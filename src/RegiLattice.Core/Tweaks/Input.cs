@@ -30,20 +30,6 @@ internal static class Input
         },
         new TweakDef
         {
-            Id = "input-disable-sticky-keys-prompt",
-            Label = "Disable Sticky Keys Prompt (5x Shift)",
-            Category = "Input",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Prevents the Sticky Keys dialog from appearing when pressing Shift 5 times.",
-            Tags = ["input", "accessibility", "gaming"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Accessibility\StickyKeys"],
-            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Accessibility\StickyKeys", "Flags", "506")],
-            RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Accessibility\StickyKeys", "Flags", "510")],
-            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Accessibility\StickyKeys", "Flags", "506")],
-        },
-        new TweakDef
-        {
             Id = "input-disable-touchpad-tap",
             Label = "Disable Touchpad Tap-to-Click (Perf)",
             Category = "Input",
@@ -145,21 +131,6 @@ internal static class Input
         },
         new TweakDef
         {
-            Id = "input-disable-sticky-keys",
-            Label = "Disable Sticky Keys Shortcut",
-            Category = "Input",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Disables the Sticky Keys shortcut (pressing Shift 5 times). Prevents accidental activation during gaming. Default: Enabled (510). Recommended: Disabled (506).",
-            Tags = ["input", "sticky-keys", "gaming", "accessibility"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Accessibility\StickyKeys"],
-            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Accessibility\StickyKeys", "Flags", "506")],
-            RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Accessibility\StickyKeys", "Flags", "510")],
-            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Accessibility\StickyKeys", "Flags", "506")],
-        },
-        new TweakDef
-        {
             Id = "input-disable-spell-check",
             Label = "Disable Spell Checking",
             Category = "Input",
@@ -240,20 +211,6 @@ internal static class Input
                 RegOp.SetDword(@"HKEY_CURRENT_USER\Control Panel\Cursors", "GestureVisualization", 31),
             ],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Control Panel\Cursors", "ContactVisualization", 0)],
-        },
-        new TweakDef
-        {
-            Id = "input-disable-sticky-keys-shortcut",
-            Label = "Disable Sticky Keys Shortcut",
-            Category = "Input",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Disables the Shift×5 shortcut that activates Sticky Keys. Prevents accidental activation during gaming. Default: enabled.",
-            Tags = ["input", "sticky-keys", "shortcut", "accessibility"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Accessibility\StickyKeys"],
-            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Accessibility\StickyKeys", "Flags", "506")],
-            RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Accessibility\StickyKeys", "Flags", "510")],
-            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Accessibility\StickyKeys", "Flags", "506")],
         },
         new TweakDef
         {
@@ -473,20 +430,6 @@ internal static class Input
             ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Control Panel\Cursors", "GestureVisualization", 0)],
             RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Control Panel\Cursors", "GestureVisualization", 31)],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Control Panel\Cursors", "GestureVisualization", 0)],
-        },
-        new TweakDef
-        {
-            Id = "input-disable-input-personalization",
-            Label = "Disable Input Personalization",
-            Category = "Input",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Disables Windows from collecting typing and inking data to personalize input. Improves privacy. Default: enabled.",
-            Tags = ["input", "personalization", "privacy", "typing"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\InputPersonalization"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\InputPersonalization", "RestrictImplicitInkCollection", 1)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\InputPersonalization", "RestrictImplicitInkCollection", 0)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\InputPersonalization", "RestrictImplicitInkCollection", 1)],
         },
         new TweakDef
         {

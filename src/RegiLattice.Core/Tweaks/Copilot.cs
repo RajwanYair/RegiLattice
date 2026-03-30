@@ -369,21 +369,7 @@ internal static class Copilot
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "ImageCreatorEnabled")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "ImageCreatorEnabled", 0)],
         },
-        new TweakDef
-        {
-            Id = "ai-copilot-disable-taskbar-search-ai",
-            Label = "Disable AI in Taskbar Search",
-            Category = "AI / Copilot",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Disables AI-powered features in the Windows taskbar search box. Prevents Copilot integration in search results. Default: enabled.",
-            Tags = ["ai", "copilot", "taskbar", "search"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Search"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Search", "SearchboxTaskbarMode", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Search", "SearchboxTaskbarMode", 1)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Search", "SearchboxTaskbarMode", 0)],
-        },
+
         new TweakDef
         {
             Id = "ai-copilot-disable-tips-notifications",
@@ -615,34 +601,7 @@ internal static class Copilot
             RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "ShowCopilotButton", 1)],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "ShowCopilotButton", 0)],
         },
-        new TweakDef
-        {
-            Id = "ai-disable-spotlight-lock-screen",
-            Label = "Disable Windows Spotlight on Lock Screen",
-            Category = "AI / Copilot",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Disables the rotating Windows Spotlight background on the lock screen. Prevents AI-curated images and suggestions from rotating on the lock screen. Default: enabled for eligible editions.",
-            Tags = ["ai", "spotlight", "lock-screen", "privacy"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager", "RotatingLockScreenEnabled", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager", "RotatingLockScreenEnabled", 1),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(
-                    @"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
-                    "RotatingLockScreenEnabled",
-                    0
-                ),
-            ],
-        },
+
         new TweakDef
         {
             Id = "ai-disable-typing-insights",

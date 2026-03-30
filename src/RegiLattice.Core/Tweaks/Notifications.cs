@@ -669,30 +669,6 @@ internal static class Notifications
         },
         new TweakDef
         {
-            Id = "notif-disable-tips-soft-landing",
-            Label = "Disable Windows Tips Notifications",
-            Category = "Notifications",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Disables Windows tips, tricks, and suggestion notifications. Reduces interruptions from Microsoft feature promotions. Default: enabled.",
-            Tags = ["notifications", "tips", "suggestions", "disable"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager", "SoftLandingEnabled", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager", "SoftLandingEnabled"),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager", "SoftLandingEnabled", 0),
-            ],
-        },
-        new TweakDef
-        {
             Id = "notif-silence-global-sounds",
             Label = "Silence All Notification Sounds",
             Category = "Notifications",
@@ -854,20 +830,6 @@ internal static class Notifications
             [
                 RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDelivery", "OemPreInstalledAppsEnabled", 0),
             ],
-        },
-        new TweakDef
-        {
-            Id = "notif-disable-tips-and-tricks",
-            Label = "Disable Windows Tips and Tricks Notifications",
-            Category = "Notifications",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Turns off Windows tips, tricks, and personalised suggestions shown in notifications and the Start menu.",
-            Tags = ["notifications", "tips", "tricks", "privacy"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDelivery"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDelivery", "SoftLandingEnabled", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDelivery", "SoftLandingEnabled", 1)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDelivery", "SoftLandingEnabled", 0)],
         },
         new TweakDef
         {

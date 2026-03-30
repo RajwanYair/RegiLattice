@@ -171,21 +171,7 @@ internal static class NightLight
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DWM", "DisableHDR")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DWM", "DisableHDR", 1)],
         },
-        new TweakDef
-        {
-            Id = "night-disable-cleartype",
-            Label = "Disable ClearType Font Smoothing",
-            Category = "Night Light & Display",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Disables ClearType/anti-aliased font rendering. Reverts to standard aliased fonts. Some users prefer sharper pixel-perfect text. Default: ClearType enabled (value 2).",
-            Tags = ["night-light", "display", "cleartype", "fonts", "rendering"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Desktop"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Control Panel\Desktop", "FontSmoothing", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Control Panel\Desktop", "FontSmoothing", 2)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Control Panel\Desktop", "FontSmoothing", 0)],
-        },
+
         new TweakDef
         {
             Id = "night-enable-vivid-colour",
@@ -216,61 +202,11 @@ internal static class NightLight
             RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\ICM", "ICMSystemActivationEnabled", 1)],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\ICM", "ICMSystemActivationEnabled", 0)],
         },
-        new TweakDef
-        {
-            Id = "night-disable-hwsch",
-            Label = "Disable Hardware GPU Scheduler",
-            Category = "Night Light & Display",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Disables the Hardware-Accelerated GPU Scheduler (HWSCH). Can resolve flickering or latency issues on some GPU models. Default: Enabled (HwSchMode=2). Recommended: Disable if experiencing display artefacts.",
-            Tags = ["night-light", "gpu", "scheduler", "hwsch", "latency", "display"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers", "HwSchMode", 1)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers", "HwSchMode", 2)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers", "HwSchMode", 1)],
-        },
-        new TweakDef
-        {
-            Id = "night-disable-adaptive-color",
-            Label = "Disable Adaptive Color Temperature",
-            Category = "Night Light & Display",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Disables Windows adaptive color temperature adjustment. Keeps display color consistent. Default: varies.",
-            Tags = ["nightlight", "adaptive", "color", "temperature"],
-            RegistryKeys =
-            [
-                @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\CloudStore\Store\DefaultAccount\Current\default$windows.data.bluelightreduction.settings",
-            ],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize", "EnableTransparency", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize", "EnableTransparency")],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize", "EnableTransparency", 1),
-            ],
-        },
 
 
-        new TweakDef
-        {
-            Id = "night-disable-transparency-effects",
-            Label = "Disable Transparency Effects",
-            Category = "Night Light & Display",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Disables transparency/blur effects in Windows (taskbar, start menu, action center). Saves GPU resources. Default: enabled.",
-            Tags = ["nightlight", "transparency", "blur", "performance"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize", "EnableTransparency", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize", "EnableTransparency", 1)],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize", "EnableTransparency", 0),
-            ],
-        },
+
+
+
         new TweakDef
         {
             Id = "night-disable-color-filters",

@@ -36,34 +36,6 @@ internal static class Speech
         },
         new TweakDef
         {
-            Id = "speech-disable-typing-insights",
-            Label = "Disable Typing Insights & Ink Collection",
-            Category = "Voice Access & Speech",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Stops Windows from collecting typing patterns and ink data for personalisation. Recommended: Disabled for privacy.",
-            Tags = ["speech", "typing", "ink", "privacy"],
-            RegistryKeys =
-            [
-                @"HKEY_CURRENT_USER\Software\Microsoft\InputPersonalization",
-                @"HKEY_CURRENT_USER\Software\Microsoft\InputPersonalization\TrainedDataStore",
-            ],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\InputPersonalization", "RestrictImplicitInkCollection", 1),
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\InputPersonalization", "RestrictImplicitTextCollection", 1),
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\InputPersonalization\TrainedDataStore", "HarvestContacts", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\InputPersonalization", "RestrictImplicitInkCollection", 0),
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\InputPersonalization", "RestrictImplicitTextCollection", 0),
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\InputPersonalization\TrainedDataStore", "HarvestContacts", 1),
-            ],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\InputPersonalization", "RestrictImplicitTextCollection", 1)],
-        },
-        new TweakDef
-        {
             Id = "speech-disable-voice-access",
             Label = "Disable Voice Access",
             Category = "Voice Access & Speech",

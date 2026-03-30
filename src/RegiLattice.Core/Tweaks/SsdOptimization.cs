@@ -276,29 +276,7 @@ internal static class SsdOptimization
             RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsEncryptPagingFile")],
             DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsEncryptPagingFile", 0)],
         },
-        new TweakDef
-        {
-            Id = "ssd-disable-storage-sense",
-            Label = "Disable Storage Sense Auto-Cleanup",
-            Category = "SSD Optimization",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Disables the automatic Storage Sense cleanup that periodically deletes temporary files. Gives you manual control.",
-            Tags = ["ssd", "storage", "cleanup", "automatic"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy", "01", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy", "01", 1),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy", "01", 0),
-            ],
-        },
+
         new TweakDef
         {
             Id = "ssd-set-io-priority-normal",

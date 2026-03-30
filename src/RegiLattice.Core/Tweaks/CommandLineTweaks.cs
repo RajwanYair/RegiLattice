@@ -357,20 +357,7 @@ internal static class CommandLineTweaks
             },
             DetectAction = () => false,
         },
-        new TweakDef
-        {
-            Id = "cmd-set-processor-scheduling-programs",
-            Label = "Prioritise Active Programs (Processor Scheduling)",
-            Category = "Command Line",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Sets Windows processor scheduling to prioritise foreground programs over background services.",
-            Tags = ["performance", "cpu", "scheduling", "foreground"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\PriorityControl"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\PriorityControl", "Win32PrioritySeparation", 38)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\PriorityControl", "Win32PrioritySeparation", 2)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\PriorityControl", "Win32PrioritySeparation", 38)],
-        },
+
         new TweakDef
         {
             Id = "cmd-disable-netbios-broadcast",

@@ -191,29 +191,7 @@ internal static class Gpu
             ],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers", "HwFlipQueueLength", 2)],
         },
-        new TweakDef
-        {
-            Id = "gpu-disable-dwm-animations",
-            Label = "Disable DWM Animations",
-            Category = "GPU / Graphics",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Disables DWM Aero Peek animations for reduced GPU overhead. Saves GPU cycles on compositing effects. Default: 1 (enabled). Recommended: Disabled for performance.",
-            Tags = ["gpu", "dwm", "animations", "aero-peek", "performance"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\DWM"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\DWM", "EnableAeroPeek", 0),
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\DWM", "AnimationsShiftKey", 1),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\DWM", "EnableAeroPeek", 1),
-                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\DWM", "AnimationsShiftKey"),
-            ],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\DWM", "EnableAeroPeek", 0)],
-        },
+
         new TweakDef
         {
             Id = "gpu-increase-tdr-delay",

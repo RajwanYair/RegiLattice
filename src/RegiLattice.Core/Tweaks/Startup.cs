@@ -263,39 +263,6 @@ internal static class Startup
         },
         new TweakDef
         {
-            Id = "startup-start-disable-tips",
-            Label = "Disable Windows Tips on Startup",
-            Category = "Startup",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Disables Windows tips, tricks, and suggestions that appear after login. Reduces startup distractions. Default: Enabled. Recommended: Disabled.",
-            Tags = ["startup", "tips", "suggestions", "notifications"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager", "SoftLandingEnabled", 0),
-                RegOp.SetDword(
-                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
-                    "SubscribedContent-338389Enabled",
-                    0
-                ),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager", "SoftLandingEnabled"),
-                RegOp.DeleteValue(
-                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
-                    "SubscribedContent-338389Enabled"
-                ),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager", "SoftLandingEnabled", 0),
-            ],
-        },
-        new TweakDef
-        {
             Id = "startup-start-disable-app-restart",
             Label = "Disable Automatic App Restart on Login",
             Category = "Startup",
@@ -681,30 +648,6 @@ internal static class Startup
                     "SubscribedContent-338393Enabled",
                     0
                 ),
-            ],
-        },
-        new TweakDef
-        {
-            Id = "startup-disable-autoplay",
-            Label = "Disable AutoPlay for All Drives",
-            Category = "Startup",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Disables AutoPlay for all media and devices. Prevents automatic program execution when connecting USB drives. Security best-practice.",
-            Tags = ["startup", "autoplay", "usb", "security"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\AutoplayHandlers"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\AutoplayHandlers", "DisableAutoplay", 1),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\AutoplayHandlers", "DisableAutoplay"),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\AutoplayHandlers", "DisableAutoplay", 1),
             ],
         },
         // ── Sprint 20 additions ─────────────────────────────────────────────

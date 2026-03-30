@@ -225,24 +225,7 @@ internal static class Defender
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\NIS", "DisableProtocolRecognition")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\NIS", "DisableProtocolRecognition", 1)],
         },
-        new TweakDef
-        {
-            Id = "sec-disable-credential-guard",
-            Label = "Disable Credential Guard",
-            Category = "Security",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description =
-                "Disables Virtualization Based Security / Credential Guard. May improve performance. Default: Enabled. Recommended: Keep enabled.",
-            Tags = ["security", "credential-guard", "vbs", "performance"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\DeviceGuard"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\DeviceGuard", "EnableVirtualizationBasedSecurity", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\DeviceGuard", "EnableVirtualizationBasedSecurity", 1)],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\DeviceGuard", "EnableVirtualizationBasedSecurity", 0),
-            ],
-        },
+
         new TweakDef
         {
             Id = "sec-enable-audit-logon",

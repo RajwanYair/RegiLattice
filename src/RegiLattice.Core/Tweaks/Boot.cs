@@ -102,21 +102,6 @@ internal static class Boot
         },
         new TweakDef
         {
-            Id = "boot-disable-auto-reboot",
-            Label = "Disable Auto-Reboot on BSOD",
-            Category = "Boot",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description =
-                "Disables automatic reboot after a Blue Screen of Death. Allows reading the full BSOD error before the system restarts. Default: Enabled. Recommended: Disabled for debugging.",
-            Tags = ["boot", "bsod", "reboot", "crash", "debugging"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "AutoReboot", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "AutoReboot", 1)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "AutoReboot", 0)],
-        },
-        new TweakDef
-        {
             Id = "boot-full-bsod-info",
             Label = "Show Full BSOD Parameters",
             Category = "Boot",
@@ -157,36 +142,6 @@ internal static class Boot
                     1
                 ),
             ],
-        },
-        new TweakDef
-        {
-            Id = "boot-reduce-service-timeout",
-            Label = "Reduce Service Shutdown Timeout",
-            Category = "Boot",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description =
-                "Reduces WaitToKillServiceTimeout to 2 seconds (default: 20s). Windows force-kills stuck services faster during shutdown. Default: 20000 ms. Recommended: 2000 ms for fast shutdown.",
-            Tags = ["boot", "shutdown", "service", "timeout", "performance"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control"],
-            ApplyOps = [RegOp.SetString(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control", "WaitToKillServiceTimeout", "2000")],
-            RemoveOps = [RegOp.SetString(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control", "WaitToKillServiceTimeout", "20000")],
-            DetectOps = [RegOp.CheckString(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control", "WaitToKillServiceTimeout", "2000")],
-        },
-        new TweakDef
-        {
-            Id = "boot-reduce-hung-app-timeout",
-            Label = "Reduce Hung Application Timeout",
-            Category = "Boot",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Reduces HungAppTimeout to 1 second (default: 5s). Non-responsive apps are flagged as hung sooner, showing the 'not responding' dialog faster. Default: 5000 ms. Recommended: 1000 ms.",
-            Tags = ["boot", "shutdown", "application", "hung", "timeout", "performance"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Desktop"],
-            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "HungAppTimeout", "1000")],
-            RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "HungAppTimeout", "5000")],
-            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "HungAppTimeout", "1000")],
         },
         new TweakDef
         {
@@ -238,21 +193,6 @@ internal static class Boot
                     1
                 ),
             ],
-        },
-        new TweakDef
-        {
-            Id = "boot-disable-crash-dumps",
-            Label = "Disable Crash Dump Creation",
-            Category = "Boot",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description =
-                "Disables creation of memory dump files on BSOD (CrashDumpEnabled=0). Saves disk space and prevents sensitive memory data from being written to disk. Default: Small memory dump (7). Recommended: Disabled on production systems.",
-            Tags = ["boot", "crash-dump", "bsod", "disk", "security"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "CrashDumpEnabled", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "CrashDumpEnabled", 7)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "CrashDumpEnabled", 0)],
         },
         new TweakDef
         {
@@ -519,21 +459,6 @@ internal static class Boot
             [
                 RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "VerifyDriverLevel", 0),
             ],
-        },
-        new TweakDef
-        {
-            Id = "boot-disable-hiberfile",
-            Label = "Disable Hibernation File (hiberfil.sys)",
-            Category = "Boot",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Disables hibernation, deleting hiberfil.sys and freeing disk space equal to RAM size.",
-            Tags = ["boot", "hibernation", "disk-space", "power"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power"],
-            SideEffects = "Disables hibernate and may disable Fast Startup.",
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power", "HibernateEnabled", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power", "HibernateEnabled", 1)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power", "HibernateEnabled", 0)],
         },
         new TweakDef
         {

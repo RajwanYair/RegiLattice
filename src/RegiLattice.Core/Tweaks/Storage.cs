@@ -6,21 +6,7 @@ internal static class Storage
 {
     internal static IReadOnlyList<TweakDef> Tweaks { get; } =
     [
-        new TweakDef
-        {
-            Id = "stor-storage-disable-hibernation",
-            Label = "Disable Hibernation File",
-            Category = "Storage",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description =
-                "Disables the Windows hibernation file (hiberfil.sys) to reclaim disk space. The file can consume several GB. Sleep mode remains available. Default: enabled. Recommended: disabled on desktops and SSD-only machines.",
-            Tags = ["storage", "hibernation", "disk", "space"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power", "HibernateEnabled", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power", "HibernateEnabled", 1)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power", "HibernateEnabled", 0)],
-        },
+
         new TweakDef
         {
             Id = "stor-storage-disable-reserved",
@@ -187,30 +173,7 @@ internal static class Storage
             RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsDisable8dot3NameCreation", 0)],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsDisable8dot3NameCreation", 1)],
         },
-        new TweakDef
-        {
-            Id = "stor-storage-large-system-cache",
-            Label = "Enable Large System Cache",
-            Category = "Storage",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description =
-                "Tells Windows to favor the system file cache over application working sets. Beneficial for file-server workloads and large sequential reads. Default: disabled (0). Recommended: enabled on file servers or 16 GB+ workstations.",
-            Tags = ["storage", "cache", "memory", "file-server", "performance"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "LargeSystemCache", 1),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "LargeSystemCache", 0),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "LargeSystemCache", 1),
-            ],
-        },
+
         new TweakDef
         {
             Id = "stor-storage-enable-long-paths",
@@ -226,21 +189,7 @@ internal static class Storage
             RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem", "LongPathsEnabled", 0)],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem", "LongPathsEnabled", 1)],
         },
-        new TweakDef
-        {
-            Id = "stor-storage-disable-defrag-boot",
-            Label = "Disable Boot Defragmentation",
-            Category = "Storage",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Disables automatic boot-time defragmentation of frequently used files. On SSD systems boot defrag provides no benefit and adds write wear. Default: enabled (Y). Recommended: disabled (N) on SSDs.",
-            Tags = ["storage", "defrag", "boot", "ssd", "performance"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Dfrg\BootOptimizeFunction"],
-            ApplyOps = [RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Dfrg\BootOptimizeFunction", "Enable", "N")],
-            RemoveOps = [RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Dfrg\BootOptimizeFunction", "Enable", "Y")],
-            DetectOps = [RegOp.CheckString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Dfrg\BootOptimizeFunction", "Enable", "N")],
-        },
+
         new TweakDef
         {
             Id = "stor-disable-storage-sense",
@@ -293,21 +242,7 @@ internal static class Storage
             RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem", "DisableDeleteNotification", 1)],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem", "DisableDeleteNotification", 0)],
         },
-        new TweakDef
-        {
-            Id = "stor-disable-defrag-ssd",
-            Label = "Disable Defrag on SSD",
-            Category = "Storage",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description =
-                "Disables boot-time defragmentation optimization on SSDs. Defrag is unnecessary and harmful for SSDs. Default: Y. Recommended: N.",
-            Tags = ["storage", "ssd", "defrag", "optimization"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Dfrg\BootOptimizeFunction"],
-            ApplyOps = [RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Dfrg\BootOptimizeFunction", "Enable", "N")],
-            RemoveOps = [RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Dfrg\BootOptimizeFunction", "Enable", "Y")],
-            DetectOps = [RegOp.CheckString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Dfrg\BootOptimizeFunction", "Enable", "N")],
-        },
+
         new TweakDef
         {
             Id = "stor-disable-last-access",
@@ -373,20 +308,7 @@ internal static class Storage
             RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\BitBucket", "NukeOnDelete")],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\BitBucket", "NukeOnDelete", 0)],
         },
-        new TweakDef
-        {
-            Id = "stor-disable-hibernation",
-            Label = "Disable Hibernation (Save Disk Space)",
-            Category = "Storage",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables hibernation and removes the hiberfil.sys file. Frees gigabytes of disk space. Default: enabled.",
-            Tags = ["storage", "hibernation", "disk-space", "hiberfil"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power", "HibernateEnabled", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power", "HibernateEnabled", 1)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power", "HibernateEnabled", 0)],
-        },
+
         new TweakDef
         {
             Id = "stor-disable-delivery-optimization-cache",

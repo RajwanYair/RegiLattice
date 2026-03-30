@@ -8,27 +8,6 @@ internal static class Performance
     [
         new TweakDef
         {
-            Id = "perf-disable-transparency",
-            Label = "Disable Transparency Effects",
-            Category = "Performance",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            ImpactScore = 3,
-            SafetyRating = 5,
-            ImpactNote = "Reduces GPU compositor overhead; snappier window dragging and switching.",
-            Description =
-                "Disables window transparency/blur effects for snappier UI. Reduces GPU compositing overhead. Default: Enabled. Recommended: Disabled for performance.",
-            Tags = ["performance", "visual", "transparency"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize", "EnableTransparency", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize", "EnableTransparency", 1)],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize", "EnableTransparency", 0),
-            ],
-        },
-        new TweakDef
-        {
             Id = "perf-disable-search-protocol-host",
             Label = "Disable SearchProtocolHost Priority Boost",
             Category = "Performance",
@@ -40,32 +19,6 @@ internal static class Performance
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows Search", "SetupCompletedSuccessfully", 0)],
             RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows Search", "SetupCompletedSuccessfully", 1)],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows Search", "SetupCompletedSuccessfully", 0)],
-        },
-        new TweakDef
-        {
-            Id = "perf-large-system-cache",
-            Label = "Enable Large System Cache",
-            Category = "Performance",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            ImpactScore = 4,
-            SafetyRating = 4,
-            ImpactNote = "Dedicates more physical RAM to file caching; visible speedup on file-heavy workloads.",
-            Description = "Enables large system cache, allowing Windows to use more RAM for file caching and improving disk performance.",
-            Tags = ["performance", "memory", "cache"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "LargeSystemCache", 1),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "LargeSystemCache", 0),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "LargeSystemCache", 1),
-            ],
         },
         new TweakDef
         {
@@ -449,22 +402,6 @@ internal static class Performance
         },
         new TweakDef
         {
-            Id = "perf-disable-font-smoothing",
-            Label = "Disable Font Smoothing (ClearType)",
-            Category = "Performance",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Disables ClearType font smoothing to reduce GPU rendering overhead. Improves performance on low-end hardware. Default: Enabled. Recommended: Disabled for maximum performance.",
-            Tags = ["performance", "font", "cleartype", "rendering", "ui"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Desktop"],
-            SideEffects = "Text will appear less smooth/anti-aliased.",
-            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "FontSmoothing", "0")],
-            RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "FontSmoothing", "2")],
-            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "FontSmoothing", "0")],
-        },
-        new TweakDef
-        {
             Id = "perf-always-unload-dll",
             Label = "Always Unload DLLs on Process Exit",
             Category = "Performance",
@@ -701,36 +638,6 @@ internal static class Performance
         },
         new TweakDef
         {
-            Id = "perf-disable-window-animations",
-            Label = "Disable Window Animations",
-            Category = "Performance",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Disables window animations (minimize, maximize, open, close). Reduces visual overhead and improves perceived responsiveness. Default: enabled.",
-            Tags = ["performance", "animations", "visual", "responsiveness"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Desktop\WindowMetrics"],
-            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop\WindowMetrics", "MinAnimate", "0")],
-            RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop\WindowMetrics", "MinAnimate", "1")],
-            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Desktop\WindowMetrics", "MinAnimate", "0")],
-        },
-        new TweakDef
-        {
-            Id = "perf-gpu-hw-scheduling",
-            Label = "Enable GPU Hardware Scheduling",
-            Category = "Performance",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Enables hardware-accelerated GPU scheduling. Reduces latency by allowing the GPU to manage its own memory. Requires compatible GPU driver. Default: off.",
-            Tags = ["performance", "gpu", "scheduling", "latency"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers", "HwSchMode", 2)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers", "HwSchMode", 1)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers", "HwSchMode", 2)],
-        },
-        new TweakDef
-        {
             Id = "perf-large-page-minimum",
             Label = "Set Large Page Minimum to 128MB",
             Category = "Performance",
@@ -795,21 +702,6 @@ internal static class Performance
         },
         new TweakDef
         {
-            Id = "perf-reduce-hung-app-timeout",
-            Label = "Reduce Hung App Timeout to 1000ms",
-            Category = "Performance",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Reduces the hung application timeout to 1000ms (1 second). Windows detects and prompts to close unresponsive apps faster. Default: 5000ms.",
-            Tags = ["performance", "timeout", "hung-app", "responsiveness"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Desktop"],
-            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "HungAppTimeout", "1000")],
-            RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "HungAppTimeout", "5000")],
-            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "HungAppTimeout", "1000")],
-        },
-        new TweakDef
-        {
             Id = "perf-svchost-split",
             Label = "Reduce SvcHost Splitting Threshold",
             Category = "Performance",
@@ -857,44 +749,6 @@ internal static class Performance
         },
         new TweakDef
         {
-            Id = "perf-disable-tips-notifications",
-            Label = "Disable Tips and Suggestions Notifications",
-            Category = "Performance",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Disables Windows tips, suggestions, and Get Started notifications that consume background resources scanning user activity.",
-            Tags = ["performance", "tips", "notifications", "suggestions"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager", "SoftLandingEnabled", 0),
-                RegOp.SetDword(
-                    @"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
-                    "SubscribedContent-338389Enabled",
-                    0
-                ),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager", "SoftLandingEnabled"),
-                RegOp.DeleteValue(
-                    @"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
-                    "SubscribedContent-338389Enabled"
-                ),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager", "SoftLandingEnabled", 0),
-                RegOp.CheckDword(
-                    @"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
-                    "SubscribedContent-338389Enabled",
-                    0
-                ),
-            ],
-        },
-        new TweakDef
-        {
             Id = "perf-disable-explorer-search-history",
             Label = "Disable Explorer Search History",
             Category = "Performance",
@@ -934,21 +788,6 @@ internal static class Performance
                     2097152
                 ),
             ],
-        },
-        new TweakDef
-        {
-            Id = "perf-disable-8dot3-name-creation",
-            Label = "Disable 8.3 Short File Name Creation",
-            Category = "Performance",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Disables legacy 8.3 (DOS) short file name generation on NTFS volumes. Reduces overhead on file creation and improves directory enumeration speed.",
-            Tags = ["performance", "ntfs", "8dot3", "filesystem"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsDisable8dot3NameCreation", 1)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsDisable8dot3NameCreation", 0)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsDisable8dot3NameCreation", 1)],
         },
         new TweakDef
         {
@@ -1047,36 +886,6 @@ internal static class Performance
         },
         new TweakDef
         {
-            Id = "perf-disable-crash-dump",
-            Label = "Disable Kernel Crash Dump",
-            Category = "Performance",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description =
-                "Disables the kernel crash dump (CrashDumpEnabled=0). On systems without debugging needs, skipping the dump saves time on BSOD and recovers disk space from dump files.",
-            Tags = ["performance", "bsod", "crash", "dump"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "CrashDumpEnabled", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "CrashDumpEnabled")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "CrashDumpEnabled", 0)],
-        },
-        new TweakDef
-        {
-            Id = "perf-disable-bsod-auto-reboot",
-            Label = "Disable Automatic Reboot on BSOD",
-            Category = "Performance",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets AutoReboot=0 so the system halts on the BSOD screen instead of immediately rebooting. Allows the stop-code and error address to be read.",
-            Tags = ["performance", "bsod", "crash", "reboot"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "AutoReboot", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "AutoReboot")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "AutoReboot", 0)],
-        },
-        new TweakDef
-        {
             Id = "perf-increase-smb-max-cmds",
             Label = "Increase SMB Client Maximum Command Queue",
             Category = "Performance",
@@ -1089,21 +898,6 @@ internal static class Performance
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanWorkstation\Parameters", "MaxCmds", 32)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanWorkstation\Parameters", "MaxCmds")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanWorkstation\Parameters", "MaxCmds", 32)],
-        },
-        new TweakDef
-        {
-            Id = "perf-disable-wer-reporting",
-            Label = "Disable Windows Error Reporting",
-            Category = "Performance",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Disables Windows Error Reporting (WER) so no problem reports are generated or uploaded. Eliminates background WER crash-harvesting threads.",
-            Tags = ["performance", "wer", "crash", "privacy"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Windows Error Reporting"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Windows Error Reporting", "Disabled", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Windows Error Reporting", "Disabled")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Windows Error Reporting", "Disabled", 1)],
         },
         new TweakDef
         {
@@ -1164,21 +958,6 @@ internal static class Performance
             ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Control Panel\Desktop", "WaitToKillAppTimeout", 5000)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Control Panel\Desktop", "WaitToKillAppTimeout")],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Control Panel\Desktop", "WaitToKillAppTimeout", 5000)],
-        },
-        new TweakDef
-        {
-            Id = "perf-set-service-kill-timeout",
-            Label = "Reduce Service Shutdown Wait to 2 s",
-            Category = "Performance",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets WaitToKillServiceTimeout to 2 000 ms. Services that do not respond to stop requests are forcibly terminated after 2 seconds during system shutdown.",
-            Tags = ["performance", "shutdown", "service", "timeout"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control", "WaitToKillServiceTimeout", 2000)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control", "WaitToKillServiceTimeout")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control", "WaitToKillServiceTimeout", 2000)],
         },
         new TweakDef
         {

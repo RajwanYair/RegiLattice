@@ -36,50 +36,8 @@ internal static class Accessibility
             DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Accessibility\StickyKeys", "Flags", "506")],
         },
 
-        new TweakDef
-        {
-            Id = "acc-disable-animations",
-            Label = "Disable Window Animations",
-            Category = "Accessibility",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Disables desktop window animations (Aero Peek, minimize/maximize effects) for snappier UI.",
-            Tags = ["accessibility", "performance", "animation"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\DWM", @"HKEY_CURRENT_USER\Control Panel\Desktop"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\DWM", "EnableAeroPeek", 0),
-                RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "UserPreferencesMask", "90 12 03 80 10 00 00 00"),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\DWM", "EnableAeroPeek", 1),
-                RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "UserPreferencesMask", "9E 3E 07 80 12 01 00 00"),
-            ],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\DWM", "EnableAeroPeek", 0)],
-        },
-        new TweakDef
-        {
-            Id = "acc-enable-cleartype",
-            Label = "Enable ClearType Font Smoothing",
-            Category = "Accessibility",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Enables ClearType sub-pixel font rendering for sharper text.",
-            Tags = ["accessibility", "font", "display"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Desktop"],
-            ApplyOps =
-            [
-                RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "FontSmoothing", "2"),
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Control Panel\Desktop", "FontSmoothingType", 2),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "FontSmoothing", "0"),
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Control Panel\Desktop", "FontSmoothingType", 0),
-            ],
-            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "FontSmoothing", "2")],
-        },
+
+
         new TweakDef
         {
             Id = "acc-wide-scrollbar",

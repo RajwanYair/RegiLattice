@@ -92,29 +92,6 @@ internal static class SystemTweaks
         },
         new TweakDef
         {
-            Id = "sys-disable-autoplay",
-            Label = "Disable AutoPlay",
-            Category = "System",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Disables AutoPlay for all removable media and devices. Security best practice to avoid malware auto-execution.",
-            Tags = ["system", "security", "autoplay", "usb"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\AutoplayHandlers"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\AutoplayHandlers", "DisableAutoplay", 1),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\AutoplayHandlers", "DisableAutoplay", 0),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\AutoplayHandlers", "DisableAutoplay", 1),
-            ],
-        },
-        new TweakDef
-        {
             Id = "sys-disable-activity-history",
             Label = "Disable Activity History",
             Category = "System",
@@ -164,43 +141,6 @@ internal static class SystemTweaks
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters", "AutoShareWks", 0)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters", "AutoShareWks")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters", "AutoShareWks", 0)],
-        },
-        new TweakDef
-        {
-            Id = "sys-system-disable-tips",
-            Label = "Disable Windows Tips and Suggestions",
-            Category = "System",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Disables Windows tips, suggestions, and 'Get Even More Out of Windows' popups. Reduces distractions. Default: Enabled. Recommended: Disabled.",
-            Tags = ["system", "tips", "suggestions", "nag"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager"],
-            ApplyOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
-                    "SubscribedContent-338389Enabled",
-                    0
-                ),
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager", "SoftLandingEnabled", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(
-                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
-                    "SubscribedContent-338389Enabled"
-                ),
-                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager", "SoftLandingEnabled"),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(
-                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
-                    "SubscribedContent-338389Enabled",
-                    0
-                ),
-            ],
         },
         new TweakDef
         {
@@ -286,45 +226,6 @@ internal static class SystemTweaks
         },
         new TweakDef
         {
-            Id = "sys-disable-storage-sense",
-            Label = "Disable Storage Sense",
-            Category = "System",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Disables Storage Sense which automatically deletes temporary files, recycle bin contents, and Downloads folder items. Default: may be enabled. Recommended: disabled for control.",
-            Tags = ["system", "storage-sense", "cleanup", "disk"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy", "01", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy", "01", 1),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy", "01", 0),
-            ],
-        },
-        new TweakDef
-        {
-            Id = "sys-disable-auto-reboot",
-            Label = "Disable Auto-Reboot After Crash",
-            Category = "System",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Prevents Windows from automatically rebooting after a BSoD crash, giving time to read the error information. Default: auto-reboot. Recommended: disabled.",
-            Tags = ["system", "crash", "reboot", "bsod", "diagnostic"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "AutoReboot", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "AutoReboot", 1)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "AutoReboot", 0)],
-        },
-        new TweakDef
-        {
             Id = "sys-restore-frequency",
             Label = "Enable Unlimited System Restore Frequency",
             Category = "System",
@@ -340,42 +241,6 @@ internal static class SystemTweaks
         },
         new TweakDef
         {
-            Id = "sys-disable-tips",
-            Label = "Disable Windows Tips and Suggestions",
-            Category = "System",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Disables Windows tips, tricks, and suggestions popups. Default: Enabled. Recommended: Disabled.",
-            Tags = ["system", "tips", "suggestions", "notifications", "nag"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager"],
-            ApplyOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
-                    "SubscribedContent-338389Enabled",
-                    0
-                ),
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager", "SoftLandingEnabled", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(
-                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
-                    "SubscribedContent-338389Enabled"
-                ),
-                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager", "SoftLandingEnabled"),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(
-                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
-                    "SubscribedContent-338389Enabled",
-                    0
-                ),
-            ],
-        },
-        new TweakDef
-        {
             Id = "sys-disable-power-throttling",
             Label = "Disable Power Throttling",
             Category = "System",
@@ -388,50 +253,6 @@ internal static class SystemTweaks
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\PowerThrottling", "PowerThrottlingOff", 1)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\PowerThrottling", "PowerThrottlingOff")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\PowerThrottling", "PowerThrottlingOff", 1)],
-        },
-        new TweakDef
-        {
-            Id = "sys-disable-hibernation",
-            Label = "Disable Hibernation",
-            Category = "System",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Disables Windows hibernation, freeing disk space used by hiberfil.sys. Default: Enabled. Recommended: Disabled for desktops with SSDs.",
-            Tags = ["system", "hibernation", "power", "disk", "ssd"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power", "HibernateEnabled", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power", "HibernateEnabled", 1)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power", "HibernateEnabled", 0)],
-        },
-        new TweakDef
-        {
-            Id = "sys-disable-8dot3",
-            Label = "Disable 8.3 Short Filename Creation",
-            Category = "System",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Disables NTFS 8.3 short filename generation for improved file system performance. Default: Enabled. Recommended: Disabled on modern systems.",
-            Tags = ["system", "ntfs", "8dot3", "filesystem", "performance"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsDisable8dot3NameCreation", 1)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsDisable8dot3NameCreation", 0)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsDisable8dot3NameCreation", 1)],
-        },
-        new TweakDef
-        {
-            Id = "sys-increase-crash-dump-verbosity",
-            Label = "Set Crash Dump to Kernel Memory Dump",
-            Category = "System",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Sets crash dump mode to Kernel Memory Dump (2). Provides better debugging info than Mini dump. Default: Automatic (7).",
-            Tags = ["system", "crash", "dump", "debug"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "CrashDumpEnabled", 2)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "CrashDumpEnabled", 7)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "CrashDumpEnabled", 2)],
         },
         new TweakDef
         {
@@ -493,21 +314,6 @@ internal static class SystemTweaks
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Windows Error Reporting", "DisableQueue", 1)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Windows Error Reporting", "DisableQueue")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Windows Error Reporting", "DisableQueue", 1)],
-        },
-        new TweakDef
-        {
-            Id = "sys-enable-long-paths",
-            Label = "Enable Win32 Long Paths (Policy)",
-            Category = "System",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Enables Win32 long path support via Group Policy. Allows applications to use paths longer than 260 characters. Default: disabled.",
-            Tags = ["system", "long-paths", "260", "policy"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem", "LongPathsEnabled", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem", "LongPathsEnabled")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem", "LongPathsEnabled", 1)],
         },
         new TweakDef
         {

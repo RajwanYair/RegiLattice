@@ -28,20 +28,7 @@ internal static class Power
             ],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power", "HibernateEnabled", 0)],
         },
-        new TweakDef
-        {
-            Id = "power-optimize-proc-scheduling",
-            Label = "Optimize Processor Scheduling",
-            Category = "Power",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Adjusts Win32PrioritySeparation for foreground-app responsiveness (value 38).",
-            Tags = ["power", "performance", "cpu"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\PriorityControl"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\PriorityControl", "Win32PrioritySeparation", 38)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\PriorityControl", "Win32PrioritySeparation", 2)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\PriorityControl", "Win32PrioritySeparation", 38)],
-        },
+
         new TweakDef
         {
             Id = "power-disable-fast-startup",
@@ -576,30 +563,7 @@ internal static class Power
                 return stdout.Contains("8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c", StringComparison.OrdinalIgnoreCase);
             },
         },
-        new TweakDef
-        {
-            Id = "power-large-system-cache",
-            Label = "Enable Large System Cache",
-            Category = "Power",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Enables large system cache, allocating more RAM for file system caching. Improves disk I/O performance on systems with ample RAM. Default: disabled (0).",
-            Tags = ["power", "cache", "memory", "performance"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "LargeSystemCache", 1),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "LargeSystemCache", 0),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "LargeSystemCache", 1),
-            ],
-        },
+
         new TweakDef
         {
             Id = "power-max-processor-turbo",

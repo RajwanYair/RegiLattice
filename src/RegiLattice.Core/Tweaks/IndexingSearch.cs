@@ -62,34 +62,8 @@ internal static class IndexingSearch
             RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Search", "BingSearchEnabled", 1)],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Search", "BingSearchEnabled", 0)],
         },
-        new TweakDef
-        {
-            Id = "idx-hide-search-box",
-            Label = "Hide Search Box on Taskbar",
-            Category = "Indexing & Search",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Completely hide the search box/icon from taskbar. Default: full box shown.",
-            Tags = ["search", "taskbar", "hide", "box"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Search"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Search", "SearchboxTaskbarMode", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Search", "SearchboxTaskbarMode", 2)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Search", "SearchboxTaskbarMode", 0)],
-        },
-        new TweakDef
-        {
-            Id = "idx-search-icon-only",
-            Label = "Show Search Icon Only (No Box)",
-            Category = "Indexing & Search",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Show only a small search icon instead of the full box. Default: full box.",
-            Tags = ["search", "icon", "taskbar", "compact"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Search"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Search", "SearchboxTaskbarMode", 1)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Search", "SearchboxTaskbarMode", 2)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Search", "SearchboxTaskbarMode", 1)],
-        },
+
+
         new TweakDef
         {
             Id = "idx-disable-indexer-backoff",

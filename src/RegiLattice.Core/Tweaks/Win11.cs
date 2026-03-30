@@ -252,21 +252,7 @@ internal static class Win11
             RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "Start_TrackDocs")],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "Start_TrackDocs", 0)],
         },
-        new TweakDef
-        {
-            Id = "w11-disable-search-highlights",
-            Label = "Disable Search Box / Highlights on Taskbar",
-            Category = "Windows 11",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Hides the Search box/icon on the taskbar and disables 'Search highlights' (Bing-powered trending topics). Default: visible. Recommended: hidden for clean taskbar.",
-            Tags = ["win11", "search", "taskbar", "bing", "ux"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Search"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Search", "SearchboxTaskbarMode", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Search", "SearchboxTaskbarMode")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Search", "SearchboxTaskbarMode", 0)],
-        },
+
         new TweakDef
         {
             Id = "w11-disable-spotlight-tips",
@@ -492,21 +478,7 @@ internal static class Win11
             RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\Explorer", "DisableSearchBoxSuggestions")],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\Explorer", "DisableSearchBoxSuggestions", 1)],
         },
-        new TweakDef
-        {
-            Id = "w11-disable-copilot-taskbar-btn",
-            Label = "Hide Copilot Button on Taskbar",
-            Category = "Windows 11",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            MinBuild = 22631,
-            Description = "Hides the Copilot button from the Windows 11 taskbar. Requires 23H2+.",
-            Tags = ["win11", "copilot", "taskbar", "ai"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "ShowCopilotButton", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "ShowCopilotButton")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "ShowCopilotButton", 0)],
-        },
+
         new TweakDef
         {
             Id = "w11-disable-lockscreen-tips",
@@ -886,22 +858,7 @@ internal static class Win11
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Personalization", "NoLockScreen")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Personalization", "NoLockScreen", 1)],
         },
-        new TweakDef
-        {
-            Id = "w11-search-box-hidden",
-            Label = "Hide Taskbar Search Box",
-            Category = "Windows 11",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            MinBuild = 22000,
-            Description =
-                "Sets SearchboxTaskbarMode=0 to hide the search box/icon from the taskbar while keeping Windows Search available via Win+S. Default: 1 (icon only) or 2 (box).",
-            Tags = ["win11", "search", "taskbar", "ui"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Search"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Search", "SearchboxTaskbarMode", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Search", "SearchboxTaskbarMode")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Search", "SearchboxTaskbarMode", 0)],
-        },
+
         new TweakDef
         {
             Id = "w11-start-recent-recs-off",
@@ -981,22 +938,7 @@ internal static class Win11
                 RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "Start_ShowClassicMode", 0),
             ],
         },
-        new TweakDef
-        {
-            Id = "w11-news-taskbar-disable",
-            Label = "Disable News and Interests Taskbar Feed",
-            Category = "Windows 11",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            MinBuild = 22000,
-            Description =
-                "Sets ShellFeedsTaskbarViewMode=2 to disable the News and Interests weather/news button on the taskbar. Reduces telemetry and MSN content loading. Default: 0 (show news).",
-            Tags = ["win11", "taskbar", "news", "feeds"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Feeds"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Feeds", "ShellFeedsTaskbarViewMode", 2)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Feeds", "ShellFeedsTaskbarViewMode")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Feeds", "ShellFeedsTaskbarViewMode", 2)],
-        },
+
         new TweakDef
         {
             Id = "w11-settings-ads-off",

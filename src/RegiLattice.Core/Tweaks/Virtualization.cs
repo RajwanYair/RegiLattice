@@ -31,49 +31,6 @@ internal static class Virtualization
         },
         new TweakDef
         {
-            Id = "virt-optimise-dynamic-memory",
-            Label = "Optimise Dynamic Memory for VMs",
-            Category = "Virtualization",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Tunes Windows memory manager for better VM density by disabling large system cache and second-level data cache.",
-            Tags = ["hyperv", "virtualization", "memory", "performance"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "LargeSystemCache", 0),
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "SecondLevelDataCache", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "LargeSystemCache"),
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "SecondLevelDataCache"),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "LargeSystemCache", 0),
-            ],
-        },
-        new TweakDef
-        {
-            Id = "virt-disable-vbs",
-            Label = "Disable Virtualization Based Security (VBS)",
-            Category = "Virtualization",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description =
-                "Disables VBS which can reduce performance in games and creative apps. WARNING: Reduces security — only use on personal gaming/performance rigs.",
-            Tags = ["vbs", "virtualization", "performance", "gaming"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\DeviceGuard"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\DeviceGuard", "EnableVirtualizationBasedSecurity", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\DeviceGuard", "EnableVirtualizationBasedSecurity", 1)],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\DeviceGuard", "EnableVirtualizationBasedSecurity", 0),
-            ],
-        },
-        new TweakDef
-        {
             Id = "virt-disable-credential-guard",
             Label = "Disable Credential Guard",
             Category = "Virtualization",

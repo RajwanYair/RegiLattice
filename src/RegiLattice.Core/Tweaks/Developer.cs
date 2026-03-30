@@ -555,20 +555,6 @@ internal static class Developer
         },
         new TweakDef
         {
-            Id = "dev-disable-windows-error-reporting",
-            Label = "Disable Windows Error Reporting for Devs",
-            Category = "Dev Drive / Developer",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Disables Windows Error Reporting so crash dialogs don't block build/test automation.",
-            Tags = ["wer", "crash", "developer", "automation"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Windows Error Reporting"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Windows Error Reporting", "Disabled", 1)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Windows Error Reporting", "Disabled", 0)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Windows Error Reporting", "Disabled", 1)],
-        },
-        new TweakDef
-        {
             Id = "dev-increase-environment-variable-size",
             Label = "Increase Max Environment Variable Size",
             Category = "Dev Drive / Developer",

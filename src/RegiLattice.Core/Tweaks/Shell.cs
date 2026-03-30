@@ -22,20 +22,6 @@ internal static class Shell
         },
         new TweakDef
         {
-            Id = "shell-disable-frequent-folders",
-            Label = "Disable Frequent Folders in Quick Access",
-            Category = "Shell",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Prevents frequently used folders from appearing in Quick Access.",
-            Tags = ["shell", "explorer", "privacy", "frequent"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer", "ShowFrequent", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer", "ShowFrequent", 1)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer", "ShowFrequent", 0)],
-        },
-        new TweakDef
-        {
             Id = "shell-compact-file-explorer",
             Label = "Enable Compact View in File Explorer",
             Category = "Shell",
@@ -296,30 +282,6 @@ internal static class Shell
                 RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Command Processor", "PathCompletionChar", 0x40),
             ],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Command Processor", "CompletionChar", 0x9)],
-        },
-        new TweakDef
-        {
-            Id = "shell-disable-autoplay",
-            Label = "Disable AutoPlay for All Drives",
-            Category = "Shell",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Disables AutoPlay for all drive types. Prevents automatic execution of media and programs when removable drives are inserted. Default: enabled.",
-            Tags = ["shell", "autoplay", "security", "usb"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\AutoplayHandlers"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\AutoplayHandlers", "DisableAutoplay", 1),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\AutoplayHandlers", "DisableAutoplay", 0),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\AutoplayHandlers", "DisableAutoplay", 1),
-            ],
         },
         new TweakDef
         {

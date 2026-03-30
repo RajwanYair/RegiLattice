@@ -94,20 +94,7 @@ internal static class SnapMultitasking
             RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "DisallowShaking", 0)],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "DisallowShaking", 1)],
         },
-        new TweakDef
-        {
-            Id = "snap-disable-window-animations",
-            Label = "Disable Window Min/Max Animations",
-            Category = "Snap & Multitasking",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Disable minimize/maximize window animation for snappier feel. Default: enabled.",
-            Tags = ["animation", "minimize", "maximize", "performance"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Desktop\WindowMetrics"],
-            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop\WindowMetrics", "MinAnimate", "0")],
-            RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop\WindowMetrics", "MinAnimate", "1")],
-            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Desktop\WindowMetrics", "MinAnimate", "0")],
-        },
+
         new TweakDef
         {
             Id = "snap-vd-all-monitors",

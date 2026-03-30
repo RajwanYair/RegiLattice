@@ -66,21 +66,7 @@ internal static class FileSystem
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Dedup\Parameters", "MaxMemory")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Dedup\Parameters", "MaxMemory", 2048)],
         },
-        new TweakDef
-        {
-            Id = "fs-disable-content-indexing",
-            Label = "Disable Content Indexing Service",
-            Category = "File System",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description =
-                "Disables the Windows Search (WSearch) content indexing service via registry. Eliminates background I/O caused by index building on large volumes. Default: 2 (automatic start). Recommended: disabled (4) on servers or SSD-only machines.",
-            Tags = ["filesystem", "indexing", "wsearch", "search", "io", "performance"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\WSearch"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\WSearch", "Start", 4)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\WSearch", "Start", 2)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\WSearch", "Start", 4)],
-        },
+
         new TweakDef
         {
             Id = "fs-enable-case-sensitive",

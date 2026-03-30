@@ -34,21 +34,7 @@ internal static class Taskbar
             RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "TaskbarSmallIcons", 0)],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "TaskbarSmallIcons", 1)],
         },
-        new TweakDef
-        {
-            Id = "tb-taskbar-hide-search",
-            Label = "Hide Taskbar Search Box",
-            Category = "Taskbar",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Hides the search box or icon from the taskbar. You can still search by pressing Win+S. Default: enabled. Recommended: disabled.",
-            Tags = ["taskbar", "search", "declutter"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Search"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Search", "SearchboxTaskbarMode", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Search", "SearchboxTaskbarMode", 1)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Search", "SearchboxTaskbarMode", 0)],
-        },
+
         new TweakDef
         {
             Id = "tb-taskbar-hide-task-view",
@@ -104,20 +90,7 @@ internal static class Taskbar
             RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "TaskbarMn", 1)],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "TaskbarMn", 0)],
         },
-        new TweakDef
-        {
-            Id = "tb-taskbar-hide-copilot",
-            Label = "Hide Copilot Button",
-            Category = "Taskbar",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Hides the Copilot button from the taskbar. Default: enabled. Recommended: disabled.",
-            Tags = ["taskbar", "copilot", "ai", "declutter"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "ShowCopilotButton", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "ShowCopilotButton", 1)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "ShowCopilotButton", 0)],
-        },
+
         new TweakDef
         {
             Id = "tb-taskbar-never-combine",
@@ -308,21 +281,7 @@ internal static class Taskbar
             RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "Start_TrackDocs")],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "Start_TrackDocs", 0)],
         },
-        new TweakDef
-        {
-            Id = "tb-disable-aero-peek",
-            Label = "Disable Aero Peek Preview",
-            Category = "Taskbar",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Disables the Aero Peek desktop preview when hovering over the Show Desktop button. Eliminates accidental desktop reveals. Default: Enabled. Recommended: Personal preference.",
-            Tags = ["taskbar", "aero-peek", "preview", "desktop", "ui"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "EnableAeroPeek", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "EnableAeroPeek")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "EnableAeroPeek", 0)],
-        },
+
         new TweakDef
         {
             Id = "tb-lock-taskbar",
@@ -367,20 +326,7 @@ internal static class Taskbar
             RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "TaskbarSmallIcons", 0)],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "TaskbarSmallIcons", 1)],
         },
-        new TweakDef
-        {
-            Id = "tb-disable-news-and-interests",
-            Label = "Disable News and Interests on Taskbar",
-            Category = "Taskbar",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Hides the News and Interests (weather) widget on the taskbar. Windows 10 only. Default: shown.",
-            Tags = ["taskbar", "news", "interests", "weather"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Feeds"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Feeds", "ShellFeedsTaskbarViewMode", 2)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Feeds", "ShellFeedsTaskbarViewMode", 0)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Feeds", "ShellFeedsTaskbarViewMode", 2)],
-        },
+
         new TweakDef
         {
             Id = "tb-disable-taskbar-people",
@@ -409,21 +355,7 @@ internal static class Taskbar
             RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "TaskbarAl", 1)],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "TaskbarAl", 0)],
         },
-        new TweakDef
-        {
-            Id = "tb-disable-weather-widget",
-            Label = "Disable Weather Widget on Taskbar",
-            Category = "Taskbar",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Disables the weather and news widget on the Windows taskbar. Reduces visual clutter and background data usage. Default: enabled.",
-            Tags = ["taskbar", "weather", "widget", "feeds"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Feeds"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Feeds", "ShellFeedsTaskbarViewMode", 2)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Feeds", "ShellFeedsTaskbarViewMode", 0)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Feeds", "ShellFeedsTaskbarViewMode", 2)],
-        },
+
         new TweakDef
         {
             Id = "tb-set-button-grouping",
@@ -438,24 +370,7 @@ internal static class Taskbar
             RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "TaskbarGlomLevel", 0)],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "TaskbarGlomLevel", 2)],
         },
-        // ── Sprint 19 additions ────────────────────────────────────────────
-        new TweakDef
-        {
-            Id = "tb-disable-taskbar-transparency",
-            Label = "Disable Taskbar Transparency",
-            Category = "Taskbar",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Disables the transparency effect on the taskbar. Makes the taskbar fully opaque. Default: transparent.",
-            Tags = ["taskbar", "transparency", "opaque", "visual"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize", "EnableTransparency", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize", "EnableTransparency", 1)],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize", "EnableTransparency", 0),
-            ],
-        },
+
         new TweakDef
         {
             Id = "tb-show-full-path-title",
@@ -588,20 +503,7 @@ internal static class Taskbar
             RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Taskband", "MaxThumbSizePx")],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Taskband", "MaxThumbSizePx", 350)],
         },
-        new TweakDef
-        {
-            Id = "tb-disable-peek-live-preview",
-            Label = "Disable Aero Peek Live Preview",
-            Category = "Taskbar",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Disables Aero Peek live thumbnails on taskbar hover. Reduces GPU usage from rendering previews. Default: enabled.",
-            Tags = ["taskbar", "peek", "live", "preview", "disable"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\DWM"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\DWM", "EnableAeroPeek", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\DWM", "EnableAeroPeek", 1)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\DWM", "EnableAeroPeek", 0)],
-        },
+
         new TweakDef
         {
             Id = "tb-hide-clock-from-taskbar",

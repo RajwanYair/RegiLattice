@@ -6,20 +6,7 @@ internal static class DevDrive
 {
     internal static IReadOnlyList<TweakDef> Tweaks { get; } =
     [
-        new TweakDef
-        {
-            Id = "dev-disable-8dot3",
-            Label = "Disable 8.3 Short Name Creation",
-            Category = "Dev Drive",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables legacy 8.3 short filename creation. Speeds up directory operations for large repos. Default: Enabled.",
-            Tags = ["dev-drive", "ntfs", "8dot3", "performance"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsDisable8dot3NameCreation", 1)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsDisable8dot3NameCreation", 0)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsDisable8dot3NameCreation", 1)],
-        },
+
         new TweakDef
         {
             Id = "dev-scan-cpu-limit",
@@ -69,29 +56,7 @@ internal static class DevDrive
                 ),
             ],
         },
-        new TweakDef
-        {
-            Id = "dev-large-fs-cache",
-            Label = "Enable Large File System Cache",
-            Category = "Dev Drive",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Enables large system cache for file system operations. Improves build I/O at the cost of more RAM usage.",
-            Tags = ["dev-drive", "cache", "memory", "performance"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "LargeSystemCache", 1),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "LargeSystemCache", 0),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "LargeSystemCache", 1),
-            ],
-        },
+
         new TweakDef
         {
             Id = "dev-disable-efs-warning",
@@ -163,24 +128,7 @@ internal static class DevDrive
                 RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsAllowExtendedCharacterIn8dot3Name", 0),
             ],
         },
-        new TweakDef
-        {
-            Id = "dev-disable-vbs",
-            Label = "Disable VBS for Dev Performance",
-            Category = "Dev Drive",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description =
-                "Disables Virtualization Based Security. Can improve compilation and linking speed by 5-15% but reduces security. Only for dedicated dev machines.",
-            Tags = ["dev-drive", "vbs", "performance", "security"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\DeviceGuard"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\DeviceGuard", "EnableVirtualizationBasedSecurity", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\DeviceGuard", "EnableVirtualizationBasedSecurity", 1)],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\DeviceGuard", "EnableVirtualizationBasedSecurity", 0),
-            ],
-        },
+
         new TweakDef
         {
             Id = "dev-disable-memory-compression",
@@ -209,21 +157,7 @@ internal static class DevDrive
                 ),
             ],
         },
-        new TweakDef
-        {
-            Id = "dev-disable-search-svc",
-            Label = "Disable Windows Search Indexer",
-            Category = "Dev Drive",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Stops the Windows Search service from indexing files. Reduces I/O contention during builds in large repositories. Default: Automatic. Recommended: Disabled on build servers.",
-            Tags = ["dev-drive", "search", "indexing", "performance", "service"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\WSearch"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\WSearch", "Start", 4)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\WSearch", "Start", 2)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\WSearch", "Start", 4)],
-        },
+
         new TweakDef
         {
             Id = "dev-disable-power-throttle",
@@ -239,20 +173,7 @@ internal static class DevDrive
             RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\PowerThrottling", "PowerThrottlingOff", 0)],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\PowerThrottling", "PowerThrottlingOff", 1)],
         },
-        new TweakDef
-        {
-            Id = "dev-enable-long-paths",
-            Label = "Enable Win32 Long Paths",
-            Category = "Dev Drive / Developer Tools",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Enables Win32 long path support (>260 chars). Essential for deep node_modules. Default: disabled.",
-            Tags = ["dev", "long-paths", "260", "node"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem", "LongPathsEnabled", 1)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem", "LongPathsEnabled", 0)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem", "LongPathsEnabled", 1)],
-        },
+
         new TweakDef
         {
             Id = "dev-enable-developer-mode",
@@ -390,20 +311,7 @@ internal static class DevDrive
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsMemoryUsage")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsMemoryUsage", 2)],
         },
-        new TweakDef
-        {
-            Id = "dev-win32-long-paths",
-            Label = "Enable Win32 Long Paths",
-            Category = "Dev Drive / Developer Tools",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Enables Win32 long path support (> 260 chars). Required for deep node_modules and .NET project trees. Default: disabled.",
-            Tags = ["developer", "long-paths", "win32", "filesystem"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem", "LongPathsEnabled", 1)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem", "LongPathsEnabled", 0)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem", "LongPathsEnabled", 1)],
-        },
+
         new TweakDef
         {
             Id = "dev-devdrive-filter-native",

@@ -463,34 +463,8 @@ internal static class MemoryOptimization
                 ),
             ],
         },
-        new TweakDef
-        {
-            Id = "mem-disable-crash-dump",
-            Label = "Disable Crash Memory Dump",
-            Category = "Memory",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Disables kernel memory dump on BSOD, freeing up pagefile space equal to RAM size. Not recommended for debugging.",
-            Tags = ["memory", "crash", "dump", "pagefile"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "CrashDumpEnabled", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "CrashDumpEnabled", 7)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "CrashDumpEnabled", 0)],
-        },
-        new TweakDef
-        {
-            Id = "mem-disable-auto-reboot-bsod",
-            Label = "Disable Auto-Reboot on BSOD",
-            Category = "Memory",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Prevents automatic restart after a Blue Screen of Death, allowing you to read the error message.",
-            Tags = ["memory", "crash", "bsod", "stability"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "AutoReboot", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "AutoReboot", 1)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "AutoReboot", 0)],
-        },
+
+
         new TweakDef
         {
             Id = "mem-set-dirty-page-threshold",
