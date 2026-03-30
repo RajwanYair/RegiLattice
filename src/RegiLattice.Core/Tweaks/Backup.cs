@@ -160,20 +160,7 @@ internal static class Backup
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Reliability", "TimeStampInterval")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Reliability", "TimeStampInterval", 0)],
         },
-        new TweakDef
-        {
-            Id = "backup-disable-auto-reboot-crash",
-            Label = "Disable Auto-Reboot After BSOD",
-            Category = "Backup & Recovery",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Prevents Windows from automatically rebooting after a blue screen crash, allowing you to read the error code.",
-            Tags = ["backup", "bsod", "crash", "reboot"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "AutoReboot", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "AutoReboot", 1)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "AutoReboot", 0)],
-        },
+
         new TweakDef
         {
             Id = "backup-bak-increase-shadow-storage",

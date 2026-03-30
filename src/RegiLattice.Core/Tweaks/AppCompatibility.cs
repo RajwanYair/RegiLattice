@@ -200,20 +200,7 @@ internal static class AppCompatibility
             RemoveOps = [RegOp.SetDword($@"{LmKey}\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Schedule\Maintenance", "WakeUp", 1)],
             DetectOps = [RegOp.CheckDword($@"{LmKey}\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Schedule\Maintenance", "WakeUp", 0)],
         },
-        new TweakDef
-        {
-            Id = "compat-set-diagnostic-data-basic",
-            Label = "Set Diagnostic Data to Basic (Required Only)",
-            Category = "App Compatibility",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Sets Windows diagnostic data collection to Basic level, sending only required telemetry data.",
-            Tags = ["compatibility", "telemetry", "privacy", "diagnostics"],
-            RegistryKeys = [$@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows\DataCollection"],
-            ApplyOps = [RegOp.SetDword($@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows\DataCollection", "AllowTelemetry", 1)],
-            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows\DataCollection", "AllowTelemetry")],
-            DetectOps = [RegOp.CheckDword($@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows\DataCollection", "AllowTelemetry", 1)],
-        },
+
         new TweakDef
         {
             Id = "compat-force-classic-shutdown",

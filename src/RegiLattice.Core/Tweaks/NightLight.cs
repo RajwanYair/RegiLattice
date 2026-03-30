@@ -251,40 +251,8 @@ internal static class NightLight
                 RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize", "EnableTransparency", 1),
             ],
         },
-        new TweakDef
-        {
-            Id = "night-enable-dark-mode",
-            Label = "Enable System Dark Mode",
-            Category = "Night Light & Display",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Enables dark mode for Windows system elements and apps. Default: light mode.",
-            Tags = ["nightlight", "dark-mode", "theme", "ui"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize", "SystemUsesLightTheme", 0)],
-            RemoveOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize", "SystemUsesLightTheme", 1),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize", "SystemUsesLightTheme", 0),
-            ],
-        },
-        new TweakDef
-        {
-            Id = "night-enable-app-dark-mode",
-            Label = "Enable App Dark Mode",
-            Category = "Night Light & Display",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Enables dark mode for Windows apps specifically (separate from system theme). Default: light.",
-            Tags = ["nightlight", "dark-mode", "apps", "theme"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize", "AppsUseLightTheme", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize", "AppsUseLightTheme", 1)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize", "AppsUseLightTheme", 0)],
-        },
+
+
         new TweakDef
         {
             Id = "night-disable-transparency-effects",

@@ -38,40 +38,8 @@ internal static class Display
             RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Control Panel\Desktop", "LogPixels")],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Control Panel\Desktop", "LogPixels", 96)],
         },
-        new TweakDef
-        {
-            Id = "display-dark-mode-apps",
-            Label = "Dark Mode for Apps",
-            Category = "Display",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Switches UWP and modern apps to their dark colour scheme.",
-            Tags = ["display", "dark", "theme", "apps"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize", "AppsUseLightTheme", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize", "AppsUseLightTheme", 1)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize", "AppsUseLightTheme", 0)],
-        },
-        new TweakDef
-        {
-            Id = "display-dark-mode-system",
-            Label = "Dark Mode for System",
-            Category = "Display",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Switches the Windows system theme (taskbar, Start menu, Action Center) to dark mode.",
-            Tags = ["display", "dark", "theme", "system"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize", "SystemUsesLightTheme", 0)],
-            RemoveOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize", "SystemUsesLightTheme", 1),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize", "SystemUsesLightTheme", 0),
-            ],
-        },
+
+
         new TweakDef
         {
             Id = "display-disable-transparency",
@@ -535,27 +503,6 @@ internal static class Display
             ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Mouse", "MouseHoverTime", "100")],
             RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Mouse", "MouseHoverTime", "400")],
             DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Mouse", "MouseHoverTime", "100")],
-        },
-        new TweakDef
-        {
-            Id = "display-enable-dark-mode-system",
-            Label = "Force System Dark Mode",
-            Category = "Display",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Forces system-wide dark mode for the Windows shell (taskbar, Start menu, Action Center). Default: follows user preference.",
-            Tags = ["display", "dark", "mode", "theme"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize", "SystemUsesLightTheme", 0)],
-            RemoveOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize", "SystemUsesLightTheme", 1),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize", "SystemUsesLightTheme", 0),
-            ],
         },
         // ── Sprint 19 additions ────────────────────────────────────────────
         new TweakDef
