@@ -114,24 +114,6 @@ internal static class UserActivity
         },
         new TweakDef
         {
-            Id = "activity-disable-frequent-places",
-            Label = "Disable Frequent Places in Quick Access",
-            Category = "User Activity",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            ImpactScore = 1,
-            SafetyRating = 5,
-            Tags = ["activity", "frequent places", "quick access", "explorer"],
-            Description =
-                "Stops File Explorer from showing frequently accessed folders in the "
-                + "Quick Access panel. Prevents folder usage patterns from being "
-                + "surfaced in the UI.",
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer", "ShowFrequent", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer", "ShowFrequent", 1)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer", "ShowFrequent", 0)],
-        },
-        new TweakDef
-        {
             Id = "activity-disable-recent-in-quick-access",
             Label = "Disable Recent Files in Quick Access",
             Category = "User Activity",

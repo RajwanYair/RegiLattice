@@ -12,34 +12,6 @@ internal static class Hardening
     [
         new TweakDef
         {
-            Id = "harden-enable-credential-guard",
-            Label = "Enable Credential Guard (UEFI Lock)",
-            Category = "Hardening",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Enables Windows Credential Guard to protect domain credentials in isolated containers. Requires Secure Boot and Hyper-V.",
-            Tags = ["hardening", "credential-guard", "security", "enterprise"],
-            SideEffects = "May break some legacy authentication protocols.",
-            RegistryKeys =
-            [
-                @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\DeviceGuard",
-                @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa",
-            ],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\DeviceGuard", "EnableVirtualizationBasedSecurity", 1),
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\DeviceGuard", "RequirePlatformSecurityFeatures", 3),
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa", "LsaCfgFlags", 1),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\DeviceGuard", "EnableVirtualizationBasedSecurity", 0),
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa", "LsaCfgFlags"),
-            ],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa", "LsaCfgFlags", 1)],
-        },
-        new TweakDef
-        {
             Id = "harden-disable-wdigest",
             Label = "Disable WDigest Plaintext Caching",
             Category = "Hardening",
@@ -727,18 +699,6 @@ internal static class Hardening
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa", "LimitBlankPasswordUse", 1)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa", "LimitBlankPasswordUse")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa", "LimitBlankPasswordUse", 1)],
-        },
-        new TweakDef
-        {
-            Id = "harden-disable-ntfs-8dot3",
-            Label = "Disable NTFS 8.3 short filename creation",
-            Category = "Hardening",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Tags = ["hardening", "ntfs", "8dot3", "filesystem", "performance"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsDisable8dot3NameCreation", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsDisable8dot3NameCreation")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsDisable8dot3NameCreation", 1)],
         },
         new TweakDef
         {

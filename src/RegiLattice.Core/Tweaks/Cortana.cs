@@ -87,20 +87,7 @@ internal static class Cortana
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search", "AllowCortanaAboveLock")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search", "AllowCortanaAboveLock", 0)],
         },
-        new TweakDef
-        {
-            Id = "cortana-disable-search-indexing",
-            Label = "Disable Windows Search Indexing Service",
-            Category = "Cortana & Search",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Disables the Windows Search indexing service entirely.",
-            Tags = ["search", "cortana", "indexing", "performance"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\WSearch"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\WSearch", "Start", 4)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\WSearch", "Start", 2)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\WSearch", "Start", 4)],
-        },
+
         new TweakDef
         {
             Id = "cortana-disable-search-highlights-dynamic",

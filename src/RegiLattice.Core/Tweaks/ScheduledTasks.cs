@@ -447,21 +447,7 @@ internal static class ScheduledTasks
             RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Schedule\Maintenance", "WakeUp", 1)],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Schedule\Maintenance", "WakeUp", 0)],
         },
-        new TweakDef
-        {
-            Id = "schtask-task-disable-scheduled-defrag",
-            Label = "Disable Scheduled Disk Defrag",
-            Category = "Scheduled Tasks",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Disables the scheduled disk defragmentation task. Recommended for SSD systems where defrag is unnecessary and wears the drive. Default: enabled.",
-            Tags = ["scheduled-tasks", "defrag", "disk", "ssd"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Dfrg\BootOptimizeFunction"],
-            ApplyOps = [RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Dfrg\BootOptimizeFunction", "Enable", "N")],
-            RemoveOps = [RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Dfrg\BootOptimizeFunction", "Enable", "Y")],
-            DetectOps = [RegOp.CheckString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Dfrg\BootOptimizeFunction", "Enable", "N")],
-        },
+
         new TweakDef
         {
             Id = "schtask-task-disable-scheduled-diagnostics",

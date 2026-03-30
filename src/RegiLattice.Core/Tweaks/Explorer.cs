@@ -704,20 +704,7 @@ internal static class Explorer
                 ),
             ],
         },
-        new TweakDef
-        {
-            Id = "explorer-enable-classic-search-bar",
-            Label = "Enable Classic Explorer Search Bar",
-            Category = "Explorer",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Restores the classic search bar in Explorer instead of the modern search box. Default: modern search.",
-            Tags = ["explorer", "search", "classic", "bar"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Search"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Search", "SearchboxTaskbarMode", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Search", "SearchboxTaskbarMode")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Search", "SearchboxTaskbarMode", 1)],
-        },
+
         // ── Restored stubs with real registry operations ──────────────────
 
         new TweakDef

@@ -32,20 +32,7 @@ internal static class Services
             ],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\DiagTrack", "Start", 4)],
         },
-        new TweakDef
-        {
-            Id = "svc-disable-wsearch",
-            Label = "Disable Windows Search Indexer",
-            Category = "Services",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables the Windows Search indexer service — helpful on low-resource machines or when using Everything search.",
-            Tags = ["services", "performance", "disk"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\WSearch"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\WSearch", "Start", 4)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\WSearch", "Start", 2)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\WSearch", "Start", 4)],
-        },
+
         new TweakDef
         {
             Id = "svc-disable-wer",
@@ -170,21 +157,7 @@ internal static class Services
             RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\AJRouter", "Start", 3)],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\AJRouter", "Start", 4)],
         },
-        new TweakDef
-        {
-            Id = "svc-disable-search-indexer",
-            Label = "Disable Windows Search Indexer",
-            Category = "Services",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description =
-                "Disables Windows Search indexing service. Significantly reduces disk I/O and CPU usage. Use Everything Search as alternative. Default: Automatic (2). Recommended: Disabled (4).",
-            Tags = ["services", "search", "indexer", "performance", "io"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\WSearch"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\WSearch", "Start", 4)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\WSearch", "Start", 2)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\WSearch", "Start", 4)],
-        },
+
         new TweakDef
         {
             Id = "svc-disable-sysmain",

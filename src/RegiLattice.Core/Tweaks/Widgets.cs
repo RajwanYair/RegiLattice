@@ -62,81 +62,6 @@ internal static class Widgets
         },
         new TweakDef
         {
-            Id = "widgets-news-disable-tips-suggestions",
-            Label = "Disable Tips and Suggestions",
-            Category = "Widgets & News",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Disables Windows tips, tricks, and suggestions notifications. Default: enabled. Recommended: disabled.",
-            Tags = ["widgets", "tips", "suggestions", "notifications"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager"],
-            ApplyOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
-                    "SubscribedContent-338389Enabled",
-                    0
-                ),
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager", "SoftLandingEnabled", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(
-                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
-                    "SubscribedContent-338389Enabled"
-                ),
-                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager", "SoftLandingEnabled"),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(
-                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
-                    "SubscribedContent-338389Enabled",
-                    0
-                ),
-            ],
-        },
-        new TweakDef
-        {
-            Id = "widgets-news-disable-spotlight",
-            Label = "Disable Windows Spotlight",
-            Category = "Widgets & News",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Disables Windows Spotlight (rotating Bing lock screen images). Also disables the fun facts/tips overlay on the lock screen. Default: enabled. Recommended: disabled.",
-            Tags = ["widgets", "spotlight", "lockscreen", "bing"],
-            RegistryKeys =
-            [
-                @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CloudContent",
-                @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
-            ],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CloudContent", "DisableWindowsSpotlightFeatures", 1),
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager", "RotatingLockScreenEnabled", 0),
-                RegOp.SetDword(
-                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
-                    "RotatingLockScreenOverlayEnabled",
-                    0
-                ),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CloudContent", "DisableWindowsSpotlightFeatures"),
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager", "RotatingLockScreenEnabled", 1),
-                RegOp.DeleteValue(
-                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
-                    "RotatingLockScreenOverlayEnabled"
-                ),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CloudContent", "DisableWindowsSpotlightFeatures", 1),
-            ],
-        },
-        new TweakDef
-        {
             Id = "widgets-news-disable-welcome-experience",
             Label = "Disable Welcome Experience",
             Category = "Widgets & News",
@@ -479,41 +404,6 @@ internal static class Widgets
             DetectOps =
             [
                 RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\SearchSettings", "IsDynamicSearchBoxEnabled", 0),
-            ],
-        },
-        new TweakDef
-        {
-            Id = "widgets-disable-spotlight-features",
-            Label = "Disable Windows Spotlight Features (Policy)",
-            Category = "Widgets & News",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Disables all Windows Spotlight features via policy, including lock screen, start menu, and Action Center Spotlight content. Default: Enabled. Recommended: Disabled.",
-            Tags = ["widgets", "spotlight", "lock-screen", "policy", "content"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CloudContent"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CloudContent", "DisableWindowsSpotlightFeatures", 1),
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager", "RotatingLockScreenEnabled", 0),
-                RegOp.SetDword(
-                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
-                    "RotatingLockScreenOverlayEnabled",
-                    0
-                ),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CloudContent", "DisableWindowsSpotlightFeatures"),
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager", "RotatingLockScreenEnabled", 1),
-                RegOp.DeleteValue(
-                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
-                    "RotatingLockScreenOverlayEnabled"
-                ),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CloudContent", "DisableWindowsSpotlightFeatures", 1),
             ],
         },
         new TweakDef

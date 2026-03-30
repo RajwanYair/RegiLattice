@@ -69,20 +69,7 @@ internal static class Gaming
             RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\GameInput", "Start", 3)],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\GameInput", "Start", 4)],
         },
-        new TweakDef
-        {
-            Id = "game-gpu-scheduling",
-            Label = "Enable Hardware-Accelerated GPU Scheduling",
-            Category = "Gaming",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Enables hardware-accelerated GPU scheduling (HAGS) for reduced latency and improved frame scheduling on supported GPUs.",
-            Tags = ["gaming", "performance", "gpu", "hags"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers", "HwSchMode", 2)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers", "HwSchMode", 1)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers", "HwSchMode", 2)],
-        },
+
         new TweakDef
         {
             Id = "game-disable-xbox-game-monitoring",
@@ -149,21 +136,7 @@ internal static class Gaming
             RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\GameBar", "ShowStartupPanel", 1)],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\GameBar", "ShowStartupPanel", 0)],
         },
-        new TweakDef
-        {
-            Id = "game-optimize-gpu-scheduling",
-            Label = "Optimize GPU Scheduling",
-            Category = "Gaming",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description =
-                "Enables hardware-accelerated GPU scheduling (HwSchMode=2). Reduces latency by letting the GPU manage its own scheduling. Default: 1 (off). Recommended: 2 for modern GPUs.",
-            Tags = ["gaming", "gpu", "scheduling", "latency", "performance"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers", "HwSchMode", 2)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers", "HwSchMode", 1)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers", "HwSchMode", 2)],
-        },
+
         new TweakDef
         {
             Id = "game-disable-auto-hdr",
@@ -475,21 +448,7 @@ internal static class Gaming
                 ),
             ],
         },
-        new TweakDef
-        {
-            Id = "game-priority-high",
-            Label = "Set Foreground Priority Boost (High)",
-            Category = "Gaming",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets Win32PrioritySeparation to 38 (short, variable, high foreground boost). Prioritises foreground applications for gaming. Default: 2.",
-            Tags = ["gaming", "priority", "foreground", "scheduling"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\PriorityControl"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\PriorityControl", "Win32PrioritySeparation", 38)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\PriorityControl", "Win32PrioritySeparation", 2)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\PriorityControl", "Win32PrioritySeparation", 38)],
-        },
+
         new TweakDef
         {
             Id = "game-set-system-responsiveness",
@@ -1307,21 +1266,7 @@ internal static class Gaming
             RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\XblGameSave", "Start", 3)],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\XblGameSave", "Start", 4)],
         },
-        new TweakDef
-        {
-            Id = "game-set-win32-priority-separation",
-            Label = "Optimise Win32 Priority Separation for Games",
-            Category = "Gaming",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets Win32PrioritySeparation=38 (hex 0x26) which configures short, variable timeslices with a 3:1 foreground/background boost ratio. Gives foreground gaming processes more CPU time. Default: 2 (balanced).",
-            Tags = ["game", "cpu", "priority", "latency", "scheduler"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\PriorityControl"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\PriorityControl", "Win32PrioritySeparation", 38)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\PriorityControl", "Win32PrioritySeparation", 2)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\PriorityControl", "Win32PrioritySeparation", 38)],
-        },
+
         new TweakDef
         {
             Id = "game-disable-game-dvr-shadow",

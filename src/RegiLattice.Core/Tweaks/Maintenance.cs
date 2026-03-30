@@ -8,54 +8,6 @@ internal static class Maintenance
     [
         new TweakDef
         {
-            Id = "maint-disable-defrag-boot-optimize",
-            Label = "Disable Scheduled Defragmentation",
-            Category = "Maintenance",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Disables the Windows automatic disk defragmentation schedule. Recommended for SSD-only systems.",
-            Tags = ["maintenance", "disk", "defrag", "ssd"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Dfrg\BootOptimizeFunction"],
-            ApplyOps = [RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Dfrg\BootOptimizeFunction", "Enable", "N")],
-            RemoveOps = [RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Dfrg\BootOptimizeFunction", "Enable", "Y")],
-            DetectOps = [RegOp.CheckString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Dfrg\BootOptimizeFunction", "Enable", "N")],
-        },
-        new TweakDef
-        {
-            Id = "maint-disable-tips-suggestions",
-            Label = "Disable Windows Tips & Suggestions",
-            Category = "Maintenance",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Disables Windows tips, suggestions, and soft-landing notifications that clutter the notification area. Default: Enabled. Recommended: Disabled.",
-            Tags = ["maintenance", "notifications", "ux"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager", "SoftLandingEnabled", 0),
-                RegOp.SetDword(
-                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
-                    "SubscribedContent-338389Enabled",
-                    0
-                ),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager", "SoftLandingEnabled", 1),
-                RegOp.SetDword(
-                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
-                    "SubscribedContent-338389Enabled",
-                    1
-                ),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager", "SoftLandingEnabled", 0),
-            ],
-        },
-        new TweakDef
-        {
             Id = "maint-disable-reliability-monitor",
             Label = "Disable Reliability Monitor (Perf)",
             Category = "Maintenance",
@@ -119,20 +71,6 @@ internal static class Maintenance
         },
         new TweakDef
         {
-            Id = "maint-disable-error-reporting",
-            Label = "Disable Windows Error Reporting",
-            Category = "Maintenance",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Disables Windows Error Reporting (WER). Stops automatic submission of crash data to Microsoft.",
-            Tags = ["maintenance", "privacy", "error-reporting"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Windows Error Reporting"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Windows Error Reporting", "Disabled", 1)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Windows Error Reporting", "Disabled", 0)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Windows Error Reporting", "Disabled", 1)],
-        },
-        new TweakDef
-        {
             Id = "maint-disable-superfetch-prefetch",
             Label = "Disable SuperFetch/SysMain Prefetch",
             Category = "Maintenance",
@@ -179,29 +117,6 @@ internal static class Maintenance
         },
         new TweakDef
         {
-            Id = "maint-disable-storage-sense",
-            Label = "Disable Storage Sense Auto-Cleanup",
-            Category = "Maintenance",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Disables Storage Sense automatic disk cleanup. Prevents Windows from automatically deleting temporary files.",
-            Tags = ["maintenance", "disk", "storage-sense", "cleanup"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy", "01", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy", "01", 1),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy", "01", 0),
-            ],
-        },
-        new TweakDef
-        {
             Id = "maint-disable-cleanup-nag",
             Label = "Disable Disk Cleanup Notifications",
             Category = "Maintenance",
@@ -214,21 +129,6 @@ internal static class Maintenance
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\StorageSense", "AllowStorageSenseGlobal", 0)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\StorageSense", "AllowStorageSenseGlobal")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\StorageSense", "AllowStorageSenseGlobal", 0)],
-        },
-        new TweakDef
-        {
-            Id = "maint-disable-defrag",
-            Label = "Disable Background Defragmentation",
-            Category = "Maintenance",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Disables background disk defragmentation and boot optimization. Reduces disk I/O on SSDs where defragmentation is unnecessary. Default: Enabled. Recommended: Disabled for SSDs.",
-            Tags = ["maintenance", "defrag", "performance", "ssd"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Dfrg\BootOptimizeFunction"],
-            ApplyOps = [RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Dfrg\BootOptimizeFunction", "Enable", "N")],
-            RemoveOps = [RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Dfrg\BootOptimizeFunction", "Enable", "Y")],
-            DetectOps = [RegOp.CheckString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Dfrg\BootOptimizeFunction", "Enable", "N")],
         },
         new TweakDef
         {
@@ -274,21 +174,6 @@ internal static class Maintenance
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DataCollection", "AllowTelemetry", 0)],
             RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DataCollection", "AllowTelemetry", 3)],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DataCollection", "AllowTelemetry", 0)],
-        },
-        new TweakDef
-        {
-            Id = "maint-disable-defrag-schedule",
-            Label = "Disable Disk Defrag Schedule",
-            Category = "Maintenance",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description =
-                "Disables the automatic disk defragmentation schedule via OptimalLayout. Prevents background defrag I/O on SSD-based systems. Default: Enabled. Recommended: Disabled for SSDs.",
-            Tags = ["maintenance", "defrag", "schedule", "ssd", "optimization"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\OptimalLayout"],
-            ApplyOps = [RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Dfrg\BootOptimizeFunction", "Enable", "N")],
-            RemoveOps = [RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Dfrg\BootOptimizeFunction", "Enable", "Y")],
-            DetectOps = [RegOp.CheckString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Dfrg\BootOptimizeFunction", "Enable", "N")],
         },
         new TweakDef
         {
@@ -515,21 +400,6 @@ internal static class Maintenance
         },
         new TweakDef
         {
-            Id = "maint-disable-crash-dumps",
-            Label = "Disable Crash Dump Generation",
-            Category = "Maintenance",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Disables crash dump file generation on system errors. Saves disk space and eliminates large dump files. Default: automatic memory dump.",
-            Tags = ["maintenance", "crash", "dump", "disable"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "CrashDumpEnabled", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "CrashDumpEnabled", 7)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "CrashDumpEnabled", 0)],
-        },
-        new TweakDef
-        {
             Id = "maint-disable-prefetch",
             Label = "Disable Prefetch/Superfetch",
             Category = "Maintenance",
@@ -621,21 +491,6 @@ internal static class Maintenance
         },
         new TweakDef
         {
-            Id = "maint-reduce-service-shutdown-timeout",
-            Label = "Reduce Service Shutdown Timeout (2s)",
-            Category = "Maintenance",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Reduces the time Windows waits for services to stop during shutdown to 2000 ms (default: 12000 ms). Significantly speeds up shutdown.",
-            Tags = ["maintenance", "shutdown", "performance", "timeout"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control"],
-            ApplyOps = [RegOp.SetString(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control", "WaitToKillServiceTimeout", "2000")],
-            RemoveOps = [RegOp.SetString(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control", "WaitToKillServiceTimeout", "12000")],
-            DetectOps = [RegOp.CheckString(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control", "WaitToKillServiceTimeout", "2000")],
-        },
-        new TweakDef
-        {
             Id = "maint-reduce-app-kill-timeout",
             Label = "Reduce Application Kill Timeout on Shutdown (2s)",
             Category = "Maintenance",
@@ -647,20 +502,6 @@ internal static class Maintenance
             ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "WaitToKillAppTimeout", "2000")],
             RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "WaitToKillAppTimeout", "20000")],
             DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "WaitToKillAppTimeout", "2000")],
-        },
-        new TweakDef
-        {
-            Id = "maint-enable-long-paths",
-            Label = "Enable Long Path Support (260+ Characters)",
-            Category = "Maintenance",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Enables Win32 long path support allowing file paths beyond the 260-character MAX_PATH limit. Requires a reboot.",
-            Tags = ["maintenance", "filesystem", "long-paths", "developer"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem", "LongPathsEnabled", 1)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem", "LongPathsEnabled", 0)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem", "LongPathsEnabled", 1)],
         },
         new TweakDef
         {

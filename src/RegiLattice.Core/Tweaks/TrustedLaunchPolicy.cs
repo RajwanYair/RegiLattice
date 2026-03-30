@@ -169,33 +169,6 @@ internal static class TrustedLaunchPolicy
             },
             new TweakDef
             {
-                Id = "trlnch-set-vbs-launch-type-auto",
-                Label = "Trusted Launch: Set VBS to Auto-Enable (All Platforms — No Manual Init Required)",
-                Category = "Trusted Launch Policy",
-                Description =
-                    "Sets EnableVirtualizationBasedSecurity=1 in the DeviceGuard key. Enables Virtualization Based Security (VBS) globally. VBS is the hypervisor-based security infrastructure that underpins Credential Guard, HVCI, System Guard, and Secure Launch. Enabling VBS creates a secured kernel environment isolated from the normal OS. This is the prerequisite setting that enables all other VBS-dependent features. On supported hardware (Hyper-V capable, Secure Boot, IOMMU), VBS activates on boot and the Hyper-V hypervisor is loaded to create the VTL1 (lower Virtual Trust Level) secure partition.",
-                Tags = ["vbs", "virtualization-security", "hyperv", "vtl", "device-guard"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 5,
-                SafetyRating = 5,
-                ImpactNote =
-                    "VBS enabled. Hyper-V hypervisor is loaded even on editions that normally do not use Hyper-V (Home, Pro). On some hardware with Hyper-V driver incompatibilities, VBS may cause boot delays or compatibility issues. VBS is enabled by default on modern Windows 11 hardware; this setting ensures it is also enforced via policy.",
-                ApplyOps =
-                [
-                    RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\DeviceGuard", "EnableVirtualizationBasedSecurity", 1),
-                ],
-                RemoveOps =
-                [
-                    RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\DeviceGuard", "EnableVirtualizationBasedSecurity"),
-                ],
-                DetectOps =
-                [
-                    RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\DeviceGuard", "EnableVirtualizationBasedSecurity", 1),
-                ],
-            },
-            new TweakDef
-            {
                 Id = "trlnch-enable-hyperv-vm-encrypted-state",
                 Label = "Trusted Launch: Enable Encrypted State for Hyper-V VMs (Shielded VM Support)",
                 Category = "Trusted Launch Policy",

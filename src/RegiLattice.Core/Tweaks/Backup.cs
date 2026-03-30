@@ -86,51 +86,9 @@ internal static class Backup
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer", "NoPreviousVersionsPage")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer", "NoPreviousVersionsPage", 1)],
         },
-        new TweakDef
-        {
-            Id = "backup-disable-auto-repair",
-            Label = "Disable Automatic Repair on Boot",
-            Category = "Backup & Recovery",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Prevents automatic reboot loops on crash by disabling the AutoReboot flag in CrashControl. Improves stability diagnostics by keeping the BSOD screen visible.",
-            Tags = ["backup", "recovery", "crash", "reboot", "performance"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "AutoReboot", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "AutoReboot", 1)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "AutoReboot", 0)],
-        },
-        new TweakDef
-        {
-            Id = "backup-recovery-timeout",
-            Label = "Set Recovery Console Timeout",
-            Category = "Backup & Recovery",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets WaitToKillServiceTimeout to 2000 ms (from default 5000 ms). Speeds up shutdown by reducing the time Windows waits for services to stop gracefully.",
-            Tags = ["backup", "shutdown", "timeout", "performance"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control"],
-            ApplyOps = [RegOp.SetString(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control", "WaitToKillServiceTimeout", "2000")],
-            RemoveOps = [RegOp.SetString(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control", "WaitToKillServiceTimeout", "5000")],
-            DetectOps = [RegOp.CheckString(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control", "WaitToKillServiceTimeout", "2000")],
-        },
-        new TweakDef
-        {
-            Id = "backup-disable-crash-dump",
-            Label = "Disable Crash Dump (Performance)",
-            Category = "Backup & Recovery",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description =
-                "Disables crash memory dumps (CrashDumpEnabled=0). Frees disk space and reduces overhead during crashes. Revert restores Automatic mode (7). Options: 0=None, 1=Complete, 2=Kernel, 3=Small, 7=Automatic.",
-            Tags = ["backup", "crash-dump", "disk", "performance"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "CrashDumpEnabled", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "CrashDumpEnabled", 7)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "CrashDumpEnabled", 0)],
-        },
+
+
+
         new TweakDef
         {
             Id = "backup-disable-error-reporting",

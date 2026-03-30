@@ -147,42 +147,6 @@ internal static class MsStore
         },
         new TweakDef
         {
-            Id = "msstore-disable-spotlight",
-            Label = "Disable Windows Spotlight",
-            Category = "Microsoft Store",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Disables Windows Spotlight on the lock screen. Default: enabled. Recommended: disabled.",
-            Tags = ["store", "spotlight", "lockscreen", "ux"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager", "RotatingLockScreenEnabled", 0),
-                RegOp.SetDword(
-                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
-                    "RotatingLockScreenOverlayEnabled",
-                    0
-                ),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager", "RotatingLockScreenEnabled"),
-                RegOp.DeleteValue(
-                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
-                    "RotatingLockScreenOverlayEnabled"
-                ),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(
-                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
-                    "RotatingLockScreenEnabled",
-                    0
-                ),
-            ],
-        },
-        new TweakDef
-        {
             Id = "msstore-disable-app-suggestions-start",
             Label = "Disable App Suggestions in Start",
             Category = "Microsoft Store",
@@ -729,30 +693,6 @@ internal static class MsStore
             DetectOps =
             [
                 RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CloudContent", "DisableWindowsConsumerFeatures", 1),
-            ],
-        },
-        new TweakDef
-        {
-            Id = "msstore-rotating-lock-screen-off",
-            Label = "Disable Windows Spotlight on lock screen",
-            Category = "Microsoft Store",
-            Tags = ["msstore", "spotlight", "lockscreen", "privacy"],
-            NeedsAdmin = false,
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager", "RotatingLockScreenEnabled", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager", "RotatingLockScreenEnabled"),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(
-                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
-                    "RotatingLockScreenEnabled",
-                    0
-                ),
             ],
         },
         new TweakDef

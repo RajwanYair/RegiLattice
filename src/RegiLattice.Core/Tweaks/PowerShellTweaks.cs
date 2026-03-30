@@ -124,21 +124,7 @@ internal static class PowerShellTweaks
                 return int.TryParse(stdout.Trim(), out var count) && count < 10;
             },
         },
-        new TweakDef
-        {
-            Id = "ps-enable-long-paths",
-            Label = "Enable Win32 Long Paths",
-            Category = "PowerShell",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            KindHint = TweakKind.PowerShell,
-            Description = "Enables support for file paths longer than 260 characters in Win32 applications.",
-            Tags = ["powershell", "filesystem", "developer"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem", "LongPathsEnabled", 1)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem", "LongPathsEnabled", 0)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem", "LongPathsEnabled", 1)],
-        },
+
         new TweakDef
         {
             Id = "ps-enable-dev-mode",

@@ -49,20 +49,6 @@ internal static class TouchPen
         },
         new TweakDef
         {
-            Id = "touch-disable-handwriting",
-            Label = "Disable Handwriting Personalisation",
-            Category = "Touch & Pen",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Stops Windows from collecting handwriting and inking data for personalisation. Recommended: Disabled for privacy.",
-            Tags = ["touch", "pen", "handwriting", "privacy"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\InputPersonalization"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\InputPersonalization", "RestrictImplicitInkCollection", 1)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\InputPersonalization", "RestrictImplicitInkCollection", 0)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\InputPersonalization", "RestrictImplicitInkCollection", 1)],
-        },
-        new TweakDef
-        {
             Id = "touch-disable-ink-suggestions",
             Label = "Disable Ink Work Suggested Apps",
             Category = "Touch & Pen",
@@ -140,20 +126,6 @@ internal static class TouchPen
                 ),
             ],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ImmersiveShell", "SignInMode", 1)],
-        },
-        new TweakDef
-        {
-            Id = "touch-disable-handwriting-panel",
-            Label = "Disable Touch Handwriting Panel",
-            Category = "Touch & Pen",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables the handwriting input panel that appears when tapping text fields with a pen. Policy setting.",
-            Tags = ["touch", "pen", "handwriting", "panel", "policy"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\TabletPC"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\InputPersonalization", "RestrictImplicitInkCollection", 1)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\InputPersonalization", "RestrictImplicitInkCollection", 0)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\InputPersonalization", "RestrictImplicitInkCollection", 1)],
         },
         new TweakDef
         {
@@ -690,21 +662,6 @@ internal static class TouchPen
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsTouchKeyboard", "DisableAutoKeyboard", 1)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsTouchKeyboard", "DisableAutoKeyboard")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsTouchKeyboard", "DisableAutoKeyboard", 1)],
-        },
-        new TweakDef
-        {
-            Id = "touch-disable-ink-personalization",
-            Label = "Disable Ink Personalisation Data Collection",
-            Category = "Touch & Pen",
-            NeedsAdmin = false,
-            CorpSafe = false,
-            Description =
-                "Stops Windows from collecting ink input samples to improve handwriting recognition. Removes implicit ink data upload. Default: collection enabled.",
-            Tags = ["touch", "ink", "privacy", "personalization"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\InputPersonalization"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\InputPersonalization", "RestrictImplicitInkCollection", 1)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\InputPersonalization", "RestrictImplicitInkCollection", 0)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\InputPersonalization", "RestrictImplicitInkCollection", 1)],
         },
         new TweakDef
         {

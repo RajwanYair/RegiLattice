@@ -757,20 +757,6 @@ internal static class Privacy
         },
         new TweakDef
         {
-            Id = "priv-disable-error-reporting",
-            Label = "Disable Windows Error Reporting",
-            Category = "Privacy",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables Windows Error Reporting (WER). Prevents crash dumps and error logs from being sent to Microsoft.",
-            Tags = ["privacy", "error", "reporting", "crash"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Windows Error Reporting"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Windows Error Reporting", "Disabled", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Windows Error Reporting", "Disabled")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Windows Error Reporting", "Disabled", 1)],
-        },
-        new TweakDef
-        {
             Id = "priv-disable-web-search-in-start",
             Label = "Disable Web Search Results in Start Menu",
             Category = "Privacy",

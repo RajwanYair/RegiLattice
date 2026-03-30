@@ -359,20 +359,6 @@ internal static class SystemOptimization
             RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "WaitToKillAppTimeout", "20000")],
             DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "WaitToKillAppTimeout", "3000")],
         },
-        new TweakDef
-        {
-            Id = "sysopt-wait-to-kill-service-timeout",
-            Label = "Reduce Wait to Kill Service Timeout (3s)",
-            Category = "System Optimization",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Reduces the wait time before force-killing services at shutdown from 12s to 3s.",
-            Tags = ["optimization", "shutdown", "service", "timeout"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control"],
-            ApplyOps = [RegOp.SetString(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control", "WaitToKillServiceTimeout", "3000")],
-            RemoveOps = [RegOp.SetString(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control", "WaitToKillServiceTimeout", "12000")],
-            DetectOps = [RegOp.CheckString(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control", "WaitToKillServiceTimeout", "3000")],
-        },
         // ── Security & LSA ───────────────────────────────────────────────
 
         new TweakDef
@@ -613,42 +599,6 @@ internal static class SystemOptimization
             DetectOps =
             [
                 RegOp.CheckDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer", "NoLowDiskSpaceChecks", 1),
-            ],
-        },
-        new TweakDef
-        {
-            Id = "sysopt-disable-tips-notifications",
-            Label = "Disable Windows Tips and Suggestions",
-            Category = "System Optimization",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Stops Windows from showing tips, suggestions, and 'Get Even More Out of Windows' prompts.",
-            Tags = ["optimization", "tips", "suggestions", "notifications"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager"],
-            ApplyOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
-                    "SubscribedContent-338389Enabled",
-                    0
-                ),
-                RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager", "SoftLandingEnabled", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(
-                    @"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
-                    "SubscribedContent-338389Enabled"
-                ),
-                RegOp.DeleteValue(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager", "SoftLandingEnabled"),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(
-                    @"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
-                    "SubscribedContent-338389Enabled",
-                    0
-                ),
             ],
         },
         new TweakDef

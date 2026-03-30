@@ -358,29 +358,6 @@ internal static class TelemetryAdvanced
         },
         new TweakDef
         {
-            Id = "telem-disable-type-personalization",
-            Label = "Disable Typing Personalisation",
-            Category = "Telemetry Advanced",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Disables typing and inking personalisation data collection. Prevents Windows from learning your typing patterns. Default: enabled.",
-            Tags = ["telemetry", "typing", "personalization", "privacy"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\InputPersonalization"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\InputPersonalization", "RestrictImplicitTextCollection", 1),
-                RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\InputPersonalization", "RestrictImplicitInkCollection", 1),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\InputPersonalization", "RestrictImplicitTextCollection"),
-                RegOp.DeleteValue(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\InputPersonalization", "RestrictImplicitInkCollection"),
-            ],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\InputPersonalization", "RestrictImplicitTextCollection", 1)],
-        },
-        new TweakDef
-        {
             Id = "telem-disable-usage-tracking",
             Label = "Disable App Launch Usage Tracking",
             Category = "Telemetry Advanced",

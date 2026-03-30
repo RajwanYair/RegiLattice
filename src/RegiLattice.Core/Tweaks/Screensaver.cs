@@ -93,23 +93,7 @@ internal static class Screensaver
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Personalization", "NoLockScreenSlideshow")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Personalization", "NoLockScreenSlideshow", 1)],
         },
-        new TweakDef
-        {
-            Id = "ss-enable-transparency",
-            Label = "Enable Transparency Effects",
-            Category = "Screensaver & Lock",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Enable window transparency/acrylic effects. Default: enabled.",
-            Tags = ["transparency", "acrylic", "effects", "visual"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize", "EnableTransparency", 1)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize", "EnableTransparency", 0)],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize", "EnableTransparency", 1),
-            ],
-        },
+
         new TweakDef
         {
             Id = "ss-scr-timeout-10min",

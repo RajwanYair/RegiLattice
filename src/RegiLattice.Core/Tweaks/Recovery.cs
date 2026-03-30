@@ -101,49 +101,9 @@ internal static class Recovery
                 RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Configuration Manager", "WinREEnabled", 0),
             ],
         },
-        new TweakDef
-        {
-            Id = "recovery-disable-auto-reboot-bsod",
-            Label = "Disable Auto-Reboot on BSOD",
-            Category = "Recovery",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Prevents automatic reboot after a blue screen of death. Allows reading the error code. Default: auto-reboot enabled.",
-            Tags = ["recovery", "bsod", "reboot", "diagnostics"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "AutoReboot", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "AutoReboot", 1)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "AutoReboot", 0)],
-        },
-        new TweakDef
-        {
-            Id = "recovery-full-memory-dump",
-            Label = "Enable Full Memory Dump on Crash",
-            Category = "Recovery",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description =
-                "Sets crash dump type to Full Memory Dump for maximum diagnostic info. Requires disk space equal to RAM. Default: Automatic (kernel).",
-            Tags = ["recovery", "crash", "memory-dump", "diagnostics"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "CrashDumpEnabled", 1)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "CrashDumpEnabled", 7)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "CrashDumpEnabled", 1)],
-        },
-        new TweakDef
-        {
-            Id = "recovery-disable-error-reporting",
-            Label = "Disable Windows Error Reporting",
-            Category = "Recovery",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables Windows Error Reporting (WER). Prevents crash data from being sent to Microsoft. Default: enabled.",
-            Tags = ["recovery", "error-reporting", "privacy", "disable"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Error Reporting"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Error Reporting", "Disabled", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Error Reporting", "Disabled")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Error Reporting", "Disabled", 1)],
-        },
+
+
+
         new TweakDef
         {
             Id = "recovery-disable-problem-reports",
@@ -306,21 +266,7 @@ internal static class Recovery
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "Overwrite")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "Overwrite", 1)],
         },
-        new TweakDef
-        {
-            Id = "recovery-small-memory-dump",
-            Label = "Use Small Memory Dump (64 KB)",
-            Category = "Recovery",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Configures the system to save a small (miniDump) crash dump instead of a full kernel or complete dump. Faster, uses minimal disk space. Default: automatic.",
-            Tags = ["recovery", "crash", "dump", "minidump", "disk-space"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "CrashDumpEnabled", 3)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "CrashDumpEnabled", 7)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "CrashDumpEnabled", 3)],
-        },
+
         new TweakDef
         {
             Id = "recovery-disable-send-alert",
@@ -354,21 +300,7 @@ internal static class Recovery
             ],
         },
         // ── Sprint 18 — 10 new Recovery tweaks ────────────────────────────
-        new TweakDef
-        {
-            Id = "recovery-disable-auto-restart-on-crash",
-            Label = "Disable Automatic Restart on System Crash",
-            Category = "Recovery",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Prevents Windows from automatically restarting after a BSOD. Shows the blue screen until manual reboot so you can read the error. Default: auto-restart.",
-            Tags = ["recovery", "bsod", "restart", "crash", "debugging"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "AutoReboot", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "AutoReboot", 1)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "AutoReboot", 0)],
-        },
+
         new TweakDef
         {
             Id = "recovery-enable-boot-logging",
@@ -384,21 +316,7 @@ internal static class Recovery
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control", "BootLog")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control", "BootLog", 1)],
         },
-        new TweakDef
-        {
-            Id = "recovery-set-minidump-type",
-            Label = "Set Crash Dump to Small Memory Dump (Minidump)",
-            Category = "Recovery",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Configures crash dumps as small memory dumps (256 KB). Saves disk space while preserving essential debugging data. Default: automatic.",
-            Tags = ["recovery", "minidump", "crash-dump", "disk-space", "bsod"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "CrashDumpEnabled", 3)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "CrashDumpEnabled", 7)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "CrashDumpEnabled", 3)],
-        },
+
         new TweakDef
         {
             Id = "recovery-disable-winre-auto-repair",

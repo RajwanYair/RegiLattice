@@ -6,36 +6,7 @@ internal static class Multimedia
 {
     internal static IReadOnlyList<TweakDef> Tweaks { get; } =
     [
-        new TweakDef
-        {
-            Id = "media-disable-autoplay",
-            Label = "Disable AutoPlay for All Drives",
-            Category = "Multimedia",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description =
-                "Disables AutoPlay for all media and removable drives via NoDriveTypeAutoRun policy. Prevents automatic execution of media content. Default: Enabled. Recommended: Disabled.",
-            Tags = ["multimedia", "autoplay", "security", "drives"],
-            RegistryKeys =
-            [
-                @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\AutoplayHandlers",
-                @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer",
-            ],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\AutoplayHandlers", "DisableAutoplay", 1),
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer", "NoDriveTypeAutoRun", 255),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\AutoplayHandlers", "DisableAutoplay"),
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer", "NoDriveTypeAutoRun"),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer", "NoDriveTypeAutoRun", 255),
-            ],
-        },
+
         new TweakDef
         {
             Id = "media-disable-autorun",
@@ -111,47 +82,8 @@ internal static class Multimedia
             RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Control Panel\Desktop", "JPEGImportQuality")],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Control Panel\Desktop", "JPEGImportQuality", 100)],
         },
-        new TweakDef
-        {
-            Id = "media-disable-window-animations",
-            Label = "Disable Window Minimize/Maximize Animations",
-            Category = "Multimedia",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Disables minimize and maximize window animations. Makes window actions feel instant. Default: Enabled. Recommended: Disabled for responsiveness.",
-            Tags = ["multimedia", "animations", "performance", "windows"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Desktop\WindowMetrics"],
-            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop\WindowMetrics", "MinAnimate", "0")],
-            RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop\WindowMetrics", "MinAnimate", "1")],
-            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Desktop\WindowMetrics", "MinAnimate", "0")],
-        },
-        new TweakDef
-        {
-            Id = "media-disable-autoplay-handlers",
-            Label = "Disable AutoPlay Handlers (User)",
-            Category = "Multimedia",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Disables AutoPlay handlers at the user level via DisableAutoplay DWORD. Prevents automatic launch of programs when media is inserted. Default: enabled. Recommended: disabled for security.",
-            Tags = ["multimedia", "autoplay", "handlers", "security"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\AutoplayHandlers"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\AutoplayHandlers", "DisableAutoplay", 1),
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer", "NoDriveTypeAutoRun", 255),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\AutoplayHandlers", "DisableAutoplay"),
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer", "NoDriveTypeAutoRun"),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer", "NoDriveTypeAutoRun", 255),
-            ],
-        },
+
+
         new TweakDef
         {
             Id = "media-disable-media-streaming",
@@ -286,29 +218,7 @@ internal static class Multimedia
                 RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "ExtendedUIHoverTime", 0),
             ],
         },
-        new TweakDef
-        {
-            Id = "media-disable-auto-play",
-            Label = "Disable AutoPlay for All Drives",
-            Category = "Multimedia",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Disables AutoPlay for all removable and fixed drives. Prevents automatic execution of media. Default: enabled.",
-            Tags = ["media", "autoplay", "security", "drives"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\AutoplayHandlers"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\AutoplayHandlers", "DisableAutoplay", 1),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\AutoplayHandlers", "DisableAutoplay", 0),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\AutoplayHandlers", "DisableAutoplay", 1),
-            ],
-        },
+
         new TweakDef
         {
             Id = "media-set-wmf-no-telemetry",
