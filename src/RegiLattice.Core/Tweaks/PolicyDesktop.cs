@@ -60,10 +60,10 @@ internal static class PolicyDesktop
 
     // ── AutoPlayPolicy ──
     private static class _AutoPlayPolicy
-    {    
+    {
         private const string Key =
             @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AutoPlay";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -237,20 +237,20 @@ internal static class PolicyDesktop
                     DetectOps = [RegOp.CheckDword(Key, "DisableAutoPlayForMTP", 1)],
                 },
             ];
-    
+
     }
 
     // ── AutoRunPolicy ──
     private static class _AutoRunPolicy
-    {    
+    {
         private const string AutoRunUser = @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer";
-    
+
         private const string AutoRunSys = @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer";
-    
+
         private const string AutoPlayUser = @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\AutoplayHandlers";
-    
+
         private const string AutoRunPolicy2 = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Explorer";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -434,15 +434,15 @@ internal static class PolicyDesktop
                 DetectOps = [RegOp.CheckDword(AutoPlayUser, "UseAutoPlay", 0)],
             },
         ];
-    
+
     }
 
     // ── ColorCalibrationPolicy ──
     private static class _ColorCalibrationPolicy
-    {    
+    {
         private const string Key =
             @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\ColorControl";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -665,26 +665,26 @@ internal static class PolicyDesktop
                 DetectOps = [RegOp.CheckDword(Key, "DisableAutoColorCorrection", 1)],
             },
         ];
-    
+
     }
 
     // ── ColorManagement ──
     private static class _ColorManagement
-    {    
+    {
         private const string IcmUser = @"HKEY_CURRENT_USER\Software\Microsoft\Windows NT\CurrentVersion\ICMRegData";
-    
+
         private const string IcmSys = @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\ICM";
-    
+
         private const string DwmCompose = @"HKEY_CURRENT_USER\Software\Microsoft\Windows\DWM";
-    
+
         private const string DisplayGamma = @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\ICM";
-    
+
         private const string HdrProfile = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Configuration";
-    
+
         private const string ColorPolicy = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Display";
-    
+
         private const string VideoSettings = @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\VideoSettings";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -868,14 +868,14 @@ internal static class PolicyDesktop
                 DetectOps = [RegOp.CheckDword(VideoSettings, "ForceFullColorRange", 1)],
             },
         ];
-    
+
     }
 
     // ── CompartmentPolicy ──
     private static class _CompartmentPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Compartment";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -1049,15 +1049,15 @@ internal static class PolicyDesktop
                 DetectOps = [RegOp.CheckDword(Key, "RestrictCrossCompartmentIPC", 1)],
             },
         ];
-    
+
     }
 
     // ── ControlPanelPolicy ──
     private static class _ControlPanelPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\ControlPanel";
         private const string ExplorerKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -1231,16 +1231,16 @@ internal static class PolicyDesktop
                 ImpactNote = "Hides Windows Update from Control panel on WSUS/Intune-managed devices.",
             },
         ];
-    
+
     }
 
     // ── DirectXRenderingPolicy ──
     private static class _DirectXRenderingPolicy
-    {    
-        private const string Key    = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Direct3D";
-        private const string DxKey  = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DirectX";
+    {
+        private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Direct3D";
+        private const string DxKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DirectX";
         private const string DgiKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DXGI";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
         [
             new TweakDef
@@ -1404,15 +1404,15 @@ internal static class PolicyDesktop
                 DetectOps    = [RegOp.CheckDword(DgiKey, "DisableHWOverlayPlanes", 1)],
             },
         ];
-    
+
     }
 
     // ── DirectXShaderCachePolicy ──
     private static class _DirectXShaderCachePolicy
-    {    
+    {
         private const string DisplayKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Display";
-        private const string GfxKey     = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers";
-    
+        private const string GfxKey = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers";
+
         public static IReadOnlyList<TweakDef> Data =>
         [
             new TweakDef
@@ -1586,15 +1586,15 @@ internal static class PolicyDesktop
                 DetectOps = [RegOp.CheckDword(GfxKey, "EnableGPUPageDeduplication", 1)],
             },
         ];
-    
+
     }
 
     // ── DisplayAdapterPolicy ──
     private static class _DisplayAdapterPolicy
-    {    
+    {
         private const string Key =
             @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DisplayAdapters";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -1817,14 +1817,14 @@ internal static class PolicyDesktop
                 DetectOps = [RegOp.CheckDword(Key, "LockColorDepth", 1)],
             },
         ];
-    
+
     }
 
     // ── FocusAssistPolicy ──
     private static class _FocusAssistPolicy
-    {    
+    {
         private const string QhKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\QuietHours";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -1998,16 +1998,16 @@ internal static class PolicyDesktop
                     DetectOps = [RegOp.CheckDword(QhKey, "DefaultProfile", 1)],
                 },
             ];
-    
+
     }
 
     // ── FontInstallationPolicy ──
     private static class _FontInstallationPolicy
-    {    
-        private const string Key      = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System";
-        private const string CtKey    = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\SystemRestore";
-        private const string FontKey  = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Fonts";
-    
+    {
+        private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System";
+        private const string CtKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\SystemRestore";
+        private const string FontKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Fonts";
+
         public static IReadOnlyList<TweakDef> Data =>
         [
             new TweakDef
@@ -2171,14 +2171,14 @@ internal static class PolicyDesktop
                 DetectOps    = [RegOp.CheckDword(FontKey, "AuditFontInstallEvents", 1)],
             },
         ];
-    
+
     }
 
     // ── FontProviderPolicy ──
     private static class _FontProviderPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\FontProvider";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -2352,16 +2352,16 @@ internal static class PolicyDesktop
                 DetectOps = [RegOp.CheckDword(Key, "DisableThirdPartyFontProvider", 1)],
             },
         ];
-    
+
     }
 
     // ── GdiRendererPolicy ──
     private static class _GdiRendererPolicy
-    {    
-        private const string Key    = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Dwm";
+    {
+        private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Dwm";
         private const string RdsKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services";
         private const string GdiKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\GDI";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
         [
             new TweakDef
@@ -2525,16 +2525,16 @@ internal static class PolicyDesktop
                 DetectOps    = [RegOp.CheckDword(GdiKey, "DisableGDITelemetry", 1)],
             },
         ];
-    
+
     }
 
     // ── GpuComputePolicy ──
     private static class _GpuComputePolicy
-    {    
-        private const string Key    = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\GPU";
-        private const string MlKey  = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WinML";
+    {
+        private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\GPU";
+        private const string MlKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WinML";
         private const string DmlKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DirectML";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
         [
             new TweakDef
@@ -2698,14 +2698,14 @@ internal static class PolicyDesktop
                 DetectOps    = [RegOp.CheckDword(Key, "CompositorVRAMReserveMB", 256)],
             },
         ];
-    
+
     }
 
     // ── GraphicsDriversPolicy ──
     private static class _GraphicsDriversPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\GraphicsDrivers";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -2900,18 +2900,18 @@ internal static class PolicyDesktop
                 DetectOps = [RegOp.CheckDword(Key, "DisableDisplayRequired", 1)],
             },
         ];
-    
+
     }
 
     // ── InputMethodPolicy ──
     private static class _InputMethodPolicy
-    {    
+    {
         private const string IntlPol = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Control Panel\International";
         private const string TextInput = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\TextInput";
         private const string TabletInput = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\TabletPC";
         private const string ImePol = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Control Panel\Desktop";
         private const string LangPol = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Control Panel\International";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -3112,14 +3112,14 @@ internal static class PolicyDesktop
                 DetectOps = [RegOp.CheckDword(ImePol, "NoPointerSettings", 1)],
             },
         ];
-    
+
     }
 
     // ── InputPersonalizationPolicy ──
     private static class _InputPersonalizationPolicy
-    {    
+    {
         private const string IpKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\InputPersonalization";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -3293,18 +3293,18 @@ internal static class PolicyDesktop
                     DetectOps = [RegOp.CheckDword(IpKey, "AllowInputDataUpload", 0)],
                 },
             ];
-    
+
     }
 
     // ── KioskAssignedAccess ──
     private static class _KioskAssignedAccess
-    {    
+    {
         private const string SysPolicy = @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System";
         private const string WinPolicy = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System";
         private const string AppCompatPolicy = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppCompat";
         private const string GpoSys = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Personalization";
         private const string ExplorerPolicy = @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -3478,14 +3478,14 @@ internal static class PolicyDesktop
                 DetectOps = [RegOp.CheckDword(ExplorerPolicy, "NoClose", 1)],
             },
         ];
-    
+
     }
 
     // ── KioskBrowserPolicy ──
     private static class _KioskBrowserPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\KioskBrowser";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -3659,14 +3659,14 @@ internal static class PolicyDesktop
                 DetectOps = [RegOp.CheckDword(Key, "HideAddressBar", 1)],
             },
         ];
-    
+
     }
 
     // ── LanguageOptionsPolicy ──
     private static class _LanguageOptionsPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\LanguageOptions";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -3860,16 +3860,16 @@ internal static class PolicyDesktop
                 DetectOps = [RegOp.CheckDword(Key, "DoNotSyncLanguageSettings", 1)],
             },
         ];
-    
+
     }
 
     // ── MobilityCenterPolicy ──
     private static class _MobilityCenterPolicy
-    {    
+    {
         private const string MobLm = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\MobilityCenter";
         private const string MobCu = @"HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\MobilityCenter";
         private const string ExplLm = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CurrentVersion\Policies\Explorer";
-    
+
         public static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -4072,16 +4072,16 @@ internal static class PolicyDesktop
                 DetectOps = [RegOp.CheckDword(ExplLm, "NoMobilityCenterContextMenu", 1)],
             },
         ];
-    
+
     }
 
     // ── ModernStandbyPolicy ──
     private static class _ModernStandbyPolicy
-    {    
+    {
         private const string MsKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\ModernStandby";
         private const string PwrKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Power\PowerSettings";
         private const string PwrSleepKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Power";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
         [
             new TweakDef
@@ -4265,14 +4265,14 @@ internal static class PolicyDesktop
                 DetectOps = [RegOp.CheckDword(PwrSleepKey, "PromptPasswordOnWakeup", 1)],
             },
         ];
-    
+
     }
 
     // ── PenWorkspaceGpoPolicy ──
     private static class _PenWorkspaceGpoPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\PenWorkspace";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -4465,15 +4465,15 @@ internal static class PolicyDesktop
                 DetectOps = [RegOp.CheckDword(Key, "PenButtonDesiredAction", 2)],
             },
         ];
-    
+
     }
 
     // ── PersonalizationLockPolicy ──
     private static class _PersonalizationLockPolicy
-    {    
+    {
         private const string Key =
             @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Personalization";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -4647,15 +4647,15 @@ internal static class PolicyDesktop
                     DetectOps = [RegOp.CheckDword(Key, "DisableTransparencyEffects", 1)],
                 },
             ];
-    
+
     }
 
     // ── PersonalizationPolicy ──
     private static class _PersonalizationPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Personalization";
         private const string SysPolicy = @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -4838,15 +4838,15 @@ internal static class PolicyDesktop
                 DetectOps = [RegOp.CheckDword(SysPolicy, "NoColorChoice", 1)],
             },
         ];
-    
+
     }
 
     // ── PlayToDevicePolicy ──
     private static class _PlayToDevicePolicy
-    {    
-        private const string Key    = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\PlayToReceiver";
+    {
+        private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\PlayToReceiver";
         private const string WsdKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WSD";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
         [
             new TweakDef
@@ -5020,15 +5020,15 @@ internal static class PolicyDesktop
                 DetectOps = [RegOp.CheckDword(WsdKey, "DisableFunctionDiscoveryHostBroadcast", 1)],
             },
         ];
-    
+
     }
 
     // ── ScreenSaverSecurityPolicy ──
     private static class _ScreenSaverSecurityPolicy
-    {    
+    {
         private const string Key =
             @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\ScreenSaver";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -5202,15 +5202,15 @@ internal static class PolicyDesktop
                     DetectOps = [RegOp.CheckDword(Key, "ScreenSaverGracePeriod", 0)],
                 },
             ];
-    
+
     }
 
     // ── SharedClipboardControlPolicy ──
     private static class _SharedClipboardControlPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System";
         private const string Key2 = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CloudContent";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -5384,14 +5384,14 @@ internal static class PolicyDesktop
                     DetectOps = [RegOp.CheckDword(Key2, "RestrictSameProcessClipboard", 1)],
                 },
             ];
-    
+
     }
 
     // ── ShellRestrictionsPolicy ──
     private static class _ShellRestrictionsPolicy
-    {    
+    {
         private const string Pol = @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer";
-    
+
         public static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -5535,14 +5535,14 @@ internal static class PolicyDesktop
                 DetectOps = [RegOp.CheckDword(Pol, "NoNetHood", 1)],
             },
         ];
-    
+
     }
 
     // ── ShutdownOptionsPolicy ──
     private static class _ShutdownOptionsPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\ShutdownOptions";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -5736,14 +5736,14 @@ internal static class PolicyDesktop
                 DetectOps = [RegOp.CheckDword(Key, "LogShutdownEvents", 1)],
             },
         ];
-    
+
     }
 
     // ── SidebarGadgetsPolicy ──
     private static class _SidebarGadgetsPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Sidebar";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -5927,16 +5927,16 @@ internal static class PolicyDesktop
                 DetectOps = [RegOp.CheckDword(Key, "DisableGadgetGallery", 1)],
             },
         ];
-    
+
     }
 
     // ── StartMenuModernPolicy ──
     private static class _StartMenuModernPolicy
-    {    
+    {
         private const string ExplPol = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Explorer";
-    
+
         private const string SmExp = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\StartMenuExperience";
-    
+
         public static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -6090,16 +6090,16 @@ internal static class PolicyDesktop
                 DetectOps = [RegOp.CheckDword(ExplPol, "NoMachineBootUninstall", 1)],
             },
         ];
-    
+
     }
 
     // ── SudoWindowsPolicy ──
     private static class _SudoWindowsPolicy
-    {    
+    {
         private const string SudoKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Sudo";
         private const string ElevationConfigKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\ElevationConfig";
         private const string UacPoliciesKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\UAC";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
         [
             new TweakDef
@@ -6283,24 +6283,24 @@ internal static class PolicyDesktop
                 DetectOps = [RegOp.CheckDword(UacPoliciesKey, "RestrictSudoToApprovedHosts", 1)],
             },
         ];
-    
+
     }
 
     // ── SystemShutdown ──
     private static class _SystemShutdown
-    {    
+    {
         private const string WinLogon = @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon";
-    
+
         private const string CurrentVersion = @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion";
-    
+
         private const string PoliciesSystem = @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System";
-    
+
         private const string PoliciesExplorer = @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer";
-    
+
         private const string PowerSettings = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Power";
-    
+
         private const string SessionManager = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -6505,15 +6505,15 @@ internal static class PolicyDesktop
                 DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows NT\CurrentVersion\Winlogon", "RestartApps", 0)],
             },
         ];
-    
+
     }
 
     // ── TabletPcInputPolicy ──
     private static class _TabletPcInputPolicy
-    {    
+    {
         private const string TabPC = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\TabletPC";
         private const string TabWin = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\TabletPC";
-    
+
         public static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -6647,18 +6647,18 @@ internal static class PolicyDesktop
                 DetectOps = [RegOp.CheckDword(TabWin, "DisableFlicksFeature", 1)],
             },
         ];
-    
+
     }
 
     // ── TouchpadGestures ──
     private static class _TouchpadGestures
-    {    
+    {
         private const string Ptp = @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad";
-    
+
         private const string PtpSettings = @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad\Settings";
-    
+
         private const string EaseTouchpad = @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad\Status";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -6843,14 +6843,14 @@ internal static class PolicyDesktop
                 DetectOps = [RegOp.CheckDword(Ptp, "EdgeEnabled", 0)],
             },
         ];
-    
+
     }
 
     // ── VideoCapturePolicy ──
     private static class _VideoCapturePolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\VideoCapture";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -7074,14 +7074,14 @@ internal static class PolicyDesktop
                 DetectOps = [RegOp.CheckDword(Key, "DisableBackgroundCapture", 1)],
             },
         ];
-    
+
     }
 
     // ── VirtualKeyboardPolicy ──
     private static class _VirtualKeyboardPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\VirtualKeyboard";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -7275,16 +7275,16 @@ internal static class PolicyDesktop
                 DetectOps = [RegOp.CheckDword(Key, "DisableWideKeyboard", 1)],
             },
         ];
-    
+
     }
 
     // ── WddmDriverPolicy ──
     private static class _WddmDriverPolicy
-    {    
-        private const string Key    = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers";
-        private const string ScKey  = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Scheduler";
+    {
+        private const string Key = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers";
+        private const string ScKey = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Scheduler";
         private const string PolKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Display";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
         [
             new TweakDef
@@ -7448,14 +7448,14 @@ internal static class PolicyDesktop
                 DetectOps    = [RegOp.CheckDword(ScKey, "BackgroundGPUPriority", 1)],
             },
         ];
-    
+
     }
 
     // ── WiaImageAcquisitionPolicy ──
     private static class _WiaImageAcquisitionPolicy
-    {    
+    {
         private const string ScanKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Scanner";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -7629,16 +7629,16 @@ internal static class PolicyDesktop
                 ImpactNote = "Limits scan destinations to IT-approved paths; scans to arbitrary local or cloud paths are blocked.",
             },
         ];
-    
+
     }
 
     // ── WindowsAccessibilityPolicy ──
     private static class _WindowsAccessibilityPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Accessibility";
         private const string MagnKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Accessibility\Magnifier";
         private const string NarratorKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Accessibility\Narrator";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -7822,14 +7822,14 @@ internal static class PolicyDesktop
                 DetectOps = [RegOp.CheckDword(NarratorKey, "DisableNarratorAutoStart", 1)],
             },
         ];
-    
+
     }
 
     // ── WindowsInkWorkspaceAdvPolicy ──
     private static class _WindowsInkWorkspaceAdvPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsInkWorkspace";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -8003,20 +8003,20 @@ internal static class PolicyDesktop
                 DetectOps = [RegOp.CheckDword(Key, "RestrictInkWorkspaceOnSharedDevices", 1)],
             },
         ];
-    
+
     }
 
     // ── WindowsSearchAdv ──
     private static class _WindowsSearchAdv
-    {    
+    {
         private const string SearchPolicy = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search";
-    
+
         private const string SearchUser = @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Search";
-    
+
         private const string SearchInternal = @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows Search";
-    
+
         private const string SearchResults = @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -8199,14 +8199,14 @@ internal static class PolicyDesktop
                 DetectOps = [RegOp.CheckDword(SearchUser, "SearchboxTaskbarMode", 1)],
             },
         ];
-    
+
     }
 
     // ── WindowsSearchIndexingAdvancedPolicy ──
     private static class _WindowsSearchIndexingAdvancedPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
         [
             new TweakDef
@@ -8370,14 +8370,14 @@ internal static class PolicyDesktop
                 DetectOps    = [RegOp.CheckDword(Key, "PreventIndexingLowDiskSpaceMB", 0)],
             },
         ];
-    
+
     }
 
     // ── VirtualizationPolicy ──
     private static class _VirtualizationPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\HyperV";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -8551,7 +8551,7 @@ internal static class PolicyDesktop
                 DetectOps = [RegOp.CheckDword(Key, "EnableEnhancedMemoryProtection", 1)],
             },
         ];
-    
+
     }
 
 }

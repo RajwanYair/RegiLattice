@@ -32,11 +32,11 @@ internal static class PolicyCloud
 
     // ── CloudBackupRetentionPolicy ──
     private static class _CloudBackupRetentionPolicy
-    {    
+    {
         private const string BackupClientKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Backup\Client";
-    
+
         private const string BackupServerKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Backup\Server";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -220,16 +220,16 @@ internal static class PolicyCloud
                     DetectOps = [RegOp.CheckDword(BackupServerKey, "MaxNetworkBandwidthPercent", 30)],
                 },
             ];
-    
+
     }
 
     // ── CloudContentPolicy ──
     private static class _CloudContentPolicy
-    {    
+    {
         private const string Cloud = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CloudContent";
-    
+
         private const string CloudCu = @"HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\CloudContent";
-    
+
         public static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -383,15 +383,15 @@ internal static class PolicyCloud
                 DetectOps = [RegOp.CheckDword(CloudCu, "DisableWindowsSpotlightOnSettings", 1)],
             },
         ];
-    
+
     }
 
     // ── CloudDesktopPolicy ──
     private static class _CloudDesktopPolicy
-    {    
-        private const string CdKey  = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\CloudDesktop";
+    {
+        private const string CdKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\CloudDesktop";
         private const string CpcKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\CloudPC";
-    
+
         public static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -605,14 +605,14 @@ internal static class PolicyCloud
                 DetectOps = [RegOp.CheckDword(CpcKey, "IdleSessionTimeout", 30)],
             },
         ];
-    
+
     }
 
     // ── CloudExperienceHostPolicy ──
     private static class _CloudExperienceHostPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CloudExperienceHost";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -796,18 +796,18 @@ internal static class PolicyCloud
                 DetectOps = [RegOp.CheckDword(Key, "SkipNetworkConnectionPage", 1)],
             },
         ];
-    
+
     }
 
     // ── CloudFileSyncPolicy ──
     private static class _CloudFileSyncPolicy
-    {    
+    {
         private const string OdKey =
             @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\OneDrive";
-    
+
         private const string WfKey =
             @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WorkFolders";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -981,14 +981,14 @@ internal static class PolicyCloud
                     DetectOps = [RegOp.CheckDword(WfKey, "LockDriveOnIdle", 1)],
                 },
             ];
-    
+
     }
 
     // ── CloudNotificationsPolicy ──
     private static class _CloudNotificationsPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CloudNotifications";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -1172,14 +1172,14 @@ internal static class PolicyCloud
                 ImpactNote = "Ensures user-configured quiet hours are not bypassed by cloud-classified urgent notifications.",
             },
         ];
-    
+
     }
 
     // ── CloudPrintPolicy ──
     private static class _CloudPrintPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CloudPrint";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -1353,16 +1353,16 @@ internal static class PolicyCloud
                 DetectOps = [RegOp.CheckDword(Key, "EnforcePrintDataRetentionPolicy", 1)],
             },
         ];
-    
+
     }
 
     // ── CloudStorageQuotaPolicy ──
     private static class _CloudStorageQuotaPolicy
-    {    
+    {
         private const string CloudContentKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CloudContent";
-    
+
         private const string StorageSenseKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\StorageSense";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -1546,16 +1546,16 @@ internal static class PolicyCloud
                     DetectOps = [RegOp.CheckDword(CloudContentKey, "DisableCloudOptimizedContent", 1)],
                 },
             ];
-    
+
     }
 
     // ── ContentDeliveryPolicy ──
     private static class _ContentDeliveryPolicy
-    {    
+    {
         private const string CloudPol = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CloudContent";
         private const string StartPol = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Start";
         private const string CdmPol = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\ContentDeliveryManager";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -1757,14 +1757,14 @@ internal static class PolicyCloud
                 DetectOps = [RegOp.CheckDword(CloudPol, "DisableTailoredExperiencesWithDiagnosticData", 1)],
             },
         ];
-    
+
     }
 
     // ── DesktopAnalyticsPolicy ──
     private static class _DesktopAnalyticsPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DataCollection";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -1938,14 +1938,14 @@ internal static class PolicyCloud
                 DetectOps = [RegOp.CheckDword(Key, "EnableOneSettingsAuditing", 1)],
             },
         ];
-    
+
     }
 
     // ── OneDriveKfmPolicy ──
     private static class _OneDriveKfmPolicy
-    {    
+    {
         private const string KfmKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\OneDrive";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -2129,14 +2129,14 @@ internal static class PolicyCloud
                 DetectOps = [RegOp.CheckDword(KfmKey, "DisableFirstDeleteDialog", 1)],
             },
         ];
-    
+
     }
 
     // ── OneDriveSyncPolicy ──
     private static class _OneDriveSyncPolicy
-    {    
+    {
         private const string OneDriveKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\OneDrive";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -2320,16 +2320,16 @@ internal static class PolicyCloud
                     DetectOps = [RegOp.CheckDword(OneDriveKey, "MinDiskFreeSpaceGB", 5)],
                 },
             ];
-    
+
     }
 
     // ── SettingSyncAdv ──
     private static class _SettingSyncAdv
-    {    
+    {
         private const string SyncPolicy = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\SettingSync";
         private const string InputPers = @"HKEY_CURRENT_USER\SOFTWARE\Microsoft\InputPersonalization";
         private const string InputPersPolicy = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\InputPersonalization";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -2515,14 +2515,14 @@ internal static class PolicyCloud
                 DetectOps = [RegOp.CheckDword(InputPersPolicy, "AllowInputPersonalization", 0)],
             },
         ];
-    
+
     }
 
     // ── SettingSyncPolicy ──
     private static class _SettingSyncPolicy
-    {    
+    {
         private const string SyncKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\SettingSync";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
         [
             new TweakDef
@@ -2686,16 +2686,16 @@ internal static class PolicyCloud
                 DetectOps = [RegOp.CheckDword(SyncKey, "DisableLanguageSettingSync", 2)],
             },
         ];
-    
+
     }
 
     // ── SharepointOnlinePolicy ──
     private static class _SharepointOnlinePolicy
-    {    
+    {
         private const string SharepointKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Office\16.0\SharePoint";
-    
+
         private const string OfficePrivacyKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Office\16.0\Common\Privacy";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -2879,14 +2879,14 @@ internal static class PolicyCloud
                     DetectOps = [RegOp.CheckDword(SharepointKey, "EnableAccessAudit", 1)],
                 },
             ];
-    
+
     }
 
     // ── SkyDrivePolicy ──
     private static class _SkyDrivePolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\SkyDrive";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
         [
             new TweakDef
@@ -3060,15 +3060,15 @@ internal static class PolicyCloud
                 DetectOps = [RegOp.CheckDword(Key, "DisableSharepointSync", 1)],
             },
         ];
-    
+
     }
 
     // ── UniversalClipboardSyncPolicy ──
     private static class _UniversalClipboardSyncPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System";
         private const string Key2 = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\EdgeUpdate";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -3242,7 +3242,7 @@ internal static class PolicyCloud
                     DetectOps = [RegOp.CheckDword(Key2, "DisableEdgeClipboardManager", 1)],
                 },
             ];
-    
+
     }
 
 }

@@ -29,9 +29,9 @@ internal static class PolicyRemoteAccess
 
     // ── ClipboardRdpRedirectionPolicy ──
     private static class _ClipboardRdpRedirectionPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -201,16 +201,16 @@ internal static class PolicyRemoteAccess
                     DetectOps = [RegOp.CheckDword(Key, "fDisablePNPRedir", 1)],
                 },
             ];
-    
+
     }
 
     // ── RdpClientPolicy ──
     private static class _RdpClientPolicy
-    {    
+    {
         private const string RdpClientPolicyKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services\Client";
         private const string RdpClientUserKey = @"HKEY_CURRENT_USER\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services";
         private const string RdpServerPolicy = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -425,16 +425,16 @@ internal static class PolicyRemoteAccess
                 DetectOps = [RegOp.CheckDword(RdpServerPolicy, "fLogonDisabled", 0), RegOp.CheckDword(RdpServerPolicy, "EnableLogonWatermarking", 1)],
             },
         ];
-    
+
     }
 
     // ── RemoteAssistancePolicy ──
     private static class _RemoteAssistancePolicy
-    {    
+    {
         private const string RaPolicy = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services";
         private const string RaOffered = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services\RAUnsolicit";
         private const string RaRuntime = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Remote Assistance";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -608,14 +608,14 @@ internal static class PolicyRemoteAccess
                 DetectOps = [RegOp.CheckDword(RaPolicy, "fDenyTSConnections", 1)],
             },
         ];
-    
+
     }
 
     // ── RemoteCredentialGuardPolicy ──
     private static class _RemoteCredentialGuardPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\RemoteCredentialGuard";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -789,14 +789,14 @@ internal static class PolicyRemoteAccess
                 DetectOps = [RegOp.CheckDword(Key, "MonitorConnectionAnomalies", 1)],
             },
         ];
-    
+
     }
 
     // ── RemoteProcedureCallPolicy ──
     private static class _RemoteProcedureCallPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Rpc";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -970,15 +970,15 @@ internal static class PolicyRemoteAccess
                 DetectOps = [RegOp.CheckDword(Key, "PortsInternetAvailable", 0)],
             },
         ];
-    
+
     }
 
     // ── RemotePsJeaPolicy ──
     private static class _RemotePsJeaPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WinRM\Service";
         private const string Key2 = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WinRM\Client";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -1152,14 +1152,14 @@ internal static class PolicyRemoteAccess
                     DetectOps = [RegOp.CheckDword(Key, "DisableCredSSP", 1)],
                 },
             ];
-    
+
     }
 
     // ── TerminalServicesAdvPolicy ──
     private static class _TerminalServicesAdvPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
         [
             new TweakDef
@@ -1333,14 +1333,14 @@ internal static class PolicyRemoteAccess
                 DetectOps = [RegOp.CheckDword(Key, "DisableClipboardRedirection", 1)],
             },
         ];
-    
+
     }
 
     // ── TerminalServicesPolicy ──
     private static class _TerminalServicesPolicy
-    {    
+    {
         private const string TsPol = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -1536,14 +1536,14 @@ internal static class PolicyRemoteAccess
                 DetectOps = [RegOp.CheckDword(TsPol, "fDisableAutoReconnect", 0)],
             },
         ];
-    
+
     }
 
     // ── WdagFileCachePolicy ──
     private static class _WdagFileCachePolicy
-    {    
+    {
         private const string WdagKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\AppHVSI";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -1727,14 +1727,14 @@ internal static class PolicyRemoteAccess
                     DetectOps = [RegOp.CheckDword(WdagKey, "AppHVSITelemetry", 1)],
                 },
             ];
-    
+
     }
 
     // ── WdagPolicy ──
     private static class _WdagPolicy
-    {    
+    {
         private const string AppHvsi = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\AppHVSI";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -1938,15 +1938,15 @@ internal static class PolicyRemoteAccess
                 DetectOps = [RegOp.CheckDword(AppHvsi, "NetworkIsolation", 1)],
             },
         ];
-    
+
     }
 
     // ── WinRmHardening ──
     private static class _WinRmHardening
-    {    
+    {
         private const string Client = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WinRM\Client";
         private const string Service = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WinRM\Service";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -2135,17 +2135,17 @@ internal static class PolicyRemoteAccess
                 DetectOps = [RegOp.CheckDword(Service, "AllowKerberos", 1)],
             },
         ];
-    
+
     }
 
     // ── WinRmPolicy ──
     private static class _WinRmPolicy
-    {    
+    {
         private const string Client =
             @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WinRM\Client";
         private const string Service =
             @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WinRM\Service";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -2340,14 +2340,14 @@ internal static class PolicyRemoteAccess
                     DetectOps = [RegOp.CheckDword(Service, "EnableVerboseLogging", 1)],
                 },
             ];
-    
+
     }
 
     // ── WinRmRemoteShellPolicy ──
     private static class _WinRmRemoteShellPolicy
-    {    
+    {
         private const string ShellKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WinRM\Service\RemoteShell";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -2521,16 +2521,16 @@ internal static class PolicyRemoteAccess
                     DetectOps = [RegOp.CheckDword(ShellKey, "AllowRemoteShellInbound", 0)],
                 },
             ];
-    
+
     }
 
     // ── WinRmSecurityPolicy ──
     private static class _WinRmSecurityPolicy
-    {    
-        private const string SvcKey   = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WinRM\Service";
-        private const string CliKey   = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WinRM\Client";
-        private const string WsmKey   = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WinRM";
-    
+    {
+        private const string SvcKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WinRM\Service";
+        private const string CliKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WinRM\Client";
+        private const string WsmKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WinRM";
+
         public static IReadOnlyList<TweakDef> Data =>
         [
             new TweakDef
@@ -2694,7 +2694,7 @@ internal static class PolicyRemoteAccess
                 DetectOps    = [RegOp.CheckDword(WsmKey, "LogAuthFailures", 1)],
             },
         ];
-    
+
     }
 
 }

@@ -23,9 +23,9 @@ internal static class PolicyCommunication
 
     // ── ConferencingBandwidthPolicy ──
     private static class _ConferencingBandwidthPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Teams";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
         [
             new TweakDef
@@ -205,15 +205,15 @@ internal static class PolicyCommunication
                 DetectOps = [RegOp.CheckDword(Key, "AllowImmersiveSpaces", 0)],
             },
         ];
-    
+
     }
 
     // ── ConferencingPolicy ──
     private static class _ConferencingPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Conferencing";
         private const string InvKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Conferencing\Invitations";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -397,15 +397,15 @@ internal static class PolicyCommunication
                 ImpactNote = "Prevents meeting room passwords from being cached in Windows credential store.",
             },
         ];
-    
+
     }
 
     // ── NetMeetingPolicy ──
     private static class _NetMeetingPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\NetMeeting";
         private const string SysKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\NetMeeting\System";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -589,15 +589,15 @@ internal static class PolicyCommunication
                 ImpactNote = "Prevents unsolicited inbound NetMeeting sessions on ports 1503/1720.",
             },
         ];
-    
+
     }
 
     // ── TeamsAdvanced ──
     private static class _TeamsAdvanced
-    {    
+    {
         private const string Policy = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\MicrosoftTeams";
         private const string PolicyUsers = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Teams";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -772,14 +772,14 @@ internal static class PolicyCommunication
                 DetectOps = [RegOp.CheckDword(Policy, "AllowPrivateCalling", 0)],
             },
         ];
-    
+
     }
 
     // ── TeamsCallingPolicy ──
     private static class _TeamsCallingPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\MicrosoftTeams";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
         [
             new TweakDef
@@ -953,16 +953,16 @@ internal static class PolicyCommunication
                 DetectOps = [RegOp.CheckDword(Key, "AllowMusicOnHold", 1)],
             },
         ];
-    
+
     }
 
     // ── TeamsMeetingAudioPolicy ──
     private static class _TeamsMeetingAudioPolicy
-    {    
+    {
         private const string TeamsOfficeKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Office\16.0\Teams";
-    
+
         private const string TeamsPolicyKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Teams";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -1146,14 +1146,14 @@ internal static class PolicyCommunication
                     DetectOps = [RegOp.CheckDword(TeamsPolicyKey, "EnableComplianceRecording", 1)],
                 },
             ];
-    
+
     }
 
     // ── TeamsMessagingPolicy ──
     private static class _TeamsMessagingPolicy
-    {    
+    {
         private const string TeamsPolicyKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Teams";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -1337,14 +1337,14 @@ internal static class PolicyCommunication
                     DetectOps = [RegOp.CheckDword(TeamsPolicyKey, "DisableConsumerFederation", 1)],
                 },
             ];
-    
+
     }
 
     // ── TelephonyPolicy ──
     private static class _TelephonyPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Telephony";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -1518,7 +1518,7 @@ internal static class PolicyCommunication
                 DetectOps = [RegOp.CheckDword(Key, "DisableIncomingCallNotification", 1)],
             },
         ];
-    
+
     }
 
 }

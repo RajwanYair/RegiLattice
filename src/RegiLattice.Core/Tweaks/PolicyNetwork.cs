@@ -97,9 +97,9 @@ internal static class PolicyNetwork
 
     // ── AdhocNetworkPolicy ──
     private static class _AdhocNetworkPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WirelessNetwork";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -273,21 +273,21 @@ internal static class PolicyNetwork
                 DetectOps = [RegOp.CheckDword(Key, "RestrictWlanAutoConfig", 1)],
             },
         ];
-    
+
     }
 
     // ── AlwaysOnVpnPolicy ──
     private static class _AlwaysOnVpnPolicy
-    {    
+    {
         private const string VpnKey =
             @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\NetworkConnectivityStatusIndicator";
-    
+
         private const string AgentKey =
             @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Internet Settings";
-    
+
         private const string RasKey =
             @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\RasMan\Parameters";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -461,15 +461,15 @@ internal static class PolicyNetwork
                     DetectOps = [RegOp.CheckDword(RasKey, "VpnLockDown", 1)],
                 },
             ];
-    
+
     }
 
     // ── BackgroundTransferPolicy ──
     private static class _BackgroundTransferPolicy
-    {    
+    {
         private const string Key =
             @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\BackgroundIntelligentTransfer";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -643,14 +643,14 @@ internal static class PolicyNetwork
                     DetectOps = [RegOp.CheckDword(Key, "EnableBITSAuditLogging", 1)],
                 },
             ];
-    
+
     }
 
     // ── BitsTransferPolicy ──
     private static class _BitsTransferPolicy
-    {    
+    {
         private const string BitsPol = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\BITS";
-    
+
         public static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -794,16 +794,16 @@ internal static class PolicyNetwork
                 DetectOps = [RegOp.CheckDword(BitsPol, "DisablePeerCachingServer", 1)],
             },
         ];
-    
+
     }
 
     // ── BranchCache ──
     private static class _BranchCache
-    {    
+    {
         private const string Svc = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\PeerDist\Service";
         private const string Fetch = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\PeerDist\ContentFetch";
         private const string Retrieval = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\PeerDist\Retrieval";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -969,17 +969,17 @@ internal static class PolicyNetwork
                 DetectOps = [RegOp.CheckDword(Fetch, "InitialOfferDelayInSeconds", 0)],
             },
         ];
-    
+
     }
 
     // ── BranchCachePolicy ──
     private static class _BranchCachePolicy
-    {    
+    {
         private const string SvcKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\PeerDist\Service";
         private const string SvcCfg = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\PeerDist\Service\Configuration";
         private const string HostedKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\PeerDist\HostedCache\Connection";
         private const string HashKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\PeerDist\Retrieval";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
         [
             new TweakDef
@@ -1143,14 +1143,14 @@ internal static class PolicyNetwork
                 DetectOps    = [RegOp.CheckDword(HashKey, "EnableBITSHash", 1)],
             },
         ];
-    
+
     }
 
     // ── CacheManagerPolicy ──
     private static class _CacheManagerPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CacheManager";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -1324,16 +1324,16 @@ internal static class PolicyNetwork
                 DetectOps = [RegOp.CheckDword(Key, "AuditOfflineFileAccess", 1)],
             },
         ];
-    
+
     }
 
     // ── ConnectedCachePolicy ──
     private static class _ConnectedCachePolicy
-    {    
+    {
         private const string MccKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\ConnectedCache";
         private const string MccClientKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\ConnectedCache\Client";
         private const string DeliveryOptKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DeliveryOptimization";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -1551,14 +1551,14 @@ internal static class PolicyNetwork
                     DetectOps = [RegOp.CheckDword(MccClientKey, "DisableOnMeteredConnections", 1)],
                 },
             ];
-    
+
     }
 
     // ── DataSensePolicy ──
     private static class _DataSensePolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DataSense";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -1732,15 +1732,15 @@ internal static class PolicyNetwork
                 DetectOps = [RegOp.CheckDword(Key, "DisableDataSenseFeature", 1)],
             },
         ];
-    
+
     }
 
     // ── DataUsageMeteringPolicy ──
     private static class _DataUsageMeteringPolicy
-    {    
+    {
         private const string Key =
             @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DataUsage";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -1914,14 +1914,14 @@ internal static class PolicyNetwork
                     DetectOps = [RegOp.CheckDword(Key, "AutoResetOnBillingCycle", 1)],
                 },
             ];
-    
+
     }
 
     // ── DeliveryOptimizationPolicy ──
     private static class _DeliveryOptimizationPolicy
-    {    
+    {
         private const string Do = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DeliveryOptimization";
-    
+
         public static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -2075,16 +2075,16 @@ internal static class PolicyNetwork
                 DetectOps = [RegOp.CheckDword(Do, "DOSetHoursToLimitBackgroundDownloadBandwidth", 1)],
             },
         ];
-    
+
     }
 
     // ── DfsnPolicy ──
     private static class _DfsnPolicy
-    {    
+    {
         private const string DfsKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\NetworkProvider";
         private const string DfsClientKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\DFS";
         private const string DfsNameKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Network Connections";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -2258,15 +2258,15 @@ internal static class PolicyNetwork
                 ImpactNote = "Prevents standard users from modifying their own RAS connection properties and profiles.",
             },
         ];
-    
+
     }
 
     // ── DfsrPolicy ──
     private static class _DfsrPolicy
-    {    
+    {
         private const string DfsrKey =
             @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DFSR";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -2440,18 +2440,18 @@ internal static class PolicyNetwork
                     DetectOps = [RegOp.CheckDword(DfsrKey, "PreseedingEnabled", 1)],
                 },
             ];
-    
+
     }
 
     // ── DiffServQosPolicy ──
     private static class _DiffServQosPolicy
-    {    
+    {
         private const string QosKey =
             @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\QoS";
-    
+
         private const string PsvKey =
             @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Psched";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -2645,21 +2645,21 @@ internal static class PolicyNetwork
                     DetectOps = [RegOp.CheckDword(QosKey, "SystemTrafficPriority", 1)],
                 },
             ];
-    
+
     }
 
     // ── DirectAccessConnectPolicy ──
     private static class _DirectAccessConnectPolicy
-    {    
+    {
         private const string NcsiKey =
             @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\NetworkConnectivityStatusIndicator";
-    
+
         private const string DaKey =
             @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DirectAccess\DaClientUsedToConnect";
-    
+
         private const string NrptKey =
             @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\DNSClient";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -2833,14 +2833,14 @@ internal static class PolicyNetwork
                     DetectOps = [RegOp.CheckDword(DaKey, "BypassInSiteEnabled", 0)],
                 },
             ];
-    
+
     }
 
     // ── DnsClientRegistrationPolicy ──
     private static class _DnsClientRegistrationPolicy
-    {    
+    {
         private const string DnsCl = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\DNSClient";
-    
+
         public static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -2984,14 +2984,14 @@ internal static class PolicyNetwork
                 DetectOps  = [RegOp.CheckDword(DnsCl, "NegativeCacheTime", 5)],
             },
         ];
-    
+
     }
 
     // ── DnsSecurePolicy ──
     private static class _DnsSecurePolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DNSClient";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -3165,14 +3165,14 @@ internal static class PolicyNetwork
                 DetectOps = [RegOp.CheckDword(Key, "RegistrationEnabled", 0)],
             },
         ];
-    
+
     }
 
     // ── DohEnforcementPolicy ──
     private static class _DohEnforcementPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DNSClient";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -3346,14 +3346,14 @@ internal static class PolicyNetwork
                     DetectOps = [RegOp.CheckDword(Key, "DisableDoHCache", 1)],
                 },
             ];
-    
+
     }
 
     // ── DynamicDataExchangePolicy ──
     private static class _DynamicDataExchangePolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DDE";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -3527,19 +3527,19 @@ internal static class PolicyNetwork
                 DetectOps = [RegOp.CheckDword(Key, "DisableClipboardDDE", 1)],
             },
         ];
-    
+
     }
 
     // ── EapNetworkPolicy ──
     private static class _EapNetworkPolicy
-    {    
+    {
         private const string Key =
             @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\EAP";
         private const string PeapKey =
             @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\EAP\PEAP";
         private const string ClientKey =
             @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\EAP\Client";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -3713,16 +3713,16 @@ internal static class PolicyNetwork
                     DetectOps = [RegOp.CheckDword(Key, "AllowOnlyTLSBasedMethods", 1)],
                 },
             ];
-    
+
     }
 
     // ── HomeGroupPolicy ──
     private static class _HomeGroupPolicy
-    {    
+    {
         private const string HomeGroupKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\HomeGroup";
         private const string SharingKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Network Connections";
         private const string WorkplaceKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WorkplaceJoin";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -3896,16 +3896,16 @@ internal static class PolicyNetwork
                 ImpactNote = "Blocks HomeGroup network listener; equivalent to disabling the service but enforced via policy.",
             },
         ];
-    
+
     }
 
     // ── HotspotAuthenticationPolicy ──
     private static class _HotspotAuthenticationPolicy
-    {    
+    {
         private const string HsKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\HotspotAuthentication";
         private const string WcmLocal = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WcmSvc\Local";
         private const string WirelessGpt = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Wireless\GPTWirelessPolicy";
-    
+
         public static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -4114,21 +4114,21 @@ internal static class PolicyNetwork
                 DetectOps = [RegOp.CheckDword(HsKey, "fCacheCredentials", 0)],
             },
         ];
-    
+
     }
 
     // ── Ieee8021xPolicy ──
     private static class _Ieee8021xPolicy
-    {    
+    {
         private const string WiredKey =
             @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WiredNetwork";
-    
+
         private const string WirelessKey =
             @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WirelessNetwork";
-    
+
         private const string EapKey =
             @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\EapHost";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -4314,15 +4314,15 @@ internal static class PolicyNetwork
                     DetectOps = [RegOp.CheckDword(EapKey, "RequireMutualAuth", 1)],
                 },
             ];
-    
+
     }
 
     // ── InternetCommunicationPolicy ──
     private static class _InternetCommunicationPolicy
-    {    
+    {
         private const string InetMgmtKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\InternetManagement";
         private const string InetRestrictKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\CurrentVersion\Software Protection Platform";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -4496,15 +4496,15 @@ internal static class PolicyNetwork
                 ImpactNote = "Stops Windows from fetching driver updates via Windows Update; driver management must be handled via MDM or manual deployment.",
             },
         ];
-    
+
     }
 
     // ── IpsecRulePolicy ──
     private static class _IpsecRulePolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\PolicyAgent\Oakley";
         private const string Key2 = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\IPSec\LocalPolicyModule";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -4676,14 +4676,14 @@ internal static class PolicyNetwork
                     DetectOps = [RegOp.CheckDword(Key2, "NegotiationPollInterval", 300)],
                 },
             ];
-    
+
     }
 
     // ── Ipv6Policy ──
     private static class _Ipv6Policy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Tcpip\Parameters";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -4857,14 +4857,14 @@ internal static class PolicyNetwork
                 DetectOps = [RegOp.CheckDword(Key, "DisableTransitionTechnologies", 1)],
             },
         ];
-    
+
     }
 
     // ── LanmanServerPolicy ──
     private static class _LanmanServerPolicy
-    {    
+    {
         private const string SrvKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\LanmanServer";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
         [
             new TweakDef
@@ -5028,14 +5028,14 @@ internal static class PolicyNetwork
                 DetectOps = [RegOp.CheckDword(SrvKey, "AuditInsecureGuestLogon", 1)],
             },
         ];
-    
+
     }
 
     // ── LanmanWorkstationPolicy ──
     private static class _LanmanWorkstationPolicy
-    {    
+    {
         private const string WksKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\LanmanWorkstation";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
         [
             new TweakDef
@@ -5199,16 +5199,16 @@ internal static class PolicyNetwork
                 DetectOps = [RegOp.CheckDword(WksKey, "DisableMulticastNameResolution", 1)],
             },
         ];
-    
+
     }
 
     // ── LdapClientPolicy ──
     private static class _LdapClientPolicy
-    {    
+    {
         private const string LdapPolicyKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\LDAP";
-    
+
         private const string LdapSvcKey = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\ldap";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -5392,16 +5392,16 @@ internal static class PolicyNetwork
                     DetectOps = [RegOp.CheckDword(LdapPolicyKey, "MaxPageSize", 1000)],
                 },
             ];
-    
+
     }
 
     // ── LdapSigningPolicy ──
     private static class _LdapSigningPolicy
-    {    
-        private const string Key    = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\ldap";
+    {
+        private const string Key = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\ldap";
         private const string PolKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\LDAP";
-        private const string DcKey  = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\NTDS\Parameters";
-    
+        private const string DcKey = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\NTDS\Parameters";
+
         public static IReadOnlyList<TweakDef> Data =>
         [
             new TweakDef
@@ -5565,24 +5565,24 @@ internal static class PolicyNetwork
                 DetectOps    = [RegOp.CheckDword(Key, "VerifyServerCertificate", 1)],
             },
         ];
-    
+
     }
 
     // ── LegacyProtocols ──
     private static class _LegacyProtocols
-    {    
+    {
         private const string DnsClient = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\DNSClient";
-    
+
         private const string DnsClientSvc = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters";
-    
+
         private const string NetBtParams = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\NetBT\Parameters";
-    
+
         private const string LltdSvc = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\lltdsvc";
-    
+
         private const string TeledoSvc = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip6\Parameters";
-    
+
         private const string IpHlpSvc = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\iphlpsvc\Parameters\Teredo";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -5779,14 +5779,14 @@ internal static class PolicyNetwork
                 DetectOps = [RegOp.CheckDword(DnsClientSvc, "QueryAdapterName", 0)],
             },
         ];
-    
+
     }
 
     // ── LltdProtocolPolicy ──
     private static class _LltdProtocolPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\LLTD";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -5960,15 +5960,15 @@ internal static class PolicyNetwork
                     DetectOps = [RegOp.CheckDword(Key, "DisableLLTDMulticast", 1)],
                 },
             ];
-    
+
     }
 
     // ── MapsBrowserPolicy ──
     private static class _MapsBrowserPolicy
-    {    
+    {
         private const string Key =
             @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\MapsBrowser";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -6142,14 +6142,14 @@ internal static class PolicyNetwork
                     DetectOps = [RegOp.CheckDword(Key, "Disable3DMaps", 1)],
                 },
             ];
-    
+
     }
 
     // ── MobilityPolicy ──
     private static class _MobilityPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Mobility";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -6355,14 +6355,14 @@ internal static class PolicyNetwork
                 ImpactNote = "Hides WWAN settings UI; prevents users from manually reconfiguring managed cellular connections.",
             },
         ];
-    
+
     }
 
     // ── NearbySharingPolicy ──
     private static class _NearbySharingPolicy
-    {    
+    {
         private const string NearbyKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\NearbySharing";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -6536,14 +6536,14 @@ internal static class PolicyNetwork
                     DetectOps = [RegOp.CheckDword(NearbyKey, "AllowCrossDeviceClipboard", 0)],
                 },
             ];
-    
+
     }
 
     // ── NetBiosPolicy ──
     private static class _NetBiosPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\NetBIOS";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -6717,14 +6717,14 @@ internal static class PolicyNetwork
                 DetectOps = [RegOp.CheckDword(Key, "DisableMulticastDNS", 1)],
             },
         ];
-    
+
     }
 
     // ── NetCfgPolicy ──
     private static class _NetCfgPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\NCSI";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -6898,21 +6898,21 @@ internal static class PolicyNetwork
                 DetectOps = [RegOp.CheckDword(Key, "EnforceSecureDnsConfiguration", 1)],
             },
         ];
-    
+
     }
 
     // ── NetIoOffloadPolicy ──
     private static class _NetIoOffloadPolicy
-    {    
+    {
         private const string TcpKey =
             @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters";
-    
+
         private const string TcpifKey =
             @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip6\Parameters";
-    
+
         private const string AfDKey =
             @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\AFD\Parameters";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -7128,15 +7128,15 @@ internal static class PolicyNetwork
                     DetectOps = [RegOp.CheckDword(TcpKey, "SynAttackProtect", 1)],
                 },
             ];
-    
+
     }
 
     // ── NetLocationAwarenessAdvancedPolicy ──
     private static class _NetLocationAwarenessAdvancedPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\NetworkList\Signatures";
         private const string NlmKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\NetworkList";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -7310,16 +7310,16 @@ internal static class PolicyNetwork
                     DetectOps = [RegOp.CheckDword(NlmKey, "ShowProfileClassificationIcon", 1)],
                 },
             ];
-    
+
     }
 
     // ── NetworkAccessProtectionPolicy ──
     private static class _NetworkAccessProtectionPolicy
-    {    
+    {
         private const string NapKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\NetworkAccessProtection\MSNAPAgent";
         private const string QuarantineKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\NetworkAccessProtection\Quarantine";
         private const string NapAgentKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\NAPAgent";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -7493,14 +7493,14 @@ internal static class PolicyNetwork
                 ImpactNote = "Activates IPsec NAP; requires HRA, NPS, and IPsec policy infrastructure — extremely disruptive if misconfigured. Production testing mandatory.",
             },
         ];
-    
+
     }
 
     // ── NetworkAccessProtPolicy ──
     private static class _NetworkAccessProtPolicy
-    {    
+    {
         private const string NapKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\NetworkAccessProtection";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -7674,14 +7674,14 @@ internal static class PolicyNetwork
                     DetectOps = [RegOp.CheckDword(NapKey, "DisablePolicyAutoUpdate", 1)],
                 },
             ];
-    
+
     }
 
     // ── NetworkAdapterPolicy ──
     private static class _NetworkAdapterPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\NetworkAdapterConfiguration";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -7855,14 +7855,14 @@ internal static class PolicyNetwork
                 DetectOps = [RegOp.CheckDword(Key, "DisableBridging", 1)],
             },
         ];
-    
+
     }
 
     // ── NetworkBridgePolicy ──
     private static class _NetworkBridgePolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Network Connections";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -8036,14 +8036,14 @@ internal static class PolicyNetwork
                     DetectOps = [RegOp.CheckDword(Key, "NC_AllowTopologyDiscovery", 0)],
                 },
             ];
-    
+
     }
 
     // ── NetworkConnectionsPolicy ──
     private static class _NetworkConnectionsPolicy
-    {    
+    {
         private const string Pol = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Network Connections";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -8207,14 +8207,14 @@ internal static class PolicyNetwork
                 DetectOps = [RegOp.CheckDword(Pol, "NC_RenameConnection", 0)],
             },
         ];
-    
+
     }
 
     // ── NetworkConnectStatusPolicy ──
     private static class _NetworkConnectStatusPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\NetworkConnectStatusIndicator";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -8389,19 +8389,19 @@ internal static class PolicyNetwork
                     DetectOps = [RegOp.CheckDword(Key, "EnableProbeFailureLogging", 1)],
                 },
             ];
-    
+
     }
 
     // ── NetworkDiagnosticsPolicy ──
     private static class _NetworkDiagnosticsPolicy
-    {    
+    {
         private const string NetDiagKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\NetworkDiagnostics";
         private const string WdiWireless = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WDI\{EBC068D3-BD0A-4B60-9078-6B952B7B04D1}";
         private const string WdiNetConn = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WDI\{A7A5847A-7511-4E4E-90B1-45AD2A002F51}";
         private const string WdiNetPerf = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WDI\{4DC08CD6-E593-4B38-9ABC-9C25B15571C1}";
         private const string WdiNetCfg = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WDI\{C76A4930-2379-4C5F-B2B3-F671FDDF73E2}";
         private const string ScriptDiag = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\ScriptedDiagnostics";
-    
+
         public static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -8601,16 +8601,16 @@ internal static class PolicyNetwork
                 DetectOps = [RegOp.CheckDword(WdiNetConn, "EnabledScenarioExecutionLevel", 1)],
             },
         ];
-    
+
     }
 
     // ── NetworkDiscovery ──
     private static class _NetworkDiscovery
-    {    
+    {
         private const string Lltd = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\LLTD";
         private const string Dns = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters";
         private const string NetBt = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\NetBT\Parameters";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -8790,15 +8790,15 @@ internal static class PolicyNetwork
                 DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\FDResPub", "Start", 4)],
             },
         ];
-    
+
     }
 
     // ── NetworkHardenedPaths ──
     private static class _NetworkHardenedPaths
-    {    
+    {
         private const string HardenedPaths = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\NetworkProvider\HardenedPaths";
         private const string WebClient = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\WebClient\Parameters";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -8972,20 +8972,20 @@ internal static class PolicyNetwork
                 DetectOps = [RegOp.CheckDword(WebClient, "ReceiveTimeout", 60000)],
             },
         ];
-    
+
     }
 
     // ── NetworkInterface ──
     private static class _NetworkInterface
-    {    
+    {
         private const string TcpIp = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters";
-    
+
         private const string TcpIpPerf = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters\Interfaces";
-    
+
         private const string AfD = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\AFD\Parameters";
-    
+
         private const string LanmanRedirector = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanWorkstation\Parameters";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -9169,14 +9169,14 @@ internal static class PolicyNetwork
                 DetectOps = [RegOp.CheckDword(TcpIp, "MaxUserPort", 65534)],
             },
         ];
-    
+
     }
 
     // ── NetworkListPolicy ──
     private static class _NetworkListPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\NetworkList";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -9350,16 +9350,16 @@ internal static class PolicyNetwork
                 DetectOps = [RegOp.CheckDword(Key, "DisableNetworkCategoryChange", 1)],
             },
         ];
-    
+
     }
 
     // ── NetworkLltdPolicy ──
     private static class _NetworkLltdPolicy
-    {    
+    {
         private const string Lltd = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\LLTD";
         private const string PeerNet = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Peernet";
         private const string PeerToPeer = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\PeerToPeer";
-    
+
         public static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -9513,14 +9513,14 @@ internal static class PolicyNetwork
                 DetectOps = [RegOp.CheckDword(PeerToPeer, "Disabled", 1)],
             },
         ];
-    
+
     }
 
     // ── NetworkLocationAwarenessPolicy ──
     private static class _NetworkLocationAwarenessPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\NetworkConnectivityStatusIndicator";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -9694,21 +9694,21 @@ internal static class PolicyNetwork
                     DetectOps = [RegOp.CheckDword(Key, "DisablePassivePolling", 1)],
                 },
             ];
-    
+
     }
 
     // ── NetworkMonitoringPolicy ──
     private static class _NetworkMonitoringPolicy
-    {    
+    {
         private const string NdfKey =
             @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\NetworkDiagnostics";
-    
+
         private const string DiagKey =
             @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Diagnostics";
-    
+
         private const string WdiKey =
             @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Diagnostics\Networking";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -9942,14 +9942,14 @@ internal static class PolicyNetwork
                         ],
                 },
             ];
-    
+
     }
 
     // ── NetworkProfilePolicy ──
     private static class _NetworkProfilePolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\NetworkConnectivity";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -10123,16 +10123,16 @@ internal static class PolicyNetwork
                 DetectOps = [RegOp.CheckDword(Key, "SetUnidentifiedNetworksToPublic", 1)],
             },
         ];
-    
+
     }
 
     // ── NetworkProjectionPolicy ──
     private static class _NetworkProjectionPolicy
-    {    
-        private const string ProjKey    = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\NetworkProjector";
-        private const string ConnKey    = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Connect";
-        private const string WdisKey    = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WirelessDisplay";
-    
+    {
+        private const string ProjKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\NetworkProjector";
+        private const string ConnKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Connect";
+        private const string WdisKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WirelessDisplay";
+
         public static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -10349,14 +10349,14 @@ internal static class PolicyNetwork
                 DetectOps = [RegOp.CheckDword(ConnKey, "ProjectionIdleTimeout", 5)],
             },
         ];
-    
+
     }
 
     // ── NetworkQosPolicy ──
     private static class _NetworkQosPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\QoS";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -10530,14 +10530,14 @@ internal static class PolicyNetwork
                 DetectOps = [RegOp.CheckDword(Key, "DisableFlowInspection", 1)],
             },
         ];
-    
+
     }
 
     // ── NfcPolicy ──
     private static class _NfcPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\NFC";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -10711,14 +10711,14 @@ internal static class PolicyNetwork
                     DetectOps = [RegOp.CheckDword(Key, "BlockUserNFCToggle", 1)],
                 },
             ];
-    
+
     }
 
     // ── NicTeamingPolicy ──
     private static class _NicTeamingPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\NICTeaming";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -10892,16 +10892,16 @@ internal static class PolicyNetwork
                     DetectOps = [RegOp.CheckDword(Key, "DisableNICTeamingTelemetry", 1)],
                 },
             ];
-    
+
     }
 
     // ── NtpGpoPolicy ──
     private static class _NtpGpoPolicy
-    {    
+    {
         private const string NtpClientKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\W32Time\Client";
         private const string NtpParametersKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\W32Time\Parameters";
         private const string NtpConfigKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\W32Time\Config";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -11075,15 +11075,15 @@ internal static class PolicyNetwork
                 ImpactNote = "Configures W32Time announce flags; primarily relevant on domain controllers — apply cautiously on standalone workstations.",
             },
         ];
-    
+
     }
 
     // ── ProxyBypassPolicy ──
     private static class _ProxyBypassPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CurrentVersion\Internet Settings";
         private const string Key2 = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Internet Explorer\Control Panel";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -11257,18 +11257,18 @@ internal static class PolicyNetwork
                     DetectOps = [RegOp.CheckDword(Key, "DisableSplitTunnelingBypass", 1)],
                 },
             ];
-    
+
     }
 
     // ── RadiusAuthPolicy ──
     private static class _RadiusAuthPolicy
-    {    
+    {
         private const string NpsKey =
             @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\NPS";
-    
+
         private const string NetworkAccessKey =
             @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\NetworkAccess";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -11442,21 +11442,21 @@ internal static class PolicyNetwork
                     DetectOps = [RegOp.CheckDword(NpsKey, "EnableProxyState", 1)],
                 },
             ];
-    
+
     }
 
     // ── RemoteNetworkAccessPolicy ──
     private static class _RemoteNetworkAccessPolicy
-    {    
+    {
         private const string RasKey =
             @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\NetworkAccessProtection";
-    
+
         private const string RemAccKey =
             @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Rpc";
-    
+
         private const string RasMgrKey =
             @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\RemoteAccess";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -11630,15 +11630,15 @@ internal static class PolicyNetwork
                     DetectOps = [RegOp.CheckDword(RasMgrKey, "MaxConcurrentConnections", 100)],
                 },
             ];
-    
+
     }
 
     // ── SharedFoldersSmbPolicy ──
     private static class _SharedFoldersSmbPolicy
-    {    
+    {
         private const string LanWs = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\LanmanWorkstation";
         private const string LanSrv = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters";
-    
+
         public static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -11774,14 +11774,14 @@ internal static class PolicyNetwork
                 DetectOps = [RegOp.CheckDword(LanSrv, "MaxMpxCt", 16777216)],
             },
         ];
-    
+
     }
 
     // ── SmbEncryptionPolicy ──
     private static class _SmbEncryptionPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\SMB";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -11955,18 +11955,18 @@ internal static class PolicyNetwork
                 DetectOps = [RegOp.CheckDword(Key, "AuditSMBConnections", 1)],
             },
         ];
-    
+
     }
 
     // ── SmbNetworking ──
     private static class _SmbNetworking
-    {    
+    {
         private const string LmWks = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanWorkstation\Parameters";
-    
+
         private const string LmSrv = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters";
-    
+
         private const string MrxSmb = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\MrxSmb\Parameters";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -12145,16 +12145,16 @@ internal static class PolicyNetwork
                 DetectOps = [RegOp.CheckDword(LmWks, "MaxCollectionCount", 32)],
             },
         ];
-    
+
     }
 
     // ── SmbServerHardeningPolicy ──
     private static class _SmbServerHardeningPolicy
-    {    
-        private const string Key    = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanManServer\Parameters";
+    {
+        private const string Key = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanManServer\Parameters";
         private const string SrvKey = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanWorkstation\Parameters";
         private const string PolKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\LanmanServer";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
         [
             new TweakDef
@@ -12318,14 +12318,14 @@ internal static class PolicyNetwork
                 DetectOps    = [RegOp.CheckDword(PolKey, "DisableSMBTelemetry", 1)],
             },
         ];
-    
+
     }
 
     // ── SmbServerPolicy ──
     private static class _SmbServerPolicy
-    {    
+    {
         private const string SmbSrv = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters";
-    
+
         public static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -12469,16 +12469,16 @@ internal static class PolicyNetwork
                 DetectOps = [RegOp.CheckDword(SmbSrv, "DiskSpaceThreshold", 10)],
             },
         ];
-    
+
     }
 
     // ── SnmpPolicy ──
     private static class _SnmpPolicy
-    {    
+    {
         private const string SnmpKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\SNMP\Parameters";
         private const string AgentKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\SNMP\Parameters\ValidCommunities";
         private const string MgrKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\SNMP\Parameters\PermittedManagers";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -12662,14 +12662,14 @@ internal static class PolicyNetwork
                 DetectOps = [RegOp.CheckDword(SnmpKey, "RestrictTrapReceivers", 1)],
             },
         ];
-    
+
     }
 
     // ── SshHardening ──
     private static class _SshHardening
-    {    
+    {
         private const string SshdConfig = @"C:\ProgramData\ssh\sshd_config";
-    
+
         // Helper: apply a directive in sshd_config (add or replace).
         private static void SetSshdDirective(string directive, string value, bool dryRun)
         {
@@ -12700,7 +12700,7 @@ internal static class PolicyNetwork
             }
             System.IO.File.WriteAllLines(SshdConfig, lines);
         }
-    
+
         // Helper: remove / comment out a directive.
         private static void RemoveSshdDirective(string directive, bool dryRun)
         {
@@ -12721,7 +12721,7 @@ internal static class PolicyNetwork
             }
             System.IO.File.WriteAllLines(SshdConfig, lines);
         }
-    
+
         // Helper: detect a directive is set to the expected value.
         private static bool DetectSshdDirective(string directive, string expectedValue)
         {
@@ -12744,9 +12744,9 @@ internal static class PolicyNetwork
             }
             return false;
         }
-    
+
         private static bool SshdConfigExists() => System.IO.File.Exists(SshdConfig);
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -12932,14 +12932,14 @@ internal static class PolicyNetwork
                 DetectAction = () => DetectSshdDirective("MACs", "hmac-sha2-512,hmac-sha2-256"),
             },
         ];
-    
+
     }
 
     // ── VoipQualityPolicy ──
     private static class _VoipQualityPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Teams";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
         [
             new TweakDef
@@ -13115,16 +13115,16 @@ internal static class PolicyNetwork
                 DetectOps = [RegOp.CheckDword(Key, "AppSharePortsEnabled", 1)],
             },
         ];
-    
+
     }
 
     // ── VpnRemoteAccessPolicy ──
     private static class _VpnRemoteAccessPolicy
-    {    
+    {
         private const string RasKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\RemoteAccess";
         private const string IkeKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\RemoteAccess\IKEv2";
         private const string ConnKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\RemoteAccess\Config";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
         [
             new TweakDef
@@ -13288,14 +13288,14 @@ internal static class PolicyNetwork
                 DetectOps    = [RegOp.CheckDword(RasKey, "DisableSavedCredentials", 1)],
             },
         ];
-    
+
     }
 
     // ── WcmConnectionPolicy ──
     private static class _WcmConnectionPolicy
-    {    
+    {
         private const string Wcm = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WcmSvc\GroupPolicy";
-    
+
         public static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -13439,15 +13439,15 @@ internal static class PolicyNetwork
                 DetectOps  = [RegOp.CheckDword(Wcm, "fBlockLocalPolicyMerge", 1)],
             },
         ];
-    
+
     }
 
     // ── WcmWifiPolicy ──
     private static class _WcmWifiPolicy
-    {    
+    {
         private const string Key =
             @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WCM";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -13621,18 +13621,18 @@ internal static class PolicyNetwork
                     DetectOps = [RegOp.CheckDword(Key, "DisableManagedWifiOffload", 1)],
                 },
             ];
-    
+
     }
 
     // ── WebProxyAutoDiscoveryPolicy ──
     private static class _WebProxyAutoDiscoveryPolicy
-    {    
+    {
         private const string InetKey =
             @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CurrentVersion\Internet Settings";
-    
+
         private const string WpadKey =
             @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CurrentVersion\Internet Settings\Wpad";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -13806,14 +13806,14 @@ internal static class PolicyNetwork
                     DetectOps = [RegOp.CheckDword(InetKey, "FtpProxyEnable", 0)],
                 },
             ];
-    
+
     }
 
     // ── WifiConnectionPolicy ──
     private static class _WifiConnectionPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WcmSvc\GroupPolicy";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -13987,24 +13987,24 @@ internal static class PolicyNetwork
                     DetectOps = [RegOp.CheckDword(Key, "EnableWifiConnectionEventLogging", 1)],
                 },
             ];
-    
+
     }
 
     // ── WifiNetworking ──
     private static class _WifiNetworking
-    {    
+    {
         private const string WifiPolicy = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WcmSvc\GroupPolicy";
-    
+
         private const string WifiService = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\WlanSvc\Parameters";
-    
+
         private const string WiFiSense = @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\WcmSvc\wifinetworkmanager\config";
-    
+
         private const string WiFiSensePolicy = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WcmSvc\wifinetworkmanager";
-    
+
         private const string WlanProfile = @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\NetworkList\DefaultMediaCost";
-    
+
         private const string NdisTcp = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -14187,14 +14187,14 @@ internal static class PolicyNetwork
                 DetectOps = [RegOp.CheckDword(WifiPolicy, "fAllowAutoConnectToWiFiSenseHotspots", 0)],
             },
         ];
-    
+
     }
 
     // ── WinHttpProxyPolicy ──
     private static class _WinHttpProxyPolicy
-    {    
+    {
         private const string WhKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WinHttp";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -14368,14 +14368,14 @@ internal static class PolicyNetwork
                     DetectOps = [RegOp.CheckDword(WhKey, "DisableWpadLookup", 1)],
                 },
             ];
-    
+
     }
 
     // ── WinInetPolicy ──
     private static class _WinInetPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CurrentVersion\Internet Settings";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -14549,18 +14549,18 @@ internal static class PolicyNetwork
                 DetectOps = [RegOp.CheckDword(Key, "DisableZoneModification", 1)],
             },
         ];
-    
+
     }
 
     // ── WinsNameResolutionPolicy ──
     private static class _WinsNameResolutionPolicy
-    {    
+    {
         private const string DnsKey =
             @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\DNSClient";
-    
+
         private const string NetbtKey =
             @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\NetBT\Parameters";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -14754,14 +14754,14 @@ internal static class PolicyNetwork
                     DetectOps = [RegOp.CheckDword(DnsKey, "EnableAutoConfig", 1)],
                 },
             ];
-    
+
     }
 
     // ── WirelessDisplayPolicy ──
     private static class _WirelessDisplayPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WirelessDisplay";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -14935,14 +14935,14 @@ internal static class PolicyNetwork
                     DetectOps = [RegOp.CheckDword(Key, "AllowMDMInputFromWirelessDisplayReceiver", 0)],
                 },
             ];
-    
+
     }
 
     // ── WlanPolicy ──
     private static class _WlanPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WlanSvc";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -15116,14 +15116,14 @@ internal static class PolicyNetwork
                 DetectOps = [RegOp.CheckDword(Key, "RestrictToApprovedSSIDs", 1)],
             },
         ];
-    
+
     }
 
     // ── WsdPrintDiscoveryPolicy ──
     private static class _WsdPrintDiscoveryPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers\WSD";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -15297,7 +15297,7 @@ internal static class PolicyNetwork
                     DetectOps = [RegOp.CheckDword(Key, "AuditWSDPrinterConnections", 1)],
                 },
             ];
-    
+
     }
 
 }

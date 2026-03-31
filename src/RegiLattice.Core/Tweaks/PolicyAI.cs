@@ -27,9 +27,9 @@ internal static class PolicyAI
 
     // ── AiAccessibilityPolicy ──
     private static class _AiAccessibilityPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Accessibility";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -203,14 +203,14 @@ internal static class PolicyAI
                     DetectOps = [RegOp.CheckDword(Key, "DisableOOBEAccessibilitySuggestions", 1)],
                 },
             ];
-    
+
     }
 
     // ── AiContentModerationPolicy ──
     private static class _AiContentModerationPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsAI\ContentModeration";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -384,18 +384,18 @@ internal static class PolicyAI
                     DetectOps = [RegOp.CheckDword(Key, "AuditAllAIInteractions", 1)],
                 },
             ];
-    
+
     }
 
     // ── AiCopilotWebPolicy ──
     private static class _AiCopilotWebPolicy
-    {    
+    {
         private const string CopilotKey =
             @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AI\Copilot";
-    
+
         private const string EdgeAiKey =
             @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -569,18 +569,18 @@ internal static class PolicyAI
                     DetectOps = [RegOp.CheckDword(CopilotKey, "AllowCopilotClipboardAccess", 0)],
                 },
             ];
-    
+
     }
 
     // ── AiInferencePolicy ──
     private static class _AiInferencePolicy
-    {    
+    {
         private const string AiKey =
             @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AI";
-    
+
         private const string AiInfKey =
             @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AI\Inference";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -754,15 +754,15 @@ internal static class PolicyAI
                     DetectOps = [RegOp.CheckDword(AiKey, "DisableAIPersonalisation", 1)],
                 },
             ];
-    
+
     }
 
     // ── AiSafetyPolicy ──
     private static class _AiSafetyPolicy
-    {    
+    {
         private const string AiSafeKey =
             @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AI\Safety";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -936,16 +936,16 @@ internal static class PolicyAI
                     DetectOps = [RegOp.CheckDword(AiSafeKey, "DisableImplicitAIConsent", 1)],
                 },
             ];
-    
+
     }
 
     // ── AttentionSensingPolicy ──
     private static class _AttentionSensingPolicy
-    {    
+    {
         private const string AttKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AttentionSensing";
         private const string PresKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\PresenceSensing";
         private const string LockKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\PresenceSensing\Lock";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
         [
             new TweakDef
@@ -1129,14 +1129,14 @@ internal static class PolicyAI
                 DetectOps = [RegOp.CheckDword(LockKey, "DisablePresenceOnLockScreen", 1)],
             },
         ];
-    
+
     }
 
     // ── CopilotPlusNpuPolicy ──
     private static class _CopilotPlusNpuPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsAI\NPU";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -1310,14 +1310,14 @@ internal static class PolicyAI
                     DetectOps = [RegOp.CheckDword(Key, "AuditNPUWorkloadDispatch", 1)],
                 },
             ];
-    
+
     }
 
     // ── CopilotSidebarPolicy ──
     private static class _CopilotSidebarPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsCopilot";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -1491,18 +1491,18 @@ internal static class PolicyAI
                     DetectOps = [RegOp.CheckDword(Key, "SuppressCopilotFirstRun", 1)],
                 },
             ];
-    
+
     }
 
     // ── MachineLearningPolicy ──
     private static class _MachineLearningPolicy
-    {    
+    {
         private const string MlKey =
             @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\MachineLearning";
-    
+
         private const string OnnxKey =
             @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\MachineLearning\ONNX";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -1676,18 +1676,18 @@ internal static class PolicyAI
                     DetectOps = [RegOp.CheckDword(MlKey, "EnableModelAccessAudit", 1)],
                 },
             ];
-    
+
     }
 
     // ── NeuralProcessingPolicy ──
     private static class _NeuralProcessingPolicy
-    {    
+    {
         private const string NpuKey =
             @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AI\NPU";
-    
+
         private const string AiHwKey =
             @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AI\HardwareAcceleration";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -1861,14 +1861,14 @@ internal static class PolicyAI
                     DetectOps = [RegOp.CheckDword(NpuKey, "NPUDiagnosticsEnabled", 1)],
                 },
             ];
-    
+
     }
 
     // ── RecallAiSnapshotPolicy ──
     private static class _RecallAiSnapshotPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsAI";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -2042,14 +2042,14 @@ internal static class PolicyAI
                     DetectOps = [RegOp.CheckDword(Key, "DisableTimelineView", 1)],
                 },
             ];
-    
+
     }
 
     // ── WindowsAiPolicy ──
     private static class _WindowsAiPolicy
-    {    
+    {
         private const string AiKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsAI";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -2230,7 +2230,7 @@ internal static class PolicyAI
                     DetectOps = [RegOp.CheckDword(AiKey, "TurnOffSavingScreenshots", 1)],
                 },
             ];
-    
+
     }
 
 }

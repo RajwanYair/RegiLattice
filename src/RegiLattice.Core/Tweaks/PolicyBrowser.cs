@@ -43,11 +43,11 @@ internal static class PolicyBrowser
 
     // ── DefaultBrowserPolicy ──
     private static class _DefaultBrowserPolicy
-    {    
+    {
         private const string EdgeKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge";
         private const string IeKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Internet Explorer\Main";
         private const string AssocKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -221,14 +221,14 @@ internal static class PolicyBrowser
                 ImpactNote = "Disables Edge side panel (Bing Chat, Shopping, Tools) from appearing in any context.",
             },
         ];
-    
+
     }
 
     // ── EdgeAppGuardPolicy ──
     private static class _EdgeAppGuardPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\AppHVSI";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -402,14 +402,14 @@ internal static class PolicyBrowser
                     DetectOps = [RegOp.CheckDword(Key, "BlockNonEnterpriseContent", 1)],
                 },
             ];
-    
+
     }
 
     // ── EdgeAutoFillPolicy ──
     private static class _EdgeAutoFillPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
         [
             new TweakDef
@@ -583,14 +583,14 @@ internal static class PolicyBrowser
                 DetectOps = [RegOp.CheckDword(Key, "EdgeShoppingAssistantEnabled", 0)],
             },
         ];
-    
+
     }
 
     // ── EdgeCertTransparencyPolicy ──
     private static class _EdgeCertTransparencyPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
         [
             new TweakDef
@@ -764,14 +764,14 @@ internal static class PolicyBrowser
                 DetectOps = [RegOp.CheckDword(Key, "HttpsOnlyMode", 1)],
             },
         ];
-    
+
     }
 
     // ── EdgeDownloadHistoryPolicy ──
     private static class _EdgeDownloadHistoryPolicy
-    {    
+    {
         private const string EdgeKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -955,14 +955,14 @@ internal static class PolicyBrowser
                 ImpactNote = "OS-unsupported banner is hidden; Edge continues to run on the OS but without updates if not supported.",
             },
         ];
-    
+
     }
 
     // ── EdgeEarlyHintsPolicy ──
     private static class _EdgeEarlyHintsPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -1136,14 +1136,14 @@ internal static class PolicyBrowser
                     DetectOps = [RegOp.CheckDword(Key, "EdgeDisableExplicitMicrosoftServicesIntegration", 1)],
                 },
             ];
-    
+
     }
 
     // ── EdgeExtensionPolicy ──
     private static class _EdgeExtensionPolicy
-    {    
+    {
         private const string EdgeKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -1317,14 +1317,14 @@ internal static class PolicyBrowser
                 ImpactNote = "Strict Enhanced Security Mode disables JIT on all sites; may slow complex web apps by 10–20%.",
             },
         ];
-    
+
     }
 
     // ── EdgeImportPrivacyPolicy ──
     private static class _EdgeImportPrivacyPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -1508,14 +1508,14 @@ internal static class PolicyBrowser
                     DetectOps = [RegOp.CheckDword(Key, "SendSiteInfoToImproveServices", 0)],
                 },
             ];
-    
+
     }
 
     // ── EdgeInternetExplorerModePolicy ──
     private static class _EdgeInternetExplorerModePolicy
-    {    
+    {
         private const string EdgeKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -1689,14 +1689,14 @@ internal static class PolicyBrowser
                 ImpactNote = "Cloud-based IE mode site list management disabled; site list is sourced from on-premises GPO or file share only.",
             },
         ];
-    
+
     }
 
     // ── EdgeMediaCapturePolicy ──
     private static class _EdgeMediaCapturePolicy
-    {    
+    {
         private const string EdgeKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -1870,14 +1870,14 @@ internal static class PolicyBrowser
                 ImpactNote = "Math Solver button removed from Edge; AI math assistance feature disabled on all pages.",
             },
         ];
-    
+
     }
 
     // ── EdgeNewTabPagePolicy ──
     private static class _EdgeNewTabPagePolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
         [
             new TweakDef
@@ -2051,14 +2051,14 @@ internal static class PolicyBrowser
                 DetectOps = [RegOp.CheckDword(Key, "NewTabPageHideDefaultTopSites", 1)],
             },
         ];
-    
+
     }
 
     // ── EdgeNotificationsAndPopupPolicy ──
     private static class _EdgeNotificationsAndPopupPolicy
-    {    
+    {
         private const string EdgeKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -2242,14 +2242,14 @@ internal static class PolicyBrowser
                 ImpactNote = "Websites cannot enter fullscreen mode; video players and presentation sites will not be able to go fullscreen.",
             },
         ];
-    
+
     }
 
     // ── EdgePasswordManagerPolicy ──
     private static class _EdgePasswordManagerPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
         [
             new TweakDef
@@ -2423,14 +2423,14 @@ internal static class PolicyBrowser
                 DetectOps = [RegOp.CheckDword(Key, "PasswordChangeThroughBrowserEnabled", 0)],
             },
         ];
-    
+
     }
 
     // ── EdgePrintAndPdfPolicy ──
     private static class _EdgePrintAndPdfPolicy
-    {    
+    {
         private const string EdgeKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -2604,14 +2604,14 @@ internal static class PolicyBrowser
                 ImpactNote = "Suppresses Edge prompt to become default PDF viewer; OS default PDF handler remains unchanged.",
             },
         ];
-    
+
     }
 
     // ── EdgeProfileSignInPolicy ──
     private static class _EdgeProfileSignInPolicy
-    {    
+    {
         private const string EdgeKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -2795,14 +2795,14 @@ internal static class PolicyBrowser
                 ImpactNote = "InPrivate windows cannot be opened; all Edge sessions are in the managed profile and subject to audit.",
             },
         ];
-    
+
     }
 
     // ── EdgeSearchAddressBarPolicy ──
     private static class _EdgeSearchAddressBarPolicy
-    {    
+    {
         private const string EdgeKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -2976,14 +2976,14 @@ internal static class PolicyBrowser
                 ImpactNote = "Typosquatting URL warnings disabled; users will not be warned about similar-looking domains.",
             },
         ];
-    
+
     }
 
     // ── EdgeSecureBrowsingPolicy ──
     private static class _EdgeSecureBrowsingPolicy
-    {    
+    {
         private const string EdgeKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -3167,14 +3167,14 @@ internal static class PolicyBrowser
                 ImpactNote = "SHA-1 signed enterprise certificates are rejected; PKI must use SHA-256+ signing algorithms.",
             },
         ];
-    
+
     }
 
     // ── EdgeSiteIsolationPolicy ──
     private static class _EdgeSiteIsolationPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -3348,14 +3348,14 @@ internal static class PolicyBrowser
                     DetectOps = [RegOp.CheckDword(Key, "WebRtcIPHandling", 2)],
                 },
             ];
-    
+
     }
 
     // ── EdgeSleepingTabsPolicy ──
     private static class _EdgeSleepingTabsPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -3529,14 +3529,14 @@ internal static class PolicyBrowser
                     DetectOps = [RegOp.CheckDword(Key, "ReaderModeEnabled", 0)],
                 },
             ];
-    
+
     }
 
     // ── EdgeSmartScreenAndSiteIsolationPolicy ──
     private static class _EdgeSmartScreenAndSiteIsolationPolicy
-    {    
+    {
         private const string EdgeKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -3721,14 +3721,14 @@ internal static class PolicyBrowser
                     "ADFS automatic sign-in integration disabled in Edge; federated authentication to ADFS relying parties requires explicit user action.",
             },
         ];
-    
+
     }
 
     // ── EdgeStartupPolicy ──
     private static class _EdgeStartupPolicy
-    {    
+    {
         private const string EdgeKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -3902,14 +3902,14 @@ internal static class PolicyBrowser
                 ImpactNote = "Disables Edge Workspaces tab sharing; prevents internal URLs from being shared via workspace links.",
             },
         ];
-    
+
     }
 
     // ── EdgeTrackingProtectionPolicy ──
     private static class _EdgeTrackingProtectionPolicy
-    {    
+    {
         private const string EdgeKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -4083,15 +4083,15 @@ internal static class PolicyBrowser
                 ImpactNote = "Lens/image region search removed from Edge context menu; no page screenshots sent to Bing image search.",
             },
         ];
-    
+
     }
 
     // ── EdgeWebView2Policy ──
     private static class _EdgeWebView2Policy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge\WebView2";
         private const string Key2 = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\EdgeWebView";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -4265,14 +4265,14 @@ internal static class PolicyBrowser
                     DetectOps = [RegOp.CheckDword(Key, "RegisteredProtocolHandlers", 0)],
                 },
             ];
-    
+
     }
 
     // ── EdgeWorkProfilePolicy ──
     private static class _EdgeWorkProfilePolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
         [
             new TweakDef
@@ -4446,19 +4446,19 @@ internal static class PolicyBrowser
                 DetectOps = [RegOp.CheckDword(Key, "ShareSessionCookiesWithExternalApps", 0)],
             },
         ];
-    
+
     }
 
     // ── IECompatPolicy ──
     private static class _IECompatPolicy
-    {    
+    {
         private const string IeMainPolicy = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Internet Explorer\Main";
         private const string IeEntMode = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Internet Explorer\Main\EnterpriseMode";
         private const string IeSecurity = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Internet Explorer\Security";
         private const string EdgeMain = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge";
         private const string EdgeCompat = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge\IEModeTabUrls";
         private const string IeZones = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CurrentVersion\Internet Settings";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -4632,14 +4632,14 @@ internal static class PolicyBrowser
                 DetectOps = [RegOp.CheckDword(EdgeMain, "PasswordManagerEnabled", 0)],
             },
         ];
-    
+
     }
 
     // ── InternetExplorerRestrictionsPolicy ──
     private static class _InternetExplorerRestrictionsPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Internet Explorer\Restrictions";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -4833,21 +4833,21 @@ internal static class PolicyBrowser
                     DetectOps = [RegOp.CheckDword(Key, "NoBrowserClose", 1)],
                 },
             ];
-    
+
     }
 
     // ── InternetZonePolicy ──
     private static class _InternetZonePolicy
-    {    
+    {
         // Root Internet Settings policy — applies machine-wide
         private const string InetPol = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CurrentVersion\Internet Settings";
-    
+
         // Zone 3 = Internet (HKLM policy version overrides HKCU)
         private const string Zone3 = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CurrentVersion\Internet Settings\Zones\3";
-    
+
         // IE SmartScreen / Phishing Filter
         private const string PhishFilter = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Internet Explorer\PhishingFilter";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -5012,12 +5012,12 @@ internal static class PolicyBrowser
                 DetectOps = [RegOp.CheckDword(Zone3, "1406", 3)],
             },
         ];
-    
+
     }
 
     // ── LegacyEdgePolicy ──
     private static class _LegacyEdgePolicy
-    {    
+    {
         private const string MainKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\MicrosoftEdge\Main";
         private const string PhishingKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\MicrosoftEdge\PhishingFilter";
         private const string TabKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\MicrosoftEdge\TabPreloader";
@@ -5025,7 +5025,7 @@ internal static class PolicyBrowser
         private const string ServiceUiKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\MicrosoftEdge\ServiceUI";
         private const string InternetSettingsKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\MicrosoftEdge\Internet Settings";
         private const string ExtensionsKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\MicrosoftEdge\Extensions";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -5209,7 +5209,7 @@ internal static class PolicyBrowser
                     DetectOps = [RegOp.CheckDword(MainKey, "HomeButtonEnabled", 0)],
                 },
             ];
-    
+
     }
 
 }

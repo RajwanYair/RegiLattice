@@ -25,9 +25,9 @@ public sealed class ToggleSwitchControl : Control
     private readonly System.Windows.Forms.Timer _animTimer;
 
     // ── Theme colours (updated via ApplyTheme) ─────────────────────────────
-    private Color _trackOn  = Color.FromArgb(137, 180, 250); // Catppuccin Blue
+    private Color _trackOn = Color.FromArgb(137, 180, 250); // Catppuccin Blue
     private Color _trackOff = Color.FromArgb(88, 91, 112);   // Catppuccin Surface2
-    private Color _knob     = Color.White;
+    private Color _knob = Color.White;
 
     // ── Events ─────────────────────────────────────────────────────────────
     public event EventHandler? CheckedChanged;
@@ -61,15 +61,15 @@ public sealed class ToggleSwitchControl : Control
     {
         SetStyle(
             ControlStyles.OptimizedDoubleBuffer |
-            ControlStyles.AllPaintingInWmPaint  |
-            ControlStyles.UserPaint             |
+            ControlStyles.AllPaintingInWmPaint |
+            ControlStyles.UserPaint |
             ControlStyles.SupportsTransparentBackColor,
             true);
 
-        Size       = new Size(TrackW + 2, TrackH + 2);
-        Cursor     = Cursors.Hand;
-        TabStop    = true;
-        BackColor  = Color.Transparent;
+        Size = new Size(TrackW + 2, TrackH + 2);
+        Cursor = Cursors.Hand;
+        TabStop = true;
+        BackColor = Color.Transparent;
 
         _animTimer = new System.Windows.Forms.Timer { Interval = AnimIntervalMs };
         _animTimer.Tick += OnAnimTick;
@@ -85,9 +85,9 @@ public sealed class ToggleSwitchControl : Control
     /// <summary>Update colours to match the current <see cref="AppTheme"/> palette.</summary>
     public void ApplyTheme(Color accent, Color surface2, Color knob)
     {
-        _trackOn  = accent;
+        _trackOn = accent;
         _trackOff = surface2;
-        _knob     = knob;
+        _knob = knob;
         Invalidate();
     }
 
@@ -130,7 +130,7 @@ public sealed class ToggleSwitchControl : Control
         float s = DpiScale;
         int tw = (int)(TrackW * s);
         int th = (int)(TrackH * s);
-        int x = (Width  - tw) / 2;
+        int x = (Width - tw) / 2;
         int y = (Height - th) / 2;
         return new Rectangle(x, y, tw, th);
     }
@@ -144,10 +144,10 @@ public sealed class ToggleSwitchControl : Control
 
         Rectangle track = ScaledTrackRect();
         float s = DpiScale;
-        int knobSize   = (int)((TrackH - KnobPad * 2) * s);
+        int knobSize = (int)((TrackH - KnobPad * 2) * s);
         int knobTravel = track.Width - knobSize - (int)(KnobPad * 2 * s);
-        int knobX      = track.Left + (int)(KnobPad * s) + (int)(knobTravel * _knobPos);
-        int knobY      = track.Top  + (int)(KnobPad * s);
+        int knobX = track.Left + (int)(KnobPad * s) + (int)(knobTravel * _knobPos);
+        int knobY = track.Top + (int)(KnobPad * s);
 
         // ── Interpolate track colour ██████████████████████████████████████
         Color trackColour = InterpolateColour(_trackOff, _trackOn, _knobPos);
@@ -169,7 +169,7 @@ public sealed class ToggleSwitchControl : Control
 
         // Draw knob
         using SolidBrush knobBrush = new SolidBrush(_knob);
-        using Pen       knobShadow = new Pen(Color.FromArgb(40, 0, 0, 0), 1);
+        using Pen knobShadow = new Pen(Color.FromArgb(40, 0, 0, 0), 1);
         var knobRect = new Rectangle(knobX, knobY, knobSize, knobSize);
         knobRect.Inflate(-1, -1);
         g.FillEllipse(knobBrush, knobRect);
@@ -194,10 +194,10 @@ public sealed class ToggleSwitchControl : Control
     {
         int d = radius * 2;
         var path = new System.Drawing.Drawing2D.GraphicsPath();
-        path.AddArc(r.Left,           r.Top,            d, d, 180, 90);
-        path.AddArc(r.Right - d,      r.Top,            d, d, 270, 90);
-        path.AddArc(r.Right - d,      r.Bottom - d,     d, d,   0, 90);
-        path.AddArc(r.Left,           r.Bottom - d,     d, d,  90, 90);
+        path.AddArc(r.Left, r.Top, d, d, 180, 90);
+        path.AddArc(r.Right - d, r.Top, d, d, 270, 90);
+        path.AddArc(r.Right - d, r.Bottom - d, d, d, 0, 90);
+        path.AddArc(r.Left, r.Bottom - d, d, d, 90, 90);
         path.CloseFigure();
         return path;
     }
@@ -230,10 +230,10 @@ public sealed class ToggleSwitchControl : Control
         }
     }
 
-    protected override void OnMouseEnter(EventArgs e) { base.OnMouseEnter(e); _hovered = true;  Invalidate(); }
+    protected override void OnMouseEnter(EventArgs e) { base.OnMouseEnter(e); _hovered = true; Invalidate(); }
     protected override void OnMouseLeave(EventArgs e) { base.OnMouseLeave(e); _hovered = false; Invalidate(); }
-    protected override void OnGotFocus(EventArgs e)   { base.OnGotFocus(e);   Invalidate(); }
-    protected override void OnLostFocus(EventArgs e)  { base.OnLostFocus(e);  Invalidate(); }
+    protected override void OnGotFocus(EventArgs e) { base.OnGotFocus(e); Invalidate(); }
+    protected override void OnLostFocus(EventArgs e) { base.OnLostFocus(e); Invalidate(); }
 
     // ── Preferred size ─────────────────────────────────────────────────────
     protected override Size DefaultSize => new Size(TrackW + 4, TrackH + 4);

@@ -35,9 +35,9 @@ internal static class PolicyAudit
 
     // ── AccountManagementAuditPolicy ──
     private static class _AccountManagementAuditPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AdvancedAuditPolicyConfiguration\System Audit Policies - Local Group Policy\Account Management";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
         [
             new TweakDef
@@ -211,14 +211,14 @@ internal static class PolicyAudit
                 DetectOps = [RegOp.CheckDword(Key, "AuditKerberosServiceTicket", 3)],
             },
         ];
-    
+
     }
 
     // ── AuditEventPolicy ──
     private static class _AuditEventPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Audit";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -392,14 +392,14 @@ internal static class PolicyAudit
                 DetectOps = [RegOp.CheckDword(Key, "AuditSecuritySystemExtension", 1)],
             },
         ];
-    
+
     }
 
     // ── AuditPolicyAdvancedPolicy ──
     private static class _AuditPolicyAdvancedPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Audit";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -573,14 +573,14 @@ internal static class PolicyAudit
                     DetectOps = [RegOp.CheckDword(Key, "BlockUserAuditPolicyChange", 1)],
                 },
             ];
-    
+
     }
 
     // ── DiagnosticDataViewerPolicy ──
     private static class _DiagnosticDataViewerPolicy
-    {    
+    {
         private const string DataCol = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DataCollection";
-    
+
         public static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -734,15 +734,15 @@ internal static class PolicyAudit
                 DetectOps = [RegOp.CheckDword(DataCol, "LimitEnhancedDiagnosticDataWindowsAnalytics", 0)],
             },
         ];
-    
+
     }
 
     // ── DsObjectAccessAuditPolicy ──
     private static class _DsObjectAccessAuditPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AdvancedAuditPolicyConfiguration\System Audit Policies - Local Group Policy\DS Access";
         private const string DetailKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AdvancedAuditPolicyConfiguration\System Audit Policies - Local Group Policy\Detailed Tracking";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
         [
             new TweakDef
@@ -916,16 +916,16 @@ internal static class PolicyAudit
                 DetectOps = [RegOp.CheckDword(Key, "AuditHandleManipulation", 3)],
             },
         ];
-    
+
     }
 
     // ── ErrorReportingPolicy ──
     private static class _ErrorReportingPolicy
-    {    
+    {
         private const string WerPol = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Error Reporting";
         private const string WerConsent = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Error Reporting\Consent";
         private const string WerQueue = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Error Reporting\ExcludedApplications";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -1116,15 +1116,15 @@ internal static class PolicyAudit
                 DetectOps = [RegOp.CheckDword(WerPol, "MaxArchiveCount", 1)],
             },
         ];
-    
+
     }
 
     // ── EtwSessionPolicy ──
     private static class _EtwSessionPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\ETW";
         private const string EvtSysKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\EventSystem";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -1298,14 +1298,14 @@ internal static class PolicyAudit
                     DetectOps = [RegOp.CheckDword(Key, "DisableNTKernelLogger", 1)],
                 },
             ];
-    
+
     }
 
     // ── EventForwardingPolicy ──
     private static class _EventForwardingPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\EventForwarding";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -1479,16 +1479,16 @@ internal static class PolicyAudit
                     DetectOps = [RegOp.CheckDword(Key, "EnableEventConsolidation", 1)],
                 },
             ];
-    
+
     }
 
     // ── EventLogChannelPolicy ──
     private static class _EventLogChannelPolicy
-    {    
+    {
         private const string AppKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\EventLog\Application";
         private const string SecurityKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\EventLog\Security";
         private const string SystemKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\EventLog\System";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -1662,19 +1662,19 @@ internal static class PolicyAudit
                     DetectOps = [RegOp.CheckDword(AppKey, "DisableDirectRegistryEdit", 1)],
                 },
             ];
-    
+
     }
 
     // ── EventLogGpoPolicy ──
     private static class _EventLogGpoPolicy
-    {    
+    {
         private const string GpoEvt = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\EventLog";
         private const string App = GpoEvt + @"\Application";
         private const string Sec = GpoEvt + @"\Security";
         private const string Sys = GpoEvt + @"\System";
         private const string Setup = GpoEvt + @"\Setup";
         private const string Forwarded = GpoEvt + @"\ForwardedEvents";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -1868,14 +1868,14 @@ internal static class PolicyAudit
                 DetectOps = [RegOp.CheckDword(Forwarded, "Retention", 0)],
             },
         ];
-    
+
     }
 
     // ── EventSubscriptionPolicy ──
     private static class _EventSubscriptionPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\EventCollector";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -2049,14 +2049,14 @@ internal static class PolicyAudit
                     DetectOps = [RegOp.CheckDword(Key, "DisableCollectorTelemetry", 1)],
                 },
             ];
-    
+
     }
 
     // ── EventTracingPolicy ──
     private static class _EventTracingPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\EventTracing";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -2230,14 +2230,14 @@ internal static class PolicyAudit
                 DetectOps = [RegOp.CheckDword(Key, "MaxEventLogFileSize", 65536)],
             },
         ];
-    
+
     }
 
     // ── LogonEventsAuditPolicy ──
     private static class _LogonEventsAuditPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AdvancedAuditPolicyConfiguration\System Audit Policies - Local Group Policy\Logon-Logoff";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
         [
             new TweakDef
@@ -2411,14 +2411,14 @@ internal static class PolicyAudit
                 DetectOps = [RegOp.CheckDword(Key, "AuditUserDeviceClaims", 1)],
             },
         ];
-    
+
     }
 
     // ── ObjectAccessPolicy ──
     private static class _ObjectAccessPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\ObjectAccess";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -2592,18 +2592,18 @@ internal static class PolicyAudit
                 DetectOps = [RegOp.CheckDword(Key, "AuditCentralAccessPolicyStaging", 1)],
             },
         ];
-    
+
     }
 
     // ── PrintAuditPolicy ──
     private static class _PrintAuditPolicy
-    {    
+    {
         private const string AudKey =
             @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers\AuditPrint";
-    
+
         private const string PrtKey =
             @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -2777,15 +2777,15 @@ internal static class PolicyAudit
                     DetectOps = [RegOp.CheckDword(AudKey, "AuditDeletedJobs", 1)],
                 },
             ];
-    
+
     }
 
     // ── PrivilegeUseAuditPolicy ──
     private static class _PrivilegeUseAuditPolicy
-    {    
+    {
         private const string PrivKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AdvancedAuditPolicyConfiguration\System Audit Policies - Local Group Policy\Privilege Use";
         private const string AclKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AdvancedAuditPolicyConfiguration\System Audit Policies - Local Group Policy\Object Access";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
         [
             new TweakDef
@@ -2959,14 +2959,14 @@ internal static class PolicyAudit
                 DetectOps = [RegOp.CheckDword(PrivKey, "AuditLSASecretsAccess", 3)],
             },
         ];
-    
+
     }
 
     // ── ProcessCreationAuditPolicy ──
     private static class _ProcessCreationAuditPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
         [
             new TweakDef
@@ -3140,22 +3140,22 @@ internal static class PolicyAudit
                 DetectOps = [RegOp.CheckDword(Key, "SecurityEventLogMinSizeMB", 512)],
             },
         ];
-    
+
     }
 
     // ── SecurityAuditPolicy ──
     private static class _SecurityAuditPolicy
-    {    
+    {
         private const string Lsa = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa";
-    
+
         private const string LsaPolicy = @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System";
-    
+
         private const string AuditPolicy = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa\Audit";
-    
+
         private const string KerberosParams = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa\Kerberos\Parameters";
-    
+
         private const string NetLogon = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Netlogon\Parameters";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -3322,15 +3322,15 @@ internal static class PolicyAudit
                 DetectOps = [RegOp.CheckDword(Lsa, "EveryoneIncludesAnonymous", 0)],
             },
         ];
-    
+
     }
 
     // ── SqlServerAuditPolicy ──
     private static class _SqlServerAuditPolicy
-    {    
+    {
         private const string InstanceKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\MSSQLServer\MSSQLServer";
-        private const string NetLibKey   = @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\MSSQLServer\MSSQLServer\SuperSocketNetLib";
-    
+        private const string NetLibKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\MSSQLServer\MSSQLServer\SuperSocketNetLib";
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -3494,14 +3494,14 @@ internal static class PolicyAudit
                     DetectOps   = [RegOp.CheckDword(NetLibKey, "ForceEncryption", 1)],
                 },
             ];
-    
+
     }
 
     // ── WefSubscriptionPolicy ──
     private static class _WefSubscriptionPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\EventLog\EventForwarding";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -3675,7 +3675,7 @@ internal static class PolicyAudit
                     DetectOps = [RegOp.CheckDword(Key, "DisableForwardingHealthTelemetry", 1)],
                 },
             ];
-    
+
     }
 
 }

@@ -31,11 +31,11 @@ internal static class PolicyEncryption
 
     // ── BackupEncryptionPolicy ──
     private static class _BackupEncryptionPolicy
-    {    
+    {
         private const string FveKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\FVE";
-    
+
         private const string BackupServerKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Backup\Server";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -219,16 +219,16 @@ internal static class PolicyEncryption
                     DetectOps = [RegOp.CheckDword(BackupServerKey, "BackupEncryptionKeyRotationDays", 90)],
                 },
             ];
-    
+
     }
 
     // ── BitLockerFvePolicy ──
     private static class _BitLockerFvePolicy
-    {    
-        private const string FveKey  = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\FVE";
-        private const string FveOs   = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\FVE\OSVolume";
-        private const string FveRem  = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\FVE\RemovableDrives";
-    
+    {
+        private const string FveKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\FVE";
+        private const string FveOs = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\FVE\OSVolume";
+        private const string FveRem = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\FVE\RemovableDrives";
+
         public static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -444,16 +444,16 @@ internal static class PolicyEncryption
                 DetectOps = [RegOp.CheckDword(FveRem, "RDVEncryptionType", 6)],
             },
         ];
-    
+
     }
 
     // ── BitLockerNetworkUnlockPolicy ──
     private static class _BitLockerNetworkUnlockPolicy
-    {    
-        private const string Key    = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\FVE";
-        private const string OsKey  = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\FVE\OSVolume";
-        private const string NuKey  = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\FVE\NetworkUnlock";
-    
+    {
+        private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\FVE";
+        private const string OsKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\FVE\OSVolume";
+        private const string NuKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\FVE\NetworkUnlock";
+
         public static IReadOnlyList<TweakDef> Data =>
         [
             new TweakDef
@@ -617,14 +617,14 @@ internal static class PolicyEncryption
                 DetectOps    = [RegOp.CheckDword(Key, "DisableBitLockerTelemetry", 1)],
             },
         ];
-    
+
     }
 
     // ── BitLockerPolicy ──
     private static class _BitLockerPolicy
-    {    
+    {
         private const string FveKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\FVE";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
         [
             new TweakDef
@@ -788,14 +788,14 @@ internal static class PolicyEncryption
                 DetectOps = [RegOp.CheckDword(FveKey, "EncryptionMethodWithXtsOs", 7)],
             },
         ];
-    
+
     }
 
     // ── BitLockerRemovable ──
     private static class _BitLockerRemovable
-    {    
+    {
         private const string Fve = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\FVE";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -991,21 +991,21 @@ internal static class PolicyEncryption
                 DetectOps = [RegOp.CheckDword(Fve, "RDVRecoveryKey", 2)],
             },
         ];
-    
+
     }
 
     // ── CryptographicOperationsPolicy ──
     private static class _CryptographicOperationsPolicy
-    {    
+    {
         private const string CryptoKey =
             @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Cryptography";
-    
+
         private const string CngKey =
             @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Cryptography\Configuration\SSL\00010002";
-    
+
         private const string FipsKey =
             @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa\FipsAlgorithmPolicy";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -1179,15 +1179,15 @@ internal static class PolicyEncryption
                     DetectOps = [RegOp.CheckDword(CryptoKey, "AllowKeyExport", 0)],
                 },
             ];
-    
+
     }
 
     // ── EfsEncryptionPolicy ──
     private static class _EfsEncryptionPolicy
-    {    
-        private const string Efs    = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\EFS";
+    {
+        private const string Efs = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\EFS";
         private const string EfsAdv = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\EnhancedStorageDevices";
-    
+
         public static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -1331,15 +1331,15 @@ internal static class PolicyEncryption
                 DetectOps  = [RegOp.CheckDword(EfsAdv, "TCGSecurityActivationDisabled", 0)],
             },
         ];
-    
+
     }
 
     // ── FipsCompliancePolicy ──
     private static class _FipsCompliancePolicy
-    {    
+    {
         private const string FipsKey = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa\FipsAlgorithmPolicy";
         private const string CryptoKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Cryptography";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -1513,15 +1513,15 @@ internal static class PolicyEncryption
                 ImpactNote = "Enforces TLS 1.2+ minimum; connections to servers that only support TLS 1.0/1.1 or SSL 3.0 will fail.",
             },
         ];
-    
+
     }
 
     // ── HvciPolicy ──
     private static class _HvciPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CI\Policy";
         private const string Key2 = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CI\Config";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -1695,14 +1695,14 @@ internal static class PolicyEncryption
                     DetectOps = [RegOp.CheckDword(Key, "EnableCIPolicyTelemetry", 1)],
                 },
             ];
-    
+
     }
 
     // ── MemoryIntegrityPolicy ──
     private static class _MemoryIntegrityPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DeviceGuard";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -1876,16 +1876,16 @@ internal static class PolicyEncryption
                 DetectOps = [RegOp.CheckDword(Key, "KernelShadowStacksEnabled", 1)],
             },
         ];
-    
+
     }
 
     // ── PersonalDataEncryptionPolicy ──
     private static class _PersonalDataEncryptionPolicy
-    {    
+    {
         private const string PdeKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\PDE";
         private const string PdeFoldersKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\PDE\ProtectedFolders";
         private const string PdeDeviceKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\PDE\Device";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
         [
             new TweakDef
@@ -2069,16 +2069,16 @@ internal static class PolicyEncryption
                 DetectOps = [RegOp.CheckDword(PdeDeviceKey, "RequireWindowsHelloEnrollment", 1)],
             },
         ];
-    
+
     }
 
     // ── SecureBootDbxPolicy ──
     private static class _SecureBootDbxPolicy
-    {    
+    {
         private const string UefiPolicyKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\UEFI";
-    
+
         private const string DeviceGuardKey = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\DeviceGuard";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -2262,14 +2262,14 @@ internal static class PolicyEncryption
                     DetectOps = [RegOp.CheckDword(UefiPolicyKey, "EnableHibernateResumeIntegrity", 1)],
                 },
             ];
-    
+
     }
 
     // ── SecureBootPolicy ──
     private static class _SecureBootPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\SecureBoot";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -2464,15 +2464,15 @@ internal static class PolicyEncryption
                 DetectOps = [RegOp.CheckDword(Key, "DisableSecureBootTelemetry", 1)],
             },
         ];
-    
+
     }
 
     // ── TlsSchannel ──
     private static class _TlsSchannel
-    {    
+    {
         // SCHANNEL root for all protocol version keys
         private const string SchannelRoot = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL";
-    
+
         private const string Ssl20Client = SchannelRoot + @"\Protocols\SSL 2.0\Client";
         private const string Ssl20Server = SchannelRoot + @"\Protocols\SSL 2.0\Server";
         private const string Ssl30Client = SchannelRoot + @"\Protocols\SSL 3.0\Client";
@@ -2481,7 +2481,7 @@ internal static class PolicyEncryption
         private const string Tls10Server = SchannelRoot + @"\Protocols\TLS 1.0\Server";
         private const string Tls11Client = SchannelRoot + @"\Protocols\TLS 1.1\Client";
         private const string Tls11Server = SchannelRoot + @"\Protocols\TLS 1.1\Server";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -2745,16 +2745,16 @@ internal static class PolicyEncryption
                 DetectOps = [RegOp.CheckDword(SchannelRoot + @"\Protocols\TLS 1.2\Client", "Enabled", 1)],
             },
         ];
-    
+
     }
 
     // ── UefiLockPolicy ──
     private static class _UefiLockPolicy
-    {    
+    {
         private const string UefiPolicyKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\UEFI";
-    
+
         private const string SecureBootStateKey = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecureBoot\State";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -2938,15 +2938,15 @@ internal static class PolicyEncryption
                     DetectOps = [RegOp.CheckDword(UefiPolicyKey, "EnablePkExpiryNotification", 1)],
                 },
             ];
-    
+
     }
 
     // ── VbsEnforcementPolicy ──
     private static class _VbsEnforcementPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\DeviceGuard";
         private const string Key2 = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\DeviceGuard\Scenarios\HypervisorEnforcedCodeIntegrity";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -3120,7 +3120,7 @@ internal static class PolicyEncryption
                     DetectOps = [RegOp.CheckDword(Key, "EnableCredentialGuard", 1)],
                 },
             ];
-    
+
     }
 
 }

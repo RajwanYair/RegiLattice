@@ -5,6 +5,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
@@ -205,6 +206,8 @@ internal sealed class ProfileSchedulerDialog : BaseDialog
 // ── Wizard dialog for adding a profile schedule ───────────────────────────────
 internal sealed class AddProfileScheduleDialog : Form
 {
+    // Result property — not designer-serializable; set at runtime when the user confirms.
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public ProfileScheduleEntry? Result { get; private set; }
 
     private readonly ComboBox _cmbProfile = new() { DropDownStyle = ComboBoxStyle.DropDownList, Width = 200 };

@@ -23,10 +23,10 @@ internal static class PolicyGaming
 
     // ── GameBarOverlayPolicy ──
     private static class _GameBarOverlayPolicy
-    {    
+    {
         private const string GbKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\GameBar";
         private const string GmKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\GameMode";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -210,16 +210,16 @@ internal static class PolicyGaming
                 DetectOps = [RegOp.CheckDword(GbKey, "AllowXboxNetworkIntegration", 0)],
             },
         ];
-    
+
     }
 
     // ── GameBarPolicy ──
     private static class _GameBarPolicy
-    {    
-        private const string Key    = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\GameDVR";
-        private const string GbKey  = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\GameBar";
-        private const string GmKey  = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\GameMode";
-    
+    {
+        private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\GameDVR";
+        private const string GbKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\GameBar";
+        private const string GmKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\GameMode";
+
         public static IReadOnlyList<TweakDef> Data =>
         [
             new TweakDef
@@ -383,14 +383,14 @@ internal static class PolicyGaming
                 DetectOps    = [RegOp.CheckDword(Key, "LogCaptureEvents", 1)],
             },
         ];
-    
+
     }
 
     // ── GameDvrPolicy ──
     private static class _GameDvrPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\GameDVR";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -603,14 +603,14 @@ internal static class PolicyGaming
                 ImpactNote = "Disconnects Xbox Live social in Game Bar; removes background network wake events.",
             },
         ];
-    
+
     }
 
     // ── GameExplorerPolicy ──
     private static class _GameExplorerPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\GameExplorer";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -826,15 +826,15 @@ internal static class PolicyGaming
                 DetectOps = [RegOp.CheckDword(Key, "LogGameActivity", 0)],
             },
         ];
-    
+
     }
 
     // ── GameStreamingPolicy ──
     private static class _GameStreamingPolicy
-    {    
-        private const string DvrKey   = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\GameDVR";
+    {
+        private const string DvrKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\GameDVR";
         private const string InputKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\GameInput";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
         [
             new TweakDef
@@ -1008,15 +1008,15 @@ internal static class PolicyGaming
                 DetectOps = [RegOp.CheckDword(InputKey, "DisableAccessibilityOverlay", 1)],
             },
         ];
-    
+
     }
 
     // ── GamingPerformancePolicy ──
     private static class _GamingPerformancePolicy
-    {    
+    {
         private const string GamesKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games";
-        private const string SysKey   = @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile";
-    
+        private const string SysKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile";
+
         public static IReadOnlyList<TweakDef> Data =>
         [
             new TweakDef
@@ -1191,14 +1191,14 @@ internal static class PolicyGaming
                 DetectOps = [RegOp.CheckDword(SysKey, "Enabled", 1)],
             },
         ];
-    
+
     }
 
     // ── XboxCloudGamingPolicy ──
     private static class _XboxCloudGamingPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\XboxLive";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
         [
             new TweakDef
@@ -1375,16 +1375,16 @@ internal static class PolicyGaming
                 DetectOps = [RegOp.CheckDword(Key, "AllowCrossPlay", 0)],
             },
         ];
-    
+
     }
 
     // ── XboxNetworkingPolicy ──
     private static class _XboxNetworkingPolicy
-    {    
-        private const string Key    = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\XboxLive";
+    {
+        private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\XboxLive";
         private const string SvcKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Gaming";
         private const string GipKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\GameInput";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
         [
             new TweakDef
@@ -1548,7 +1548,7 @@ internal static class PolicyGaming
                 DetectOps    = [RegOp.CheckDword(SvcKey, "LogGamingServiceEvents", 1)],
             },
         ];
-    
+
     }
 
 }

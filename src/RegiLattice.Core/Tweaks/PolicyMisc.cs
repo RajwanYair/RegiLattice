@@ -44,9 +44,9 @@ internal static class PolicyMisc
 
     // ── ActiveSetupPolicy ──
     private static class _ActiveSetupPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\ActiveSetup";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -220,14 +220,14 @@ internal static class PolicyMisc
                 DetectOps = [RegOp.CheckDword(Key, "EnforceUserIsolation", 1)],
             },
         ];
-    
+
     }
 
     // ── ActiveXInstallerServicePolicy ──
     private static class _ActiveXInstallerServicePolicy
-    {    
+    {
         private const string AxKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AxInstaller";
-    
+
         public static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -440,14 +440,14 @@ internal static class PolicyMisc
                 DetectOps = [RegOp.CheckDword(AxKey, "BlockOcxDownload", 1)],
             },
         ];
-    
+
     }
 
     // ── ClipboardHistoryAdvancedPolicy ──
     private static class _ClipboardHistoryAdvancedPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -619,14 +619,14 @@ internal static class PolicyMisc
                     DetectOps = [RegOp.CheckDword(Key, "DisableLockScreenClipboard", 1)],
                 },
             ];
-    
+
     }
 
     // ── ClipboardHistoryPolicy ──
     private static class _ClipboardHistoryPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\ClipboardHistory";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -813,15 +813,15 @@ internal static class PolicyMisc
                 DetectOps = [RegOp.CheckDword(Key, "DisableClipboardTelemetry", 1)],
             },
         ];
-    
+
     }
 
     // ── ClipboardSensitivityPolicy ──
     private static class _ClipboardSensitivityPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DataCollection";
         private const string Key2 = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -995,14 +995,14 @@ internal static class PolicyMisc
                     DetectOps = [RegOp.CheckDword(Key2, "DisableClipboardEncryptionBypass", 1)],
                 },
             ];
-    
+
     }
 
     // ── CrashDumpPolicy ──
     private static class _CrashDumpPolicy
-    {    
+    {
         private const string CcKey = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -1176,14 +1176,14 @@ internal static class PolicyMisc
                     DetectOps = [RegOp.CheckDword(CcKey, "DisableDedicatedDumpFile", 1)],
                 },
             ];
-    
+
     }
 
     // ── CrashDumpsPolicy ──
     private static class _CrashDumpsPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CrashControl";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -1357,15 +1357,15 @@ internal static class PolicyMisc
                 DetectOps = [RegOp.CheckDword(Key, "DumpRetentionDays", 30)],
             },
         ];
-    
+
     }
 
     // ── DotNetFrameworkPolicy ──
     private static class _DotNetFrameworkPolicy
-    {    
+    {
         private const string DotNetKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\.NETFramework";
         private const string DotNetUserKey = @"HKEY_CURRENT_USER\SOFTWARE\Policies\Microsoft\.NETFramework";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -1539,14 +1539,14 @@ internal static class PolicyMisc
                 ImpactNote = "Disables .NET hosting in the IE WebBrowser control; WinForms apps using WebBrowser control will break.",
             },
         ];
-    
+
     }
 
     // ── LicensingPolicy ──
     private static class _LicensingPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\CurrentVersion\SoftwareProtectionPlatform";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -1720,15 +1720,15 @@ internal static class PolicyMisc
                 DetectOps = [RegOp.CheckDword(Key, "DisableGracePeriodNotifications", 1)],
             },
         ];
-    
+
     }
 
     // ── MediaFoundationPolicy ──
     private static class _MediaFoundationPolicy
-    {    
+    {
         private const string Key =
             @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\MediaFoundation";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -1951,14 +1951,14 @@ internal static class PolicyMisc
                 DetectOps = [RegOp.CheckDword(Key, "EnableMFTelemetry", 0)],
             },
         ];
-    
+
     }
 
     // ── MediaPlayerAdvPolicy ──
     private static class _MediaPlayerAdvPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsMediaPlayer";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
         [
             new TweakDef
@@ -2132,15 +2132,15 @@ internal static class PolicyMisc
                 DetectOps = [RegOp.CheckDword(Key, "DisableRadioBar", 1)],
             },
         ];
-    
+
     }
 
     // ── MsdtcPolicy ──
     private static class _MsdtcPolicy
-    {    
+    {
         private const string MsDtcKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\MSDTC";
         private const string MsDtcSec = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\MSDTC\Security";
-    
+
         public static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -2351,14 +2351,14 @@ internal static class PolicyMisc
                 DetectOps = [RegOp.CheckDword(MsDtcSec, "LuTransactions", 0)],
             },
         ];
-    
+
     }
 
     // ── RestartManagerPolicy ──
     private static class _RestartManagerPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\RestartManager";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -2532,14 +2532,14 @@ internal static class PolicyMisc
                 DetectOps = [RegOp.CheckDword(Key, "DisableGracefulShutdown", 0)],
             },
         ];
-    
+
     }
 
     // ── SystemRecoveryOptionsPolicy ──
     private static class _SystemRecoveryOptionsPolicy
-    {    
+    {
         private const string RecKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\SystemRecovery";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -2713,16 +2713,16 @@ internal static class PolicyMisc
                     DetectOps = [RegOp.CheckDword(RecKey, "DisableMemoryDiagnostics", 1)],
                 },
             ];
-    
+
     }
 
     // ── SystemRestoreGpoPolicy ──
     private static class _SystemRestoreGpoPolicy
-    {    
+    {
         private const string SrPol = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\SystemRestore";
-    
+
         private const string SrSettings = @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\SystemRestore";
-    
+
         public static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -2876,15 +2876,15 @@ internal static class PolicyMisc
                 DetectOps = [RegOp.CheckDword(SrSettings, "PreventIncrementalRestorations", 1)],
             },
         ];
-    
+
     }
 
     // ── TimeSyncAdvPolicy ──
     private static class _TimeSyncAdvPolicy
-    {    
+    {
         private const string ParamKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\W32time\Parameters";
         private const string CfgKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\W32time\Config";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -3058,16 +3058,16 @@ internal static class PolicyMisc
                     DetectOps = [RegOp.CheckDword(CfgKey, "EventLogFlags", 3)],
                 },
             ];
-    
+
     }
 
     // ── TimeServicePolicy ──
     private static class _TimeServicePolicy
-    {    
-        private const string Key    = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\W32Time\Parameters";
+    {
+        private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\W32Time\Parameters";
         private const string PrvKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\W32Time\Providers\NtpClient";
         private const string CfgKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\W32Time\Config";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
         [
             new TweakDef
@@ -3231,15 +3231,15 @@ internal static class PolicyMisc
                 DetectOps    = [RegOp.CheckDword(CfgKey, "MaxAllowedPhaseOffset", 300)],
             },
         ];
-    
+
     }
 
     // ── WindowsAnytimeUpgradePolicy ──
     private static class _WindowsAnytimeUpgradePolicy
-    {    
+    {
         private const string Key =
             @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsAnytimeUpgrade";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -3413,15 +3413,15 @@ internal static class PolicyMisc
                     DetectOps = [RegOp.CheckDword(Key, "DisableTrialConversion", 1)],
                 },
             ];
-    
+
     }
 
     // ── WindowsBackupPolicy ──
     private static class _WindowsBackupPolicy
-    {    
+    {
         private const string BackupKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Backup";
         private const string ClientKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Backup\Client";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
         [
             new TweakDef
@@ -3585,16 +3585,16 @@ internal static class PolicyMisc
                 DetectOps = [RegOp.CheckDword(ClientKey, "HideControlPanelLink", 1)],
             },
         ];
-    
+
     }
 
     // ── WindowsConnectNowPolicy ──
     private static class _WindowsConnectNowPolicy
-    {    
+    {
         private const string RegKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WCN\Registrars";
         private const string UiKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WCN\UI";
         private const string WcnKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WCN";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -3778,15 +3778,15 @@ internal static class PolicyMisc
                 DetectOps = [RegOp.CheckDword(WcnKey, "DisablePushButtonConnect", 1)],
             },
         ];
-    
+
     }
 
     // ── WindowsLogonOptionsPolicy ──
     private static class _WindowsLogonOptionsPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\CurrentVersion\Winlogon";
         private const string SysKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -4014,14 +4014,14 @@ internal static class PolicyMisc
                 ImpactNote = "Locks workstation on smart card removal; prevents unattended session access.",
             },
         ];
-    
+
     }
 
     // ── WindowsMailPolicy ──
     private static class _WindowsMailPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Mail";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -4205,14 +4205,14 @@ internal static class PolicyMisc
                 ImpactNote = "Prevents calendar data from syncing to unmanaged Microsoft Account stores.",
             },
         ];
-    
+
     }
 
     // ── WindowsMediaPlayerPolicy ──
     private static class _WindowsMediaPlayerPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsMediaPlayer";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -4426,15 +4426,15 @@ internal static class PolicyMisc
                 ImpactNote = "Hides WMP Privacy tab; prevents users from modifying centrally managed privacy settings.",
             },
         ];
-    
+
     }
 
     // ── WindowsMediaPolicyAdv ──
     private static class _WindowsMediaPolicyAdv
-    {    
+    {
         private const string WmpLm = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsMediaPlayer";
         private const string WmpCu = @"HKEY_CURRENT_USER\Software\Policies\Microsoft\WindowsMediaPlayer";
-    
+
         public static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -4588,14 +4588,14 @@ internal static class PolicyMisc
                 DetectOps = [RegOp.CheckDword(WmpCu, "PreventRadioPresetsRetrieval", 1)],
             },
         ];
-    
+
     }
 
     // ── WindowsPerformancePolicy ──
     private static class _WindowsPerformancePolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Performance";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -4769,15 +4769,15 @@ internal static class PolicyMisc
                 DetectOps = [RegOp.CheckDword(Key, "EnablePerformanceAuditLogging", 1)],
             },
         ];
-    
+
     }
 
     // ── WindowsReliabilityPolicy ──
     private static class _WindowsReliabilityPolicy
-    {    
+    {
         private const string RelKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Reliability";
         private const string WerKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Error Reporting";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -4961,20 +4961,20 @@ internal static class PolicyMisc
                 DetectOps = [RegOp.CheckDword(WerKey, "DisableKernelFaultLogging", 1)],
             },
         ];
-    
+
     }
 
     // ── WindowsTimeGpoPolicy ──
     private static class _WindowsTimeGpoPolicy
-    {    
+    {
         private const string W32Params = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\W32Time\Parameters";
-    
+
         private const string W32Config = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\W32Time\Config";
-    
+
         private const string NtpClient = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\W32Time\TimeProviders\NtpClient";
-    
+
         private const string NtpServer = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\W32Time\TimeProviders\NtpServer";
-    
+
         public static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -5128,17 +5128,17 @@ internal static class PolicyMisc
                 DetectOps = [RegOp.CheckDword(W32Config, "PhaseCorrectRate", 7)],
             },
         ];
-    
+
     }
 
     // ── WindowsTimePolicy ──
     private static class _WindowsTimePolicy
-    {    
+    {
         private const string ParamKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\W32time\Parameters";
         private const string CfgKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\W32time\Config";
         private const string NtpClient = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\W32time\TimeProviders\NtpClient";
         private const string NtpServer = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\W32time\TimeProviders\NtpServer";
-    
+
         public static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -5348,14 +5348,14 @@ internal static class PolicyMisc
                 DetectOps = [RegOp.CheckDword(CfgKey, "SpikeWatchPeriod", 900)],
             },
         ];
-    
+
     }
 
     // ── WinlogonPolicy ──
     private static class _WinlogonPolicy
-    {    
+    {
         private const string WlKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Winlogon";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
         [
             new TweakDef
@@ -5519,7 +5519,7 @@ internal static class PolicyMisc
                 DetectOps = [RegOp.CheckDword(WlKey, "CachedLogonsCount", 2)],
             },
         ];
-    
+
     }
 
 }

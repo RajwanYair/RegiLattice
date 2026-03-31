@@ -23,11 +23,11 @@ internal static class PolicyCertificate
 
     // ── CertAutoEnrollmentPolicy ──
     private static class _CertAutoEnrollmentPolicy
-    {    
+    {
         private const string AeLm = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Cryptography\AutoEnrollment";
         private const string AeCu = @"HKEY_CURRENT_USER\Software\Policies\Microsoft\Cryptography\AutoEnrollment";
         private const string PkiLm = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Cryptography\PKI";
-    
+
         public static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -247,14 +247,14 @@ internal static class PolicyCertificate
                 DetectOps = [RegOp.CheckDword(PkiLm, "DisableWeakSignatures", 1)],
             },
         ];
-    
+
     }
 
     // ── CertificateBasedAuthPolicy ──
     private static class _CertificateBasedAuthPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\SmartCardCredentialProvider";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -428,12 +428,12 @@ internal static class PolicyCertificate
                     DetectOps = [RegOp.CheckDword(Key, "RequireValidKDCCertificate", 1)],
                 },
             ];
-    
+
     }
 
     // ── CertificatePolicy ──
     private static class _CertificatePolicy
-    {    
+    {
         private const string Net4_64 = @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\.NETFramework\v4.0.30319";
         private const string Net4_32 = @"HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft\.NETFramework\v4.0.30319";
         private const string Net2_64 = @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\.NETFramework\v2.0.50727";
@@ -442,7 +442,7 @@ internal static class PolicyCertificate
         private const string Wintrust32 = @"HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft\Cryptography\Wintrust\Config";
         private const string AuthRoot = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\SystemCertificates\AuthRoot";
         private const string InternetSettings = @"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Internet Settings";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -631,12 +631,12 @@ internal static class PolicyCertificate
                 DetectOps = [RegOp.CheckDword(InternetSettings, "CertificateRevocation", 1)],
             },
         ];
-    
+
     }
 
     // ── CertificateServices ──
     private static class _CertificateServices
-    {    
+    {
         private const string AutoEnrollMachine = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Cryptography\AutoEnrollment";
         private const string AutoEnrollUser = @"HKEY_CURRENT_USER\SOFTWARE\Policies\Microsoft\Cryptography\AutoEnrollment";
         private const string CertPolicies = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\SystemCertificates\Root\ProtectedRoots";
@@ -644,7 +644,7 @@ internal static class PolicyCertificate
         private const string CryptBasePolicy = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Cryptography";
         private const string CaClientsPolicy = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Cryptography\AutoEnrollment";
         private const string TrustProviderPolicy = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Safer\CodeIdentifiers";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -857,18 +857,18 @@ internal static class PolicyCertificate
                 DetectOps = [RegOp.CheckDword(AutoEnrollMachine, "AllowUserCertTrust", 0)],
             },
         ];
-    
+
     }
 
     // ── CertRevocationPolicy ──
     private static class _CertRevocationPolicy
-    {    
+    {
         private const string CertRootKey =
             @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\SystemCertificates";
-    
+
         private const string RevocationKey =
             @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\SystemCertificates\ChainEngine\Config";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -1068,14 +1068,14 @@ internal static class PolicyCertificate
                     DetectOps = [RegOp.CheckDword(RevocationKey, "MaxOCSPResponseAge", 86400)],
                 },
             ];
-    
+
     }
 
     // ── CertValidationPolicy ──
     private static class _CertValidationPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CertValidity";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -1249,21 +1249,21 @@ internal static class PolicyCertificate
                 DetectOps = [RegOp.CheckDword(Key, "DisableCertValidationTelemetry", 1)],
             },
         ];
-    
+
     }
 
     // ── PkiPublicKeyServicesPolicy ──
     private static class _PkiPublicKeyServicesPolicy
-    {    
+    {
         private const string SmartCardKey =
             @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\SmartCardCredentialProvider";
-    
+
         private const string AutoEnrollKey =
             @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Cryptography\AutoEnrollment";
-    
+
         private const string PkiKey =
             @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\PKI";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -1446,16 +1446,16 @@ internal static class PolicyCertificate
                     DetectOps = [RegOp.CheckDword(PkiKey, "EKUFiltering", 1)],
                 },
             ];
-    
+
     }
 
     // ── WindowsAdcsPolicy ──
     private static class _WindowsAdcsPolicy
-    {    
-        private const string CryptoKey   = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Cryptography";
-        private const string SmartKey    = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\SmartCardCredentialProvider";
-        private const string CertSvcKey  = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CertSvc";
-    
+    {
+        private const string CryptoKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Cryptography";
+        private const string SmartKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\SmartCardCredentialProvider";
+        private const string CertSvcKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CertSvc";
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -1619,7 +1619,7 @@ internal static class PolicyCertificate
                     DetectOps   = [RegOp.CheckDword(CryptoKey, "RequireChainValidation", 1)],
                 },
             ];
-    
+
     }
 
 }

@@ -4,6 +4,7 @@
 
 namespace RegiLattice.GUI.Forms;
 
+using System.ComponentModel;
 using RegiLattice.Core;
 using RegiLattice.Core.Services;
 
@@ -45,8 +46,11 @@ internal sealed class FirstRunWizardDialog : Form
     private readonly Button _btnNext;
     private readonly Button _btnFinish;
 
-    // Result
+    // Result properties — not designer-serializable; set at runtime by the wizard steps.
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public string? SelectedProfile { get; private set; }
+
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool EnableDryRun { get; private set; }
 
     internal FirstRunWizardDialog()

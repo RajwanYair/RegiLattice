@@ -48,11 +48,11 @@ internal static class PolicyEnterprise
 
     // ── AdfsFederationPolicy ──
     private static class _AdfsFederationPolicy
-    {    
-        private const string AdfsKey   = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\ADFS";
-        private const string AuthKey   = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Authentication";
-        private const string SvcKey    = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\adfssrv\Parameters";
-    
+    {
+        private const string AdfsKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\ADFS";
+        private const string AuthKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Authentication";
+        private const string SvcKey = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\adfssrv\Parameters";
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -216,16 +216,16 @@ internal static class PolicyEnterprise
                     DetectOps   = [RegOp.CheckDword(AdfsKey, "AuditFlags", 1)],
                 },
             ];
-    
+
     }
 
     // ── ActiveDirectoryServicesPolicy ──
     private static class _ActiveDirectoryServicesPolicy
-    {    
+    {
         private const string AdPolicyKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System";
-    
+
         private const string NetlogonKey = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Netlogon\Parameters";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -373,16 +373,16 @@ internal static class PolicyEnterprise
                     DetectOps = [RegOp.CheckDword(NetlogonKey, "ForceRediscoveryInterval", 600)],
                 },
             ];
-    
+
     }
 
     // ── AdReplicationPolicy ──
     private static class _AdReplicationPolicy
-    {    
+    {
         private const string NtdsPolicyKey = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\NTDS\Parameters";
-    
+
         private const string SystemPolicyKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -566,16 +566,16 @@ internal static class PolicyEnterprise
                     DetectOps = [RegOp.CheckDword(NtdsPolicyKey, "AuditRidAllocation", 1)],
                 },
             ];
-    
+
     }
 
     // ── AzureVirtualDesktopPolicy ──
     private static class _AzureVirtualDesktopPolicy
-    {    
+    {
         private const string TsKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services";
-    
+
         private const string AvdKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services\Azure Virtual Desktop";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -752,18 +752,18 @@ internal static class PolicyEnterprise
                     DetectOps = [RegOp.CheckDword(TsKey, "fClientShortPathEndpointEnabled", 1)],
                 },
             ];
-    
+
     }
 
     // ── CloudPcWindows365Policy ──
     private static class _CloudPcWindows365Policy
-    {    
+    {
         private const string CloudPcKey =
             @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\CloudPC";
-    
+
         private const string TsKey =
             @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -940,14 +940,14 @@ internal static class PolicyEnterprise
                     DetectOps = [RegOp.CheckDword(TsKey, "fDisablePNPRedir", 1)],
                 },
             ];
-    
+
     }
 
     // ── ConfigurationManagerPolicy ──
     private static class _ConfigurationManagerPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\ConfigurationManager";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
         [
             new TweakDef
@@ -1121,14 +1121,14 @@ internal static class PolicyEnterprise
                 DetectOps = [RegOp.CheckDword(Key, "DisableNAACredentialCaching", 1)],
             },
         ];
-    
+
     }
 
     // ── DeploymentServicesPolicy ──
     private static class _DeploymentServicesPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WDS";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -1302,16 +1302,16 @@ internal static class PolicyEnterprise
                 DetectOps = [RegOp.CheckDword(Key, "LimitServerAccessibility", 1)],
             },
         ];
-    
+
     }
 
     // ── DomainControllerHardeningPolicy ──
     private static class _DomainControllerHardeningPolicy
-    {    
-        private const string Key    = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Netlogon\Parameters";
+    {
+        private const string Key = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Netlogon\Parameters";
         private const string SecKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Netlogon";
         private const string LsaKey = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa\MSV1_0";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
         [
             new TweakDef
@@ -1475,14 +1475,14 @@ internal static class PolicyEnterprise
                 DetectOps    = [RegOp.CheckDword(Key, "DisableNetlogonTelemetry", 1)],
             },
         ];
-    
+
     }
 
     // ── DomainIsolationPolicy ──
     private static class _DomainIsolationPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\IPSec";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -1656,16 +1656,16 @@ internal static class PolicyEnterprise
                 DetectOps = [RegOp.CheckDword(Key, "EnableSAMonitoring", 1)],
             },
         ];
-    
+
     }
 
     // ── DomainTrustPolicy ──
     private static class _DomainTrustPolicy
-    {    
+    {
         private const string NetlogonKey = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Netlogon\Parameters";
-    
+
         private const string SystemPolicyKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -1849,14 +1849,14 @@ internal static class PolicyEnterprise
                     DetectOps = [RegOp.CheckDword(NetlogonKey, "CrossForestReferralTtl", 3600)],
                 },
             ];
-    
+
     }
 
     // ── EasMdmPolicy ──
     private static class _EasMdmPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\EasMdm";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -2070,18 +2070,18 @@ internal static class PolicyEnterprise
                 ImpactNote = "Disables Bluetooth on MDM-managed devices; reduces BlueSnarfing and proximity-based attack risk.",
             },
         ];
-    
+
     }
 
     // ── EnterpriseDeviceManagementPolicy ──
     private static class _EnterpriseDeviceManagementPolicy
-    {    
+    {
         private const string ErmKey =
             @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\EnterpriseResourceManager";
-    
+
         private const string MdmKey =
             @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CurrentVersion\MDM";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -2255,14 +2255,14 @@ internal static class PolicyEnterprise
                     DetectOps = [RegOp.CheckDword(MdmKey, "RequireEncryptedMdmChannel", 1)],
                 },
             ];
-    
+
     }
 
     // ── EnterpriseResourceDeployPolicy ──
     private static class _EnterpriseResourceDeployPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\EnterpriseResourceManager";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
         [
             new TweakDef
@@ -2436,14 +2436,14 @@ internal static class PolicyEnterprise
                 DetectOps = [RegOp.CheckDword(Key, "EnforcePrerequisiteChecks", 1)],
             },
         ];
-    
+
     }
 
     // ── EnterpriseResourcePolicy ──
     private static class _EnterpriseResourcePolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\EnterpriseResourceManager";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -2617,14 +2617,14 @@ internal static class PolicyEnterprise
                 DetectOps = [RegOp.CheckDword(Key, "EnforceResourceNamingStandards", 1)],
             },
         ];
-    
+
     }
 
     // ── EnterpriseStateRoamingPolicy ──
     private static class _EnterpriseStateRoamingPolicy
-    {    
+    {
         private const string SyncKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\SettingSync";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -2798,15 +2798,15 @@ internal static class PolicyEnterprise
                 ImpactNote = "Stops device account (email/calendar config) from syncing; MDM-managed profiles are unaffected.",
             },
         ];
-    
+
     }
 
     // ── GpoFolderRedirPolicy ──
     private static class _GpoFolderRedirPolicy
-    {    
+    {
         private const string SystemKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System";
         private const string LogonKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Logon";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -2980,14 +2980,14 @@ internal static class PolicyEnterprise
                 ImpactNote = "Sets a 30-second wait period for profile load before falling back to local cache on domain join.",
             },
         ];
-    
+
     }
 
     // ── GpoScriptsPolicy ──
     private static class _GpoScriptsPolicy
-    {    
+    {
         private const string SystemKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -3161,19 +3161,19 @@ internal static class PolicyEnterprise
                 ImpactNote = "Sets a 5-minute (300s) cap on non-interactive scripts; scripts that need more time must run interactively.",
             },
         ];
-    
+
     }
 
     // ── GroupPolicySettingsPolicy ──
     private static class _GroupPolicySettingsPolicy
-    {    
+    {
         private const string Key =
             @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\GroupPolicy";
-    
+
         // Well-known Group Policy Object GUID for User Configuration CSE
         private const string UserCseKey =
             @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\GroupPolicy\{35378EAC-683F-11D2-A89A-00C04FBBCFA2}";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -3387,15 +3387,15 @@ internal static class PolicyEnterprise
                     DetectOps = [RegOp.CheckDword(Key, "RequireSecureChannel", 1)],
                 },
             ];
-    
+
     }
 
     // ── HotpatchUpdatePolicy ──
     private static class _HotpatchUpdatePolicy
-    {    
+    {
         private const string HotpatchKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\Hotpatch";
-        private const string WuKey       = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate";
-    
+        private const string WuKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate";
+
         public static IReadOnlyList<TweakDef> Data =>
         [
             new TweakDef
@@ -3579,15 +3579,15 @@ internal static class PolicyEnterprise
                 DetectOps = [RegOp.CheckDword(WuKey, "RequireManagedDeviceForHotpatch", 1)],
             },
         ];
-    
+
     }
 
     // ── HybridJoinDnsPolicy ──
     private static class _HybridJoinDnsPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\NetworkIsolation";
         private const string Key2 = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CloudAuthentication\HybridJoin";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -3761,14 +3761,14 @@ internal static class PolicyEnterprise
                     DetectOps = [RegOp.CheckDword(Key2, "EnableHybridJoinAuditLogging", 1)],
                 },
             ];
-    
+
     }
 
     // ── IntuneDeviceEventPolicy ──
     private static class _IntuneDeviceEventPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DataCollection\MDM";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
         [
             new TweakDef
@@ -3942,16 +3942,16 @@ internal static class PolicyEnterprise
                 DetectOps = [RegOp.CheckDword(Key, "EnableRemoteWipeAuditLog", 1)],
             },
         ];
-    
+
     }
 
     // ── MdmEnrollmentPolicy ──
     private static class _MdmEnrollmentPolicy
-    {    
+    {
         private const string MdmKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CurrentVersion\MDM";
         private const string WpjKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WorkplaceJoin";
         private const string HelloKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\PassportForWork";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -4135,18 +4135,18 @@ internal static class PolicyEnterprise
                 DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DynamicLock", "AllowDynamicLock", 0)],
             },
         ];
-    
+
     }
 
     // ── MdmRegistrationPolicy ──
     private static class _MdmRegistrationPolicy
-    {    
+    {
         private const string MdmKey =
             @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CurrentVersion\MDM";
-    
+
         private const string EnrollKey =
             @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CurrentVersion\MDMEnrollment";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -4320,19 +4320,19 @@ internal static class PolicyEnterprise
                     DetectOps = [RegOp.CheckDword(EnrollKey, "EnableEnrollmentRetryOnFailure", 1)],
                 },
             ];
-    
+
     }
 
     // ── OobePolicy ──
     private static class _OobePolicy
-    {    
+    {
         private const string OobeKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\OOBE";
         private const string SetupKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Setup";
         private const string ShellLm = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Shell";
         private const string ShellCu = @"HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\Shell";
         private const string SrvMgrKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Server Manager";
         private const string SystemPolKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System";
-    
+
         public static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -4534,14 +4534,14 @@ internal static class PolicyEnterprise
                 DetectOps = [RegOp.CheckDword(SetupKey, "DisableUXFirstRunAnimation", 1)],
             },
         ];
-    
+
     }
 
     // ── RetailDemoPolicy ──
     private static class _RetailDemoPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\RetailDemo";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -4757,14 +4757,14 @@ internal static class PolicyEnterprise
                 DetectOps = [RegOp.CheckDword(Key, "NoRetailTelemetry", 1)],
             },
         ];
-    
+
     }
 
     // ── SharedPCPolicy ──
     private static class _SharedPCPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\SharedPC";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -4938,14 +4938,14 @@ internal static class PolicyEnterprise
                 DetectOps = [RegOp.CheckDword(Key, "SignInOnResume", 1)],
             },
         ];
-    
+
     }
 
     // ── WindowsAutopilotPolicy ──
     private static class _WindowsAutopilotPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Autopilot";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
         [
             new TweakDef
@@ -5119,16 +5119,16 @@ internal static class PolicyEnterprise
                 DetectOps = [RegOp.CheckDword(Key, "EnrollmentStatusPageTimeout", 90)],
             },
         ];
-    
+
     }
 
     // ── WindowsDeploymentServicesPolicy ──
     private static class _WindowsDeploymentServicesPolicy
-    {    
+    {
         private const string SvcKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WDS\Server";
         private const string PxeKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WDS\PXE";
         private const string TransKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WDS\Transport";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
         [
             new TweakDef
@@ -5292,14 +5292,14 @@ internal static class PolicyEnterprise
                 DetectOps    = [RegOp.CheckDword(SvcKey, "NamingPolicy", 1)],
             },
         ];
-    
+
     }
 
     // ── WindowsFlightedFeaturesPolicy ──
     private static class _WindowsFlightedFeaturesPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\FlightedFeatures";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -5513,14 +5513,14 @@ internal static class PolicyEnterprise
                 ImpactNote = "Locks device to production ring permanently; critical for compliance-controlled endpoints.",
             },
         ];
-    
+
     }
 
     // ── WindowsFlightingPolicy ──
     private static class _WindowsFlightingPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\PreviewBuilds";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -5694,22 +5694,22 @@ internal static class PolicyEnterprise
                 DetectOps = [RegOp.CheckDword(Key, "DisableOptionalFeatureUpdates", 1)],
             },
         ];
-    
+
     }
 
     // ── WindowsInsider ──
     private static class _WindowsInsider
-    {    
+    {
         private const string PreviewBuildsPolicy = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\PreviewBuilds";
-    
+
         private const string DataCollection = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DataCollection";
-    
+
         private const string CloudContent = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CloudContent";
-    
+
         private const string SelfHostApplicability = @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\WindowsSelfHost\Applicability";
-    
+
         private const string FeedbackRules = @"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Siuf\Rules";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -5894,14 +5894,14 @@ internal static class PolicyEnterprise
                 DetectOps = [RegOp.CheckDword(DataCollection, "DisableTailoredExperiencesWithDiagnosticData", 1)],
             },
         ];
-    
+
     }
 
     // ── WindowsServicingPolicy ──
     private static class _WindowsServicingPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
         [
             new TweakDef
@@ -6075,14 +6075,14 @@ internal static class PolicyEnterprise
                 DetectOps = [RegOp.CheckDword(Key, "EnableComplianceDeadlineEnforcement", 1)],
             },
         ];
-    
+
     }
 
     // ── WindowsToGoPolicy ──
     private static class _WindowsToGoPolicy
-    {    
+    {
         private const string WtgKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\PortableOperatingSystem";
-    
+
         public static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -6294,7 +6294,7 @@ internal static class PolicyEnterprise
                 DetectOps = [RegOp.CheckDword(WtgKey, "NoAutoUpdate", 1)],
             },
         ];
-    
+
     }
 
 }

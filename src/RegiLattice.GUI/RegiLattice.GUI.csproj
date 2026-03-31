@@ -9,12 +9,11 @@
     <ApplicationIcon>app.ico</ApplicationIcon>
     <StartupObject>RegiLattice.GUI.Program</StartupObject>
     <Description>RegiLattice — WinForms GUI</Description>
-    <!-- Windows 10 2004+ minimum: suppresses CA1416 false-positives on WinForms APIs -->
+    <!-- Windows 10 2004+ minimum: eliminates CA1416 false-positives on WinForms APIs.
+         Matches the global SupportedOSPlatformVersion in Directory.Build.props. -->
     <SupportedOSPlatformVersion>10.0.19041.0</SupportedOSPlatformVersion>
-    <!-- Suppress CA1416 for this explicitly Windows-only WinForms project -->
-    <!-- Suppress WFO1000: custom Controls already annotated with [DesignerSerializationVisibility(Hidden)];
-         .NET 10 WinForms SDK upgraded WFO1000 to error-level & fires even when the attribute is present. -->
-    <NoWarn>$(NoWarn);CA1416;WFO1000</NoWarn>
+    <!-- WFO1000 root fix: Form result properties are annotated with
+         [DesignerSerializationVisibility(Hidden)] — no NoWarn suppression needed. -->
   </PropertyGroup>
 
   <ItemGroup>

@@ -381,7 +381,7 @@ internal sealed class DnsSwitcherDialog : BaseDialog
                     catch { }
                 }
                 string latency = success > 0 ? $"{total / success} ms" : "timeout";
-                results.AppendLine($"  {p.Name, 40}  {latency, 10}  ({p.Primary})");
+                results.AppendLine($"  {p.Name,40}  {latency,10}  ({p.Primary})");
             }
         });
 

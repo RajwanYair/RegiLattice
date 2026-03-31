@@ -1,4 +1,4 @@
-﻿// RegiLattice.Core — TweakEngine.cs
+// RegiLattice.Core — TweakEngine.cs
 // Central engine: manages all tweaks, profiles, search, batch operations, snapshots.
 // Replaces Python tweaks/__init__.py entirely.
 
