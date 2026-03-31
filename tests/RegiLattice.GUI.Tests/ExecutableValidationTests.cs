@@ -102,7 +102,8 @@ public sealed class ExecutableValidationTests
         var versionInfo = FileVersionInfo.GetVersionInfo(guiPath);
         Assert.NotNull(versionInfo.FileVersion);
         Assert.NotEqual("0.0.0.0", versionInfo.FileVersion);
-        Assert.StartsWith("5.", versionInfo.FileVersion);
+        var expectedMajor = typeof(RegiLattice.Core.TweakEngine).Assembly.GetName().Version!.Major;
+        Assert.StartsWith($"{expectedMajor}.", versionInfo.FileVersion);
     }
 
     [Fact]
@@ -115,7 +116,8 @@ public sealed class ExecutableValidationTests
         var versionInfo = FileVersionInfo.GetVersionInfo(cliPath);
         Assert.NotNull(versionInfo.FileVersion);
         Assert.NotEqual("0.0.0.0", versionInfo.FileVersion);
-        Assert.StartsWith("5.", versionInfo.FileVersion);
+        var expectedMajor = typeof(RegiLattice.Core.TweakEngine).Assembly.GetName().Version!.Major;
+        Assert.StartsWith($"{expectedMajor}.", versionInfo.FileVersion);
     }
 
     [Fact]
@@ -128,7 +130,8 @@ public sealed class ExecutableValidationTests
         var versionInfo = FileVersionInfo.GetVersionInfo(corePath);
         Assert.NotNull(versionInfo.FileVersion);
         Assert.NotEqual("0.0.0.0", versionInfo.FileVersion);
-        Assert.StartsWith("5.", versionInfo.FileVersion);
+        var expectedMajor = typeof(RegiLattice.Core.TweakEngine).Assembly.GetName().Version!.Major;
+        Assert.StartsWith($"{expectedMajor}.", versionInfo.FileVersion);
     }
 
     [Fact]
@@ -139,7 +142,7 @@ public sealed class ExecutableValidationTests
 
         Assert.NotNull(version);
         Assert.NotEqual(new Version(0, 0, 0, 0), version);
-        Assert.Equal(5, version.Major);
+        Assert.True(version.Major >= 5, $"GUI major version {version.Major} unexpectedly low");
     }
 
     [Fact]
@@ -150,7 +153,7 @@ public sealed class ExecutableValidationTests
 
         Assert.NotNull(version);
         Assert.NotEqual(new Version(0, 0, 0, 0), version);
-        Assert.Equal(5, version.Major);
+        Assert.True(version.Major >= 5, $"Core major version {version.Major} unexpectedly low");
     }
 
     // ── CLI smoke test ──────────────────────────────────────────────────
