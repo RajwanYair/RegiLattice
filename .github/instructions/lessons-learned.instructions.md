@@ -7,7 +7,77 @@ applyTo: "**/*.cs,**/tests/**,**/*Tests/**"
 > Accumulated hard-won insights from the Python → C# migration, test coverage sprints,
 > and the 453-tweak restoration campaign.
 > These rules are **as important as the coding standards** — they prevent recurring mistakes.
-> Last updated: 2026-03-31 (v6.0.0, C# 13 / .NET 10.0-windows, ~9190 tweaks, 101 categories, 2931 tests)
+> Last updated: 2026-03-31 (v6.0.3, C# 13 / .NET 10.0-windows, ~9190 tweaks, 101 categories, 2955 tests)
+
+---
+
+## `Task.Run` + WMI = COM STA Threads That Block Process Exit
+
+`ManagementObjectSearcher.Get()` inside `Task.Run` (ThreadPool) can cause the
+`dotnet-testhost` process to hang for hours after all tests pass.
+
+**Root cause**: The COM infrastructure invoked by `System.Management` may create
+internal STA (Single-Threaded Apartment) message-pump threads.  These threads are
+**foreground threads** — the .NET runtime waits for all foreground threads to finish
+before the process exits.  On Intel/corporate machines with busy Intune or SCCM WMI
+providers, those COM threads can stay alive indefinitely.
+
+**Fix applied (v6.0.3)** in `HardwareInfo.BuildHwProfile()`:
+```csharp
+// ✅ CORRECT — explicit background MTA threads prevent COM STA pump creation
+var t = new Thread(() => { try { action(); } catch { } }) { IsBackground = true };
+t.SetApartmentState(ApartmentState.MTA);
+t.Start();
+
+// ❌ BROKEN — ThreadPool Task.Run allows COM to create STA message-pump threads
+Task.Run(() => DetectCpu(), cts.Token);   // STA threads block process exit
+```
+
+**Rule**: Any code that calls into `System.Management` (WMI) **must** run on a thread
+created with `IsBackground = true` AND `ApartmentState.MTA`.  Never rely on `Task.Run`
+for WMI calls — use explicit `Thread` with both properties set.
+
+**Symptom**: Test output shows `Passed! Failed: 0, Passed: NNN` but then the terminal
+hangs for minutes or hours before returning to the shell prompt.
+
+---
+
+## Redirected Stdout Pipe Buffer Deadlock in Process Tests
+
+When a test launches a child process with `RedirectStandardOutput = true` and calls
+`WaitForExit()` **without first draining stdout**, the process will deadlock if it
+outputs more than ~4–64 KB of text (OS pipe buffer size).
+
+**Root cause**: The child writes to the stdout pipe. When the pipe buffer fills, the child
+blocks on `Write()`. The test is blocked on `WaitForExit()`. Neither side proceeds —
+**deadlock**.
+
+**Symptom (v6.0.4)**: `CliExe_RunWithHelp_ExitsCleanly` timed out at 10 s because the
+B3 grouped help text overflows the Windows pipe buffer.
+
+**Fix**: Drain stdout **before** or **concurrently with** `WaitForExit`:
+```csharp
+// ✅ CORRECT — ReadToEnd() drains stdout; process can then exit; WaitForExit returns instantly
+process.Start();
+string _ = process.StandardOutput.ReadToEnd();
+bool exited = process.WaitForExit(10_000);
+
+// ❌ BROKEN — pipe buffer fills if help/list output > ~64 KB
+process.Start();
+bool exited = process.WaitForExit(10_000);   // deadlock for large output
+```
+
+**Async alternative** (when you also need to time out independently):
+```csharp
+process.Start();
+process.BeginOutputReadLine();  // async drain, discards data
+process.BeginErrorReadLine();   // drain stderr too
+bool exited = process.WaitForExit(10_000);
+```
+
+**Rule**: Any test that passes `RedirectStandardOutput = true` to `ProcessStartInfo` **must**
+drain stdout (and stderr if redirected) before or during `WaitForExit`. This applies to all
+smoke/integration tests that launch the CLI or GUI exe.
 
 ---
 

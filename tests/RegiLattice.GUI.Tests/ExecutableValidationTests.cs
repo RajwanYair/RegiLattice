@@ -177,6 +177,11 @@ public sealed class ExecutableValidationTests
         };
 
         process.Start();
+        // Drain stdout before WaitForExit — B3 help output is large and fills the
+        // pipe buffer, causing the CLI to block on Write while the test waits for
+        // exit: classic pipe-buffer deadlock.  ReadToEnd() completes once the
+        // process closes its stdout (i.e. exits), so WaitForExit() returns instantly.
+        string _ = process.StandardOutput.ReadToEnd();
         bool exited = process.WaitForExit(10_000);
 
         Assert.True(exited, "CLI process did not exit within 10 seconds");
