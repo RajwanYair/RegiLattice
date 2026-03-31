@@ -101,7 +101,7 @@
   "git.enableSmartCommit": true,
   // ── Markdown ────────────────────────────────────────────────────────
   // Config lives in .markdownlint.json (project root) — takes precedence.
-  // ── Network / proxy (Intel corporate TLS inspection) ─────────────────
+  // ── Network / proxy ────────────────────────────────────────────────
   "http.proxySupport": "on",
   "http.proxyStrictSSL": false,
   // ── YAML (redhat.vscode-yaml) ───────────────────────────────────────

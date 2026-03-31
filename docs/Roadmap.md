@@ -1,17 +1,3 @@
-Read [](file:///c%3A/Users/ryair/OneDrive%20-%20Intel%20Corporation/Documents/MyScripts/RegiLattice/docs/Roadmap.md#1-1), lines 1 to 100
-
-Read [](file:///c%3A/Users/ryair/OneDrive%20-%20Intel%20Corporation/Documents/MyScripts/RegiLattice/docs/Roadmap.md#100-100), lines 100 to 269
-
-Read [](file:///c%3A/Users/ryair/OneDrive%20-%20Intel%20Corporation/Documents/MyScripts/RegiLattice/docs/Development.md#1-1), lines 1 to 60
-
-Read [](file:///c%3A/Users/ryair/OneDrive%20-%20Intel%20Corporation/Documents/MyScripts/RegiLattice/src/RegiLattice.Core/Services)
-
-Read [](file:///c%3A/Users/ryair/OneDrive%20-%20Intel%20Corporation/Documents/MyScripts/RegiLattice/src/RegiLattice.GUI/Forms)
-
-I now have a complete picture of the project state. Let me write the roadmap.
-
----
-
 # RegiLattice — Development Roadmap
 
 > **Baseline:** v5.97.0 · 9,190 tweaks · 637 categories · 665 modules · 2,941 tests · 64 GUI forms · 34 Core services
