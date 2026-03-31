@@ -1128,3 +1128,1070 @@ internal static class WindowsHello
         },
     ];
 }
+
+// === Merged from: LockScreen.cs ===
+
+
+internal static class LockScreen
+{
+    internal static IReadOnlyList<TweakDef> Tweaks { get; } =
+    [
+        new TweakDef
+        {
+            Id = "lock-disable-lock-screen",
+            Label = "Disable Lock Screen Entirely",
+            Category = "Lock Screen & Login",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description =
+                "Completely disables the lock screen, going straight to the password/PIN prompt. Default: enabled. Recommended: disabled (home PCs).",
+            Tags = ["lockscreen", "disable", "bypass", "login"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Personalization"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Personalization", "NoLockScreen", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Personalization", "NoLockScreen")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Personalization", "NoLockScreen", 1)],
+        },
+        new TweakDef
+        {
+            Id = "lock-disable-login-blur",
+            Label = "Disable Login Background Blur",
+            Category = "Lock Screen & Login",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Disables the acrylic (frosted glass) blur effect on the sign-in screen background. Shows the full wallpaper. Default: blurred. Recommended: disabled.",
+            Tags = ["lockscreen", "login", "blur", "acrylic", "background"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "DisableAcrylicBackgroundOnLogon", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "DisableAcrylicBackgroundOnLogon")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "DisableAcrylicBackgroundOnLogon", 1)],
+        },
+        new TweakDef
+        {
+            Id = "lock-disable-first-login-animation",
+            Label = "Disable First Sign-In Animation",
+            Category = "Lock Screen & Login",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Disables the 'Hi / We're getting things ready' animation on first login. Speeds up new profile setup. Default: 1 (enabled). Recommended: 0 (disabled).",
+            Tags = ["lockscreen", "animation", "login", "first-run"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "EnableFirstLogonAnimation", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "EnableFirstLogonAnimation")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "EnableFirstLogonAnimation", 0)],
+        },
+
+        new TweakDef
+        {
+            Id = "lock-disable-lock-screen-ads",
+            Label = "Disable Lock Screen Ads/Tips",
+            Category = "Lock Screen & Login",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Disables rotating lock screen tips and advertising overlays. Default: Enabled. Recommended: Disabled.",
+            Tags = ["lockscreen", "ads", "tips", "spotlight"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Personalization", "NoLockScreen", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Personalization", "NoLockScreen")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Personalization", "NoLockScreen", 1)],
+        },
+
+        new TweakDef
+        {
+            Id = "lock-disable-network-ui",
+            Label = "Disable Network UI on Lock Screen",
+            Category = "Lock Screen & Login",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description =
+                "Disables the network selection UI on the lock screen. Prevents users from connecting to networks before sign-in. Default: Enabled. Recommended: Disabled for security.",
+            Tags = ["lockscreen", "network", "selection", "security"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "DontDisplayNetworkSelectionUI", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "DontDisplayNetworkSelectionUI")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "DontDisplayNetworkSelectionUI", 1)],
+        },
+
+        new TweakDef
+        {
+            Id = "lock-disable-password-reveal",
+            Label = "Disable Password Reveal Button",
+            Category = "Lock Screen & Login",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description =
+                "Hides the password reveal (eye) button from credential input fields on the login screen and UAC prompts. Reduces shoulder-surfing risk. Default: shown. Recommended: hidden for shared/kiosk machines.",
+            Tags = ["lockscreen", "password", "reveal", "security", "credential"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CredUI"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CredUI", "DisablePasswordReveal", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CredUI", "DisablePasswordReveal")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CredUI", "DisablePasswordReveal", 1)],
+        },
+        new TweakDef
+        {
+            Id = "lock-hide-sleep-button",
+            Label = "Hide Sleep Button from Lock Screen Power Menu",
+            Category = "Lock Screen & Login",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description =
+                "Removes the Sleep option from the power flyout on the lock screen and Start menu. Prevents accidental sleep on always-on machines. Default: shown. Recommended: hidden for servers/kiosks.",
+            Tags = ["lockscreen", "sleep", "power", "flyout", "button"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\FlyoutMenuSettings"],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\FlyoutMenuSettings", "ShowSleepOption", 0),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\FlyoutMenuSettings", "ShowSleepOption"),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\FlyoutMenuSettings", "ShowSleepOption", 0),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "lock-hide-hibernate-button",
+            Label = "Hide Hibernate Button from Lock Screen Power Menu",
+            Category = "Lock Screen & Login",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description =
+                "Removes the Hibernate option from the power flyout on the lock screen and Start menu. Prevents accidental hibernation on desktop machines. Default: shown (if hibernate enabled). Recommended: hidden for desktops.",
+            Tags = ["lockscreen", "hibernate", "power", "flyout", "button"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\FlyoutMenuSettings"],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\FlyoutMenuSettings", "ShowHibernateOption", 0),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\FlyoutMenuSettings", "ShowHibernateOption"),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\FlyoutMenuSettings",
+                    "ShowHibernateOption",
+                    0
+                ),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "lock-set-lockout-threshold-5",
+            Label = "Set Account Lockout Threshold to 5 Attempts",
+            Category = "Lock Screen & Login",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Locks the account after 5 failed login attempts via registry. Helps mitigate brute-force attacks. Default: 0 (disabled).",
+            Tags = ["lockscreen", "lockout", "security", "brute-force"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System"],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "MaxDevicePasswordFailedAttempts", 5),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "MaxDevicePasswordFailedAttempts"),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System",
+                    "MaxDevicePasswordFailedAttempts",
+                    5
+                ),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "lock-disable-shutdown-button",
+            Label = "Hide Shutdown Button on Login Screen",
+            Category = "Lock Screen & Login",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Hides the shutdown button from the login screen. Prevents unauthorized shutdowns. Default: shown.",
+            Tags = ["lockscreen", "shutdown", "login", "security"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "ShutdownWithoutLogon", 0)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "ShutdownWithoutLogon", 1)],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "ShutdownWithoutLogon", 0),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "lock-disable-camera-on-lockscreen",
+            Label = "Disable Camera on Lock Screen",
+            Category = "Lock Screen & Login",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Prevents access to the camera from the lock screen. Enhances physical security. Default: accessible.",
+            Tags = ["lock-screen", "camera", "disable", "security"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Personalization"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Personalization", "NoLockScreenCamera", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Personalization", "NoLockScreenCamera")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Personalization", "NoLockScreenCamera", 1)],
+        },
+        new TweakDef
+        {
+            Id = "lock-disable-slideshow",
+            Label = "Disable Lock Screen Slideshow",
+            Category = "Lock Screen & Login",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables the slideshow feature on the lock screen. Reduces memory and GPU usage. Default: user-configurable.",
+            Tags = ["lock-screen", "slideshow", "disable", "performance"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Personalization"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Personalization", "NoLockScreenSlideshow", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Personalization", "NoLockScreenSlideshow")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Personalization", "NoLockScreenSlideshow", 1)],
+        },
+        new TweakDef
+        {
+            Id = "lock-auto-lock-10min",
+            Label = "Auto-Lock After 10 Minutes",
+            Category = "Lock Screen & Login",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Sets the screen saver timeout to 10 minutes with automatic lock. Enhances physical security. Default: no timeout.",
+            Tags = ["lock-screen", "auto-lock", "timeout", "security"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System"],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "InactivityTimeoutSecs", 600),
+            ],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "InactivityTimeoutSecs")],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "InactivityTimeoutSecs", 600),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "lock-auto-lock-5min",
+            Label = "Auto-Lock After 5 Minutes",
+            Category = "Lock Screen & Login",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Sets the inactivity timeout to 5 minutes with automatic lock. Stricter security policy. Default: no timeout.",
+            Tags = ["lock-screen", "auto-lock", "timeout", "strict"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System"],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "InactivityTimeoutSecs", 300),
+            ],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "InactivityTimeoutSecs")],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "InactivityTimeoutSecs", 300),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "lock-auto-restart-signon",
+            Label = "Disable Auto-Restart Sign-On (ARSO)",
+            Category = "Lock Screen & Login",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables Automatic Restart Sign-On. Prevents Windows from automatically signing in after updates. Default: enabled.",
+            Tags = ["lock-screen", "arso", "restart", "sign-on"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System"],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "DisableAutomaticRestartSignOn", 1),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "DisableAutomaticRestartSignOn"),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "DisableAutomaticRestartSignOn", 1),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "lock-clear-legal-notice",
+            Label = "Clear Legal Notice at Login",
+            Category = "Lock Screen & Login",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description =
+                "Clears any legal notice caption and text displayed before login. Removes the mandatory 'OK' click before sign-in. Default: none.",
+            Tags = ["lock-screen", "legal-notice", "login", "corporate"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System"],
+            ApplyOps =
+            [
+                RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "legalnoticecaption", ""),
+                RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "legalnoticetext", ""),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "legalnoticecaption"),
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "legalnoticetext"),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "legalnoticecaption", ""),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "lock-disable-ads",
+            Label = "Disable Lock Screen Advertisements",
+            Category = "Lock Screen & Login",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description =
+                "Disables fun facts, tips, and tricks (ads) on the lock screen. Prevents Microsoft from showing promotional content. Default: enabled.",
+            Tags = ["lock-screen", "ads", "tips", "spotlight"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager"],
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
+                    "RotatingLockScreenOverlayEnabled",
+                    0
+                ),
+                RegOp.SetDword(
+                    @"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
+                    "SubscribedContent-338387Enabled",
+                    0
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(
+                    @"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
+                    "RotatingLockScreenOverlayEnabled"
+                ),
+                RegOp.DeleteValue(
+                    @"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
+                    "SubscribedContent-338387Enabled"
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
+                    "RotatingLockScreenOverlayEnabled",
+                    0
+                ),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "lock-disable-camera",
+            Label = "Disable Lock Screen Camera",
+            Category = "Lock Screen & Login",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables the camera shortcut on the lock screen. Prevents photo access without unlocking. Default: enabled.",
+            Tags = ["lock-screen", "camera", "privacy", "disable"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Personalization"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Personalization", "NoLockScreenCamera", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Personalization", "NoLockScreenCamera")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Personalization", "NoLockScreenCamera", 1)],
+        },
+        new TweakDef
+        {
+            Id = "lock-disable-fast-user-switching",
+            Label = "Disable Fast User Switching",
+            Category = "Lock Screen & Login",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Disables Fast User Switching. Only one user at a time; other users must log off first. Saves memory and resources. Default: enabled.",
+            Tags = ["lock-screen", "fast-user-switching", "security", "resources"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "HideFastUserSwitching", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "HideFastUserSwitching")],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "HideFastUserSwitching", 1),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "lock-disable-sign-in-animation",
+            Label = "Disable First Sign-In Animation",
+            Category = "Lock Screen & Login",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables the 'Getting things ready' first sign-in animation. Speeds up new user profile creation. Default: enabled.",
+            Tags = ["lock-screen", "animation", "first-login", "speed"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System"],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "EnableFirstLogonAnimation", 0),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "EnableFirstLogonAnimation"),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "EnableFirstLogonAnimation", 0),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "lock-hide-network-icon",
+            Label = "Hide Network Icon on Lock Screen",
+            Category = "Lock Screen & Login",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Hides the network icon from the Windows lock screen. Prevents users from changing Wi-Fi or seeing network status before login. Default: visible.",
+            Tags = ["lock-screen", "network", "icon", "hide"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "DontDisplayNetworkSelectionUI", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "DontDisplayNetworkSelectionUI")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "DontDisplayNetworkSelectionUI", 1)],
+        },
+        new TweakDef
+        {
+            Id = "lock-disable-lockscreen-app-notif",
+            Label = "Disable App Notifications on Lock Screen",
+            Category = "Lock Screen & Login",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Sets DisableLockScreenAppNotifications=1 in the System policy. Prevents any app from showing toast notification content on the lock screen, reducing information leakage.",
+            Tags = ["lock-screen", "notifications", "policy", "privacy"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "DisableLockScreenAppNotifications", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "DisableLockScreenAppNotifications")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "DisableLockScreenAppNotifications", 1)],
+        },
+        new TweakDef
+        {
+            Id = "lock-block-picture-password",
+            Label = "Block Picture Password for Domain Users",
+            Category = "Lock Screen & Login",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Sets BlockDomainPicturePassword=1 in System policies. Prevents domain-joined users from using picture gestures as a Windows logon method, ensuring credential-based authentication.",
+            Tags = ["lock-screen", "password", "domain", "security"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System"],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "BlockDomainPicturePassword", 1),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "BlockDomainPicturePassword"),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "BlockDomainPicturePassword", 1),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "lock-hide-locked-user-display",
+            Label = "Do Not Display Locked User Identity",
+            Category = "Lock Screen & Login",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Sets DontDisplayLockedUserId=3 in System policies. Shows a generic icon instead of the user's name and picture on the lock screen when the session is locked.",
+            Tags = ["lock-screen", "user", "identity", "privacy"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System"],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "DontDisplayLockedUserId", 3),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "DontDisplayLockedUserId"),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "DontDisplayLockedUserId", 3),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "lock-force-unlock-reauth",
+            Label = "Require Re-Authentication When Unlocking Screen",
+            Category = "Lock Screen & Login",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Sets ForceUnlockLogon=1 in Winlogon. Forces the machine to always require credentials (not just a cached unlock token) when returning from the lock screen.",
+            Tags = ["lock-screen", "unlock", "authentication", "security"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon", "ForceUnlockLogon", 1)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon", "ForceUnlockLogon", 0)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon", "ForceUnlockLogon", 1)],
+        },
+        new TweakDef
+        {
+            Id = "lock-disable-spotlight-rotation",
+            Label = "Disable Windows Spotlight Rotating Lock Screen Images",
+            Category = "Lock Screen & Login",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description =
+                "Sets RotatingLockScreenEnabled=0 in the ContentDeliveryManager key. Stops the lock screen background from cycling through Microsoft Spotlight images downloaded from the internet.",
+            Tags = ["lock-screen", "spotlight", "background", "images"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager"],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager", "RotatingLockScreenEnabled", 0),
+            ],
+            RemoveOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager", "RotatingLockScreenEnabled", 1),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
+                    "RotatingLockScreenEnabled",
+                    0
+                ),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "lock-set-blank-screensaver",
+            Label = "Set Screen Saver to Blank Screen",
+            Category = "Lock Screen & Login",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description =
+                "Sets SCRNSAVE.EXE to scrnsave.scr (blank screen) in Desktop. Uses the built-in blank screen saver that simply turns the display black, avoiding GPU usage from animated screen savers.",
+            Tags = ["lock-screen", "screensaver", "blank", "power"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Desktop"],
+            ApplyOps = [RegOp.SetExpandString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "SCRNSAVE.EXE", @"%SystemRoot%\system32\scrnsave.scr")],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Control Panel\Desktop", "SCRNSAVE.EXE")],
+            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "SCRNSAVE.EXE", @"%SystemRoot%\system32\scrnsave.scr")],
+        },
+        new TweakDef
+        {
+            Id = "lock-block-user-info-at-signin",
+            Label = "Block Users from Showing Personal Info on Sign-In Screen",
+            Category = "Lock Screen & Login",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Sets BlockUserFromShowingAccountDetailsOnSignin=1 in System policy. Prevents users from choosing to display their email address, display name, or account picture on the Windows sign-in screen.",
+            Tags = ["lock-screen", "sign-in", "privacy", "policy"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System"],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "BlockUserFromShowingAccountDetailsOnSignin", 1),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "BlockUserFromShowingAccountDetailsOnSignin"),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "BlockUserFromShowingAccountDetailsOnSignin", 1),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "lock-suppress-user-name-display",
+            Label = "Do Not Display Username on Sign-In Screen",
+            Category = "Lock Screen & Login",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Sets DontDisplayUserName=1 in System policies. Hides the user's display name (but not the username entry field) on the Windows sign-in and lock screen tiles.",
+            Tags = ["lock-screen", "user", "name", "privacy"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "DontDisplayUserName", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "DontDisplayUserName")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "DontDisplayUserName", 1)],
+        },
+        new TweakDef
+        {
+            Id = "lock-set-logon-async-scripts",
+            Label = "Run Logon Scripts Asynchronously",
+            Category = "Lock Screen & Login",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Sets RunLogonScriptSync=0 in Winlogon. Allows the Windows shell to load before logon scripts finish executing. Significantly speeds up the time from password entry to a usable desktop.",
+            Tags = ["lock-screen", "logon", "scripts", "performance"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon", "RunLogonScriptSync", 0)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon", "RunLogonScriptSync", 1)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon", "RunLogonScriptSync", 0)],
+        },
+        new TweakDef
+        {
+            Id = "lock-disable-spotlight-lock-policy",
+            Label = "Disable Windows Spotlight on Lock Screen (Policy)",
+            Category = "Lock Screen & Login",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description =
+                "Sets DisableWindowsSpotlightOnLockScreen=1 in the CloudContent user policy key. Prevents the lock screen from fetching and displaying MSN Spotlight background images and facts.",
+            Tags = ["lock-screen", "spotlight", "cloud-content", "policy"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\CloudContent"],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\CloudContent", "DisableWindowsSpotlightOnLockScreen", 1),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\CloudContent", "DisableWindowsSpotlightOnLockScreen"),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\CloudContent", "DisableWindowsSpotlightOnLockScreen", 1),
+            ],
+        },
+    ];
+}
+
+// ── Merged from Screensaver.cs ──────────────────────────────────────────────────
+
+internal static class Screensaver
+{
+    internal static IReadOnlyList<TweakDef> Tweaks { get; } =
+    [
+        new TweakDef
+        {
+            Id = "ss-disable-screensaver",
+            Label = "Disable Screensaver",
+            Category = "Lock Screen & Login",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Disable the screensaver. Default: enabled. Recommended: keep enabled with password.",
+            Tags = ["screensaver", "disable", "screen"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Desktop"],
+            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "ScreenSaveActive", "0")],
+            RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "ScreenSaveActive", "1")],
+            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "ScreenSaveActive", "0")],
+        },
+        new TweakDef
+        {
+            Id = "ss-timeout-5m",
+            Label = "Screensaver Timeout: 5 Minutes",
+            Category = "Lock Screen & Login",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Set screensaver to activate after 5 minutes. Default: 15 minutes.",
+            Tags = ["screensaver", "timeout", "5min"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Desktop"],
+            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "ScreenSaveTimeOut", "300")],
+            RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "ScreenSaveTimeOut", "900")],
+            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "ScreenSaveTimeOut", "300")],
+        },
+        new TweakDef
+        {
+            Id = "ss-timeout-10m",
+            Label = "Screensaver Timeout: 10 Minutes",
+            Category = "Lock Screen & Login",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Set screensaver to activate after 10 minutes. Default: 15 minutes.",
+            Tags = ["screensaver", "timeout", "10min"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Desktop"],
+            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "ScreenSaveTimeOut", "600")],
+            RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "ScreenSaveTimeOut", "900")],
+            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "ScreenSaveTimeOut", "600")],
+        },
+        new TweakDef
+        {
+            Id = "ss-blank-screensaver",
+            Label = "Set Blank (Black) Screensaver",
+            Category = "Lock Screen & Login",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Set screensaver to plain black screen. Default: none. Recommended: blank for OLED.",
+            Tags = ["screensaver", "blank", "black", "oled"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Desktop"],
+            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "SCRNSAVE.EXE", "C:\\Windows\\System32\\scrnsave.scr")],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Control Panel\Desktop", "SCRNSAVE.EXE")],
+            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "SCRNSAVE.EXE", "C:\\Windows\\System32\\scrnsave.scr")],
+        },
+        new TweakDef
+        {
+            Id = "ss-disable-lock-slideshow",
+            Label = "Disable Lock Screen Slideshow",
+            Category = "Lock Screen & Login",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disable slideshow on the lock screen. Default: enabled.",
+            Tags = ["lock", "slideshow", "screen"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Personalization"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Personalization", "NoLockScreenSlideshow", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Personalization", "NoLockScreenSlideshow")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Personalization", "NoLockScreenSlideshow", 1)],
+        },
+
+        new TweakDef
+        {
+            Id = "ss-scr-timeout-10min",
+            Label = "Set Screensaver Timeout to 10 Minutes (Policy)",
+            Category = "Lock Screen & Login",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Sets screensaver timeout to 10 minutes via machine policy. Enforced across all users. Default: varies. Recommended: 600 seconds.",
+            Tags = ["screensaver", "timeout", "10min", "policy"],
+            RegistryKeys =
+            [
+                @"HKEY_CURRENT_USER\Control Panel\Desktop",
+                @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Control Panel\Desktop",
+            ],
+            ApplyOps =
+            [
+                RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "ScreenSaveTimeOut", "600"),
+                RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Control Panel\Desktop", "ScreenSaveTimeOut", "600"),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Control Panel\Desktop", "ScreenSaveTimeOut"),
+                RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "ScreenSaveTimeOut", "900"),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Control Panel\Desktop", "ScreenSaveTimeOut", "600"),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "ss-scr-disable-screensaver",
+            Label = "Disable Screensaver Completely (Policy)",
+            Category = "Lock Screen & Login",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description =
+                "Disables the screensaver completely via machine policy. Prevents screensaver from activating on any user. Default: Enabled. Recommended: Disabled only for kiosks.",
+            Tags = ["screensaver", "disable", "policy"],
+            RegistryKeys =
+            [
+                @"HKEY_CURRENT_USER\Control Panel\Desktop",
+                @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Control Panel\Desktop",
+            ],
+            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "ScreenSaveActive", "0")],
+            RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "ScreenSaveActive", "1")],
+            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "ScreenSaveActive", "0")],
+        },
+        new TweakDef
+        {
+            Id = "ss-set-screensaver-timeout-300",
+            Label = "Set Screensaver Timeout to 5 Minutes",
+            Category = "Lock Screen & Login",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Sets screensaver activation timeout to 300 seconds (5 minutes). Default: 900 (15 min).",
+            Tags = ["screensaver", "timeout", "lock", "idle"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Desktop"],
+            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "ScreenSaveTimeOut", "300")],
+            RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "ScreenSaveTimeOut", "900")],
+            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "ScreenSaveTimeOut", "300")],
+        },
+        new TweakDef
+        {
+            Id = "ss-require-password-on-resume",
+            Label = "Require Password on Screensaver Resume",
+            Category = "Lock Screen & Login",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Requires password when resuming from screensaver. Critical for security. Default: varies.",
+            Tags = ["screensaver", "password", "lock", "security"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Desktop"],
+            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "ScreenSaverIsSecure", "1")],
+            RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "ScreenSaverIsSecure", "0")],
+            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "ScreenSaverIsSecure", "1")],
+        },
+        new TweakDef
+        {
+            Id = "ss-set-screensaver-blank",
+            Label = "Set Screensaver to Blank (Most Efficient)",
+            Category = "Lock Screen & Login",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Sets the screensaver to the blank (black screen) option. Lowest power usage. Default: none.",
+            Tags = ["screensaver", "blank", "power", "efficiency"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Desktop"],
+            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "SCRNSAVE.EXE", @"C:\Windows\System32\scrnsave.scr")],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Control Panel\Desktop", "SCRNSAVE.EXE")],
+            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "SCRNSAVE.EXE", @"C:\Windows\System32\scrnsave.scr")],
+        },
+        new TweakDef
+        {
+            Id = "ss-disable-screen-saver-policy",
+            Label = "Disable Screen Saver via Group Policy",
+            Category = "Lock Screen & Login",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables the screen saver using Group Policy. Overrides user settings. Default: not configured.",
+            Tags = ["screensaver", "policy", "gpo", "disable"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Control Panel\Desktop"],
+            ApplyOps = [RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Control Panel\Desktop", "ScreenSaveActive", "0")],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Control Panel\Desktop", "ScreenSaveActive")],
+            DetectOps = [RegOp.CheckString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Control Panel\Desktop", "ScreenSaveActive", "0")],
+        },
+        new TweakDef
+        {
+            Id = "ss-lock-screen-timeout-60",
+            Label = "Set Lock Screen Timeout to 60 Seconds",
+            Category = "Lock Screen & Login",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Sets the console lock display-off timeout to 60 seconds. Screen turns off faster on lock screen. Default: 60 (Windows default, but often changed by OEMs).",
+            Tags = ["screensaver", "lock-screen", "timeout", "display"],
+            RegistryKeys =
+            [
+                @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\PowerSettings\7516b95f-f776-4464-8c53-06167f40cc99\8EC4B3A5-6868-48c2-BE75-4F3044BE88A7",
+            ],
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\PowerSettings\7516b95f-f776-4464-8c53-06167f40cc99\8EC4B3A5-6868-48c2-BE75-4F3044BE88A7",
+                    "Attributes",
+                    2
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\PowerSettings\7516b95f-f776-4464-8c53-06167f40cc99\8EC4B3A5-6868-48c2-BE75-4F3044BE88A7",
+                    "Attributes"
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\PowerSettings\7516b95f-f776-4464-8c53-06167f40cc99\8EC4B3A5-6868-48c2-BE75-4F3044BE88A7",
+                    "Attributes",
+                    2
+                ),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "ss-disable-user-policy",
+            Label = "Disable Screen Saver (User)",
+            Category = "Lock Screen & Login",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description =
+                "Disables the screen saver for the current user. Screen will stay on until manually locked or display timeout triggers. Default: enabled.",
+            Tags = ["screensaver", "disable", "user", "lock"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Desktop"],
+            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "ScreenSaveActive", "0")],
+            RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "ScreenSaveActive", "1")],
+            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "ScreenSaveActive", "0")],
+        },
+        new TweakDef
+        {
+            Id = "ss-force-policy",
+            Label = "Force Screen Saver via Policy",
+            Category = "Lock Screen & Login",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Enforces screen saver activation via Group Policy. Overrides user preferences. Default: not enforced.",
+            Tags = ["screensaver", "force", "policy", "security"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Control Panel\Desktop"],
+            ApplyOps = [RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Control Panel\Desktop", "ScreenSaveActive", "1")],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Control Panel\Desktop", "ScreenSaveActive")],
+            DetectOps = [RegOp.CheckString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Control Panel\Desktop", "ScreenSaveActive", "1")],
+        },
+        new TweakDef
+        {
+            Id = "ss-prevent-screensaver-change",
+            Label = "Prevent Screen Saver Changes",
+            Category = "Lock Screen & Login",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Prevents users from changing the screen saver settings. Locks the current screen saver configuration. Default: allowed.",
+            Tags = ["screensaver", "prevent", "change", "policy"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "NoDispScrSavPage", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "NoDispScrSavPage")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "NoDispScrSavPage", 1)],
+        },
+        new TweakDef
+        {
+            Id = "ss-require-password",
+            Label = "Require Password on Screen Saver Resume",
+            Category = "Lock Screen & Login",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Requires a password to unlock after screen saver activates. Enhances physical security. Default: not required.",
+            Tags = ["screensaver", "password", "resume", "security"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Desktop"],
+            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "ScreenSaverIsSecure", "1")],
+            RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "ScreenSaverIsSecure", "0")],
+            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "ScreenSaverIsSecure", "1")],
+        },
+        new TweakDef
+        {
+            Id = "ss-scr-password-on-resume",
+            Label = "Enforce Password on Resume (Policy)",
+            Category = "Lock Screen & Login",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Enforces password requirement on screen saver resume via Group Policy. Machine-wide enforcement. Default: not enforced.",
+            Tags = ["screensaver", "password", "resume", "policy"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Control Panel\Desktop"],
+            ApplyOps = [RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Control Panel\Desktop", "ScreenSaverIsSecure", "1")],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Control Panel\Desktop", "ScreenSaverIsSecure")],
+            DetectOps =
+            [
+                RegOp.CheckString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Control Panel\Desktop", "ScreenSaverIsSecure", "1"),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "ss-set-timeout-15min",
+            Label = "Set Screen Saver Timeout to 15 Minutes",
+            Category = "Lock Screen & Login",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description =
+                "Sets the screen saver activation timeout to 15 minutes (900 seconds). Balances security with usability. Default: 10 minutes.",
+            Tags = ["screensaver", "timeout", "15min", "lock"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Desktop"],
+            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "ScreenSaveTimeOut", "900")],
+            RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "ScreenSaveTimeOut", "600")],
+            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "ScreenSaveTimeOut", "900")],
+        },
+        new TweakDef
+        {
+            Id = "ss-set-timeout-30min",
+            Label = "Set Screen Saver Timeout to 30 Minutes",
+            Category = "Lock Screen & Login",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description =
+                "Sets the screen saver activation timeout to 30 minutes (1800 seconds). Longer timeout for active use. Default: 10 minutes.",
+            Tags = ["screensaver", "timeout", "30min", "lock"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Desktop"],
+            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "ScreenSaveTimeOut", "1800")],
+            RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "ScreenSaveTimeOut", "600")],
+            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "ScreenSaveTimeOut", "1800")],
+        },
+        new TweakDef
+        {
+            Id = "ss-set-timeout-5min",
+            Label = "Set Screensaver Timeout to 5 Minutes",
+            Category = "Lock Screen & Login",
+            NeedsAdmin = false,
+            Description = "Sets the screensaver activation timeout to 5 minutes (300 seconds). Default: 15 minutes.",
+            Tags = ["screensaver", "timeout", "lock", "5-min"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Desktop"],
+            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "ScreenSaveTimeOut", "300")],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Control Panel\Desktop", "ScreenSaveTimeOut")],
+            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "ScreenSaveTimeOut", "300")],
+        },
+        new TweakDef
+        {
+            Id = "ss-set-timeout-10min",
+            Label = "Set Screensaver Timeout to 10 Minutes",
+            Category = "Lock Screen & Login",
+            NeedsAdmin = false,
+            Description = "Sets the screensaver activation timeout to 10 minutes (600 seconds). Default: 15 minutes.",
+            Tags = ["screensaver", "timeout", "lock", "10-min"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Desktop"],
+            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "ScreenSaveTimeOut", "600")],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Control Panel\Desktop", "ScreenSaveTimeOut")],
+            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "ScreenSaveTimeOut", "600")],
+        },
+        new TweakDef
+        {
+            Id = "ss-enable-password-on-resume",
+            Label = "Require Password on Resume",
+            Category = "Lock Screen & Login",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Requires password after screensaver deactivation. Security best practice. Default: disabled.",
+            Tags = ["screensaver", "password", "lock", "security"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Desktop"],
+            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "ScreenSaverIsSecure", "1")],
+            RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "ScreenSaverIsSecure", "0")],
+            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "ScreenSaverIsSecure", "1")],
+        },
+        new TweakDef
+        {
+            Id = "ss-force-blank-screensaver",
+            Label = "Set Blank Screen Screensaver",
+            Category = "Lock Screen & Login",
+            NeedsAdmin = false,
+            Description = "Sets the screensaver to a blank (black) screen. Lowest resource usage. Default: none.",
+            Tags = ["screensaver", "blank", "black", "power"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Desktop"],
+            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "SCRNSAVE.EXE", @"C:\Windows\System32\scrnsave.scr")],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Control Panel\Desktop", "SCRNSAVE.EXE")],
+            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "SCRNSAVE.EXE", @"C:\Windows\System32\scrnsave.scr")],
+        },
+        new TweakDef
+        {
+            Id = "ss-disable-lock-screen-camera",
+            Label = "Disable Lock Screen Camera",
+            Category = "Lock Screen & Login",
+            NeedsAdmin = true,
+            Description = "Disables the camera shortcut on the lock screen. Default: enabled.",
+            Tags = ["lock", "camera", "privacy", "lock-screen"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Personalization"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Personalization", "NoLockScreenCamera", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Personalization", "NoLockScreenCamera")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Personalization", "NoLockScreenCamera", 1)],
+        },
+        new TweakDef
+        {
+            Id = "ss-disable-lock-screen-slideshow",
+            Label = "Disable Lock Screen Slideshow",
+            Category = "Lock Screen & Login",
+            NeedsAdmin = true,
+            Description = "Disables the Windows Spotlight/slideshow on the lock screen. Default: enabled.",
+            Tags = ["lock", "slideshow", "spotlight", "lock-screen"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Personalization"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Personalization", "NoLockScreenSlideshow", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Personalization", "NoLockScreenSlideshow")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Personalization", "NoLockScreenSlideshow", 1)],
+        },
+        new TweakDef
+        {
+            Id = "ss-set-monitor-timeout-10min",
+            Label = "Set Monitor Power Off to 10 Minutes",
+            Category = "Lock Screen & Login",
+            NeedsAdmin = false,
+            Description = "Sets the monitor to turn off after 10 minutes of inactivity. Saves energy. Default: 15 minutes.",
+            Tags = ["monitor", "power", "timeout", "display"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\PowerCfg\PowerPolicies\0"],
+            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop\ScreenSaveTimeOut", "MonitorPowerOff", "600")],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Control Panel\Desktop\ScreenSaveTimeOut", "MonitorPowerOff")],
+            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Desktop\ScreenSaveTimeOut", "MonitorPowerOff", "600")],
+        },
+        new TweakDef
+        {
+            Id = "ss-enable-lock-workstation",
+            Label = "Enable Lock Workstation (Ctrl+Alt+Del)",
+            Category = "Lock Screen & Login",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Ensures the Lock Workstation option is available on Ctrl+Alt+Del. Default: enabled.",
+            Tags = ["lock", "workstation", "security", "ctrl-alt-del"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "DisableLockWorkstation", 0)],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "DisableLockWorkstation"),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "DisableLockWorkstation", 0),
+            ],
+        },
+    ];
+}
