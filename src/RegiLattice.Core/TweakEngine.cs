@@ -4,6 +4,7 @@
 
 using System.Collections.Concurrent;
 using System.Collections.Frozen;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Text.Json;
 using RegiLattice.Core.Models;
@@ -33,10 +34,17 @@ public sealed class TweakEngine
     private Dictionary<string, int>? _cachedCategoryCounts;
     private Dictionary<TweakScope, int>? _cachedScopeCounts;
     private FrozenDictionary<string, TweakDef>? _frozenById;
+    private IReadOnlyDictionary<string, IReadOnlyList<TweakDef>>? _cachedByCat;
     private bool _frozen;
 
     public RegistrySession Session => _session;
     public int TweakCount => _allTweaks.Count;
+
+    /// <summary>
+    /// Elapsed milliseconds of the last <see cref="RegisterBuiltins"/> call.
+    /// Zero until <see cref="RegisterBuiltins"/> has been called at least once.
+    /// </summary>
+    public long LastRegistrationMs { get; private set; }
 
     public TweakEngine(RegistrySession? session = null)
     {
@@ -97,6 +105,8 @@ public sealed class TweakEngine
     /// <summary>Register all built-in tweaks from the Tweaks namespace via reflection.</summary>
     public void RegisterBuiltins()
     {
+        var sw = Stopwatch.StartNew();
+
         // Discover all internal static classes in RegiLattice.Core.Tweaks that expose
         // a static "Tweaks" property returning IReadOnlyList<TweakDef>.
         var tweaksNs = typeof(Tweaks.Accessibility).Namespace!;
@@ -113,6 +123,8 @@ public sealed class TweakEngine
         }
 
         Freeze();
+        sw.Stop();
+        LastRegistrationMs = sw.ElapsedMilliseconds;
     }
 
     /// <summary>
@@ -126,6 +138,7 @@ public sealed class TweakEngine
         _cachedCategories = [.. _tweaksByCat.Keys.Order()];
         _cachedCategoryCounts = _tweaksByCat.ToDictionary(kv => kv.Key, kv => kv.Value.Count);
         _cachedScopeCounts = _tweaksByScope.ToDictionary(kv => kv.Key, kv => kv.Value.Count);
+        _cachedByCat = _tweaksByCat.ToDictionary(kv => kv.Key, kv => (IReadOnlyList<TweakDef>)kv.Value);
         _frozen = true;
     }
 
@@ -154,7 +167,8 @@ public sealed class TweakEngine
 
     public IReadOnlyList<string> Categories() => _cachedCategories ?? [.. _tweaksByCat.Keys.Order()];
 
-    public IReadOnlyDictionary<string, List<TweakDef>> TweaksByCategory() => _tweaksByCat;
+    public IReadOnlyDictionary<string, IReadOnlyList<TweakDef>> TweaksByCategory() =>
+        _cachedByCat ?? _tweaksByCat.ToDictionary(kv => kv.Key, kv => (IReadOnlyList<TweakDef>)kv.Value);
 
     public int CategoryCount => _tweaksByCat.Count;
 

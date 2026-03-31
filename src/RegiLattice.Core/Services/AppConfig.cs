@@ -141,7 +141,7 @@ public sealed class AppConfig
     // ── Profile Scheduler ────────────────────────────────────────────────
     /// <summary>List of scheduled profile switches persisted with the config.</summary>
     [JsonPropertyName("profile_schedules")]
-    public List<ProfileScheduleEntry> ProfileSchedules { get; set; } = [];
+    public IReadOnlyList<ProfileScheduleEntry> ProfileSchedules { get; set; } = [];
 
     /// <summary>Profile name to apply automatically when the power plan changes (empty = disabled).</summary>
     [JsonPropertyName("profile_on_plan_switch")]

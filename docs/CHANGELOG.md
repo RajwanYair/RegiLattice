@@ -4,6 +4,23 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [6.0.2] — 2026-03-31
+
+#### Enhanced
+
+- **Test isolation (A5)**: Added `[Collection("Favorites")]` to 3 test classes (`FavoritesTests`, `FavoritesBranchTests`, `FavoritesWhitespaceBranchTests`) and `[Collection("ComplianceHistory")]` to `ComplianceTrendDialogTests` — prevents non-deterministic failures if test parallelization settings change
+- **Startup profiling (C3)**: Instrumented `TweakEngine.RegisterBuiltins()` with `Stopwatch` — new `LastRegistrationMs` property exposes cold-start timing. Baseline: 1146ms cold, ~84ms warm (9,190 tweaks, 83 modules). Performance baseline saved to `.tmp/perf-baseline.txt`
+- **IReadOnlyList audit (C5)**: Changed 3 public API properties/methods from `List<T>` to `IReadOnlyList<T>`:
+  - `AppConfig.ProfileSchedules`: `List<ProfileScheduleEntry>` → `IReadOnlyList<ProfileScheduleEntry>`
+  - `TweakConfig.Tweaks`: `List<string>` → `IReadOnlyList<string>`
+  - `TweakEngine.TweaksByCategory()`: `IReadOnlyDictionary<string, List<TweakDef>>` → `IReadOnlyDictionary<string, IReadOnlyList<TweakDef>>` (cached in `Freeze()` for zero-allocation reads)
+
+#### Stats
+
+- Tweaks: **9 190** across **101** categories (83 modules)
+- Tests: **2 931** passing (2 291 Core + 301 CLI + 339 GUI, 0 failures)
+- Version bumped `6.0.1` → `6.0.2`
+
 ## [6.0.1] — 2026-03-31
 
 #### Enhanced

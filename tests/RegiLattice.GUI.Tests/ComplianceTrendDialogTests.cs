@@ -16,6 +16,7 @@ namespace RegiLattice.GUI.Tests;
 /// Tests for the ComplianceTrendDialog data layer — ComplianceHistory CRUD
 /// and the metric calculations that drive chart rendering.
 /// </summary>
+[Collection("ComplianceHistory")]
 public sealed class ComplianceTrendDialogTests : IDisposable
 {
     // Backup/restore the real history file so tests don't corrupt user data.

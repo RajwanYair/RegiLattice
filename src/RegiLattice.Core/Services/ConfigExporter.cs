@@ -23,7 +23,7 @@ public sealed class TweakConfig
     public string RegiLatticeVersion { get; set; } = "3.5.0";
 
     [JsonPropertyName("tweaks")]
-    public List<string> Tweaks { get; set; } = [];
+    public IReadOnlyList<string> Tweaks { get; set; } = [];
 }
 
 /// <summary>
