@@ -16,9 +16,9 @@ applyTo: "**/tests/**,**/*Tests/**,**/*Tests.csproj,**/test_*.py,**/conftest.py"
 | Project                  | Tests     | Covers                                                                                                                                                                         |
 | ------------------------ | --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `RegiLattice.Core.Tests` | 2,293+    | TweakDef, TweakEngine, RegistrySession, Services, Plugins, Locale, SnapshotManager, TweakValidator, DependencyResolver, Favorites, TweakHistory, ConfigExporter, SystemMonitor, BatchImpactEstimator |
-| `RegiLattice.CLI.Tests`  | 301+      | CLI argument parsing (ParseArgs, CliArgs, ConsoleColorizer)                                                                                                                    |
+| `RegiLattice.CLI.Tests`  | 332+      | CLI argument parsing (ParseArgs, CliArgs, ConsoleColorizer)                                                                                                                    |
 | `RegiLattice.GUI.Tests`  | 340+      | Theme, PackageManagerValidation, PackageNameValidator, AppIcons                                                                                                                |
-| **Total**                | **2,934+**|                                                                                                                                                                                |
+| **Total**                | **2,962+**|                                                                                                                                                                                |
 
 ## Running Tests
 

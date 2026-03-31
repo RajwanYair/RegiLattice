@@ -20,7 +20,7 @@
 [![CI](https://github.com/RajwanYair/RegiLattice/actions/workflows/ci.yml/badge.svg)](https://github.com/RajwanYair/RegiLattice/actions/workflows/ci.yml)
 ![.NET 10](https://img.shields.io/badge/.NET-10.0-512BD4?logo=dotnet&logoColor=white)
 ![C#](https://img.shields.io/badge/C%23-13-239120?logo=csharp&logoColor=white)
-![Tests](https://img.shields.io/badge/tests-2931%20passing-brightgreen)
+![Tests](https://img.shields.io/badge/tests-2962%20passing-brightgreen)
 ![Platform](https://img.shields.io/badge/platform-Windows%20x64-0078D6?logo=windows&logoColor=white)
 ![License](https://img.shields.io/badge/license-MIT-green)
 ![Version](https://img.shields.io/badge/version-6.0.4-blue)
@@ -67,7 +67,7 @@ Download `RegiLattice.GUI.exe` or `RegiLattice.exe` directly from the [Releases 
 - **Corporate network safety** — blocks tweaks on domain-joined, Azure AD, VPN, and managed machines
 - **Automatic backups** — every registry mutation is backed up to JSON before changes
 - **Package managers** — built-in Scoop, pip, Chocolatey, WinGet, and PowerShell module manager dialogs
-- **2931 tests** across 17+ test files — full engine, model, service, plugin, and GUI coverage (xUnit)
+- **2962 tests** across 17+ test files — full engine, model, service, plugin, and GUI coverage (xUnit)
 - **Dependency resolution** — `ResolveDependencies()` topological sort; `Dependents()` reverse lookup
 - **Validation engine** — `ValidateTweaks()` checks IDs, labels, categories, broken DependsOn, circular deps
 - **Plugin system** — JSON Tweak Packs with marketplace, SHA-256 verification
@@ -169,7 +169,7 @@ git clone https://github.com/RajwanYair/RegiLattice.git
 cd RegiLattice
 dotnet build RegiLattice.sln -c Release
 
-# Run tests (2931 tests)
+# Run tests (2962 tests)
 dotnet test RegiLattice.sln
 
 # Publish self-contained executables
@@ -260,7 +260,7 @@ graph TD
         CLI["⌨️ RegiLattice.CLI<br/>25+ CLI Commands · CliArgs · ConsoleColorizer"]
     end
 
-    subgraph TST["🧪 tests/  ·  2931 xUnit tests"]
+    subgraph TST["🧪 tests/  ·  2962 xUnit tests"]
         CT["Core.Tests<br/>2291 tests · 12 files"]
         CLT["CLI.Tests<br/>301 tests · 1 file"]
         GT["GUI.Tests<br/>339 tests · 3 files"]
