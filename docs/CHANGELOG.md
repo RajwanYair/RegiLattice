@@ -12,10 +12,15 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 - **B3 grouped help**: `--help` output restructured into labelled sections — *Tweak Operations*, *Search & Browse*, *Profiles*, *Snapshots*, *Export / Import*, *Marketplace*, *Favorites & History*, *General*, *Exit Codes*
 - **B5 stable exit codes**: New `ExitCodes` static class with documented constants — `0` success, `1` partial fail, `2` user error (bad args / not found), `3` admin required. Documented in `--help` output
 
+#### Fixed
+
+- **WMI hang (HardwareInfo)**: Replaced `Task.Run` (ThreadPool) with explicit background MTA threads for all 12 WMI probes. WMI/COM was creating STA foreground pump threads from ThreadPool — those threads block .NET process exit. Process now exits in ~10 s on Intel corporate / Intune-managed machines (was 4 000+ s)
+- **CLI `--help` pipe deadlock**: `CliExe_RunWithHelp_ExitsCleanly` test was deadlocking because B3 grouped help text overflows the OS pipe buffer when stdout is redirected. Fixed by draining stdout before `WaitForExit`
+
 #### Stats
 
 - Tweaks: **9 190** across **101** categories (83 modules)
-- Tests: **2 934+** passing (0 failures)
+- Tests: **2 962** passing (2 291 Core + 332 CLI + 339 GUI, 0 failures)
 - Version bumped `6.0.3` → `6.0.4`
 
 ## [6.0.3] — 2026-03-31
