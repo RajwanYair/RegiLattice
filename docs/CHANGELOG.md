@@ -4,6 +4,22 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [6.0.0] — 2026-03-31
+
+#### Refactored
+
+- **Major consolidation milestone**: merged 15 secondary tweak modules into their primary category files
+- Module count reduced from **98 → 83 files** (−15%)
+- Category count: **101** (unchanged from v5.99.0)
+- All tweak IDs unchanged — zero behavior regression; all 9,190 tweaks retained
+- Updated README badges, Mermaid diagrams, stats.svg, and copilot-instructions with correct counts
+
+#### Stats
+
+- Total: **9,190 tweaks**, 101 categories, 83 module files
+- Tests: 2,291 Core + 301 CLI + 339 GUI = **2,931 passing** (0 failures)
+- Version bumped `5.99.0` → `6.0.0`
+
 ## [5.99.0] — 2026-03-30
 
 #### Refactored
