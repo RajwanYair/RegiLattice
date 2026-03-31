@@ -244,6 +244,7 @@ public sealed class ScheduledTweakServiceBranchTests : IDisposable
 //    Missing branch: `string.IsNullOrWhiteSpace(id)` == true → !true = false → short-circuit.
 //    (All existing tests import valid non-whitespace IDs.)
 
+[Collection("Favorites")]
 public sealed class FavoritesWhitespaceBranchTests : IDisposable
 {
     public FavoritesWhitespaceBranchTests() => Favorites.Reset();

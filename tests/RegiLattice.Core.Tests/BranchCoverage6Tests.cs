@@ -388,6 +388,7 @@ public sealed class TweakEnginePartialBranchTests
 
 // ── 7. Favorites — partial branch coverage ──────────────────────────────────
 
+[Collection("Favorites")]
 public sealed class FavoritesBranchTests : IDisposable
 {
     public FavoritesBranchTests() => Favorites.Reset();

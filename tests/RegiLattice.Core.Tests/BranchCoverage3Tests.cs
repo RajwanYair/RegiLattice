@@ -244,7 +244,7 @@ public sealed class AppConfigValidateBranchTests
     public void Validate_ProfileScheduleEmptyProfile_ReturnsError()
     {
         var cfg = new AppConfig();
-        cfg.ProfileSchedules.Add(new ProfileScheduleEntry { Profile = "", Trigger = "on_boot" });
+        cfg.ProfileSchedules = [new ProfileScheduleEntry { Profile = "", Trigger = "on_boot" }];
         var errors = cfg.Validate();
         Assert.Contains(errors, e => e.Contains("profile_schedule"));
     }
@@ -253,7 +253,7 @@ public sealed class AppConfigValidateBranchTests
     public void Validate_ProfileScheduleEmptyTrigger_ReturnsError()
     {
         var cfg = new AppConfig();
-        cfg.ProfileSchedules.Add(new ProfileScheduleEntry { Profile = "minimal", Trigger = "" });
+        cfg.ProfileSchedules = [new ProfileScheduleEntry { Profile = "minimal", Trigger = "" }];
         var errors = cfg.Validate();
         Assert.Contains(errors, e => e.Contains("profile_schedule"));
     }
@@ -262,14 +262,15 @@ public sealed class AppConfigValidateBranchTests
     public void Validate_ProfileScheduleDailyWithInvalidTime_ReturnsError()
     {
         var cfg = new AppConfig();
-        cfg.ProfileSchedules.Add(
+        cfg.ProfileSchedules =
+        [
             new ProfileScheduleEntry
             {
                 Profile = "minimal",
                 Trigger = "daily",
                 Time = "bad_time",
-            }
-        );
+            },
+        ];
         var errors = cfg.Validate();
         Assert.Contains(errors, e => e.Contains("daily profile_schedule"));
     }
@@ -279,14 +280,15 @@ public sealed class AppConfigValidateBranchTests
     {
         // Empty time is allowed (means no time restriction for daily)
         var cfg = new AppConfig();
-        cfg.ProfileSchedules.Add(
+        cfg.ProfileSchedules =
+        [
             new ProfileScheduleEntry
             {
                 Profile = "minimal",
                 Trigger = "daily",
                 Time = "",
-            }
-        );
+            },
+        ];
         var errors = cfg.Validate();
         Assert.DoesNotContain(errors, e => e.Contains("daily profile_schedule"));
     }
@@ -295,14 +297,15 @@ public sealed class AppConfigValidateBranchTests
     public void Validate_ProfileScheduleDailyWithValidTime_IsValid()
     {
         var cfg = new AppConfig();
-        cfg.ProfileSchedules.Add(
+        cfg.ProfileSchedules =
+        [
             new ProfileScheduleEntry
             {
                 Profile = "minimal",
                 Trigger = "daily",
                 Time = "08:30",
-            }
-        );
+            },
+        ];
         var errors = cfg.Validate();
         Assert.DoesNotContain(errors, e => e.Contains("daily profile_schedule"));
     }

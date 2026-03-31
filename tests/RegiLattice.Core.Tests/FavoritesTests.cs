@@ -4,6 +4,7 @@ using Xunit;
 namespace RegiLattice.Core.Tests;
 
 /// <summary>Tests for the Favorites service — add, remove, toggle, persist.</summary>
+[Collection("Favorites")]
 public sealed class FavoritesTests : IDisposable
 {
     public FavoritesTests()

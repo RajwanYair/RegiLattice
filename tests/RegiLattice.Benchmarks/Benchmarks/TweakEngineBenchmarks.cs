@@ -46,7 +46,7 @@ public class TweakEngineBenchmarks
 
     /// <summary>Category grouping — used by the GUI category tree.</summary>
     [Benchmark]
-    public IReadOnlyDictionary<string, List<TweakDef>> TweaksByCategory() => _engine.TweaksByCategory();
+    public IReadOnlyDictionary<string, IReadOnlyList<TweakDef>> TweaksByCategory() => _engine.TweaksByCategory();
 
     /// <summary>Per-category counts dictionary — used by the GUI badge display.</summary>
     [Benchmark]
