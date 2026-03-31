@@ -458,44 +458,43 @@ G6 (PluginAuthoring docs) <──► H6 (custom tweaks — same doc)
 
 ## Sprint Plan
 
-### Milestone 1 — v5.98.0 to v5.100.0: Code Health & CLI Foundation
+### Milestone 1 — v6.0.x: Code Health & DevOps (current)
 
-**Target: 3–5 sprints from current HEAD (v5.97.0)**
+**Status: In progress (v6.0.0 released 2026-03-31)**
 
-| Version | Theme | Key Deliverables | Exit Criteria |
-|---------|-------|-----------------|---------------|
-| **v5.98.0** | C, A | C3 startup perf profiling baseline · C4/C8 dead code sweep · A7 test isolation audit | Cold-start baseline measured; no shared file writes in tests; `List<T>` in public API catalogued |
-| **v5.99.0** | B | B1 subcommand architecture · B3 grouped help | `regilattice tweak apply <id>` works; old positional args still work via compat shim |
-| **v5.100.0** | B, A | B2 structured output (JSON/CSV) · B5 stable exit codes · A5 CLI contract tests | All commands support `--output json`; exit codes documented + tested; A5 contract test suite green |
+| Version | Theme | Key Deliverables | Status |
+|---------|-------|-----------------|--------|
+| **v6.0.0** | — | Module consolidation (98→83 modules), doc/metadata cleanup | ✅ Released |
+| **v6.0.1** | C, F | C4 dead code sweep · F2 automated release notes · F5 `--vulnerable` CI check | ✅ Released |
+| **v6.0.2** | A, C | A7 test isolation audit · C3 startup perf baseline · C5 `IReadOnlyList` audit | Planned |
+| **v6.0.3** | C | C3 nullable audit (`/warnaserror:nullable`) · C4 remaining dead code | Planned |
 
-**M1 gate:** CLI subcommand skeleton present · structured output on `apply / remove / status / search` · test isolation clean · startup profiling baseline established.
-
----
-
-### Milestone 2 — v6.0.0: CLI Complete + Distribution + Compliance
-
-**Target: ~10 additional sprints**
-
-| Version | Theme | Key Deliverables | Exit Criteria |
-|---------|-------|-----------------|---------------|
-| **+1** | B | B4 PowerShell module parity · B6 shell completions · B7 batch mode | `Import-Module RegiLattice` works; tab completion for tweak IDs in pwsh and bash |
-| **+2** | F | F5 Dependabot NuGet + `--vulnerable` CI check · F2 automated release notes | Dependabot PRs opening; release body auto-populated from CHANGELOG on tag push |
-| **+3** | F | F1 Authenticode code signing (EV cert procurement + CI integration) | `signtool verify /pa` passes on GUI EXE, CLI EXE, MSI in CI |
-| **+4** | F | F3 release smoke test matrix · F4 Chocolatey auto-submit | `choco install regilattice` installs from community on `windows-2022` + `windows-2025` |
-| **+5** | E | E2 user baselines · E1 CIS/DISA L1 Desktop baseline template | `--baseline-compare custom.json` works; 2 built-in CIS baselines ship with release |
-| **+6** | E | E3 audit log CEF export · E4 compliance report scheduling | `--export-audit-log --format cef` emits valid CEF; `--schedule-compliance` cron-fires report |
-| **+7** | D | D8 `.resx` locale migration · D1 undo/redo | All 64 dialogs backed by `.resx`; `Ctrl+Z` undoes the last apply or remove |
-| **+8** | D | D4 saved filter presets · D6 detail pane enrichment (impact matrix) | 3 named filter presets saveable; detail pane shows predicted score delta |
-| **+9** | A, H | A6 BenchmarkDotNet perf gate · H3 conflict enrichment (50 pairs) · H5 MinBuild audit | Perf gate in CI; 50 conflict pairs documented; all tweaks have explicit `MinBuild` |
-| **+10** | C, A | C7 nullable audit · A8 coverage delta gate | Zero nullable warnings in Core; coverage gate fails PR if branch coverage drops > 2% |
-
-**M2 gate (v6.0.0):** CLI subcommands complete · JSON output on all commands · Authenticode signed · Chocolatey community package live · CIS baseline ships · undo/redo · conflict enrichment · Stryker mutation score reported in CI · release notes automated. Tag `v6.0.0` (MAJOR — breaking CLI interface changes from B1).
+**M1 gate:** Dead code eliminated · CI scans for vulnerable packages · release notes auto-populated from CHANGELOG · test isolation clean · startup baseline measured.
 
 ---
 
-### Milestone 3 — v6.1.0 to v7.0.0: Architecture Renaissance + Platform
+### Milestone 2 — v6.1.0: CLI Overhaul + Distribution
 
-**Target: 12–18 months post-v6.0.0**
+**Target: ~8 sprints post-M1**
+
+| Sprint | Theme | Key Deliverables | Exit Criteria |
+|--------|-------|-----------------|---------------|
+| **+1** | B | B1 subcommand architecture · B3 grouped help | `regilattice tweak apply <id>` works; old `--flags` preserved |
+| **+2** | B, A | B2 structured output (JSON/CSV) · B5 stable exit codes · A3 CLI contract tests | All commands support `--output json`; exit codes documented + tested |
+| **+3** | B | B4 PowerShell module parity · B6 shell completions · B7 batch mode | `Import-Module RegiLattice` works; tab completion in pwsh |
+| **+4** | F | F1 Authenticode code signing (EV cert + CI) | `signtool verify /pa` passes on GUI EXE, CLI EXE, MSI in CI |
+| **+5** | F | F3 release smoke test matrix · F4 Chocolatey auto-submit | `choco install regilattice` works from community |
+| **+6** | E | E2 user baselines · E1 CIS/DISA L1 Desktop baseline template | `--baseline-compare cis-l1-desktop` works |
+| **+7** | D | D1 undo/redo · D2 saved filter presets | `Ctrl+Z` undoes the last apply or remove |
+| **+8** | A, H | A4 BenchmarkDotNet perf gate · H3 conflict enrichment (50 pairs) | Perf gate in CI; 50 conflict pairs documented |
+
+**M2 gate (v6.1.0):** CLI subcommands complete · `--output json` on all commands · Authenticode signed · CIS baseline ships · undo/redo · release notes automated. Tag `v6.1.0` (MINOR — new CLI subcommands additive).
+
+---
+
+### Milestone 3 — v7.0.0: Architecture Renaissance + Platform
+
+**Target: 12–18 months post-v6.1.0**
 
 | Focus | Theme | Key Deliverables |
 |-------|-------|-----------------|
@@ -523,39 +522,37 @@ G6 (PluginAuthoring docs) <──► H6 (custom tweaks — same doc)
 | R5 | WinUI 3 migration scope underestimated (D10) | Medium | High | 2-sprint time-boxed spike before decision; if full migration > 6 months estimate, defer to v7.5 |
 | R6 | LLM hallucinations in AI description pass (H1) | High | Medium | 100% human review before merge; run diff against existing descriptions side-by-side |
 | R7 | Chocolatey community pipeline (F4) rejects unsigned EXE | High | High | F1 (signing) must complete before F4 is attempted — hard dependency |
-| R8 | Named pipe latency in G1 sandbox exceeds usability threshold | Medium | High | Benchmark 100 `SetDword` calls via pipe before design commit; if > 200 ms total, adopt batch-serialize protocol
-| R6 | LLM hallucinations in AI description pass (H1) | High | Medium | 100% human review before merge; run diff against existing descriptions side-by-side |
-| R7 | Chocolatey community pipeline (F4) rejects unsigned EXE | High | High | F1 (signing) must complete before F4 is attempted — hard dependency |
 | R8 | Named pipe latency in G1 sandbox exceeds usability threshold | Medium | High | Benchmark 100 `SetDword` calls via pipe before design commit; if > 200 ms total, adopt batch-serialize protocol |
 
 ---
 
 ## Success Metrics
 
-| Metric | v5.97.0 (now) | v5.100.0 | v6.0.0 |
-|--------|--------------|----------|--------|
-| Tweaks | 9,190 | 9,190+ (cadence continues) | 10,000+ |
-| Categories | 637 | 640+ | 680+ |
-| Tests | 2,941 | 2,980+ | 3,200+ |
-| Branch coverage | ~57% | ≥ 60% | **≥ 75%** |
-| Mutation kill score | Running (threshold 55%) | 60%+ | **≥ 70%** |
+| Metric | v6.0.0 (now) | v6.1.0 | v7.0.0 |
+|--------|-------------|--------|--------|
+| Tweaks | 9,190 | 9,500+ | 10,000+ |
+| Categories | 101 | 110+ | 120+ |
+| Modules | 83 | 85+ | 90+ |
+| Tests | 2,931 | 3,100+ | 3,500+ |
+| Branch coverage | ~57% | ≥ 65% | **≥ 75%** |
+| Mutation kill score | ~55% threshold | 60%+ | **≥ 70%** |
 | CLI subcommand structure | ❌ | ✅ | ✅ |
 | JSON output on all CLI commands | ❌ | ✅ | ✅ |
 | Stable exit codes | ❌ | ✅ | ✅ |
-| Authenticode signed | ❌ | ❌ | ✅ |
+| Authenticode signed | ❌ | ✅ | ✅ |
 | Locales (`.resx`) | 6 (Locale.cs) | 6 | **10** |
 | Source generator | ❌ | ❌ | ✅ |
 | Startup time | Unmeasured | Baseline captured | **< 800 ms** |
 | Working set (idle) | Unmeasured | Baseline captured | **< 150 MB** |
-| Undo/redo | ❌ | ❌ | ✅ |
-| CIS/DISA baselines | ❌ | ❌ | ✅ |
+| Undo/redo | ❌ | ✅ | ✅ |
+| CIS/DISA baselines | ❌ | ✅ | ✅ |
 | SCAP export | ❌ | ❌ | ✅ |
 | Plugin sandbox | ❌ | ❌ | ✅ |
 | E2E GUI tests | ❌ | ❌ | ✅ (5 scenarios) |
 
 ---
 
-## Next Steps — Immediate Priority (v5.98.0–v6.0.0)
+## Next Steps — Immediate Priority (v6.0.x)
 
 > **These are the next 3–5 actions.** Ordered by dependency chain and effort size. Each item below produces a committable, releasable delta.
 
@@ -574,7 +571,7 @@ No other work is blocked by this procurement; the EV cert work can proceed in pa
 
 ---
 
-### Step 2 — v5.98.0: Code Health Sprint
+### Step 2 — v6.0.2: Test & Performance Baseline Sprint
 
 **Target**: 1–2 sprints. **Can start immediately** (no prerequisites).
 
@@ -582,18 +579,28 @@ No other work is blocked by this procurement; the EV cert work can proceed in pa
 |----------|------|---------|
 | **A7** | Test isolation audit — eliminate shared `%LOCALAPPDATA%` file access in tests | Prevents non-deterministic CI failures as test count grows; cheap to fix now, expensive to debug later |
 | **C3** | Startup profiling baseline — instrument `RegisterBuiltins()` + full GUI cold-start | Establishes the baseline before architectural changes in C1/C2 complicate measurement |
-| **C4** / **C8** | Dead code sweep — remove unused methods, classes, or constants; trim `List<T>` in public API | Reduces noise from `get_errors`, simplifies future refactoring |
-| **F5** | Dependabot + `dotnet list package --vulnerable` CI check | Automated dependency security scanning; takes one CI YAML step |
+| **C5** | `IReadOnlyList` audit — find remaining `List<T>` in public APIs | Clean up API surface before CLI overhaul |
 
-**Exit criteria**: All 2,941 tests pass; no shared file paths in test constructors without temp-file isolation; startup time baseline committed to `.tmp/perf-baseline.txt`; Dependabot opening NuGet PRs.
-
-**Commit message**: `chore(tests): A7 test isolation + C3 perf baseline + C4 dead code sweep + F5 Dependabot — v5.98.0`
+**Exit criteria**: All tests pass; no shared file paths in test constructors without temp-file isolation; startup time baseline committed to `.tmp/perf-baseline.txt`.
 
 ---
 
-### Step 3 — v5.99.0: CLI Subcommand Architecture (B1)
+### Step 3 — v6.0.3: Nullable Audit + Remaining Dead Code
 
-**Target**: 1–2 sprints. **Starts after Step 2**.
+**Target**: 1 sprint. **Can start immediately** (no prerequisites).
+
+| Priority | Task | Why Now |
+|----------|------|---------|
+| **C3** | Nullable audit — treat nullable warnings as errors in Core | Prevents null-reference bugs as codebase grows |
+| **C4** | Remaining dead code sweep — second pass with Stryker guidance | Reduce noise |
+
+**Exit criteria**: Zero nullable warnings in Core build; Stryker report shows no surviving easy mutants.
+
+---
+
+### Step 4 — v6.1.0: CLI Subcommand Architecture (B1)
+
+**Target**: 2–3 sprints. **Starts after v6.0.x code health is clean.**
 
 **What changes**: `Program.cs` currently parses `string[] args` with a flat `if/else` chain. Refactor to an `ICommand` interface + dispatcher pattern.
 
@@ -602,43 +609,21 @@ Before:  regilattice --apply priv-disable-telemetry
 After:   regilattice tweak apply priv-disable-telemetry
          regilattice search telemetry
          regilattice profile apply privacy
-         (old --flags still work via compat shim in v5.x)
+         (old --flags still work via compat shim)
 ```
 
 **Key deliverables**:
 - `ICommand` interface with `Name`, `Usage`, `Execute(CliArgs, TweakEngine)`
 - `CommandDispatcher` in `Program.cs`
 - All 25+ existing commands ported to subcommand classes
-- Old `--flag` style still dispatches correctly via alias mapping (no breaking change in v5.x series)
+- Old `--flag` style still dispatches correctly via alias mapping
 - `B3`: Grouped `--help` output (by category: Tweak, Search, Profile, Snapshot, Export, Admin)
+- `B2`: `--output json|csv|table` on all commands
+- `B5`: Stable exit codes (0 = success, 1 = partial, 2 = error, 3 = admin required)
 
-**Exit criteria**: `regilattice tweak apply <id>` works; `regilattice --apply <id>` still works; all 301 CLI tests green.
+**Exit criteria**: `regilattice tweak apply <id>` works; `regilattice --apply <id>` still works; all CLI tests green; `--output json` on all commands.
 
-**Commit message**: `feat(cli): B1 subcommand architecture + B3 grouped help — v5.99.0`
-
----
-
-### Step 4 — v5.100.0: Structured Output + CLI Contract Tests (B2, B5, A5)
-
-**Target**: 1 sprint. **Starts after Step 3** (depends on B1 dispatcher).
-
-**What changes**: Add `--output json|csv|table` flag. `apply`, `remove`, `status`, `search`, `--list`, `--stats`, `--validate` all produce machine-readable output. Define and document stable exit codes (0 = success, 1 = partial failure, 2 = critical error, 3 = admin required).
-
-**Key deliverables**:
-- `B2`: `OutputFormatter` class supporting `json`, `csv`, `table` modes
-- `B5`: Exit code constants documented in `CliArgs.cs` + validated in tests
-- `A5`: 30+ CLI contract tests asserting exact JSON schema for each command's output
-
-```powershell
-# Example after B2:
-regilattice search telemetry --output json | ConvertFrom-Json | Where-Object Category -eq 'Privacy'
-regilattice status priv-disable-telemetry --output json
-# exits 0 if Applied, 1 if NotApplied, 2 on error
-```
-
-**Exit criteria**: All CLI commands support `--output json`; exit codes match spec; 30+ new contract tests green.
-
-**Commit message**: `feat(cli): B2 structured output + B5 exit codes + A5 contract tests — v5.100.0`
+**Tag**: `v6.1.0` (MINOR — additive CLI subcommands)
 
 ---
 

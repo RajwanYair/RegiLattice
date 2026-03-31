@@ -238,6 +238,23 @@ jobs:
           choco push $nupkg.FullName --source https://push.chocolatey.org/ --api-key $env:CHOCOLATEY_API_KEY
           Write-Host "Pushed $($nupkg.Name) to Chocolatey"
 
+      - name: Extract release notes from CHANGELOG
+        id: release-notes
+        shell: pwsh
+        run: |
+          $tag = '${{ inputs.tag_name || github.ref_name }}'
+          $ver = $tag.TrimStart('v')
+          $cl  = Get-Content 'docs/CHANGELOG.md' -Raw
+          # Extract section between ## [X.Y.Z] and the next ## [
+          if ($cl -match "(?s)## \[$([regex]::Escape($ver))\][^\n]*\n(.*?)(?=\n## \[|$)") {
+            $notes = $Matches[1].Trim()
+          } else {
+            $notes = "Release $tag — see [CHANGELOG](https://github.com/RajwanYair/RegiLattice/blob/main/docs/CHANGELOG.md) for details."
+          }
+          # Write to file for gh release --notes-file
+          [IO.File]::WriteAllText('publish/RELEASE_NOTES.md', $notes, [Text.Encoding]::UTF8)
+          Write-Host "Release notes extracted ($($notes.Length) chars)"
+
       - name: Create GitHub Release
         # Uses the pre-installed gh CLI (no Node.js action — avoids node20 deprecation warnings).
         # On re-runs (workflow_dispatch when release already exists), uploads artifacts only.
@@ -270,7 +287,7 @@ jobs:
             Write-Host "Release $tag already exists — uploading artifacts only"
             if ($files.Count -gt 0) { gh release upload $tag @files --clobber }
           } else {
-            gh release create $tag @files --generate-notes --title $tag
+            gh release create $tag @files --notes-file publish/RELEASE_NOTES.md --title $tag
           }
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           Write-Host "Release $tag published successfully"

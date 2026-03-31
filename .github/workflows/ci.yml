@@ -46,6 +46,15 @@ jobs:
       - name: Build
         run: dotnet build RegiLattice.sln -c Release --no-restore
 
+      - name: Check for vulnerable NuGet packages
+        shell: pwsh
+        run: |
+          $output = dotnet list RegiLattice.sln package --vulnerable --include-transitive 2>&1
+          Write-Host $output
+          if ($output -match 'has the following vulnerable packages') {
+            Write-Warning "::warning::Vulnerable NuGet packages detected — review Dependabot PRs"
+          }
+
       # Run test projects individually (not as solution) to guarantee sequential
       # execution and prevent shared-file races between Core.Tests and GUI.Tests.
       # See tests/.runsettings — MaxCpuCount=1 note.
