@@ -4,6 +4,20 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [6.0.4] — 2026-03-31
+
+#### Added
+
+- **B1 subcommand architecture**: Verb-noun CLI syntax — `regilattice tweak apply/remove/update/status/list`, `search <q>`, `profile apply/list/create/delete`, `snapshot save/restore`, `export json/reg/gpo/intune/config`, `import json/config`, `list`, `validate`, `stats`, `doctor`, `check`, `marketplace <cmd>`. All previous `--flag` style invocations remain fully backward-compatible
+- **B3 grouped help**: `--help` output restructured into labelled sections — *Tweak Operations*, *Search & Browse*, *Profiles*, *Snapshots*, *Export / Import*, *Marketplace*, *Favorites & History*, *General*, *Exit Codes*
+- **B5 stable exit codes**: New `ExitCodes` static class with documented constants — `0` success, `1` partial fail, `2` user error (bad args / not found), `3` admin required. Documented in `--help` output
+
+#### Stats
+
+- Tweaks: **9 190** across **101** categories (83 modules)
+- Tests: **2 934+** passing (0 failures)
+- Version bumped `6.0.3` → `6.0.4`
+
 ## [6.0.3] — 2026-03-31
 
 #### Enhanced

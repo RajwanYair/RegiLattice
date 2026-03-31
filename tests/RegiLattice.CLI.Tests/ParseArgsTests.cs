@@ -698,6 +698,266 @@ public sealed class ParseArgsTests
         Assert.Null(a.PsModuleOutput);
         Assert.True(a.Force);
     }
+
+    // ── B1: Verb-noun subcommand routing ────────────────────────────────
+
+    [Theory]
+    [InlineData("apply")]
+    [InlineData("remove")]
+    [InlineData("update")]
+    [InlineData("status")]
+    public void ParseArgs_SubcmdTweakVerb_SetsMode(string verb)
+    {
+        var a = Program.ParseArgs(["tweak", verb, "priv-disable-telemetry"]);
+        Assert.NotNull(a);
+        Assert.Equal(verb, a.Mode);
+        Assert.Equal("priv-disable-telemetry", a.Tweak);
+        Assert.Equal("tweak", a.SubVerb);
+    }
+
+    [Fact]
+    public void ParseArgs_SubcmdTweakList_SetsShowList()
+    {
+        var a = Program.ParseArgs(["tweak", "list"]);
+        Assert.NotNull(a);
+        Assert.True(a.ShowList);
+        Assert.Equal("tweak", a.SubVerb);
+    }
+
+    [Fact]
+    public void ParseArgs_SubcmdTweakApply_WithTrailingFlag_SetsDryRun()
+    {
+        var a = Program.ParseArgs(["tweak", "apply", "perf-disable-animations", "--dry-run"]);
+        Assert.NotNull(a);
+        Assert.Equal("apply", a.Mode);
+        Assert.Equal("perf-disable-animations", a.Tweak);
+        Assert.True(a.DryRun);
+    }
+
+    [Fact]
+    public void ParseArgs_SubcmdTweakApply_NoId_ModeSetTweakNull()
+    {
+        var a = Program.ParseArgs(["tweak", "apply"]);
+        Assert.NotNull(a);
+        Assert.Equal("apply", a.Mode);
+        Assert.Null(a.Tweak);
+    }
+
+    [Fact]
+    public void ParseArgs_SubcmdTweakIdShorthand_SetsStatusMode()
+    {
+        // regilattice tweak <id>  →  status shorthand
+        var a = Program.ParseArgs(["tweak", "priv-disable-telemetry"]);
+        Assert.NotNull(a);
+        Assert.Equal("status", a.Mode);
+        Assert.Equal("priv-disable-telemetry", a.Tweak);
+    }
+
+    [Fact]
+    public void ParseArgs_SubcmdSearch_SetsSearchQuery()
+    {
+        var a = Program.ParseArgs(["search", "telemetry"]);
+        Assert.NotNull(a);
+        Assert.Equal("telemetry", a.Search);
+        Assert.Equal("search", a.SubVerb);
+    }
+
+    [Fact]
+    public void ParseArgs_SubcmdSearch_NoQuery_SearchNull()
+    {
+        var a = Program.ParseArgs(["search"]);
+        Assert.NotNull(a);
+        Assert.Equal("search", a.SubVerb);
+        Assert.Null(a.Search);
+    }
+
+    [Fact]
+    public void ParseArgs_SubcmdSearch_FlagQuery_FlagConsumedByLoop()
+    {
+        // "search --force" — --force starts with '-', not consumed as query
+        var a = Program.ParseArgs(["search", "--force"]);
+        Assert.NotNull(a);
+        Assert.Null(a.Search);
+        Assert.True(a.Force);
+    }
+
+    [Fact]
+    public void ParseArgs_SubcmdList_SetsShowList()
+    {
+        var a = Program.ParseArgs(["list"]);
+        Assert.NotNull(a);
+        Assert.True(a.ShowList);
+        Assert.Equal("list", a.SubVerb);
+    }
+
+    [Fact]
+    public void ParseArgs_SubcmdValidate_SetsValidate()
+    {
+        var a = Program.ParseArgs(["validate"]);
+        Assert.NotNull(a);
+        Assert.True(a.Validate);
+        Assert.Equal("validate", a.SubVerb);
+    }
+
+    [Fact]
+    public void ParseArgs_SubcmdStats_SetsStats()
+    {
+        var a = Program.ParseArgs(["stats"]);
+        Assert.NotNull(a);
+        Assert.True(a.Stats);
+        Assert.Equal("stats", a.SubVerb);
+    }
+
+    [Fact]
+    public void ParseArgs_SubcmdDoctor_SetsDoctor()
+    {
+        var a = Program.ParseArgs(["doctor"]);
+        Assert.NotNull(a);
+        Assert.True(a.Doctor);
+        Assert.Equal("doctor", a.SubVerb);
+    }
+
+    [Fact]
+    public void ParseArgs_SubcmdCheck_SetsCheck()
+    {
+        var a = Program.ParseArgs(["check"]);
+        Assert.NotNull(a);
+        Assert.True(a.Check);
+        Assert.Equal("check", a.SubVerb);
+    }
+
+    [Fact]
+    public void ParseArgs_SubcmdProfileApply_SetsProfile()
+    {
+        var a = Program.ParseArgs(["profile", "apply", "gaming"]);
+        Assert.NotNull(a);
+        Assert.Equal("gaming", a.Profile);
+        Assert.Equal("profile", a.SubVerb);
+    }
+
+    [Fact]
+    public void ParseArgs_SubcmdProfileList_SetsListProfiles()
+    {
+        var a = Program.ParseArgs(["profile", "list"]);
+        Assert.NotNull(a);
+        Assert.True(a.ListProfiles);
+    }
+
+    [Fact]
+    public void ParseArgs_SubcmdProfileCreate_SetsProfileCreate()
+    {
+        var a = Program.ParseArgs(["profile", "create", "my-profile"]);
+        Assert.NotNull(a);
+        Assert.Equal("my-profile", a.ProfileCreate);
+    }
+
+    [Fact]
+    public void ParseArgs_SubcmdSnapshotSave_SetsSnapshot()
+    {
+        var a = Program.ParseArgs(["snapshot", "save", "snap.json"]);
+        Assert.NotNull(a);
+        Assert.Equal("snap.json", a.Snapshot);
+        Assert.Equal("snapshot", a.SubVerb);
+    }
+
+    [Fact]
+    public void ParseArgs_SubcmdSnapshotRestore_SetsRestore()
+    {
+        var a = Program.ParseArgs(["snapshot", "restore", "snap.json"]);
+        Assert.NotNull(a);
+        Assert.Equal("snap.json", a.Restore);
+    }
+
+    [Fact]
+    public void ParseArgs_SubcmdExportJson_SetsExportJson()
+    {
+        var a = Program.ParseArgs(["export", "json", "out.json"]);
+        Assert.NotNull(a);
+        Assert.Equal("out.json", a.ExportJson);
+        Assert.Equal("export", a.SubVerb);
+    }
+
+    [Fact]
+    public void ParseArgs_SubcmdExportReg_SetsExportReg()
+    {
+        var a = Program.ParseArgs(["export", "reg", "out.reg"]);
+        Assert.NotNull(a);
+        Assert.Equal("out.reg", a.ExportReg);
+    }
+
+    [Fact]
+    public void ParseArgs_SubcmdExportGpo_SetsExportGpo()
+    {
+        var a = Program.ParseArgs(["export", "gpo", "policy.admx"]);
+        Assert.NotNull(a);
+        Assert.Equal("policy.admx", a.ExportGpo);
+    }
+
+    [Fact]
+    public void ParseArgs_SubcmdImportJson_SetsImportJsonAndApplyMode()
+    {
+        var a = Program.ParseArgs(["import", "json", "ids.json"]);
+        Assert.NotNull(a);
+        Assert.Equal("ids.json", a.ImportJson);
+        Assert.Equal("apply", a.Mode);
+    }
+
+    [Fact]
+    public void ParseArgs_SubcmdImportConfig_SetsImportConfig()
+    {
+        var a = Program.ParseArgs(["import", "config", "settings.json"]);
+        Assert.NotNull(a);
+        Assert.Equal("settings.json", a.ImportConfig);
+    }
+
+    [Fact]
+    public void ParseArgs_SubcmdMarketplace_SetsMarketplaceAndArg()
+    {
+        var a = Program.ParseArgs(["marketplace", "install", "my-pack"]);
+        Assert.NotNull(a);
+        Assert.Equal("install", a.Marketplace);
+        Assert.Equal("my-pack", a.MarketplaceArg);
+        Assert.Equal("marketplace", a.SubVerb);
+    }
+
+    [Fact]
+    public void ParseArgs_SubcmdMarketplaceNoArg_DefaultsList()
+    {
+        // regilattice marketplace  (no sub-command) → default "list"
+        var a = Program.ParseArgs(["marketplace"]);
+        Assert.NotNull(a);
+        Assert.Equal("list", a.Marketplace);
+    }
+
+    // backward-compat: legacy flag style must still work alongside subcommands
+    [Fact]
+    public void ParseArgs_LegacyFlagList_StillWorks()
+    {
+        var a = Program.ParseArgs(["--list"]);
+        Assert.NotNull(a);
+        Assert.True(a.ShowList);
+        Assert.Null(a.SubVerb);
+    }
+
+    [Fact]
+    public void ParseArgs_LegacyPositionalApply_StillWorks()
+    {
+        var a = Program.ParseArgs(["apply", "priv-disable-telemetry"]);
+        Assert.NotNull(a);
+        Assert.Equal("apply", a.Mode);
+        Assert.Equal("priv-disable-telemetry", a.Tweak);
+        Assert.Null(a.SubVerb); // not a verb-routing hit
+    }
+
+    // B5: ExitCodes constants are defined and sensible
+    [Fact]
+    public void ExitCodes_Values_AreStable()
+    {
+        Assert.Equal(0, ExitCodes.Success);
+        Assert.Equal(1, ExitCodes.PartialFail);
+        Assert.Equal(2, ExitCodes.UserError);
+        Assert.Equal(3, ExitCodes.AdminRequired);
+    }
 }
 
 /// <summary>Tests for the ConsoleColorizer utility.</summary>

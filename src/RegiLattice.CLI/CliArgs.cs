@@ -7,6 +7,10 @@ internal sealed class CliArgs
 {
     public string? Mode { get; set; }
     public string? Tweak { get; set; }
+
+    // ── B1: Verb-noun subcommand routing ─────────────────────────────────
+    /// <summary>The top-level verb when using subcommand syntax (e.g. "tweak", "search", "profile").</summary>
+    public string? SubVerb { get; set; }
     public bool ShowList { get; set; }
     public bool Force { get; set; }
     public bool Gui { get; set; }

@@ -61,8 +61,12 @@ public static class HardwareInfo
 
     private static HwProfile BuildHwProfile()
     {
-        // Parallelize WMI queries for faster startup.
-        // CancellationTokenSource signals tasks to skip queuing if we've already timed out.
+        // Parallelize WMI queries on explicit background MTA threads.
+        // Using Thread directly (not Task.Run) ensures IsBackground = true and
+        // ApartmentState.MTA.  WMI / COM can create internal STA message-pump threads
+        // when called from a ThreadPool Task; those STA threads are foreground threads
+        // that block process exit, causing the testhost to hang after all tests complete.
+        // Explicit MTA background threads prevent COM from ever creating an STA pump.
         CpuInfo? cpu = null;
         IReadOnlyList<GpuInfo>? gpus = null;
         DiskInfo? disk = null;
@@ -72,21 +76,45 @@ public static class HardwareInfo
             hasSecureBoot = false,
             hasBattery = false;
 
-        using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(10));
-        Task[] wmiTasks =
+        static Thread WmiThread(Action action)
+        {
+            var t = new Thread(() =>
+            {
+                try
+                {
+                    action();
+                }
+                catch { }
+            })
+            {
+                IsBackground = true,
+                Name = "RL-WmiProbe",
+            };
+            t.SetApartmentState(ApartmentState.MTA);
+            t.Start();
+            return t;
+        }
+
+        Thread[] wmiThreads =
         [
-            Task.Run(() => cpu = DetectCpu(), cts.Token),
-            Task.Run(() => gpus = DetectGpus(), cts.Token),
-            Task.Run(() => disk = DetectDisk(), cts.Token),
-            Task.Run(() => hasHyperV = CheckHyperV(), cts.Token),
-            Task.Run(() => hasWsl = CheckWsl(), cts.Token),
-            Task.Run(() => hasTpm = CheckTpm(), cts.Token),
-            Task.Run(() => hasSecureBoot = CheckSecureBoot(), cts.Token),
-            Task.Run(() => hasBattery = CheckBattery(), cts.Token),
+            WmiThread(() => cpu = DetectCpu()),
+            WmiThread(() => gpus = DetectGpus()),
+            WmiThread(() => disk = DetectDisk()),
+            WmiThread(() => hasHyperV = CheckHyperV()),
+            WmiThread(() => hasWsl = CheckWsl()),
+            WmiThread(() => hasTpm = CheckTpm()),
+            WmiThread(() => hasSecureBoot = CheckSecureBoot()),
+            WmiThread(() => hasBattery = CheckBattery()),
         ];
-        // 12-second hard cap (covers the 10 s CTS window with margin).
-        // Individual searchers have a 5 s EnumerationOptions.Timeout.
-        Task.WaitAll(wmiTasks, 12_000);
+        // 12-second hard cap shared across all threads; abandon any that exceed the budget.
+        // Individual searchers also have a 5 s EnumerationOptions.Timeout as a second layer.
+        var deadline = System.Diagnostics.Stopwatch.StartNew();
+        foreach (var t in wmiThreads)
+        {
+            int remaining = Math.Max(0, 12_000 - (int)deadline.ElapsedMilliseconds);
+            if (remaining > 0)
+                t.Join(remaining);
+        }
         // Null-guard fallbacks for any task that did not complete in time.
         cpu ??= new CpuInfo(
             Environment.GetEnvironmentVariable("PROCESSOR_IDENTIFIER") ?? "Unknown",
