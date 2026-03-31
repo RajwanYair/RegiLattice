@@ -15,12 +15,6 @@ namespace RegiLattice.GUI.Forms;
 /// </summary>
 internal abstract class BaseDialog : Form
 {
-    // Tracks whether this dialog was started in standalone mode
-    // (Application.Run called on it directly, not shown from a parent form).
-#pragma warning disable CS0414 // assigned but never read — consumed by EnableStandaloneMode
-    private bool _standaloneMode;
-#pragma warning restore CS0414
-
     /// <summary>
     /// Initialises common dialog properties.
     /// </summary>
@@ -49,7 +43,6 @@ internal abstract class BaseDialog : Form
     /// </summary>
     internal void EnableStandaloneMode()
     {
-        _standaloneMode = true;
         ShowInTaskbar = true;
         MinimizeBox = true;
         AppTheme.Apply(this);

@@ -4,6 +4,26 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [6.0.1] — 2026-03-31
+
+#### Enhanced
+
+- **CI**: Added `dotnet list package --vulnerable --include-transitive` step to `ci.yml` — scans NuGet dependencies for known vulnerabilities on every build
+- **Release**: Automated release notes extraction from CHANGELOG in `release.yml` — `gh release create` now uses `--notes-file` instead of `--generate-notes`
+- **Docs**: Rewrote Roadmap.md Sprint Plan, Success Metrics, and Next Steps to reflect v6.0.0 as current baseline (was stale at v5.97.0 references)
+- **Docs**: Fixed duplicate risk register entries R6–R8 in Roadmap.md
+
+#### Fixed
+
+- **Dead code**: Removed unused `_standaloneMode` field and associated `#pragma` from `BaseDialog.cs`
+- **SVGs**: Updated banner.svg (9 190 tweaks, 101 categories, 2 931 tests), architecture.svg (9 190 tweaks), how-it-works.svg (9 190 tweaks), features.svg (per-profile counts scaled to 9,190 total)
+
+#### Stats
+
+- Total: **9,190 tweaks**, 101 categories, 83 module files
+- Tests: 2,291 Core + 301 CLI + 339 GUI = **2,931 passing** (0 failures)
+- Version bumped `6.0.0` → `6.0.1`
+
 ## [6.0.0] — 2026-03-31
 
 #### Refactored
