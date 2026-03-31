@@ -1,19 +1,19 @@
 # RegiLattice — Development Roadmap
 
-> **Baseline:** v5.97.0 · 9,190 tweaks · 637 categories · 665 modules · 2,941 tests · 64 GUI forms · 34 Core services
-> **Last updated:** 2026-03-30
-> **Planning horizon:** v5.98.0 → v6.0.0 (next 6–12 months)
+> **Baseline:** v6.0.0 · 9,190 tweaks · 101 categories · 83 modules · 2,931 tests · 64 GUI forms · 34 Core services
+> **Last updated:** 2026-03-31
+> **Planning horizon:** v6.0.0 → v7.0.0
 
 ---
 
 ## Current Project State
 
-| Area | v5.0.0 Baseline | v5.97.0 Actual | Change |
+| Area | v5.0.0 Baseline | v6.0.0 Actual | Change |
 |------|----------------|----------------|--------|
 | Tweaks | 4,825 | 9,190 | +4,365 (+90%) |
-| Categories | 198 | 637 | +439 |
-| Modules | 193 | 665 | +472 |
-| Tests | 2,661 | 2,941 | +280 |
+| Categories | 198 | 101 | −97 (consolidated) |
+| Modules | 193 | 83 | −110 (consolidated) |
+| Tests | 2,661 | 2,931 | +270 |
 | GUI Forms | 63 | 64 | +1 |
 | Core Services | 34 | 34 | (expanded) |
 
