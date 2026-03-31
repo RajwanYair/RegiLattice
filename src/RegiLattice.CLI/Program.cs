@@ -2087,83 +2087,105 @@ internal static class Program
             $"""
             RegiLattice v{Version} — Windows registry tweak toolkit
 
-            Usage: regilattice [mode] [tweak] [options]
+            Usage:
+              regilattice [flags]              Flag-style (all options available)
+              regilattice <verb> [noun] [...]  Subcommand style (see groups below)
 
-            Modes:
-              apply <id|all>     Apply a tweak or all tweaks
-              remove <id|all>    Remove a tweak or all tweaks
-              update <id>        Update a tweak (runs UpdateAction or falls back to Apply)
-              status <id>        Show status of a specific tweak
+            ── Tweak Operations ──────────────────────────────────────────────────────
+              tweak apply   <id|all>     Apply a tweak (or every tweak)
+              tweak remove  <id|all>     Revert a tweak (or every tweak)
+              tweak update  <id>         Update a tweak (runs UpdateAction or re-applies)
+              tweak status  <id>         Check current status of a tweak
+              tweak list                 List all available tweaks
+              tweak <id>                 Shorthand: check status of <id>
 
-            Options:
-              --list              List all available tweaks
-              --search <query>    Search tweaks by keyword
-              --profile <name>    Apply a profile (business|gaming|privacy|minimal|server)
-              --list-profiles     List available profiles
-              --categories        List tweak categories with counts
-              --tags              List all unique tags
-              --stats             Show comprehensive statistics
-              --validate          Validate all tweak definitions
-              --check             Audit: show which tweaks are applied/default/unknown
-              --report            Status report by category
-              --diff <profile>    Compare current state against a profile
-              --doctor            System health check
-              --hwinfo            Detect and display hardware info
-              --gui               Launch the graphical interface
-              --menu              Launch the interactive terminal menu
+              Flag equivalents: apply/remove/status/update <id|all>  --list
 
-            Export / Import:
-              --export-json <path>   Export tweak definitions to JSON
-              --export-reg <path>    Export registry state to .reg file
-              --export-gpo <path>    Export HKLM tweaks as ADMX Group Policy template
-              --export-intune <path> Export HKLM tweaks as Intune OMA-URI JSON
-              --import-json <path>   Import tweak IDs from JSON (use with apply/remove)
-              --export-config <path> Export applied tweak selections to shareable JSON config
-              --import-config <path> Import & apply tweaks from a config file
+            ── Search & Browse ───────────────────────────────────────────────────────
+              search <query>             Search tweaks by keyword
+              list                       List all tweaks
+              validate                   Validate all tweak definitions
+              stats                      Show comprehensive statistics
+              check                      Audit: show applied/default/unknown status
+              doctor                     System health check
 
-            Favorites & History:
-              --favorites            List all favorited tweaks
-              --favorite-add <id>    Add a tweak to favorites
-              --favorite-remove <id> Remove a tweak from favorites
-              --history [count]      Show recent tweak operation history (default: 20)
+              Flag equivalents: --search <q>  --list  --validate  --stats  --check
+                                --doctor  --hwinfo  --categories  --tags  --report
+                                --scope <user|machine|both>  --min-build N
+                                --corp-safe  --needs-admin  --filter-status <s>
 
-            Snapshots:
-              --snapshot <path>       Save current state snapshot
-              --restore <path>        Restore tweaks from snapshot
-              --snapshot-diff A B     Compare two snapshots
-              --html <path>           HTML output for snapshot-diff
+            ── Profiles ──────────────────────────────────────────────────────────────
+              profile apply  <name>      Apply a built-in or custom profile
+              profile list               List all available profiles
+              profile create <name>      Create a custom user profile
+              profile delete <name>      Delete a custom user profile
 
-            Marketplace:
-              --marketplace list                 Browse available tweak packs
-              --marketplace search <query>       Search packs by keyword
-              --marketplace install <name>       Install a pack from the marketplace
-              --marketplace install-file <path>  Install a pack from local JSON file
-              --marketplace uninstall <name>     Remove an installed pack
-              --marketplace installed            List installed packs
-              --marketplace info <name>          Show pack details
-              --marketplace update <name>        Update a pack to latest version
-              --marketplace updates              Check for available updates
+              Flag equivalents: --profile <name>  --list-profiles  --list-user-profiles
+                                --profile-create <n>  --profile-delete <n>
+                                --profile-clone F T  --profile-rename F T
+                                --profile-tweaks <id,...>  --profile-desc <text>
+                                --diff <profile>
 
-            Filters (use with --list/--search):
-              --scope <user|machine|both>  Filter by registry scope
-              --min-build <number>         Filter by Windows build
-              --corp-safe                  Only corporate-safe tweaks
-              --needs-admin                Only admin-required tweaks
-              --output <table|json>        Output format (default: table)
-              --category <name>            Filter by category / apply-remove category
+            ── Snapshots ─────────────────────────────────────────────────────────────
+              snapshot save    <path>    Save current registry state to JSON
+              snapshot restore <path>    Restore tweaks from a saved snapshot
 
-            General:
-              --depends-on <id>         Show dependency chain for a tweak
-              --force                   Bypass corporate network guard
-              --dry-run                 Preview without modifying registry
-              --config <path>           Specify config file path
-              -y, --assume-yes          Skip confirmation prompts
-              --no-color                Disable ANSI colour output
-              --portable                Store all data in .\data\ (portable install)
-              --silent                  No console output; use exit code for scripting
-              --log-file <path>         Write JSON result log (useful with --silent)
-              --version                 Show version info
-              --help, -h                Show this help
+              Flag equivalents: --snapshot <path>  --restore <path>
+                                --snapshot-diff A B  --html <path>
+
+            ── Export / Import ───────────────────────────────────────────────────────
+              export json   <path>       Export tweak definitions to JSON
+              export reg    <path>       Export registry state to .reg file
+              export gpo    <path>       Export HKLM tweaks as ADMX Group Policy
+              export intune <path>       Export HKLM tweaks as Intune OMA-URI JSON
+              export config <path>       Export applied selections (shareable config)
+              import json   <path>       Import tweak IDs from JSON (combine with apply)
+              import config <path>       Import & apply tweaks from a config file
+
+              Flag equivalents: --export-json  --export-reg  --export-gpo
+                                --export-intune  --export-config  --import-json
+                                --import-config  --html-report <path>
+
+            ── Marketplace ───────────────────────────────────────────────────────────
+              marketplace list           Browse available tweak packs
+              marketplace search <q>     Search packs by keyword
+              marketplace install <name> Install a pack from the marketplace
+              marketplace uninstall <n>  Remove an installed pack
+              marketplace installed      List installed packs
+              marketplace update <name>  Update a pack to latest version
+              marketplace updates        Check for available pack updates
+              marketplace info <name>    Show pack details
+
+              Flag equivalent: --marketplace <command> [arg]
+
+            ── Favorites & History ───────────────────────────────────────────────────
+              --favorites                    List all favorited tweaks
+              --favorite-add <id>            Add a tweak to favorites
+              --favorite-remove <id>         Remove a tweak from favorites
+              --history [count]              Show recent operation history (default: 20)
+              --compliance <snapshot>        Compliance check against a snapshot
+              --compliance-history           Show compliance check history
+              --compliance-report <mode>     Run compliance report (e.g. "auto")
+
+            ── General ───────────────────────────────────────────────────────────────
+              --force                        Bypass corporate network guard
+              --dry-run                      Preview without modifying registry
+              --config <path>                Specify config file path
+              -y, --assume-yes               Skip confirmation prompts
+              --no-color                     Disable ANSI colour output
+              --portable                     Store all data in .\data\ (portable mode)
+              --silent                       No console output; exit code only
+              --log-file <path>              Write JSON result log (with --silent)
+              --gui                          Launch the graphical interface
+              --menu                         Launch the interactive terminal menu
+              --version                      Show version info
+              --help, -h                     Show this help
+
+            ── Exit Codes ────────────────────────────────────────────────────────────
+              0  All operations succeeded (or no-op)
+              1  One or more operations failed
+              2  Bad arguments / tweak or profile not found
+              3  Administrator privileges required
             """
         );
     }
@@ -2174,6 +2196,218 @@ internal static class Program
     {
         var p = new CliArgs();
         int i = 0;
+
+        // ── B1: Verb-noun subcommand routing ─────────────────────────────────────────
+        // Recognises:  regilattice <verb> [noun] [args...]
+        // Falls through unchanged to the flag-style while loop when first arg starts with '-'.
+        if (args.Length > 0 && !args[0].StartsWith('-'))
+        {
+            switch (args[0].ToLowerInvariant())
+            {
+                case "tweak":
+                {
+                    p.SubVerb = "tweak";
+                    string noun = args.Length > 1 ? args[1].ToLowerInvariant() : "";
+                    switch (noun)
+                    {
+                        case "apply":
+                        case "remove":
+                        case "update":
+                        case "status":
+                            p.Mode = noun;
+                            if (args.Length > 2 && !args[2].StartsWith('-'))
+                            {
+                                p.Tweak = args[2];
+                                i = 3;
+                            }
+                            else
+                            {
+                                i = 2;
+                            }
+                            break;
+                        case "list":
+                            p.ShowList = true;
+                            i = 2;
+                            break;
+                        default:
+                            if (noun.Length > 0 && !noun.StartsWith('-'))
+                            {
+                                // regilattice tweak <id>  →  shorthand for status
+                                p.Mode = "status";
+                                p.Tweak = args[1];
+                                i = 2;
+                            }
+                            else
+                            {
+                                // noun is a flag or absent — advance past verb only
+                                i = 1;
+                            }
+                            break;
+                    }
+                    break;
+                }
+
+                case "search":
+                    p.SubVerb = "search";
+                    if (args.Length > 1 && !args[1].StartsWith('-'))
+                    {
+                        p.Search = args[1];
+                        i = 2;
+                    }
+                    else
+                    {
+                        i = 1;
+                    }
+                    break;
+
+                case "list":
+                    p.SubVerb = "list";
+                    p.ShowList = true;
+                    i = 1;
+                    break;
+
+                case "validate":
+                    p.SubVerb = "validate";
+                    p.Validate = true;
+                    i = 1;
+                    break;
+
+                case "stats":
+                    p.SubVerb = "stats";
+                    p.Stats = true;
+                    i = 1;
+                    break;
+
+                case "doctor":
+                    p.SubVerb = "doctor";
+                    p.Doctor = true;
+                    i = 1;
+                    break;
+
+                case "check":
+                    p.SubVerb = "check";
+                    p.Check = true;
+                    i = 1;
+                    break;
+
+                case "profile":
+                {
+                    p.SubVerb = "profile";
+                    string noun = args.Length > 1 ? args[1].ToLowerInvariant() : "";
+                    string? name = args.Length > 2 && !args[2].StartsWith('-') ? args[2] : null;
+                    switch (noun)
+                    {
+                        case "apply":
+                            p.Profile = name;
+                            break;
+                        case "list":
+                            p.ListProfiles = true;
+                            break;
+                        case "create":
+                            p.ProfileCreate = name;
+                            break;
+                        case "delete":
+                            p.ProfileDelete = name;
+                            break;
+                    }
+                    if (noun.Length == 0 || noun.StartsWith('-'))
+                        i = 1;
+                    else
+                        i = name is not null ? 3 : 2;
+                    break;
+                }
+
+                case "snapshot":
+                {
+                    p.SubVerb = "snapshot";
+                    string noun = args.Length > 1 ? args[1].ToLowerInvariant() : "";
+                    string? path = args.Length > 2 && !args[2].StartsWith('-') ? args[2] : null;
+                    switch (noun)
+                    {
+                        case "save":
+                            p.Snapshot = path;
+                            break;
+                        case "restore":
+                            p.Restore = path;
+                            break;
+                    }
+                    if (noun.Length == 0 || noun.StartsWith('-'))
+                        i = 1;
+                    else
+                        i = path is not null ? 3 : 2;
+                    break;
+                }
+
+                case "export":
+                {
+                    p.SubVerb = "export";
+                    string noun = args.Length > 1 ? args[1].ToLowerInvariant() : "";
+                    string? path = args.Length > 2 && !args[2].StartsWith('-') ? args[2] : null;
+                    switch (noun)
+                    {
+                        case "json":
+                            p.ExportJson = path;
+                            break;
+                        case "reg":
+                            p.ExportReg = path;
+                            break;
+                        case "gpo":
+                            p.ExportGpo = path;
+                            break;
+                        case "intune":
+                            p.ExportIntune = path;
+                            break;
+                        case "config":
+                            p.ExportConfig = path;
+                            break;
+                    }
+                    if (noun.Length == 0 || noun.StartsWith('-'))
+                        i = 1;
+                    else
+                        i = path is not null ? 3 : 2;
+                    break;
+                }
+
+                case "import":
+                {
+                    p.SubVerb = "import";
+                    string noun = args.Length > 1 ? args[1].ToLowerInvariant() : "";
+                    string? path = args.Length > 2 && !args[2].StartsWith('-') ? args[2] : null;
+                    switch (noun)
+                    {
+                        case "json":
+                            p.ImportJson = path;
+                            p.Mode = "apply";
+                            break;
+                        case "config":
+                            p.ImportConfig = path;
+                            break;
+                    }
+                    if (noun.Length == 0 || noun.StartsWith('-'))
+                        i = 1;
+                    else
+                        i = path is not null ? 3 : 2;
+                    break;
+                }
+
+                case "marketplace":
+                {
+                    p.SubVerb = "marketplace";
+                    if (args.Length > 1 && !args[1].StartsWith('-'))
+                    {
+                        p.Marketplace = args[1];
+                        p.MarketplaceArg = args.Length > 2 && !args[2].StartsWith('-') ? args[2] : null;
+                        i = p.MarketplaceArg is not null ? 3 : 2;
+                    }
+                    else
+                    {
+                        p.Marketplace = "list";
+                        i = 1;
+                    }
+                    break;
+                }
+            }
+        }
 
         while (i < args.Length)
         {
@@ -2460,4 +2694,24 @@ internal static class Program
     }
 
     private static string PlatformSummaryStatic() => $".NET {Environment.Version} | {RuntimeInformation.OSDescription}";
+}
+
+// ── B5: Stable exit codes ─────────────────────────────────────────────────────
+/// <summary>
+/// Stable exit codes for scripting and automation.
+/// Uses 0/1/2/3 matching common POSIX conventions and the help text contract.
+/// </summary>
+internal static class ExitCodes
+{
+    /// <summary>All operations succeeded (or produced a no-op result).</summary>
+    public const int Success = 0;
+
+    /// <summary>One or more operations failed or returned an unexpected status.</summary>
+    public const int PartialFail = 1;
+
+    /// <summary>Bad arguments, tweak/profile/pack not found, or invalid input.</summary>
+    public const int UserError = 2;
+
+    /// <summary>Administrator privileges required for one or more operations.</summary>
+    public const int AdminRequired = 3;
 }

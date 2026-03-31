@@ -479,8 +479,8 @@ G6 (PluginAuthoring docs) <──► H6 (custom tweaks — same doc)
 
 | Sprint | Theme | Key Deliverables | Exit Criteria |
 |--------|-------|-----------------|---------------|
-| **+1** | B | B1 subcommand architecture · B3 grouped help | `regilattice tweak apply <id>` works; old `--flags` preserved |
-| **+2** | B, A | B2 structured output (JSON/CSV) · B5 stable exit codes · A3 CLI contract tests | All commands support `--output json`; exit codes documented + tested |
+| **v6.0.4** | B | B1 subcommand architecture · B3 grouped help · B5 stable exit codes | `regilattice tweak apply <id>` works; old `--flags` preserved; exit codes 0/1/2/3 documented | ✅ Released |
+| **+2** | B, A | B2 structured output (JSON/CSV) · A3 CLI contract tests | All commands support `--output json`; 100% branch coverage on new routes |
 | **+3** | B | B4 PowerShell module parity · B6 shell completions · B7 batch mode | `Import-Module RegiLattice` works; tab completion in pwsh |
 | **+4** | F | F1 Authenticode code signing (EV cert + CI) | `signtool verify /pa` passes on GUI EXE, CLI EXE, MSI in CI |
 | **+5** | F | F3 release smoke test matrix · F4 Chocolatey auto-submit | `choco install regilattice` works from community |
