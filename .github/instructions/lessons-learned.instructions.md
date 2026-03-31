@@ -1416,3 +1416,26 @@ Get-Date -Format "yyyy-MM-dd"
 **Why it matters**: Future dates in CHANGELOG cause confusion when auditing the project
 history ("when was this actually shipped?") and may break date-parsing tools or
 release notes generators.
+
+---
+
+## Hardcoded Major Version in Tests — Use Dynamic Assertions
+
+`ExecutableValidationTests` had `Assert.StartsWith("5.", ...)` and `Assert.Equal(5, version.Major)`
+hardcoded for three EXE/DLL version checks and two loaded-assembly checks. When the version
+bumped from v5.x to v6.0.0, all five assertions failed and broke the CI release workflow.
+
+```csharp
+// ❌ BAD — hardcoded major version breaks on next major bump
+Assert.StartsWith("5.", versionInfo.FileVersion);
+Assert.Equal(5, version.Major);
+
+// ✅ GOOD — reads expected major from loaded Core assembly
+var expectedMajor = typeof(RegiLattice.Core.TweakEngine).Assembly.GetName().Version!.Major;
+Assert.StartsWith($"{expectedMajor}.", versionInfo.FileVersion);
+Assert.True(version.Major >= 5, $"Major version {version.Major} unexpectedly low");
+```
+
+**Rule**: Never hardcode version numbers in tests. Read the expected version dynamically
+from the loaded assembly or `Directory.Build.props`. This applies to any test that
+validates PE metadata, assembly version, or file version info.
