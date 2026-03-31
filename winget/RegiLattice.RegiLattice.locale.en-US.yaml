@@ -1,6 +1,6 @@
 # yaml-language-server: $schema=https://aka.ms/winget-manifest.defaultLocale.1.6.0.schema.json
 PackageIdentifier: RegiLattice.RegiLattice
-PackageVersion: 5.97.0
+PackageVersion: 6.0.0
 PackageLocale: en-US
 Publisher: YairRajwan
 PublisherUrl: https://github.com/RajwanYair/RegiLattice
@@ -8,10 +8,10 @@ PackageName: RegiLattice
 PackageUrl: https://github.com/RajwanYair/RegiLattice
 License: MIT
 LicenseUrl: https://github.com/RajwanYair/RegiLattice/blob/main/LICENSE
-ShortDescription: Windows registry tweak toolkit with 9,190 tweaks across 637 categories. WinForms GUI + CLI.
+ShortDescription: Windows registry tweak toolkit with 9,190 tweaks across 101 categories. WinForms GUI + CLI.
 Description: >-
   RegiLattice is a .NET 10 (C#) Windows registry tweak manager featuring
-  9,190 verified tweaks across 637 categories. It provides a WinForms GUI with 11 themes,
+  9,190 verified tweaks across 101 categories. It provides a WinForms GUI with 11 themes,
   a 25+ command CLI, 5 profile presets (Business, Gaming, Privacy, Minimal, Server),
   snapshot & diff, favorites export/import, tweak history, auto-backup before apply,
   corporate network detection, and dry-run safety. Self-contained x64 executable.
