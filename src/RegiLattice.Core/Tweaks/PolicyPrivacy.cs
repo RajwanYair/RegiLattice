@@ -33,10 +33,10 @@ internal static class PolicyPrivacy
 
     // ── AdvertisingInfoPolicy ──
     private static class _AdvertisingInfoPolicy
-    {    
+    {
         private const string Key =
             @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AdvertisingInfo";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -210,16 +210,16 @@ internal static class PolicyPrivacy
                     DetectOps = [RegOp.CheckDword(Key, "DisableDiagnosticAdFeedback", 1)],
                 },
             ];
-    
+
     }
 
     // ── DataCollectionPolicy ──
     private static class _DataCollectionPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DataCollection";
         private const string SqmKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\SQMClient\Windows";
         private const string DastKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DAST";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -403,14 +403,14 @@ internal static class PolicyPrivacy
                 DetectOps = [RegOp.CheckDword(Key, "HideDiagnosticPage", 1)],
             },
         ];
-    
+
     }
 
     // ── DataIntegrityPolicy ──
     private static class _DataIntegrityPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DataIntegrity";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -584,14 +584,14 @@ internal static class PolicyPrivacy
                 DetectOps = [RegOp.CheckDword(Key, "EnforceIntegrityOnWrite", 1)],
             },
         ];
-    
+
     }
 
     // ── FeedbackPolicy ──
     private static class _FeedbackPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Feedback";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -785,19 +785,19 @@ internal static class PolicyPrivacy
                 DetectOps = [RegOp.CheckDword(Key, "DisableAccountRequirement", 1)],
             },
         ];
-    
+
     }
 
     // ── LocationSensors ──
     private static class _LocationSensors
-    {    
+    {
         private const string LocPolicy = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\LocationAndSensors";
         private const string AppPrivacy = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy";
         private const string WinSearch = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search";
         private const string WifiConfig = @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\WcmSvc\wifinetworkmanager\config";
         private const string UserLocation = @"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\location";
         private const string UserActivity = @"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\activity";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -994,14 +994,14 @@ internal static class PolicyPrivacy
                 ],
             },
         ];
-    
+
     }
 
     // ── LocationSensorsPolicy ──
     private static class _LocationSensorsPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\LocationAndSensors";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -1175,24 +1175,24 @@ internal static class PolicyPrivacy
                     DetectOps = [RegOp.CheckDword(Key, "AllowAppsToAccessLocation", 0)],
                 },
             ];
-    
+
     }
 
     // ── MicrosoftAccount ──
     private static class _MicrosoftAccount
-    {    
+    {
         private const string MsaPolicy = @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\PolicyManager\current\device\Accounts";
-    
+
         private const string WinLogon = @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon";
-    
+
         private const string SyncPolicy = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\SettingSync";
-    
+
         private const string PassportPolicy = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\PassportForWork";
-    
+
         private const string SignIn = @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System";
-    
+
         private const string MsaUserPolicy = @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Cloud";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -1418,16 +1418,16 @@ internal static class PolicyPrivacy
                 DetectOps = [RegOp.CheckDword(SyncPolicy, "DisableApplicationSettingSync", 1)],
             },
         ];
-    
+
     }
 
     // ── PhotoAcquisitionPolicy ──
     private static class _PhotoAcquisitionPolicy
-    {    
+    {
         private const string PaLm = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\PhotoAcquire";
         private const string PaCu = @"HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\PhotoAcquire";
         private const string DevMetaKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DeviceMetadata";
-    
+
         public static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -1631,14 +1631,14 @@ internal static class PolicyPrivacy
                 DetectOps = [RegOp.CheckDword(PaLm, "DisableCameraEvents", 1)],
             },
         ];
-    
+
     }
 
     // ── PushNotificationsPolicy ──
     private static class _PushNotificationsPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CurrentVersion\PushNotifications";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -1831,14 +1831,14 @@ internal static class PolicyPrivacy
                     DetectOps = [RegOp.CheckDword(Key, "NoNetworkNotification", 1)],
                 },
             ];
-    
+
     }
 
     // ── SearchWebPolicy ──
     private static class _SearchWebPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -2021,17 +2021,17 @@ internal static class PolicyPrivacy
                 DetectOps = [RegOp.CheckDword(Key, "AllowIndexingEncryptedStoresOrItems", 0)],
             },
         ];
-    
+
     }
 
     // ── SensorPolicy ──
     private static class _SensorPolicy
-    {    
+    {
         private const string LocSensors = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\LocationAndSensors";
-    
+
         // CapabilityAccessManager ConsentStore — machine-wide capability deny
         private const string CamBase = @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -2203,14 +2203,14 @@ internal static class PolicyPrivacy
                 DetectOps = [RegOp.CheckString($@"{CamBase}\bluetoothSync", "Value", "Deny")],
             },
         ];
-    
+
     }
 
     // ── SensorServicePolicy ──
     private static class _SensorServicePolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\LocationAndSensors";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -2384,14 +2384,14 @@ internal static class PolicyPrivacy
                 DetectOps = [RegOp.CheckDword(Key, "DisableLocationBroadcast", 1)],
             },
         ];
-    
+
     }
 
     // ── SpellingAndTypingPolicy ──
     private static class _SpellingAndTypingPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\SpellingAndTyping";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -2588,19 +2588,19 @@ internal static class PolicyPrivacy
                 DetectOps = [RegOp.CheckDword(Key, "AutoCompleteEnabled", 0)],
             },
         ];
-    
+
     }
 
     // ── WindowsDiagnostics ──
     private static class _WindowsDiagnostics
-    {    
+    {
         private const string WerPolicy = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Error Reporting";
         private const string WerService = @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Windows Error Reporting";
         private const string WerPCHealth = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\PCHealth\ErrorReporting";
         private const string AppCompatPolicy = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppCompat";
         private const string AppCompatFlags = @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\AppCompatFlags";
         private const string FeedbackPolicy = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DataCollection";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -2831,14 +2831,14 @@ internal static class PolicyPrivacy
                 DetectOps = [RegOp.CheckDword(FeedbackPolicy, "DisableWindowsConsumerFeatures", 1)],
             },
         ];
-    
+
     }
 
     // ── WindowsDiagnosticsInfraPolicy ──
     private static class _WindowsDiagnosticsInfraPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WDI";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -3038,14 +3038,14 @@ internal static class PolicyPrivacy
                     DetectOps = [RegOp.CheckDword(Key, "PreventDiagnosticTaskExecution", 1)],
                 },
             ];
-    
+
     }
 
     // ── WindowsDiagTrackPolicy ──
     private static class _WindowsDiagTrackPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DataCollection";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -3259,16 +3259,16 @@ internal static class PolicyPrivacy
                 ImpactNote = "Blocks clipboard telemetry via DiagTrack; prevents clipboard usage patterns from being collected.",
             },
         ];
-    
+
     }
 
     // ── WindowsInfoProtectionPolicy ──
     private static class _WindowsInfoProtectionPolicy
-    {    
+    {
         private const string WipKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DataProtection";
         private const string EdpKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\EnterpriseDataProtection";
         private const string NetIsoKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\NetworkIsolation";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -3452,18 +3452,18 @@ internal static class PolicyPrivacy
                 DetectOps = [RegOp.CheckDword(NetIsoKey, "EnterpriseCloudResources", 1)],
             },
         ];
-    
+
     }
 
     // ── WindowsMapsPolicy ──
     private static class _WindowsMapsPolicy
-    {    
+    {
         private const string Maps = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Maps";
-    
+
         private const string WinSearch = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search";
-    
+
         private const string WinSearchCu = @"HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\Windows Search";
-    
+
         public static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -3617,7 +3617,7 @@ internal static class PolicyPrivacy
                 DetectOps = [RegOp.CheckDword(WinSearchCu, "AllowCortanaInAAD", 0)],
             },
         ];
-    
+
     }
 
 }

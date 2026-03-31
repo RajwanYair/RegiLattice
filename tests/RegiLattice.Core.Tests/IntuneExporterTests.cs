@@ -1,4 +1,4 @@
-﻿using System.Text.Json;
+using System.Text.Json;
 using Microsoft.Win32;
 using RegiLattice.Core;
 using RegiLattice.Core.Models;

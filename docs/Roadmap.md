@@ -467,9 +467,9 @@ G6 (PluginAuthoring docs) <──► H6 (custom tweaks — same doc)
 | **v6.0.0** | — | Module consolidation (98→83 modules), doc/metadata cleanup | ✅ Released |
 | **v6.0.1** | C, F | C4 dead code sweep · F2 automated release notes · F5 `--vulnerable` CI check | ✅ Released |
 | **v6.0.2** | A, C | A5 test isolation audit · C3 startup perf baseline · C5 `IReadOnlyList` audit | ✅ Released |
-| **v6.0.3** | C | C3 nullable audit (`/warnaserror:nullable`) · C4 remaining dead code | Planned |
+| **v6.0.3** | C | C3 nullable enforcement (`TreatWarningsAsErrors`) · C4 dead code audit confirmed clean | ✅ Released |
 
-**M1 gate:** Dead code eliminated · CI scans for vulnerable packages · release notes auto-populated from CHANGELOG · test isolation clean · startup baseline measured.
+**M1 gate:** Dead code eliminated · CI scans for vulnerable packages · release notes auto-populated from CHANGELOG · test isolation clean · startup baseline measured. **✅ M1 complete as of v6.0.3.**
 
 ---
 

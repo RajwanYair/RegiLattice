@@ -31,9 +31,9 @@ internal static class PolicySubsystems
 
     // ── AndroidAppDebuggingPolicy ──
     private static class _AndroidAppDebuggingPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsSubsystemForAndroid\Debugging";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -207,14 +207,14 @@ internal static class PolicySubsystems
                     DetectOps = [RegOp.CheckDword(Key, "BlockAndroidWifiPasswordSharing", 1)],
                 },
             ];
-    
+
     }
 
     // ── AndroidSensorAccessPolicy ──
     private static class _AndroidSensorAccessPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsSubsystemForAndroid\Sensors";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -388,14 +388,14 @@ internal static class PolicySubsystems
                     DetectOps = [RegOp.CheckDword(Key, "DisableStepCounterSensor", 1)],
                 },
             ];
-    
+
     }
 
     // ── HolographicDevicePolicy ──
     private static class _HolographicDevicePolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\HolographicDevices";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -569,16 +569,16 @@ internal static class PolicySubsystems
                 DetectOps = [RegOp.CheckDword(Key, "EnableHolographicAuditEvents", 1)],
             },
         ];
-    
+
     }
 
     // ── HyperVContainerPolicy ──
     private static class _HyperVContainerPolicy
-    {    
-        private const string Key    = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\HyperV";
-        private const string VmKey  = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\VirtualMachineMonitor";
+    {
+        private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\HyperV";
+        private const string VmKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\VirtualMachineMonitor";
         private const string CtrKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Containers";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
         [
             new TweakDef
@@ -742,14 +742,14 @@ internal static class PolicySubsystems
                 DetectOps    = [RegOp.CheckDword(Key, "LogVMLifecycleEvents", 1)],
             },
         ];
-    
+
     }
 
     // ── WindowsContainerPolicy ──
     private static class _WindowsContainerPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Containers";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -923,14 +923,14 @@ internal static class PolicySubsystems
                 DetectOps = [RegOp.CheckDword(Key, "DisableContainerTelemetry", 1)],
             },
         ];
-    
+
     }
 
     // ── WindowsSandboxPolicy ──
     private static class _WindowsSandboxPolicy
-    {    
+    {
         private const string SandboxKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Sandbox";
-    
+
         public static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -1156,14 +1156,14 @@ internal static class PolicySubsystems
                 DetectOps = [RegOp.CheckDword(SandboxKey, "AllowLogonCredentials", 0)],
             },
         ];
-    
+
     }
 
     // ── WsaAndroidPolicy ──
     private static class _WsaAndroidPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsSubsystemForAndroid";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -1337,14 +1337,14 @@ internal static class PolicySubsystems
                     DetectOps = [RegOp.CheckDword(Key, "AndroidContainerMaxMemoryMB", 4096)],
                 },
             ];
-    
+
     }
 
     // ── WsaNetworkIsolationPolicy ──
     private static class _WsaNetworkIsolationPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsSubsystemForAndroid\Network";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -1518,14 +1518,14 @@ internal static class PolicySubsystems
                     DetectOps = [RegOp.CheckDword(Key, "EnableAndroidNetworkAuditLog", 1)],
                 },
             ];
-    
+
     }
 
     // ── WsaStoragePolicy ──
     private static class _WsaStoragePolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsSubsystemForAndroid\Storage";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -1699,16 +1699,16 @@ internal static class PolicySubsystems
                     DetectOps = [RegOp.CheckDword(Key, "BlockAndroidScreenCapture", 1)],
                 },
             ];
-    
+
     }
 
     // ── Wsl2AdvancedPolicy ──
     private static class _Wsl2AdvancedPolicy
-    {    
-        private const string Key    = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Lxss";
-        private const string FwKey  = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Lxss\Firewall";
-        private const string NwKey  = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Lxss\Networking";
-    
+    {
+        private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Lxss";
+        private const string FwKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Lxss\Firewall";
+        private const string NwKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Lxss\Networking";
+
         public static IReadOnlyList<TweakDef> Data =>
         [
             new TweakDef
@@ -1872,14 +1872,14 @@ internal static class PolicySubsystems
                 DetectOps    = [RegOp.CheckDword(Key, "RequireAdminForDistroInstall", 1)],
             },
         ];
-    
+
     }
 
     // ── WslDistroManagementPolicy ──
     private static class _WslDistroManagementPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Lxss\Distros";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
         [
             new TweakDef
@@ -2053,14 +2053,14 @@ internal static class PolicySubsystems
                 DetectOps = [RegOp.CheckDword(Key, "RequireAdminForDistributionUpdates", 1)],
             },
         ];
-    
+
     }
 
     // ── WslFileSystemPolicy ──
     private static class _WslFileSystemPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Lxss\FileSystem";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
         [
             new TweakDef
@@ -2234,14 +2234,14 @@ internal static class PolicySubsystems
                 DetectOps = [RegOp.CheckDword(Key, "DisableTmpfsHostOverflow", 1)],
             },
         ];
-    
+
     }
 
     // ── WslKernelUpdatePolicy ──
     private static class _WslKernelUpdatePolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Lxss\Updates";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
         [
             new TweakDef
@@ -2415,14 +2415,14 @@ internal static class PolicySubsystems
                 DetectOps = [RegOp.CheckDword(Key, "RequireSessionRestartForKernelUpdate", 1)],
             },
         ];
-    
+
     }
 
     // ── WslMemoryLimitsPolicy ──
     private static class _WslMemoryLimitsPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Lxss\Memory";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
         [
             new TweakDef
@@ -2596,14 +2596,14 @@ internal static class PolicySubsystems
                 DetectOps = [RegOp.CheckDword(Key, "DisableLargePageAllocation", 1)],
             },
         ];
-    
+
     }
 
     // ── WslSecurityHardeningPolicy ──
     private static class _WslSecurityHardeningPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Lxss\Security";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
         [
             new TweakDef
@@ -2777,14 +2777,14 @@ internal static class PolicySubsystems
                 DetectOps = [RegOp.CheckDword(Key, "DisableUnsignedKernelModuleLoad", 1)],
             },
         ];
-    
+
     }
 
     // ── WindowsSubsystemLinuxPolicy ──
     private static class _WindowsSubsystemLinuxPolicy
-    {    
+    {
         private const string LxssKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Lxss";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -2958,7 +2958,7 @@ internal static class PolicySubsystems
                     DetectOps = [RegOp.CheckDword(LxssKey, "AllowVTPM", 0)],
                 },
             ];
-    
+
     }
 
 }

@@ -205,7 +205,7 @@ public static class BatchImpactEstimator
         {
             sb.AppendLine("  Categories   :");
             foreach (var (cat, cnt) in summary.ByCategory.OrderByDescending(kv => kv.Value))
-                sb.AppendLine($"    {cat, -28} {cnt}");
+                sb.AppendLine($"    {cat,-28} {cnt}");
         }
 
         if (summary.TopBenefits.Count > 0)

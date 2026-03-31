@@ -33,10 +33,10 @@ internal static class PolicyPrint
 
     // ── FaxServicePolicy ──
     private static class _FaxServicePolicy
-    {    
+    {
         private const string FaxLm = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Fax";
         private const string FaxCu = @"HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows NT\Fax";
-    
+
         public static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -240,15 +240,15 @@ internal static class PolicyPrint
                 DetectOps = [RegOp.CheckDword(FaxLm, "NewAccounts", 1)],
             },
         ];
-    
+
     }
 
     // ── InternetPrintingPolicy ──
     private static class _InternetPrintingPolicy
-    {    
+    {
         private const string Prnt = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers";
         private const string PnP = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers\PointAndPrint";
-    
+
         public static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -384,14 +384,14 @@ internal static class PolicyPrint
                 DetectOps = [RegOp.CheckDword(Prnt, "V3DriverPolicy", 1)],
             },
         ];
-    
+
     }
 
     // ── IppEverywherePolicy ──
     private static class _IppEverywherePolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers\IPPEverywhere";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -565,14 +565,14 @@ internal static class PolicyPrint
                     DetectOps = [RegOp.CheckDword(Key, "BlockAnonymousIPPEverywherePrint", 1)],
                 },
             ];
-    
+
     }
 
     // ── IppProtocolPolicy ──
     private static class _IppProtocolPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers\IPP";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -746,14 +746,14 @@ internal static class PolicyPrint
                     DetectOps = [RegOp.CheckDword(Key, "EnableIPPAuditLog", 1)],
                 },
             ];
-    
+
     }
 
     // ── PrinterDirectoryServicesPolicy ──
     private static class _PrinterDirectoryServicesPolicy
-    {    
+    {
         private const string DsKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers\DS";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -946,14 +946,14 @@ internal static class PolicyPrint
                     DetectOps = [RegOp.CheckDword(DsKey, "PruningRetries", 2)],
                 },
             ];
-    
+
     }
 
     // ── PrinterDriverIsolationPolicy ──
     private static class _PrinterDriverIsolationPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers\DriverIsolation";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -1127,14 +1127,14 @@ internal static class PolicyPrint
                     DetectOps = [RegOp.CheckDword(Key, "AuditDriverInstallEvents", 1)],
                 },
             ];
-    
+
     }
 
     // ── PrinterGpoPolicy ──
     private static class _PrinterGpoPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -1308,15 +1308,15 @@ internal static class PolicyPrint
                 DetectOps = [RegOp.CheckDword(Key, "RpcOverNamedPipes", 0)],
             },
         ];
-    
+
     }
 
     // ── PrinterRedirectionPolicy ──
     private static class _PrinterRedirectionPolicy
-    {    
+    {
         private const string TsKey =
             @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -1490,18 +1490,18 @@ internal static class PolicyPrint
                     DetectOps = [RegOp.CheckDword(TsKey, "FallbackToEasyPrint", 1)],
                 },
             ];
-    
+
     }
 
     // ── PrintJobManagementPolicy ──
     private static class _PrintJobManagementPolicy
-    {    
+    {
         private const string JobKey =
             @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers\JobManagement";
-    
+
         private const string PrtKey =
             @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -1675,14 +1675,14 @@ internal static class PolicyPrint
                     DetectOps = [RegOp.CheckDword(JobKey, "BlockUntrustedFonts", 1)],
                 },
             ];
-    
+
     }
 
     // ── PrintManagementPolicy ──
     private static class _PrintManagementPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\PrintManagement";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -1856,18 +1856,18 @@ internal static class PolicyPrint
                 DetectOps = [RegOp.CheckDword(Key, "DisableCloudPrintSharing", 1)],
             },
         ];
-    
+
     }
 
     // ── PrintQueuePolicy ──
     private static class _PrintQueuePolicy
-    {    
+    {
         private const string PrtKey =
             @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers";
-    
+
         private const string RpcKey =
             @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers\RPC";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -2053,14 +2053,14 @@ internal static class PolicyPrint
                     DetectOps = [RegOp.CheckDword(PrtKey, "EnableLpdLogging", 1)],
                 },
             ];
-    
+
     }
 
     // ── PrintSpoolAdvPolicy ──
     private static class _PrintSpoolAdvPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers\PointAndPrint";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -2234,14 +2234,14 @@ internal static class PolicyPrint
                 DetectOps = [RegOp.CheckDword(Key, "InheritedPolicies", 1)],
             },
         ];
-    
+
     }
 
     // ── PrintSpoolerAdvancedPolicy ──
     private static class _PrintSpoolerAdvancedPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
         [
             new TweakDef
@@ -2405,15 +2405,15 @@ internal static class PolicyPrint
                 DetectOps    = [RegOp.CheckDword(Key, "DisableSpoolerInboundRPC", 1)],
             },
         ];
-    
+
     }
 
     // ── PrintSpoolerPolicy ──
     private static class _PrintSpoolerPolicy
-    {    
+    {
         private const string SpoolKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers";
         private const string PnPKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers\PointAndPrint";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
         [
             new TweakDef
@@ -2577,20 +2577,20 @@ internal static class PolicyPrint
                 DetectOps = [RegOp.CheckDword(PnPKey, "InstallDriverPromptSetting", 2)],
             },
         ];
-    
+
     }
 
     // ── PrintSpoolerSecurity ──
     private static class _PrintSpoolerSecurity
-    {    
+    {
         private const string Spooler = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Spooler";
-    
+
         private const string SpoolerPolicy = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers";
-    
+
         private const string SpoolerPointAndPrint = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers\PointAndPrint";
-    
+
         private const string PrintNightmare = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers\Management";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -2785,14 +2785,14 @@ internal static class PolicyPrint
                 DetectOps = [RegOp.CheckDword(SpoolerPolicy, "EventLog", 1)],
             },
         ];
-    
+
     }
 
     // ── PrintSpoolFinalPolicy ──
     private static class _PrintSpoolFinalPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers\Cleanup";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -2926,18 +2926,18 @@ internal static class PolicyPrint
                 DetectOps = [RegOp.CheckDword(Key, "DisablePersistentlyCachedPrintJobs", 1)],
             },
         ];
-    
+
     }
 
     // ── PrintTicketPolicy ──
     private static class _PrintTicketPolicy
-    {    
+    {
         private const string TktKey =
             @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers\PrintTicket";
-    
+
         private const string PrtKey =
             @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -3111,16 +3111,16 @@ internal static class PolicyPrint
                     DetectOps = [RegOp.CheckDword(TktKey, "RestrictToUserSessions", 1)],
                 },
             ];
-    
+
     }
 
     // ── ProtectedPrintModePolicy ──
     private static class _ProtectedPrintModePolicy
-    {    
+    {
         private const string WppKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\ProtectedPrint";
         private const string WppDriverKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\ProtectedPrint\DriverPolicy";
         private const string PrintSpoolerKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers\WPP";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
         [
             new TweakDef
@@ -3304,7 +3304,7 @@ internal static class PolicyPrint
                 DetectOps = [RegOp.CheckDword(PrintSpoolerKey, "EnableSpoolerProcessIsolation", 1)],
             },
         ];
-    
+
     }
 
 }

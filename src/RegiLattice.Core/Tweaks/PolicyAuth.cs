@@ -48,10 +48,10 @@ internal static class PolicyAuth
 
     // ── AzureAdConditionalAccessPolicy ──
     private static class _AzureAdConditionalAccessPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\AzureADAccount";
         private const string Key2 = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WorkplaceJoin";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -225,14 +225,14 @@ internal static class PolicyAuth
                     DetectOps = [RegOp.CheckDword(Key, "RequireIntuneCompliance", 1)],
                 },
             ];
-    
+
     }
 
     // ── AzureAdPrtSsoPolicy ──
     private static class _AzureAdPrtSsoPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CloudAuthentication";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -406,14 +406,14 @@ internal static class PolicyAuth
                     DetectOps = [RegOp.CheckDword(Key, "BlockPRTOnSharedDevice", 1)],
                 },
             ];
-    
+
     }
 
     // ── AzureAdSsprPolicy ──
     private static class _AzureAdSsprPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\SSPR";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -587,14 +587,14 @@ internal static class PolicyAuth
                     DetectOps = [RegOp.CheckDword(Key, "MaxUnlockAttemptsPerHour", 3)],
                 },
             ];
-    
+
     }
 
     // ── AzureAdTenantPolicy ──
     private static class _AzureAdTenantPolicy
-    {    
+    {
         private const string AadKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AzureADAccount";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -768,14 +768,14 @@ internal static class PolicyAuth
                     DetectOps = [RegOp.CheckDword(AadKey, "AllowCrossDeviceClipboard", 0)],
                 },
             ];
-    
+
     }
 
     // ── BiometricAuthPolicy ──
     private static class _BiometricAuthPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Biometrics";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -949,18 +949,18 @@ internal static class PolicyAuth
                     DetectOps = [RegOp.CheckDword(Key, "ClearBiometricCacheOnLock", 1)],
                 },
             ];
-    
+
     }
 
     // ── Biometrics ──
     private static class _Biometrics
-    {    
+    {
         private const string Bio = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Biometrics";
         private const string BioCP = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Biometrics\Credential Provider";
         private const string BioFace = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Biometrics\FacialFeatures";
         private const string Whfb = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\PassportForWork";
         private const string WhfbPin = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\PassportForWork\PINComplexity";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -1148,17 +1148,17 @@ internal static class PolicyAuth
                 DetectOps = [RegOp.CheckDword(WhfbPin, "Expiration", 90)],
             },
         ];
-    
+
     }
 
     // ── BiometricsConfigPolicy ──
     private static class _BiometricsConfigPolicy
-    {    
+    {
         private const string BioKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Biometrics";
         private const string BioDomain = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Biometrics\DomainAccounts";
         private const string BioFace = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Biometrics\FacialFeatures";
         private const string BioEnroll = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Biometrics\Enrollment";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -1332,23 +1332,23 @@ internal static class PolicyAuth
                     DetectOps = [RegOp.CheckDword(BioFace, "Enabled", 0)],
                 },
             ];
-    
+
     }
 
     // ── CredentialCachingPolicy ──
     private static class _CredentialCachingPolicy
-    {    
+    {
         private const string CredSSP =
             @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System\CredSSP\Parameters";
-    
+
         private const string CredDel =
             @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CredentialsDelegation";
-    
+
         private const string WDigest =
             @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\WDigest";
-    
+
         private const string Lsa = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa";
-    
+
         public static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -1503,14 +1503,14 @@ internal static class PolicyAuth
                 DetectOps = [RegOp.CheckDword(Lsa, "NoLmHash", 1)],
             },
         ];
-    
+
     }
 
     // ── CredentialDelegationPolicy ──
     private static class _CredentialDelegationPolicy
-    {    
+    {
         private const string CredDelKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CredentialsDelegation";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
         [
             new TweakDef
@@ -1674,14 +1674,14 @@ internal static class PolicyAuth
                 DetectOps = [RegOp.CheckDword(CredDelKey, "BlockDelegationToWorkgroupComputers", 1)],
             },
         ];
-    
+
     }
 
     // ── CredentialManagerPolicy ──
     private static class _CredentialManagerPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CredentialsDelegation";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -1855,16 +1855,16 @@ internal static class PolicyAuth
                 DetectOps = [RegOp.CheckDword(Key, "BlockNTLMDelegation", 1)],
             },
         ];
-    
+
     }
 
     // ── CredentialRoamingPolicy ──
     private static class _CredentialRoamingPolicy
-    {    
-        private const string Key    = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\CurrentVersion\Winlogon";
+    {
+        private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\CurrentVersion\Winlogon";
         private const string RoamKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\CurrentVersion\Winlogon\RoamingProfile";
         private const string CertKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CurrentVersion\RoamingProfile";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
         [
             new TweakDef
@@ -2028,15 +2028,15 @@ internal static class PolicyAuth
                 DetectOps    = [RegOp.CheckDword(CertKey, "DisableCredentialRoamingTelemetry", 1)],
             },
         ];
-    
+
     }
 
     // ── CredentialUiPolicy ──
     private static class _CredentialUiPolicy
-    {    
+    {
         private const string CredUi = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CredUI";
         private const string CredUiCu = @"HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\CredUI";
-    
+
         public static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -2170,15 +2170,15 @@ internal static class PolicyAuth
                 DetectOps = [RegOp.CheckDword(CredUi, "DisableAutofill", 1)],
             },
         ];
-    
+
     }
 
     // ── EntraDeviceRegistrationPolicy ──
     private static class _EntraDeviceRegistrationPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WorkplaceJoin";
         private const string Key2 = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CurrentVersion\MDM";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -2352,15 +2352,15 @@ internal static class PolicyAuth
                     DetectOps = [RegOp.CheckDword(Key2, "RequireEntraCompliantForUpdate", 1)],
                 },
             ];
-    
+
     }
 
     // ── KerberoastMitigationPolicy ──
     private static class _KerberoastMitigationPolicy
-    {    
+    {
         private const string KerbKey = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa\Kerberos\Parameters";
-        private const string LsaKey  = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa";
-    
+        private const string LsaKey = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa";
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -2524,15 +2524,15 @@ internal static class PolicyAuth
                     DetectOps   = [RegOp.CheckDword(KerbKey, "ClientRequireStrictKDCValidation", 1)],
                 },
             ];
-    
+
     }
 
     // ── KerberosAdvanced ──
     private static class _KerberosAdvanced
-    {    
+    {
         private const string KrbLsaParams = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa\Kerberos\Parameters";
         private const string KrbPolicyParams = @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System\Kerberos\Parameters";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -2747,16 +2747,16 @@ internal static class PolicyAuth
                 DetectOps = [RegOp.CheckDword(KrbLsaParams, "PurgeTicketCacheOnLogoff", 1)],
             },
         ];
-    
+
     }
 
     // ── KerberosArmoringPolicy ──
     private static class _KerberosArmoringPolicy
-    {    
-        private const string KdcKey     = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System\KDC";
-        private const string KrbKey     = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System\Kerberos";
-        private const string KrbSvcKey  = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Kerberos\Parameters";
-    
+    {
+        private const string KdcKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System\KDC";
+        private const string KrbKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System\Kerberos";
+        private const string KrbSvcKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Kerberos\Parameters";
+
         public static IReadOnlyList<TweakDef> Data =>
         [
             new TweakDef
@@ -2930,16 +2930,16 @@ internal static class PolicyAuth
                 DetectOps = [RegOp.CheckDword(KrbKey, "SupportedEncryptionTypes", 2147483640)],
             },
         ];
-    
+
     }
 
     // ── KerberosDelegationPolicy ──
     private static class _KerberosDelegationPolicy
-    {    
+    {
         private const string KerbKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Security\Kerberos";
-    
+
         private const string KerbNtKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon\Kerberos";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -3123,15 +3123,15 @@ internal static class PolicyAuth
                     DetectOps = [RegOp.CheckDword(KerbKey, "DoNotRequirePreauth", 0)],
                 },
             ];
-    
+
     }
 
     // ── KerberosEncryptionPolicy ──
     private static class _KerberosEncryptionPolicy
-    {    
+    {
         private const string KerbPolicyKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System\Kerberos\Parameters";
         private const string KerbLsaKey = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa\Kerberos\Parameters";
-    
+
         public static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -3296,16 +3296,16 @@ internal static class PolicyAuth
                 DetectOps = [RegOp.CheckDword(KerbLsaKey, "PreAuthRequiredLevel", 1)],
             },
         ];
-    
+
     }
 
     // ── KerberosSecurityPolicy ──
     private static class _KerberosSecurityPolicy
-    {    
-        private const string Key    = @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System\Kerberos\Parameters";
+    {
+        private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System\Kerberos\Parameters";
         private const string PolKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System\Audit";
         private const string SecKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Security\Kerberos";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
         [
             new TweakDef
@@ -3469,14 +3469,14 @@ internal static class PolicyAuth
                 DetectOps    = [RegOp.CheckDword(Key, "DisableKerberosTelemetry", 1)],
             },
         ];
-    
+
     }
 
     // ── LapsPolicy ──
     private static class _LapsPolicy
-    {    
+    {
         private const string LapsKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\LAPS";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
         [
             new TweakDef
@@ -3640,14 +3640,14 @@ internal static class PolicyAuth
                 DetectOps = [RegOp.CheckDword(LapsKey, "NotifyPasswordExpiryDays", 7)],
             },
         ];
-    
+
     }
 
     // ── LapsSecurity ──
     private static class _LapsSecurity
-    {    
+    {
         private const string LapsPolicy = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\LAPS";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -3852,14 +3852,14 @@ internal static class PolicyAuth
                 DetectOps = [RegOp.CheckDword(LapsPolicy, "LegacyMicrosoftLAPSEnabled", 0)],
             },
         ];
-    
+
     }
 
     // ── LegacyAuthPolicy ──
     private static class _LegacyAuthPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\NetworkProvider";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -4033,16 +4033,16 @@ internal static class PolicyAuth
                 DetectOps = [RegOp.CheckDword(Key, "EnableExtendedProtection", 1)],
             },
         ];
-    
+
     }
 
     // ── LocalSecurityAuthorityPolicy ──
     private static class _LocalSecurityAuthorityPolicy
-    {    
-        private const string Key    = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa";
+    {
+        private const string Key = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa";
         private const string SecKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System";
         private const string CfgKey = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\WDigest";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
         [
             new TweakDef
@@ -4206,17 +4206,17 @@ internal static class PolicyAuth
                 DetectOps    = [RegOp.CheckDword(Key, "DisableLSATelemetry", 1)],
             },
         ];
-    
+
     }
 
     // ── LogonCachePolicy ──
     private static class _LogonCachePolicy
-    {    
+    {
         private const string Winlogon = @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon";
         private const string NetlogonParams = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Netlogon\Parameters";
         private const string PolicySys = @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System";
         private const string Lsa = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -4390,15 +4390,15 @@ internal static class PolicyAuth
                 DetectOps = [RegOp.CheckDword(Lsa, "DisableDomainCreds", 1)],
             },
         ];
-    
+
     }
 
     // ── LogonGpoPolicy ──
     private static class _LogonGpoPolicy
-    {    
+    {
         private const string LogonSys =
             @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System";
-    
+
         public static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -4556,16 +4556,16 @@ internal static class PolicyAuth
                 DetectOps = [RegOp.CheckDword(LogonSys, "PowerButtonDenied", 1)],
             },
         ];
-    
+
     }
 
     // ── LsaProtectionPolicy ──
     private static class _LsaProtectionPolicy
-    {    
+    {
         private const string LsaKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CredentialsDelegation";
         private const string LsaSysKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsNT\CurrentVersion\Winlogon";
         private const string LsaCtrl = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\CurrentVersion\LSA";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -4759,14 +4759,14 @@ internal static class PolicyAuth
                     DetectOps = [RegOp.CheckDword(LsaCtrl, "UseLogonCredential", 0)],
                 },
             ];
-    
+
     }
 
     // ── PasswordlessSignInPolicy ──
     private static class _PasswordlessSignInPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\PassportForWork";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -4940,15 +4940,15 @@ internal static class PolicyAuth
                     DetectOps = [RegOp.CheckDword(Key, "AuditProvisioningEvents", 1)],
                 },
             ];
-    
+
     }
 
     // ── SmartCardCredentialsPolicy ──
     private static class _SmartCardCredentialsPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\SmartCardCredentialProvider";
         private const string SysKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
         [
             new TweakDef
@@ -5122,15 +5122,15 @@ internal static class PolicyAuth
                 DetectOps = [RegOp.CheckDword(Key, "EnableIntegratedUnblock", 1)],
             },
         ];
-    
+
     }
 
     // ── SmartCardCredProvPolicy ──
     private static class _SmartCardCredProvPolicy
-    {    
+    {
         private const string Key =
             @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\SmartCardCredentialProvider";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -5304,14 +5304,14 @@ internal static class PolicyAuth
                     DetectOps = [RegOp.CheckDword(Key, "LogonHoursNotificationEnabled", 1)],
                 },
             ];
-    
+
     }
 
     // ── WebAuthnPolicy ──
     private static class _WebAuthnPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WebAuthn";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -5509,14 +5509,14 @@ internal static class PolicyAuth
                 DetectOps = [RegOp.CheckDword(Key, "DisableBluetoothTransport", 1)],
             },
         ];
-    
+
     }
 
     // ── WhfbPinPolicy ──
     private static class _WhfbPinPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\PassportForWork\PINComplexity";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -5690,14 +5690,14 @@ internal static class PolicyAuth
                     DetectOps = [RegOp.CheckDword(Key, "MaxFailedAttempts", 5)],
                 },
             ];
-    
+
     }
 
     // ── WindowsHelloAdvPolicy ──
     private static class _WindowsHelloAdvPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\PassportForWork";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -5871,15 +5871,15 @@ internal static class PolicyAuth
                 DetectOps = [RegOp.CheckDword(Key, "EnhancedAntiSpoofingForFacialFeatures", 1)],
             },
         ];
-    
+
     }
 
     // ── WorkplaceJoinPolicy ──
     private static class _WorkplaceJoinPolicy
-    {    
+    {
         private const string Key =
             @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WorkplaceJoin";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -6053,7 +6053,7 @@ internal static class PolicyAuth
                     DetectOps = [RegOp.CheckDword(Key, "RequireSecureChannel", 1)],
                 },
             ];
-    
+
     }
 
 }

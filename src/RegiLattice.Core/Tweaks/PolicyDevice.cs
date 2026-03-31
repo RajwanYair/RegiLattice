@@ -38,13 +38,13 @@ internal static class PolicyDevice
 
     // ── BluetoothAdvPolicy ──
     private static class _BluetoothAdvPolicy
-    {    
+    {
         private const string BtPolicy = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Bluetooth";
         private const string BthPort = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BTHPORT\Parameters";
         private const string BtHub = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\BluetoothDeviceEnumerator";
         private const string BtPrivacy = @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\BlueTooth";
         private const string BtPhoneBook = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\BlueTooth\PhoneBook";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -218,18 +218,18 @@ internal static class PolicyDevice
                 DetectOps = [RegOp.CheckDword(BtPolicy, "DisableSharedExperiences", 1)],
             },
         ];
-    
+
     }
 
     // ── DeviceCompliancePolicy ──
     private static class _DeviceCompliancePolicy
-    {    
+    {
         private const string DhaKey =
             @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DeviceHealthAttestation";
-    
+
         private const string HcKey =
             @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\HealthCenter";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -403,18 +403,18 @@ internal static class PolicyDevice
                     DetectOps = [RegOp.CheckDword(DhaKey, "TpmAttestationLogging", 1)],
                 },
             ];
-    
+
     }
 
     // ── DeviceEnrollmentLimitPolicy ──
     private static class _DeviceEnrollmentLimitPolicy
-    {    
+    {
         private const string EnlKey =
             @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DeviceEnrollment";
-    
+
         private const string MdmKey =
             @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CurrentVersion\MDM";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -588,14 +588,14 @@ internal static class PolicyDevice
                     DetectOps = [RegOp.CheckDword(EnlKey, "AuditEnrollmentActivity", 1)],
                 },
             ];
-    
+
     }
 
     // ── DeviceEnrollmentPolicy ──
     private static class _DeviceEnrollmentPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CurrentVersion\MDMEnrollment";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -769,14 +769,14 @@ internal static class PolicyDevice
                 DetectOps = [RegOp.CheckDword(Key, "RestrictToApprovedTenant", 1)],
             },
         ];
-    
+
     }
 
     // ── DeviceGuardPolicy ──
     private static class _DeviceGuardPolicy
-    {    
+    {
         private const string DgKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DeviceGuard";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
         [
             new TweakDef
@@ -940,24 +940,24 @@ internal static class PolicyDevice
                 DetectOps = [RegOp.CheckDword(DgKey, "AuditDeviceGuardStatus", 1)],
             },
         ];
-    
+
     }
 
     // ── DeviceGuardVbs ──
     private static class _DeviceGuardVbs
-    {    
+    {
         private const string DeviceGuard = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\DeviceGuard";
-    
+
         private const string Scenarios = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\DeviceGuard\Scenarios";
-    
+
         private const string HvciScenario = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\DeviceGuard\Scenarios\HypervisorEnforcedCodeIntegrity";
-    
+
         private const string CredentialGuard = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa";
-    
+
         private const string CodeIntegrity = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CI\Config";
-    
+
         private const string DeviceGuardPolicy = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DeviceGuard";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -1146,18 +1146,18 @@ internal static class PolicyDevice
                 DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa", "RunAsPPLBoot", 2)],
             },
         ];
-    
+
     }
 
     // ── DeviceHealthCheckPolicy ──
     private static class _DeviceHealthCheckPolicy
-    {    
+    {
         private const string HcKey =
             @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DeviceHealthAttestation";
-    
+
         private const string TpmKey =
             @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\TPM";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -1331,22 +1331,22 @@ internal static class PolicyDevice
                     DetectOps = [RegOp.CheckDword(HcKey, "IncludeVbsStateInReport", 1)],
                 },
             ];
-    
+
     }
 
     // ── DeviceInstallPolicies ──
     private static class _DeviceInstallPolicies
-    {    
+    {
         private const string Restrictions = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DeviceInstall\Restrictions";
-    
+
         private const string Settings = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DeviceInstall\Settings";
-    
+
         private const string DriverSearching = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DriverSearching";
-    
+
         private const string DeviceMetadata = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Device Metadata";
-    
+
         private const string DeviceInstaller = @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Device Installer";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -1545,15 +1545,15 @@ internal static class PolicyDevice
                 DetectOps = [RegOp.CheckDword(DeviceMetadata, "PreventDeviceMetadataFromNetwork", 1)],
             },
         ];
-    
+
     }
 
     // ── DeviceInstallPolicy ──
     private static class _DeviceInstallPolicy
-    {    
+    {
         private const string DiKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DeviceInstall";
         private const string DiRestrictKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DeviceInstall\Restrictions";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
         [
             new TweakDef
@@ -1717,16 +1717,16 @@ internal static class PolicyDevice
                 DetectOps = [RegOp.CheckDword(DiRestrictKey, "AlertOnDeviceInstallation", 1)],
             },
         ];
-    
+
     }
 
     // ── DeviceLockGpoPolicy ──
     private static class _DeviceLockGpoPolicy
-    {    
+    {
         private const string PassportKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\PassportForWork";
         private const string DesktopKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Control Panel\Desktop";
         private const string SystemKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -1900,17 +1900,17 @@ internal static class PolicyDevice
                 ImpactNote = "Removes app notifications from lock screen; does not affect standard accessibility tools at login.",
             },
         ];
-    
+
     }
 
     // ── DeviceProvisioningPolicy ──
     private static class _DeviceProvisioningPolicy
-    {    
+    {
         private const string Oobe = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\OOBE";
         private const string HomeGrp = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\HomeGroup";
         private const string WpjPol = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WorkplaceJoin";
         private const string CloudContent = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CloudContent";
-    
+
         public static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -2064,15 +2064,15 @@ internal static class PolicyDevice
                 DetectOps = [RegOp.CheckDword(CloudContent, "DisableTailoredExperiencesWithDiagnosticData", 1)],
             },
         ];
-    
+
     }
 
     // ── DeviceRegistrationPolicy ──
     private static class _DeviceRegistrationPolicy
-    {    
+    {
         private const string Key =
             @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DeviceRegistration";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -2246,16 +2246,16 @@ internal static class PolicyDevice
                     DetectOps = [RegOp.CheckDword(Key, "BlockEnrollmentStatusPageSkip", 1)],
                 },
             ];
-    
+
     }
 
     // ── FirmwareUpdatePolicy ──
     private static class _FirmwareUpdatePolicy
-    {    
+    {
         private const string FwUpdateKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\UEFI\FirmwareUpdate";
-    
+
         private const string WuPolicyKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -2439,14 +2439,14 @@ internal static class PolicyDevice
                     DetectOps = [RegOp.CheckDword(FwUpdateKey, "BlockLegacyBiosUpdate", 1)],
                 },
             ];
-    
+
     }
 
     // ── HardwareDevicePolicy ──
     private static class _HardwareDevicePolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DeviceInstall";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -2620,15 +2620,15 @@ internal static class PolicyDevice
                 DetectOps = [RegOp.CheckDword(Key, "DisableOnlineDriverSearch", 1)],
             },
         ];
-    
+
     }
 
     // ── KernelDmaProtectionPolicy ──
     private static class _KernelDmaProtectionPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Kernel DMA Protection";
         private const string Key2 = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\DmaSecurity";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -2802,27 +2802,27 @@ internal static class PolicyDevice
                     DetectOps = [RegOp.CheckDword(Key2, "RemappingTableRebuildTimeoutSec", 5)],
                 },
             ];
-    
+
     }
 
     // ── MemoryDiagnostics ──
     private static class _MemoryDiagnostics
-    {    
+    {
         private const string CrashControl =
             @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl";
-    
+
         private const string Wer =
             @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Windows Error Reporting";
-    
+
         private const string WerQueue =
             @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Windows Error Reporting\Queue";
-    
+
         private const string WerConsentPolicy =
             @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\PCHealth\ErrorReporting";
-    
+
         private const string WerPolicy =
             @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Error Reporting";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -3006,14 +3006,14 @@ internal static class PolicyDevice
                 DetectOps = [RegOp.CheckDword(CrashControl, "LogEvent", 1)],
             },
         ];
-    
+
     }
 
     // ── PageFilePolicy ──
     private static class _PageFilePolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\PageFile";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -3187,14 +3187,14 @@ internal static class PolicyDevice
                 DetectOps = [RegOp.CheckDword(Key, "DisableMemoryDump", 1)],
             },
         ];
-    
+
     }
 
     // ── PortableDevicePolicy ──
     private static class _PortableDevicePolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DeviceInstall\Restrictions";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -3368,14 +3368,14 @@ internal static class PolicyDevice
                     DetectOps = [RegOp.CheckDword(Key, "BlockThunderboltStorage", 1)],
                 },
             ];
-    
+
     }
 
     // ── PortableDevicesPolicy ──
     private static class _PortableDevicesPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\PortableDevices";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -3549,14 +3549,14 @@ internal static class PolicyDevice
                 DetectOps = [RegOp.CheckDword(Key, "DisablePortableDeviceTelemetry", 1)],
             },
         ];
-    
+
     }
 
     // ── ProcessorPolicy ──
     private static class _ProcessorPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Processor";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -3730,14 +3730,14 @@ internal static class PolicyDevice
                 DetectOps = [RegOp.CheckDword(Key, "EnableSTIBP", 1)],
             },
         ];
-    
+
     }
 
     // ── SuperFetchSysmainPolicy ──
     private static class _SuperFetchSysmainPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\SuperFetch";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -3932,12 +3932,12 @@ internal static class PolicyDevice
                 DetectOps = [RegOp.CheckDword(Key, "SuperFetchDisableTelemetry", 1)],
             },
         ];
-    
+
     }
 
     // ── UsbStoragePolicy ──
     private static class _UsbStoragePolicy
-    {    
+    {
         private const string StoragePolicy = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\StorageDevicePolicies";
         private const string RemovableDevices = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\RemovableStorageDevices";
         private const string UsbFloppyClass =
@@ -3948,7 +3948,7 @@ internal static class PolicyDevice
             @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\RemovableStorageDevices\{53f5630b-b6bf-11d0-94f2-00a0c91efb8b}";
         private const string WpdClass =
             @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\RemovableStorageDevices\{6AC27878-A6FA-4155-BA85-F98F491D4F33}";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -4122,14 +4122,14 @@ internal static class PolicyDevice
                 DetectOps = [RegOp.CheckDword(WpdClass, "Deny_Read", 1)],
             },
         ];
-    
+
     }
 
     // ── VirtualDiskServicePolicy ──
     private static class _VirtualDiskServicePolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DiskManagement";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -4303,7 +4303,7 @@ internal static class PolicyDevice
                     DetectOps = [RegOp.CheckDword(Key, "DisableAutoProvisionDisk", 1)],
                 },
             ];
-    
+
     }
 
 }

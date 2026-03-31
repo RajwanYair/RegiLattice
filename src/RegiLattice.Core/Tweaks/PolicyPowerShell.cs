@@ -21,10 +21,10 @@ internal static class PolicyPowerShell
 
     // ── IseDeprecationPolicy ──
     private static class _IseDeprecationPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\PowerShell";
         private const string Key2 = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\PowerShell\ProtectedEventLogging";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -198,18 +198,18 @@ internal static class PolicyPowerShell
                     DetectOps = [RegOp.CheckDword(Key, "ForceNetworkRestrictedSessions", 1)],
                 },
             ];
-    
+
     }
 
     // ── PowerShellPolicy ──
     private static class _PowerShellPolicy
-    {    
+    {
         private const string PsRoot = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\PowerShell";
         private const string ScriptBlockLogging = PsRoot + @"\ScriptBlockLogging";
         private const string ModuleLogging = PsRoot + @"\ModuleLogging";
         private const string Transcription = PsRoot + @"\Transcription";
         private const string ProtectedEventLogging = PsRoot + @"\ProtectedEventLogging";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -403,15 +403,15 @@ internal static class PolicyPowerShell
                 DetectOps = [RegOp.CheckString(PsRoot, "ExecutionPolicy", "AllSigned")],
             },
         ];
-    
+
     }
 
     // ── Ps7ExecutionModePolicy ──
     private static class _Ps7ExecutionModePolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\PowerShellCore";
         private const string Key2 = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\PowerShellCore\ScriptBlockLogging";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -585,15 +585,15 @@ internal static class PolicyPowerShell
                     DetectOps = [RegOp.CheckDword(Key, "DisableUpdateNotifications", 1)],
                 },
             ];
-    
+
     }
 
     // ── ScriptBlockLoggingAdvancedPolicy ──
     private static class _ScriptBlockLoggingAdvancedPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\PowerShell\ScriptBlockLogging";
         private const string Key2 = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\PowerShell\Transcription";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -779,16 +779,16 @@ internal static class PolicyPowerShell
                     DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\EventLog\Security", "RestrictGuestAccess", 1)],
                 },
             ];
-    
+
     }
 
     // ── ScriptedDiagnosticsPolicy ──
     private static class _ScriptedDiagnosticsPolicy
-    {    
+    {
         private const string SdKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\ScriptedDiagnostics";
         private const string SdProv = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\ScriptedDiagnosticsProvider\Policy";
         private const string TshootKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Troubleshooting\AllowRecommendations";
-    
+
         public static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -999,15 +999,15 @@ internal static class PolicyPowerShell
                 DetectOps = [RegOp.CheckDword(SdKey, "DisableTroubleshootingHistory", 1)],
             },
         ];
-    
+
     }
 
     // ── WindowsTerminalAdvancedPolicy ──
     private static class _WindowsTerminalAdvancedPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsTerminal";
         private const string Key2 = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsTerminal\Updates";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -1181,7 +1181,7 @@ internal static class PolicyPowerShell
                     DetectOps = [RegOp.CheckDword(Key2, "BlockManualUpdates", 1)],
                 },
             ];
-    
+
     }
 
 }

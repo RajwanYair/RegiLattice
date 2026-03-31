@@ -4,6 +4,19 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [6.0.3] — 2026-03-31
+
+#### Enhanced
+
+- **C3 nullable enforcement**: Added `<TreatWarningsAsErrors>nullable</TreatWarningsAsErrors>` to `Directory.Build.props` — all three projects now treat CS8xxx nullable-reference warnings as build errors. Pre-audit confirmed 0 warnings already present across all 211 774 source lines
+- **C4 dead code sweep (second pass)**: Ran full diagnostic sweep (`IDE0051`/`IDE0052`/`IDE0005`) — codebase confirmed clean. 0 unused private members, 0 unused using directives, 0 stale TODO/FIXME markers, 0 pragma suppressions, 0 commented-out code blocks
+
+#### Stats
+
+- Tweaks: **9 190** across **101** categories (83 modules)
+- Tests: **2 931** passing (2 291 Core + 301 CLI + 339 GUI, 0 failures)
+- Version bumped `6.0.2` → `6.0.3`
+
 ## [6.0.2] — 2026-03-31
 
 #### Enhanced

@@ -600,13 +600,13 @@ internal sealed class NetworkToolsDialog : BaseDialog
                             var reply = await pinger.SendPingAsync(host, 2000);
                             string line =
                                 reply.Status == System.Net.NetworkInformation.IPStatus.Success
-                                    ? $"  \u2714  {host, -30} {reply.Address}  {reply.RoundtripTime}ms"
-                                    : $"  \u2718  {host, -30} {reply.Status}";
+                                    ? $"  \u2714  {host,-30} {reply.Address}  {reply.RoundtripTime}ms"
+                                    : $"  \u2718  {host,-30} {reply.Status}";
                             Invoke(() => _pingLog.AppendText(line + "\r\n"));
                         }
                         catch (Exception ex)
                         {
-                            Invoke(() => _pingLog.AppendText($"  \u2718  {host, -30} {ex.Message}\r\n"));
+                            Invoke(() => _pingLog.AppendText($"  \u2718  {host,-30} {ex.Message}\r\n"));
                         }
                     }
                 },

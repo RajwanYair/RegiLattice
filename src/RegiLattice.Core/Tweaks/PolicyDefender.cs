@@ -35,14 +35,14 @@ internal static class PolicyDefender
 
     // ── AmsiScriptPolicy ──
     private static class _AmsiScriptPolicy
-    {    
+    {
         private const string ScriptBlockLog = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\PowerShell\ScriptBlockLogging";
         private const string ModuleLog = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\PowerShell\ModuleLogging";
         private const string Transcription = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\PowerShell\Transcription";
         private const string PshPolicy = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\PowerShell";
         private const string WdEngine = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\MpEngine";
         private const string NtscriptPolicy = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WScript";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -216,16 +216,16 @@ internal static class PolicyDefender
                 DetectOps = [RegOp.CheckDword(PshPolicy, "EnableV2", 0)],
             },
         ];
-    
+
     }
 
     // ── AsrAttackSurfacePolicy ──
     private static class _AsrAttackSurfacePolicy
-    {    
+    {
         private const string AsrKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Windows Defender Exploit Guard\ASR\Rules";
-    
+
         private const string AsrBaseKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Windows Defender Exploit Guard\ASR";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -400,15 +400,15 @@ internal static class PolicyDefender
                     DetectOps = [RegOp.CheckDword(AsrBaseKey, "ExploitGuard_ASR_Rules", 2)],
                 },
             ];
-    
+
     }
 
     // ── ControlledFolderAccessPolicy ──
     private static class _ControlledFolderAccessPolicy
-    {    
+    {
         private const string CfaKey =
             @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Windows Defender Exploit Guard\Controlled Folder Access";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -583,18 +583,18 @@ internal static class PolicyDefender
                     DetectOps = [RegOp.CheckDword(CfaKey, "OnlyEnforceAllowedApplicationsList", 1)],
                 },
             ];
-    
+
     }
 
     // ── DefenderAdvanced ──
     private static class _DefenderAdvanced
-    {    
+    {
         private const string DefRoot = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender";
         private const string MpEngine = DefRoot + @"\MpEngine";
         private const string Spynet = DefRoot + @"\Spynet";
         private const string RealTime = DefRoot + @"\Real-Time Protection";
         private const string Scan = DefRoot + @"\Scan";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -785,17 +785,17 @@ internal static class PolicyDefender
                 DetectOps = [RegOp.CheckDword(Scan, "RandomizeScheduleTaskTimes", 1)],
             },
         ];
-    
+
     }
 
     // ── DefenderAntivirusAdvancedPolicy ──
     private static class _DefenderAntivirusAdvancedPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender";
         private const string ScanKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Scan";
         private const string SpynetKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Spynet";
         private const string QtnKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Quarantine";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -1029,14 +1029,14 @@ internal static class PolicyDefender
                     DetectOps = [RegOp.CheckDword(Key, "DisableMpTelemetry", 1)],
                 },
             ];
-    
+
     }
 
     // ── DefenderExclusionsPolicy ──
     private static class _DefenderExclusionsPolicy
-    {    
+    {
         private const string ExclKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsDefender\Exclusions";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -1210,16 +1210,16 @@ internal static class PolicyDefender
                     DetectOps = [RegOp.CheckDword(ExclKey, "RestrictWildcardExclusions", 1)],
                 },
             ];
-    
+
     }
 
     // ── DefenderExploitSystemPolicy ──
     private static class _DefenderExploitSystemPolicy
-    {    
+    {
         private const string ExploitKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Exploit Guard\Exploit Protection";
-    
+
         private const string MpKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\MpEngine";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -1398,15 +1398,15 @@ internal static class PolicyDefender
                     DetectOps = [RegOp.CheckDword(MpKey, "MpCloudBlockLevel", 6)],
                 },
             ];
-    
+
     }
 
     // ── DefenderFirewallAdvancedPolicy ──
     private static class _DefenderFirewallAdvancedPolicy
-    {    
+    {
         private const string Domain = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsFirewall\DomainProfile";
         private const string Standard = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsFirewall\StandardProfile";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -1577,17 +1577,17 @@ internal static class PolicyDefender
                     DetectOps = [RegOp.CheckDword(Domain, "DisableUnicastResponsesToMulticastBroadcast", 1)],
                 },
             ];
-    
+
     }
 
     // ── DefenderNetworkProtectionPolicy ──
     private static class _DefenderNetworkProtectionPolicy
-    {    
+    {
         private const string NetProtKey =
             @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Windows Defender Exploit Guard\Network Protection";
-    
+
         private const string SmartScreenKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\SmartScreen";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -1761,14 +1761,14 @@ internal static class PolicyDefender
                     DetectOps = [RegOp.CheckDword(NetProtKey, "DisableLoopbackExemption", 1)],
                 },
             ];
-    
+
     }
 
     // ── DefenderSignatureUpdatePolicy ──
     private static class _DefenderSignatureUpdatePolicy
-    {    
+    {
         private const string SigKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Signature Updates";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -1945,15 +1945,15 @@ internal static class PolicyDefender
                     DetectOps = [RegOp.CheckDword(SigKey, "ForceUpdateFromMU", 1)],
                 },
             ];
-    
+
     }
 
     // ── EarlyLaunchAMPolicy ──
     private static class _EarlyLaunchAMPolicy
-    {    
+    {
         private const string ElaKey = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Policies\EarlyLaunch";
         private const string ElaCtrl = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\EarlyLaunch";
-    
+
         public static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -2172,14 +2172,14 @@ internal static class PolicyDefender
                 DetectOps = [RegOp.CheckDword(ElaKey, "PersistBootLog", 1)],
             },
         ];
-    
+
     }
 
     // ── EnhancedPhishingProtectionPolicy ──
     private static class _EnhancedPhishingProtectionPolicy
-    {    
+    {
         private const string WtdsKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WTDS";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -2372,17 +2372,17 @@ internal static class PolicyDefender
                 DetectOps = [RegOp.CheckDword(WtdsKey, "NotifyPasswordChangeReuse", 1)],
             },
         ];
-    
+
     }
 
     // ── ExploitGuardPolicy ──
     private static class _ExploitGuardPolicy
-    {    
+    {
         private const string AsrKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Windows Defender Exploit Guard\ASR";
         private const string EgKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Windows Defender Exploit Guard";
         private const string CfaKey =
             @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Windows Defender Exploit Guard\Controlled Folder Access";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -2636,21 +2636,21 @@ internal static class PolicyDefender
                     DetectOps = [RegOp.CheckDword(EgKey, "DisableExploitGuardTelemetry", 1)],
                 },
             ];
-    
+
     }
 
     // ── FirewallLogPolicy ──
     private static class _FirewallLogPolicy
-    {    
+    {
         private const string DomainLog =
             @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsFirewall\DomainProfile\Logging";
-    
+
         private const string PrivateLog =
             @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsFirewall\PrivateProfile\Logging";
-    
+
         private const string PublicLog =
             @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsFirewall\PublicProfile\Logging";
-    
+
         public static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -2819,18 +2819,18 @@ internal static class PolicyDefender
                 ],
             },
         ];
-    
+
     }
 
     // ── FirewallProfileHardeningPolicy ──
     private static class _FirewallProfileHardeningPolicy
-    {    
+    {
         private const string DomainKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsFirewall\DomainProfile";
         private const string PrivKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsFirewall\PrivateProfile";
         private const string PubKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsFirewall\PublicProfile";
         private const string DomLog = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsFirewall\DomainProfile\Logging";
         private const string PubLog = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsFirewall\PublicProfile\Logging";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -3004,18 +3004,18 @@ internal static class PolicyDefender
                     DetectOps = [RegOp.CheckDword(DomainKey, "IPsecExemptMulticast", 0)],
                 },
             ];
-    
+
     }
 
     // ── SmartControlBypassPolicy ──
     private static class _SmartControlBypassPolicy
-    {    
+    {
         private const string PsKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\PowerShell";
-    
+
         private const string SysKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System";
-    
+
         private const string WscriptKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System\WScript";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -3199,16 +3199,16 @@ internal static class PolicyDefender
                     DetectOps = [RegOp.CheckDword(SysKey, "BlockCertutilDownload", 1)],
                 },
             ];
-    
+
     }
 
     // ── SmartScreenAdvancedPolicy ──
     private static class _SmartScreenAdvancedPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System";
         private const string EdgeKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\MicrosoftEdge\PhishingFilter";
         private const string ExplKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Explorer";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -3382,17 +3382,17 @@ internal static class PolicyDefender
                     DetectOps = [RegOp.CheckDword(Key, "DisableSmartScreenTelemetry", 1)],
                 },
             ];
-    
+
     }
 
     // ── SmartScreenPolicy ──
     private static class _SmartScreenPolicy
-    {    
+    {
         private const string WinSys = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System";
         private const string DefSS = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\SmartScreen";
         private const string IEPhish = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\MicrosoftEdge\PhishingFilter";
         private const string EdgePol = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge";
-    
+
         public static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -3543,14 +3543,14 @@ internal static class PolicyDefender
                 DetectOps = [RegOp.CheckDword(EdgePol, "SmartScreenForceEnabled", 1)],
             },
         ];
-    
+
     }
 
     // ── WebThreatDefensePolicy ──
     private static class _WebThreatDefensePolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WebThreatDefense";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -3772,17 +3772,17 @@ internal static class PolicyDefender
                 DetectOps = [RegOp.CheckDword(Key, "DisableCredentialWarning", 1)],
             },
         ];
-    
+
     }
 
     // ── WindowsFirewallPolicy ──
     private static class _WindowsFirewallPolicy
-    {    
+    {
         private const string FwBase = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsFirewall";
         private const string DomainKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsFirewall\DomainProfile";
         private const string PrivateKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsFirewall\PrivateProfile";
         private const string PublicKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsFirewall\PublicProfile";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
         [
             new TweakDef
@@ -3946,7 +3946,7 @@ internal static class PolicyDefender
                 DetectOps = [RegOp.CheckDword(PublicKey, "DisableNotifications", 1)],
             },
         ];
-    
+
     }
 
 }

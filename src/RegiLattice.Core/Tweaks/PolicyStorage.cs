@@ -38,7 +38,7 @@ internal static class PolicyStorage
 
     // ── CdBurningPolicy ──
     private static class _CdBurningPolicy
-    {    
+    {
         private const string BurnKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CDBurning";
         private const string ExplLm = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CurrentVersion\Policies\Explorer";
         private const string ExplCu = @"HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\Explorer";
@@ -46,7 +46,7 @@ internal static class PolicyStorage
             @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\RemovableStorageDevices\{53f56308-b6bf-11d0-94f2-00a0c91efb8b}";
         private const string DvdKey =
             @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\RemovableStorageDevices\{53f56307-b6bf-11d0-94f2-00a0c91efb8b}";
-    
+
         public static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -241,14 +241,14 @@ internal static class PolicyStorage
                 DetectOps = [RegOp.CheckDword(ExplLm, "NoAutoplayfornonVolume", 1)],
             },
         ];
-    
+
     }
 
     // ── DiskQuotaAdvancedPolicy ──
     private static class _DiskQuotaAdvancedPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\DiskQuota";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -422,14 +422,14 @@ internal static class PolicyStorage
                     DetectOps = [RegOp.CheckDword(Key, "RestrictQuotaReportExport", 1)],
                 },
             ];
-    
+
     }
 
     // ── DiskQuotaPolicy ──
     private static class _DiskQuotaPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DiskQuota";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -603,15 +603,15 @@ internal static class PolicyStorage
                     DetectOps = [RegOp.CheckDword(Key, "ExemptAdministrators", 1)],
                 },
             ];
-    
+
     }
 
     // ── FileHistoryPolicy ──
     private static class _FileHistoryPolicy
-    {    
+    {
         private const string FhKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\FileHistory";
         private const string BkpKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Backup\Client";
-    
+
         public static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -811,14 +811,14 @@ internal static class PolicyStorage
                 DetectOps = [RegOp.CheckDword(BkpKey, "DisableRestoredUI", 1)],
             },
         ];
-    
+
     }
 
     // ── FileSharePolicy ──
     private static class _FileSharePolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\LanmanServer";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -992,18 +992,18 @@ internal static class PolicyStorage
                 DetectOps = [RegOp.CheckDword(Key, "ConfigureOplocks", 0)],
             },
         ];
-    
+
     }
 
     // ── FileShareWitnessPolicy ──
     private static class _FileShareWitnessPolicy
-    {    
+    {
         private const string SrvKey =
             @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\LanmanServer";
-    
+
         private const string WrkKey =
             @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\LanmanWorkstation";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -1177,14 +1177,14 @@ internal static class PolicyStorage
                     DetectOps = [RegOp.CheckDword(SrvKey, "AutoShareWks", 0)],
                 },
             ];
-    
+
     }
 
     // ── NtfsPolicy ──
     private static class _NtfsPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\NTFS";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -1358,15 +1358,15 @@ internal static class PolicyStorage
                 DetectOps = [RegOp.CheckDword(Key, "DisableOpportunisticLocking", 1)],
             },
         ];
-    
+
     }
 
     // ── OfflineFilesSyncPolicy ──
     private static class _OfflineFilesSyncPolicy
-    {    
+    {
         private const string NetCache = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\NetCache";
         private const string SyncMgr = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\SyncMgr";
-    
+
         public static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -1510,16 +1510,16 @@ internal static class PolicyStorage
                 DetectOps = [RegOp.CheckDword(SyncMgr, "HideOptionsForSyncProvider", 1)],
             },
         ];
-    
+
     }
 
     // ── OpenTypeSecurityPolicy ──
     private static class _OpenTypeSecurityPolicy
-    {    
-        private const string Key     = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\MitigationOptions";
+    {
+        private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\MitigationOptions";
         private const string FontKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\MpEngine";
         private const string GdipKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Fonts";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
         [
             new TweakDef
@@ -1683,14 +1683,14 @@ internal static class PolicyStorage
                 DetectOps    = [RegOp.CheckDword(GdipKey, "DisableFontDriverTelemetry", 1)],
             },
         ];
-    
+
     }
 
     // ── RefsFsPolicy ──
     private static class _RefsFsPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\ReFS";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -1864,14 +1864,14 @@ internal static class PolicyStorage
                     DetectOps = [RegOp.CheckDword(Key, "DisableRefsCompression", 1)],
                 },
             ];
-    
+
     }
 
     // ── ReFSPolicy ──
     private static class _ReFSPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\ReFS";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -2065,18 +2065,18 @@ internal static class PolicyStorage
                 DetectOps = [RegOp.CheckDword(Key, "DisableCompression", 1)],
             },
         ];
-    
+
     }
 
     // ── ShadowCopyVss ──
     private static class _ShadowCopyVss
-    {    
+    {
         private const string VssSettings = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\VSS\Settings";
         private const string SrPolicy = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\SystemRestore";
         private const string SrSettings = @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\SystemRestore";
         private const string VssDisks = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\VolSnap";
         private const string VssWriters = @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\SystemRestore\Cfg";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -2291,14 +2291,14 @@ internal static class PolicyStorage
                 DetectOps = [RegOp.CheckDword(SrSettings, "CreatePointBeforeCriticalPatches", 0)],
             },
         ];
-    
+
     }
 
     // ── StorageBusPolicy ──
     private static class _StorageBusPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\StorageBus";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -2472,15 +2472,15 @@ internal static class PolicyStorage
                     DetectOps = [RegOp.CheckDword(Key, "EnableStorageBusHealthLogging", 1)],
                 },
             ];
-    
+
     }
 
     // ── StorageHealthPolicy ──
     private static class _StorageHealthPolicy
-    {    
+    {
         private const string Key =
             @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\StorageHealth";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -2654,14 +2654,14 @@ internal static class PolicyStorage
                     DetectOps = [RegOp.CheckDword(Key, "SsdSpareAlertThresholdPercent", 10)],
                 },
             ];
-    
+
     }
 
     // ── StorageManagementPolicy ──
     private static class _StorageManagementPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\StorageManagement";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -2859,14 +2859,14 @@ internal static class PolicyStorage
                 DetectOps = [RegOp.CheckDword(Key, "DisableLowDiskSpaceWarning", 1)],
             },
         ];
-    
+
     }
 
     // ── StoragePoolPolicy ──
     private static class _StoragePoolPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\StoragePools";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -3040,15 +3040,15 @@ internal static class PolicyStorage
                 DetectOps = [RegOp.CheckDword(Key, "AuditPoolConfigChanges", 1)],
             },
         ];
-    
+
     }
 
     // ── StorageReplicaPolicy ──
     private static class _StorageReplicaPolicy
-    {    
+    {
         private const string SrKey =
             @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\StorageReplica";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -3222,14 +3222,14 @@ internal static class PolicyStorage
                     DetectOps = [RegOp.CheckDword(SrKey, "ReplicationPort", 5445)],
                 },
             ];
-    
+
     }
 
     // ── StorageSensePolicy ──
     private static class _StorageSensePolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\StorageSense";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -3414,18 +3414,18 @@ internal static class PolicyStorage
                     DetectOps = [RegOp.CheckDword(Key, "ConfigStorageSenseGlobalCadence", 7)],
                 },
             ];
-    
+
     }
 
     // ── StorageSpacesMigrationPolicy ──
     private static class _StorageSpacesMigrationPolicy
-    {    
+    {
         private const string SsKey =
             @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\StorageSpaces";
-    
+
         private const string SmsKey =
             @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\StorageMigrationService";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -3599,14 +3599,14 @@ internal static class PolicyStorage
                     DetectOps = [RegOp.CheckDword(SsKey, "SuppressRepairNotifications", 0)],
                 },
             ];
-    
+
     }
 
     // ── StorageSpacesPolicy ──
     private static class _StorageSpacesPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\StorageSpaces";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -3780,15 +3780,15 @@ internal static class PolicyStorage
                     DetectOps = [RegOp.CheckDword(Key, "DisableAutoRebuildOnDriveDetection", 1)],
                 },
             ];
-    
+
     }
 
     // ── SyncCenterPolicy ──
     private static class _SyncCenterPolicy
-    {    
+    {
         private const string SyncMgrKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\SyncMgr";
         private const string OfflineKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\OfflineFiles";
-    
+
         public static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -3952,14 +3952,14 @@ internal static class PolicyStorage
                 DetectOps = [RegOp.CheckDword(OfflineKey, "GoOfflineAction", 1)],
             },
         ];
-    
+
     }
 
     // ── VolumeShadowCopyPolicy ──
     private static class _VolumeShadowCopyPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\VolumeShadowCopy";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -4133,15 +4133,15 @@ internal static class PolicyStorage
                 DetectOps = [RegOp.CheckDword(Key, "DisableShadowCopyOnRemovable", 1)],
             },
         ];
-    
+
     }
 
     // ── WorkFoldersPolicy ──
     private static class _WorkFoldersPolicy
-    {    
+    {
         private const string WfLm = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WorkFolders";
         private const string WfCu = @"HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\WorkFolders";
-    
+
         public static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -4344,7 +4344,7 @@ internal static class PolicyStorage
                 DetectOps = [RegOp.CheckDword(WfLm, "MinSyncInterval", 15)],
             },
         ];
-    
+
     }
 
 }

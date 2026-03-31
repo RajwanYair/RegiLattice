@@ -2,4 +2,4 @@
 
 For the complete version history, see **[docs/CHANGELOG.md](docs/CHANGELOG.md)**.
 
-Latest: **v6.0.2** (2026-03-31) — PATCH: Test isolation audit (A5), startup perf baseline (C3), IReadOnlyList public API audit (C5).
+Latest: **v6.0.3** (2026-03-31) — PATCH: C3 nullable enforcement (TreatWarningsAsErrors) + C4 dead code sweep confirmed clean.

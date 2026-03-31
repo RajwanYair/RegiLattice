@@ -53,9 +53,9 @@ internal static class PolicyAppControl
 
     // ── AddRemoveProgramsPolicy ──
     private static class _AddRemoveProgramsPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AddRemovePrograms";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -249,14 +249,14 @@ internal static class PolicyAppControl
                     DetectOps = [RegOp.CheckDword(Key, "DefaultCategory", 1)],
                 },
             ];
-    
+
     }
 
     // ── AppCompatGpoPolicy ──
     private static class _AppCompatGpoPolicy
-    {    
+    {
         private const string AppComp = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppCompat";
-    
+
         public static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -395,15 +395,15 @@ internal static class PolicyAppControl
                 DetectOps = [RegOp.CheckDword(AppComp, "DisableWER", 1)],
             },
         ];
-    
+
     }
 
     // ── AppCompatibilityPolicy ──
     private static class _AppCompatibilityPolicy
-    {    
+    {
         private const string Key =
             @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\ApplicationCompatibility";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -577,14 +577,14 @@ internal static class PolicyAppControl
                     DetectOps = [RegOp.CheckDword(Key, "DisableSwitchesPerProcess", 1)],
                 },
             ];
-    
+
     }
 
     // ── AppConsentStorePolicy ──
     private static class _AppConsentStorePolicy
-    {    
+    {
         private const string AcsKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppConsentStore";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -758,14 +758,14 @@ internal static class PolicyAppControl
                     DetectOps = [RegOp.CheckDword(AcsKey, "DisableConsentNotifications", 1)],
                 },
             ];
-    
+
     }
 
     // ── AppContainerPolicy ──
     private static class _AppContainerPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppContainer";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -939,16 +939,16 @@ internal static class PolicyAppControl
                 DetectOps = [RegOp.CheckDword(Key, "EnforceStrictIsolation", 1)],
             },
         ];
-    
+
     }
 
     // ── AppContainerSandboxPolicy ──
     private static class _AppContainerSandboxPolicy
-    {    
-        private const string Key    = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy";
+    {
+        private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy";
         private const string IsoKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppIsolation";
         private const string AppKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Appx";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
         [
             new TweakDef
@@ -1112,14 +1112,14 @@ internal static class PolicyAppControl
                 DetectOps    = [RegOp.CheckDword(IsoKey, "AuditCapabilityGrantEvents", 1)],
             },
         ];
-    
+
     }
 
     // ── AppGuardPolicy ──
     private static class _AppGuardPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\AppHVSI";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -1293,14 +1293,14 @@ internal static class PolicyAppControl
                 DetectOps = [RegOp.CheckDword(Key, "AppHVSICertificateSharing", 0)],
             },
         ];
-    
+
     }
 
     // ── AppInstallerPolicy ──
     private static class _AppInstallerPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppInstaller";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -1484,16 +1484,16 @@ internal static class PolicyAppControl
                 DetectOps = [RegOp.CheckDword(Key, "EnableMicrosoftStoreSource", 0)],
             },
         ];
-    
+
     }
 
     // ── ApplicationGuardPersistencePolicy ──
     private static class _ApplicationGuardPersistencePolicy
-    {    
+    {
         private const string WdagKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\AppHVSI";
-    
+
         private const string OfficeWdagKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Office\16.0\Common\AppHVSI";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -1677,17 +1677,17 @@ internal static class PolicyAppControl
                     DetectOps = [RegOp.CheckDword(WdagKey, "AppHVSINetworkIsolationLevel", 2)],
                 },
             ];
-    
+
     }
 
     // ── ApplicationRestartPolicy ──
     private static class _ApplicationRestartPolicy
-    {    
+    {
         private const string AeDebug = @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\AeDebug";
         private const string CrashCtl = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl";
         private const string WerPolicy = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Error Reporting";
         private const string WerMain = @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Windows Error Reporting";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -1861,19 +1861,19 @@ internal static class PolicyAppControl
                 DetectOps = [RegOp.CheckDword(CrashCtl, "Overwrite", 1)],
             },
         ];
-    
+
     }
 
     // ── AppLockerAdvancedPolicy ──
     private static class _AppLockerAdvancedPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\SrpV2";
         private const string ExeKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\SrpV2\Exe";
         private const string DllKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\SrpV2\Dll";
         private const string MsiKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\SrpV2\Msi";
         private const string ScriptKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\SrpV2\Script";
         private const string AppxKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\SrpV2\Appx";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -2047,19 +2047,19 @@ internal static class PolicyAppControl
                     DetectOps = [RegOp.CheckDword(Key, "DisableAppLockerTelemetry", 1)],
                 },
             ];
-    
+
     }
 
     // ── AppLockerPolicy ──
     private static class _AppLockerPolicy
-    {    
+    {
         private const string SrpBase = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\SrpV2";
         private const string ExeKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\SrpV2\Exe";
         private const string MsiKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\SrpV2\Msi";
         private const string ScriptKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\SrpV2\Script";
         private const string DllKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\SrpV2\Dll";
         private const string AppxKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\SrpV2\Appx";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
         [
             new TweakDef
@@ -2223,12 +2223,12 @@ internal static class PolicyAppControl
                 DetectOps = [RegOp.CheckDword(SrpBase, "EnablePerformanceLogging", 1)],
             },
         ];
-    
+
     }
 
     // ── AppLockerWdac ──
     private static class _AppLockerWdac
-    {    
+    {
         private const string CIPol = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CI\Config";
         private const string AplPol = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\SrpV2";
         private const string WdacPol = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Policy Manager";
@@ -2236,7 +2236,7 @@ internal static class PolicyAppControl
         private const string AplAppx = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\SrpV2\Appx";
         private const string SiPol = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CI\Policy";
         private const string HvciPol = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\DeviceGuard";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -2448,14 +2448,14 @@ internal static class PolicyAppControl
                 ],
             },
         ];
-    
+
     }
 
     // ── AppPermissions ──
     private static class _AppPermissions
-    {    
+    {
         private const string AppPrivacy = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -2638,14 +2638,14 @@ internal static class PolicyAppControl
                 DetectOps = [RegOp.CheckDword(AppPrivacy, "LetAppsAccessRadios", 2)],
             },
         ];
-    
+
     }
 
     // ── AppPrivacyPolicy ──
     private static class _AppPrivacyPolicy
-    {    
+    {
         private const string Policy = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -2825,14 +2825,14 @@ internal static class PolicyAppControl
                 DetectOps = [RegOp.CheckDword(Policy, "LetAppsAccessVideoLibrary", 2)],
             },
         ];
-    
+
     }
 
     // ── AppPrivacyPolicyAdv ──
     private static class _AppPrivacyPolicyAdv
-    {    
+    {
         private const string Policy = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy";
-    
+
         public static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -2986,14 +2986,14 @@ internal static class PolicyAppControl
                 DetectOps = [RegOp.CheckDword(Policy, "LetAppsActivateWithVoiceAboveLock", 2)],
             },
         ];
-    
+
     }
 
     // ── AppReadinessPolicy ──
     private static class _AppReadinessPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppReadiness";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -3167,14 +3167,14 @@ internal static class PolicyAppControl
                 DetectOps = [RegOp.CheckDword(Key, "DisableDefaultAppsChoice", 1)],
             },
         ];
-    
+
     }
 
     // ── AppSiloAdvPolicy ──
     private static class _AppSiloAdvPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppSiloAdvanced";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -3348,14 +3348,14 @@ internal static class PolicyAppControl
                 DetectOps = [RegOp.CheckDword(Key, "EnforceSiloIdentityIsolation", 1)],
             },
         ];
-    
+
     }
 
     // ── AppSiloPolicy ──
     private static class _AppSiloPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppSilo";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -3529,18 +3529,18 @@ internal static class PolicyAppControl
                 DetectOps = [RegOp.CheckDword(Key, "EnableSiloCrashReporting", 1)],
             },
         ];
-    
+
     }
 
     // ── AppVirtualization ──
     private static class _AppVirtualization
-    {    
+    {
         private const string Client = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\AppV\Client";
         private const string Streaming = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\AppV\Client\Streaming";
         private const string Integration = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\AppV\Client\Integration";
         private const string Reporting = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\AppV\Client\Reporting";
         private const string Virtualization = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\AppV\Client\Virtualization";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -3706,14 +3706,14 @@ internal static class PolicyAppControl
                 DetectOps = [RegOp.CheckDword(Streaming, "StreamingConnectionTimeout", 120)],
             },
         ];
-    
+
     }
 
     // ── AppxBundlePolicy ──
     private static class _AppxBundlePolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppxBundle";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -3887,14 +3887,14 @@ internal static class PolicyAppControl
                 DetectOps = [RegOp.CheckDword(Key, "BlockNonStoreApps", 1)],
             },
         ];
-    
+
     }
 
     // ── AppXPackagingPolicy ──
     private static class _AppXPackagingPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppxPackaging";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -4068,20 +4068,20 @@ internal static class PolicyAppControl
                 DetectOps = [RegOp.CheckDword(Key, "DisableStagedRemoval", 1)],
             },
         ];
-    
+
     }
 
     // ── AppxPolicy ──
     private static class _AppxPolicy
-    {    
+    {
         private const string AppxPolicy2 = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Appx";
-    
+
         private const string MsStorePolicy = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsStore";
-    
+
         private const string ExplorerPolicy = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Explorer";
-    
+
         private const string InstallerPolicy = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Installer";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -4265,14 +4265,14 @@ internal static class PolicyAppControl
                 DetectOps = [RegOp.CheckDword(AppxPolicy2, "AllowSharedLocalAppData", 0)],
             },
         ];
-    
+
     }
 
     // ── AppxProvisioningPolicy ──
     private static class _AppxProvisioningPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Appx";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -4483,16 +4483,16 @@ internal static class PolicyAppControl
                 ImpactNote = "Blocks packaged COM activation bypass; tightens UWP sandbox isolation. May break some packaged apps.",
             },
         ];
-    
+
     }
 
     // ── CodeIntegrityAppPolicy ──
     private static class _CodeIntegrityAppPolicy
-    {    
+    {
         private const string DgKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DeviceGuard";
-    
+
         private const string SrpKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\SrpV2";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -4676,14 +4676,14 @@ internal static class PolicyAppControl
                     DetectOps = [RegOp.CheckDword(DgKey, "SmartAppControlState", 2)],
                 },
             ];
-    
+
     }
 
     // ── CodeSigningPolicy ──
     private static class _CodeSigningPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CodeSigning";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -4857,16 +4857,16 @@ internal static class PolicyAppControl
                 DetectOps = [RegOp.CheckDword(Key, "EnableAuditCodeIntegrity", 1)],
             },
         ];
-    
+
     }
 
     // ── MicrosoftStorePolicy ──
     private static class _MicrosoftStorePolicy
-    {    
-        private const string Key    = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsStore";
+    {
+        private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsStore";
         private const string AppKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Appx";
         private const string LicKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppLicense";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
         [
             new TweakDef
@@ -5030,14 +5030,14 @@ internal static class PolicyAppControl
                 DetectOps    = [RegOp.CheckDword(AppKey, "AuditAppxInstallEvents", 1)],
             },
         ];
-    
+
     }
 
     // ── MsiInstallerPolicy ──
     private static class _MsiInstallerPolicy
-    {    
+    {
         private const string Inst = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Installer";
-    
+
         public static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -5181,15 +5181,15 @@ internal static class PolicyAppControl
                 DetectOps = [RegOp.CheckDword(Inst, "DisableMedia", 1)],
             },
         ];
-    
+
     }
 
     // ── PackagedAppDebugPolicy ──
     private static class _PackagedAppDebugPolicy
-    {    
+    {
         private const string Key =
             @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\PackagedAppXDebug";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -5363,14 +5363,14 @@ internal static class PolicyAppControl
                     DetectOps = [RegOp.CheckDword(Key, "AuditSideloadAttempts", 1)],
                 },
             ];
-    
+
     }
 
     // ── PushToInstallPolicy ──
     private static class _PushToInstallPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\PushToInstall";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -5585,16 +5585,16 @@ internal static class PolicyAppControl
                 DetectOps = [RegOp.CheckDword(Key, "DisablePushServiceWake", 1)],
             },
         ];
-    
+
     }
 
     // ── SmartAppControlPolicy ──
     private static class _SmartAppControlPolicy
-    {    
+    {
         private const string SacKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\SmartAppControl";
         private const string WdCiKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\SmartScreen";
         private const string SacStateKey = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CI\Policy";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
         [
             new TweakDef
@@ -5778,16 +5778,16 @@ internal static class PolicyAppControl
                 DetectOps = [RegOp.CheckDword(WdCiKey, "EnableIntelligentSecurityGraph", 1)],
             },
         ];
-    
+
     }
 
     // ── SoftwareRestrictionAdvPolicy ──
     private static class _SoftwareRestrictionAdvPolicy
-    {    
+    {
         private const string SrpKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Safer\CodeIdentifiers";
-    
+
         private const string AlKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppLocker";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -5971,14 +5971,14 @@ internal static class PolicyAppControl
                     DetectOps = [RegOp.CheckDword(AlKey, "BlockOfficeChildProcesses", 1)],
                 },
             ];
-    
+
     }
 
     // ── WdacCodeIntegrity ──
     private static class _WdacCodeIntegrity
-    {    
+    {
         private const string AsrRules = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Windows Defender Exploit Guard\ASR\Rules";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -6173,16 +6173,16 @@ internal static class PolicyAppControl
                 DetectOps = [RegOp.CheckDword(AsrRules, "7674BA52-37EB-4A4F-A9A1-F0F9A1619A2C", 1)],
             },
         ];
-    
+
     }
 
     // ── WindowsDefenderApplicationControlPolicy ──
     private static class _WindowsDefenderApplicationControlPolicy
-    {    
-        private const string Key    = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CI\Policy";
+    {
+        private const string Key = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CI\Policy";
         private const string CfgKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DeviceGuard";
         private const string SipKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\SipEngine";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
         [
             new TweakDef
@@ -6346,14 +6346,14 @@ internal static class PolicyAppControl
                 DetectOps    = [RegOp.CheckDword(CfgKey, "DisableWDACTelemetry", 1)],
             },
         ];
-    
+
     }
 
     // ── WindowsInstallerAdvPolicy ──
     private static class _WindowsInstallerAdvPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Installer";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
         [
             new TweakDef
@@ -6527,14 +6527,14 @@ internal static class PolicyAppControl
                 DetectOps = [RegOp.CheckDword(Key, "DisableLockdownInstall", 1)],
             },
         ];
-    
+
     }
 
     // ── WindowsInstallerPolicy ──
     private static class _WindowsInstallerPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Installer";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
             [
                 new TweakDef
@@ -6718,14 +6718,14 @@ internal static class PolicyAppControl
                     DetectOps = [RegOp.CheckString(Key, "Logging", "voicewarmupx")],
                 },
             ];
-    
+
     }
 
     // ── WindowsScriptHostPolicy ──
     private static class _WindowsScriptHostPolicy
-    {    
+    {
         private const string WshKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Script Host\Settings";
-    
+
         public static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -6889,14 +6889,14 @@ internal static class PolicyAppControl
                 DetectOps = [RegOp.CheckDword(WshKey, "IgnoreUserSettings", 1)],
             },
         ];
-    
+
     }
 
     // ── WindowsStoreForBusinessPolicy ──
     private static class _WindowsStoreForBusinessPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsStore";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -7110,7 +7110,7 @@ internal static class PolicyAppControl
                 ImpactNote = "Blocks Store-driven pre-installs and OOBE promotions; keeps SOE image clean.",
             },
         ];
-    
+
     }
 
 }

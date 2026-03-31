@@ -24,9 +24,9 @@ internal static class PolicyUpdate
 
     // ── CbsUpdatePolicy ──
     private static class _CbsUpdatePolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CBS";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -200,14 +200,14 @@ internal static class PolicyUpdate
                 DetectOps = [RegOp.CheckDword(Key, "PrioritizeServicingStackUpdates", 1)],
             },
         ];
-    
+
     }
 
     // ── UpdateAutoRestartPolicy ──
     private static class _UpdateAutoRestartPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
         [
             new TweakDef
@@ -382,15 +382,15 @@ internal static class PolicyUpdate
                 DetectOps = [RegOp.CheckDword(Key, "SetAutoRestartNotificationConfig", 1)],
             },
         ];
-    
+
     }
 
     // ── WindowsPauseUpdatesPolicy ──
     private static class _WindowsPauseUpdatesPolicy
-    {    
+    {
         private const string PauseKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate";
         private const string AuKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -604,18 +604,18 @@ internal static class PolicyUpdate
                 ImpactNote = "Forces restart within 72 hours of patch install; prevents indefinite deferral of security updates.",
             },
         ];
-    
+
     }
 
     // ── WindowsUpdateAdvanced ──
     private static class _WindowsUpdateAdvanced
-    {    
+    {
         private const string WuPolicy = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate";
-    
+
         private const string WuAu = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU";
-    
+
         private const string DeliveryOpt = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DeliveryOptimization";
-    
+
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
             new TweakDef
@@ -812,15 +812,15 @@ internal static class PolicyUpdate
                 DetectOps = [RegOp.CheckDword(WuPolicy, "ActiveHoursStart", 8), RegOp.CheckDword(WuPolicy, "ActiveHoursEnd", 20)],
             },
         ];
-    
+
     }
 
     // ── WindowsUpdateDriverPolicy ──
     private static class _WindowsUpdateDriverPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DeviceInstall\Restrictions";
         private const string SignKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Driver Signing";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
         [
             new TweakDef
@@ -994,14 +994,14 @@ internal static class PolicyUpdate
                 DetectOps = [RegOp.CheckDword(Key, "AllowAdminInstall", 1)],
             },
         ];
-    
+
     }
 
     // ── WindowsUpdateNotificationPolicy ──
     private static class _WindowsUpdateNotificationPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
         [
             new TweakDef
@@ -1176,14 +1176,14 @@ internal static class PolicyUpdate
                 DetectOps = [RegOp.CheckDword(Key, "AllowNonMicrosoftSignedUpdate", 0)],
             },
         ];
-    
+
     }
 
     // ── WindowsUpdatePolicy ──
     private static class _WindowsUpdatePolicy
-    {    
+    {
         private const string WuKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
         [
             new TweakDef
@@ -1347,15 +1347,15 @@ internal static class PolicyUpdate
                 DetectOps = [RegOp.CheckDword(WuKey, "BranchReadinessLevel", 16)],
             },
         ];
-    
+
     }
 
     // ── WindowsUpdateScanPolicy ──
     private static class _WindowsUpdateScanPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate";
         private const string AuKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
         [
             new TweakDef
@@ -1530,14 +1530,14 @@ internal static class PolicyUpdate
                 DetectOps = [RegOp.CheckDword(Key, "RebootWarningTimeoutEnabled", 1)],
             },
         ];
-    
+
     }
 
     // ── WindowsUpdateUsoPolicy ──
     private static class _WindowsUpdateUsoPolicy
-    {    
+    {
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate";
-    
+
         public static IReadOnlyList<TweakDef> Data =>
         [
             new TweakDef
@@ -1711,7 +1711,7 @@ internal static class PolicyUpdate
                 DetectOps = [RegOp.CheckDword(Key, "SetPolicyDrivenUpdateSourceForOtherUpdates", 1)],
             },
         ];
-    
+
     }
 
 }
