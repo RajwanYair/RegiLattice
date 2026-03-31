@@ -1,4 +1,4 @@
-﻿<Project>
+<Project>
   <PropertyGroup Condition="'$(UsingMicrosoftNETSdk)' == 'true'">
     <TargetFramework>net10.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
