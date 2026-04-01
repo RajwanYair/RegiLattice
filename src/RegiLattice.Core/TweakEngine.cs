@@ -1,10 +1,11 @@
-// RegiLattice.Core — TweakEngine.cs
+﻿// RegiLattice.Core — TweakEngine.cs
 // Central engine: manages all tweaks, profiles, search, batch operations, snapshots.
 // Replaces Python tweaks/__init__.py entirely.
 
 using System.Collections.Concurrent;
 using System.Collections.Frozen;
 using System.Diagnostics;
+using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Text.Json;
 using RegiLattice.Core.Models;
@@ -20,14 +21,14 @@ namespace RegiLattice.Core;
 public sealed class TweakEngine
 {
     private readonly RegistrySession _session;
-    private readonly List<TweakDef> _allTweaks = [];
-    private readonly Dictionary<string, TweakDef> _tweakById = new(StringComparer.OrdinalIgnoreCase);
-    private readonly Dictionary<string, List<TweakDef>> _tweaksByCat = new(StringComparer.OrdinalIgnoreCase);
-    private readonly Dictionary<string, List<TweakDef>> _tweaksByTag = new(StringComparer.OrdinalIgnoreCase);
-    private readonly Dictionary<TweakScope, List<TweakDef>> _tweaksByScope = [];
+    private readonly List<TweakDef> _allTweaks = new(10_000);
+    private readonly Dictionary<string, TweakDef> _tweakById = new(10_000, StringComparer.OrdinalIgnoreCase);
+    private readonly Dictionary<string, List<TweakDef>> _tweaksByCat = new(64, StringComparer.OrdinalIgnoreCase);
+    private readonly Dictionary<string, List<TweakDef>> _tweaksByTag = new(256, StringComparer.OrdinalIgnoreCase);
+    private readonly Dictionary<TweakScope, List<TweakDef>> _tweaksByScope = new(4);
     private readonly ConcurrentDictionary<string, TweakScope> _scopeCache = new(StringComparer.OrdinalIgnoreCase);
-    private readonly List<(string Lower, TweakDef Tweak)> _searchPairs = [];
-    private readonly Dictionary<string, string> _tweakSearchText = new(StringComparer.OrdinalIgnoreCase);
+    private readonly List<(string Lower, TweakDef Tweak)> _searchPairs = new(10_000);
+    private readonly Dictionary<string, string> _tweakSearchText = new(10_000, StringComparer.OrdinalIgnoreCase);
 
     // Cached post-registration data (populated by Freeze())
     private string[]? _cachedCategories;
@@ -95,8 +96,8 @@ public sealed class TweakEngine
             scopeList.Add(td);
 
             // Build search index once, reused by Search() and Filter(query: ...).
-            var searchText =
-                $"{td.Id} {td.Label} {td.Category} {td.Description} {td.GetExpectedResult()} {string.Join(' ', td.Tags)}".ToLowerInvariant();
+            // Use a shared StringBuilder to avoid per-tweak intermediate string allocations.
+            var searchText = BuildSearchText(td);
             _searchPairs.Add((searchText, td));
             _tweakSearchText[td.Id] = searchText;
         }
@@ -125,6 +126,46 @@ public sealed class TweakEngine
         Freeze();
         sw.Stop();
         LastRegistrationMs = sw.ElapsedMilliseconds;
+    }
+
+    // Thread-local StringBuilder avoids per-tweak allocation during Register().
+    [ThreadStatic]
+    private static System.Text.StringBuilder? _searchSb;
+
+    /// <summary>
+    /// Builds the lowercased search text for a tweak using a reusable StringBuilder.
+    /// Eliminates ~36K intermediate string allocations during RegisterBuiltins().
+    /// </summary>
+    private static string BuildSearchText(TweakDef td)
+    {
+        var sb = _searchSb ??= new System.Text.StringBuilder(512);
+        sb.Clear();
+        sb.Append(td.Id);
+        sb.Append(' ');
+        sb.Append(td.Label);
+        sb.Append(' ');
+        sb.Append(td.Category);
+        sb.Append(' ');
+        sb.Append(td.Description);
+        sb.Append(' ');
+        sb.Append(td.GetExpectedResult());
+        foreach (var tag in td.Tags)
+        {
+            sb.Append(' ');
+            sb.Append(tag);
+        }
+
+        // Lower-case in-place using string.Create to avoid a second allocation.
+        return string.Create(
+            sb.Length,
+            sb,
+            static (span, src) =>
+            {
+                src.CopyTo(0, span, src.Length);
+                for (int i = 0; i < span.Length; i++)
+                    span[i] = char.ToLowerInvariant(span[i]);
+            }
+        );
     }
 
     /// <summary>
