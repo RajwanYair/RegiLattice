@@ -1,5 +1,5 @@
 // RegiLattice.GUI.Tests — PackCreatorDialogTests.cs
-// Sprint 125: Pack Creator Studio Dialog (T7.2).
+// Pack Creator Studio Dialog.
 
 using RegiLattice.Core;
 using RegiLattice.Core.Models;

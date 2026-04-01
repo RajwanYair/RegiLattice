@@ -1,5 +1,5 @@
 // RegiLattice.Core.Tests — AppConfigValidationTests.cs
-// Tests for AppConfig.Validate() — Sprint 110.
+// Tests for AppConfig.Validate().
 
 using RegiLattice.Core;
 using Xunit;
@@ -248,7 +248,7 @@ public sealed class AppConfigValidationTests
     }
 }
 // ── merged from AppConfigPortableTests.cs ──────────────────────────────────
-/// <summary>Tests for Sprint 59: AppConfig portable mode.</summary>
+/// <summary>AppConfig portable mode tests.</summary>
 public sealed class AppConfigPortableTests
 {
     // Reset portable state after every test — IsPortable is a static field.

@@ -1,5 +1,5 @@
 // RegiLattice.GUI.Tests — ComplianceTrendDialogTests.cs
-// Sprint 128: Compliance Trend Dashboard (T4.4).
+// Compliance Trend Dashboard.
 // Tests cover ComplianceHistory data layer and chart value helpers.
 // No WinForms windows are created — all assertions target the data model.
 

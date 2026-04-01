@@ -1,5 +1,5 @@
 // RegiLattice.Core.Tests — UserProfileServiceTests.cs
-// Tests for UserProfileService — Sprint 110.
+// Tests for UserProfileService.
 // Uses portable mode + temp directory for file-system isolation.
 
 using RegiLattice.Core;
@@ -59,10 +59,10 @@ public sealed class UserProfileServiceTests : IDisposable
     [Fact]
     public void Create_ValidProfile_PersistsFile()
     {
-        var profile = UserProfileService.Create("sprint110", "Sprint 110 test", FewTweakIds);
+        var profile = UserProfileService.Create("test-profile", "Test profile description", FewTweakIds);
         Assert.NotNull(profile);
-        Assert.Equal("sprint110", profile.Name);
-        Assert.Equal("Sprint 110 test", profile.Description);
+        Assert.Equal("test-profile", profile.Name);
+        Assert.Equal("Test profile description", profile.Description);
         Assert.Equal(2, profile.TweakIds.Count);
     }
 

@@ -195,7 +195,7 @@ public sealed class FavoritesTests : IDisposable
         Assert.False(Favorites.IsFavorite("UPPER-ID"));
     }
 
-    // ── Sprint 47 enhancement tests ───────────────────────────────
+    // ── Enhancement tests ──
 
     [Fact]
     public async Task ExportToJsonAsync_WritesJsonArrayOfIds()

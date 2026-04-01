@@ -922,7 +922,7 @@ public sealed class SystemMonitorTests
     }
 }
 
-// ── Sprint 21: Coverage boost — Analytics, Locale, Ratings edge cases ────────
+// ── Coverage boost — Analytics, Locale, Ratings edge cases ──
 
 [Collection("Analytics")]
 public sealed class AnalyticsCoverageTests
@@ -1142,7 +1142,7 @@ public sealed class RatingsCoverageTests
     }
 }
 
-// ── Sprint 23 — Locale hot-cache branch coverage ─────────────────────────────
+// ── Locale hot-cache branch coverage ──
 
 /// <summary>Tests targeting Locale._hotCache hit/miss branches and LoadLocaleFile.</summary>
 public sealed class LocaleHotCacheTests
@@ -1220,7 +1220,7 @@ public sealed class LocaleHotCacheTests
     }
 }
 
-// ── Sprint 23 — CorporateGuard extra branches ───────────────────────────────
+// ── CorporateGuard extra branches ──
 
 /// <summary>Additional branch coverage for CorporateGuard.</summary>
 public sealed class CorporateGuardBranchTests
@@ -1281,7 +1281,7 @@ public sealed class CorporateGuardBranchTests
     }
 }
 
-// ── Sprint 23 — HardwareInfo extended branches ──────────────────────────────
+// ── HardwareInfo extended branches ──
 
 /// <summary>Extended coverage for HardwareInfo methods not yet tested.</summary>
 public sealed class HardwareInfoExtendedTests
@@ -1331,7 +1331,7 @@ public sealed class HardwareInfoExtendedTests
     }
 }
 
-// ── Sprint 24: AppConfig field coverage ───────────────────────────────────
+// ── AppConfig field coverage ──
 
 public sealed class AppConfigFieldTests
 {
@@ -1448,7 +1448,7 @@ public sealed class AppConfigFieldTests
     }
 }
 
-// ── Sprint 24: Ratings edge cases ─────────────────────────────────────────
+// ── Ratings edge cases ──
 
 public sealed class RatingsSprintTests
 {
@@ -1526,7 +1526,7 @@ public sealed class RatingsSprintTests
     }
 }
 
-// ── Sprint 24: Analytics edge cases ───────────────────────────────────────
+// ── Analytics edge cases ──
 
 [Collection("Analytics")]
 public sealed class AnalyticsSprintTests
@@ -1557,9 +1557,9 @@ public sealed class AnalyticsSprintTests
     public void TopTweaks_ReturnsNonNullList() => Assert.NotNull(Analytics.TopTweaks(5));
 }
 
-// ── Sprint 47: AppConfig new property defaults ──────────────────────────────
+// ── AppConfig new property defaults ──
 
-public sealed class AppConfigSprint47Tests
+public sealed class AppConfigPropertyDefaultsTests
 {
     [Fact]
     public void Default_AutoBackupOnApply_IsTrue() => Assert.True(new AppConfig().AutoBackupOnApply);
@@ -1588,9 +1588,9 @@ public sealed class AppConfigSprint47Tests
     }
 }
 
-// ── Sprint 47: NetworkManager new APIs ──────────────────────────────────────
+// ── NetworkManager new APIs ──
 
-public sealed class NetworkManagerSprint47Tests
+public sealed class NetworkManagerApiTests
 {
     [Fact]
     public void GetNetworkInterfaceStats_ReturnsNonNull()
@@ -1628,9 +1628,9 @@ public sealed class NetworkManagerSprint47Tests
     }
 }
 
-// ── Sprint 47: StartupManager AddRegistryEntry validation ──────────────────
+// ── StartupManager AddRegistryEntry validation ──
 
-public sealed class StartupManagerSprint47Tests
+public sealed class StartupManagerValidationTests
 {
     [Fact]
     public void AddRegistryEntry_BlankName_ThrowsArgumentException()
@@ -1651,9 +1651,9 @@ public sealed class StartupManagerSprint47Tests
     }
 }
 
-// ── Sprint 47: ServiceManager new APIs ──────────────────────────────────────
+// ── ServiceManager new APIs ──
 
-public sealed class ServiceManagerSprint47Tests
+public sealed class ServiceManagerApiTests
 {
     [Fact]
     public void GetDependentServices_BlankName_ThrowsArgumentException()
@@ -2447,7 +2447,7 @@ public sealed class UpdateCheckServiceTests
 }
 // ── merged from BranchCoverageServiceTests.cs ──────────────────────────────────
 /// <summary>
-/// Sprint 121 — Branch-coverage tests for <see cref="SmartScanService"/>.
+/// Branch-coverage tests for <see cref="SmartScanService"/>.
 /// Uses minimal inline engines so every branch is deliberately triggered.
 /// </summary>
 public sealed class SmartScanBranchTests
@@ -2711,7 +2711,7 @@ public sealed class SmartScanBranchTests
 // ═════════════════════════════════════════════════════════════════════════════
 
 /// <summary>
-/// Sprint 121 — Branch-coverage tests for <see cref="PingResult"/>.
+/// Branch-coverage tests for <see cref="PingResult"/>.
 /// PingResult.Parse() is internal but visible via InternalsVisibleTo.
 /// </summary>
 public sealed class PingResultBranchTests
@@ -2813,7 +2813,7 @@ public sealed class PingResultBranchTests
 // ═════════════════════════════════════════════════════════════════════════════
 
 /// <summary>
-/// Sprint 121 — Branch-coverage tests for <see cref="ConfigExporter"/> edge cases.
+/// Branch-coverage tests for <see cref="ConfigExporter"/> edge cases.
 /// </summary>
 public sealed class ConfigExporterBranchTests : IDisposable
 {
@@ -2933,7 +2933,7 @@ public sealed class ConfigExporterBranchTests : IDisposable
 // ═════════════════════════════════════════════════════════════════════════════
 
 /// <summary>
-/// Sprint 121 — Branch-coverage tests for <see cref="Ratings"/> edge paths.
+/// Branch-coverage tests for <see cref="Ratings"/> edge paths.
 /// </summary>
 [Collection("Ratings")]
 public sealed class RatingsBranchTests
@@ -3040,7 +3040,7 @@ public sealed class RatingsBranchTests
 // ═════════════════════════════════════════════════════════════════════════════
 
 /// <summary>
-/// Sprint 121 — Additional branch-coverage tests for <see cref="Analytics"/>.
+/// Additional branch-coverage tests for <see cref="Analytics"/>.
 /// </summary>
 [Collection("Analytics")]
 public sealed class AnalyticsBranchTests

@@ -1,5 +1,5 @@
 // tests/RegiLattice.Core.Tests/ComplianceReportExporterTests.cs
-// Tests for ComplianceReportExporter — HTML compliance report generation (Sprint 102 service).
+// Tests for ComplianceReportExporter — HTML compliance report generation.
 
 #nullable enable
 

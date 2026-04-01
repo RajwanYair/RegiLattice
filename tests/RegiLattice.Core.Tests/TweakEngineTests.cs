@@ -1787,7 +1787,7 @@ public sealed class TweakEngineTests : IClassFixture<BuiltinsFixture>
         Assert.NotNull(td);
     }
 
-    // ── Sprint 21: Coverage boost — Filter, Batch, StatusMap, Export edge cases ──
+    // ── Coverage boost — Filter, Batch, StatusMap, Export edge cases ──
 
     [Fact]
     public void Filter_ByCategory_ReturnsOnlyThatCategory()
@@ -2106,13 +2106,13 @@ public sealed class TweakEngineTests : IClassFixture<BuiltinsFixture>
     }
 }
 
-// ── Sprint 24: ApplyProfile, CategoryCounts, ScopeCounts, utility paths ──
+// ── ApplyProfile, CategoryCounts, ScopeCounts, utility paths ──
 
-public sealed class TweakEngineSprint24Tests : IClassFixture<BuiltinsFixture>
+public sealed class TweakEngineAdditionalTests : IClassFixture<BuiltinsFixture>
 {
     private readonly TweakEngine _engine;
 
-    public TweakEngineSprint24Tests(BuiltinsFixture fixture) => _engine = fixture.Engine;
+    public TweakEngineAdditionalTests(BuiltinsFixture fixture) => _engine = fixture.Engine;
 
     [Fact]
     public void ApplyProfile_ValidProfile_ReturnsResultsForEachTweak()
@@ -2265,7 +2265,7 @@ public sealed class TweakEngineSprint24Tests : IClassFixture<BuiltinsFixture>
 }
 
 // ── merged from TweakEngineSearchNlpTests.cs ──────────────────────────────────
-/// <summary>Tests for Sprint 58: NLP synonym search in TweakEngine.Search().</summary>
+/// <summary>NLP synonym search tests for TweakEngine.Search().</summary>
 public sealed class TweakEngineSearchNlpTests
 {
     private static TweakEngine BuildEngine()
@@ -3355,7 +3355,7 @@ public sealed class TweaksForProfileTests
     }
 }
 // ── merged from ConflictDetectorTests.cs ──────────────────────────────────
-/// <summary>Tests for Sprint 66: ConflictDetector.</summary>
+/// <summary>ConflictDetector tests.</summary>
 public sealed class ConflictDetectorTests
 {
     // Known conflicting pair used across multiple tests.

@@ -1,5 +1,5 @@
 // RegiLattice.Core.Tests — PackSubmissionServiceTests.cs
-// Tests for PackSubmissionService — Sprint 124 (T7.5).
+// Tests for PackSubmissionService.
 
 using RegiLattice.Core.Plugins;
 using Xunit;

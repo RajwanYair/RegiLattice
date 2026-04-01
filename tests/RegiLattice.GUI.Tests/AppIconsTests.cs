@@ -137,7 +137,7 @@ public sealed class AppIconsTests
         Assert.Same(first, second);
     }
 
-    // ── Sprint 18 — New menu icon bitmaps ──────────────────────────────
+    // ── New menu icon bitmaps ──
 
     [Fact]
     public void FileMenuBitmap_IsValid16x16()

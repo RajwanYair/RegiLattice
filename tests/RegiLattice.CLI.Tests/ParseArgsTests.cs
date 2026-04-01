@@ -1182,7 +1182,7 @@ public sealed class FavoritesAndHistoryParseTests
     }
 }
 
-// ── Sprint 24: Additional CLI arg parsing edge cases ─────────────────────
+// ── Additional CLI arg parsing edge cases ──
 
 public sealed class CliArgEdgeCaseTests
 {
@@ -1298,7 +1298,7 @@ public sealed class CliArgEdgeCaseTests
         Assert.Equal("gaming", result.Profile);
     }
 
-    // ── Sprint 127 — user profile CRUD args ─────────────────────────────
+    // ── User profile CRUD args ──
 
     [Fact]
     public void ParseArgs_ProfileCreate_SetsName()
@@ -1400,7 +1400,7 @@ public sealed class CliArgEdgeCaseTests
     }
 }
 
-// ── Sprint 24: ConsoleColorizer additional coverage ───────────────────────
+// ── ConsoleColorizer additional coverage ──
 
 /// <summary>Sprint-era ConsoleColorizer tests — share the same collection to prevent
 /// race conditions on the shared NoColor static property.</summary>

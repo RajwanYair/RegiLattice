@@ -369,7 +369,7 @@ public sealed class ThemeTests
         Assert.True(path.PointCount > 0);
     }
 
-    // ── Sprint 18 — New theme dark/light verification ───────────────────
+    // ── Theme dark/light verification ──
 
     [Theory]
     [InlineData("tokyo-night")]
@@ -590,7 +590,7 @@ public sealed class ThemeTests
     }
 }
 
-// ── Sprint 26: WhatsNewDialog ──────────────────────────────────────────────
+// ── WhatsNewDialog ──
 
 public sealed class WhatsNewDialogTests
 {

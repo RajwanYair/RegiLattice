@@ -1,5 +1,5 @@
 // RegiLattice.Core.Tests — SmartScanServiceTests.cs
-// Unit tests for SmartScanService (Sprint 108).
+// Unit tests for SmartScanService.
 // SmartScanService.Scan() analyses the engine status map and returns prioritised
 // recommendations ranked by ImpactScore × SafetyRating (max 25).
 

@@ -224,7 +224,7 @@ public sealed class TweakHistoryTests : IDisposable
         Assert.Equal(20, recent.Count);
     }
 
-    // ── Sprint 47 enhancement tests ───────────────────────────────
+    // ── Enhancement tests ───────────
 
     [Fact]
     public void GetSummaryStats_ReturnsCorrectActionCounts()
