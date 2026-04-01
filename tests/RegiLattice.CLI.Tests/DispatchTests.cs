@@ -39,6 +39,26 @@ public sealed class DispatchTestFixture
         Session = new RegistrySession(dryRun: true);
         Engine = new TweakEngine(Session);
 
+        // Bypass WMI hardware probing for all CLI dispatch tests.
+        // WMI on managed/corporate machines (Intel Intune) creates foreground COM STA threads
+        // that block dotnet-testhost exit, causing the test runner to hang indefinitely.
+        // See lessons-learned.instructions.md § 'Task.Run + WMI = COM STA Threads'
+        HardwareInfo.StubProfile = new HwProfile
+        {
+            Cpu = new CpuInfo("Stub CPU (test)", 2, 4, "x64"),
+            Gpus = [],
+            Memory = new MemoryInfo(8192, 4096),
+            Disk = new DiskInfo("C:", 256, 128, true),
+            HasHyperV = false,
+            HasWsl = false,
+            HasTpm = false,
+            HasSecureBoot = false,
+            HasBattery = false,
+            WindowsBuild = 22000,
+            OptimalWorkers = 4,
+            GuiBatchSize = 200,
+        };
+
         Engine.Register([
             new TweakDef
             {

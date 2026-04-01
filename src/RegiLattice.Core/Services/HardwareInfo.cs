@@ -56,8 +56,14 @@ public static class HardwareInfo
     [return: MarshalAs(UnmanagedType.Bool)]
     private static extern bool GlobalMemoryStatusEx(ref MEMORYSTATUSEX lpBuffer);
 
+    /// <summary>
+    /// When set, <see cref="DetectHardware"/> returns this stub immediately instead of running WMI.
+    /// For use in automated tests only — prevents WMI COM-thread hangs in managed-machine test runs.
+    /// </summary>
+    internal static HwProfile? StubProfile { get; set; }
+
     /// <summary>Returns cached hardware profile; the WMI probe runs exactly once per process.</summary>
-    public static HwProfile DetectHardware() => _lazy.Value;
+    public static HwProfile DetectHardware() => StubProfile ?? _lazy.Value;
 
     private static HwProfile BuildHwProfile()
     {
