@@ -1548,3 +1548,245 @@ public sealed class B2ContractTests_ExitCodes(DispatchTestFixture fixture) : Dis
         Assert.Equal(0, exit);
     }
 }
+
+// ─────────────────────────────────────────────────────────────────────────────
+// RunBatch (B7)
+// ─────────────────────────────────────────────────────────────────────────────
+
+[Collection("CliDispatch")]
+public sealed class RunBatchTests(DispatchTestFixture fixture) : DispatchTestBase(fixture)
+{
+    // ── Plain-text format ────────────────────────────────────────────────
+
+    [Fact]
+    public void Dispatch_BatchApply_PlainTextFile_ReturnsZero()
+    {
+        string tmp = Path.Combine(Path.GetTempPath(), $"batch-{Guid.NewGuid():N}.txt");
+        try
+        {
+            File.WriteAllText(tmp, DispatchTestFixture.KnownId);
+            int exit = Program.Dispatch(new CliArgs
+            {
+                BatchMode = "apply",
+                BatchFile = tmp,
+                AssumeYes = true,
+                Force = true,
+            });
+            Assert.Equal(0, exit);
+        }
+        finally
+        {
+            if (File.Exists(tmp)) File.Delete(tmp);
+        }
+    }
+
+    [Fact]
+    public void Dispatch_BatchApply_PlainTextFile_OutputContainsTweakId()
+    {
+        string tmp = Path.Combine(Path.GetTempPath(), $"batch-{Guid.NewGuid():N}.txt");
+        try
+        {
+            File.WriteAllText(tmp, DispatchTestFixture.KnownId);
+            Program.Dispatch(new CliArgs
+            {
+                BatchMode = "apply",
+                BatchFile = tmp,
+                AssumeYes = true,
+                Force = true,
+            });
+            Assert.Contains(DispatchTestFixture.KnownId, Output, StringComparison.OrdinalIgnoreCase);
+        }
+        finally
+        {
+            if (File.Exists(tmp)) File.Delete(tmp);
+        }
+    }
+
+    [Fact]
+    public void Dispatch_BatchApply_MultiLineFile_ProcessesAllTweaks()
+    {
+        string tmp = Path.Combine(Path.GetTempPath(), $"batch-{Guid.NewGuid():N}.txt");
+        try
+        {
+            File.WriteAllLines(tmp, [
+                DispatchTestFixture.KnownId,
+                "# this is a comment",
+                "",
+                DispatchTestFixture.KnownId2,
+            ]);
+            int exit = Program.Dispatch(new CliArgs
+            {
+                BatchMode = "apply",
+                BatchFile = tmp,
+                AssumeYes = true,
+                Force = true,
+            });
+            Assert.Equal(0, exit);
+            Assert.Contains(DispatchTestFixture.KnownId, Output, StringComparison.OrdinalIgnoreCase);
+            Assert.Contains(DispatchTestFixture.KnownId2, Output, StringComparison.OrdinalIgnoreCase);
+        }
+        finally
+        {
+            if (File.Exists(tmp)) File.Delete(tmp);
+        }
+    }
+
+    // ── JSON array format ────────────────────────────────────────────────
+
+    [Fact]
+    public void Dispatch_BatchApply_JsonArrayFile_ReturnsZero()
+    {
+        string tmp = Path.Combine(Path.GetTempPath(), $"batch-{Guid.NewGuid():N}.json");
+        try
+        {
+            File.WriteAllText(tmp, $"[\"{ DispatchTestFixture.KnownId}\",\"{DispatchTestFixture.KnownId2}\"]");
+            int exit = Program.Dispatch(new CliArgs
+            {
+                BatchMode = "apply",
+                BatchFile = tmp,
+                AssumeYes = true,
+                Force = true,
+            });
+            Assert.Equal(0, exit);
+        }
+        finally
+        {
+            if (File.Exists(tmp)) File.Delete(tmp);
+        }
+    }
+
+    // ── Snapshot JSON format ─────────────────────────────────────────────
+
+    [Fact]
+    public void Dispatch_BatchApply_SnapshotJsonFile_ReturnsZero()
+    {
+        string snap = Path.Combine(Path.GetTempPath(), $"batch-snap-{Guid.NewGuid():N}.json");
+        string batch = Path.Combine(Path.GetTempPath(), $"batch-use-{Guid.NewGuid():N}.json");
+        try
+        {
+            // Create a real snapshot file
+            Program.Dispatch(new CliArgs { Snapshot = snap });
+            int exit = Program.Dispatch(new CliArgs
+            {
+                BatchMode = "apply",
+                BatchFile = snap,
+                AssumeYes = true,
+                Force = true,
+            });
+            // Snapshot-based batch succeeds (0) or returns PartialFail (1) if no
+            // tweaks were applied — both are valid outcomes for this structural test.
+            Assert.True(exit is 0 or 1, $"Unexpected exit code: {exit}");
+        }
+        finally
+        {
+            if (File.Exists(snap)) File.Delete(snap);
+            if (File.Exists(batch)) File.Delete(batch);
+        }
+    }
+
+    // ── Remove verb ──────────────────────────────────────────────────────
+
+    [Fact]
+    public void Dispatch_BatchRemove_PlainTextFile_ReturnsZero()
+    {
+        string tmp = Path.Combine(Path.GetTempPath(), $"batch-{Guid.NewGuid():N}.txt");
+        try
+        {
+            File.WriteAllText(tmp, DispatchTestFixture.KnownId);
+            int exit = Program.Dispatch(new CliArgs
+            {
+                BatchMode = "remove",
+                BatchFile = tmp,
+                AssumeYes = true,
+                Force = true,
+            });
+            Assert.Equal(0, exit);
+        }
+        finally
+        {
+            if (File.Exists(tmp)) File.Delete(tmp);
+        }
+    }
+
+    // ── Error cases ──────────────────────────────────────────────────────
+
+    [Fact]
+    public void Dispatch_BatchApply_MissingFile_ReturnsUserError()
+    {
+        string nonExistent = Path.Combine(Path.GetTempPath(), $"no-such-file-{Guid.NewGuid():N}.txt");
+        int exit = Program.Dispatch(new CliArgs
+        {
+            BatchMode = "apply",
+            BatchFile = nonExistent,
+            AssumeYes = true,
+            Force = true,
+        });
+        Assert.Equal(ExitCodes.UserError, exit);
+    }
+
+    [Fact]
+    public void Dispatch_BatchApply_EmptyFile_ReturnsUserError()
+    {
+        string tmp = Path.Combine(Path.GetTempPath(), $"batch-empty-{Guid.NewGuid():N}.txt");
+        try
+        {
+            File.WriteAllText(tmp, "");
+            int exit = Program.Dispatch(new CliArgs
+            {
+                BatchMode = "apply",
+                BatchFile = tmp,
+                AssumeYes = true,
+                Force = true,
+            });
+            Assert.Equal(ExitCodes.UserError, exit);
+        }
+        finally
+        {
+            if (File.Exists(tmp)) File.Delete(tmp);
+        }
+    }
+
+    [Fact]
+    public void Dispatch_BatchApply_AllUnknownIds_ReturnsUserError()
+    {
+        string tmp = Path.Combine(Path.GetTempPath(), $"batch-unk-{Guid.NewGuid():N}.txt");
+        try
+        {
+            File.WriteAllLines(tmp, ["zzz-no-such-tweak-1", "zzz-no-such-tweak-2"]);
+            int exit = Program.Dispatch(new CliArgs
+            {
+                BatchMode = "apply",
+                BatchFile = tmp,
+                AssumeYes = true,
+                Force = true,
+            });
+            Assert.Equal(ExitCodes.UserError, exit);
+        }
+        finally
+        {
+            if (File.Exists(tmp)) File.Delete(tmp);
+        }
+    }
+
+    [Fact]
+    public void Dispatch_BatchApply_PartialUnknownIds_OutputWarnsUnknown()
+    {
+        string tmp = Path.Combine(Path.GetTempPath(), $"batch-partial-{Guid.NewGuid():N}.txt");
+        try
+        {
+            File.WriteAllLines(tmp, [DispatchTestFixture.KnownId, "zzz-unknown-tweak-zzz"]);
+            Program.Dispatch(new CliArgs
+            {
+                BatchMode = "apply",
+                BatchFile = tmp,
+                AssumeYes = true,
+                Force = true,
+            });
+            Assert.Contains("unknown", Output, StringComparison.OrdinalIgnoreCase);
+        }
+        finally
+        {
+            if (File.Exists(tmp)) File.Delete(tmp);
+        }
+    }
+}

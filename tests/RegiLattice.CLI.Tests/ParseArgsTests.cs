@@ -1626,3 +1626,80 @@ public sealed class ComplianceAndManagerParseTests
         Assert.Equal("Package Management", result.Category);
     }
 }
+
+// ── B7: batch subcommand parsing ─────────────────────────────────────────────
+
+/// <summary>Tests for the <c>batch apply|remove &lt;file&gt;</c> subcommand parsing (B7).</summary>
+public sealed class BatchSubcmdParseTests
+{
+    [Fact]
+    public void ParseArgs_SubcmdBatchApply_SetsModeFileAndSubVerb()
+    {
+        var a = Program.ParseArgs(["batch", "apply", "ids.txt"]);
+        Assert.NotNull(a);
+        Assert.Equal("batch", a.SubVerb);
+        Assert.Equal("apply", a.BatchMode);
+        Assert.Equal("ids.txt", a.BatchFile);
+    }
+
+    [Fact]
+    public void ParseArgs_SubcmdBatchRemove_SetsModeAndFile()
+    {
+        var a = Program.ParseArgs(["batch", "remove", "remove-list.txt"]);
+        Assert.NotNull(a);
+        Assert.Equal("batch", a.SubVerb);
+        Assert.Equal("remove", a.BatchMode);
+        Assert.Equal("remove-list.txt", a.BatchFile);
+    }
+
+    [Fact]
+    public void ParseArgs_SubcmdBatchApply_WithJsonFile_SetsFile()
+    {
+        var a = Program.ParseArgs(["batch", "apply", "tweaks.json"]);
+        Assert.NotNull(a);
+        Assert.Equal("apply", a.BatchMode);
+        Assert.Equal("tweaks.json", a.BatchFile);
+    }
+
+    [Fact]
+    public void ParseArgs_SubcmdBatchNoVerb_SubVerbSetButBatchModeNull()
+    {
+        // 'batch' with no apply/remove verb → SubVerb set, BatchMode stays null
+        var a = Program.ParseArgs(["batch"]);
+        Assert.NotNull(a);
+        Assert.Equal("batch", a.SubVerb);
+        Assert.Null(a.BatchMode);
+    }
+
+    [Fact]
+    public void ParseArgs_SubcmdBatchUnknownVerb_BatchModeNull()
+    {
+        // 'batch badverb file' — not apply/remove → BatchMode null, file null
+        var a = Program.ParseArgs(["batch", "badverb", "ids.txt"]);
+        Assert.NotNull(a);
+        Assert.Equal("batch", a.SubVerb);
+        Assert.Null(a.BatchMode);
+        Assert.Null(a.BatchFile);
+    }
+
+    [Fact]
+    public void ParseArgs_SubcmdBatchApply_NoFile_BatchFileNull()
+    {
+        // 'batch apply' with no file → BatchFile null
+        var a = Program.ParseArgs(["batch", "apply"]);
+        Assert.NotNull(a);
+        Assert.Equal("apply", a.BatchMode);
+        Assert.Null(a.BatchFile);
+    }
+
+    [Fact]
+    public void ParseArgs_SubcmdBatchApply_WithFlags_FlagsAlsoParsed()
+    {
+        var a = Program.ParseArgs(["batch", "apply", "ids.txt", "--dry-run", "--force"]);
+        Assert.NotNull(a);
+        Assert.Equal("apply", a.BatchMode);
+        Assert.Equal("ids.txt", a.BatchFile);
+        Assert.True(a.DryRun);
+        Assert.True(a.Force);
+    }
+}
