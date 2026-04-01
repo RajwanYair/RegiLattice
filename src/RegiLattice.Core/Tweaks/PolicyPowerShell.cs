@@ -31,7 +31,7 @@ internal static class PolicyPowerShell
                 {
                     Id = "isedep-block-ise-launch",
                     Label = "Block PowerShell ISE Launch",
-                    Category = "PowerShell & Scripting Policy",
+                    Category = "PowerShell",
                     Description =
                         "Blocks launch of the Windows PowerShell ISE (Integrated Scripting Environment), which is end-of-life and lacks modern security controls like AMSI integration.",
                     Tags = ["powershell", "ise", "deprecation", "security", "policy"],
@@ -48,7 +48,7 @@ internal static class PolicyPowerShell
                 {
                     Id = "isedep-force-remoting-allsigned",
                     Label = "Block Unsigned Scripts via PS Remoting",
-                    Category = "PowerShell & Scripting Policy",
+                    Category = "PowerShell",
                     Description =
                         "Sets the remoting script execution policy to AllSigned, so scripts delivered via WinRM PowerShell remoting sessions must be digitally signed.",
                     Tags = ["powershell", "remoting", "signing", "security", "policy"],
@@ -65,7 +65,7 @@ internal static class PolicyPowerShell
                 {
                     Id = "isedep-disable-v2-engine",
                     Label = "Disable PowerShell v2 Engine",
-                    Category = "PowerShell & Scripting Policy",
+                    Category = "PowerShell",
                     Description =
                         "Disables the Windows PowerShell version 2 engine (powershell.exe -version 2) which bypasses modern security controls such as AMSI, ETW, and Constrained Language Mode.",
                     Tags = ["powershell", "v2", "downgrade", "security", "policy"],
@@ -82,7 +82,7 @@ internal static class PolicyPowerShell
                 {
                     Id = "isedep-enable-protected-event-logging",
                     Label = "Enable Protected Event Logging",
-                    Category = "PowerShell & Scripting Policy",
+                    Category = "PowerShell",
                     Description =
                         "Enables Protected Event Logging (PEL) for PowerShell, which encrypts sensitive PowerShell script block log entries at rest using a certificate, protecting them from unauthorized access.",
                     Tags = ["powershell", "event-logging", "encryption", "security", "policy"],
@@ -99,7 +99,7 @@ internal static class PolicyPowerShell
                 {
                     Id = "isedep-disable-credential-prompt",
                     Label = "Disable Credential Prompt in PowerShell Sessions",
-                    Category = "PowerShell & Scripting Policy",
+                    Category = "PowerShell",
                     Description =
                         "Disables interactive credential prompts within PowerShell sessions, forcing scripts to use pre-provisioned credentials or fail instead of prompting the user.",
                     Tags = ["powershell", "credentials", "prompt", "security", "policy"],
@@ -116,7 +116,7 @@ internal static class PolicyPowerShell
                 {
                     Id = "isedep-enable-module-logging",
                     Label = "Enable Module Logging for PowerShell",
-                    Category = "PowerShell & Scripting Policy",
+                    Category = "PowerShell",
                     Description =
                         "Enables module-level logging for all PowerShell modules by default, ensuring that all custom module invocations are captured in the Windows PowerShell/Operational event log.",
                     Tags = ["powershell", "module-logging", "audit", "policy"],
@@ -133,7 +133,7 @@ internal static class PolicyPowerShell
                 {
                     Id = "isedep-disable-script-download",
                     Label = "Disable Script Download from Internet in PowerShell",
-                    Category = "PowerShell & Scripting Policy",
+                    Category = "PowerShell",
                     Description =
                         "Blocks PowerShell from downloading and executing scripts from internet URIs using Invoke-Expression (IEX) with web requests, a common living-off-the-land attack technique.",
                     Tags = ["powershell", "download-cradle", "iex", "security", "policy"],
@@ -150,7 +150,7 @@ internal static class PolicyPowerShell
                 {
                     Id = "isedep-block-ps-dev-mode",
                     Label = "Block PowerShell Developer Mode",
-                    Category = "PowerShell & Scripting Policy",
+                    Category = "PowerShell",
                     Description =
                         "Disables the PowerShell developer mode flag that bypasses certain security policies, ensuring that production machines do not inadvertently run in a relaxed-security development mode.",
                     Tags = ["powershell", "developer-mode", "security", "policy"],
@@ -167,7 +167,7 @@ internal static class PolicyPowerShell
                 {
                     Id = "isedep-disable-ps-telemetry",
                     Label = "Disable Windows PowerShell 5 Telemetry",
-                    Category = "PowerShell & Scripting Policy",
+                    Category = "PowerShell",
                     Description =
                         "Disables usage telemetry collection in Windows PowerShell 5.1, preventing execution metadata and error statistics from being sent to Microsoft.",
                     Tags = ["powershell", "ps5", "telemetry", "privacy", "policy"],
@@ -184,7 +184,7 @@ internal static class PolicyPowerShell
                 {
                     Id = "isedep-force-network-restricted-sessions",
                     Label = "Force Network-Restricted PowerShell Remoting Sessions",
-                    Category = "PowerShell & Scripting Policy",
+                    Category = "PowerShell",
                     Description =
                         "Forces all incoming PowerShell remoting sessions to run as NetworkRestricted, preventing remotely established sessions from making outbound network connections.",
                     Tags = ["powershell", "remoting", "network-restricted", "hardening", "policy"],
@@ -216,7 +216,7 @@ internal static class PolicyPowerShell
             {
                 Id = "pspolicy-script-block-logging",
                 Label = "Enable PowerShell Script Block Logging",
-                Category = "PowerShell & Scripting Policy",
+                Category = "PowerShell",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -235,7 +235,7 @@ internal static class PolicyPowerShell
             {
                 Id = "pspolicy-script-invocation-logging",
                 Label = "Enable PowerShell Script Invocation Logging",
-                Category = "PowerShell & Scripting Policy",
+                Category = "PowerShell",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -254,7 +254,7 @@ internal static class PolicyPowerShell
             {
                 Id = "pspolicy-module-logging",
                 Label = "Enable PowerShell Module Logging",
-                Category = "PowerShell & Scripting Policy",
+                Category = "PowerShell",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -273,7 +273,7 @@ internal static class PolicyPowerShell
             {
                 Id = "pspolicy-transcription-on",
                 Label = "Enable PowerShell Transcription",
-                Category = "PowerShell & Scripting Policy",
+                Category = "PowerShell",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -292,7 +292,7 @@ internal static class PolicyPowerShell
             {
                 Id = "pspolicy-transcription-header",
                 Label = "Include Invocation Header in PowerShell Transcripts",
-                Category = "PowerShell & Scripting Policy",
+                Category = "PowerShell",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -311,7 +311,7 @@ internal static class PolicyPowerShell
             {
                 Id = "pspolicy-transcription-output-path",
                 Label = "Set PowerShell Transcript Output Directory",
-                Category = "PowerShell & Scripting Policy",
+                Category = "PowerShell",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -330,7 +330,7 @@ internal static class PolicyPowerShell
             {
                 Id = "pspolicy-disable-ps2-engine",
                 Label = "Disable PowerShell 2.0 Engine",
-                Category = "PowerShell & Scripting Policy",
+                Category = "PowerShell",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -349,7 +349,7 @@ internal static class PolicyPowerShell
             {
                 Id = "pspolicy-protected-event-logging",
                 Label = "Enable Protected Event Logging",
-                Category = "PowerShell & Scripting Policy",
+                Category = "PowerShell",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -368,7 +368,7 @@ internal static class PolicyPowerShell
             {
                 Id = "pspolicy-enable-scripts",
                 Label = "Enable PowerShell Script Execution (GPO)",
-                Category = "PowerShell & Scripting Policy",
+                Category = "PowerShell",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -387,7 +387,7 @@ internal static class PolicyPowerShell
             {
                 Id = "pspolicy-require-signed-scripts",
                 Label = "Require Signed PowerShell Scripts (AllSigned)",
-                Category = "PowerShell & Scripting Policy",
+                Category = "PowerShell",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -418,7 +418,7 @@ internal static class PolicyPowerShell
                 {
                     Id = "ps7exec-enable-constrained-language",
                     Label = "Enable Constrained Language Mode in PowerShell 7",
-                    Category = "PowerShell & Scripting Policy",
+                    Category = "PowerShell",
                     Description =
                         "Enables Constrained Language Mode (CLM) for PowerShell 7 (pwsh), restricting the .NET types and COM objects that scripts can use and mitigating fileless malware execution.",
                     Tags = ["powershell", "ps7", "constrained-language", "security", "policy"],
@@ -435,7 +435,7 @@ internal static class PolicyPowerShell
                 {
                     Id = "ps7exec-set-allsigned-policy",
                     Label = "Enforce AllSigned Execution Policy in PowerShell 7",
-                    Category = "PowerShell & Scripting Policy",
+                    Category = "PowerShell",
                     Description =
                         "Sets the PowerShell 7 execution policy to AllSigned, requiring all scripts (including local scripts) to be digitally signed by a trusted publisher before execution.",
                     Tags = ["powershell", "ps7", "execution-policy", "signing", "security", "policy"],
@@ -452,7 +452,7 @@ internal static class PolicyPowerShell
                 {
                     Id = "ps7exec-disable-remoting",
                     Label = "Disable PowerShell 7 Remoting",
-                    Category = "PowerShell & Scripting Policy",
+                    Category = "PowerShell",
                     Description =
                         "Disables PowerShell 7 remoting (WinRM/SSH transport) via policy, preventing pwsh from being used as a remote administration target.",
                     Tags = ["powershell", "ps7", "remoting", "security", "policy"],
@@ -469,7 +469,7 @@ internal static class PolicyPowerShell
                 {
                     Id = "ps7exec-disable-implicit-remoting",
                     Label = "Disable PS7 Implicit Remoting Module Import",
-                    Category = "PowerShell & Scripting Policy",
+                    Category = "PowerShell",
                     Description =
                         "Disables implicit remoting module imports in PowerShell 7, preventing a script from automatically importing and executing remote commands from untrusted sources.",
                     Tags = ["powershell", "ps7", "implicit-remoting", "security", "policy"],
@@ -486,7 +486,7 @@ internal static class PolicyPowerShell
                 {
                     Id = "ps7exec-require-signed-modules",
                     Label = "Require Signed Module Manifests in PowerShell 7",
-                    Category = "PowerShell & Scripting Policy",
+                    Category = "PowerShell",
                     Description =
                         "Requires all PowerShell 7 module manifests (.psd1) to be signed by a trusted publisher before the module can be loaded, blocking unsigned third-party modules.",
                     Tags = ["powershell", "ps7", "modules", "signing", "security", "policy"],
@@ -503,7 +503,7 @@ internal static class PolicyPowerShell
                 {
                     Id = "ps7exec-block-ps-gallery",
                     Label = "Block PowerShell Gallery Repository in PS7",
-                    Category = "PowerShell & Scripting Policy",
+                    Category = "PowerShell",
                     Description =
                         "Disables access to the default PowerShell Gallery online repository in PowerShell 7, forcing module and script installation through an approved internal repository.",
                     Tags = ["powershell", "ps7", "gallery", "policy"],
@@ -520,7 +520,7 @@ internal static class PolicyPowerShell
                 {
                     Id = "ps7exec-enable-script-block-logging",
                     Label = "Enable Script Block Logging in PowerShell 7",
-                    Category = "PowerShell & Scripting Policy",
+                    Category = "PowerShell",
                     Description =
                         "Enables script block logging in PowerShell 7 to record all script blocks executed to the event log (Microsoft-Windows-PowerShell/Operational), supporting forensic analysis.",
                     Tags = ["powershell", "ps7", "script-block-logging", "audit", "policy"],
@@ -537,7 +537,7 @@ internal static class PolicyPowerShell
                 {
                     Id = "ps7exec-enable-invocation-logging",
                     Label = "Enable Script Block Invocation Logging in PS7",
-                    Category = "PowerShell & Scripting Policy",
+                    Category = "PowerShell",
                     Description =
                         "Enables verbose script block invocation logging in PowerShell 7, capturing start and stop events for each script block execution for detailed forensic trails.",
                     Tags = ["powershell", "ps7", "invocation-logging", "audit", "policy"],
@@ -554,7 +554,7 @@ internal static class PolicyPowerShell
                 {
                     Id = "ps7exec-disable-telemetry",
                     Label = "Disable PowerShell 7 Telemetry",
-                    Category = "PowerShell & Scripting Policy",
+                    Category = "PowerShell",
                     Description =
                         "Disables the PowerShell 7 telemetry feature that sends usage statistics (command names, error categories, OS info) to Microsoft via opt-out environment variable enforcement at policy level.",
                     Tags = ["powershell", "ps7", "telemetry", "privacy", "policy"],
@@ -571,7 +571,7 @@ internal static class PolicyPowerShell
                 {
                     Id = "ps7exec-disable-update-notif",
                     Label = "Disable PowerShell 7 Update Notifications",
-                    Category = "PowerShell & Scripting Policy",
+                    Category = "PowerShell",
                     Description =
                         "Suppresses in-session PowerShell 7 update available notifications that prompt users to download newer versions, deferring updates to a managed patching process.",
                     Tags = ["powershell", "ps7", "update", "notifications", "policy"],
@@ -600,7 +600,7 @@ internal static class PolicyPowerShell
                 {
                     Id = "sbloga-enable-script-block-logging",
                     Label = "Enable Script Block Logging (Windows PS)",
-                    Category = "PowerShell & Scripting Policy",
+                    Category = "PowerShell",
                     Description =
                         "Enables PowerShell script block logging for Windows PowerShell 5.1 via the dedicated ScriptBlockLogging policy key, recording all executed script blocks to the PowerShell/Operational event log.",
                     Tags = ["powershell", "script-block-logging", "audit", "siem", "policy"],
@@ -617,7 +617,7 @@ internal static class PolicyPowerShell
                 {
                     Id = "sbloga-enable-invocation-header",
                     Label = "Enable Script Block Invocation Header Logging",
-                    Category = "PowerShell & Scripting Policy",
+                    Category = "PowerShell",
                     Description =
                         "Enables logging of the start and stop events for each function/script-block invocation, providing timestamped execution boundaries in the event log.",
                     Tags = ["powershell", "script-block-logging", "invocation", "audit", "policy"],
@@ -634,7 +634,7 @@ internal static class PolicyPowerShell
                 {
                     Id = "sbloga-enable-transcription",
                     Label = "Enable PowerShell Transcript Logging",
-                    Category = "PowerShell & Scripting Policy",
+                    Category = "PowerShell",
                     Description =
                         "Enables PowerShell session transcription that saves a full text copy of every PowerShell session to a transcript file on disk, providing a human-readable audit trail.",
                     Tags = ["powershell", "transcription", "audit", "policy"],
@@ -651,7 +651,7 @@ internal static class PolicyPowerShell
                 {
                     Id = "sbloga-enable-invocation-header-transcript",
                     Label = "Include Invocation Header in PS Transcripts",
-                    Category = "PowerShell & Scripting Policy",
+                    Category = "PowerShell",
                     Description =
                         "Adds invocation header information (command name, arguments, timestamps, username, process info) to PowerShell transcript files.",
                     Tags = ["powershell", "transcription", "header", "audit", "policy"],
@@ -668,7 +668,7 @@ internal static class PolicyPowerShell
                 {
                     Id = "sbloga-set-output-directory",
                     Label = "Set Centralised PowerShell Transcript Directory",
-                    Category = "PowerShell & Scripting Policy",
+                    Category = "PowerShell",
                     Description =
                         "Sets the PowerShell transcript output directory to a centralised network share or admin-controlled path so all endpoint transcripts are collected in one location.",
                     Tags = ["powershell", "transcription", "directory", "audit", "policy"],
@@ -685,7 +685,7 @@ internal static class PolicyPowerShell
                 {
                     Id = "sbloga-log-encoded-commands",
                     Label = "Log Encoded PowerShell Command Executions",
-                    Category = "PowerShell & Scripting Policy",
+                    Category = "PowerShell",
                     Description =
                         "Enables script block logging specifically targeting Base64-encoded commands (-EncodedCommand), which are commonly used by malware to obfuscate payloads.",
                     Tags = ["powershell", "encoded-commands", "obfuscation", "security", "policy"],
@@ -702,7 +702,7 @@ internal static class PolicyPowerShell
                 {
                     Id = "sbloga-log-dynamic-code",
                     Label = "Log Dynamically Generated PowerShell Code",
-                    Category = "PowerShell & Scripting Policy",
+                    Category = "PowerShell",
                     Description =
                         "Enables logging of dynamically generated PowerShell code (e.g., from Invoke-Expression or Add-Type), capturing obfuscated payloads that are assembled at runtime.",
                     Tags = ["powershell", "dynamic-code", "invoke-expression", "security", "policy"],
@@ -719,7 +719,7 @@ internal static class PolicyPowerShell
                 {
                     Id = "sbloga-set-max-log-size",
                     Label = "Set PowerShell Operational Log Max Size to 512 MB",
-                    Category = "PowerShell & Scripting Policy",
+                    Category = "PowerShell",
                     Description =
                         "Increases the Microsoft-Windows-PowerShell/Operational event log maximum size to 512 MB to prevent log overwriting (circular buffer) during high-volume script block logging.",
                     Tags = ["powershell", "event-log", "size", "audit", "policy"],
@@ -742,7 +742,7 @@ internal static class PolicyPowerShell
                 {
                     Id = "sbloga-retain-on-clear",
                     Label = "Retain PowerShell Log Archive on Clear",
-                    Category = "PowerShell & Scripting Policy",
+                    Category = "PowerShell",
                     Description =
                         "Configures the PowerShell operational event log to archive before clearing when the log becomes full, preventing permanent log loss during log maintenance.",
                     Tags = ["powershell", "event-log", "archive", "audit", "policy"],
@@ -765,7 +765,7 @@ internal static class PolicyPowerShell
                 {
                     Id = "sbloga-block-clear-eventlog",
                     Label = "Block Standard Users from Clearing Event Logs",
-                    Category = "PowerShell & Scripting Policy",
+                    Category = "PowerShell",
                     Description =
                         "Restricts the ability to clear the PowerShell and Windows event logs to administrators only, preventing attackers with standard user access from clearing their tracks.",
                     Tags = ["powershell", "event-log", "clear", "hardening", "policy"],
@@ -795,7 +795,7 @@ internal static class PolicyPowerShell
             {
                 Id = "sdiag-disable-scripted-diagnostics",
                 Label = "Disable Scripted Diagnostics Execution",
-                Category = "PowerShell & Scripting Policy",
+                Category = "PowerShell",
                 Description =
                     "Sets ExecutionPolicy=0 in the ScriptedDiagnostics policy key. "
                     + "Prevents Windows from executing scripted diagnostic packages (.diagpkg, .diag files), "
@@ -816,7 +816,7 @@ internal static class PolicyPowerShell
             {
                 Id = "sdiag-disable-online-troubleshooters",
                 Label = "Disable Online Troubleshooting Recommendations",
-                Category = "PowerShell & Scripting Policy",
+                Category = "PowerShell",
                 Description =
                     "Sets EnabledPolicy=0 in the ScriptedDiagnosticsProvider Policy key. "
                     + "Prevents Windows from downloading and applying troubleshooting recommendations from Microsoft's "
@@ -836,7 +836,7 @@ internal static class PolicyPowerShell
             {
                 Id = "sdiag-disable-recommended-troubleshooting",
                 Label = "Disable Windows Recommended Troubleshooting",
-                Category = "PowerShell & Scripting Policy",
+                Category = "PowerShell",
                 Description =
                     "Sets TurnOffWindowsErrorReportingServer=1 in the AllowRecommendations "
                     + "Troubleshooting policy key. Disables the 'Recommended troubleshooting' feature "
@@ -857,7 +857,7 @@ internal static class PolicyPowerShell
             {
                 Id = "sdiag-disable-automatic-maintenance-diagnostics",
                 Label = "Disable Automatic Maintenance Diagnostics",
-                Category = "PowerShell & Scripting Policy",
+                Category = "PowerShell",
                 Description =
                     "Sets EnableAutomatedTroubleshooting=0 in the ScriptedDiagnostics policy key. "
                     + "Prevents Windows Automatic Maintenance from running scripted diagnostic jobs "
@@ -878,7 +878,7 @@ internal static class PolicyPowerShell
             {
                 Id = "sdiag-disable-elevated-troubleshooter",
                 Label = "Disable Elevated Scripted Troubleshooter Execution",
-                Category = "PowerShell & Scripting Policy",
+                Category = "PowerShell",
                 Description =
                     "Sets RunAsHighestAvailablePrivilege=0 in the ScriptedDiagnostics policy key. "
                     + "Prevents scripted diagnostic packages from automatically requesting elevation to "
@@ -899,7 +899,7 @@ internal static class PolicyPowerShell
             {
                 Id = "sdiag-disable-results-upload",
                 Label = "Disable Diagnostic Results Upload",
-                Category = "PowerShell & Scripting Policy",
+                Category = "PowerShell",
                 Description =
                     "Sets AllowDiagnosticDataUpload=0 in the ScriptedDiagnostics policy key. "
                     + "Prevents scripted diagnostic packages from uploading their results logs, "
@@ -919,7 +919,7 @@ internal static class PolicyPowerShell
             {
                 Id = "sdiag-disable-user-initiated-troubleshooter",
                 Label = "Block User-Initiated Troubleshooters",
-                Category = "PowerShell & Scripting Policy",
+                Category = "PowerShell",
                 Description =
                     "Sets DisableUserDiagnostics=1 in the ScriptedDiagnostics policy key. "
                     + "Prevents non-administrator users from launching troubleshooters from Settings "
@@ -940,7 +940,7 @@ internal static class PolicyPowerShell
             {
                 Id = "sdiag-disable-third-party-diagnostics",
                 Label = "Block Third-Party Diagnostic Packages",
-                Category = "PowerShell & Scripting Policy",
+                Category = "PowerShell",
                 Description =
                     "Sets AllowThirdPartyDiagnostics=0 in the ScriptedDiagnostics policy key. "
                     + "Prevents Windows from running scripted diagnostic packages (.diagpkg) from publishers "
@@ -960,7 +960,7 @@ internal static class PolicyPowerShell
             {
                 Id = "sdiag-disable-scheduled-diagnostics",
                 Label = "Disable Scheduled Diagnostic Tasks",
-                Category = "PowerShell & Scripting Policy",
+                Category = "PowerShell",
                 Description =
                     "Sets DisableScheduledDiagnostics=1 in the ScriptedDiagnostics policy key. "
                     + "Prevents the Scheduled Maintenance Diagnostics task scheduler jobs from creating "
@@ -981,7 +981,7 @@ internal static class PolicyPowerShell
             {
                 Id = "sdiag-disable-troubleshooting-history",
                 Label = "Disable Troubleshooting History Storage",
-                Category = "PowerShell & Scripting Policy",
+                Category = "PowerShell",
                 Description =
                     "Sets DisableTroubleshootingHistory=1 in the ScriptedDiagnostics policy key. "
                     + "Prevents Windows from writing troubleshooter run results and histories to the "
@@ -1014,7 +1014,7 @@ internal static class PolicyPowerShell
                 {
                     Id = "termadv-disable-auto-update",
                     Label = "Disable Windows Terminal Auto-Update",
-                    Category = "PowerShell & Scripting Policy",
+                    Category = "PowerShell",
                     Description =
                         "Disables automatic update checks and downloads for Windows Terminal, ensuring the terminal version is managed by WSUS or package management rather than in-app updates.",
                     Tags = ["terminal", "update", "policy"],
@@ -1031,7 +1031,7 @@ internal static class PolicyPowerShell
                 {
                     Id = "termadv-disable-telemetry",
                     Label = "Disable Windows Terminal Telemetry",
-                    Category = "PowerShell & Scripting Policy",
+                    Category = "PowerShell",
                     Description =
                         "Disables usage telemetry collection in Windows Terminal including keyboard shortcut usage, profile creation frequency, and renderer performance data.",
                     Tags = ["terminal", "telemetry", "privacy", "policy"],
@@ -1048,7 +1048,7 @@ internal static class PolicyPowerShell
                 {
                     Id = "termadv-disable-store-launch",
                     Label = "Disable Store Launch from Windows Terminal",
-                    Category = "PowerShell & Scripting Policy",
+                    Category = "PowerShell",
                     Description =
                         "Prevents Windows Terminal from launching the Microsoft Store for extensions, themes, or profile suggestions, reducing MS Store telemetry exposure.",
                     Tags = ["terminal", "store", "policy"],
@@ -1065,7 +1065,7 @@ internal static class PolicyPowerShell
                 {
                     Id = "termadv-disable-startup-tasks",
                     Label = "Disable Windows Terminal Startup Tasks",
-                    Category = "PowerShell & Scripting Policy",
+                    Category = "PowerShell",
                     Description =
                         "Disables Windows Terminal startup task registration that auto-starts terminal on user login, reducing unnecessary background process startup.",
                     Tags = ["terminal", "startup", "policy"],
@@ -1082,7 +1082,7 @@ internal static class PolicyPowerShell
                 {
                     Id = "termadv-enforce-restricted-profile",
                     Label = "Enforce Restricted Profile in Windows Terminal",
-                    Category = "PowerShell & Scripting Policy",
+                    Category = "PowerShell",
                     Description =
                         "Enables restricted profile enforcement in Windows Terminal, blocking users from modifying terminal profiles, settings JSON, or key bindings.",
                     Tags = ["terminal", "profile", "restriction", "policy"],
@@ -1099,7 +1099,7 @@ internal static class PolicyPowerShell
                 {
                     Id = "termadv-disable-extensions",
                     Label = "Disable Windows Terminal Extensions",
-                    Category = "PowerShell & Scripting Policy",
+                    Category = "PowerShell",
                     Description =
                         "Disables the ability to install or run third-party extensions in Windows Terminal, reducing the attack surface from unvetted extension code execution.",
                     Tags = ["terminal", "extensions", "security", "policy"],
@@ -1116,7 +1116,7 @@ internal static class PolicyPowerShell
                 {
                     Id = "termadv-block-ssh-agent",
                     Label = "Block SSH Agent Integration in Windows Terminal",
-                    Category = "PowerShell & Scripting Policy",
+                    Category = "PowerShell",
                     Description =
                         "Disables the SSH agent forwarding integration in Windows Terminal, preventing terminal sessions from forwarding SSH keys to remote hosts.",
                     Tags = ["terminal", "ssh", "agent", "security", "policy"],
@@ -1133,7 +1133,7 @@ internal static class PolicyPowerShell
                 {
                     Id = "termadv-disable-preview-builds",
                     Label = "Disable Windows Terminal Preview Build Channel",
-                    Category = "PowerShell & Scripting Policy",
+                    Category = "PowerShell",
                     Description =
                         "Forces Windows Terminal to the stable release channel, disabling the Preview and Canary build channels to ensure only stable, vetted versions are used.",
                     Tags = ["terminal", "preview", "channel", "policy"],
@@ -1150,7 +1150,7 @@ internal static class PolicyPowerShell
                 {
                     Id = "termadv-disable-update-notifications",
                     Label = "Disable Update Notifications in Windows Terminal",
-                    Category = "PowerShell & Scripting Policy",
+                    Category = "PowerShell",
                     Description =
                         "Suppresses in-app update available notifications in Windows Terminal, which can distract users and prompt unauthorized manual updates.",
                     Tags = ["terminal", "update", "notifications", "policy"],
@@ -1167,7 +1167,7 @@ internal static class PolicyPowerShell
                 {
                     Id = "termadv-block-manual-updates",
                     Label = "Block Manual Windows Terminal Updates by Users",
-                    Category = "PowerShell & Scripting Policy",
+                    Category = "PowerShell",
                     Description =
                         "Prevents standard users from triggering manual Windows Terminal update checks or downloads, ensuring that all terminal update operations require administrator rights.",
                     Tags = ["terminal", "update", "restriction", "policy"],

@@ -43,7 +43,7 @@ internal static class PolicyPrivacy
                 {
                     Id = "advinfo-disable-advertising-id",
                     Label = "Disable Windows Advertising ID (RUID)",
-                    Category = "Privacy & Telemetry Policy",
+                    Category = "Privacy",
                     Description =
                         "Disables the Windows Advertising ID (also called Resettable Unique Identifier / RUID) that apps use to deliver targeted advertising across sessions. Prevents cross-app tracking of user behaviour. Default: enabled. Recommended: 1 for all privacy-conscious deployments.",
                     Tags = ["advertising", "adid", "tracking", "privacy", "ruid", "policy"],
@@ -60,7 +60,7 @@ internal static class PolicyPrivacy
                 {
                     Id = "advinfo-disable-personalised-ads",
                     Label = "Disable Personalised Ad Delivery",
-                    Category = "Privacy & Telemetry Policy",
+                    Category = "Privacy",
                     Description =
                         "Prevents Windows from delivering personalised ads based on browsing history, app usage, and interest profiles. Ads shown in apps and the OS are non-personalised. Default: personalised ads on. Recommended: 1.",
                     Tags = ["advertising", "personalised", "targeting", "privacy", "policy"],
@@ -77,7 +77,7 @@ internal static class PolicyPrivacy
                 {
                     Id = "advinfo-block-ad-id-reset",
                     Label = "Block User from Resetting / Re-Enabling Advertising ID",
-                    Category = "Privacy & Telemetry Policy",
+                    Category = "Privacy",
                     Description =
                         "Prevents users from navigating to Settings → Privacy → General and re-enabling or resetting the Advertising ID. Ensures the enterprise policy remains in effect. Default: users can change. Recommended: 1 on managed endpoints.",
                     Tags = ["advertising", "adid", "user-restriction", "privacy", "policy"],
@@ -94,7 +94,7 @@ internal static class PolicyPrivacy
                 {
                     Id = "advinfo-disable-interest-profile",
                     Label = "Disable Interest Profile Building for Ads",
-                    Category = "Privacy & Telemetry Policy",
+                    Category = "Privacy",
                     Description =
                         "Prevents Windows from building an interest and behaviour profile based on usage patterns to improve ad targeting. Stops data collection that feeds the Microsoft ad platform. Default: profiling active. Recommended: 1.",
                     Tags = ["advertising", "profiling", "interests", "privacy", "telemetry", "policy"],
@@ -111,7 +111,7 @@ internal static class PolicyPrivacy
                 {
                     Id = "advinfo-disable-cross-device-ad-sync",
                     Label = "Disable Cross-Device Advertising ID Sync",
-                    Category = "Privacy & Telemetry Policy",
+                    Category = "Privacy",
                     Description =
                         "Prevents synchronisation of the Advertising ID across devices signed in with the same Microsoft Account. Eliminates cross-device ad targeting linking a user's phone, tablet, and PC. Default: sync enabled. Recommended: 1.",
                     Tags = ["advertising", "cross-device", "sync", "privacy", "account", "policy"],
@@ -128,7 +128,7 @@ internal static class PolicyPrivacy
                 {
                     Id = "advinfo-disable-location-for-ads",
                     Label = "Block Location Data for Advertising",
-                    Category = "Privacy & Telemetry Policy",
+                    Category = "Privacy",
                     Description =
                         "Prevents Windows from using geographic location data to serve location-targeted advertisements. Default: location can be used by ad platform. Recommended: 1 for privacy.",
                     Tags = ["advertising", "location", "privacy", "geotargeting", "policy"],
@@ -145,7 +145,7 @@ internal static class PolicyPrivacy
                 {
                     Id = "advinfo-disable-app-ad-consent-requests",
                     Label = "Block Apps from Requesting Ad Consent",
-                    Category = "Privacy & Telemetry Policy",
+                    Category = "Privacy",
                     Description =
                         "Prevents apps from displaying permission dialogs asking the user to consent to advertising-related data collection. Returns 'denied' to all such requests without prompting. Default: consent prompts allowed. Recommended: 1.",
                     Tags = ["advertising", "consent", "apps", "privacy", "policy"],
@@ -162,7 +162,7 @@ internal static class PolicyPrivacy
                 {
                     Id = "advinfo-disable-ad-activity-history",
                     Label = "Disable Ad Activity History Collection",
-                    Category = "Privacy & Telemetry Policy",
+                    Category = "Privacy",
                     Description =
                         "Stops Windows from collecting and retaining a history of ad impression events (which ads were shown, clicked, or dismissed). Removes a persistent data trail used for attribution and retargeting. Default: history retained. Recommended: 1.",
                     Tags = ["advertising", "history", "impressions", "privacy", "policy"],
@@ -179,7 +179,7 @@ internal static class PolicyPrivacy
                 {
                     Id = "advinfo-hide-advertising-settings-page",
                     Label = "Hide Advertising Privacy Settings page",
-                    Category = "Privacy & Telemetry Policy",
+                    Category = "Privacy",
                     Description =
                         "Removes the Advertising ID sub-page from Settings → Privacy → General. Prevents users from discovering or interacting with advertising-related privacy controls. Default: page visible. Recommended: 1 on locked-down kiosk endpoints.",
                     Tags = ["advertising", "settings", "ui-restriction", "kiosk", "privacy", "policy"],
@@ -196,7 +196,7 @@ internal static class PolicyPrivacy
                 {
                     Id = "advinfo-disable-diagnostic-ad-feedback",
                     Label = "Disable Diagnostic Feedback for Ad Measurement",
-                    Category = "Privacy & Telemetry Policy",
+                    Category = "Privacy",
                     Description =
                         "Prevents Windows from sending diagnostic events (install, launch, purchase, uninstall) to Microsoft for use in advertising measurement and attribution. Reduces silently collected conversion data. Default: feedback sent. Recommended: 1.",
                     Tags = ["advertising", "diagnostics", "attribution", "telemetry", "privacy", "policy"],
@@ -226,7 +226,7 @@ internal static class PolicyPrivacy
             {
                 Id = "datacol-disable-opt-in-notification",
                 Label = "Suppress Telemetry Opt-In Change Notification",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 Description =
                     "Prevents Windows from displaying a notification banner when the telemetry level changes. Eliminates user-visible popups during telemetry configuration.",
                 Tags = ["telemetry", "notification", "privacy", "policy"],
@@ -244,7 +244,7 @@ internal static class PolicyPrivacy
             {
                 Id = "datacol-hide-telemetry-settings-ui",
                 Label = "Hide Telemetry Controls from Settings",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 Description =
                     "Removes the Diagnostic & Feedback section from Windows Settings, preventing users from changing telemetry level or viewing diagnostic data.",
                 Tags = ["telemetry", "settings", "privacy", "policy"],
@@ -262,7 +262,7 @@ internal static class PolicyPrivacy
             {
                 Id = "datacol-disable-enterprise-auth-proxy",
                 Label = "Disable Enterprise Auth Proxy for Telemetry",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 Description =
                     "Prevents Windows telemetry service from using authenticated proxy servers to send diagnostic data. Forces direct transmission or blocks it entirely.",
                 Tags = ["telemetry", "proxy", "network", "policy"],
@@ -280,7 +280,7 @@ internal static class PolicyPrivacy
             {
                 Id = "datacol-disable-device-delete-button",
                 Label = "Disable Delete Device Diagnostic Data Button",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 Description =
                     "Prevents users from deleting device diagnostic data via the 'Delete diagnostic data' button in Settings > Privacy > Diagnostics & Feedback.",
                 Tags = ["telemetry", "diagnostic-data", "settings", "policy"],
@@ -298,7 +298,7 @@ internal static class PolicyPrivacy
             {
                 Id = "datacol-disable-feedback-notifications",
                 Label = "Suppress Windows Feedback Reminder Pop-Ups",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 Description =
                     "Prevents Windows from displaying feedback reminder notifications that prompt users to rate experiences or submit feedback to Microsoft.",
                 Tags = ["feedback", "notifications", "privacy", "policy"],
@@ -316,7 +316,7 @@ internal static class PolicyPrivacy
             {
                 Id = "datacol-disable-device-name-in-telemetry",
                 Label = "Block Device Name in Telemetry Submissions",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 Description =
                     "Prevents Windows from including the device's computer name in telemetry payloads sent to Microsoft. Reduces machine-identifying data in diagnostics.",
                 Tags = ["telemetry", "device-name", "privacy", "policy"],
@@ -334,7 +334,7 @@ internal static class PolicyPrivacy
             {
                 Id = "datacol-disable-ceip",
                 Label = "Disable Customer Experience Improvement Program",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 Description =
                     "Disables Microsoft's Customer Experience Improvement Program (CEIP) which collects anonymous usage statistics across Windows components. Policy-level disable.",
                 Tags = ["ceip", "telemetry", "privacy", "policy"],
@@ -352,7 +352,7 @@ internal static class PolicyPrivacy
             {
                 Id = "datacol-disable-sample-submission",
                 Label = "Disable File Sample Submission to Microsoft",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 Description =
                     "Prevents Windows Diagnostic Analysis Service (DAST) and Windows Defender from submitting file samples to Microsoft's analysis cloud for threat intelligence.",
                 Tags = ["sample-submission", "telemetry", "security", "policy"],
@@ -370,7 +370,7 @@ internal static class PolicyPrivacy
             {
                 Id = "datacol-disable-onesettings-downloads",
                 Label = "Block WindowsOneSettings Telemetry Overrides",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 Description =
                     "Prevents Windows from downloading one-time configuration overrides (OneSettings) that can dynamically change data collection settings without a Windows Update.",
                 Tags = ["telemetry", "onesettings", "policy", "hardening"],
@@ -388,7 +388,7 @@ internal static class PolicyPrivacy
             {
                 Id = "datacol-disable-diagnostic-page",
                 Label = "Hide Diagnostic Data Viewer Page in Settings",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 Description =
                     "Hides the Diagnostic Data Viewer page from Windows Settings > Privacy & Security > Diagnostics & Feedback, preventing users from reviewing diagnostic data submissions.",
                 Tags = ["telemetry", "diagnostic-data", "settings", "policy"],
@@ -417,7 +417,7 @@ internal static class PolicyPrivacy
             {
                 Id = "dataintg-enable-integrity-checks",
                 Label = "Enable System Data Integrity Checks",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 5,
@@ -434,7 +434,7 @@ internal static class PolicyPrivacy
             {
                 Id = "dataintg-enable-runtime-verification",
                 Label = "Enable Runtime Data Integrity Verification",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -451,7 +451,7 @@ internal static class PolicyPrivacy
             {
                 Id = "dataintg-disable-bypass",
                 Label = "Disable Data Integrity Check Bypass",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 5,
@@ -468,7 +468,7 @@ internal static class PolicyPrivacy
             {
                 Id = "dataintg-enable-audit-logging",
                 Label = "Enable Data Integrity Audit Logging",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -485,7 +485,7 @@ internal static class PolicyPrivacy
             {
                 Id = "dataintg-enable-boot-verification",
                 Label = "Enable Boot-Time Data Integrity Verification",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 5,
@@ -502,7 +502,7 @@ internal static class PolicyPrivacy
             {
                 Id = "dataintg-enable-usermode-checks",
                 Label = "Enable User-Mode Data Integrity Checks",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -519,7 +519,7 @@ internal static class PolicyPrivacy
             {
                 Id = "dataintg-disable-rollback",
                 Label = "Disable Data Integrity Version Rollback",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -536,7 +536,7 @@ internal static class PolicyPrivacy
             {
                 Id = "dataintg-enable-hash-validation",
                 Label = "Enable File Hash Validation Before Execution",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 5,
@@ -553,7 +553,7 @@ internal static class PolicyPrivacy
             {
                 Id = "dataintg-disable-telemetry",
                 Label = "Disable Data Integrity Telemetry",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 1,
@@ -570,7 +570,7 @@ internal static class PolicyPrivacy
             {
                 Id = "dataintg-enforce-on-write",
                 Label = "Enforce Data Integrity on File Write Operations",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -598,7 +598,7 @@ internal static class PolicyPrivacy
             {
                 Id = "fbk-disable-feedback-notifications",
                 Label = "Disable Feedback Notifications",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 NeedsAdmin = true, CorpSafe = true, ImpactScore = 3, SafetyRating = 5,
                 Description =
                     "Sets DisableFeedbackNotifications=1 in the Feedback policy key. Prevents "
@@ -617,7 +617,7 @@ internal static class PolicyPrivacy
             {
                 Id = "fbk-disable-feedback-hub",
                 Label = "Disable Feedback Hub",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 NeedsAdmin = true, CorpSafe = true, ImpactScore = 3, SafetyRating = 5,
                 Description =
                     "Sets DisableFeedbackHub=1 in the Feedback policy key. Blocks the "
@@ -636,7 +636,7 @@ internal static class PolicyPrivacy
             {
                 Id = "fbk-disable-feedback-hub-nps",
                 Label = "Disable Feedback Hub NPS Surveys",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 NeedsAdmin = true, CorpSafe = true, ImpactScore = 2, SafetyRating = 5,
                 Description =
                     "Sets DisableNpsSurveys=1 in the Feedback policy key. Suppresses "
@@ -655,7 +655,7 @@ internal static class PolicyPrivacy
             {
                 Id = "fbk-disable-feedback-telemetry-upload",
                 Label = "Disable Feedback Telemetry Upload",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 NeedsAdmin = true, CorpSafe = true, ImpactScore = 4, SafetyRating = 5,
                 Description =
                     "Sets DisableTelemetryUpload=1 in the Feedback policy key. Explicitly "
@@ -674,7 +674,7 @@ internal static class PolicyPrivacy
             {
                 Id = "fbk-disable-screen-capture-feedback",
                 Label = "Disable Feedback Screen Capture",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 NeedsAdmin = true, CorpSafe = true, ImpactScore = 4, SafetyRating = 5,
                 Description =
                     "Sets DisableScreenCapture=1 in the Feedback policy key. Prevents the "
@@ -693,7 +693,7 @@ internal static class PolicyPrivacy
             {
                 Id = "fbk-disable-recording-feedback",
                 Label = "Disable Feedback Steps Recorder",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 NeedsAdmin = true, CorpSafe = true, ImpactScore = 3, SafetyRating = 5,
                 Description =
                     "Sets DisableStepsRecorder=1 in the Feedback policy key. Blocks the "
@@ -712,7 +712,7 @@ internal static class PolicyPrivacy
             {
                 Id = "fbk-disable-feedback-app-prompts",
                 Label = "Disable In-App Feedback Prompts",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 NeedsAdmin = true, CorpSafe = true, ImpactScore = 2, SafetyRating = 5,
                 Description =
                     "Sets DisableInAppFeedbackPrompts=1 in the Feedback policy key. Prevents "
@@ -731,7 +731,7 @@ internal static class PolicyPrivacy
             {
                 Id = "fbk-set-feedback-frequency-never",
                 Label = "Set Feedback Frequency to Never",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 NeedsAdmin = true, CorpSafe = true, ImpactScore = 3, SafetyRating = 5,
                 Description =
                     "Sets FeedbackFrequency=0 in the Feedback policy key. Sets the periodic "
@@ -750,7 +750,7 @@ internal static class PolicyPrivacy
             {
                 Id = "fbk-disable-voluntary-data-collection",
                 Label = "Disable Voluntary Data Collection via Feedback",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 NeedsAdmin = true, CorpSafe = true, ImpactScore = 3, SafetyRating = 5,
                 Description =
                     "Sets DisableVoluntaryDataCollection=1 in the Feedback policy key. Opts "
@@ -769,7 +769,7 @@ internal static class PolicyPrivacy
             {
                 Id = "fbk-disable-feedback-account-requirement",
                 Label = "Disable Feedback Account Sign-In Requirement",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 NeedsAdmin = true, CorpSafe = true, ImpactScore = 2, SafetyRating = 5,
                 Description =
                     "Sets DisableAccountRequirement=1 in the Feedback policy key. Prevents "
@@ -804,7 +804,7 @@ internal static class PolicyPrivacy
             {
                 Id = "loc-disable-location-scripting",
                 Label = "Disable Location Scripting",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -822,7 +822,7 @@ internal static class PolicyPrivacy
             {
                 Id = "loc-disable-sensors",
                 Label = "Disable Windows Sensor Platform",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -840,7 +840,7 @@ internal static class PolicyPrivacy
             {
                 Id = "loc-disable-location-provider",
                 Label = "Disable Windows Location Provider",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -859,7 +859,7 @@ internal static class PolicyPrivacy
             {
                 Id = "loc-policy-deny-app-location",
                 Label = "Policy: Force-Deny All UWP Apps Location Access",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -878,7 +878,7 @@ internal static class PolicyPrivacy
             {
                 Id = "loc-policy-deny-app-motion",
                 Label = "Policy: Force-Deny All UWP Apps Motion Sensor Access",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -896,7 +896,7 @@ internal static class PolicyPrivacy
             {
                 Id = "loc-disable-search-location",
                 Label = "Disable Location-Based Windows Search Results",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 1,
@@ -914,7 +914,7 @@ internal static class PolicyPrivacy
             {
                 Id = "loc-disable-wifi-location",
                 Label = "Disable Wi-Fi Location Auto-Connect",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 1,
@@ -932,7 +932,7 @@ internal static class PolicyPrivacy
             {
                 Id = "loc-user-deny-location",
                 Label = "Turn Off Location Access for Current User",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 NeedsAdmin = false,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -951,7 +951,7 @@ internal static class PolicyPrivacy
             {
                 Id = "loc-user-deny-activity-sensors",
                 Label = "Turn Off Activity Sensor Access for Current User",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 NeedsAdmin = false,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -970,7 +970,7 @@ internal static class PolicyPrivacy
             {
                 Id = "loc-disable-ie-geolocation",
                 Label = "Disable Internet Explorer Geolocation API",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 1,
@@ -1008,7 +1008,7 @@ internal static class PolicyPrivacy
                 {
                     Id = "locsns-disable-location",
                     Label = "Disable All Location Services",
-                    Category = "Privacy & Telemetry Policy",
+                    Category = "Privacy",
                     Description =
                         "Disables the Windows location platform, preventing all applications and system components from accessing the device's geographic location. Default: enabled. Recommended: 1 (disabled) on workstations where geo-location is unnecessary.",
                     Tags = ["location", "privacy", "sensors", "gps", "policy"],
@@ -1025,7 +1025,7 @@ internal static class PolicyPrivacy
                 {
                     Id = "locsns-disable-scripted-location",
                     Label = "Disable Scripted Location Access",
-                    Category = "Privacy & Telemetry Policy",
+                    Category = "Privacy",
                     Description =
                         "Prevents scripts (JScript, VBScript, PowerShell) and web content from accessing the Windows location platform. Closes browser-script and WSH location enumeration vectors. Default: enabled. Recommended: 1 (disabled).",
                     Tags = ["location", "scripting", "privacy", "web", "policy"],
@@ -1042,7 +1042,7 @@ internal static class PolicyPrivacy
                 {
                     Id = "locsns-disable-sensors",
                     Label = "Disable Hardware Sensor Driver Framework",
-                    Category = "Privacy & Telemetry Policy",
+                    Category = "Privacy",
                     Description =
                         "Disables the Windows sensor platform, preventing ambient light, accelerometer, gyroscope, and other sensor drivers from reporting data to applications. Default: enabled. Recommended: 1 (disabled) on fixed workstations.",
                     Tags = ["sensors", "hardware", "accelerometer", "privacy", "policy"],
@@ -1059,7 +1059,7 @@ internal static class PolicyPrivacy
                 {
                     Id = "locsns-disable-windowed-location",
                     Label = "Disable Windowed Location Mode",
-                    Category = "Privacy & Telemetry Policy",
+                    Category = "Privacy",
                     Description =
                         "Disables the windowed (per-session) location mode where each window can independently request location access. Centralises location control. Default: enabled. Recommended: 1 (disabled).",
                     Tags = ["location", "windowed", "session", "privacy", "policy"],
@@ -1076,7 +1076,7 @@ internal static class PolicyPrivacy
                 {
                     Id = "locsns-disable-wifi-scan",
                     Label = "Disable Wi-Fi Scan for Geo-Location",
-                    Category = "Privacy & Telemetry Policy",
+                    Category = "Privacy",
                     Description =
                         "Prevents the Windows location platform from using Wi-Fi access point scanning to determine the device's location. Eliminates WPS-based location leakage on enterprise Wi-Fi. Default: enabled. Recommended: 1 (disabled).",
                     Tags = ["location", "wifi", "geolocation", "privacy", "policy"],
@@ -1093,7 +1093,7 @@ internal static class PolicyPrivacy
                 {
                     Id = "locsns-disable-fused-provider",
                     Label = "Disable Fused Location Provider",
-                    Category = "Privacy & Telemetry Policy",
+                    Category = "Privacy",
                     Description =
                         "Disables the Windows Fused Location Provider that combines GPS, cellular, Wi-Fi, and sensor data for high-accuracy positioning. Reduces background data aggregation. Default: enabled. Recommended: 1 (disabled) on desktop/server systems.",
                     Tags = ["location", "fused", "gps", "accuracy", "privacy", "policy"],
@@ -1110,7 +1110,7 @@ internal static class PolicyPrivacy
                 {
                     Id = "locsns-clear-location-history",
                     Label = "Disable Location History Logging",
-                    Category = "Privacy & Telemetry Policy",
+                    Category = "Privacy",
                     Description =
                         "Prevents Windows from storing a history of the device's geographic location. Location data is used for each query only and not retained locally. Default: enabled. Recommended: 1 (disabled) for regulatory compliance.",
                     Tags = ["location", "history", "privacy", "data-retention", "policy"],
@@ -1127,7 +1127,7 @@ internal static class PolicyPrivacy
                 {
                     Id = "locsns-disable-cellular-location",
                     Label = "Disable Cellular Data for Location",
-                    Category = "Privacy & Telemetry Policy",
+                    Category = "Privacy",
                     Description =
                         "Prevents the Windows location service from using cellular tower triangulation to determine device position. Applicable on devices with mobile data or SIM cards. Default: enabled. Recommended: 1 (disabled).",
                     Tags = ["location", "cellular", "triangulation", "privacy", "policy"],
@@ -1144,7 +1144,7 @@ internal static class PolicyPrivacy
                 {
                     Id = "locsns-geo-smoothing-disable",
                     Label = "Disable Location Geo-Smoothing",
-                    Category = "Privacy & Telemetry Policy",
+                    Category = "Privacy",
                     Description =
                         "Disables the geo-smoothing algorithm that averages location readings over time. Reduces background sensor polling frequency and associated battery/resource usage. Default: enabled. Recommended: 0 (off) on fixed machines.",
                     Tags = ["location", "smoothing", "gps", "performance", "policy"],
@@ -1161,7 +1161,7 @@ internal static class PolicyPrivacy
                 {
                     Id = "locsns-deny-app-location-access",
                     Label = "Deny All App Access to Location",
-                    Category = "Privacy & Telemetry Policy",
+                    Category = "Privacy",
                     Description =
                         "Forces a system-wide policy that denies all apps access to the location platform, overriding per-app user consent. More restrictive than disabling the service; denies even system components. Default: not set. Recommended: 1.",
                     Tags = ["location", "app-access", "privacy", "lockdown", "policy"],
@@ -1199,7 +1199,7 @@ internal static class PolicyPrivacy
             {
                 Id = "msa-disable-account-sync",
                 Label = "Disable Microsoft Account Settings Sync",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 NeedsAdmin = true,
                 CorpSafe = false,
                 ImpactScore = 3,
@@ -1217,7 +1217,7 @@ internal static class PolicyPrivacy
             {
                 Id = "msa-disable-sync-override",
                 Label = "Prevent Users from Overriding Settings Sync Policy",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 NeedsAdmin = true,
                 CorpSafe = false,
                 ImpactScore = 3,
@@ -1234,7 +1234,7 @@ internal static class PolicyPrivacy
             {
                 Id = "msa-block-msa-signin",
                 Label = "Block Microsoft Account Sign-In for Apps",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -1253,7 +1253,7 @@ internal static class PolicyPrivacy
             {
                 Id = "msa-disable-windows-hello-provision",
                 Label = "Disable Windows Hello Provisioning (Local Account)",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -1271,7 +1271,7 @@ internal static class PolicyPrivacy
             {
                 Id = "msa-disable-optional-diagnostic-sync",
                 Label = "Disable Optional Diagnostic Data Sync via MSA",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 NeedsAdmin = true,
                 CorpSafe = false,
                 ImpactScore = 2,
@@ -1289,7 +1289,7 @@ internal static class PolicyPrivacy
             {
                 Id = "msa-disable-app-access-account-info",
                 Label = "Disable App Access to Account Information (Privacy)",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 NeedsAdmin = false,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -1328,7 +1328,7 @@ internal static class PolicyPrivacy
             {
                 Id = "msa-disable-suggested-apps-msa",
                 Label = "Disable MSA-Based Suggested Apps and Content",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 NeedsAdmin = false,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -1367,7 +1367,7 @@ internal static class PolicyPrivacy
             {
                 Id = "msa-disable-theme-sync",
                 Label = "Disable Theme Sync via Microsoft Account",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 1,
@@ -1385,7 +1385,7 @@ internal static class PolicyPrivacy
             {
                 Id = "msa-disable-password-sync",
                 Label = "Disable Password Sync via Microsoft Account",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -1403,7 +1403,7 @@ internal static class PolicyPrivacy
             {
                 Id = "msa-disable-app-settings-sync",
                 Label = "Disable Per-App Settings Sync via Microsoft Account",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -1434,7 +1434,7 @@ internal static class PolicyPrivacy
             {
                 Id = "photo-disable-acquire-wizard",
                 Label = "Disable Photo Acquisition Wizard",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 Description =
                     "Sets DisableAutoPlayForCamera=1 in the machine Photo Acquire policy key. "
                     + "Prevents the Windows Photo Acquisition Wizard from launching automatically when a camera "
@@ -1454,7 +1454,7 @@ internal static class PolicyPrivacy
             {
                 Id = "photo-disable-acquire-wizard-user",
                 Label = "Disable Photo Acquisition Wizard (Current User)",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 Description =
                     "Sets DisableAutoPlayForCamera=1 in the per-user Photo Acquire policy key. "
                     + "Suppresses the photo import prompt for the current user when a camera is connected, "
@@ -1474,7 +1474,7 @@ internal static class PolicyPrivacy
             {
                 Id = "photo-disable-delete-after-import",
                 Label = "Prevent Photo Deletion After Import",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 Description =
                     "Sets NeverDeleteOriginalFiles=1 in the machine Photo Acquire policy key. "
                     + "Prevents the Photo Acquisition Wizard from offering or performing deletion of photos "
@@ -1494,7 +1494,7 @@ internal static class PolicyPrivacy
             {
                 Id = "photo-disable-tag-on-import",
                 Label = "Disable Automatic Tagging During Photo Import",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 Description =
                     "Sets DisableTaggingOnAcquire=1 in the machine Photo Acquire policy key. "
                     + "Stops the Photo Acquisition Wizard from automatically adding metadata tags to photos "
@@ -1514,7 +1514,7 @@ internal static class PolicyPrivacy
             {
                 Id = "photo-disable-rotate-on-import",
                 Label = "Disable Auto-Rotate During Photo Import",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 Description =
                     "Sets DisableRotateOnAcquire=1 in the machine Photo Acquire policy key. "
                     + "Prevents the acquisition wizard from auto-rotating photos based on EXIF orientation metadata. "
@@ -1534,7 +1534,7 @@ internal static class PolicyPrivacy
             {
                 Id = "photo-disable-title-on-import",
                 Label = "Disable Title Prompt During Photo Import",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 Description =
                     "Sets DisableTitleOnAcquire=1 in the machine Photo Acquire policy key. "
                     + "Skips the title/description prompt during the photo acquisition wizard. "
@@ -1554,7 +1554,7 @@ internal static class PolicyPrivacy
             {
                 Id = "photo-disable-open-explorer-after",
                 Label = "Disable 'Open Folder' After Photo Import",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 Description =
                     "Sets DisableOpenFilesystemAfterAcquire=1 in the machine Photo Acquire policy key. "
                     + "Prevents the Photo Acquisition Wizard from automatically opening the destination folder "
@@ -1574,7 +1574,7 @@ internal static class PolicyPrivacy
             {
                 Id = "photo-disable-wia-device-install",
                 Label = "Disable WIA Device Metadata Internet Download",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 Description =
                     "Sets PreventDeviceMetadataFromNetwork=1 in the Device Metadata policy key. "
                     + "Prevents Windows from downloading WIA (Windows Image Acquisition) device metadata "
@@ -1594,7 +1594,7 @@ internal static class PolicyPrivacy
             {
                 Id = "photo-disable-scanner-events",
                 Label = "Disable WIA Scanner Device Events",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 Description =
                     "Sets DisableScannerEvents=1 in the machine Photo Acquire policy key. "
                     + "Suppresses WIA scanner events that trigger the photo acquisition wizard or image scanning dialogs "
@@ -1614,7 +1614,7 @@ internal static class PolicyPrivacy
             {
                 Id = "photo-disable-camera-events",
                 Label = "Disable WIA Camera Device Events",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 Description =
                     "Sets DisableCameraEvents=1 in the machine Photo Acquire policy key. "
                     + "Suppresses WIA camera events that trigger the photo acquisition wizard when a digital camera "
@@ -1645,7 +1645,7 @@ internal static class PolicyPrivacy
                 {
                     Id = "pnp-disable-toast-notifications",
                     Label = "Disable All Toast Notifications via Policy",
-                    Category = "Privacy & Telemetry Policy",
+                    Category = "Privacy",
                     Description =
                         "Sets ToastEnabled=0 to block all toast (pop-up) notifications via Group Policy. "
                         + "No app toast alerts will appear on the desktop or in Action Center regardless of individual app notification settings. "
@@ -1664,7 +1664,7 @@ internal static class PolicyPrivacy
                 {
                     Id = "pnp-disable-lockscreen-toasts",
                     Label = "Disable Toast Notifications on Lock Screen",
-                    Category = "Privacy & Telemetry Policy",
+                    Category = "Privacy",
                     Description =
                         "Sets NoToastApplicationNotificationOnLockscreen=1 to prevent app toast notifications from appearing on the Windows lock screen. "
                         + "Protects notification content from physical shoulder-surfing on unattended machines in shared-space environments.",
@@ -1682,7 +1682,7 @@ internal static class PolicyPrivacy
                 {
                     Id = "pnp-disable-app-notifications",
                     Label = "Disable App Notifications via Group Policy",
-                    Category = "Privacy & Telemetry Policy",
+                    Category = "Privacy",
                     Description =
                         "Sets NoToastApplicationNotification=1 to block all application-level toast notifications via Group Policy. "
                         + "This machine-wide policy prevents individual users from re-enabling per-app notifications in Windows Settings, "
@@ -1701,7 +1701,7 @@ internal static class PolicyPrivacy
                 {
                     Id = "pnp-disable-cloud-notifications",
                     Label = "Disable Cloud-Sourced Notifications",
-                    Category = "Privacy & Telemetry Policy",
+                    Category = "Privacy",
                     Description =
                         "Sets NoCloudApplicationNotification=1 to prevent Windows from delivering notifications that originate from cloud services "
                         + "via Windows Push Notification Services (WNS). Reduces notification-related network traffic and prevents cloud-sourced "
@@ -1720,7 +1720,7 @@ internal static class PolicyPrivacy
                 {
                     Id = "pnp-disable-tile-notifications",
                     Label = "Disable Live Tile Notifications",
-                    Category = "Privacy & Telemetry Policy",
+                    Category = "Privacy",
                     Description =
                         "Sets NoTileApplicationNotification=1 to prevent apps from updating live tile badges and content on the Start menu. "
                         + "Eliminates background polling by Start tile update engines, reduces network usage from tile refresh requests, "
@@ -1739,7 +1739,7 @@ internal static class PolicyPrivacy
                 {
                     Id = "pnp-disable-notification-mirroring",
                     Label = "Disable Notification Mirroring to Linked Devices",
-                    Category = "Privacy & Telemetry Policy",
+                    Category = "Privacy",
                     Description =
                         "Sets DisallowNotificationMirroring=1 to prevent Windows from forwarding notification content to linked devices "
                         + "via Bluetooth pairing or the Phone Link (Your Phone) application. Mirrored notifications bypass per-app "
@@ -1758,7 +1758,7 @@ internal static class PolicyPrivacy
                 {
                     Id = "pnp-disable-cloud-toast-notifications",
                     Label = "Disable Cloud Toast Notification Delivery",
-                    Category = "Privacy & Telemetry Policy",
+                    Category = "Privacy",
                     Description =
                         "Sets DisallowCloudToastNotification=1 to block toast notifications delivered through the Windows Push Notification "
                         + "Services (WNS) cloud infrastructure. Prevents the WNS channel from delivering push content from app backends, "
@@ -1777,7 +1777,7 @@ internal static class PolicyPrivacy
                 {
                     Id = "pnp-disable-badge-on-lockscreen",
                     Label = "Disable App Badge Counters on Lock Screen",
-                    Category = "Privacy & Telemetry Policy",
+                    Category = "Privacy",
                     Description =
                         "Sets NoLockScreenApplicationBadge=1 to prevent app badge counters from appearing on the Windows lock screen. "
                         + "Badge numbers (unread email count, missed calls, calendar items) are hidden, reducing information leakage "
@@ -1796,7 +1796,7 @@ internal static class PolicyPrivacy
                 {
                     Id = "pnp-disable-user-notification-changes",
                     Label = "Prevent User Changes to Notification Settings",
-                    Category = "Privacy & Telemetry Policy",
+                    Category = "Privacy",
                     Description =
                         "Sets DisallowUserChanges=1 to prevent end-users from modifying notification priorities and quiet-hours settings "
                         + "in the Windows Settings app. Policy-enforced notification settings cannot be overridden per-user when this "
@@ -1815,7 +1815,7 @@ internal static class PolicyPrivacy
                 {
                     Id = "pnp-restrict-push-notification-network",
                     Label = "Block Push Notification Network Access",
-                    Category = "Privacy & Telemetry Policy",
+                    Category = "Privacy",
                     Description =
                         "Sets NoNetworkNotification=1 to prevent Windows from delivering network-status notifications (connection changes, "
                         + "captive portal prompts, VPN status). Reduces notification noise in environments with frequent network transitions "
@@ -1845,7 +1845,7 @@ internal static class PolicyPrivacy
             {
                 Id = "srchweb-disable-cloud-search",
                 Label = "Disable Cloud-Augmented Search Results",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 Description =
                     "Prevents Windows Search from combining local results with cloud (Bing/MSN index) results. Search returns only locally-indexed content.",
                 Tags = ["search", "cloud", "bing", "privacy", "policy"],
@@ -1863,7 +1863,7 @@ internal static class PolicyPrivacy
             {
                 Id = "srchweb-disable-cortana-policy",
                 Label = "Disable Cortana AI Assistant (Machine Policy)",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 Description = "Machine-wide Group Policy to disable Cortana integration in Windows Search. Overrides per-user and per-app settings.",
                 Tags = ["cortana", "search", "ai", "policy", "privacy"],
                 NeedsAdmin = true,
@@ -1880,7 +1880,7 @@ internal static class PolicyPrivacy
             {
                 Id = "srchweb-disable-cortana-above-lock",
                 Label = "Disable Cortana on Lock Screen",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 Description =
                     "Prevents Cortana from responding to voice or text queries when the device is locked. Blocks unauthenticated access to Cortana assistant features.",
                 Tags = ["cortana", "lock-screen", "policy", "security"],
@@ -1898,7 +1898,7 @@ internal static class PolicyPrivacy
             {
                 Id = "srchweb-disable-web-results",
                 Label = "Disable Web Results in Windows Search",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 Description =
                     "Prevents Windows Search from including Bing web results alongside local search results. Search is limited to locally-indexed files and apps.",
                 Tags = ["search", "web", "bing", "privacy", "policy"],
@@ -1916,7 +1916,7 @@ internal static class PolicyPrivacy
             {
                 Id = "srchweb-disable-web-over-metered",
                 Label = "Disable Web Search over Metered Connections",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 Description =
                     "Blocks web-augmented search results when the device is connected via a metered network. Reduces unexpected data usage during web search on limited plans.",
                 Tags = ["search", "metered", "data", "policy"],
@@ -1934,7 +1934,7 @@ internal static class PolicyPrivacy
             {
                 Id = "srchweb-disable-search-location",
                 Label = "Disable Location Access in Windows Search",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 Description =
                     "Prevents Windows Search from using the device's current location to improve local search results. Removes a location-data disclosure path.",
                 Tags = ["search", "location", "privacy", "policy"],
@@ -1952,7 +1952,7 @@ internal static class PolicyPrivacy
             {
                 Id = "srchweb-disable-bing-in-search",
                 Label = "Disable Bing Web Search in Start/Taskbar",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 Description =
                     "Completely disables Bing web search from appearing in the Windows Start menu and taskbar search. All search results come from the local index only.",
                 Tags = ["search", "bing", "start", "taskbar", "privacy", "policy"],
@@ -1970,7 +1970,7 @@ internal static class PolicyPrivacy
             {
                 Id = "srchweb-enforce-safe-search",
                 Label = "Enforce Strict SafeSearch for Web Results",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 Description =
                     "Forces Bing SafeSearch to Strict mode for all web search results delivered through Windows Search. Value 2 = Strict. Recommended for managed shared devices.",
                 Tags = ["search", "safesearch", "policy", "content-filter"],
@@ -1988,7 +1988,7 @@ internal static class PolicyPrivacy
             {
                 Id = "srchweb-disable-dynamic-content-wsb",
                 Label = "Disable Dynamic Content in Windows Search Box",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 Description =
                     "Prevents Windows Search Box from showing dynamic highlights, trending topics, and promotional content. Keeps the search bar focused on user-typed queries.",
                 Tags = ["search", "search-box", "highlights", "policy"],
@@ -2006,7 +2006,7 @@ internal static class PolicyPrivacy
             {
                 Id = "srchweb-disable-indexing-encrypted",
                 Label = "Disable Indexing of Encrypted Files",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 Description =
                     "Prevents Windows Search from indexing encrypted files and stores. Reduces the risk that sensitive encrypted content is extractable via the search index.",
                 Tags = ["search", "encryption", "indexing", "security", "policy"],
@@ -2038,7 +2038,7 @@ internal static class PolicyPrivacy
             {
                 Id = "sensor-block-location-scripting",
                 Label = "Block Script Access to Location Services",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 Tags = ["sensor", "location", "scripting", "privacy", "policy"],
@@ -2055,7 +2055,7 @@ internal static class PolicyPrivacy
             {
                 Id = "sensor-disable-all-sensors",
                 Label = "Disable All Sensor Devices via Policy",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 Tags = ["sensor", "hardware", "disable", "privacy", "policy"],
@@ -2072,7 +2072,7 @@ internal static class PolicyPrivacy
             {
                 Id = "sensor-disable-windows-location-provider",
                 Label = "Disable Windows Location Platform Provider",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 Tags = ["sensor", "location", "provider", "windows", "privacy"],
@@ -2089,7 +2089,7 @@ internal static class PolicyPrivacy
             {
                 Id = "sensor-block-location-user-override",
                 Label = "Prevent Users Re-Enabling Location Services",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 Tags = ["sensor", "location", "user-override", "policy", "lock"],
@@ -2106,7 +2106,7 @@ internal static class PolicyPrivacy
             {
                 Id = "sensor-deny-radios-capability",
                 Label = "Deny App Access to Radio (Bluetooth/Wi-Fi) Controls",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 Tags = ["sensor", "radios", "bluetooth", "wifi", "privacy"],
@@ -2123,7 +2123,7 @@ internal static class PolicyPrivacy
             {
                 Id = "sensor-deny-activity-capability",
                 Label = "Deny App Access to User Activity / Fitness Data",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 Tags = ["sensor", "activity", "fitness", "privacy", "capability"],
@@ -2139,7 +2139,7 @@ internal static class PolicyPrivacy
             {
                 Id = "sensor-deny-gaze-input-capability",
                 Label = "Deny App Access to Gaze / Eye-Tracking Input",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 Tags = ["sensor", "gaze", "eye-tracking", "input", "privacy"],
@@ -2155,7 +2155,7 @@ internal static class PolicyPrivacy
             {
                 Id = "sensor-deny-contacts-capability",
                 Label = "Deny App Access to Contacts",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 Tags = ["sensor", "contacts", "privacy", "capability", "data"],
@@ -2172,7 +2172,7 @@ internal static class PolicyPrivacy
             {
                 Id = "sensor-deny-email-capability",
                 Label = "Deny App Access to Email",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 Tags = ["sensor", "email", "privacy", "capability", "data"],
@@ -2189,7 +2189,7 @@ internal static class PolicyPrivacy
             {
                 Id = "sensor-deny-bluetooth-sync-capability",
                 Label = "Deny App Access to Bluetooth Sync",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 Tags = ["sensor", "bluetooth", "sync", "privacy", "capability"],
@@ -2217,7 +2217,7 @@ internal static class PolicyPrivacy
             {
                 Id = "sensor-disable-location",
                 Label = "Disable Location Services",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -2234,7 +2234,7 @@ internal static class PolicyPrivacy
             {
                 Id = "sensor-disable-sensors",
                 Label = "Disable Sensor Data Access",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -2251,7 +2251,7 @@ internal static class PolicyPrivacy
             {
                 Id = "sensor-disable-location-scripting",
                 Label = "Disable Location Scripting Access",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -2268,7 +2268,7 @@ internal static class PolicyPrivacy
             {
                 Id = "sensor-block-location-provider-svc",
                 Label = "Disable Windows Location Provider",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -2285,7 +2285,7 @@ internal static class PolicyPrivacy
             {
                 Id = "sensor-disable-location-telemetry",
                 Label = "Disable Location Telemetry",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -2302,7 +2302,7 @@ internal static class PolicyPrivacy
             {
                 Id = "sensor-disable-geocoder",
                 Label = "Disable Geocoder Service",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -2319,7 +2319,7 @@ internal static class PolicyPrivacy
             {
                 Id = "sensor-disable-location-history",
                 Label = "Disable Location History",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -2336,7 +2336,7 @@ internal static class PolicyPrivacy
             {
                 Id = "sensor-disable-permission-changes",
                 Label = "Disable Location Permission Changes",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -2353,7 +2353,7 @@ internal static class PolicyPrivacy
             {
                 Id = "sensor-disable-network-location",
                 Label = "Disable Network Location Service",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -2370,7 +2370,7 @@ internal static class PolicyPrivacy
             {
                 Id = "sensor-disable-location-broadcast",
                 Label = "Disable Location Broadcast",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -2398,7 +2398,7 @@ internal static class PolicyPrivacy
             {
                 Id = "sptype-disable-auto-correct",
                 Label = "Disable Autocorrect via Policy",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 NeedsAdmin = true, CorpSafe = true, ImpactScore = 2, SafetyRating = 5,
                 Description =
                     "Sets AutocorrectMisspelledWords=0 in the SpellingAndTyping policy key. "
@@ -2417,7 +2417,7 @@ internal static class PolicyPrivacy
             {
                 Id = "sptype-disable-spell-checking",
                 Label = "Disable System-Wide Spell Checking",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 NeedsAdmin = true, CorpSafe = true, ImpactScore = 2, SafetyRating = 5,
                 Description =
                     "Sets SpellCheckingEnabled=0 in the SpellingAndTyping policy key. Disables "
@@ -2437,7 +2437,7 @@ internal static class PolicyPrivacy
             {
                 Id = "sptype-disable-text-prediction",
                 Label = "Disable Text Prediction (Inline Suggestions)",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 NeedsAdmin = true, CorpSafe = true, ImpactScore = 2, SafetyRating = 5,
                 Description =
                     "Sets TextPredictionEnabled=0 in the SpellingAndTyping policy key. "
@@ -2456,7 +2456,7 @@ internal static class PolicyPrivacy
             {
                 Id = "sptype-disable-highlight-misspelled",
                 Label = "Disable Misspelling Underline Highlight",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 NeedsAdmin = true, CorpSafe = true, ImpactScore = 1, SafetyRating = 5,
                 Description =
                     "Sets HighlightMisspelledWords=0 in the SpellingAndTyping policy key. "
@@ -2475,7 +2475,7 @@ internal static class PolicyPrivacy
             {
                 Id = "sptype-disable-typing-insights",
                 Label = "Disable Typing Insights",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 NeedsAdmin = true, CorpSafe = true, ImpactScore = 2, SafetyRating = 5,
                 Description =
                     "Sets InsightsEnabled=0 in the SpellingAndTyping policy key. Disables "
@@ -2494,7 +2494,7 @@ internal static class PolicyPrivacy
             {
                 Id = "sptype-disable-hardware-keyboard-suggestions",
                 Label = "Disable Hardware Keyboard Suggestions Bar",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 NeedsAdmin = true, CorpSafe = true, ImpactScore = 2, SafetyRating = 5,
                 Description =
                     "Sets HardwareKeyboardTextSuggestions=0 in the SpellingAndTyping policy key. "
@@ -2513,7 +2513,7 @@ internal static class PolicyPrivacy
             {
                 Id = "sptype-disable-swipe-typing",
                 Label = "Disable Touch Keyboard Swipe Typing",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 NeedsAdmin = true, CorpSafe = true, ImpactScore = 2, SafetyRating = 5,
                 Description =
                     "Sets SwipeKeyboardEnabled=0 in the SpellingAndTyping policy key. Disables "
@@ -2532,7 +2532,7 @@ internal static class PolicyPrivacy
             {
                 Id = "sptype-disable-typing-telemetry",
                 Label = "Disable Typing Telemetry Upload",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 NeedsAdmin = true, CorpSafe = true, ImpactScore = 3, SafetyRating = 5,
                 Description =
                     "Sets TypingDataCollectionEnabled=0 in the SpellingAndTyping policy key. "
@@ -2552,7 +2552,7 @@ internal static class PolicyPrivacy
             {
                 Id = "sptype-disable-handwriting-recognition",
                 Label = "Disable Handwriting Recognition Improvement",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 NeedsAdmin = true, CorpSafe = true, ImpactScore = 2, SafetyRating = 5,
                 Description =
                     "Sets HandwritingAcceptedSamples=0 in the SpellingAndTyping policy key. "
@@ -2571,7 +2571,7 @@ internal static class PolicyPrivacy
             {
                 Id = "sptype-disable-autocomplete",
                 Label = "Disable System Autocomplete",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 NeedsAdmin = true, CorpSafe = true, ImpactScore = 2, SafetyRating = 5,
                 Description =
                     "Sets AutoCompleteEnabled=0 in the SpellingAndTyping policy key. Disables "
@@ -2607,7 +2607,7 @@ internal static class PolicyPrivacy
             {
                 Id = "wdiag-disable-wer-reporting",
                 Label = "Diagnostics: Disable Windows Error Reporting (WER)",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 NeedsAdmin = true,
                 CorpSafe = false,
                 MinBuild = 17763,
@@ -2628,7 +2628,7 @@ internal static class PolicyPrivacy
             {
                 Id = "wdiag-disable-wer-queue",
                 Label = "Diagnostics: Disable Windows Error Report Queue (Prevent Deferred Uploads)",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 NeedsAdmin = true,
                 CorpSafe = false,
                 MinBuild = 17763,
@@ -2649,7 +2649,7 @@ internal static class PolicyPrivacy
             {
                 Id = "wdiag-opt-out-wer-enterprise",
                 Label = "Diagnostics: Opt Out of Windows Error Reporting Enterprise Tier",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 MinBuild = 17763,
@@ -2670,7 +2670,7 @@ internal static class PolicyPrivacy
             {
                 Id = "wdiag-disable-app-compat-telemetry",
                 Label = "Diagnostics: Disable Application Compatibility Telemetry (CEIP)",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 NeedsAdmin = true,
                 CorpSafe = false,
                 MinBuild = 17763,
@@ -2691,7 +2691,7 @@ internal static class PolicyPrivacy
             {
                 Id = "wdiag-disable-app-compat-engine",
                 Label = "Diagnostics: Disable Application Compatibility Engine",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 NeedsAdmin = true,
                 CorpSafe = false,
                 MinBuild = 17763,
@@ -2713,7 +2713,7 @@ internal static class PolicyPrivacy
             {
                 Id = "wdiag-disable-psr",
                 Label = "Diagnostics: Disable Problem Steps Recorder (PSR / psr.exe)",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 MinBuild = 17763,
@@ -2734,7 +2734,7 @@ internal static class PolicyPrivacy
             {
                 Id = "wdiag-disable-feedback-notifications",
                 Label = "Diagnostics: Disable Windows Feedback and Satisfaction Surveys",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 MinBuild = 17763,
@@ -2755,7 +2755,7 @@ internal static class PolicyPrivacy
             {
                 Id = "wdiag-disable-reliability-monitor",
                 Label = "Diagnostics: Disable Reliability Monitor Data Collection",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 NeedsAdmin = true,
                 CorpSafe = false,
                 MinBuild = 17763,
@@ -2776,7 +2776,7 @@ internal static class PolicyPrivacy
             {
                 Id = "wdiag-set-wer-local-dumps",
                 Label = "Diagnostics: Redirect Crash Dumps to Local Folder (No Upload)",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 MinBuild = 17763,
@@ -2813,7 +2813,7 @@ internal static class PolicyPrivacy
             {
                 Id = "wdiag-disable-insider-preview-builds",
                 Label = "Diagnostics: Block Windows Insider Preview Build Notifications",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 MinBuild = 17763,
@@ -2845,7 +2845,7 @@ internal static class PolicyPrivacy
                 {
                     Id = "wdip-disable-scenario-execution",
                     Label = "Disable WDI Diagnostic Scenario Execution",
-                    Category = "Privacy & Telemetry Policy",
+                    Category = "Privacy",
                     Description =
                         "Sets ScenarioExecutionEnabled=0 to prevent Windows Diagnostic Infrastructure from running "
                         + "built-in diagnostic scenarios. WDI scenarios collect hardware, driver, and application state "
@@ -2865,7 +2865,7 @@ internal static class PolicyPrivacy
                 {
                     Id = "wdip-disable-diagnostic-triggers",
                     Label = "Disable WDI Diagnostic Trigger Execution",
-                    Category = "Privacy & Telemetry Policy",
+                    Category = "Privacy",
                     Description =
                         "Sets DiagnosticTriggerExecution=0 to prevent WDI from launching diagnostic routines in response "
                         + "to system event triggers (crash, hang, driver error). Trigger-based diagnostics collect snapshot data "
@@ -2884,7 +2884,7 @@ internal static class PolicyPrivacy
                 {
                     Id = "wdip-disable-result-summary",
                     Label = "Disable WDI Diagnostic Result Summary Collection",
-                    Category = "Privacy & Telemetry Policy",
+                    Category = "Privacy",
                     Description =
                         "Sets ResultSummaryEnabled=0 to prevent Windows Diagnostic Infrastructure from generating and storing "
                         + "diagnostic result summaries. These summaries aggregate diagnostic run outcomes and feed Windows reliability "
@@ -2903,7 +2903,7 @@ internal static class PolicyPrivacy
                 {
                     Id = "wdip-disable-task-collection",
                     Label = "Disable WDI Diagnostic Task Collection",
-                    Category = "Privacy & Telemetry Policy",
+                    Category = "Privacy",
                     Description =
                         "Sets EnableDiagnosticTaskCollection=0 to stop WDI from scheduling and collecting data via "
                         + "background diagnostic tasks. Diagnostic task collection uses scheduled tasks in the "
@@ -2923,7 +2923,7 @@ internal static class PolicyPrivacy
                 {
                     Id = "wdip-disable-scenario-logging",
                     Label = "Disable WDI Diagnostic Scenario Event Logging",
-                    Category = "Privacy & Telemetry Policy",
+                    Category = "Privacy",
                     Description =
                         "Sets ScenarioLoggingEnabled=0 to prevent WDI from writing diagnostic scenario execution results "
                         + "to the Windows event log. Reduces event log noise from the WDI event provider and prevents "
@@ -2942,7 +2942,7 @@ internal static class PolicyPrivacy
                 {
                     Id = "wdip-disable-results-caching",
                     Label = "Disable WDI Diagnostic Results Caching",
-                    Category = "Privacy & Telemetry Policy",
+                    Category = "Privacy",
                     Description =
                         "Sets ResultsCachingEnabled=0 to prevent WDI from caching diagnostic run results to disk. "
                         + "Without caching, each diagnostic scenario must re-run fully if retriggered instead of serving "
@@ -2962,7 +2962,7 @@ internal static class PolicyPrivacy
                 {
                     Id = "wdip-set-max-persistence-days",
                     Label = "Limit WDI Scenario Result Persistence",
-                    Category = "Privacy & Telemetry Policy",
+                    Category = "Privacy",
                     Description =
                         "Sets MaxScenarioPersistenceDurationDays=1 to keep diagnostic scenario result data on disk for "
                         + "no more than 1 day. Stale diagnostic data is purged quickly, limiting the window in which "
@@ -2981,7 +2981,7 @@ internal static class PolicyPrivacy
                 {
                     Id = "wdip-disable-msa-diagnostics",
                     Label = "Disable MSA-Linked WDI Diagnostics",
-                    Category = "Privacy & Telemetry Policy",
+                    Category = "Privacy",
                     Description =
                         "Sets DisableDiagnosticsMSA=1 to prevent WDI from associating diagnostic results and telemetry "
                         + "with the user's Microsoft Account (MSA). MSA-linked diagnostics allow personalised Windows "
@@ -3001,7 +3001,7 @@ internal static class PolicyPrivacy
                 {
                     Id = "wdip-disable-boot-diagnostics",
                     Label = "Disable WDI Boot Diagnostic Collection",
-                    Category = "Privacy & Telemetry Policy",
+                    Category = "Privacy",
                     Description =
                         "Sets EnableBootDiagnostics=0 to prevent WDI from collecting boot-time diagnostic data during "
                         + "the Windows startup phase. Boot diagnostics capture driver initialisation timing, boot event "
@@ -3021,7 +3021,7 @@ internal static class PolicyPrivacy
                 {
                     Id = "wdip-prevent-diagnostic-task-execution",
                     Label = "Prevent WDI Diagnostic Task Execution via Policy",
-                    Category = "Privacy & Telemetry Policy",
+                    Category = "Privacy",
                     Description =
                         "Sets PreventDiagnosticTaskExecution=1 to apply a hard Group Policy block on all WDI-managed "
                         + "diagnostic task execution. This policy-level enforcement takes precedence over local WDI "
@@ -3052,7 +3052,7 @@ internal static class PolicyPrivacy
             {
                 Id = "diagtrk-set-telemetry-security-only",
                 Label = "Windows DiagTrack: Set Telemetry to Security (Level 0)",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 Description =
                     "Sets the Windows diagnostic data collection level to Security (level 0) — the lowest telemetry tier. "
                     + "Security-level telemetry sends only data required for Windows Defender ATP and Windows security functions. "
@@ -3073,7 +3073,7 @@ internal static class PolicyPrivacy
             {
                 Id = "diagtrk-disable-opt-in-change-notifications",
                 Label = "Windows DiagTrack: Disable Telemetry Opt-In Change Notifications",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 Description =
                     "Prevents Windows from prompting users to change their diagnostic data settings. "
                     + "When telemetry is centrally managed via GPO, user-facing prompts to adjust data collection settings are noise and could cause confusion. "
@@ -3094,7 +3094,7 @@ internal static class PolicyPrivacy
             {
                 Id = "diagtrk-disable-opt-in-settings-ui",
                 Label = "Windows DiagTrack: Disable Telemetry Opt-In Settings UI",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 Description =
                     "Hides the diagnostic data opt-in settings page in the Privacy section of Windows Settings. "
                     + "When telemetry is managed via GPO or Intune, the Settings page is redundant and could confuse users into thinking they can adjust the policy. "
@@ -3115,7 +3115,7 @@ internal static class PolicyPrivacy
             {
                 Id = "diagtrk-disable-enterprise-auth-proxy",
                 Label = "Windows DiagTrack: Disable Enterprise Authentication Proxy for Telemetry",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 Description =
                     "Prevents the DiagTrack service from using authenticated proxy servers for telemetry data uploads. "
                     + "When an enterprise proxy requires NTLM/Kerberos authentication, the DiagTrack service may authenticate with machine credentials. "
@@ -3136,7 +3136,7 @@ internal static class PolicyPrivacy
             {
                 Id = "diagtrk-disable-device-name-in-telemetry",
                 Label = "Windows DiagTrack: Prevent Device Name from Being Sent in Telemetry",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 Description =
                     "Prevents Windows from including the device hostname in diagnostic telemetry data sent to Microsoft. "
                     + "Device names can reveal organizational naming conventions, asset tag formats, and employee details. "
@@ -3157,7 +3157,7 @@ internal static class PolicyPrivacy
             {
                 Id = "diagtrk-limit-diagnostic-log-collection",
                 Label = "Windows DiagTrack: Limit Diagnostic Log Collection",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 Description =
                     "Limits the amount of diagnostic log data that the Connected User Experiences and Telemetry service can collect. "
                     + "Unrestricted log collection can gather large volumes of user activity and application usage data. "
@@ -3178,7 +3178,7 @@ internal static class PolicyPrivacy
             {
                 Id = "diagtrk-disable-dump-collection",
                 Label = "Windows DiagTrack: Disable Crash Dump Collection for Telemetry",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 Description =
                     "Prevents the DiagTrack service from collecting and uploading process crash dumps as part of diagnostic telemetry. "
                     + "Crash dumps can contain sensitive memory contents, user data, and application secrets captured at the moment of a crash. "
@@ -3199,7 +3199,7 @@ internal static class PolicyPrivacy
             {
                 Id = "diagtrk-limit-dump-collection",
                 Label = "Windows DiagTrack: Limit Dump Collection Level",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 Description =
                     "Limits the diagnostic dump collection level to minimize the amount of memory captured during crash events used for telemetry. "
                     + "Windows can collect kernel dumps, mini dumps, or full memory dumps for telemetry reporting. "
@@ -3220,7 +3220,7 @@ internal static class PolicyPrivacy
             {
                 Id = "diagtrk-disable-one-settings-downloads",
                 Label = "Windows DiagTrack: Disable OneSettings Policy Downloads",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 Description =
                     "Prevents Windows from downloading configuration and feature flag updates via the OneSettings service used by DiagTrack. "
                     + "OneSettings allows Microsoft to remotely change Windows behavior, feature availability, and telemetry configurations. "
@@ -3241,7 +3241,7 @@ internal static class PolicyPrivacy
             {
                 Id = "diagtrk-disable-cloud-clipboard-integration",
                 Label = "Windows DiagTrack: Disable Cloud Clipboard Telemetry",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 Description =
                     "Prevents the DiagTrack service from collecting clipboard content samples as part of cloud clipboard telemetry. "
                     + "When Cloud Clipboard is enabled, diagnostic telemetry may include usage metadata that could indirectly expose clipboard patterns. "
@@ -3275,7 +3275,7 @@ internal static class PolicyPrivacy
             {
                 Id = "wippol-allow-user-decrypt",
                 Label = "WIP: Allow User to Decrypt Protected Files",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 Description =
                     "Allows the owner of a WIP-protected file to decrypt it. When disabled, only IT admins can remove protection. Enabled by default; disable for stricter DLP control.",
                 Tags = ["wip", "edp", "dlp", "data-protection", "encryption", "policy"],
@@ -3293,7 +3293,7 @@ internal static class PolicyPrivacy
             {
                 Id = "wippol-require-protection-under-lock",
                 Label = "WIP: Require Protection While Under Lock",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 Description =
                     "Requires that WIP-protected data remain encrypted even when the device is locked. Prevents data access from unauthorized physical access when the screen is locked.",
                 Tags = ["wip", "edp", "lock-screen", "data-protection", "policy"],
@@ -3311,7 +3311,7 @@ internal static class PolicyPrivacy
             {
                 Id = "wippol-enable-edp",
                 Label = "WIP: Enable Enterprise Data Protection",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 Description =
                     "Enables Windows Information Protection (formerly Enterprise Data Protection/EDP) on the device. Mode 3 = Block — prevents users from copying work data to personal apps.",
                 Tags = ["wip", "edp", "dlp", "enterprise", "policy"],
@@ -3329,7 +3329,7 @@ internal static class PolicyPrivacy
             {
                 Id = "wippol-silent-mode",
                 Label = "WIP: Set Silent Enforcement (Audit Without Block)",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 Description =
                     "Sets WIP/EDP to silent enforcement mode. Personal data leakage is logged to the event log but not blocked. Useful for piloting WIP before enforcing restrictions.",
                 Tags = ["wip", "edp", "dlp", "audit", "silent", "policy"],
@@ -3347,7 +3347,7 @@ internal static class PolicyPrivacy
             {
                 Id = "wippol-block-copy-to-personal",
                 Label = "WIP: Block Copying Work Data to Personal Apps",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 Description =
                     "Enforces WIP to Block mode — users cannot copy, paste, or share protected work data to personal or unmanaged applications. The strictly enforced DLP level.",
                 Tags = ["wip", "edp", "dlp", "block", "clipboard", "policy"],
@@ -3365,7 +3365,7 @@ internal static class PolicyPrivacy
             {
                 Id = "wippol-disable-bing-results-wip",
                 Label = "WIP: Disable Bing Integration for Work Searches",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 Description =
                     "Prevents Windows Search from sending work-context search queries to Bing when WIP is enabled. Keeps enterprise search results isolated from the internet.",
                 Tags = ["wip", "edp", "bing", "search", "privacy", "policy"],
@@ -3383,7 +3383,7 @@ internal static class PolicyPrivacy
             {
                 Id = "wippol-revoke-on-unenroll",
                 Label = "WIP: Revoke Access Keys on MDM Unenrollment",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 Description =
                     "Automatically revokes WIP encryption keys when the device is unenrolled from MDM. Prevents access to protected work data after device management is removed.",
                 Tags = ["wip", "edp", "mdm", "revoke", "unenroll", "policy"],
@@ -3401,7 +3401,7 @@ internal static class PolicyPrivacy
             {
                 Id = "wippol-show-ede-icons",
                 Label = "WIP: Show Enterprise Data Protection Icons on Protected Files",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 Description =
                     "Displays a work briefcase icon overlay on WIP-protected files in Explorer and on the Start menu to visually distinguish protected corporate data from personal files.",
                 Tags = ["wip", "edp", "icons", "explorer", "visibility", "policy"],
@@ -3419,7 +3419,7 @@ internal static class PolicyPrivacy
             {
                 Id = "wippol-restrict-clipboard",
                 Label = "WIP: Restrict Clipboard Sharing Between Work and Personal",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 Description =
                     "Restricts clipboard operations to prevent copying WIP-protected (work) content into unmanaged (personal) applications. Prevents clipboard-based data exfiltration.",
                 Tags = ["wip", "edp", "clipboard", "dlp", "restriction", "policy"],
@@ -3437,7 +3437,7 @@ internal static class PolicyPrivacy
             {
                 Id = "wippol-enterprise-ip-isolation",
                 Label = "WIP: Enable Enterprise Network Isolation",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 Description =
                     "Activates WIP network isolation policy — only IP ranges and domains defined in the enterprise network boundary list are treated as 'work' destinations.",
                 Tags = ["wip", "edp", "network-isolation", "enterprise", "policy"],
@@ -3470,7 +3470,7 @@ internal static class PolicyPrivacy
             {
                 Id = "wmaps-disable-auto-download",
                 Label = "Maps: Disable automatic map data download and update",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 Description =
                     "Sets AutoDownloadAndUpdateMapData=0 in the Maps policy key. Prevents the Maps app "
                     + "from automatically downloading and updating offline map data in the background.",
@@ -3485,7 +3485,7 @@ internal static class PolicyPrivacy
             {
                 Id = "wmaps-disable-untriggered-network",
                 Label = "Maps: Disable untriggered network traffic from Maps settings page",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 Description =
                     "Sets AllowUntriggeredNetworkTrafficOnSettingsPage=0. Prevents the Maps settings page "
                     + "from making unsolicited network requests to check for map updates or new regions.",
@@ -3500,7 +3500,7 @@ internal static class PolicyPrivacy
             {
                 Id = "wmaps-no-connected-search-privacy",
                 Label = "Search: Enforce maximum privacy for Connected Search",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 Description =
                     "Sets ConnectedSearchPrivacy=3 (machine policy). Value 3 blocks web search from "
                     + "the taskbar search box, enforcing the strictest privacy posture.",
@@ -3515,7 +3515,7 @@ internal static class PolicyPrivacy
             {
                 Id = "wmaps-enforce-safe-search-strict",
                 Label = "Search: Enforce strict SafeSearch in Windows Search",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 Description =
                     "Sets ConnectedSearchSafeSearch=2 (machine policy). Value 2 = Strict; filters adult "
                     + "content from Windows Search results. Default: 1 (moderate).",
@@ -3530,7 +3530,7 @@ internal static class PolicyPrivacy
             {
                 Id = "wmaps-disable-search-highlights",
                 Label = "Search: Disable dynamic search highlights in the taskbar",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 Description =
                     "Sets AllowSearchHighlights=0 (machine policy). Prevents Windows from displaying "
                     + "rotating 'Search Highlights' icons and animations in the taskbar search box.",
@@ -3545,7 +3545,7 @@ internal static class PolicyPrivacy
             {
                 Id = "wmaps-disable-cortana-aad",
                 Label = "Search: Disable Cortana for Azure AD accounts (machine policy)",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 Description =
                     "Sets AllowCortanaInAAD=0 in Windows Search policy. Prevents Cortana from being "
                     + "available for Azure Active Directory (Microsoft Entra ID) signed-in accounts.",
@@ -3560,7 +3560,7 @@ internal static class PolicyPrivacy
             {
                 Id = "wmaps-user-no-connected-search-privacy",
                 Label = "Search (user): Enforce maximum Connected Search privacy per user",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 Description =
                     "Sets ConnectedSearchPrivacy=3 at HKCU user-policy scope. Enforces per-user strictest "
                     + "Connected Search privacy for the current signed-in account.",
@@ -3575,7 +3575,7 @@ internal static class PolicyPrivacy
             {
                 Id = "wmaps-user-enforce-safe-search",
                 Label = "Search (user): Enforce strict SafeSearch per user",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 Description =
                     "Sets ConnectedSearchSafeSearch=2 at HKCU user-policy scope. Enforces strict search "
                     + "result filtering for the current user's Windows Search results.",
@@ -3590,7 +3590,7 @@ internal static class PolicyPrivacy
             {
                 Id = "wmaps-user-disable-search-highlights",
                 Label = "Search (user): Disable search highlights per user",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 Description =
                     "Sets AllowSearchHighlights=0 at HKCU user-policy scope. Hides the rotating "
                     + "Search Highlights animations in the taskbar for the current user.",
@@ -3605,7 +3605,7 @@ internal static class PolicyPrivacy
             {
                 Id = "wmaps-user-disable-cortana-aad",
                 Label = "Search (user): Disable Cortana for AAD accounts per user",
-                Category = "Privacy & Telemetry Policy",
+                Category = "Privacy",
                 Description =
                     "Sets AllowCortanaInAAD=0 at HKCU user-policy scope. Disables Cortana for Azure AD "
                     + "accounts at the individual user level, complementing the machine-wide policy.",

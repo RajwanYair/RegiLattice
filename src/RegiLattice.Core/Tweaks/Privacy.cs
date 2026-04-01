@@ -1556,7 +1556,7 @@ internal static class TelemetryAdvanced
         {
             Id = "telem-disable-diag-optin",
             Label = "Block Diagnostic Data Settings Changes",
-            Category = "Telemetry Advanced",
+            Category = "Privacy",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -1582,7 +1582,7 @@ internal static class TelemetryAdvanced
         {
             Id = "telem-disable-app-telemetry",
             Label = "Disable App Telemetry (Steps Recorder + Inventory)",
-            Category = "Telemetry Advanced",
+            Category = "Privacy",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -1605,7 +1605,7 @@ internal static class TelemetryAdvanced
         {
             Id = "telem-disable-handwriting",
             Label = "Disable Handwriting Data Sharing",
-            Category = "Telemetry Advanced",
+            Category = "Privacy",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -1628,7 +1628,7 @@ internal static class TelemetryAdvanced
         {
             Id = "telem-disable-feedback",
             Label = "Disable Feedback Notifications",
-            Category = "Telemetry Advanced",
+            Category = "Privacy",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -1643,7 +1643,7 @@ internal static class TelemetryAdvanced
         {
             Id = "telem-disable-input-telemetry",
             Label = "Disable Typing/Inking Telemetry",
-            Category = "Telemetry Advanced",
+            Category = "Privacy",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -1658,7 +1658,7 @@ internal static class TelemetryAdvanced
         {
             Id = "telem-disable-tailored-experiences",
             Label = "Disable Tailored Experiences",
-            Category = "Telemetry Advanced",
+            Category = "Privacy",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -1693,7 +1693,7 @@ internal static class TelemetryAdvanced
         {
             Id = "telem-disable-inventory-collector",
             Label = "Disable Inventory Collector",
-            Category = "Telemetry Advanced",
+            Category = "Privacy",
             NeedsAdmin = true,
             CorpSafe = false,
             Description =
@@ -1708,7 +1708,7 @@ internal static class TelemetryAdvanced
         {
             Id = "telem-disable-sqm-upload",
             Label = "Disable SQM Telemetry Upload",
-            Category = "Telemetry Advanced",
+            Category = "Privacy",
             NeedsAdmin = true,
             CorpSafe = false,
             Description =
@@ -1723,7 +1723,7 @@ internal static class TelemetryAdvanced
         {
             Id = "telem-disable-mrt-report",
             Label = "Disable MRT Infection Reporting",
-            Category = "Telemetry Advanced",
+            Category = "Privacy",
             NeedsAdmin = true,
             CorpSafe = false,
             Description =
@@ -1738,7 +1738,7 @@ internal static class TelemetryAdvanced
         {
             Id = "telem-disable-speech-model-update",
             Label = "Disable Speech Model Automatic Update",
-            Category = "Telemetry Advanced",
+            Category = "Privacy",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -1753,7 +1753,7 @@ internal static class TelemetryAdvanced
         {
             Id = "telem-disable-license-telemetry",
             Label = "Disable License Telemetry (NoGenTicket)",
-            Category = "Telemetry Advanced",
+            Category = "Privacy",
             NeedsAdmin = true,
             CorpSafe = false,
             Description =
@@ -1768,7 +1768,7 @@ internal static class TelemetryAdvanced
         {
             Id = "telem-disable-ncsi-probing",
             Label = "Disable NCSI Active Probe",
-            Category = "Telemetry Advanced",
+            Category = "Privacy",
             NeedsAdmin = true,
             CorpSafe = false,
             Description =
@@ -1792,7 +1792,7 @@ internal static class TelemetryAdvanced
         {
             Id = "telem-disable-customer-experience",
             Label = "Disable Customer Experience Improvement Program",
-            Category = "Telemetry Advanced",
+            Category = "Privacy",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables CEIP data collection. Hardware/software usage data won't be sent to Microsoft. Default: enabled.",
@@ -1806,7 +1806,7 @@ internal static class TelemetryAdvanced
         {
             Id = "telem-disable-handwriting-data",
             Label = "Disable Handwriting Data Sharing",
-            Category = "Telemetry Advanced",
+            Category = "Privacy",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables sending handwriting error reports and data to Microsoft. Default: enabled.",
@@ -1820,7 +1820,7 @@ internal static class TelemetryAdvanced
         {
             Id = "telem-disable-kms-client-emulation",
             Label = "Disable KMS Client Online AVS Validation",
-            Category = "Telemetry Advanced",
+            Category = "Privacy",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables automatic KMS client activation validation pings. Reduces outbound telemetry traffic. Default: enabled.",
@@ -1854,7 +1854,7 @@ internal static class TelemetryAdvanced
         {
             Id = "telem-disable-advertising-id",
             Label = "Disable Advertising ID (Policy)",
-            Category = "Telemetry Advanced",
+            Category = "Privacy",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables the per-user advertising ID via Group Policy. Prevents personalised ad tracking across apps. Default: enabled.",
@@ -1868,7 +1868,7 @@ internal static class TelemetryAdvanced
         {
             Id = "telem-disable-diagtrack-autologger",
             Label = "Disable DiagTrack AutoLogger",
-            Category = "Telemetry Advanced",
+            Category = "Privacy",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -1892,7 +1892,7 @@ internal static class TelemetryAdvanced
         {
             Id = "telem-disable-win-error-reporting",
             Label = "Disable Windows Error Reporting (Policy)",
-            Category = "Telemetry Advanced",
+            Category = "Privacy",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -1907,7 +1907,7 @@ internal static class TelemetryAdvanced
         {
             Id = "telem-security-only",
             Label = "Set Telemetry to Security Only",
-            Category = "Telemetry Advanced",
+            Category = "Privacy",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -1922,7 +1922,7 @@ internal static class TelemetryAdvanced
         {
             Id = "telem-telemetry-set-max-size",
             Label = "Set Telemetry Cache Max Size to 0 MB",
-            Category = "Telemetry Advanced",
+            Category = "Privacy",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Sets the maximum diagnostic data cache size to 0 MB. Prevents telemetry data from accumulating on disk. Default: 1024 MB.",
@@ -1936,7 +1936,7 @@ internal static class TelemetryAdvanced
         {
             Id = "telem-disable-ceip",
             Label = "Disable Customer Experience Improvement Programme (SQMClient)",
-            Category = "Telemetry Advanced",
+            Category = "Privacy",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -1951,7 +1951,7 @@ internal static class TelemetryAdvanced
         {
             Id = "telem-disable-one-settings-download",
             Label = "Disable OneSettings Telemetry Configuration Downloads",
-            Category = "Telemetry Advanced",
+            Category = "Privacy",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -1969,7 +1969,7 @@ internal static class TelemetryAdvanced
         {
             Id = "telem-limit-diagnostic-log",
             Label = "Limit Diagnostic Log Collection to Minimum",
-            Category = "Telemetry Advanced",
+            Category = "Privacy",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -1987,7 +1987,7 @@ internal static class TelemetryAdvanced
         {
             Id = "telem-disable-cloud-analytics-enhanced",
             Label = "Restrict Enhanced Diagnostic Data to Windows Analytics",
-            Category = "Telemetry Advanced",
+            Category = "Privacy",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -2022,7 +2022,7 @@ internal static class TelemetryAdvanced
         {
             Id = "telem-disable-device-metadata-lookup",
             Label = "Disable Device Metadata Service URL Lookups",
-            Category = "Telemetry Advanced",
+            Category = "Privacy",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -2050,7 +2050,7 @@ internal static class TelemetryAdvanced
         {
             Id = "telem-disable-language-list-share",
             Label = "Disable Language List Sharing with Websites",
-            Category = "Telemetry Advanced",
+            Category = "Privacy",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -2065,7 +2065,7 @@ internal static class TelemetryAdvanced
         {
             Id = "telem-disable-insider-builds",
             Label = "Disable Windows Insider Preview Build Access",
-            Category = "Telemetry Advanced",
+            Category = "Privacy",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -2080,7 +2080,7 @@ internal static class TelemetryAdvanced
         {
             Id = "telem-disable-inking-telemetry",
             Label = "Disable Inking and Typing Privacy Telemetry",
-            Category = "Telemetry Advanced",
+            Category = "Privacy",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -2101,7 +2101,7 @@ internal static class TelemetryAdvanced
         {
             Id = "telem-disable-edge-data-opt-in",
             Label = "Opt Out of Microsoft Edge Telemetry Data",
-            Category = "Telemetry Advanced",
+            Category = "Privacy",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -2129,7 +2129,7 @@ internal static class TelemetryAdvanced
         {
             Id = "telem-disable-map-auto-update",
             Label = "Disable Windows Maps Automatic Data Updates",
-            Category = "Telemetry Advanced",
+            Category = "Privacy",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -2144,7 +2144,7 @@ internal static class TelemetryAdvanced
         {
             Id = "telem-disable-oobe-privacy-wizard",
             Label = "Disable OOBE Privacy Experience Wizard",
-            Category = "Telemetry Advanced",
+            Category = "Privacy",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =

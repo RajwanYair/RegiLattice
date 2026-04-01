@@ -53,7 +53,7 @@ internal static class PolicyMisc
             {
                 Id = "actsetup-disable-active-setup-execution",
                 Label = "Disable Active Setup Execution for Non-Administrative Users",
-                Category = "System & Misc Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -70,7 +70,7 @@ internal static class PolicyMisc
             {
                 Id = "actsetup-audit-active-setup-changes",
                 Label = "Enable Auditing for Active Setup Registry Modifications",
-                Category = "System & Misc Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -87,7 +87,7 @@ internal static class PolicyMisc
             {
                 Id = "actsetup-restrict-active-setup-to-signed",
                 Label = "Restrict Active Setup to Digitally Signed Components Only",
-                Category = "System & Misc Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -104,7 +104,7 @@ internal static class PolicyMisc
             {
                 Id = "actsetup-limit-active-setup-user-context",
                 Label = "Limit Active Setup Execution to System Context Only",
-                Category = "System & Misc Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -121,7 +121,7 @@ internal static class PolicyMisc
             {
                 Id = "actsetup-disable-iexplore-active-setup",
                 Label = "Disable Internet Explorer Active Setup Initialization Components",
-                Category = "System & Misc Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -138,7 +138,7 @@ internal static class PolicyMisc
             {
                 Id = "actsetup-block-remote-active-setup-triggers",
                 Label = "Block Remotely Triggered Active Setup Execution",
-                Category = "System & Misc Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -155,7 +155,7 @@ internal static class PolicyMisc
             {
                 Id = "actsetup-whitelist-active-setup-guids",
                 Label = "Enforce Allowlist for Permitted Active Setup Component GUIDs",
-                Category = "System & Misc Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -172,7 +172,7 @@ internal static class PolicyMisc
             {
                 Id = "actsetup-log-active-setup-execution",
                 Label = "Enable Execution Logging for All Active Setup Component Runs",
-                Category = "System & Misc Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -189,7 +189,7 @@ internal static class PolicyMisc
             {
                 Id = "actsetup-prevent-active-setup-version-spoofing",
                 Label = "Prevent Active Setup Component Version Number Spoofing",
-                Category = "System & Misc Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -206,7 +206,7 @@ internal static class PolicyMisc
             {
                 Id = "actsetup-enforce-active-setup-user-isolation",
                 Label = "Enforce User Profile Isolation for Active Setup Component Execution",
-                Category = "System & Misc Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -234,7 +234,7 @@ internal static class PolicyMisc
             {
                 Id = "axinst-disable-activex-install",
                 Label = "Disable ActiveX Installer Service",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description =
                     "Sets DoNotRunAxInstaller=1 in the AxInstaller policy key. "
                     + "Prevents the ActiveX Installer Service from installing or updating ActiveX controls on this machine. "
@@ -255,7 +255,7 @@ internal static class PolicyMisc
             {
                 Id = "axinst-require-admin-approval",
                 Label = "Require Admin Approval for ActiveX Install",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description =
                     "Sets RequireApproval=1 in the AxInstaller policy key. "
                     + "Forces the ActiveX Installer Service to require administrator approval "
@@ -276,7 +276,7 @@ internal static class PolicyMisc
             {
                 Id = "axinst-disable-trusted-zone-only",
                 Label = "Block ActiveX Install from Untrusted Zones",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description =
                     "Sets DisableActiveXInstallFromUntrustedZones=1 in the AxInstaller policy key. "
                     + "Prevents the ActiveX Installer Service from processing install requests "
@@ -297,7 +297,7 @@ internal static class PolicyMisc
             {
                 Id = "axinst-log-successful-installs",
                 Label = "Enable ActiveX Install Success Logging",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description =
                     "Sets LoggingEnabled=1 in the AxInstaller policy key. "
                     + "Instructs the ActiveX Installer Service to write a log entry to the Windows Event Log "
@@ -318,7 +318,7 @@ internal static class PolicyMisc
             {
                 Id = "axinst-log-failed-installs",
                 Label = "Enable ActiveX Install Failure Logging",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description =
                     "Sets ErrorLoggingEnabled=1 in the AxInstaller policy key. "
                     + "Instructs the ActiveX Installer Service to write error events to the Windows Event Log "
@@ -338,7 +338,7 @@ internal static class PolicyMisc
             {
                 Id = "axinst-disable-activex-update",
                 Label = "Disable Automatic ActiveX Control Updates",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description =
                     "Sets DisableAxUpdate=1 in the AxInstaller policy key. "
                     + "Prevents the ActiveX Installer Service from automatically updating existing ActiveX controls "
@@ -359,7 +359,7 @@ internal static class PolicyMisc
             {
                 Id = "axinst-block-per-user-install",
                 Label = "Block Per-User ActiveX Control Installation",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description =
                     "Sets BlockPerUserInstall=1 in the AxInstaller policy key. "
                     + "Prevents the ActiveX Installer Service from installing controls in per-user profile locations, "
@@ -380,7 +380,7 @@ internal static class PolicyMisc
             {
                 Id = "axinst-disable-silent-install",
                 Label = "Disable Silent ActiveX Control Installation",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description =
                     "Sets DisableSilentInstall=1 in the AxInstaller policy key. "
                     + "Prevents the ActiveX Installer Service from installing controls without displaying "
@@ -401,7 +401,7 @@ internal static class PolicyMisc
             {
                 Id = "axinst-restrict-download-cache",
                 Label = "Restrict ActiveX Download Cache Size",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description =
                     "Sets MaxCachedDownloadSize=0 in the AxInstaller policy key. "
                     + "Limits the ActiveX Installer Service download cache to zero, preventing caching of "
@@ -422,7 +422,7 @@ internal static class PolicyMisc
             {
                 Id = "axinst-block-ocx-download",
                 Label = "Block ActiveX OCX Download from Internet",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description =
                     "Sets BlockOcxDownload=1 in the AxInstaller policy key. "
                     + "Prevents the ActiveX Installer Service from downloading .ocx files (OLE Control eXtensions) "
@@ -454,7 +454,7 @@ internal static class PolicyMisc
                 {
                     Id = "clipadv-disable-clipboard-history",
                     Label = "Disable Clipboard History Feature",
-                    Category = "System & Misc Policy",
+                    Category = "System",
                     Description =
                         "Sets AllowClipboardHistory=0 to disable the Windows clipboard history feature (Win+V), preventing clipboard contents from being stored in history.",
                     Tags = ["clipboard", "history", "privacy", "policy"],
@@ -471,7 +471,7 @@ internal static class PolicyMisc
                 {
                     Id = "clipadv-disable-cross-device-sync",
                     Label = "Disable Cross-Device Clipboard Sync",
-                    Category = "System & Misc Policy",
+                    Category = "System",
                     Description =
                         "Sets AllowCrossDeviceClipboard=0 to prevent clipboard content from syncing between devices linked to the same Microsoft account via the cloud.",
                     Tags = ["clipboard", "sync", "cloud", "privacy", "policy"],
@@ -488,7 +488,7 @@ internal static class PolicyMisc
                 {
                     Id = "clipadv-disable-history-across-sessions",
                     Label = "Disable Clipboard History Across Sessions",
-                    Category = "System & Misc Policy",
+                    Category = "System",
                     Description = "Disables clipboard history persistence across logon sessions so clipboard items are cleared when a user logs off.",
                     Tags = ["clipboard", "session", "privacy", "policy"],
                     NeedsAdmin = true,
@@ -504,7 +504,7 @@ internal static class PolicyMisc
                 {
                     Id = "clipadv-block-app-clipboard-access",
                     Label = "Block Clipboard Access from Apps",
-                    Category = "System & Misc Policy",
+                    Category = "System",
                     Description =
                         "Blocks background application access to clipboard contents unless the application is in the foreground, preventing silent clipboard exfiltration.",
                     Tags = ["clipboard", "apps", "security", "policy"],
@@ -521,7 +521,7 @@ internal static class PolicyMisc
                 {
                     Id = "clipadv-disable-history-logging",
                     Label = "Disable Clipboard History Logging",
-                    Category = "System & Misc Policy",
+                    Category = "System",
                     Description =
                         "Disables event logging of clipboard history operations, preventing clipboard contents from appearing in diagnostic logs.",
                     Tags = ["clipboard", "logging", "privacy", "policy"],
@@ -538,7 +538,7 @@ internal static class PolicyMisc
                 {
                     Id = "clipadv-restrict-to-current-user",
                     Label = "Restrict Clipboard History to Current User Only",
-                    Category = "System & Misc Policy",
+                    Category = "System",
                     Description =
                         "Restricts clipboard history storage so that entries are isolated to the current user's session and cannot be accessed by other users on the same machine.",
                     Tags = ["clipboard", "user", "isolation", "policy"],
@@ -555,7 +555,7 @@ internal static class PolicyMisc
                 {
                     Id = "clipadv-disable-rich-text-clipboard",
                     Label = "Disable Rich Text Clipboard Format",
-                    Category = "System & Misc Policy",
+                    Category = "System",
                     Description =
                         "Disables the rich text (RTF) clipboard format, forcing text copies to plain text and reducing the metadata stored in clipboard entries.",
                     Tags = ["clipboard", "rich-text", "format", "policy"],
@@ -572,7 +572,7 @@ internal static class PolicyMisc
                 {
                     Id = "clipadv-block-bg-app-clipboard",
                     Label = "Block Clipboard API for Background Apps",
-                    Category = "System & Misc Policy",
+                    Category = "System",
                     Description =
                         "Prevents background applications from using the clipboard API for reads or writes, limiting clipboard exposure to foreground processes only.",
                     Tags = ["clipboard", "background", "api", "security", "policy"],
@@ -589,7 +589,7 @@ internal static class PolicyMisc
                 {
                     Id = "clipadv-max-item-count-25",
                     Label = "Set Clipboard History Max Item Count to 25",
-                    Category = "System & Misc Policy",
+                    Category = "System",
                     Description = "Caps the clipboard history list at 25 entries to limit on-disk footprint of potentially sensitive copied data.",
                     Tags = ["clipboard", "limit", "history", "policy"],
                     NeedsAdmin = true,
@@ -605,7 +605,7 @@ internal static class PolicyMisc
                 {
                     Id = "clipadv-disable-lock-screen-clipboard",
                     Label = "Disable Clipboard History on Lock Screen",
-                    Category = "System & Misc Policy",
+                    Category = "System",
                     Description =
                         "Disables access to clipboard history from the lock screen, preventing unauthenticated users from viewing previously copied content.",
                     Tags = ["clipboard", "lock-screen", "security", "policy"],
@@ -633,7 +633,7 @@ internal static class PolicyMisc
             {
                 Id = "clphist-disable-clipboard-history",
                 Label = "Disable Clipboard History",
-                Category = "System & Misc Policy",
+                Category = "System",
                 NeedsAdmin = true, CorpSafe = true, ImpactScore = 3, SafetyRating = 5,
                 Description =
                     "Sets DisableClipboardHistory=1 in the ClipboardHistory policy key. Prevents "
@@ -652,7 +652,7 @@ internal static class PolicyMisc
             {
                 Id = "clphist-disable-cloud-sync",
                 Label = "Disable Clipboard Cloud Sync",
-                Category = "System & Misc Policy",
+                Category = "System",
                 NeedsAdmin = true, CorpSafe = true, ImpactScore = 4, SafetyRating = 5,
                 Description =
                     "Sets DisableClipboardSync=1 in the ClipboardHistory policy key. Stops "
@@ -670,7 +670,7 @@ internal static class PolicyMisc
             {
                 Id = "clphist-clear-on-logoff",
                 Label = "Clear Clipboard History on Logoff",
-                Category = "System & Misc Policy",
+                Category = "System",
                 NeedsAdmin = true, CorpSafe = true, ImpactScore = 3, SafetyRating = 5,
                 Description =
                     "Sets ClearClipboardOnLogoff=1 in the ClipboardHistory policy key. Purges "
@@ -688,7 +688,7 @@ internal static class PolicyMisc
             {
                 Id = "clphist-disable-enterprise-sync",
                 Label = "Disable Clipboard Enterprise Roaming",
-                Category = "System & Misc Policy",
+                Category = "System",
                 NeedsAdmin = true, CorpSafe = true, ImpactScore = 3, SafetyRating = 5,
                 Description =
                     "Sets DisableEnterpriseSync=1 in the ClipboardHistory policy key. Prevents "
@@ -707,7 +707,7 @@ internal static class PolicyMisc
             {
                 Id = "clphist-disable-pin-items",
                 Label = "Disable Clipboard Pin Persistent Items",
-                Category = "System & Misc Policy",
+                Category = "System",
                 NeedsAdmin = true, CorpSafe = true, ImpactScore = 2, SafetyRating = 5,
                 Description =
                     "Sets DisablePinItems=1 in the ClipboardHistory policy key. Prevents users "
@@ -725,7 +725,7 @@ internal static class PolicyMisc
             {
                 Id = "clphist-disable-image-data",
                 Label = "Disable Clipboard Image Data Retention",
-                Category = "System & Misc Policy",
+                Category = "System",
                 NeedsAdmin = true, CorpSafe = true, ImpactScore = 2, SafetyRating = 5,
                 Description =
                     "Sets DisableImageData=1 in the ClipboardHistory policy key. Prevents "
@@ -743,7 +743,7 @@ internal static class PolicyMisc
             {
                 Id = "clphist-disable-html-data",
                 Label = "Disable Clipboard HTML Fragment Retention",
-                Category = "System & Misc Policy",
+                Category = "System",
                 NeedsAdmin = true, CorpSafe = true, ImpactScore = 2, SafetyRating = 5,
                 Description =
                     "Sets DisableHtmlData=1 in the ClipboardHistory policy key. Prevents the "
@@ -761,7 +761,7 @@ internal static class PolicyMisc
             {
                 Id = "clphist-disable-thumbnail-preview",
                 Label = "Disable Clipboard History Thumbnail Preview",
-                Category = "System & Misc Policy",
+                Category = "System",
                 NeedsAdmin = true, CorpSafe = true, ImpactScore = 1, SafetyRating = 5,
                 Description =
                     "Sets DisableThumbnailPreview=1 in the ClipboardHistory policy key. Removes "
@@ -779,7 +779,7 @@ internal static class PolicyMisc
             {
                 Id = "clphist-limit-history-size",
                 Label = "Limit Clipboard History Size",
-                Category = "System & Misc Policy",
+                Category = "System",
                 NeedsAdmin = true, CorpSafe = true, ImpactScore = 2, SafetyRating = 5,
                 Description =
                     "Sets MaxHistorySize=10 in the ClipboardHistory policy key. Caps the number "
@@ -797,7 +797,7 @@ internal static class PolicyMisc
             {
                 Id = "clphist-disable-telemetry",
                 Label = "Disable Clipboard History Telemetry",
-                Category = "System & Misc Policy",
+                Category = "System",
                 NeedsAdmin = true, CorpSafe = true, ImpactScore = 2, SafetyRating = 5,
                 Description =
                     "Sets DisableClipboardTelemetry=1 in the ClipboardHistory policy key. "
@@ -828,7 +828,7 @@ internal static class PolicyMisc
                 {
                     Id = "clipsens-block-sensitive-data-dlp",
                     Label = "Block Sensitive Data in Clipboard (DLP)",
-                    Category = "System & Misc Policy",
+                    Category = "System",
                     Description =
                         "Enables DLP-style clipboard content blocking that prevents sensitive data (PII, credentials, financial info) from being copied to the clipboard by monitored apps.",
                     Tags = ["clipboard", "dlp", "sensitive", "privacy", "policy"],
@@ -845,7 +845,7 @@ internal static class PolicyMisc
                 {
                     Id = "clipsens-disable-diagnostic-monitoring",
                     Label = "Disable Clipboard Monitoring by Diagnostic Services",
-                    Category = "System & Misc Policy",
+                    Category = "System",
                     Description =
                         "Disables clipboard monitoring by Windows diagnostic data services, preventing clipboard usage data (not content) from being collected as diagnostic telemetry.",
                     Tags = ["clipboard", "monitoring", "telemetry", "privacy", "policy"],
@@ -862,7 +862,7 @@ internal static class PolicyMisc
                 {
                     Id = "clipsens-block-pii-in-history",
                     Label = "Block PII from Clipboard History",
-                    Category = "System & Misc Policy",
+                    Category = "System",
                     Description =
                         "Prevents personally identifiable information from being stored in clipboard history entries, stripping or blocking PII items before they enter the history store.",
                     Tags = ["clipboard", "pii", "privacy", "policy"],
@@ -879,7 +879,7 @@ internal static class PolicyMisc
                 {
                     Id = "clipsens-disable-usage-analytics",
                     Label = "Disable Clipboard Usage Analytics",
-                    Category = "System & Misc Policy",
+                    Category = "System",
                     Description =
                         "Disables collection of clipboard usage analytics (copy/paste frequency, format types, app usage) sent to Microsoft for product improvement.",
                     Tags = ["clipboard", "analytics", "telemetry", "privacy", "policy"],
@@ -896,7 +896,7 @@ internal static class PolicyMisc
                 {
                     Id = "clipsens-restrict-secure-desktops",
                     Label = "Restrict Clipboard to Secure Desktops Only",
-                    Category = "System & Misc Policy",
+                    Category = "System",
                     Description =
                         "Restricts clipboard operations to secure desktop contexts only, preventing clipboard data from crossing the security boundary between secure and non-secure desktops.",
                     Tags = ["clipboard", "secure-desktop", "isolation", "policy"],
@@ -913,7 +913,7 @@ internal static class PolicyMisc
                 {
                     Id = "clipsens-block-bluetooth-share",
                     Label = "Block Clipboard Sharing via Bluetooth",
-                    Category = "System & Misc Policy",
+                    Category = "System",
                     Description =
                         "Blocks clipboard content from being shared over Bluetooth connections (e.g., via Swift Pair or Nearby Sharing with Bluetooth transport).",
                     Tags = ["clipboard", "bluetooth", "sharing", "privacy", "policy"],
@@ -930,7 +930,7 @@ internal static class PolicyMisc
                 {
                     Id = "clipsens-disable-kiosk-clipboard",
                     Label = "Disable Clipboard Access in Kiosk Mode",
-                    Category = "System & Misc Policy",
+                    Category = "System",
                     Description =
                         "Disables clipboard access in Kiosk (Assigned Access) mode, preventing kiosk users from copying data from the kiosk session to other applications.",
                     Tags = ["clipboard", "kiosk", "assigned-access", "security", "policy"],
@@ -947,7 +947,7 @@ internal static class PolicyMisc
                 {
                     Id = "clipsens-prevent-password-paste",
                     Label = "Prevent Password Paste from Clipboard Manager",
-                    Category = "System & Misc Policy",
+                    Category = "System",
                     Description =
                         "Blocks clipboard managers from injecting stored passwords into password fields via paste, requiring direct typing or approved password manager integration.",
                     Tags = ["clipboard", "password", "paste", "security", "policy"],
@@ -964,7 +964,7 @@ internal static class PolicyMisc
                 {
                     Id = "clipsens-max-data-size-64kb",
                     Label = "Restrict Clipboard Max Data Size to 64 KB",
-                    Category = "System & Misc Policy",
+                    Category = "System",
                     Description =
                         "Caps the maximum size of a single clipboard entry at 64 KB (65536 bytes), limiting the volume of bulk data that can be exfiltrated in a single clipboard operation.",
                     Tags = ["clipboard", "size-limit", "dlp", "policy"],
@@ -981,7 +981,7 @@ internal static class PolicyMisc
                 {
                     Id = "clipsens-disable-encryption-bypass",
                     Label = "Disable Clipboard Encryption Bypass",
-                    Category = "System & Misc Policy",
+                    Category = "System",
                     Description =
                         "Disables clipboard encryption bypass mechanisms that allow certain privileged processes to read encrypted clipboard contents without proper decryption.",
                     Tags = ["clipboard", "encryption", "bypass", "security", "policy"],
@@ -1009,7 +1009,7 @@ internal static class PolicyMisc
                 {
                     Id = "cdump-disable-crash-dump",
                     Label = "Disable Crash Dump Generation",
-                    Category = "System & Misc Policy",
+                    Category = "System",
                     Description =
                         "Sets CrashDumpEnabled=0 to disable creation of any memory dump file when Windows encounters a stop error (BSOD). Frees disk space on constrained devices and prevents large dump files from accumulating. Default: 7 (auto).",
                     Tags = ["crash dump", "bsod", "memory", "storage", "policy"],
@@ -1026,7 +1026,7 @@ internal static class PolicyMisc
                 {
                     Id = "cdump-set-mini-dump",
                     Label = "Set Crash Dump to Minidump Only",
-                    Category = "System & Misc Policy",
+                    Category = "System",
                     Description =
                         "Sets CrashDumpEnabled=3 to configure Windows to write only a small minidump (~256 KB) on stop errors instead of a full or kernel memory dump. Balances debuggability with disk usage. Default: 7 (auto).",
                     Tags = ["crash dump", "minidump", "bsod", "storage", "policy"],
@@ -1043,7 +1043,7 @@ internal static class PolicyMisc
                 {
                     Id = "cdump-disable-auto-reboot",
                     Label = "Disable Automatic Reboot on BSOD",
-                    Category = "System & Misc Policy",
+                    Category = "System",
                     Description =
                         "Sets AutoReboot=0 to prevent Windows from automatically restarting immediately after a stop error. The system halts at the blue screen allowing the error code to be read. Useful for physical machines and servers.",
                     Tags = ["crash dump", "auto reboot", "bsod", "server", "policy"],
@@ -1060,7 +1060,7 @@ internal static class PolicyMisc
                 {
                     Id = "cdump-disable-log-event",
                     Label = "Disable BSOD Event Log Entry",
-                    Category = "System & Misc Policy",
+                    Category = "System",
                     Description =
                         "Sets LogEvent=0 to prevent Windows from writing an event log entry to the System log when a stop error occurs. Default: 1 (log enabled). Reduces event log verbosity on systems with frequent crash-recovery cycles.",
                     Tags = ["crash dump", "event log", "bsod", "logging", "policy"],
@@ -1077,7 +1077,7 @@ internal static class PolicyMisc
                 {
                     Id = "cdump-disable-send-alert",
                     Label = "Disable BSOD Admin Alert",
-                    Category = "System & Misc Policy",
+                    Category = "System",
                     Description =
                         "Sets SendAlert=0 to prevent Windows from sending a network alert to the designated administrator message server when a stop error occurs. Default: 1 in domain environments. Relevant for workgroup machines.",
                     Tags = ["crash dump", "alert", "network", "admin", "policy"],
@@ -1094,7 +1094,7 @@ internal static class PolicyMisc
                 {
                     Id = "cdump-disable-storage-telemetry",
                     Label = "Disable Crash Dump Telemetry Collection",
-                    Category = "System & Misc Policy",
+                    Category = "System",
                     Description =
                         "Sets StorageTelemetryEnabled=0 to prevent WER from uploading crash dump telemetry to Microsoft when connected. Combines with WER upload policies for comprehensive crash data privacy.",
                     Tags = ["crash dump", "telemetry", "wer", "privacy", "policy"],
@@ -1111,7 +1111,7 @@ internal static class PolicyMisc
                 {
                     Id = "cdump-disable-dump-log-file",
                     Label = "Disable Crash Dump Log File",
-                    Category = "System & Misc Policy",
+                    Category = "System",
                     Description =
                         "Sets EnableLogFile=0 to prevent the crash dump subsystem from writing the memory.dmp log header file alongside the dump. Default: 1. Reduces extra disk writes and keeps the dump directory clean.",
                     Tags = ["crash dump", "log file", "disk", "policy"],
@@ -1128,7 +1128,7 @@ internal static class PolicyMisc
                 {
                     Id = "cdump-overwrite-existing-dump",
                     Label = "Overwrite Existing Crash Dump",
-                    Category = "System & Misc Policy",
+                    Category = "System",
                     Description =
                         "Sets Overwrite=1 so that each new crash dump overwrites the previous dump file rather than keeping multiple copies. Prevents disk space exhaustion on managed devices that experience occasional stop errors.",
                     Tags = ["crash dump", "overwrite", "disk", "storage", "policy"],
@@ -1145,7 +1145,7 @@ internal static class PolicyMisc
                 {
                     Id = "cdump-disable-filter-pages",
                     Label = "Disable Crash Dump Page Filtering",
-                    Category = "System & Misc Policy",
+                    Category = "System",
                     Description =
                         "Sets FilterPages=0 to disable the Windows crash dump page-filtering feature that removes unnecessary memory pages before writing the dump file. Produces more complete dumps at the cost of larger file size. Default: 1.",
                     Tags = ["crash dump", "filter", "memory", "debugging", "policy"],
@@ -1162,7 +1162,7 @@ internal static class PolicyMisc
                 {
                     Id = "cdump-disable-dedicated-dump-file",
                     Label = "Disable Dedicated Dump File",
-                    Category = "System & Misc Policy",
+                    Category = "System",
                     Description =
                         "Sets DisableDedicatedDumpFile=1 to prevent Windows from reserving a dedicated page-file-adjacent dump file (used on devices where the page file is too small for a full dump). Default: 0 (dedicated file used when needed).",
                     Tags = ["crash dump", "dedicated file", "pagefile", "storage", "policy"],
@@ -1190,7 +1190,7 @@ internal static class PolicyMisc
             {
                 Id = "crshmp-disable-crash-report-telemetry",
                 Label = "Disable Automatic Crash Report Transmission to Microsoft Telemetry",
-                Category = "System & Misc Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -1207,7 +1207,7 @@ internal static class PolicyMisc
             {
                 Id = "crshmp-restrict-minidump-directory",
                 Label = "Restrict Mini Dump Directory to Secure Administrative Location",
-                Category = "System & Misc Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -1224,7 +1224,7 @@ internal static class PolicyMisc
             {
                 Id = "crshmp-configure-dump-type-kernel",
                 Label = "Configure Crash Dump Type to Kernel Memory Dump for System Analysis",
-                Category = "System & Misc Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -1241,7 +1241,7 @@ internal static class PolicyMisc
             {
                 Id = "crshmp-enable-automatic-dump-encryption",
                 Label = "Enable Automatic Encryption of Crash Dump Files at Write Time",
-                Category = "System & Misc Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -1258,7 +1258,7 @@ internal static class PolicyMisc
             {
                 Id = "crshmp-disable-live-kernel-reports",
                 Label = "Disable Live Kernel Report Generation and Automatic Submission",
-                Category = "System & Misc Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -1275,7 +1275,7 @@ internal static class PolicyMisc
             {
                 Id = "crshmp-disable-user-mode-crash-reporting",
                 Label = "Disable User Mode Application Crash Reporting Submission",
-                Category = "System & Misc Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -1292,7 +1292,7 @@ internal static class PolicyMisc
             {
                 Id = "crshmp-audit-dump-file-access",
                 Label = "Enable Audit Logging for All Access to Crash Dump Files",
-                Category = "System & Misc Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -1309,7 +1309,7 @@ internal static class PolicyMisc
             {
                 Id = "crshmp-enable-dump-file-overwrite",
                 Label = "Enable Automatic Overwrite of Previous Crash Dump on New Crash",
-                Category = "System & Misc Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -1326,7 +1326,7 @@ internal static class PolicyMisc
             {
                 Id = "crshmp-disable-automatic-restart-after-crash",
                 Label = "Disable Automatic System Restart After BSOD for Manual Investigation",
-                Category = "System & Misc Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -1343,7 +1343,7 @@ internal static class PolicyMisc
             {
                 Id = "crshmp-configure-dump-retention-days",
                 Label = "Configure Crash Dump Retention Period for Automatic Cleanup",
-                Category = "System & Misc Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -1372,7 +1372,7 @@ internal static class PolicyMisc
             {
                 Id = "dotnet-disable-authenticode-publisher-prompt",
                 Label = ".NET Framework Policy: Disable Authenticode Publisher Trust Prompt",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description = "Prevents the Authenticode publisher trust dialog from appearing when running .NET applications that are not signed by a trusted publisher. The dialog asks users whether to trust the publisher; allowing untrained users to click through this prompt grants blanket trust to potentially malicious assemblies signed by unknown or compromised certificates.",
                 Tags = [".net", "authenticode", "trust", "publisher", "security", "policy"],
                 NeedsAdmin = true,
@@ -1389,7 +1389,7 @@ internal static class PolicyMisc
             {
                 Id = "dotnet-disable-clickonce-publisher-prompt",
                 Label = ".NET Framework Policy: Disable ClickOnce Untrusted Publisher Prompt",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description = "Prevents ClickOnce deployment applications from showing a trust elevation prompt when the publisher is not in the Trusted Publishers certificate store. ClickOnce is a .NET deployment technology used for updating business apps; if an attacker substitutes a malicious manifest, the user would be prompted to trust the new publisher. Disabling the prompt blocks this attack vector.",
                 Tags = [".net", "clickonce", "trust", "publisher", "deployment", "policy"],
                 NeedsAdmin = true,
@@ -1406,7 +1406,7 @@ internal static class PolicyMisc
             {
                 Id = "dotnet-enable-strong-name-bypass-disable",
                 Label = ".NET Framework Policy: Disable Strong Name Verification Bypass",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description = "Prevents the .NET CLR from skipping strong-name signature verification for fully-trusted assemblies. The strong-name bypass feature was introduced in .NET 3.5 to improve startup performance but it allows assemblies loaded from the GAC or fully-trusted zones to run without their digital signatures being verified. Disabling the bypass restores cryptographic integrity checking.",
                 Tags = [".net", "strong name", "signature", "verification", "security", "policy"],
                 NeedsAdmin = true,
@@ -1423,7 +1423,7 @@ internal static class PolicyMisc
             {
                 Id = "dotnet-disable-legacysecuritypolicy",
                 Label = ".NET Framework Policy: Disable Legacy CAS Security Policy",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description = "Disables the legacy .NET Framework Code Access Security (CAS) policy engine used by .NET 2.0–3.5 applications. The legacy CAS policy is deprecated, has known bypasses, and is incompatible with modern .NET security models. Disabling it enforces the modern host-based security model and prevents legacy policy rules from creating permission exceptions.",
                 Tags = [".net", "cas", "code access security", "legacy", "security", "policy"],
                 NeedsAdmin = true,
@@ -1440,7 +1440,7 @@ internal static class PolicyMisc
             {
                 Id = "dotnet-disable-jit-debugger-prompt",
                 Label = ".NET Framework Policy: Disable JIT Debugger Attachment Prompt",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description = "Prevents the automatic JIT (Just-in-Time) debugger attachment dialog from appearing when a .NET application crashes. The JIT debugger prompt asks whether to attach a debugger to the crashed process, which in production workstations serves no legitimate purpose. Malicious code can trigger an application exception to cause this dialog to appear, providing a hook for attaching debuggers.",
                 Tags = [".net", "jit debugger", "crash", "dialog", "security", "policy"],
                 NeedsAdmin = false,
@@ -1457,7 +1457,7 @@ internal static class PolicyMisc
             {
                 Id = "dotnet-disable-application-feedback-prompt",
                 Label = ".NET Framework Policy: Disable .NET Application Feedback/Telemetry Prompt",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description = "Prevents .NET runtime applications from showing feedback and crash reporting dialogs that offer to send diagnostics to Microsoft. Legacy .NET framework applications may trigger the Windows Error Reporting dialog for unhandled exceptions, which includes options to send debug dumps and crash details to Microsoft servers.",
                 Tags = [".net", "feedback", "telemetry", "crash", "reporting", "policy"],
                 NeedsAdmin = true,
@@ -1474,7 +1474,7 @@ internal static class PolicyMisc
             {
                 Id = "dotnet-require-aslr-for-net-apps",
                 Label = ".NET Framework Policy: Require ASLR for .NET Application Loading",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description = "Enforces Address Space Layout Randomization (ASLR) for .NET CLR assemblies, ensuring that the CLR heap, stack, and PE image bases are randomized on each load. Without ASLR enforcement, predictable memory layouts make ROP (Return-Oriented Programming) and heap spray attacks easier. Modern .NET runtimes support ASLR natively but older framework versions may not opt-in by default.",
                 Tags = [".net", "aslr", "memory", "security", "exploit mitigation", "policy"],
                 NeedsAdmin = true,
@@ -1491,7 +1491,7 @@ internal static class PolicyMisc
             {
                 Id = "dotnet-disable-publisher-evidence",
                 Label = ".NET Framework Policy: Disable XML Publisher Evidence Collection",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description = "Disables the collection of XML serialized publisher evidence during .NET assembly loading. Publisher evidence includes X.509 certificate chain information from the assembly's Authenticode signature; when serialized, it can be used by CAS zone policy. Disabling collection speeds up cold-start assembly loading for heavily-signed enterprise packages.",
                 Tags = [".net", "publisher evidence", "performance", "security", "policy"],
                 NeedsAdmin = true,
@@ -1508,7 +1508,7 @@ internal static class PolicyMisc
             {
                 Id = "dotnet-disable-uselegacyv2runtimeactivationpolicy",
                 Label = ".NET Framework Policy: Disable Legacy .NET 2.0 Runtime Activation Policy",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description = "Disables the useLegacyV2RuntimeActivationPolicy compatibility shim that allows .NET 4.x host processes to load in-process .NET 2.0/3.5 CLR components. This shim was provided as a migration aid for mixed-version COM interop scenarios. Modern applications should use the unified CLR loading mechanism; keeping this policy disabled prevents accidental dual-CLR-version instancing.",
                 Tags = [".net", "legacy", "clr", "activation", "policy"],
                 NeedsAdmin = true,
@@ -1525,7 +1525,7 @@ internal static class PolicyMisc
             {
                 Id = "dotnet-disable-ie-hosted-webbrowser",
                 Label = ".NET Framework Policy: Disable .NET in IE-Hosted WebBrowser Control",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description = "Prevents the .NET Framework from activating in the legacy Internet Explorer WebBrowser ActiveX control hosted inside WinForms or WPF applications. The DHTML scripting bridge between IE's Trident engine and .NET has historically been a code execution attack vector. Modern apps should use Edge WebView2 instead of the legacy IE-hosted WebBrowser control.",
                 Tags = [".net", "ie", "webbrowser", "activex", "security", "policy"],
                 NeedsAdmin = true,
@@ -1553,7 +1553,7 @@ internal static class PolicyMisc
             {
                 Id = "licpol-disable-activation-status-report",
                 Label = "Disable Windows Activation Status Reporting",
-                Category = "System & Misc Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 1,
@@ -1570,7 +1570,7 @@ internal static class PolicyMisc
             {
                 Id = "licpol-disable-kms-discovery",
                 Label = "Disable KMS Server Auto-Discovery",
-                Category = "System & Misc Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -1587,7 +1587,7 @@ internal static class PolicyMisc
             {
                 Id = "licpol-disable-activation-ui",
                 Label = "Disable Activation UI Prompts",
-                Category = "System & Misc Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 1,
@@ -1604,7 +1604,7 @@ internal static class PolicyMisc
             {
                 Id = "licpol-set-renewal-interval",
                 Label = "Set License Renewal Check Interval",
-                Category = "System & Misc Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 1,
@@ -1621,7 +1621,7 @@ internal static class PolicyMisc
             {
                 Id = "licpol-disable-oem-activation",
                 Label = "Disable OEM Activation Key Usage",
-                Category = "System & Misc Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -1638,7 +1638,7 @@ internal static class PolicyMisc
             {
                 Id = "licpol-disable-license-backout",
                 Label = "Disable License Downgrade",
-                Category = "System & Misc Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -1655,7 +1655,7 @@ internal static class PolicyMisc
             {
                 Id = "licpol-disable-license-telemetry",
                 Label = "Disable License Data Telemetry Uploads",
-                Category = "System & Misc Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 1,
@@ -1672,7 +1672,7 @@ internal static class PolicyMisc
             {
                 Id = "licpol-disable-license-store-access",
                 Label = "Restrict License Store User Access",
-                Category = "System & Misc Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -1689,7 +1689,7 @@ internal static class PolicyMisc
             {
                 Id = "licpol-disable-online-activation",
                 Label = "Disable Online Product Activation",
-                Category = "System & Misc Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -1706,7 +1706,7 @@ internal static class PolicyMisc
             {
                 Id = "licpol-disable-grace-period-notifications",
                 Label = "Disable Activation Grace Period Notifications",
-                Category = "System & Misc Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 1,
@@ -1735,7 +1735,7 @@ internal static class PolicyMisc
             {
                 Id = "mfa-disable-frame-server",
                 Label = "Disable Media Foundation Frame Server Mode",
-                Category = "System & Misc Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -1757,7 +1757,7 @@ internal static class PolicyMisc
             {
                 Id = "mfa-block-untrusted-codecs",
                 Label = "Block Untrusted Media Codecs",
-                Category = "System & Misc Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -1779,7 +1779,7 @@ internal static class PolicyMisc
             {
                 Id = "mfa-disable-hw-acceleration",
                 Label = "Disable Media Foundation Hardware Acceleration",
-                Category = "System & Misc Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -1801,7 +1801,7 @@ internal static class PolicyMisc
             {
                 Id = "mfa-disable-transcoding",
                 Label = "Disable Media Foundation Transcoding",
-                Category = "System & Misc Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -1823,7 +1823,7 @@ internal static class PolicyMisc
             {
                 Id = "mfa-disable-protected-content",
                 Label = "Disable Protected Media Content Playback",
-                Category = "System & Misc Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -1845,7 +1845,7 @@ internal static class PolicyMisc
             {
                 Id = "mfa-disable-network-streaming",
                 Label = "Disable Media Foundation Network Streaming",
-                Category = "System & Misc Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -1867,7 +1867,7 @@ internal static class PolicyMisc
             {
                 Id = "mfa-disable-codec-downloads",
                 Label = "Disable Automatic Codec Downloads",
-                Category = "System & Misc Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -1888,7 +1888,7 @@ internal static class PolicyMisc
             {
                 Id = "mfa-disable-media-sharing",
                 Label = "Disable Media Foundation Sharing APIs",
-                Category = "System & Misc Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -1909,7 +1909,7 @@ internal static class PolicyMisc
             {
                 Id = "mfa-disable-drm-individualization",
                 Label = "Disable DRM Individualization",
-                Category = "System & Misc Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -1932,7 +1932,7 @@ internal static class PolicyMisc
             {
                 Id = "mfa-disable-mf-telemetry",
                 Label = "Disable Media Foundation Telemetry",
-                Category = "System & Misc Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -1965,7 +1965,7 @@ internal static class PolicyMisc
             {
                 Id = "wmpol-prevent-codec-download",
                 Label = "WMP: Prevent Automatic Codec Download from the Internet",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description = "Sets PreventCodecDownload=1 in Windows Media Player policy. Prevents Windows Media Player from automatically downloading codecs from the internet to play media files that use unknown or missing codecs. Automatic codec download has historically been a malware delivery vector: specially crafted media files embedded codec 'requirements' that redirected to malicious codec installer EXEs from attacker-controlled servers rather than legitimate codec repositories. " +
                     "The drive-by codec attack vector was prevalent in the Windows XP/Vista era: opening a video file triggers WMP's codec detection, which displays a dialog offering to download from a URL embedded in the media file's codec detection field — which can point to any server. Modern enterprise security policies require that all software (including codecs) be installed through approved channels (SCCM, Intune). Blocking automatic codec download ensures users cannot inadvertently install unapproved software via a malicious media file.",
                 Tags = ["wmpol", "windows-media-player", "codec", "download", "malware", "drive-by"],
@@ -1982,7 +1982,7 @@ internal static class PolicyMisc
             {
                 Id = "wmpol-disable-auto-update",
                 Label = "WMP: Disable Windows Media Player Automatic Online Update Check",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description = "Sets DisableAutoUpdate=1 in Windows Media Player policy. Prevents Windows Media Player from automatically checking for updates and new functionality online. WMP update checks contact Microsoft servers on every WMP launch, contributing to outbound telemetry traffic and potentially introducing version changes to a controlled software baseline. " +
                     "On enterprise-managed systems where application updates are managed by WSUS or SCCM, unsolicited update checks by individual applications create unpredictable patching timelines. WMP updates have in the past introduced new codec support, UI changes, and DRM policy updates that required revalidation by enterprise compatibility teams. Disabling auto-update ensures WMP version state is controlled exclusively by IT-managed patching processes.",
                 Tags = ["wmpol", "windows-media-player", "auto-update", "baseline", "wsus"],
@@ -1999,7 +1999,7 @@ internal static class PolicyMisc
             {
                 Id = "wmpol-disable-network-settings",
                 Label = "WMP: Prevent User Modification of Network Streaming Settings",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description = "Sets DisableNetworkSettings=1 in Windows Media Player policy. Prevents users from modifying Windows Media Player network settings (streaming protocol selection, proxy configuration, bandwidth usage). On corporate networks, streaming settings should be configured by IT to ensure WMP uses approved proxy settings and consumption limits, preventing users from configuring direct internet streaming paths that bypass proxy inspection. " +
                     "WMP network settings include the ability to configure RTSP and HTTP streaming protocol preferences and proxy exclusion lists. A user who configures WMP to bypass the corporate proxy for streaming sources creates an uninspected traffic path for internet-sourced audio/video streams. Corporate DLP and web filtering policies rely on all internet traffic flowing through the approved proxy for content inspection. Locking WMP network settings prevents direct-to-internet streaming paths.",
                 Tags = ["wmpol", "windows-media-player", "network-settings", "proxy", "streaming", "dlp"],
@@ -2016,7 +2016,7 @@ internal static class PolicyMisc
             {
                 Id = "wmpol-disable-privacy-tab",
                 Label = "WMP: Hide Privacy Settings Tab to Lock in Policy-Configured Privacy Options",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description = "Sets DisablePrivacyTab=1 in Windows Media Player policy. Hides the Privacy tab in Windows Media Player preferences, preventing users from changing privacy settings (DRM licence acquisition, licence backup, Windows Media metafile security, internet radio station access). Hiding the tab ensures IT-configured privacy settings remain in effect and cannot be reversed by end users. " +
                     "The WMP Privacy tab controls whether WMP sends usage data to Microsoft (Enhanced Playback Experience / CEIP), whether it acquires media player licences automatically, and whether it shows WMP in the Media Guide. In corp environments where these settings are locked by policy, displaying the Privacy tab presents options the user cannot actually save — leading to confusion and support desk calls. Hiding the tab presents a cleaner, policy-consistent experience.",
                 Tags = ["wmpol", "windows-media-player", "privacy-tab", "policy-lock", "drm"],
@@ -2033,7 +2033,7 @@ internal static class PolicyMisc
             {
                 Id = "wmpol-disable-media-sharing",
                 Label = "WMP: Disable Windows Media Player Media Sharing Service",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description = "Sets DisableMedia​Sharing=1 in Windows Media Player policy (RegSZ). Wait — this should be SetDword. Disabling media sharing prevents the Windows Media Sharing UPnP service from advertising the local media library to other devices on the network. WMP's media sharing exposes a UPnP media server that broadcasts the local music, video, and picture library to all devices on the same subnet. " +
                     "UPnP-based media sharing is a network discovery and information disclosure risk: the WMP UPnP server exposes a list of all media files in the user's library to any device on the same network (including guest Wi-Fi segments if inter-VLAN routing allows). File names, album metadata, and media thumbnails may contain sensitive information or personal data. On corporate networks, the UPnP media broadcasting also generates multicast traffic that consumes bandwidth and may trigger IDS rules configured to alert on UPnP device announcements from endpoints.",
                 Tags = ["wmpol", "windows-media-player", "media-sharing", "upnp", "network-discovery"],
@@ -2050,7 +2050,7 @@ internal static class PolicyMisc
             {
                 Id = "wmpol-prevent-drm-internet-access",
                 Label = "WMP: Block DRM Internet Connections for Licence Acquisition",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description = "Sets PolicyDontAllow=1 in Windows Media Player DRM policy (actually PreventDRMUpdate=1 in the main key). Prevents Windows Media Player from connecting to internet-hosted DRM (Digital Rights Management) licence servers to acquire, update, or backup media playback licences. DRM licence acquisition involves contacting Microsoft PlayReady servers and potentially third-party vendor licence servers based on the media file's licence URL embedded in the WRM header. " +
                     "DRM internet connections are an outbound channel that operates based on media file content: a specially crafted WMA/WMV file with a malicious licence acquisition URL will cause WMP to reach out to an attacker-controlled server for licence validation — generating an outbound HTTP request to an external host triggered by opening a media file. This is a data exfiltration vector for leaking internal host information (IP address, Windows Media identifier, user details) to external servers via the licence request header.",
                 Tags = ["wmpol", "windows-media-player", "drm", "licence-acquisition", "outbound-dns", "data-exfiltration"],
@@ -2067,7 +2067,7 @@ internal static class PolicyMisc
             {
                 Id = "wmpol-prevent-media-information-retrieval",
                 Label = "WMP: Prevent Automatic Online Media Information Retrieval",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description = "Sets PreventMediaRetrieval=1 in Windows Media Player policy. Prevents Windows Media Player from automatically sending the names of media files being played to Microsoft's online content service to retrieve album art, track information, lyrics, and related metadata. This retrieval exposes media file names and playing history to Microsoft's servers. " +
                     "Automatic media information retrieval sends the track title, artist name, and album to Microsoft's media content service (previously WindowsMedia.com, now Microsoft's CDN) for every media file opened in WMP. In healthcare or legal environments, media files may have confidential file names (patient ID numbers, case numbers, attorney names in video deposition recordings). Transmitting these file names to external servers violates data minimisation principles under GDPR and HIPAA. Disabling retrieval ensures locally held media metadata is not transmitted externally.",
                 Tags = ["wmpol", "windows-media-player", "media-metadata", "privacy", "album-art", "gdpr"],
@@ -2084,7 +2084,7 @@ internal static class PolicyMisc
             {
                 Id = "wmpol-hide-music-library-tab",
                 Label = "WMP: Hide Music Library Tab to Prevent Windows Media Player Library Exposure",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description = "Sets DisableMusicLibraryTab=1 in Windows Media Player policy. Hides the Music library tab in the WMP Library view, preventing the Windows Media Player library from being browsed by other applications or users via the WMP COM API or shell integration. The WMP library database (containing all indexed media file paths) is accessible via COM to any application with the user's privilege level. " +
                     "Windows Media Player maintains an indexed library database of all media files accessible on the system, stored in %LocalAppData%\\Microsoft\\Media Player\\. The library database contains full file paths, playback statistics, and metadata for all media files the user has played. Malware running under the user context can query the WMP COM interface to enumerate all media files, obtaining a list of all file paths in the user's media collection — a comprehensive directory traversal without requiring file system access. Hiding the Music Library tab also removes the WMP library sharing surface area.",
                 Tags = ["wmpol", "windows-media-player", "library", "com-api", "privacy", "data-enumeration"],
@@ -2101,7 +2101,7 @@ internal static class PolicyMisc
             {
                 Id = "wmpol-prevent-desktop-shortcut",
                 Label = "WMP: Suppress Windows Media Player Desktop Shortcut Creation",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description = "Sets PreventDesktopShortcutCreation=1 in Windows Media Player policy. Prevents Windows Media Player from creating or re-creating a desktop shortcut after updates or new user profile setup. On managed enterprise desktops, the shortcut layout is controlled by IT policy and unexpected shortcuts (including WMP shortcuts re-created after each feature update) violate the managed desktop configuration. " +
                     "Like the SkyDrive desktop shortcut policy, Windows Media Player has a history of re-creating its desktop shortcut after major Windows Updates, particularly after Media Pack installations in Windows N/KN editions where Media Player is added. Suppressing creation via policy ensures the shortcut stays absent without requiring GPO shortcut deletion scripts.",
                 Tags = ["wmpol", "windows-media-player", "desktop-shortcut", "managed-desktop", "enterprise"],
@@ -2118,7 +2118,7 @@ internal static class PolicyMisc
             {
                 Id = "wmpol-prevent-radio-access",
                 Label = "WMP: Disable Internet Radio Access in Windows Media Player",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description = "Sets DisableRadioBar=1 in Windows Media Player policy. Disables the Windows Media Player internet radio feature and radio bar UI, preventing users from streaming internet radio stations through WMP. Internet radio streaming creates a persistent outbound streaming connection on a potentially high-bandwidth audio stream that bypasses content filtering proxies that only filter HTTP web traffic. " +
                     "Internet radio streaming in WMP uses RTSP and HTTP streaming protocols directly to external radio station servers. These connections are not inspected by web content filtering proxies that focus on HTTP page content. A persistent audio stream connection to an external server also creates a long-lived outbound connection that some SIEM rules identify as potential C2 beacon traffic — generating false positive alerts that consume SOC analyst time. Disabling internet radio access eliminates this uninspected outbound streaming channel.",
                 Tags = ["wmpol", "windows-media-player", "internet-radio", "streaming", "rtsp", "c2-detection"],
@@ -2147,7 +2147,7 @@ internal static class PolicyMisc
             {
                 Id = "msdtc-require-secure-rpc",
                 Label = "Require Secure RPC for MSDTC",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description =
                     "Sets AllowOnlySecureRpcCalls=1 in the MSDTC policy key. "
                     + "Forces the Microsoft Distributed Transaction Coordinator to use only secure, authenticated RPC calls, "
@@ -2167,7 +2167,7 @@ internal static class PolicyMisc
             {
                 Id = "msdtc-no-fallback-insecure-rpc",
                 Label = "Prevent MSDTC Fallback to Unsecure RPC",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description =
                     "Sets FallbackToUnsecureRPCIfNecessary=0 in the MSDTC policy key. "
                     + "Prevents MSDTC from automatically falling back to unprotected RPC connections when a secure connection fails. "
@@ -2188,7 +2188,7 @@ internal static class PolicyMisc
             {
                 Id = "msdtc-keep-rpc-security",
                 Label = "Keep MSDTC RPC Security Enabled",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description =
                     "Sets TurnOffRpcSecurity=0 in the MSDTC policy key. "
                     + "Ensures RPC security is kept active for MSDTC communications. "
@@ -2209,7 +2209,7 @@ internal static class PolicyMisc
             {
                 Id = "msdtc-disable-network-access",
                 Label = "Disable MSDTC Network DTC Access",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description =
                     "Sets NetworkDtcAccess=0 in the MSDTC Security policy key. "
                     + "Disables all network access to the Distributed Transaction Coordinator. "
@@ -2231,7 +2231,7 @@ internal static class PolicyMisc
             {
                 Id = "msdtc-disable-client-dtc",
                 Label = "Disable MSDTC Network Client Access",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description =
                     "Sets NetworkDtcAccessClients=0 in the MSDTC Security policy key. "
                     + "Prevents client applications on this machine from initiating or participating in "
@@ -2251,7 +2251,7 @@ internal static class PolicyMisc
             {
                 Id = "msdtc-disable-inbound-transactions",
                 Label = "Disable MSDTC Inbound Network Transactions",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description =
                     "Sets NetworkDtcAccessInbound=0 in the MSDTC Security policy key. "
                     + "Blocks this machine from accepting inbound distributed transaction requests from remote MSDTC coordinators. "
@@ -2272,7 +2272,7 @@ internal static class PolicyMisc
             {
                 Id = "msdtc-disable-outbound-transactions",
                 Label = "Disable MSDTC Outbound Network Transactions",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description =
                     "Sets NetworkDtcAccessOutbound=0 in the MSDTC Security policy key. "
                     + "Prevents this machine from propagating distributed transactions to remote resource managers. "
@@ -2292,7 +2292,7 @@ internal static class PolicyMisc
             {
                 Id = "msdtc-disable-network-transactions",
                 Label = "Disable MSDTC Network Transaction Coordinator",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description =
                     "Sets NetworkDtcAccessTransactions=0 in the MSDTC Security policy key. "
                     + "Disables the network transaction coordination role of MSDTC, preventing it from acting as "
@@ -2312,7 +2312,7 @@ internal static class PolicyMisc
             {
                 Id = "msdtc-disable-xa-transactions",
                 Label = "Disable MSDTC XA Transactions",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description =
                     "Sets XaTransactions=0 in the MSDTC Security policy key. "
                     + "Disables support for XA (X/Open) standard distributed transactions in MSDTC. "
@@ -2333,7 +2333,7 @@ internal static class PolicyMisc
             {
                 Id = "msdtc-disable-lu-transactions",
                 Label = "Disable MSDTC LU (SNA/LU6.2) Transactions",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description =
                     "Sets LuTransactions=0 in the MSDTC Security policy key. "
                     + "Disables support for IBM SNA LU6.2 (Logical Unit) transactions in MSDTC. "
@@ -2365,7 +2365,7 @@ internal static class PolicyMisc
             {
                 Id = "rstmgr-disable-restart-manager",
                 Label = "Disable Restart Manager",
-                Category = "System & Misc Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -2382,7 +2382,7 @@ internal static class PolicyMisc
             {
                 Id = "rstmgr-disable-app-relaunch",
                 Label = "Disable Application Relaunch After Restart",
-                Category = "System & Misc Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -2399,7 +2399,7 @@ internal static class PolicyMisc
             {
                 Id = "rstmgr-allow-mitigations",
                 Label = "Allow Restart Manager Mitigations",
-                Category = "System & Misc Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -2416,7 +2416,7 @@ internal static class PolicyMisc
             {
                 Id = "rstmgr-disable-telemetry",
                 Label = "Disable Restart Manager Telemetry",
-                Category = "System & Misc Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 1,
@@ -2433,7 +2433,7 @@ internal static class PolicyMisc
             {
                 Id = "rstmgr-disable-session-registration",
                 Label = "Disable Restart Manager Session Registration",
-                Category = "System & Misc Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -2450,7 +2450,7 @@ internal static class PolicyMisc
             {
                 Id = "rstmgr-set-shutdown-timeout",
                 Label = "Set Service Shutdown Timeout 30 Seconds",
-                Category = "System & Misc Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -2467,7 +2467,7 @@ internal static class PolicyMisc
             {
                 Id = "rstmgr-disable-reboot-notification",
                 Label = "Disable Reboot Notification",
-                Category = "System & Misc Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -2484,7 +2484,7 @@ internal static class PolicyMisc
             {
                 Id = "rstmgr-disable-service-restart",
                 Label = "Disable Service Restart by Restart Manager",
-                Category = "System & Misc Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -2501,7 +2501,7 @@ internal static class PolicyMisc
             {
                 Id = "rstmgr-zero-max-service-shutdown-wait",
                 Label = "Set Max Service Shutdown Wait to Zero",
-                Category = "System & Misc Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -2518,7 +2518,7 @@ internal static class PolicyMisc
             {
                 Id = "rstmgr-allow-graceful-shutdown",
                 Label = "Allow Graceful Shutdown Behavior",
-                Category = "System & Misc Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -2546,7 +2546,7 @@ internal static class PolicyMisc
                 {
                     Id = "sysrecpol-disable-startup-repair",
                     Label = "Disable Automatic Startup Repair",
-                    Category = "System & Misc Policy",
+                    Category = "System",
                     Description =
                         "Sets DisableStartupRepair=1 to prevent Windows from automatically launching Startup Repair when repeated boot failures are detected. Useful for controlled boot environments.",
                     Tags = ["recovery", "startup-repair", "boot", "policy"],
@@ -2563,7 +2563,7 @@ internal static class PolicyMisc
                 {
                     Id = "sysrecpol-block-recovery-options-access",
                     Label = "Block Access to Recovery Options Menu",
-                    Category = "System & Misc Policy",
+                    Category = "System",
                     Description =
                         "Sets AllowAccessToRecoveryOptions=0 to prevent users from accessing the Windows Recovery Options menu (F8/Shift+F8 at boot). Enhances security by restricting boot-time intervention.",
                     Tags = ["recovery", "options", "boot", "policy", "security"],
@@ -2580,7 +2580,7 @@ internal static class PolicyMisc
                 {
                     Id = "sysrecpol-disable-sr-from-recovery",
                     Label = "Disable System Restore from Recovery Environment",
-                    Category = "System & Misc Policy",
+                    Category = "System",
                     Description =
                         "Sets DisableSystemRestoreFromRecovery=1 to remove System Restore as an option within the Windows Recovery Environment (WinRE), preventing rollback during recovery sessions.",
                     Tags = ["recovery", "system-restore", "winre", "policy"],
@@ -2597,7 +2597,7 @@ internal static class PolicyMisc
                 {
                     Id = "sysrecpol-block-reset-this-pc",
                     Label = "Block Reset This PC Option",
-                    Category = "System & Misc Policy",
+                    Category = "System",
                     Description =
                         "Sets DisableResetPC=1 to remove the Reset This PC option from the recovery environment and Settings > Recovery. Prevents full system resets that could wipe enterprise configurations.",
                     Tags = ["recovery", "reset", "policy", "security"],
@@ -2614,7 +2614,7 @@ internal static class PolicyMisc
                 {
                     Id = "sysrecpol-block-cmd-in-recovery",
                     Label = "Block Command Prompt in Recovery Environment",
-                    Category = "System & Misc Policy",
+                    Category = "System",
                     Description =
                         "Sets DisableCmdInRecovery=1 to remove the Command Prompt option from WinRE Advanced Options. Prevents low-level shell access that could be used to bypass OS security controls.",
                     Tags = ["recovery", "command-prompt", "winre", "security", "policy"],
@@ -2631,7 +2631,7 @@ internal static class PolicyMisc
                 {
                     Id = "sysrecpol-disable-recovery-ui",
                     Label = "Disable Recovery Environment User Interface",
-                    Category = "System & Misc Policy",
+                    Category = "System",
                     Description =
                         "Sets DisableRecoveryUI=1 to suppress the Windows Recovery Environment graphical interface. Recovery actions are restricted to command-line tools or domain-administered methods.",
                     Tags = ["recovery", "ui", "winre", "policy"],
@@ -2648,7 +2648,7 @@ internal static class PolicyMisc
                 {
                     Id = "sysrecpol-block-advanced-recovery-tools",
                     Label = "Block Advanced Recovery Tools",
-                    Category = "System & Misc Policy",
+                    Category = "System",
                     Description =
                         "Sets BlockAdvancedTools=1 to hide Advanced Recovery Tools such as System Image Recovery, Startup Settings, and UEFI Firmware Settings from the WinRE options menu.",
                     Tags = ["recovery", "advanced-tools", "winre", "policy", "security"],
@@ -2665,7 +2665,7 @@ internal static class PolicyMisc
                 {
                     Id = "sysrecpol-disable-auto-recovery-boot",
                     Label = "Disable Automatic Recovery Boot Sequence",
-                    Category = "System & Misc Policy",
+                    Category = "System",
                     Description =
                         "Sets DisableAutoRecoveryBoot=1 to prevent Windows from automatically booting into the recovery environment after consecutive failed normal boots. Boots to error screen instead.",
                     Tags = ["recovery", "boot", "automatic", "policy"],
@@ -2682,7 +2682,7 @@ internal static class PolicyMisc
                 {
                     Id = "sysrecpol-hide-recovery-console",
                     Label = "Hide Recovery Console Menu Entry",
-                    Category = "System & Misc Policy",
+                    Category = "System",
                     Description =
                         "Sets HideRecoveryConsole=1 to remove the Recovery Console entry from the boot manager and WinRE menus. Prevents direct console access that bypasses normal Windows login.",
                     Tags = ["recovery", "console", "boot", "security", "policy"],
@@ -2699,7 +2699,7 @@ internal static class PolicyMisc
                 {
                     Id = "sysrecpol-disable-memory-diagnostics",
                     Label = "Disable Memory Diagnostics in Recovery",
-                    Category = "System & Misc Policy",
+                    Category = "System",
                     Description =
                         "Sets DisableMemoryDiagnostics=1 to hide the Windows Memory Diagnostic option in WinRE. Prevents access to diagnostics tools that could be misused in shared-access environments.",
                     Tags = ["recovery", "memory", "diagnostics", "policy"],
@@ -2729,7 +2729,7 @@ internal static class PolicyMisc
             {
                 Id = "srgpo-disable-sr-policy",
                 Label = "System Restore: Disable System Restore via Group Policy",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description =
                     "Sets DisableSR=1 in the SystemRestore policy key. Turns off System Restore for all "
                     + "drives and prevents automatic restore point creation. Frees disk space used by VSC.",
@@ -2744,7 +2744,7 @@ internal static class PolicyMisc
             {
                 Id = "srgpo-disable-config-policy",
                 Label = "System Restore: Lock out System Restore configuration UI",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description =
                     "Sets DisableConfig=1 in the SystemRestore policy key. Hides the 'Configure' button "
                     + "on the System Protection tab, preventing users from enabling or adjusting SR settings.",
@@ -2759,7 +2759,7 @@ internal static class PolicyMisc
             {
                 Id = "srgpo-set-rp-session-interval",
                 Label = "System Restore: Set restore-point creation interval to 1 day",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description =
                     "Sets RPSessionInterval=1 in SystemRestore settings. Limits automatic restore-point "
                     + "creation frequency to once per day rather than every session start, saving disk space.",
@@ -2774,7 +2774,7 @@ internal static class PolicyMisc
             {
                 Id = "srgpo-set-rp-global-interval",
                 Label = "System Restore: Set global restore-point creation interval (24 hr)",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description =
                     "Sets RPGlobalInterval=1440 (minutes = 24 hours). Controls how often System Restore "
                     + "creates scheduled restore points, capping frequency to once per 24-hour period.",
@@ -2789,7 +2789,7 @@ internal static class PolicyMisc
             {
                 Id = "srgpo-set-max-disk-usage",
                 Label = "System Restore: Cap restore-point disk usage at 5 %",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description =
                     "Sets DiskPercent=5 in SystemRestore settings. Limits the maximum disk space that "
                     + "System Restore shadow copies may consume to 5 % of the system drive.",
@@ -2804,7 +2804,7 @@ internal static class PolicyMisc
             {
                 Id = "srgpo-disable-system-checkpoint",
                 Label = "System Restore: Disable automatic system checkpoints",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description =
                     "Sets CreateSystemCheckPoints=0 in SystemRestore settings. Prevents Windows from "
                     + "automatically creating restore points during system events such as updates.",
@@ -2819,7 +2819,7 @@ internal static class PolicyMisc
             {
                 Id = "srgpo-disable-scan-checkpoint",
                 Label = "System Restore: Disable restore point creation before scan/cleanup",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description =
                     "Sets ScanInterval=0 in SystemRestore settings. Stops Windows Security (and legacy "
                     + "Defender) from automatically creating a restore point before each full scan.",
@@ -2834,7 +2834,7 @@ internal static class PolicyMisc
             {
                 Id = "srgpo-disable-optimistic-restore",
                 Label = "System Restore: Disable optimistic restore support",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description =
                     "Sets OptimisticRestore=0 in SystemRestore settings. Disables the optimistic-restore "
                     + "code path that tries to recover the system without a full restore after certain failures.",
@@ -2849,7 +2849,7 @@ internal static class PolicyMisc
             {
                 Id = "srgpo-disable-batch-restore-points",
                 Label = "System Restore: Disable batch software-install restore point creation",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description =
                     "Sets RestorePointCreationFrequency=0 in SystemRestore settings. Prevents batching of "
                     + "multiple restore-point creation requests within a single install session.",
@@ -2864,7 +2864,7 @@ internal static class PolicyMisc
             {
                 Id = "srgpo-disable-incremental-rps",
                 Label = "System Restore: Disable incremental restore point diff storage",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description =
                     "Sets PreventIncrementalRestorations=1 in SystemRestore settings. Forces each restore "
                     + "point to be a full snapshot rather than an incremental delta, ensuring clean rollback.",
@@ -2891,7 +2891,7 @@ internal static class PolicyMisc
                 {
                     Id = "tsap-set-ntp-type",
                     Label = "Set W32tm Sync Type to NTP",
-                    Category = "System & Misc Policy",
+                    Category = "System",
                     Description =
                         "Sets the W32tm Type value to 'NTP' via policy, instructing the Windows Time service to use NTP time sources only (not domain hierarchy NT5DS). Required on stand-alone machines or workgroup environments.",
                     Tags = ["time sync", "ntp", "w32tm", "policy"],
@@ -2908,7 +2908,7 @@ internal static class PolicyMisc
                 {
                     Id = "tsap-set-ntp-server",
                     Label = "Set NTP Server to pool.ntp.org",
-                    Category = "System & Misc Policy",
+                    Category = "System",
                     Description =
                         "Sets NtpServer='pool.ntp.org,0x9' as the time source for the Windows Time service via Group Policy. Use '0x9' flags (poll + step). Replaces time.windows.com for environments that prefer public NTP pools.",
                     Tags = ["time sync", "ntp", "ntp server", "policy"],
@@ -2925,7 +2925,7 @@ internal static class PolicyMisc
                 {
                     Id = "tsap-disable-nosync",
                     Label = "Prevent W32tm NoSync Mode",
-                    Category = "System & Misc Policy",
+                    Category = "System",
                     Description =
                         "Sets Type='NTP' (not 'NoSync') and effectively prevents the 'NoSync' policy from leaving the system unsynchronised. Ensures the Windows Time service always uses a time source rather than relying solely on the hardware clock.",
                     Tags = ["time sync", "nosync", "policy", "w32tm"],
@@ -2942,7 +2942,7 @@ internal static class PolicyMisc
                 {
                     Id = "tsap-set-polling-interval",
                     Label = "Set NTP Polling Interval (Every Hour)",
-                    Category = "System & Misc Policy",
+                    Category = "System",
                     Description =
                         "Sets MaxPollInterval=10 (2^10 = 1024 s ≈ 17 min) and MinPollInterval=6 (2^6 = 64 s) to keep the Windows Time service polling NTP servers more frequently. Default max: 15 (≈9 hours). Improves time accuracy.",
                     Tags = ["time sync", "polling", "interval", "ntp", "policy"],
@@ -2959,7 +2959,7 @@ internal static class PolicyMisc
                 {
                     Id = "tsap-set-min-poll-interval",
                     Label = "Set NTP Minimum Polling Interval (64 s)",
-                    Category = "System & Misc Policy",
+                    Category = "System",
                     Description =
                         "Sets MinPollInterval=6 (2^6 = 64 seconds) as the minimum poll interval for the Windows Time service. Default: 10 (1024 s). Lowering this keeps clocks tighter on mobile devices that experience frequent network changes.",
                     Tags = ["time sync", "polling", "min interval", "ntp", "policy"],
@@ -2976,7 +2976,7 @@ internal static class PolicyMisc
                 {
                     Id = "tsap-set-max-pos-phase-correction",
                     Label = "Limit Max Positive Phase Correction (1 h)",
-                    Category = "System & Misc Policy",
+                    Category = "System",
                     Description =
                         "Sets MaxPosPhaseCorrection=3600 (seconds) to cap how far forward the system clock can be stepped in a single sync. Default: 0x7FFFFFFF (unlimited). Prevents accidental large forward clock jumps on domain or NTP misconfiguration.",
                     Tags = ["time sync", "phase correction", "clock jump", "policy"],
@@ -2993,7 +2993,7 @@ internal static class PolicyMisc
                 {
                     Id = "tsap-set-max-neg-phase-correction",
                     Label = "Limit Max Negative Phase Correction (1 h)",
-                    Category = "System & Misc Policy",
+                    Category = "System",
                     Description =
                         "Sets MaxNegPhaseCorrection=3600 (seconds) to cap how far backward the system clock can be stepped. Default: 0x7FFFFFFF (unlimited). Prevents Kerberos ticket invalidation and certificate errors caused by large backward clock jumps.",
                     Tags = ["time sync", "phase correction", "clock", "kerberos", "policy"],
@@ -3010,7 +3010,7 @@ internal static class PolicyMisc
                 {
                     Id = "tsap-enable-hyperv-timesync",
                     Label = "Enable Hyper-V Time Sync Provider",
-                    Category = "System & Misc Policy",
+                    Category = "System",
                     Description =
                         "Sets HyperVEnabled=1 in W32time Config to enable the Hyper-V time synchronisation provider when running inside a Hyper-V virtual machine. Improves clock accuracy for VMs that experience clock drift on pause/resume.",
                     Tags = ["time sync", "hyper-v", "vm", "virtual machine", "policy"],
@@ -3027,7 +3027,7 @@ internal static class PolicyMisc
                 {
                     Id = "tsap-set-large-phase-spike-threshold",
                     Label = "Increase Phase Spike Threshold",
-                    Category = "System & Misc Policy",
+                    Category = "System",
                     Description =
                         "Sets PhaseCorrectRate=7 and SpikeWatchPeriod=90 (seconds) via Config to widen the time-spike detection window. Reduces the number of legitimate time corrections that are incorrectly classified as spikes and discarded.",
                     Tags = ["time sync", "spike", "phase", "ntp", "policy"],
@@ -3044,7 +3044,7 @@ internal static class PolicyMisc
                 {
                     Id = "tsap-set-event-log-flags",
                     Label = "Increase W32tm Event Log Verbosity",
-                    Category = "System & Misc Policy",
+                    Category = "System",
                     Description =
                         "Sets EventLogFlags=3 to enable both time-jump and time-source-change events in the W32tm event log. Default: 2 (time-jump only). Useful for auditing clock synchronisation events on sensitive systems.",
                     Tags = ["time sync", "event log", "audit", "w32tm", "policy"],
@@ -3074,7 +3074,7 @@ internal static class PolicyMisc
             {
                 Id           = "timepol-require-secure-time-provider",
                 Label        = "Require Authenticated NTP Time Source for W32Time",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description  = "Configures Windows Time Service to use only authenticated NTP time sources (symmetric key mode or MS-SNTP), preventing time set via unauthenticated NTP which could be used to replay expired Kerberos tickets or HSTS bypass.",
                 Tags         = ["w32time", "ntp", "authenticated", "kerberos", "policy"],
                 NeedsAdmin   = true,
@@ -3090,7 +3090,7 @@ internal static class PolicyMisc
             {
                 Id           = "timepol-set-ntp-server-domain",
                 Label        = "Set NTP Server to Domain Hierarchy (Domain Synchronisation)",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description  = "Configures Windows Time Service to synchronise time from the Active Directory domain hierarchy (PDC emulator chain), ensuring all domain-joined machines use a consistent, domain-controlled time source.",
                 Tags         = ["w32time", "ntp", "domain", "active-directory", "policy"],
                 NeedsAdmin   = true,
@@ -3106,7 +3106,7 @@ internal static class PolicyMisc
             {
                 Id           = "timepol-set-max-pos-phase-correction",
                 Label        = "Set Maximum Positive Time Correction to 3600 Seconds",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description  = "Limits the maximum positive time jump that W32TM will accept in a single synchronisation to 3600 seconds (1 hour), preventing an attacker from jumping the system clock forward to expire Kerberos tickets or bypass time-based security checks.",
                 Tags         = ["w32time", "time-correction", "max-jump", "security", "policy"],
                 NeedsAdmin   = true,
@@ -3122,7 +3122,7 @@ internal static class PolicyMisc
             {
                 Id           = "timepol-set-max-neg-phase-correction",
                 Label        = "Set Maximum Negative Time Correction to 3600 Seconds",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description  = "Limits the maximum negative time jump (clock backward adjustment) to 3600 seconds (1 hour), preventing attacks that move the clock backward to re-validate already-expired certificates or Kerberos tickets.",
                 Tags         = ["w32time", "time-correction", "max-jump-backward", "security", "policy"],
                 NeedsAdmin   = true,
@@ -3138,7 +3138,7 @@ internal static class PolicyMisc
             {
                 Id           = "timepol-log-time-jumps",
                 Label        = "Log Large Time Synchronisation Jumps in System Log",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description  = "Enables System event log entries (EventID 35 — W32TM) when the clock is adjusted by more than 2 minutes due to a time synchronisation event, providing visibility into significant time changes for security auditing.",
                 Tags         = ["w32time", "event-log", "audit", "time-jump", "policy"],
                 NeedsAdmin   = true,
@@ -3154,7 +3154,7 @@ internal static class PolicyMisc
             {
                 Id           = "timepol-set-poll-interval",
                 Label        = "Set NTP Poll Interval to 3600 Seconds for Time Accuracy",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description  = "Sets the Windows Time Service NTP client poll interval to 3600 seconds (1 hour), balancing clock accuracy with network traffic, replacing the default variable 17-bit interval that can allow clocks to drift for many hours.",
                 Tags         = ["w32time", "ntp", "poll-interval", "clock-accuracy", "policy"],
                 NeedsAdmin   = true,
@@ -3170,7 +3170,7 @@ internal static class PolicyMisc
             {
                 Id           = "timepol-disable-w32time-telemetry",
                 Label        = "Disable Windows Time Service Telemetry to Microsoft",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description  = "Prevents the Windows Time Service from sending time synchronisation success/failure rates, configured time source, and clock offset telemetry to Microsoft.",
                 Tags         = ["w32time", "telemetry", "privacy", "microsoft", "policy"],
                 NeedsAdmin   = true,
@@ -3186,7 +3186,7 @@ internal static class PolicyMisc
             {
                 Id           = "timepol-block-time-provider-change",
                 Label        = "Block Standard Users from Changing Time Synchronisation Provider",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description  = "Prevents standard users from changing the Windows Time Service provider configuration, ensuring time source and authentication settings can only be changed by administrators.",
                 Tags         = ["w32time", "provider", "standard-user", "admin", "policy"],
                 NeedsAdmin   = true,
@@ -3202,7 +3202,7 @@ internal static class PolicyMisc
             {
                 Id           = "timepol-enable-hyperv-time-correction",
                 Label        = "Enable Hyper-V Time Synchronisation Guest Correction",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description  = "Ensures that VMs running in Hyper-V synchronise their clocks from the Hyper-V host's time source rather than from an NTP server, preventing VM clock drift from causing Kerberos authentication failures in guest environments.",
                 Tags         = ["w32time", "hyper-v", "time-sync", "vm", "policy"],
                 NeedsAdmin   = true,
@@ -3218,7 +3218,7 @@ internal static class PolicyMisc
             {
                 Id           = "timepol-harden-stratum-1-sources",
                 Label        = "Restrict Windows Time to Stratum-1 or Stratum-2 Sources Only",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description  = "Configures Windows Time Service to reject time sources below Stratum 2 quality, preventing synchronisation with inaccurate or potentially manipulated Stratum-8 or worse NTP sources.",
                 Tags         = ["w32time", "ntp", "stratum", "accuracy", "policy"],
                 NeedsAdmin   = true,
@@ -3246,7 +3246,7 @@ internal static class PolicyMisc
                 {
                     Id = "wanyu-disable-anytime-upgrade",
                     Label = "Disable Windows Anytime Upgrade",
-                    Category = "System & Misc Policy",
+                    Category = "System",
                     Description =
                         "Prevents users from launching Windows Anytime Upgrade to purchase and install a higher-edition license key. On managed corporate devices the OS edition is centrally managed; users should not be able to self-upgrade. Default: Anytime Upgrade accessible. Recommended: 1.",
                     Tags = ["anytime-upgrade", "edition", "upgrade", "store", "policy"],
@@ -3263,7 +3263,7 @@ internal static class PolicyMisc
                 {
                     Id = "wanyu-disable-upgrade-via-store",
                     Label = "Disable OS Upgrade via Microsoft Store",
-                    Category = "System & Misc Policy",
+                    Category = "System",
                     Description =
                         "Prevents users from upgrading the operating system edition (e.g., Home → Pro, or Pro → Enterprise) via the Microsoft Store upgrade pathways. Keeps OS edition under IT control on managed devices. Default: Store-based edition upgrade permitted. Recommended: 1.",
                     Tags = ["anytime-upgrade", "edition", "store", "upgrade", "policy"],
@@ -3280,7 +3280,7 @@ internal static class PolicyMisc
                 {
                     Id = "wanyu-block-key-entry-ui",
                     Label = "Block Product Key Entry for Edition Upgrade",
-                    Category = "System & Misc Policy",
+                    Category = "System",
                     Description =
                         "Removes the 'Change product key' button from Settings → Update & Security → Activation that would allow a user to enter a higher-edition key and trigger an in-place upgrade. Prevents unauthorized edition changes by typing a key. Default: key entry available. Recommended: 1.",
                     Tags = ["anytime-upgrade", "product-key", "activation", "edition", "policy"],
@@ -3297,7 +3297,7 @@ internal static class PolicyMisc
                 {
                     Id = "wanyu-log-upgrade-attempts",
                     Label = "Log Windows Anytime Upgrade Attempts",
-                    Category = "System & Misc Policy",
+                    Category = "System",
                     Description =
                         "Records an Application event log entry whenever a user attempts to initiate a Windows Anytime Upgrade, whether blocked by policy or not. Useful for detecting users who are trying to bypass edition controls. Default: attempts not logged. Recommended: 1 on monitored endpoints.",
                     Tags = ["anytime-upgrade", "audit", "logging", "edition", "policy"],
@@ -3314,7 +3314,7 @@ internal static class PolicyMisc
                 {
                     Id = "wanyu-disable-upgrade-notification",
                     Label = "Suppress Windows Anytime Upgrade Notifications",
-                    Category = "System & Misc Policy",
+                    Category = "System",
                     Description =
                         "Suppresses promotional notifications and prompts that encourage users to purchase a higher Windows edition (e.g., 'Upgrade to Pro for these features'). Removes upsell nags from the UI without affecting the installed edition. Default: notifications displayed. Recommended: 1.",
                     Tags = ["anytime-upgrade", "notification", "ui", "edition", "policy"],
@@ -3331,7 +3331,7 @@ internal static class PolicyMisc
                 {
                     Id = "wanyu-prevent-downgrade",
                     Label = "Prevent Windows Edition Downgrade via Policy",
-                    Category = "System & Misc Policy",
+                    Category = "System",
                     Description =
                         "Prevents edition downgrades (e.g., Enterprise → Pro rollback) via key entry or the Activation Store. Protects against licence audit circumvention where a device could be temporarily downgraded. Default: downgrade via key entry possible. Recommended: 1.",
                     Tags = ["anytime-upgrade", "downgrade", "edition", "activation", "policy"],
@@ -3348,7 +3348,7 @@ internal static class PolicyMisc
                 {
                     Id = "wanyu-hide-activation-settings",
                     Label = "Hide Activation Settings Page",
-                    Category = "System & Misc Policy",
+                    Category = "System",
                     Description =
                         "Removes the Activation page from Windows Settings so users cannot view the activation status or attempt to change the product key. Useful on volume-licensed endpoints where individual activation management is not required and should not be user-accessible. Default: Activation page visible. Recommended: 1 on volume-licensed images.",
                     Tags = ["anytime-upgrade", "activation", "settings", "ui", "policy"],
@@ -3365,7 +3365,7 @@ internal static class PolicyMisc
                 {
                     Id = "wanyu-disable-phone-activation",
                     Label = "Disable Phone Activation Method",
-                    Category = "System & Misc Policy",
+                    Category = "System",
                     Description =
                         "Blocks the automated phone activation pathway that allows a user to activate a new edition by calling a Microsoft number and entering a confirmation code. Prevents out-of-band edition changes that bypasses online controls. Default: phone activation available. Recommended: 1.",
                     Tags = ["anytime-upgrade", "phone-activation", "edition", "activation", "policy"],
@@ -3382,7 +3382,7 @@ internal static class PolicyMisc
                 {
                     Id = "wanyu-lock-edition-to-deployed",
                     Label = "Lock OS Edition to IT-Deployed Edition",
-                    Category = "System & Misc Policy",
+                    Category = "System",
                     Description =
                         "Configures a policy lock that prevents the OS edition from changing in either direction (upgrade or downgrade) without explicit Group Policy update. Provides a strong enforcement control on managed devices where edition stability is a compliance requirement. Default: not locked. Recommended: 1 on standardised fleet deployments.",
                     Tags = ["anytime-upgrade", "edition", "lock", "compliance", "policy"],
@@ -3399,7 +3399,7 @@ internal static class PolicyMisc
                 {
                     Id = "wanyu-disable-trial-edition-conversion",
                     Label = "Disable Trial Edition Conversion",
-                    Category = "System & Misc Policy",
+                    Category = "System",
                     Description =
                         "Prevents the OS from being converted from a trial (evaluation) edition to a retail edition via key entry. Ensures evaluation images are not accidentally or deliberately activated as production machines without proper licensing procedures. Default: trial conversion available. Recommended: 1 on production fleet.",
                     Tags = ["anytime-upgrade", "trial", "conversion", "edition", "activation", "policy"],
@@ -3428,7 +3428,7 @@ internal static class PolicyMisc
             {
                 Id = "backup-disable-backup",
                 Label = "Disable Windows Backup",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description = "Disables the Windows Backup feature and prevents users from initiating backups through the control panel.",
                 Tags = ["backup", "windows-backup", "policy"],
                 NeedsAdmin = true,
@@ -3444,7 +3444,7 @@ internal static class PolicyMisc
             {
                 Id = "backup-disable-restore",
                 Label = "Disable Windows Backup Restore",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description = "Prevents users from using the Windows Backup restore feature to recover files or system state.",
                 Tags = ["backup", "restore", "windows-backup", "policy"],
                 NeedsAdmin = true,
@@ -3460,7 +3460,7 @@ internal static class PolicyMisc
             {
                 Id = "backup-disable-catalog-viewer",
                 Label = "Disable Windows Backup Catalog Viewer",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description = "Removes access to the Windows Backup catalog viewer preventing browsing of historical backup sets.",
                 Tags = ["backup", "catalog", "policy"],
                 NeedsAdmin = true,
@@ -3476,7 +3476,7 @@ internal static class PolicyMisc
             {
                 Id = "backup-disable-system-backup",
                 Label = "Disable Windows System Backup",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description = "Prevents users from creating system image or system files backups through the Windows Backup UI.",
                 Tags = ["backup", "system-backup", "image", "policy"],
                 NeedsAdmin = true,
@@ -3492,7 +3492,7 @@ internal static class PolicyMisc
             {
                 Id = "backup-suppress-backup-progress-ui",
                 Label = "Suppress Windows Backup Progress Dialog",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description = "Hides the backup progress window and toast notifications that appear during Windows Backup operations.",
                 Tags = ["backup", "ui", "progress", "notifications", "policy"],
                 NeedsAdmin = true,
@@ -3508,7 +3508,7 @@ internal static class PolicyMisc
             {
                 Id = "backup-disable-online-backup",
                 Label = "Disable Online Backup Services Integration",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description = "Removes the online backup provider options from the Windows Backup configuration wizard.",
                 Tags = ["backup", "online", "cloud", "policy"],
                 NeedsAdmin = true,
@@ -3524,7 +3524,7 @@ internal static class PolicyMisc
             {
                 Id = "backup-disable-network-backup",
                 Label = "Disable Backup to Network Locations",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description = "Blocks Windows Backup from saving backup sets to network shares or mapped drives.",
                 Tags = ["backup", "network", "share", "policy"],
                 NeedsAdmin = true,
@@ -3540,7 +3540,7 @@ internal static class PolicyMisc
             {
                 Id = "backup-disable-backup-over-metered",
                 Label = "Disable Windows Backup on Metered Connections",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description = "Prevents Windows Backup from running over metered (pay-per-use) network connections.",
                 Tags = ["backup", "metered", "network", "data-usage", "policy"],
                 NeedsAdmin = true,
@@ -3556,7 +3556,7 @@ internal static class PolicyMisc
             {
                 Id = "backup-disable-scheduled-backup",
                 Label = "Disable Scheduled Windows Backup",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description = "Prevents Windows from running scheduled background backups automatically on a configured schedule.",
                 Tags = ["backup", "scheduled", "task", "policy"],
                 NeedsAdmin = true,
@@ -3572,7 +3572,7 @@ internal static class PolicyMisc
             {
                 Id = "backup-hide-control-panel-link",
                 Label = "Hide Windows Backup Control Panel Link",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description = "Removes the Windows Backup entry from the Control Panel and System & Security settings page.",
                 Tags = ["backup", "control-panel", "ui", "policy"],
                 NeedsAdmin = true,
@@ -3601,7 +3601,7 @@ internal static class PolicyMisc
             {
                 Id = "wcnpol-disable-registrars",
                 Label = "WCN Policy: Disable WCN Registrars",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description =
                     "Disables all Windows Connect Now (WCN) registrar functionality via Group Policy. WCN allows wireless device configuration over the network — a potential attack vector on corporate Wi-Fi.",
                 Tags = ["wcn", "wireless", "wifi", "registrar", "policy", "hardening"],
@@ -3619,7 +3619,7 @@ internal static class PolicyMisc
             {
                 Id = "wcnpol-disable-execution-service",
                 Label = "WCN Policy: Disable WCN Execution Service",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description =
                     "Prevents the WCN execution service from running through GPO. The WCN service manages network device discovery and configuration — disabling it reduces the attack surface on managed enterprise networks.",
                 Tags = ["wcn", "service", "wireless", "policy", "hardening"],
@@ -3637,7 +3637,7 @@ internal static class PolicyMisc
             {
                 Id = "wcnpol-disable-flash-config",
                 Label = "WCN Policy: Disable Flash Config Provisioning",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description =
                     "Disables the WCN Flash Config Registrar which allows device setup via USB-connected flash drives. Flash-based provisioning can be exploited to inject unauthorized wireless configurations.",
                 Tags = ["wcn", "flash", "usb", "provisioning", "policy", "hardening"],
@@ -3655,7 +3655,7 @@ internal static class PolicyMisc
             {
                 Id = "wcnpol-disable-inband-80211",
                 Label = "WCN Policy: Disable In-Band 802.11 Wireless Registrar",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description =
                     "Disables the WCN in-band 802.11 wireless registrar, which enables over-the-air device configuration. Prevents unauthorized wireless setup requests from being processed by managed devices.",
                 Tags = ["wcn", "802.11", "wifi", "wireless", "policy", "hardening"],
@@ -3673,7 +3673,7 @@ internal static class PolicyMisc
             {
                 Id = "wcnpol-disable-upnp-registrar",
                 Label = "WCN Policy: Disable UPnP-Based WCN Registrar",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description =
                     "Disables the WCN UPnP registrar. WCN over UPnP can expose wireless credentials and configuration data to other devices on the local network without authentication.",
                 Tags = ["wcn", "upnp", "wireless", "network", "policy", "hardening"],
@@ -3691,7 +3691,7 @@ internal static class PolicyMisc
             {
                 Id = "wcnpol-disable-ui",
                 Label = "WCN Policy: Disable WCN User Interface",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description =
                     "Hides the Windows Connect Now setup wizard from the Network and Sharing Center UI. Prevents end users from initiating WCN-based wireless device setup sessions on managed endpoints.",
                 Tags = ["wcn", "ui", "wireless", "policy", "lockdown"],
@@ -3709,7 +3709,7 @@ internal static class PolicyMisc
             {
                 Id = "wcnpol-disable-auto-add",
                 Label = "WCN Policy: Disable Automatic Device Add via WCN",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description =
                     "Prevents automatic device addition through WCN by disabling the auto-add registrar. Stops devices from self-enrolling into the network through the WCN protocol without admin intervention.",
                 Tags = ["wcn", "auto-add", "device", "network", "policy", "hardening"],
@@ -3727,7 +3727,7 @@ internal static class PolicyMisc
             {
                 Id = "wcnpol-disable-wcn-global",
                 Label = "WCN Policy: Globally Disable Windows Connect Now",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description =
                     "Completely disables Windows Connect Now via the top-level GPO flag. Prevents any WCN-based operations including wireless device setup, UPnP registrar, and in-band 802.11 provisioning.",
                 Tags = ["wcn", "disable", "wireless", "global", "policy", "hardening"],
@@ -3745,7 +3745,7 @@ internal static class PolicyMisc
             {
                 Id = "wcnpol-disable-pin-connect",
                 Label = "WCN Policy: Disable PIN-Based WCN Device Connection",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description =
                     "Blocks PIN-based Windows Connect Now device pairing. WCN PIN-based setup is vulnerable to brute-force PIN enumeration attacks (similar to WPS vulnerabilities on routers).",
                 Tags = ["wcn", "pin", "pairing", "wireless", "policy", "hardening"],
@@ -3763,7 +3763,7 @@ internal static class PolicyMisc
             {
                 Id = "wcnpol-disable-push-button-connect",
                 Label = "WCN Policy: Disable Push Button WCN Connection",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description =
                     "Disables push-button connection method for Windows Connect Now. Physical push-button pairing can be exploited in unlocked or unattended environments to add unauthorized devices.",
                 Tags = ["wcn", "push-button", "wps", "wireless", "policy", "hardening"],
@@ -3793,7 +3793,7 @@ internal static class PolicyMisc
             {
                 Id = "wlogon-disable-last-username-display",
                 Label = "Windows Logon Options: Do Not Display Last Signed-In Username",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description =
                     "Prevents the logon screen from pre-filling or displaying the last signed-in user's username. "
                     + "Displaying the last username reduces the effort required for an attacker with physical access to attempt credential attacks. "
@@ -3814,7 +3814,7 @@ internal static class PolicyMisc
             {
                 Id = "wlogon-disable-last-user-account-logon-info",
                 Label = "Windows Logon Options: Do Not Display Last Account Info at Logon",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description =
                     "Prevents the logon screen from displaying account information from the last successfully logged-on user. "
                     + "This includes not showing the account name, domain, and display picture associated with the previous session. "
@@ -3835,7 +3835,7 @@ internal static class PolicyMisc
             {
                 Id = "wlogon-require-ctrl-alt-del",
                 Label = "Windows Logon Options: Require Ctrl+Alt+Del Secure Attention Sequence",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description =
                     "Forces users to press Ctrl+Alt+Del before entering credentials on the logon screen. "
                     + "The Ctrl+Alt+Del Secure Attention Sequence (SAS) is a trusted OS-level signal that cannot be intercepted by malware. "
@@ -3856,7 +3856,7 @@ internal static class PolicyMisc
             {
                 Id = "wlogon-disable-password-reveal-button",
                 Label = "Windows Logon Options: Disable Password Reveal Button",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description =
                     "Removes the password reveal (eye icon) button from password fields on the logon screen and credential dialogs. "
                     + "The reveal button is a usability feature but it creates shoulder-surfing risk in shared or open-plan environments. "
@@ -3877,7 +3877,7 @@ internal static class PolicyMisc
             {
                 Id = "wlogon-set-legal-notice-caption",
                 Label = "Windows Logon Options: Set Legal Notice Banner Caption",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description =
                     "Sets the caption text for the legal notice dialog shown before Windows logon. "
                     + "Displaying a legal notice at logon is a common compliance requirement that informs users the system is monitored and for authorized use only. "
@@ -3898,7 +3898,7 @@ internal static class PolicyMisc
             {
                 Id = "wlogon-set-legal-notice-text",
                 Label = "Windows Logon Options: Set Legal Notice Banner Body Text",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description =
                     "Sets the body text content of the legal notice dialog shown before Windows logon. "
                     + "Legal notice text should convey that the system is for authorized users only, activity is monitored, and unauthorized access is prohibited. "
@@ -3933,7 +3933,7 @@ internal static class PolicyMisc
             {
                 Id = "wlogon-disable-fast-user-switching",
                 Label = "Windows Logon Options: Disable Fast User Switching",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description =
                     "Prevents multiple user sessions from being simultaneously active via fast user switching. "
                     + "Fast user switching allows a second user to log on without the first user logging off, leaving their session unlocked in memory. "
@@ -3954,7 +3954,7 @@ internal static class PolicyMisc
             {
                 Id = "wlogon-disable-unlocking-from-non-domain-context",
                 Label = "Windows Logon Options: Require Domain Logon to Unlock Machine",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description =
                     "Prevents users from unlocking a locked workstation using a local (non-domain) account. "
                     + "When enabled, only domain accounts can unlock the session, preventing an attacker from using a local account to bypass domain authentication. "
@@ -3975,7 +3975,7 @@ internal static class PolicyMisc
             {
                 Id = "wlogon-set-machine-inactivity-limit",
                 Label = "Windows Logon Options: Set Machine Inactivity Limit (15 min)",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description =
                     "Configures a machine-scope inactivity timeout of 15 minutes after which the screen locks automatically. "
                     + "This policy is evaluated at the OS level and overrides user-configured screen saver delays. "
@@ -3996,7 +3996,7 @@ internal static class PolicyMisc
             {
                 Id = "wlogon-disable-smart-card-removal-behavior-none",
                 Label = "Windows Logon Options: Lock on Smart Card Removal",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description =
                     "Configures the system to lock the workstation when the smart card is removed from the reader. "
                     + "For environments using smart-card-based authentication (PIV, CAC), removing the card should immediately secure the session. "
@@ -4028,7 +4028,7 @@ internal static class PolicyMisc
             {
                 Id = "winmail-disable-manual-launch",
                 Label = "Windows Mail Policy: Block Manual Launch of Windows Mail",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description =
                     "Prevents users from manually launching the Windows Mail application. Enterprise environments that route email exclusively through corporate clients (Outlook, web) should block the inbox Windows Mail app to reduce shadow IT risk.",
                 Tags = ["mail", "windows-mail", "launch", "block", "policy"],
@@ -4046,7 +4046,7 @@ internal static class PolicyMisc
             {
                 Id = "winmail-disable-mail-import",
                 Label = "Windows Mail Policy: Disable Import of External Mail Accounts",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description =
                     "Prevents Windows Mail from importing accounts, messages, or contacts from external mail clients. Disabling import reduces the risk of unauthorized data ingestion from non-corporate mail clients into the Windows Mail store.",
                 Tags = ["mail", "windows-mail", "import", "accounts", "policy"],
@@ -4064,7 +4064,7 @@ internal static class PolicyMisc
             {
                 Id = "winmail-block-http-tracking-pixels",
                 Label = "Windows Mail Policy: Block HTTP Remote Images (Anti-Tracking)",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description =
                     "Prevents Windows Mail from automatically loading HTTP images embedded in email messages. Remote images (1x1 tracking pixels) are widely used by marketers and threat actors to confirm email addresses are active and track recipient location.",
                 Tags = ["mail", "windows-mail", "tracking", "images", "privacy", "policy"],
@@ -4082,7 +4082,7 @@ internal static class PolicyMisc
             {
                 Id = "winmail-disable-featured-updates",
                 Label = "Windows Mail Policy: Disable Featured Updates in Windows Mail",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description =
                     "Turns off the featured/promotional updates displayed within the Windows Mail application. In enterprise deployments, UI promotional messages are distractions that may redirect users to unsanctioned services.",
                 Tags = ["mail", "windows-mail", "updates", "promotional", "policy"],
@@ -4100,7 +4100,7 @@ internal static class PolicyMisc
             {
                 Id = "winmail-disable-hotmail-contact-sync",
                 Label = "Windows Mail Policy: Disable Hotmail/Live Contact Synchronisation",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description =
                     "Prevents Windows Mail from synchronising contacts with Microsoft Hotmail or Live accounts. On managed devices, contact sync to personal Microsoft accounts creates data exfiltration risk for confidential address book entries.",
                 Tags = ["mail", "windows-mail", "hotmail", "contacts", "sync", "policy"],
@@ -4118,7 +4118,7 @@ internal static class PolicyMisc
             {
                 Id = "winmail-force-plaintext-display",
                 Label = "Windows Mail Policy: Force Plaintext Rendering for Email",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description =
                     "Forces Windows Mail to render incoming messages as plain text only. HTML email is the primary delivery vector for phishing attacks (hidden links, CSS tricks, JavaScript payloads). Plain text rendering neutralises the entire class of HTML-based email threats.",
                 Tags = ["mail", "windows-mail", "plaintext", "html", "phishing", "policy"],
@@ -4136,7 +4136,7 @@ internal static class PolicyMisc
             {
                 Id = "winmail-block-executable-attachments",
                 Label = "Windows Mail Policy: Block Executable File Attachments",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description =
                     "Prevents Windows Mail from delivering or presenting executable file attachments (EXE, COM, BAT, PS1, etc.) to users. Executable email attachments are the most common initial access vector in enterprise phishing campaigns.",
                 Tags = ["mail", "windows-mail", "attachments", "executable", "block", "policy"],
@@ -4154,7 +4154,7 @@ internal static class PolicyMisc
             {
                 Id = "winmail-disable-shopping-links",
                 Label = "Windows Mail Policy: Disable Shopping Promotional Links",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description =
                     "Disables shopping links and promotional offers embedded in Windows Mail. Enterprise mail clients should suppress commercial UI to prevent employee distraction and reduce the risk of clicking unsolicited purchase links.",
                 Tags = ["mail", "windows-mail", "shopping", "promotional", "policy"],
@@ -4172,7 +4172,7 @@ internal static class PolicyMisc
             {
                 Id = "winmail-disable-news-feed",
                 Label = "Windows Mail Policy: Disable News Feed Integration",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description =
                     "Disables the integrated news feed widget within Windows Mail. News feed integration increases background network calls and may display content from external third-party news aggregators, which is inappropriate for managed enterprise environments.",
                 Tags = ["mail", "windows-mail", "news", "feed", "policy"],
@@ -4190,7 +4190,7 @@ internal static class PolicyMisc
             {
                 Id = "winmail-disable-calendar-integration",
                 Label = "Windows Mail Policy: Disable Calendar Sync Integration",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description =
                     "Prevents Windows Mail from synchronising calendar data with Microsoft consumer accounts or Exchange integrations not managed by the enterprise. Blocks calendar data from being stored in the Windows Mail local store outside MDM supervision.",
                 Tags = ["mail", "windows-mail", "calendar", "sync", "policy"],
@@ -4219,7 +4219,7 @@ internal static class PolicyMisc
             {
                 Id = "wmplay-disable-auto-codec-download",
                 Label = "Windows Media Player: Disable Automatic Codec Download",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description =
                     "Prevents Windows Media Player from automatically downloading codecs from the Internet when a media file requires one. "
                     + "Automatic codec download can introduce unsigned or malicious codec software that runs in a privileged context. "
@@ -4240,7 +4240,7 @@ internal static class PolicyMisc
             {
                 Id = "wmplay-disable-network-settings-change",
                 Label = "Windows Media Player: Disable Network Settings Changes",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description =
                     "Prevents WMP users from modifying network configuration in the Windows Media Player settings dialog. "
                     + "Network settings in WMP include proxy configuration, streaming protocol selection, and bandwidth limits. "
@@ -4261,7 +4261,7 @@ internal static class PolicyMisc
             {
                 Id = "wmplay-disable-auto-update-check",
                 Label = "Windows Media Player: Disable Automatic Update Checking",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description =
                     "Prevents Windows Media Player from automatically checking for updates on the Internet. "
                     + "Automatic update checks for WMP can generate unexpected outbound traffic to Microsoft update servers. "
@@ -4282,7 +4282,7 @@ internal static class PolicyMisc
             {
                 Id = "wmplay-disable-internet-streaming",
                 Label = "Windows Media Player: Disable Internet Media Streaming",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description =
                     "Restricts Windows Media Player from streaming media content from Internet URLs. "
                     + "Allowing arbitrary Internet streaming can consume significant bandwidth and may result in access to unlicensed or inappropriate content. "
@@ -4303,7 +4303,7 @@ internal static class PolicyMisc
             {
                 Id = "wmplay-disable-digital-rights-management",
                 Label = "Windows Media Player: Disable DRM License Acquisition from Internet",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description =
                     "Prevents Windows Media Player from automatically acquiring DRM (Digital Rights Management) licenses from the Internet. "
                     + "Automatic DRM license acquisition initiates outbound connections to third-party license servers without explicit user consent. "
@@ -4324,7 +4324,7 @@ internal static class PolicyMisc
             {
                 Id = "wmplay-disable-library-sharing",
                 Label = "Windows Media Player: Disable Media Library Sharing",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description =
                     "Prevents Windows Media Player from sharing its media library on the local network through the Windows Media Network Sharing service. "
                     + "WMP library sharing exposes media file metadata and content over the network, which may include corporate training materials, meeting recordings, or other sensitive files. "
@@ -4345,7 +4345,7 @@ internal static class PolicyMisc
             {
                 Id = "wmplay-disable-media-information-online",
                 Label = "Windows Media Player: Disable Online Media Information Retrieval",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description =
                     "Prevents WMP from connecting to the Internet to retrieve album artwork, track information, and music metadata. "
                     + "Online metadata requests reveal what media files are being played to Microsoft or third-party data providers. "
@@ -4366,7 +4366,7 @@ internal static class PolicyMisc
             {
                 Id = "wmplay-disable-usage-reporting",
                 Label = "Windows Media Player: Disable Usage Reporting",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description =
                     "Prevents Windows Media Player from sending usage reports and playback data to Microsoft. "
                     + "WMP usage reporting transmits data about media formats played, codecs used, and playback errors. "
@@ -4387,7 +4387,7 @@ internal static class PolicyMisc
             {
                 Id = "wmplay-disable-remote-skin-download",
                 Label = "Windows Media Player: Disable Remote Skin and Visualizer Download",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description =
                     "Prevents Windows Media Player from downloading skins, visualizations, and plug-in content from the Internet. "
                     + "Remote skin and plug-in downloads represent an arbitrary code execution risk if the download source is compromised or spoofed. "
@@ -4408,7 +4408,7 @@ internal static class PolicyMisc
             {
                 Id = "wmplay-hide-privacy-tab",
                 Label = "Windows Media Player: Hide Privacy Tab in Options",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description =
                     "Removes the Privacy tab from the Windows Media Player Options dialog. "
                     + "The Privacy tab allows users to modify privacy settings including DRM, usage reporting, and online content lookups. "
@@ -4441,7 +4441,7 @@ internal static class PolicyMisc
             {
                 Id = "wmply-no-screensaver",
                 Label = "WMP: Disable screensaver activation during audio playback",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description =
                     "Sets AllowScreenSaver=0 in the Windows Media Player policy key. Prevents the "
                     + "screensaver from activating while WMP is playing audio, even when the screen is idle.",
@@ -4456,7 +4456,7 @@ internal static class PolicyMisc
             {
                 Id = "wmply-no-cd-metadata",
                 Label = "WMP: Prevent CD/DVD metadata retrieval from the internet",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description =
                     "Sets PreventCDDVDMetadataRetrieval=1. Stops Windows Media Player from contacting "
                     + "online databases to retrieve CD/DVD album art, track names, and other metadata.",
@@ -4471,7 +4471,7 @@ internal static class PolicyMisc
             {
                 Id = "wmply-no-music-metadata",
                 Label = "WMP: Prevent music file metadata retrieval from the internet",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description =
                     "Sets PreventMusicFileMetadataRetrieval=1. Blocks WMP from downloading online "
                     + "metadata for music files such as album art, artist info, and lyrics.",
@@ -4486,7 +4486,7 @@ internal static class PolicyMisc
             {
                 Id = "wmply-no-radio-presets",
                 Label = "WMP: Prevent internet radio preset retrieval",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description =
                     "Sets PreventRadioPresetsRetrieval=1. Prevents Windows Media Player from downloading "
                     + "internet radio station presets from online services.",
@@ -4501,7 +4501,7 @@ internal static class PolicyMisc
             {
                 Id = "wmply-no-auto-update",
                 Label = "WMP: Disable automatic Windows Media Player updates",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description =
                     "Sets DisableAutoUpdate=1. Prevents Windows Media Player from automatically checking "
                     + "for and downloading software updates in the background.",
@@ -4516,7 +4516,7 @@ internal static class PolicyMisc
             {
                 Id = "wmply-no-codec-download",
                 Label = "WMP: Prevent automatic codec download",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description =
                     "Sets PreventCodecDownload=1. Stops Windows Media Player from automatically "
                     + "downloading codecs needed to play unsupported media formats.",
@@ -4531,7 +4531,7 @@ internal static class PolicyMisc
             {
                 Id = "wmply-no-network-protocol-download",
                 Label = "WMP: Prevent automatic network protocol download",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description =
                     "Sets PreventNetworkProtocolAutomaticDownload=1. Prevents Windows Media Player from "
                     + "automatically downloading streaming network protocol components.",
@@ -4546,7 +4546,7 @@ internal static class PolicyMisc
             {
                 Id = "wmply-user-no-cd-metadata",
                 Label = "WMP (user): Prevent CD/DVD metadata retrieval per user",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description =
                     "Sets PreventCDDVDMetadataRetrieval=1 at the per-user policy scope (HKCU). Enforces "
                     + "no-internet-metadata policy for the current user regardless of machine policy.",
@@ -4561,7 +4561,7 @@ internal static class PolicyMisc
             {
                 Id = "wmply-user-no-music-metadata",
                 Label = "WMP (user): Prevent music metadata retrieval per user",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description =
                     "Sets PreventMusicFileMetadataRetrieval=1 at the per-user policy scope (HKCU). "
                     + "Stops the current user's WMP session from downloading online music metadata.",
@@ -4576,7 +4576,7 @@ internal static class PolicyMisc
             {
                 Id = "wmply-user-no-radio-presets",
                 Label = "WMP (user): Prevent internet radio presets per user",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description =
                     "Sets PreventRadioPresetsRetrieval=1 at the per-user policy scope (HKCU). Prevents "
                     + "the current user's WMP from fetching online radio station preset lists.",
@@ -4602,7 +4602,7 @@ internal static class PolicyMisc
             {
                 Id = "wnperf-restrict-background-activity",
                 Label = "Restrict Background Application Activity Through Performance Policy",
-                Category = "System & Misc Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -4619,7 +4619,7 @@ internal static class PolicyMisc
             {
                 Id = "wnperf-enable-cpu-priority-boost",
                 Label = "Enable CPU Priority Boosting for Foreground Interactive Applications",
-                Category = "System & Misc Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -4636,7 +4636,7 @@ internal static class PolicyMisc
             {
                 Id = "wnperf-configure-memory-usage-policy",
                 Label = "Configure System Memory Usage Policy for Balanced Performance",
-                Category = "System & Misc Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -4653,7 +4653,7 @@ internal static class PolicyMisc
             {
                 Id = "wnperf-disable-animated-windows-effects",
                 Label = "Disable Animated Window Effects for Improved System Performance",
-                Category = "System & Misc Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -4670,7 +4670,7 @@ internal static class PolicyMisc
             {
                 Id = "wnperf-configure-disk-io-scheduling",
                 Label = "Configure Disk I/O Scheduling for Application vs System Service Balance",
-                Category = "System & Misc Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -4687,7 +4687,7 @@ internal static class PolicyMisc
             {
                 Id = "wnperf-restrict-startup-program-execution",
                 Label = "Restrict Startup Program Execution to Approved Application List",
-                Category = "System & Misc Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -4704,7 +4704,7 @@ internal static class PolicyMisc
             {
                 Id = "wnperf-configure-network-throttling",
                 Label = "Configure Network Bandwidth Throttling for Background Update Operations",
-                Category = "System & Misc Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -4721,7 +4721,7 @@ internal static class PolicyMisc
             {
                 Id = "wnperf-enable-prefetch-optimization",
                 Label = "Enable Prefetch Optimization for Frequently Used Application Launch",
-                Category = "System & Misc Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -4738,7 +4738,7 @@ internal static class PolicyMisc
             {
                 Id = "wnperf-configure-power-performance-balance",
                 Label = "Configure Power and Performance Balance Policy for Enterprise Workloads",
-                Category = "System & Misc Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -4755,7 +4755,7 @@ internal static class PolicyMisc
             {
                 Id = "wnperf-enable-performance-audit-logging",
                 Label = "Enable Performance Audit Logging for System Resource Utilization",
-                Category = "System & Misc Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -4784,7 +4784,7 @@ internal static class PolicyMisc
             {
                 Id = "relpol-disable-shutdown-tracker",
                 Label = "Reliability Policy: Disable Shutdown Event Tracker",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description =
                     "Disables the Shutdown Event Tracker dialog that prompts users or admins for a reason when the system is shut down or restarted. Useful for desktops that do not require uptime tracking.",
                 Tags = ["reliability", "shutdown", "event-tracker", "policy"],
@@ -4802,7 +4802,7 @@ internal static class PolicyMisc
             {
                 Id = "relpol-disable-rac-reporting",
                 Label = "Reliability Policy: Disable RAC Problem Reporting to Microsoft",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description =
                     "Disables the Reliability Analysis Component (RAC) from forwarding problem report data to Microsoft. RAC gathers application crash data and forwards it to Problem Reports and Solutions (WER).",
                 Tags = ["reliability", "rac", "wer", "reporting", "privacy", "policy"],
@@ -4820,7 +4820,7 @@ internal static class PolicyMisc
             {
                 Id = "relpol-disable-archive",
                 Label = "Reliability Policy: Disable Reliability Data Archive",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description =
                     "Disables the reliability history archive database written by the Reliability Analysis Component (RACAgent). Prevents creation and retention of Windows reliability scores and application failure records.",
                 Tags = ["reliability", "archive", "rac", "history", "policy"],
@@ -4838,7 +4838,7 @@ internal static class PolicyMisc
             {
                 Id = "relpol-limit-archive-count",
                 Label = "Reliability Policy: Limit Reliability Archive Maximum Count",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description =
                     "Limits the number of reliability history records stored in the RAC database. Reducing the max archive count prevents unbounded growth of reliability data on low-disk-space endpoints.",
                 Tags = ["reliability", "archive", "limit", "disk-space", "policy"],
@@ -4856,7 +4856,7 @@ internal static class PolicyMisc
             {
                 Id = "relpol-disable-shutdown-reason-required",
                 Label = "Reliability Policy: Disable Shutdown Reason Requirement",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description =
                     "Removes the requirement for users to provide an annotated reason when shutting down or restarting the system. Complements the Shutdown Event Tracker disable for unattended workstations.",
                 Tags = ["reliability", "shutdown", "reason", "policy"],
@@ -4874,7 +4874,7 @@ internal static class PolicyMisc
             {
                 Id = "relpol-disable-shutdown-reason-display",
                 Label = "Reliability Policy: Disable Shutdown Reason UI Display",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description =
                     "Disables the on-screen display of shutdown reason annotations set by the Shutdown Event Tracker. Reduces noise in end-user shutdown flows where reason data is collected only for IT audit purposes.",
                 Tags = ["reliability", "shutdown", "reason", "ui", "policy"],
@@ -4892,7 +4892,7 @@ internal static class PolicyMisc
             {
                 Id = "relpol-block-wer-auto-upload",
                 Label = "Reliability Policy: Block WER Auto-Upload of Crash Dumps",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description =
                     "Prevents Windows Error Reporting from automatically uploading minidumps and full memory dumps to Microsoft. Crash dumps can contain sensitive application data, PII, or credentials from process memory.",
                 Tags = ["reliability", "wer", "crash-dump", "upload", "privacy", "policy"],
@@ -4910,7 +4910,7 @@ internal static class PolicyMisc
             {
                 Id = "relpol-disable-wer-ui-prompt",
                 Label = "Reliability Policy: Disable WER User Prompt Dialog",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description =
                     "Suppresses the Windows Error Reporting prompt dialog when an application crashes. On headless or thin-client deployments, the WER dialog can block process termination and require remote intervention.",
                 Tags = ["reliability", "wer", "dialog", "prompt", "headless", "policy"],
@@ -4928,7 +4928,7 @@ internal static class PolicyMisc
             {
                 Id = "relpol-limit-wer-queue-count",
                 Label = "Reliability Policy: Limit WER Report Queue Size",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description =
                     "Limits the maximum number of error reports held in the WER queue to a small number. On heavily-used endpoints, an unbounded WER queue can consume significant disk space.",
                 Tags = ["reliability", "wer", "queue", "limit", "disk-space", "policy"],
@@ -4946,7 +4946,7 @@ internal static class PolicyMisc
             {
                 Id = "relpol-disable-wer-kernel-dump",
                 Label = "Reliability Policy: Disable WER Kernel Fault/Dump Reporting",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description =
                     "Disables Windows Error Reporting capture of kernel-mode fault data (BSoD minidumps). Prevents automatic transmission of kernel dump data to Microsoft after BSODs on sensitive systems.",
                 Tags = ["reliability", "wer", "kernel-dump", "bsod", "privacy", "policy"],
@@ -4981,7 +4981,7 @@ internal static class PolicyMisc
             {
                 Id = "timepol-type-ntp",
                 Label = "Enforce W32Time sync type NTP (policy)",
-                Category = "System & Misc Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 Description =
@@ -4996,7 +4996,7 @@ internal static class PolicyMisc
             {
                 Id = "timepol-ntp-server-pool",
                 Label = "Configure NTP pool servers (policy)",
-                Category = "System & Misc Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 Description =
@@ -5011,7 +5011,7 @@ internal static class PolicyMisc
             {
                 Id = "timepol-ntpclient-enable",
                 Label = "Enable NTP client time provider (policy)",
-                Category = "System & Misc Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 Description =
@@ -5026,7 +5026,7 @@ internal static class PolicyMisc
             {
                 Id = "timepol-ntpclient-poll-hourly",
                 Label = "Set NTP client poll interval to 1 hour (policy)",
-                Category = "System & Misc Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 Description =
@@ -5041,7 +5041,7 @@ internal static class PolicyMisc
             {
                 Id = "timepol-ntpclient-eventlog",
                 Label = "Log NTP time jumps and source changes (policy)",
-                Category = "System & Misc Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 Description =
@@ -5056,7 +5056,7 @@ internal static class PolicyMisc
             {
                 Id = "timepol-ntpserver-disable",
                 Label = "Disable NTP server time provider on workstations (policy)",
-                Category = "System & Misc Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 Description =
@@ -5071,7 +5071,7 @@ internal static class PolicyMisc
             {
                 Id = "timepol-max-pos-correction",
                 Label = "Cap maximum positive time correction at 2 hours (policy)",
-                Category = "System & Misc Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 Description =
@@ -5086,7 +5086,7 @@ internal static class PolicyMisc
             {
                 Id = "timepol-max-neg-correction",
                 Label = "Cap maximum negative time correction at 2 hours (policy)",
-                Category = "System & Misc Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 Description =
@@ -5101,7 +5101,7 @@ internal static class PolicyMisc
             {
                 Id = "timepol-frequency-correct-rate",
                 Label = "Set W32Time frequency correction rate (policy)",
-                Category = "System & Misc Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 Description =
@@ -5116,7 +5116,7 @@ internal static class PolicyMisc
             {
                 Id = "timepol-phase-correct-rate",
                 Label = "Set W32Time phase (offset) correction rate (policy)",
-                Category = "System & Misc Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 Description =
@@ -5145,7 +5145,7 @@ internal static class PolicyMisc
             {
                 Id = "wtime-set-ntp-server",
                 Label = "Configure NTP Server to time.windows.com",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description =
                     "Sets the NtpServer value in the W32time Parameters policy key to 'time.windows.com,0x9'. "
                     + "Configures Windows Time Service to sync from Microsoft's public NTP server using the NT5DS+NTP type. "
@@ -5165,7 +5165,7 @@ internal static class PolicyMisc
             {
                 Id = "wtime-force-ntp-type",
                 Label = "Force Time Sync Type to NTP",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description =
                     "Sets Type=NTP in the W32time Parameters policy key. "
                     + "Forces the Windows Time Service to use NTP (Network Time Protocol) as the sync source "
@@ -5186,7 +5186,7 @@ internal static class PolicyMisc
             {
                 Id = "wtime-enable-ntp-client",
                 Label = "Enable NTP Client Provider",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description =
                     "Sets Enabled=1 in the W32time NtpClient TimeProvider policy key. "
                     + "Ensures the built-in NTP client provider is active and allowed to gather time samples "
@@ -5206,7 +5206,7 @@ internal static class PolicyMisc
             {
                 Id = "wtime-disable-ntp-server",
                 Label = "Disable NTP Server Provider",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description =
                     "Sets Enabled=0 in the W32time NtpServer TimeProvider policy key. "
                     + "Disables this machine from acting as an NTP server for other clients on the network. "
@@ -5226,7 +5226,7 @@ internal static class PolicyMisc
             {
                 Id = "wtime-set-poll-interval-6",
                 Label = "Set NTP Poll Interval to 64 Seconds (Accurate)",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description =
                     "Sets SpecialPollInterval=64 in the W32time NtpClient policy key. "
                     + "Configures the NTP client to query the time server every 64 seconds (2^6), "
@@ -5248,7 +5248,7 @@ internal static class PolicyMisc
             {
                 Id = "wtime-set-max-pos-phase-correction",
                 Label = "Set Maximum Positive Phase Correction to 3600s",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description =
                     "Sets MaxPosPhaseCorrection=3600 in the W32time Config policy key. "
                     + "Limits how far the clock can jump forward in a single correction to 3600 seconds (1 hour). "
@@ -5268,7 +5268,7 @@ internal static class PolicyMisc
             {
                 Id = "wtime-set-max-neg-phase-correction",
                 Label = "Set Maximum Negative Phase Correction to 3600s",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description =
                     "Sets MaxNegPhaseCorrection=3600 in the W32time Config policy key. "
                     + "Limits how far the clock can jump backward in a single correction to 3600 seconds (1 hour). "
@@ -5288,7 +5288,7 @@ internal static class PolicyMisc
             {
                 Id = "wtime-set-update-interval",
                 Label = "Set Clock Update Interval to 30000 (30 Seconds)",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description =
                     "Sets UpdateInterval=30000 in the W32time Config policy key. "
                     + "Configures how often (in 100-nanosecond units, 30000 = approximately 3ms effective interval) "
@@ -5309,7 +5309,7 @@ internal static class PolicyMisc
             {
                 Id = "wtime-set-phase-correction-rate",
                 Label = "Set NTP Phase Correction Rate to 1 (Fast)",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description =
                     "Sets FrequencyCorrectRate=4 in the W32time Config policy key. "
                     + "Controls how aggressively W32tm corrects the local oscillator frequency to match the NTP reference. "
@@ -5330,7 +5330,7 @@ internal static class PolicyMisc
             {
                 Id = "wtime-set-spike-watchdog",
                 Label = "Enable NTP Spike Watchdog Protection",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description =
                     "Sets SpikeWatchPeriod=900 in the W32time Config policy key (900 seconds = 15 minutes). "
                     + "Sets the window during which W32tm detects and ignores suspicious time spike samples "
@@ -5362,7 +5362,7 @@ internal static class PolicyMisc
             {
                 Id = "wlpol-require-ctrl-alt-del",
                 Label = "Require Ctrl+Alt+Delete at Login",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description = "Enforces the secure attention sequence (Ctrl+Alt+Delete) before the Windows logon screen appears.",
                 Tags = ["winlogon", "ctrl-alt-del", "logon", "security"],
                 NeedsAdmin = true,
@@ -5378,7 +5378,7 @@ internal static class PolicyMisc
             {
                 Id = "wlpol-disable-autologon",
                 Label = "Disable Automatic Administrator Logon",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description = "Prevents Windows from automatically logging in with a saved administrator account and password at startup.",
                 Tags = ["winlogon", "autologon", "logon", "security"],
                 NeedsAdmin = true,
@@ -5394,7 +5394,7 @@ internal static class PolicyMisc
             {
                 Id = "wlpol-lock-on-smartcard-removal",
                 Label = "Lock Workstation on Smart Card Removal",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description = "Automatically locks the workstation screen when the user removes their smart card from the reader.",
                 Tags = ["winlogon", "smart-card", "lock", "security", "mfa"],
                 NeedsAdmin = true,
@@ -5410,7 +5410,7 @@ internal static class PolicyMisc
             {
                 Id = "wlpol-no-grace-period-after-screensaver",
                 Label = "No Grace Period After Screen Saver for Unlock",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description = "Requires immediate credential entry after the screen saver activates, with no grace period delay.",
                 Tags = ["winlogon", "screen-saver", "lock", "grace-period", "security"],
                 NeedsAdmin = true,
@@ -5426,7 +5426,7 @@ internal static class PolicyMisc
             {
                 Id = "wlpol-enable-force-unlock-logon",
                 Label = "Force Credential Re-Entry on Workstation Unlock",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description = "Requires full credential re-entry when unlocking a workstation, even if the same user locked it.",
                 Tags = ["winlogon", "unlock", "credentials", "security"],
                 NeedsAdmin = true,
@@ -5442,7 +5442,7 @@ internal static class PolicyMisc
             {
                 Id = "wlpol-block-software-sas",
                 Label = "Block Software-Generated Secure Attention Sequence",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description = "Prevents applications and services from programmatically generating the Ctrl+Alt+Delete SAS.",
                 Tags = ["winlogon", "sas", "security", "ctrl-alt-del"],
                 NeedsAdmin = true,
@@ -5458,7 +5458,7 @@ internal static class PolicyMisc
             {
                 Id = "wlpol-run-logon-scripts-sync",
                 Label = "Run Logon Scripts Synchronously",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description = "Waits for all logon scripts to complete before presenting the user desktop.",
                 Tags = ["winlogon", "logon-scripts", "gpo", "synchronous"],
                 NeedsAdmin = true,
@@ -5474,7 +5474,7 @@ internal static class PolicyMisc
             {
                 Id = "wlpol-disable-boot-animation",
                 Label = "Disable Windows Boot Animation",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description = "Skips the animated Windows splash screen during boot to reduce boot time and remove branding.",
                 Tags = ["winlogon", "boot", "animation", "performance"],
                 NeedsAdmin = true,
@@ -5490,7 +5490,7 @@ internal static class PolicyMisc
             {
                 Id = "wlpol-hide-last-logon-user",
                 Label = "Hide Last Logged-On Username at Logon Screen",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description = "Clears the username field at the Windows logon screen so it does not display the last signed-in account.",
                 Tags = ["winlogon", "last-user", "privacy", "logon", "security"],
                 NeedsAdmin = true,
@@ -5506,7 +5506,7 @@ internal static class PolicyMisc
             {
                 Id = "wlpol-limit-cached-logons",
                 Label = "Limit Cached Domain Logon Credentials",
-                Category = "System & Misc Policy",
+                Category = "System",
                 Description = "Restricts how many domain credentials Windows caches locally for offline logon situations.",
                 Tags = ["winlogon", "cached-logon", "credentials", "domain", "security"],
                 NeedsAdmin = true,

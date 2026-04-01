@@ -43,7 +43,7 @@ internal static class PolicyPrint
             {
                 Id = "faxsvc-disable-fax",
                 Label = "Disable Fax Service",
-                Category = "Print Policy",
+                Category = "Printing",
                 Description =
                     "Sets Fax=1 in the machine Fax policy key under DisabledComponents. "
                     + "Configures Windows Group Policy to mark the Fax service component as disabled at the policy level. "
@@ -63,7 +63,7 @@ internal static class PolicyPrint
             {
                 Id = "faxsvc-disable-online-fax",
                 Label = "Disable Online Fax Service",
-                Category = "Print Policy",
+                Category = "Printing",
                 Description =
                     "Sets OnlineFax=1 in the machine Fax policy key. "
                     + "Prevents users from sending faxes via online fax providers or cloud-based fax services. "
@@ -83,7 +83,7 @@ internal static class PolicyPrint
             {
                 Id = "faxsvc-disable-cover-pages",
                 Label = "Disable Fax Cover Pages",
-                Category = "Print Policy",
+                Category = "Printing",
                 Description =
                     "Sets CoverPages=1 in the machine Fax policy key. "
                     + "Prevents users from attaching cover pages to faxes sent through the Windows fax tool. "
@@ -103,7 +103,7 @@ internal static class PolicyPrint
             {
                 Id = "faxsvc-disable-personal-cover-pages",
                 Label = "Disable Personal Fax Cover Pages",
-                Category = "Print Policy",
+                Category = "Printing",
                 Description =
                     "Sets PersonalCoverPages=1 in the machine Fax policy key. "
                     + "Prevents users from creating or storing personal fax cover page templates ("
@@ -123,7 +123,7 @@ internal static class PolicyPrint
             {
                 Id = "faxsvc-disable-recipients",
                 Label = "Disable Fax Recipient Book",
-                Category = "Print Policy",
+                Category = "Printing",
                 Description =
                     "Sets DisableRecipients=1 in the machine Fax policy key. "
                     + "Removes the 'Select Recipients' feature from the Windows Fax and Scan UI, "
@@ -143,7 +143,7 @@ internal static class PolicyPrint
             {
                 Id = "faxsvc-require-send-tapi",
                 Label = "Restrict Fax to TAPI Lines Only",
-                Category = "Print Policy",
+                Category = "Printing",
                 Description =
                     "Sets TapiOnly=1 in the machine Fax policy key. "
                     + "Forces the Windows Fax service to use only TAPI-registered lines for sending faxes, "
@@ -163,7 +163,7 @@ internal static class PolicyPrint
             {
                 Id = "faxsvc-disable-inbound-routing",
                 Label = "Disable Inbound Fax Routing",
-                Category = "Print Policy",
+                Category = "Printing",
                 Description =
                     "Sets InboundRouting=1 in the machine Fax policy key. "
                     + "Prevents the Windows fax service from routing incoming faxes to user inboxes or email. "
@@ -183,7 +183,7 @@ internal static class PolicyPrint
             {
                 Id = "faxsvc-disable-archive",
                 Label = "Disable Fax Archive",
-                Category = "Print Policy",
+                Category = "Printing",
                 Description =
                     "Sets Archive=1 in the machine Fax policy key. "
                     + "Prevents the Windows fax service from automatically archiving copies of sent and received faxes. "
@@ -203,7 +203,7 @@ internal static class PolicyPrint
             {
                 Id = "faxsvc-disable-fax-user",
                 Label = "Disable Fax for Current User",
-                Category = "Print Policy",
+                Category = "Printing",
                 Description =
                     "Sets Fax=1 in the per-user Fax policy key. "
                     + "Applies the fax disable policy for the current user only, without requiring a machine-wide GPO. "
@@ -223,7 +223,7 @@ internal static class PolicyPrint
             {
                 Id = "faxsvc-disable-new-account",
                 Label = "Disable Fax New Account Creation",
-                Category = "Print Policy",
+                Category = "Printing",
                 Description =
                     "Sets NewAccounts=1 in the machine Fax policy key. "
                     + "Prevents users from adding new fax accounts or configuring additional fax connections in Windows. "
@@ -255,7 +255,7 @@ internal static class PolicyPrint
             {
                 Id = "inetprt-disable-web-printing",
                 Label = "Disable Web Printing",
-                Category = "Print Policy",
+                Category = "Printing",
                 Description = "Prevents users from printing to Internet printers over HTTP.",
                 Tags = ["printing", "network", "group-policy", "hardening"],
                 NeedsAdmin = true,
@@ -268,7 +268,7 @@ internal static class PolicyPrint
             {
                 Id = "inetprt-disable-http-printing",
                 Label = "Disable HTTP Printing",
-                Category = "Print Policy",
+                Category = "Printing",
                 Description = "Disables use of HTTP for connecting to printers on intranet/internet print servers.",
                 Tags = ["printing", "network", "group-policy", "hardening"],
                 NeedsAdmin = true,
@@ -281,7 +281,7 @@ internal static class PolicyPrint
             {
                 Id = "inetprt-block-spooler-rpc-endpoint",
                 Label = "Block Spooler Remote RPC Endpoint Registration",
-                Category = "Print Policy",
+                Category = "Printing",
                 Description = "Prevents the print spooler from registering with the remote RPC endpoint mapper, reducing remote attack surface.",
                 Tags = ["printing", "security", "group-policy", "hardening", "rpc"],
                 NeedsAdmin = true,
@@ -294,7 +294,7 @@ internal static class PolicyPrint
             {
                 Id = "inetprt-block-kernel-mode-drivers",
                 Label = "Block Kernel-Mode Printer Drivers",
-                Category = "Print Policy",
+                Category = "Printing",
                 Description = "Prevents installation of kernel-mode printer drivers, which can be exploited for privilege escalation.",
                 Tags = ["printing", "security", "group-policy", "hardening", "drivers"],
                 NeedsAdmin = true,
@@ -307,7 +307,7 @@ internal static class PolicyPrint
             {
                 Id = "inetprt-package-point-and-print-only",
                 Label = "Restrict Point and Print to Package-Aware Drivers Only",
-                Category = "Print Policy",
+                Category = "Printing",
                 Description = "Requires Point and Print connections to use only package-aware (.inf-packaged) printer drivers.",
                 Tags = ["printing", "security", "group-policy", "hardening"],
                 NeedsAdmin = true,
@@ -320,7 +320,7 @@ internal static class PolicyPrint
             {
                 Id = "inetprt-pnp-no-warning-on-install",
                 Label = "Require Warning + Elevation for Point and Print Driver Install",
-                Category = "Print Policy",
+                Category = "Printing",
                 Description =
                     "Ensures users are warned and elevation is required when installing Point and Print drivers, mitigating PrintNightmare-class attacks.",
                 Tags = ["printing", "security", "group-policy", "hardening", "uac"],
@@ -334,7 +334,7 @@ internal static class PolicyPrint
             {
                 Id = "inetprt-pnp-require-update-prompt",
                 Label = "Require Elevation for Point and Print Driver Updates",
-                Category = "Print Policy",
+                Category = "Printing",
                 Description = "Forces elevation prompt when connecting to a print server that requires a newer driver version.",
                 Tags = ["printing", "security", "group-policy", "hardening"],
                 NeedsAdmin = true,
@@ -347,7 +347,7 @@ internal static class PolicyPrint
             {
                 Id = "inetprt-disable-print-driver-download",
                 Label = "Disable Automatic Print Driver Download from Windows Update",
-                Category = "Print Policy",
+                Category = "Printing",
                 Description = "Prevents Windows from automatically downloading printer drivers from Windows Update.",
                 Tags = ["printing", "network", "group-policy", "update"],
                 NeedsAdmin = true,
@@ -360,7 +360,7 @@ internal static class PolicyPrint
             {
                 Id = "inetprt-restrict-driver-install-to-admins",
                 Label = "Restrict Printer Driver Installation to Administrators",
-                Category = "Print Policy",
+                Category = "Printing",
                 Description =
                     "Allows only administrators to install printer drivers, preventing non-admins from installing potentially malicious drivers.",
                 Tags = ["printing", "security", "group-policy", "hardening"],
@@ -374,7 +374,7 @@ internal static class PolicyPrint
             {
                 Id = "inetprt-disable-v3-printer-driver",
                 Label = "Disable v3 User-Mode Printer Drivers",
-                Category = "Print Policy",
+                Category = "Printing",
                 Description = "Prevents the use of v3 (user-mode) printer drivers; only v4 (kernel-mode isolated) drivers are allowed.",
                 Tags = ["printing", "security", "group-policy", "drivers"],
                 NeedsAdmin = true,
@@ -398,7 +398,7 @@ internal static class PolicyPrint
                 {
                     Id = "ippevy-disable-ipp-everywhere",
                     Label = "Disable IPP Everywhere Driverless Printing",
-                    Category = "Print Policy",
+                    Category = "Printing",
                     Description =
                         "Disables the IPP Everywhere driverless printing framework, forcing Windows to rely on traditional printer drivers instead of the universal IPP print path used by modern printers.",
                     Tags = ["ipp-everywhere", "driverless-printing", "printing", "policy"],
@@ -415,7 +415,7 @@ internal static class PolicyPrint
                 {
                     Id = "ippevy-block-cloud-ipp-print",
                     Label = "Block Cloud IPP Print (Universal Cloud Print Path)",
-                    Category = "Print Policy",
+                    Category = "Printing",
                     Description =
                         "Blocks cloud-relayed IPP print paths that route print jobs through Microsoft cloud infrastructure, ensuring all print jobs are submitted directly to local network printers without cloud relay.",
                     Tags = ["ipp-everywhere", "cloud-print", "printing", "privacy", "policy"],
@@ -432,7 +432,7 @@ internal static class PolicyPrint
                 {
                     Id = "ippevy-require-pw-format",
                     Label = "Require PWG Raster Format Validation for IPP Jobs",
-                    Category = "Print Policy",
+                    Category = "Printing",
                     Description =
                         "Enforces format validation for PWG Raster print data submitted via IPP Everywhere, rejecting malformed print data that could trigger parsing vulnerabilities in printer firmware.",
                     Tags = ["ipp-everywhere", "pwg-raster", "printing", "security", "policy"],
@@ -449,7 +449,7 @@ internal static class PolicyPrint
                 {
                     Id = "ippevy-block-apple-airprint",
                     Label = "Block Apple AirPrint via IPP Everywhere on Windows",
-                    Category = "Print Policy",
+                    Category = "Printing",
                     Description =
                         "Blocks the AirPrint protocol layer that allows Apple devices to print to Windows-shared printers using IPP Everywhere, preventing uncontrolled cross-platform printer sharing.",
                     Tags = ["ipp-everywhere", "airprint", "apple", "printing", "policy"],
@@ -466,7 +466,7 @@ internal static class PolicyPrint
                 {
                     Id = "ippevy-disable-ipp-infra-service",
                     Label = "Disable IPP Infrastructure Service (Universal Print Relay)",
-                    Category = "Print Policy",
+                    Category = "Printing",
                     Description =
                         "Disables the Windows IPP Infrastructure Background Service that routes IPP jobs to printers registered in Microsoft Universal Print, forcing direct queue usage.",
                     Tags = ["ipp-everywhere", "universal-print", "microsoft", "printing", "policy"],
@@ -483,7 +483,7 @@ internal static class PolicyPrint
                 {
                     Id = "ippevy-block-mopria-print",
                     Label = "Block Mopria Print Discovery and Submission",
-                    Category = "Print Policy",
+                    Category = "Printing",
                     Description =
                         "Blocks the Mopria Alliance standard print path that allows Android and other devices to discover and submit print jobs to Windows-shared printers via Mopria-compliant IPP.",
                     Tags = ["ipp-everywhere", "mopria", "android", "printing", "policy"],
@@ -500,7 +500,7 @@ internal static class PolicyPrint
                 {
                     Id = "ippevy-require-tls-12-minimum",
                     Label = "Require TLS 1.2 Minimum for IPP Everywhere HTTPS",
-                    Category = "Print Policy",
+                    Category = "Printing",
                     Description =
                         "Enforces a minimum of TLS 1.2 for IPPS connections used in IPP Everywhere print paths, blocking print traffic over TLS 1.0 or 1.1 which are deprecated and cryptographically weak.",
                     Tags = ["ipp-everywhere", "tls", "security", "printing", "policy"],
@@ -517,7 +517,7 @@ internal static class PolicyPrint
                 {
                     Id = "ippevy-disable-pdf-print-path",
                     Label = "Disable IPP Everywhere PDF Print Format Path",
-                    Category = "Print Policy",
+                    Category = "Printing",
                     Description =
                         "Disables the PDF-based print format path in IPP Everywhere, preventing Windows from generating PDF documents during the print process which avoids PDF parser vulnerabilities in printer firmware.",
                     Tags = ["ipp-everywhere", "pdf", "print-format", "security", "policy"],
@@ -534,7 +534,7 @@ internal static class PolicyPrint
                 {
                     Id = "ippevy-log-ipp-everywhere-jobs",
                     Label = "Enable Audit Logging for IPP Everywhere Print Jobs",
-                    Category = "Print Policy",
+                    Category = "Printing",
                     Description =
                         "Enables event log entries for print jobs submitted via the IPP Everywhere path, providing a record of driverless print activity including job source IP and document metadata.",
                     Tags = ["ipp-everywhere", "audit-log", "printing", "compliance", "policy"],
@@ -551,7 +551,7 @@ internal static class PolicyPrint
                 {
                     Id = "ippevy-block-anonymous-ipp-print",
                     Label = "Block Anonymous IPP Everywhere Print Submissions",
-                    Category = "Print Policy",
+                    Category = "Printing",
                     Description =
                         "Blocks unauthenticated (anonymous) print job submissions via IPP Everywhere, requiring all IPP Everywhere clients to present credentials before print jobs are accepted.",
                     Tags = ["ipp-everywhere", "authentication", "anonymous", "printing", "policy"],
@@ -579,7 +579,7 @@ internal static class PolicyPrint
                 {
                     Id = "ipppol-disable-ipp-client",
                     Label = "Disable IPP Printing Client",
-                    Category = "Print Policy",
+                    Category = "Printing",
                     Description =
                         "Disables the Windows Internet Printing Protocol (IPP) client, preventing Windows from submitting print jobs to network printers using RFC 8011 IPP over TCP/631.",
                     Tags = ["ipp", "printing", "network", "security", "policy"],
@@ -596,7 +596,7 @@ internal static class PolicyPrint
                 {
                     Id = "ipppol-enforce-ipp-tls",
                     Label = "Enforce TLS for IPP Print Jobs (IPPS)",
-                    Category = "Print Policy",
+                    Category = "Printing",
                     Description =
                         "Forces all IPP print jobs to use IPPS (IPP over TLS, port 443/631), preventing print data from being sent in plaintext over the network where it could be intercepted.",
                     Tags = ["ipp", "ipps", "tls", "printing", "security", "policy"],
@@ -613,7 +613,7 @@ internal static class PolicyPrint
                 {
                     Id = "ipppol-block-ipp-everywhere-auto-add",
                     Label = "Block IPP Everywhere Auto-Add Network Printers",
-                    Category = "Print Policy",
+                    Category = "Printing",
                     Description =
                         "Prevents Windows from automatically adding IPP Everywhere printers discovered on the local network via mDNS/Bonjour, stopping printers from being silently added to the system when connecting to a network.",
                     Tags = ["ipp", "ipp-everywhere", "auto-add", "mdns", "printing", "policy"],
@@ -630,7 +630,7 @@ internal static class PolicyPrint
                 {
                     Id = "ipppol-require-ipp-auth",
                     Label = "Require Authentication for IPP Print Jobs",
-                    Category = "Print Policy",
+                    Category = "Printing",
                     Description =
                         "Forces authentication for all IPP print jobs submitted to network printers, preventing anonymous IPP printing that could allow unauthorised print access or queue inspection.",
                     Tags = ["ipp", "authentication", "printing", "security", "policy"],
@@ -647,7 +647,7 @@ internal static class PolicyPrint
                 {
                     Id = "ipppol-block-cross-domain-ipp",
                     Label = "Block IPP Printing to Cross-Domain Servers",
-                    Category = "Print Policy",
+                    Category = "Printing",
                     Description =
                         "Restricts IPP printing to print servers within the same domain, preventing print data (which may contain sensitive content) from being submitted to external or untrusted IPP endpoints.",
                     Tags = ["ipp", "domain", "printing", "data-loss-prevention", "policy"],
@@ -664,7 +664,7 @@ internal static class PolicyPrint
                 {
                     Id = "ipppol-disable-ipp-printer-share",
                     Label = "Disable IPP Printer Sharing Outbound from This Host",
-                    Category = "Print Policy",
+                    Category = "Printing",
                     Description =
                         "Disables this host from acting as an IPP print server, stopping Windows from advertising locally configured printers as IPP endpoints that other devices can connect to.",
                     Tags = ["ipp", "printer-sharing", "printing", "security", "policy"],
@@ -681,7 +681,7 @@ internal static class PolicyPrint
                 {
                     Id = "ipppol-limit-ipp-max-job-size",
                     Label = "Limit Maximum IPP Print Job Size to 100 MB",
-                    Category = "Print Policy",
+                    Category = "Printing",
                     Description =
                         "Caps the maximum size of a single IPP print job at 100 MB, preventing denial-of-service attacks that attempt to exhaust disk space or spooler memory via unexpectedly large print jobs.",
                     Tags = ["ipp", "print-job", "dos-protection", "printing", "policy"],
@@ -698,7 +698,7 @@ internal static class PolicyPrint
                 {
                     Id = "ipppol-disable-ipp-compressed-jobs",
                     Label = "Disable IPP Compressed (GZIP) Job Data",
-                    Category = "Print Policy",
+                    Category = "Printing",
                     Description =
                         "Disables compression (gzip/deflate) for IPP print job data, mitigating compression-based timing and oracle attacks against the IPP stream while simplifying spooler job processing.",
                     Tags = ["ipp", "compression", "printing", "security", "policy"],
@@ -715,7 +715,7 @@ internal static class PolicyPrint
                 {
                     Id = "ipppol-block-ipp-mdns-advertisement",
                     Label = "Block IPP Printer mDNS/Bonjour Advertisement",
-                    Category = "Print Policy",
+                    Category = "Printing",
                     Description =
                         "Prevents this host from broadcasting locally-share printers via mDNS/Bonjour, hiding the presence of connected printers from device discovery on the local network.",
                     Tags = ["ipp", "mdns", "bonjour", "printer-discovery", "privacy", "policy"],
@@ -732,7 +732,7 @@ internal static class PolicyPrint
                 {
                     Id = "ipppol-enable-ipp-audit-log",
                     Label = "Enable IPP Print Job Audit Logging",
-                    Category = "Print Policy",
+                    Category = "Printing",
                     Description =
                         "Enables event log entries for IPP print jobs (job start, completion, errors), providing traceability for print operations for security monitoring and compliance.",
                     Tags = ["ipp", "audit-log", "printing", "compliance", "policy"],
@@ -760,7 +760,7 @@ internal static class PolicyPrint
                 {
                     Id = "pdssp-disable-printer-publishing",
                     Label = "Disable Automatic Printer Publishing to AD",
-                    Category = "Print Policy",
+                    Category = "Printing",
                     Description =
                         "Sets PublishPrinters=0 to prevent Windows from automatically publishing printers to Active Directory "
                         + "Directory Services when they are added to the system. Unpublished printers are not discoverable via "
@@ -779,7 +779,7 @@ internal static class PolicyPrint
                 {
                     Id = "pdssp-disable-printer-pruning",
                     Label = "Disable Printer Object Pruning from AD",
-                    Category = "Print Policy",
+                    Category = "Printing",
                     Description =
                         "Sets PruningRetries=0 to disable the printer pruning mechanism that removes stale printer objects "
                         + "from Active Directory when the print server is unreachable. Prevents pruning in environments where "
@@ -798,7 +798,7 @@ internal static class PolicyPrint
                 {
                     Id = "pdssp-set-pruning-interval",
                     Label = "Set Printer Pruning Check Interval",
-                    Category = "Print Policy",
+                    Category = "Printing",
                     Description =
                         "Sets PruningInterval=480 to check every 8 hours (480 minutes) whether printer objects in Active Directory "
                         + "should be pruned. The default check interval is every 8 hours; a longer interval reduces AD queries "
@@ -817,7 +817,7 @@ internal static class PolicyPrint
                 {
                     Id = "pdssp-set-pruning-priority",
                     Label = "Set Printer Pruning Thread Priority",
-                    Category = "Print Policy",
+                    Category = "Printing",
                     Description =
                         "Sets PruningPriority=0 to run the printer pruning thread at low priority. "
                         + "Reduces CPU contention from the background AD pruning process on heavily loaded print servers "
@@ -836,7 +836,7 @@ internal static class PolicyPrint
                 {
                     Id = "pdssp-log-pruning-events",
                     Label = "Enable Printer Pruning Event Logging",
-                    Category = "Print Policy",
+                    Category = "Printing",
                     Description =
                         "Sets PruningRetryLog=1 to record printer pruning retry and failure events to the Windows Application event log. "
                         + "Provides audit visibility into AD printer object lifecycle events for SIEM ingestion and printer infrastructure monitoring.",
@@ -854,7 +854,7 @@ internal static class PolicyPrint
                 {
                     Id = "pdssp-disable-non-published-printer-access",
                     Label = "Block Access to Non-Published AD Printers",
-                    Category = "Print Policy",
+                    Category = "Printing",
                     Description =
                         "Sets NonPublishedPrinters=0 to prevent users from connecting to network printers that are not published "
                         + "in Active Directory. Ensures all printer installations go through the AD Directory Services vetting process "
@@ -873,7 +873,7 @@ internal static class PolicyPrint
                 {
                     Id = "pdssp-disable-ipp-web-printing",
                     Label = "Disable IPP Web Printing via AD",
-                    Category = "Print Policy",
+                    Category = "Printing",
                     Description =
                         "Sets DisableWebPrinting=1 to prevent users from installing printers via Internet Printing Protocol (IPP) "
                         + "URLs discovered through Active Directory. Web-based printer installation bypasses network printer "
@@ -892,7 +892,7 @@ internal static class PolicyPrint
                 {
                     Id = "pdssp-set-server-thread-count",
                     Label = "Limit Printer DS Server Thread Count",
-                    Category = "Print Policy",
+                    Category = "Printing",
                     Description =
                         "Sets ServerThread=2 to limit the number of concurrent threads used by the spooler for Active Directory "
                         + "printer publishing operations. Reducing thread count lowers CPU usage on print servers with many shared "
@@ -911,7 +911,7 @@ internal static class PolicyPrint
                 {
                     Id = "pdssp-enforce-pre-publish-printers",
                     Label = "Enforce Pre-Publication of Printers to AD",
-                    Category = "Print Policy",
+                    Category = "Printing",
                     Description =
                         "Sets PrePublishPrinters=1 to require printers to be pre-published to Active Directory before they "
                         + "become available to clients. Pre-publishing ensures printer metadata is available for directory browsing "
@@ -930,7 +930,7 @@ internal static class PolicyPrint
                 {
                     Id = "pdssp-set-max-pruning-retries",
                     Label = "Set Maximum Printer Pruning Retry Count",
-                    Category = "Print Policy",
+                    Category = "Printing",
                     Description =
                         "Sets PruningRetries=2 to limit the number of times the pruning mechanism retries an unreachable "
                         + "print server before removing its printer AD objects. A lower retry count speeds up cleanup of "
@@ -960,7 +960,7 @@ internal static class PolicyPrint
                 {
                     Id = "pdrv-enforce-driver-isolation",
                     Label = "Enforce Printer Driver Isolation (Separate Process)",
-                    Category = "Print Policy",
+                    Category = "Printing",
                     Description =
                         "Forces printer drivers to run in isolated processes separate from the spooler service, preventing a buggy or malicious printer driver from crashing or compromising the spooler.",
                     Tags = ["printing", "driver-isolation", "spooler", "security", "policy"],
@@ -977,7 +977,7 @@ internal static class PolicyPrint
                 {
                     Id = "pdrv-block-unsigned-drivers",
                     Label = "Block Installation of Unsigned Printer Drivers",
-                    Category = "Print Policy",
+                    Category = "Printing",
                     Description =
                         "Blocks the installation of printer drivers that do not have a valid WHQL or enterprise certificate signature, preventing malicious or vulnerable unsigned printer drivers from loading.",
                     Tags = ["printing", "unsigned-driver", "security", "whql", "policy"],
@@ -994,7 +994,7 @@ internal static class PolicyPrint
                 {
                     Id = "pdrv-limit-driver-install-to-admin",
                     Label = "Restrict Printer Driver Installation to Administrators Only",
-                    Category = "Print Policy",
+                    Category = "Printing",
                     Description =
                         "Requires administrator privileges to install any new printer driver, preventing standard users from adding potentially exploitable printer drivers via easy-to-add printer workflows.",
                     Tags = ["printing", "driver-install", "admin", "security", "policy"],
@@ -1011,7 +1011,7 @@ internal static class PolicyPrint
                 {
                     Id = "pdrv-disable-v3-kernel-drivers",
                     Label = "Disable Legacy V3 Kernel-Mode Printer Drivers",
-                    Category = "Print Policy",
+                    Category = "Printing",
                     Description =
                         "Disables legacy V3 (kernel-mode) printer drivers, allowing only V4 user-mode drivers which run isolated from the kernel and reduce the risk of privilege escalation via printer drivers.",
                     Tags = ["printing", "v3-driver", "kernel-mode", "security", "policy"],
@@ -1028,7 +1028,7 @@ internal static class PolicyPrint
                 {
                     Id = "pdrv-block-network-driver-download",
                     Label = "Block Automatic Printer Driver Download from Network",
-                    Category = "Print Policy",
+                    Category = "Printing",
                     Description =
                         "Blocks Windows from automatically downloading printer drivers from remote print servers or Windows Update when a new printer is detected, requiring manual driver installation.",
                     Tags = ["printing", "auto-driver-download", "network", "security", "policy"],
@@ -1045,7 +1045,7 @@ internal static class PolicyPrint
                 {
                     Id = "pdrv-enable-enhanced-point-and-print",
                     Label = "Enable Enhanced Point and Print Restriction",
-                    Category = "Print Policy",
+                    Category = "Printing",
                     Description =
                         "Enables enhanced Point and Print restrictions requiring that drivers originate from an approved printer server list, preventing attackers from serving malicious drivers via rogue print servers.",
                     Tags = ["printing", "point-and-print", "security", "policy"],
@@ -1062,7 +1062,7 @@ internal static class PolicyPrint
                 {
                     Id = "pdrv-disable-driver-update-prompt",
                     Label = "Disable Automatic Printer Driver Update Prompts",
-                    Category = "Print Policy",
+                    Category = "Printing",
                     Description =
                         "Suppresses automatic driver update prompts from existing printer drivers via Windows Update, preventing unexpected printer driver updates that could introduce vulnerabilities.",
                     Tags = ["printing", "driver-update", "windows-update", "policy"],
@@ -1079,7 +1079,7 @@ internal static class PolicyPrint
                 {
                     Id = "pdrv-block-driver-staging-from-drivers-folder",
                     Label = "Block Driver Installation from Drivers Folder Without Inbox",
-                    Category = "Print Policy",
+                    Category = "Printing",
                     Description =
                         "Prevents printer drivers from being installed from the Windows Drivers directory without being in the inbox driver store, blocking attack paths that stage evil drivers into the Drivers folder.",
                     Tags = ["printing", "driver-staging", "security", "policy"],
@@ -1096,7 +1096,7 @@ internal static class PolicyPrint
                 {
                     Id = "pdrv-disable-printer-driver-dcom",
                     Label = "Disable DCOM Access for Printer Driver Processes",
-                    Category = "Print Policy",
+                    Category = "Printing",
                     Description =
                         "Prevents printer driver host processes from making DCOM calls to other processes, reducing lateral movement risk if a printer driver process is compromised.",
                     Tags = ["printing", "dcom", "driver-isolation", "security", "policy"],
@@ -1113,7 +1113,7 @@ internal static class PolicyPrint
                 {
                     Id = "pdrv-log-driver-install-events",
                     Label = "Enable Audit Logging for Printer Driver Installs",
-                    Category = "Print Policy",
+                    Category = "Printing",
                     Description =
                         "Enables security audit events whenever a printer driver is installed, updated, or removed, providing a log trail for detecting unauthorized driver installation activity.",
                     Tags = ["printing", "audit-log", "driver-install", "security", "policy"],
@@ -1141,7 +1141,7 @@ internal static class PolicyPrint
             {
                 Id = "prtgpo-disable-print-spooler-sharing",
                 Label = "Disable Printer Spooler Network Sharing",
-                Category = "Print Policy",
+                Category = "Printing",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -1158,7 +1158,7 @@ internal static class PolicyPrint
             {
                 Id = "prtgpo-disable-internet-printing",
                 Label = "Disable Internet Printing Protocol (IPP)",
-                Category = "Print Policy",
+                Category = "Printing",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -1175,7 +1175,7 @@ internal static class PolicyPrint
             {
                 Id = "prtgpo-block-driver-install",
                 Label = "Block Unapproved Printer Driver Installation",
-                Category = "Print Policy",
+                Category = "Printing",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -1192,7 +1192,7 @@ internal static class PolicyPrint
             {
                 Id = "prtgpo-disable-pointed-print-warnings",
                 Label = "Enforce Point and Print Security Warnings",
-                Category = "Print Policy",
+                Category = "Printing",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -1209,7 +1209,7 @@ internal static class PolicyPrint
             {
                 Id = "prtgpo-disable-v3-driver-priority",
                 Label = "Disable V3 Printer Driver Package-Aware Priority",
-                Category = "Print Policy",
+                Category = "Printing",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -1226,7 +1226,7 @@ internal static class PolicyPrint
             {
                 Id = "prtgpo-restrict-print-server-list",
                 Label = "Restrict Point and Print to Approved Servers",
-                Category = "Print Policy",
+                Category = "Printing",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -1243,7 +1243,7 @@ internal static class PolicyPrint
             {
                 Id = "prtgpo-disable-print-discovery",
                 Label = "Disable Network Printer Discovery",
-                Category = "Print Policy",
+                Category = "Printing",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -1260,7 +1260,7 @@ internal static class PolicyPrint
             {
                 Id = "prtgpo-disable-print-driver-updates",
                 Label = "Disable Automatic Print Driver Updates via Windows Update",
-                Category = "Print Policy",
+                Category = "Printing",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -1277,7 +1277,7 @@ internal static class PolicyPrint
             {
                 Id = "prtgpo-disable-printer-extension",
                 Label = "Disable Printer Extension Apps",
-                Category = "Print Policy",
+                Category = "Printing",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 1,
@@ -1294,7 +1294,7 @@ internal static class PolicyPrint
             {
                 Id = "prtgpo-disable-rpc-over-namedpipes",
                 Label = "Disable Print Spooler RPC over Named Pipes",
-                Category = "Print Policy",
+                Category = "Printing",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -1323,7 +1323,7 @@ internal static class PolicyPrint
                 {
                     Id = "prtred-disable-client-printer-redirect",
                     Label = "Printer Redirection: Disable Client Printer Redirection in RDS Sessions",
-                    Category = "Print Policy",
+                    Category = "Printing",
                     Description =
                         "Sets fDisableCam=1 in Terminal Services policy. Prevents client printers from being automatically mapped into Remote Desktop Services sessions. When client printer redirection is enabled, every printer installed on the client machine is mapped into the RDS session as a session-specific printer. In large VDI deployments this creates hundreds of ghost printer objects per session host, causing significant spooler memory consumption, slow logon (each session must enumerate and map client printers), and instability. For environments where users should only print to central print servers, disabling client printer redirection is the recommended configuration.",
                     Tags = ["rds", "printer-redirection", "vdi", "rdp", "logon-speed"],
@@ -1340,7 +1340,7 @@ internal static class PolicyPrint
                 {
                     Id = "prtred-enable-easy-print",
                     Label = "Printer Redirection: Enable Remote Desktop Easy Print Driver",
-                    Category = "Print Policy",
+                    Category = "Printing",
                     Description =
                         "Sets UseUniversalPrinter=1 in Terminal Services policy. Enables the Remote Desktop Easy Print driver as the primary driver for redirected client printers. When Easy Print is enabled, redirected client printers use a single universal print driver on the session host rather than requiring the client's specific printer driver to be installed on every session host server. This eliminates the printer driver management burden of server-side driver installation: a 200-server RDS farm no longer needs every printer driver for every model used by clients. The Easy Print driver communicates rendering instructions to the client, which uses its own installed driver.",
                     Tags = ["rds", "easy-print", "universal-driver", "printer-redirection", "vdi"],
@@ -1357,7 +1357,7 @@ internal static class PolicyPrint
                 {
                     Id = "prtred-set-printer-redirection-timeout-60s",
                     Label = "Printer Redirection: Set Printer Redirection Timeout to 60 Seconds",
-                    Category = "Print Policy",
+                    Category = "Printing",
                     Description =
                         "Sets PrinterRedirectionTimeout=60 in Terminal Services policy. Sets the maximum wait time during session logon for redirected printers to become available. When client printer redirection is enabled, the session host waits for the RDP printer redirection channel to report all client printers before proceeding with logon. On slow WAN connections, printer enumeration over RDP can take tens of seconds. If the session host waits indefinitely, logon appears to hang. Setting a 60-second timeout ensures logon proceeds even if some client printers fail to enumerate, preventing printer redirection from delaying session startup.",
                     Tags = ["rds", "printer-redirection", "timeout", "logon-speed", "rdp"],
@@ -1374,7 +1374,7 @@ internal static class PolicyPrint
                 {
                     Id = "prtred-disable-xps-redirection",
                     Label = "Printer Redirection: Disable XPS Printer Redirection",
-                    Category = "Print Policy",
+                    Category = "Printing",
                     Description =
                         "Sets DisableXpsRedirection=1 in Terminal Services policy. Prevents the Microsoft XPS Document Writer virtual printer from being redirected into user sessions. The XPS Document Writer is a file-generation virtual printer: when a user 'prints' to it, a .XPS file is created on the user's local machine. In RDS sessions, redirected XPS printing places XPS files on the user's local machine through the RDP file system redirection channel. This creates a data exfiltration path: users on session hosts with sensitive application data can 'print' documents as XPS files and take them home. Disabling XPS redirection closes this path.",
                     Tags = ["rds", "xps-printer", "data-exfiltration", "restriction", "virtual-printer"],
@@ -1391,7 +1391,7 @@ internal static class PolicyPrint
                 {
                     Id = "prtred-restrict-auto-printer-creation",
                     Label = "Printer Redirection: Restrict Automatic Session Printer Creation to Default Only",
-                    Category = "Print Policy",
+                    Category = "Printing",
                     Description =
                         "Sets LoadDriversForDefaultPrinterOnly=1 in Terminal Services policy. Limits automatic printer creation in RDS sessions to the client's default printer only, rather than all client printers. Mapping every client printer into every session is the primary cause of session host spooler memory exhaustion in large VDI farms. A user with 5 printers on their client machine causes 5 session-specific printer entries on every session host they connect to. 'Default printer only' mode preserves the one-click printing experience for the user's preferred printer while eliminating the overhead of mapping every lesser-used printer.",
                     Tags = ["rds", "printer-auto-creation", "default-printer", "vdi", "performance"],
@@ -1408,7 +1408,7 @@ internal static class PolicyPrint
                 {
                     Id = "prtred-disable-pdf-printer-redirect",
                     Label = "Printer Redirection: Disable PDF Printer Redirection in RDS",
-                    Category = "Print Policy",
+                    Category = "Printing",
                     Description =
                         "Sets DisablePDFRedirection=1 in Terminal Services policy. Prevents the Microsoft Print to PDF virtual printer from being redirected into RDS sessions. Microsoft Print to PDF, like XPS, is a file-generation virtual printer that creates PDF files on the user's local machine via the RDP file system redirection channel. This is an equally effective data exfiltration path: users can take sensitive documents from session hosts as PDF files. Enterprise DRM-protected documents that cannot be copied via clipboard or USB may still be 'printed' to local PDF files through this channel.",
                     Tags = ["rds", "pdf-printer", "data-exfiltration", "dlp", "virtual-printer"],
@@ -1425,7 +1425,7 @@ internal static class PolicyPrint
                 {
                     Id = "prtred-enable-bidirectional-communication",
                     Label = "Printer Redirection: Enable Bidirectional Printer Communication",
-                    Category = "Print Policy",
+                    Category = "Printing",
                     Description =
                         "Sets BidiComm=1 in Terminal Services policy. Enables bidirectional (bidi) printer communication for redirected printers in RDS sessions. Bidi communication allows the session to query the printer's current status — toner levels, paper jam conditions, available paper sizes, and duplexing capability — from within the session. Without bidi, users cannot see printer status from their RDS session and the print driver cannot adapt to the printer's available options. Bidi requires the Easy Print driver path and the client to support bidi reporting.",
                     Tags = ["rds", "bidi", "printer-status", "toner", "bidirectional"],
@@ -1442,7 +1442,7 @@ internal static class PolicyPrint
                 {
                     Id = "prtred-set-max-redirected-printers-5",
                     Label = "Printer Redirection: Limit Redirected Printers Per Session to 5",
-                    Category = "Print Policy",
+                    Category = "Printing",
                     Description =
                         "Sets MaxRedirectedPrinters=5 in Terminal Services policy. Caps the maximum number of client printers that can be redirected into a single RDS session. Without this limit, a user with 20+ printers installed (e.g., a power user with many VPN-connected branch printers) will have all 20 mapped into every session — consuming substantial memory and logon time on the session host server. Limiting to 5 redirected printers covers virtually all legitimate printing needs while preventing excessive session host resource consumption from clients with large printer inventories.",
                     Tags = ["rds", "printer-limit", "session", "performance", "resource"],
@@ -1459,7 +1459,7 @@ internal static class PolicyPrint
                 {
                     Id = "prtred-use-compression-for-print-data",
                     Label = "Printer Redirection: Enable Compression for Redirected Print Data",
-                    Category = "Print Policy",
+                    Category = "Printing",
                     Description =
                         "Sets CompressPrintData=1 in Terminal Services policy. Enables compression of print job data transmitted through the RDP printer redirection channel. Print job data (especially EMF) can be highly compressible — text-heavy documents may compress by 80%+. Without compression, printing large documents over WAN-connected RDS sessions consumes significant RDP session bandwidth. With compression enabled, the RDP virtual channel compresses the print data stream before transmission, reducing the bandwidth and time required to print large documents over slow connections.",
                     Tags = ["rds", "print-compression", "bandwidth", "wan", "rdp"],
@@ -1476,7 +1476,7 @@ internal static class PolicyPrint
                 {
                     Id = "prtred-allow-only-easy-print-fallback",
                     Label = "Printer Redirection: Use Easy Print as Exclusive Fallback Driver",
-                    Category = "Print Policy",
+                    Category = "Printing",
                     Description =
                         "Sets FallbackToEasyPrint=1 in Terminal Services policy. Configures RDS to use the Easy Print driver as the exclusive fallback when the client printer's specific driver is not installed on the session host. Without this setting, if the specific printer driver is absent, redirection may fail entirely or attempt to download the driver automatically. With FallbackToEasyPrint enabled, any printer whose driver is not on the server falls back to Easy Print — ensuring the printer is always usable even if not optimally configured. Eliminates 'Printer unavailable' errors from driver-absent conditions.",
                     Tags = ["rds", "easy-print", "fallback-driver", "printer-availability", "rdp"],
@@ -1508,7 +1508,7 @@ internal static class PolicyPrint
                 {
                     Id = "prtjob-purge-jobs-on-restart",
                     Label = "Print Job Management: Purge All Print Jobs on Spooler Restart",
-                    Category = "Print Policy",
+                    Category = "Printing",
                     Description =
                         "Sets PurgeJobsOnRestart=1 in JobManagement policy. Clears all pending print jobs from all print queues when the Print Spooler service restarts. By default, the spooler preserves queued jobs across restarts, which can cause problems when a restarted spooler encounters corrupted spool files (EMF or RAW) from a failed previous session — leading to an infinite loop where the spooler starts, crashes processing a bad job, and restarts. Purging on restart ensures the spooler always starts with a clean queue. Lost jobs must be resubmitted by users.",
                     Tags = ["print-job", "spooler-restart", "queue-purge", "stability", "recovery"],
@@ -1525,7 +1525,7 @@ internal static class PolicyPrint
                 {
                     Id = "prtjob-set-max-spool-file-size-1gb",
                     Label = "Print Job Management: Set Maximum Spool File Size to 1 GB",
-                    Category = "Print Policy",
+                    Category = "Printing",
                     Description =
                         "Sets MaxSpoolFileSize=1073741824 in JobManagement policy (1 GB in bytes). Sets the maximum allowed size for individual print spool files. Without a spool file size limit, a single print job (e.g., a 10,000-page CAD print run or a large PDF) can generate a spool file that consumes all available disk space on the print server, starving all other users' jobs. 1 GB is sufficient for most large-format print jobs while protecting against runaway spool generation. Jobs exceeding the limit are rejected with a 'Spool file too large' error.",
                     Tags = ["print-job", "spool-file", "disk-space", "limit", "print-server"],
@@ -1542,7 +1542,7 @@ internal static class PolicyPrint
                 {
                     Id = "prtjob-enable-separator-page",
                     Label = "Print Job Management: Enable Separator Page Between Print Jobs",
-                    Category = "Print Policy",
+                    Category = "Printing",
                     Description =
                         "Sets UseSeparatorPage=1 in JobManagement policy. Enables job separator pages (banner pages) between print jobs. A separator page is a printed page inserted before each job containing: user name, date, time, and job ID. In shared printer environments, separator pages allow users to find their document among others' output in the printer tray output bin. Without separator pages, documents from multiple users in a busy shared printer pile together, causing users to accidentally take others' confidential documents — a physical information disclosure risk.",
                     Tags = ["print-job", "separator-page", "banner-page", "physical-security", "shared-printer"],
@@ -1559,7 +1559,7 @@ internal static class PolicyPrint
                 {
                     Id = "prtjob-set-job-expiry-8hours",
                     Label = "Print Job Management: Expire Unprinted Jobs After 8 Hours",
-                    Category = "Print Policy",
+                    Category = "Printing",
                     Description =
                         "Sets JobExpiryHours=8 in JobManagement policy. Automatically removes print jobs that have been queued but not processed (printed) within 8 hours. Jobs can accumulate in a queue when a printer is taken offline, goes into an error state, or is deliberately paused. Without expiry, a queue can accumulate hundreds of stale jobs — some of which may contain sensitive documents submitted by users who no longer need them. 8 hours aligns with a standard business day — a job submitted in the morning and not printed by end of day is auto-purged.",
                     Tags = ["print-job", "expiry", "queue-management", "security", "cleanup"],
@@ -1576,7 +1576,7 @@ internal static class PolicyPrint
                 {
                     Id = "prtjob-disable-interactive-print-sharing",
                     Label = "Print Job Management: Disable Interactive Console Print Sharing",
-                    Category = "Print Policy",
+                    Category = "Printing",
                     Description =
                         "Sets DisableInteractivePrinterSharing=1 in Printers policy. Prevents users from interactively sharing printers through the Windows Printer Properties dialog. Without this restriction, any local user can share their local printer to the network — creating unmanaged, unmonitored print shares that bypass central print server controls. Printer sharing should only be managed through Group Policy printer deployment or by administrators. Unmanaged printer shares can also have misconfigured permissions, allowing unauthenticated network print access.",
                     Tags = ["print-job", "printer-sharing", "management", "control", "network"],
@@ -1593,7 +1593,7 @@ internal static class PolicyPrint
                 {
                     Id = "prtjob-enforce-default-queue-priority",
                     Label = "Print Job Management: Enforce Default Queue Priority Level (49)",
-                    Category = "Print Policy",
+                    Category = "Printing",
                     Description =
                         "Sets DefaultPriority=49 in JobManagement policy. Sets the default print job priority to 49 (scale of 1-99, where 99 is highest). When a user does not specify a priority or when they have priority escalation rights, print jobs default to priority 49. This ensures administrators can designate executive or time-critical queues with priority 50+ that will always preempt standard user jobs. Without a defined default, systems may inherit OS defaults that vary between Windows versions, making priority management unpredictable.",
                     Tags = ["print-job", "priority", "queue-management", "fairness", "scheduling"],
@@ -1610,7 +1610,7 @@ internal static class PolicyPrint
                 {
                     Id = "prtjob-set-spool-directory-to-secured",
                     Label = "Print Job Management: Set Secure Spool Directory ACL Enforcement",
-                    Category = "Print Policy",
+                    Category = "Printing",
                     Description =
                         "Sets SecureSpoolDirectory=1 in JobManagement policy. Enables ACL enforcement on the print spool directory (%SystemRoot%\\System32\\spool\\PRINTERS). By default this directory has permissive ACLs that allow any authenticated user to read or delete spool files. Spool files contain the raw or EMF rendering of documents being printed — reading them is equivalent to reading the document. With SecureSpoolDirectory enabled, only the SYSTEM account and print administrators can read spool files. Standard users cannot access other users' spool files.",
                     Tags = ["print-job", "spool-directory", "acl", "file-security", "information-disclosure"],
@@ -1627,7 +1627,7 @@ internal static class PolicyPrint
                 {
                     Id = "prtjob-disable-printer-status-popup",
                     Label = "Print Job Management: Disable Print Status Notification Popups",
-                    Category = "Print Policy",
+                    Category = "Printing",
                     Description =
                         "Sets DisablePrinterstatusNotifications=1 in JobManagement policy. Prevents the print status notification system tray balloon and popup messages from appearing when a print job completes successfully. In enterprise environments with high print volumes, completed print job notifications are a source of notification fatigue — users who print dozens of documents per day receive an equal number of transient notifications that they learn to dismiss immediately. Disabling successful-completion notifications reduces noise; error notifications (failure, out of paper) are separately configurable and should remain enabled.",
                     Tags = ["print-job", "notifications", "user-experience", "task-bar", "status"],
@@ -1644,7 +1644,7 @@ internal static class PolicyPrint
                 {
                     Id = "prtjob-enable-emf-spool-format",
                     Label = "Print Job Management: Use Enhanced Metafile (EMF) Spooling Format",
-                    Category = "Print Policy",
+                    Category = "Printing",
                     Description =
                         "Sets UseEMFSpool=1 in JobManagement policy. Configures the print spooler to spool print jobs in Enhanced Metafile (EMF) format rather than the RAW (device-ready) format. EMF spooling returns control to the application faster — the application finishes its print call as soon as the EMF commands are written to the spool file, rather than waiting for the full rasterisation to the printer's native format. The spooler then renders EMF to RAW in the background. Faster application hand-off is the primary benefit; the trade-off is that EMF rendering errors are deferred to the spooler.",
                     Tags = ["print-job", "emf", "spool-format", "performance", "application-responsiveness"],
@@ -1661,7 +1661,7 @@ internal static class PolicyPrint
                 {
                     Id = "prtjob-block-untrusted-printer-fonts",
                     Label = "Print Job Management: Block Untrusted Fonts in Print Jobs",
-                    Category = "Print Policy",
+                    Category = "Printing",
                     Description =
                         "Sets BlockUntrustedFonts=1 in JobManagement policy. Blocks loading of fonts from untrusted sources within print job processing. The Windows font parsing subsystem has historically been a high-value attack target — multiple CVEs involve malformed fonts causing kernel memory corruption during parsing. Print jobs submitted from remote clients can contain embedded fonts. By blocking fonts that are not installed in the trusted Windows font store, the attack surface for font-based exploitation via print jobs is reduced. Print jobs with embedded, untrusted fonts may render with fallback system fonts.",
                     Tags = ["print-job", "font", "untrusted-fonts", "kernel", "security"],
@@ -1689,7 +1689,7 @@ internal static class PolicyPrint
             {
                 Id = "prtmgmt-disable-mmc",
                 Label = "Disable Print Management MMC Console",
-                Category = "Print Policy",
+                Category = "Printing",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -1706,7 +1706,7 @@ internal static class PolicyPrint
             {
                 Id = "prtmgmt-disable-driver-autoinstall",
                 Label = "Disable Printer Driver Auto-Install",
-                Category = "Print Policy",
+                Category = "Printing",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -1723,7 +1723,7 @@ internal static class PolicyPrint
             {
                 Id = "prtmgmt-disable-default-mgmt",
                 Label = "Disable Default Printer Management",
-                Category = "Print Policy",
+                Category = "Printing",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -1740,7 +1740,7 @@ internal static class PolicyPrint
             {
                 Id = "prtmgmt-disable-queue-sharing",
                 Label = "Disable Print Queue Sharing",
-                Category = "Print Policy",
+                Category = "Printing",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -1757,7 +1757,7 @@ internal static class PolicyPrint
             {
                 Id = "prtmgmt-disable-print-pdf-rdp",
                 Label = "Disable Print to PDF from RDP",
-                Category = "Print Policy",
+                Category = "Printing",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -1774,7 +1774,7 @@ internal static class PolicyPrint
             {
                 Id = "prtmgmt-disable-telemetry",
                 Label = "Disable Print Management Telemetry",
-                Category = "Print Policy",
+                Category = "Printing",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 1,
@@ -1791,7 +1791,7 @@ internal static class PolicyPrint
             {
                 Id = "prtmgmt-disable-discovery",
                 Label = "Disable Printer Discovery",
-                Category = "Print Policy",
+                Category = "Printing",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -1808,7 +1808,7 @@ internal static class PolicyPrint
             {
                 Id = "prtmgmt-disable-xps-writer",
                 Label = "Disable Microsoft XPS Document Writer",
-                Category = "Print Policy",
+                Category = "Printing",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -1825,7 +1825,7 @@ internal static class PolicyPrint
             {
                 Id = "prtmgmt-disable-internet-printing",
                 Label = "Disable Internet Printing",
-                Category = "Print Policy",
+                Category = "Printing",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -1842,7 +1842,7 @@ internal static class PolicyPrint
             {
                 Id = "prtmgmt-disable-cloud-print-sharing",
                 Label = "Disable Cloud Print Sharing",
-                Category = "Print Policy",
+                Category = "Printing",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -1874,7 +1874,7 @@ internal static class PolicyPrint
                 {
                     Id = "prtq-disable-spooler-on-non-print-servers",
                     Label = "Print Queue: Disable Print Spooler Service on Non-Print Servers",
-                    Category = "Print Policy",
+                    Category = "Printing",
                     Description =
                         "Sets DisableSpooler=1 in Printers policy. Disables the Print Spooler service on machines that are not designated print servers. The Print Spooler service has been the subject of critical vulnerabilities including PrintNightmare (CVE-2021-34527) and SpoolFool (CVE-2022-22718). Every machine running the spooler is a potential target. Domain controllers, application servers, and most workstations do not need to act as print servers. Disabling the spooler on these machines eliminates the entire attack surface — the only cost is that users cannot share their local printers with other network users from that machine.",
                     Tags = ["print-spooler", "printnightmare", "cve-2021-34527", "security", "attack-surface"],
@@ -1891,7 +1891,7 @@ internal static class PolicyPrint
                 {
                     Id = "prtq-restrict-driver-installation-to-admins",
                     Label = "Print Queue: Restrict Printer Driver Installation to Administrators",
-                    Category = "Print Policy",
+                    Category = "Printing",
                     Description =
                         "Sets RestrictDriverInstallationToAdministrators=1 in Printers policy. Prevents standard (non-administrator) users from installing printer drivers. The PrintNightmare vulnerability chain exploited the ability of standard users to install printer drivers via the Windows Point and Print mechanism — using driver installation as a code execution vector to escalate privileges to SYSTEM. Restricting driver installation to administrators ensures that only IT-approved, tested drivers are deployed and closes the user-mode attack path for printer driver exploitation.",
                     Tags = ["printer-driver", "printnightmare", "privilege-escalation", "security", "point-and-print"],
@@ -1908,7 +1908,7 @@ internal static class PolicyPrint
                 {
                     Id = "prtq-require-rpc-authentication",
                     Label = "Print Queue: Require RPC Authentication for Printer Client Connections",
-                    Category = "Print Policy",
+                    Category = "Printing",
                     Description =
                         "Sets RpcUseNamedPipeProtocol=1 in Printers/RPC policy. Requires authenticated named pipe (rather than anonymous TCP) for RPC connections to print servers. Unauthenticated or weakly-authenticated RPC endpoints allow attackers to send RPC calls to printers without valid credentials — exploitable by several PrintNightmare-era attack chains. By requiring authenticated named pipe transport, each print spooler RPC call is associated with a verified security principal, enabling access control and audit logging of all print server interactions.",
                     Tags = ["print-rpc", "authentication", "named-pipe", "security", "printnightmare"],
@@ -1925,7 +1925,7 @@ internal static class PolicyPrint
                 {
                     Id = "prtq-disable-internet-printing",
                     Label = "Print Queue: Disable Internet Printing Protocol (IPP) Client",
-                    Category = "Print Policy",
+                    Category = "Printing",
                     Description =
                         "Sets DisableHTTPPrinting=1 in Printers policy. Disables the Internet Printing Protocol (IPP) client component that allows printing to HTTP/HTTPS-hosted print servers. IPP printing was designed for consumer environments and internet-hosted printers. In enterprise environments, all printing should go through internal print servers using SMB/named pipe transport with Kerberos authentication. IPP printing bypasses enterprise print audit controls and can send documents to external internet printers if a user knows the IPP URL. Disabling IPP ensures all print traffic is channelled through monitored, authenticated print servers.",
                     Tags = ["ipp", "internet-printing", "http-printing", "security", "data-exfiltration"],
@@ -1942,7 +1942,7 @@ internal static class PolicyPrint
                 {
                     Id = "prtq-restrict-point-and-print",
                     Label = "Print Queue: Restrict Point and Print to Approved Print Servers",
-                    Category = "Print Policy",
+                    Category = "Printing",
                     Description =
                         "Sets NoWarningNoElevationOnInstall=0 and UpdatePromptSettings=0 in Printers policy. Configures Point and Print policy to warn users and require elevated privileges for both driver installation and driver updates from non-approved print servers. NoWarningNoElevationOnInstall=0 ensures that attempts to install printer drivers from unapproved servers prompt for admin credentials. UpdatePromptSettings=0 ensures driver updates from arbitrary servers also require elevation. This is the core Point and Print hardening — Microsoft's own mitigations for CVE-2021-36958.",
                     Tags = ["point-and-print", "driver-install", "cve-2021-36958", "elevation", "security"],
@@ -1971,7 +1971,7 @@ internal static class PolicyPrint
                 {
                     Id = "prtq-disable-web-based-printing",
                     Label = "Print Queue: Disable Web-Based Printer Queue Management",
-                    Category = "Print Policy",
+                    Category = "Printing",
                     Description =
                         "Sets DisableWebBasedPrinting=1 in Printers policy. Disables the Internet Information Services (IIS)-based web print queue management interface that allows users to manage print jobs via a browser on port 80. The web-based print management component requires IIS and opens an additional HTTP listener. In enterprise environments, print queue management is performed by IT via the Print Management MMC snap-in. Exposing a web interface for print queue management on domain print servers creates an unnecessary attack surface on the internal network.",
                     Tags = ["print", "web-printing", "iis", "attack-surface", "hardening"],
@@ -1988,7 +1988,7 @@ internal static class PolicyPrint
                 {
                     Id = "prtq-enable-spooler-event-logging",
                     Label = "Print Queue: Enable Print Spooler Event Logging",
-                    Category = "Print Policy",
+                    Category = "Printing",
                     Description =
                         "Sets EnableEventLogging=1 in Printers policy. Enables detailed event logging in the Microsoft-Windows-PrintService/Operational event channel. Print spooler events record: job submitted, job printed, job failed, driver installed, printer added, printer deleted. Without this logging, detecting abuse of the print spooler (lateral movement, privilege escalation attempts, sensitive document printing) is impossible. The operational log is disabled by default to reduce log volume — enabling it on high-value machines (DCs, app servers, HR workstations) provides a forensic trail.",
                     Tags = ["print-spooler", "event-log", "audit", "monitoring", "forensics"],
@@ -2005,7 +2005,7 @@ internal static class PolicyPrint
                 {
                     Id = "prtq-disable-auto-download-of-drivers",
                     Label = "Print Queue: Disable Automatic Download of Printer Drivers from Windows Update",
-                    Category = "Print Policy",
+                    Category = "Printing",
                     Description =
                         "Sets DisableWindowsUpdateDriverSearching=1 in Printers policy. Prevents the Print Spooler from automatically downloading and installing printer drivers from Windows Update when a new printer is detected. Automatic driver downloads from Windows Update bypass the enterprise software approval process: the driver may not be tested in the organisation's environment, may contain outdated firmware, or might be a supply-chain compromised update. Enterprise environments should pre-stage approved drivers in driver stores and deploy them via Group Policy or Intune.",
                     Tags = ["printer-driver", "windows-update", "auto-download", "approval", "security"],
@@ -2022,7 +2022,7 @@ internal static class PolicyPrint
                 {
                     Id = "prtq-require-package-aware-drivers",
                     Label = "Print Queue: Require Package-Aware Printer Driver Architecture",
-                    Category = "Print Policy",
+                    Category = "Printing",
                     Description =
                         "Sets PackagePointAndPrintOnly=1 in Printers policy. Requires that Point and Print operations only install printer drivers that are packaged as Windows printer driver packages (not legacy kernel-mode drivers). Package-aware drivers use a sandboxed installation process that does not require kernel-mode code execution during driver install. Legacy v3 kernel-mode printer drivers run in the same trust context as the spooler (SYSTEM) — which is why PrintNightmare's kernel driver DLL injection worked. Package-aware (v4) drivers run in a lower-privilege isolated host.",
                     Tags = ["printer-driver", "v4-driver", "package-aware", "kernel-mode", "printnightmare"],
@@ -2039,7 +2039,7 @@ internal static class PolicyPrint
                 {
                     Id = "prtq-enable-lpd-service-logging",
                     Label = "Print Queue: Enable Line Printer Daemon Service Audit Logging",
-                    Category = "Print Policy",
+                    Category = "Printing",
                     Description =
                         "Sets EnableLpdLogging=1 in Printers policy. Enables audit logging for the Line Printer Daemon (LPD) service when it is installed. LPD is the Unix/Linux print protocol listener (TCP port 515) that allows Unix-style lpr/lpq clients to submit print jobs to Windows print servers. LPD lacks authentication and is disabled by default on Windows Server, but legacy environments that enable it for Unix/Linux compatibility should maintain an audit log of all LPD print submissions. The log provides the source IP, user name, and document name for every LPD print job.",
                     Tags = ["lpd", "lpr", "print-audit", "unix-print", "logging"],
@@ -2067,7 +2067,7 @@ internal static class PolicyPrint
             {
                 Id = "prtspool-disable-point-and-print-unrestricted",
                 Label = "Disable Unrestricted Point and Print Driver Installation",
-                Category = "Print Policy",
+                Category = "Printing",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 5,
@@ -2084,7 +2084,7 @@ internal static class PolicyPrint
             {
                 Id = "prtspool-require-admin-for-driver-update",
                 Label = "Require Administrator Approval for Printer Driver Updates",
-                Category = "Print Policy",
+                Category = "Printing",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 5,
@@ -2101,7 +2101,7 @@ internal static class PolicyPrint
             {
                 Id = "prtspool-restrict-point-and-print-servers",
                 Label = "Restrict Point and Print to Approved Print Server List",
-                Category = "Print Policy",
+                Category = "Printing",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -2118,7 +2118,7 @@ internal static class PolicyPrint
             {
                 Id = "prtspool-disable-print-spooler-remote-rpc",
                 Label = "Disable Remote Print Spooler RPC Connections",
-                Category = "Print Policy",
+                Category = "Printing",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 5,
@@ -2135,7 +2135,7 @@ internal static class PolicyPrint
             {
                 Id = "prtspool-disable-web-printing-communication",
                 Label = "Disable Windows Internet Printing Protocol Communication",
-                Category = "Print Policy",
+                Category = "Printing",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -2152,7 +2152,7 @@ internal static class PolicyPrint
             {
                 Id = "prtspool-redirect-print-spool-directory",
                 Label = "Restrict Print Spooler Directory to Non-System Drive",
-                Category = "Print Policy",
+                Category = "Printing",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -2169,7 +2169,7 @@ internal static class PolicyPrint
             {
                 Id = "prtspool-disable-print-spool-named-pipe",
                 Label = "Disable Print Spooler Named Pipe Access for Non-Admins",
-                Category = "Print Policy",
+                Category = "Printing",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -2186,7 +2186,7 @@ internal static class PolicyPrint
             {
                 Id = "prtspool-enable-detailed-spool-audit-events",
                 Label = "Enable Detailed Audit Events for Print Spooler Operations",
-                Category = "Print Policy",
+                Category = "Printing",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -2203,7 +2203,7 @@ internal static class PolicyPrint
             {
                 Id = "prtspool-disable-print-to-file",
                 Label = "Disable Print to File Functionality for Standard Users",
-                Category = "Print Policy",
+                Category = "Printing",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -2220,7 +2220,7 @@ internal static class PolicyPrint
             {
                 Id = "prtspool-enforce-print-driver-signing",
                 Label = "Enforce Digital Signature Verification for Printer Drivers",
-                Category = "Print Policy",
+                Category = "Printing",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -2248,7 +2248,7 @@ internal static class PolicyPrint
             {
                 Id           = "spladv-disable-print-spooler",
                 Label        = "Disable Print Spooler Service",
-                Category = "Print Policy",
+                Category = "Printing",
                 Description  = "Disables the Windows Print Spooler service entirely, eliminating the PrintNightmare attack surface and all spooler-related privilege escalation vectors on systems that do not need to print.",
                 Tags         = ["spooler", "printing", "security", "printnightmare", "policy"],
                 NeedsAdmin   = true,
@@ -2264,7 +2264,7 @@ internal static class PolicyPrint
             {
                 Id           = "spladv-block-remote-printer-install",
                 Label        = "Block Non-Admin Remote Printer Driver Installation",
-                Category = "Print Policy",
+                Category = "Printing",
                 Description  = "Prevents non-administrator users from installing printer drivers remotely via the spooler, closing the PrintNightmare (CVE-2021-34527) driver-install privilege escalation path.",
                 Tags         = ["spooler", "printing", "security", "printnightmare", "driver", "policy"],
                 NeedsAdmin   = true,
@@ -2280,7 +2280,7 @@ internal static class PolicyPrint
             {
                 Id           = "spladv-disable-mxdc-rendering",
                 Label        = "Disable MXDC Package Rendering in Print Spooler",
-                Category = "Print Policy",
+                Category = "Printing",
                 Description  = "Disables the Microsoft XPS Document Converter (MXDC) rendering path in the spooler, blocking an attack vector where malicious XPS documents exploit the spooler RPC interface.",
                 Tags         = ["spooler", "xps", "mxdc", "security", "policy"],
                 NeedsAdmin   = true,
@@ -2296,7 +2296,7 @@ internal static class PolicyPrint
             {
                 Id           = "spladv-disable-internet-printing-client",
                 Label        = "Disable Internet Printing Client (IPP over HTTP)",
-                Category = "Print Policy",
+                Category = "Printing",
                 Description  = "Disables the Internet Printing Protocol (IPP) client in Windows, preventing print jobs from being submitted to printers over HTTP/HTTPS and closing the associated network attack surface.",
                 Tags         = ["spooler", "ipp", "internet-printing", "security", "policy"],
                 NeedsAdmin   = true,
@@ -2312,7 +2312,7 @@ internal static class PolicyPrint
             {
                 Id           = "spladv-disable-printer-browse-list",
                 Label        = "Disable Printer Browse List on Domain",
-                Category = "Print Policy",
+                Category = "Printing",
                 Description  = "Disables the automatic browse list that advertises available printers across a domain, reducing network discovery noise and preventing spooler-based reconnaissance.",
                 Tags         = ["spooler", "printing", "browsing", "domain", "policy"],
                 NeedsAdmin   = true,
@@ -2328,7 +2328,7 @@ internal static class PolicyPrint
             {
                 Id           = "spladv-block-print-to-xps",
                 Label        = "Block Print to XPS Document Writer",
-                Category = "Print Policy",
+                Category = "Printing",
                 Description  = "Blocks the Microsoft XPS Document Writer virtual printer, preventing users from saving print jobs to XPS format files and closing the XPS writer spooler attack surface.",
                 Tags         = ["spooler", "xps", "virtual-printer", "security", "policy"],
                 NeedsAdmin   = true,
@@ -2344,7 +2344,7 @@ internal static class PolicyPrint
             {
                 Id           = "spladv-block-lpt-port-printing",
                 Label        = "Block LPT Parallel Port Printer Access",
-                Category = "Print Policy",
+                Category = "Printing",
                 Description  = "Blocks the spooler from accessing LPT (parallel port) printer connections, removing a legacy attack surface on systems that do not have or use parallel port printers.",
                 Tags         = ["spooler", "lpt", "parallel-port", "legacy", "policy"],
                 NeedsAdmin   = true,
@@ -2360,7 +2360,7 @@ internal static class PolicyPrint
             {
                 Id           = "spladv-disable-com-port-printing",
                 Label        = "Block COM Serial Port Printer Access",
-                Category = "Print Policy",
+                Category = "Printing",
                 Description  = "Blocks the spooler from accessing COM (serial port) printer connections, removing legacy serial printing capability that is not needed on modern systems.",
                 Tags         = ["spooler", "com-port", "serial-port", "legacy", "policy"],
                 NeedsAdmin   = true,
@@ -2376,7 +2376,7 @@ internal static class PolicyPrint
             {
                 Id           = "spladv-block-outbound-spool-jobs",
                 Label        = "Block Outbound Print Job Forwarding from This Machine",
-                Category = "Print Policy",
+                Category = "Printing",
                 Description  = "Prevents this Windows machine from forwarding print jobs to remote printers via the spooler, an attack path used to steal NTLM credentials (printer capture attacks).",
                 Tags         = ["spooler", "printing", "ntlm-capture", "security", "policy"],
                 NeedsAdmin   = true,
@@ -2392,7 +2392,7 @@ internal static class PolicyPrint
             {
                 Id           = "spladv-disable-spooler-inbound-access",
                 Label        = "Disable Inbound Print Spooler RPC Access",
-                Category = "Print Policy",
+                Category = "Printing",
                 Description  = "Disables the inbound RPC interface on the Print Spooler, preventing remote machines from submitting print jobs to this machine via the spooler, closing another PrintNightmare-family attack vector.",
                 Tags         = ["spooler", "rpc", "security", "printnightmare", "policy"],
                 NeedsAdmin   = true,
@@ -2420,7 +2420,7 @@ internal static class PolicyPrint
             {
                 Id = "prtspool-block-km-printer-drivers",
                 Label = "Block Kernel-Mode Printer Drivers",
-                Category = "Print Policy",
+                Category = "Printing",
                 Description = "Prevents kernel-mode printer drivers from loading in the Windows print spooler process (PrintNightmare mitigation).",
                 Tags = ["print-spooler", "kernel-mode", "driver", "printnightmare", "security"],
                 NeedsAdmin = true,
@@ -2436,7 +2436,7 @@ internal static class PolicyPrint
             {
                 Id = "prtspool-disable-remote-rpc",
                 Label = "Disable Remote Print Spooler RPC Endpoint",
-                Category = "Print Policy",
+                Category = "Printing",
                 Description = "Disables the remote RPC endpoint of the print spooler, preventing remote printer enumeration and exploitation.",
                 Tags = ["print-spooler", "rpc", "remote", "printnightmare", "network", "security"],
                 NeedsAdmin = true,
@@ -2452,7 +2452,7 @@ internal static class PolicyPrint
             {
                 Id = "prtspool-require-signed-copy-files",
                 Label = "Require Signed Copy Files for PnP Printers",
-                Category = "Print Policy",
+                Category = "Printing",
                 Description = "Restricts printer driver copy-files during PnP association to only allow digitally signed drivers.",
                 Tags = ["print-spooler", "copy-files", "pnp", "signed-driver", "security"],
                 NeedsAdmin = true,
@@ -2468,7 +2468,7 @@ internal static class PolicyPrint
             {
                 Id = "prtspool-disable-web-pnp-download",
                 Label = "Disable Printer Driver Download from Windows Update",
-                Category = "Print Policy",
+                Category = "Printing",
                 Description = "Prevents Windows from automatically downloading printer drivers from Windows Update during PnP printer installation.",
                 Tags = ["print-spooler", "windows-update", "pnp", "driver-download", "security"],
                 NeedsAdmin = true,
@@ -2484,7 +2484,7 @@ internal static class PolicyPrint
             {
                 Id = "prtspool-disable-http-printing",
                 Label = "Disable Printing over HTTP",
-                Category = "Print Policy",
+                Category = "Printing",
                 Description = "Blocks the Windows print spooler from connecting to or using printers over the HTTP/IPP protocol.",
                 Tags = ["print-spooler", "http", "ipp", "network", "security"],
                 NeedsAdmin = true,
@@ -2500,7 +2500,7 @@ internal static class PolicyPrint
             {
                 Id = "prtspool-pnp-restrict-to-admins",
                 Label = "Restrict Point and Print Driver Installation to Admins",
-                Category = "Print Policy",
+                Category = "Printing",
                 Description = "Requires administrator privileges to install printer drivers via Point and Print, regardless of the print server.",
                 Tags = ["print-spooler", "point-and-print", "admin", "driver", "security"],
                 NeedsAdmin = true,
@@ -2516,7 +2516,7 @@ internal static class PolicyPrint
             {
                 Id = "prtspool-pnp-no-trusted-servers",
                 Label = "Disable Trusted Print Server Exemption for Point and Print",
-                Category = "Print Policy",
+                Category = "Printing",
                 Description = "Removes the trusted print server list exemption, requiring admin-level approval for ALL Point and Print servers.",
                 Tags = ["print-spooler", "point-and-print", "trusted-servers", "security"],
                 NeedsAdmin = true,
@@ -2532,7 +2532,7 @@ internal static class PolicyPrint
             {
                 Id = "prtspool-pnp-no-forest-trust",
                 Label = "Disable Forest-Level Trust for Point and Print",
-                Category = "Print Policy",
+                Category = "Printing",
                 Description = "Disables the implicit trust granted to print servers in the same Active Directory forest for Point and Print.",
                 Tags = ["print-spooler", "point-and-print", "forest", "ad", "trust", "security"],
                 NeedsAdmin = true,
@@ -2548,7 +2548,7 @@ internal static class PolicyPrint
             {
                 Id = "prtspool-pnp-elevate-driver-update",
                 Label = "Require Elevation When Updating Printer Drivers via PnP",
-                Category = "Print Policy",
+                Category = "Printing",
                 Description = "Forces a UAC elevation prompt when an existing printer driver is updated via Point and Print.",
                 Tags = ["print-spooler", "point-and-print", "uac", "elevation", "update", "security"],
                 NeedsAdmin = true,
@@ -2564,7 +2564,7 @@ internal static class PolicyPrint
             {
                 Id = "prtspool-pnp-elevate-driver-install",
                 Label = "Require Elevation When Installing New Printer Drivers via PnP",
-                Category = "Print Policy",
+                Category = "Printing",
                 Description = "Forces a UAC elevation prompt when a new printer driver is installed via Point and Print.",
                 Tags = ["print-spooler", "point-and-print", "uac", "elevation", "install", "security"],
                 NeedsAdmin = true,
@@ -2597,7 +2597,7 @@ internal static class PolicyPrint
             {
                 Id = "spool-disable-spooler-service",
                 Label = "Disable Print Spooler Service (Non-Print Servers/Workstations)",
-                Category = "Print Policy",
+                Category = "Printing",
                 NeedsAdmin = true,
                 CorpSafe = false,
                 ImpactScore = 3,
@@ -2615,7 +2615,7 @@ internal static class PolicyPrint
             {
                 Id = "spool-disable-spooler-remote-rpc",
                 Label = "Disable Remote Print Spooler RPC (CVE-2021-1675 Mitigation)",
-                Category = "Print Policy",
+                Category = "Printing",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -2634,7 +2634,7 @@ internal static class PolicyPrint
             {
                 Id = "spool-restrict-driver-install",
                 Label = "Restrict Driver Installation via Point-and-Print",
-                Category = "Print Policy",
+                Category = "Printing",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -2652,7 +2652,7 @@ internal static class PolicyPrint
             {
                 Id = "spool-restrict-update-without-elevation",
                 Label = "Require Elevation to Update Printer Drivers",
-                Category = "Print Policy",
+                Category = "Printing",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -2670,7 +2670,7 @@ internal static class PolicyPrint
             {
                 Id = "spool-restrict-point-and-print-servers",
                 Label = "Restrict Point-and-Print to Approved Servers Only",
-                Category = "Print Policy",
+                Category = "Printing",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -2688,7 +2688,7 @@ internal static class PolicyPrint
             {
                 Id = "spool-disable-http-printing",
                 Label = "Disable HTTP Printing (Internet Printing Protocol)",
-                Category = "Print Policy",
+                Category = "Printing",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -2706,7 +2706,7 @@ internal static class PolicyPrint
             {
                 Id = "spool-disable-web-based-printing",
                 Label = "Disable Web-Based Printer Browsing",
-                Category = "Print Policy",
+                Category = "Printing",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -2724,7 +2724,7 @@ internal static class PolicyPrint
             {
                 Id = "spool-disable-printer-driver-download",
                 Label = "Disable Automatic Printer Driver Download from Windows Update",
-                Category = "Print Policy",
+                Category = "Printing",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -2752,7 +2752,7 @@ internal static class PolicyPrint
             {
                 Id = "spool-disable-mxdw-pdf-writer",
                 Label = "Disable Microsoft XPS Document Writer (MXDW) Printer",
-                Category = "Print Policy",
+                Category = "Printing",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 1,
@@ -2770,7 +2770,7 @@ internal static class PolicyPrint
             {
                 Id = "spool-log-spooler-events",
                 Label = "Enable Print Spooler Event Logging",
-                Category = "Print Policy",
+                Category = "Printing",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -2799,7 +2799,7 @@ internal static class PolicyPrint
             {
                 Id = "splfinal-enable-print-spooler-cleanup-on-idle",
                 Label = "Enable Automatic Print Spooler Cleanup When Print Queue Is Idle",
-                Category = "Print Policy",
+                Category = "Printing",
                 NeedsAdmin = true, CorpSafe = true, ImpactScore = 2, SafetyRating = 5,
                 Description = "Enabling automatic print spooler cleanup when the print queue is idle removes completed print jobs and temporary spool files from the spooler directory ensuring that document content is not retained in the spool longer than necessary for the print operation. Print spool files contain document images in EMF or RAW format that may include sensitive content and should be removed promptly after the print job completes to minimize exposure. Automatic cleanup on idle conditions ensures that print spool data is cleared during normal operational periods without requiring administrative intervention for routine spool maintenance. Spool file cleanup reduces the attack surface on print servers by minimizing the window during which attackers can access spool files to recover document content. Organizations should verify that spool cleanup policies are applied consistently on all print servers and workstations with local print queues. Spool cleanup events should be logged to provide evidence that print data was disposed of appropriately for compliance reporting purposes.",
                 Tags = ["print-spooler", "cleanup", "spool-files", "data-retention", "policy"],
@@ -2812,7 +2812,7 @@ internal static class PolicyPrint
             {
                 Id = "splfinal-enforce-immediate-spool-file-deletion",
                 Label = "Enforce Immediate Deletion of Print Spool Files After Job Completion",
-                Category = "Print Policy",
+                Category = "Printing",
                 NeedsAdmin = true, CorpSafe = true, ImpactScore = 3, SafetyRating = 5,
                 Description = "Enforcing immediate deletion of print spool files upon job completion eliminates the retention window during which print spool data would otherwise be recoverable from the spool directory on print servers and workstations. Immediate spool deletion is a defense against forensic recovery of document content from print infrastructure that has been accessed by an attacker. Organizations handling sensitive information under regulatory requirements may need to implement immediate spool deletion to satisfy data minimization requirements for printed document data. Immediate deletion should be applied to all stages of the print spool including temporary intermediate files generated during EMF to device format conversion. The deletion operation should be verified to ensure files are actually removed rather than simply marked for deletion by the file system. Secure deletion using file overwrite operations rather than simple deletion should be considered for high-security environments where forensic recovery of spool data poses a significant risk.",
                 Tags = ["print-spooler", "immediate-deletion", "spool-files", "secure-disposal", "policy"],
@@ -2825,7 +2825,7 @@ internal static class PolicyPrint
             {
                 Id = "splfinal-restrict-orphan-spool-file-retention",
                 Label = "Restrict Retention of Orphaned Print Spool Files to Mandatory Cleanup Period",
-                Category = "Print Policy",
+                Category = "Printing",
                 NeedsAdmin = true, CorpSafe = true, ImpactScore = 2, SafetyRating = 5,
                 Description = "Orphaned print spool files resulting from failed or interrupted print jobs are retained in the spool directory indefinitely without automatic cleanup which creates unnecessary data accumulation and potential sensitive data exposure. Restricting orphaned spool file retention period to a maximum defined duration ensures that print data from failed jobs is automatically removed within a predictable timeframe. Long-term retention of orphaned spool files on print servers can accumulate large volumes of sensitive document data from all users who have sent print jobs to the server. Cleanup of orphaned spool files should be automated through the print spooler service rather than relying on manual administrator cleanup which may not occur regularly. The retention period for orphaned spool files should be set based on the sensitivity of the documents typically printed in the environment with shorter periods for environments processing sensitive regulated data. Cleanup operations for orphaned spool files should be logged to provide an audit trail of data disposal activities.",
                 Tags = ["print-spooler", "orphaned-files", "cleanup", "spool-retention", "policy"],
@@ -2838,7 +2838,7 @@ internal static class PolicyPrint
             {
                 Id = "splfinal-enable-secure-spool-file-overwrite",
                 Label = "Enable Secure Multi-Pass Overwrite for Print Spool File Deletion",
-                Category = "Print Policy",
+                Category = "Printing",
                 NeedsAdmin = true, CorpSafe = true, ImpactScore = 3, SafetyRating = 5,
                 Description = "Enabling secure overwrite for spool files replaces the content of spool files with random data before deletion ensuring that the document data is irrecoverable from the storage media through standard data recovery utilities. Simple deletion of spool files marks the file system entry as free but does not overwrite the underlying disk sectors leaving document content recoverable until those sectors are reused by other files. Organizations that process classified or highly sensitive documents using print infrastructure should implement secure overwrite for spool files to satisfy media sanitization requirements. The performance impact of secure overwrite operations on print servers is generally low because spool files are relatively small but the impact should be tested before deployment in high-volume print environments. Secure overwrite should be applied to all temporary files generated during the print rendering process including intermediate format conversion files that may contain partial document images. Compliance documentation for sensitive data handling programs should reference secure spool file deletion as a control contributing to data disposal assurance.",
                 Tags = ["print-spooler", "secure-overwrite", "data-sanitization", "spool-security", "policy"],
@@ -2851,7 +2851,7 @@ internal static class PolicyPrint
             {
                 Id = "splfinal-audit-spool-directory-access",
                 Label = "Enable Audit Logging for Print Spool Directory File System Access Events",
-                Category = "Print Policy",
+                Category = "Printing",
                 NeedsAdmin = true, CorpSafe = true, ImpactScore = 3, SafetyRating = 5,
                 Description = "Enabling audit logging for print spool directory access events records all reads writes and deletions of files in the print spool directory providing visibility into unauthorized access to spool data by processes other than the print spooler service. Unauthorized access to the print spool directory by non-spooler processes may indicate malware attempting to read document content from spool files or an attacker harvesting document data. Access to spool directory files should be restricted to the Print Spooler service and local SYSTEM account with all other access attempts generating security audit events. Spool directory access audit events should be reviewed for access by unusual processes or user identities that do not have legitimate access needs. Security audit rules for the spool directory should be configured at the object access audit level to capture both successful and failed access attempts. Spool directory access audit data should be forwarded to SIEM for correlation with other endpoint security events to identify malicious access patterns.",
                 Tags = ["print-spooler", "spool-directory", "audit-logging", "file-access", "policy"],
@@ -2864,7 +2864,7 @@ internal static class PolicyPrint
             {
                 Id = "splfinal-restrict-spool-directory-permissions",
                 Label = "Restrict File System Permissions on Print Spool Directory to Minimum Required Access",
-                Category = "Print Policy",
+                Category = "Printing",
                 NeedsAdmin = true, CorpSafe = true, ImpactScore = 3, SafetyRating = 5,
                 Description = "Restricting file system permissions on the print spool directory ensures that only the Print Spooler service account and local administrators have access to spool files preventing unauthorized reading or modification of print job data. Default Windows configurations allow the Network Service account and some user accounts to read from the spool directory which is broader access than required for normal printing operations. Tightening spool directory ACLs to SYSTEM and Print Spooler service only requires careful testing to ensure that the print spooler functionality is not broken and that legitimate access patterns are maintained. The Windows default spool directory path is %SYSTEMROOT%\\System32\\spool\\PRINTERS which should have restrictive ACLs preventing standard user access. Spool directory permission changes should be performed with care and tested thoroughly before production deployment as misconfigured permissions can prevent printing from functioning. Periodic review of spool directory permissions should verify that ACLs have not been relaxed by software installation or administrative changes.",
                 Tags = ["print-spooler", "directory-permissions", "acl", "least-privilege", "policy"],
@@ -2877,7 +2877,7 @@ internal static class PolicyPrint
             {
                 Id = "splfinal-block-spool-file-access-by-network",
                 Label = "Block Remote Network Access to Print Spooler Spool File Directory",
-                Category = "Print Policy",
+                Category = "Printing",
                 NeedsAdmin = true, CorpSafe = true, ImpactScore = 3, SafetyRating = 5,
                 Description = "Blocking remote network access to the print spool directory ensures that network shares and remote file access protocols cannot be used to read or enumerate print spool contents from remote systems without the authorization required for spooler management operations. The PrintNightmare vulnerability family demonstrated that access to the spool directory from remote network connections can be exploited for privilege escalation and remote code execution. Blocking network access to the spool directory at the file system level provides defense in depth complementing the print spooler service access controls. Network firewall rules should also block remote access to the print spooler service on port 445 from systems that are not authorized print clients or print administrators. The printer driver path within the spool directory is particularly sensitive as it can be used to load arbitrary DLLs if network access is permitted. Vulnerability assessments should specifically test for network access to the spool directory as part of print infrastructure security evaluations.",
                 Tags = ["print-spooler", "network-access", "printnightmare", "remote-access", "policy"],
@@ -2890,7 +2890,7 @@ internal static class PolicyPrint
             {
                 Id = "splfinal-enable-spool-service-hardening",
                 Label = "Enable Additional Security Hardening for Print Spooler Service Operation",
-                Category = "Print Policy",
+                Category = "Printing",
                 NeedsAdmin = true, CorpSafe = true, ImpactScore = 4, SafetyRating = 5,
                 Description = "Print spooler service hardening applies additional security restrictions to the spooler process including restricting which DLLs can be loaded controlling network communication capabilities and applying attack surface reduction rules specifically targeting the print spooler attack surface. The print spooler service has historically been a common target for privilege escalation exploit chains and running the spooler with hardened configuration significantly reduces the effectiveness of known exploit techniques. Spooler hardening includes disabling the ability for the Print Spooler to accept remote connections when the system is not intended to serve as a print server which eliminates the network attack surface. Applications on workstations that do not require serving print jobs to other computers should run the print spooler in local-only mode to prevent remote exploitation. Print server configurations that require the remote print spooler functionality should apply spooler hardening in ways that are compatible with the remote printing use case. Microsoft security updates for the print spooler should be applied promptly due to the elevated risk associated with known spooler vulnerabilities.",
                 Tags = ["print-spooler", "service-hardening", "attack-surface", "exploit-mitigation", "policy"],
@@ -2903,7 +2903,7 @@ internal static class PolicyPrint
             {
                 Id = "splfinal-configure-spool-file-encryption",
                 Label = "Configure Encryption for Print Spool Files on Disk at Rest",
-                Category = "Print Policy",
+                Category = "Printing",
                 NeedsAdmin = true, CorpSafe = true, ImpactScore = 3, SafetyRating = 5,
                 Description = "Configuring encryption for print spool files on disk ensures that document content written to the spool directory during print operations is protected against unauthorized access by processes that can access the file system but are not authorized to access print data. Spool file encryption can be implemented through EFS Encrypting File System applied to the spool directory or through volume-level BitLocker encryption that covers the system drive where the spool directory resides. EFS applied specifically to the spool directory provides per-file encryption with the Print Spooler service as the authorized accessor while BitLocker provides volume-level protection relevant to physical media attacks. Organizations processing highly sensitive documents should evaluate spool file encryption as a control that complements access control restrictions on the spool directory. Encryption key management for spool file encryption should integrate with organizational key management practices to ensure keys are recoverable in the event of system failure. Performance testing should validate that spool file encryption does not introduce unacceptable latency in the print workflow for high-volume print environments.",
                 Tags = ["print-spooler", "spool-encryption", "data-at-rest", "efs", "policy"],
@@ -2916,7 +2916,7 @@ internal static class PolicyPrint
             {
                 Id = "splfinal-disable-persistently-cached-print-jobs",
                 Label = "Disable Persistent Caching of Print Jobs in Print Spool for Offline Recovery",
-                Category = "Print Policy",
+                Category = "Printing",
                 NeedsAdmin = true, CorpSafe = true, ImpactScore = 2, SafetyRating = 5,
                 Description = "Disabling persistent caching of print jobs prevents the print spooler from retaining print job data across system restarts for the purpose of re-submitting jobs that were queued when a printer was offline. Persistent print job caching means that document content can remain in the spool for extended periods including across security-relevant system events such as user logoff or system hibernation. Users who submit print jobs intending them to be printed will have a poor experience if persistent caching is disabled when the target printer is unavailable but the security benefit justifies the workflow impact in high-security environments. Organizations with strict data handling requirements for sensitive document categories should disable persistent print job caching to ensure document data does not accumulate in the spool across operational sessions. Alternative print management approaches including print management software that provides controlled job resubmission with appropriate authentication can address legitimate offline printing requirements. User communication about the impact of disabling persistent print caching should be provided before the policy is deployed.",
                 Tags = ["print-spooler", "persistent-cache", "data-minimization", "offline-printing", "policy"],
@@ -2944,7 +2944,7 @@ internal static class PolicyPrint
                 {
                     Id = "prttkt-enable-print-ticket-validation",
                     Label = "Print Ticket: Enable Print Ticket Schema Validation",
-                    Category = "Print Policy",
+                    Category = "Printing",
                     Description =
                         "Sets ValidatePrintTickets=1 in PrintTicket policy. Enables XML schema validation of Print Tickets before they are processed by the print driver. A Print Ticket is an XML document that describes the desired print job settings (paper size, colour mode, duplex, media type). Malformed or crafted Print Tickets with invalid XML — including oversized attribute values or deeply nested structures — can trigger XML parser vulnerabilities in GDI/XPS rendering code. Enabling validation rejects malformed Print Tickets before they reach the vulnerable parsing code, reducing the attack surface for print-job-based exploits.",
                     Tags = ["print-ticket", "xml", "validation", "security", "schema"],
@@ -2961,7 +2961,7 @@ internal static class PolicyPrint
                 {
                     Id = "prttkt-disable-xps-rendering-sandbox-bypass",
                     Label = "Print Ticket: Disable XPS Rendering Sandbox Bypass",
-                    Category = "Print Policy",
+                    Category = "Printing",
                     Description =
                         "Sets DisableXpsRenderingBypass=1 in PrintTicket policy. Prevents applications from bypassing the XPS rendering pipeline sandbox. When a print job is sent as XPS data (from an application using the XPS Document Interface), the rendering is performed in a sandboxed low-privilege process. Some applications or malicious payloads can attempt to invoke a direct rendering path that bypasses the sandbox — processing XPS content with the full privilege of the calling process. Enabling this setting forces all XPS rendering through the sandboxed pipeline regardless of the caller's request.",
                     Tags = ["print-ticket", "xps", "sandbox", "security", "rendering"],
@@ -2978,7 +2978,7 @@ internal static class PolicyPrint
                 {
                     Id = "prttkt-restrict-print-ticket-namespace",
                     Label = "Print Ticket: Restrict Print Ticket XML Namespaces to Approved List",
-                    Category = "Print Policy",
+                    Category = "Printing",
                     Description =
                         "Sets RestrictCustomNamespaces=1 in PrintTicket policy. Restricts Print Ticket XML namespaces to the standard Print Schema namespace plus explicitly approved vendor extensions. Print Tickets support vendor-defined custom XML namespaces for proprietary printer features. A maliciously crafted Print Ticket can include a large number of custom namespace declarations, causing the XML parser to resolve namespaces recursively (XML namespace expansion attack) or consume excessive memory. Restricting namespaces to known-good ones eliminates this attack vector.",
                     Tags = ["print-ticket", "xml-namespace", "security", "print-schema", "restriction"],
@@ -2995,7 +2995,7 @@ internal static class PolicyPrint
                 {
                     Id = "prttkt-enable-wsd-printer-discovery-logging",
                     Label = "Print Ticket: Enable WSD Printer Discovery Logging",
-                    Category = "Print Policy",
+                    Category = "Printing",
                     Description =
                         "Sets WsdDiscoveryLogging=1 in PrintTicket policy. Enables logging of Web Services on Devices (WSD) printer discovery events. WSD is the network printer discovery protocol used by Windows to automatically find and install network printers. WSD discovery responses are XML documents parsed by the Windows printer subsystem. Logging WSD discovery events provides visibility into which printers the system detected, which printers were installed automatically, and whether any unexpected WSD responses were received — useful for detecting rogue printer injection attacks where an attacker's device responds to WSD probes with a malicious printer description.",
                     Tags = ["wsd", "printer-discovery", "logging", "network", "security"],
@@ -3012,7 +3012,7 @@ internal static class PolicyPrint
                 {
                     Id = "prttkt-disable-auto-wsd-install",
                     Label = "Print Ticket: Disable Automatic WSD Printer Installation",
-                    Category = "Print Policy",
+                    Category = "Printing",
                     Description =
                         "Sets DisableAutoWsdInstall=1 in Printers policy. Prevents Windows from automatically installing WSD-discovered printers without user confirmation or administrator intervention. WSD auto-install reads the printer's XML device description and installs a print driver automatically. An attacker on the local network can broadcast crafted WSD printer advertisements causing Windows to auto-install drivers from rogue printers — if the driver installation triggers a code execution vector (custom driver DLL), the auto-install path is exploitable without any user interaction. Disabling auto-install prevents unsolicited printer additions.",
                     Tags = ["wsd", "auto-install", "printer", "security", "rogue-printer"],
@@ -3029,7 +3029,7 @@ internal static class PolicyPrint
                 {
                     Id = "prttkt-set-max-print-ticket-size-64kb",
                     Label = "Print Ticket: Set Maximum Print Ticket XML Size to 64 KB",
-                    Category = "Print Policy",
+                    Category = "Printing",
                     Description =
                         "Sets MaxPrintTicketSize=65536 in PrintTicket policy (bytes). Sets the maximum allowed size for a Print Ticket XML document to 64 KB. A legitimate Print Ticket for a printer with comprehensive feature support (media handling, finishing, stapling options, colour profiles) is typically 5-15 KB. There is no legitimate reason for a Print Ticket to be larger. Oversized Print Tickets that exceed the limit are rejected before being passed to the XML parser — preventing XML bomb attacks (exponential entity expansion) or other size-based parser exploits that would attempt to process megabytes of XML through a kernel component.",
                     Tags = ["print-ticket", "xml-size", "dos", "security", "parser"],
@@ -3046,7 +3046,7 @@ internal static class PolicyPrint
                 {
                     Id = "prttkt-enable-capability-schema-enforcement",
                     Label = "Print Ticket: Enforce PrintCapabilities Schema on Driver Provider",
-                    Category = "Print Policy",
+                    Category = "Printing",
                     Description =
                         "Sets EnforceCapabilitySchema=1 in PrintTicket policy. Requires print drivers to provide a schema-conformant PrintCapabilities document when queried by the print subsystem. PrintCapabilities is the XML document that describes what a printer can do (available media types, print qualities, finishing options). Some legacy drivers return malformed or empty PrintCapabilities responses causing the Windows XPS/Print Schema layer to fall back to guessed defaults or crash. Enforcing schema compliance causes drivers returning invalid PrintCapabilities to produce a validation error rather than passing corrupt XML further into the stack.",
                     Tags = ["print-ticket", "print-capabilities", "driver", "schema", "validation"],
@@ -3063,7 +3063,7 @@ internal static class PolicyPrint
                 {
                     Id = "prttkt-disable-network-scan-to-print",
                     Label = "Print Ticket: Disable Network Scan-to-Print Direct Integration",
-                    Category = "Print Policy",
+                    Category = "Printing",
                     Description =
                         "Sets DisableScanToPrint=1 in PrintTicket policy. Disables the Windows Scan-to-Print direct integration feature that allows WSD-enabled multi-function printers to push scanned documents directly into the Windows print queue for automatic printing. Direct scan-to-print integration accepts document data from network devices without user-initiated authentication. An attacker with access to the local network who can simulate a WSD scanner can push arbitrary document data into the print pipeline by impersonating a scannner. Disabling this feature requires users to initiate scan operations from Windows Fax and Scan or third-party software.",
                     Tags = ["scan-to-print", "wsd", "network-scanner", "security", "injection"],
@@ -3080,7 +3080,7 @@ internal static class PolicyPrint
                 {
                     Id = "prttkt-allow-only-v4-xps-print-path",
                     Label = "Print Ticket: Allow Only V4 XPS Print Path for Network Printers",
-                    Category = "Print Policy",
+                    Category = "Printing",
                     Description =
                         "Sets EnforceXpsPrintPath=1 in PrintTicket policy. Restricts network printer connections to the v4 XPS print path exclusively. The v4 XPS print path processes all print jobs through the GDI-to-XPS conversion path, running in an isolated XPS rendering host. The legacy v3 GDI direct print path processes documents in the context of the calling application or SYSTEM — a code execution vulnerability in the rendering path is much higher privilege. Enforcing the XPS path for network printers ensures malicious print data processed from network sources is contained in the lower-privilege XPS host.",
                     Tags = ["print-ticket", "v4-driver", "xps-path", "security", "isolation"],
@@ -3097,7 +3097,7 @@ internal static class PolicyPrint
                 {
                     Id = "prttkt-restrict-print-ticket-processing-to-users",
                     Label = "Print Ticket: Restrict Print Ticket Processing to Authorised User Sessions",
-                    Category = "Print Policy",
+                    Category = "Printing",
                     Description =
                         "Sets RestrictToUserSessions=1 in PrintTicket policy. Restricts Print Ticket processing to originate only from authenticated user sessions (interactive or service sessions with a valid user token). Print Tickets submitted without an associated user session token (e.g., from an anonymous service account or through a NULL session SMB path) are rejected. This prevents attackers from submitting print jobs anonymously that would be processed with SYSTEM-level privileges in the spooler. All legitimate print submissions in enterprise environments originate from authenticated user accounts.",
                     Tags = ["print-ticket", "authentication", "session", "security", "anonymous"],
@@ -3127,7 +3127,7 @@ internal static class PolicyPrint
             {
                 Id = "wpp-enable-protected-print-mode",
                 Label = "Enable Windows Protected Print Mode",
-                Category = "Print Policy",
+                Category = "Printing",
                 Description = "Enables Windows Protected Print (WPP) mode, which restricts printing to only Windows-protected printer drivers that are signed and certified by Microsoft. Prevents malicious print drivers.",
                 Tags = ["wpp", "printing", "protected-print", "driver-security", "windows-11"],
                 NeedsAdmin = true,
@@ -3145,7 +3145,7 @@ internal static class PolicyPrint
             {
                 Id = "wpp-block-legacy-print-drivers",
                 Label = "Block Legacy (Non-WPP) Print Drivers",
-                Category = "Print Policy",
+                Category = "Printing",
                 Description = "Prevents Windows from loading or using non-WPP print drivers. Only drivers explicitly certified under the Windows Protected Print certification program are permitted to run.",
                 Tags = ["wpp", "printing", "driver-block", "legacy-driver", "security"],
                 NeedsAdmin = true,
@@ -3163,7 +3163,7 @@ internal static class PolicyPrint
             {
                 Id = "wpp-require-driver-signature",
                 Label = "Require Driver Signature Verification for Print Drivers",
-                Category = "Print Policy",
+                Category = "Printing",
                 Description = "Enforces cryptographic signature verification for all print drivers prior to loading. Drivers without a valid Microsoft-issued signature are rejected, even in a non-WPP environment.",
                 Tags = ["wpp", "printing", "driver-signing", "code-integrity", "security"],
                 NeedsAdmin = true,
@@ -3181,7 +3181,7 @@ internal static class PolicyPrint
             {
                 Id = "wpp-disable-driver-installation-from-user",
                 Label = "Prevent Users from Installing Print Drivers",
-                Category = "Print Policy",
+                Category = "Printing",
                 Description = "Restricts print driver installation to administrators only. Standard users cannot add printers with non-WPP drivers via the Windows print management UI or mapped drives.",
                 Tags = ["wpp", "printing", "driver-install", "user-restriction", "security"],
                 NeedsAdmin = true,
@@ -3199,7 +3199,7 @@ internal static class PolicyPrint
             {
                 Id = "wpp-audit-driver-load-events",
                 Label = "Audit Print Driver Load Events",
-                Category = "Print Policy",
+                Category = "Printing",
                 Description = "Enables audit logging for all print driver load operations. Events include driver name, installer identity, and whether the load was permitted or denied by WPP policy.",
                 Tags = ["wpp", "printing", "driver-audit", "event-log", "compliance"],
                 NeedsAdmin = true,
@@ -3217,7 +3217,7 @@ internal static class PolicyPrint
             {
                 Id = "wpp-block-raw-printing",
                 Label = "Block RAW Format Print Job Submission",
-                Category = "Print Policy",
+                Category = "Printing",
                 Description = "Prevents applications from submitting RAW-format print jobs, which bypass the Windows print rendering pipeline and can embed arbitrary data. WPP requires rendering through the IPP stack.",
                 Tags = ["wpp", "printing", "raw-print", "ipp", "security"],
                 NeedsAdmin = true,
@@ -3235,7 +3235,7 @@ internal static class PolicyPrint
             {
                 Id = "wpp-restrict-remote-print-driver-install",
                 Label = "Block Remote Print Driver Installation via RPC",
-                Category = "Print Policy",
+                Category = "Printing",
                 Description = "Prevents print drivers from being remotely installed via the Print Spooler RPC interface. Remote driver installation was exploited by PrintNightmare (CVE-2021-1675); WPP mode disables this endpoint.",
                 Tags = ["wpp", "printing", "rpc", "print-spooler", "printnightmare", "cve"],
                 NeedsAdmin = true,
@@ -3253,7 +3253,7 @@ internal static class PolicyPrint
             {
                 Id = "wpp-require-ipp-protocol-only",
                 Label = "Restrict Print Communication to IPP Protocol Only",
-                Category = "Print Policy",
+                Category = "Printing",
                 Description = "Configures the Windows print stack to communicate with printers using Internet Printing Protocol (IPP) only, blocking legacy LPR and SMB-based print protocols that WPP does not support.",
                 Tags = ["wpp", "printing", "ipp", "protocol", "security"],
                 NeedsAdmin = true,
@@ -3271,7 +3271,7 @@ internal static class PolicyPrint
             {
                 Id = "wpp-disable-printer-redirection-rdp",
                 Label = "Disable Client-Side Print Redirection in Remote Desktop",
-                Category = "Print Policy",
+                Category = "Printing",
                 Description = "Prevents local printers from being redirected and made available in Remote Desktop sessions. Eliminates the risk of untrusted WPP-non-compliant client drivers being exposed to an RDS server.",
                 Tags = ["wpp", "printing", "rdp", "print-redirection", "remote-desktop"],
                 NeedsAdmin = true,
@@ -3289,7 +3289,7 @@ internal static class PolicyPrint
             {
                 Id = "wpp-enable-spooler-process-isolation",
                 Label = "Enable Print Spooler Process Isolation",
-                Category = "Print Policy",
+                Category = "Printing",
                 Description = "Configures the Windows Print Spooler to run third-party print processors and drivers in isolated job-scoped processes rather than within the main spooler process. Limits the blast radius of a compromised driver.",
                 Tags = ["wpp", "printing", "process-isolation", "spooler", "security"],
                 NeedsAdmin = true,
