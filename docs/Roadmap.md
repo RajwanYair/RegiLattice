@@ -482,11 +482,12 @@ G6 (PluginAuthoring docs) <──► H6 (custom tweaks — same doc)
 | **v6.0.4** | B | B1 subcommand architecture · B3 grouped help · B5 stable exit codes | `regilattice tweak apply <id>` works; old `--flags` preserved; exit codes 0/1/2/3 documented | ✅ Released |
 | **v6.0.5** | B, A | B2 structured output (JSON/CSV) · A3 CLI contract tests | All commands support `--output json`; +30 A3 contract tests; exit code 4 for corp guard | ✅ Released |
 | **v6.0.6** | B | B4 PowerShell module parity · B6 shell completions · B7 batch mode | `Import-Module RegiLattice` works; tab completion in pwsh; `batch apply ids.txt` works | ✅ Released |
+| **v6.0.7** | D, F, H | D1 undo/redo · F3 smoke test matrix · H3 conflict enrichment (50 pairs) | `Ctrl+Z`/`Ctrl+Y` work; smoke matrix on windows-2022+2025; 50 conflict pairs | ✅ Released |
 | **+4** | F | F1 Authenticode code signing (EV cert + CI) | `signtool verify /pa` passes on GUI EXE, CLI EXE, MSI in CI |
-| **+5** | F | F3 release smoke test matrix · F4 Chocolatey auto-submit | `choco install regilattice` works from community |
+| **+5** | F | F4 Chocolatey auto-submit | `choco install regilattice` works from community |
 | **+6** | E | E2 user baselines · E1 CIS/DISA L1 Desktop baseline template | `--baseline-compare cis-l1-desktop` works |
-| **+7** | D | D1 undo/redo · D2 saved filter presets | `Ctrl+Z` undoes the last apply or remove |
-| **+8** | A, H | A4 BenchmarkDotNet perf gate · H3 conflict enrichment (50 pairs) | Perf gate in CI; 50 conflict pairs documented |
+| **+7** | D | D2 saved filter presets | Saved filters persist across restarts |
+| **+8** | A | A4 BenchmarkDotNet perf gate | Perf gate in CI |
 
 **M2 gate (v6.1.0):** CLI subcommands complete · `--output json` on all commands · Authenticode signed · CIS baseline ships · undo/redo · release notes automated. Tag `v6.1.0` (MINOR — new CLI subcommands additive).
 

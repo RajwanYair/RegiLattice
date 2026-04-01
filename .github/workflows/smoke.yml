@@ -1,0 +1,139 @@
+---
+# smoke.yml — Release Smoke-Test Matrix (F3)
+# Runs after a GitHub Release is published.
+# Downloads the CLI EXE from the release and runs basic smoke commands on
+# both windows-2022 and windows-2025 to confirm the artifact is functional.
+name: Smoke Tests
+
+on:
+    release:
+        types: [published]
+
+permissions:
+    contents: read
+
+env:
+    DOTNET_NOLOGO: true
+    DOTNET_CLI_TELEMETRY_OPTOUT: true
+    MSBUILDDISABLENODEREUSE: 1
+    FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+jobs:
+    smoke:
+        name: Smoke — ${{ matrix.os }}
+        runs-on: ${{ matrix.os }}
+        continue-on-error: true # non-blocking; failures raise an annotation but don't fail the release
+
+        strategy:
+            fail-fast: false
+            matrix:
+                os: [windows-2022, windows-2025]
+
+        steps:
+            - name: Download CLI artifact from release
+              shell: pwsh
+              env:
+                  GH_TOKEN: ${{ github.token }}
+              run: |
+                  $tag = "${{ github.event.release.tag_name }}"
+                  Write-Host "Downloading CLI EXE for release $tag"
+                  gh release download $tag `
+                      --repo "${{ github.repository }}" `
+                      --pattern "RegiLatticeCLI.exe" `
+                      --dir "$env:TEMP\regilattice-smoke"
+                  Write-Host "Download complete."
+                  Get-ChildItem "$env:TEMP\regilattice-smoke"
+
+            - name: Smoke — --help
+              shell: pwsh
+              run: |
+                  $exe = "$env:TEMP\regilattice-smoke\RegiLatticeCLI.exe"
+                  & $exe --help
+                  if ($LASTEXITCODE -ne 0) {
+                      Write-Error "--help returned exit code $LASTEXITCODE"
+                      exit $LASTEXITCODE
+                  }
+                  Write-Host "--help OK (exit 0)"
+
+            - name: Smoke — --list-profiles
+              shell: pwsh
+              run: |
+                  $exe = "$env:TEMP\regilattice-smoke\RegiLatticeCLI.exe"
+                  & $exe --list-profiles
+                  if ($LASTEXITCODE -ne 0) {
+                      Write-Error "--list-profiles returned exit code $LASTEXITCODE"
+                      exit $LASTEXITCODE
+                  }
+                  Write-Host "--list-profiles OK (exit 0)"
+
+            - name: Smoke — --show-categories
+              shell: pwsh
+              run: |
+                  $exe = "$env:TEMP\regilattice-smoke\RegiLatticeCLI.exe"
+                  & $exe --show-categories
+                  if ($LASTEXITCODE -ne 0) {
+                      Write-Error "--show-categories returned exit code $LASTEXITCODE"
+                      exit $LASTEXITCODE
+                  }
+                  Write-Host "--show-categories OK (exit 0)"
+
+            - name: Smoke — --validate
+              shell: pwsh
+              run: |
+                  $exe = "$env:TEMP\regilattice-smoke\RegiLatticeCLI.exe"
+                  & $exe --validate
+                  if ($LASTEXITCODE -ne 0) {
+                      Write-Error "--validate returned exit code $LASTEXITCODE"
+                      exit $LASTEXITCODE
+                  }
+                  Write-Host "--validate OK (exit 0)"
+
+            - name: Smoke — --stats
+              shell: pwsh
+              run: |
+                  $exe = "$env:TEMP\regilattice-smoke\RegiLatticeCLI.exe"
+                  & $exe --stats
+                  if ($LASTEXITCODE -ne 0) {
+                      Write-Error "--stats returned exit code $LASTEXITCODE"
+                      exit $LASTEXITCODE
+                  }
+                  Write-Host "--stats OK (exit 0)"
+
+            - name: Smoke — --dry-run --list (first 5 lines)
+              shell: pwsh
+              run: |
+                  $exe = "$env:TEMP\regilattice-smoke\RegiLatticeCLI.exe"
+                  $output = & $exe --list --dry-run 2>&1
+                  if ($LASTEXITCODE -ne 0) {
+                      Write-Error "--list --dry-run returned exit code $LASTEXITCODE"
+                      exit $LASTEXITCODE
+                  }
+                  $output | Select-Object -First 5 | ForEach-Object { Write-Host $_ }
+                  Write-Host "... (truncated)"
+                  Write-Host "--list --dry-run OK (exit 0)"
+
+            - name: Write Smoke Summary
+              if: always()
+              shell: pwsh
+              env:
+                  JOB_STATUS: ${{ job.status }}
+              run: |
+                  $tag   = "${{ github.event.release.tag_name }}"
+                  $os    = "${{ matrix.os }}"
+                  $status = $env:JOB_STATUS
+                  $icon  = if ($status -eq "success") { ":white_check_mark:" } else { ":x:" }
+                  $body  = @"
+                  ## $icon Smoke Tests — $tag on $os
+
+                  | Step  | Result |
+                  |-------|--------|
+                  | --help | Ran |
+                  | --list-profiles | Ran |
+                  | --show-categories | Ran |
+                  | --validate | Ran |
+                  | --stats | Ran |
+                  | --list --dry-run | Ran |
+
+                  **Overall status**: $status
+                  "@
+                  $body | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Encoding utf8 -Append

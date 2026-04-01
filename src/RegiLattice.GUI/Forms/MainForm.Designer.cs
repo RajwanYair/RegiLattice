@@ -25,6 +25,7 @@ partial class MainForm
     private ToolStripButton _btnInvert = null!;
     private ToolStripButton _btnSettings = null!;
     private ToolStripButton _btnUndoLast = null!;
+    private ToolStripButton _btnRedo = null!;
 
     // ── Kind filter ────────────────────────────────────────────────────────
     private ToolStripLabel _kindLabel = null!;
@@ -451,13 +452,21 @@ partial class MainForm
         };
         _btnSettings.Click += (_, _) => OnOpenPreferences();
 
-        _btnUndoLast = new ToolStripButton("↩ Undo Last")
+        _btnUndoLast = new ToolStripButton("↩ Undo")
         {
             ToolTipText = "Undo the last tweak apply/remove operation (Ctrl+Z)",
             DisplayStyle = ToolStripItemDisplayStyle.Text,
             Enabled = false,
         };
         _btnUndoLast.Click += async (_, _) => await OnUndoLastAsync();
+
+        _btnRedo = new ToolStripButton("↪ Redo")
+        {
+            ToolTipText = "Redo the last undone operation (Ctrl+Y)",
+            DisplayStyle = ToolStripItemDisplayStyle.Text,
+            Enabled = false,
+        };
+        _btnRedo.Click += async (_, _) => await OnRedoAsync();
 
         _kindLabel = new ToolStripLabel("Kind:") { ToolTipText = "Filter tweaks by their operation kind (Registry, PowerShell, Service, etc.)" };
         _kindCombo = new ToolStripComboBox { DropDownStyle = ComboBoxStyle.DropDownList, ToolTipText = "Filter by tweak kind", Width = 130 };
@@ -478,7 +487,7 @@ partial class MainForm
         _toolStrip = new ToolStrip();
         _toolStrip.Items.AddRange(new ToolStripItem[]
         {
-            _btnApply, _btnRemove, _btnUndoLast,
+            _btnApply, _btnRemove, _btnUndoLast, _btnRedo,
             new ToolStripSeparator(),
             _btnRefresh,
             new ToolStripSeparator(),

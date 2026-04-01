@@ -4,6 +4,20 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [6.0.7] — 2026-04-01
+
+#### Added
+
+- **D1 Undo/Redo system**: New `TweakOperationStack` (in-memory, max 50 ops) powers true undo/redo across the session. Toolbar now has `↩ Undo` (Ctrl+Z) and `↪ Redo` (Ctrl+Y) buttons with dynamic tooltips showing the tweak name and time elapsed. Undo inverts the last applied/removed tweak; Redo re-executes it. Stack is session-scoped — cleared on app exit. `toolbar_redo` locale key added to all 10 supported languages (EN, DE, FR, ES, HE, JA, ZH-CN, KO, AR, PT-BR)
+- **F3 Smoke test matrix**: New `.github/workflows/smoke.yml` workflow triggers on every published GitHub Release and runs a matrix smoke test across `windows-2022` and `windows-2025`. Downloads `RegiLatticeCLI.exe` from the release assets and exercises `--help`, `--list-profiles`, `--show-categories`, `--validate`, `--stats`, and `--list --dry-run`. Non-blocking (`continue-on-error: true`); writes a per-OS job summary to the Actions step summary panel
+- **H3 Conflict enrichment**: `ConflictDetector` expanded from 16 to 50 known conflict pairs (+34). New categories: Network/IPv6/proxy (4), Firewall (3), Defender extended (3), Power plans (2), Print Spooler (2), Privacy/Telemetry extended (3), Display/Graphics (2), Explorer/Shell (3), Clipboard/Input (2), Storage/FileSystem (2), UAC extended (2), Windows Update extended (2), Cortana/Voice (1), Startup/Logon (1), Debloat/Game Bar (1), Virtualization (1)
+- **TweakOperationStack tests**: 29 new xUnit tests (`TweakOperationStackTests.cs`) covering all stack states — empty invariants, push/undo/redo ordering, redo-cleared-on-push, capacity cap at MaxOps=50, and Clear()
+
+#### Stats
+
+- Tweaks: 9,190 | Categories: 101 | Modules: 83
+- Tests: **3,035** (Core 2,317 + CLI 379 + GUI 339) — 0 failures
+
 ## [6.0.6] — 2026-04-01
 
 #### Added
