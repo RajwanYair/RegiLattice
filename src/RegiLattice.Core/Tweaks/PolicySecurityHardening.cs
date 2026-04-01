@@ -61,7 +61,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "acctlkout-disable-locked-account-message",
                 Label = "Account Lockout Policy: Do Not Display Locked Account Message",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description = "Suppresses the message informing a user that their account is locked out. Showing a lockout message leaks information to an attacker performing a password-spray attack — confirming correct usernames. Hiding the message converts an unlocking error into a generic access denied.",
                 Tags = ["logon", "lockout", "message", "privacy", "policy"],
                 NeedsAdmin = true,
@@ -78,7 +78,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "acctlkout-disable-automatic-admin-logon",
                 Label = "Account Lockout Policy: Disable Automatic Administrator Logon",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description = "Clears the AutoAdminLogon registry value that enables Windows to log on automatically with saved administrator credentials. Autologon with elevated credentials bypasses all logon security and allows anyone with physical access to the machine to gain an admin session simply by rebooting.",
                 Tags = ["logon", "autologon", "admin", "lockout", "security"],
                 NeedsAdmin = true,
@@ -95,7 +95,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "acctlkout-limit-ras-lockout-count",
                 Label = "Account Lockout Policy: Limit RAS Account Lockout Attempts to 3",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description = "Sets the Remote Access Service (RAS/VPN) account lockout threshold to 3 failed authentication attempts. Without a RAS lockout threshold, attackers can brute-force VPN credentials indefinitely without triggering a local account lockout. Applies only to RAS/VPN dial-in connections.",
                 Tags = ["ras", "vpn", "lockout", "brute force", "policy"],
                 NeedsAdmin = true,
@@ -112,7 +112,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "acctlkout-set-ras-lockout-reset-interval",
                 Label = "Account Lockout Policy: Set RAS Lockout Reset Interval to 60 Minutes",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description = "Configures the RAS account lockout observation window (reset interval) to 60 minutes. After a RAS account is locked due to too many failed authentication attempts, the failure counter is reset after 60 minutes without requiring administrative intervention.",
                 Tags = ["ras", "vpn", "lockout", "reset", "interval", "policy"],
                 NeedsAdmin = true,
@@ -129,7 +129,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "acctlkout-disable-logon-hours-lock",
                 Label = "Account Lockout Policy: Force Logoff When Logon Hours Expire",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description = "Configures Windows to disconnect users when their logon hours expire instead of allowing continued access. Without this setting, users who are already logged on continue working past their permitted logon window, defeating time-based access controls.",
                 Tags = ["logon", "hours", "force logoff", "access control", "policy"],
                 NeedsAdmin = true,
@@ -146,7 +146,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "acctlkout-disable-network-unlock-message",
                 Label = "Account Lockout Policy: Hide Network Logon Username",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description = "Prevents Windows from pre-populating the username field on network authentication dialogs with the currently signed-in user account name. Pre-populated usernames expose account credentials to shoulder-surfing and reduce the security of multi-user environments.",
                 Tags = ["logon", "network", "username", "privacy", "policy"],
                 NeedsAdmin = true,
@@ -163,7 +163,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "acctlkout-enable-inactive-account-shutdown",
                 Label = "Account Lockout Policy: Require Password After Screen Saver Activation",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description = "Forces password re-entry when the screen saver activates. This ensures that an unattended workstation is effectively locked — any user returning must authenticate before accessing the desktop. Prevents tailgating attacks on unattended, logged-in workstations.",
                 Tags = ["logon", "screen saver", "password", "inactive", "lock", "policy"],
                 NeedsAdmin = false,
@@ -197,7 +197,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "acctprot-disable-wdigest-plaintext",
                 Label = "Disable WDigest Plaintext Password Storage in LSASS",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 5,
@@ -217,7 +217,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "acctprot-enable-lsa-protected-mode",
                 Label = "Enable LSA Protected Process Light (PPL)",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 5,
@@ -237,7 +237,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "acctprot-limit-credential-cache",
                 Label = "Limit Cached Domain Credentials to 2 Entries",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = false,
                 ImpactScore = 3,
@@ -256,7 +256,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "acctprot-disable-domain-creds-storage",
                 Label = "Prevent Domain Credentials from Being Stored in Credential Manager",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = false,
                 ImpactScore = 3,
@@ -276,7 +276,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "acctprot-display-last-logon-info",
                 Label = "Show Last Logon Info at Login (Compliance Visibility)",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -294,7 +294,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "acctprot-block-remote-uac-bypass",
                 Label = "Block Remote Admin UAC Token Filter Bypass",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -313,7 +313,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "acctprot-audit-lsa-anonymous",
                 Label = "Enable LSA Audit for Anonymous Access Attempts",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -344,7 +344,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "biadmin-disable-guest-account-elevate",
                 Label = "Built-in Admin Policy: Disable Guest Account Network Access",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description = "Restricts the local Guest account from being used for network resource access. The Guest account has no password by default and, if network access is not blocked, can be used to access shares and remote services anonymously. This setting forces Guest logon attempts to fail at the network level.",
                 Tags = ["guest", "network", "access", "builtin", "admin", "policy"],
                 NeedsAdmin = true,
@@ -361,7 +361,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "biadmin-disable-anonymous-sam-enumeration",
                 Label = "Built-in Admin Policy: Prevent Anonymous SAM Account Enumeration",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description = "Prevents anonymous users from enumerating SAM account names and shares. Without this restriction, attackers on the local network can list all local user accounts and share names via null-session connections — a classic pre-XP recon technique still exploitable in default configurations.",
                 Tags = ["sam", "anonymous", "enumeration", "builtin", "admin", "policy"],
                 NeedsAdmin = true,
@@ -378,7 +378,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "biadmin-enable-admin-approval-mode",
                 Label = "Built-in Admin Policy: Enable Admin Approval Mode for Built-in Administrator",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description = "Enables UAC Admin Approval Mode (AAM) for the built-in Administrator account. By default, the built-in Administrator runs all programs at full administrator privilege without UAC prompts. Enabling AAM forces the built-in admin through standard elevation prompts, matching the security model used for all other admin accounts.",
                 Tags = ["uac", "admin approval", "builtin", "admin", "elevation", "policy"],
                 NeedsAdmin = true,
@@ -395,7 +395,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "biadmin-disable-local-system-blank-password",
                 Label = "Built-in Admin Policy: Restrict System Logon to Local Accounts with Blank Passwords",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description = "Prevents local accounts that have blank passwords from being used for interactive or remote logon via services, scheduled tasks, or batch jobs. This closes a privilege escalation vector where an unattended service running as a blank-password local admin could be exploited.",
                 Tags = ["blank password", "local account", "system service", "builtin", "policy"],
                 NeedsAdmin = true,
@@ -412,7 +412,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "biadmin-require-elevation-uac",
                 Label = "Built-in Admin Policy: Elevate Only Signed Executables Without Prompting Admin",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description = "Configures UAC to silently elevate only executables that are securely signed and validated. Unsigned executables that request elevation will prompt the administrator. This prevents unsigned trojans and malware from silently elevating by mimicking a legitimate system binary.",
                 Tags = ["uac", "elevation", "signed", "builtin", "admin", "security", "policy"],
                 NeedsAdmin = true,
@@ -429,7 +429,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "biadmin-block-uac-virtualization",
                 Label = "Built-in Admin Policy: Disable UAC File/Registry Virtualization for Admins",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description = "Disables User Account Control file and registry write virtualization for administrators. UAC virtualization redirects writes from protected system locations to per-user virtual stores for standard users. Admins who need direct writes should use elevation rather than rely on virtualization, which may mask application privilege requirements.",
                 Tags = ["uac", "virtualization", "registry", "file", "admin", "policy"],
                 NeedsAdmin = true,
@@ -446,7 +446,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "biadmin-disable-uac-installer-detection",
                 Label = "Built-in Admin Policy: Enable UAC Installer Detection for All Users",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description = "Enables the UAC installer detection algorithm that heuristically detects setup programs and automatically prompts for elevation. Without this, legacy installers that do not include a proper elevation manifest silently fail without requesting admin rights, leaving software partially or incorrectly installed.",
                 Tags = ["uac", "installer", "detection", "elevation", "admin", "policy"],
                 NeedsAdmin = true,
@@ -463,7 +463,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "biadmin-restrict-run-as-logon",
                 Label = "Built-in Admin Policy: Restrict Secondary Logon (RunAs) Service",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description = "Applies policy restrictions to the Secondary Logon (RunAs) service, limiting which users can invoke it. Secondary Logon can be abused by malware to silently launch processes under alternative credentials without displaying a logon UI. Policy restriction prevents abuse of the service on non-administrative accounts.",
                 Tags = ["runas", "secondary logon", "logon", "admin", "builtin", "policy"],
                 NeedsAdmin = true,
@@ -480,7 +480,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "biadmin-enable-uac-main-switch",
                 Label = "Built-in Admin Policy: Ensure UAC Main Switch Is Enabled",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description = "Ensures that the master User Account Control (UAC) enable switch is set to 1 (enabled). If UAC is disabled globally, all elevation prompts are suppressed and all processes run at the full token of whichever user is logged on. This is the single most impactful UAC configuration value.",
                 Tags = ["uac", "main switch", "elevation", "admin", "policy"],
                 NeedsAdmin = true,
@@ -509,7 +509,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "camprivacy-block-all-apps-camera",
                 Label = "Camera Privacy Policy: Block All Store Apps from Accessing Camera",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description = "Denies all Windows Store (UWP) application access to the camera device at the Group Policy level. Individual per-app camera permissions are irrelevant when this policy is set to Force Deny — no UWP app can activate the camera sensor regardless of user settings.",
                 Tags = ["camera", "privacy", "app", "uwp", "store", "policy"],
                 NeedsAdmin = true,
@@ -526,7 +526,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "camprivacy-block-background-camera",
                 Label = "Camera Privacy Policy: Prevent Camera Access from Background Apps",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description = "Prevents background Windows applications from activating the camera while they are not in the foreground. A background app that can silently activate the camera is a surveillance risk. This policy forces apps to request camera access only while actively in use.",
                 Tags = ["camera", "background", "privacy", "uwp", "policy"],
                 NeedsAdmin = true,
@@ -543,7 +543,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "camprivacy-disable-camera-roll-cloud-upload",
                 Label = "Camera Privacy Policy: Disable Camera Roll Cloud Upload",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description = "Prevents the Camera Roll library from automatically uploading captured photos and videos to OneDrive or other cloud services. Disabling auto-upload ensures that images taken by the camera application remain local to the device until explicitly shared by the user.",
                 Tags = ["camera", "cloud", "upload", "onedrive", "privacy", "policy"],
                 NeedsAdmin = true,
@@ -560,7 +560,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "camprivacy-disable-camera-for-lockscreen",
                 Label = "Camera Privacy Policy: Disable Camera Access on Lock Screen",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description = "Prevents the camera from being activated while the device is at the lock screen. Allowing camera access on the lock screen means anyone who picks up a device can activate it to take photos without unlocking — bypassing the user authentication barrier entirely.",
                 Tags = ["camera", "lock screen", "privacy", "policy"],
                 NeedsAdmin = true,
@@ -577,7 +577,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "camprivacy-block-desktop-app-camera",
                 Label = "Camera Privacy Policy: Audit Desktop App Camera Access",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description = "Enables privacy auditing for desktop applications (Win32/COM) that access the camera. Desktop apps (unlike UWP/Universal apps) are not subject to UWP privacy controls by default, but when auditing is enabled, camera activations by desktop apps are recorded in the diagnostic log.",
                 Tags = ["camera", "desktop app", "win32", "audit", "privacy", "policy"],
                 NeedsAdmin = false,
@@ -594,7 +594,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "camprivacy-block-win32-app-camera",
                 Label = "Camera Privacy Policy: Block Win32 Desktop App Camera Access",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description = "Denies all Win32 (desktop) applications from accessing the camera at the system consent store level. Unlike UWP apps subject to app-level policy, Win32 apps bypass the Windows privacy store by default. Setting the NonPackaged value to Deny blocks all desktop apps from activating the webcam.",
                 Tags = ["camera", "win32", "non-packaged", "deny", "privacy", "policy"],
                 NeedsAdmin = false,
@@ -611,7 +611,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "camprivacy-disable-face-analysis-services",
                 Label = "Camera Privacy Policy: Restrict Facial Analysis Services Access to Camera",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description = "Prevents facial recognition and biometric analysis services (such as Windows Hello Face and third-party face unlock SDKs) from accessing the camera in the background while a user session is active. Restricts ambient face scanning outside of explicit user-initiated authentication flows.",
                 Tags = ["camera", "facial recognition", "biometric", "background", "privacy", "policy"],
                 NeedsAdmin = true,
@@ -628,7 +628,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "camprivacy-restrict-cortana-camera",
                 Label = "Camera Privacy Policy: Block Cortana from Accessing Camera",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description = "Prevents the Cortana voice and AI assistant from activating or accessing the device camera. Cortana camera access enables continuous visual context gathering — a privacy concern on device without hardware camera shutters.",
                 Tags = ["camera", "cortana", "privacy", "ai", "policy"],
                 NeedsAdmin = true,
@@ -645,7 +645,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "camprivacy-require-user-consent-camera",
                 Label = "Camera Privacy Policy: Default Camera Consent to User-Controlled",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description = "Resets the system-wide camera consent store to require per-user approval rather than allowing blanket access. This ensures that newly installed applications must explicitly request and receive user consent before the camera sensor can be activated, enforcing a privacy-by-default camera access model.",
                 Tags = ["camera", "consent", "user control", "privacy", "policy"],
                 NeedsAdmin = false,
@@ -673,7 +673,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "capacs-deny-microphone-access",
                 Label = "Force Deny App Microphone Access",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -690,7 +690,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "capacs-deny-camera-access",
                 Label = "Force Deny App Camera Access",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -707,7 +707,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "capacs-deny-location-access",
                 Label = "Force Deny App Location Access",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -724,7 +724,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "capacs-deny-contacts-access",
                 Label = "Force Deny App Contacts Access",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -741,7 +741,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "capacs-deny-calendar-access",
                 Label = "Force Deny App Calendar Access",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -758,7 +758,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "capacs-deny-messaging-access",
                 Label = "Force Deny App Messaging Access",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -775,7 +775,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "capacs-deny-radios-access",
                 Label = "Force Deny App Radio Access",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -792,7 +792,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "capacs-deny-calls-access",
                 Label = "Force Deny App Phone Call Access",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -809,7 +809,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "capacs-deny-account-info-access",
                 Label = "Force Deny App Account Information Access",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -826,7 +826,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "capacs-deny-diagnostics-access",
                 Label = "Force Deny App Diagnostic Information Access",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -855,7 +855,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "dcom-disable-remote-launch-activation",
                 Label = "Disable Remote DCOM Launch and Activation",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description = "Prevents remote clients from launching or activating DCOM servers on this machine.",
                 Tags = ["dcom", "remote", "security", "hardening"],
                 NeedsAdmin = true,
@@ -871,7 +871,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "dcom-restrict-anonymous-launch",
                 Label = "Restrict Anonymous DCOM Launch",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description = "Denies anonymous (unauthenticated) remote clients the ability to launch DCOM servers.",
                 Tags = ["dcom", "anonymous", "launch", "security"],
                 NeedsAdmin = true,
@@ -887,7 +887,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "dcom-require-packet-privacy",
                 Label = "Require Packet Privacy for DCOM",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description = "Forces all DCOM remote calls to use packet-level privacy (encryption).",
                 Tags = ["dcom", "encryption", "privacy", "security"],
                 NeedsAdmin = true,
@@ -903,7 +903,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "dcom-disable-com-internet-services",
                 Label = "Disable COM Internet Services (DCOMHTTP)",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description = "Prevents DCOM servers from accepting connections over HTTP (TCP port 80) via COM Internet Services.",
                 Tags = ["dcom", "com-internet-services", "http", "security"],
                 NeedsAdmin = true,
@@ -919,7 +919,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "dcom-restrict-access-by-policy",
                 Label = "Restrict DCOM Access via Machine Access Restriction",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description = "Applies a restrictive machine-wide access restriction SDDL to all DCOM servers.",
                 Tags = ["dcom", "access-restriction", "sddl", "hardening"],
                 NeedsAdmin = true,
@@ -935,7 +935,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "dcom-restrict-access-limits-policy",
                 Label = "Restrict DCOM Machine Access Limits via Policy",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description = "Applies machine-wide access limits to constrain which principals can make remote DCOM calls.",
                 Tags = ["dcom", "access-limits", "principal", "policy"],
                 NeedsAdmin = true,
@@ -951,7 +951,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "dcom-audit-launch-activation-failures",
                 Label = "Audit DCOM Launch/Activation Failures",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description = "Logs failed DCOM activation attempts to the security event log for threat detection.",
                 Tags = ["dcom", "audit", "logging", "security"],
                 NeedsAdmin = true,
@@ -967,7 +967,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "dcom-disable-dcomscm-shortcut",
                 Label = "Disable DCOM SCM Shortcut Activation",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description = "Prevents the DCOM Service Control Manager from accepting shortcut-path activation requests.",
                 Tags = ["dcom", "scm", "activation", "security"],
                 NeedsAdmin = true,
@@ -983,7 +983,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "dcom-disable-persistent-activations",
                 Label = "Disable DCOM Persistent Activation",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description = "Prevents DCOM persistent activation which can be abused to maintain server sessions indefinitely.",
                 Tags = ["dcom", "persistent", "activation", "security"],
                 NeedsAdmin = true,
@@ -999,7 +999,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "dcom-block-remote-activation-for-standard-users",
                 Label = "Block Remote DCOM Activation for Standard Users",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description = "Prevents standard (non-admin) users from activating DCOM servers remotely.",
                 Tags = ["dcom", "standard-user", "remote", "hardening"],
                 NeedsAdmin = true,
@@ -1026,7 +1026,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "hltha-disable-remote-health-attestation",
                 Label = "Disable Remote Health Attestation",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true, CorpSafe = true, ImpactScore = 4, SafetyRating = 4,
                 Description =
                     "Sets Enabled=0 in the HealthAttestation policy key. Prevents Windows "
@@ -1046,7 +1046,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "hltha-disable-attestation-telemetry",
                 Label = "Disable Health Attestation Telemetry",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true, CorpSafe = true, ImpactScore = 3, SafetyRating = 5,
                 Description =
                     "Sets DisableAttestation Telemetry=1 in the HealthAttestation policy key. "
@@ -1066,7 +1066,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "hltha-require-tpm-attestation",
                 Label = "Require TPM for Device Health Attestation",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true, CorpSafe = true, ImpactScore = 4, SafetyRating = 5,
                 Description =
                     "Sets RequireTpmAttestation=1 in the HealthAttestation policy key. Enforces "
@@ -1085,7 +1085,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "hltha-set-custom-has-url",
                 Label = "Use Private Health Attestation Service",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true, CorpSafe = true, ImpactScore = 3, SafetyRating = 5,
                 Description =
                     "Sets UseCustomHasUrl=1 in the HealthAttestation policy key. Signals that "
@@ -1104,7 +1104,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "hltha-disable-has-caching",
                 Label = "Disable Health Attestation Report Caching",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true, CorpSafe = true, ImpactScore = 2, SafetyRating = 5,
                 Description =
                     "Sets DisableAttestation Caching=1 in the HealthAttestation policy key. "
@@ -1123,7 +1123,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "hltha-enforce-secureboot-check",
                 Label = "Enforce Secure Boot in Health Check",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true, CorpSafe = true, ImpactScore = 5, SafetyRating = 5,
                 Description =
                     "Sets EnforceSecureBootCheck=1 in the HealthAttestation policy key. "
@@ -1143,7 +1143,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "hltha-enforce-bitlocker-check",
                 Label = "Enforce BitLocker in Health Attestation",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true, CorpSafe = true, ImpactScore = 5, SafetyRating = 5,
                 Description =
                     "Sets EnforceBitLockerCheck=1 in the HealthAttestation policy key. Marks "
@@ -1162,7 +1162,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "hltha-enforce-elam-check",
                 Label = "Enforce Early Launch Antimalware in Health Check",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true, CorpSafe = true, ImpactScore = 4, SafetyRating = 5,
                 Description =
                     "Sets EnforceElamCheck=1 in the HealthAttestation policy key. Requires "
@@ -1181,7 +1181,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "hltha-enforce-vsm-check",
                 Label = "Enforce Virtualization Based Security in Health Check",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true, CorpSafe = true, ImpactScore = 4, SafetyRating = 5,
                 Description =
                     "Sets EnforceVsmCheck=1 in the HealthAttestation policy key. Marks devices "
@@ -1200,7 +1200,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "hltha-set-attestation-interval",
                 Label = "Set Health Attestation Report Interval",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true, CorpSafe = true, ImpactScore = 3, SafetyRating = 5,
                 Description =
                     "Sets AttestationInterval=60 in the HealthAttestation policy key. Instructs "
@@ -1231,7 +1231,7 @@ internal static class PolicySecurityHardening
                 {
                     Id = "iisharden-limit-max-request-bytes",
                     Label = "Limit IIS Max Request Buffer (16 KB)",
-                    Category = "Security Hardening Policy",
+                    Category = "Security",
                     Description =
                         "Sets MaxRequestBytes=16384 in HTTP.sys. Caps the maximum size of the HTTP request entity body buffer accepted by the kernel-mode HTTP stack. Oversized request buffers are a common vector for DoS and buffer-overflow attacks against IIS. 16 KB is the documented default; reducing it further hardens high-security endpoints while having no effect on typical REST APIs that receive JSON payloads under a few kilobytes.",
                     Tags = ["iis", "http-sys", "request-limit", "dos", "hardening"],
@@ -1248,7 +1248,7 @@ internal static class PolicySecurityHardening
                 {
                     Id = "iisharden-limit-max-field-length",
                     Label = "Limit IIS Max Header Field Length (16 KB)",
-                    Category = "Security Hardening Policy",
+                    Category = "Security",
                     Description =
                         "Sets MaxFieldLength=16384 in HTTP.sys. Restricts the maximum size of any single HTTP request header field. Excessively long header values (e.g., Cookie or Authorization) are exploited in header injection, HTTP request smuggling, and slow-header denial-of-service attacks. Capping individual fields at 16 KB protects the kernel HTTP stack without affecting any legitimate browser or API client.",
                     Tags = ["iis", "http-sys", "header-limit", "injection", "hardening"],
@@ -1265,7 +1265,7 @@ internal static class PolicySecurityHardening
                 {
                     Id = "iisharden-disallow-restricted-chars",
                     Label = "Block Restricted Characters in IIS URLs",
-                    Category = "Security Hardening Policy",
+                    Category = "Security",
                     Description =
                         "Sets AllowRestrictedChars=0 in HTTP.sys. Instructs the kernel HTTP driver to reject URLs containing characters from the restricted set (control characters and other disallowed byte sequences). Prevents directory traversal and URL injection attacks that rely on encoding restricted characters (e.g., %00, %2F) to confuse URL parsers. This is the secure default on all modern Windows versions.",
                     Tags = ["iis", "http-sys", "url-security", "traversal", "hardening"],
@@ -1282,7 +1282,7 @@ internal static class PolicySecurityHardening
                 {
                     Id = "iisharden-limit-url-segment-length",
                     Label = "Limit IIS URL Segment Length (260 chars)",
-                    Category = "Security Hardening Policy",
+                    Category = "Security",
                     Description =
                         "Sets UrlSegmentMaxLength=260 in HTTP.sys. Caps the character length of individual URL path segments (the portions between slash delimiters). Excessively long URL segments are used in buffer-overflow probes and WAF evasion techniques. 260 characters aligns with the Windows MAX_PATH constant and accommodates all standard web application URL structures without restriction.",
                     Tags = ["iis", "http-sys", "url-length", "buffer", "hardening"],
@@ -1299,7 +1299,7 @@ internal static class PolicySecurityHardening
                 {
                     Id = "iisharden-disable-non-utf-encodings",
                     Label = "Force UTF-8 URL Encoding on IIS",
-                    Category = "Security Hardening Policy",
+                    Category = "Security",
                     Description =
                         "Sets EnableNonUTFEncodings=0 in HTTP.sys. Prevents the kernel HTTP stack from accepting URLs encoded in non-UTF-8 character sets such as MBCS or DBCS. Non-UTF-8 encoded paths are a well-known vector for double-decode attacks and WAF bypass techniques that exploit charset confusion. Enforcing UTF-8 simplifies URL parsing and eliminates an entire class of encoding-based attacks.",
                     Tags = ["iis", "http-sys", "encoding", "utf-8", "hardening"],
@@ -1316,7 +1316,7 @@ internal static class PolicySecurityHardening
                 {
                     Id = "iisharden-set-connection-timeout",
                     Label = "Set IIS Connection Timeout (120 s)",
-                    Category = "Security Hardening Policy",
+                    Category = "Security",
                     Description =
                         "Sets ConnectionTimeout=120 in W3SVC Parameters. Limits how long IIS waits for a request to complete or a response to be fully sent before forcibly closing the connection. A 120-second timeout prevents slowloris-style and slow-POST denial-of-service attacks without affecting legitimate long-running API calls. The Windows default is 120 seconds but this may be overridden by IIS configuration; setting it explicitly ensures the hardened value is always in effect.",
                     Tags = ["iis", "w3svc", "timeout", "slowloris", "hardening"],
@@ -1333,7 +1333,7 @@ internal static class PolicySecurityHardening
                 {
                     Id = "iisharden-limit-listen-backlog",
                     Label = "Limit IIS TCP Listen Backlog (1 000)",
-                    Category = "Security Hardening Policy",
+                    Category = "Security",
                     Description =
                         "Sets ListenBackLog=1000 in W3SVC Parameters. Controls the TCP incoming connection queue depth for the IIS listener socket. Bounding the backlog prevents memory exhaustion from SYN-flood attacks by limiting the number of half-open connections the kernel will queue before dropping new SYN packets. 1 000 entries is more than sufficient for most enterprise IIS workloads.",
                     Tags = ["iis", "w3svc", "tcp", "syn-flood", "hardening"],
@@ -1350,7 +1350,7 @@ internal static class PolicySecurityHardening
                 {
                     Id = "iisharden-disable-socket-pooling",
                     Label = "Disable IIS Socket Pooling",
-                    Category = "Security Hardening Policy",
+                    Category = "Security",
                     Description =
                         "Sets DisableSocketPool=1 in W3SVC Parameters. Disables IIS socket pooling, which pre-allocates a pool of listening sockets shared across all web sites bound to the same IP address. Socket pooling can allow one site's TLS configuration to influence another site on the same IP. Disabling it gives each site an isolated socket lifecycle and prevents cross-site socket interference in multi-tenant IIS deployments.",
                     Tags = ["iis", "w3svc", "socket-pool", "isolation", "hardening"],
@@ -1367,7 +1367,7 @@ internal static class PolicySecurityHardening
                 {
                     Id = "iisharden-limit-max-connections",
                     Label = "Limit IIS Max Simultaneous Connections (10 000)",
-                    Category = "Security Hardening Policy",
+                    Category = "Security",
                     Description =
                         "Sets MaxConnections=10000 in W3SVC Parameters. Caps the total number of simultaneous TCP connections IIS will accept across all sites. Without an explicit cap IIS uses the OS default which is effectively unlimited, leaving the server vulnerable to connection-flood attacks. 10 000 connections accommodates legitimate enterprise HTTP/1.1 and HTTP/2 traffic while preventing unbounded memory and thread consumption.",
                     Tags = ["iis", "w3svc", "connection-limit", "dos", "hardening"],
@@ -1384,7 +1384,7 @@ internal static class PolicySecurityHardening
                 {
                     Id = "iisharden-enable-log-error-requests",
                     Label = "Enable IIS Error Request Logging",
-                    Category = "Security Hardening Policy",
+                    Category = "Security",
                     Description =
                         "Sets LogErrorRequests=1 in HTTP.sys Parameters. Instructs the kernel HTTP driver to log all requests that result in an error response (4xx/5xx). Error request logs are essential for detecting attack reconnaissance (404 directory sweeps), injection probes, and protocol violation attempts. Disabled by default in some configurations; enabling it ensures complete HTTP-level audit coverage independent of IIS application-layer logging.",
                     Tags = ["iis", "http-sys", "logging", "audit", "hardening"],
@@ -1412,7 +1412,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "lkdwnbr-enable-lockdown-mode",
                 Label = "Enable Lockdown Browsing Mode for Restricted Kiosk Environments",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -1429,7 +1429,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "lkdwnbr-disable-developer-tools",
                 Label = "Disable Web Browser Developer Tools in Lockdown Environments",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -1446,7 +1446,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "lkdwnbr-block-file-protocol",
                 Label = "Block file:// Protocol Access in Lockdown Browser Environments",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -1463,7 +1463,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "lkdwnbr-restrict-context-menus",
                 Label = "Restrict Right-Click Context Menus to Prevent Navigation Bypass",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -1480,7 +1480,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "lkdwnbr-disable-printing",
                 Label = "Disable Printing Functionality in Lockdown Browser Sessions",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -1497,7 +1497,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "lkdwnbr-enforce-popup-blocking",
                 Label = "Enforce Popup Blocking in Lockdown Browser Browsing Policy",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -1514,7 +1514,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "lkdwnbr-disable-browser-extensions",
                 Label = "Disable Browser Extension Installation in Lockdown Environments",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -1531,7 +1531,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "lkdwnbr-force-clear-session-data",
                 Label = "Force Clearing Session Data on Lockdown Browser Session End",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -1548,7 +1548,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "lkdwnbr-restrict-keyboard-shortcuts",
                 Label = "Restrict Browser Keyboard Shortcuts in Lockdown Browser Policy",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -1565,7 +1565,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "lkdwnbr-enable-idle-session-reset",
                 Label = "Enable Automatic Reset of Lockdown Browser on Session Idle Timeout",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -1594,7 +1594,7 @@ internal static class PolicySecurityHardening
                 {
                     Id = "msgsec-disable-messaging-sync",
                     Label = "Disable Messaging Cloud Sync",
-                    Category = "Security Hardening Policy",
+                    Category = "Security",
                     Description =
                         "Prevents the Windows Messaging app from synchronising SMS / MMS messages to the Microsoft cloud for cross-device access. Keeps message content on-device only. Default: sync enabled. Recommended: 1 for data sovereignty requirements.",
                     Tags = ["messaging", "sms", "sync", "cloud", "privacy", "policy"],
@@ -1611,7 +1611,7 @@ internal static class PolicySecurityHardening
                 {
                     Id = "msgsec-disable-mms-support",
                     Label = "Disable MMS / Rich Communication Support",
-                    Category = "Security Hardening Policy",
+                    Category = "Security",
                     Description =
                         "Blocks the Windows Messaging application from sending or receiving MMS messages (picture messages, group messages). Limits messaging to plain SMS text only. Default: MMS enabled. Recommended: 1 on devices without approved MMS plans.",
                     Tags = ["messaging", "mms", "picture", "restrict", "policy"],
@@ -1628,7 +1628,7 @@ internal static class PolicySecurityHardening
                 {
                     Id = "msgsec-disable-rich-communication",
                     Label = "Disable RCS / Rich Communication Services",
-                    Category = "Security Hardening Policy",
+                    Category = "Security",
                     Description =
                         "Prevents the Messaging app from using RCS (Rich Communication Services), which offers read receipts, typing indicators, and high-res file transfer over mobile data. Contains metadata leakage risks. Default: RCS enabled when supported. Recommended: 1.",
                     Tags = ["messaging", "rcs", "rich-communication", "privacy", "policy"],
@@ -1645,7 +1645,7 @@ internal static class PolicySecurityHardening
                 {
                     Id = "msgsec-block-messaging-backup",
                     Label = "Block Messaging App Cloud Backup",
-                    Category = "Security Hardening Policy",
+                    Category = "Security",
                     Description =
                         "Prevents the Windows Messaging app from backing up message content to OneDrive or other cloud storage. Ensures message data remains local and is not stored in cloud accounts. Default: backup allowed. Recommended: 1.",
                     Tags = ["messaging", "backup", "cloud", "onedrive", "privacy", "policy"],
@@ -1662,7 +1662,7 @@ internal static class PolicySecurityHardening
                 {
                     Id = "msgsec-set-retention-90days",
                     Label = "Set Message Retention to 90 Days",
-                    Category = "Security Hardening Policy",
+                    Category = "Security",
                     Description =
                         "Configures the Messaging app to automatically delete messages older than 90 days. Limits the on-device message data footprint and reduces exposure in the event of device compromise. Default: messages kept indefinitely. Recommended: 90.",
                     Tags = ["messaging", "retention", "deletion", "compliance", "policy"],
@@ -1679,7 +1679,7 @@ internal static class PolicySecurityHardening
                 {
                     Id = "msgsec-disable-message-notification-preview",
                     Label = "Disable Message Content Preview in Notifications",
-                    Category = "Security Hardening Policy",
+                    Category = "Security",
                     Description =
                         "Prevents message text from being displayed in lock screen or toast notifications. Only 'New message' is shown, not the sender or content. Default: content preview shown. Recommended: 1 for screen-sharing and shared-workspace environments.",
                     Tags = ["messaging", "notification", "preview", "privacy", "lock-screen", "policy"],
@@ -1696,7 +1696,7 @@ internal static class PolicySecurityHardening
                 {
                     Id = "msgsec-block-group-messaging",
                     Label = "Block Group Messaging",
-                    Category = "Security Hardening Policy",
+                    Category = "Security",
                     Description =
                         "Prevents creation of or participation in group SMS/MMS conversations. Reduces risk of accidental data disclosure to an unintended recipient set. Default: group messaging allowed. Recommended: 1 in regulated environments.",
                     Tags = ["messaging", "group", "sms", "compliance", "policy"],
@@ -1713,7 +1713,7 @@ internal static class PolicySecurityHardening
                 {
                     Id = "msgsec-disable-read-receipts",
                     Label = "Disable SMS/MMS Read Receipts",
-                    Category = "Security Hardening Policy",
+                    Category = "Security",
                     Description =
                         "Prevents the Messaging app from sending read receipts to senders when messages are opened. Stops informing external parties when the user has read a message. Default: receipts sent. Recommended: 1 for privacy.",
                     Tags = ["messaging", "read-receipt", "privacy", "sms", "policy"],
@@ -1730,7 +1730,7 @@ internal static class PolicySecurityHardening
                 {
                     Id = "msgsec-block-premium-sms",
                     Label = "Block Premium SMS / Reverse-Charge Messages",
-                    Category = "Security Hardening Policy",
+                    Category = "Security",
                     Description =
                         "Prevents apps from sending messages to premium-rate or reverse-charge SMS numbers without explicit user confirmation for each message. Protects against malware-driven premium SMS charges. Default: apps can send freely. Recommended: 1.",
                     Tags = ["messaging", "premium-sms", "billing", "security", "policy"],
@@ -1747,7 +1747,7 @@ internal static class PolicySecurityHardening
                 {
                     Id = "msgsec-disable-smart-reply",
                     Label = "Disable Messaging Smart Reply Suggestions",
-                    Category = "Security Hardening Policy",
+                    Category = "Security",
                     Description =
                         "Disables the AI-powered smart reply suggestions in the Messaging app that analyse incoming message content to offer quick replies. Prevents message content from being processed by suggestion models. Default: smart replies on. Recommended: 1.",
                     Tags = ["messaging", "smart-reply", "ai", "privacy", "policy"],
@@ -1777,7 +1777,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "ntlma-enforce-client-session-security",
                 Label = "NTLM: Enforce NTLMv2 and 128-Bit Encryption for Client Sessions",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -1796,7 +1796,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "ntlma-enforce-server-session-security",
                 Label = "NTLM: Enforce NTLMv2 and 128-Bit Encryption for Server Sessions",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -1815,7 +1815,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "ntlma-sign-netlogon-channel",
                 Label = "NTLM: Require Digital Signing for Netlogon Secure Channel",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -1834,7 +1834,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "ntlma-seal-netlogon-channel",
                 Label = "NTLM: Require Encryption (Seal) for Netlogon Secure Channel",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -1853,7 +1853,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "ntlma-deny-all-outgoing-ntlm",
                 Label = "NTLM: Deny All Outgoing NTLM Authentication Requests",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = false,
                 ImpactScore = 5,
@@ -1875,7 +1875,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "ntlma-audit-all-domain-ntlm",
                 Label = "NTLM: Audit All NTLM Authentication in Active Directory Domain",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -1895,7 +1895,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "ntlma-restrict-ntlm-in-domain",
                 Label = "NTLM: Restrict NTLM In-Domain Authentication to Specific Servers",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -1915,7 +1915,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "ntlma-audit-logon-events-msv",
                 Label = "NTLM: Enable NTLM Logon Auditing in MSV1_0",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -1934,7 +1934,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "ntlma-block-null-session-fallback",
                 Label = "NTLM: Block Null Session NTLM Authentication Fallback",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -1954,7 +1954,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "ntlma-require-ntlmv2-msv",
                 Label = "NTLM: Require NTLMv2 Session Security at MSV1_0 Level",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -1988,7 +1988,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "ntlm-restrict-outgoing-ntlm-to-servers",
                 Label = "Restrict Outgoing NTLM Authentication to Remote Servers",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description = "Restricts NTLM authentication for outgoing network connections from this machine. Supports deny-all or allowlist modes; prevents NTLM relay and pass-the-hash attacks via outbound credential exposure.",
                 Tags = ["ntlm", "authentication", "relay", "pass-the-hash", "security"],
                 NeedsAdmin = true,
@@ -2005,7 +2005,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "ntlm-block-incoming-ntlm-auth",
                 Label = "Block Incoming NTLM Authentication on This Server",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description = "Prevents this machine from accepting NTLM authentication for inbound network connections. Forces clients to negotiate a stronger protocol (Kerberos or NegotiateExt). Effective against NTLM relay to this host.",
                 Tags = ["ntlm", "authentication", "server", "relay-protection", "hardening"],
                 NeedsAdmin = true,
@@ -2022,7 +2022,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "ntlm-audit-outgoing-ntlm-traffic",
                 Label = "Audit Outgoing NTLM Authentication Requests",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description = "Enables audit-only mode for outbound NTLM authentication, logging every server to which this machine sends NTLM credentials. Use audit data to build an allowlist before enforcing restrictions.",
                 Tags = ["ntlm", "authentication", "audit", "event-log", "compliance"],
                 NeedsAdmin = true,
@@ -2039,7 +2039,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "ntlm-disable-ntlmv1",
                 Label = "Disable NTLMv1 Authentication (Require NTLMv2 Minimum)",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description = "Configures the LAN Manager authentication level to refuse NTLMv1 and LM authentication. Requires NTLMv2 as the minimum level, or Kerberos where available. NTLMv1 is cryptographically weak and bruteforceable.",
                 Tags = ["ntlm", "ntlmv1", "lm-hash", "authentication-level", "hardening"],
                 NeedsAdmin = true,
@@ -2056,7 +2056,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "ntlm-require-session-security",
                 Label = "Require NTLMv2 Session Security (128-bit Encryption)",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description = "Enforces 128-bit message confidentiality and integrity for all NTLM-based network sessions. Clients and servers that do not support 128-bit NTLMv2 session security cannot establish NTLM sessions.",
                 Tags = ["ntlm", "session-security", "encryption", "ntlmv2", "hardening"],
                 NeedsAdmin = true,
@@ -2073,7 +2073,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "ntlm-block-ntlm-over-http",
                 Label = "Block NTLM Authentication over HTTP (IWA Web Authentication)",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description = "Prevents Integrated Windows Authentication from presenting NTLM credentials to web proxies and HTTP endpoints. Restricts IWA to Kerberos-capable servers only, preventing NTLM relay via HTTP.",
                 Tags = ["ntlm", "http", "iwa", "web-auth", "security"],
                 NeedsAdmin = true,
@@ -2090,7 +2090,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "ntlm-require-extended-protection",
                 Label = "Require Extended Protection for NTLM Authentication",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description = "Enables Extended Protection for Authentication (EPA), binding NTLM tokens to the TLS channel they're sent over. Prevents cross-protocol NTLM relay even when credentials are intercepted in transit.",
                 Tags = ["ntlm", "epa", "extended-protection", "channel-binding", "security"],
                 NeedsAdmin = true,
@@ -2107,7 +2107,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "ntlm-audit-all-domain-ntlm",
                 Label = "Enable Domain-Level NTLM Authentication Audit",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description = "Configures domain-level NTLM auditing to log every NTLM authentication event across the domain, including accounts, client names, and server names. Essential for NTLM-reduction baselining.",
                 Tags = ["ntlm", "domain", "audit", "event-log", "active-directory"],
                 NeedsAdmin = true,
@@ -2124,7 +2124,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "ntlm-enable-server-allowlist",
                 Label = "Enable NTLM Server Allowlist (Exception List) Enforcement",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description = "Activates enforcement of the NTLM server exception allowlist, permitting NTLM only to servers explicitly named in the AllowlistedServers value. All other NTLM outbound traffic is blocked.",
                 Tags = ["ntlm", "allowlist", "exception", "server-list", "hardening"],
                 NeedsAdmin = true,
@@ -2141,7 +2141,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "ntlm-block-ntlm-to-ldap",
                 Label = "Block NTLM Authentication to LDAP (Require Kerberos for AD)",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description = "Prevents LDAP clients on this machine from using NTLM to authenticate to Active Directory Domain Controllers. Forces Kerberos-based LDAP authentication, eliminating LDAP relay attack vectors.",
                 Tags = ["ntlm", "ldap", "active-directory", "kerberos", "hardening"],
                 NeedsAdmin = true,
@@ -2171,7 +2171,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "ntlm-deny-ntlmv1-outbound",
                 Label = "Deny NTLMv1 Outbound Authentication",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description = "Restricts outbound NTLM to NTLMv2 only; NTLMv1 responses are refused.",
                 Tags = ["ntlm", "authentication", "hardening", "security"],
                 NeedsAdmin = true,
@@ -2187,7 +2187,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "ntlm-disable-lmhash-storage",
                 Label = "Disable LM Hash Storage",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description = "Prevents Windows from storing LAN Manager password hashes in the SAM database.",
                 Tags = ["ntlm", "lm-hash", "sam", "security"],
                 NeedsAdmin = true,
@@ -2203,7 +2203,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "ntlm-require-ntlmv2-session-security-128",
                 Label = "Require 128-bit NTLMv2 Session Security",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description = "Forces NTLM session security to use 128-bit encryption and NTLMv2 message integrity.",
                 Tags = ["ntlm", "session-security", "encryption", "hardening"],
                 NeedsAdmin = true,
@@ -2219,7 +2219,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "ntlm-require-server-ntlmv2-128",
                 Label = "Require 128-bit NTLMv2 Server Session Security",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description = "Forces the NTLM server to require 128-bit session security and NTLMv2 from clients.",
                 Tags = ["ntlm", "server", "session-security", "hardening"],
                 NeedsAdmin = true,
@@ -2235,7 +2235,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "ntlm-restrict-outbound-to-domain",
                 Label = "Restrict NTLM Outbound Traffic to Domain Servers Only",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description = "Denies NTLM authentication to servers outside the local domain (blocks NTLM relay to internet).",
                 Tags = ["ntlm", "outbound", "relay", "hardening"],
                 NeedsAdmin = true,
@@ -2251,7 +2251,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "ntlm-deny-inbound-ntlm",
                 Label = "Deny All Inbound NTLM Authentication",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description = "Blocks the local server from accepting NTLM authentication from any client.",
                 Tags = ["ntlm", "inbound", "hardening", "security"],
                 NeedsAdmin = true,
@@ -2267,7 +2267,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "ntlm-enable-audit-incoming",
                 Label = "Enable NTLM Audit for Incoming Authentication",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description = "Logs all incoming NTLM authentication attempts to the security event log for review.",
                 Tags = ["ntlm", "audit", "logging", "monitoring"],
                 NeedsAdmin = true,
@@ -2283,7 +2283,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "ntlm-enable-audit-outgoing",
                 Label = "Enable NTLM Audit for Outgoing Authentication",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description = "Logs all outgoing NTLM authentication attempts to identify apps still using NTLM.",
                 Tags = ["ntlm", "audit", "outbound", "logging"],
                 NeedsAdmin = true,
@@ -2299,7 +2299,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "ntlm-disable-null-sessions",
                 Label = "Disable NTLM Null Session Access",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description = "Prevents anonymous (null session) NTLM connections that can enumerate shares and users.",
                 Tags = ["ntlm", "null-session", "anonymous", "hardening"],
                 NeedsAdmin = true,
@@ -2315,7 +2315,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "ntlm-require-secure-channel-ntlmv2",
                 Label = "Require NTLMv2 on Secure Channel",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description = "Forces domain secure channel authentication to use NTLMv2; prevents downgrade to NTLMv1 in machine authentication.",
                 Tags = ["ntlm", "secure-channel", "domain", "hardening"],
                 NeedsAdmin = true,
@@ -2344,7 +2344,7 @@ internal static class PolicySecurityHardening
             {
                 Id           = "ntlmadv-block-ntlmv1",
                 Label        = "Block NTLMv1 Authentication (Allow NTLMv2 Only)",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description  = "Configures LAN Manager authentication level to disallow NTLMv1 and LM authentication, accepting only NTLMv2 challenge-response and Kerberos, protecting against pass-the-hash from weak NTLMv1 hashes.",
                 Tags         = ["ntlm", "ntlmv1", "ntlmv2", "pass-the-hash", "policy"],
                 NeedsAdmin   = true,
@@ -2360,7 +2360,7 @@ internal static class PolicySecurityHardening
             {
                 Id           = "ntlmadv-require-ntlmv2-session-security",
                 Label        = "Require NTLMv2 Session Security with 128-Bit Encryption",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description  = "Configures NTLM session security to require NTLMv2 session security and 128-bit encryption for all NTLM sessions, preventing NTLM session reduction attacks that downgrade to weaker LM session security.",
                 Tags         = ["ntlm", "session-security", "128-bit", "ntlmv2", "policy"],
                 NeedsAdmin   = true,
@@ -2376,7 +2376,7 @@ internal static class PolicySecurityHardening
             {
                 Id           = "ntlmadv-enable-extended-protection",
                 Label        = "Enable NTLM Extended Protection for Authentication (EPA)",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description  = "Enables NTLM Extended Protection for Authentication (EPA/CBT) on the client, adding channel binding tokens to NTLM authentication ensuring credentials can only be used on the TLS channel over which they were captured, preventing relay attacks.",
                 Tags         = ["ntlm", "epa", "channel-binding", "relay-attack", "policy"],
                 NeedsAdmin   = true,
@@ -2392,7 +2392,7 @@ internal static class PolicySecurityHardening
             {
                 Id           = "ntlmadv-disable-lm-hash-storage",
                 Label        = "Disable LAN Manager (LM) Hash Storage in SAM",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description  = "Prevents Windows from storing LAN Manager password hashes in the local SAM database, eliminating the easily cracked LM hash from credential stores that could be extracted by credential dumping tools.",
                 Tags         = ["ntlm", "lm-hash", "sam", "credential-dump", "policy"],
                 NeedsAdmin   = true,
@@ -2408,7 +2408,7 @@ internal static class PolicySecurityHardening
             {
                 Id           = "ntlmadv-restrict-outbound-ntlm-to-negotiate",
                 Label        = "Restrict Outbound NTLM Authentication to Negotiate Only",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description  = "Configures the system to only use NTLM via the Negotiate (SPNEGO) mechanism for outbound authentication, preventing direct NTLM usage that bypasses Kerberos preference and could expose NTLM hashes to non-domain servers.",
                 Tags         = ["ntlm", "outbound", "negotiate", "spnego", "policy"],
                 NeedsAdmin   = true,
@@ -2424,7 +2424,7 @@ internal static class PolicySecurityHardening
             {
                 Id           = "ntlmadv-restrict-incoming-ntlm",
                 Label        = "Restrict Incoming NTLM Authentication to Domain Accounts Only",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description  = "Configures the server component to only accept NTLM authentication from accounts in the domain (rejecting local SAM account NTLM), reducing the attack surface from pass-the-hash attacks using local account credentials.",
                 Tags         = ["ntlm", "incoming", "domain-only", "pass-the-hash", "policy"],
                 NeedsAdmin   = true,
@@ -2440,7 +2440,7 @@ internal static class PolicySecurityHardening
             {
                 Id           = "ntlmadv-enable-ntlm-audit-mode",
                 Label        = "Enable NTLM Authentication Audit Logging",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description  = "Enables system audit logging for all NTLM authentication attempts, recording both successful and failed NTLM sessions in the Security event log to support detection of lateral movement and pass-the-hash activity.",
                 Tags         = ["ntlm", "audit", "event-log", "lateral-movement", "policy"],
                 NeedsAdmin   = true,
@@ -2456,7 +2456,7 @@ internal static class PolicySecurityHardening
             {
                 Id           = "ntlmadv-enable-outbound-audit",
                 Label        = "Enable Audit Logging for Outbound NTLM Authentication",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description  = "Enables audit logging for all outbound NTLM authentication attempts from this machine, providing visibility into which remote servers receive NTLM credentials from applications running on this endpoint.",
                 Tags         = ["ntlm", "outbound-audit", "credential-exposure", "logging", "policy"],
                 NeedsAdmin   = true,
@@ -2472,7 +2472,7 @@ internal static class PolicySecurityHardening
             {
                 Id           = "ntlmadv-disable-ntlm-auth-in-smb",
                 Label        = "Require Kerberos Authentication for SMB (Block NTLM in SMB)",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description  = "Configures SMB over network shares to require Kerberos authentication rather than NTLM, preventing NTLM relay attacks that capture and forward SMB authentication to remote shares or other services.",
                 Tags         = ["ntlm", "smb", "kerberos", "relay-attack", "policy"],
                 NeedsAdmin   = true,
@@ -2488,7 +2488,7 @@ internal static class PolicySecurityHardening
             {
                 Id           = "ntlmadv-disable-ntlm-telemetry",
                 Label        = "Disable NTLM Authentication Telemetry to Microsoft",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description  = "Prevents the Windows NTLM authentication provider from sending authentication success/failure rates, cipher usage, and session fallback telemetry to Microsoft.",
                 Tags         = ["ntlm", "telemetry", "privacy", "microsoft", "policy"],
                 NeedsAdmin   = true,
@@ -2519,7 +2519,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "prctmtg-enable-sehop",
                 Label = "Process Mitigation: Enable SEHOP (SEH Overwrite Protection)",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 RegistryKeys = [KernelCtl],
@@ -2537,7 +2537,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "prctmtg-enable-heap-termination-on-corruption",
                 Label = "Process Mitigation: Enable Heap Termination on Corruption",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 RegistryKeys = [KernelCtl],
@@ -2555,7 +2555,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "prctmtg-enable-mandatory-aslr",
                 Label = "Process Mitigation: Enable Mandatory ASLR System-Wide",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 RegistryKeys = [MemMgmt],
@@ -2572,7 +2572,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "prctmtg-enable-bottom-up-aslr",
                 Label = "Process Mitigation: Enable Bottom-Up ASLR (Stack / Heap Randomisation)",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 RegistryKeys = [MemMgmt],
@@ -2589,7 +2589,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "prctmtg-enable-high-entropy-aslr",
                 Label = "Process Mitigation: Enable High-Entropy ASLR (64-bit Processes)",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 RegistryKeys = [MemMgmt],
@@ -2606,7 +2606,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "prctmtg-enable-kernel-stack-protection",
                 Label = "Process Mitigation: Enable Kernel Stack Cookie Protection",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 RegistryKeys = [KernelCtl],
@@ -2623,7 +2623,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "prctmtg-protect-lsa-as-ppl",
                 Label = "Process Mitigation: Enable LSA Protection (RunAsPPL)",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 RegistryKeys = [LsaMain],
@@ -2640,7 +2640,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "prctmtg-protect-svc-with-emet",
                 Label = "Process Mitigation: Enable Kernel Patch Protection (KPP) Enforcement",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 RegistryKeys = [KernelCtl],
@@ -2657,7 +2657,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "prctmtg-disable-page-file-on-shutdown",
                 Label = "Process Mitigation: Clear Page File at System Shutdown",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 RegistryKeys = [MemMgmt],
@@ -2686,7 +2686,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "secchan-require-secure-channel-signing",
                 Label = "Require Signing on Domain Secure Channel Communication",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true, CorpSafe = true, ImpactScore = 5, SafetyRating = 5,
                 Description = "Domain secure channel signing ensures that NetLogon traffic between domain members and domain controllers is cryptographically signed to prevent replay and man-in-the-middle attacks. Requiring secure channel signing prevents an attacker from intercepting and replaying domain authentication traffic to authenticate as legitimate domain users. Unsigned secure channel traffic can be captured and manipulated by an attacker with network access to forge authentication responses from a domain controller. Secure channel signing is required in addition to sealing to provide both integrity and confidentiality protection for domain authentication. Organizations with older legacy clients that do not support secure channel signing must upgrade those systems before requiring signing across the domain. Microsoft requires secure channel signing in all hardened domain configurations and it is enforced in Windows Server 2022 default hardening baselines.",
                 Tags = ["secure-channel", "signing", "netlogon", "authentication", "policy"],
@@ -2699,7 +2699,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "secchan-require-secure-channel-sealing",
                 Label = "Require Encryption Sealing on Domain Secure Channel",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true, CorpSafe = true, ImpactScore = 5, SafetyRating = 5,
                 Description = "Secure channel sealing encrypts all NetLogon traffic between domain members and domain controllers protecting authentication data from network eavesdropping. Requiring secure channel sealing prevents credential harvesting from network captures by encrypting all domain authentication communication. Secure channel sealing uses the session key negotiated during the NetLogon authentication to provide symmetric encryption of subsequent traffic. The combination of signing and sealing provides both integrity and confidentiality protection for domain authentication channels. Organizations should enable both RequireSignOrSeal and SealSecureChannel to enforce maximum security on domain communication. Secure channel sealing has negligible performance impact on modern systems and should be enabled universally across all domain-joined systems.",
                 Tags = ["secure-channel", "sealing", "encryption", "netlogon", "policy"],
@@ -2712,7 +2712,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "secchan-require-strong-session-key",
                 Label = "Require Strong Session Keys for Domain Secure Channel",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true, CorpSafe = true, ImpactScore = 4, SafetyRating = 5,
                 Description = "Strong secure channel session keys require the use of 128-bit encryption for NetLogon channel protection replacing older 40-bit and 56-bit keys that are trivially crackable. Requiring strong session keys ensures that encrypted secure channel traffic cannot be decrypted by an attacker even with captured traffic and offline attacks. Older Windows NT systems used 40-bit session keys that can be broken in minutes on modern hardware making strong key requirements essential for current environments. Strong session key requirements are enabled by default on Windows Vista and later but should be explicitly required through policy to prevent negotiation of weaker keys. Organizations must ensure all domain-joined systems running Windows Vista or later which support 128-bit keys before enabling this requirement. The transition from weak to strong session keys is part of the NetLogon hardening changes in the Zerologon vulnerability remediation.",
                 Tags = ["secure-channel", "session-keys", "encryption", "netlogon", "policy"],
@@ -2725,7 +2725,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "secchan-enable-full-netlogon-audit",
                 Label = "Enable Full Audit Logging for NetLogon Secure Channel Events",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true, CorpSafe = true, ImpactScore = 4, SafetyRating = 5,
                 Description = "NetLogon audit logging captures secure channel establishment failures and anomalous authentication events for security monitoring and incident response. Enabling full NetLogon audit creates visibility into domain authentication attempts that may indicate credential attacks or infrastructure problems. NetLogon failures during secure channel establishment can indicate Zerologon-style attacks or misconfigured domain trust relationships. The NetLogon log is stored on domain controllers and should be forwarded to SIEM for centralized analysis and alerting. Domain controller NetLogon log data combined with Security event log data provides comprehensive coverage of authentication threats. NetLogon audit data is particularly valuable during incident response to trace lateral movement paths through domain authentication.",
                 Tags = ["secure-channel", "audit", "netlogon", "monitoring", "policy"],
@@ -2738,7 +2738,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "secchan-disable-vulnerable-netlogon",
                 Label = "Block Vulnerable NetLogon Connections from Non-Compliant Devices",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true, CorpSafe = true, ImpactScore = 5, SafetyRating = 4,
                 Description = "The Zerologon vulnerability (CVE-2020-1472) exploits a flaw in the NetLogon secure channel allowing unauthenticated clients to set machine account passwords and gain domain administrator access. Blocking vulnerable NetLogon connections enforces the second phase of CVE-2020-1472 remediation denying connections from clients that do not use secure RPC. Microsoft released this as a phased fix where the initial patch logged vulnerable connections and the second phase blocked them outright. All Windows clients released after 2016 use secure RPC for NetLogon by default making this restriction safe for modern environments. Non-Windows devices like Linux Samba domain members may require updates to support secure RPC NetLogon before enforcement mode can be enabled. Organizations should review the NetLogon event log for any vulnerable client connections before enabling enforcement mode.",
                 Tags = ["secure-channel", "zerologon", "cve-2020-1472", "netlogon", "policy"],
@@ -2751,7 +2751,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "secchan-set-machine-account-password-age",
                 Label = "Set Maximum Machine Account Password Age for Secure Channel",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true, CorpSafe = true, ImpactScore = 3, SafetyRating = 5,
                 Description = "Machine account password age controls how frequently domain-joined computers automatically rotate their computer account passwords as part of secure channel maintenance. Setting maximum machine account password age ensures regular rotation of computer credentials that are used to establish the secure channel to domain controllers. Computer account passwords are automatically changed every 30 days by default in Active Directory but this setting can enforce a shorter maximum. Environments with compliance requirements for credential rotation should set machine account password age to align with their policy requirements. Machine accounts with very old passwords may indicate stale or abandoned systems that should be reviewed for decommissioning. Disabling machine account password changes creates long-lived credentials that are a security risk if the machine is compromised.",
                 Tags = ["secure-channel", "machine-account", "password-rotation", "netlogon", "policy"],
@@ -2764,7 +2764,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "secchan-disable-machine-account-password-changes",
                 Label = "Prevent Disabling of Automatic Machine Account Password Changes",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true, CorpSafe = true, ImpactScore = 4, SafetyRating = 5,
                 Description = "Automatic machine account password rotation maintains the security of domain trust relationships by regularly changing computer account credentials. Preventing administrators from disabling machine account password changes ensures that automated credential rotation is not bypassed which would create static long-term credentials. Some organizations disable machine account password changes for problematic legacy systems but this creates long-lived credentials that weaken domain security. Machine account password change failures are often the cause of systems falling off the domain which should be addressed by fixing root causes rather than disabling rotation. DisablePasswordChange set to 1 is a common misconfiguration that should be detected and remediated during security assessments. Domain controllers should always enforce machine account password rotation as part of a healthy Active Directory environment.",
                 Tags = ["secure-channel", "machine-account", "password-changes", "netlogon", "policy"],
@@ -2777,7 +2777,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "secchan-restrict-domain-controller-replication",
                 Label = "Restrict Unauthorized Domain Controller Replication Requests",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true, CorpSafe = true, ImpactScore = 5, SafetyRating = 4,
                 Description = "DC Sync attacks exploit domain replication rights to steal password hashes from Active Directory without requiring code execution on a domain controller. Restricting domain controller replication ensures that only authorized domain controller accounts have rights to request replication of sensitive AD information. DCSync attacks use DRSUAPI replication calls to extract KRBTGT and other sensitive account hashes enabling further credential attacks. Replication rights should be limited exclusively to accounts with the DS-Replication-Get-Changes and DS-Replication-Get-Changes-All permissions that are domain controllers and select administrative accounts. Monitoring for DS-Replication-Get-Changes events from non-domain-controller accounts is a high-fidelity detection indicator for DCSync attacks. Organizations should audit replication permissions quarterly and remove any accounts that do not require these rights.",
                 Tags = ["secure-channel", "dcsync", "replication", "netlogon", "policy"],
@@ -2790,7 +2790,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "secchan-enforce-netlogon-service-hardening",
                 Label = "Enforce NetLogon Service Security Hardening Settings",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true, CorpSafe = true, ImpactScore = 4, SafetyRating = 5,
                 Description = "NetLogon service hardening enforces additional security constraints on the NetLogon service that handles domain authentication preventing exploitation of service vulnerabilities. Enabling NetLogon service hardening sets a higher security bar for all NetLogon operations reducing the attack surface available to vulnerabilities like Zerologon. NetLogon service hardening was introduced as part of the CVE-2020-1472 remediation and Microsoft recommends it for all domain-joined systems. Service hardening configuration ensures the NetLogon service uses maximally secure communication parameters for all domain authentication operations. Organizations should monitor for NetLogon service failures after enabling hardening as service misconfiguration may prevent authentication. Testing NetLogon hardening in a non-production environment is recommended before wide deployment in complex multi-domain environments.",
                 Tags = ["secure-channel", "service-hardening", "netlogon", "zero-day", "policy"],
@@ -2803,7 +2803,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "secchan-set-account-lockout-on-channel-failure",
                 Label = "Enable Account Lockout after Secure Channel Authentication Failures",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true, CorpSafe = true, ImpactScore = 3, SafetyRating = 4,
                 Description = "Account lockout on secure channel authentication failure provides protection against brute-force attacks that attempt to guess machine account passwords or negotiate vulnerable secure channel parameters. Enabling lockout after repeated secure channel failures prevents automated attacks from making unlimited authentication guesses against domain accounts. Secure channel authentication failure lockout thresholds should be set high enough to avoid locking out systems with legitimate authentication problems such as time synchronization issues. The lockout threshold for machine accounts should be higher than interactive user accounts since machines do not have users who can notice and unlock their accounts. Organizations should implement account lockout monitoring to identify systems triggering lockout as this indicates either misconfiguration or active attack attempts. Automatically unlocking accounts after a short observation period balances security protection with operational availability.",
                 Tags = ["secure-channel", "account-lockout", "brute-force", "netlogon", "policy"],
@@ -2827,7 +2827,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "seccxn-disable-tls-10-protocol",
                 Label = "Disable TLS 1.0 Protocol for All System Secure Connections",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 5,
@@ -2844,7 +2844,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "seccxn-disable-tls-11-protocol",
                 Label = "Disable TLS 1.1 Protocol for All System Secure Connections",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 5,
@@ -2861,7 +2861,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "seccxn-enable-tls-13-support",
                 Label = "Enable TLS 1.3 Protocol Support for Enhanced Connection Security",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 5,
@@ -2878,7 +2878,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "seccxn-disable-ssl-30-protocol",
                 Label = "Disable SSL 3.0 Protocol to Prevent POODLE Attack Vulnerability",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 5,
@@ -2895,7 +2895,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "seccxn-restrict-cipher-suite-order",
                 Label = "Restrict Cipher Suite Selection to Security-Approved Algorithms",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -2912,7 +2912,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "seccxn-enable-extended-master-secret",
                 Label = "Enable Extended Master Secret Support for TLS Session Resumption",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -2929,7 +2929,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "seccxn-disable-rc4-cipher",
                 Label = "Disable RC4 Stream Cipher for All TLS and Secure Channel Connections",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 5,
@@ -2946,7 +2946,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "seccxn-require-certificate-revocation-check",
                 Label = "Require Certificate Revocation Status Checks for TLS Connections",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -2963,7 +2963,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "seccxn-enable-certificate-transparency-audit",
                 Label = "Enable Certificate Transparency Verification for Public TLS Certificates",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -2980,7 +2980,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "seccxn-require-minimum-rsa-key-size",
                 Label = "Require Minimum 2048-Bit RSA Key Size for TLS Certificate Acceptance",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -3009,7 +3009,7 @@ internal static class PolicySecurityHardening
                 {
                     Id = "sldrtm-enable-secure-launch",
                     Label = "Enable Secure Launch (DRTM) for Boot Integrity",
-                    Category = "Security Hardening Policy",
+                    Category = "Security",
                     Description =
                         "Enables Secure Launch using Dynamic Root of Trust for Measurement (DRTM), which uses CPU SKINIT/SENTER instructions and TPM to establish a fresh chain of trust independent of firmware prior to OS load.",
                     Tags = ["secure-launch", "drtm", "tpm", "boot-integrity", "policy"],
@@ -3026,7 +3026,7 @@ internal static class PolicySecurityHardening
                 {
                     Id = "sldrtm-require-txt-active",
                     Label = "Require Intel TXT Active for Secure Launch",
-                    Category = "Security Hardening Policy",
+                    Category = "Security",
                     Description =
                         "Requires Intel Trusted Execution Technology (TXT) to be active and verified for Secure Launch to proceed, aborting boot if TXT is disabled or in error state.",
                     Tags = ["secure-launch", "intel-txt", "drtm", "tpm", "policy"],
@@ -3043,7 +3043,7 @@ internal static class PolicySecurityHardening
                 {
                     Id = "sldrtm-seal-tpm-to-secure-launch",
                     Label = "Seal TPM PCR Values to Secure Launch Measurements",
-                    Category = "Security Hardening Policy",
+                    Category = "Security",
                     Description =
                         "Configures the TPM to seal key material to the PCR values produced by the DRTM Secure Launch measurement, ensuring sealed secrets are only released when the boot chain is unmodified.",
                     Tags = ["secure-launch", "tpm", "pcr", "sealed-storage", "policy"],
@@ -3060,7 +3060,7 @@ internal static class PolicySecurityHardening
                 {
                     Id = "sldrtm-enable-tpm-boot-entropy",
                     Label = "Enable TPM Boot Entropy for DRTM",
-                    Category = "Security Hardening Policy",
+                    Category = "Security",
                     Description =
                         "Enables TPM-based boot entropy collection during the DRTM phase, seeding the OS CSPRNG with hardware-attested randomness from the TPM prior to key generation.",
                     Tags = ["secure-launch", "tpm", "entropy", "csprng", "policy"],
@@ -3077,7 +3077,7 @@ internal static class PolicySecurityHardening
                 {
                     Id = "sldrtm-require-verified-acm",
                     Label = "Require Verified Authenticated Code Module for DRTM",
-                    Category = "Security Hardening Policy",
+                    Category = "Security",
                     Description =
                         "Requires that the Intel TXT/AMD SKINIT Authenticated Code Module (ACM) used in DRTM is cryptographically verified before execution, preventing use of revoked or tampered ACMs.",
                     Tags = ["secure-launch", "acm", "drtm", "code-integrity", "policy"],
@@ -3094,7 +3094,7 @@ internal static class PolicySecurityHardening
                 {
                     Id = "sldrtm-block-bootkit-execution",
                     Label = "Block Bootkit Execution via DRTM Measurement",
-                    Category = "Security Hardening Policy",
+                    Category = "Security",
                     Description =
                         "Enables the DRTM measurement of the MBR and VBR sectors to detect bootkits that modify the boot record, causing the boot to fail if the MBR/VBR measurements do not match the expected policy.",
                     Tags = ["secure-launch", "bootkit", "mbr", "vbr", "policy"],
@@ -3111,7 +3111,7 @@ internal static class PolicySecurityHardening
                 {
                     Id = "sldrtm-enable-slat-enforcement",
                     Label = "Enforce Second Level Address Translation (SLAT) for VBS",
-                    Category = "Security Hardening Policy",
+                    Category = "Security",
                     Description =
                         "Requires Second Level Address Translation (Intel EPT / AMD RVI) to be active and used by VBS before allowing the Secure Launch environment to initialise.",
                     Tags = ["secure-launch", "slat", "ept", "rvi", "vbs", "policy"],
@@ -3128,7 +3128,7 @@ internal static class PolicySecurityHardening
                 {
                     Id = "sldrtm-enable-sl-logging",
                     Label = "Enable Secure Launch Audit Logging",
-                    Category = "Security Hardening Policy",
+                    Category = "Security",
                     Description =
                         "Enables event logging for all Secure Launch DRTM measurement and verification events, providing a forensic record of the boot chain measurements on each startup.",
                     Tags = ["secure-launch", "logging", "audit", "drtm", "policy"],
@@ -3145,7 +3145,7 @@ internal static class PolicySecurityHardening
                 {
                     Id = "sldrtm-block-intel-me-exploit",
                     Label = "Block Intel ME/AMT Exploit Path via TXT Lockdown",
-                    Category = "Security Hardening Policy",
+                    Category = "Security",
                     Description =
                         "Configures TXT policy to lock down the Intel Management Engine (ME/AMT) memory space during the DRTM launch phase, mitigating SMM handler exploits that target ME-accessible addresses.",
                     Tags = ["secure-launch", "intel-me", "amt", "smm", "policy"],
@@ -3162,7 +3162,7 @@ internal static class PolicySecurityHardening
                 {
                     Id = "sldrtm-require-tpm-pcr17-attestation",
                     Label = "Require TPM PCR17 Attestation for Secure Launch",
-                    Category = "Security Hardening Policy",
+                    Category = "Security",
                     Description =
                         "Requires TPM PCR17 to be populated by DRTM measurements and attestation-verified before Windows allows the Secure Launch environment to proceed, ensuring an unbroken hardware attestation chain.",
                     Tags = ["secure-launch", "tpm", "pcr17", "attestation", "policy"],
@@ -3190,7 +3190,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "secctr-disable-security-center",
                 Label = "Disable Windows Security Center",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -3212,7 +3212,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "secctr-disable-spyware-monitoring",
                 Label = "Disable Security Center Spyware Monitoring",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -3234,7 +3234,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "secctr-disable-antivirus-monitoring",
                 Label = "Disable Security Center Antivirus Monitoring",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -3256,7 +3256,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "secctr-disable-firewall-monitoring",
                 Label = "Disable Security Center Firewall Monitoring",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -3277,7 +3277,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "secctr-disable-update-monitoring",
                 Label = "Disable Security Center Windows Update Monitoring",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -3298,7 +3298,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "secctr-disable-uac-monitoring",
                 Label = "Disable Security Center UAC Monitoring",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -3319,7 +3319,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "secctr-disable-internet-monitoring",
                 Label = "Disable Security Center Internet Security Monitoring",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -3340,7 +3340,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "secctr-hide-systray-icon",
                 Label = "Hide Windows Security Center Tray Icon",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 1,
@@ -3362,7 +3362,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "secctr-disable-account-monitoring",
                 Label = "Disable Security Center Account Protection Monitoring",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -3383,7 +3383,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "secctr-disable-notifications",
                 Label = "Disable Security Center Notification Toasts",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -3415,7 +3415,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "svcact-enable-managed-service-accounts",
                 Label = "Enable Managed Service Accounts for Windows Services",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -3432,7 +3432,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "svcact-restrict-service-account-interactive",
                 Label = "Prevent Service Accounts from Interactive Logon",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -3449,7 +3449,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "svcact-enforce-service-account-password-complexity",
                 Label = "Enforce Strong Password Complexity for Service Accounts",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -3466,7 +3466,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "svcact-audit-service-account-usage",
                 Label = "Enable Audit Logging for Service Account Authentication",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -3483,7 +3483,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "svcact-restrict-service-account-delegation",
                 Label = "Restrict Unconstrained Kerberos Delegation for Service Accounts",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 5,
@@ -3500,7 +3500,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "svcact-enable-tiered-service-access",
                 Label = "Enable Tiered Access for Service Accounts by Privilege Level",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -3517,7 +3517,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "svcact-prevent-spn-enumeration",
                 Label = "Restrict Unauthenticated Service Principal Name Enumeration",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -3534,7 +3534,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "svcact-disable-service-account-email-usage",
                 Label = "Prevent Service Accounts from Accessing Email Mailboxes",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -3551,7 +3551,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "svcact-set-service-account-logon-hours",
                 Label = "Restrict Service Account Logon to Business Hours Windows",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -3568,7 +3568,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "svcact-enable-just-in-time-service-access",
                 Label = "Enable Just-in-Time Access Elevation for Service Accounts",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 5,
@@ -3596,7 +3596,7 @@ internal static class PolicySecurityHardening
                 {
                     Id = "sgrm-enable-system-guard-runtime",
                     Label = "Enable System Guard Runtime Monitor",
-                    Category = "Security Hardening Policy",
+                    Category = "Security",
                     Description =
                         "Enables System Guard Runtime Monitor (SGRM) which continuously monitors the OS security state during runtime using VBS, detecting live kernel patching, rootkits, and hypervisor attacks.",
                     Tags = ["system-guard", "runtime-monitor", "vbs", "attestation", "policy"],
@@ -3613,7 +3613,7 @@ internal static class PolicySecurityHardening
                 {
                     Id = "sgrm-require-firmware-attestation",
                     Label = "Require Firmware Attestation in System Guard",
-                    Category = "Security Hardening Policy",
+                    Category = "Security",
                     Description =
                         "Requires System Guard to include firmware measurement (SMBIOS, ACPI tables, UEFI variables) in its attestation report, detecting firmware-level tampering via Microsoft AAP cloud verification.",
                     Tags = ["system-guard", "firmware", "attestation", "uefi", "policy"],
@@ -3630,7 +3630,7 @@ internal static class PolicySecurityHardening
                 {
                     Id = "sgrm-enable-kernel-dma-runtime-check",
                     Label = "Enable Runtime DMA Remapping Check in System Guard",
-                    Category = "Security Hardening Policy",
+                    Category = "Security",
                     Description =
                         "Enables System Guard to continuously verify that the Intel VT-d / AMD-Vi DMA remapping tables are not tampered with at runtime, detecting DMA remap attacks from existing PCIe devices.",
                     Tags = ["system-guard", "dma", "vtd", "pcie", "policy"],
@@ -3647,7 +3647,7 @@ internal static class PolicySecurityHardening
                 {
                     Id = "sgrm-enable-memory-scan",
                     Label = "Enable System Guard Memory Scan for Rootkits",
-                    Category = "Security Hardening Policy",
+                    Category = "Security",
                     Description =
                         "Enables System Guard runtime memory scanning to detect kernel rootkits and bootkits that modify kernel data structures, leveraging VBS isolation to inspect kernel memory safely.",
                     Tags = ["system-guard", "memory-scan", "rootkit", "vbs", "policy"],
@@ -3664,7 +3664,7 @@ internal static class PolicySecurityHardening
                 {
                     Id = "sgrm-set-attestation-interval",
                     Label = "Set System Guard Attestation Report Interval to 60 Minutes",
-                    Category = "Security Hardening Policy",
+                    Category = "Security",
                     Description =
                         "Configures System Guard to generate and upload attestation reports every 60 minutes, ensuring near-real-time security state visibility in Microsoft Defender for Endpoint.",
                     Tags = ["system-guard", "attestation", "interval", "mde", "policy"],
@@ -3681,7 +3681,7 @@ internal static class PolicySecurityHardening
                 {
                     Id = "sgrm-block-anti-cheat-bypass",
                     Label = "Block Anti-Cheat Driver from Bypassing System Guard",
-                    Category = "Security Hardening Policy",
+                    Category = "Security",
                     Description =
                         "Blocks kernel-mode anti-cheat and DRM drivers from acquiring write access to kernel memory regions protected by System Guard, preventing anti-cheat tools from weakening system integrity.",
                     Tags = ["system-guard", "anti-cheat", "drm", "kernel", "policy"],
@@ -3698,7 +3698,7 @@ internal static class PolicySecurityHardening
                 {
                     Id = "sgrm-enable-hypervisor-integrity-check",
                     Label = "Enable Hypervisor Page Table Integrity Check",
-                    Category = "Security Hardening Policy",
+                    Category = "Security",
                     Description =
                         "Enables System Guard to verify the integrity of the Hyper-V hypervisor page table entries at runtime, detecting attacks that modify the hypervisor's own memory mappings.",
                     Tags = ["system-guard", "hypervisor", "page-table", "integrity", "policy"],
@@ -3715,7 +3715,7 @@ internal static class PolicySecurityHardening
                 {
                     Id = "sgrm-secure-world-crash-dump-policy",
                     Label = "Restrict Crash Dump Access from Outside Secure World",
-                    Category = "Security Hardening Policy",
+                    Category = "Security",
                     Description =
                         "Configures System Guard to prevent the normal OS kernel dump process from reading VBS Secure World memory, ensuring credential material and kernel secrets are not exposed in crash dumps.",
                     Tags = ["system-guard", "crash-dump", "secure-world", "credential-protection", "policy"],
@@ -3732,7 +3732,7 @@ internal static class PolicySecurityHardening
                 {
                     Id = "sgrm-require-modern-standby-isolation",
                     Label = "Require Hardware Isolation During Modern Standby",
-                    Category = "Security Hardening Policy",
+                    Category = "Security",
                     Description =
                         "Requires System Guard to maintain hardware VBS isolation during Modern Standby (DRIPS) low-power states, preventing attacks that exploit relaxed memory permissions during sleep transitions.",
                     Tags = ["system-guard", "modern-standby", "sleepstate", "vbs", "policy"],
@@ -3749,7 +3749,7 @@ internal static class PolicySecurityHardening
                 {
                     Id = "sgrm-enable-post-boot-runtime-check",
                     Label = "Enable Post-Boot Runtime Integrity Check",
-                    Category = "Security Hardening Policy",
+                    Category = "Security",
                     Description =
                         "Enables a periodic post-boot integrity check by System Guard that verifies critical kernel structures have not been modified since boot, catching late-stage kernel tampering.",
                     Tags = ["system-guard", "post-boot", "integrity", "kernel", "policy"],
@@ -3779,7 +3779,7 @@ internal static class PolicySecurityHardening
             {
                 Id           = "schtasksec-disable-task-creation",
                 Label        = "Prevent Non-Admin Task Creation",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description  = "Prevents standard users from creating new scheduled tasks. Only administrators can create, modify, or delete tasks. Default: allowed. Recommended for hardened systems.",
                 Tags         = ["scheduled-tasks", "security", "hardening", "user-restriction", "policy"],
                 NeedsAdmin   = true,
@@ -3795,7 +3795,7 @@ internal static class PolicySecurityHardening
             {
                 Id           = "schtasksec-disable-task-deletion",
                 Label        = "Prevent Non-Admin Task Deletion",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description  = "Prevents standard users from deleting existing scheduled tasks. Protects system maintenance and backup tasks from accidental removal. Default: allowed.",
                 Tags         = ["scheduled-tasks", "security", "hardening", "user-restriction", "policy"],
                 NeedsAdmin   = true,
@@ -3811,7 +3811,7 @@ internal static class PolicySecurityHardening
             {
                 Id           = "schtasksec-disable-execution-control",
                 Label        = "Prevent Non-Admin Manual Task Execution",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description  = "Prevents standard users from running existing tasks on-demand (right-click → Run). Tasks still execute on their configured schedule. Default: allowed.",
                 Tags         = ["scheduled-tasks", "security", "hardening", "execution", "policy"],
                 NeedsAdmin   = true,
@@ -3827,7 +3827,7 @@ internal static class PolicySecurityHardening
             {
                 Id           = "schtasksec-disable-drag-drop-run",
                 Label        = "Disable Drag-and-Drop Task Execution",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description  = "Prevents running a scheduled task by dragging and dropping a file onto its entry. Reduces accidental or social-engineering-based task execution. Default: allowed.",
                 Tags         = ["scheduled-tasks", "security", "hardening", "drag-drop", "policy"],
                 NeedsAdmin   = true,
@@ -3843,7 +3843,7 @@ internal static class PolicySecurityHardening
             {
                 Id           = "schtasksec-disable-property-pages",
                 Label        = "Hide Task Scheduler Property Pages",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description  = "Hides the property pages (settings, triggers, conditions, history) for existing scheduled tasks from standard users. Prevents information disclosure of task details. Default: visible.",
                 Tags         = ["scheduled-tasks", "security", "information-disclosure", "policy"],
                 NeedsAdmin   = true,
@@ -3859,7 +3859,7 @@ internal static class PolicySecurityHardening
             {
                 Id           = "schtasksec-disable-browse-network",
                 Label        = "Disable Network Browse in Task Scheduler",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description  = "Prevents the Task Scheduler from browsing the network for remote task targets. Limits attack surface when managing scheduled tasks. Default: allowed.",
                 Tags         = ["scheduled-tasks", "security", "network", "hardening", "policy"],
                 NeedsAdmin   = true,
@@ -3875,7 +3875,7 @@ internal static class PolicySecurityHardening
             {
                 Id           = "schtasksec-disable-at-compatibility",
                 Label        = "Disable AT Command Compatibility in Task Scheduler",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description  = "Disables the legacy AT.exe command compatibility layer. AT-scheduled tasks bypass modern security controls. Default: compatible.",
                 Tags         = ["scheduled-tasks", "security", "legacy", "at-command", "policy"],
                 NeedsAdmin   = true,
@@ -3891,7 +3891,7 @@ internal static class PolicySecurityHardening
             {
                 Id           = "schtasksec-disable-v1-api",
                 Label        = "Disable Task Scheduler 1.0 API Compatibility",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description  = "Disables the legacy Task Scheduler 1.0 COM API. Prevents applications using the old interface from creating or modifying tasks. Default: enabled.",
                 Tags         = ["scheduled-tasks", "security", "legacy", "api", "com", "policy"],
                 NeedsAdmin   = true,
@@ -3907,7 +3907,7 @@ internal static class PolicySecurityHardening
             {
                 Id           = "schtasksec-set-maint-boundary-days",
                 Label        = "Set Maintenance Task Deadline to 7 Days",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description  = "Sets the automatic maintenance activation boundary to 7 days. If maintenance has not run in 7 days, the system forces it on next idle. Default: 2 days.",
                 Tags         = ["scheduled-tasks", "maintenance", "deadline", "policy"],
                 NeedsAdmin   = true,
@@ -3923,7 +3923,7 @@ internal static class PolicySecurityHardening
             {
                 Id           = "schtasksec-disable-maint-wakeup",
                 Label        = "Disable Maintenance Task Wake-Up Timer",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description  = "Prevents the automatic maintenance task from waking the computer from sleep. Maintenance only runs when the device is already awake. Default: may wake.",
                 Tags         = ["scheduled-tasks", "maintenance", "wake-timer", "power", "policy"],
                 NeedsAdmin   = true,
@@ -3950,7 +3950,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "tokbrk-disable-token-broker",
                 Label = "Disable Web Account Token Broker",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true, CorpSafe = true, ImpactScore = 4, SafetyRating = 4,
                 Description =
                     "Sets DisableTokenBroker=1 in the TokenBroker policy key. Prevents the "
@@ -3969,7 +3969,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "tokbrk-disable-persistent-token-cache",
                 Label = "Disable Persistent Token Cache",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true, CorpSafe = true, ImpactScore = 3, SafetyRating = 4,
                 Description =
                     "Sets DisablePersistentTokenCache=1 in the TokenBroker policy key. "
@@ -3988,7 +3988,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "tokbrk-disable-background-token-refresh",
                 Label = "Disable Background Token Refresh",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true, CorpSafe = true, ImpactScore = 3, SafetyRating = 4,
                 Description =
                     "Sets DisableBackgroundTokenRefresh=1 in the TokenBroker policy key. "
@@ -4007,7 +4007,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "tokbrk-disable-aad-token-sharing",
                 Label = "Disable Azure AD Token Sharing Between Apps",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true, CorpSafe = true, ImpactScore = 3, SafetyRating = 5,
                 Description =
                     "Sets DisableAadTokenSharing=1 in the TokenBroker policy key. Blocks WAM "
@@ -4026,7 +4026,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "tokbrk-disable-msa-token-sharing",
                 Label = "Disable Microsoft Account Token Sharing",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true, CorpSafe = true, ImpactScore = 3, SafetyRating = 5,
                 Description =
                     "Sets DisableMsaTokenSharing=1 in the TokenBroker policy key. Prevents WAM "
@@ -4045,7 +4045,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "tokbrk-require-user-consent",
                 Label = "Require Explicit User Consent for Token Grants",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true, CorpSafe = true, ImpactScore = 4, SafetyRating = 5,
                 Description =
                     "Sets RequireUserConsentForTokenGrant=1 in the TokenBroker policy key. "
@@ -4064,7 +4064,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "tokbrk-disable-token-telemetry",
                 Label = "Disable Token Broker Telemetry",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true, CorpSafe = true, ImpactScore = 2, SafetyRating = 5,
                 Description =
                     "Sets DisableTokenBrokerTelemetry=1 in the TokenBroker policy key. Stops "
@@ -4083,7 +4083,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "tokbrk-disable-implicit-account-discovery",
                 Label = "Disable Implicit Account Discovery",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true, CorpSafe = true, ImpactScore = 3, SafetyRating = 5,
                 Description =
                     "Sets DisableImplicitAccountDiscovery=1 in the TokenBroker policy key. "
@@ -4102,7 +4102,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "tokbrk-limit-token-lifetime",
                 Label = "Limit OAuth Token Lifetime",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true, CorpSafe = true, ImpactScore = 3, SafetyRating = 4,
                 Description =
                     "Sets MaxTokenLifetimeMinutes=60 in the TokenBroker policy key. Caps the "
@@ -4121,7 +4121,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "tokbrk-disable-enterprise-sso",
                 Label = "Disable Enterprise SSO Token Propagation",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true, CorpSafe = true, ImpactScore = 3, SafetyRating = 4,
                 Description =
                     "Sets DisableEnterpriseSso=1 in the TokenBroker policy key. Prevents WAM "
@@ -4151,7 +4151,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "tokpriv-restrict-debug-privilege-assignment",
                 Label = "Restrict Assignment of Debug Programs Privilege to Authorized Accounts",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 5,
@@ -4168,7 +4168,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "tokpriv-audit-privilege-use-events",
                 Label = "Enable Audit Logging for Sensitive Privilege Use Security Events",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -4185,7 +4185,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "tokpriv-restrict-take-ownership-privilege",
                 Label = "Restrict SeTakeOwnershipPrivilege Assignment on Domain and Local Accounts",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -4202,7 +4202,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "tokpriv-block-load-driver-privilege-expansion",
                 Label = "Block Unauthorized Expansion of Load Driver Privilege to Standard Accounts",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 5,
@@ -4219,7 +4219,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "tokpriv-enforce-privilege-token-filtering",
                 Label = "Enforce Privilege Token Filtering for Administrative Access on Domain Systems",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -4236,7 +4236,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "tokpriv-restrict-impersonate-client-privilege",
                 Label = "Restrict SeImpersonatePrivilege to Service Accounts That Require Impersonation",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -4253,7 +4253,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "tokpriv-block-privilege-abuse-alerts",
                 Label = "Enable Real-Time Alerts for Privilege Abuse and Excessive Privilege Operations",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -4270,7 +4270,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "tokpriv-enforce-time-limited-privilege-grants",
                 Label = "Enforce Time-Limited Just-In-Time Privilege Elevation for Administrative Tasks",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -4287,7 +4287,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "tokpriv-restrict-backup-restore-privileges",
                 Label = "Restrict SeBackupPrivilege and SeRestorePrivilege to Authorized Backup Accounts",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -4304,7 +4304,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "tokpriv-block-assign-primary-token-privilege",
                 Label = "Block Unauthorized Assignment of Primary Token Privilege to Service Accounts",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -4332,7 +4332,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "tpmadv-enable-tpm-auto-provisioning",
                 Label = "Enable Automatic TPM Provisioning and Activation",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -4349,7 +4349,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "tpmadv-configure-tpm-lockout-duration",
                 Label = "Configure TPM Lockout Duration for Failed Authorization Attempts",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -4366,7 +4366,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "tpmadv-require-tpm-for-bitlocker",
                 Label = "Require TPM for BitLocker Drive Encryption Operations",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 5,
@@ -4383,7 +4383,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "tpmadv-enable-tpm-platform-attestation",
                 Label = "Enable TPM Platform Attestation for Device Health Verification",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -4400,7 +4400,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "tpmadv-configure-tpm-pcr-banks",
                 Label = "Configure TPM PCR Bank Selection for Maximum Security Coverage",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -4417,7 +4417,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "tpmadv-disable-tpm-clear-without-pin",
                 Label = "Require Physical Presence PIN for TPM Clear Operations",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -4434,7 +4434,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "tpmadv-restrict-tpm-commandlist",
                 Label = "Restrict TPM Command List to Approved Operations Only",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -4451,7 +4451,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "tpmadv-enable-tpm-srk-policy",
                 Label = "Configure TPM Storage Root Key Policy for Key Protection",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -4468,7 +4468,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "tpmadv-audit-tpm-operations",
                 Label = "Enable Comprehensive Audit Logging for TPM Operations",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -4485,7 +4485,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "tpmadv-configure-tpm-firmware-update",
                 Label = "Configure TPM Firmware Update Policy for Security Patches",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -4515,7 +4515,7 @@ internal static class PolicySecurityHardening
             {
                 Id           = "tpmpol-require-tpm-for-bitlocker",
                 Label        = "Require TPM for All BitLocker Encrypted Volumes",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description  = "Requires that all BitLocker encrypted volumes use a TPM protector, preventing BitLocker in password-only mode which does not provide pre-boot hardware attestation or protection against direct memory access attacks.",
                 Tags         = ["tpm", "bitlocker", "hardware-security", "attestation", "policy"],
                 NeedsAdmin   = true,
@@ -4531,7 +4531,7 @@ internal static class PolicySecurityHardening
             {
                 Id           = "tpmpol-enable-device-health-attestation",
                 Label        = "Enable Device Health Attestation (DHA) Service",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description  = "Enables the Windows Device Health Attestation service which uses TPM measurements to produce a signed boot health certificate, allowing MDM policies to verify device security posture before granting access.",
                 Tags         = ["tpm", "dha", "health-attestation", "mdm", "policy"],
                 NeedsAdmin   = true,
@@ -4547,7 +4547,7 @@ internal static class PolicySecurityHardening
             {
                 Id           = "tpmpol-set-lockout-threshold-10",
                 Label        = "Set TPM Anti-Hammering Lockout Threshold to 10 Failures",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description  = "Configures the TPM anti-hammering lockout threshold to 10 failed authorisation attempts, after which the TPM enters lockout mode requiring administrative reset, protecting against brute-force TPM dictionary attacks.",
                 Tags         = ["tpm", "lockout", "anti-hammering", "brute-force", "policy"],
                 NeedsAdmin   = true,
@@ -4563,7 +4563,7 @@ internal static class PolicySecurityHardening
             {
                 Id           = "tpmpol-block-tpm-clear-by-standard-user",
                 Label        = "Block Standard Users from Clearing the TPM",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description  = "Prevents standard (non-administrator) users from clearing the TPM chip, which would destroy all TPM-protected keys and could be used to defeat BitLocker and Credential Guard protections.",
                 Tags         = ["tpm", "clear-tpm", "standard-user", "bitlocker", "policy"],
                 NeedsAdmin   = true,
@@ -4579,7 +4579,7 @@ internal static class PolicySecurityHardening
             {
                 Id           = "tpmpol-require-tpm2-minimum",
                 Label        = "Require TPM 2.0 Minimum for Secure Device Operations",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description  = "Enforces that all security operations requiring TPM attestation (BitLocker, Credential Guard, Device Guard, Windows Hello) use TPM 2.0, blocking fallback to the weaker TPM 1.2 specification.",
                 Tags         = ["tpm", "tpm-2.0", "version-requirement", "security", "policy"],
                 NeedsAdmin   = true,
@@ -4595,7 +4595,7 @@ internal static class PolicySecurityHardening
             {
                 Id           = "tpmpol-enable-measured-boot",
                 Label        = "Enable Windows Measured Boot with TPM PCR Logging",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description  = "Enables Measured Boot on the Windows bootloader, ensuring that each boot component hash is recorded in TPM PCR registers, creating an immutable tamper-evident boot measurement log.",
                 Tags         = ["tpm", "measured-boot", "pcr", "boot-security", "policy"],
                 NeedsAdmin   = true,
@@ -4611,7 +4611,7 @@ internal static class PolicySecurityHardening
             {
                 Id           = "tpmpol-disable-tpm-auto-provisioning",
                 Label        = "Disable Automatic TPM Provisioning by Windows",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description  = "Prevents Windows from automatically taking ownership of the TPM during first boot provisioning, requiring explicit administrative TPM initialisation and ensuring TPM ownership is a deliberate IT action.",
                 Tags         = ["tpm", "provisioning", "ownership", "admin", "policy"],
                 NeedsAdmin   = true,
@@ -4627,7 +4627,7 @@ internal static class PolicySecurityHardening
             {
                 Id           = "tpmpol-log-tpm-events",
                 Label        = "Log TPM Attestation and Lockout Events in Security Log",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description  = "Enables Security event log entries for TPM lockout events, attestation failures, and TPM provisioning changes, providing audit visibility into hardware security chip state changes.",
                 Tags         = ["tpm", "event-log", "audit", "lockout", "attestation", "policy"],
                 NeedsAdmin   = true,
@@ -4643,7 +4643,7 @@ internal static class PolicySecurityHardening
             {
                 Id           = "tpmpol-disable-tpm-remote-management",
                 Label        = "Disable Remote TPM Management via DCOM",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description  = "Prevents remote administration of the TPM chip via the DCOM TPM management interface, ensuring all TPM configuration changes require local administrator access to the physical or virtual machine.",
                 Tags         = ["tpm", "remote-management", "dcom", "security", "policy"],
                 NeedsAdmin   = true,
@@ -4659,7 +4659,7 @@ internal static class PolicySecurityHardening
             {
                 Id           = "tpmpol-disable-tpm-telemetry",
                 Label        = "Disable TPM Telemetry Reporting to Microsoft",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description  = "Prevents Windows from sending TPM chip model, firmware version, PCR configuration, and health attestation result telemetry to Microsoft.",
                 Tags         = ["tpm", "telemetry", "privacy", "microsoft", "policy"],
                 NeedsAdmin   = true,
@@ -4688,7 +4688,7 @@ internal static class PolicySecurityHardening
                 {
                     Id = "tpmrec-backup-tpm-owner-info-to-ad",
                     Label = "TPM Recovery: Backup TPM Owner Information to Active Directory",
-                    Category = "Security Hardening Policy",
+                    Category = "Security",
                     Description =
                         "Sets ActiveDirectoryBackupEnabled=1 in the TPM policy hive. Enables automatic backup of the TPM owner authorization value (TPM owner password hash) to Active Directory when the TPM is initialised or reset. The TPM owner password is needed for certain TPM management operations (clearing the TPM, resetting TPM lockout after dictionary attack). Without Active Directory backup, losing the owner password means the TPM cannot be cleared without a firmware-level reset, which can prevent BitLocker recovery in certain scenarios. Backing up to AD ensures the TPM owner information is recoverable by enterprise admins.",
                     Tags = ["tpm", "backup", "active-directory", "owner-password", "recovery"],
@@ -4706,7 +4706,7 @@ internal static class PolicySecurityHardening
                 {
                     Id = "tpmrec-require-tpm-backup-before-enable",
                     Label = "TPM Recovery: Block TPM Enablement Unless AD Backup Succeeds",
-                    Category = "Security Hardening Policy",
+                    Category = "Security",
                     Description =
                         "Sets RequireActiveDirectoryBackup=1 in the TPM policy hive. Prevents the BitLocker Drive Encryption setup wizard from enabling BitLocker on a drive if the TPM owner information backup to Active Directory fails. Without this requirement, BitLocker can be enabled on a device even if the TPM backup fails — resulting in deployed BitLocker with no enterprise-recoverable TPM owner info. By requiring backup success before BitLocker activation, this ensures that every BitLocker-protected device in the enterprise has its TPM recovery data in AD.",
                     Tags = ["tpm", "backup-required", "bitlocker", "recovery", "active-directory"],
@@ -4724,7 +4724,7 @@ internal static class PolicySecurityHardening
                 {
                     Id = "tpmrec-block-tpm-clear-by-non-admin",
                     Label = "TPM Recovery: Block TPM Clear Operation by Non-Administrator Users",
-                    Category = "Security Hardening Policy",
+                    Category = "Security",
                     Description =
                         "Sets BlockTPMClear=1 in the TPM policy hive. Prevents non-administrator users from clearing the TPM. Clearing the TPM destroys all TPM-protected keys — all BitLocker encryption keys bound to the TPM, Windows Hello for Business keys, and any application TPM keys. A non-admin user who can clear the TPM on a shared workstation can force a BitLocker recovery event (requiring the recovery key) and potentially create confusion that could be exploited during the recovery process. Restricting TPM clear operations to administrators ensures only authorised personnel can perform this destructive operation.",
                     Tags = ["tpm", "clear-prevention", "admin-only", "bitlocker", "key-destruction"],
@@ -4742,7 +4742,7 @@ internal static class PolicySecurityHardening
                 {
                     Id = "tpmrec-enable-tpm-auto-provisioning",
                     Label = "TPM Recovery: Enable Automatic TPM Provisioning by Windows",
-                    Category = "Security Hardening Policy",
+                    Category = "Security",
                     Description =
                         "Sets EnableAutoTPMProvisioning=1 in the TPM policy hive. Enables automatic TPM provisioning by Windows during first use. When a device ships with an unprovisioned TPM (factory default), Windows can automatically provision the TPM, set the owner password, and back up the owner info to AD. Without auto-provisioning, administrators must manually provision each device's TPM before BitLocker can be deployed. Auto-provisioning ensures that all devices in the enterprise have their TPMs properly initialised during the Windows Setup or subsequent first-login process, enabling enterprise-wide BitLocker deployment without per-device manual TPM steps.",
                     Tags = ["tpm", "provisioning", "auto", "bitlocker-readiness", "deployment"],
@@ -4760,7 +4760,7 @@ internal static class PolicySecurityHardening
                 {
                     Id = "tpmrec-set-tpm-lockout-duration-30min",
                     Label = "TPM Recovery: Set TPM Dictionary Attack Lockout Duration to 30 Minutes",
-                    Category = "Security Hardening Policy",
+                    Category = "Security",
                     Description =
                         "Sets DictionaryAttackLockoutDuration=30 in the TPM policy hive (units: minutes). Sets the TPM dictionary attack lockout duration to 30 minutes. The TPM tracks repeated failed authorisation attempts (dictionary attack mitigation). After exceeding the threshold, the TPM enters a lockout mode and refuses further authorisation attempts. The lockout duration determines how long the TPM remains locked before resetting its counter. A 30-minute lockout provides strong protection against automated PIN/password brute-force attacks against BitLocker TPM+PIN while being reasonable for legitimate pin-entry mistakes.",
                     Tags = ["tpm", "dictionary-attack", "lockout", "bitlocker", "brute-force"],
@@ -4778,7 +4778,7 @@ internal static class PolicySecurityHardening
                 {
                     Id = "tpmrec-set-tpm-lockout-threshold-5",
                     Label = "TPM Recovery: Set TPM Dictionary Attack Lockout Threshold to 5 Attempts",
-                    Category = "Security Hardening Policy",
+                    Category = "Security",
                     Description =
                         "Sets DictionaryAttackLockoutThreshold=5 in the TPM policy hive. Sets the number of failed TPM authorisation attempts before the TPM enters lockout mode to 5. Five attempts is consistent with enterprise account lockout policies (typically 5–10 attempts) — it provides a reasonable number of legitimate re-entry attempts while blocking automated brute-force attacks (which attempt thousands of PINs per minute). Combined with the 30-minute lockout duration, this means an attacker can test at most 5 PINs every 30 minutes — making a full 6-digit PIN space (1,000,000 values) take over 100,000 hours to exhaust.",
                     Tags = ["tpm", "lockout-threshold", "brute-force", "bitlocker", "dictionary-attack"],
@@ -4796,7 +4796,7 @@ internal static class PolicySecurityHardening
                 {
                     Id = "tpmrec-backup-bitlocker-recovery-key-to-ad",
                     Label = "TPM Recovery: Require BitLocker Recovery Key Backup to Active Directory/AAD",
-                    Category = "Security Hardening Policy",
+                    Category = "Security",
                     Description =
                         "Sets RequireDeviceLockout=1 in the BitLocker policy hive (OSRecoveryInformationBackup flag). Requires that BitLocker recovery keys be backed up to Active Directory or Azure AD before BitLocker encryption can be enabled. Without this requirement, users or automated deployment systems can enable BitLocker and generate a recovery key that is never stored in the enterprise directory — resulting in encrypted devices with no enterprise-retrievable recovery key. If the device then undergoes a TPM change, firmware update, or Secure Boot configuration change, recovery requires that local key which may be lost.",
                     Tags = ["bitlocker", "recovery-key", "ad-backup", "aad-backup", "encryption"],
@@ -4823,7 +4823,7 @@ internal static class PolicySecurityHardening
                 {
                     Id = "tpmrec-enable-bitlocker-preboot-pin",
                     Label = "TPM Recovery: Require BitLocker Pre-Boot PIN for OS Drive",
-                    Category = "Security Hardening Policy",
+                    Category = "Security",
                     Description =
                         "Sets EnableBDEWithNoTPM=0 and TPM-based protection with PIN by setting UseACBitLockerPIN=1 in the BitLocker policy. Requires that the BitLocker OS drive uses TPM+PIN authentication, not TPM-only. TPM-only BitLocker can be bypassed by a cold-boot attack (freezing RAM to preserve encryption keys) or by DMA attacks against the boot process. Requiring a PIN in addition to the TPM ensures that even if hardware-level memory extraction is performed, the attacker must also know the PIN. The PIN is never transmitted over the network and is not stored in AD — it is the 'something you know' factor in the BitLocker two-factor authentication.",
                     Tags = ["bitlocker", "pre-boot-pin", "tpm-plus-pin", "cold-boot", "dma-attack"],
@@ -4841,7 +4841,7 @@ internal static class PolicySecurityHardening
                 {
                     Id = "tpmrec-enable-enhanced-pin",
                     Label = "TPM Recovery: Enable Enhanced BitLocker PIN (Allows Full Keyboard Chars)",
-                    Category = "Security Hardening Policy",
+                    Category = "Security",
                     Description =
                         "Sets UseEnhancedPin=1 in the BitLocker policy hive. Enables Enhanced PINs for BitLocker pre-boot authentication on supported firmware. By default, BitLocker PINs only accept numeric digits (0–9) in pre-boot. Enhanced PINs allow letters, symbols, and spaces — enabling passphrases and mixed PINs that are significantly harder to brute-force. A 6-digit numeric PIN has 1,000,000 combinations; an 8-character alphanumeric+symbol passphrase has over 6 quadrillion combinations. Enabling Enhanced PINs dramatically increases the effective entropy of BitLocker pre-boot authentication without changing the TPM+PIN hardware requirement.",
                     Tags = ["bitlocker", "enhanced-pin", "passphrase", "entropy", "pre-boot"],
@@ -4859,7 +4859,7 @@ internal static class PolicySecurityHardening
                 {
                     Id = "tpmrec-enable-tpm-attestation-azure",
                     Label = "TPM Recovery: Enable TPM Attestation for Intune/Azure Conditional Access",
-                    Category = "Security Hardening Policy",
+                    Category = "Security",
                     Description =
                         "Sets EnableTPMAttestation=1 in the TPM policy hive. Enables TPM-based device attestation for Microsoft Intune and Azure Conditional Access compliance checks. TPM attestation allows Intune to verify that a device's TPM is genuine (not emulated), the device has not been tampered with since last boot, Secure Boot is active, and the early launch anti-malware driver passed. Devices that fail attestation can be blocked from accessing corporate resources via Conditional Access policies. This prevents attackers from using counterfeit or compromised device identities to gain cloud resource access.",
                     Tags = ["tpm", "attestation", "intune", "azure", "conditional-access"],
@@ -4889,7 +4889,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "tpmgpo-require-active-directory-backup",
                 Label = "Require TPM Owner Info Backup to Active Directory",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description = "Requires TPM owner authorization information to be backed up to Active Directory before TPM operations are allowed. Prevents TPM ownership from being set on machines where AD backup fails, ensuring recoverability. Default: 0. Recommended: 1 for AD-joined enterprise machines.",
                 Tags = ["tpm", "active-directory", "backup", "security"],
                 NeedsAdmin = true,
@@ -4903,7 +4903,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "tpmgpo-enable-active-directory-backup",
                 Label = "Enable TPM Owner Info Active Directory Backup",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description = "Enables automatic backup of TPM owner authorization to Active Directory. When combined with RequireActiveDirectoryBackup, ensures all TPM-protected machines have recoverable owner keys in AD. Default: 0. Recommended: 1.",
                 Tags = ["tpm", "active-directory", "backup", "security"],
                 NeedsAdmin = true,
@@ -4917,7 +4917,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "tpmgpo-os-managed-auth-level",
                 Label = "Set TPM OS-Managed Auth Level to Full Delegation",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description = "Sets OS-managed TPM auth level to 4 (full delegation). This determines how much of the TPM authorization is delegated to the OS vs retained by the hardware. Level 4 allows OS full control needed for BitLocker and Device Guard. Default: 4. Recommended: 4.",
                 Tags = ["tpm", "auth", "delegation", "bitlocker"],
                 NeedsAdmin = true,
@@ -4931,7 +4931,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "tpmgpo-standard-user-lockout-threshold",
                 Label = "Set TPM Standard-User Authorization Failure Threshold",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description = "Sets the TPM lockout threshold for standard users to 32 failed authorization attempts before the TPM enters lockout mode. Balances brute-force protection with usability. Default: 32. Recommended: 9 for stricter environments.",
                 Tags = ["tpm", "lockout", "brute-force", "security"],
                 NeedsAdmin = true,
@@ -4945,7 +4945,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "tpmgpo-standard-user-lockout-duration",
                 Label = "Set TPM Standard-User Lockout Duration to 1 Hour",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description = "Sets the TPM lockout observation window to 3 600 seconds (1 hour). Failed authorization attempts within this window count toward the lockout threshold. After the window expires, failed counts reset. Default: 7200. Recommended: 3600.",
                 Tags = ["tpm", "lockout", "duration", "security"],
                 NeedsAdmin = true,
@@ -4959,7 +4959,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "tpmgpo-standard-user-individual-lockout",
                 Label = "Set TPM Standard-User Individual Auth Failure Threshold",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description = "Sets the TPM individual authorization failure threshold for standard users to 4. A single TPM authorization can fail at most 4 times within the observation window before triggering lockout for that key. Default: 4. Recommended: 4.",
                 Tags = ["tpm", "lockout", "individual", "security"],
                 NeedsAdmin = true,
@@ -4973,7 +4973,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "tpmgpo-enable-credential-guard",
                 Label = "Enable Credential Guard via Device Guard Policy",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description = "Enables Windows Defender Credential Guard through Group Policy. Credential Guard uses VBS to isolate LSA credential storage, protecting NTLM hashes and Kerberos tickets from pass-the-hash attacks. Default: 0. Recommended: 1.",
                 Tags = ["tpm", "credential-guard", "vbs", "security", "lsa"],
                 NeedsAdmin = true,
@@ -4987,7 +4987,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "tpmgpo-enable-hvci",
                 Label = "Enable Hypervisor-Protected Code Integrity (HVCI)",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description = "Enables Hypervisor-Protected Code Integrity (HVCI / Memory Integrity) via Device Guard GPO policy. HVCI uses VBS to ensure only code signed by trusted authorities runs in kernel mode, blocking unsigned driver exploits. Default: 0. Recommended: 1.",
                 Tags = ["tpm", "hvci", "memory-integrity", "vbs", "kernel", "security"],
                 NeedsAdmin = true,
@@ -5001,7 +5001,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "tpmgpo-enable-secure-launch",
                 Label = "Enable Secure Launch (DRTM) via Device Guard",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description = "Enables Secure Launch (Dynamic Root of Trust for Measurement / DRTM) through Device Guard GPO. DRTM provides a hardware-attested boot chain using Intel TXT or AMD Skinit, protecting firmware from being modified. Default: 0. Recommended: 1 on supported hardware.",
                 Tags = ["tpm", "secure-launch", "drtm", "firmware", "security"],
                 NeedsAdmin = true,
@@ -5015,7 +5015,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "tpmgpo-enable-vbs",
                 Label = "Enable Virtualization-Based Security (VBS)",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description = "Enables Virtualization-Based Security (VBS) through Device Guard GPO. VBS uses the hypervisor to create an isolated memory region for security code — prerequisite for Credential Guard and HVCI. Default: 0. Recommended: 1.",
                 Tags = ["tpm", "vbs", "virtualization", "security", "hypervisor"],
                 NeedsAdmin = true,
@@ -5040,7 +5040,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "trustprov-require-trust-chain",
                 Label = "Require Complete Certificate Trust Chain",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -5057,7 +5057,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "trustprov-enable-revocation-check",
                 Label = "Enable Certificate Revocation Checking",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -5074,7 +5074,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "trustprov-block-expired-certificates",
                 Label = "Block Expired Authenticode Certificates",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -5091,7 +5091,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "trustprov-require-timestamping",
                 Label = "Require Timestamp Countersignature for Code Signing",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -5108,7 +5108,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "trustprov-restrict-trust-to-enterprise-ca",
                 Label = "Restrict Code Trust to Enterprise CA",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -5125,7 +5125,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "trustprov-block-md5-signatures",
                 Label = "Block MD5-Based Certificate Signatures",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -5142,7 +5142,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "trustprov-block-sha1-code-signing",
                 Label = "Block SHA-1 Authenticode Code Signatures",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -5159,7 +5159,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "trustprov-audit-revocation-failures",
                 Label = "Audit Certificate Revocation Check Failures",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -5176,7 +5176,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "trustprov-enable-ev-code-signing",
                 Label = "Prefer Extended Validation Code Signing Certificates",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -5193,7 +5193,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "trustprov-log-trust-decisions",
                 Label = "Enable Trust Decision Audit Logging",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -5223,7 +5223,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "uacadv-disable-arso",
                 Label = "Logon: Disable automatic restart sign-on (ARSO)",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description =
                     "Sets DisableAutomaticRestartSignOn=1 in Policies\\System. Prevents Windows from "
                     + "automatically signing in and locking the last interactive user after a reboot "
@@ -5239,7 +5239,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "uacadv-hide-network-selection-ui",
                 Label = "Logon: Hide the network selection UI on the sign-in screen",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description =
                     "Sets DontDisplayNetworkSelectionUI=1 in Policies\\System. Removes the Wi-Fi/network "
                     + "chooser button from the Windows logon screen, preventing unauthenticated network changes.",
@@ -5254,7 +5254,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "uacadv-hide-failed-unlock-text",
                 Label = "Logon: Hide failed-unlock notification text on lock screen",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description =
                     "Sets DontDisplayFailedUnlock=1 in Policies\\System. Suppresses the 'Your account has "
                     + "been locked' / 'too many attempts' banner shown on the lock screen after failed logins.",
@@ -5269,7 +5269,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "uacadv-hide-locked-user-id",
                 Label = "Logon: Hide user identity information on the lock screen",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description =
                     "Sets DontDisplayLockedUserId=3 in Policies\\System. Value 3 hides both user name and "
                     + "email from the lock screen, preventing information disclosure of signed-in users.",
@@ -5284,7 +5284,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "uacadv-require-msa-optional",
                 Label = "Logon: Make Microsoft Account sign-in optional (allow local accounts)",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description =
                     "Sets MSAOptional=1 in Policies\\System. Allows users on apps and services to proceed "
                     + "without a Microsoft Account when the service offers a local-account alternative.",
@@ -5299,7 +5299,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "uacadv-disable-shutdown-without-logon",
                 Label = "Logon: Prevent shutdown from the lock screen (require logon)",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description =
                     "Sets ShutdownWithoutLogon=0 in Policies\\System. Removes the 'Shut down' button from "
                     + "the Windows lock screen, requiring users to authenticate before powering off.",
@@ -5314,7 +5314,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "uacadv-disable-lock-workstation",
                 Label = "Logon: Prevent users from locking the workstation via keyboard shortcut",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description =
                     "Sets DisableLockWorkstation=1 in Policies\\System. Disables the Win+L and "
                     + "Ctrl+Alt+Del > Lock option, preventing interactive users from manually locking the PC.",
@@ -5329,7 +5329,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "uacadv-disable-change-password",
                 Label = "Logon: Prevent users from changing their password via Ctrl+Alt+Del",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description =
                     "Sets DisableChangePassword=1 in Policies\\System. Removes the 'Change password' "
                     + "option from the Ctrl+Alt+Del security screen (useful in kiosk/shared-PC scenarios).",
@@ -5344,7 +5344,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "uacadv-legal-notice-caption",
                 Label = "Logon: Set a legal notice caption on the sign-in screen",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description =
                     "Sets LegalNoticeCaption to 'Authorized Access Only' in Policies\\System. Displays a "
                     + "custom caption banner on the Windows logon screen — common in corporate environments.",
@@ -5359,7 +5359,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "uacadv-disable-task-manager",
                 Label = "Logon: Disable Task Manager for non-admin users",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description =
                     "Sets DisableTaskMgr=1 in Policies\\System. Prevents standard user accounts from "
                     + "opening Task Manager (Ctrl+Shift+Esc / Ctrl+Alt+Del). Admin accounts are unaffected.",
@@ -5385,7 +5385,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "upprof-enable-smartscreen-apps",
                 Label = "Enable SmartScreen for Apps and Files",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description = "Activates Windows SmartScreen to check apps and files downloaded from the Internet before execution.",
                 Tags = ["smartscreen", "security", "malware", "downloads", "system"],
                 NeedsAdmin = true,
@@ -5401,7 +5401,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "upprof-restrict-cmd-for-users",
                 Label = "Restrict Command Prompt Access for Standard Users",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description = "Prevents standard (non-admin) users from launching Command Prompt (cmd.exe) directly.",
                 Tags = ["cmd", "command-prompt", "restriction", "users", "security"],
                 NeedsAdmin = true,
@@ -5417,7 +5417,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "upprof-run-logon-scripts-sync",
                 Label = "Run Logon and Startup Scripts Synchronously",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description = "Runs all Group Policy logon and startup scripts synchronously before presenting the user desktop.",
                 Tags = ["logon-scripts", "startup-scripts", "gpo", "synchronous", "user-profile"],
                 NeedsAdmin = true,
@@ -5433,7 +5433,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "upprof-max-gpo-script-wait",
                 Label = "Set Maximum Wait Time for Group Policy Scripts",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description = "Configures the maximum time (in seconds) Windows waits for Group Policy startup and shutdown scripts to complete.",
                 Tags = ["gpo-scripts", "timeout", "logon", "user-profile"],
                 NeedsAdmin = true,
@@ -5449,7 +5449,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "upprof-enable-gp-refresh",
                 Label = "Enable Background Group Policy Refresh",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description = "Ensures Group Policy is refreshed in the background on a schedule, even when the user is logged in.",
                 Tags = ["group-policy", "gpo-refresh", "background", "user-profile"],
                 NeedsAdmin = true,
@@ -5465,7 +5465,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "upprof-block-roaming-profile-changes",
                 Label = "Prevent Local Changes from Syncing Back to Roaming Profile",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description = "Prevents any changes made to a roaming user profile during a session from syncing back to the network share.",
                 Tags = ["roaming-profile", "user-profile", "sync", "restriction"],
                 NeedsAdmin = true,
@@ -5481,7 +5481,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "upprof-verbose-logon-status",
                 Label = "Disable Verbose Logon Status Messages",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description = "Suppresses the verbose 'Please wait...' and 'Applying computer settings...' status messages during logon.",
                 Tags = ["logon", "status-messages", "ui", "boot", "user-profile"],
                 NeedsAdmin = true,
@@ -5497,7 +5497,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "upprof-block-profile-list-enumeration",
                 Label = "Block Switching to Another User's Profile",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description = "Restricts the ability to download or load another user's roaming profile on this machine during interactive logon.",
                 Tags = ["user-profile", "roaming-profile", "multi-user", "security"],
                 NeedsAdmin = true,
@@ -5513,7 +5513,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "upprof-enable-logon-scripts-for-admins",
                 Label = "Run Logon Scripts for Administrator Accounts",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description = "Ensures Group Policy logon scripts execute even when an administrator account is used to log on.",
                 Tags = ["logon-scripts", "admin", "gpo", "user-profile"],
                 NeedsAdmin = true,
@@ -5529,7 +5529,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "upprof-clear-recent-docs-on-logoff",
                 Label = "Clear Recent Document Lists on Logoff",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description = "Deletes the list of recently accessed documents and applications from the user profile when they log off.",
                 Tags = ["recent-docs", "logoff", "privacy", "user-profile"],
                 NeedsAdmin = true,
@@ -5556,7 +5556,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "uprof-disable-roaming-profiles",
                 Label = "Disable Roaming User Profiles",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -5577,7 +5577,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "uprof-disable-slow-link-detection",
                 Label = "Disable Slow Network Link Detection for User Profiles",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -5597,7 +5597,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "uprof-delete-cached-copies",
                 Label = "Delete Cached Copies of Roaming Profiles at Logoff",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -5617,7 +5617,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "uprof-prevent-profile-size-limit",
                 Label = "Disable User Profile Size Limit Warning Dialog",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -5637,7 +5637,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "uprof-wait-on-logoff",
                 Label = "Wait for Remote Profile Upload at Logoff",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -5657,7 +5657,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "uprof-disable-profile-error-notify",
                 Label = "Disable User Profile Load Error Notification",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -5678,7 +5678,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "uprof-disable-guest-logon",
                 Label = "Disable Guest Account Profile Creation",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -5698,7 +5698,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "uprof-apply-gpo-at-logon",
                 Label = "Force Synchronous Group Policy Processing at Logon",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -5719,7 +5719,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "uprof-disable-user-tracking",
                 Label = "Disable User Profile Tracking for Shell Namespace",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -5739,7 +5739,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "uprof-limit-profile-size",
                 Label = "Disable User Profile Disk Quota Enforcement",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -5771,7 +5771,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "usrrts-restrict-debug-privilege",
                 Label = "Restrict SeDebugPrivilege to Administrators Only",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 5,
@@ -5788,7 +5788,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "usrrts-restrict-backup-privilege",
                 Label = "Restrict SeBackupPrivilege to Backup Operators Only",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -5805,7 +5805,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "usrrts-restrict-restore-privilege",
                 Label = "Restrict SeRestorePrivilege to Backup Operators Only",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -5822,7 +5822,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "usrrts-restrict-load-driver-privilege",
                 Label = "Restrict SeLoadDriverPrivilege to Administrators Only",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 5,
@@ -5839,7 +5839,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "usrrts-restrict-take-ownership",
                 Label = "Restrict SeTakeOwnershipPrivilege to Administrators Only",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -5856,7 +5856,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "usrrts-restrict-impersonate-privilege",
                 Label = "Restrict SeImpersonatePrivilege to Service Accounts Only",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 5,
@@ -5873,7 +5873,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "usrrts-remove-network-logon-guests",
                 Label = "Deny Network Logon Rights to Guest Accounts",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -5890,7 +5890,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "usrrts-restrict-shutdown-privilege",
                 Label = "Restrict Remote Shutdown Privilege to Administrators",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -5907,7 +5907,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "usrrts-restrict-create-global-objects",
                 Label = "Restrict SeCreateGlobalPrivilege to Trusted Service Accounts",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -5924,7 +5924,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "usrrts-restrict-act-as-os-privilege",
                 Label = "Restrict SeTcbPrivilege (Act as Part of OS) to System Accounts",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 5,
@@ -5952,7 +5952,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "attach-dont-save-zone-info",
                 Label = "Attachments: Do Not Preserve Zone ID on Downloads",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description =
                     "Prevents Windows from saving the Zone Identifier (Zone.Identifier ADS stream) on files downloaded from the internet. When set, users will not receive SmartScreen or Open File security warnings for downloaded files. Use only if zone information is enforced by a separate security layer.",
                 Tags = ["attachments", "zone-id", "download", "smartscreen", "policy"],
@@ -5970,7 +5970,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "attach-always-scan-with-av",
                 Label = "Attachments: Require Antivirus Scan on File Open",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description =
                     "Forces Windows Attachment Manager to invoke the registered antivirus product before allowing the user to open any file attachment. Ensures executables and archives received via email or browser downloads are scanned prior to execution.",
                 Tags = ["attachments", "antivirus", "scan", "security", "policy"],
@@ -5988,7 +5988,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "attach-default-high-risk",
                 Label = "Attachments: Set Default File Type Risk to High",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description =
                     "Sets the default file type risk level for Attachment Manager to High (3). Files with unknown extension risk mappings are treated as high-risk and trigger a security prompt before execution. Protects against novel filetype exploit vectors.",
                 Tags = ["attachments", "file-type", "risk", "high", "security", "policy"],
@@ -6006,7 +6006,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "attach-show-zone-info-properties",
                 Label = "Attachments: Show Zone ID in File Properties (Zone Tab Visible)",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description =
                     "Ensures the Zone Information tab is visible in file properties for downloaded files. When HideZoneInfoOnProperties=0, users can inspect a file's zone origin, supporting security awareness and incident investigation.",
                 Tags = ["attachments", "zone-id", "properties", "transparency", "policy"],
@@ -6024,7 +6024,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "attach-notify-blocked-executables",
                 Label = "Attachments: Notify User When Executable Attachment Is Blocked",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description =
                     "Enables user notification when Attachment Manager blocks a potentially unsafe file from being opened. Alerts are displayed when a download is prevented by file-type risk classification, improving user awareness that a file was quarantined.",
                 Tags = ["attachments", "notify", "block", "executable", "policy"],
@@ -6042,7 +6042,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "attach-block-remote-file-open",
                 Label = "Attachments: Block Direct Open of Remote Files Without Save",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description =
                     "Prevents users from opening downloaded files without first saving them locally (where zone information and AV scanning are applied). Helps enforce the attachment scan pipeline for files opened directly from browser 'Open' prompts.",
                 Tags = ["attachments", "remote", "open", "block", "security", "policy"],
@@ -6060,7 +6060,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "attach-disable-file-unblock",
                 Label = "Attachments: Prevent Users from Unblocking File Attachments",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description =
                     "Disables the 'Unblock' option on file properties for internet-zone downloads. Prevents users from bypassing attachment security by removing the zone identifier (Zone.Identifier stream) via the file's Properties → Security tab.",
                 Tags = ["attachments", "unblock", "zone-id", "bypass", "policy"],
@@ -6078,7 +6078,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "attach-force-zone-id-prompt",
                 Label = "Attachments: Force Security Warning Prompt for Internet-Zone Files",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description =
                     "Ensures the security warning dialog is always displayed when a user attempts to open files tagged with the Internet zone identifier. Prevents security-zone bypass for files copied into local folders that might otherwise strip zone data.",
                 Tags = ["attachments", "zone-id", "prompt", "internet-zone", "policy"],
@@ -6096,7 +6096,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "attach-disable-inheritance-bypass",
                 Label = "Attachments: Block Zone Inheritance Bypass for Attachments",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description =
                     "Prevents attachment processing from inheriting a lower-risk zone classification from parent application contexts. Ensures that all attachments opened from email clients or Office files are evaluated at the attachment's own zone level.",
                 Tags = ["attachments", "zone-inheritance", "bypass", "security", "policy"],
@@ -6114,7 +6114,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "attach-block-mime-sniff-override",
                 Label = "Attachments: Block MIME-Type Sniffing as Risk Classification Override",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description =
                     "Prevents Attachment Manager from using MIME content-type sniffing to downgrade the risk classification of a file beyond its registered extension risk level. A JPEG served with an executable MIME type remains high-risk.",
                 Tags = ["attachments", "mime", "sniff", "risk-override", "security", "policy"],
@@ -6146,7 +6146,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "evtacc-set-security-log-size-100mb",
                 Label = "Event Log Access: Set Security Log Maximum Size to 100 MB",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description =
                     "Sets the maximum size of the Windows Security event log to 100 MB (102,400 KB). "
                     + "Security logs capture authentication, privilege use, object access, and policy changes. "
@@ -6167,7 +6167,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "evtacc-set-system-log-size-50mb",
                 Label = "Event Log Access: Set System Log Maximum Size to 50 MB",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description =
                     "Sets the maximum size of the Windows System event log to 50 MB (51,200 KB). "
                     + "System logs record OS-level events including driver failures, service status changes, and hardware errors. "
@@ -6188,7 +6188,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "evtacc-set-application-log-size-50mb",
                 Label = "Event Log Access: Set Application Log Maximum Size to 50 MB",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description =
                     "Sets the maximum size of the Windows Application event log to 50 MB (51,200 KB). "
                     + "Application logs capture events from user-mode applications, COM+ components, and .NET runtime. "
@@ -6209,7 +6209,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "evtacc-set-powershell-log-size-50mb",
                 Label = "Event Log Access: Set PowerShell Log Maximum Size to 50 MB",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description =
                     "Sets the maximum size of the Windows PowerShell event log to 50 MB (51,200 KB). "
                     + "PowerShell logs are critical for detecting malicious script execution, living-off-the-land attacks, and lateral movement. "
@@ -6230,7 +6230,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "evtacc-security-log-retain-7days",
                 Label = "Event Log Access: Retain Security Log for 7 Days Before Overwriting",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description =
                     "Configures the security event log retention policy to retain events for a minimum of 7 days before overwriting. "
                     + "This ensures that security events are available for forensic analysis for at least one week after they occur. "
@@ -6251,7 +6251,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "evtacc-security-log-autobackup",
                 Label = "Event Log Access: Auto-Backup Security Log When Full",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description =
                     "Enables automatic backup archiving of the security event log when it reaches capacity. "
                     + "When enabled, Windows saves a timestamped archive copy of the full log before creating space for new events. "
@@ -6272,7 +6272,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "evtacc-restrict-guest-access-security-log",
                 Label = "Event Log Access: Restrict Guest Access to Security Log",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description =
                     "Prevents guest accounts from reading the security event log. "
                     + "The security log contains sensitive information about authentication attempts and privilege usage that should not be accessible to unauthenticated or guest-level users. "
@@ -6293,7 +6293,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "evtacc-restrict-guest-access-system-log",
                 Label = "Event Log Access: Restrict Guest Access to System Log",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description =
                     "Prevents guest accounts from reading the system event log. "
                     + "System logs contain details about driver loads, service failures, and hardware events that can aid an attacker in reconnaissance. "
@@ -6314,7 +6314,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "evtacc-restrict-guest-access-application-log",
                 Label = "Event Log Access: Restrict Guest Access to Application Log",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description =
                     "Prevents guest accounts from reading the application event log. "
                     + "Application log events can expose internal application behavior, error messages, and stack traces useful to an attacker. "
@@ -6335,7 +6335,7 @@ internal static class PolicySecurityHardening
             {
                 Id = "evtacc-system-log-autobackup",
                 Label = "Event Log Access: Auto-Backup System Log When Full",
-                Category = "Security Hardening Policy",
+                Category = "Security",
                 Description =
                     "Enables automatic backup archiving of the system event log when it reaches capacity. "
                     + "System events relating to hardware failures, driver crashes, or service terminations should be preserved. "

@@ -42,7 +42,7 @@ internal static class PolicyEncryption
                 {
                     Id = "bkpenc-require-bitlocker-os-drive",
                     Label = "Backup Encryption: Require BitLocker Encryption on OS Drive Before Backup",
-                    Category = "Encryption Policy",
+                    Category = "Encryption",
                     Description =
                         "Sets OSRequireActiveEncryption=1 in the BitLocker FVE policy key. Requires that the OS drive is encrypted with BitLocker before a system backup job can proceed. An unencrypted OS drive backup creates a physical-access vulnerability — the backup media (USB, NAS, cloud) contains a fully readable copy of the OS and all its files. If the backup media is stolen or improperly secured, all data on the device is exposed. Requiring BitLocker on the OS drive ensures that backup images of the OS partition are also effectively encrypted at the data level.",
                     Tags = ["bitlocker", "os-drive", "encryption", "backup-prerequisite", "fve"],
@@ -60,7 +60,7 @@ internal static class PolicyEncryption
                 {
                     Id = "bkpenc-require-bitlocker-fixed-drives",
                     Label = "Backup Encryption: Require BitLocker on Fixed Data Drives",
-                    Category = "Encryption Policy",
+                    Category = "Encryption",
                     Description =
                         "Sets FDVRequireEncryption=1 in the BitLocker FVE policy key. Requires that all fixed (non-removable) data drives are encrypted with BitLocker. Secondary data drives (D:, E:) used for data storage often contain the organisation's most sensitive data — project files, database files, archive documents. Without BitLocker on data drives, stealing the drive (or the laptop) gives physical access to all stored data without any authentication barrier. Requiring BitLocker on all fixed drives ensures at-rest data protection regardless of the data drive structure.",
                     Tags = ["bitlocker", "fixed-drives", "data-drive", "at-rest-encryption", "fve"],
@@ -78,7 +78,7 @@ internal static class PolicyEncryption
                 {
                     Id = "bkpenc-require-bitlocker-removable-drives",
                     Label = "Backup Encryption: Require BitLocker On Removable Drives Before Writing (BitLocker To Go)",
-                    Category = "Encryption Policy",
+                    Category = "Encryption",
                     Description =
                         "Sets RDVDenyWriteAccess=1 combined with RDVRequireEncryption=1 in the FVE policy key. Prevents writing to removable drives (USB sticks, USB HDDs, SD cards) that are not encrypted with BitLocker To Go. Any removable drive used as a backup destination, or for data transfer, must first be encrypted with BitLocker To Go. Unencrypted USB sticks containing backup exports, data exports, or file transfers are frequently lost or stolen — with no encryption protection. This policy blocks writes to unencrypted removable media at the OS level.",
                     Tags = ["bitlocker", "removable-drive", "bitlocker-to-go", "usb", "data-loss"],
@@ -96,7 +96,7 @@ internal static class PolicyEncryption
                 {
                     Id = "bkpenc-set-bitlocker-encryption-method-xts-aes-256",
                     Label = "Backup Encryption: Set BitLocker Encryption Method to XTS-AES 256-bit",
-                    Category = "Encryption Policy",
+                    Category = "Encryption",
                     Description =
                         "Sets EncryptionMethodWithXtsOs=7 (XTS-AES 256) and EncryptionMethodWithXtsFdv=7 in the FVE policy key. Configures BitLocker to use XTS-AES 256-bit encryption for all OS and fixed data drives. XTS-AES 256 is the strongest available encryption mode in BitLocker — XTS (XEX-based tweaked codebook mode with ciphertext stealing) provides better sector-level diffusion than CBC mode, making it resistant to certain cryptanalytic attacks against disk encryption. AES-256 provides twice the key length of AES-128. This is the NSA and NIST recommended configuration for protecting classified information up to TOP SECRET.",
                     Tags = ["bitlocker", "xts-aes-256", "encryption-method", "nist", "aes"],
@@ -114,7 +114,7 @@ internal static class PolicyEncryption
                 {
                     Id = "bkpenc-backup-os-recovery-key-to-ad",
                     Label = "Backup Encryption: Require BitLocker OS Recovery Key Backup to Active Directory",
-                    Category = "Encryption Policy",
+                    Category = "Encryption",
                     Description =
                         "Sets OSRequireActiveDirectoryBackup=1 in the FVE policy key. Requires that the BitLocker recovery key for the OS drive is backed up to Active Directory before BitLocker encryption is allowed to complete. This is the critical operational safety control for enterprise BitLocker deployment — without a backed-up recovery key, a user who forgets their PIN or whose TPM is cleared (BIOS reset, hardware replacement) cannot recover access to their data. AD backup ensures helpdesk can retrieve the recovery key when needed.",
                     Tags = ["bitlocker", "recovery-key", "active-directory", "os-drive", "operational-safety"],
@@ -132,7 +132,7 @@ internal static class PolicyEncryption
                 {
                     Id = "bkpenc-enable-bitlocker-preboot-recovery",
                     Label = "Backup Encryption: Enable BitLocker Pre-Boot Recovery URL and Message",
-                    Category = "Encryption Policy",
+                    Category = "Encryption",
                     Description =
                         "Sets RecoveryKeyMessageSource=2 in the FVE policy key combined with RecoveryKeyMessage to provide a custom helpdesk URL. Enables a custom recovery message displayed on the BitLocker pre-boot recovery screen when a user cannot unlock their drive. The recovery screen is a blue BIOS-like interface — without a custom message, users see only the recovery key prompt with no guidance. Setting a helpdesk URL (e.g., 'Call IT Helpdesk at ext. 5555 or visit https://helpdesk.company.com/bitlocker') reduces helpdesk call time and improves user experience during lockout incidents.",
                     Tags = ["bitlocker", "pre-boot", "recovery-message", "helpdesk", "user-experience"],
@@ -150,7 +150,7 @@ internal static class PolicyEncryption
                 {
                     Id = "bkpenc-require-tpm-plus-pin",
                     Label = "Backup Encryption: Require TPM + PIN at BitLocker Pre-Boot (Strongest Auth)",
-                    Category = "Encryption Policy",
+                    Category = "Encryption",
                     Description =
                         "Sets OSRequireStartupPIN=2 in the FVE policy key (value 2 = Required). Requires a user-set PIN in addition to the TPM for BitLocker pre-boot authentication. TPM-only BitLocker (transparent unlock) provides strong at-rest protection but does not protect against an attack where the device is booted and then handed to the attacker in a running state — the TPM unlocks automatically. Requiring a PIN as a second factor ensures that even if the device is stolen while powered on, the attacker cannot cold-boot into Windows without the PIN.",
                     Tags = ["bitlocker", "tpm-pin", "pre-boot-auth", "two-factor", "cold-boot"],
@@ -168,7 +168,7 @@ internal static class PolicyEncryption
                 {
                     Id = "bkpenc-disable-bitlocker-sleep-allow",
                     Label = "Backup Encryption: Disable Hibernation as BitLocker Bypass Vector (Hibernate-to-RAM)",
-                    Category = "Encryption Policy",
+                    Category = "Encryption",
                     Description =
                         "Sets DisallowStandardUserPINReset=1 in the FVE key, along with enforcing that the system creates a HibernateEnabled=0 check via this policy. When a BitLocker-protected device hibernates, the memory contents (including the in-memory BitLocker volume key) are written to hiberfil.sys — a plaintext file on disk. An attacker who can read hiberfil.sys (while the system is in hibernation) can extract the volume master key from the hiberfil and decrypt the BitLocker drive. This is the 'cold boot attack' variant against hibernation. For highest-security scenarios, hibernation should be disabled to prevent this vector.",
                     Tags = ["bitlocker", "hibernation", "volume-key", "cold-boot", "hiberfil"],
@@ -186,7 +186,7 @@ internal static class PolicyEncryption
                 {
                     Id = "bkpenc-backup-fdv-recovery-key-to-ad",
                     Label = "Backup Encryption: Require Fixed Data Drive Recovery Key Backup to Active Directory",
-                    Category = "Encryption Policy",
+                    Category = "Encryption",
                     Description =
                         "Sets FDVRequireActiveDirectoryBackup=1 and FDVActiveDirectoryBackup=1 in the FVE policy key. Requires that BitLocker recovery keys for all Fixed Data Volumes (secondary data drives) are backed up to Active Directory before encryption completes. Secondary data drives containing important data are often overlooked in recovery key backup procedures — if a secondary drive recovery key is lost and the TPM is cleared, the data on that drive is permanently unrecoverable. Requiring AD backup for all fixed drives closes this gap.",
                     Tags = ["bitlocker", "fixed-drives", "recovery-key", "active-directory", "data-recovery"],
@@ -204,7 +204,7 @@ internal static class PolicyEncryption
                 {
                     Id = "bkpenc-set-backup-encryption-key-rotation-90days",
                     Label = "Backup Encryption: Set Backup Encryption Key Rotation Period to 90 Days",
-                    Category = "Encryption Policy",
+                    Category = "Encryption",
                     Description =
                         "Sets BackupEncryptionKeyRotationDays=90 in the Backup Server policy key. Configures the backup encryption key rotation cadence to 90 days — backup data encryption keys are rotated every 90 days. Key rotation limits the blast radius of a key compromise — an attacker who obtains an old backup encryption key can only decrypt backups created during the previous 90-day key lifecycle. Fewer backup sets are at risk with shorter key rotation cycles. 90 days aligns with standard enterprise key management policies and NIST key management guidelines.",
                     Tags = ["backup", "encryption-key", "key-rotation", "nist", "key-management"],
@@ -235,7 +235,7 @@ internal static class PolicyEncryption
             {
                 Id = "blfve-disable-recovery-console-dra",
                 Label = "Disable BitLocker Recovery via Data Recovery Agent",
-                Category = "Encryption Policy",
+                Category = "Encryption",
                 Description = "Sets DisableDRA=1 in the FVE policy key. "
                     + "Prevents the use of a Data Recovery Agent (DRA) certificate to unlock BitLocker-protected "
                     + "OS or fixed drives. DRA keys are sometimes required in enterprise environments where the "
@@ -257,7 +257,7 @@ internal static class PolicyEncryption
             {
                 Id = "blfve-require-tpm-for-os-drive",
                 Label = "Require TPM for OS Drive BitLocker",
-                Category = "Encryption Policy",
+                Category = "Encryption",
                 Description = "Sets OSRequireTPM=1 in the FVE policy key. "
                     + "Requires the machine to have a Trusted Platform Module (TPM) present and enabled before "
                     + "BitLocker can be activated on the OS drive. Prevents BitLocker from being activated in "
@@ -278,7 +278,7 @@ internal static class PolicyEncryption
             {
                 Id = "blfve-set-os-encryption-aes256",
                 Label = "Set OS Drive BitLocker Encryption to AES-256-XTS",
-                Category = "Encryption Policy",
+                Category = "Encryption",
                 Description = "Sets OSEncryptionType=7 in the FVE policy key. "
                     + "Forces BitLocker on the OS drive to use AES-256 with XTS mode (the strongest "
                     + "BitLocker cipher suite available on Windows 10/11). The EncryptionMethod values: "
@@ -299,7 +299,7 @@ internal static class PolicyEncryption
             {
                 Id = "blfve-require-recovery-key-os",
                 Label = "Require Recovery Key for OS BitLocker",
-                Category = "Encryption Policy",
+                Category = "Encryption",
                 Description = "Sets OSRecoveryKey=1 in the FVE OSVolume policy key. "
                     + "Requires that a recovery key (48-digit password or .bek file) be generated and saved "
                     + "when BitLocker is enabled on the OS drive. Ensures that IT helpdesk or the user always "
@@ -319,7 +319,7 @@ internal static class PolicyEncryption
             {
                 Id = "blfve-deny-write-removable-unprotected",
                 Label = "Deny Write Access to Unprotected Removable Drives",
-                Category = "Encryption Policy",
+                Category = "Encryption",
                 Description = "Sets RDVDenyWriteAccess=1 in the FVE RemovableDrives policy key. "
                     + "Prevents the Windows file system from granting write access to removable drives "
                     + "(USB flash, external HDD, SD cards) that are not BitLocker-protected. "
@@ -340,7 +340,7 @@ internal static class PolicyEncryption
             {
                 Id = "blfve-enable-preboot-input-protectors",
                 Label = "Enable Pre-Boot Input Protectors for BitLocker",
-                Category = "Encryption Policy",
+                Category = "Encryption",
                 Description = "Sets OSEnablePreBootInputProtectors=1 in the FVE policy key. "
                     + "Allows BitLocker to use pre-boot input protectors (PIN or passphrase) even on "
                     + "systems with touch-only or non-standard input (Surface tablets, kiosk machines). "
@@ -361,7 +361,7 @@ internal static class PolicyEncryption
             {
                 Id = "blfve-disable-standby-bitlocker",
                 Label = "Disable Standby Mode When BitLocker Is Active",
-                Category = "Encryption Policy",
+                Category = "Encryption",
                 Description = "Sets DisallowStandbyWithBitLocker=1 in the FVE policy key. "
                     + "Prevents the machine from entering S1-S3 standby sleep states while a "
                     + "BitLocker-protected OS drive is active and not locked. Standby states "
@@ -383,7 +383,7 @@ internal static class PolicyEncryption
             {
                 Id = "blfve-backup-recovery-to-ad",
                 Label = "Backup BitLocker Recovery Key to Active Directory",
-                Category = "Encryption Policy",
+                Category = "Encryption",
                 Description = "Sets OSRecoveryBackupToAD=1 in the FVE OSVolume policy key. "
                     + "Requires BitLocker to back up the OS drive recovery key to Active Directory Domain "
                     + "Services (ADDS) before finishing encryption. Prevents scenarios where the recovery "
@@ -404,7 +404,7 @@ internal static class PolicyEncryption
             {
                 Id = "blfve-set-fixed-drive-aes256",
                 Label = "Set Fixed Drive BitLocker Encryption to AES-256-XTS",
-                Category = "Encryption Policy",
+                Category = "Encryption",
                 Description = "Sets FDVEncryptionType=7 in the FVE policy key. "
                     + "Forces BitLocker on fixed data drives (secondary internal HDDs/SSDs) to use "
                     + "XTS-AES-256, the strongest available cipher. Fixed data drives often store sensitive "
@@ -425,7 +425,7 @@ internal static class PolicyEncryption
             {
                 Id = "blfve-set-removable-drive-aes128",
                 Label = "Set Removable Drive BitLocker Encryption to AES-128-XTS",
-                Category = "Encryption Policy",
+                Category = "Encryption",
                 Description = "Sets RDVEncryptionType=6 in the FVE RemovableDrives policy key. "
                     + "Forces BitLocker To Go on removable drives to use XTS-AES-128 rather than the "
                     + "default AES-128 (non-XTS). XTS mode adds ciphertext-manipulation protection on "
@@ -460,7 +460,7 @@ internal static class PolicyEncryption
             {
                 Id           = "blnetun-require-tpm-plus-pin",
                 Label        = "Require TPM + PIN Pre-Boot Authentication for BitLocker OS Volumes",
-                Category = "Encryption Policy",
+                Category = "Encryption",
                 Description  = "Configures BitLocker to require both TPM attestation and a user-supplied PIN for OS volume unlock at pre-boot, providing two-factor pre-boot authentication that protects against direct memory access and cold boot attacks even on stolen hardware.",
                 Tags         = ["bitlocker", "tpm", "pin", "pre-boot", "two-factor", "policy"],
                 NeedsAdmin   = true,
@@ -476,7 +476,7 @@ internal static class PolicyEncryption
             {
                 Id           = "blnetun-set-minimum-pin-length-8",
                 Label        = "Set Minimum BitLocker Pre-Boot PIN Length to 8 Digits",
-                Category = "Encryption Policy",
+                Category = "Encryption",
                 Description  = "Sets the minimum pre-boot PIN length to 8 digits, preventing trivially short 4-digit PINs that could be brute-forced even against the TPM anti-hammering lockout threshold.",
                 Tags         = ["bitlocker", "pin-length", "minimum", "brute-force", "policy"],
                 NeedsAdmin   = true,
@@ -492,7 +492,7 @@ internal static class PolicyEncryption
             {
                 Id           = "blnetun-disable-recovery-to-ad-storage",
                 Label        = "Disable BitLocker Recovery Key Storage in Active Directory by Default",
-                Category = "Encryption Policy",
+                Category = "Encryption",
                 Description  = "Prevents BitLocker from automatically storing the 48-digit recovery key in Active Directory by default, ensuring recovery key storage is a deliberate IT action rather than an automatic operation that could be mass-enumerated.",
                 Tags         = ["bitlocker", "recovery-key", "active-directory", "key-storage", "policy"],
                 NeedsAdmin   = true,
@@ -508,7 +508,7 @@ internal static class PolicyEncryption
             {
                 Id           = "blnetun-block-recovery-password-print",
                 Label        = "Block Printing BitLocker Recovery Passwords",
-                Category = "Encryption Policy",
+                Category = "Encryption",
                 Description  = "Prevents users from printing the 48-digit BitLocker recovery password, ensuring recovery passwords are not output on physical paper that could be shoulder-surfed, photographed, or left in a printer output tray.",
                 Tags         = ["bitlocker", "recovery-password", "print", "physical-security", "policy"],
                 NeedsAdmin   = true,
@@ -524,7 +524,7 @@ internal static class PolicyEncryption
             {
                 Id           = "blnetun-deny-write-without-bitlocker",
                 Label        = "Deny Write Access to Removable Drives Without BitLocker",
-                Category = "Encryption Policy",
+                Category = "Encryption",
                 Description  = "Prevents write operations to removable USB drives and portable storage that are not BitLocker-protected, ensuring sensitive data cannot be exfiltrated to unencrypted USB devices.",
                 Tags         = ["bitlocker", "removable-drive", "usb", "write-protection", "data-exfiltration", "policy"],
                 NeedsAdmin   = true,
@@ -540,7 +540,7 @@ internal static class PolicyEncryption
             {
                 Id           = "blnetun-enable-network-unlock",
                 Label        = "Enable BitLocker Network Unlock for Domain-Joined Systems",
-                Category = "Encryption Policy",
+                Category = "Encryption",
                 Description  = "Enables BitLocker Network Unlock, allowing domain-joined systems connected to a trusted corporate network at boot time to automatically unlock the OS volume without requiring a PIN, simplifying remote management while maintaining offline protection.",
                 Tags         = ["bitlocker", "network-unlock", "domain", "remote-management", "policy"],
                 NeedsAdmin   = true,
@@ -556,7 +556,7 @@ internal static class PolicyEncryption
             {
                 Id           = "blnetun-use-aes-256-xts",
                 Label        = "Use AES-256-XTS Encryption for New BitLocker OS Volumes",
-                Category = "Encryption Policy",
+                Category = "Encryption",
                 Description  = "Sets the BitLocker encryption algorithm for new OS volume encryptions to AES-256 in XTS mode, which is the strongest available encryption in Windows 11, replacing the default AES-128-XTS.",
                 Tags         = ["bitlocker", "aes-256", "xts", "encryption-strength", "policy"],
                 NeedsAdmin   = true,
@@ -572,7 +572,7 @@ internal static class PolicyEncryption
             {
                 Id           = "blnetun-use-aes-256-xts-fixed",
                 Label        = "Use AES-256-XTS Encryption for New BitLocker Fixed Data Volumes",
-                Category = "Encryption Policy",
+                Category = "Encryption",
                 Description  = "Sets the BitLocker encryption algorithm for new fixed (internal) data drive encryptions to AES-256-XTS, ensuring the same maximum-strength encryption is applied to non-OS data drives.",
                 Tags         = ["bitlocker", "aes-256", "xts", "data-volume", "policy"],
                 NeedsAdmin   = true,
@@ -588,7 +588,7 @@ internal static class PolicyEncryption
             {
                 Id           = "blnetun-log-unlock-events",
                 Label        = "Log BitLocker Volume Unlock and Lock Events",
-                Category = "Encryption Policy",
+                Category = "Encryption",
                 Description  = "Enables Security audit log entries for BitLocker volume unlock and lock events, providing visibility into drive decryption activity for forensics and compliance auditing.",
                 Tags         = ["bitlocker", "unlock-audit", "event-log", "compliance", "policy"],
                 NeedsAdmin   = true,
@@ -604,7 +604,7 @@ internal static class PolicyEncryption
             {
                 Id           = "blnetun-disable-bitlocker-telemetry",
                 Label        = "Disable BitLocker Telemetry Reporting to Microsoft",
-                Category = "Encryption Policy",
+                Category = "Encryption",
                 Description  = "Prevents BitLocker from reporting encryption algorithm usage, PIN complexity, recovery key storage method, and drive unlock events to Microsoft via Windows telemetry.",
                 Tags         = ["bitlocker", "telemetry", "privacy", "microsoft", "policy"],
                 NeedsAdmin   = true,
@@ -631,7 +631,7 @@ internal static class PolicyEncryption
             {
                 Id = "bde-require-tpm",
                 Label = "Require TPM for BitLocker Encryption",
-                Category = "Encryption Policy",
+                Category = "Encryption",
                 Description = "Prevents BitLocker from being configured without a compatible Trusted Platform Module (TPM).",
                 Tags = ["bitlocker", "tpm", "fde", "encryption", "security"],
                 NeedsAdmin = true,
@@ -647,7 +647,7 @@ internal static class PolicyEncryption
             {
                 Id = "bde-allow-enhanced-pin",
                 Label = "Allow Enhanced BitLocker TPM PINs",
-                Category = "Encryption Policy",
+                Category = "Encryption",
                 Description = "Permits the use of enhanced PINs (letters, symbols, and spaces) instead of only digits for BitLocker TPM startup.",
                 Tags = ["bitlocker", "tpm", "pin", "security", "encryption"],
                 NeedsAdmin = true,
@@ -663,7 +663,7 @@ internal static class PolicyEncryption
             {
                 Id = "bde-set-minimum-pin-8",
                 Label = "Set Minimum BitLocker TPM PIN Length to 8",
-                Category = "Encryption Policy",
+                Category = "Encryption",
                 Description = "Requires the BitLocker TPM PIN to be at least 8 characters long.",
                 Tags = ["bitlocker", "tpm", "pin", "length", "security"],
                 NeedsAdmin = true,
@@ -679,7 +679,7 @@ internal static class PolicyEncryption
             {
                 Id = "bde-require-recovery-password",
                 Label = "Require BitLocker Recovery Password",
-                Category = "Encryption Policy",
+                Category = "Encryption",
                 Description = "Mandates that a 48-digit numerical recovery password is generated and saved before BitLocker can be enabled.",
                 Tags = ["bitlocker", "recovery", "password", "security"],
                 NeedsAdmin = true,
@@ -695,7 +695,7 @@ internal static class PolicyEncryption
             {
                 Id = "bde-backup-to-ad",
                 Label = "Back Up BitLocker Recovery Key to Active Directory",
-                Category = "Encryption Policy",
+                Category = "Encryption",
                 Description = "Automatically backs up BitLocker recovery passwords and key packages to Active Directory DS.",
                 Tags = ["bitlocker", "recovery", "active-directory", "backup", "security"],
                 NeedsAdmin = true,
@@ -711,7 +711,7 @@ internal static class PolicyEncryption
             {
                 Id = "bde-block-without-ad-backup",
                 Label = "Block BitLocker if AD Recovery Backup Fails",
-                Category = "Encryption Policy",
+                Category = "Encryption",
                 Description = "Prevents BitLocker from completing setup if the recovery password cannot be backed up to Active Directory.",
                 Tags = ["bitlocker", "recovery", "active-directory", "policy", "security"],
                 NeedsAdmin = true,
@@ -727,7 +727,7 @@ internal static class PolicyEncryption
             {
                 Id = "bde-store-password-and-key-package",
                 Label = "Store BitLocker Recovery Password and Key Package",
-                Category = "Encryption Policy",
+                Category = "Encryption",
                 Description = "Configures AD backup to store both the recovery password and the full key package for maximum recovery options.",
                 Tags = ["bitlocker", "recovery", "active-directory", "key-package", "security"],
                 NeedsAdmin = true,
@@ -743,7 +743,7 @@ internal static class PolicyEncryption
             {
                 Id = "bde-require-tpm-and-pin",
                 Label = "Require TPM + PIN for BitLocker OS Drive Startup",
-                Category = "Encryption Policy",
+                Category = "Encryption",
                 Description = "Mandates both TPM presence and a user-supplied PIN for pre-boot BitLocker authentication on the OS drive.",
                 Tags = ["bitlocker", "tpm", "pin", "startup", "security", "mfa"],
                 NeedsAdmin = true,
@@ -759,7 +759,7 @@ internal static class PolicyEncryption
             {
                 Id = "bde-disable-recovery-usb",
                 Label = "Disable USB Recovery Key for BitLocker OS Drive",
-                Category = "Encryption Policy",
+                Category = "Encryption",
                 Description = "Prevents a USB recovery key flash drive from being used as a recovery method for the BitLocker OS drive.",
                 Tags = ["bitlocker", "recovery", "usb", "security"],
                 NeedsAdmin = true,
@@ -775,7 +775,7 @@ internal static class PolicyEncryption
             {
                 Id = "bde-set-xts-aes-256",
                 Label = "Set BitLocker Encryption to XTS-AES-256",
-                Category = "Encryption Policy",
+                Category = "Encryption",
                 Description = "Configures BitLocker to use XTS-AES-256 encryption for all new volumes, providing maximum encryption strength.",
                 Tags = ["bitlocker", "encryption", "aes-256", "xts", "security"],
                 NeedsAdmin = true,
@@ -802,7 +802,7 @@ internal static class PolicyEncryption
             {
                 Id = "btogo-deny-write-unencrypted",
                 Label = "BitLocker To Go: Deny Write Access to Unencrypted Removable Drives",
-                Category = "Encryption Policy",
+                Category = "Encryption",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 5,
@@ -822,7 +822,7 @@ internal static class PolicyEncryption
             {
                 Id = "btogo-enable-rdv",
                 Label = "BitLocker To Go: Enable BitLocker on Removable Data Volumes",
-                Category = "Encryption Policy",
+                Category = "Encryption",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -841,7 +841,7 @@ internal static class PolicyEncryption
             {
                 Id = "btogo-require-passphrase",
                 Label = "BitLocker To Go: Require Passphrase for Removable Drive Unlock",
-                Category = "Encryption Policy",
+                Category = "Encryption",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -860,7 +860,7 @@ internal static class PolicyEncryption
             {
                 Id = "btogo-passphrase-complexity",
                 Label = "BitLocker To Go: Require Complex Passphrase for Removable Drives",
-                Category = "Encryption Policy",
+                Category = "Encryption",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -879,7 +879,7 @@ internal static class PolicyEncryption
             {
                 Id = "btogo-passphrase-min-length",
                 Label = "BitLocker To Go: Set Minimum Passphrase Length to 12 Characters",
-                Category = "Encryption Policy",
+                Category = "Encryption",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -898,7 +898,7 @@ internal static class PolicyEncryption
             {
                 Id = "btogo-aes128-xts",
                 Label = "BitLocker To Go: Set AES-128-XTS Encryption for Removable Drives",
-                Category = "Encryption Policy",
+                Category = "Encryption",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -917,7 +917,7 @@ internal static class PolicyEncryption
             {
                 Id = "btogo-disable-hardware-encryption",
                 Label = "BitLocker To Go: Disable Hardware Encryption (Force Software AES)",
-                Category = "Encryption Policy",
+                Category = "Encryption",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -937,7 +937,7 @@ internal static class PolicyEncryption
             {
                 Id = "btogo-allow-smart-card",
                 Label = "BitLocker To Go: Allow Smart Card Authentication for Removable Drives",
-                Category = "Encryption Policy",
+                Category = "Encryption",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -956,7 +956,7 @@ internal static class PolicyEncryption
             {
                 Id = "btogo-require-recovery-password",
                 Label = "BitLocker To Go: Require Recovery Password Backup for Removable Drives",
-                Category = "Encryption Policy",
+                Category = "Encryption",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -974,7 +974,7 @@ internal static class PolicyEncryption
             {
                 Id = "btogo-require-recovery-key",
                 Label = "BitLocker To Go: Require Recovery Key File Backup for Removable Drives",
-                Category = "Encryption Policy",
+                Category = "Encryption",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -1012,7 +1012,7 @@ internal static class PolicyEncryption
                 {
                     Id = "cryptops-enable-fips-mode",
                     Label = "Cryptographic: Enable FIPS 140-2 Compliant Algorithm Mode",
-                    Category = "Encryption Policy",
+                    Category = "Encryption",
                     Description =
                         "Sets Enabled=1 in FipsAlgorithmPolicy. Activates Windows FIPS 140-2 compliant algorithm mode. FIPS mode restricts all cryptographic operations to NIST-validated algorithms: AES (128/192/256 bit), 3DES (112-bit effective), SHA-1/SHA-256/SHA-384/SHA-512, RSA, and ECDH. It disables non-FIPS algorithms including RC4, MD5, DES, and any non-validated implementations. Required by US Federal Government agencies, DoD, HIPAA-compliant healthcare, and certain financial institutions.",
                     Tags = ["fips", "cryptography", "compliance", "federal", "algorithm"],
@@ -1029,7 +1029,7 @@ internal static class PolicyEncryption
                 {
                     Id = "cryptops-disable-rc4-cipher",
                     Label = "Cryptographic: Disable RC4 Cipher in TLS/DTLS Negotiation",
-                    Category = "Encryption Policy",
+                    Category = "Encryption",
                     Description =
                         "Sets RC4Enabled=0 in Cryptography policy. Removes RC4 from the TLS cipher suite negotiation list. RC4 is broken: statistical biases in its keystream have been exploited in the RC4 NOMORE attack (86 hours to decrypt a cookie in RC4-protected TLS). IETF prohibited RC4 in TLS in RFC 7465 (2015). Despite the RFC prohibition, RC4 remains enabled on Windows by default for backwards compatibility. Explicitly disabling RC4 enforces the RFC 7465 prohibition in the Windows Schannel TLS provider.",
                     Tags = ["cryptography", "rc4", "tls", "cipher", "hardening"],
@@ -1046,7 +1046,7 @@ internal static class PolicyEncryption
                 {
                     Id = "cryptops-disable-md5-signature",
                     Label = "Cryptographic: Disable MD5 for Digital Signature Verification",
-                    Category = "Encryption Policy",
+                    Category = "Encryption",
                     Description =
                         "Sets MD5SignatureEnabled=0 in Cryptography policy. Disables MD5 signatures in the Windows cryptographic infrastructure's digital signature verification pipeline. MD5 is cryptographically broken (collision attacks are practical): forged X.509 certificates signed with MD5 have been demonstrated in academic research (the Rogue CA attack in 2008). Any certificate in the chain using MD5 is treated as invalid. Windows already rejects MD5 certificates in many contexts; this policy extends the restriction.",
                     Tags = ["cryptography", "md5", "signature", "certificate", "hardening"],
@@ -1063,7 +1063,7 @@ internal static class PolicyEncryption
                 {
                     Id = "cryptops-set-min-rsa-key-length",
                     Label = "Cryptographic: Enforce Minimum 2048-bit RSA Key Length",
-                    Category = "Encryption Policy",
+                    Category = "Encryption",
                     Description =
                         "Sets MinRsaKeyLength=2048 in Cryptography policy. Rejects any RSA cryptographic operation (key generation, signature verification, key exchange) using keys shorter than 2048 bits. NIST deprecated 1024-bit RSA in 2010 (Special Publication 800-131A); keys of this length are attackable by well-resourced adversaries using GNFS factoring. 2048-bit RSA provides approximately 112 bits of security and is the current minimum for new deployments through 2030.",
                     Tags = ["cryptography", "rsa", "key-length", "pki", "hardening"],
@@ -1080,7 +1080,7 @@ internal static class PolicyEncryption
                 {
                     Id = "cryptops-enable-crl-check",
                     Label = "Cryptographic: Enable CRL Check on All Certificate Verification",
-                    Category = "Encryption Policy",
+                    Category = "Encryption",
                     Description =
                         "Sets CertificateRevocationEnabled=1 in Cryptography policy. Enables CRL (Certificate Revocation List) checking for all certificate verification operations. When a certificate is presented for authentication or TLS, Windows checks the issuing CA's CRL distribution point to verify the certificate has not been revoked. Without CRL checking, revoked certificates (e.g., from a compromised private key) remain functional. This is a mandatory control in PKI-secured environments.",
                     Tags = ["cryptography", "crl", "certificate", "revocation", "pki"],
@@ -1097,7 +1097,7 @@ internal static class PolicyEncryption
                 {
                     Id = "cryptops-disable-null-ciphers",
                     Label = "Cryptographic: Disable NULL Cipher Suite in TLS",
-                    Category = "Encryption Policy",
+                    Category = "Encryption",
                     Description =
                         "Sets NullCipherEnabled=0 in Cryptography policy. Removes all NULL encryption cipher suites from TLS/SSL negotiation. NULL cipher suites (TLS_RSA_WITH_NULL_SHA, etc.) perform authentication and integrity checking but transmit payload data in plaintext. While uncommon in practice, NULL ciphers in the cipher suite list represent a denial-of-confidentiality risk: a man-in-the-middle that can manipulate TLS negotiation could force both parties to select a NULL cipher, establishing an authenticated but unencrypted channel.",
                     Tags = ["cryptography", "null-cipher", "tls", "plaintext", "hardening"],
@@ -1114,7 +1114,7 @@ internal static class PolicyEncryption
                 {
                     Id = "cryptops-require-strong-key-protection",
                     Label = "Cryptographic: Require Strong Key Protection UI for Private Keys",
-                    Category = "Encryption Policy",
+                    Category = "Encryption",
                     Description =
                         "Sets ForceKeyProtection=2 in Cryptography policy. Configures the CSP to require explicit user interaction (a password prompt) every time a private key is accessed from the Windows certificate store. With strong protection, private keys cannot be silently accessed by malware running in the user context without triggering a UI prompt that requires button click or password entry. This detects and prevents silent RSA private key use by credential-theft tools (e.g., mimikatz crypto module).",
                     Tags = ["cryptography", "private-key", "protection", "key-guard", "security"],
@@ -1131,7 +1131,7 @@ internal static class PolicyEncryption
                 {
                     Id = "cryptops-disable-sha1-server-auth",
                     Label = "Cryptographic: Disable SHA-1 for Server Authentication Certificates",
-                    Category = "Encryption Policy",
+                    Category = "Encryption",
                     Description =
                         "Sets SHA1ServerAuthEnabled=0 in Cryptography policy. Rejects SHA-1 signed server authentication certificates from TLS handshakes. SHA-1 has been practically broken since 2017 (Google's SHAttered attack demonstrated a SHA-1 collision for $75,000 in cloud compute). Major CAs stopped issuing SHA-1 certs in 2016; public trust anchors no longer accept SHA-1. Internal PKI CAs that still issue SHA-1 server certs should be upgraded to SHA-256.",
                     Tags = ["cryptography", "sha1", "tls", "certificate", "hardening"],
@@ -1148,7 +1148,7 @@ internal static class PolicyEncryption
                 {
                     Id = "cryptops-enable-pkcs11-interface",
                     Label = "Cryptographic: Enable PKCS#11 Hardware Token Interface",
-                    Category = "Encryption Policy",
+                    Category = "Encryption",
                     Description =
                         "Sets EnablePkcs11=1 in Cryptography policy. Registers the Windows PKCS#11 bridge layer, enabling applications that use the PKCS#11 (Cryptoki) standard hardware security module API to use Windows-managed smart cards and Trusted Platform Module (TPM) key storage via a unified interface. This is required in environments deploying hardware security tokens for code signing, SSH key storage, or network authentication (e.g., PIV smart cards, YubiKey HSM).",
                     Tags = ["cryptography", "pkcs11", "smart-card", "hsm", "token"],
@@ -1165,7 +1165,7 @@ internal static class PolicyEncryption
                 {
                     Id = "cryptops-disable-export-of-user-keys",
                     Label = "Cryptographic: Prevent Export of User Private Keys from Key Store",
-                    Category = "Encryption Policy",
+                    Category = "Encryption",
                     Description =
                         "Sets AllowKeyExport=0 in Cryptography policy. Prevents the export of user private keys from the Windows certificate store to PFX files. Private key export is a credential theft vector: an attacker with user-level access can export the user's private email signing key, code signing key, or authentication certificate to a PFX file and exfiltrate it. Keys stored in non-exportable containers provide in-place security; the private key cannot be removed from the machine's key storage even by the key owner.",
                     Tags = ["cryptography", "key-export", "private-key", "dlp", "hardening"],
@@ -1194,7 +1194,7 @@ internal static class PolicyEncryption
             {
                 Id = "efspol-disable-efs",
                 Label = "Disable EFS (Encrypting File System)",
-                Category = "Encryption Policy",
+                Category = "Encryption",
                 Description = "Disables the Encrypting File System (EFS) on all NTFS volumes. Prevents users from encrypting files with EFS — useful when BitLocker is the mandated encryption solution and EFS would create conflicting or unmanaged encryption. Default: 0 (enabled). Recommended: 1 for BitLocker-only environments.",
                 Tags = ["efs", "encryption", "filesystem", "ntfs", "security"],
                 NeedsAdmin = true,
@@ -1208,7 +1208,7 @@ internal static class PolicyEncryption
             {
                 Id = "efspol-disable-cert-request",
                 Label = "Disable EFS Certificate Request UI",
-                Category = "Encryption Policy",
+                Category = "Encryption",
                 Description = "Suppresses the EFS certificate request dialog box when a user encrypts a file and no valid EFS certificate exists. Prevents ad-hoc self-signed EFS certificates from being created outside of PKI control. Default: 0. Recommended: 1.",
                 Tags = ["efs", "certificate", "pki", "encryption"],
                 NeedsAdmin = true,
@@ -1222,7 +1222,7 @@ internal static class PolicyEncryption
             {
                 Id = "efspol-enable-page-file-encryption",
                 Label = "Encrypt Page File via EFS Policy",
-                Category = "Encryption Policy",
+                Category = "Encryption",
                 Description = "Enforces page file encryption at system level, preventing sensitive data in virtual memory from being read from the page file on disk after shutdown or hibernation. Default: 0. Recommended: 1.",
                 Tags = ["efs", "page-file", "encryption", "memory", "security"],
                 NeedsAdmin = true,
@@ -1236,7 +1236,7 @@ internal static class PolicyEncryption
             {
                 Id = "efspol-set-cache-timeout",
                 Label = "Set EFS Key Cache Timeout to 8 Hours",
-                Category = "Encryption Policy",
+                Category = "Encryption",
                 Description = "Sets the EFS key cache timeout to 28 800 seconds (8 hours). After this period of inactivity the EFS private key is evicted from memory, requiring re-authentication before encrypted files can be opened. Default: not set. Recommended: 28800.",
                 Tags = ["efs", "cache", "key", "security", "timeout"],
                 NeedsAdmin = true,
@@ -1250,7 +1250,7 @@ internal static class PolicyEncryption
             {
                 Id = "efspol-require-smart-card",
                 Label = "Require Smart Card for EFS Key Storage",
-                Category = "Encryption Policy",
+                Category = "Encryption",
                 Description = "Forces EFS to use hardware-backed smart card key storage instead of software keys. Ensures EFS encryption keys are protected by hardware rather than being stored in the software key store. Default: 0. Recommended: 1 for high-security PKI environments.",
                 Tags = ["efs", "smart-card", "pki", "hardware", "security"],
                 NeedsAdmin = true,
@@ -1264,7 +1264,7 @@ internal static class PolicyEncryption
             {
                 Id = "efspol-disable-enhanced-storage-legacy",
                 Label = "Disallow Legacy Devices in Enhanced Storage",
-                Category = "Encryption Policy",
+                Category = "Encryption",
                 Description = "Blocks non-IEEE-1667–compliant (legacy) USB storage devices from being used as enhanced storage targets. Forces use of only certified IEEE-1667 hardware-encrypted storage devices. Default: 0. Recommended: 1.",
                 Tags = ["efs", "enhanced-storage", "usb", "hardware", "security"],
                 NeedsAdmin = true,
@@ -1278,7 +1278,7 @@ internal static class PolicyEncryption
             {
                 Id = "efspol-disable-enhanced-storage-1394",
                 Label = "Disallow IEEE 1394 Enhanced Storage Devices",
-                Category = "Encryption Policy",
+                Category = "Encryption",
                 Description = "Denies use of IEEE 1394 (FireWire) enhanced-storage devices as encryption targets. Eliminates a legacy port-based attack surface available through IEEE 1394 DMA. Default: 0. Recommended: 1.",
                 Tags = ["efs", "enhanced-storage", "firewire", "ieee1394", "security"],
                 NeedsAdmin = true,
@@ -1292,7 +1292,7 @@ internal static class PolicyEncryption
             {
                 Id = "efspol-require-password-silo",
                 Label = "Require Password Silo Certificate for Enhanced Storage",
-                Category = "Encryption Policy",
+                Category = "Encryption",
                 Description = "Requires a password silo certificate (from organizational CA) before access to enhanced storage devices is granted. Prevents use of consumer/personal enhanced storage in enterprise environments. Default: 0. Recommended: 1.",
                 Tags = ["efs", "enhanced-storage", "certificate", "silo", "security"],
                 NeedsAdmin = true,
@@ -1306,7 +1306,7 @@ internal static class PolicyEncryption
             {
                 Id = "efspol-lock-enhanced-storage-on-lock",
                 Label = "Lock Enhanced Storage on Workstation Lock",
-                Category = "Encryption Policy",
+                Category = "Encryption",
                 Description = "Locks (re-locks) all connected enhanced storage devices when the workstation is locked (Win+L, screensaver, idle). Ensures encrypted USB storage is inaccessible without re-authentication after lock. Default: 0. Recommended: 1.",
                 Tags = ["efs", "enhanced-storage", "lock", "usb", "security"],
                 NeedsAdmin = true,
@@ -1320,7 +1320,7 @@ internal static class PolicyEncryption
             {
                 Id = "efspol-disable-enhanced-storage-device-list",
                 Label = "Restrict Enhanced Storage to Approved Devices Only",
-                Category = "Encryption Policy",
+                Category = "Encryption",
                 Description = "When set, only enhanced storage devices whose identity matches organizational approved entries are allowed. All unapproved hardware-encrypted USB drives are blocked. Default: 0. Recommended: 1 for controlled hardware environments.",
                 Tags = ["efs", "enhanced-storage", "allowlist", "usb", "security"],
                 NeedsAdmin = true,
@@ -1346,7 +1346,7 @@ internal static class PolicyEncryption
             {
                 Id = "fips-enable-fips-algorithm-policy",
                 Label = "FIPS Compliance: Enable FIPS 140-2 Compliant Algorithms",
-                Category = "Encryption Policy",
+                Category = "Encryption",
                 Description = "Enables the FIPS 140-2 compliant algorithm policy (FipsAlgorithmPolicy\\Enabled=1), which forces Windows security subsystems including TLS, Schannel, BitLocker, and Remote Desktop to use only FIPS-approved cryptographic algorithms. Required by NIST SP 800-53, FedRAMP, DoD STIGs, and PCI-DSS environments. Note: some older COM components and third-party applications may fail when this is enforced.",
                 Tags = ["fips", "cryptography", "compliance", "security", "nist"],
                 NeedsAdmin = true,
@@ -1363,7 +1363,7 @@ internal static class PolicyEncryption
             {
                 Id = "fips-disable-machine-key-caching",
                 Label = "FIPS Compliance: Disable Machine Key Caching",
-                Category = "Encryption Policy",
+                Category = "Encryption",
                 Description = "Disables caching of machine-level CNG (Cryptography Next Generation) private keys in memory. When enabled, machine keys can remain in memory after their first use for performance reasons, but this creates a window where a privileged attacker or malicious driver could extract cached key material. Disabling caching forces fresh key derivation on each use, aligning with zero-trust key management practices.",
                 Tags = ["fips", "cryptography", "machine key", "caching", "policy"],
                 NeedsAdmin = true,
@@ -1380,7 +1380,7 @@ internal static class PolicyEncryption
             {
                 Id = "fips-force-strong-key-protection",
                 Label = "FIPS Compliance: Force Strong Key Protection for User Keys",
-                Category = "Encryption Policy",
+                Category = "Encryption",
                 Description = "Configures CNG to require strong key protection (ForceKeyProtection=2), which means private keys stored in the user's personal certificate store can only be accessed after the user explicitly provides their password. This prevents silent background access to private keys by automated processes, scheduled tasks, or potentially compromised processes running in the user context without the user's consent.",
                 Tags = ["fips", "cryptography", "key protection", "certificates", "policy"],
                 NeedsAdmin = true,
@@ -1397,7 +1397,7 @@ internal static class PolicyEncryption
             {
                 Id = "fips-disable-dpapi-auto-protection",
                 Label = "FIPS Compliance: Restrict DPAPI Automatic Data Protection",
-                Category = "Encryption Policy",
+                Category = "Encryption",
                 Description = "Restricts the Data Protection API (DPAPI) from automatically enrolling new data blobs with default key generation settings that may not be FIPS-compliant. DPAPI is used by browsers (Chrome/Edge), mail clients, and credential managers to protect saved passwords and tokens. When FIPS mode is enabled but DPAPI is not restricted, legacy blobs may still be created using non-FIPS algorithms.",
                 Tags = ["fips", "cryptography", "dpapi", "data protection", "policy"],
                 NeedsAdmin = true,
@@ -1414,7 +1414,7 @@ internal static class PolicyEncryption
             {
                 Id = "fips-require-sha2-minimum",
                 Label = "FIPS Compliance: Require SHA-2 Minimum for Code Integrity",
-                Category = "Encryption Policy",
+                Category = "Encryption",
                 Description = "Sets the minimum hash algorithm for Authenticode code signing to SHA-2 (SHA-256 or better), blocking execution of binaries signed only with SHA-1 or MD5. SHA-1 signatures have been deprecated by NIST since 2011 and are considered vulnerable to collision attacks. This policy aligns code integrity checking with FIPS 140-2 Annex A requirements.",
                 Tags = ["fips", "cryptography", "sha2", "code signing", "policy"],
                 NeedsAdmin = true,
@@ -1431,7 +1431,7 @@ internal static class PolicyEncryption
             {
                 Id = "fips-disable-rc4-tls",
                 Label = "FIPS Compliance: Disable RC4 Cipher in TLS",
-                Category = "Encryption Policy",
+                Category = "Encryption",
                 Description = "Disables the RC4 stream cipher from the TLS negotiation cipher suite list at the Schannel policy level. RC4 is not FIPS-approved (NSA Suite B) and has been proven vulnerable to statistical attacks (BEAST, RC4NOMORE). Windows Server 2012 R2 and newer disable it by default, but this policy explicitly sets the registry value to ensure RC4 cannot be re-enabled by custom application cipher suite negotiation.",
                 Tags = ["fips", "cryptography", "rc4", "tls", "schannel"],
                 NeedsAdmin = true,
@@ -1448,7 +1448,7 @@ internal static class PolicyEncryption
             {
                 Id = "fips-disable-weak-hash-algorithms",
                 Label = "FIPS Compliance: Disable MD5 and MD4 Hash Algorithms",
-                Category = "Encryption Policy",
+                Category = "Encryption",
                 Description = "Disables MD5 and MD4 hash algorithms from being used by the Windows CNG key storage provider for new operations. MD5 and MD4 are not FIPS-approved; both have known collision vulnerabilities. While MD5 is still widely used in non-security contexts (file checksums), its use in cryptographic operations (certificate fingerprints, HMAC) must be blocked in FIPS-compliant environments.",
                 Tags = ["fips", "cryptography", "md5", "hash algorithms", "policy"],
                 NeedsAdmin = true,
@@ -1465,7 +1465,7 @@ internal static class PolicyEncryption
             {
                 Id = "fips-disable-des-3des-cipher",
                 Label = "FIPS Compliance: Restrict DES and 3DES Ciphers",
-                Category = "Encryption Policy",
+                Category = "Encryption",
                 Description = "Restricts use of DES (56-bit) and Triple-DES (3DES/TDEA) block ciphers in new cryptographic sessions. DES has been disallowed by NIST since 2005. 3DES (with 112-bit effective security) was deprecated by NIST SP 800-131A in 2023 for new use and is only approved through 2023 for legacy compatibility. This policy aligns the cipher suite with the requirement for AES-256 minimum.",
                 Tags = ["fips", "cryptography", "des", "3des", "cipher policy"],
                 NeedsAdmin = true,
@@ -1482,7 +1482,7 @@ internal static class PolicyEncryption
             {
                 Id = "fips-require-tls-certificate-validation",
                 Label = "FIPS Compliance: Require Full Certificate Chain Validation",
-                Category = "Encryption Policy",
+                Category = "Encryption",
                 Description = "Requires that all TLS connections validate the complete certificate chain including OCSP stapling verification and CRL distribution point checks. In FIPS environments, certificate validation must be comprehensive — weak pinning, expired status checks, or bypassed revocation checks can introduce attack vectors. This policy sets the strict validation mode for the Windows Schannel certificate validation path.",
                 Tags = ["fips", "cryptography", "certificate", "tls validation", "policy"],
                 NeedsAdmin = true,
@@ -1499,7 +1499,7 @@ internal static class PolicyEncryption
             {
                 Id = "fips-enforce-secure-channel-minimum",
                 Label = "FIPS Compliance: Enforce Minimum Secure Channel Protocol Version",
-                Category = "Encryption Policy",
+                Category = "Encryption",
                 Description = "Enforces a minimum TLS 1.2 protocol version for all Windows Schannel connections, preventing fallback to SSL 3.0, TLS 1.0, or TLS 1.1. All three older versions have documented protocol-level vulnerabilities (POODLE, BEAST, DROWN, BEAST) that allow decryption of traffic by an active network attacker. FIPS 140-2 references NIST SP 800-52 which mandates TLS 1.2 as the minimum for federal systems.",
                 Tags = ["fips", "cryptography", "tls", "secure channel", "minimum version"],
                 NeedsAdmin = true,
@@ -1528,7 +1528,7 @@ internal static class PolicyEncryption
                 {
                     Id = "hvci-set-policy-level-strict",
                     Label = "Set HVCI Code Integrity Policy to Strict",
-                    Category = "Encryption Policy",
+                    Category = "Encryption",
                     Description =
                         "Sets the Code Integrity policy level to Strict via the CI\\Policy key, blocking DLL injections and kernel-mode payloads that exploit unsigned code paths not caught by the default policy.",
                     Tags = ["hvci", "code-integrity", "strict", "driver", "policy"],
@@ -1545,7 +1545,7 @@ internal static class PolicyEncryption
                 {
                     Id = "hvci-block-driver-vulnerability-list",
                     Label = "Enable Vulnerable Driver Blocklist",
-                    Category = "Encryption Policy",
+                    Category = "Encryption",
                     Description =
                         "Enables the Microsoft Vulnerable Driver Blocklist (also built into Windows Security Center) via the CI policy, preventing known exploitable drivers from loading regardless of signature status.",
                     Tags = ["hvci", "driver-blocklist", "vulnerable-drivers", "policy"],
@@ -1562,7 +1562,7 @@ internal static class PolicyEncryption
                 {
                     Id = "hvci-enable-ci-flight-check",
                     Label = "Enable Code Integrity Flight Signing Check",
-                    Category = "Encryption Policy",
+                    Category = "Encryption",
                     Description =
                         "Enables flight signing checks in CI policy, ensuring Windows Insider / pre-release kernel updates still pass code integrity verification while on production builds.",
                     Tags = ["hvci", "flight-signing", "ci", "policy"],
@@ -1579,7 +1579,7 @@ internal static class PolicyEncryption
                 {
                     Id = "hvci-block-dev-mode-km-bypass",
                     Label = "Block Developer Mode Kernel Bypass of HVCI",
-                    Category = "Encryption Policy",
+                    Category = "Encryption",
                     Description =
                         "Prevents Developer Mode (Sideload Apps / Test Signing) from bypassing HVCI code integrity enforcement, ensuring HVCI cannot be defeated by enabling Developer Mode.",
                     Tags = ["hvci", "developer-mode", "test-signing", "bypass", "policy"],
@@ -1596,7 +1596,7 @@ internal static class PolicyEncryption
                 {
                     Id = "hvci-disable-kernel-debug-bypass",
                     Label = "Disable Kernel Debugging Bypass of Code Integrity",
-                    Category = "Encryption Policy",
+                    Category = "Encryption",
                     Description =
                         "Prevents kernel debugger attachment from disabling HVCI code integrity checks, ensuring that even a live kernel debug session cannot load unsigned drivers.",
                     Tags = ["hvci", "kernel-debug", "code-integrity", "security", "policy"],
@@ -1613,7 +1613,7 @@ internal static class PolicyEncryption
                 {
                     Id = "hvci-enable-user-mode-ci",
                     Label = "Enable User-Mode Code Integrity (UMCI)",
-                    Category = "Encryption Policy",
+                    Category = "Encryption",
                     Description =
                         "Extends code integrity enforcement to user mode via UMCI, requiring all user-mode executables and DLLs to be signed, providing application whitelisting at the OS policy level.",
                     Tags = ["hvci", "umci", "user-mode", "code-integrity", "policy"],
@@ -1630,7 +1630,7 @@ internal static class PolicyEncryption
                 {
                     Id = "hvci-block-hmac-degradation",
                     Label = "Block HMAC Algorithm Downgrade in CI Validation",
-                    Category = "Encryption Policy",
+                    Category = "Encryption",
                     Description =
                         "Prevents CI signature validation from falling back to weak legacy HMAC algorithms, ensuring code integrity checks always use strong cryptographic hashing.",
                     Tags = ["hvci", "hmac", "cryptography", "downgrade", "policy"],
@@ -1647,7 +1647,7 @@ internal static class PolicyEncryption
                 {
                     Id = "hvci-enforce-efi-boot-driver-check",
                     Label = "Enforce EFI Boot Driver Code Integrity Check",
-                    Category = "Encryption Policy",
+                    Category = "Encryption",
                     Description =
                         "Extends HVCI enforcement to EFI boot-time drivers loaded by the firmware, ensuring CI policy covers the entire boot chain and not just post-HORM drivers.",
                     Tags = ["hvci", "efi", "boot-driver", "secure-boot", "policy"],
@@ -1664,7 +1664,7 @@ internal static class PolicyEncryption
                 {
                     Id = "hvci-block-ci-opt-out-for-drivers",
                     Label = "Block Per-Driver CI Opt-Out Flag",
-                    Category = "Encryption Policy",
+                    Category = "Encryption",
                     Description =
                         "Prevents individual drivers from setting a CI opt-out flag in their INF to bypass HVCI verification, ensuring the CI policy cannot be weakened driver-by-driver.",
                     Tags = ["hvci", "driver", "opt-out", "bypass-prevention", "policy"],
@@ -1681,7 +1681,7 @@ internal static class PolicyEncryption
                 {
                     Id = "hvci-enable-ci-policy-telemetry",
                     Label = "Enable CI Policy Violation Telemetry Reporting",
-                    Category = "Encryption Policy",
+                    Category = "Encryption",
                     Description =
                         "Enables reporting of Code Integrity policy violations to Windows Defender ATP / Microsoft Defender for Endpoint, supporting cloud-based detection of BYOVD and LOLBAS attack patterns.",
                     Tags = ["hvci", "telemetry", "defender", "atp", "policy"],
@@ -1709,7 +1709,7 @@ internal static class PolicyEncryption
             {
                 Id = "memintg-enable-hvci",
                 Label = "Enable Hypervisor-Protected Code Integrity (HVCI/Memory Integrity)",
-                Category = "Encryption Policy",
+                Category = "Encryption",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 5,
@@ -1726,7 +1726,7 @@ internal static class PolicyEncryption
             {
                 Id = "memintg-enable-vbs",
                 Label = "Enable Virtualization-Based Security (VBS)",
-                Category = "Encryption Policy",
+                Category = "Encryption",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 5,
@@ -1743,7 +1743,7 @@ internal static class PolicyEncryption
             {
                 Id = "memintg-require-uefi-lock",
                 Label = "Require UEFI Lock for Device Guard Configuration",
-                Category = "Encryption Policy",
+                Category = "Encryption",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 5,
@@ -1760,7 +1760,7 @@ internal static class PolicyEncryption
             {
                 Id = "memintg-enable-credential-guard",
                 Label = "Enable Windows Defender Credential Guard",
-                Category = "Encryption Policy",
+                Category = "Encryption",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 5,
@@ -1777,7 +1777,7 @@ internal static class PolicyEncryption
             {
                 Id = "memintg-enable-system-guard",
                 Label = "Enable Windows Defender System Guard Runtime Monitor",
-                Category = "Encryption Policy",
+                Category = "Encryption",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -1794,7 +1794,7 @@ internal static class PolicyEncryption
             {
                 Id = "memintg-block-untrusted-fonts",
                 Label = "Block Untrusted Font Loading in Kernel Mode",
-                Category = "Encryption Policy",
+                Category = "Encryption",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -1811,7 +1811,7 @@ internal static class PolicyEncryption
             {
                 Id = "memintg-enable-secure-launch",
                 Label = "Enable Secure Launch Measured Boot (DRTM)",
-                Category = "Encryption Policy",
+                Category = "Encryption",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 5,
@@ -1828,7 +1828,7 @@ internal static class PolicyEncryption
             {
                 Id = "memintg-audit-vbs-incompatible-drivers",
                 Label = "Enable Audit Mode for VBS Incompatible Drivers",
-                Category = "Encryption Policy",
+                Category = "Encryption",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -1845,7 +1845,7 @@ internal static class PolicyEncryption
             {
                 Id = "memintg-enable-dma-protection",
                 Label = "Enable Kernel DMA Protection for External Devices",
-                Category = "Encryption Policy",
+                Category = "Encryption",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 5,
@@ -1862,7 +1862,7 @@ internal static class PolicyEncryption
             {
                 Id = "memintg-enforce-kernel-shadow-stacks",
                 Label = "Enable Hardware-Enforced Stack Protection for Kernel Code",
-                Category = "Encryption Policy",
+                Category = "Encryption",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 5,
@@ -1892,7 +1892,7 @@ internal static class PolicyEncryption
             {
                 Id = "pde-enable-personal-data-encryption",
                 Label = "Enable Personal Data Encryption",
-                Category = "Encryption Policy",
+                Category = "Encryption",
                 Description = "Enables Personal Data Encryption (PDE) on the device, protecting user files in selected folders with keys tied to the signed-in user identity. Requires Windows Hello for Business.",
                 Tags = ["pde", "encryption", "personal-data", "security", "windows-11"],
                 NeedsAdmin = true,
@@ -1910,7 +1910,7 @@ internal static class PolicyEncryption
             {
                 Id = "pde-require-device-encryption-prereq",
                 Label = "Require BitLocker as PDE Prerequisite",
-                Category = "Encryption Policy",
+                Category = "Encryption",
                 Description = "Requires BitLocker drive encryption to be active before Personal Data Encryption can be applied to user folders. Ensures defense-in-depth for protected content.",
                 Tags = ["pde", "encryption", "bitlocker", "prerequisite", "security"],
                 NeedsAdmin = true,
@@ -1928,7 +1928,7 @@ internal static class PolicyEncryption
             {
                 Id = "pde-block-network-content-access",
                 Label = "Block PDE Content Access from Network Accounts",
-                Category = "Encryption Policy",
+                Category = "Encryption",
                 Description = "Prevents network service accounts and remote processes from accessing folders protected by Personal Data Encryption, limiting access to the locally signed-in user.",
                 Tags = ["pde", "encryption", "network", "access-control", "security"],
                 NeedsAdmin = true,
@@ -1946,7 +1946,7 @@ internal static class PolicyEncryption
             {
                 Id = "pde-wipe-keys-on-lock",
                 Label = "Wipe PDE Keys on Device Lock",
-                Category = "Encryption Policy",
+                Category = "Encryption",
                 Description = "Instructs Windows to purge in-memory Personal Data Encryption keys when the device screen locks. Files remain encrypted and inaccessible until the user unlocks with Windows Hello.",
                 Tags = ["pde", "encryption", "lock-screen", "key-management", "security"],
                 NeedsAdmin = true,
@@ -1964,7 +1964,7 @@ internal static class PolicyEncryption
             {
                 Id = "pde-protect-desktop-folder",
                 Label = "Enable PDE Protection for Desktop Folder",
-                Category = "Encryption Policy",
+                Category = "Encryption",
                 Description = "Applies Personal Data Encryption to the user's Desktop folder, ensuring files placed on the desktop are encrypted with the user's Windows Hello identity key.",
                 Tags = ["pde", "encryption", "desktop", "folder-protection", "windows-11"],
                 NeedsAdmin = true,
@@ -1982,7 +1982,7 @@ internal static class PolicyEncryption
             {
                 Id = "pde-protect-documents-folder",
                 Label = "Enable PDE Protection for Documents Folder",
-                Category = "Encryption Policy",
+                Category = "Encryption",
                 Description = "Applies Personal Data Encryption to the user's Documents folder. Files are encrypted with user identity keys tied to Windows Hello, preventing offline access without user authentication.",
                 Tags = ["pde", "encryption", "documents", "folder-protection", "windows-11"],
                 NeedsAdmin = true,
@@ -2000,7 +2000,7 @@ internal static class PolicyEncryption
             {
                 Id = "pde-protect-pictures-folder",
                 Label = "Enable PDE Protection for Pictures Folder",
-                Category = "Encryption Policy",
+                Category = "Encryption",
                 Description = "Applies Personal Data Encryption to the user's Pictures folder, protecting images and media from offline access on lost or stolen devices.",
                 Tags = ["pde", "encryption", "pictures", "folder-protection", "windows-11"],
                 NeedsAdmin = true,
@@ -2018,7 +2018,7 @@ internal static class PolicyEncryption
             {
                 Id = "pde-audit-access-events",
                 Label = "Enable PDE Access Audit Events",
-                Category = "Encryption Policy",
+                Category = "Encryption",
                 Description = "Enables Windows to generate audit events when PDE-protected content is accessed or when PDE encryption/decryption operations occur, supporting security monitoring and compliance.",
                 Tags = ["pde", "encryption", "audit", "compliance", "event-log"],
                 NeedsAdmin = true,
@@ -2036,7 +2036,7 @@ internal static class PolicyEncryption
             {
                 Id = "pde-restrict-key-backup",
                 Label = "Restrict PDE Key Backup to Organization",
-                Category = "Encryption Policy",
+                Category = "Encryption",
                 Description = "Limits Personal Data Encryption key backup to organization-controlled Microsoft Entra ID (Azure AD) accounts only, preventing personal Microsoft account key escrow.",
                 Tags = ["pde", "encryption", "key-backup", "azure-ad", "enterprise"],
                 NeedsAdmin = true,
@@ -2054,7 +2054,7 @@ internal static class PolicyEncryption
             {
                 Id = "pde-require-windows-hello-enrolment",
                 Label = "Require Windows Hello Enrollment for PDE",
-                Category = "Encryption Policy",
+                Category = "Encryption",
                 Description = "Enforces that users must be enrolled in Windows Hello for Business before Personal Data Encryption can be activated on their device. Prevents PDE deployment without modern authentication.",
                 Tags = ["pde", "encryption", "windows-hello", "enrollment", "security"],
                 NeedsAdmin = true,
@@ -2085,7 +2085,7 @@ internal static class PolicyEncryption
                 {
                     Id = "sbdbx-enable-dbx-automatic-update",
                     Label = "Secure Boot DBX: Enable Automatic Secure Boot Forbidden Signatures (DBX) Update",
-                    Category = "Encryption Policy",
+                    Category = "Encryption",
                     Description =
                         "Sets EnableDbxUpdate=1 in the UEFI policy hive. Enables automatic updates to the Secure Boot DBX (Forbidden Signatures Database) via Windows Update. The DBX contains hashes of compromised or revoked Secure Boot bootloaders and keys — when a bootloader is found to have a security vulnerability that can bypass Secure Boot (e.g., the BlackLotus bootkit targets CVE-2022-21894), Microsoft adds its hash to the DBX and distributes the update via Windows Update. Without automatic DBX updates, a compromised bootloader that has been publicly revoked can still be used to bypass Secure Boot on unpatched systems.",
                     Tags = ["secure-boot", "dbx", "forbidden-signatures", "bootkit", "uefi"],
@@ -2103,7 +2103,7 @@ internal static class PolicyEncryption
                 {
                     Id = "sbdbx-require-secure-boot-enabled",
                     Label = "Secure Boot DBX: Require Secure Boot to be Enabled (Block Boot if Disabled)",
-                    Category = "Encryption Policy",
+                    Category = "Encryption",
                     Description =
                         "Sets RequireSecureBoot=1 in the UEFI policy hive. Enforces a policy that Secure Boot must be enabled on this device. If Secure Boot is detected as disabled in the firmware, Windows can generate compliance events and Intune/AAD Conditional Access can block the device from accessing corporate resources until Secure Boot is re-enabled. This policy does not directly enable Secure Boot in firmware (that requires a separate UEFI configuration), but it marks the device as non-compliant for enterprise attestation purposes when Secure Boot is off.",
                     Tags = ["secure-boot", "compliance", "firmware", "attestation", "conditional-access"],
@@ -2121,7 +2121,7 @@ internal static class PolicyEncryption
                 {
                     Id = "sbdbx-enable-uefi-boot-event-logging",
                     Label = "Secure Boot DBX: Enable UEFI Boot Event and Measurement Logging",
-                    Category = "Encryption Policy",
+                    Category = "Encryption",
                     Description =
                         "Sets EnableUefiBootEventLogging=1 in the UEFI policy hive. Enables logging of UEFI boot events and TPM PCR measurements to the Windows event log. During boot, the UEFI firmware measures each boot component (UEFI itself, secure boot db/dbx state, boot manager, OS loader) and extends the TPM PCRs. Enabling event logging records these measurements in the Windows event log (TCG EventLog / Measured Boot). SOC tools and attestation services use these events to detect firmware tampering, kernel module loading of unsigned code, or PCR value anomalies that may indicate a rootkit or bootkit is active.",
                     Tags = ["uefi", "boot-events", "tpm-measurement", "tcg", "boot-attestation"],
@@ -2139,7 +2139,7 @@ internal static class PolicyEncryption
                 {
                     Id = "sbdbx-block-unsigned-uefi-variables-write",
                     Label = "Secure Boot DBX: Block User-Mode Write Access to Unsigned UEFI Variables",
-                    Category = "Encryption Policy",
+                    Category = "Encryption",
                     Description =
                         "Sets BlockUnsignedUefiVarsWrite=1 in the UEFI policy hive. Prevents user-mode processes from writing unsigned UEFI variables to the UEFI NVRAM. UEFI variables are persistent firmware storage accessible from both firmware and running OS. Attackers have used arbitrary UEFI variable writes (e.g., FinFisher and the Lojax bootkit) to plant malicious firmware bypass code in UEFI NVRAM. Blocking unsigned variable writes from user-mode requires that any UEFI variable modification be signed with a key in the Secure Boot DB — preventing attacker UEFI variable injection from compromised user accounts.",
                     Tags = ["uefi", "variable-write", "nvram", "bootkit", "lojax"],
@@ -2157,7 +2157,7 @@ internal static class PolicyEncryption
                 {
                     Id = "sbdbx-enable-vbs-device-guard",
                     Label = "Secure Boot DBX: Enable VBS Platform Security Level 2 (Secure Boot + IOMMU)",
-                    Category = "Encryption Policy",
+                    Category = "Encryption",
                     Description =
                         "Sets RequirePlatformSecurityFeatures=3 in DeviceGuard (value 3 = Secure Boot AND IOMMU/DMAR required for VBS). Requires both Secure Boot and IOMMU (Input-Output Memory Management Unit, Intel VT-d or AMD-Vi) to be active before Virtualization Based Security will start. Without IOMMU, DMA attacks (Direct Memory Access via PCIe Thunderbolt, FireWire, ExpressCard) can directly read or write the hypervisor memory region, bypassing VBS isolation. Requiring IOMMU for VBS ensures that even DMA-capable physical attacks cannot access the VBS inner partition.",
                     Tags = ["vbs", "iommu", "secure-boot", "dma-protection", "device-guard"],
@@ -2175,7 +2175,7 @@ internal static class PolicyEncryption
                 {
                     Id = "sbdbx-enable-signed-boot-chain-policy",
                     Label = "Secure Boot DBX: Enforce Complete Signed Boot Chain Policy",
-                    Category = "Encryption Policy",
+                    Category = "Encryption",
                     Description =
                         "Sets EnforceSignedBootChain=1 in the UEFI policy hive. Enforces that the complete boot chain (firmware → UEFI boot manager → Windows Boot Manager → OS loader → kernel) must be signed with certificates in the Secure Boot DB. If any component in the chain fails signature verification, the boot process halts. This policy extends beyond the basic Secure Boot enforcement to include the Windows Boot Manager's own chain-of-trust validation — ensuring that even if an attacker manages to inject a signed (but old and vulnerable) bootloader into the DB, the Windows Boot Policy prevents unsigned kernel components from loading.",
                     Tags = ["secure-boot", "boot-chain", "signature", "kernel", "integrity"],
@@ -2193,7 +2193,7 @@ internal static class PolicyEncryption
                 {
                     Id = "sbdbx-set-db-update-policy-microsoft-only",
                     Label = "Secure Boot DBX: Restrict Secure Boot DB Updates to Microsoft-Signed Only",
-                    Category = "Encryption Policy",
+                    Category = "Encryption",
                     Description =
                         "Sets DbUpdatePolicy=1 in the UEFI policy hive (value 1 = Microsoft PKI only; value 0 = Any signed, value 2 = Unsigned allowed). Restricts Secure Boot DB update signatures to Microsoft-issued certificates only. Third-party software or OEM firmware tools can inject their own signing certificates into the Secure Boot DB — an attacker who compromises an OEM's signing key can add a malicious signing certificate to the DB and then boot any malware signed with that key. Restricting DB updates to Microsoft PKI ensures the Secure Boot DB can only be extended by Microsoft-delivered Windows Update packages.",
                     Tags = ["secure-boot", "db-update", "microsoft-pki", "signing-certificate", "uefi"],
@@ -2211,7 +2211,7 @@ internal static class PolicyEncryption
                 {
                     Id = "sbdbx-prevent-boot-debug-mode",
                     Label = "Secure Boot DBX: Prevent Boot-Time Kernel Debug Mode Activation",
-                    Category = "Encryption Policy",
+                    Category = "Encryption",
                     Description =
                         "Sets PreventBootDebugMode=1 in the UEFI policy hive. Blocks the ability to activate kernel debug mode (bcdedit /debug on) via boot configuration. Kernel debug mode creates a kernel debugging channel that can be used to attach a physical or kernel debugger — bypassing all user-mode security and directly reading/writing kernel memory. An attacker with physical access (or boot configuration access) who enables kernel debug and attaches a debugger can perform any system modification, including disabling security software, injecting rootkits, and extracting credentials from LSASS. Preventing debug mode activation closes this powerful boot-time bypass.",
                     Tags = ["kernel-debug", "boot-debug", "bcdedit", "bypass-prevention", "physical-security"],
@@ -2229,7 +2229,7 @@ internal static class PolicyEncryption
                 {
                     Id = "sbdbx-enable-pre-os-dma-protection",
                     Label = "Secure Boot DBX: Enable Pre-OS DMA Protection (Thunderbolt / PCIe)",
-                    Category = "Encryption Policy",
+                    Category = "Encryption",
                     Description =
                         "Sets EnablePreBoot_DMA_protection=1 in the DeviceGuard key. Enables pre-OS DMA protection (Kernel DMA Protection) for Thunderbolt and PCIe devices. By default, DMA protection only activates after Windows fully loads. During the Windows boot phase, Thunderbolt or PCIe-attached devices have full DMA access to system memory — enabling pre-boot DMA attacks (PCILeech, Inception) against the boot process. Enabling pre-OS DMA protection activates IOMMU-based isolation during the early boot phase, before Windows loads, protecting the boot process against DMA-based physical attacks.",
                     Tags = ["dma-protection", "thunderbolt", "pcie", "kernel-dma", "boot-phase"],
@@ -2247,7 +2247,7 @@ internal static class PolicyEncryption
                 {
                     Id = "sbdbx-enable-hibernate-resume-integrity-check",
                     Label = "Secure Boot DBX: Enable Hibernate Resume Integrity Verification",
-                    Category = "Encryption Policy",
+                    Category = "Encryption",
                     Description =
                         "Sets EnableHibernateResumeIntegrity=1 in the UEFI policy hive. Enables integrity verification of the hibernation file (hiberfil.sys) during resume from hibernate. The hibernation file contains a complete snapshot of system memory at the time of hibernation — including all active keys, credentials in memory, and kernel state. If an attacker can tamper with hiberfil.sys (e.g., by booting a second OS on the same device), they can modify the kernel state or inject code that will execute when the device resumes. Integrity checking ensures that tampering with hiberfil.sys causes a safe boot failure rather than a silent compromise.",
                     Tags = ["hibernate", "resume", "integrity", "hiberfil", "cold-boot"],
@@ -2276,7 +2276,7 @@ internal static class PolicyEncryption
             {
                 Id = "secboot-enable-db-update",
                 Label = "Enable Secure Boot DB Update",
-                Category = "Encryption Policy",
+                Category = "Encryption",
                 NeedsAdmin = true, CorpSafe = true, ImpactScore = 4, SafetyRating = 5,
                 Description =
                     "Sets AllowUpdateOfSecureBootDb=1 in the SecureBoot policy key. Permits "
@@ -2296,7 +2296,7 @@ internal static class PolicyEncryption
             {
                 Id = "secboot-disable-test-signing",
                 Label = "Disable Test-Signing Mode Boot",
-                Category = "Encryption Policy",
+                Category = "Encryption",
                 NeedsAdmin = true, CorpSafe = true, ImpactScore = 5, SafetyRating = 5,
                 Description =
                     "Sets DisableTestSigning=1 in the SecureBoot policy key. Prevents the "
@@ -2315,7 +2315,7 @@ internal static class PolicyEncryption
             {
                 Id = "secboot-enable-user-mode-ci",
                 Label = "Enable User-Mode Code Integrity (UMCI)",
-                Category = "Encryption Policy",
+                Category = "Encryption",
                 NeedsAdmin = true, CorpSafe = true, ImpactScore = 5, SafetyRating = 4,
                 Description =
                     "Sets EnableUMCI=1 in the SecureBoot policy key. Activates User-Mode "
@@ -2334,7 +2334,7 @@ internal static class PolicyEncryption
             {
                 Id = "secboot-enable-kernel-ci",
                 Label = "Enable Kernel Code Integrity Enforcement",
-                Category = "Encryption Policy",
+                Category = "Encryption",
                 NeedsAdmin = true, CorpSafe = true, ImpactScore = 5, SafetyRating = 4,
                 Description =
                     "Sets EnableKernelCI=1 in the SecureBoot policy key. Enforces that only "
@@ -2353,7 +2353,7 @@ internal static class PolicyEncryption
             {
                 Id = "secboot-enable-secinitrd",
                 Label = "Enable Secure Initial Ramdisk (secInitrd)",
-                Category = "Encryption Policy",
+                Category = "Encryption",
                 NeedsAdmin = true, CorpSafe = true, ImpactScore = 4, SafetyRating = 5,
                 Description =
                     "Sets EnableSecInitRd=1 in the SecureBoot policy key. Requires the "
@@ -2372,7 +2372,7 @@ internal static class PolicyEncryption
             {
                 Id = "secboot-disable-network-unlock",
                 Label = "Disable Secure Boot Network Unlock",
-                Category = "Encryption Policy",
+                Category = "Encryption",
                 NeedsAdmin = true, CorpSafe = true, ImpactScore = 3, SafetyRating = 5,
                 Description =
                     "Sets DisableNetworkUnlock=1 in the SecureBoot policy key. Prevents "
@@ -2391,7 +2391,7 @@ internal static class PolicyEncryption
             {
                 Id = "secboot-enforce-secure-mos-policy",
                 Label = "Enforce Secure Managed OS Policy",
-                Category = "Encryption Policy",
+                Category = "Encryption",
                 NeedsAdmin = true, CorpSafe = true, ImpactScore = 4, SafetyRating = 4,
                 Description =
                     "Sets EnforceManagedOsPolicy=1 in the SecureBoot policy key. Requires "
@@ -2410,7 +2410,7 @@ internal static class PolicyEncryption
             {
                 Id = "secboot-disable-custom-pk",
                 Label = "Disable Custom Platform Key Enrollment",
-                Category = "Encryption Policy",
+                Category = "Encryption",
                 NeedsAdmin = true, CorpSafe = true, ImpactScore = 4, SafetyRating = 5,
                 Description =
                     "Sets DisableCustomPk=1 in the SecureBoot policy key. Prevents users "
@@ -2429,7 +2429,7 @@ internal static class PolicyEncryption
             {
                 Id = "secboot-require-bootloader-revocation",
                 Label = "Require Bootloader Revocation Check",
-                Category = "Encryption Policy",
+                Category = "Encryption",
                 NeedsAdmin = true, CorpSafe = true, ImpactScore = 4, SafetyRating = 5,
                 Description =
                     "Sets RequireBootloaderRevocationCheck=1 in the SecureBoot policy key. "
@@ -2448,7 +2448,7 @@ internal static class PolicyEncryption
             {
                 Id = "secboot-disable-secure-boot-telemetry",
                 Label = "Disable Secure Boot Telemetry",
-                Category = "Encryption Policy",
+                Category = "Encryption",
                 NeedsAdmin = true, CorpSafe = true, ImpactScore = 2, SafetyRating = 5,
                 Description =
                     "Sets DisableSecureBootTelemetry=1 in the SecureBoot policy key. Stops "
@@ -2488,7 +2488,7 @@ internal static class PolicyEncryption
             {
                 Id = "tls-disable-ssl20",
                 Label = "Disable SSL 2.0 (Client + Server)",
-                Category = "Encryption Policy",
+                Category = "Encryption",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 5,
@@ -2518,7 +2518,7 @@ internal static class PolicyEncryption
             {
                 Id = "tls-disable-ssl30",
                 Label = "Disable SSL 3.0 (Client + Server)",
-                Category = "Encryption Policy",
+                Category = "Encryption",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 5,
@@ -2548,7 +2548,7 @@ internal static class PolicyEncryption
             {
                 Id = "tls-disable-tls10",
                 Label = "Disable TLS 1.0 (Client + Server)",
-                Category = "Encryption Policy",
+                Category = "Encryption",
                 NeedsAdmin = true,
                 CorpSafe = false,
                 ImpactScore = 4,
@@ -2578,7 +2578,7 @@ internal static class PolicyEncryption
             {
                 Id = "tls-disable-tls11",
                 Label = "Disable TLS 1.1 (Client + Server)",
-                Category = "Encryption Policy",
+                Category = "Encryption",
                 NeedsAdmin = true,
                 CorpSafe = false,
                 ImpactScore = 4,
@@ -2609,7 +2609,7 @@ internal static class PolicyEncryption
             {
                 Id = "tls-enable-schannel-event-logging",
                 Label = "Enable Detailed SCHANNEL Event Logging",
-                Category = "Encryption Policy",
+                Category = "Encryption",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -2627,7 +2627,7 @@ internal static class PolicyEncryption
             {
                 Id = "tls-disable-weak-rc4-cipher",
                 Label = "Disable RC4 Cipher Suite",
-                Category = "Encryption Policy",
+                Category = "Encryption",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -2655,7 +2655,7 @@ internal static class PolicyEncryption
             {
                 Id = "tls-disable-des-cipher",
                 Label = "Disable DES / Triple-DES Cipher Suites",
-                Category = "Encryption Policy",
+                Category = "Encryption",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -2681,7 +2681,7 @@ internal static class PolicyEncryption
             {
                 Id = "tls-disable-null-cipher",
                 Label = "Disable NULL Cipher Suite",
-                Category = "Encryption Policy",
+                Category = "Encryption",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 5,
@@ -2699,7 +2699,7 @@ internal static class PolicyEncryption
             {
                 Id = "tls-disable-md5-hash",
                 Label = "Disable MD5 Hash Algorithm in SCHANNEL",
-                Category = "Encryption Policy",
+                Category = "Encryption",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -2717,7 +2717,7 @@ internal static class PolicyEncryption
             {
                 Id = "tls-enable-tls12-explicitly",
                 Label = "Explicitly Enable TLS 1.2 (Client + Server)",
-                Category = "Encryption Policy",
+                Category = "Encryption",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -2761,7 +2761,7 @@ internal static class PolicyEncryption
                 {
                     Id = "uefilck-require-secure-boot-active",
                     Label = "UEFI Lock: Require UEFI Secure Boot to Be Active (OS Enforcement Check)",
-                    Category = "Encryption Policy",
+                    Category = "Encryption",
                     Description =
                         "Sets RequireSecureBoot=1 in the SecureBoot State key. Records an OS-level enforcement requirement that Secure Boot must be active. Windows reads this value to determine whether Secure Boot is enforced by OS policy — if the firmware has Secure Boot disabled while this policy value is set, Windows Update and Intune compliance checks flag the device as non-compliant. This acts as an OS-side sentinel that detects when someone has disabled Secure Boot in the UEFI settings and correlates with health attestation checks. The actual Secure Boot enforcement is in the UEFI firmware — this registry value is the OS policy declaration that drives compliance reporting.",
                     Tags = ["secure-boot", "compliance", "intune", "policy-enforcement", "health-attestation"],
@@ -2779,7 +2779,7 @@ internal static class PolicyEncryption
                 {
                     Id = "uefilck-block-test-signing-mode",
                     Label = "UEFI Lock: Block Windows Test Signing Mode (BcdEdit /set testsigning)",
-                    Category = "Encryption Policy",
+                    Category = "Encryption",
                     Description =
                         "Sets PreventTestSigningMode=1 in the UEFI policy key. Prevents enabling Windows test signing mode (where the OS accepts self-signed test drivers without Authenticode code signing). Test signing mode is used during driver development for testing unsigned drivers. However, if an attacker gains admin rights, enabling test signing mode is a common step to load a malicious unsigned kernel driver (rootkit). Setting this policy via Group Policy via UEFI Lock ensures that even an admin cannot re-enable test signing mode for driver-loading bypass.",
                     Tags = ["test-signing", "unsigned-driver", "rootkit", "bcdedit", "kernel-protection"],
@@ -2797,7 +2797,7 @@ internal static class PolicyEncryption
                 {
                     Id = "uefilck-block-secure-boot-db-write",
                     Label = "UEFI Lock: Block OS-Level Writes to Secure Boot DB/DBX Variables",
-                    Category = "Encryption Policy",
+                    Category = "Encryption",
                     Description =
                         "Sets BlockSecureBootDbWrite=1 in the UEFI policy key. Prevents OS-level software from writing to the Secure Boot DB (Allowed Signatures Database) or DBX (Forbidden Signatures Database) UEFI variables. Secure Boot database variables can be written from the OS via UEFI variable write APIs (SetVariable) when in user mode with administrator privileges. An attacker with kernel access can add their own signing certificate to DB (making their malware trusted by Secure Boot) or clear DBX entries to re-allow previously blacklisted boot components. Blocking OS-level writes to DB/DBX closes this attack surface — DB/DBX updates can still be delivered via signed UEFI firmware update capsules.",
                     Tags = ["secure-boot", "db-dbx", "uefi-variables", "signing-cert", "dbx"],
@@ -2815,7 +2815,7 @@ internal static class PolicyEncryption
                 {
                     Id = "uefilck-disable-csm-compat-support-module",
                     Label = "UEFI Lock: Disable CSM (Compatibility Support Module) — Force Pure UEFI Mode",
-                    Category = "Encryption Policy",
+                    Category = "Encryption",
                     Description =
                         "Sets DisableCSM=1 in the UEFI policy key. Disables the UEFI Compatibility Support Module (CSM), which provides backwards compatibility for legacy BIOS-based boot processes. CSM dramatically expands the firmware attack surface — CSM firmware is older code that typically has fewer security controls, does not validate signatures, and may have unpatched vulnerabilities. Many firmware-level attacks (Option ROM attacks, legacy VGA ROM injection) require CSM to be active. Disabling CSM forces pure UEFI mode, eliminating the legacy firmware code path entirely. This is a prerequisite for Secure Boot to function completely without gaps.",
                     Tags = ["csm", "legacy-bios", "pure-uefi", "option-rom", "firmware-attack"],
@@ -2833,7 +2833,7 @@ internal static class PolicyEncryption
                 {
                     Id = "uefilck-block-uefi-shell-execution",
                     Label = "UEFI Lock: Block UEFI Shell Execution (Remove Shell.efi Access)",
-                    Category = "Encryption Policy",
+                    Category = "Encryption",
                     Description =
                         "Sets BlockUefiShell=1 in the UEFI policy key. Prevents execution of the UEFI shell (Shell.efi) from the UEFI boot menu. The UEFI shell is a command-line interface that runs before the OS boots and has full access to all UEFI variables, firmware functions, and boot option management commands. An attacker with brief physical access who can reach the UEFI boot menu can launch the shell and modify Secure Boot variables, alter boot entries, read memory, or persist a bootkit. Blocking UEFI shell execution removes this pre-OS privileged environment from the UEFI boot menu.",
                     Tags = ["uefi-shell", "pre-os", "physical-access", "boot-menu", "shell-efi"],
@@ -2851,7 +2851,7 @@ internal static class PolicyEncryption
                 {
                     Id = "uefilck-lock-boot-order-modification",
                     Label = "UEFI Lock: Lock UEFI Boot Order Modification from the OS",
-                    Category = "Encryption Policy",
+                    Category = "Encryption",
                     Description =
                         "Sets LockBootOrder=1 in the UEFI policy key. Prevents OS-level software and users from modifying the UEFI boot order (BootOrder, Boot#### UEFI variables) via Windows bcdedit, UEFI variable APIs, or third-party boot order tools. An attacker who can modify the boot order can insert a malicious EFI binary as boot entry 0, causing it to execute before Windows on the next boot. Boot order modification is a known persistence technique for UEFI bootkits. Locking the boot order via OS policy ensures that established boot sequences cannot be tampered with without physical BIOS access.",
                     Tags = ["boot-order", "uefi-variables", "bootkit", "persistence", "bcdedit"],
@@ -2869,7 +2869,7 @@ internal static class PolicyEncryption
                 {
                     Id = "uefilck-enable-uefi-audit-log",
                     Label = "UEFI Lock: Enable UEFI Variable Write Audit Log",
-                    Category = "Encryption Policy",
+                    Category = "Encryption",
                     Description =
                         "Sets EnableUefiVariableAudit=1 in the UEFI policy key. Enables auditing of writes to UEFI non-volatile variables (NvStore writes) from the OS layer. When enabled, each OS-level write to a UEFI variable (SetVariable call) generates a Windows Security event (Event ID 4670 / 4724 or vendor-specific log depending on platform). UEFI variable writes are used for boot configuration, Secure Boot database modification, and firmware communication. Audit logging of these writes provides visibility into potentially malicious UEFI variable manipulation by malware operating with elevated privileges.",
                     Tags = ["uefi-variables", "audit", "setVariable", "event-log", "siem"],
@@ -2887,7 +2887,7 @@ internal static class PolicyEncryption
                 {
                     Id = "uefilck-require-uefi-password-for-settings-access",
                     Label = "UEFI Lock: Require Policy Enforcement of UEFI Setup Password Presence",
-                    Category = "Encryption Policy",
+                    Category = "Encryption",
                     Description =
                         "Sets RequireUefiSetupPassword=1 in the UEFI policy key. Marks the policy requirement that a UEFI setup password (administrator password) must be configured on the device. The actual password configuration is in firmware — this policy establishes the OS-side compliance assertion. Intune and MDM can read this policy value to determine whether devices have UEFI setup passwords enforced. Devices without a UEFI setup password allow anyone with physical access to modify Secure Boot settings, boot order, and disable security features from the UEFI settings UI.",
                     Tags = ["uefi-password", "setup-password", "physical-access", "compliance", "intune"],
@@ -2905,7 +2905,7 @@ internal static class PolicyEncryption
                 {
                     Id = "uefilck-block-external-uefi-option-rom-execution",
                     Label = "UEFI Lock: Block Execution of External UEFI Option ROMs",
-                    Category = "Encryption Policy",
+                    Category = "Encryption",
                     Description =
                         "Sets BlockExternalOptionRom=1 in the UEFI policy key. Prevents the UEFI firmware from executing UEFI Option ROMs from external or removable devices (PCIe add-in cards, Thunderbolt docks, USB devices with firmware). Option ROMs from external devices are a well-documented firmware attack vector — malicious hardware devices containing a custom Option ROM can execute arbitrary UEFI code before the OS boots, bypassing Secure Boot's guarantees. Blocking external Option ROMexecution protects against 'evil maid' attacks using malicious peripherals inserted while the device is unattended.",
                     Tags = ["option-rom", "evil-maid", "external-device", "pcie", "uefi-firmware"],
@@ -2923,7 +2923,7 @@ internal static class PolicyEncryption
                 {
                     Id = "uefilck-expire-pk-on-loss-prevention",
                     Label = "UEFI Lock: Enable PK Expiry Notification for Secure Boot Platform Key",
-                    Category = "Encryption Policy",
+                    Category = "Encryption",
                     Description =
                         "Sets EnablePkExpiryNotification=1 in the UEFI policy key. Enables periodic Windows event log entries and Intune compliance alerts when the UEFI Platform Key (PK) — the root of trust for Secure Boot — is approaching its certificate expiration date. The PK is an X.509 certificate embedded in UEFI, and like all certificates, it can have an expiration date. In OEM firmware, PKs typically have long lifetimes (10–20 years), but custom enterprise PKI-based PKs may have shorter expirations. An expired PK can cause Secure Boot validation failures. PK expiry notification ensures IT is proactively alerted before the expiry causes a boot failure incident.",
                     Tags = ["pk", "platform-key", "certificate-expiry", "secure-boot-root", "notification"],
@@ -2953,7 +2953,7 @@ internal static class PolicyEncryption
                 {
                     Id = "vbsenf-enable-vbs",
                     Label = "Enable Virtualization-Based Security (VBS)",
-                    Category = "Encryption Policy",
+                    Category = "Encryption",
                     Description =
                         "Enables Virtualization-Based Security, which uses hardware virtualisation to create an isolated execution environment (Secure World) that protects sensitive kernel data and code from OS-level compromises.",
                     Tags = ["vbs", "security", "virtualization", "device-guard", "policy"],
@@ -2970,7 +2970,7 @@ internal static class PolicyEncryption
                 {
                     Id = "vbsenf-enable-hvci",
                     Label = "Enable HVCI Memory Integrity via DeviceGuard",
-                    Category = "Encryption Policy",
+                    Category = "Encryption",
                     Description =
                         "Enables Hypervisor-Protected Code Integrity (HVCI / Memory Integrity) which uses VBS to ensure only signed code runs in kernel mode, blocking unsigned kernel drivers and rootkits.",
                     Tags = ["hvci", "memory-integrity", "vbs", "device-guard", "policy"],
@@ -2987,7 +2987,7 @@ internal static class PolicyEncryption
                 {
                     Id = "vbsenf-enable-hvci-audit",
                     Label = "Enable HVCI Audit Mode (Log Before Block)",
-                    Category = "Encryption Policy",
+                    Category = "Encryption",
                     Description =
                         "Puts HVCI into Audit mode which logs policy violations (unsigned kernel-mode code) to the event log without blocking, useful for compatibility testing before enforcing.",
                     Tags = ["hvci", "audit-mode", "vbs", "device-guard", "policy"],
@@ -3004,7 +3004,7 @@ internal static class PolicyEncryption
                 {
                     Id = "vbsenf-require-uefi-lock",
                     Label = "Require UEFI Lock for VBS Configuration",
-                    Category = "Encryption Policy",
+                    Category = "Encryption",
                     Description =
                         "Locks VBS configuration via UEFI so it cannot be disabled from the OS, even by an administrator, requiring physical UEFI/BIOS access to turn off — provides boot-time tamper resistance.",
                     Tags = ["vbs", "uefi-lock", "security", "tamper-resistance", "policy"],
@@ -3021,7 +3021,7 @@ internal static class PolicyEncryption
                 {
                     Id = "vbsenf-enable-secure-memory-overwrite",
                     Label = "Enable Secure Memory Overwrite on Shutdown",
-                    Category = "Encryption Policy",
+                    Category = "Encryption",
                     Description =
                         "Enables the secure memory overwrite function that clears VBS-protected LSASS memory on shutdown, preventing cold-boot attacks from recovering credential material from memory.",
                     Tags = ["vbs", "memory-overwrite", "cold-boot", "lsass", "policy"],
@@ -3038,7 +3038,7 @@ internal static class PolicyEncryption
                 {
                     Id = "vbsenf-lock-config-flags",
                     Label = "Lock VBS Configuration Flags to Prevent Downgrade",
-                    Category = "Encryption Policy",
+                    Category = "Encryption",
                     Description =
                         "Sets the ConfigFlags registry value to lock VBS in its current secure state, preventing an attacker with registry access from disabling VBS before the next reboot.",
                     Tags = ["vbs", "config-lock", "downgrade-protection", "policy"],
@@ -3055,7 +3055,7 @@ internal static class PolicyEncryption
                 {
                     Id = "vbsenf-block-third-party-kernel-drivers",
                     Label = "Block Third-Party Unsigned Kernel Drivers via VBS",
-                    Category = "Encryption Policy",
+                    Category = "Encryption",
                     Description =
                         "Configures VBS Code Integrity policy to block third-party unsigned or revoked kernel drivers from loading, ensuring only Microsoft-signed and WHQL-certified drivers run in kernel mode.",
                     Tags = ["vbs", "drivers", "code-integrity", "security", "policy"],
@@ -3072,7 +3072,7 @@ internal static class PolicyEncryption
                 {
                     Id = "vbsenf-enable-kernel-dma-protection",
                     Label = "Enable Kernel DMA Protection via VBS",
-                    Category = "Encryption Policy",
+                    Category = "Encryption",
                     Description =
                         "Enables Kernel DMA Protection (Thunderbolt/PCIe DMA attack mitigation) via VBS, preventing external devices from reading or writing kernel memory through direct memory access without authorisation.",
                     Tags = ["vbs", "kernel-dma", "thunderbolt", "pcie", "policy"],
@@ -3089,7 +3089,7 @@ internal static class PolicyEncryption
                 {
                     Id = "vbsenf-require-tpm-for-vbs",
                     Label = "Require TPM 2.0 for VBS Secure World",
-                    Category = "Encryption Policy",
+                    Category = "Encryption",
                     Description =
                         "Requires a TPM 2.0 chip as a prerequisite for activating the VBS Secure World, ensuring the VBS Secure Boot chain is bound to hardware attestation.",
                     Tags = ["vbs", "tpm", "secure-boot", "attestation", "policy"],
@@ -3106,7 +3106,7 @@ internal static class PolicyEncryption
                 {
                     Id = "vbsenf-enable-credential-guard",
                     Label = "Enable Credential Guard via VBS",
-                    Category = "Encryption Policy",
+                    Category = "Encryption",
                     Description =
                         "Enables Windows Credential Guard which uses VBS to protect LSASS credential material (NTLM hashes, Kerberos TGTs) in an isolated Secure World process, preventing Pass-the-Hash attacks.",
                     Tags = ["vbs", "credential-guard", "lsass", "pass-the-hash", "policy"],

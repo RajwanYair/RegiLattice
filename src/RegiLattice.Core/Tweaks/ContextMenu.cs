@@ -10,7 +10,7 @@ internal static class ContextMenu
         {
             Id = "ctx-add-powershell-here",
             Label = "Add 'Open PowerShell Here' to Context Menu",
-            Category = "Context Menu",
+            Category = "Explorer",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -32,7 +32,7 @@ internal static class ContextMenu
         {
             Id = "ctx-add-wt-here",
             Label = "Add 'Open Windows Terminal Here' to Context Menu",
-            Category = "Context Menu",
+            Category = "Explorer",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -51,7 +51,7 @@ internal static class ContextMenu
         {
             Id = "ctx-add-cmd-here",
             Label = "Add 'Open Command Prompt Here' to Context Menu",
-            Category = "Context Menu",
+            Category = "Explorer",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -70,7 +70,7 @@ internal static class ContextMenu
         {
             Id = "ctx-add-copy-path",
             Label = "Add 'Copy Path' to File Context Menu",
-            Category = "Context Menu",
+            Category = "Explorer",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -85,7 +85,7 @@ internal static class ContextMenu
         {
             Id = "ctx-add-open-cmd-here",
             Label = "Add Open Command Prompt Here",
-            Category = "Context Menu",
+            Category = "Explorer",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Adds an 'Open Command Prompt Here' option to the folder context menu. Default: removed in Win11.",
@@ -107,7 +107,7 @@ internal static class ContextMenu
         {
             Id = "ctx-remove-share-context-menu",
             Label = "Remove Share Context Menu",
-            Category = "Context Menu",
+            Category = "Explorer",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Removes the 'Share' option from the right-click context menu. Default: visible.",
@@ -141,7 +141,7 @@ internal static class ContextMenu
         {
             Id = "ctx-remove-give-access-to",
             Label = "Remove Give Access To Menu",
-            Category = "Context Menu",
+            Category = "Explorer",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Removes the 'Give access to' sharing option from the context menu. Default: visible.",
@@ -175,7 +175,7 @@ internal static class ContextMenu
         {
             Id = "ctx-remove-troubleshoot-compatibility",
             Label = "Remove 'Troubleshoot Compatibility' from Context Menu",
-            Category = "Context Menu",
+            Category = "Explorer",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Removes the 'Troubleshoot compatibility' option from file context menus. Default: shown.",
@@ -209,7 +209,7 @@ internal static class ContextMenu
         {
             Id = "ctx-remove-cast-to-device",
             Label = "Remove 'Cast to Device' from Context Menu",
-            Category = "Context Menu",
+            Category = "Explorer",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Removes the 'Cast to device' (Play To) option from the context menu. Default: shown.",
@@ -243,7 +243,7 @@ internal static class ContextMenu
         {
             Id = "ctx-remove-edit-with-paint3d",
             Label = "Remove 'Edit with Paint 3D' from Context Menu",
-            Category = "Context Menu",
+            Category = "Explorer",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Removes 'Edit with Paint 3D' from the right-click menu for image files. Default: shown.",
@@ -277,7 +277,7 @@ internal static class ContextMenu
         {
             Id = "ctx-remove-include-in-library",
             Label = "Remove 'Include in Library' from Context Menu",
-            Category = "Context Menu",
+            Category = "Explorer",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Removes the 'Include in library' option from folder context menus. Default: shown.",
@@ -311,7 +311,7 @@ internal static class ContextMenu
         {
             Id = "ctx-remove-send-to-compressed",
             Label = "Remove 'Compressed (zipped) folder' from Send To",
-            Category = "Context Menu",
+            Category = "Explorer",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Removes the obsolete 'Compressed (zipped) folder' from the Send To menu. Use 7-Zip instead. Default: shown.",
@@ -325,7 +325,7 @@ internal static class ContextMenu
         {
             Id = "ctx-remove-previous-versions",
             Label = "Remove 'Restore Previous Versions' from Context Menu",
-            Category = "Context Menu",
+            Category = "Explorer",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Removes the 'Restore previous versions' tab from file/folder properties. Default: shown.",
@@ -359,7 +359,7 @@ internal static class ContextMenu
         {
             Id = "ctx-add-take-ownership",
             Label = "Add 'Take Ownership' to Context Menu",
-            Category = "Context Menu",
+            Category = "Explorer",
             NeedsAdmin = false,
             CorpSafe = false,
             Description =
@@ -399,7 +399,7 @@ internal static class ContextMenu
         {
             Id = "ctx-add-open-with-notepad",
             Label = "Add 'Open with Notepad' to Context Menu",
-            Category = "Context Menu",
+            Category = "Explorer",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Adds 'Open with Notepad' to the right-click menu for all files. Quick way to view file contents. Default: not present.",
@@ -424,7 +424,7 @@ internal static class ContextMenu
         {
             Id = "ctx-classic-context-menu",
             Label = "Force Classic Context Menu (User)",
-            Category = "Context Menu",
+            Category = "Explorer",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Restores the Windows 10 full context menu by overriding the Windows 11 compact menu CLSID.",
@@ -441,7 +441,7 @@ internal static class ContextMenu
         {
             Id = "ctx-remove-defender-scan",
             Label = "Remove 'Scan with Defender' Context",
-            Category = "Context Menu",
+            Category = "Explorer",
             NeedsAdmin = true,
             CorpSafe = false,
             Description = "Removes the 'Scan with Microsoft Defender' entry from the right-click context menu.",
@@ -458,7 +458,7 @@ internal static class ContextMenu
         {
             Id = "ctx-remove-give-access",
             Label = "Remove 'Give Access To' Context",
-            Category = "Context Menu",
+            Category = "Explorer",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Removes the 'Give access to' sharing menu from the right-click context menu.",
@@ -479,7 +479,7 @@ internal static class ContextMenu
         {
             Id = "ctx-remove-include-library",
             Label = "Remove 'Include in Library' Context",
-            Category = "Context Menu",
+            Category = "Explorer",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Removes the 'Include in library' entry from the folder context menu.",
@@ -500,7 +500,7 @@ internal static class ContextMenu
         {
             Id = "ctx-remove-paint3d-edit",
             Label = "Remove 'Edit with Paint 3D' Context",
-            Category = "Context Menu",
+            Category = "Explorer",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Removes the 'Edit with Paint 3D' option from image file context menus.",
@@ -532,7 +532,7 @@ internal static class ContextMenu
         {
             Id = "ctx-remove-photos-edit",
             Label = "Remove 'Edit with Photos' Context",
-            Category = "Context Menu",
+            Category = "Explorer",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Removes the 'Edit with Photos' option from image file context menus.",
@@ -566,7 +566,7 @@ internal static class ContextMenu
         {
             Id = "ctx-remove-pin-to-start",
             Label = "Remove 'Pin to Start' Context Entry",
-            Category = "Context Menu",
+            Category = "Explorer",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Removes the 'Pin to Start' context menu option from files and folders.",
@@ -587,7 +587,7 @@ internal static class ContextMenu
         {
             Id = "ctx-remove-print",
             Label = "Remove 'Print' Context Menu Entry",
-            Category = "Context Menu",
+            Category = "Explorer",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Removes the 'Print' entry from the right-click context menu for supported file types.",
@@ -610,7 +610,7 @@ internal static class ContextMenu
         {
             Id = "ctx-remove-send-to",
             Label = "Remove 'Send To' Context Menu",
-            Category = "Context Menu",
+            Category = "Explorer",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Removes the 'Send to' cascading menu from the right-click context menu.",
@@ -631,7 +631,7 @@ internal static class ContextMenu
         {
             Id = "ctx-remove-share",
             Label = "Remove 'Share' Context Menu Entry",
-            Category = "Context Menu",
+            Category = "Explorer",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Removes the 'Share' modern sharing entry from the right-click context menu.",
@@ -645,7 +645,7 @@ internal static class ContextMenu
         {
             Id = "ctx-remove-troubleshoot-compat",
             Label = "Remove 'Troubleshoot Compatibility'",
-            Category = "Context Menu",
+            Category = "Explorer",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Removes the 'Troubleshoot compatibility' entry from the context menu for executables.",
@@ -666,7 +666,7 @@ internal static class ContextMenu
         {
             Id = "ctx-remove-wmp-context",
             Label = "Remove Windows Media Context Entries",
-            Category = "Context Menu",
+            Category = "Explorer",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Removes Windows Media Player context menu entries (Play, Add to playlist, etc.).",
@@ -706,7 +706,7 @@ internal static class Shell
         {
             Id = "shell-compact-file-explorer",
             Label = "Enable Compact View in File Explorer",
-            Category = "Shell",
+            Category = "Explorer",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Enables the compact layout in File Explorer, reducing padding between items.",
@@ -721,7 +721,7 @@ internal static class Shell
         {
             Id = "shell-disable-ink-workspace",
             Label = "Disable Windows Ink Workspace",
-            Category = "Shell",
+            Category = "Explorer",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -736,7 +736,7 @@ internal static class Shell
         {
             Id = "shell-enable-dark-mode-console",
             Label = "Enable Dark Mode for Console Windows",
-            Category = "Shell",
+            Category = "Explorer",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Enables dark mode for legacy console host windows. Default: light.",
@@ -750,7 +750,7 @@ internal static class Shell
         {
             Id = "shell-set-console-buffer-9999",
             Label = "Set Console Screen Buffer to 9999 Lines",
-            Category = "Shell",
+            Category = "Explorer",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Sets the console screen buffer size to 9999 lines. More scrollback history. Default: 300.",
@@ -764,7 +764,7 @@ internal static class Shell
         {
             Id = "shell-enable-quickedit-mode",
             Label = "Enable Console QuickEdit Mode",
-            Category = "Shell",
+            Category = "Explorer",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Enables QuickEdit mode in console windows. Allows mouse text selection. Default: enabled.",
@@ -778,7 +778,7 @@ internal static class Shell
         {
             Id = "shell-disable-cmd-autorun",
             Label = "Disable CMD AutoRun Commands",
-            Category = "Shell",
+            Category = "Explorer",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Clears the CMD AutoRun registry value. Prevents potentially malicious auto-execution. Default: not set.",
@@ -792,7 +792,7 @@ internal static class Shell
         {
             Id = "shell-set-powershell-execution-remotesigned",
             Label = "Set PowerShell Execution Policy to RemoteSigned",
-            Category = "Shell",
+            Category = "Explorer",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -824,7 +824,7 @@ internal static class Shell
         {
             Id = "shell-add-python-to-path",
             Label = "Add Python App Installer to PATH",
-            Category = "Shell",
+            Category = "Explorer",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -843,7 +843,7 @@ internal static class Shell
         {
             Id = "shell-classic-context-menu",
             Label = "Restore Classic Context Menu (Shell)",
-            Category = "Shell",
+            Category = "Explorer",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -861,7 +861,7 @@ internal static class Shell
         {
             Id = "shell-cmd-autocomplete",
             Label = "Enable Command Prompt AutoComplete",
-            Category = "Shell",
+            Category = "Explorer",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -884,7 +884,7 @@ internal static class Shell
         {
             Id = "shell-disable-python-store-alias",
             Label = "Disable Python Store Redirect Alias",
-            Category = "Shell",
+            Category = "Explorer",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -928,7 +928,7 @@ internal static class Shell
         {
             Id = "shell-file-hash-context",
             Label = "Add File Hash to Context Menu",
-            Category = "Shell",
+            Category = "Explorer",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -952,7 +952,7 @@ internal static class Shell
         {
             Id = "shell-open-cmd-here",
             Label = "Add 'Open CMD Here' to Context Menu",
-            Category = "Shell",
+            Category = "Explorer",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Adds 'Open Command Prompt Here' to the directory background context menu. Default: not available.",
@@ -978,7 +978,7 @@ internal static class Shell
         {
             Id = "shell-open-ps-here",
             Label = "Add 'Open PowerShell Here' to Context Menu",
-            Category = "Shell",
+            Category = "Explorer",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Adds 'Open PowerShell Here' to the directory background context menu. Default: not available.",
@@ -1001,7 +1001,7 @@ internal static class Shell
         {
             Id = "shell-open-wt-here",
             Label = "Add 'Open Windows Terminal Here'",
-            Category = "Shell",
+            Category = "Explorer",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -1024,7 +1024,7 @@ internal static class Shell
         {
             Id = "shell-take-ownership",
             Label = "Add 'Take Ownership' to Context Menu",
-            Category = "Shell",
+            Category = "Explorer",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -1049,7 +1049,7 @@ internal static class Shell
         {
             Id = "shell-disable-thumbnail-net-cache",
             Label = "Disable Thumbs.db on Network Folders",
-            Category = "Shell",
+            Category = "Explorer",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -1085,7 +1085,7 @@ internal static class Shell
         {
             Id = "shell-enable-numlock-startup",
             Label = "Enable Num Lock on Startup",
-            Category = "Shell",
+            Category = "Explorer",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -1100,7 +1100,7 @@ internal static class Shell
         {
             Id = "shell-disable-folder-info-tips",
             Label = "Disable Folder Info Tips in Explorer",
-            Category = "Shell",
+            Category = "Explorer",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -1121,7 +1121,7 @@ internal static class Shell
         {
             Id = "shell-disable-sharing-wizard",
             Label = "Disable File Sharing Wizard",
-            Category = "Shell",
+            Category = "Explorer",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -1137,7 +1137,7 @@ internal static class Shell
         {
             Id = "shell-restore-previous-folders",
             Label = "Reopen Previous Folder Windows on Login",
-            Category = "Shell",
+            Category = "Explorer",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -1152,7 +1152,7 @@ internal static class Shell
         {
             Id = "shell-show-encrypted-color",
             Label = "Show Encrypted & Compressed Files in Color",
-            Category = "Shell",
+            Category = "Explorer",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -1177,7 +1177,7 @@ internal static class Shell
         {
             Id = "shell-disable-recent-docs-policy",
             Label = "Disable Recent Documents Tracking (Policy)",
-            Category = "Shell",
+            Category = "Explorer",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -1195,7 +1195,7 @@ internal static class Shell
         {
             Id = "shell-show-status-bar",
             Label = "Show Status Bar in Explorer Windows",
-            Category = "Shell",
+            Category = "Explorer",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =

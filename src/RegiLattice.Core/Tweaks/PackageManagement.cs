@@ -11,7 +11,7 @@ internal static class PackageManagement
         {
             Id = "pkg-disable-suggested-apps",
             Label = "Disable Suggested App Installations",
-            Category = "Package Management",
+            Category = "Developer",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Prevents Windows from silently installing suggested apps. Default: Enabled. Recommended: Disabled.",
@@ -46,7 +46,7 @@ internal static class PackageManagement
         {
             Id = "pkg-disable-winget-auto-update",
             Label = "Disable WinGet Auto-Update",
-            Category = "Package Management",
+            Category = "Developer",
             NeedsAdmin = true,
             CorpSafe = false,
             Description =
@@ -61,7 +61,7 @@ internal static class PackageManagement
         {
             Id = "pkg-choco-proxy",
             Label = "Set Chocolatey System Proxy",
-            Category = "Package Management",
+            Category = "Developer",
             NeedsAdmin = true,
             CorpSafe = false,
             Description =
@@ -76,7 +76,7 @@ internal static class PackageManagement
         {
             Id = "pkg-source-validation",
             Label = "Enable Package Source Validation",
-            Category = "Package Management",
+            Category = "Developer",
             NeedsAdmin = true,
             CorpSafe = false,
             Description =
@@ -91,7 +91,7 @@ internal static class PackageManagement
         {
             Id = "pkg-disable-ms-store",
             Label = "Disable Microsoft Store via Policy",
-            Category = "Package Management",
+            Category = "Developer",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables access to the Microsoft Store via Group Policy. Default: enabled.",
@@ -105,7 +105,7 @@ internal static class PackageManagement
         {
             Id = "pkg-enable-developer-sideload",
             Label = "Enable Developer Mode Sideloading",
-            Category = "Package Management",
+            Category = "Developer",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Enables developer mode to allow sideloading of apps without the Store. Default: disabled.",
@@ -119,7 +119,7 @@ internal static class PackageManagement
         {
             Id = "pkg-disable-appinstaller-protocol",
             Label = "Disable ms-appinstaller Protocol",
-            Category = "Package Management",
+            Category = "Developer",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables the ms-appinstaller URI protocol. Prevents drive-by installs from web links. Default: enabled.",
@@ -133,7 +133,7 @@ internal static class PackageManagement
         {
             Id = "pkg-disable-auto-repair-apps",
             Label = "Disable Auto-Repair of Windows Apps",
-            Category = "Package Management",
+            Category = "Developer",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Prevents Windows from automatically repairing broken UWP/MSIX apps. Default: enabled.",
@@ -147,7 +147,7 @@ internal static class PackageManagement
         {
             Id = "pkg-disable-shared-experiences",
             Label = "Disable Cross-Device App Experiences",
-            Category = "Package Management",
+            Category = "Developer",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Disables shared experiences (app hand-off between devices). Default: enabled.",
@@ -162,7 +162,7 @@ internal static class PackageManagement
         {
             Id = "pkg-trust-psgallery",
             Label = "Trust PSGallery Repository",
-            Category = "Package Management",
+            Category = "Developer",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Sets the PowerShell Gallery as a trusted repository, eliminating installation prompts for modules.",
@@ -186,7 +186,7 @@ internal static class PackageManagement
         {
             Id = "pkg-install-scoop",
             Label = "Install Scoop Package Manager",
-            Category = "Package Management",
+            Category = "Developer",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Installs Scoop — a CLI package manager for Windows. Scoop installs apps to ~/scoop by default and requires no admin.",
@@ -208,7 +208,7 @@ internal static class PackageManagement
         {
             Id = "pkg-update-powershellget",
             Label = "Update PowerShellGet to Latest",
-            Category = "Package Management",
+            Category = "Developer",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Updates PowerShellGet module to the latest version for improved module management.",
@@ -233,7 +233,7 @@ internal static class PackageManagement
         {
             Id = "pkg-enable-winget",
             Label = "Enable WinGet App Installer",
-            Category = "Package Management",
+            Category = "Developer",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -248,7 +248,7 @@ internal static class PackageManagement
         {
             Id = "pkg-npm-prefer-offline",
             Label = "NPM Prefer Offline Cache",
-            Category = "Package Management",
+            Category = "Developer",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -263,7 +263,7 @@ internal static class PackageManagement
         {
             Id = "pkg-pip-disable-version-check",
             Label = "Disable pip Version Check",
-            Category = "Package Management",
+            Category = "Developer",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Disables pip from checking for newer versions on every run. Speeds up pip operations. Default: checks on every run.",
@@ -277,7 +277,7 @@ internal static class PackageManagement
         {
             Id = "pkg-pip-no-cache",
             Label = "Disable pip Cache",
-            Category = "Package Management",
+            Category = "Developer",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Disables pip download caching. Saves disk space at the cost of re-downloading packages. Default: caching enabled.",
@@ -291,7 +291,7 @@ internal static class PackageManagement
         {
             Id = "pkg-pip-require-venv",
             Label = "Require Virtualenv for pip Install",
-            Category = "Package Management",
+            Category = "Developer",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -306,7 +306,7 @@ internal static class PackageManagement
         {
             Id = "pkg-pip-system-index",
             Label = "Set System pip Index URL",
-            Category = "Package Management",
+            Category = "Developer",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Sets the default PyPI index URL for all users at the system level. Useful for corporate mirrors. Default: pypi.org.",
@@ -334,7 +334,7 @@ internal static class PackageManagement
         {
             Id = "pkg-pip-system-no-cache",
             Label = "Disable pip Cache (System)",
-            Category = "Package Management",
+            Category = "Developer",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables pip download caching at the system level for all users. Default: caching enabled.",
@@ -351,7 +351,7 @@ internal static class PackageManagement
         {
             Id = "pkg-pip-system-require-venv",
             Label = "Require Virtualenv for pip (System)",
-            Category = "Package Management",
+            Category = "Developer",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Forces pip to only install inside virtual environments at the system level for all users. Default: allows global.",
@@ -374,7 +374,7 @@ internal static class PackageManagement
         {
             Id = "pkg-pip-system-trusted-host",
             Label = "Set pip Trusted Hosts (System)",
-            Category = "Package Management",
+            Category = "Developer",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Sets trusted pip hosts at the system level to bypass SSL verification. Useful for corporate proxies. Default: none.",
@@ -402,7 +402,7 @@ internal static class PackageManagement
         {
             Id = "pkg-pip-timeout",
             Label = "Set pip Network Timeout",
-            Category = "Package Management",
+            Category = "Developer",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -417,7 +417,7 @@ internal static class PackageManagement
         {
             Id = "pkg-pip-trusted-host",
             Label = "Set pip Trusted Hosts",
-            Category = "Package Management",
+            Category = "Developer",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Sets trusted pip hosts for the current user to bypass SSL verification. Useful for corporate proxies. Default: none.",
@@ -431,7 +431,7 @@ internal static class PackageManagement
         {
             Id = "pkg-pip-user-default",
             Label = "pip Install to User Site by Default",
-            Category = "Package Management",
+            Category = "Developer",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -446,7 +446,7 @@ internal static class PackageManagement
         {
             Id = "pkg-ps-gallery-trust",
             Label = "Trust PowerShell Gallery",
-            Category = "Package Management",
+            Category = "Developer",
             NeedsAdmin = false,
             CorpSafe = true,
             KindHint = TweakKind.PowerShell,
@@ -464,7 +464,7 @@ internal static class PackageManagement
         {
             Id = "pkg-ps-remotesigned",
             Label = "Set PowerShell ExecutionPolicy to RemoteSigned",
-            Category = "Package Management",
+            Category = "Developer",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -493,7 +493,7 @@ internal static class PackageManagement
         {
             Id = "pkg-scoop-setup",
             Label = "Install Scoop Package Manager",
-            Category = "Package Management",
+            Category = "Developer",
             NeedsAdmin = false,
             CorpSafe = true,
             KindHint = TweakKind.PackageManager,
@@ -512,7 +512,7 @@ internal static class PackageManagement
         {
             Id = "pkg-winget-disable-auto-update",
             Label = "Disable WinGet Auto-Upgrade",
-            Category = "Package Management",
+            Category = "Developer",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables automatic package upgrades via WinGet auto-update policy. Prevents unattended app updates. Default: enabled.",
@@ -526,7 +526,7 @@ internal static class PackageManagement
         {
             Id = "pkg-winget-disable-msstore-source",
             Label = "Disable WinGet Microsoft Store Source",
-            Category = "Package Management",
+            Category = "Developer",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables the Microsoft Store source in WinGet. Limits installs to winget community repository only. Default: enabled.",
@@ -549,7 +549,7 @@ internal static class ScoopTools
         {
             Id = "scoop-disable-autoupdate",
             Label = "Disable Scoop Auto-Update on Install",
-            Category = "Package Management",
+            Category = "Developer",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -564,7 +564,7 @@ internal static class ScoopTools
         {
             Id = "scoop-parallel-downloads",
             Label = "Enable Scoop Parallel Downloads (aria2)",
-            Category = "Package Management",
+            Category = "Developer",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -579,7 +579,7 @@ internal static class ScoopTools
         {
             Id = "scoop-set-global-install-dir",
             Label = "Set Scoop Global Install Directory",
-            Category = "Package Management",
+            Category = "Developer",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Sets the global Scoop install directory to C:\\Scoop via environment variable. Default: C:\\ProgramData\\scoop.",
@@ -593,7 +593,7 @@ internal static class ScoopTools
         {
             Id = "scoop-set-cache-dir",
             Label = "Set Scoop Cache Directory",
-            Category = "Package Management",
+            Category = "Developer",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Sets Scoop download cache to C:\\ScoopCache. Keeps downloads separate from installs. Default: ~\\scoop\\cache.",
@@ -607,7 +607,7 @@ internal static class ScoopTools
         {
             Id = "scoop-enable-debug-mode",
             Label = "Enable Scoop Debug Mode",
-            Category = "Package Management",
+            Category = "Developer",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Enables Scoop debug output for troubleshooting install failures. Default: disabled.",
@@ -621,7 +621,7 @@ internal static class ScoopTools
         {
             Id = "scoop-set-aria2-max-connections",
             Label = "Set Scoop Aria2 Max Connections to 16",
-            Category = "Package Management",
+            Category = "Developer",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Sets Scoop Aria2 max connections per server to 16. Speeds up downloads. Default: not set (Aria2 default is 1).",
@@ -635,7 +635,7 @@ internal static class ScoopTools
         {
             Id = "scoop-set-global-install-path",
             Label = "Set Scoop Global Install Path",
-            Category = "Package Management",
+            Category = "Developer",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -650,7 +650,7 @@ internal static class ScoopTools
         {
             Id = "scoop-set-virustotal-api-key",
             Label = "Set Scoop VirusTotal API Key Variable",
-            Category = "Package Management",
+            Category = "Developer",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -665,7 +665,7 @@ internal static class ScoopTools
         {
             Id = "scoop-disable-checkver",
             Label = "Disable Scoop Auto-Version Check",
-            Category = "Package Management",
+            Category = "Developer",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Sets SCOOP_NO_CHECKVER=1 to skip automatic version checks. Speeds up 'scoop status'. Default: checks versions.",
@@ -679,7 +679,7 @@ internal static class ScoopTools
         {
             Id = "scoop-add-extras-bucket",
             Label = "Add Scoop Extras Bucket",
-            Category = "Package Management",
+            Category = "Developer",
             NeedsAdmin = false,
             CorpSafe = true,
             KindHint = TweakKind.PowerShell,
@@ -697,7 +697,7 @@ internal static class ScoopTools
         {
             Id = "scoop-cleanup-all",
             Label = "Clean Up All Scoop Caches",
-            Category = "Package Management",
+            Category = "Developer",
             NeedsAdmin = false,
             CorpSafe = true,
             KindHint = TweakKind.PowerShell,
@@ -714,7 +714,7 @@ internal static class ScoopTools
         {
             Id = "scoop-install-aria2",
             Label = "Install Aria2 for Scoop Downloads",
-            Category = "Package Management",
+            Category = "Developer",
             NeedsAdmin = false,
             CorpSafe = true,
             KindHint = TweakKind.PackageManager,
@@ -732,7 +732,7 @@ internal static class ScoopTools
         {
             Id = "scoop-7zip",
             Label = "Install 7-Zip via Scoop",
-            Category = "Package Management",
+            Category = "Developer",
             NeedsAdmin = false,
             CorpSafe = true,
             KindHint = TweakKind.PackageManager,
@@ -747,7 +747,7 @@ internal static class ScoopTools
         {
             Id = "scoop-bat",
             Label = "Install bat via Scoop",
-            Category = "Package Management",
+            Category = "Developer",
             NeedsAdmin = false,
             CorpSafe = true,
             KindHint = TweakKind.PackageManager,
@@ -762,7 +762,7 @@ internal static class ScoopTools
         {
             Id = "scoop-btop",
             Label = "Install btop via Scoop",
-            Category = "Package Management",
+            Category = "Developer",
             NeedsAdmin = false,
             CorpSafe = true,
             KindHint = TweakKind.PackageManager,
@@ -777,7 +777,7 @@ internal static class ScoopTools
         {
             Id = "scoop-curl",
             Label = "Install curl via Scoop",
-            Category = "Package Management",
+            Category = "Developer",
             NeedsAdmin = false,
             CorpSafe = true,
             KindHint = TweakKind.PackageManager,
@@ -792,7 +792,7 @@ internal static class ScoopTools
         {
             Id = "scoop-delta",
             Label = "Install delta via Scoop",
-            Category = "Package Management",
+            Category = "Developer",
             NeedsAdmin = false,
             CorpSafe = true,
             KindHint = TweakKind.PackageManager,
@@ -807,7 +807,7 @@ internal static class ScoopTools
         {
             Id = "scoop-duf",
             Label = "Install duf via Scoop",
-            Category = "Package Management",
+            Category = "Developer",
             NeedsAdmin = false,
             CorpSafe = true,
             KindHint = TweakKind.PackageManager,
@@ -822,7 +822,7 @@ internal static class ScoopTools
         {
             Id = "scoop-dust",
             Label = "Install dust via Scoop",
-            Category = "Package Management",
+            Category = "Developer",
             NeedsAdmin = false,
             CorpSafe = true,
             KindHint = TweakKind.PackageManager,
@@ -837,7 +837,7 @@ internal static class ScoopTools
         {
             Id = "scoop-everything",
             Label = "Install Everything via Scoop",
-            Category = "Package Management",
+            Category = "Developer",
             NeedsAdmin = false,
             CorpSafe = true,
             KindHint = TweakKind.PackageManager,
@@ -852,7 +852,7 @@ internal static class ScoopTools
         {
             Id = "scoop-fd",
             Label = "Install fd via Scoop",
-            Category = "Package Management",
+            Category = "Developer",
             NeedsAdmin = false,
             CorpSafe = true,
             KindHint = TweakKind.PackageManager,
@@ -867,7 +867,7 @@ internal static class ScoopTools
         {
             Id = "scoop-fzf",
             Label = "Install fzf via Scoop",
-            Category = "Package Management",
+            Category = "Developer",
             NeedsAdmin = false,
             CorpSafe = true,
             KindHint = TweakKind.PackageManager,
@@ -882,7 +882,7 @@ internal static class ScoopTools
         {
             Id = "scoop-git",
             Label = "Install Git via Scoop",
-            Category = "Package Management",
+            Category = "Developer",
             NeedsAdmin = false,
             CorpSafe = true,
             KindHint = TweakKind.PackageManager,
@@ -897,7 +897,7 @@ internal static class ScoopTools
         {
             Id = "scoop-gsudo",
             Label = "Install gsudo via Scoop",
-            Category = "Package Management",
+            Category = "Developer",
             NeedsAdmin = false,
             CorpSafe = true,
             KindHint = TweakKind.PackageManager,
@@ -912,7 +912,7 @@ internal static class ScoopTools
         {
             Id = "scoop-hyperfine",
             Label = "Install hyperfine via Scoop",
-            Category = "Package Management",
+            Category = "Developer",
             NeedsAdmin = false,
             CorpSafe = true,
             KindHint = TweakKind.PackageManager,
@@ -927,7 +927,7 @@ internal static class ScoopTools
         {
             Id = "scoop-jq",
             Label = "Install jq via Scoop",
-            Category = "Package Management",
+            Category = "Developer",
             NeedsAdmin = false,
             CorpSafe = true,
             KindHint = TweakKind.PackageManager,
@@ -942,7 +942,7 @@ internal static class ScoopTools
         {
             Id = "scoop-lazygit",
             Label = "Install lazygit via Scoop",
-            Category = "Package Management",
+            Category = "Developer",
             NeedsAdmin = false,
             CorpSafe = true,
             KindHint = TweakKind.PackageManager,
@@ -957,7 +957,7 @@ internal static class ScoopTools
         {
             Id = "scoop-neovim",
             Label = "Install Neovim via Scoop",
-            Category = "Package Management",
+            Category = "Developer",
             NeedsAdmin = false,
             CorpSafe = true,
             KindHint = TweakKind.PackageManager,
@@ -972,7 +972,7 @@ internal static class ScoopTools
         {
             Id = "scoop-nodejs",
             Label = "Install Node.js via Scoop",
-            Category = "Package Management",
+            Category = "Developer",
             NeedsAdmin = false,
             CorpSafe = true,
             KindHint = TweakKind.PackageManager,
@@ -987,7 +987,7 @@ internal static class ScoopTools
         {
             Id = "scoop-python",
             Label = "Install Python via Scoop",
-            Category = "Package Management",
+            Category = "Developer",
             NeedsAdmin = false,
             CorpSafe = true,
             KindHint = TweakKind.PackageManager,
@@ -1002,7 +1002,7 @@ internal static class ScoopTools
         {
             Id = "scoop-ripgrep",
             Label = "Install ripgrep via Scoop",
-            Category = "Package Management",
+            Category = "Developer",
             NeedsAdmin = false,
             CorpSafe = true,
             KindHint = TweakKind.PackageManager,
@@ -1017,7 +1017,7 @@ internal static class ScoopTools
         {
             Id = "scoop-set-global-path",
             Label = "Add Scoop Global Apps to PATH",
-            Category = "Package Management",
+            Category = "Developer",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -1046,7 +1046,7 @@ internal static class ScoopTools
         {
             Id = "scoop-starship",
             Label = "Install Starship via Scoop",
-            Category = "Package Management",
+            Category = "Developer",
             NeedsAdmin = false,
             CorpSafe = true,
             KindHint = TweakKind.PackageManager,
@@ -1061,7 +1061,7 @@ internal static class ScoopTools
         {
             Id = "scoop-tldr",
             Label = "Install tldr via Scoop",
-            Category = "Package Management",
+            Category = "Developer",
             NeedsAdmin = false,
             CorpSafe = true,
             KindHint = TweakKind.PackageManager,
@@ -1076,7 +1076,7 @@ internal static class ScoopTools
         {
             Id = "scoop-wget",
             Label = "Install wget via Scoop",
-            Category = "Package Management",
+            Category = "Developer",
             NeedsAdmin = false,
             CorpSafe = true,
             KindHint = TweakKind.PackageManager,
@@ -1091,7 +1091,7 @@ internal static class ScoopTools
         {
             Id = "scoop-zoxide",
             Label = "Install zoxide via Scoop",
-            Category = "Package Management",
+            Category = "Developer",
             NeedsAdmin = false,
             CorpSafe = true,
             KindHint = TweakKind.PackageManager,
@@ -1106,7 +1106,7 @@ internal static class ScoopTools
         {
             Id = "scoop-lsd",
             Label = "Install lsd via Scoop",
-            Category = "Package Management",
+            Category = "Developer",
             NeedsAdmin = false,
             CorpSafe = true,
             KindHint = TweakKind.PackageManager,
@@ -1121,7 +1121,7 @@ internal static class ScoopTools
         {
             Id = "scoop-sd",
             Label = "Install sd via Scoop",
-            Category = "Package Management",
+            Category = "Developer",
             NeedsAdmin = false,
             CorpSafe = true,
             KindHint = TweakKind.PackageManager,
@@ -1136,7 +1136,7 @@ internal static class ScoopTools
         {
             Id = "scoop-procs",
             Label = "Install procs via Scoop",
-            Category = "Package Management",
+            Category = "Developer",
             NeedsAdmin = false,
             CorpSafe = true,
             KindHint = TweakKind.PackageManager,
@@ -1151,7 +1151,7 @@ internal static class ScoopTools
         {
             Id = "scoop-bottom",
             Label = "Install bottom via Scoop",
-            Category = "Package Management",
+            Category = "Developer",
             NeedsAdmin = false,
             CorpSafe = true,
             KindHint = TweakKind.PackageManager,
@@ -1166,7 +1166,7 @@ internal static class ScoopTools
         {
             Id = "scoop-xh",
             Label = "Install xh via Scoop",
-            Category = "Package Management",
+            Category = "Developer",
             NeedsAdmin = false,
             CorpSafe = true,
             KindHint = TweakKind.PackageManager,
@@ -1181,7 +1181,7 @@ internal static class ScoopTools
         {
             Id = "scoop-gping",
             Label = "Install gping via Scoop",
-            Category = "Package Management",
+            Category = "Developer",
             NeedsAdmin = false,
             CorpSafe = true,
             KindHint = TweakKind.PackageManager,
@@ -1196,7 +1196,7 @@ internal static class ScoopTools
         {
             Id = "scoop-tokei",
             Label = "Install tokei via Scoop",
-            Category = "Package Management",
+            Category = "Developer",
             NeedsAdmin = false,
             CorpSafe = true,
             KindHint = TweakKind.PackageManager,
@@ -1211,7 +1211,7 @@ internal static class ScoopTools
         {
             Id = "scoop-tealdeer",
             Label = "Install tealdeer via Scoop",
-            Category = "Package Management",
+            Category = "Developer",
             NeedsAdmin = false,
             CorpSafe = true,
             KindHint = TweakKind.PackageManager,
@@ -1226,7 +1226,7 @@ internal static class ScoopTools
         {
             Id = "scoop-carapace-bin",
             Label = "Install carapace-bin via Scoop",
-            Category = "Package Management",
+            Category = "Developer",
             NeedsAdmin = false,
             CorpSafe = true,
             KindHint = TweakKind.PackageManager,
@@ -1241,7 +1241,7 @@ internal static class ScoopTools
         {
             Id = "scoop-eza",
             Label = "Install eza via Scoop",
-            Category = "Package Management",
+            Category = "Developer",
             NeedsAdmin = false,
             CorpSafe = true,
             KindHint = TweakKind.PackageManager,
@@ -1257,7 +1257,7 @@ internal static class ScoopTools
         {
             Id = "scoop-yazi",
             Label = "Install yazi via Scoop",
-            Category = "Package Management",
+            Category = "Developer",
             NeedsAdmin = false,
             CorpSafe = true,
             KindHint = TweakKind.PackageManager,
@@ -1272,7 +1272,7 @@ internal static class ScoopTools
         {
             Id = "scoop-helix",
             Label = "Install Helix editor via Scoop",
-            Category = "Package Management",
+            Category = "Developer",
             NeedsAdmin = false,
             CorpSafe = true,
             KindHint = TweakKind.PackageManager,
@@ -1288,7 +1288,7 @@ internal static class ScoopTools
         {
             Id = "scoop-nushell",
             Label = "Install Nushell via Scoop",
-            Category = "Package Management",
+            Category = "Developer",
             NeedsAdmin = false,
             CorpSafe = true,
             KindHint = TweakKind.PackageManager,
@@ -1303,7 +1303,7 @@ internal static class ScoopTools
         {
             Id = "scoop-zellij",
             Label = "Install Zellij via Scoop",
-            Category = "Package Management",
+            Category = "Developer",
             NeedsAdmin = false,
             CorpSafe = true,
             KindHint = TweakKind.PackageManager,
@@ -1318,7 +1318,7 @@ internal static class ScoopTools
         {
             Id = "scoop-gitoxide",
             Label = "Install gitoxide (gix) via Scoop",
-            Category = "Package Management",
+            Category = "Developer",
             NeedsAdmin = false,
             CorpSafe = true,
             KindHint = TweakKind.PackageManager,
@@ -1333,7 +1333,7 @@ internal static class ScoopTools
         {
             Id = "scoop-watchexec",
             Label = "Install watchexec via Scoop",
-            Category = "Package Management",
+            Category = "Developer",
             NeedsAdmin = false,
             CorpSafe = true,
             KindHint = TweakKind.PackageManager,
@@ -1349,7 +1349,7 @@ internal static class ScoopTools
         {
             Id = "scoop-topgrade",
             Label = "Install topgrade via Scoop",
-            Category = "Package Management",
+            Category = "Developer",
             NeedsAdmin = false,
             CorpSafe = true,
             KindHint = TweakKind.PackageManager,
@@ -1364,7 +1364,7 @@ internal static class ScoopTools
         {
             Id = "scoop-pueue",
             Label = "Install pueue via Scoop",
-            Category = "Package Management",
+            Category = "Developer",
             NeedsAdmin = false,
             CorpSafe = true,
             KindHint = TweakKind.PackageManager,
@@ -1379,7 +1379,7 @@ internal static class ScoopTools
         {
             Id = "scoop-oha",
             Label = "Install oha via Scoop",
-            Category = "Package Management",
+            Category = "Developer",
             NeedsAdmin = false,
             CorpSafe = true,
             KindHint = TweakKind.PackageManager,

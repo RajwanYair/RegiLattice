@@ -34,7 +34,7 @@ internal static class PolicyCertificate
             {
                 Id = "certae-disable-machine-autoenroll",
                 Label = "Disable Machine Certificate Auto-Enrollment",
-                Category = "Certificate Policy",
+                Category = "Security",
                 Description =
                     "Sets AEPolicy=4 in the machine Cryptography AutoEnrollment policy key. "
                     + "Prevents Windows from automatically requesting, renewing, or installing machine "
@@ -57,7 +57,7 @@ internal static class PolicyCertificate
             {
                 Id = "certae-enable-machine-autoenroll",
                 Label = "Enable Machine Certificate Auto-Enrollment with Renewal",
-                Category = "Certificate Policy",
+                Category = "Security",
                 Description =
                     "Sets AEPolicy=7 in the machine Cryptography AutoEnrollment policy key. "
                     + "Enables machine certificate auto-enrollment, automatic renewal of expiring certs, "
@@ -79,7 +79,7 @@ internal static class PolicyCertificate
             {
                 Id = "certae-disable-user-autoenroll",
                 Label = "Disable User Certificate Auto-Enrollment",
-                Category = "Certificate Policy",
+                Category = "Security",
                 Description =
                     "Sets AEPolicy=0 in the user Cryptography AutoEnrollment policy key. "
                     + "Prevents Windows from automatically requesting or renewing user certificates from an "
@@ -100,7 +100,7 @@ internal static class PolicyCertificate
             {
                 Id = "certae-enable-user-autoenroll",
                 Label = "Enable User Certificate Auto-Enrollment with Renewal",
-                Category = "Certificate Policy",
+                Category = "Security",
                 Description =
                     "Sets AEPolicy=7 in the user Cryptography AutoEnrollment policy key. "
                     + "Enables user certificate auto-enrollment, automatic renewal, and key archiving "
@@ -121,7 +121,7 @@ internal static class PolicyCertificate
             {
                 Id = "certae-disable-cert-expiry-alerts",
                 Label = "Disable Certificate Expiry Balloon Notifications",
-                Category = "Certificate Policy",
+                Category = "Security",
                 Description =
                     "Sets ExpirationWarning=0 in the machine AutoEnrollment policy key. "
                     + "Prevents Windows from generating balloon notification alerts to users when their "
@@ -143,7 +143,7 @@ internal static class PolicyCertificate
             {
                 Id = "certae-enable-certificate-logging",
                 Label = "Enable Certificate Enrollment Audit Logging",
-                Category = "Certificate Policy",
+                Category = "Security",
                 Description =
                     "Sets AuditLevel=2 in the machine AutoEnrollment policy key. "
                     + "Enables audit logging for each machine certificate enrollment, renewal, and deletion event. "
@@ -164,7 +164,7 @@ internal static class PolicyCertificate
             {
                 Id = "certae-disable-offline-dom-enroll",
                 Label = "Disable Certificate Enrollment in Offline Domain Join",
-                Category = "Certificate Policy",
+                Category = "Security",
                 Description =
                     "Sets OfflineDomainJoinEnrollment=0 in the machine AutoEnrollment policy key. "
                     + "Prevents certificate auto-enrollment from running during an offline domain join operation "
@@ -185,7 +185,7 @@ internal static class PolicyCertificate
             {
                 Id = "certae-enable-key-based-renewal",
                 Label = "Enable Key-Based Certificate Renewal",
-                Category = "Certificate Policy",
+                Category = "Security",
                 Description =
                     "Sets EnableKeyBasedRenewal=1 in the PKI policy key. "
                     + "Allows Windows to perform key-based certificate renewal (KBR) where the same private key "
@@ -206,7 +206,7 @@ internal static class PolicyCertificate
             {
                 Id = "certae-disable-pki-url-retrieval",
                 Label = "Disable URL-Based PKI Object Retrieval",
-                Category = "Certificate Policy",
+                Category = "Security",
                 Description =
                     "Sets EnableCertChainValidation=0 in the PKI policy key. "
                     + "Prevents Windows from automatically fetching CRL, OCSP, and AIA objects from "
@@ -228,7 +228,7 @@ internal static class PolicyCertificate
             {
                 Id = "certae-set-weak-cert-blocking",
                 Label = "Enable Weak Certificate Algorithm Blocking",
-                Category = "Certificate Policy",
+                Category = "Security",
                 Description =
                     "Sets DisableWeakSignatures=1 in the PKI policy key. "
                     + "Instructs the Windows certificate chain engine to reject certificates that use "
@@ -261,7 +261,7 @@ internal static class PolicyCertificate
                 {
                     Id = "cbapol-require-smartcard-login",
                     Label = "Require Smart Card for Interactive Logon",
-                    Category = "Certificate Policy",
+                    Category = "Security",
                     Description =
                         "Requires a smart card (or virtual smart card with TPM) for all interactive Windows logon sessions, blocking password-based or biometric-only sign-in and enforcing certificate-based two-factor authentication.",
                     Tags = ["smartcard", "cba", "certificate", "authentication", "policy"],
@@ -278,7 +278,7 @@ internal static class PolicyCertificate
                 {
                     Id = "cbapol-lock-on-smartcard-removal",
                     Label = "Lock Workstation on Smart Card Removal",
-                    Category = "Certificate Policy",
+                    Category = "Security",
                     Description =
                         "Automatically locks the Windows workstation when the smart card is removed from the reader, enforcing physical card custody and preventing unattended session access.",
                     Tags = ["smartcard", "cba", "lock", "card-removal", "policy"],
@@ -295,7 +295,7 @@ internal static class PolicyCertificate
                 {
                     Id = "cbapol-require-ocsp-for-crl",
                     Label = "Require OCSP Revocation Check for Smart Card Certificates",
-                    Category = "Certificate Policy",
+                    Category = "Security",
                     Description =
                         "Forces OCSP (Online Certificate Status Protocol) revocation checking for smart card certificates during logon, immediately blocking revoked certificates rather than waiting for CRL cache to expire.",
                     Tags = ["smartcard", "cba", "ocsp", "revocation", "pki", "policy"],
@@ -312,7 +312,7 @@ internal static class PolicyCertificate
                 {
                     Id = "cbapol-allow-virtual-smart-card",
                     Label = "Allow TPM Virtual Smart Cards",
-                    Category = "Certificate Policy",
+                    Category = "Security",
                     Description =
                         "Enables TPM-backed virtual smart cards (VSCs) as an alternative to physical smart card readers, allowing certificate-based authentication without requiring physical card hardware.",
                     Tags = ["smartcard", "virtual-smart-card", "tpm", "cba", "policy"],
@@ -329,7 +329,7 @@ internal static class PolicyCertificate
                 {
                     Id = "cbapol-block-pin-caching",
                     Label = "Block Smart Card PIN Caching",
-                    Category = "Certificate Policy",
+                    Category = "Security",
                     Description =
                         "Disables caching of smart card PINs in memory after successful authentication, requiring the user to re-enter their PIN for every cryptographic operation instead of using a cached PIN.",
                     Tags = ["smartcard", "pin", "caching", "cba", "policy"],
@@ -346,7 +346,7 @@ internal static class PolicyCertificate
                 {
                     Id = "cbapol-block-root-cert-auto-update",
                     Label = "Block Automatic Root Certificate Auto-Update",
-                    Category = "Certificate Policy",
+                    Category = "Security",
                     Description =
                         "Prevents Windows from automatically downloading and installing new root certificates from Windows Update, keeping the trusted root store static and under admin control.",
                     Tags = ["cba", "root-certificate", "pki", "policy"],
@@ -363,7 +363,7 @@ internal static class PolicyCertificate
                 {
                     Id = "cbapol-log-all-cert-validation",
                     Label = "Enable Audit Logging for Certificate Chain Validation",
-                    Category = "Certificate Policy",
+                    Category = "Security",
                     Description =
                         "Enables event logging for all certificate chain validation operations including OCSP, CRL, and path-building events, providing a PKI audit trail for smart card and TLS authentication.",
                     Tags = ["cba", "certificate", "audit-log", "pki", "policy"],
@@ -380,7 +380,7 @@ internal static class PolicyCertificate
                 {
                     Id = "cbapol-block-expired-cert-auth",
                     Label = "Block Authentication with Expired Certificates",
-                    Category = "Certificate Policy",
+                    Category = "Security",
                     Description =
                         "Rejects smart card or certificate-based logon attempts when the authentication certificate has expired, preventing continuation of sessions using stale credentials.",
                     Tags = ["cba", "certificate", "expiry", "smartcard", "policy"],
@@ -397,7 +397,7 @@ internal static class PolicyCertificate
                 {
                     Id = "cbapol-enforce-strong-key-protection",
                     Label = "Enforce Strong Private Key Protection for User Certs",
-                    Category = "Certificate Policy",
+                    Category = "Security",
                     Description =
                         "Requires strong private key protection (PIN or password confirmation) whenever a user certificate's private key is accessed, preventing silent key use by malicious processes.",
                     Tags = ["cba", "private-key", "strong-protection", "pki", "policy"],
@@ -414,7 +414,7 @@ internal static class PolicyCertificate
                 {
                     Id = "cbapol-require-kdc-cert-valid",
                     Label = "Require Valid KDC Certificate for Kerberos PKINIT",
-                    Category = "Certificate Policy",
+                    Category = "Security",
                     Description =
                         "Requires that the Kerberos KDC certificate presented during PKINIT authentication is valid and trusted, blocking use of self-signed or untrusted KDC certificates in Kerberos certificate-based auth.",
                     Tags = ["cba", "kerberos", "pkinit", "kdc", "pki", "policy"],
@@ -449,7 +449,7 @@ internal static class PolicyCertificate
             {
                 Id = "certpol-dotnet-strong-crypto-64",
                 Label = "Enable .NET 4 Strong Cryptography (64-bit)",
-                Category = "Certificate Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -468,7 +468,7 @@ internal static class PolicyCertificate
             {
                 Id = "certpol-dotnet-strong-crypto-32",
                 Label = "Enable .NET 4 Strong Cryptography (32-bit / WoW64)",
-                Category = "Certificate Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -486,7 +486,7 @@ internal static class PolicyCertificate
             {
                 Id = "certpol-dotnet-tls12-default-64",
                 Label = "Use System TLS Versions in .NET 4 (64-bit)",
-                Category = "Certificate Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -505,7 +505,7 @@ internal static class PolicyCertificate
             {
                 Id = "certpol-dotnet-tls12-default-32",
                 Label = "Use System TLS Versions in .NET 4 (32-bit / WoW64)",
-                Category = "Certificate Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -522,7 +522,7 @@ internal static class PolicyCertificate
             {
                 Id = "certpol-dotnet2-strong-crypto-64",
                 Label = "Enable .NET 2/3.5 Strong Cryptography (64-bit)",
-                Category = "Certificate Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -540,7 +540,7 @@ internal static class PolicyCertificate
             {
                 Id = "certpol-dotnet2-strong-crypto-32",
                 Label = "Enable .NET 2/3.5 Strong Cryptography (32-bit / WoW64)",
-                Category = "Certificate Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -558,7 +558,7 @@ internal static class PolicyCertificate
             {
                 Id = "certpol-cert-padding-check-64",
                 Label = "Enable Certificate Padding Check (64-bit)",
-                Category = "Certificate Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -577,7 +577,7 @@ internal static class PolicyCertificate
             {
                 Id = "certpol-cert-padding-check-32",
                 Label = "Enable Certificate Padding Check (32-bit / WoW64)",
-                Category = "Certificate Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -596,7 +596,7 @@ internal static class PolicyCertificate
             {
                 Id = "certpol-disable-root-auto-update",
                 Label = "Disable Automatic Root Certificate Update",
-                Category = "Certificate Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -615,7 +615,7 @@ internal static class PolicyCertificate
             {
                 Id = "certpol-ie-cert-revocation",
                 Label = "Enable Certificate Revocation Checking (Internet Settings)",
-                Category = "Certificate Policy",
+                Category = "Security",
                 NeedsAdmin = false,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -651,7 +651,7 @@ internal static class PolicyCertificate
             {
                 Id = "certpol-enable-machine-autoenroll",
                 Label = "Certificates: Enable Machine Auto-Enrollment",
-                Category = "Certificate Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 MinBuild = 17763,
@@ -672,7 +672,7 @@ internal static class PolicyCertificate
             {
                 Id = "certpol-disable-machine-autoenroll",
                 Label = "Certificates: Disable Machine Auto-Enrollment",
-                Category = "Certificate Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 MinBuild = 17763,
@@ -692,7 +692,7 @@ internal static class PolicyCertificate
             {
                 Id = "certpol-enable-user-autoenroll",
                 Label = "Certificates: Enable User Auto-Enrollment",
-                Category = "Certificate Policy",
+                Category = "Security",
                 NeedsAdmin = false,
                 CorpSafe = true,
                 MinBuild = 17763,
@@ -713,7 +713,7 @@ internal static class PolicyCertificate
             {
                 Id = "certpol-protect-root-store",
                 Label = "Certificates: Protect Root CA Store from User Modification",
-                Category = "Certificate Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 MinBuild = 17763,
@@ -734,7 +734,7 @@ internal static class PolicyCertificate
             {
                 Id = "certpol-disable-crl-url-retrieval",
                 Label = "Certificates: Disable Automatic CRL/OCSP URL Retrieval for Offline Scenarios",
-                Category = "Certificate Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 MinBuild = 17763,
@@ -755,7 +755,7 @@ internal static class PolicyCertificate
             {
                 Id = "certpol-require-publishers-approval",
                 Label = "Certificates: Require Trusted Publishers Approval for Unsigned Code",
-                Category = "Certificate Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 MinBuild = 17763,
@@ -776,7 +776,7 @@ internal static class PolicyCertificate
             {
                 Id = "certpol-strong-key-protection",
                 Label = "Certificates: Enforce Strong Private-Key Protection",
-                Category = "Certificate Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 MinBuild = 17763,
@@ -797,7 +797,7 @@ internal static class PolicyCertificate
             {
                 Id = "certpol-disable-sha1-for-certs",
                 Label = "Certificates: Block SHA-1 Certificates for Server Authentication",
-                Category = "Certificate Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 MinBuild = 17763,
@@ -818,7 +818,7 @@ internal static class PolicyCertificate
             {
                 Id = "certpol-log-cert-chain-errors",
                 Label = "Certificates: Enable Certificate Chain Validation Logging",
-                Category = "Certificate Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 MinBuild = 17763,
@@ -839,7 +839,7 @@ internal static class PolicyCertificate
             {
                 Id = "certpol-disable-explicit-user-trust",
                 Label = "Certificates: Prevent Users from Trusting Certificates Manually",
-                Category = "Certificate Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 MinBuild = 17763,
@@ -875,7 +875,7 @@ internal static class PolicyCertificate
                 {
                     Id = "certr-set-max-url-retrieval-timeout",
                     Label = "Certificate Revocation: Set URL Retrieval Timeout to 20 Seconds",
-                    Category = "Certificate Policy",
+                    Category = "Security",
                     Description =
                         "Sets MaxURLRetrievalTimeout=20000 (ms) in ChainEngine Config. Controls how long the certificate chain validation engine waits for a CRL or OCSP response before treating the revocation check as failed. The default is very long (60 seconds), causing connection delays when a CRL Distribution Point server is offline. Setting to 20 seconds balances security (the revocation check still occurs) against UX (a slow CDP doesn't cause a 60-second hang in certificate operations).",
                     Tags = ["certificate", "crl", "ocsp", "revocation", "timeout"],
@@ -892,7 +892,7 @@ internal static class PolicyCertificate
                 {
                     Id = "certr-disable-revocation-on-offline",
                     Label = "Certificate Revocation: Allow Certificate Use When CRL Offline",
-                    Category = "Certificate Policy",
+                    Category = "Security",
                     Description =
                         "Sets WeakSignatureSettings=0 to allow certificate use when revocation check fails due to network unavailability. Configures the Windows chain engine to treat a revocation check that fails because the CRL/OCSP endpoint is unreachable differently from a positive revocation (certificate is explicitly revoked). When offline revocation is allowed, a certificate passes validation if the revocation server was unreachable (soft fail) rather than blocking the certificate (hard fail). Appropriate for environments where CRL accessibility is inconsistent.",
                     Tags = ["certificate", "crl", "offline", "revocation", "chain"],
@@ -909,7 +909,7 @@ internal static class PolicyCertificate
                 {
                     Id = "certr-enable-ocsp-preference",
                     Label = "Certificate Revocation: Enable OCSP Preference Over CRL",
-                    Category = "Certificate Policy",
+                    Category = "Security",
                     Description =
                         "Sets OCSPPreferEnabled=1 in ChainEngine Config. When a certificate contains both CDP (CRL Distribution Point) and AIA (Authority Information Access / OCSP) extensions, directs Windows to prefer OCSP stapling and online OCSP checks over downloading the full CRL. OCSP provides real-time revocation status for a single certificate without downloading the complete CRL; for single-certificate validation, OCSP is faster and uses less bandwidth than a multi-megabyte CRL download.",
                     Tags = ["certificate", "ocsp", "crl", "revocation", "performance"],
@@ -926,7 +926,7 @@ internal static class PolicyCertificate
                 {
                     Id = "certr-set-crl-cache-ttl",
                     Label = "Certificate Revocation: Set CRL Cache Time-to-Live to 4 Hours",
-                    Category = "Certificate Policy",
+                    Category = "Security",
                     Description =
                         "Sets DefaultOCSPResponderURLRetrievalTimeout=14400 (seconds) in ChainEngine Config to cap the maximum CRL cache lifetime at 4 hours. Windows caches downloaded CRLs for up to their published validity period (often 7 days). A compromised certificate that was revoked after the CRL was cached remains effective for up to 7 days on clients that cached the CRL. Reducing the cache TTL limits the window during which a revoked certificate appears valid to clients that have already cached the pre-revocation CRL.",
                     Tags = ["certificate", "crl", "cache", "revocation", "ttl"],
@@ -952,7 +952,7 @@ internal static class PolicyCertificate
                 {
                     Id = "certr-set-chain-path-length",
                     Label = "Certificate Revocation: Enforce Maximum Certificate Chain Depth of 6",
-                    Category = "Certificate Policy",
+                    Category = "Security",
                     Description =
                         "Sets ChainEngineEnabledForcePathLengthConstraint=6 in ChainEngine Config. Limits the maximum depth of a certificate chain that Windows will validate. Unlimited chain depth enables issuing certificate chains through an arbitrary number of intermediate CAs, each potentially compromised. Setting a maximum of 6 links (root, 4 intermediates, end-entity) matches industry best practice for enterprise hierarchies and prevents unbounded certificate chain traversal which can be exploited in Name Constraint validation bypass attacks.",
                     Tags = ["certificate", "chain", "depth", "path-length", "hardening"],
@@ -986,7 +986,7 @@ internal static class PolicyCertificate
                 {
                     Id = "certr-enable-revocation-for-code-signing",
                     Label = "Certificate Revocation: Enable Revocation Check for Code Signing Certificates",
-                    Category = "Certificate Policy",
+                    Category = "Security",
                     Description =
                         "Sets CodeSigningRevocationEnabled=1 in SystemCertificates policy. Enables mandatory revocation checking for code signing certificates used when validating Authenticode signatures (EXE, DLL, MSI, PowerShell scripts). Without revocation checking for code signing, a revoked code signing certificate (e.g., stolen by malware author) remains valid for signing malicious code. This is critical for organizations that enforce signature validation before software execution.",
                     Tags = ["certificate", "code-signing", "revocation", "authenticode", "security"],
@@ -1003,7 +1003,7 @@ internal static class PolicyCertificate
                 {
                     Id = "certr-require-delta-crl",
                     Label = "Certificate Revocation: Enable Delta CRL Support for Fresh Revocations",
-                    Category = "Certificate Policy",
+                    Category = "Security",
                     Description =
                         "Sets EnableDeltaCRL=1 in ChainEngine Config. Enables the processing of Delta CRLs (incremental revocation lists that contain only revocations published since the last base CRL). When a certificate is revoked, the revocation becomes effective with the next published CRL. Base CRLs are typically published weekly; Delta CRLs are published hourly. Using Delta CRLs reduces the window between revocation and client awareness from days to hours, minimising the time a stolen certificate remains valid.",
                     Tags = ["certificate", "delta-crl", "revocation", "freshness", "crl"],
@@ -1020,7 +1020,7 @@ internal static class PolicyCertificate
                 {
                     Id = "certr-deny-untrusted-roots",
                     Label = "Certificate Revocation: Deny Certificates from Untrusted Root CAs",
-                    Category = "Certificate Policy",
+                    Category = "Security",
                     Description =
                         "Sets AuthRootAutoUpdateEnabled=1 in SystemCertificates to enable automatic trusted root list updates, and sets the chain validation to reject chains with roots not in the Microsoft Trusted Root Programme. When DenyUntrustedRoots=1, Windows blocks TLS connections and application trust for certificates issued by any CA whose root is not in the Microsoft Trusted Root Store and not in the organisation's own Enterprise Trust list. Prevents rogue CA certificates from being trusted.",
                     Tags = ["certificate", "root-ca", "trust", "untrusted", "hardening"],
@@ -1037,7 +1037,7 @@ internal static class PolicyCertificate
                 {
                     Id = "certr-enable-auth-root-auto-update",
                     Label = "Certificate Revocation: Enable Automatic Trusted Root Certificate Updates",
-                    Category = "Certificate Policy",
+                    Category = "Security",
                     Description =
                         "Sets AuthRootAutoUpdateEnabled=1 in SystemCertificates. Enables automatic download of updates to the Microsoft Trusted Root Certificate Programme from Windows Update. Root certificate stores can become stale if auto-update is disabled: newly cross-signed root CAs cannot be trusted, and distrusted CAs that Microsoft removes (e.g., compromised CAs) may remain trusted. Auto-update ensures the machine's root store reflects current CA trust decisions by the Microsoft PKI team.",
                     Tags = ["certificate", "root-ca", "auto-update", "trust-store", "pki"],
@@ -1054,7 +1054,7 @@ internal static class PolicyCertificate
                 {
                     Id = "certr-set-ocsp-max-age",
                     Label = "Certificate Revocation: Set OCSP Response Maximum Age to 24 Hours",
-                    Category = "Certificate Policy",
+                    Category = "Security",
                     Description =
                         "Sets MaxOCSPResponseAge=86400 (seconds = 24 hours) in ChainEngine Config. OCSP stapling allows TLS servers to pre-fetch and embed a signed OCSP response in the TLS handshake, avoiding a separate client-to-OCSP-server round-trip. However, OCSP responses are timestamped and expire; a stale stapled OCSP response must be refreshed. Limiting the maximum acceptable age of an OCSP response to 24 hours ensures clients receive reasonably fresh revocation data without excessive OCSP server load.",
                     Tags = ["certificate", "ocsp", "stapling", "revocation", "ttl"],
@@ -1082,7 +1082,7 @@ internal static class PolicyCertificate
             {
                 Id = "certvld-disable-auto-root-update",
                 Label = "Disable Automatic Root Certificate Update",
-                Category = "Certificate Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -1099,7 +1099,7 @@ internal static class PolicyCertificate
             {
                 Id = "certvld-disable-revocation-check",
                 Label = "Enforce Certificate Revocation Checking",
-                Category = "Certificate Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 5,
@@ -1116,7 +1116,7 @@ internal static class PolicyCertificate
             {
                 Id = "certvld-disable-ocsp-staple-bypass",
                 Label = "Disable OCSP Stapling Bypass",
-                Category = "Certificate Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -1133,7 +1133,7 @@ internal static class PolicyCertificate
             {
                 Id = "certvld-disable-certificate-propagation",
                 Label = "Disable Automatic Certificate Propagation",
-                Category = "Certificate Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -1150,7 +1150,7 @@ internal static class PolicyCertificate
             {
                 Id = "certvld-enable-cert-padding-check",
                 Label = "Enable Certificate Padding Check",
-                Category = "Certificate Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -1167,7 +1167,7 @@ internal static class PolicyCertificate
             {
                 Id = "certvld-disable-weak-algorithms",
                 Label = "Disable Weak Certificate Signature Algorithms",
-                Category = "Certificate Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 5,
@@ -1184,7 +1184,7 @@ internal static class PolicyCertificate
             {
                 Id = "certvld-disable-expired-cert-bypass",
                 Label = "Disable Expired Certificate Bypass",
-                Category = "Certificate Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -1201,7 +1201,7 @@ internal static class PolicyCertificate
             {
                 Id = "certvld-disable-cert-chain-building",
                 Label = "Restrict Certificate Chain Building to Local Store Only",
-                Category = "Certificate Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -1218,7 +1218,7 @@ internal static class PolicyCertificate
             {
                 Id = "certvld-disable-cert-transparency",
                 Label = "Enable Certificate Transparency Enforcement",
-                Category = "Certificate Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -1235,7 +1235,7 @@ internal static class PolicyCertificate
             {
                 Id = "certvld-disable-cert-telemetry",
                 Label = "Disable Certificate Validation Telemetry",
-                Category = "Certificate Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 1,
@@ -1270,7 +1270,7 @@ internal static class PolicyCertificate
                 {
                     Id = "pki-enable-certificate-auto-enrollment",
                     Label = "PKI: Enable Certificate Auto-Enrollment from Enterprise CA",
-                    Category = "Certificate Policy",
+                    Category = "Security",
                     Description =
                         "Sets AEPolicy=7 in AutoEnrollment policy (value = AUTOENROLLMENT_ENABLED | UPDATE_PENDING | ENROLL_ON_BEHALF_OF). Enables automatic certificate enrollment from an enterprise CA via Active Directory Certificate Services. Workstations request and renew certificates without user interaction: machine authentication certificates, user signing certificates, and EFS keys are automatically provisioned to domain-joined machines according to certificate templates published in the AD CA. Essential for large-scale PKI deployments.",
                     Tags = ["pki", "auto-enrollment", "certificate", "active-directory", "ca"],
@@ -1287,7 +1287,7 @@ internal static class PolicyCertificate
                 {
                     Id = "pki-disable-smartcard-pin-recovery",
                     Label = "PKI: Disable Smart Card PIN Recovery Mode",
-                    Category = "Certificate Policy",
+                    Category = "Security",
                     Description =
                         "Sets DisablePINRecovery=1 in SmartCardCredentialProvider policy. Prevents smart card PIN recovery mechanisms that allow an administrator or escrowed key to bypass Smart Card PIN verification. PIN recovery is a usability feature but it weakens the two-factor authentication model of smart cards: if the PIN can be recovered or bypassed administratively, the authentication factor is reduced from 'something you have + something you know' to effectively 'something you have + a password held by IT'. Disabling PIN recovery enforces the full 2FA model.",
                     Tags = ["pki", "smart-card", "pin", "2fa", "hardening"],
@@ -1304,7 +1304,7 @@ internal static class PolicyCertificate
                 {
                     Id = "pki-enable-reverse-subject-name",
                     Label = "PKI: Enable Reversal of Encoded Subject Name in Certificate UI",
-                    Category = "Certificate Policy",
+                    Category = "Security",
                     Description =
                         "Sets ReverseSubject=1 in PKI policy. Changes the display order of certificate subject Distinguished Name components in the certificate viewer UI from ASN.1-encoded reverse order (dc=net, dc=contoso, cn=Users, cn=JaneExample) to the more intuitive forward-reading order (cn=JaneExample, cn=Users, dc=contoso, dc=net). This purely cosmetic change makes it easier for users and helpdesk staff to verify certificate identity fields without understanding ASN.1 DER encoding conventions.",
                     Tags = ["pki", "certificate", "display", "subject-name", "ui"],
@@ -1321,7 +1321,7 @@ internal static class PolicyCertificate
                 {
                     Id = "pki-force-logon-smartcard",
                     Label = "PKI: Require Smart Card for Interactive Logon",
-                    Category = "Certificate Policy",
+                    Category = "Security",
                     Description =
                         "Sets ScForceOption=1 in SmartCardCredentialProvider policy. Requires that all interactive logon sessions use a smart card for authentication. When this setting is active, the username/password credential provider is hidden and only the smart card credential provider is visible at the logon screen and UAC prompts. This enforces hardware-backed two-factor authentication for all interactive access: physical smart card (something you have) + PIN (something you know). Cannot be bypassed by users.",
                     Tags = ["pki", "smart-card", "logon", "2fa", "hardening"],
@@ -1338,7 +1338,7 @@ internal static class PolicyCertificate
                 {
                     Id = "pki-enable-cert-prop-to-user-store",
                     Label = "PKI: Enable Certificate Propagation from Smart Card to User Store",
-                    Category = "Certificate Policy",
+                    Category = "Security",
                     Description =
                         "Sets EnableCertPropagation=1 in SmartCardCredentialProvider policy. Activates the Windows Certificate Propagation Service which copies certificates from an inserted smart card into the user's personal certificate store (Cert:\\CurrentUser\\My). Applications that enumerate the user certificate store (email clients for S/MIME, VPN clients, code signing tools) can then find the smart card certificate without requiring explicit application-level smart card support. Certificates are removed from the store when the card is removed.",
                     Tags = ["pki", "smart-card", "certificate", "propagation", "store"],
@@ -1355,7 +1355,7 @@ internal static class PolicyCertificate
                 {
                     Id = "pki-enable-root-cert-update",
                     Label = "PKI: Allow Enterprise Trusted Root Certificate Updates via GP",
-                    Category = "Certificate Policy",
+                    Category = "Security",
                     Description =
                         "Sets EnablePKIUpdates=1 in PKI policy. Allows the Windows PKI infrastructure to process and install enterprise root and intermediate CA certificates that are distributed via the NTAuth certificate store in Active Directory and via Group Policy Objects. Required for domain-joined machines to automatically receive internally issued CA certificate updates. Without this, machines require manual certificate installations when the enterprise CA hierarchy changes (new intermediate, renewed root, distrusted CA).",
                     Tags = ["pki", "certificate", "root-ca", "group-policy", "enterprise"],
@@ -1372,7 +1372,7 @@ internal static class PolicyCertificate
                 {
                     Id = "pki-enable-pin-change-on-logon",
                     Label = "PKI: Enable Smart Card PIN Change Option at Logon",
-                    Category = "Certificate Policy",
+                    Category = "Security",
                     Description =
                         "Sets AllowPINChangeAtLogon=1 in SmartCardCredentialProvider. Presents the 'Change PIN' option in the Windows Security screen (Ctrl+Alt+Del) for smart card users, allowing them to update their smart card PIN through the Windows credential interface. Without this option, users must use vendor-specific middleware or management tools to change PINs. Providing PIN change through the familiar Windows interface reduces friction for PIN management, encouraging regular PIN rotation.",
                     Tags = ["pki", "smart-card", "pin", "change", "usability"],
@@ -1389,7 +1389,7 @@ internal static class PolicyCertificate
                 {
                     Id = "pki-disable-smartcard-logon-no-dirsvc",
                     Label = "PKI: Disable Smart Card Logon Without Active Directory Service",
-                    Category = "Certificate Policy",
+                    Category = "Security",
                     Description =
                         "Sets AllowSmartCardWithoutDirectoryService=0 in SmartCardCredentialProvider policy. Prevents smart card logon when Active Directory is not reachable. In hybrid or cached-credential scenarios, Windows can sometimes allow smart card logon using locally cached credentials even when the AD DC is unavailable. Disabling this prevents smart card authentication from falling back to cached credentials. Ensures all smart card authentications are validated against a live domain controller — preventing stale credential-based access.",
                     Tags = ["pki", "smart-card", "active-directory", "logon", "hardening"],
@@ -1415,7 +1415,7 @@ internal static class PolicyCertificate
                 {
                     Id = "pki-enable-cert-transparency-log",
                     Label = "PKI: Enable Certificate Transparency Log Validation",
-                    Category = "Certificate Policy",
+                    Category = "Security",
                     Description =
                         "Sets EnableCTLog=1 in PKI policy. Enables validation against Certificate Transparency (RFC 9162) logs when verifying TLS server certificates. Certificate Transparency is a public audit mechanism: all publicly trusted CAs are required to submit issued certificates to public CT logs, allowing domain owners to detect mis-issued certificates within hours. When CT validation is enabled, Windows Schannel verifies that a TLS certificate has Signed Certificate Timestamp (SCT) extensions proving inclusion in a CT log.",
                     Tags = ["pki", "certificate", "transparency", "ct-log", "auditing"],
@@ -1432,7 +1432,7 @@ internal static class PolicyCertificate
                 {
                     Id = "pki-enable-eku-filtering",
                     Label = "PKI: Enable Enhanced Key Usage Filtering in Certificate Validation",
-                    Category = "Certificate Policy",
+                    Category = "Security",
                     Description =
                         "Sets EKUFiltering=1 in PKI policy. Enables strict Extended Key Usage (EKU) filtering during certificate path validation. The EKU extension in a certificate restricts the cryptographic operations for which the certificate is valid (e.g., serverAuthentication, clientAuthentication, codeSigning, emailProtection). Without EKU filtering, a client authentication certificate could theoretically be misused for server authentication or code signing. EKU filtering enforces the certificate's intended use constraints.",
                     Tags = ["pki", "eku", "certificate", "key-usage", "hardening"],
@@ -1462,7 +1462,7 @@ internal static class PolicyCertificate
                 {
                     Id          = "adcspol-protect-root-store",
                     Label       = "Protect Root Certificate Store Against Modification",
-                    Category = "Certificate Policy",
+                    Category = "Security",
                     Description = "Sets ProtectedRootsAllowedToPerformCRLRetrieval=0 in the Cryptography policy. Prevents non-administrative processes from retrieving CRL (Certificate Revocation List) data through the Protected Roots API. Restricting this access reduces the risk of CRL poisoning attacks that could mark legitimate certificates as revoked or prevent revocation checks from completing correctly.",
                     Tags        = ["adcs", "certificate", "root-store", "crl", "hardening"],
                     NeedsAdmin  = true,
@@ -1478,7 +1478,7 @@ internal static class PolicyCertificate
                 {
                     Id          = "adcspol-disable-auto-root-update",
                     Label       = "Disable Automatic Root Certificate Update",
-                    Category = "Certificate Policy",
+                    Category = "Security",
                     Description = "Sets DisableRootAutoUpdate=1 in the Cryptography policy. Prevents Windows from automatically downloading and installing new trusted root certificates from the Windows Update Certificate Distribution Point (CDP). In air-gapped or highly regulated environments this prevents silent addition of untrusted or government-mandated CA certificates. Organisations must manage root store updates manually through their own PKI if this is enabled.",
                     Tags        = ["adcs", "certificate", "root-update", "policy", "hardening"],
                     NeedsAdmin  = true,
@@ -1494,7 +1494,7 @@ internal static class PolicyCertificate
                 {
                     Id          = "adcspol-enforce-strong-key-protection",
                     Label       = "Enforce Strong Private Key Protection",
-                    Category = "Certificate Policy",
+                    Category = "Security",
                     Description = "Sets ForceKeyProtection=2 in the Cryptography policy. Requires a user password confirmation every time a certificate's private key is accessed by an application. Values: 0=no protection, 1=notify on first use, 2=require password for every use. Level 2 ensures that private key operations cannot happen silently in the background, protecting against malware that attempts to sign data or decrypt sensitive content using stored keys.",
                     Tags        = ["adcs", "certificate", "private-key", "policy", "hardening"],
                     NeedsAdmin  = true,
@@ -1510,7 +1510,7 @@ internal static class PolicyCertificate
                 {
                     Id          = "adcspol-smartcard-require-logon",
                     Label       = "Require Smart Card for Interactive Logon",
-                    Category = "Certificate Policy",
+                    Category = "Security",
                     Description = "Sets RequireSignOrSeal=1 in the SmartCardCredentialProvider policy. Enforces the Require Smart Card for Interactive Logon policy, preventing users from logging on with a password and requiring a physical smart card or Windows Hello for Business credential instead. This is the strongest form of phishing-resistant multi-factor authentication available natively in Windows.",
                     Tags        = ["adcs", "smart-card", "mfa", "logon", "hardening"],
                     NeedsAdmin  = true,
@@ -1526,7 +1526,7 @@ internal static class PolicyCertificate
                 {
                     Id          = "adcspol-smartcard-pin-blocking",
                     Label       = "Enable Smart Card PIN Lock After 5 Failures",
-                    Category = "Certificate Policy",
+                    Category = "Security",
                     Description = "Sets PINLockAfterFailedAttempts=5 in the SmartCardCredentialProvider policy. Automatically locks the smart card after 5 consecutive incorrect PIN entries, requiring an administrative PUK unlock. This prevents brute-force PIN guessing attacks where an attacker physically possesses the card and attempts to guess the PIN. Five attempts is the CIS Benchmark recommended maximum.",
                     Tags        = ["adcs", "smart-card", "pin", "lockout", "hardening"],
                     NeedsAdmin  = true,
@@ -1542,7 +1542,7 @@ internal static class PolicyCertificate
                 {
                     Id          = "adcspol-disable-keyarchival",
                     Label       = "Disable Certificate Key Archival to CA",
-                    Category = "Certificate Policy",
+                    Category = "Security",
                     Description = "Sets DisableKeyArchival=1 in the CertSvc policy key. Prevents Windows from automatically archiving private keys to the Certificate Authority during certificate enrollment. Key archival allows CA administrators to recover encrypted data if a user loses their key, but it also means private keys leave the user's device and are stored on (and thus accessible to) the CA server. Disabling archival keeps private keys on the user's device only.",
                     Tags        = ["adcs", "certificate", "key-archival", "policy", "privacy"],
                     NeedsAdmin  = true,
@@ -1558,7 +1558,7 @@ internal static class PolicyCertificate
                 {
                     Id          = "adcspol-disable-cert-pub-ldap",
                     Label       = "Disable Certificate Auto-Publication to LDAP",
-                    Category = "Certificate Policy",
+                    Category = "Security",
                     Description = "Sets DisableLdapCertPublish=1 in the CertSvc policy. Prevents certificate enrollment from automatically publishing user or machine certificates to the LDAP directory (Active Directory). In high-security environments where only specific certificates should be visible in LDAP, disabling auto-publication prevents unnecessary certificate disclosure that could aid LDAP enumeration.",
                     Tags        = ["adcs", "certificate", "ldap", "publish", "hardening"],
                     NeedsAdmin  = true,
@@ -1574,7 +1574,7 @@ internal static class PolicyCertificate
                 {
                     Id          = "adcspol-enable-cng-policy",
                     Label       = "Enforce CNG Algorithm Policy (Block Legacy Crypto)",
-                    Category = "Certificate Policy",
+                    Category = "Security",
                     Description = "Sets EnforceCNGAlgorithmPolicy=1 in the Cryptography policy. Instructs Windows CNG (Cryptography Next Generation) to apply the configured algorithm policy when evaluating certificate signatures and key operations. When combined with a restricted algorithm suite policy, this prevents applications from using deprecated or weak cryptographic algorithms (MD5, SHA-1 RSA-1024) in certificate operations.",
                     Tags        = ["adcs", "cryptography", "cng", "algorithm", "hardening"],
                     NeedsAdmin  = true,
@@ -1590,7 +1590,7 @@ internal static class PolicyCertificate
                 {
                     Id          = "adcspol-disable-cert-enrollment-ui",
                     Label       = "Disable Certificate Enrollment UI for Non-Admins",
-                    Category = "Certificate Policy",
+                    Category = "Security",
                     Description = "Sets DisableEnrollmentUI=1 in the CertSvc policy. Prevents the certificate enrollment wizard UI from being accessed by non-administrative users. Restricting certificate enrollment to administrators ensures that only properly authorised and audited enrollment workflows generate new certificates, preventing users from self-enrolling unapproved certificate types from the CA.",
                     Tags        = ["adcs", "certificate", "enrollment", "ui", "hardening"],
                     NeedsAdmin  = true,
@@ -1606,7 +1606,7 @@ internal static class PolicyCertificate
                 {
                     Id          = "adcspol-require-cert-chain-validation",
                     Label       = "Require Full Certificate Chain Validation",
-                    Category = "Certificate Policy",
+                    Category = "Security",
                     Description = "Sets RequireChainValidation=1 in the Cryptography policy. Forces Windows to perform complete certificate chain validation (root, intermediates, and end-entity) before accepting any certificate as trusted. Disabling partial chain validation prevents applications from accepting certificates whose intermediate CA is untrusted or expired, closing a common misconfiguration that allows self-signed or invalid certificates to be accepted in some code paths.",
                     Tags        = ["adcs", "certificate", "chain", "validation", "hardening"],
                     NeedsAdmin  = true,

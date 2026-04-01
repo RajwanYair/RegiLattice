@@ -59,7 +59,7 @@ internal static class PolicyEnterprise
                 {
                     Id          = "adfspol-enable-extranet-lockout",
                     Label       = "Enable ADFS Extranet Smart Lockout",
-                    Category = "Enterprise Management Policy",
+                    Category = "System",
                     Description = "Sets EnableExtranetLockout=1 in the ADFS policy. Activates ADFS Extranet Smart Lockout (ESL) which tracks authentication attempts from extranet (external) IP addresses separately from intranet ones. Extranet lockout prevents password spray and brute-force attacks from the internet from locking out Active Directory accounts while still allowing internal users to authenticate normally.",
                     Tags        = ["adfs", "extranet", "lockout", "brute-force", "hardening"],
                     NeedsAdmin  = true,
@@ -75,7 +75,7 @@ internal static class PolicyEnterprise
                 {
                     Id          = "adfspol-set-extranet-lockout-threshold",
                     Label       = "Set ADFS Extranet Lockout Threshold (5 attempts)",
-                    Category = "Enterprise Management Policy",
+                    Category = "System",
                     Description = "Sets ExtranetLockoutThreshold=5 in the ADFS policy. Defines the number of failed authentication attempts from an extranet IP address before ADFS blocks further attempts from that IP. Five failed attempts is the CIS recommendation that balances security against accidental account lockout from mistyped passwords on shared IP networks (NAT, VPN exit nodes).",
                     Tags        = ["adfs", "extranet", "lockout", "threshold", "hardening"],
                     NeedsAdmin  = true,
@@ -91,7 +91,7 @@ internal static class PolicyEnterprise
                 {
                     Id          = "adfspol-disable-endpoint-wia-fallback",
                     Label       = "Disable ADFS Windows Integrated Auth Fallback",
-                    Category = "Enterprise Management Policy",
+                    Category = "System",
                     Description = "Sets DisableWIAFallback=1 in the ADFS policy. Prevents ADFS from falling back to Windows Integrated Authentication (Kerberos/NTLM from browser) when the primary authentication method fails. WIA fallback can expose NTLM credentials when users authenticate from non-domain-joined browsers, potentially enabling NTLM relay attacks. Disabling fallback forces explicit form-based or certificate authentication.",
                     Tags        = ["adfs", "wia", "fallback", "ntlm", "hardening"],
                     NeedsAdmin  = true,
@@ -107,7 +107,7 @@ internal static class PolicyEnterprise
                 {
                     Id          = "adfspol-require-ssl-certificate-auth",
                     Label       = "Require TLS Certificate Authentication for ADFS Service",
-                    Category = "Enterprise Management Policy",
+                    Category = "System",
                     Description = "Sets RequireCertificateAuthentication=1 in the ADFS service Parameters key. Enforces mutual TLS certificate authentication for ADFS service account communication. When mutual TLS is required the ADFS service will reject connections from components (proxy servers, relying party trusts) that do not present a valid certificate, preventing impersonation of trusted federation endpoints.",
                     Tags        = ["adfs", "tls", "certificate", "mutual-auth", "hardening"],
                     NeedsAdmin  = true,
@@ -123,7 +123,7 @@ internal static class PolicyEnterprise
                 {
                     Id          = "adfspol-enable-oauth-pkce",
                     Label       = "Require PKCE for ADFS OAuth2 Authorization Code Flow",
-                    Category = "Enterprise Management Policy",
+                    Category = "System",
                     Description = "Sets RequirePKCEForOAuth=1 in the ADFS policy. Enforces Proof Key for Code Exchange (PKCE, RFC 7636) for all OAuth 2.0 authorization code flow requests to ADFS. PKCE prevents authorization code interception attacks where an attacker intercepts the authorization code redirect and exchanges it for tokens. Required by RFC 9700 (OAuth 2.0 Security Best Current Practice) for all public and confidential clients.",
                     Tags        = ["adfs", "oauth", "pkce", "authorization-code", "hardening"],
                     NeedsAdmin  = true,
@@ -139,7 +139,7 @@ internal static class PolicyEnterprise
                 {
                     Id          = "adfspol-disable-device-auth-bypass",
                     Label       = "Disable ADFS Device Authentication Bypass",
-                    Category = "Enterprise Management Policy",
+                    Category = "System",
                     Description = "Sets DisableDeviceAuthenticationBypass=1 in the ADFS policy. Prevents ADFS from bypassing multi-factor authentication requirements based solely on device registration status. When disabled, a registered device alone is not sufficient to skip MFA — users must still satisfy the full authentication policy. This closes a gap where attackers who enroll a stolen device could bypass step-up authentication.",
                     Tags        = ["adfs", "device-auth", "mfa", "bypass", "hardening"],
                     NeedsAdmin  = true,
@@ -155,7 +155,7 @@ internal static class PolicyEnterprise
                 {
                     Id          = "adfspol-set-token-replay-detection",
                     Label       = "Enable ADFS Token Replay Detection",
-                    Category = "Enterprise Management Policy",
+                    Category = "System",
                     Description = "Sets EnableTokenReplayDetection=1 in the ADFS policy. Activates the ADFS token replay detection cache which records recently used security tokens and rejects any attempt to present the same token a second time. Token replay attacks occur when an attacker intercepts a SAML assertion or JWT and submits it to gain access. Detection is critical for federated SSO scenarios where tokens flow through multiple network intermediaries.",
                     Tags        = ["adfs", "token-replay", "detection", "saml", "hardening"],
                     NeedsAdmin  = true,
@@ -171,7 +171,7 @@ internal static class PolicyEnterprise
                 {
                     Id          = "adfspol-require-extended-protection",
                     Label       = "Require Extended Protection for ADFS Authentication",
-                    Category = "Enterprise Management Policy",
+                    Category = "System",
                     Description = "Sets EnableExtendedProtection=1 in the ADFS authentication policy. Enables Extended Protection for Authentication (EPA) which binds the Windows authentication handshake to the TLS channel. EPA prevents NTLM relay attacks where an attacker forwards authentication attempts to the ADFS endpoint from a man-in-the-middle position. Supported in all Windows versions since Windows 7 SP1.",
                     Tags        = ["adfs", "extended-protection", "ntlm-relay", "authentication", "hardening"],
                     NeedsAdmin  = true,
@@ -187,7 +187,7 @@ internal static class PolicyEnterprise
                 {
                     Id          = "adfspol-disable-prompt-login",
                     Label       = "Disable ADFS Prompt=Login Re-Authentication Bypass",
-                    Category = "Enterprise Management Policy",
+                    Category = "System",
                     Description = "Sets DisablePromptLoginHandling=1 in the ADFS policy. Prevents ADFS from honouring the OAuth/OIDC prompt=login parameter which forces a fresh login regardless of existing SSO session. While useful for applications needing fresh credentials, this parameter can be abused by attackers to force users into repeated phishing-susceptible login flows. Disabling allows ADFS to enforce its own session management instead.",
                     Tags        = ["adfs", "oauth", "prompt-login", "session", "hardening"],
                     NeedsAdmin  = true,
@@ -203,7 +203,7 @@ internal static class PolicyEnterprise
                 {
                     Id          = "adfspol-enable-audit-events",
                     Label       = "Enable ADFS Security Audit Events",
-                    Category = "Enterprise Management Policy",
+                    Category = "System",
                     Description = "Sets AuditFlags=1 in the ADFS policy. Instructs ADFS to write security audit events to the Windows Security event log for all federation authentication requests, token issuances, and extranet lockout events. ADFS audit events (Event IDs 1200, 1201, 411, 412) are essential for detecting password spray attacks, compromised account usage, and abnormal token issuance patterns in a federated identity environment.",
                     Tags        = ["adfs", "audit", "events", "security-log", "compliance"],
                     NeedsAdmin  = true,
@@ -232,7 +232,7 @@ internal static class PolicyEnterprise
                 {
                     Id = "addsvc-require-strong-dc-channel",
                     Label = "AD Services: Require Sign-and-Seal (Strong) Secure Channel to DC",
-                    Category = "Enterprise Management Policy",
+                    Category = "System",
                     Description =
                         "Sets RequireSignOrSeal=1 in Netlogon\\Parameters. Requires all Netlogon secure channel traffic between this workstation and domain controllers to be both signed and sealed (encrypted). The Netlogon secure channel carries authentication traffic, machine account password changes, and group policy downloads. If unsigned and unencrypted, the secure channel is susceptible to the Zerologon vulnerability (CVE-2020-1472) and earlier Netlogon protocol attacks that allow privilege escalation to Domain Admin. Requiring sign-and-seal ensures all Netlogon traffic is integrity-protected and encrypted.",
                     Tags = ["netlogon", "secure-channel", "zerologon", "cve-2020-1472", "sign-seal"],
@@ -250,7 +250,7 @@ internal static class PolicyEnterprise
                 {
                     Id = "addsvc-enable-secure-channel-sealing",
                     Label = "AD Services: Enable Netlogon Secure Channel Encryption (Seal)",
-                    Category = "Enterprise Management Policy",
+                    Category = "System",
                     Description =
                         "Sets SealSecureChannel=1 in Netlogon\\Parameters. Enables encryption (sealing) of the Netlogon secure channel in addition to signing. While RequireSignOrSeal=1 ensures integrity, this setting specifically ensures confidentiality — the channel content is encrypted and cannot be captured by network eavesdropping. Together, signing and sealing provide authenticated-and-encrypted communication between clients and domain controllers for all Netlogon protocol messages, including machine account password refresh operations.",
                     Tags = ["netlogon", "seal", "encryption", "secure-channel", "confidentiality"],
@@ -268,7 +268,7 @@ internal static class PolicyEnterprise
                 {
                     Id = "addsvc-set-machine-password-age-30days",
                     Label = "AD Services: Set Machine Account Password Rotation Interval to 30 Days",
-                    Category = "Enterprise Management Policy",
+                    Category = "System",
                     Description =
                         "Sets MaximumPasswordAge=30 in Netlogon\\Parameters (units: days). Sets the maximum age of the machine account password to 30 days, after which Netlogon automatically requests a new password from the DC. Machine account passwords authenticate the workstation to the domain (used in Netlogon secure channel setup and Kerberos S4U2Proxy). An attacker who compromises a machine account password can perform Pass-the-Hash or Silver Ticket attacks using the machine account's Kerberos hash. Frequent rotation limits the attacker's window of opportunity. Default is 30 days; explicitly setting this prevents GPO drift to longer values.",
                     Tags = ["machine-account", "password-rotation", "netlogon", "silver-ticket", "s4u"],
@@ -286,7 +286,7 @@ internal static class PolicyEnterprise
                 {
                     Id = "addsvc-enable-machine-account-password-change",
                     Label = "AD Services: Enable Automatic Machine Account Password Rotation",
-                    Category = "Enterprise Management Policy",
+                    Category = "System",
                     Description =
                         "Sets DisablePasswordChange=0 in Netlogon\\Parameters. Explicitly enables automatic machine account password changes (sets the DisablePasswordChange flag to 0 = do NOT disable). Automatic machine account password rotation is a security feature — some organisations disable it to prevent 'secure channel' credential staleness in certain edge cases (e.g., VDI golden image re-deployment). Disabling rotation means the machine's Active Directory password stays static indefinitely, making it a persistent credential that is more valuable to attackers and never expires. Explicitly enabling rotation is a defence-in-depth measure.",
                     Tags = ["machine-account", "password-rotation", "disable-prevention", "netlogon"],
@@ -304,7 +304,7 @@ internal static class PolicyEnterprise
                 {
                     Id = "addsvc-restrict-ntlm-outbound-to-trusted-servers",
                     Label = "AD Services: Restrict Outbound NTLM to Domain-Trusted Servers Only",
-                    Category = "Enterprise Management Policy",
+                    Category = "System",
                     Description =
                         "Sets RestrictSendingNTLMTraffic=2 in the System policy (value 2 = Deny All, value 1 = Audit, value 0 = Allow). Restricts outbound NTLM authentication to only servers in the trusted exception list. NTLM credentials can be captured by rogue SMB or HTTP servers (e.g., via LLMNR/NBT-NS poisoning with Responder) — any outbound NTLM challenge-response that reaches an attacker's server provides an NTLM hash that can be relayed or cracked. Denying outbound NTLM to non-trusted-listed servers prevents credential leakage via NTLM to attacker-controlled resources. Start with value 1 (Audit) to identify NTLM usage before enforcing value 2.",
                     Tags = ["ntlm", "outbound-restriction", "responder", "ntlm-relay", "credential-capture"],
@@ -322,7 +322,7 @@ internal static class PolicyEnterprise
                 {
                     Id = "addsvc-enable-ntlm-audit-logging",
                     Label = "AD Services: Enable NTLM Outbound Authentication Audit Logging",
-                    Category = "Enterprise Management Policy",
+                    Category = "System",
                     Description =
                         "Sets AuditReceivingNTLMTraffic=2 in the System policy (value 2 = Enable auditing for all NTLM authentication). Enables auditing of all outbound NTLM authentication requests from this client. Audited events appear in the Security event log (Event ID 8001/8002/8003) and include the destination server, the NTLM authentication type, and the caller process. This is essential for mapping NTLM usage before deploying NTLM restriction policies — it allows the security team to identify which applications, services, and users are using NTLM so equivalent Kerberos or modern authentication alternatives can be configured before NTLM is denied.",
                     Tags = ["ntlm", "audit", "event-log", "siem", "authentication-map"],
@@ -340,7 +340,7 @@ internal static class PolicyEnterprise
                 {
                     Id = "addsvc-require-ldap-server-integrity",
                     Label = "AD Services: Require DC-Side LDAP Server Signing (Integrity Check)",
-                    Category = "Enterprise Management Policy",
+                    Category = "System",
                     Description =
                         "Sets LDAPServerIntegrity=2 in the Netlogon\\Parameters hive (value 2 = Require signing). Requires LDAP signing on LDAP connections from clients to domain controllers. This is the server-side complement to the LDAP client signing requirement (LDAPClientIntegrity). When both client and server require signing, LDAP relay attacks that attempt to intercept and modify LDAP traffic are blocked at both endpoints. Without the server-side requirement, an attacker could spoof a DC with an unsigned LDAP server even if client policy sends signed requests.",
                     Tags = ["ldap", "server-signing", "ldap-relay", "netlogon", "integrity"],
@@ -358,7 +358,7 @@ internal static class PolicyEnterprise
                 {
                     Id = "addsvc-set-dc-locator-force-rediscovery-600",
                     Label = "AD Services: Set DC Locator Force Re-Discovery Period to 600 Seconds",
-                    Category = "Enterprise Management Policy",
+                    Category = "System",
                     Description =
                         "Sets ForceRediscoveryInterval=600 in Netlogon\\Parameters (units: seconds). Sets the minimum interval between forced DC re-discovery events to 600 seconds (10 minutes). DC locator caches the preferred domain controller for each domain to avoid repeated DC lookup traffic. If the preferred DC becomes unavailable (patched, restarted, or taken down), the client should re-discover a DC within a reasonable time. Setting 600 seconds ensures that clients do not hold stale DC references for longer than 10 minutes when a DC failure event occurs, reducing authentication outage windows during DC failover events.",
                     Tags = ["netlogon", "dc-locator", "failover", "rediscovery", "resilience"],
@@ -389,7 +389,7 @@ internal static class PolicyEnterprise
                 {
                     Id = "adrep-require-ntds-replication-sign-seal",
                     Label = "AD Replication: Require NTDS Replication Traffic Sign-and-Seal",
-                    Category = "Enterprise Management Policy",
+                    Category = "System",
                     Description =
                         "Sets ReplicationSignAndSeal=1 in NTDS\\Parameters. Requires that Active Directory replication traffic between domain controllers is both signed (integrity-protected) and sealed (encrypted). AD replication carries all directory changes — new accounts, password updates, group membership changes, and computer policy settings. If replication traffic is unprotected, an attacker who can perform a man-in-the-middle attack on DC-to-DC traffic can inject or modify replication data, potentially escalating privileges by injecting account changes. Sign-and-seal ensures all replication traffic is authenticated and encrypted.",
                     Tags = ["ntds", "replication", "sign-seal", "dc-to-dc", "encryption"],
@@ -407,7 +407,7 @@ internal static class PolicyEnterprise
                 {
                     Id = "adrep-set-tomb-stone-lifetime-180days",
                     Label = "AD Replication: Set Active Directory Tombstone Lifetime to 180 Days",
-                    Category = "Enterprise Management Policy",
+                    Category = "System",
                     Description =
                         "Sets TombstoneLifetime=180 in NTDS\\Parameters (units: days). Sets the AD tombstone lifetime to 180 days. When an object is deleted in AD, it becomes a tombstone — a marker that propagates the deletion to all DCs before the tombstone is permanently removed. If a DC is offline longer than the tombstone lifetime, it must be forcibly re-joined to the domain (a USN rollback scenario) or reinstalled. 60 days (the old default) is insufficient for quarterly disaster recovery testing cycles. 180 days ensures that DCs recovered from quarterly backup snapshots are still within the tombstone window and can be safely re-brought online without forced rejoin.",
                     Tags = ["ntds", "tombstone", "backup-recovery", "deleted-objects", "replication"],
@@ -425,7 +425,7 @@ internal static class PolicyEnterprise
                 {
                     Id = "adrep-enable-strict-replication-consistency",
                     Label = "AD Replication: Enable Strict Replication Consistency Mode",
-                    Category = "Enterprise Management Policy",
+                    Category = "System",
                     Description =
                         "Sets Strict Replication Consistency=1 in NTDS\\Parameters. Enables strict replication consistency, which causes NTDS to disable replication from a replication partner that has an out-of-date replication topology (i.e., has missed more than MaxConsistencyCheckPercent of updates). Without strict consistency, AD will attempt to 'loose' replicate with lagged partners even if that results in duplicate GUID conflicts or lingering objects. In lingering object scenarios (DCs that have been offline past the tombstone lifetime), strict mode prevents corrupted data from being silently re-introduced into the directory by an out-of-date DC.",
                     Tags = ["ntds", "replication-consistency", "lingering-objects", "strict-mode", "integrity"],
@@ -443,7 +443,7 @@ internal static class PolicyEnterprise
                 {
                     Id = "adrep-enable-dns-consistency-check",
                     Label = "AD Replication: Enable DNS Consistency Check During Promotion",
-                    Category = "Enterprise Management Policy",
+                    Category = "System",
                     Description =
                         "Sets DnsAvoidRegisterRecords=0 in NTDS\\Parameters. Ensures that all required DNS records for the domain controller are registered during or after promotion, and that the DNS consistency check is not bypassed. DC promotion attempts with unresolvable DNS names or misconfigured DNS zones that bypass the DNS check can result in DCs that are partially functional but not properly reachable by other DCs — leading to intermittent replication failures that are hard to diagnose. Ensuring DNS consistency is enforced catches DNS misconfigurations at promotion time rather than as production replication failures.",
                     Tags = ["ntds", "dns", "consistency-check", "promotion", "dc-registration"],
@@ -461,7 +461,7 @@ internal static class PolicyEnterprise
                 {
                     Id = "adrep-restrict-ad-single-object-recovery",
                     Label = "AD Replication: Enable AD Recycle Bin (Prevent Immediate Object Purge)",
-                    Category = "Enterprise Management Policy",
+                    Category = "System",
                     Description =
                         "Sets EnabledScopes=1 in NTDS\\Parameters. Enables the Active Directory Recycle Bin feature flag on this DC. The AD Recycle Bin preserves deleted objects (with all attributes including group memberships) for the deleted-object lifetime (default 180 days), making it possible to restore accidentally deleted user accounts, OUs, or groups without authoritative restore from backup. Without the Recycle Bin, deleted objects immediately lose most attributes and recovery requires authoritative NTDS restore or backup-based object recovery. This is a forest-level feature that must be enabled via PowerShell on the Schema Master (Enable-ADOptionalFeature) — this policy flag enables the local DC to participate.",
                     Tags = ["ntds", "recycle-bin", "object-recovery", "deleted-objects", "resilience"],
@@ -479,7 +479,7 @@ internal static class PolicyEnterprise
                 {
                     Id = "adrep-set-max-replication-failures-5",
                     Label = "AD Replication: Alert on More Than 5 Consecutive Replication Failures",
-                    Category = "Enterprise Management Policy",
+                    Category = "System",
                     Description =
                         "Sets MaxConsistencyCheckPercent=5 in NTDS\\Parameters. Sets the threshold at which consecutive replication failures from a partner trigger a consistency check alert to 5 failures. By default, NTDS tolerates a high number of consecutive replication failures before logging a critical event or taking action. Setting a lower threshold ensures that replication health degradation is detected and reported early — critical for catching incidents where an attacker disrupts replication to prevent domain-wide propagation of security policy changes or account lockouts.",
                     Tags = ["ntds", "replication-failure", "alerting", "consistency", "monitoring"],
@@ -497,7 +497,7 @@ internal static class PolicyEnterprise
                 {
                     Id = "adrep-enable-ad-audit-log-policy-access",
                     Label = "AD Replication: Enable Audit of AD DS Access Policy Operations",
-                    Category = "Enterprise Management Policy",
+                    Category = "System",
                     Description =
                         "Sets AuditPolicySubcategory=1 in NTDS\\Parameters. Enables auditing of Active Directory Service access subcategory events. These events include access to sensitive AD objects (krbtgt account reads, Domain Admins group modifications, Schema changes, replication metadata access), NTDS database file access, and NTDS parameter changes. Without this audit, an attacker who accesses sensitive AD objects (e.g., DCSync — requesting replication metadata from a DC to extract all password hashes) leaves no event log trail. With audit enabled, DCSync attempts generate replication audit events (EventID 4662, 4928) that can be detected by SIEM.",
                     Tags = ["ntds", "audit", "dcsync", "replication-access", "event-4662"],
@@ -515,7 +515,7 @@ internal static class PolicyEnterprise
                 {
                     Id = "adrep-enable-ntds-encrypted-communication",
                     Label = "AD Replication: Enable NTDS RPC Encrypted Communication Channel",
-                    Category = "Enterprise Management Policy",
+                    Category = "System",
                     Description =
                         "Sets EncryptRpcCommunication=1 in NTDS\\Parameters. Enables RPC encryption for AD replication traffic between domain controllers. AD DS replication uses Microsoft RPC over TCP for inter-DC communication. Enabling RPC encryption ensures that the payload of replication packets (directory object changes, attribute updates, password hash data) is encrypted in transit between DCs. This is layered protection on top of sign-and-seal — even if sign-and-seal at the NTDS layer is bypassed, the RPC transport layer encryption provides an additional barrier.",
                     Tags = ["ntds", "rpc", "encryption", "replication", "transport-security"],
@@ -533,7 +533,7 @@ internal static class PolicyEnterprise
                 {
                     Id = "adrep-set-ad-query-policy-max-objects-10000",
                     Label = "AD Replication: Cap AD DS Directory Queries to 10000 Objects Per Operation",
-                    Category = "Enterprise Management Policy",
+                    Category = "System",
                     Description =
                         "Sets MaxTempTableSize=10000 in NTDS\\Parameters (units: objects). Limits the number of objects returned in a single AD query operation to 10,000. Unrestricted AD queries can consume significant DC CPU and memory — an attacker with LDAP read access who issues an unbounded subtree search against the entire domain partition can cause a DC denial-of-service by forcing it to process a millions-of-results query. Setting a per-query object cap ensures that even large LDAP clients must paginate, distributing the query load over time and preventing single-query DC saturation.",
                     Tags = ["ntds", "query-limit", "dos-mitigation", "ldap", "pagination"],
@@ -551,7 +551,7 @@ internal static class PolicyEnterprise
                 {
                     Id = "adrep-enable-rid-master-audit",
                     Label = "AD Replication: Enable RID (Relative Identifier) Pool Allocation Audit",
-                    Category = "Enterprise Management Policy",
+                    Category = "System",
                     Description =
                         "Sets AuditRidAllocation=1 in NTDS\\Parameters. Enables auditing of RID (Relative Identifier) pool allocation requests. Domain controllers request blocks of RIDs from the RID Master FSMO role to assign unique object SIDs when creating new AD objects. An unusually high rate of RID pool requests from a specific DC (e.g., thousands of allocations per day) may indicate automated object creation — a technique used by ransomware operators to create new privileged accounts en masse or by red teams performing domain object flooding. Auditing RID allocation enables detection of anomalous object creation bursts.",
                     Tags = ["ntds", "rid", "rid-master", "object-creation", "forensics"],
@@ -582,7 +582,7 @@ internal static class PolicyEnterprise
                 {
                     Id = "avd-enable-watermarking",
                     Label = "AVD: Enable Screen Watermarking for Session Hosts",
-                    Category = "Enterprise Management Policy",
+                    Category = "System",
                     Description =
                         "Sets EnableWatermarking=1 and WatermarkingHeightFactor/WidthFactor. Overlays a semi-transparent QR code on AVD session screens that encodes the user's UPN and session identifier. This watermark is user-invisible during normal work but visible in screenshots and screen captures. Watermarking is essential for data loss investigations and insider threat deterrence in environments handling sensitive or regulated data.",
                     Tags = ["avd", "watermarking", "dlp", "session", "enterprise"],
@@ -600,7 +600,7 @@ internal static class PolicyEnterprise
                 {
                     Id = "avd-disable-clipboard-redirect",
                     Label = "AVD: Disable Clipboard Redirection in Sessions",
-                    Category = "Enterprise Management Policy",
+                    Category = "System",
                     Description =
                         "Sets fDisableClip=1. Blocks bidirectional clipboard redirection between the AVD session and the client device. Clipboard is a primary data exfiltration vector in VDI environments: users copy sensitive data from the session and paste it outside the controlled environment. Disabling clipboard redirection is a key DLP control for finance, healthcare, and legal VDI deployments. Some AVD workflows may require clipboard for productivity; evaluate per use-case.",
                     Tags = ["avd", "clipboard", "dlp", "data-exfiltration", "enterprise"],
@@ -618,7 +618,7 @@ internal static class PolicyEnterprise
                 {
                     Id = "avd-disable-drive-redirect",
                     Label = "AVD: Disable Drive Redirection in Sessions",
-                    Category = "Enterprise Management Policy",
+                    Category = "System",
                     Description =
                         "Sets fDisableCdm=1. Prevents client-side drives (USB sticks, local hard drives, network shares) from being mounted in AVD sessions. Drive redirection is exploited for both data exfiltration (copying from session to external media) and malware delivery (running executables from a USB drive in the session). Removing drive redirection is a standard DLP and malware containment control in supervised VDI environments.",
                     Tags = ["avd", "drive-redirect", "usb", "dlp", "malware"],
@@ -635,7 +635,7 @@ internal static class PolicyEnterprise
                 {
                     Id = "avd-idle-disconnect-30min",
                     Label = "AVD: Disconnect Idle Sessions After 30 Minutes",
-                    Category = "Enterprise Management Policy",
+                    Category = "System",
                     Description =
                         "Sets MaxIdleTime=1800000 (30 minutes in milliseconds). Automatically disconnects AVD sessions that have been idle for 30 minutes. Idle sessions consume Azure compute costs and create an unattended-session security risk where unlocked sessions could be accessed by physical access to an unattended client. Auto-disconnect after 30 minutes is the standard enterprise baseline for cost and security management of AVD session hosts.",
                     Tags = ["avd", "idle", "session-management", "cost", "security"],
@@ -652,7 +652,7 @@ internal static class PolicyEnterprise
                 {
                     Id = "avd-enable-screen-capture-protection",
                     Label = "AVD: Enable Screen Capture Protection (DRM-Level)",
-                    Category = "Enterprise Management Policy",
+                    Category = "System",
                     Description =
                         "Sets fEnableScreenCaptureProtect=1. Enables AVD screen capture protection, which uses DRM-style OS hooks to prevent the AVD session content from being captured by screenshots, screen recording software, or GPU frame capture tools on the client side. The session content appears as a black region in any screen capture. Essential for protecting classified information displays, financial data, and healthcare PHI from accidental or intentional screen capture exfiltration.",
                     Tags = ["avd", "screen-capture", "dlp", "drm", "enterprise"],
@@ -670,7 +670,7 @@ internal static class PolicyEnterprise
                 {
                     Id = "avd-enable-private-mode",
                     Label = "AVD: Enable Private Mode for Session Hosts",
-                    Category = "Enterprise Management Policy",
+                    Category = "System",
                     Description =
                         "Sets EnablePrivateMode=1. Activates AVD Private Mode which restricts session actions to reduce data leakage risk: disables local clipboard, file transfers, printing to local printers, and local drive access in a single policy. Private Mode is designed for shared/kiosk session hosts in sensitive environments where multiple users share the same session host profile. Equivalent to enabling fDisableClip + fDisableCdm + printer restrictions together.",
                     Tags = ["avd", "private-mode", "kiosk", "dlp", "enterprise"],
@@ -687,7 +687,7 @@ internal static class PolicyEnterprise
                 {
                     Id = "avd-set-rdp-security-layer",
                     Label = "AVD: Enforce TLS 1.2+ for RDP Transport Layer",
-                    Category = "Enterprise Management Policy",
+                    Category = "System",
                     Description =
                         "Sets SecurityLayer=2 (TLS). Forces the Remote Desktop Protocol transport layer to use SSL/TLS 1.2 or later for all connections to AVD session hosts. Value 0 = RDP legacy (cleartext-vulnerable), value 1 = negotiate (downgrade possible), value 2 = TLS required. In Azure, the network path is encrypted at the Azure backbone level; however, enforcing TLS at the RDP layer provides defence-in-depth and satisfies compliance requirements for encrypted-in-transit data.",
                     Tags = ["avd", "rdp", "tls", "encryption", "security"],
@@ -704,7 +704,7 @@ internal static class PolicyEnterprise
                 {
                     Id = "avd-require-nla",
                     Label = "AVD: Require Network Level Authentication for Sessions",
-                    Category = "Enterprise Management Policy",
+                    Category = "System",
                     Description =
                         "Sets UserAuthentication=1. Requires Network Level Authentication (NLA) before establishing an RDP session to the AVD host. NLA authenticates the user before allocating session resources, preventing unauthenticated users from reaching the Windows login screen and mounting DoS attacks by opening many half-authenticated sessions. AVD natively enforces Azure AD authentication; this setting adds an additional OS-level NLA gate.",
                     Tags = ["avd", "nla", "authentication", "rdp", "security"],
@@ -721,7 +721,7 @@ internal static class PolicyEnterprise
                 {
                     Id = "avd-limit-session-connections",
                     Label = "AVD: Limit Users to a Single Active Session",
-                    Category = "Enterprise Management Policy",
+                    Category = "System",
                     Description =
                         "Sets fSingleSessionPerUser=1. Restricts each user to a single simultaneous AVD session across all host pool machines. Without this limit, a user can open multiple sessions (e.g., from multiple devices simultaneously), multiplying their compute cost and creating multiple unmanaged session states. Single-session enforcement reduces Azure compute costs proportionally to the number of multi-device users and simplifies session management.",
                     Tags = ["avd", "session-limit", "cost", "enterprise"],
@@ -738,7 +738,7 @@ internal static class PolicyEnterprise
                 {
                     Id = "avd-enable-shortpath-udp",
                     Label = "AVD: Enable UDP ShortPath for Optimized Network Performance",
-                    Category = "Enterprise Management Policy",
+                    Category = "System",
                     Description =
                         "Sets fClientShortPathEndpointEnabled=1. Activates Azure Virtual Desktop UDP ShortPath, which establishes direct UDP-based transport between the AVD client and session host instead of routing all traffic through the Azure gateway TCP relay. UDP ShortPath reduces round-trip latency from 50–200 ms (TCP relay) to near-direct network latency, dramatically improving display responsiveness and Teams/audio quality in AVD sessions.",
                     Tags = ["avd", "shortpath", "udp", "latency", "performance"],
@@ -770,7 +770,7 @@ internal static class PolicyEnterprise
                 {
                     Id = "cloudpc-enable-udp-shortpath",
                     Label = "Cloud PC: Enable UDP ShortPath for Low-Latency Transport",
-                    Category = "Enterprise Management Policy",
+                    Category = "System",
                     Description =
                         "Sets fUdpRedirectorEnabled=1 under Terminal Services. Enables UDP-based RDP traffic for Windows 365 Cloud PCs, bypassing the TCP relay in Azure and creating a near-direct UDP path from the Windows 365 client to the Cloud PC. UDP ShortPath typically reduces RDP latency by 40–80 ms for geographically proximate users, significantly improving the responsiveness of interactive applications and video playback inside a Cloud PC session.",
                     Tags = ["cloudpc", "windows-365", "udp", "performance", "shortpath"],
@@ -787,7 +787,7 @@ internal static class PolicyEnterprise
                 {
                     Id = "cloudpc-enable-teams-optimization",
                     Label = "Cloud PC: Enable Teams AV Optimization (Media Redirection)",
-                    Category = "Enterprise Management Policy",
+                    Category = "System",
                     Description =
                         "Sets TeamsMeetingUnmuteOnEntry=0 and related Teams policy keys. Activates Teams audio/video media optimization for Windows 365 Cloud PCs, which redirects media processing from the Cloud PC CPU to the local client device. Without media optimization, Teams calls are processed server-side, consuming Cloud PC vCPU and causing high latency. With optimization, HD video calls run at near-native quality on the client while the Cloud PC CPU overhead drops by 70–90%.",
                     Tags = ["cloudpc", "teams", "media-redirect", "av", "performance"],
@@ -807,7 +807,7 @@ internal static class PolicyEnterprise
                 {
                     Id = "cloudpc-disable-printer-redirect",
                     Label = "Cloud PC: Disable Client Printer Redirection",
-                    Category = "Enterprise Management Policy",
+                    Category = "System",
                     Description =
                         "Sets fDisablePrnt=1. Prevents client-side printers from being redirected into Cloud PC sessions. Printer redirection is a DLP risk (printing regulated data to unmanaged printers) and a performance risk (printer driver discovery causes session startup delays). In Cloud PC deployments, managed network printers should be configured via Intune printer policies; redirect from local client printers is generally not needed and introduces risk.",
                     Tags = ["cloudpc", "printer", "redirect", "dlp", "security"],
@@ -824,7 +824,7 @@ internal static class PolicyEnterprise
                 {
                     Id = "cloudpc-set-display-depth-32bit",
                     Label = "Cloud PC: Set Remote Display to 32-Bit Color",
-                    Category = "Enterprise Management Policy",
+                    Category = "System",
                     Description =
                         "Sets MaxColorDepth=4 (32-bit). Sets the RDP session color depth to 32-bit for Windows 365 Cloud PC sessions. This is the maximum color depth supported by the RDP protocol. Higher color depth improves the quality of rendered graphics, images, and Office documents within Cloud PC sessions. Since Windows 365 provides dedicated compute resources per user, the additional bandwidth from 32-bit color to maximize visual fidelity is generally available.",
                     Tags = ["cloudpc", "display", "color-depth", "quality"],
@@ -841,7 +841,7 @@ internal static class PolicyEnterprise
                 {
                     Id = "cloudpc-enable-gpu-redirect",
                     Label = "Cloud PC: Enable GPU RemoteFX Virtual GPU",
-                    Category = "Enterprise Management Policy",
+                    Category = "System",
                     Description =
                         "Sets AVC444ModePreferred=1. Enables AVC444 (H.264 4:4:4 + Alpha) GPU-accelerated video codec for Windows 365 Cloud PC remote display rendering. AVC444 encoding provides near-lossless visual quality for Office and professional design applications within Cloud PC sessions. Windows 365 SKUs with GPU resources support AVC444 by default; this policy ensures it's selected over fallback codecs for the highest visual quality.",
                     Tags = ["cloudpc", "gpu", "avc444", "gpu-redirect", "display"],
@@ -858,7 +858,7 @@ internal static class PolicyEnterprise
                 {
                     Id = "cloudpc-lock-session-on-disconnect",
                     Label = "Cloud PC: Lock Screen Immediately on Session Disconnect",
-                    Category = "Enterprise Management Policy",
+                    Category = "System",
                     Description =
                         "Sets fPromptForPassword=1. Forces Cloud PC sessions to present the Windows lock screen immediately when a client disconnects, preventing subsequent reconnections without re-authentication. Since Cloud PCs are persistent VMs, a disconnected-but-unlocked session could be accessed by the Azure admin or re-attached without the user's explicit re-authentication after a network interruption. Locking on disconnect enforces MFA re-authentication at every new session.",
                     Tags = ["cloudpc", "lock-screen", "authentication", "security"],
@@ -875,7 +875,7 @@ internal static class PolicyEnterprise
                 {
                     Id = "cloudpc-session-time-limit-8h",
                     Label = "Cloud PC: Set Maximum Active Session Duration to 8 Hours",
-                    Category = "Enterprise Management Policy",
+                    Category = "System",
                     Description =
                         "Sets MaxConnectionTime=28800000 (8 hours in ms). Limits any single active Windows 365 session to 8 hours before forcing a graceful disconnect. Long-running sessions can accumulate memory leaks, stale credentials, and dangling file handles. The 8-hour limit ensures daily session recycling while accommodating a full work day. Windows 365 profiles are persistent so user state is preserved across the disconnect/reconnect cycle.",
                     Tags = ["cloudpc", "session-limit", "time-limit", "maintenance"],
@@ -892,7 +892,7 @@ internal static class PolicyEnterprise
                 {
                     Id = "cloudpc-disable-audio-record-redirect",
                     Label = "Cloud PC: Disable Microphone Redirection in Sessions",
-                    Category = "Enterprise Management Policy",
+                    Category = "System",
                     Description =
                         "Sets fDisableAudioCapture=1. Blocks client-side microphone from being redirected into Cloud PC sessions. Microphone-in-session is a privacy risk in shared office environments where other people's conversations could be inadvertently captured in Cloud PC recordings or Teams calls. In organizations using Teams Calling or Teams AV Optimization (which handles audio on the local client endpoint), microphone redirect to the Cloud PC is redundant and unnecessary.",
                     Tags = ["cloudpc", "microphone", "audio", "privacy", "redirect"],
@@ -909,7 +909,7 @@ internal static class PolicyEnterprise
                 {
                     Id = "cloudpc-enable-display-quality-max",
                     Label = "Cloud PC: Set Maximum Visual Quality Level for Display",
-                    Category = "Enterprise Management Policy",
+                    Category = "System",
                     Description =
                         "Sets VisualQuality=3 (medium-high). Sets the Cloud PC RDP display quality to the highest persistent level. Windows 365 uses dynamic display quality to adapt to network bandwidth; this policy sets the floor to 3 (medium-high) so quality never drops below acceptable levels on stable Azure Expressroute or 100Mbps+ connections. Particularly beneficial for Cloud PCs used for creative and Office work where blurry codec artifacts impair productivity.",
                     Tags = ["cloudpc", "display-quality", "rdp", "performance"],
@@ -926,7 +926,7 @@ internal static class PolicyEnterprise
                 {
                     Id = "cloudpc-disable-device-redirect",
                     Label = "Cloud PC: Disable PnP Device Redirection into Sessions",
-                    Category = "Enterprise Management Policy",
+                    Category = "System",
                     Description =
                         "Sets fDisablePNPRedir=1. Blocks Plug-and-Play (PnP) device redirection from the client endpoint into the Cloud PC session. PnP redirection allows USB devices (webcams, scanners, dongles, smart card readers) to appear inside the Cloud PC session. This creates an uncontrolled hardware import surface: unmanaged USB devices can introduce malware through HID attacks or USB Rubber Ducky-style injection. Block PnP redirect unless there is a specific use case for hardware peripherals in Cloud PC.",
                     Tags = ["cloudpc", "usb", "pnp", "device-redirect", "security"],
@@ -954,7 +954,7 @@ internal static class PolicyEnterprise
             {
                 Id = "confmgr-require-code-signing-for-scripts",
                 Label = "ConfigMgr: Require Script Code Signing for All Client-Side Script Execution",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description = "Sets RequireScriptCodeSigning=1 in ConfigurationManager policy. Requires that any script (PowerShell, VBScript, JScript) deployed through the Configuration Manager client for task sequences or application deployment must be digitally signed by a certificate trusted by the client's root store before execution. " +
                     "Configuration Manager script execution is a primary lateral movement vector in enterprise environments. A compromised management server or a rogue admin with deployment rights can push arbitrary scripts to all managed clients. Without code signing enforcement, any script pushed through ConfigMgr is executed verbatim. Requiring script code signing ensures only scripts signed by the enterprise PKI certificate authority are executed.",
                 Tags = ["configmgr", "sccm", "scripts", "code-signing", "security"],
@@ -971,7 +971,7 @@ internal static class PolicyEnterprise
             {
                 Id = "confmgr-enable-client-audit-logging",
                 Label = "ConfigMgr: Enable Comprehensive Audit Logging for Client Agent Operations",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description = "Sets EnableClientAuditLogging=1 in ConfigurationManager policy. Enables detailed audit logging in the Configuration Manager client agent, causing all deployment operations (software installs, uninstalls, state machine transitions, inventory collection, policy downloads) to be recorded in the Security event log in addition to the standard ccmsetup.log files. " +
                     "The default ConfigMgr client logging writes verbose detail to log files under C:\\Windows\\CCM\\Logs\\ but does not generate Security event log entries auditable by a SIEM. With audit logging enabled, Security events are generated for every ConfigMgr operation, enabling correlation with Active Directory logon events, PowerShell execution events, and process creation events during incident investigations. This enables detection of ConfigMgr-based lateral movement.",
                 Tags = ["configmgr", "sccm", "audit-log", "security", "siem"],
@@ -988,7 +988,7 @@ internal static class PolicyEnterprise
             {
                 Id = "confmgr-require-ssl-for-management-point",
                 Label = "ConfigMgr: Require HTTPS/PKI for All Client-to–Management Point Communication",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description = "Sets RequireSSLForManagementPoint=1 in ConfigurationManager policy. Enforces that the ConfigMgr client uses HTTPS with PKI client certificates for all communication with the Management Point, Distribution Point, and other site roles, blocking fallback to HTTP. " +
                     "Configuration Manager in HTTP mode transmits deployment data, credentials used for network access accounts, and package download URLs in plaintext. A network attacker on the same segment as a ConfigMgr client can intercept policy downloads and inject malicious package locations. Enforcing HTTPS-only communication requires PKI infrastructure but prevents man-in-the-middle interception of ConfigMgr policy and deployment content.",
                 Tags = ["configmgr", "sccm", "https", "pki", "ssl", "management-point"],
@@ -1005,7 +1005,7 @@ internal static class PolicyEnterprise
             {
                 Id = "confmgr-disable-software-center-user-portal",
                 Label = "ConfigMgr: Disable Software Center User-Initiated Install Portal",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description = "Sets DisableSoftwareCenterPortal=1 in ConfigurationManager policy. Disables the Software Center user-facing portal through which end users can browse 'Available' software and initiate their own optional application installs. Only 'Required' deployments that are pushed and mandatory remain active; the Software Center self-service catalog is removed from the user's Start menu. " +
                     "The Software Center self-service portal is appropriate for general enterprise endpoints where end users should be able to install productivity tools. In high-security or locked-down environments (healthcare workstations, kiosk terminals, PCI-scope machines), allowing users to install any software from the catalog — even admin-approved software — introduces unnecessary attack surface expansion. Application installs should be exclusively IT-admin-driven deployments.",
                 Tags = ["configmgr", "sccm", "software-center", "lockdown", "user-install"],
@@ -1022,7 +1022,7 @@ internal static class PolicyEnterprise
             {
                 Id = "confmgr-disable-client-auto-upgrade",
                 Label = "ConfigMgr: Disable Automatic ConfigMgr Client Agent Auto-Upgrade",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description = "Sets DisableAutoUpgrade=1 in ConfigurationManager policy. Prevents the ConfigMgr client agent from automatically upgrading itself when the site server is running a newer version of the ConfigMgr client, requiring IT to explicitly push client upgrades through a managed deployment. " +
                     "The ConfigMgr client auto-upgrade mechanism upgrades the client agent on all managed endpoints automatically when the Primary Site server is upgraded. While convenient, this means that upgrading the site server triggers an automatic, uncontrolled rollout to thousands of endpoints simultaneously, with no staging, no pilot group, and no rollback capability. A buggy client version pushed by auto-upgrade to all endpoints can simultaneously disrupt the management channel for the entire estate.",
                 Tags = ["configmgr", "sccm", "client-upgrade", "rollout", "change-control"],
@@ -1039,7 +1039,7 @@ internal static class PolicyEnterprise
             {
                 Id = "confmgr-require-admin-for-user-policy-execution",
                 Label = "ConfigMgr: Require Administrative Approval Before User-Targeted Policy Execution",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description = "Sets RequireAdminApprovalForUserPolicy=1 in ConfigurationManager policy. Requires that user-targeted configuration baseline deployments (policies applied to users, not computers) receive explicit IT admin approval in the ConfigMgr console before the client agent executes them on the endpoint. " +
                     "In some ConfigMgr configurations, user-targeted configuration baselines can be deployed to security groups by less-privileged admins (Help Desk, Application Deployment staff) without requiring full ConfigMgr infrastructure admin privileges. If those baselines include scripts or registry modifications, a Help Desk operator with deployment rights could push policy changes to all users in their management scope. Requiring admin approval creates a second-factor approval gate for user-targeted policy execution.",
                 Tags = ["configmgr", "sccm", "user-policy", "admin-approval", "separation-of-duties"],
@@ -1056,7 +1056,7 @@ internal static class PolicyEnterprise
             {
                 Id = "confmgr-cap-content-cache-size-5gb",
                 Label = "ConfigMgr: Cap Client Content Cache Size at 5 GB",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description = "Sets MaxContentCacheSizeGB=5 in ConfigurationManager policy. Limits the ConfigMgr client content cache (the local disk cache where the client pre-downloads content from Distribution Points before installation) to a maximum of 5 GB, preventing the cache from consuming disk space beyond this limit. " +
                     "By default, the ConfigMgr client content cache can grow to 10% of total disk size. On large-disk endpoints (1 TB drives), this allows a 100 GB cache. In environments with thin-provisioned storage (VDI, laptop SSDs) or low-disk-space scenarios, an unbounded cache can fill available disk space, causing operating system failures or application performance issues. A 5 GB cap is sufficient for most enterprise software deployments while protecting disk space.",
                 Tags = ["configmgr", "sccm", "cache", "disk-space", "storage"],
@@ -1073,7 +1073,7 @@ internal static class PolicyEnterprise
             {
                 Id = "confmgr-disable-client-notification-feature",
                 Label = "ConfigMgr: Disable ConfigMgr Client Notification Channel",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description = "Sets DisableClientNotification=1 in ConfigurationManager policy. Disables the ConfigMgr client notification channel — a push mechanism that allows the site server to send fast-path notifications to clients to immediately trigger a policy evaluation or initiate re-inventory without waiting for the standard polling interval. " +
                     "The client notification channel uses a persistent TCP connection from the ConfigMgr client to the Management Point. While this enables near-real-time policy deployment, it also means a compromised Management Point has an active connection to every managed client and can trigger immediate policy execution on all clients simultaneously. In environments where the threat model includes Management Point compromise, disabling the notification channel forces deployments to use the standard polling schedule which is easier to audit and rate-limit.",
                 Tags = ["configmgr", "sccm", "client-notification", "tcp", "management-point"],
@@ -1090,7 +1090,7 @@ internal static class PolicyEnterprise
             {
                 Id = "confmgr-enable-tamper-protection",
                 Label = "ConfigMgr: Enable Tamper Protection for ConfigMgr Client Agent",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description = "Sets EnableClientTamperProtection=1 in ConfigurationManager policy. Enables the ConfigMgr client tamper protection mechanism, which prevents standard users and non-admin processes from stopping or disabling the CCMExec service, deleting the CCM client registry keys, or uninstalling the ConfigMgr client agent. " +
                     "Attackers that gain code execution on an endpoint as a standard user or as a low-privilege process will attempt to disable security tools and management agents before proceeding with lateral movement or data exfiltration. The ConfigMgr client agent is a high-value target for disablement because it delivers security baselines, patches, and malware detection policies. Tamper protection prevents the CCMExec service from being stopped by non-admin processes.",
                 Tags = ["configmgr", "sccm", "tamper-protection", "service-protection", "ccmexec"],
@@ -1107,7 +1107,7 @@ internal static class PolicyEnterprise
             {
                 Id = "confmgr-block-network-access-account-caching",
                 Label = "ConfigMgr: Block Caching of Network Access Account Credentials on Client Disk",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description = "Sets DisableNAACredentialCaching=1 in ConfigurationManager policy. Prevents the ConfigMgr client from caching the Network Access Account (NAA) credentials — the service account used to authenticate with Distribution Points — in the local DPAPI credential store on the client disk. " +
                     "The ConfigMgr Network Access Account is a domain service account whose credentials are distributed to all ConfigMgr-managed clients to allow content download from Distribution Points. By default, these credentials are cached on disk using DPAPI. On a compromised endpoint, an attacker can extract the NAA credentials using tools that decrypt DPAPI-protected data (accessible to SYSTEM-level processes) and then use those credentials to authenticate to internal servers as the NAA service account, often a domain user with broad read access.",
                 Tags = ["configmgr", "sccm", "naa", "credentials", "dpapi", "credential-theft"],
@@ -1135,7 +1135,7 @@ internal static class PolicyEnterprise
             {
                 Id = "depsvc-disable-multicast",
                 Label = "Disable WDS Multicast Image Transfer",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -1152,7 +1152,7 @@ internal static class PolicyEnterprise
             {
                 Id = "depsvc-disable-pxe-response",
                 Label = "Disable WDS PXE Boot Response",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -1169,7 +1169,7 @@ internal static class PolicyEnterprise
             {
                 Id = "depsvc-require-user-authorization",
                 Label = "Require User Authorization for WDS Network Boot",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -1186,7 +1186,7 @@ internal static class PolicyEnterprise
             {
                 Id = "depsvc-enable-boot-logging",
                 Label = "Enable WDS Boot Session Logging",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -1203,7 +1203,7 @@ internal static class PolicyEnterprise
             {
                 Id = "depsvc-disable-tftp-anonymous-access",
                 Label = "Disable Anonymous TFTP Access to WDS Boot Files",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -1220,7 +1220,7 @@ internal static class PolicyEnterprise
             {
                 Id = "depsvc-restrict-image-groups",
                 Label = "Restrict WDS Image Groups to Authorized Groups Only",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -1237,7 +1237,7 @@ internal static class PolicyEnterprise
             {
                 Id = "depsvc-enable-driver-injection-restriction",
                 Label = "Restrict WDS Driver Injection to Approved Drivers",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -1254,7 +1254,7 @@ internal static class PolicyEnterprise
             {
                 Id = "depsvc-disable-wds-client-logging",
                 Label = "Disable WDS Client-Side Telemetry Logging",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -1271,7 +1271,7 @@ internal static class PolicyEnterprise
             {
                 Id = "depsvc-enforce-network-boot-security",
                 Label = "Enforce Secure Network Boot Validation",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 5,
@@ -1288,7 +1288,7 @@ internal static class PolicyEnterprise
             {
                 Id = "depsvc-limit-wds-server-accessibility",
                 Label = "Restrict WDS Server Access to Deployment VLAN",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -1318,7 +1318,7 @@ internal static class PolicyEnterprise
             {
                 Id           = "dchrdn-require-secure-channel-signing",
                 Label        = "Require Signing on All Netlogon Secure Channel Connections",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description  = "Configures Netlogon to require cryptographic signing on all secure channel connections from this machine to its domain controller, protecting against Zerologon (CVE-2020-1472) and secure channel downgrade attacks.",
                 Tags         = ["netlogon", "secure-channel", "zerologon", "cve-2020-1472", "policy"],
                 NeedsAdmin   = true,
@@ -1334,7 +1334,7 @@ internal static class PolicyEnterprise
             {
                 Id           = "dchrdn-require-secure-channel-sealing",
                 Label        = "Require Sealing (Encryption) on Netlogon Secure Channel",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description  = "Configures the Netlogon secure channel to use full encryption (sealing) in addition to signing, ensuring the contents of secure channel messages cannot be intercepted and read by network observers.",
                 Tags         = ["netlogon", "sealing", "encryption", "secure-channel", "policy"],
                 NeedsAdmin   = true,
@@ -1350,7 +1350,7 @@ internal static class PolicyEnterprise
             {
                 Id           = "dchrdn-sign-secure-channel",
                 Label        = "Enable Netlogon Secure Channel Cryptographic Signatures",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description  = "Enables Netlogon secure channel signing at the Windows Security Support Provider level, ensuring all Netlogon RPC traffic includes a HMAC-based message authentication code protecting against modification.",
                 Tags         = ["netlogon", "signing", "hmac", "rpc", "policy"],
                 NeedsAdmin   = true,
@@ -1366,7 +1366,7 @@ internal static class PolicyEnterprise
             {
                 Id           = "dchrdn-set-max-machine-account-age-30d",
                 Label        = "Set Machine Account Password Maximum Age to 30 Days",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description  = "Sets the maximum age of the machine account Kerberos trust password to 30 days, ensuring machine account credentials are regularly rotated and limiting the window during which a stolen machine account password can be misused.",
                 Tags         = ["netlogon", "machine-account", "password-age", "rotation", "policy"],
                 NeedsAdmin   = true,
@@ -1382,7 +1382,7 @@ internal static class PolicyEnterprise
             {
                 Id           = "dchrdn-disable-machine-account-pwd-change",
                 Label        = "Enable Machine Account Password Rotation (Prevent Disabling)",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description  = "Ensures the machine account password rotation feature is not disabled, counteracting malware or misconfiguration that sets DisablePasswordChange=1 to prevent the machine account from rotating its domain password.",
                 Tags         = ["netlogon", "machine-account", "password-change", "security", "policy"],
                 NeedsAdmin   = true,
@@ -1398,7 +1398,7 @@ internal static class PolicyEnterprise
             {
                 Id           = "dchrdn-enable-strong-key",
                 Label        = "Enable Strong Session Key for Netlogon Secure Channel",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description  = "Forces the use of AES-256 strong session keys for Netlogon secure channel encryption rather than the legacy DES-based 64-bit session keys, significantly increasing the strength of DC trust channel encryption.",
                 Tags         = ["netlogon", "strong-key", "aes", "session-key", "policy"],
                 NeedsAdmin   = true,
@@ -1414,7 +1414,7 @@ internal static class PolicyEnterprise
             {
                 Id           = "dchrdn-restrict-null-session-pipes",
                 Label        = "Restrict Null Session Named Pipe Access to Empty List",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description  = "Removes all entries from the NullSessionPipes registry value, ensuring no named pipes can be accessed via anonymous null session connections on this machine, closing a legacy attack vector for anonymous RPC enumeration.",
                 Tags         = ["netlogon", "null-session", "named-pipes", "anonymous", "policy"],
                 NeedsAdmin   = true,
@@ -1430,7 +1430,7 @@ internal static class PolicyEnterprise
             {
                 Id           = "dchrdn-log-netlogon-failures",
                 Label        = "Log Netlogon Secure Channel Failure Events",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description  = "Enables detailed event log entries for Netlogon secure channel establishment failures, authentication denials, and secure channel seal/sign rejections, providing visibility into DC trust channel attacks.",
                 Tags         = ["netlogon", "event-log", "audit", "secure-channel-failure", "policy"],
                 NeedsAdmin   = true,
@@ -1446,7 +1446,7 @@ internal static class PolicyEnterprise
             {
                 Id           = "dchrdn-restrict-ntlm-in-domain",
                 Label        = "Restrict Incoming NTLM Authentication in Domain Context",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description  = "Configures this domain member to block incoming NTLM authentication from domain accounts, requiring Kerberos for all intra-domain service authentication and preventing NTLM relay and pass-the-hash attacks between domain members.",
                 Tags         = ["netlogon", "ntlm", "domain", "relay-attack", "policy"],
                 NeedsAdmin   = true,
@@ -1462,7 +1462,7 @@ internal static class PolicyEnterprise
             {
                 Id           = "dchrdn-disable-netlogon-telemetry",
                 Label        = "Disable Netlogon and Domain Services Telemetry to Microsoft",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description  = "Prevents the Netlogon service and domain authentication components from sending DC trust channel statistics, authentication success rates, and secure channel negotiation telemetry to Microsoft.",
                 Tags         = ["netlogon", "telemetry", "privacy", "microsoft", "policy"],
                 NeedsAdmin   = true,
@@ -1489,7 +1489,7 @@ internal static class PolicyEnterprise
             {
                 Id = "domiso-enable-ipsec-policy",
                 Label = "Enable IPsec Domain Isolation Policy",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 5,
@@ -1506,7 +1506,7 @@ internal static class PolicyEnterprise
             {
                 Id = "domiso-require-auth-for-inbound",
                 Label = "Require IPsec Authentication for Inbound Connections",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 5,
@@ -1523,7 +1523,7 @@ internal static class PolicyEnterprise
             {
                 Id = "domiso-enable-ipsec-encryption",
                 Label = "Enable IPsec Traffic Encryption",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -1540,7 +1540,7 @@ internal static class PolicyEnterprise
             {
                 Id = "domiso-prefer-aes256",
                 Label = "Prefer AES-256 for IPsec Encryption",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -1557,7 +1557,7 @@ internal static class PolicyEnterprise
             {
                 Id = "domiso-enable-perfect-forward-secrecy",
                 Label = "Enable Perfect Forward Secrecy for IPsec",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -1574,7 +1574,7 @@ internal static class PolicyEnterprise
             {
                 Id = "domiso-block-non-ipsec-fallback",
                 Label = "Block Fallback to Unprotected Connections",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -1591,7 +1591,7 @@ internal static class PolicyEnterprise
             {
                 Id = "domiso-enable-ike-v2",
                 Label = "Require IKEv2 for IPsec Key Exchange",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -1608,7 +1608,7 @@ internal static class PolicyEnterprise
             {
                 Id = "domiso-log-ipsec-failures",
                 Label = "Enable IPsec Negotiation Failure Logging",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -1625,7 +1625,7 @@ internal static class PolicyEnterprise
             {
                 Id = "domiso-exempt-icmp",
                 Label = "Configure ICMP Exemption from IPsec",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -1642,7 +1642,7 @@ internal static class PolicyEnterprise
             {
                 Id = "domiso-enable-ipsec-monitoring",
                 Label = "Enable IPsec Security Association Monitoring",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -1672,7 +1672,7 @@ internal static class PolicyEnterprise
                 {
                     Id = "domtrust-enable-sid-filter-quarantine",
                     Label = "Domain Trust: Enable SID Filtering (Quarantine) on External Trusts",
-                    Category = "Enterprise Management Policy",
+                    Category = "System",
                     Description =
                         "Sets FilterAdministratorToken=1 in Netlogon\\Parameters. Enables SID filtering (quarantine) on external domain trusts. SID filtering prevents a user in a trusted domain from having SIDs in their access token that belong to privileged groups in the trusting domain. Without SID filtering, an attacker who has compromised a trusted domain can add the 'Domain Admins' SID of the trusting domain to their token via SID history manipulation — a SID history injection attack. With SID filtering, SIDs from the trusted domain that belong to the trusting domain's sensitive groups are stripped from the token.",
                     Tags = ["domain-trust", "sid-filter", "quarantine", "sid-history", "cross-forest"],
@@ -1690,7 +1690,7 @@ internal static class PolicyEnterprise
                 {
                     Id = "domtrust-require-strong-key-trust",
                     Label = "Domain Trust: Require Strong Encryption Keys for Trust Authentication",
-                    Category = "Enterprise Management Policy",
+                    Category = "System",
                     Description =
                         "Sets RequireStrongKey=1 in Netlogon\\Parameters. Requires that the inter-domain trust uses strong encryption keys (128-bit RC4 or AES keys) for the trust authentication. If RequireStrongKey is 0, the Netlogon secure channel for trust relationships can negotiate down to weak DES encryption. Trust relationships using weak keys are vulnerable to offline brute-force attacks against captured Netlogon challenge-response traffic. RequireStrongKey=1 prevents this downgrade and ensures all trust traffic uses at minimum 128-bit RC4, and preferably AES (when both sides support it via SupportedEncryptionTypes setting in the trust object).",
                     Tags = ["domain-trust", "strong-key", "encryption", "downgrade-prevention", "netlogon"],
@@ -1708,7 +1708,7 @@ internal static class PolicyEnterprise
                 {
                     Id = "domtrust-disable-anonymous-trust-dc-discovery",
                     Label = "Domain Trust: Disable Anonymous Trust DC Discovery Across Forest",
-                    Category = "Enterprise Management Policy",
+                    Category = "System",
                     Description =
                         "Sets RefusePWChange=1 in Netlogon\\Parameters. Prevents this DC from processing anonymous inter-domain Netlogon authentication DC discovery requests from untrusted sources. Unauthenticated DC discovery requests (LDAP ping, GetDCName) can be used to enumerate the forest structure, discover domain names, and map the replication topology — all without any credentials. Refusing anonymous discovery from this DC reduces the amount of information an unauthenticated attacker can extract about the forest topology from the network.",
                     Tags = ["domain-trust", "anonymous-discovery", "dc-discovery", "enumeration", "netlogon"],
@@ -1726,7 +1726,7 @@ internal static class PolicyEnterprise
                 {
                     Id = "domtrust-set-max-trust-connections-per-dc-8",
                     Label = "Domain Trust: Cap Maximum Trust Relationships Per DC to 8",
-                    Category = "Enterprise Management Policy",
+                    Category = "System",
                     Description =
                         "Sets MaximumPasswordAge=8 in Netlogon\\Parameters (trust connection context). Limits the number of active trust authentication sessions per DC. Excessive trust-path authentication requests can degrade DC performance and may indicate a trust path enumeration or brute-force attack via trust authentication. Setting a reasonable cap prevents a compromised trust partner from flooding the local DC with trust authentication requests, providing a basic denial-of-service protection for the DC trust authentication subsystem.",
                     Tags = ["domain-trust", "connection-limit", "dos-mitigation", "netlogon"],
@@ -1744,7 +1744,7 @@ internal static class PolicyEnterprise
                 {
                     Id = "domtrust-restrict-cross-domain-admin-delegation",
                     Label = "Domain Trust: Restrict Kerberos Constrained Delegation Across Trust",
-                    Category = "Enterprise Management Policy",
+                    Category = "System",
                     Description =
                         "Sets DisableConstrainedDelegation=1 in the System policy hive. Prevents Kerberos constrained delegation from being used across domain trust boundaries unless explicitly permitted. Cross-domain constrained delegation allows a service in domain A (with the msDS-AllowedToDelegateTo attribute configured to a resource in domain B) to obtain a Kerberos ticket to that resource on behalf of any user. This capability can be abused — an attacker who compromises a service account configured for cross-domain delegation can impersonate any user against the delegated resource in the partner domain. Restricting cross-domain delegation by default limits blast radius.",
                     Tags = ["kerberos-delegation", "cross-domain", "constrained-delegation", "trust", "impersonation"],
@@ -1762,7 +1762,7 @@ internal static class PolicyEnterprise
                 {
                     Id = "domtrust-enable-pam-trust-privilege-check",
                     Label = "Domain Trust: Enable Privileged Access Management PAM Trust",
-                    Category = "Enterprise Management Policy",
+                    Category = "System",
                     Description =
                         "Sets EnablePAMTrust=1 in Netlogon\\Parameters. Enables the Privileged Access Management (PAM) trust feature on forest trusts (Windows Server 2016+ forest functional level required). PAM trust adds time-limited group membership to the Kerberos PAC — when an admin authenticates via a PAM bastion forest, their group memberships in the resource forest are valid only for the specified time window (e.g., 1 hour). After the window expires, membership is automatically removed. This provides Just-In-Time (JIT) access for privileged accounts — even if the PAM token is stolen, it expires within the configured window.",
                     Tags = ["pam", "just-in-time", "jit", "trust", "privileged-access"],
@@ -1780,7 +1780,7 @@ internal static class PolicyEnterprise
                 {
                     Id = "domtrust-enable-selective-authentication-forest",
                     Label = "Domain Trust: Enable Selective Authentication on Forest Trusts",
-                    Category = "Enterprise Management Policy",
+                    Category = "System",
                     Description =
                         "Sets ForestTransitiveAuth=2 in Netlogon\\Parameters. Enables selective authentication mode on forest trusts. With selective authentication, users from the trusted forest cannot access resources in the trusting forest unless they have been explicitly granted the 'Allowed to Authenticate' permission on the specific computer object they are accessing. This is the opposite of forest-wide authentication (the default), where all users in the trusted forest can attempt to authenticate against any resource in the trusting forest. Selective authentication significantly reduces the blast radius of a trusted-forest compromise.",
                     Tags = ["forest-trust", "selective-authentication", "allowed-to-authenticate", "cross-forest"],
@@ -1798,7 +1798,7 @@ internal static class PolicyEnterprise
                 {
                     Id = "domtrust-log-trust-authentication-failures",
                     Label = "Domain Trust: Log All Trust Authentication Failures to Security Log",
-                    Category = "Enterprise Management Policy",
+                    Category = "System",
                     Description =
                         "Sets AuditTrustAuthFailures=1 in Netlogon\\Parameters. Enables logging of all Netlogon trust authentication failures in the Security event log. Trust authentication failures (wrong trust password, SID filter violation, expired credentials) are logged with the source domain, target domain, error code, and the client computer name. These events are key indicators of: brute-force attacks against trust relationships, trust relationship degradation (trust password drift), and lateral movement attempts using forged cross-domain Kerberos tickets. SIEM correlation rules targeting trust authentication failures enable detection of inter-forest attacks.",
                     Tags = ["domain-trust", "audit", "authentication-failure", "netlogon", "forensics"],
@@ -1816,7 +1816,7 @@ internal static class PolicyEnterprise
                 {
                     Id = "domtrust-disable-trust-downgrade-to-cleartext",
                     Label = "Domain Trust: Prevent Trust Negotiation Downgrade to Clear-Text Password",
-                    Category = "Enterprise Management Policy",
+                    Category = "System",
                     Description =
                         "Sets AllowNT4Crypto=0 in Netlogon\\Parameters. Prevents Netlogon from allowing legacy NT4-era clear-text trust password negotiation. Old NT4-style inter-domain trusts used clear-text password exchange in the trust setup phase, which is vulnerable to eavesdropping. Even in modern Windows domains, Netlogon will accept NT4-style authentication if a legacy DC requests it. Setting AllowNT4Crypto=0 prevents this downgrade, ensuring trust negotiation always uses modern cryptographic protocols.",
                     Tags = ["domain-trust", "nt4", "clear-text", "downgrade", "netlogon"],
@@ -1834,7 +1834,7 @@ internal static class PolicyEnterprise
                 {
                     Id = "domtrust-set-net-logon-service-tgt-ttl-3600",
                     Label = "Domain Trust: Set Cross-Forest Referral Ticket TTL to 3600 Seconds",
-                    Category = "Enterprise Management Policy",
+                    Category = "System",
                     Description =
                         "Sets CrossForestReferralTtl=3600 in Netlogon\\Parameters (units: seconds). Sets the Time-To-Live for cross-forest Kerberos referral tickets to 3600 seconds (1 hour). Cross-forest referral tickets are issued when a user in one forest authenticates to a resource in a trusting forest — the KDC issues a referral ticket that the client presents to the trusting forests KDC. Shorter TTLs mean more frequent referral ticket renewals (slightly more authentication overhead) but reduce the window during which a captured referral ticket is valid. 3600 seconds is a reasonable balance between performance and security for standard enterprise cross-forest authentication scenarios.",
                     Tags = ["kerberos", "cross-forest", "referral-ticket", "ttl", "trust"],
@@ -1863,7 +1863,7 @@ internal static class PolicyEnterprise
             {
                 Id = "easmdm-require-device-password",
                 Label = "Exchange ActiveSync MDM Policy: Require Device Password",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description =
                     "Enforces a device password requirement via Exchange ActiveSync MDM policy. "
                     + "When enabled, users must configure a PIN or password before the device can synchronise with an Exchange server. "
@@ -1884,7 +1884,7 @@ internal static class PolicyEnterprise
             {
                 Id = "easmdm-min-password-length",
                 Label = "Exchange ActiveSync MDM Policy: Set Minimum Password Length (8)",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description =
                     "Sets the minimum device password length to 8 characters via Exchange ActiveSync MDM policy. "
                     + "Short passwords are vulnerable to brute-force attacks, especially on mobile and endpoint devices. "
@@ -1905,7 +1905,7 @@ internal static class PolicyEnterprise
             {
                 Id = "easmdm-max-failed-attempts",
                 Label = "Exchange ActiveSync MDM Policy: Limit Max Failed Password Attempts (10)",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description =
                     "Caps the number of consecutive failed password attempts to 10 before triggering a device lockout via Exchange ActiveSync MDM. "
                     + "Limiting failed attempts deters brute-force attacks against the device lock screen. "
@@ -1926,7 +1926,7 @@ internal static class PolicyEnterprise
             {
                 Id = "easmdm-inactivity-lock-5min",
                 Label = "Exchange ActiveSync MDM Policy: Lock Device After 5 Minutes Inactivity",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description =
                     "Configures the Exchange ActiveSync MDM policy to lock the device screen after 5 minutes of inactivity. "
                     + "Auto-locking an idle device prevents unauthorised access when the device is left unattended. "
@@ -1947,7 +1947,7 @@ internal static class PolicyEnterprise
             {
                 Id = "easmdm-require-encryption",
                 Label = "Exchange ActiveSync MDM Policy: Require Device Encryption",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description =
                     "Requires full device storage encryption via Exchange ActiveSync MDM policy. "
                     + "Encryption ensures that data stored on the device cannot be read if the hardware is lost or stolen. "
@@ -1968,7 +1968,7 @@ internal static class PolicyEnterprise
             {
                 Id = "easmdm-block-wifi",
                 Label = "Exchange ActiveSync MDM Policy: Block Wi-Fi Connections",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description =
                     "Disables Wi-Fi connectivity on the device via Exchange ActiveSync MDM policy. "
                     + "Blocking Wi-Fi forces the device to use wired or cellular connections, reducing exposure on potentially unsecured wireless networks. "
@@ -1989,7 +1989,7 @@ internal static class PolicyEnterprise
             {
                 Id = "easmdm-block-removable-storage",
                 Label = "Exchange ActiveSync MDM Policy: Block Removable Storage",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description =
                     "Prevents access to removable storage media (SD cards, USB drives) via Exchange ActiveSync MDM policy. "
                     + "Removable storage is a common vector for data exfiltration and introduction of malware. "
@@ -2010,7 +2010,7 @@ internal static class PolicyEnterprise
             {
                 Id = "easmdm-block-camera",
                 Label = "Exchange ActiveSync MDM Policy: Block Camera Use",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description =
                     "Disables camera hardware on the device via Exchange ActiveSync MDM policy. "
                     + "Camera restrictions are commonly required in secure facilities, clean-room environments, or for devices that handle classified information. "
@@ -2031,7 +2031,7 @@ internal static class PolicyEnterprise
             {
                 Id = "easmdm-block-internet-sharing",
                 Label = "Exchange ActiveSync MDM Policy: Block Internet Sharing / Hotspot",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description =
                     "Blocks the ability to share the device's internet connection (hotspot/tethering) via Exchange ActiveSync MDM policy. "
                     + "Mobile hotspot can bypass corporate network monitoring and proxy controls, introducing compliance gaps. "
@@ -2052,7 +2052,7 @@ internal static class PolicyEnterprise
             {
                 Id = "easmdm-block-bluetooth",
                 Label = "Exchange ActiveSync MDM Policy: Block Bluetooth",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description =
                     "Disables Bluetooth connectivity on the device via Exchange ActiveSync MDM policy. "
                     + "Bluetooth can be exploited for proximity-based attacks (BlueSnarfing, BIAS) or used to exfiltrate data without leaving a network trace. "
@@ -2088,7 +2088,7 @@ internal static class PolicyEnterprise
                 {
                     Id = "edm-enable-comanagement-with-sccm",
                     Label = "Enterprise Device Management: Enable Intune/SCCM Co-Management",
-                    Category = "Enterprise Management Policy",
+                    Category = "System",
                     Description =
                         "Sets EnableCoManagement=1 in MDM policy. Enables co-management of Windows 10/11 devices by both System Center Configuration Manager (SCCM/ConfigMgr) and Microsoft Intune simultaneously. Co-management allows gradual migration of workloads from SCCM to Intune — starting with compliance evaluation and conditional access in Intune while keeping software deployment in SCCM. Without this policy, organizations must choose one management plane. Co-management is the Microsoft-recommended path for organizations with existing SCCM infrastructure transitioning to cloud-modern management.",
                     Tags = ["co-management", "sccm", "configmgr", "intune", "cloud-management"],
@@ -2105,7 +2105,7 @@ internal static class PolicyEnterprise
                 {
                     Id = "edm-enable-remote-lock-on-compliance-breach",
                     Label = "Enterprise Device Management: Enable Remote Lock on Compliance Breach",
-                    Category = "Enterprise Management Policy",
+                    Category = "System",
                     Description =
                         "Sets EnableRemoteLockOnComplianceBreach=1 in EnterpriseResourceManager policy. Configures the MDM client to accept remote lock commands from the MDM authority when the device is marked non-compliant AND has not remediated within the grace period. Remote lock sets the device to the lock screen and requires the user to enter their PIN/password to regain access. This prevents a non-compliant device from being used while IT is investigating or while the device is remediating a compliance issue — ensuring that a known-non-compliant device is not being actively used to access corporate resources.",
                     Tags = ["remote-lock", "compliance", "non-compliant", "mdm", "incident-response"],
@@ -2122,7 +2122,7 @@ internal static class PolicyEnterprise
                 {
                     Id = "edm-enable-selective-wipe-on-unenroll",
                     Label = "Enterprise Device Management: Enable Selective Wipe of Corporate Data on Unenroll",
-                    Category = "Enterprise Management Policy",
+                    Category = "System",
                     Description =
                         "Sets EnableSelectiveWipeOnUnenroll=1 in EnterpriseResourceManager policy. Enables selective wipe of corporate data when a device unenrolls from MDM. Selective wipe removes only corporate-managed content: corporate email profiles, MDM-deployed certificates, VPN profiles, Wi-Fi profiles, and corporate app data — while preserving personal files, photos, and applications. This is the appropriate default for BYOD scenarios: when an employee leaves and disconnects their personal device from MDM, the corporate data is cleaned up without erasing the employee's personal content.",
                     Tags = ["selective-wipe", "unenrollment", "corporate-data", "byod", "data-protection"],
@@ -2139,7 +2139,7 @@ internal static class PolicyEnterprise
                 {
                     Id = "edm-require-approved-apps-only",
                     Label = "Enterprise Device Management: Restrict App Installation to MDM-Approved Apps Only",
-                    Category = "Enterprise Management Policy",
+                    Category = "System",
                     Description =
                         "Sets RequireApprovedAppsOnly=1 in EnterpriseResourceManager policy. Restricts app installation to apps that are deployed or approved by the MDM authority. Users are not permitted to install arbitrary apps from the Microsoft Store or third-party sources unless the MDM administrator has explicitly approved them in the app catalog. This policy is typically layered with AppLocker or Windows Defender Application Control. On its own, it provides an MDM-layer approval gate that blocks app installation from retail Store listings, reducing the attack surface from malicious store apps.",
                     Tags = ["approved-apps", "app-control", "mdm", "store", "whitelisting"],
@@ -2156,7 +2156,7 @@ internal static class PolicyEnterprise
                 {
                     Id = "edm-sync-device-inventory-every-4h",
                     Label = "Enterprise Device Management: Sync Device Inventory to MDM Every 4 Hours",
-                    Category = "Enterprise Management Policy",
+                    Category = "System",
                     Description =
                         "Sets InventorySyncIntervalHours=4 in EnterpriseResourceManager policy. Configures the MDM client to push a device inventory update (installed apps, hardware specs, disk space, OS version, installed patches) to the MDM authority every 4 hours. Accurate, fresh device inventory is essential for software license compliance, vulnerability management (detecting devices missing patches), and asset management. A staleinventory (updated less than once daily) may miss a device that has been reformatted, had apps removed, or had OS version changed — leading to false compliance reporting.",
                     Tags = ["inventory", "sync-interval", "asset-management", "vulnerability-mgmt", "mdm"],
@@ -2173,7 +2173,7 @@ internal static class PolicyEnterprise
                 {
                     Id = "edm-block-factory-reset-by-user",
                     Label = "Enterprise Device Management: Prevent User-Initiated Factory Reset",
-                    Category = "Enterprise Management Policy",
+                    Category = "System",
                     Description =
                         "Sets BlockUserInitiatedFactoryReset=1 in EnterpriseResourceManager policy. Prevents standard users from performing a factory reset (Settings > System > Recovery > Reset this PC, or WinRE recovery). Factory reset bypasses MDM policies, removes all corporate data and certificates, and leaves the device unmanaged. An insider threat actor could use factory reset to wipe evidence before investigation. A regular user could accidentally factory reset, losing both personal and corporate data. IT-initiated remote wipe via the MDM console remains available for authorized operations.",
                     Tags = ["factory-reset", "protective", "insider-threat", "data-preservation", "mdm"],
@@ -2190,7 +2190,7 @@ internal static class PolicyEnterprise
                 {
                     Id = "edm-enable-mdm-certificate-renewal",
                     Label = "Enterprise Device Management: Enable Automatic MDM Certificate Renewal",
-                    Category = "Enterprise Management Policy",
+                    Category = "System",
                     Description =
                         "Sets EnableMdmCertificateRenewal=1 in MDM policy. Configures the MDM client to automatically renew the MDM enrollment certificate before it expires. The MDM enrollment certificate authenticates the device to the MDM service on every check-in. If this certificate expires without renewal, the device loses the ability to receive new policies, report compliance status, or accept remote management commands — even though it may still appear enrolled in the MDM console. Automatic renewal prevents this silent disconnection, which is especially important for devices in long-term storage or deployed in air-gapped environments.",
                     Tags = ["mdm", "certificate", "renewal", "enrollment", "expiry"],
@@ -2207,7 +2207,7 @@ internal static class PolicyEnterprise
                 {
                     Id = "edm-enable-managed-device-restrictions",
                     Label = "Enterprise Device Management: Enable MDM-Enforced Managed Device Restrictions",
-                    Category = "Enterprise Management Policy",
+                    Category = "System",
                     Description =
                         "Sets EnableManagedDeviceRestrictions=1 in EnterpriseResourceManager policy. Enables the enforcement layer for MDM-delivered device restrictions — settings like camera disable, screen capture restriction, clipboard policy, USB disable, and Bluetooth restriction — that are delivered as MDM CSP payloads. Without this flag, MDM restriction payloads are accepted but not enforced at the OS level. This is a master switch that must be enabled for MDM-pushed restrictions to take effect. Relevant for organizations deploying information protection policies that require disabling hardware capabilities on managed devices.",
                     Tags = ["mdm", "device-restrictions", "camera-disable", "clipboard", "usb"],
@@ -2224,7 +2224,7 @@ internal static class PolicyEnterprise
                 {
                     Id = "edm-audit-mdm-policy-changes",
                     Label = "Enterprise Device Management: Audit All MDM Policy Application Events",
-                    Category = "Enterprise Management Policy",
+                    Category = "System",
                     Description =
                         "Sets AuditMdmPolicyChanges=1 in MDM policy. Enables audit events whenever an MDM policy is applied, updated, or removed on the device. Each audit event records the CSP path that was changed, the old and new values, the MDM authority that issued the change, and the result (success or error code). MDM policy audit events are written to the Microsoft-Windows-DeviceManagement-Enterprise-Diagnostics-Provider/Admin channel. These events are essential for SIEM correlation: if a device's MDM policy is unexpectedly changed (indicating a rogue MDM push or configuration scope error), the audit trail makes detection possible.",
                     Tags = ["mdm", "audit", "policy-changes", "siem", "event-log"],
@@ -2241,7 +2241,7 @@ internal static class PolicyEnterprise
                 {
                     Id = "edm-enable-encrypted-mdm-channel",
                     Label = "Enterprise Device Management: Enforce TLS 1.2+ for MDM Communication",
-                    Category = "Enterprise Management Policy",
+                    Category = "System",
                     Description =
                         "Sets RequireEncryptedMdmChannel=1 in MDM policy. Enforces that all MDM client communication (enrollment, check-in, policy delivery, command receipt) is conducted over TLS 1.2 or higher. MDM payloads include configuration settings, app assignments, certificate payloads, and VPN profiles — all of which are sensitive. An MDM session over TLS 1.0 can be downgrade-attacked using known vulnerabilities (BEAST, POODLE) to intercept policy payloads. Enforcing TLS 1.2+ on the MDM channel ensures that policy delivery is encrypted to modern standards.",
                     Tags = ["mdm", "tls", "encrypted-channel", "transport-security", "policy-delivery"],
@@ -2269,7 +2269,7 @@ internal static class PolicyEnterprise
             {
                 Id = "erdeploy-set-default-deploy-ring-broad",
                 Label = "Enterprise Deploy: Set Default Application Deployment Ring to 'Broad' Stable Channel",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description = "Sets DefaultDeployRing=2 in EnterpriseResourceManager policy. Configures the default application deployment ring for this endpoint to the 'Broad' (stable) deployment ring, ensuring the device receives application updates only after full release validation has been completed across the Pilot and Early Majority rings. " +
                     "Enterprise application deployments using modern ring-based rollout (Intune or ConfigMgr ring filtering) gate updates through sequenced rings before broad deployment. Endpoints that are miscategorised as 'Pilot' receive updates intended for testing and may encounter pre-release application bugs. Explicitly setting the deployment ring to 'Broad' (ring 2) prevents endpoints from accidentally receiving early-ring deployments due to misconfigured ring assignment logic.",
                 Tags = ["enterprise-deploy", "deployment-ring", "app-update", "staging", "rollout"],
@@ -2286,7 +2286,7 @@ internal static class PolicyEnterprise
             {
                 Id = "erdeploy-require-admin-for-app-removal",
                 Label = "Enterprise Deploy: Require Administrator Approval to Remove Managed Applications",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description = "Sets RequireAdminForAppRemoval=1 in EnterpriseResourceManager policy. Blocks standard users from uninstalling applications that were deployed by the enterprise (via Intune, ConfigMgr, or Group Policy Software Installation), requiring administrative credentials for removal even though the application was installed in user context. " +
                     "Required enterprise applications (endpoint detection and response agents, certificate management tools, identity protection software) must remain installed once deployed. A standard user who can uninstall enterprise-managed apps can remove security tooling from their device, creating a gap in protection that may persist until the next compliance check triggers a remediation deployment. Blocking user-initiated uninstall of managed apps prevents intentional or accidental removal of critical security tools.",
                 Tags = ["enterprise-deploy", "app-removal", "security-tools", "admin-required", "lockdown"],
@@ -2303,7 +2303,7 @@ internal static class PolicyEnterprise
             {
                 Id = "erdeploy-block-user-initiated-install",
                 Label = "Enterprise Deploy: Block User-Initiated Application Installation Outside of Managed Channels",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description = "Sets BlockUserInitiatedInstall=1 in EnterpriseResourceManager policy. Prevents users from initiating the installation of new applications through any mechanism other than IT-managed deployment channels (Intune, ConfigMgr, Software Center) — blocking double-click installer execution, Windows Installer (MSI) invocation, and MSIX/APPX package sideloading by standard users. " +
                     "The majority of enterprise malware infections arrive as LOB-disguised executables or malicious MSI packages that a user is socially engineered into running. If users can execute arbitrary installers, the application allowlist maintained by IT is bypassed — even if the endpoint has Microsoft Defender WDAC policy configured, a sufficiently permissive WDAC policy allows signed MSI files from any vendor. Blocking user-initiated installation removes the primary vector for user-driven software installation.",
                 Tags = ["enterprise-deploy", "user-install", "msi", "lockdown", "wdac", "applocker"],
@@ -2320,7 +2320,7 @@ internal static class PolicyEnterprise
             {
                 Id = "erdeploy-enforce-maintenance-window",
                 Label = "Enterprise Deploy: Enforce Deployment Maintenance Window Compliance",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description = "Sets EnforceMaintenanceWindow=1 in EnterpriseResourceManager policy. Restricts deployment execution by the enterprise resource manager to within the configured maintenance window schedule, preventing deployments from triggering application installs, updates, or reboots during business hours and confining disruptive deployments to the approved maintenance period. " +
                     "Without maintenance window enforcement, a deployment configured as 'Available as soon as possible' may start an application install or triggered reboot at any time, including during an end-user presentation or in the middle of a running workflow. Maintenance windows define agreed low-impact periods (after hours, weekends) for deployments. Enforcing the maintenance window prevents IT from accidentally or intentionally bypassing the agreed change window, which is often an ITIL or change management process requirement.",
                 Tags = ["enterprise-deploy", "maintenance-window", "deployment-schedule", "change-management", "itil"],
@@ -2337,7 +2337,7 @@ internal static class PolicyEnterprise
             {
                 Id = "erdeploy-cap-max-install-retries-3",
                 Label = "Enterprise Deploy: Cap Application Installation Retry Attempts at 3",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description = "Sets MaxInstallRetries=3 in EnterpriseResourceManager policy. Limits the number of times the enterprise resource manager retries a failed application installation to 3 attempts before marking the deployment as failed and triggering an alert, rather than retrying indefinitely. " +
                     "A deployment that retries an application installation indefinitely will continually consume CPU, disk I/O, and network bandwidth on the endpoint for days or weeks. On endpoints with transient installation failures (antivirus blocking the installer, required service temporarily unavailable), unlimited retries create ongoing performance degradation. Capping retries at 3 ensures failed deployments are surfaced as failures in the management console rather than silently retrying without ever succeeding.",
                 Tags = ["enterprise-deploy", "install-retry", "deployment-failure", "performance", "alert"],
@@ -2354,7 +2354,7 @@ internal static class PolicyEnterprise
             {
                 Id = "erdeploy-enable-deployment-audit-log",
                 Label = "Enterprise Deploy: Enable Security Audit Log for All Deployment Operations",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description = "Sets EnableDeploymentAuditLog=1 in EnterpriseResourceManager policy. Causes each application installation, update, and removal operation completed by the enterprise resource manager to generate a Security event log entry, recording the application name, version, deployment source, requesting authority, and outcome code. " +
                     "Application deployment audit logs are required in PCI-DSS, HIPAA, and SOC2 regulated environments where all software changes on in-scope endpoints must be tracked in a tamper-evident audit log. Without deployment audit logging, an attacker who compromises the management channel and installs a malicious application through the enterprise deployment infrastructure would have no on-device trace of the install (as the standard registry Uninstall key is easily manipulated). Security event log entries are tamper-resistant to local manipulation.",
                 Tags = ["enterprise-deploy", "audit-log", "deployment", "pci", "hipaa", "soc2"],
@@ -2371,7 +2371,7 @@ internal static class PolicyEnterprise
             {
                 Id = "erdeploy-disable-sideloaded-appx-packages",
                 Label = "Enterprise Deploy: Disable Sideloading of APPX Packages from Unmanaged Sources",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description = "Sets DisableSideloadedApps=1 in EnterpriseResourceManager policy. Prevents installation of APPX/MSIX application packages from unsigned or unmanaged sources (USB drives, SharePoint file shares, developer sideloading) and restricts APPX installation to managed channels only (Microsoft Store for Business, Intune managed app, or enterprise signed MSIX bundles). " +
                     "MSIX sideloading is the primary vector for distributing trojanised or repackaged application packages disguised as legitimate enterprise tools. An attacker who sends a malicious MSIX package via email or file share (and the user's developer mode is enabled) can have arbitrary code run in a package context with the package's declared capabilities. Disabling sideloading from unmanaged sources blocks this vector without affecting Store and Intune-delivered MSIX packages.",
                 Tags = ["enterprise-deploy", "sideloading", "appx", "msix", "developer-mode", "trojan"],
@@ -2388,7 +2388,7 @@ internal static class PolicyEnterprise
             {
                 Id = "erdeploy-require-signed-deployment-packages",
                 Label = "Enterprise Deploy: Require Cryptographic Signing for All Deployment Packages",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description = "Sets RequireSignedPackages=1 in EnterpriseResourceManager policy. Requires that every application package deployed through the enterprise resource manager is digitally signed by a certificate in the enterprise trusted publisher store before the installation is allowed to proceed, blocking unsigned or improperly signed packages from executing. " +
                     "Unsigned deployment packages can be tampered with between the time they are created and the time they are deployed. An attacker who compromises a Distribution Point or content staging server can replace a legitimate installer package with a trojanised version. Without package signing verification, the deployment infrastructure distributes the malicious version to all targeted endpoints without any integrity check. Requiring signed packages ensures only packages that passed code signing (and therefore were authenticated at signing time) are installed.",
                 Tags = ["enterprise-deploy", "package-signing", "integrity", "distribution-point", "code-signing"],
@@ -2405,7 +2405,7 @@ internal static class PolicyEnterprise
             {
                 Id = "erdeploy-block-store-install-during-maintenance",
                 Label = "Enterprise Deploy: Block Microsoft Store Application Updates During Active Deployment Window",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description = "Sets BlockStoreInstallDuringDeployment=1 in EnterpriseResourceManager policy. Suspends automatic Microsoft Store application updates from downloading and installing during active enterprise deployment windows, preventing Store-initiated background installs from competing with enterprise deployment bandwidth and CPU allocations. " +
                     "Large enterprise deployments (OS feature updates, security patches for hundreds of applications) consume significant bandwidth from Distribution Points. If the Microsoft Store simultaneously triggers background app updates across the same endpoints during the deployment window, both processes compete for disk I/O, network bandwidth, and Windows Installer service locking. This can cause enterprise deployments to fail with 'service busy' errors or time out due to resource contention. Blocking Store updates during scheduled deployment windows eliminates this interference.",
                 Tags = ["enterprise-deploy", "store", "bandwidth", "contention", "deployment-window"],
@@ -2422,7 +2422,7 @@ internal static class PolicyEnterprise
             {
                 Id = "erdeploy-enable-prerequisite-check-enforcement",
                 Label = "Enterprise Deploy: Enforce Prerequisite Dependency Checks Before Application Deployment",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description = "Sets EnforcePrerequisiteChecks=1 in EnterpriseResourceManager policy. Enforces that the installation of a dependent application is verified as successfully installed and functional before the enterprise resource manager proceeds with a higher-level application deployment that requires it as a prerequisite, rather than attempting the deployment and failing at runtime. " +
                     "Enterprise application deployments often have prerequisite chains: a LOB application may require a specific .NET runtime version, a specific redistributable, and a specific licence management service to be installed before it will work. Without prerequisite enforcement, all packages attempt installation in parallel, and the LOB application may fail (or partially install) because its prerequisites aren't available yet. Enforcing prerequisite checks runs the dependency chain in the correct order and stops the deployment if any prerequisite fails.",
                 Tags = ["enterprise-deploy", "prerequisites", "dependency", "deployment-order", "reliability"],
@@ -2450,7 +2450,7 @@ internal static class PolicyEnterprise
             {
                 Id = "entres-enable-enterprise-resource-audit",
                 Label = "Enable Audit Logging for Enterprise Resource Access Events",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -2467,7 +2467,7 @@ internal static class PolicyEnterprise
             {
                 Id = "entres-enforce-resource-access-policies",
                 Label = "Enforce Centralized Access Policies for Enterprise Resource Management",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -2484,7 +2484,7 @@ internal static class PolicyEnterprise
             {
                 Id = "entres-restrict-resource-sharing-to-domain",
                 Label = "Restrict Enterprise Resource Sharing to Domain-Authenticated Sessions",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -2501,7 +2501,7 @@ internal static class PolicyEnterprise
             {
                 Id = "entres-enable-data-classification-integration",
                 Label = "Enable Data Classification Integration with Enterprise Resource Policy",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -2518,7 +2518,7 @@ internal static class PolicyEnterprise
             {
                 Id = "entres-configure-resource-manager-logging",
                 Label = "Configure Verbose Logging for Enterprise Resource Manager Operations",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -2535,7 +2535,7 @@ internal static class PolicyEnterprise
             {
                 Id = "entres-enforce-resource-expiration-policy",
                 Label = "Enforce Expiration Policy for Temporary Enterprise Resource Access Grants",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -2552,7 +2552,7 @@ internal static class PolicyEnterprise
             {
                 Id = "entres-block-cross-tenant-resource-access",
                 Label = "Block Enterprise Resource Access from External Tenant Identities",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -2569,7 +2569,7 @@ internal static class PolicyEnterprise
             {
                 Id = "entres-enforce-resource-location-restriction",
                 Label = "Restrict Enterprise Resource Access to Organizational Network Locations",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -2586,7 +2586,7 @@ internal static class PolicyEnterprise
             {
                 Id = "entres-enable-resource-health-monitoring",
                 Label = "Enable Health Monitoring for Enterprise Resource Availability and Integrity",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -2603,7 +2603,7 @@ internal static class PolicyEnterprise
             {
                 Id = "entres-enforce-resource-naming-standards",
                 Label = "Enforce Naming Standards for Enterprise Resource Registration and Discovery",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -2631,7 +2631,7 @@ internal static class PolicyEnterprise
             {
                 Id = "esroam-disable-app-setting-sync",
                 Label = "Enterprise State Roaming: Disable Application Settings Sync",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description = "Prevents Windows from syncing application settings (e.g., browser preferences, UWP app configuration) to Azure AD / Microsoft account cloud storage via Enterprise State Roaming. Application settings often contain business-critical customizations; roaming them to cloud storage creates data residency concerns and can cause settings to propagate to personal devices using the same account.",
                 Tags = ["state roaming", "sync", "app settings", "azure ad", "policy"],
                 NeedsAdmin = true,
@@ -2648,7 +2648,7 @@ internal static class PolicyEnterprise
             {
                 Id = "esroam-disable-start-layout-sync",
                 Label = "Enterprise State Roaming: Disable Start Menu Layout Sync",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description = "Disables synchronization of the Windows Start layout (Start screen tile arrangement, pinned apps, size configuration) across devices enrolled in Enterprise State Roaming. In managed environments where Start menus are deployed via Group Policy or provisioning packages, cloud roaming of Start layout can overwrite the IT-managed layout, creating inconsistency across machines.",
                 Tags = ["state roaming", "sync", "start menu", "layout", "policy"],
                 NeedsAdmin = true,
@@ -2665,7 +2665,7 @@ internal static class PolicyEnterprise
             {
                 Id = "esroam-disable-desktop-theme-sync",
                 Label = "Enterprise State Roaming: Disable Desktop Theme Sync",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description = "Prevents Windows desktop themes (wallpaper, accent color, visual effects, window transparency) from synchronizing across devices. While cosmetic, theme sync can override corporate branding standards (desktop wallpapers, accent colors mandated by IT) when the same account logs in on different managed computers or when personal account themes overwrite work account settings.",
                 Tags = ["state roaming", "sync", "theme", "desktop", "policy"],
                 NeedsAdmin = true,
@@ -2682,7 +2682,7 @@ internal static class PolicyEnterprise
             {
                 Id = "esroam-disable-browser-setting-sync",
                 Label = "Enterprise State Roaming: Disable Web Browser Settings Sync",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description = "Stops the Windows Settings Sync provider from roaming browser-related settings (favorites, history sync pointers) through the ESR (Enterprise State Roaming) channel. Note: this controls the Windows-level sync channel, not the browser's own sync channel. Browser favorites should be managed via browser-specific policies (see Edge/Chrome policy modules).",
                 Tags = ["state roaming", "sync", "browser", "favorites", "policy"],
                 NeedsAdmin = true,
@@ -2699,7 +2699,7 @@ internal static class PolicyEnterprise
             {
                 Id = "esroam-disable-password-sync",
                 Label = "Enterprise State Roaming: Disable Password Settings Sync",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description = "Prevents Windows credential and password hashes from being synchronized through the Enterprise State Roaming channel to Azure AD cloud storage. Password roaming via ESR is distinct from Azure AD seamless SSO and may involve credential material being persisted in a cloud-accessible store. In high-security environments, all credential handling must be on-premises only.",
                 Tags = ["state roaming", "sync", "password", "credentials", "policy"],
                 NeedsAdmin = true,
@@ -2716,7 +2716,7 @@ internal static class PolicyEnterprise
             {
                 Id = "esroam-disable-app-sync-setting",
                 Label = "Enterprise State Roaming: Disable App Sync via ESR Channel",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description = "Disables the specific ESR sync provider for application data packages (UWP AppX app state, configuration blobs stored in the cloud). App sync allows UWP apps to restore their last-used state—including user-typed data—when the same account signs in on another device. For apps that handle sensitive data (forms, documents), roaming this state creates residual data in Azure.",
                 Tags = ["state roaming", "sync", "app data", "uwp", "policy"],
                 NeedsAdmin = true,
@@ -2733,7 +2733,7 @@ internal static class PolicyEnterprise
             {
                 Id = "esroam-block-user-override-setting-sync",
                 Label = "Enterprise State Roaming: Block User Override of Settings Sync Policy",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description = "Prevents users from re-enabling settings synchronization that has been disabled by Group Policy. Without this policy, a standard user can navigate to Windows Settings → Accounts → Sync your settings and re-enable options that the admin has turned off. This policy ensures sync restrictions are permanent and cannot be overridden by end users.",
                 Tags = ["state roaming", "sync", "user override", "restriction", "policy"],
                 NeedsAdmin = true,
@@ -2750,7 +2750,7 @@ internal static class PolicyEnterprise
             {
                 Id = "esroam-block-user-override-app-sync",
                 Label = "Enterprise State Roaming: Block User Override of App Settings Sync Policy",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description = "Prevents users from overriding the Group Policy that disables application settings synchronization. The Windows sync settings UI allows users to individually toggle sync categories; this policy forces DisableApplicationSettingSync to be admin-enforced and uneditable, ensuring corporate devices cannot roam application configuration data regardless of user preference.",
                 Tags = ["state roaming", "sync", "app settings", "user override", "policy"],
                 NeedsAdmin = true,
@@ -2767,7 +2767,7 @@ internal static class PolicyEnterprise
             {
                 Id = "esroam-block-user-override-start-layout",
                 Label = "Enterprise State Roaming: Block User Override of Start Layout Sync Policy",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description = "Prevents users from re-enabling Start menu layout synchronization after it has been disabled by Group Policy. In environments with GPO-deployed Start menus, users should not be able to revert to a cloud-synced layout that was potentially configured on a personal device or a different organizational unit, as this undermines the standardized desktop configuration management.",
                 Tags = ["state roaming", "sync", "start menu", "user override", "policy"],
                 NeedsAdmin = true,
@@ -2784,7 +2784,7 @@ internal static class PolicyEnterprise
             {
                 Id = "esroam-disable-device-account-sync",
                 Label = "Enterprise State Roaming: Disable Device Account Settings Sync",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description = "Disables synchronization of device account settings (Microsoft account email app state, mail account configuration, calendar sync settings) through Enterprise State Roaming. On managed corporate devices where mail clients are configured centrally via MDM profiles or Exchange Autodiscover, preventing cloud-roaming of account settings avoids conflicts between centrally-pushed and user-synced configurations.",
                 Tags = ["state roaming", "sync", "device account", "email", "policy"],
                 NeedsAdmin = true,
@@ -2813,7 +2813,7 @@ internal static class PolicyEnterprise
             {
                 Id = "folderredir-enable-cache-rename",
                 Label = "GPO Folder Redirection: Enable Cache Rename on Redirect",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description = "Enables cache renaming when a redirected folder path changes. When a folder redirection target is updated via Group Policy (e.g., moving a redirected My Documents share from an old file server to a new one), Windows can seamlessly rename the local offline-files cache entry to match the new UNC path. Without this setting, the client cache may retain stale entries pointing to the old server, causing offline file sync conflicts.",
                 Tags = ["folder redirection", "offline files", "gpo", "cache", "policy"],
                 NeedsAdmin = true,
@@ -2830,7 +2830,7 @@ internal static class PolicyEnterprise
             {
                 Id = "folderredir-disable-user-profile-roaming",
                 Label = "GPO Folder Redirection: Disable User Profile Roaming Download",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description = "Prevents Windows from downloading a roaming user profile from the network during logon when the user profile server is unavailable. Without this policy, Windows waits for the roaming profile to download (up to the profile server timeout) before allowing login. Blocking this fallback download prevents slow logons when profile servers are down while ensuring that local cached profiles are used immediately.",
                 Tags = ["folder redirection", "roaming profile", "logon", "performance", "policy"],
                 NeedsAdmin = true,
@@ -2847,7 +2847,7 @@ internal static class PolicyEnterprise
             {
                 Id = "folderredir-disable-roaming-profile-quota-notification",
                 Label = "GPO Folder Redirection: Disable Roaming Profile Quota Warning Notification",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description = "Suppresses the roaming profile quota warning balloon notification that appears in the notification area when a user's roaming profile approaches its storage quota. In enterprise environments where profile size is managed through other mechanisms (e.g., folder redirection, profile monitoring tools), these notifications create user confusion and help desk calls without providing actionable guidance for end users.",
                 Tags = ["folder redirection", "roaming profile", "quota", "notification", "policy"],
                 NeedsAdmin = true,
@@ -2864,7 +2864,7 @@ internal static class PolicyEnterprise
             {
                 Id = "folderredir-wait-for-policy-at-logon",
                 Label = "GPO Folder Redirection: Wait for Group Policy at Logon (Background Sync Block)",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description = "Forces Windows to perform a synchronous (blocking) Group Policy application at logon rather than applying folder redirection policies in the background after the user is already logged in. Without this setting, users may briefly see their unredirected local Desktop and Documents folders before the redirection takes effect, resulting in files being saved to the wrong location. Synchronous policy application eliminates this window.",
                 Tags = ["folder redirection", "group policy", "logon", "synchronous", "policy"],
                 NeedsAdmin = true,
@@ -2881,7 +2881,7 @@ internal static class PolicyEnterprise
             {
                 Id = "folderredir-redirect-local-profile-to-network",
                 Label = "GPO Folder Redirection: Grant User Exclusive Rights to Redirected Folder",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description = "Grants the user exclusive NTFS permissions on their redirected folder target when the folder redirection policy first creates it on the file server. Without this setting, the Administrators group retains access to all redirected folders, enabling administrators to read user-redirected documents. Granting exclusive user rights is a privacy and security best practice that ensures sensitive user data in redirected folders is only accessible to the owning account.",
                 Tags = ["folder redirection", "permissions", "ntfs", "privacy", "policy"],
                 NeedsAdmin = true,
@@ -2898,7 +2898,7 @@ internal static class PolicyEnterprise
             {
                 Id = "folderredir-use-localized-subfolder-names",
                 Label = "GPO Folder Redirection: Use Localized Subfolder Names",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description = "Configures folder redirection to use the localized (OS language-specific) names for redirected subfolders on the file server rather than English names. In multi-language organizations where different users log on with different Windows UI languages, the names of redirected subfolder paths (e.g., Documents vs. Documenti vs. Dokumente) can vary unless this policy standardizes them to the localized folder names per user.",
                 Tags = ["folder redirection", "localization", "subfolder names", "policy"],
                 NeedsAdmin = true,
@@ -2915,7 +2915,7 @@ internal static class PolicyEnterprise
             {
                 Id = "folderredir-move-contents-on-redirect",
                 Label = "GPO Folder Redirection: Move Contents to Redirected Path",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description = "Instructs Windows to automatically move the contents of a folder from its original local location to the new UNC redirect target when folder redirection is first applied. Without this policy, existing local files stay in place and only new files go to the redirect target, leaving users with data split across two locations. Enabling content migration ensures a complete transition to the managed file server path.",
                 Tags = ["folder redirection", "content migration", "data move", "gpo", "policy"],
                 NeedsAdmin = true,
@@ -2932,7 +2932,7 @@ internal static class PolicyEnterprise
             {
                 Id = "folderredir-disable-unc-path-hardening-bypass",
                 Label = "GPO Folder Redirection: Block UNC Hardening Bypass for Redirected Paths",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description = "Prevents applications from bypassing UNC path hardening (SMB signing requirements) for redirected folder UNC targets. Windows allows some UNC access to bypass signing requirements for specific paths. This policy ensures that even though folder redirection targets are trusted by Windows, they are still subject to SMB signing requirements to prevent man-in-the-middle attacks on the file server connection carrying redirected folder traffic.",
                 Tags = ["folder redirection", "unc hardening", "smb signing", "security", "policy"],
                 NeedsAdmin = true,
@@ -2949,7 +2949,7 @@ internal static class PolicyEnterprise
             {
                 Id = "folderredir-configure-profile-slow-link-detection",
                 Label = "GPO Folder Redirection: Configure Slow-Link Detection Threshold",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description = "Configures the network bandwidth threshold below which Windows considers the connection to the roaming profile server as a 'slow link', triggering use of the local cached profile instead of downloading the full remote profile. Setting this to the Microsoft-recommended value of 500 kbps ensures that even on moderate WAN links, users get fast logons while good connections still get the full roaming/redirected experience.",
                 Tags = ["folder redirection", "slow link", "profile", "bandwidth", "policy"],
                 NeedsAdmin = true,
@@ -2966,7 +2966,7 @@ internal static class PolicyEnterprise
             {
                 Id = "folderredir-enable-profile-migration-on-domain-join",
                 Label = "GPO Folder Redirection: Enable Local Profile Migration on Domain Join",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description = "Permits migration of the local user profile to the roaming profile path when a user first logs in after a machine is joined to a domain. Without this policy, domain logons create a new empty profile and the user's existing local profile data (desktop files, AppData settings) is left behind in the local profile. Enabling migration ensures the first domain logon seamlessly carries over all existing local user data.",
                 Tags = ["folder redirection", "profile migration", "domain join", "logon", "policy"],
                 NeedsAdmin = true,
@@ -2994,7 +2994,7 @@ internal static class PolicyEnterprise
             {
                 Id = "gposcripts-run-logon-script-sync",
                 Label = "GPO Scripts: Run Logon Scripts Synchronously",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description = "Configures Windows to run all Group Policy logon scripts synchronously and display the desktop only after all logon scripts have completed. By default, Windows may display the desktop before all logon scripts finish, which can result in users opening applications before drive mappings, printer connections, or environment variables are established by logon scripts. Synchronous execution ensures scripts complete before the user session is accessible.",
                 Tags = ["gpo scripts", "logon scripts", "synchronous", "startup", "policy"],
                 NeedsAdmin = true,
@@ -3011,7 +3011,7 @@ internal static class PolicyEnterprise
             {
                 Id = "gposcripts-run-startup-script-sync",
                 Label = "GPO Scripts: Run Startup Scripts Synchronously",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description = "Configures Windows to run all Computer Configuration startup scripts one at a time and sequentially before the logon prompt appears. Without this setting, startup scripts may run asynchronously in the background, meaning critical system initialization scripts (e.g., disk encryption unlock, certificate enrollment, MDM check-in) may not complete before a user logs in, potentially resulting in incomplete system state at logon.",
                 Tags = ["gpo scripts", "startup scripts", "synchronous", "boot", "policy"],
                 NeedsAdmin = true,
@@ -3028,7 +3028,7 @@ internal static class PolicyEnterprise
             {
                 Id = "gposcripts-run-legacy-logon-hidden",
                 Label = "GPO Scripts: Run Legacy Logon Scripts Visible but Silent",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description = "Forces legacy logon scripts (those defined in the user profile properties of Active Directory) to run visible to the user but without a separate CMD window. By default, legacy logon scripts (as distinct from Group Policy logon scripts) may flash console windows briefly. This policy suppresses the command prompt window while still allowing the script to run, providing a cleaner logon experience without confusing users with flashing black windows.",
                 Tags = ["gpo scripts", "logon scripts", "legacy", "hidden window", "policy"],
                 NeedsAdmin = true,
@@ -3045,7 +3045,7 @@ internal static class PolicyEnterprise
             {
                 Id = "gposcripts-set-max-script-wait-time",
                 Label = "GPO Scripts: Set Maximum Script Runtime Timeout (10 minutes)",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description = "Sets the maximum time Windows will wait for a Group Policy script (startup, logon, logoff, or shutdown) to complete before forcibly terminating it. The default is 600 seconds (10 minutes). Scripts that exceed this timeout are terminated without completing. Setting this explicitly prevents runaway scripts from hanging the logon/logoff sequence indefinitely, which can leave the machine in an unresponsive state.",
                 Tags = ["gpo scripts", "timeout", "max wait", "startup shutdown", "policy"],
                 NeedsAdmin = true,
@@ -3062,7 +3062,7 @@ internal static class PolicyEnterprise
             {
                 Id = "gposcripts-hide-startup-scripts",
                 Label = "GPO Scripts: Hide Startup Scripts (No Status Message)",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description = "Suppresses the 'Running startup scripts...' status message and progress screen that Windows displays during boot when Group Policy startup scripts are executing. In environments where startup scripts handle sensitive operations (certificate enrollment, TPM initialization commands, encrypted volume mounting), displaying the script status messages onscreen may expose the types of security operations to anyone observing the boot screen.",
                 Tags = ["gpo scripts", "startup scripts", "hidden", "status message", "policy"],
                 NeedsAdmin = true,
@@ -3079,7 +3079,7 @@ internal static class PolicyEnterprise
             {
                 Id = "gposcripts-hide-logon-scripts",
                 Label = "GPO Scripts: Hide Logon Scripts (No Progress Window)",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description = "Hides the 'Applying your personal settings...' and similar logon script progress messages that appear during user logon in verbose mode. While informative for administrators, these messages reveal that Group Policy logon scripts are running, potentially exposing script categories to end users. In secure environments, the logon process should be opaque — completing silently and presenting the desktop only when ready.",
                 Tags = ["gpo scripts", "logon scripts", "hidden", "progress window", "policy"],
                 NeedsAdmin = true,
@@ -3096,7 +3096,7 @@ internal static class PolicyEnterprise
             {
                 Id = "gposcripts-hide-logoff-scripts",
                 Label = "GPO Scripts: Hide Logoff Scripts (No Logoff Window)",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description = "Suppresses the window that appears when Group Policy logoff scripts are executing at user sign-out. When logoff scripts clean up user sessions (removing temp credentials, wiping browser profiles, revoking certificates), showing the progress window to the user is unnecessary and can lead users to terminate the logoff early by pressing the power button, potentially leaving cleanup scripts incomplete.",
                 Tags = ["gpo scripts", "logoff scripts", "hidden", "sign-out", "policy"],
                 NeedsAdmin = true,
@@ -3113,7 +3113,7 @@ internal static class PolicyEnterprise
             {
                 Id = "gposcripts-hide-shutdown-scripts",
                 Label = "GPO Scripts: Hide Shutdown Scripts (Silent System Shutdown)",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description = "Suppresses the shutdown script progress window that shows when Group Policy Computer Configuration shutdown scripts run during system power-down. Shutdown scripts commonly perform operations such as disk encryption key cleanup, network session teardown, and compliance logging. Hiding the progress window provides a cleaner shutdown experience and prevents disclosure of the shutdown script sequence to onlookers.",
                 Tags = ["gpo scripts", "shutdown scripts", "hidden", "system shutdown", "policy"],
                 NeedsAdmin = true,
@@ -3130,7 +3130,7 @@ internal static class PolicyEnterprise
             {
                 Id = "gposcripts-run-scripts-first-at-user-logon",
                 Label = "GPO Scripts: Run User Logon Scripts Before Group Policy Logon Scripts",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description = "Forces user-level logon scripts (defined in profile properties) to run before the Group Policy client completes processing Computer and User Configuration logon scripts. In some deployment scenarios, user-specific scripts (which map personal drives or configure user-specific settings) must run before broader GPO changes are applied. This ordering ensures user context is established before group-level policies modify the environment.",
                 Tags = ["gpo scripts", "logon scripts", "run order", "user scripts", "policy"],
                 NeedsAdmin = true,
@@ -3147,7 +3147,7 @@ internal static class PolicyEnterprise
             {
                 Id = "gposcripts-set-max-noninteractive-runtime",
                 Label = "GPO Scripts: Set Maximum Non-Interactive Script Runtime (5 minutes)",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description = "Sets the maximum time a non-interactive Group Policy script (startup, shutdown, logon, logoff scripts running in non-interactive mode) is allowed to run. Setting this to 300 seconds (5 minutes) provides a tighter timeout than the default 600 seconds. For background scripts that should complete quickly, this reduces the window during which a script error or infinite loop delays the logon or shutdown sequence.",
                 Tags = ["gpo scripts", "timeout", "non-interactive", "runtime limit", "policy"],
                 NeedsAdmin = true,
@@ -3180,7 +3180,7 @@ internal static class PolicyEnterprise
                 {
                     Id = "gppol-disable-slow-link-detection",
                     Label = "Disable Slow-Link GP Processing Skip",
-                    Category = "Enterprise Management Policy",
+                    Category = "System",
                     Description =
                         "By default, some Group Policy CSEs (such as Software Installation) are skipped when a slow network link is detected. Disabling this exception ensures all policies are fully applied even over slow connections. Default: slow-link skip enabled. Recommended: 1 on all managed endpoints.",
                     Tags = ["group-policy", "slow-link", "processing", "security", "policy"],
@@ -3217,7 +3217,7 @@ internal static class PolicyEnterprise
                 {
                     Id = "gppol-force-reprocess-changed",
                     Label = "Force Reprocessing of Changed GP Objects",
-                    Category = "Enterprise Management Policy",
+                    Category = "System",
                     Description =
                         "Instructs the Group Policy client to reapply all policy settings at each background refresh cycle, even if no GPO has changed since the last refresh. Ensures policy drift (caused by local changes) is corrected at the next refresh. Default: only changed GPOs are reprocessed. Recommended: 1.",
                     Tags = ["group-policy", "refresh", "reprocess", "compliance", "policy"],
@@ -3254,7 +3254,7 @@ internal static class PolicyEnterprise
                 {
                     Id = "gppol-set-refresh-interval-30min",
                     Label = "Set GP Background Refresh Interval to 30 Minutes",
-                    Category = "Enterprise Management Policy",
+                    Category = "System",
                     Description =
                         "Reduces the background Group Policy refresh interval from the default 90 minutes (+30-minute random offset) to 30 minutes. Faster refresh means policy changes reach devices sooner and local configuration drift is corrected more quickly. Default: 90 minutes. Recommended: 30 for dynamic policy environments.",
                     Tags = ["group-policy", "refresh-interval", "compliance", "policy"],
@@ -3271,7 +3271,7 @@ internal static class PolicyEnterprise
                 {
                     Id = "gppol-set-refresh-offset-0",
                     Label = "Set GP Refresh Random Offset to 0",
-                    Category = "Enterprise Management Policy",
+                    Category = "System",
                     Description =
                         "Removes the random time offset added to each policy refresh interval. The default offset spreads refresh load across the interval; setting it to 0 makes refreshes predictable and easier to correlate with compliance scan windows. Default: 30-minute random offset. Recommended: 0 in controlled networks.",
                     Tags = ["group-policy", "refresh-interval", "offset", "policy"],
@@ -3288,7 +3288,7 @@ internal static class PolicyEnterprise
                 {
                     Id = "gppol-enable-verbose-logging",
                     Label = "Enable Verbose GP Processing Logging",
-                    Category = "Enterprise Management Policy",
+                    Category = "System",
                     Description =
                         "Writes detailed diagnostic information about each Group Policy processing cycle to the Group Policy Operational event log. Enables troubleshooting of GPO application failures and security audit of policy application. Default: limited operational logging. Recommended: 1 on managed endpoints.",
                     Tags = ["group-policy", "logging", "audit", "diagnostics", "policy"],
@@ -3305,7 +3305,7 @@ internal static class PolicyEnterprise
                 {
                     Id = "gppol-disable-user-gpo-override",
                     Label = "Prevent Users from Overriding Group Policy Settings",
-                    Category = "Enterprise Management Policy",
+                    Category = "System",
                     Description =
                         "Blocks users from modifying registry keys that are managed by Group Policy, even when those keys are under HKCU. Without this, a technically savvy user could temporarily override a GPO setting by writing directly to HKCU. Default: HKCU writes allowed. Recommended: 1 on high-security desktops.",
                     Tags = ["group-policy", "user-override", "security", "hkcu", "policy"],
@@ -3322,7 +3322,7 @@ internal static class PolicyEnterprise
                 {
                     Id = "gppol-apply-during-logon",
                     Label = "Apply Group Policy Synchronously at Logon",
-                    Category = "Enterprise Management Policy",
+                    Category = "System",
                     Description =
                         "Forces Group Policy to be applied synchronously at logon — the desktop does not appear until all policies have been processed. Prevents users from interacting with the desktop before security policies (such as drive mappings, logon scripts, and folder redirection) are applied. Default: async logon on workstations. Recommended: 1.",
                     Tags = ["group-policy", "logon", "synchronous", "security", "policy"],
@@ -3339,7 +3339,7 @@ internal static class PolicyEnterprise
                 {
                     Id = "gppol-log-rsop-data",
                     Label = "Enable RSoP (Resultant Set of Policy) Logging",
-                    Category = "Enterprise Management Policy",
+                    Category = "System",
                     Description =
                         "Enables collection and logging of Resultant Set of Policy data, which records exactly which policies are applied to each user and computer. Required for the 'Logging' mode of Group Policy Modeling and for compliance audits that verify policy coverage. Default: RSoP logging enabled but may be disabled by some hardening guides. Recommended: 1.",
                     Tags = ["group-policy", "rsop", "logging", "audit", "compliance", "policy"],
@@ -3356,7 +3356,7 @@ internal static class PolicyEnterprise
                 {
                     Id = "gppol-block-local-gpo",
                     Label = "Disable Local Group Policy Objects for Domain Members",
-                    Category = "Enterprise Management Policy",
+                    Category = "System",
                     Description =
                         "Prevents Local GPOs (lgpo.exe modifications, Local Security Policy) from being applied on domain-joined machines. When domain GPOs manage all settings, local GPOs can introduce conflicts or be used to circumvent domain policy. Default: local GPOs applied. Recommended: 1 on all domain-joined machines.",
                     Tags = ["group-policy", "local-gpo", "domain", "security", "policy"],
@@ -3373,7 +3373,7 @@ internal static class PolicyEnterprise
                 {
                     Id = "gppol-require-secure-channel",
                     Label = "Require Secure Channel for GP Download",
-                    Category = "Enterprise Management Policy",
+                    Category = "System",
                     Description =
                         "Forces Windows to use a signed and encrypted secure channel (Kerberos) when downloading GPOs from the domain controller. Prevents man-in-the-middle attacks that inject malicious policy settings during transport. Default: secure channel used but not strictly enforced for all GPOs. Recommended: 1.",
                     Tags = ["group-policy", "secure-channel", "kerberos", "security", "policy"],
@@ -3402,7 +3402,7 @@ internal static class PolicyEnterprise
             {
                 Id = "hotpatch-enable-hotpatch-updates",
                 Label = "Enable Windows Hotpatch (Live Kernel Patching)",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description = "Enables Windows Hotpatch, which installs security patches directly into running kernel and system process memory without requiring a reboot. Dramatically reduces downtime for critical servers and VMs while keeping them current.",
                 Tags = ["hotpatch", "live-patching", "kernel", "windows-update", "reboot-less"],
                 NeedsAdmin = true,
@@ -3420,7 +3420,7 @@ internal static class PolicyEnterprise
             {
                 Id = "hotpatch-disable-hotpatch-updates",
                 Label = "Disable Windows Hotpatch Updates",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description = "Administratively disables the Hotpatch update channel, reverting the device to the traditional monthly Update Tuesday update cycle that installs patches via a reboot. Suitable for environments that require deterministic full-restart update cycles.",
                 Tags = ["hotpatch", "disable", "windows-update", "patching", "control"],
                 NeedsAdmin = true,
@@ -3438,7 +3438,7 @@ internal static class PolicyEnterprise
             {
                 Id = "hotpatch-require-code-integrity",
                 Label = "Require Code Integrity Validation for Hotpatch Modules",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description = "Enforces Authenticode signature verification for every Hotpatch module before it is loaded into kernel memory. Prevents unsigned or tampered patches from being applied even if a threat actor gains WU delivery access.",
                 Tags = ["hotpatch", "code-integrity", "signature", "authenticode", "security"],
                 NeedsAdmin = true,
@@ -3456,7 +3456,7 @@ internal static class PolicyEnterprise
             {
                 Id = "hotpatch-block-rollback",
                 Label = "Block Hotpatch Rollback to Unpatched State",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description = "Prevents administrators and automated tools from rolling back applied hotpatch modules to a pre-patched kernel state. Ensures regulatory compliance environments maintain a continuous patched state.",
                 Tags = ["hotpatch", "rollback", "compliance", "integrity", "security"],
                 NeedsAdmin = true,
@@ -3474,7 +3474,7 @@ internal static class PolicyEnterprise
             {
                 Id = "hotpatch-audit-patch-events",
                 Label = "Enable Hotpatch Apply and Fail Event Auditing",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description = "Enables detailed event logging for every Hotpatch application attempt, whether successful or failed. Events include the patch identifier, timestamp, module hash, and failure reason code for SIEM ingestion.",
                 Tags = ["hotpatch", "audit", "event-log", "siem", "monitoring"],
                 NeedsAdmin = true,
@@ -3492,7 +3492,7 @@ internal static class PolicyEnterprise
             {
                 Id = "hotpatch-limit-max-deferred-reboots",
                 Label = "Limit Maximum Reboots Deferred by Hotpatch to 2 Baseline Periods",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description = "Caps the number of consecutive Update Tuesday cycles that Hotpatch can defer a baseline (reboot-required) update. After the configured number of hotpatch-only cycles, a baseline restart is mandated to consolidate all patches.",
                 Tags = ["hotpatch", "baseline-reboot", "deferred-restart", "patch-cycle", "control"],
                 NeedsAdmin = true,
@@ -3510,7 +3510,7 @@ internal static class PolicyEnterprise
             {
                 Id = "hotpatch-schedule-baseline-restart",
                 Label = "Schedule Mandatory Baseline Restart Outside Business Hours",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description = "Configures hotpatch baseline restarts to occur outside defined active hours (default: 2:00 AM), avoiding interruption of user sessions. When a baseline reboot is required, it is deferred to the next maintenance window.",
                 Tags = ["hotpatch", "baseline-reboot", "active-hours", "maintenance-window", "scheduling"],
                 NeedsAdmin = true,
@@ -3528,7 +3528,7 @@ internal static class PolicyEnterprise
             {
                 Id = "hotpatch-disable-telemetry-upload",
                 Label = "Disable Hotpatch Telemetry Upload to Microsoft",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description = "Prevents the Hotpatch subsystem from uploading patch application telemetry, timing data, and failure diagnostics to Microsoft. Retains telemetry locally in the event log only for internal analysis.",
                 Tags = ["hotpatch", "telemetry", "privacy", "diagnostic-data", "cloud"],
                 NeedsAdmin = true,
@@ -3546,7 +3546,7 @@ internal static class PolicyEnterprise
             {
                 Id = "hotpatch-exclude-driver-updates",
                 Label = "Exclude Driver Updates from Hotpatch Delivery Channel",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description = "Restricts the Hotpatch delivery channel to security patches only, excluding optional and driver updates. Driver changes often require a full reboot for hardware initialisation; delivering them via Hotpatch risks incomplete initialisation.",
                 Tags = ["hotpatch", "driver-updates", "exclusion", "windows-update", "stability"],
                 NeedsAdmin = true,
@@ -3564,7 +3564,7 @@ internal static class PolicyEnterprise
             {
                 Id = "hotpatch-require-managed-device-enrollment",
                 Label = "Require Managed Device Enrollment for Hotpatch Activation",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description = "Permits Hotpatch activation only on devices enrolled in a compatible MDM solution (Intune, MEM). Unmanaged devices fall back to the standard WU reboot channel. Ensures compliance-tracking for reboot-free patch deployments.",
                 Tags = ["hotpatch", "mdm", "intune", "device-enrollment", "compliance"],
                 NeedsAdmin = true,
@@ -3594,7 +3594,7 @@ internal static class PolicyEnterprise
                 {
                     Id = "hjdns-enable-direct-hybrid-join",
                     Label = "Enable Managed Domain Hybrid Join (No ADFS)",
-                    Category = "Enterprise Management Policy",
+                    Category = "System",
                     Description =
                         "Enables direct Hybrid Azure AD Join for managed domains without AD FS federation, allowing devices to register with AAD using username/password and SCP discovery.",
                     Tags = ["hybrid-join", "azure-ad", "managed-domain", "policy"],
@@ -3611,7 +3611,7 @@ internal static class PolicyEnterprise
                 {
                     Id = "hjdns-block-unregistered-domain-devices",
                     Label = "Block Hybrid Join from Unregistered DNS Domains",
-                    Category = "Enterprise Management Policy",
+                    Category = "System",
                     Description =
                         "Prevents devices in DNS domains not listed in the Hybrid Join SCP from attempting to register with Azure AD, blocking rogue machines on unknown domains from joining.",
                     Tags = ["hybrid-join", "dns", "domain", "security", "policy"],
@@ -3628,7 +3628,7 @@ internal static class PolicyEnterprise
                 {
                     Id = "hjdns-force-scp-lookup",
                     Label = "Force Service Connection Point Lookup for Hybrid Join",
-                    Category = "Enterprise Management Policy",
+                    Category = "System",
                     Description =
                         "Forces Azure AD Hybrid Join to use Service Connection Point (SCP) in Active Directory for tenant discovery instead of the local registry, ensuring centrally managed tenant targeting.",
                     Tags = ["hybrid-join", "scp", "active-directory", "policy"],
@@ -3645,7 +3645,7 @@ internal static class PolicyEnterprise
                 {
                     Id = "hjdns-disable-cloud-ap-tenant-override",
                     Label = "Disable Cloud-AP Tenant Override for Hybrid Join",
-                    Category = "Enterprise Management Policy",
+                    Category = "System",
                     Description =
                         "Blocks user-level Cloud AP (Azure AD Authentication Plugin) tenant override that can redirect a device's hybrid join to a different AAD tenant ID.",
                     Tags = ["hybrid-join", "cloud-ap", "tenant", "security", "policy"],
@@ -3662,7 +3662,7 @@ internal static class PolicyEnterprise
                 {
                     Id = "hjdns-isolate-enterprise-endpoints",
                     Label = "Isolate Enterprise Network Endpoints for Cloud Authentication",
-                    Category = "Enterprise Management Policy",
+                    Category = "System",
                     Description =
                         "Configures Network Isolation policy to classify Microsoft cloud authentication endpoints as enterprise-owned, enabling Windows Information Protection to treat AAD traffic as internal.",
                     Tags = ["hybrid-join", "network-isolation", "wip", "policy"],
@@ -3679,7 +3679,7 @@ internal static class PolicyEnterprise
                 {
                     Id = "hjdns-block-non-domain-dns-fallback",
                     Label = "Block Non-Domain DNS Fallback During Hybrid Join",
-                    Category = "Enterprise Management Policy",
+                    Category = "System",
                     Description =
                         "Prevents the hybrid join process from falling back to public DNS resolvers when the on-premises DNS server is unavailable, ensuring join only proceeds with trusted DNS resolution.",
                     Tags = ["hybrid-join", "dns-fallback", "security", "policy"],
@@ -3696,7 +3696,7 @@ internal static class PolicyEnterprise
                 {
                     Id = "hjdns-require-line-of-sight",
                     Label = "Require DC Line-of-Sight for Hybrid Join",
-                    Category = "Enterprise Management Policy",
+                    Category = "System",
                     Description =
                         "Requires line-of-sight to a domain controller (DC availability check) before allowing the hybrid join registration task to execute, preventing join failures when offline.",
                     Tags = ["hybrid-join", "domain-controller", "offline", "policy"],
@@ -3713,7 +3713,7 @@ internal static class PolicyEnterprise
                 {
                     Id = "hjdns-set-join-timeout",
                     Label = "Set Hybrid Join Task Timeout to 90 Seconds",
-                    Category = "Enterprise Management Policy",
+                    Category = "System",
                     Description =
                         "Caps the Hybrid Azure AD Join registration task at 90 seconds, preventing long hangs at logon when the join endpoint is unreachable.",
                     Tags = ["hybrid-join", "timeout", "policy"],
@@ -3730,7 +3730,7 @@ internal static class PolicyEnterprise
                 {
                     Id = "hjdns-disable-joined-device-local-admin",
                     Label = "Disable Local Admin Add via AAD Device Join",
-                    Category = "Enterprise Management Policy",
+                    Category = "System",
                     Description =
                         "Prevents the automatic addition of the joining user as a local administrator when a device is hybrid-joined to Azure AD, maintaining least-privilege on joined devices.",
                     Tags = ["hybrid-join", "local-admin", "least-privilege", "policy"],
@@ -3747,7 +3747,7 @@ internal static class PolicyEnterprise
                 {
                     Id = "hjdns-enable-hybrid-join-audit",
                     Label = "Enable Hybrid Join Operation Audit Logging",
-                    Category = "Enterprise Management Policy",
+                    Category = "System",
                     Description =
                         "Enables detailed audit event logging for Hybrid Azure AD Join operations, recording device registration attempts, successes, and failures to the Windows event log.",
                     Tags = ["hybrid-join", "audit", "logging", "policy"],
@@ -3775,7 +3775,7 @@ internal static class PolicyEnterprise
             {
                 Id = "intuneev-enable-device-health-reporting",
                 Label = "Intune: Enable Intune Device Health Reporting for Compliance Assessment",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description = "Sets EnableDeviceHealthReporting=1 in the MDM data collection policy. Enables the Intune client health reporting service which sends device health attestation data — TPM status, Secure Boot state, BitLocker encryption status, ELAM driver state, UEFI firmware version — to the Intune service for compliance policy evaluation. " +
                     "Intune's device compliance policies can gate conditional access (blocking Microsoft 365, SharePoint, or other Entra ID protected resources) based on device health. For health-based conditional access to function, the device must send health attestation reports. Disabling health reporting (or leaving it unconfigured) causes compliance status to show as 'Unknown', which depending on conditional access policy settings may either block all access or allow access by default for unknown-state devices.",
                 Tags = ["intune", "mdm", "health-reporting", "compliance", "tpm", "conditional-access"],
@@ -3792,7 +3792,7 @@ internal static class PolicyEnterprise
             {
                 Id = "intuneev-disable-mdm-diagnostic-telemetry-upload",
                 Label = "Intune: Disable Voluntary MDM Diagnostic Data Upload to Microsoft",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description = "Sets DisableMDMDiagnosticsTelemetry=1 in the MDM data collection policy. Stops the Intune MDM client from uploading optional diagnostic data about MDM client performance, error rates, and command processing latency to Microsoft's MDM service telemetry pipeline, separate from Windows diagnostic data. " +
                     "The MDM client telemetry pipeline transmits information about policy processing durations, enrollment command error codes, and sync performance metrics. While this data is used by Microsoft for service improvement and does not contain policy payload content, it reveals information about the organisation's governance structure: how many MDM commands are failing, which policy types are erroring, and whether device compliance is degrading. Disabling this prevents that metadata from leaving the organisation.",
                 Tags = ["intune", "mdm", "telemetry", "diagnostic-data", "privacy"],
@@ -3809,7 +3809,7 @@ internal static class PolicyEnterprise
             {
                 Id = "intuneev-require-enrollment-certificate",
                 Label = "Intune: Require PKI Certificate for MDM Enrollment Authentication",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description = "Sets RequireMDMEnrollmentCertificate=1 in the MDM data collection policy. Configures the MDM client to use a PKI client certificate issued by the internal CA for Intune enrollment authentication, rather than Microsoft Entra ID token-only authentication, providing a hardware-bound credential (certificate stored in TPM) alongside the Entra token. " +
                     "Token-based MDM enrollment (Entra ID access token only) is subject to token theft attacks — an attacker who steals an Entra ID access token from a device could initiate MDM enrollment of a hostile device. PKI certificate-based enrollment requires the certificate private key (ideally TPM-bound) in addition to the Entra token, making stolen tokens insufficient to enrol a new device because the certificate is non-exportable from the TPM.",
                 Tags = ["intune", "mdm", "enrollment", "certificate", "pki", "tpm"],
@@ -3826,7 +3826,7 @@ internal static class PolicyEnterprise
             {
                 Id = "intuneev-enable-mdm-event-audit-log",
                 Label = "Intune: Enable MDM Client Audit Logging for Every Policy Command",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description = "Sets EnableMDMEventAuditLog=1 in the MDM data collection policy. Enables detailed audit logging in the Windows MDM stack, causing every OMA-DM command received from the Intune service (CSP write, CSP delete, configuration profile apply, compliance check result) to generate an audit event in the Security event log. " +
                     "MDM policy delivery happens silently in the background. Without audit logging, there is no on-device record of which policies were applied, when they were applied, which settings were changed, and who authorised the change. This creates a gap in the device's audit trail — changes made via MDM bypass the traditional registry audit trail. With MDM audit logging enabled, all MDM-delivered policy changes generate Security events auditable by SIEM alongside other registry change events.",
                 Tags = ["intune", "mdm", "audit-log", "oma-dm", "csp", "siem"],
@@ -3843,7 +3843,7 @@ internal static class PolicyEnterprise
             {
                 Id = "intuneev-block-mdm-unenrollment",
                 Label = "Intune: Block User-Initiated MDM Unenrollment from Settings",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description = "Sets BlockMDMUnenrollment=1 in the MDM data collection policy. Prevents users from manually removing the MDM enrollment from Settings > Accounts > Access work or school, blocking self-service unenrollment that would remove all MDM-delivered policies, compliance baselines, and enterprise configuration from the device. " +
                     "A user who unenrols their device from MDM removes all Intune-delivered policies, certificates, and compliance configurations in a single action. This gives users the ability to escape enterprise security enforcement by removing device management. The device continues to function normally but is no longer managed, no longer receives security patches via Intune, no longer reports compliance, and potentially still has access to enterprise resources if conditional access doesn't immediately detect the unenrollment.",
                 Tags = ["intune", "mdm", "unenrollment", "lockout", "compliance"],
@@ -3860,7 +3860,7 @@ internal static class PolicyEnterprise
             {
                 Id = "intuneev-enforce-compliance-check-daily",
                 Label = "Intune: Enforce Daily MDM Compliance Check-In Regardless of Network",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description = "Sets EnforceComplianceCheckCadenceHours=24 in the MDM data collection policy. Forces the Intune MDM client to attempt a compliance status check-in to the Intune service at least once every 24 hours, even if the last successful sync was within the standard 8-hour interval, ensuring compliance policy is always evaluated at least daily. " +
                     "MDM sync frequency is typically driven by the Intune service push schedule. Devices that are frequently off the corporate network (remote workers using cellular connections) may go days between Intune syncs if they are not on Wi-Fi and data usage policies are aggressive. A device not syncing for multiple days may have outdated compliance status, allowing it to retain conditional access even after a compliance change (e.g., BitLocker requirement added) that it cannot meet.",
                 Tags = ["intune", "mdm", "compliance", "check-in", "cadence", "remote"],
@@ -3877,7 +3877,7 @@ internal static class PolicyEnterprise
             {
                 Id = "intuneev-require-signed-mdm-commands",
                 Label = "Intune: Require Cryptographic Signing of All OMA-DM Commands",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description = "Sets RequireSignedMDMCommands=1 in the MDM data collection policy. Requires that all OMA-DM commands received from the MDM server are cryptographically signed with the Intune service certificate, and rejects unsigned or incorrectly signed OMA-DM payloads, protecting against rogue MDM server injection. " +
                     "OMA-DM is the protocol that carries MDM policy commands from the Intune service to the client. Without command signing enforcement, an attacker who achieves a man-in-the-middle position between the endpoint and the Intune service endpoint could inject arbitrary OMA-DM commands (which translate to registry writes, file downloads, and application installs). Requiring signed commands ensures only the authentic Intune service can deliver policy changes.",
                 Tags = ["intune", "mdm", "oma-dm", "signing", "mitm", "command-integrity"],
@@ -3894,7 +3894,7 @@ internal static class PolicyEnterprise
             {
                 Id = "intuneev-enable-mdm-config-lockdown",
                 Label = "Intune: Enable MDM Config Lock to Re-Enforce Settings Changed Out-of-Band",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description = "Sets EnableMDMConfigLockdown=1 in the MDM data collection policy. Enables the MDM config lock feature, which continuously monitors settings delivered by Intune compliance or configuration profiles and automatically reverts any changes made to those settings through other means (GPO that conflicts with MDM, manual registry edits, third-party tools). " +
                     "MDM config lock prevents MDM-delivered settings from being overridden by competing configuration mechanisms. Without config lock, other Group Policy settings delivered via domain join, local GPOs applied by elevated users, or malicious registry edits can override MDM-delivered security baselines. Config lock creates a continuous enforcement loop that re-applies MDM settings whenever they deviate from the expected values, functioning as a security posture self-healing mechanism.",
                 Tags = ["intune", "mdm", "config-lock", "drift", "enforcement", "security-baseline"],
@@ -3911,7 +3911,7 @@ internal static class PolicyEnterprise
             {
                 Id = "intuneev-disable-mdm-agent-auto-update-from-store",
                 Label = "Intune: Block MDM Agent Auto-Update from Microsoft Store",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description = "Sets DisableMDMAgentAutoUpdate=1 in the MDM data collection policy. Prevents the Intune Company Portal and MDM management agent components from auto-updating from the Microsoft Store, requiring IT to control agent updates through managed deployment paths (MDM app profiles, SCCM, or Intune Win32 app) rather than consumer Store delivery. " +
                     "MDM agent updates delivered through the Microsoft Store follow the Store's release schedule independently of IT's testing and validation calendar. A Store-delivered agent update may change MDM enrollment flow, compliance evaluation behaviour, or Company Portal UI in ways that weren't tested by IT's change management process. Blocking auto-update from Store and using managed deployment paths ensures IT controls when MDM agent updates reach production endpoints.",
                 Tags = ["intune", "mdm", "company-portal", "auto-update", "store", "change-control"],
@@ -3928,7 +3928,7 @@ internal static class PolicyEnterprise
             {
                 Id = "intuneev-enable-remote-wipe-audit-log",
                 Label = "Intune: Enable Audit Logging for Remote Wipe Commands Received from MDM Server",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description = "Sets EnableRemoteWipeAuditLog=1 in the MDM data collection policy. Generates a Security event log entry (and application event log warning) the moment the Intune service delivers a remote wipe command to the client, recording the timestamp and wipe type (quick wipe vs full wipe) before the wipe execution begins. " +
                     "Remote wipe is the nuclear security action available through MDM — it erases all device data. Without an audit log entry before execution, there is no on-device evidence that a wipe was initiated via MDM (distinguishable from a local factory reset). In scenarios where a remote wipe was accidental (wrong device targeted in the Intune console) or unauthorised (admin credential compromise), forensic investigation of what happened requires an event record. A pre-wipe audit log event can be captured by a SIEM before the device is erased.",
                 Tags = ["intune", "mdm", "remote-wipe", "audit-log", "forensics", "siem"],
@@ -3958,7 +3958,7 @@ internal static class PolicyEnterprise
             {
                 Id = "mdmpol-disable-auto-enroll",
                 Label = "Disable Automatic MDM Enrollment on Azure AD Join",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description =
                     "Prevents the device from automatically enrolling into Mobile Device Management (MDM/Intune) when joined to Azure Active Directory. Requires explicit manual enrollment.",
                 Tags = ["mdm", "intune", "azure-ad", "enrollment", "policy"],
@@ -3976,7 +3976,7 @@ internal static class PolicyEnterprise
             {
                 Id = "mdmpol-disable-user-registration",
                 Label = "Disable User-Initiated MDM Registration",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description =
                     "Prevents users from manually registering the device with a Mobile Device Management server. Only administrators can initiate MDM enrollment.",
                 Tags = ["mdm", "enrollment", "policy"],
@@ -3994,7 +3994,7 @@ internal static class PolicyEnterprise
             {
                 Id = "mdmpol-block-aad-workplace-join",
                 Label = "Block Azure AD Workplace Join",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description =
                     "Prevents the device from being registered with Azure Active Directory as a workplace-joined device. Blocks self-service Azure AD registration from Settings.",
                 Tags = ["azure-ad", "workplace-join", "mdm", "policy"],
@@ -4012,7 +4012,7 @@ internal static class PolicyEnterprise
             {
                 Id = "mdmpol-disable-auto-workplace-join",
                 Label = "Disable Automatic Workplace Registration",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description =
                     "Prevents the device from automatically registering with a workplace (Azure AD/Entra ID) during user sign-in. Requires explicit admin-driven join workflow.",
                 Tags = ["azure-ad", "workplace-join", "privacy", "policy"],
@@ -4030,7 +4030,7 @@ internal static class PolicyEnterprise
             {
                 Id = "mdmpol-disable-hello-for-business",
                 Label = "Disable Windows Hello for Business",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description =
                     "Disables Windows Hello for Business (WHFB) enterprise credential provisioning. Users cannot set up WHFB biometrics or PIN backed by PKI infrastructure.",
                 Tags = ["windows-hello", "hello-for-business", "credential", "policy"],
@@ -4048,7 +4048,7 @@ internal static class PolicyEnterprise
             {
                 Id = "mdmpol-require-hello-tpm",
                 Label = "Require TPM for Windows Hello for Business",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description =
                     "Requires a Trusted Platform Module (TPM) chip for Windows Hello for Business provisioning. Prevents software-only (less secure) TPM emulation from being used.",
                 Tags = ["windows-hello", "tpm", "security", "policy"],
@@ -4066,7 +4066,7 @@ internal static class PolicyEnterprise
             {
                 Id = "mdmpol-disable-hello-pin-recovery",
                 Label = "Disable Windows Hello PIN Recovery Service",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description =
                     "Disables the cloud-based PIN recovery service for Windows Hello. PINs cannot be reset via Microsoft account cloud backup. Keeps credentials fully local.",
                 Tags = ["windows-hello", "pin", "recovery", "privacy", "policy"],
@@ -4084,7 +4084,7 @@ internal static class PolicyEnterprise
             {
                 Id = "mdmpol-disable-hello-remote",
                 Label = "Disable Remote Windows Hello (Phone Sign-In)",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description =
                     "Disables the Remote Windows Hello feature that allows using a phone or paired device as a sign-in credential for the PC. Available since Windows 10 1607.",
                 Tags = ["windows-hello", "remote", "phone", "credential", "policy"],
@@ -4102,7 +4102,7 @@ internal static class PolicyEnterprise
             {
                 Id = "mdmpol-disable-hello-biometrics",
                 Label = "Disable Biometrics for Windows Hello",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description =
                     "Disables the use of biometrics (fingerprint, face recognition) for Windows Hello authentication. PIN remains available as the fallback credential.",
                 Tags = ["windows-hello", "biometrics", "fingerprint", "face-id", "policy"],
@@ -4120,7 +4120,7 @@ internal static class PolicyEnterprise
             {
                 Id = "mdmpol-disable-dynamic-lock",
                 Label = "Disable Dynamic Lock (Phone Proximity Lock)",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description =
                     "Disables Dynamic Lock, which automatically locks the PC when a paired Bluetooth phone moves out of range. Prevents unintended automatic locking in enterprise environments.",
                 Tags = ["dynamic-lock", "bluetooth", "lock", "policy"],
@@ -4153,7 +4153,7 @@ internal static class PolicyEnterprise
                 {
                     Id = "mdmreg-enable-aad-auto-enrollment",
                     Label = "MDM Registration: Enable Auto-Enrollment for Azure AD Joined Devices",
-                    Category = "Enterprise Management Policy",
+                    Category = "System",
                     Description =
                         "Sets AutoEnrollMDM=1 in MDM policy. Enables automatic MDM enrollment for devices that join Azure AD (Azure AD Join or Azure AD Hybrid Join). When a device joins Azure AD, the enrollment process automatically provisions the device with an MDM enrolment token and registers it with the configured MDM authority (typically Microsoft Intune). Without this policy, AAD Joined devices are registered in Azure AD but not MDM-managed — group policy, compliance checks, and app deployments via Intune will not work. Auto-enrollment is the standard corporate device onboarding mechanism.",
                     Tags = ["mdm", "auto-enrollment", "azure-ad", "intune", "device-management"],
@@ -4170,7 +4170,7 @@ internal static class PolicyEnterprise
                 {
                     Id = "mdmreg-require-reenrollment-on-rename",
                     Label = "MDM Registration: Require Re-Enrollment after Device Rename",
-                    Category = "Enterprise Management Policy",
+                    Category = "System",
                     Description =
                         "Sets RequireReenrollmentOnRename=1 in MDM policy. Forces the device to re-enroll in MDM when the device name changes. Device renaming is sometimes used as a pivot technique during lateral movement: an attacker renames a managed device to match an expected device name to pass name-based access controls. Forcing re-enrollment on rename ensures the MDM service receives a new enrollment token for the renamed device, which updates the device record in the MDM database and triggers compliance re-evaluation. Any conditional access policies that check the MDM enrollment record are therefore aware of the identity change.",
                     Tags = ["mdm", "re-enrollment", "device-rename", "identity", "conditional-access"],
@@ -4187,7 +4187,7 @@ internal static class PolicyEnterprise
                 {
                     Id = "mdmreg-disable-user-unenrollment",
                     Label = "MDM Registration: Prevent Users from Manually Unenrolling Device from MDM",
-                    Category = "Enterprise Management Policy",
+                    Category = "System",
                     Description =
                         "Sets DisallowUserMdmUnenrollment=1 in MDM policy. Prevents standard users (non-administrators) from unenrolling the device from MDM management through the Settings app. Without this policy, any user with access to Settings > Accounts > Access work or school can disconnect the device from MDM management, effectively removing it from IT control, compliance enforcement, and conditional access scope. While admins can still unenroll via MDM push commands, preventing user-initiated unenrollment ensures the device remains managed.",
                     Tags = ["mdm", "unenrollment", "user-restriction", "settings", "tamper-prevention"],
@@ -4204,7 +4204,7 @@ internal static class PolicyEnterprise
                 {
                     Id = "mdmreg-use-enterprise-enrollment-only",
                     Label = "MDM Registration: Restrict MDM Enrollment to Enterprise Tenants Only",
-                    Category = "Enterprise Management Policy",
+                    Category = "System",
                     Description =
                         "Sets EnterpriseEnrollmentOnly=1 in MDM policy. Restricts MDM enrollment so that only corporate tenants (as determined by the MDM authority in the Group Policy or the domain's MDM discovery service) can claim management of the device. Without this policy, a device can be enrolled by any MDM provider, including personal Intune accounts. This is relevant in bring-your-own-device (BYOD) scenarios where an employee might accidentally enroll their managed corporate device with their personal Microsoft 365 account's MDM, causing policy conflicts.",
                     Tags = ["mdm", "enrollment", "enterprise-only", "byod", "tenant-restriction"],
@@ -4221,7 +4221,7 @@ internal static class PolicyEnterprise
                 {
                     Id = "mdmreg-enable-diagnostic-auto-upload",
                     Label = "MDM Registration: Enable Automatic Diagnostic Log Upload to MDM",
-                    Category = "Enterprise Management Policy",
+                    Category = "System",
                     Description =
                         "Sets EnableDiagnosticUpload=1 in MDM policy. Enables the MDM client to automatically upload MDM diagnostic logs to the MDM server when requested via a remote log collection push from the MDM authority. Without this, IT admins must physically access the device or use complex manual collection procedures to retrieve MDM diagnostic files. With this enabled, an MDM admin can trigger log collection from the Intune console without user interaction — essential for diagnosing enrollment failures, policy application errors, or app deployment problems on devices that are not physically accessible.",
                     Tags = ["mdm", "diagnostics", "log-upload", "remote-collection", "intune"],
@@ -4238,7 +4238,7 @@ internal static class PolicyEnterprise
                 {
                     Id = "mdmreg-set-enrollment-check-in-interval-4h",
                     Label = "MDM Registration: Set MDM Check-In Interval to 4 Hours",
-                    Category = "Enterprise Management Policy",
+                    Category = "System",
                     Description =
                         "Sets EnrollmentCheckInIntervalHours=4 in MDM policy. Sets the frequency at which the MDM client checks in with the MDM server to receive new policies, app assignments, compliance commands, and configuration updates. The default check-in interval is 8 hours. A 4-hour interval reduces the lag between MDM policy changes (such as blocking USB, pushing a security update requirement, or revering a credential) and their application on devices. In incident response scenarios, the ability to push a policy change and have it take effect within 4 hours rather than 8 hours is a meaningful response time improvement.",
                     Tags = ["mdm", "check-in", "policy-apply", "interval", "response-time"],
@@ -4255,7 +4255,7 @@ internal static class PolicyEnterprise
                 {
                     Id = "mdmreg-enable-conditional-access-notification",
                     Label = "MDM Registration: Enable MDM Enrollment Notification for Conditional Access",
-                    Category = "Enterprise Management Policy",
+                    Category = "System",
                     Description =
                         "Sets NotifyConditionalAccessOnEnrollment=1 in MDM policy. Configures the MDM client to push an enrollment state notification to the Azure AD conditional access service whenever the device's MDM enrollment status changes (enrolled, unenrolled, compliance state changed). Without this notification push, conditional access relies on polling of the Intune device inventory, which has a delay. The push notification significantly reduces the time between an enrollment state change and the conditional access enforcement update — important for scenarios like immediately restoring access after successful compliance remediation.",
                     Tags = ["mdm", "conditional-access", "enrollment-notification", "aad", "response-time"],
@@ -4272,7 +4272,7 @@ internal static class PolicyEnterprise
                 {
                     Id = "mdmreg-block-guest-from-enrollment",
                     Label = "MDM Registration: Block Guest Accounts from MDM Enrollment",
-                    Category = "Enterprise Management Policy",
+                    Category = "System",
                     Description =
                         "Sets BlockGuestAccountEnrollment=1 in MDM policy. Prevents Guest accounts from triggering MDM enrollment or accessing MDM-managed resources. Guest accounts by definition have no AAD identity and should not enroll in MDM. In some configurations, a device with an active Guest session can inadvertently trigger MDM enrollment flows with an empty principal, creating orphaned device records in the MDM tenant. Blocking guest account enrollment eliminates this edge case and prevents Guest-session processes from interacting with the MDM client.",
                     Tags = ["mdm", "guest-account", "enrollment-block", "identity", "orphaned-device"],
@@ -4289,7 +4289,7 @@ internal static class PolicyEnterprise
                 {
                     Id = "mdmreg-enable-silent-enrollment",
                     Label = "MDM Registration: Enable Silent (No User Prompt) MDM Enrollment",
-                    Category = "Enterprise Management Policy",
+                    Category = "System",
                     Description =
                         "Sets EnableSilentEnrollment=1 in MDM policy. Configures MDM enrollment to complete silently without displaying user-facing dialogs, progress indicators, or consent prompts. Silent enrollment is used in corporate provisioning scenarios (Autopilot, bulk enrolment) where the device is pre-configured by IT before delivery to the user. Without silent enrollment, the MDM client shows enrollment progress dialogs that may alarm users who are not expecting them. Silent enrollment also reduces the risk of users cancelling the enrollment process mid-flow, which can leave the device in a partially-enrolled state.",
                     Tags = ["mdm", "silent-enrollment", "autopilot", "provisioning", "user-experience"],
@@ -4306,7 +4306,7 @@ internal static class PolicyEnterprise
                 {
                     Id = "mdmreg-enable-enrollment-retry-on-failure",
                     Label = "MDM Registration: Enable Automatic Retry on MDM Enrollment Failure",
-                    Category = "Enterprise Management Policy",
+                    Category = "System",
                     Description =
                         "Sets EnableEnrollmentRetryOnFailure=1 in EnrollmentSecurity policy. Enables the MDM client to automatically retry enrollment if the initial enrollment attempt fails due to network connectivity issues, MDM service transient errors, or AAD token acquisition failures. Without retry logic, a single transient failure during Autopilot provisioning (e.g., the device starts enrollment before DNS is fully resolving, or the MDM service returns HTTP 503 during a brief outage) results in a permanently unenrolled device that requires manual remediation. Automatic retry ensures transient failures are recovered without IT intervention.",
                     Tags = ["mdm", "enrollment-retry", "resilience", "autopilot", "transient-failure"],
@@ -4339,7 +4339,7 @@ internal static class PolicyEnterprise
             {
                 Id = "oobe-disable-privacy-experience",
                 Label = "Disable OOBE Privacy Experience",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description =
                     "Sets DisablePrivacyExperience=1 in the Windows OOBE policy key. "
                     + "Prevents the full-screen privacy settings wizard from appearing on first sign-in for new user accounts "
@@ -4359,7 +4359,7 @@ internal static class PolicyEnterprise
             {
                 Id = "oobe-skip-user-oobe",
                 Label = "Skip User OOBE Page",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description =
                     "Sets SkipUserOOBE=1 in the Windows OOBE policy key. "
                     + "Suppresses the user portion of the Out-of-Box Experience wizard, skipping personalization and "
@@ -4379,7 +4379,7 @@ internal static class PolicyEnterprise
             {
                 Id = "oobe-skip-machine-oobe",
                 Label = "Skip Machine OOBE Page",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description =
                     "Sets SkipMachineOOBE=1 in the Windows OOBE policy key. "
                     + "Suppresses the machine-level portion of the OOBE wizard during initial Windows setup, "
@@ -4399,7 +4399,7 @@ internal static class PolicyEnterprise
             {
                 Id = "oobe-no-network-connections-wizard",
                 Label = "Disable OOBE Network Connections Wizard",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description =
                     "Sets DisableNetworkConnectionsWizard=1 in the Windows OOBE policy key. "
                     + "Suppresses the network connection setup wizard that appears during the OOBE phase, "
@@ -4419,7 +4419,7 @@ internal static class PolicyEnterprise
             {
                 Id = "oobe-no-first-logon-animation",
                 Label = "Disable First Logon Animation",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description =
                     "Sets ShowFirstLogonAnimation=0 in the Windows Setup policy key. "
                     + "Disables the full-screen 'Hi' and 'Getting Windows ready' animation sequence shown to new users on first sign-in, "
@@ -4439,7 +4439,7 @@ internal static class PolicyEnterprise
             {
                 Id = "oobe-no-welcome-screen-lm",
                 Label = "Disable Welcome Screen (Machine)",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description =
                     "Sets NoWelcomeScreen=1 in the machine-scoped Windows Shell policy key. "
                     + "Suppresses the Windows Welcome Center / Did You Know tips overlay that could appear post-setup. "
@@ -4458,7 +4458,7 @@ internal static class PolicyEnterprise
             {
                 Id = "oobe-no-welcome-screen-user",
                 Label = "Disable Welcome Screen (Current User)",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description =
                     "Sets NoWelcomeScreen=1 in the per-user Windows Shell policy key. "
                     + "Hides the Welcome Center / Getting Started experience for the current user. "
@@ -4477,7 +4477,7 @@ internal static class PolicyEnterprise
             {
                 Id = "oobe-no-server-manager-at-logon",
                 Label = "Disable Server Manager Auto-Open at Logon",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description =
                     "Sets DoNotOpenServerManagerAtLogon=1 in the Server Manager policy key. "
                     + "Prevents Windows Server Manager from automatically opening at every administrator logon. "
@@ -4497,7 +4497,7 @@ internal static class PolicyEnterprise
             {
                 Id = "oobe-disable-balloon-tips",
                 Label = "Disable System Tray Balloon Tips",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description =
                     "Sets EnableBalloonTips=0 in the machine-side System policy key. "
                     + "Suppresses all Action Center / notification area balloon notifications and first-run tip balloons "
@@ -4517,7 +4517,7 @@ internal static class PolicyEnterprise
             {
                 Id = "oobe-disable-upgrade-ui",
                 Label = "Disable Windows Upgrade Prompt UI",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description =
                     "Sets DisableUXFirstRunAnimation=1 in the Windows Setup policy key. "
                     + "Suppresses the upgrade experience UX animations and first-run prompts that may appear "
@@ -4548,7 +4548,7 @@ internal static class PolicyEnterprise
             {
                 Id = "rdemo-disable-retail-demo",
                 Label = "Disable Retail Demo Mode",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -4570,7 +4570,7 @@ internal static class PolicyEnterprise
             {
                 Id = "rdemo-disable-attract-loop",
                 Label = "Disable Retail Demo Attract Loop",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -4591,7 +4591,7 @@ internal static class PolicyEnterprise
             {
                 Id = "rdemo-disable-auto-signin",
                 Label = "Disable Retail Demo Auto Sign-In",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -4612,7 +4612,7 @@ internal static class PolicyEnterprise
             {
                 Id = "rdemo-disable-demo-apps",
                 Label = "Disable Retail Demo App Provisioning",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -4633,7 +4633,7 @@ internal static class PolicyEnterprise
             {
                 Id = "rdemo-disable-demo-content",
                 Label = "Disable Retail Demo Content Delivery",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -4654,7 +4654,7 @@ internal static class PolicyEnterprise
             {
                 Id = "rdemo-disable-experience-provider",
                 Label = "Disable Retail Demo Device Experience Provider",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -4675,7 +4675,7 @@ internal static class PolicyEnterprise
             {
                 Id = "rdemo-disable-demo-banner",
                 Label = "Disable Retail Demo Info Banner",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 1,
@@ -4696,7 +4696,7 @@ internal static class PolicyEnterprise
             {
                 Id = "rdemo-disable-oobe-demo",
                 Label = "Disable Retail Demo OOBE Flow",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -4717,7 +4717,7 @@ internal static class PolicyEnterprise
             {
                 Id = "rdemo-disable-cleanup-revert",
                 Label = "Disable Retail Demo Cleanup Revert Task",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -4738,7 +4738,7 @@ internal static class PolicyEnterprise
             {
                 Id = "rdemo-disable-demo-telemetry",
                 Label = "Disable Retail Demo Interaction Telemetry",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -4771,7 +4771,7 @@ internal static class PolicyEnterprise
             {
                 Id = "shpc-disable-shared-pc-mode",
                 Label = "Disable Shared PC Mode",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -4788,7 +4788,7 @@ internal static class PolicyEnterprise
             {
                 Id = "shpc-zero-disk-deletion-level",
                 Label = "Disable Disk Level Deletion",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -4805,7 +4805,7 @@ internal static class PolicyEnterprise
             {
                 Id = "shpc-zero-disk-caching-level",
                 Label = "Disable Disk Level Caching",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -4822,7 +4822,7 @@ internal static class PolicyEnterprise
             {
                 Id = "shpc-zero-inactive-threshold",
                 Label = "Disable Inactive User Threshold",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -4839,7 +4839,7 @@ internal static class PolicyEnterprise
             {
                 Id = "shpc-zero-max-page-file-mb",
                 Label = "Disable Shared PC Max Page File Size",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -4856,7 +4856,7 @@ internal static class PolicyEnterprise
             {
                 Id = "shpc-delete-guest-on-logoff",
                 Label = "Delete Guest Account on Logoff",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -4873,7 +4873,7 @@ internal static class PolicyEnterprise
             {
                 Id = "shpc-restrict-local-storage",
                 Label = "Restrict Local Storage Access",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -4890,7 +4890,7 @@ internal static class PolicyEnterprise
             {
                 Id = "shpc-disable-enabled-flag",
                 Label = "Disable Shared PC Enabled Flag",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -4907,7 +4907,7 @@ internal static class PolicyEnterprise
             {
                 Id = "shpc-clear-kiosk-aumid",
                 Label = "Clear Kiosk Mode Application ID",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -4924,7 +4924,7 @@ internal static class PolicyEnterprise
             {
                 Id = "shpc-require-signin-on-resume",
                 Label = "Require Sign-In on Resume",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -4952,7 +4952,7 @@ internal static class PolicyEnterprise
             {
                 Id = "wpautopilot-block-oobe-cortana",
                 Label = "Autopilot: Suppress Cortana Voice Assistant During OOBE Provisioning",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description = "Sets DisableCortanaInOOBE=1 in Autopilot policy. Prevents Cortana's voice-guided OOBE assistant from launching during the Windows Out-Of-Box Experience on Autopilot-provisioned devices, eliminating unexpected voice output and microphone access during unattended provisioning. " +
                     "During self-deploying Autopilot provisioning, the device may go through OOBE phases unattended. Cortana's voice interface launching during an unattended provisioning session can trigger unexpected audio output (speakers active) and request microphone access, which is unnecessary and potentially alarming in secure staging environments. Suppressing Cortana during OOBE ensures silent, predictable provisioning.",
                 Tags = ["autopilot", "oobe", "cortana", "provisioning", "silent"],
@@ -4969,7 +4969,7 @@ internal static class PolicyEnterprise
             {
                 Id = "wpautopilot-require-tpm-attestation",
                 Label = "Autopilot: Require TPM Attestation Before Autopilot Pre-Provisioning Completes",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description = "Sets RequireTPMAttestation=1 in Autopilot policy. Requires that the device's TPM chip successfully completes attestation with the Microsoft Attestation Service before Autopilot White Glove pre-provisioning is allowed to complete, ensuring only machines with healthy TPM chips receive the provisioning credential blob. " +
                     "Autopilot White Glove pre-provisioning downloads and installs applications and policies during the Technician Phase. If TPM attestation is not required, a device with a non-functional or tampered TPM can still be fully provisioned and shipped to an end user with an enterprise credential blob. Requiring TPM attestation ensures only hardware with a verified, healthy TPM is provisioned, supporting BitLocker and Windows Hello for Business.",
                 Tags = ["autopilot", "tpm", "attestation", "white-glove", "hardware-security"],
@@ -4986,7 +4986,7 @@ internal static class PolicyEnterprise
             {
                 Id = "wpautopilot-block-language-selection-in-oobe",
                 Label = "Autopilot: Skip Language and Region Selection in OOBE (Silent Provisioning)",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description = "Sets SkipLanguageAndRegion=1 in Autopilot policy. Skips the language selection, keyboard layout, and region selection screens during OOBE, using the locale settings pre-configured in the Autopilot deployment profile instead of prompting the user or technician during provisioning. " +
                     "Self-deploying Autopilot profiles target unattended provisioning. Any OOBE screen that blocks at a user input prompt (language, region) halts the provisioning workflow until answered. In staging environments where devices are provisioned in bulk on racks, unexpected OOBE prompts that require per-device interaction break the automation, requiring manual intervention on each device.",
                 Tags = ["autopilot", "oobe", "language", "silent", "unattended"],
@@ -5003,7 +5003,7 @@ internal static class PolicyEnterprise
             {
                 Id = "wpautopilot-disable-privacy-settings-screen",
                 Label = "Autopilot: Skip Privacy Settings Screen in OOBE",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description = "Sets DisablePrivacySettingsInOOBE=1 in Autopilot policy. Suppresses the privacy settings configuration screen that appears during OOBE, where Windows presents toggles for diagnostic data, location, speech recognition, and ink/typing personalisation, using enterprise policy defaults instead. " +
                     "The OOBE privacy settings screen presents users and technicians with a series of toggle choices that may override enterprise Group Policy settings if the user makes incorrect selections during provisioning. By skipping this screen and applying privacy settings via Group Policy or Intune configuration profiles, the enterprise ensures the device always meets its defined privacy configuration baseline from first boot.",
                 Tags = ["autopilot", "oobe", "privacy", "provisioning", "baseline"],
@@ -5020,7 +5020,7 @@ internal static class PolicyEnterprise
             {
                 Id = "wpautopilot-enable-secure-diagnostics-upload",
                 Label = "Autopilot: Enable Secure Diagnostic Log Upload on Provisioning Failure",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description = "Sets EnableDiagnosticsUploadOnFailure=1 in Autopilot policy. Enables automatic upload of diagnostic logs to the Microsoft Intune service when Autopilot provisioning fails, allowing IT admins to review failure details in the Intune admin center without physical access to the device. " +
                     "Autopilot provisioning failures in the field (enrolled device failing to complete provisioning at an employee's desk) are difficult to diagnose without the detailed log files stored on the device. Without automatic log upload, IT must either collect logs manually (requiring physical access or remote PowerShell) or rely on the user to capture and submit logs. Enabling automatic upload on failure provides actionable failure diagnostics in the admin portal.",
                 Tags = ["autopilot", "diagnostics", "failure", "logging", "intune"],
@@ -5037,7 +5037,7 @@ internal static class PolicyEnterprise
             {
                 Id = "wpautopilot-block-manual-hardware-hash-upload",
                 Label = "Autopilot: Block Manual Hardware Hash Upload by Non-Administrators",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description = "Sets DisableManualHardwareHashUpload=1 in Autopilot policy. Prevents standard users from manually running scripts or PowerShell commands that collect the device's hardware hash and upload it to the Autopilot service, restricting hardware hash registration to OEM upload and IT admin-initiated processes. " +
                     "Hardware hash registration is the authoritative step that associates a physical device with an Autopilot deployment profile. If standard users can run scripts to upload hardware hashes of arbitrary devices (including virtual machines running on personal hardware), they may register personal devices into the enterprise Autopilot service, bootstrapping them with enterprise policies, certificates, and credentials.",
                 Tags = ["autopilot", "hardware-hash", "registration", "unauthorised", "admin"],
@@ -5054,7 +5054,7 @@ internal static class PolicyEnterprise
             {
                 Id = "wpautopilot-enable-provisioning-audit-log",
                 Label = "Autopilot: Enable Security Audit Log for Autopilot Provisioning Events",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description = "Sets EnableProvisioningAuditLog=1 in Autopilot policy. Causes a Security event log entry to be written at each stage of the Autopilot provisioning workflow (device registration, Entra ID join, MDM enrollment, application installation) including the result and any error codes. " +
                     "Without provisioning audit logging, there is no on-device Security event record of what happened during Autopilot provisioning — only the results visible in the Intune admin portal. Having on-device event log entries for each provisioning stage enables post-incident forensics if a device's provisioning state is questioned (e.g., whether a specific application or configuration was applied correctly during the initial setup).",
                 Tags = ["autopilot", "audit", "provisioning", "event-log", "forensics"],
@@ -5071,7 +5071,7 @@ internal static class PolicyEnterprise
             {
                 Id = "wpautopilot-require-enrolled-device-for-provisioning",
                 Label = "Autopilot: Require Device Pre-Registration Before OOBE Autopilot Profile Download",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description = "Sets RequirePreRegistration=1 in Autopilot policy. Enforces that the device must be pre-registered in the Autopilot service (via hardware hash) before the OOBE Autopilot profile download proceeds, blocking provisioning of devices that have not been explicitly registered by IT. " +
                     "Without pre-registration enforcement, an unregistered device going through OOBE on the same network as a registered device might accidentally receive an Autopilot profile due to subnet-based profile assignment misconfiguration. Requiring explicit pre-registration ensures that Autopilot profiles are only applied to known, IT-registered hardware and not to devices that are accidentally discoverable.",
                 Tags = ["autopilot", "pre-registration", "oobe", "hardware", "policy"],
@@ -5088,7 +5088,7 @@ internal static class PolicyEnterprise
             {
                 Id = "wpautopilot-block-oobe-skip-button",
                 Label = "Autopilot: Remove OOBE Skip/Cancel Button to Prevent Provisioning Abandonment",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description = "Sets DisableSkipButtonInOOBE=1 in Autopilot policy. Removes the 'Skip' and 'Cancel' buttons from Autopilot OOBE screens that would allow a user or technician to abort the provisioning workflow before it completes, ensuring devices are always fully provisioned before being usable. " +
                     "OOBE Skip buttons allow a technician or user to abandon Autopilot provisioning mid-way through, leaving the device in a partially configured state with some apps installed and others not, MDM enrollment incomplete, and security baselines potentially unapplied. A partially provisioned device may appear to work normally while critical security configurations are absent.",
                 Tags = ["autopilot", "oobe", "skip", "provisioning", "incomplete"],
@@ -5105,7 +5105,7 @@ internal static class PolicyEnterprise
             {
                 Id = "wpautopilot-set-provisioning-timeout-90min",
                 Label = "Autopilot: Set Autopilot Enrollment Status Page Timeout to 90 Minutes",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description = "Sets EnrollmentStatusPageTimeout=90 in Autopilot policy. Sets the Autopilot Enrollment Status Page (ESP) timeout — the maximum time the ESP will wait for app and policy installation to complete before triggering an error — to 90 minutes. " +
                     "The default ESP timeout is 60 minutes. In enterprise environments with large required application sets or slow network segments (branch office with limited bandwidth), the app installation phase can exceed 60 minutes especially for large apps delivered via Intune Win32 app deployment (LOB apps with 500 MB+ installers). An ESP timeout before provisioning completes leaves the device in an error state, triggering a factory reset. A 90-minute timeout accommodates larger app sets.",
                 Tags = ["autopilot", "esp", "timeout", "provisioning", "apps"],
@@ -5135,7 +5135,7 @@ internal static class PolicyEnterprise
             {
                 Id           = "wds-require-admin-approval",
                 Label        = "Require Admin Approval for PXE Boot Clients",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description  = "Requires administrator approval before unknown PXE clients can boot from WDS. Prevents unauthorised devices from imaging. Default: auto-approve.",
                 Tags         = ["wds", "pxe", "security", "approval", "deployment", "policy"],
                 NeedsAdmin   = true,
@@ -5151,7 +5151,7 @@ internal static class PolicyEnterprise
             {
                 Id           = "wds-disable-unknown-pxe",
                 Label        = "Block Unknown Clients from PXE Boot",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description  = "Prevents unknown (non-pre-staged) computers from performing PXE boot via WDS. Only pre-staged/known devices can image. Default: allow all.",
                 Tags         = ["wds", "pxe", "security", "unknown-clients", "deployment", "policy"],
                 NeedsAdmin   = true,
@@ -5167,7 +5167,7 @@ internal static class PolicyEnterprise
             {
                 Id           = "wds-enable-pxe-prompt",
                 Label        = "Enable PXE Boot Key Press Prompt",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description  = "Requires the user to press a key (e.g., F12) to initiate PXE boot. Prevents automatic network boot on every startup. Default: may auto-boot.",
                 Tags         = ["wds", "pxe", "prompt", "boot", "deployment", "policy"],
                 NeedsAdmin   = true,
@@ -5183,7 +5183,7 @@ internal static class PolicyEnterprise
             {
                 Id           = "wds-set-pxe-timeout",
                 Label        = "Set PXE Prompt Timeout to 10 Seconds",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description  = "Sets the PXE boot key-press prompt timeout to 10 seconds. After timeout, the device continues to local disk boot. Default: varies by BIOS.",
                 Tags         = ["wds", "pxe", "timeout", "boot", "deployment", "policy"],
                 NeedsAdmin   = true,
@@ -5199,7 +5199,7 @@ internal static class PolicyEnterprise
             {
                 Id           = "wds-enable-logging",
                 Label        = "Enable WDS Deployment Event Logging",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description  = "Enables detailed event logging for WDS deployment operations. Provides audit trail of which devices were imaged and when. Default: minimal logging.",
                 Tags         = ["wds", "logging", "audit", "deployment", "policy"],
                 NeedsAdmin   = true,
@@ -5215,7 +5215,7 @@ internal static class PolicyEnterprise
             {
                 Id           = "wds-set-multicast-transfer-mode",
                 Label        = "Set WDS Multicast Transfer to Auto Mode",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description  = "Configures multicast image transfers to auto-select between multicast and unicast based on network conditions. Default: multicast only.",
                 Tags         = ["wds", "multicast", "network", "deployment", "policy"],
                 NeedsAdmin   = true,
@@ -5231,7 +5231,7 @@ internal static class PolicyEnterprise
             {
                 Id           = "wds-set-multicast-session-threshold",
                 Label        = "Set Multicast Session Client Threshold to 10",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description  = "Sets the minimum number of clients before a multicast session starts. Prevents starting a multicast session for only 1–2 clients. Default: 1.",
                 Tags         = ["wds", "multicast", "threshold", "deployment", "policy"],
                 NeedsAdmin   = true,
@@ -5247,7 +5247,7 @@ internal static class PolicyEnterprise
             {
                 Id           = "wds-enable-tftp-window-size",
                 Label        = "Set WDS TFTP Block Size to 16384",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description  = "Increases the TFTP block size used by WDS PXE boot to 16384 bytes. Improves image download speed on modern networks. Default: 1456 (standard TFTP block).",
                 Tags         = ["wds", "tftp", "performance", "pxe", "deployment", "policy"],
                 NeedsAdmin   = true,
@@ -5263,7 +5263,7 @@ internal static class PolicyEnterprise
             {
                 Id           = "wds-disable-dhcp-option-60",
                 Label        = "Disable DHCP Option 60 (PXEClient Class ID)",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description  = "Prevents WDS from adding DHCP Option 60 (PXEClient class identifier) to DHCP responses. Use when WDS is co-located with DHCP to avoid conflicts. Default: enabled.",
                 Tags         = ["wds", "dhcp", "pxe", "network", "deployment", "policy"],
                 NeedsAdmin   = true,
@@ -5279,7 +5279,7 @@ internal static class PolicyEnterprise
             {
                 Id           = "wds-restrict-naming-policy",
                 Label        = "Enforce WDS Computer Naming Policy",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description  = "Enforces a server-defined computer naming policy for imaged devices. Prevents users from choosing arbitrary computer names during imaging. Default: user-chosen.",
                 Tags         = ["wds", "naming", "policy", "deployment", "standardisation"],
                 NeedsAdmin   = true,
@@ -5306,7 +5306,7 @@ internal static class PolicyEnterprise
             {
                 Id = "flight-disable-feature-trials",
                 Label = "Windows Flighted Features: Disable Feature Trials",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description =
                     "Prevents Windows from enrolling this device in feature trials via the flighting (A/B testing) mechanism. "
                     + "Feature trials push experimental or partially-ready features to a subset of devices without user opt-in. "
@@ -5327,7 +5327,7 @@ internal static class PolicyEnterprise
             {
                 Id = "flight-block-preview-builds",
                 Label = "Windows Flighted Features: Block Preview Build Features",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description =
                     "Prevents preview-ring feature flags from being activated on production endpoints via the flighting registry policy. "
                     + "Preview builds may include unstable code paths, driver compatibility issues, or features not yet hardened for enterprise use. "
@@ -5348,7 +5348,7 @@ internal static class PolicyEnterprise
             {
                 Id = "flight-set-branch-readiness-semi-annual",
                 Label = "Windows Flighted Features: Set Branch Readiness to Semi-Annual Channel",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description =
                     "Configures the Windows flighting branch readiness level to the Semi-Annual Channel (production ring). "
                     + "The branch readiness level controls which update ring the device belongs to — insider, beta, or release. "
@@ -5369,7 +5369,7 @@ internal static class PolicyEnterprise
             {
                 Id = "flight-disable-diagnostic-data-upload",
                 Label = "Windows Flighted Features: Disable Diagnostic Data Upload for Flights",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description =
                     "Disables the upload of diagnostic data specifically associated with flighted (experimental) feature usage. "
                     + "When a feature trial is active, Windows collects enhanced telemetry to evaluate the trial's effectiveness. "
@@ -5390,7 +5390,7 @@ internal static class PolicyEnterprise
             {
                 Id = "flight-disable-experimentation",
                 Label = "Windows Flighted Features: Disable A/B Experimentation",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description =
                     "Prevents Windows from applying A/B experimentation overrides via the flighting system. "
                     + "A/B experimentation can silently change UI layouts, default settings, or feature availability without the user's knowledge. "
@@ -5411,7 +5411,7 @@ internal static class PolicyEnterprise
             {
                 Id = "flight-set-target-release-version",
                 Label = "Windows Flighted Features: Set Target Release Version (24H2)",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description =
                     "Pins the device to Windows 11 24H2 as the target feature update version via the flighting policy. "
                     + "Pinning the target release prevents automatic upgrade to newer feature releases before IT validation is complete. "
@@ -5432,7 +5432,7 @@ internal static class PolicyEnterprise
             {
                 Id = "flight-disable-insider-content",
                 Label = "Windows Flighted Features: Disable Insider Tip Content",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description =
                     "Blocks Windows Insider tip and promotional content pushed via the flighting infrastructure. "
                     + "Insider tips are shown in Start, Tips app, and Settings to encourage enrollment in the Insider Program. "
@@ -5453,7 +5453,7 @@ internal static class PolicyEnterprise
             {
                 Id = "flight-disable-rollback-on-failure",
                 Label = "Windows Flighted Features: Disable Automatic Rollback on Flight Failure",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description =
                     "Controls whether Windows automatically rolls back a failed flight update without administrator approval. "
                     + "Automatic rollback can interfere with change-management processes in enterprise environments where all changes must be audited. "
@@ -5474,7 +5474,7 @@ internal static class PolicyEnterprise
             {
                 Id = "flight-disable-feature-notifications",
                 Label = "Windows Flighted Features: Disable Feature Notification Banners",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description =
                     "Suppresses notification banners introduced as part of flight updates — new feature announcements, upgrade prompts, and welcome screens. "
                     + "Flight-related notifications interrupt workflows and are inappropriate in a managed enterprise environment. "
@@ -5495,7 +5495,7 @@ internal static class PolicyEnterprise
             {
                 Id = "flight-enforce-production-ring",
                 Label = "Windows Flighted Features: Enforce Production Ring Only",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description =
                     "Forces the flighting infrastructure to treat this device as production-ring only, blocking all early-access feature assignments. "
                     + "In combination with BranchReadinessLevel, this ensures the device cannot be reclassified by Microsoft's backend assignment logic. "
@@ -5527,7 +5527,7 @@ internal static class PolicyEnterprise
             {
                 Id = "flight-disable-insider-preview",
                 Label = "Disable Windows Insider Preview Enrollment",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -5544,7 +5544,7 @@ internal static class PolicyEnterprise
             {
                 Id = "flight-disable-preview-builds",
                 Label = "Block Preview Build Installation",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -5561,7 +5561,7 @@ internal static class PolicyEnterprise
             {
                 Id = "flight-disable-config-flighting",
                 Label = "Disable Windows Configuration Flighting",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -5578,7 +5578,7 @@ internal static class PolicyEnterprise
             {
                 Id = "flight-disable-telemetry-for-flighting",
                 Label = "Disable Flighting Telemetry Uploads",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -5595,7 +5595,7 @@ internal static class PolicyEnterprise
             {
                 Id = "flight-disable-feature-rollout",
                 Label = "Disable Gradual Feature Rollout",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -5612,7 +5612,7 @@ internal static class PolicyEnterprise
             {
                 Id = "flight-disable-experimental-features",
                 Label = "Disable Experimental Feature Flags",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -5629,7 +5629,7 @@ internal static class PolicyEnterprise
             {
                 Id = "flight-disable-a-b-testing",
                 Label = "Disable A/B Feature Testing Participation",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -5646,7 +5646,7 @@ internal static class PolicyEnterprise
             {
                 Id = "flight-set-insider-ring",
                 Label = "Set Windows Insider Ring to None",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -5663,7 +5663,7 @@ internal static class PolicyEnterprise
             {
                 Id = "flight-disable-insider-program-settings",
                 Label = "Disable Insider Program Settings Access",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -5680,7 +5680,7 @@ internal static class PolicyEnterprise
             {
                 Id = "flight-disable-optional-feature-updates",
                 Label = "Disable Optional Preview Feature Updates",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -5716,7 +5716,7 @@ internal static class PolicyEnterprise
             {
                 Id = "insider-block-preview-builds",
                 Label = "Block Windows Insider Preview Build Enrollment (GPO)",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -5734,7 +5734,7 @@ internal static class PolicyEnterprise
             {
                 Id = "insider-disable-config-flighting",
                 Label = "Disable Configuration Flighting (A/B Feature Tests)",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -5752,7 +5752,7 @@ internal static class PolicyEnterprise
             {
                 Id = "insider-disable-experimentation",
                 Label = "Disable Windows Experimentation (A/B Feature Trials)",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -5770,7 +5770,7 @@ internal static class PolicyEnterprise
             {
                 Id = "insider-disable-feedback-notifications",
                 Label = "Disable Windows Feedback Notification Popups",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -5788,7 +5788,7 @@ internal static class PolicyEnterprise
             {
                 Id = "insider-set-retail-ring",
                 Label = "Set Device to Retail (Non-Insider) Ring",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -5806,7 +5806,7 @@ internal static class PolicyEnterprise
             {
                 Id = "insider-disable-feedback-frequency",
                 Label = "Stop Windows Feedback Frequency Prompts",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 NeedsAdmin = false,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -5824,7 +5824,7 @@ internal static class PolicyEnterprise
             {
                 Id = "insider-disable-consumer-features",
                 Label = "Disable Windows Consumer (Non-Enterprise) Features",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -5842,7 +5842,7 @@ internal static class PolicyEnterprise
             {
                 Id = "insider-disable-soft-landing",
                 Label = "Disable Soft Landing Tips (New Feature Suggestions)",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -5860,7 +5860,7 @@ internal static class PolicyEnterprise
             {
                 Id = "insider-disable-cloud-optimized-content",
                 Label = "Disable Cloud-Optimized Content Delivery",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -5878,7 +5878,7 @@ internal static class PolicyEnterprise
             {
                 Id = "insider-disable-cloud-content-experience",
                 Label = "Disable Cloud Content for Windows Suggestions",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -5908,7 +5908,7 @@ internal static class PolicyEnterprise
             {
                 Id = "winsvc-set-target-ga-release-channel",
                 Label = "Servicing: Set Windows Update for Business Channel to GA Release Channel",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description = "Sets TargetReleaseVersionInfo=\"GA\" in WindowsUpdate policy. Configures Windows Update for Business to target the General Availability (GA) channel, ensuring the endpoint only receives fully released Windows 11/10 builds rather than Beta channel, Release Preview builds, or Insider Preview builds, providing the most stable update experience. " +
                     "Without an explicit channel configuration, a Windows endpoint may be enrolled in a Windows Insider Program channel from a previous administrator action and continue receiving pre-release builds. Pre-release builds are not covered by the standard Microsoft support lifecycle and may contain known stability regressions. Locking the endpoint to the GA channel ensures only fully supported, production-validated Windows builds are ever installed.",
                 Tags = ["windows-servicing", "release-channel", "ga", "insider", "update"],
@@ -5925,7 +5925,7 @@ internal static class PolicyEnterprise
             {
                 Id = "winsvc-defer-feature-updates-90-days",
                 Label = "Servicing: Defer Windows Feature Updates for 90 Days from GA Release",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description = "Sets DeferFeatureUpdatesPeriodInDays=90 in WindowsUpdate policy. Delays the installation of Windows Feature Updates (major annual or semi-annual releases introducing new OS capabilities) by 90 days from the date they are first made publicly available, giving Microsoft time to issue compatibility fixes and giving IT time to complete validation and application compatibility testing. " +
                     "New Windows Feature Updates (e.g., Windows 11 version upgrades) introduce significant changes to the OS, including driver model changes, security changes, and UI modifications. Enterprises that immediately deploy new feature updates (0-day) routinely encounter application compatibility regressions, driver failures for specialised hardware, and Group Policy setting changes that require updated ADMX templates. A 90-day deferral provides buffer for Microsoft to release hotfixes and for enterprise IT to complete testing.",
                 Tags = ["windows-servicing", "feature-update", "deferral", "compatibility", "testing"],
@@ -5942,7 +5942,7 @@ internal static class PolicyEnterprise
             {
                 Id = "winsvc-defer-quality-updates-7-days",
                 Label = "Servicing: Defer Windows Quality Updates for 7 Days to Allow Reliability Monitoring",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description = "Sets DeferQualityUpdatesPeriodInDays=7 in WindowsUpdate policy. Delays the installation of Windows Quality Updates (monthly Patch Tuesday cumulative updates containing security fixes, reliability improvements, and bug fixes) by 7 days from their initial release to allow time for early-adopter reports to surface critical issues before enterprise-wide deployment. " +
                     "Monthly Patch Tuesday cumulative updates occasionally introduce regressions — caused by a security fix that changes underlying API behaviour or a reliability fix interacting unexpectedly with specific application configurations. In prior years, Patch Tuesday updates have introduced BSoDs for specific driver configurations, performance regressions in SMB file server workloads, and print spooler failures. A 7-day deferral allows Microsoft, the community, and independent testing labs to publish regression reports before the update reaches production endpoints.",
                 Tags = ["windows-servicing", "quality-update", "patch-tuesday", "deferral", "regression"],
@@ -5959,7 +5959,7 @@ internal static class PolicyEnterprise
             {
                 Id = "winsvc-disable-dual-scan",
                 Label = "Servicing: Disable WUfB Dual-Scan (WSUS + Windows Update Cloud Simultaneously)",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description = "Sets DisableDualScan=1 in WindowsUpdate policy. Prevents Windows Update for Business from simultaneously scanning both the corporate WSUS server and the Windows Update cloud service for updates, restricting update source to the configured primary source only (typically WSUS). Without this setting, endpoints configured with both WSUS and WUfB policies may accidentally install cloud-sourced updates that haven't been approved in WSUS. " +
                     "WSUS environments use update approval workflows to prevent unapproved patches from installing. Windows Update for Business cloud scanning bypasses WSUS approval workflows — an update that is DECLINED in WSUS may still install if the endpoint simultaneously scans and finds the update approved in the Windows Update cloud service. Dual scan effectively breaks WSUS update governance by allowing cloud updates to supersede WSUS-declined updates.",
                 Tags = ["windows-servicing", "dual-scan", "wsus", "wufb", "update-governance"],
@@ -5976,7 +5976,7 @@ internal static class PolicyEnterprise
             {
                 Id = "winsvc-block-preview-builds",
                 Label = "Servicing: Block Windows Preview Builds and Insider Preview Enrollment",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description = "Sets ManagePreviewBuilds=1 in WindowsUpdate policy. Prevents Windows from accessing Insider Preview builds, blocks the Windows Insider Program from enrolling the device, and hides the 'Windows Insider Program' section from Settings > Windows Update, making it impossible for users or administrators to opt into Insider Preview channels that would replace the production OS with a pre-release build. " +
                     "Windows Insider Program enrolment replaces the production Windows build with a pre-release build that may have known critical vulnerabilities (disclosed during the Insider period), removed security features under development, or APIs with breaking changes from the production build. On enterprise endpoints, any path that allows downgrading from a supported production build to an unsupported pre-release build bypasses the enterprise's patching SLA and software support commitments.",
                 Tags = ["windows-servicing", "insider-preview", "preview-builds", "insider-program", "lockdown"],
@@ -5993,7 +5993,7 @@ internal static class PolicyEnterprise
             {
                 Id = "winsvc-exclude-drivers-from-quality-updates",
                 Label = "Servicing: Exclude Driver Updates from Monthly Quality Update Package",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description = "Sets ExcludeWUDriversInQualityUpdate=1 in WindowsUpdate policy. Prevents Windows Update for Business from installing driver updates as part of the monthly cumulative quality update package, requiring that driver updates are sourced and approved separately through the driver management pipeline rather than being bundled into the OS quality update. " +
                     "Driver updates bundled into Windows quality updates have been a source of hardware compatibility regressions, particularly for specialised peripherals, storage controllers, and graphics subsystems. A mandatory driver update included in a cumulative update may replace a tested, stable OEM driver with a Microsoft-provided inbox driver that behaves differently for specific hardware configurations. Excluding drivers from quality updates allows IT to validate and approve driver updates independently on a slower cadence.",
                 Tags = ["windows-servicing", "drivers", "quality-update", "regression", "driver-management"],
@@ -6010,7 +6010,7 @@ internal static class PolicyEnterprise
             {
                 Id = "winsvc-block-optional-content-updates",
                 Label = "Servicing: Block Optional Windows Content Updates (Media Features, Language Packs)",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description = "Sets AllowOptionalContent=0 in WindowsUpdate policy. Prevents Windows Update from automatically downloading and installing optional content updates — including optional feature updates, language experience packs, optional cumulative update components, and regional supplemental content packs — without explicit IT administrator approval for each optional package. " +
                     "Optional content includes media feature packs, additional language support, and supplemental features that Microsoft offers but does not install by default. While largely benign, optional content can consume hundreds of MB of disk space per package and is not required for enterprise operation. In disk-constrained environments (VDI thin clients, 128 GB endpoint SSDs) or bandwidth-constrained environments (WAN-connected branch offices), automatic download of optional content packages creates unnecessary overhead without enterprise benefit.",
                 Tags = ["windows-servicing", "optional-content", "language-packs", "disk-space", "bandwidth"],
@@ -6027,7 +6027,7 @@ internal static class PolicyEnterprise
             {
                 Id = "winsvc-set-readiness-level-general-availability",
                 Label = "Servicing: Set Branch Readiness Level to General Availability Channel",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description = "Sets BranchReadinessLevel=16 in WindowsUpdate policy. Sets the Windows Update for Business readiness level (deployment ring) to General Availability Channel (value 16), directing the endpoint to receive feature updates only after they have been on the General Availability channel for the configured deferral period, rather than from the Beta or Release Preview channels. " +
                     "BranchReadinessLevel determines which update channel feeds feature update availability. A value of 2 selects the Release Preview channel; 16 selects General Availability. Enterprises that configure WUfB without explicitly setting the readiness level may receive updates from the Release Preview channel, which contains builds that are near-final but may still have issues resolved between Release Preview and GA. Explicit GA targeting closes this gap.",
                 Tags = ["windows-servicing", "branch-readiness", "ga-channel", "feature-update", "wufb"],
@@ -6044,7 +6044,7 @@ internal static class PolicyEnterprise
             {
                 Id = "winsvc-enable-safe-os-update-rollback",
                 Label = "Servicing: Enable SafeOS Update Rollback on Feature Update Failure Detection",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description = "Sets EnableSafeOSUpdateRollback=1 in WindowsUpdate policy. Enables the Windows Safe OS rollback mechanism for failed feature updates. When a feature update installation fails (BSoD during upgrade, driver incompatibility detected, boot loop), Windows automatically rolls back to the previous working build rather than leaving the endpoint in an unbootable or partially-upgraded state. " +
                     "Feature update installation failures can leave an endpoint in a state where it has partially installed the new version but cannot boot successfully. Without SafeOS rollback enabled, the endpoint may enter a boot repair loop, requiring IT to perform manual recovery (recovery console, reimaging). With SafeOS rollback, Windows detects the boot failure and automatically recovers to the last known good state, minimising end-user downtime and IT support demand for failed feature update deployments.",
                 Tags = ["windows-servicing", "rollback", "feature-update", "safeos", "recovery"],
@@ -6061,7 +6061,7 @@ internal static class PolicyEnterprise
             {
                 Id = "winsvc-enable-compliance-deadline-enforcement",
                 Label = "Servicing: Enable Compliance Deadline Enforcement to Prevent Indefinite Update Deferral",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description = "Sets EnableComplianceDeadlineEnforcement=1 in WindowsUpdate policy. Enables the WUfB compliance deadline mechanism, which automatically enforces update installation (overriding user-controlled active hours and post-deadline deferral settings) when a security update has been available beyond the configured deadline period, ensuring security patches cannot be deferred indefinitely by end-users. " +
                     "Windows Update for Business user deadline controls allow end-users to dismiss and defer reboot prompts after updates are downloaded. In environments without compliance deadline enforcement, a user who repeatedly dismisses reboot prompts can delay security patch installation for weeks or months. The compliance deadline enforcement mechanism ensures that regardless of user behaviour, a security update that has been downloaded for more than the configured deadline period (typically 3–7 days) will install on the next restart.",
                 Tags = ["windows-servicing", "compliance-deadline", "security-patch", "forced-reboot", "sla"],
@@ -6089,7 +6089,7 @@ internal static class PolicyEnterprise
             {
                 Id = "wtg-disable-sleep",
                 Label = "Disable Sleep States for Windows To Go",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description = "Sets EnableSleep=0 in the PortableOperatingSystem policy key. "
                     + "Prevents Windows To Go workspaces from entering S1-S3 sleep states while running "
                     + "from a USB drive. Sleep states on WTG disks can corrupt the workspace if the USB "
@@ -6110,7 +6110,7 @@ internal static class PolicyEnterprise
             {
                 Id = "wtg-disable-hibernation",
                 Label = "Disable Hibernation for Windows To Go",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description = "Sets EnableHibernation=0 in the PortableOperatingSystem policy key. "
                     + "Prevents Windows To Go workspaces from using the hibernate (S4) power state. "
                     + "Hibernation on a WTG USB workspace saves RAM to the hiberfil.sys on the USB disk, "
@@ -6131,7 +6131,7 @@ internal static class PolicyEnterprise
             {
                 Id = "wtg-block-workspace-creation",
                 Label = "Block Windows To Go Workspace Creation",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description = "Sets NoWorkspaceCreation=1 in the PortableOperatingSystem policy key. "
                     + "Prevents users from using the Windows To Go Workspace Creator wizard to create "
                     + "new WTG workspaces from this machine. Ensures WTG environments are only created "
@@ -6152,7 +6152,7 @@ internal static class PolicyEnterprise
             {
                 Id = "wtg-block-boot-from-external",
                 Label = "Block Booting From External WTG Media",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description = "Sets BlockBootFromExternalMedia=1 in the PortableOperatingSystem policy key. "
                     + "Prevents this machine from booting a Windows To Go workspace from external USB media. "
                     + "Ensures the machine always boots its internal Windows installation and cannot be "
@@ -6173,7 +6173,7 @@ internal static class PolicyEnterprise
             {
                 Id = "wtg-disable-host-offline-folders",
                 Label = "Disable Host Offline Folders in Windows To Go",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description = "Sets NoOfflineFolders=1 in the PortableOperatingSystem policy key. "
                     + "Prevents the WTG workspace from accessing the host machine's Offline Files cache. "
                     + "Ensures that when a user boots into a WTG workspace, they cannot read or write "
@@ -6194,7 +6194,7 @@ internal static class PolicyEnterprise
             {
                 Id = "wtg-disable-retail-demo",
                 Label = "Disable Retail Demo Mode for Windows To Go",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description = "Sets DisableRetailDemo=1 in the PortableOperatingSystem policy key. "
                     + "Suppresses the Retail Demo Experience (RDX) from being shown or launched when "
                     + "a WTG workspace boots on a retail display or demo machine. Prevents WTG workspaces "
@@ -6214,7 +6214,7 @@ internal static class PolicyEnterprise
             {
                 Id = "wtg-disable-sync-on-metered",
                 Label = "Disable Sync Provider on Metered Connection for WTG",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description = "Sets DisableSyncProviderOnMetered=1 in the PortableOperatingSystem policy key. "
                     + "Prevents the WTG workspace from contacting cloud sync providers (OneDrive, Dropbox, etc.) "
                     + "when the device is on a metered network connection. Reduces data usage costs for WTG "
@@ -6234,7 +6234,7 @@ internal static class PolicyEnterprise
             {
                 Id = "wtg-block-cross-hardware-deploy",
                 Label = "Block Cross-Hardware WTG Deployment",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description = "Sets NoCrossHardwareDeploy=1 in the PortableOperatingSystem policy key. "
                     + "Prevents the WTG workspace from being moved to a different hardware platform once it "
                     + "has been provisioned. Cross-hardware WTG deployment can cause driver conflicts, "
@@ -6255,7 +6255,7 @@ internal static class PolicyEnterprise
             {
                 Id = "wtg-enforce-secure-boot",
                 Label = "Enforce Secure Boot for Windows To Go Workspaces",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description = "Sets RequireSecureBoot=1 in the PortableOperatingSystem policy key. "
                     + "Requires that the host machine's Secure Boot setting be enabled before a WTG "
                     + "workspace will boot. Prevents WTG from being used as an attack vector on machines "
@@ -6276,7 +6276,7 @@ internal static class PolicyEnterprise
             {
                 Id = "wtg-disable-automatic-update",
                 Label = "Disable Automatic Windows Update in WTG Workspace",
-                Category = "Enterprise Management Policy",
+                Category = "System",
                 Description = "Sets NoAutoUpdate=1 in the PortableOperatingSystem policy key. "
                     + "Prevents the WTG workspace from automatically downloading and installing Windows updates "
                     + "while running on the road. Updates in a WTG workspace use the host machine's internet "

@@ -850,7 +850,7 @@ internal static class FileSystem
         {
             Id = "fs-disable-encryption-warning",
             Label = "Disable EFS Encryption Warning",
-            Category = "File System",
+            Category = "Storage",
             NeedsAdmin = true,
             CorpSafe = false,
             Description =
@@ -866,7 +866,7 @@ internal static class FileSystem
         {
             Id = "fs-disable-remote-diff-compression",
             Label = "Disable Remote Differential Compression",
-            Category = "File System",
+            Category = "Storage",
             NeedsAdmin = true,
             CorpSafe = false,
             Description =
@@ -881,7 +881,7 @@ internal static class FileSystem
         {
             Id = "fs-enable-dedup-memory",
             Label = "Set Higher Dedup Memory Usage",
-            Category = "File System",
+            Category = "Storage",
             NeedsAdmin = true,
             CorpSafe = false,
             Description =
@@ -897,7 +897,7 @@ internal static class FileSystem
         {
             Id = "fs-enable-case-sensitive",
             Label = "Enable Per-Directory Case Sensitivity",
-            Category = "File System",
+            Category = "Storage",
             NeedsAdmin = true,
             CorpSafe = false,
             Description =
@@ -912,7 +912,7 @@ internal static class FileSystem
         {
             Id = "fs-disable-name-generation",
             Label = "Disable Extended Character 8.3 Name Generation",
-            Category = "File System",
+            Category = "Storage",
             NeedsAdmin = true,
             CorpSafe = false,
             Description =
@@ -936,7 +936,7 @@ internal static class FileSystem
         {
             Id = "fs-increase-mft-zone",
             Label = "Increase NTFS MFT Zone Reservation",
-            Category = "File System",
+            Category = "Storage",
             NeedsAdmin = true,
             CorpSafe = false,
             Description =
@@ -951,7 +951,7 @@ internal static class FileSystem
         {
             Id = "fs-disable-encrypt-paging",
             Label = "Disable Paging File Encryption",
-            Category = "File System",
+            Category = "Storage",
             NeedsAdmin = true,
             CorpSafe = false,
             Description =
@@ -966,7 +966,7 @@ internal static class FileSystem
         {
             Id = "fs-disable-dos-devices",
             Label = "Disable DOS Device Mapping Protection",
-            Category = "File System",
+            Category = "Storage",
             NeedsAdmin = true,
             CorpSafe = false,
             Description =
@@ -981,7 +981,7 @@ internal static class FileSystem
         {
             Id = "fs-set-additional-del-margin",
             Label = "Set Critical Disk Allocation Margin",
-            Category = "File System",
+            Category = "Storage",
             NeedsAdmin = true,
             CorpSafe = false,
             Description =
@@ -999,7 +999,7 @@ internal static class FileSystem
         {
             Id = "fs-disable-azure-indexing",
             Label = "Disable Azure AD Cloud Content Indexing",
-            Category = "File System",
+            Category = "Storage",
             NeedsAdmin = true,
             CorpSafe = false,
             Description =
@@ -1014,7 +1014,7 @@ internal static class FileSystem
         {
             Id = "fs-disable-8dot3-names",
             Label = "Disable 8.3 Short Filename Creation",
-            Category = "File System",
+            Category = "Storage",
             NeedsAdmin = true,
             CorpSafe = false,
             Description =
@@ -1029,7 +1029,7 @@ internal static class FileSystem
         {
             Id = "fs-increase-ntfs-memory",
             Label = "Increase NTFS Memory Usage",
-            Category = "File System",
+            Category = "Storage",
             NeedsAdmin = true,
             CorpSafe = false,
             Description =
@@ -1044,7 +1044,7 @@ internal static class FileSystem
         {
             Id = "fs-disable-tunneling",
             Label = "Disable NTFS Filename Tunneling",
-            Category = "File System",
+            Category = "Storage",
             NeedsAdmin = true,
             CorpSafe = false,
             Description =
@@ -1059,7 +1059,7 @@ internal static class FileSystem
         {
             Id = "fs-enable-large-system-cache",
             Label = "Enable Large System Cache",
-            Category = "File System",
+            Category = "Storage",
             NeedsAdmin = true,
             CorpSafe = false,
             Description =
@@ -1083,7 +1083,7 @@ internal static class FileSystem
         {
             Id = "fs-disable-last-access-timestamp",
             Label = "Disable Last Access Timestamps",
-            Category = "File System",
+            Category = "Storage",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables updating last-access timestamps on NTFS. Reduces disk writes and improves performance. Default: user managed.",
@@ -1118,7 +1118,7 @@ internal static class FileSystem
         {
             Id = "fs-enable-ntfs-encryption",
             Label = "Enable NTFS Encryption Warnings",
-            Category = "File System",
+            Category = "Storage",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -1133,7 +1133,7 @@ internal static class FileSystem
         {
             Id = "fs-increase-ntfs-memory-usage",
             Label = "Increase NTFS Paged Pool Memory",
-            Category = "File System",
+            Category = "Storage",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Increases the NTFS paged pool memory allocation. Improves performance with many open files. Default: system managed.",
@@ -1147,7 +1147,7 @@ internal static class FileSystem
         {
             Id = "fs-disable-delete-confirmation",
             Label = "Disable Delete Confirmation Dialog",
-            Category = "File System",
+            Category = "Storage",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Disables the 'Are you sure you want to move this to Recycle Bin?' confirmation. Default: enabled.",
@@ -1161,7 +1161,7 @@ internal static class FileSystem
         {
             Id = "fs-enable-path-based-case-sensitivity",
             Label = "Enable Per-Directory Case Sensitivity",
-            Category = "File System",
+            Category = "Storage",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Enables support for per-directory case sensitivity on NTFS via Windows Subsystem for Linux. Default: disabled.",
@@ -1175,7 +1175,7 @@ internal static class FileSystem
         {
             Id = "fs-disable-last-access-update",
             Label = "Disable Last Access Time Stamp",
-            Category = "File System",
+            Category = "Storage",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -1192,7 +1192,7 @@ internal static class FileSystem
         {
             Id = "fs-set-additional-critical-worker-threads",
             Label = "Increase Critical Worker Threads",
-            Category = "File System",
+            Category = "Storage",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -1227,7 +1227,7 @@ internal static class FileSystem
         {
             Id = "fs-set-additional-delayed-worker-threads",
             Label = "Increase Delayed Worker Threads",
-            Category = "File System",
+            Category = "Storage",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Adds additional delayed worker threads for background file system operations. Reduces queuing delays under heavy I/O.",
@@ -1258,7 +1258,7 @@ internal static class FileSystem
         {
             Id = "fs-disable-notification-change",
             Label = "Disable NTFS Change Notifications",
-            Category = "File System",
+            Category = "Storage",
             NeedsAdmin = true,
             CorpSafe = false,
             Description = "Disables NTFS change notification tracking. Reduces kernel overhead from file watchers (may break live-reload tools).",
@@ -1272,7 +1272,7 @@ internal static class FileSystem
         {
             Id = "fs-optimize-path-cache",
             Label = "Increase File Path Cache Size",
-            Category = "File System",
+            Category = "Storage",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Increases the path cache size to speed up directory traversals, especially on deep file hierarchies like node_modules.",
@@ -1286,7 +1286,7 @@ internal static class FileSystem
         {
             Id = "fs-enable-opportunistic-locking",
             Label = "Enable Opportunistic File Locking",
-            Category = "File System",
+            Category = "Storage",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -1301,7 +1301,7 @@ internal static class FileSystem
         {
             Id = "fs-disable-ntfs-tunneling",
             Label = "Disable NTFS File Name Tunneling",
-            Category = "File System",
+            Category = "Storage",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -1317,7 +1317,7 @@ internal static class FileSystem
         {
             Id = "fs-enable-win32-long-paths-policy",
             Label = "Enable Long Paths via Group Policy",
-            Category = "File System",
+            Category = "Storage",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -1332,7 +1332,7 @@ internal static class FileSystem
         {
             Id = "fs-disable-transacted-installer-rollback",
             Label = "Disable Transactional NTFS Rollback",
-            Category = "File System",
+            Category = "Storage",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables Transactional NTFS (TxF) rollback log creation. Saves disk space and I/O for this rarely-used feature.",
@@ -1346,7 +1346,7 @@ internal static class FileSystem
         {
             Id = "fs-increase-file-handle-limit",
             Label = "Increase System File Handle Limit",
-            Category = "File System",
+            Category = "Storage",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Increases the system-wide file handle limit. Prevents 'too many open files' errors for applications with heavy file I/O.",
@@ -1360,7 +1360,7 @@ internal static class FileSystem
         {
             Id = "fs-disable-admin-shares",
             Label = "Disable Administrative Shares (C$, ADMIN$)",
-            Category = "File System",
+            Category = "Storage",
             NeedsAdmin = true,
             CorpSafe = false,
             Description =
@@ -1375,7 +1375,7 @@ internal static class FileSystem
         {
             Id = "fs-disable-smb1-server",
             Label = "Disable SMB 1.0 Server Protocol",
-            Category = "File System",
+            Category = "Storage",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -1390,7 +1390,7 @@ internal static class FileSystem
         {
             Id = "fs-disable-file-history",
             Label = "Disable File History Backup Service (Policy)",
-            Category = "File System",
+            Category = "Storage",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -1405,7 +1405,7 @@ internal static class FileSystem
         {
             Id = "fs-disable-prev-versions-ui",
             Label = "Disable Previous Versions UI in File Explorer",
-            Category = "File System",
+            Category = "Storage",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -1420,7 +1420,7 @@ internal static class FileSystem
         {
             Id = "fs-disable-dfs-client",
             Label = "Disable DFS Client Name Resolution",
-            Category = "File System",
+            Category = "Storage",
             NeedsAdmin = true,
             CorpSafe = false,
             Description =
@@ -1435,7 +1435,7 @@ internal static class FileSystem
         {
             Id = "fs-enable-extended-chars-8dot3",
             Label = "Allow Extended Characters in 8.3 Short Names",
-            Category = "File System",
+            Category = "Storage",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -1459,7 +1459,7 @@ internal static class FileSystem
         {
             Id = "fs-set-smb-auto-disconnect",
             Label = "Set SMB Server Idle Disconnect Timeout to 5 Min",
-            Category = "File System",
+            Category = "Storage",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -1474,7 +1474,7 @@ internal static class FileSystem
         {
             Id = "fs-set-oplock-break-timeout",
             Label = "Set Oplock Break ACK Timeout to 35 s",
-            Category = "File System",
+            Category = "Storage",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -1498,7 +1498,7 @@ internal static class FileSystem
         {
             Id = "fs-disable-ntfs-compression-global",
             Label = "Disable NTFS Compression System-Wide",
-            Category = "File System",
+            Category = "Storage",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -1513,7 +1513,7 @@ internal static class FileSystem
         {
             Id = "fs-disable-low-disk-check",
             Label = "Disable Low Disk Space Balloon Warning",
-            Category = "File System",
+            Category = "Storage",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -1534,7 +1534,7 @@ internal static class FileSystem
         {
             Id = "fs-disable-autorun-gpo",
             Label = "Disable AutoRun on All Drives (Policy)",
-            Category = "File System",
+            Category = "Storage",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -1544,6 +1544,683 @@ internal static class FileSystem
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Explorer", "NoAutorun", 1)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Explorer", "NoAutorun")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Explorer", "NoAutorun", 1)],
+        },
+    ];
+}
+
+// ── merged from SsdOptimization.cs ────────────────────────────────────────
+internal static class SsdOptimization
+{
+    private const string LmKey = @"HKEY_LOCAL_MACHINE";
+
+    internal static IReadOnlyList<TweakDef> Tweaks { get; } =
+    [
+        new TweakDef
+        {
+            Id = "ssd-disable-superfetch",
+            Label = "Disable Superfetch / SysMain on SSD",
+            Category = "Storage",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables the SysMain (Superfetch) service which pre-loads apps into memory. Unnecessary on SSDs and reduces write wear.",
+            Tags = ["ssd", "performance", "superfetch", "sysmain"],
+            RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Services\SysMain"],
+            ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\SysMain", "Start", 4)],
+            RemoveOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\SysMain", "Start", 2)],
+            DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\SysMain", "Start", 4)],
+        },
+        new TweakDef
+        {
+            Id = "ssd-disable-prefetch",
+            Label = "Disable Prefetch on SSD",
+            Category = "Storage",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables the Windows Prefetch feature. On SSDs, random read is fast enough that prefetching provides no benefit.",
+            Tags = ["ssd", "performance", "prefetch"],
+            RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\PrefetchParameters"],
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    $@"{LmKey}\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\PrefetchParameters",
+                    "EnablePrefetcher",
+                    0
+                ),
+                RegOp.SetDword(
+                    $@"{LmKey}\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\PrefetchParameters",
+                    "EnableSuperfetch",
+                    0
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.SetDword(
+                    $@"{LmKey}\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\PrefetchParameters",
+                    "EnablePrefetcher",
+                    3
+                ),
+                RegOp.SetDword(
+                    $@"{LmKey}\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\PrefetchParameters",
+                    "EnableSuperfetch",
+                    3
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    $@"{LmKey}\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\PrefetchParameters",
+                    "EnablePrefetcher",
+                    0
+                ),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "ssd-disable-last-access-timestamp",
+            Label = "Disable Last Access Timestamp (NTFS)",
+            Category = "Storage",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            KindHint = TweakKind.SystemCommand,
+            Description = "Disables NTFS last-access-time updates, reducing unnecessary SSD writes on every file read.",
+            Tags = ["ssd", "performance", "ntfs", "filesystem"],
+            ApplyAction = _ => ShellRunner.Run("fsutil.exe", ["behavior", "set", "disablelastaccess", "1"]),
+            RemoveAction = _ => ShellRunner.Run("fsutil.exe", ["behavior", "set", "disablelastaccess", "0"]),
+            DetectAction = () =>
+            {
+                var (_, stdout, _) = ShellRunner.Run("fsutil.exe", ["behavior", "query", "disablelastaccess"]);
+                return stdout.Contains("1", StringComparison.OrdinalIgnoreCase) || stdout.Contains("enabled", StringComparison.OrdinalIgnoreCase);
+            },
+        },
+        new TweakDef
+        {
+            Id = "ssd-enable-trim",
+            Label = "Enable TRIM (Automatic Optimization)",
+            Category = "Storage",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            KindHint = TweakKind.SystemCommand,
+            Description = "Ensures TRIM is enabled for SSD garbage collection. TRIM informs the SSD which blocks are no longer in use.",
+            Tags = ["ssd", "performance", "trim", "defrag"],
+            ApplyAction = _ => ShellRunner.Run("fsutil.exe", ["behavior", "set", "disabledeletenotify", "0"]),
+            RemoveAction = _ => ShellRunner.Run("fsutil.exe", ["behavior", "set", "disabledeletenotify", "1"]),
+            DetectAction = () =>
+            {
+                var (_, stdout, _) = ShellRunner.Run("fsutil.exe", ["behavior", "query", "disabledeletenotify"]);
+                return stdout.Contains("= 0", StringComparison.Ordinal);
+            },
+        },
+        new TweakDef
+        {
+            Id = "ssd-disable-defrag-schedule",
+            Label = "Disable Scheduled Disk Defragmentation",
+            Category = "Storage",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            KindHint = TweakKind.PowerShell,
+            Description = "Disables the scheduled defragmentation task. SSDs should use TRIM, not defragmentation.",
+            Tags = ["ssd", "performance", "defrag", "scheduled-task"],
+            ApplyAction = _ =>
+                ShellRunner.RunPowerShell(
+                    "Disable-ScheduledTask -TaskPath '\\Microsoft\\Windows\\Defrag\\' -TaskName 'ScheduledDefrag' -ErrorAction SilentlyContinue"
+                ),
+            RemoveAction = _ =>
+                ShellRunner.RunPowerShell(
+                    "Enable-ScheduledTask -TaskPath '\\Microsoft\\Windows\\Defrag\\' -TaskName 'ScheduledDefrag' -ErrorAction SilentlyContinue"
+                ),
+            DetectAction = () =>
+            {
+                var (_, stdout, _) = ShellRunner.RunPowerShell(
+                    "(Get-ScheduledTask -TaskPath '\\Microsoft\\Windows\\Defrag\\' -TaskName 'ScheduledDefrag' -ErrorAction SilentlyContinue).State"
+                );
+                return stdout.Trim().Equals("Disabled", StringComparison.OrdinalIgnoreCase);
+            },
+        },
+        new TweakDef
+        {
+            Id = "ssd-disable-windows-search-indexing",
+            Label = "Disable Windows Search Indexing",
+            Category = "Storage",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Disables the Windows Search Indexer service. Reduces write amplification on SSDs. Search will still work but without instant results.",
+            Tags = ["ssd", "performance", "indexing", "search"],
+            RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Services\WSearch"],
+            ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\WSearch", "Start", 4)],
+            RemoveOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\WSearch", "Start", 2)],
+            DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\WSearch", "Start", 4)],
+        },
+        new TweakDef
+        {
+            Id = "ssd-enable-write-caching",
+            Label = "Enable Write Caching on SSD",
+            Category = "Storage",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            KindHint = TweakKind.PowerShell,
+            Description =
+                "Enables disk write caching for improved SSD write performance. Data is cached in volatile memory before being written to disk.",
+            Tags = ["ssd", "performance", "write-cache", "disk"],
+            SideEffects = "Risk of data loss on sudden power failure without UPS.",
+            ApplyAction = _ =>
+                ShellRunner.RunPowerShell(
+                    "Get-Disk | Where-Object { $_.BusType -ne 'USB' } | ForEach-Object { "
+                        + "Set-StorageSetting -NewDiskPolicy OnlineAll -ErrorAction SilentlyContinue }"
+                ),
+            RemoveAction = _ => { },
+            DetectAction = () => false,
+        },
+        new TweakDef
+        {
+            Id = "ssd-disable-hibernation-ssd",
+            Label = "Disable Hibernation (SSD Wear Reduction)",
+            Category = "Storage",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            KindHint = TweakKind.SystemCommand,
+            Description =
+                "Disables hibernation to avoid writing full RAM contents to SSD (hiberfil.sys). Reduces write wear and frees disk space equal to RAM size.",
+            Tags = ["ssd", "performance", "hibernation", "disk-space"],
+            SideEffects = "Hibernation and Fast Startup will be unavailable.",
+            ApplyAction = _ => ShellRunner.Run("powercfg.exe", ["-h", "off"]),
+            RemoveAction = _ => ShellRunner.Run("powercfg.exe", ["-h", "on"]),
+            DetectAction = () =>
+            {
+                var (_, stdout, _) = ShellRunner.RunPowerShell("Test-Path \"$env:SystemDrive\\hiberfil.sys\"");
+                return stdout.Trim().Equals("False", StringComparison.OrdinalIgnoreCase);
+            },
+        },
+        new TweakDef
+        {
+            Id = "ssd-disable-8dot3-names",
+            Label = "Disable 8.3 Short File Names (NTFS)",
+            Category = "Storage",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            KindHint = TweakKind.SystemCommand,
+            Description = "Disables legacy 8.3 short filename generation in NTFS. Reduces overhead on every file creation.",
+            Tags = ["ssd", "performance", "ntfs", "filesystem"],
+            ApplyAction = _ => ShellRunner.Run("fsutil.exe", ["8dot3name", "set", "1"]),
+            RemoveAction = _ => ShellRunner.Run("fsutil.exe", ["8dot3name", "set", "0"]),
+            DetectAction = () =>
+            {
+                var (_, stdout, _) = ShellRunner.Run("fsutil.exe", ["8dot3name", "query"]);
+                return stdout.Contains("1", StringComparison.Ordinal) || stdout.Contains("disabled", StringComparison.OrdinalIgnoreCase);
+            },
+        },
+        new TweakDef
+        {
+            Id = "ssd-increase-ntfs-memory-usage",
+            Label = "Increase NTFS Memory Usage (Paged Pool)",
+            Category = "Storage",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Increases NTFS paged pool memory usage for better file system performance. Trades RAM for reduced disk I/O.",
+            Tags = ["ssd", "performance", "ntfs", "memory"],
+            RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Control\FileSystem"],
+            ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsMemoryUsage", 2)],
+            RemoveOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsMemoryUsage", 1)],
+            DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsMemoryUsage", 2)],
+        },
+        new TweakDef
+        {
+            Id = "ssd-large-system-cache",
+            Label = "Enable Large System Cache",
+            Category = "Storage",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Configures Windows to use a large system cache, improving file system performance at the cost of higher memory usage.",
+            Tags = ["ssd", "performance", "cache", "memory"],
+            RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management"],
+            ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "LargeSystemCache", 1)],
+            RemoveOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "LargeSystemCache", 0)],
+            DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "LargeSystemCache", 1)],
+        },
+        new TweakDef
+        {
+            Id = "ssd-disable-boot-trace",
+            Label = "Disable Boot Trace Logging",
+            Category = "Storage",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables boot trace diagnostic logging that writes to disk during startup.",
+            Tags = ["ssd", "performance", "boot", "trace", "io"],
+            RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Control\WMI\Autologger\ReadyBoot"],
+            ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\WMI\Autologger\ReadyBoot", "Start", 0)],
+            RemoveOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\WMI\Autologger\ReadyBoot", "Start", 1)],
+            DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\WMI\Autologger\ReadyBoot", "Start", 0)],
+        },
+        new TweakDef
+        {
+            Id = "ssd-disable-ntfs-compression",
+            Label = "Disable NTFS Compression (System Drive)",
+            Category = "Storage",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables NTFS compression on the system drive. Compression adds CPU overhead and provides minimal benefit on fast SSDs.",
+            Tags = ["ssd", "performance", "ntfs", "compression", "cpu"],
+            RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Control\FileSystem"],
+            ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsDisableCompression", 1)],
+            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsDisableCompression")],
+            DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsDisableCompression", 1)],
+        },
+        new TweakDef
+        {
+            Id = "ssd-disable-ntfs-encryption",
+            Label = "Disable NTFS Encryption Paging",
+            Category = "Storage",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables NTFS encrypted paging file. Reduces I/O overhead from encrypting page file writes.",
+            Tags = ["ssd", "performance", "ntfs", "encryption", "paging"],
+            RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Control\FileSystem"],
+            ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsEncryptPagingFile", 0)],
+            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsEncryptPagingFile")],
+            DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsEncryptPagingFile", 0)],
+        },
+
+        new TweakDef
+        {
+            Id = "ssd-set-io-priority-normal",
+            Label = "Set Default I/O Priority to Normal",
+            Category = "Storage",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Sets the default I/O priority for all processes to Normal. Prevents I/O starvation from low-priority background tasks.",
+            Tags = ["ssd", "performance", "io-priority", "scheduling"],
+            RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Control\PriorityControl"],
+            ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\PriorityControl", "ConvertibleSlateMode", 0)],
+            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SYSTEM\CurrentControlSet\Control\PriorityControl", "ConvertibleSlateMode")],
+            DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\PriorityControl", "ConvertibleSlateMode", 0)],
+        },
+        new TweakDef
+        {
+            Id = "ssd-disable-low-disk-check",
+            Label = "Disable Low Disk Space Check",
+            Category = "Storage",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Disables the periodic low disk space notification check. Reduces unnecessary disk I/O.",
+            Tags = ["ssd", "performance", "notification", "disk-space"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer", "NoLowDiskSpaceChecks", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer", "NoLowDiskSpaceChecks")],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer", "NoLowDiskSpaceChecks", 1),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "ssd-increase-ntfs-mft-zone",
+            Label = "Increase NTFS MFT Zone Reservation",
+            Category = "Storage",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Increases the NTFS Master File Table zone reservation to reduce MFT fragmentation on SSDs with many small files.",
+            Tags = ["ssd", "performance", "ntfs", "mft", "fragmentation"],
+            RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Control\FileSystem"],
+            ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsMftZoneReservation", 2)],
+            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsMftZoneReservation")],
+            DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsMftZoneReservation", 2)],
+        },
+        new TweakDef
+        {
+            Id = "ssd-disable-readyboost",
+            Label = "Disable ReadyBoost Service",
+            Category = "Storage",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables the ReadyBoost service which uses USB flash drives as cache. Useless on systems with SSDs.",
+            Tags = ["ssd", "performance", "readyboost", "service", "usb"],
+            RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Services\rdyboost"],
+            ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\rdyboost", "Start", 4)],
+            RemoveOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\rdyboost", "Start", 3)],
+            DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\rdyboost", "Start", 4)],
+        },
+        new TweakDef
+        {
+            Id = "ssd-disable-disk-perf-counters",
+            Label = "Disable Disk Performance Counters",
+            Category = "Storage",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables disk performance counters to reduce I/O overhead. Disable only if you don't monitor disk performance.",
+            Tags = ["ssd", "performance", "counters", "io", "monitoring"],
+            RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Services\PerfDisk"],
+            ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\PerfDisk", "Start", 4)],
+            RemoveOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\PerfDisk", "Start", 2)],
+            DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\PerfDisk", "Start", 4)],
+        },
+        // ── Sprint 20 additions ─────────────────────────────────────────────
+
+        new TweakDef
+        {
+            Id = "ssd-disable-link-power-management",
+            Label = "Disable AHCI Link Power Management",
+            Category = "Storage",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables AHCI Link Power Management (HIPM/DIPM) to prevent SSD latency spikes from power state transitions.",
+            Tags = ["ssd", "performance", "power", "ahci"],
+            RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Services\storahci\Parameters\Device"],
+            ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\storahci\Parameters\Device", "EnableHIPM", 0)],
+            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SYSTEM\CurrentControlSet\Services\storahci\Parameters\Device", "EnableHIPM")],
+            DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\storahci\Parameters\Device", "EnableHIPM", 0)],
+        },
+        new TweakDef
+        {
+            Id = "ssd-disable-dipm",
+            Label = "Disable Device-Initiated Power Management",
+            Category = "Storage",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Disables DIPM (Device-Initiated Power Management) on SATA SSDs. Prevents the SSD from entering low-power states that add latency.",
+            Tags = ["ssd", "performance", "power", "dipm"],
+            RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Services\storahci\Parameters\Device"],
+            ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\storahci\Parameters\Device", "EnableDIPM", 0)],
+            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SYSTEM\CurrentControlSet\Services\storahci\Parameters\Device", "EnableDIPM")],
+            DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\storahci\Parameters\Device", "EnableDIPM", 0)],
+        },
+        new TweakDef
+        {
+            Id = "ssd-disable-idle-power-timeout",
+            Label = "Disable Disk Idle Power Timeout",
+            Category = "Storage",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Sets the disk idle timeout to 0, preventing SSDs from entering sleep mode. Eliminates wake-up latency spikes.",
+            Tags = ["ssd", "performance", "power", "timeout"],
+            RegistryKeys =
+            [
+                $@"{LmKey}\SYSTEM\CurrentControlSet\Control\Power\PowerSettings\0012ee47-9041-4b5d-9b77-535fba8b1442\6738e2c4-e8a5-4a42-b16a-e040e769756e",
+            ],
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    $@"{LmKey}\SYSTEM\CurrentControlSet\Control\Power\PowerSettings\0012ee47-9041-4b5d-9b77-535fba8b1442\6738e2c4-e8a5-4a42-b16a-e040e769756e",
+                    "ValueMax",
+                    0
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(
+                    $@"{LmKey}\SYSTEM\CurrentControlSet\Control\Power\PowerSettings\0012ee47-9041-4b5d-9b77-535fba8b1442\6738e2c4-e8a5-4a42-b16a-e040e769756e",
+                    "ValueMax"
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    $@"{LmKey}\SYSTEM\CurrentControlSet\Control\Power\PowerSettings\0012ee47-9041-4b5d-9b77-535fba8b1442\6738e2c4-e8a5-4a42-b16a-e040e769756e",
+                    "ValueMax",
+                    0
+                ),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "ssd-increase-mft-zone-4",
+            Label = "Increase MFT Zone Reservation to 4",
+            Category = "Storage",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Reserves a larger contiguous area for the Master File Table, reducing MFT fragmentation on heavily used SSDs.",
+            Tags = ["ssd", "ntfs", "mft", "fragmentation"],
+            RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Control\FileSystem"],
+            ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsMftZoneReservation", 4)],
+            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsMftZoneReservation")],
+            DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsMftZoneReservation", 4)],
+        },
+        new TweakDef
+        {
+            Id = "ssd-disable-log-file-flush",
+            Label = "Reduce NTFS Log File Flush Frequency",
+            Category = "Storage",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Reduces the frequency of NTFS journal log file flushes. Decreases write amplification on SSDs at a small risk of data on power loss.",
+            Tags = ["ssd", "ntfs", "log", "performance"],
+            RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Control\FileSystem"],
+            ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsDisableLogfileFlush", 1)],
+            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsDisableLogfileFlush")],
+            DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsDisableLogfileFlush", 1)],
+        },
+        new TweakDef
+        {
+            Id = "ssd-disable-pagefile-encryption",
+            Label = "Disable Page File Encryption",
+            Category = "Storage",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description =
+                "Disables page file encryption that adds CPU overhead and write amplification on SSDs. Less secure but faster swap performance.",
+            Tags = ["ssd", "pagefile", "encryption", "performance"],
+            RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Control\FileSystem"],
+            ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsEncryptPagingFile", 0)],
+            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsEncryptPagingFile")],
+            DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsEncryptPagingFile", 0)],
+        },
+        new TweakDef
+        {
+            Id = "ssd-optimize-power-scheme",
+            Label = "Optimize SSD Power Scheme Settings",
+            Category = "Storage",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Configures the active power scheme for SSDs by disabling aggressive power saving that causes latency on modern NVMe drives.",
+            Tags = ["ssd", "power", "nvme", "performance"],
+            RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Control\Power"],
+            ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\Power", "HibernateEnabled", 0)],
+            RemoveOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\Power", "HibernateEnabled", 1)],
+            DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\Power", "HibernateEnabled", 0)],
+        },
+        new TweakDef
+        {
+            Id = "ssd-disable-timestamp-on-directories",
+            Label = "Disable Timestamp Updates on Directories",
+            Category = "Storage",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables NTFS timestamp updates on directory access. Reduces unnecessary write operations during directory traversals.",
+            Tags = ["ssd", "ntfs", "timestamp", "io"],
+            RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Control\FileSystem"],
+            ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsDisableLastAccessUpdate", 1)],
+            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsDisableLastAccessUpdate")],
+            DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsDisableLastAccessUpdate", 1)],
+        },
+        new TweakDef
+        {
+            Id = "ssd-enable-volatile-write-cache",
+            Label = "Enable Volatile Write Cache on SSD",
+            Category = "Storage",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description =
+                "Enables volatile write caching on SSD controller. Improves sequential write performance but data may be lost on sudden power loss.",
+            Tags = ["ssd", "write-cache", "performance", "risk"],
+            RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Enum\SCSI"],
+            ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\disk", "EnableWriteCache", 1)],
+            RemoveOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\disk", "EnableWriteCache", 0)],
+            DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\disk", "EnableWriteCache", 1)],
+        },
+        new TweakDef
+        {
+            Id = "ssd-disable-content-indexing-global",
+            Label = "Disable Content Indexing via Registry",
+            Category = "Storage",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables Windows Search content indexing globally via registry. Reduces background I/O and write wear on SSDs.",
+            Tags = ["ssd", "indexing", "search", "performance"],
+            RegistryKeys = [$@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows\Windows Search"],
+            ApplyOps = [RegOp.SetDword($@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows\Windows Search", "AllowIndexingEncryptedStoresOrItems", 0)],
+            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows\Windows Search", "AllowIndexingEncryptedStoresOrItems")],
+            DetectOps = [RegOp.CheckDword($@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows\Windows Search", "AllowIndexingEncryptedStoresOrItems", 0)],
+        },
+        new TweakDef
+        {
+            Id = "ssd-disable-pagefile-clear-shutdown",
+            Label = "Disable Pagefile Wipe on Shutdown",
+            Category = "Storage",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description =
+                "Sets ClearPageFileAtShutdown=0 so Windows does not zero-fill the pagefile on every shutdown. Eliminates a large sequential write that significantly increases SSD wear-out and lengthens shutdown time.",
+            Tags = ["ssd", "pagefile", "shutdown", "performance", "wear"],
+            RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management"],
+            ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "ClearPageFileAtShutdown", 0)],
+            RemoveOps =
+            [
+                RegOp.DeleteValue($@"{LmKey}\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "ClearPageFileAtShutdown"),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "ClearPageFileAtShutdown", 0),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "ssd-indexer-low-priority-io",
+            Label = "Run Windows Search Indexer at Low I/O Priority",
+            Category = "Storage",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Sets LowPriorityIO=1 in the Windows Search gatherer parameters. The indexer uses background I/O priority, reducing I/O contention with interactive applications on SSDs.",
+            Tags = ["ssd", "search", "indexer", "io-priority", "performance"],
+            RegistryKeys = [$@"{LmKey}\SOFTWARE\Microsoft\Windows Search\Gather\Windows\SystemIndex"],
+            ApplyOps = [RegOp.SetDword($@"{LmKey}\SOFTWARE\Microsoft\Windows Search\Gather\Windows\SystemIndex", "LowPriorityIO", 1)],
+            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SOFTWARE\Microsoft\Windows Search\Gather\Windows\SystemIndex", "LowPriorityIO")],
+            DetectOps = [RegOp.CheckDword($@"{LmKey}\SOFTWARE\Microsoft\Windows Search\Gather\Windows\SystemIndex", "LowPriorityIO", 1)],
+        },
+        new TweakDef
+        {
+            Id = "ssd-disable-boot-auto-layout",
+            Label = "Disable Boot File Auto-Layout Optimisation",
+            Category = "Storage",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Sets EnableAutoLayout=0. On SSDs the auto-layout rearrangement of boot files provides no latency benefit because seek time is negligible. Eliminates the post-defrag layout phase.",
+            Tags = ["ssd", "boot", "auto-layout", "defrag", "performance"],
+            RegistryKeys = [$@"{LmKey}\SOFTWARE\Microsoft\Windows\CurrentVersion\OptimalLayout"],
+            ApplyOps = [RegOp.SetDword($@"{LmKey}\SOFTWARE\Microsoft\Windows\CurrentVersion\OptimalLayout", "EnableAutoLayout", 0)],
+            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SOFTWARE\Microsoft\Windows\CurrentVersion\OptimalLayout", "EnableAutoLayout")],
+            DetectOps = [RegOp.CheckDword($@"{LmKey}\SOFTWARE\Microsoft\Windows\CurrentVersion\OptimalLayout", "EnableAutoLayout", 0)],
+        },
+        new TweakDef
+        {
+            Id = "ssd-set-disk-timeout-fast",
+            Label = "Reduce Disk I/O Timeout to 20 s",
+            Category = "Storage",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Sets the disk service TimeOutValue to 20 seconds. SSDs respond orders of magnitude faster than HDDs; the default 45 s timeout means stalled SSD requests block the queue for far too long.",
+            Tags = ["ssd", "timeout", "disk", "performance"],
+            RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Services\disk"],
+            ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\disk", "TimeOutValue", 20)],
+            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SYSTEM\CurrentControlSet\Services\disk", "TimeOutValue")],
+            DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\disk", "TimeOutValue", 20)],
+        },
+        new TweakDef
+        {
+            Id = "ssd-limit-io-page-lock-pool",
+            Label = "Limit I/O Page-Lock Memory Pool to 1 MB",
+            Category = "Storage",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Sets IoPageLockLimit to 1 048 576 bytes (1 MB). Caps the amount of physical memory that can be locked for I/O transfers, keeping more RAM available for application buffers.",
+            Tags = ["ssd", "memory", "io", "pool", "performance"],
+            RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management"],
+            ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "IoPageLockLimit", 1048576)],
+            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "IoPageLockLimit")],
+            DetectOps =
+            [
+                RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "IoPageLockLimit", 1048576),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "ssd-disable-rac-sampling",
+            Label = "Disable Reliability Activity Centre Sampling",
+            Category = "Storage",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Sets GeneralSamplingEnabled=0 in the RAC registry key. Stops the Reliability Analysis Component from periodically sampling system activity and writing entries to the RAC database on the SSD.",
+            Tags = ["ssd", "reliability", "rac", "wear", "writes"],
+            RegistryKeys = [$@"{LmKey}\SOFTWARE\Microsoft\Reliability Analysis\RAC"],
+            ApplyOps = [RegOp.SetDword($@"{LmKey}\SOFTWARE\Microsoft\Reliability Analysis\RAC", "GeneralSamplingEnabled", 0)],
+            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SOFTWARE\Microsoft\Reliability Analysis\RAC", "GeneralSamplingEnabled")],
+            DetectOps = [RegOp.CheckDword($@"{LmKey}\SOFTWARE\Microsoft\Reliability Analysis\RAC", "GeneralSamplingEnabled", 0)],
+        },
+        new TweakDef
+        {
+            Id = "ssd-ntfs-force-nonpaged-pool",
+            Label = "Force NTFS Metadata into Non-Paged Pool",
+            Category = "Storage",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Sets NtfsForceNonPagedPoolAllocation=1. Keeps NTFS internal metadata structures in non-paged pool memory, eliminating paging I/O on the SSD for the file system's own working set.",
+            Tags = ["ssd", "ntfs", "memory", "paged-pool", "performance"],
+            RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Control\FileSystem"],
+            ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsForceNonPagedPoolAllocation", 1)],
+            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsForceNonPagedPoolAllocation")],
+            DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsForceNonPagedPoolAllocation", 1)],
+        },
+        new TweakDef
+        {
+            Id = "ssd-disable-smb-read-ahead",
+            Label = "Disable SMB Read-Ahead for SSD",
+            Category = "Storage",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Sets ReadAheadThreshold=0 in LanmanWorkstation parameters. Disables SMB client read-ahead prefetching. On SSDs random I/O is as fast as sequential, so pre-reading data wastes write bandwidth and cache without benefit.",
+            Tags = ["ssd", "smb", "read-ahead", "network", "performance"],
+            RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Services\LanmanWorkstation\Parameters"],
+            ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\LanmanWorkstation\Parameters", "ReadAheadThreshold", 0)],
+            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SYSTEM\CurrentControlSet\Services\LanmanWorkstation\Parameters", "ReadAheadThreshold")],
+            DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\LanmanWorkstation\Parameters", "ReadAheadThreshold", 0)],
+        },
+        new TweakDef
+        {
+            Id = "ssd-search-no-backoff-busy",
+            Label = "Disable Windows Search I/O Backoff When Disk Busy",
+            Category = "Storage",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Sets BackOffIfDiskBusy=0 in Windows Search. By default the indexer backs off when disk utilisation is high. On SSDs concurrent I/O is fully supported; disabling backoff lets indexing keep pace.",
+            Tags = ["ssd", "search", "indexer", "io", "performance"],
+            RegistryKeys = [$@"{LmKey}\SOFTWARE\Microsoft\Windows Search"],
+            ApplyOps = [RegOp.SetDword($@"{LmKey}\SOFTWARE\Microsoft\Windows Search", "BackOffIfDiskBusy", 0)],
+            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SOFTWARE\Microsoft\Windows Search", "BackOffIfDiskBusy")],
+            DetectOps = [RegOp.CheckDword($@"{LmKey}\SOFTWARE\Microsoft\Windows Search", "BackOffIfDiskBusy", 0)],
+        },
+        new TweakDef
+        {
+            Id = "ssd-disable-auto-volume-mount",
+            Label = "Disable Automatic New-Volume Mounting",
+            Category = "Storage",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Sets NoAutoMount=1 in the MountMgr parameters. Prevents Windows from automatically assigning drive letters and mounting new storage volumes. Avoids unexpected I/O and AutoRun triggers when USB drives are inserted.",
+            Tags = ["ssd", "mount", "volume", "autorun", "security"],
+            RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Services\MountMgr"],
+            ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\MountMgr", "NoAutoMount", 1)],
+            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SYSTEM\CurrentControlSet\Services\MountMgr", "NoAutoMount")],
+            DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\MountMgr", "NoAutoMount", 1)],
         },
     ];
 }

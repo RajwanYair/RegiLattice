@@ -44,7 +44,7 @@ internal static class PolicyAudit
             {
                 Id = "acmgmtaudit-audit-user-account-management",
                 Label = "Account Mgmt Audit: Enable Success+Failure Auditing for All User Account Changes",
-                Category = "Security Audit Policy",
+                Category = "Security",
                 Description = "Sets AuditUserAccountManagement=3 (Success+Failure) in the Advanced Audit Policy Account Management category. Generates Security events 4720 (created), 4722 (enabled), 4723 (pwd change attempt), 4724 (pwd reset), 4725 (disabled), 4726 (deleted), 4738 (changed), 4740 (locked out), 4765/4766 (SID history) for all local and domain user account lifecycle operations. Provides complete user identity lifecycle audit trail. " +
                     "User account management events are the foundational identity audit record. Security events 4720/4726 (account create/delete) are mandatory for SOC monitoring because they record rogue account creation — a common persistence technique. Without user account management auditing enabled, a threat actor can create a new backdoor local administrator account and there is no Security event log record of the account creation. All identity governance and SoD (Separation of Duties) compliance requirements depend on this audit subcategory being active.",
                 Tags = ["account-mgmt-audit", "user-account", "account-creation", "4720", "persistence", "backdoor-account"],
@@ -61,7 +61,7 @@ internal static class PolicyAudit
             {
                 Id = "acmgmtaudit-audit-security-group-management",
                 Label = "Account Mgmt Audit: Enable Auditing for All Security Group Membership Changes",
-                Category = "Security Audit Policy",
+                Category = "Security",
                 Description = "Sets AuditSecurityGroupManagement=3 (Success+Failure) in the Advanced Audit Policy. Generates Security events 4727 (global group created), 4728 (member added), 4729 (member removed), 4730 (global group deleted), 4731 (local group created), 4732 (local group member added), 4733 (local group member removed), 4734 (local group deleted), 4735 (local group changed) for all security group membership operations. " +
                     "Group membership changes are the primary privilege escalation audit signal in Active Directory environments. Adding a compromised account to Domain Admins, Backup Operators, or any privileged security group generates Event 4728/4732. SOC SIEM rules that alert on additions to predefined sensitive security groups (Domain Admins, Enterprise Admins, Schema Admins, Protected Users) depend entirely on this audit subcategory being active across all domain controllers and endpoints.",
                 Tags = ["account-mgmt-audit", "security-group", "group-membership", "4728", "privilege-escalation", "domain-admins"],
@@ -78,7 +78,7 @@ internal static class PolicyAudit
             {
                 Id = "acmgmtaudit-audit-distribution-group-management",
                 Label = "Account Mgmt Audit: Enable Auditing for Distribution Group Membership Changes",
-                Category = "Security Audit Policy",
+                Category = "Security",
                 Description = "Sets AuditDistributionGroupManagement=3 (Success+Failure) in the Advanced Audit Policy. Generates Security events for distribution group lifecycle operations (4744–4758: create, change, delete, member add, member remove for global and universal distribution groups). Provides identity governance visibility for non-security-enabled groups that may have access to sensitive email distribution lists or SharePoint groups. " +
                     "Distribution groups do not have security principals and cannot directly grant file system access, but they control email distribution reach and SharePoint group membership when used as SharePoint audience targeting groups. An attacker who adds a compromised account to a 'Finance-All' distribution group gains full visibility of financial email communications including budgets, deals, and sensitive financial data delivered through that distribution list. Auditing distribution group changes enables detection of email list infiltration.",
                 Tags = ["account-mgmt-audit", "distribution-group", "email-list", "sharepoint", "insider-threat"],
@@ -95,7 +95,7 @@ internal static class PolicyAudit
             {
                 Id = "acmgmtaudit-audit-computer-account-management",
                 Label = "Account Mgmt Audit: Enable Auditing for Computer Account Creation and Deletion",
-                Category = "Security Audit Policy",
+                Category = "Security",
                 Description = "Sets AuditComputerAccountManagement=3 (Success+Failure) in the Advanced Audit Policy. Generates Security events 4741 (computer account created), 4742 (computer account changed), 4743 (computer account deleted) for computer object lifecycle operations in Active Directory. Provides detection for rogue computer account creation used for Kerberos silver ticket persistence. " +
                     "Computer account creation in Active Directory is a high-value attack technique. By default, any domain user can create up to 10 computer objects in any container they have permissions over (ms-DS-MachineAccountQuota). An attacker with a foothold in the domain can create new computer accounts (RBCD, resource-based constrained delegation attacks), configure a service principal name, and use Kerberos delegation to obtain elevated Kerberos tickets. Computer account creation events detect this persistence technique immediately.",
                 Tags = ["account-mgmt-audit", "computer-account", "4741", "rbcd", "kerberos", "silver-ticket"],
@@ -112,7 +112,7 @@ internal static class PolicyAudit
             {
                 Id = "acmgmtaudit-audit-other-account-management-events",
                 Label = "Account Mgmt Audit: Enable Other Account Management Events (Password Hash Sync, PKI)",
-                Category = "Security Audit Policy",
+                Category = "Security",
                 Description = "Sets AuditOtherAccountManagementEvents=3 (Success+Failure) in the Advanced Audit Policy. Generates Security events 4782 (password hash was accessed), 4793 (password policy API called), 4798 (user's local group membership enumerated), 4799 (security-enabled local group members enumerated) — capturing credential database access and reconnaissance activities that fall outside the standard account management event types. " +
                     "Events 4798 and 4799 (local group membership enumeration) are particularly significant — they are generated when a script or tool enumerates the members of the local Administrators group on an endpoint. Ransomware operators and red teams consistently enumerate local admin group membership across all endpoints immediately after initial compromise to identify which machines have Domain Admins logged in or have shared local admin passwords. These events provide direct detection of the reconnaissance phase of a ransomware campaign.",
                 Tags = ["account-mgmt-audit", "4798", "4799", "local-group-enumeration", "ransomware", "recon"],
@@ -129,7 +129,7 @@ internal static class PolicyAudit
             {
                 Id = "acmgmtaudit-audit-application-group-management",
                 Label = "Account Mgmt Audit: Enable Application Group Management Auditing",
-                Category = "Security Audit Policy",
+                Category = "Security",
                 Description = "Sets AuditApplicationGroupManagement=3 (Success+Failure) in the Advanced Audit Policy. Generates Security events for application group lifecycle operations (4783–4792: create, change, delete, member add/remove for non-Universal, non-Security application groups used by network access protection and application-specific group policies). " +
                     "Application groups include Windows Authorization Manager (AzMan) application groups, which are used by LOB applications to define role-based access control within the application independent of Active Directory security groups. If an attacker gains write access to an AzMan policy store, they can add themselves to application-level admin roles without modifying Active Directory groups. Auditing application group changes detects this application-level privilege escalation vector.",
                 Tags = ["account-mgmt-audit", "application-group", "azman", "rbac", "app-privilege-escalation"],
@@ -146,7 +146,7 @@ internal static class PolicyAudit
             {
                 Id = "acmgmtaudit-enable-account-lockout-audit",
                 Label = "Account Mgmt Audit: Enable Account Lockout Event Auditing for Brute Force Detection",
-                Category = "Security Audit Policy",
+                Category = "Security",
                 Description = "Sets AuditAccountLockout=3 (Success+Failure) in the Advanced Audit Policy Logon/Logoff category. Generates Security event 4625 Failure, 4770, and 4771 for failed logon attempts and event 4740 (account locked out) when an account's failed logon threshold is exceeded, providing brute force password spray attack detection across all endpoints and authentication services. " +
                     "Password spray attacks target a single password against an entire user list to avoid triggering per-account lockout thresholds (one attempt per account does not trigger lockout). Account lockout audit enables detection of spray patterns by correlating event 4740 (account locked out) across multiple accounts in a short time window — multiple lockouts in minutes with the same originating IP address is a high-fidelity indicator of a password spray attack. SOC SIEM rules for password spray are entirely dependent on this audit subcategory.",
                 Tags = ["account-mgmt-audit", "account-lockout", "4740", "password-spray", "brute-force", "siem"],
@@ -163,7 +163,7 @@ internal static class PolicyAudit
             {
                 Id = "acmgmtaudit-audit-user-right-assignment",
                 Label = "Account Mgmt Audit: Enable Auditing for User Right Assignment Changes",
-                Category = "Security Audit Policy",
+                Category = "Security",
                 Description = "Sets AuditPolicyChange=3 (Success+Failure) in the Advanced Audit Policy Audit Policy Change category. Generates Security events 4703 (token privilege enabled/disabled), 4704 (user right assigned), 4705 (user right removed) when any user right (SeDebugPrivilege, SeTcbPrivilege, SeImpersonatePrivilege, etc.) is granted to or removed from any security principal. Detects direct user right manipulation. " +
                     "Granting SeDebugPrivilege or SeImpersonatePrivilege directly to a non-administrator security principal is an authoritative persistence technique — it gives the principal the same privilege as a local administrator for a specific action without adding them to the Administrators group. This bypasses monitoring rules that only watch for Administrators group membership changes. Auditing user right assignment changes detects this out-of-band privilege grant pathway.",
                 Tags = ["account-mgmt-audit", "user-rights", "4704", "sedebug", "seimpersonate", "privilege-grant"],
@@ -180,7 +180,7 @@ internal static class PolicyAudit
             {
                 Id = "acmgmtaudit-audit-credential-validation-failures",
                 Label = "Account Mgmt Audit: Enable Credential Validation Failure Auditing for Auth Attack Detection",
-                Category = "Security Audit Policy",
+                Category = "Security",
                 Description = "Sets AuditCredentialValidation=3 (Success+Failure) in the Advanced Audit Policy Account Logon category. Generates Security events 4776 (NTLM authentication attempt — success/failure) and 4772/4776 failure events for failed NTLM credential validation attempts against the local SAM, enabling detection of NTLM hash relay attacks, local brute force, and pass-the-hash authentication re-use attempts against local account hashes. " +
                     "NTLM authentication failure events (4776 Failure) are the primary detection signal for NTLM relay attacks — when an attacker captures an NTLM challenge-response and relays it to a different server, the relay attempt generates authentication failure events with the source workstation name visible. Pass-the-Hash attempts against local accounts (using a harvested NTLM hash to authenticate to SMB) also generate 4776 Failure events from unexpected source machines. These events feed the 'NTLM authentication anomaly' SIEM detection rules.",
                 Tags = ["account-mgmt-audit", "credential-validation", "ntlm", "4776", "pass-the-hash", "relay-attack"],
@@ -197,7 +197,7 @@ internal static class PolicyAudit
             {
                 Id = "acmgmtaudit-enable-kerberos-service-ticket-audit",
                 Label = "Account Mgmt Audit: Enable Kerberos Service Ticket Auditing for Ticket Attack Detection",
-                Category = "Security Audit Policy",
+                Category = "Security",
                 Description = "Sets AuditKerberosServiceTicket=3 (Success+Failure) in the Advanced Audit Policy Account Logon category. Generates Security events 4769 (Kerberos service ticket request — success), 4770 (Kerberos service ticket renew), and 4771 (Kerberos pre-authentication failure) for all Kerberos ticket-granting service (TGS) requests, enabling detection of Kerberoasting attacks that request service tickets for all SPNs to offline crack their RC4-encrypted password hashes. " +
                     "Kerberoasting is one of the most common Active Directory attack techniques: any domain user can request a TGS for any service principal name, and if the service account's domain password is RC4-encrypted in the ticket (etype 0x17), the ticket can be taken offline for brute force password cracking without triggering any lockout. Auditing Kerberos TGS requests generates Event 4769 for each SPN ticket request — a Kerberoasting scan (requesting TGS for all SPNs in rapid succession) creates a distinctive volume and timing pattern detectable by SIEM.",
                 Tags = ["account-mgmt-audit", "kerberos", "4769", "kerberoasting", "tgs", "service-ticket"],
@@ -225,7 +225,7 @@ internal static class PolicyAudit
             {
                 Id = "audevt-audit-logon-events",
                 Label = "Enable Audit Policy for Logon Success and Failure Events",
-                Category = "Security Audit Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 5,
@@ -242,7 +242,7 @@ internal static class PolicyAudit
             {
                 Id = "audevt-audit-account-management",
                 Label = "Enable Audit Policy for Account Management Changes",
-                Category = "Security Audit Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 5,
@@ -259,7 +259,7 @@ internal static class PolicyAudit
             {
                 Id = "audevt-audit-privilege-use",
                 Label = "Enable Audit Policy for Sensitive Privilege Use Events",
-                Category = "Security Audit Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -276,7 +276,7 @@ internal static class PolicyAudit
             {
                 Id = "audevt-audit-policy-change",
                 Label = "Enable Audit Policy for Security Policy Changes",
-                Category = "Security Audit Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 5,
@@ -293,7 +293,7 @@ internal static class PolicyAudit
             {
                 Id = "audevt-audit-object-access",
                 Label = "Enable Audit Policy for File and Registry Object Access",
-                Category = "Security Audit Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -310,7 +310,7 @@ internal static class PolicyAudit
             {
                 Id = "audevt-audit-process-creation",
                 Label = "Enable Audit Policy for Process Creation Events",
-                Category = "Security Audit Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 5,
@@ -327,7 +327,7 @@ internal static class PolicyAudit
             {
                 Id = "audevt-audit-logon-special",
                 Label = "Enable Audit Policy for Special Logon Events",
-                Category = "Security Audit Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -344,7 +344,7 @@ internal static class PolicyAudit
             {
                 Id = "audevt-audit-directory-service",
                 Label = "Enable Audit Policy for Active Directory Service Changes",
-                Category = "Security Audit Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 5,
@@ -361,7 +361,7 @@ internal static class PolicyAudit
             {
                 Id = "audevt-audit-ipsec-extended",
                 Label = "Enable Extended Audit Policy for IPSec Events",
-                Category = "Security Audit Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -378,7 +378,7 @@ internal static class PolicyAudit
             {
                 Id = "audevt-audit-security-system-extension",
                 Label = "Enable Audit Policy for Security System Extension Loading",
-                Category = "Security Audit Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -406,7 +406,7 @@ internal static class PolicyAudit
                 {
                     Id = "auditadv-force-subcategory-policy",
                     Label = "Force Audit Policy Subcategory Settings Over Category",
-                    Category = "Security Audit Policy",
+                    Category = "Security",
                     Description =
                         "Forces Windows to use advanced audit policy subcategory settings (configured via auditpol.exe or Group Policy Advanced Audit) rather than the basic per-category settings from the local security policy, enabling fine-grained audit control.",
                     Tags = ["audit", "audit-policy", "subcategory", "security", "policy"],
@@ -423,7 +423,7 @@ internal static class PolicyAudit
                 {
                     Id = "auditadv-enable-pnp-activity-audit",
                     Label = "Enable Plug and Play Activity Audit",
-                    Category = "Security Audit Policy",
+                    Category = "Security",
                     Description =
                         "Enables auditing of Plug and Play device connections and disconnections, generating Security event 6416 for each new external device plugged in, supporting exfiltration investigations via USB/Thunderbolt devices.",
                     Tags = ["audit", "pnp", "usb", "device-connection", "security", "policy"],
@@ -440,7 +440,7 @@ internal static class PolicyAudit
                 {
                     Id = "auditadv-enable-removable-storage-audit",
                     Label = "Enable Removable Storage Object Access Audit",
-                    Category = "Security Audit Policy",
+                    Category = "Security",
                     Description =
                         "Enables auditing of read and write access to removable storage devices, generating Security event 4663 entries for file access on USB drives, SD cards, and other removable media.",
                     Tags = ["audit", "removable-storage", "file-access", "usb", "dlp", "policy"],
@@ -457,7 +457,7 @@ internal static class PolicyAudit
                 {
                     Id = "auditadv-enable-token-right-adjusted-audit",
                     Label = "Enable Token Right Adjustment Audit",
-                    Category = "Security Audit Policy",
+                    Category = "Security",
                     Description =
                         "Enables auditing of privilege adjustments (token right changes) such as SeDebugPrivilege, SeLoadDriverPrivilege activations, generating Security event 4703 to track privilege escalation attempts.",
                     Tags = ["audit", "privilege", "token-rights", "escalation", "security", "policy"],
@@ -474,7 +474,7 @@ internal static class PolicyAudit
                 {
                     Id = "auditadv-enable-user-account-management-audit",
                     Label = "Enable User Account Management Success and Failure Audit",
-                    Category = "Security Audit Policy",
+                    Category = "Security",
                     Description =
                         "Enables both success and failure auditing of user account management operations (account creation, modification, deletion, password reset, enable/disable) generating Security events 4720-4767 for compliance.",
                     Tags = ["audit", "user-accounts", "account-management", "compliance", "policy"],
@@ -491,7 +491,7 @@ internal static class PolicyAudit
                 {
                     Id = "auditadv-enable-sensitive-privilege-use-audit",
                     Label = "Enable Sensitive Privilege Use Audit",
-                    Category = "Security Audit Policy",
+                    Category = "Security",
                     Description =
                         "Enables auditing of sensitive privilege use (e.g., acting as part of OS, taking ownership, restoring files), generating Security event 4673/4674 entries to detect abuse of powerful administrative rights.",
                     Tags = ["audit", "privilege-use", "sensitive-privileges", "admin-abuse", "policy"],
@@ -508,7 +508,7 @@ internal static class PolicyAudit
                 {
                     Id = "auditadv-enable-ipsec-driver-audit",
                     Label = "Enable IPsec Driver Audit",
-                    Category = "Security Audit Policy",
+                    Category = "Security",
                     Description =
                         "Enables auditing of IPsec driver events including filter match, connection establishment, and connection drop events, supporting network security posture monitoring and VPN tunnel activity auditing.",
                     Tags = ["audit", "ipsec", "vpn", "network", "security", "policy"],
@@ -525,7 +525,7 @@ internal static class PolicyAudit
                 {
                     Id = "auditadv-enable-wfp-audit",
                     Label = "Enable Windows Filtering Platform (WFP) Audit",
-                    Category = "Security Audit Policy",
+                    Category = "Security",
                     Description =
                         "Enables auditing of Windows Filtering Platform connection permit and drop events, generating Security events 5031, 5152-5158 to support network activity analysis and firewall rule effectiveness reviews.",
                     Tags = ["audit", "wfp", "firewall", "network", "connection", "policy"],
@@ -542,7 +542,7 @@ internal static class PolicyAudit
                 {
                     Id = "auditadv-enable-registry-audit",
                     Label = "Enable Registry Object Access Audit",
-                    Category = "Security Audit Policy",
+                    Category = "Security",
                     Description =
                         "Enables auditing of registry key access and modifications when an object SACL is present, supporting post-incident forensics by recording which processes accessed security-sensitive registry keys.",
                     Tags = ["audit", "registry", "object-access", "forensics", "policy"],
@@ -559,7 +559,7 @@ internal static class PolicyAudit
                 {
                     Id = "auditadv-disable-audit-policy-change-by-user",
                     Label = "Block Audit Policy Changes by Non-Admin Users",
-                    Category = "Security Audit Policy",
+                    Category = "Security",
                     Description =
                         "Prevents non-administrator users from modifying audit policy settings via auditpol.exe or the Security Policy snap-in, ensuring the audit configuration cannot be weakened by standard users or compromised service accounts.",
                     Tags = ["audit", "audit-policy", "tamper-protection", "admin", "policy"],
@@ -587,7 +587,7 @@ internal static class PolicyAudit
             {
                 Id = "diagdvr-disable-viewer",
                 Label = "Telemetry: Disable the Diagnostic Data Viewer app",
-                Category = "Security Audit Policy",
+                Category = "Security",
                 Description =
                     "Sets DisableDiagnosticDataViewer=1. Prevents end users from opening the Diagnostic "
                     + "Data Viewer app to inspect telemetry sent to Microsoft, reducing data-disclosure risk.",
@@ -602,7 +602,7 @@ internal static class PolicyAudit
             {
                 Id = "diagdvr-disable-device-health-attestation",
                 Label = "Telemetry: Disable Device Health Attestation service reporting",
-                Category = "Security Audit Policy",
+                Category = "Security",
                 Description =
                     "Sets AllowDeviceHealthAttestationService=0. Prevents Windows from uploading "
                     + "boot-state measurements to the Microsoft Device Health Attestation cloud service.",
@@ -617,7 +617,7 @@ internal static class PolicyAudit
             {
                 Id = "diagdvr-limit-diagnostic-log-collection",
                 Label = "Telemetry: Limit diagnostic log collection for Windows Update",
-                Category = "Security Audit Policy",
+                Category = "Security",
                 Description =
                     "Sets LimitDiagnosticLogCollection=1. Restricts the volume of diagnostic logs "
                     + "collected from the device and uploaded during Windows Update servicing operations.",
@@ -632,7 +632,7 @@ internal static class PolicyAudit
             {
                 Id = "diagdvr-disable-enterprise-auth-proxy",
                 Label = "Telemetry: Disable enterprise auth-proxy for telemetry uploads",
-                Category = "Security Audit Policy",
+                Category = "Security",
                 Description =
                     "Sets DisableEnterpriseAuthProxy=1. Prevents the Connected User Experiences service "
                     + "from using Authenticated Proxy to send telemetry, forcing direct connection only.",
@@ -647,7 +647,7 @@ internal static class PolicyAudit
             {
                 Id = "diagdvr-disable-onesettings-auditing",
                 Label = "Telemetry: Disable OneSettings diagnostic auditing",
-                Category = "Security Audit Policy",
+                Category = "Security",
                 Description =
                     "Sets EnableOneSettingsAuditing=0. Prevents Windows from recording a local audit log "
                     + "of each OneSettings configuration payload fetched from Microsoft cloud endpoints.",
@@ -662,7 +662,7 @@ internal static class PolicyAudit
             {
                 Id = "diagdvr-disable-update-compliance-processing",
                 Label = "Telemetry: Disable Update Compliance telemetry processing",
-                Category = "Security Audit Policy",
+                Category = "Security",
                 Description =
                     "Sets AllowUpdateComplianceProcessing=0. Prevents the device from sending telemetry "
                     + "to the Windows Update Compliance cloud analytics workspace.",
@@ -677,7 +677,7 @@ internal static class PolicyAudit
             {
                 Id = "diagdvr-disable-wufb-cloud-processing",
                 Label = "Telemetry: Disable Windows Update for Business cloud processing",
-                Category = "Security Audit Policy",
+                Category = "Security",
                 Description =
                     "Sets AllowWUfBCloudProcessing=0. Prevents the device from sending telemetry to the "
                     + "Windows Update for Business cloud processing pipeline.",
@@ -692,7 +692,7 @@ internal static class PolicyAudit
             {
                 Id = "diagdvr-disable-desktop-analytics",
                 Label = "Telemetry: Disable Desktop Analytics/Endpoint Analytics telemetry",
-                Category = "Security Audit Policy",
+                Category = "Security",
                 Description =
                     "Sets AllowDesktopAnalyticsProcessing=0. Stops the device from contributing "
                     + "telemetry to Microsoft Desktop Analytics and Endpoint Analytics workloads.",
@@ -707,7 +707,7 @@ internal static class PolicyAudit
             {
                 Id = "diagdvr-disable-commercial-data-pipeline",
                 Label = "Telemetry: Disable commercial data pipeline telemetry upload",
-                Category = "Security Audit Policy",
+                Category = "Security",
                 Description =
                     "Sets AllowCommercialDataPipeline=0. Prevents Windows from routing diagnostic data "
                     + "through the commercial telemetry pipeline used by enterprise monitoring solutions.",
@@ -722,7 +722,7 @@ internal static class PolicyAudit
             {
                 Id = "diagdvr-limit-enhanced-diagnostic-data",
                 Label = "Telemetry: Limit enhanced diagnostic data for Windows Analytics",
-                Category = "Security Audit Policy",
+                Category = "Security",
                 Description =
                     "Sets LimitEnhancedDiagnosticDataWindowsAnalytics=0. When telemetry is set to Enhanced, "
                     + "this policy further limits the enhanced-tier subset sent to Windows Analytics.",
@@ -749,7 +749,7 @@ internal static class PolicyAudit
             {
                 Id = "dsaudit-audit-directory-service-access",
                 Label = "DS Audit: Enable Directory Service Object Access Auditing (LDAP Reads to Sensitive AD Objects)",
-                Category = "Security Audit Policy",
+                Category = "Security",
                 Description = "Sets AuditDirectoryServiceAccess=3 (Success+Failure) in Advanced Audit Policy DS Access category. Generates Security event 4661 for SACL-triggered access to Active Directory objects on domain controllers — user objects, group objects, GPO links, schema attributes, and AdminSDHolder-protected objects — providing on-DC audit records of all access to sensitive AD data. " +
                     "Active Directory is the crown jewel of the enterprise identity infrastructure. Without directory service access auditing, an attacker who performs an LDAP dump of all user objects (including password hint attributes, lastLogon, adminCount, userAccountControl enumeration) leaves no Security event log trace on the domain controller. With SACL-protected sensitive AD objects (all adminCount=1 objects, GPO objects, schema), directory service access events generate on every LDAP read, enabling DCSync detection and AD reconnaissance identification.",
                 Tags = ["ds-audit", "directory-service", "active-directory", "ldap", "dcsync", "sacl"],
@@ -766,7 +766,7 @@ internal static class PolicyAudit
             {
                 Id = "dsaudit-audit-directory-service-changes",
                 Label = "DS Audit: Enable Directory Service Object Modification Auditing (AD Object Changes)",
-                Category = "Security Audit Policy",
+                Category = "Security",
                 Description = "Sets AuditDirectoryServiceChanges=3 (Success+Failure) in Advanced Audit Policy DS Access category. Generates Security events 5136 (attribute modified), 5137 (object created), 5138 (object restored from tombstone), 5139 (object moved), 5141 (object deleted) for all changes to Active Directory objects, providing a granular changelog of AD modifications. " +
                     "Event 5136 is the AD schema-level modification record — it captures every attribute write to every AD object (user, group, computer, GPO, schema). Without this auditing subcategory enabled on domain controllers, the SOC has no event log record of Group Policy Object (GPO) modifications, AdminSDHolder ACL changes, Service Principal Name (SPN) additions (Kerberoasting target creation), or Domain Trust modifications (trust injection). SOC SIEM rules for GPO modification, persistence SPN addition, and trust injection all depend on Event 5136.",
                 Tags = ["ds-audit", "directory-service-changes", "event-5136", "gpo", "spn", "trust-injection"],
@@ -783,7 +783,7 @@ internal static class PolicyAudit
             {
                 Id = "dsaudit-audit-directory-service-replication",
                 Label = "DS Audit: Enable Directory Service Replication Auditing for DCSync Detection",
-                Category = "Security Audit Policy",
+                Category = "Security",
                 Description = "Sets AuditDirectoryServiceReplication=3 (Success+Failure) in Advanced Audit Policy DS Access category. Generates Security events 4928 (source naming context established — replication initiated), 4929 (source naming context removed), 4930 (source naming context modified), 4931 (destination naming context modified) for AD replication operations. Enables detection of DCSync attacks performed by non-DC machines invoking DS-Replication-Get-Changes privileges. " +
                     "DCSync (Mimikatz's lsadump::dcsync) mimics the behaviour of a domain controller requesting replication from another DC to obtain all account password hashes without requiring local access to the DC. The attack uses DS-Replication-Get-Changes-All privileges. Replication audit events (4928) are generated on the target DC when the replication request arrives. A 4928 event from a client workstation (not a domain controller) is a high-fidelity DCSync detection signal.",
                 Tags = ["ds-audit", "replication", "event-4928", "dcsync", "ds-replication", "mimikatz"],
@@ -800,7 +800,7 @@ internal static class PolicyAudit
             {
                 Id = "dsaudit-audit-detailed-replication",
                 Label = "DS Audit: Enable Detailed Directory Service Replication Auditing",
-                Category = "Security Audit Policy",
+                Category = "Security",
                 Description = "Sets AuditDetailedDirectoryServiceReplication=3 (Success+Failure) in Advanced Audit Policy DS Access category. Generates verbose Security events 4932/4933 (synchronization of a naming context has begun/ended) and 4934/4935/4937 (attribute of AD object replicated/failed/lingering object removed) for each object-level attribute synchronisation step during AD replication, providing attribute-granular replication change records. " +
                     "Detailed replication auditing provides the object-level granularity missing from standard replication auditing. When a naming context replication session (Event 4928) encompasses thousands of object changes, the standard events identify that replication occurred but not which specific objects or attributes were synchronised. Detailed replication events (4932/4934) identify the specific objects replicated in each session, enabling investigation of which specific accounts were targeted in a DCSync attack session.",
                 Tags = ["ds-audit", "detailed-replication", "event-4932", "naming-context", "dcsync-detail"],
@@ -817,7 +817,7 @@ internal static class PolicyAudit
             {
                 Id = "dsaudit-enable-dpapi-activity-audit",
                 Label = "DS Audit: Enable DPAPI Activity Auditing for Master Key Access Monitoring",
-                Category = "Security Audit Policy",
+                Category = "Security",
                 Description = "Sets AuditDPAPIActivity=3 (Success+Failure) in Advanced Audit Policy Detailed Tracking category. Generates Security events 4692 (DPAPI backup key was requested), 4693 (DPAPI data was decrypted), 4694 (DPAPI data was encrypted), 4695 (DPAPI data was decrypted in unprotected state) for all DPAPI encryption and decryption operations. Enables detection of DPAPI master key harvesting attacks. " +
                     "DPAPI master key backup operations (Event 4692) are generated when a new DPAPI master key is created and its backup is sent to the domain controller for recovery purposes. In DPAPI masterkey harvesting attacks (used by NanoDump, SharpDPAPI), an attacker requests the DPAPI backup key from the domain controller to decrypt all locally cached DPAPI blobs across the enterprise. Event 4692 from an unexpected non-system principal is a binary indicator of DPAPI master key interception.",
                 Tags = ["ds-audit", "dpapi", "event-4692", "master-key", "credential-decryption", "sharpdpapi"],
@@ -834,7 +834,7 @@ internal static class PolicyAudit
             {
                 Id = "dsaudit-enable-rpc-events-audit",
                 Label = "DS Audit: Enable RPC Events Auditing for Remote Service Call Monitoring",
-                Category = "Security Audit Policy",
+                Category = "Security",
                 Description = "Sets AuditRPCEvents=3 (Success+Failure) in Advanced Audit Policy Detailed Tracking category. Generates Security event 5712 (RPC connection attempt) for remote procedure call connections with caller identity, target interface UUID, and endpoint information — enabling detection of RPC-based lateral movement techniques that use Windows RPC interfaces (MS-SAMR, MS-LSAD, MS-DRSR, MS-RPRN) to access remote system resources. " +
                     "Remote Printer Spooler (MS-RPRN) exploitation (PrintNightmare) and RPC-based DCSync (MS-DRSR interface calls) are primary RPC-based attack techniques. Without RPC event auditing, there is no Security event log record of specific Windows RPC interface calls made to an endpoint. RPC event audit enables detection of PrintNightmare exploitation (unexpected MS-RPRN calls from non-print-server machines) and RPC-based credential access attempts targeting SAMR and LSAD interfaces.",
                 Tags = ["ds-audit", "rpc", "event-5712", "printnightmare", "ms-rprn", "samr", "lsad"],
@@ -851,7 +851,7 @@ internal static class PolicyAudit
             {
                 Id = "dsaudit-enable-central-access-policy-staging",
                 Label = "DS Audit: Enable Central Access Policy Staging Audit for DAC Rule Pre-Deployment Testing",
-                Category = "Security Audit Policy",
+                Category = "Security",
                 Description = "Sets AuditCentralAccessPolicyStaging=1 (Success) in Advanced Audit Policy DS Access category. Generates Security event 4818 (proposed Central Access Policy does not grant the same access permissions as the current Central Access Policy) when a proposed Dynamic Access Control policy being tested in staging mode would grant different access than the currently active policy, identifying files that would change access before the policy is deployed. " +
                     "Central Access Policy staging is the Windows DAC mechanism for safely testing new classification policies before deploying them to production. Without staging audit events, IT cannot determine the blast radius of a new DAC policy change — which files would gain new access grants, which would lose existing access. Event 4818 provides a non-destructive preview showing exactly which resources would receive different access treatment under the proposed policy vs the current policy.",
                 Tags = ["ds-audit", "central-access-policy", "dac", "staging", "event-4818", "policy-testing"],
@@ -868,7 +868,7 @@ internal static class PolicyAudit
             {
                 Id = "dsaudit-enable-certificate-services-audit",
                 Label = "DS Audit: Enable Active Directory Certificate Services Audit for CA Operation Monitoring",
-                Category = "Security Audit Policy",
+                Category = "Security",
                 Description = "Sets AuditCertificationServices=3 (Success+Failure) in Advanced Audit Policy Object Access category. Generates Security events 4870/4871/4872/4873/4874/4875/4876/4877 for all Active Directory Certificate Services operations — certificate requests (approved, denied, pending), certificate revocations, certificate template modifications, and CA role service start/stop. Critical for detecting AD CS-based privilege escalation (ESC1–ESC8 attacks). " +
                     "AD Certificate Services attacks (ESC1–ESC8, as catalogued by SpecterOps) enable low-privilege users to obtain certificates that can be used for domain admin authentication or persistent machine authentication bypass. Without CS audit events, a user who requests and receives a certificate through a misconfigured template (ESC1: SANs allowed by requester) generates no Security alert. Certificate request events (4886: certificate requested, 4887: certificate issued) record the subject, certificate template, and requester — enabling detection of privilege-elevating certificate requests.",
                 Tags = ["ds-audit", "ad-cs", "certificate-services", "event-4887", "esc1", "privilege-escalation"],
@@ -885,7 +885,7 @@ internal static class PolicyAudit
             {
                 Id = "dsaudit-audit-filtering-platform-connection",
                 Label = "DS Audit: Enable Windows Filtering Platform Connection Auditing for Network Profiling",
-                Category = "Security Audit Policy",
+                Category = "Security",
                 Description = "Sets AuditFilteringPlatformConnection=3 (Success+Failure) in Advanced Audit Policy Object Access category. Generates Security events 5031 (WFP application blocked), 5150/5151 (WFP packet blocked/dropped), 5156/5157 (WFP connection allowed/blocked by application) for Windows Filtering Platform (Windows Firewall) connection decisions, providing process-to-network socket binding records without requiring Sysmon Event ID 3. " +
                     "WFP connection allowed/blocked events (5156/5157) provide the same process-to-network binding information as Sysmon Event 3 but natively through Windows Security event log. Organisations that cannot deploy Sysmon can achieve equivalent network visibility using WFP auditing. Event 5156 records the process making the connection, the destination IP/port, and the protocol — enabling detection of command-and-control beaconing, lateral movement SMB connections, and data exfiltration to external IP ranges.",
                 Tags = ["ds-audit", "wfp", "windows-firewall", "event-5156", "c2-detection", "network-profiling"],
@@ -902,7 +902,7 @@ internal static class PolicyAudit
             {
                 Id = "dsaudit-audit-handle-manipulation",
                 Label = "DS Audit: Enable Handle Manipulation Auditing for LSASS Memory Access Detection",
-                Category = "Security Audit Policy",
+                Category = "Security",
                 Description = "Sets AuditHandleManipulation=3 (Success+Failure) in Advanced Audit Policy Object Access category. Generates Security event 4658 (handle to object closed) and event 4690 (attempt to duplicate handle to object) that complement the SACL-based object access events — specifically Event 4690 which records attempts to duplicate an open handle to a sensitive object (such as an LSASS process handle) to a different process. " +
                     "Process handle duplication is an advanced LSASS dump technique used to avoid the more detectable direct process access calls. Tools like x64dump and some variants of Cobalt Strike's in-memory credential extraction duplicate an existing handle to the LSASS process (owned by csrss.exe or another trusted process) rather than opening a new handle from a suspicious process. Event 4690 captures this handle duplication attempt, providing detection for handle-based LSASS access that bypasses protection based solely on process open calls.",
                 Tags = ["ds-audit", "handle-manipulation", "event-4690", "lsass", "handle-duplication", "credential-theft"],
@@ -932,7 +932,7 @@ internal static class PolicyAudit
             {
                 Id = "werpol-disable-wer",
                 Label = "Disable Windows Error Reporting via Group Policy",
-                Category = "Security Audit Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -951,7 +951,7 @@ internal static class PolicyAudit
             {
                 Id = "werpol-disable-internet-send",
                 Label = "WER: Block Sending Error Reports to Microsoft",
-                Category = "Security Audit Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -969,7 +969,7 @@ internal static class PolicyAudit
             {
                 Id = "werpol-disable-crash-dialog",
                 Label = "WER: Suppress Crash Report Dialog",
-                Category = "Security Audit Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -987,7 +987,7 @@ internal static class PolicyAudit
             {
                 Id = "werpol-bypass-throttling",
                 Label = "WER: Bypass Error Report Throttling",
-                Category = "Security Audit Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -1006,7 +1006,7 @@ internal static class PolicyAudit
             {
                 Id = "werpol-disable-logging",
                 Label = "WER: Disable Error Report Logging to Event Log",
-                Category = "Security Audit Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -1024,7 +1024,7 @@ internal static class PolicyAudit
             {
                 Id = "werpol-auto-approve-reports",
                 Label = "WER: Auto-Approve All Error Report Submissions",
-                Category = "Security Audit Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -1043,7 +1043,7 @@ internal static class PolicyAudit
             {
                 Id = "werpol-disable-heap-dumps",
                 Label = "WER: Disable Heap Memory Dump Collection",
-                Category = "Security Audit Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -1062,7 +1062,7 @@ internal static class PolicyAudit
             {
                 Id = "werpol-disable-queue-reporting",
                 Label = "WER: Disable Queued Error Report Sending",
-                Category = "Security Audit Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -1081,7 +1081,7 @@ internal static class PolicyAudit
             {
                 Id = "werpol-disable-unplanned-shutdown-reports",
                 Label = "WER: Suppress Unplanned OS Shutdown Reports",
-                Category = "Security Audit Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -1100,7 +1100,7 @@ internal static class PolicyAudit
             {
                 Id = "werpol-purge-report-archive",
                 Label = "WER: Set Maximum Archive Store to Zero Days",
-                Category = "Security Audit Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -1131,7 +1131,7 @@ internal static class PolicyAudit
                 {
                     Id = "etwses-disable-auto-logger-startup",
                     Label = "Disable ETW Auto-Logger Sessions at Startup",
-                    Category = "Security Audit Policy",
+                    Category = "Security",
                     Description =
                         "Prevents ETW auto-logger trace sessions from starting automatically at system boot, reducing the number of persistent trace sessions that consume memory and logging bandwidth during normal operation.",
                     Tags = ["etw", "auto-logger", "startup", "performance", "policy"],
@@ -1148,7 +1148,7 @@ internal static class PolicyAudit
                 {
                     Id = "etwses-block-user-trace-sessions",
                     Label = "Block Standard Users from Creating ETW Trace Sessions",
-                    Category = "Security Audit Policy",
+                    Category = "Security",
                     Description =
                         "Prevents standard (non-administrator) user accounts from creating new ETW trace sessions via StartTrace API, restricting diagnostic trace collection to administrator-initiated sessions only.",
                     Tags = ["etw", "trace-session", "standard-user", "admin", "policy"],
@@ -1165,7 +1165,7 @@ internal static class PolicyAudit
                 {
                     Id = "etwses-disable-wpp-tracing",
                     Label = "Disable WPP Software Tracing Buffer Logging",
-                    Category = "Security Audit Policy",
+                    Category = "Security",
                     Description =
                         "Disables Windows Pre-Processing (WPP) software tracing buffer logging, stopping WPP-instrumented drivers and services from maintaining in-memory circular trace buffers that consume non-paged pool memory.",
                     Tags = ["etw", "wpp", "software-tracing", "memory", "policy"],
@@ -1182,7 +1182,7 @@ internal static class PolicyAudit
                 {
                     Id = "etwses-set-max-trace-sessions-8",
                     Label = "Limit Maximum Concurrent ETW Trace Sessions to 8",
-                    Category = "Security Audit Policy",
+                    Category = "Security",
                     Description =
                         "Sets the maximum number of concurrent ETW trace sessions to 8, reducing resource usage from trace session handle tables and preventing excessive trace session proliferation from misconfigured applications.",
                     Tags = ["etw", "max-sessions", "resource-limit", "tracing", "policy"],
@@ -1199,7 +1199,7 @@ internal static class PolicyAudit
                 {
                     Id = "etwses-block-third-party-providers",
                     Label = "Block Third-Party ETW Provider Registration",
-                    Category = "Security Audit Policy",
+                    Category = "Security",
                     Description =
                         "Prevents third-party applications from registering new ETW providers in the system namespace, restricting ETW instrumentation to Microsoft-signed components and reducing the attack surface for provider injection.",
                     Tags = ["etw", "provider-registration", "third-party", "security", "policy"],
@@ -1216,7 +1216,7 @@ internal static class PolicyAudit
                 {
                     Id = "etwses-disable-diagnostic-sessions",
                     Label = "Disable Automatic Diagnostic ETW Session Startup",
-                    Category = "Security Audit Policy",
+                    Category = "Security",
                     Description =
                         "Disables automatic startup of Windows diagnostic ETW sessions (DiagTrack, WdiContextLog, AppModel) that run at boot to support telemetry and diagnostics, reducing process creation overhead and memory footprint.",
                     Tags = ["etw", "diagnostic-sessions", "telemetry", "startup-performance", "policy"],
@@ -1233,7 +1233,7 @@ internal static class PolicyAudit
                 {
                     Id = "etwses-enable-session-audit",
                     Label = "Enable ETW Trace Session Creation and Deletion Audit",
-                    Category = "Security Audit Policy",
+                    Category = "Security",
                     Description =
                         "Enables audit log entries when ETW trace sessions are created or deleted, providing visibility into which processes are setting up system-level event tracing that could be used for monitoring or exfiltration.",
                     Tags = ["etw", "audit", "trace-session", "security", "policy"],
@@ -1250,7 +1250,7 @@ internal static class PolicyAudit
                 {
                     Id = "etwses-disable-telemetry-reporting",
                     Label = "Disable ETW Telemetry Reporting to Microsoft",
-                    Category = "Security Audit Policy",
+                    Category = "Security",
                     Description =
                         "Prevents the ETW infrastructure from sending trace session statistics and provider usage telemetry to Microsoft, keeping internal diagnostic trace topology and provider utilisation patterns from cloud disclosure.",
                     Tags = ["etw", "telemetry", "privacy", "microsoft", "policy"],
@@ -1267,7 +1267,7 @@ internal static class PolicyAudit
                 {
                     Id = "etwses-disable-com-event-system",
                     Label = "Disable COM+ Event System ETW Tracing",
-                    Category = "Security Audit Policy",
+                    Category = "Security",
                     Description =
                         "Disables the COM+ Event System event tracing provider, stopping background COM subscription events from being generated and reducing ETW trace volume on systems where COM+ subscriptions are unused.",
                     Tags = ["etw", "com+", "event-system", "tracing", "policy"],
@@ -1284,7 +1284,7 @@ internal static class PolicyAudit
                 {
                     Id = "etwses-disable-kernel-logger",
                     Label = "Disable ETW NT Kernel Logger Trace Session",
-                    Category = "Security Audit Policy",
+                    Category = "Security",
                     Description =
                         "Disables the ETW NT Kernel Logger trace session that captures system-wide kernel events (process, thread, I/O, network), reducing the background monitoring overhead on production systems not undergoing active diagnostics.",
                     Tags = ["etw", "kernel-logger", "performance", "tracing", "policy"],
@@ -1312,7 +1312,7 @@ internal static class PolicyAudit
                 {
                     Id = "evtfwd-enable-subscription-manager",
                     Label = "Enable WEF Subscription Manager",
-                    Category = "Security Audit Policy",
+                    Category = "Security",
                     Description =
                         "Activates the Windows Event Forwarding subscription manager, allowing this source computer to forward events to a configured collector. Required for WEF operation. Default: 0. Recommended: 1 when WEF is deployed.",
                     Tags = ["wef", "event-forwarding", "subscription", "siem", "policy"],
@@ -1329,7 +1329,7 @@ internal static class PolicyAudit
                 {
                     Id = "evtfwd-require-encryption",
                     Label = "Require Encrypted Event Forwarding Channel",
-                    Category = "Security Audit Policy",
+                    Category = "Security",
                     Description =
                         "Prevents event forwarding over unencrypted channels. All WEF traffic must use HTTPS or Kerberos-authenticated transport. Default: not enforced. Recommended: 1 for any production WEF deployment.",
                     Tags = ["wef", "event-forwarding", "encryption", "https", "policy"],
@@ -1346,7 +1346,7 @@ internal static class PolicyAudit
                 {
                     Id = "evtfwd-require-kerberos-auth",
                     Label = "Require Kerberos Authentication for WEF",
-                    Category = "Security Audit Policy",
+                    Category = "Security",
                     Description =
                         "Enforces Kerberos mutual authentication for all Windows Event Forwarding connections. Prevents relaying to an untrusted or spoofed collector endpoint. Default: 0. Recommended: 1 in domain environments.",
                     Tags = ["wef", "event-forwarding", "kerberos", "authentication", "policy"],
@@ -1363,7 +1363,7 @@ internal static class PolicyAudit
                 {
                     Id = "evtfwd-limit-max-forward-rate",
                     Label = "Limit Maximum Event Forwarding Rate",
-                    Category = "Security Audit Policy",
+                    Category = "Security",
                     Description =
                         "Caps the maximum rate at which events are forwarded to the collector at 1000 events per second. Prevents event flooding from overwhelming the collector during high-activity periods. Default: unlimited. Recommended: 1000.",
                     Tags = ["wef", "event-forwarding", "rate-limit", "performance", "policy"],
@@ -1380,7 +1380,7 @@ internal static class PolicyAudit
                 {
                     Id = "evtfwd-set-retry-interval",
                     Label = "Set WEF Connection Retry Interval",
-                    Category = "Security Audit Policy",
+                    Category = "Security",
                     Description =
                         "Configures the interval (in seconds) between connection retry attempts when the WEF collector is unreachable. Lower values detect recovery faster; higher values reduce network noise. Default: 300. Recommended: 60.",
                     Tags = ["wef", "event-forwarding", "retry", "availability", "policy"],
@@ -1397,7 +1397,7 @@ internal static class PolicyAudit
                 {
                     Id = "evtfwd-set-heartbeat-interval",
                     Label = "Set WEF Collector Heartbeat Interval",
-                    Category = "Security Audit Policy",
+                    Category = "Security",
                     Description =
                         "Sets the heartbeat keep-alive interval (seconds) for WEF collector connections. Ensures the subscription stays active and the collector knows the source is alive. Default: not set. Recommended: 3600 (1 hour).",
                     Tags = ["wef", "event-forwarding", "heartbeat", "keepalive", "policy"],
@@ -1414,7 +1414,7 @@ internal static class PolicyAudit
                 {
                     Id = "evtfwd-set-connection-timeout",
                     Label = "Set WEF Connection Timeout",
-                    Category = "Security Audit Policy",
+                    Category = "Security",
                     Description =
                         "Sets the connection timeout (in seconds) for WEF collector connections. After this period without a response, the connection is dropped and retried. Default: 30. Recommended: 60.",
                     Tags = ["wef", "event-forwarding", "timeout", "connection", "policy"],
@@ -1431,7 +1431,7 @@ internal static class PolicyAudit
                 {
                     Id = "evtfwd-limit-max-queue-size",
                     Label = "Limit WEF Local Event Queue Size",
-                    Category = "Security Audit Policy",
+                    Category = "Security",
                     Description =
                         "Caps the local event queue (held while the collector is unreachable) to 1024 MB. Prevents unbounded disk growth during extended collector outages. Default: unlimited. Recommended: 1024.",
                     Tags = ["wef", "event-forwarding", "queue", "storage", "policy"],
@@ -1448,7 +1448,7 @@ internal static class PolicyAudit
                 {
                     Id = "evtfwd-use-minimize-bandwidth",
                     Label = "Use Bandwidth-Minimising WEF Delivery Mode",
-                    Category = "Security Audit Policy",
+                    Category = "Security",
                     Description =
                         "Switches WEF delivery optimisation to minimise bandwidth consumption (batch mode). Events are grouped and sent less frequently but more efficiently. Default: 0 (normal). Recommended: 1 on constrained WAN links.",
                     Tags = ["wef", "event-forwarding", "bandwidth", "delivery", "policy"],
@@ -1465,7 +1465,7 @@ internal static class PolicyAudit
                 {
                     Id = "evtfwd-enable-event-consolidation",
                     Label = "Enable WEF Event Consolidation at Source",
-                    Category = "Security Audit Policy",
+                    Category = "Security",
                     Description =
                         "Enables duplicate event consolidation on the source computer before forwarding. Repeated identical events within the batch window are sent once with a count. Reduces collector load. Default: 0. Recommended: 1.",
                     Tags = ["wef", "event-forwarding", "consolidation", "deduplication", "policy"],
@@ -1495,7 +1495,7 @@ internal static class PolicyAudit
                 {
                     Id = "evtchan-application-log-size-64mb",
                     Label = "Set Application Event Log Maximum Size to 64 MB",
-                    Category = "Security Audit Policy",
+                    Category = "Security",
                     Description =
                         "Sets the Application event log channel maximum file size to 64 MB (65536 KB), providing a larger rolling buffer for application-generated events before older records are overwritten.",
                     Tags = ["event-log", "application-log", "log-size", "policy"],
@@ -1512,7 +1512,7 @@ internal static class PolicyAudit
                 {
                     Id = "evtchan-security-log-size-256mb",
                     Label = "Set Security Event Log Maximum Size to 256 MB",
-                    Category = "Security Audit Policy",
+                    Category = "Security",
                     Description =
                         "Sets the Security event log channel maximum file size to 256 MB (262144 KB), providing substantial rolling buffer capacity for high-volume security audit events such as logon/logoff and object access.",
                     Tags = ["event-log", "security-log", "log-size", "audit", "policy"],
@@ -1529,7 +1529,7 @@ internal static class PolicyAudit
                 {
                     Id = "evtchan-system-log-size-64mb",
                     Label = "Set System Event Log Maximum Size to 64 MB",
-                    Category = "Security Audit Policy",
+                    Category = "Security",
                     Description =
                         "Sets the System event log channel maximum file size to 64 MB (65536 KB), ensuring system-level driver, service, and hardware events are retained longer before overwrite during high-event-rate conditions.",
                     Tags = ["event-log", "system-log", "log-size", "policy"],
@@ -1546,7 +1546,7 @@ internal static class PolicyAudit
                 {
                     Id = "evtchan-security-log-retain-never-overwrite",
                     Label = "Set Security Event Log to Never Overwrite Old Events",
-                    Category = "Security Audit Policy",
+                    Category = "Security",
                     Description =
                         "Configures the Security event log to stop logging new events when the log is full rather than overwriting the oldest events, ensuring regulatory audit trails are never silently discarded.",
                     Tags = ["event-log", "security-log", "overwrite", "audit-trail", "policy"],
@@ -1563,7 +1563,7 @@ internal static class PolicyAudit
                 {
                     Id = "evtchan-restrict-security-log-guest",
                     Label = "Restrict Guest Account Security Event Log Access",
-                    Category = "Security Audit Policy",
+                    Category = "Security",
                     Description =
                         "Prevents the Guest account from reading the Security event log, ensuring that sensitive audit data (logon events, privilege use) cannot be accessed by unauthenticated or minimally-privileged guest sessions.",
                     Tags = ["event-log", "security-log", "guest", "access-control", "policy"],
@@ -1580,7 +1580,7 @@ internal static class PolicyAudit
                 {
                     Id = "evtchan-restrict-application-log-guest",
                     Label = "Restrict Guest Account Application Event Log Access",
-                    Category = "Security Audit Policy",
+                    Category = "Security",
                     Description =
                         "Prevents the Guest account from reading Application event log entries, protecting potentially sensitive application error messages and stack traces from unauthenticated access.",
                     Tags = ["event-log", "application-log", "guest", "access-control", "policy"],
@@ -1597,7 +1597,7 @@ internal static class PolicyAudit
                 {
                     Id = "evtchan-restrict-system-log-guest",
                     Label = "Restrict Guest Account System Event Log Access",
-                    Category = "Security Audit Policy",
+                    Category = "Security",
                     Description =
                         "Prevents the Guest account from reading System event log entries, hiding driver failures, service start/stop events, and hardware error messages from unauthenticated guest sessions.",
                     Tags = ["event-log", "system-log", "guest", "access-control", "policy"],
@@ -1614,7 +1614,7 @@ internal static class PolicyAudit
                 {
                     Id = "evtchan-application-log-overwrite-oldest",
                     Label = "Set Application Event Log to Overwrite Events Older Than 30 Days",
-                    Category = "Security Audit Policy",
+                    Category = "Security",
                     Description =
                         "Configures the Application event log to overwrite events older than 30 days when the log fills up, ensuring at least 30 days of application event history while preventing the log from permanently growing.",
                     Tags = ["event-log", "application-log", "overwrite", "retention", "policy"],
@@ -1631,7 +1631,7 @@ internal static class PolicyAudit
                 {
                     Id = "evtchan-security-log-auto-backup",
                     Label = "Enable Automatic Security Event Log Backup on Full",
-                    Category = "Security Audit Policy",
+                    Category = "Security",
                     Description =
                         "Enables automatic backup of the Security event log to a .evtx archive file when the log reaches capacity, preserving the full audit history before the log is cleared and begins collecting new events.",
                     Tags = ["event-log", "security-log", "auto-backup", "archive", "policy"],
@@ -1648,7 +1648,7 @@ internal static class PolicyAudit
                 {
                     Id = "evtchan-disable-event-log-registry-edit",
                     Label = "Disable Direct Registry Editing of Event Log Channel Settings",
-                    Category = "Security Audit Policy",
+                    Category = "Security",
                     Description =
                         "Prevents users and scripts from making direct registry edits to event log channel keys (MaxSize, Retention, etc.) outside of Group Policy, ensuring that event log configuration cannot be tampered with by non-admin processes.",
                     Tags = ["event-log", "registry", "tamper-protection", "admin", "policy"],
@@ -1681,7 +1681,7 @@ internal static class PolicyAudit
             {
                 Id = "evtgpo-application-size-128mb",
                 Label = "Set Application Event Log Size to 128 MB (GPO)",
-                Category = "Security Audit Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -1700,7 +1700,7 @@ internal static class PolicyAudit
             {
                 Id = "evtgpo-security-size-1gb",
                 Label = "Set Security Event Log Size to 1 GB (GPO)",
-                Category = "Security Audit Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -1719,7 +1719,7 @@ internal static class PolicyAudit
             {
                 Id = "evtgpo-system-size-128mb",
                 Label = "Set System Event Log Size to 128 MB (GPO)",
-                Category = "Security Audit Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -1738,7 +1738,7 @@ internal static class PolicyAudit
             {
                 Id = "evtgpo-setup-size-64mb",
                 Label = "Set Setup Event Log Size to 64 MB (GPO)",
-                Category = "Security Audit Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -1757,7 +1757,7 @@ internal static class PolicyAudit
             {
                 Id = "evtgpo-forwarded-size-256mb",
                 Label = "Set Forwarded Events Log Size to 256 MB (GPO)",
-                Category = "Security Audit Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -1776,7 +1776,7 @@ internal static class PolicyAudit
             {
                 Id = "evtgpo-application-overwrite",
                 Label = "Overwrite Application Event Log When Full (GPO)",
-                Category = "Security Audit Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -1795,7 +1795,7 @@ internal static class PolicyAudit
             {
                 Id = "evtgpo-security-overwrite",
                 Label = "Overwrite Security Event Log When Full (GPO)",
-                Category = "Security Audit Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -1814,7 +1814,7 @@ internal static class PolicyAudit
             {
                 Id = "evtgpo-system-overwrite",
                 Label = "Overwrite System Event Log When Full (GPO)",
-                Category = "Security Audit Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -1833,7 +1833,7 @@ internal static class PolicyAudit
             {
                 Id = "evtgpo-setup-overwrite",
                 Label = "Overwrite Setup Event Log When Full (GPO)",
-                Category = "Security Audit Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -1852,7 +1852,7 @@ internal static class PolicyAudit
             {
                 Id = "evtgpo-forwarded-overwrite",
                 Label = "Overwrite Forwarded Events Log When Full (GPO)",
-                Category = "Security Audit Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -1882,7 +1882,7 @@ internal static class PolicyAudit
                 {
                     Id = "wecpol-enable-event-collector-service",
                     Label = "Enable Windows Event Collector Service",
-                    Category = "Security Audit Policy",
+                    Category = "Security",
                     Description =
                         "Enables the Windows Event Collector service which accepts WinRM-based event forwarding subscriptions, allowing this machine to act as a centralised log collection point for multiple source machines.",
                     Tags = ["event-collector", "wec", "winrm", "siem", "policy"],
@@ -1899,7 +1899,7 @@ internal static class PolicyAudit
                 {
                     Id = "wecpol-require-https-on-collector",
                     Label = "Require HTTPS on Windows Event Collector Subscriptions",
-                    Category = "Security Audit Policy",
+                    Category = "Security",
                     Description =
                         "Forces all incoming event forwarding connections to the Windows Event Collector to use HTTPS, blocking plain HTTP or unencrypted WinRM connections from source machines.",
                     Tags = ["event-collector", "https", "encryption", "wec", "policy"],
@@ -1916,7 +1916,7 @@ internal static class PolicyAudit
                 {
                     Id = "wecpol-limit-subscription-concurrency-100",
                     Label = "Limit Event Collector Concurrent Source Connections to 100",
-                    Category = "Security Audit Policy",
+                    Category = "Security",
                     Description =
                         "Sets the maximum number of concurrent source machine connections to the Windows Event Collector to 100, preventing resource exhaustion on the collector from too many simultaneous forwarding sessions.",
                     Tags = ["event-collector", "concurrency", "resource-limit", "wec", "policy"],
@@ -1933,7 +1933,7 @@ internal static class PolicyAudit
                 {
                     Id = "wecpol-log-subscription-setup-failures",
                     Label = "Log Event Collector Subscription Setup Failures",
-                    Category = "Security Audit Policy",
+                    Category = "Security",
                     Description =
                         "Enables detailed event log entries when Windows Event Collector subscription setup fails, providing diagnostics for misconfigurations such as authentication failures, network issues, and XPath query errors.",
                     Tags = ["event-collector", "diagnostics", "subscription-failure", "event-log", "policy"],
@@ -1950,7 +1950,7 @@ internal static class PolicyAudit
                 {
                     Id = "wecpol-disable-legacy-event-subscription",
                     Label = "Disable Legacy Event Pull Subscription (Source-Initiated Only)",
-                    Category = "Security Audit Policy",
+                    Category = "Security",
                     Description =
                         "Disables collector-initiated (legacy pull) subscriptions, allowing only source-initiated (push) subscriptions where source machines connect to the collector, which works across NAT and firewall boundaries.",
                     Tags = ["event-collector", "pull-subscription", "source-initiated", "network", "policy"],
@@ -1967,7 +1967,7 @@ internal static class PolicyAudit
                 {
                     Id = "wecpol-audit-subscription-activity",
                     Label = "Audit All Event Collector Subscription Activity",
-                    Category = "Security Audit Policy",
+                    Category = "Security",
                     Description =
                         "Enables detailed auditing of all Windows Event Collector subscription activities (created, modified, deleted, connected, disconnected) to the local Security event log for compliance and change tracking.",
                     Tags = ["event-collector", "audit", "subscription-activity", "compliance", "policy"],
@@ -1984,7 +1984,7 @@ internal static class PolicyAudit
                 {
                     Id = "wecpol-set-heartbeat-interval-3600",
                     Label = "Set Event Collector Heartbeat Interval to 3600 Seconds",
-                    Category = "Security Audit Policy",
+                    Category = "Security",
                     Description =
                         "Sets the Windows Event Collector heartbeat interval to 3600 seconds (one hour), reducing the frequency of heartbeat network traffic between source machines and the collector on stable networks.",
                     Tags = ["event-collector", "heartbeat", "network", "interval", "policy"],
@@ -2001,7 +2001,7 @@ internal static class PolicyAudit
                 {
                     Id = "wecpol-restrict-subscription-management-to-admin",
                     Label = "Restrict Event Collector Subscription Management to Administrators",
-                    Category = "Security Audit Policy",
+                    Category = "Security",
                     Description =
                         "Requires administrator privileges to create, modify, or delete Windows Event Collector subscriptions, preventing standard users or service accounts from altering the event collection pipeline.",
                     Tags = ["event-collector", "admin", "subscription-management", "security", "policy"],
@@ -2018,7 +2018,7 @@ internal static class PolicyAudit
                 {
                     Id = "wecpol-set-max-event-buffer-1mb",
                     Label = "Set Event Collector Internal Buffer to 1 MB Per Subscription",
-                    Category = "Security Audit Policy",
+                    Category = "Security",
                     Description =
                         "Sets the internal memory buffer used per Windows Event Collector subscription to 1 MB, providing sufficient queuing capacity for burst event delivery while limiting per-subscription memory consumption.",
                     Tags = ["event-collector", "buffer", "memory", "performance", "policy"],
@@ -2035,7 +2035,7 @@ internal static class PolicyAudit
                 {
                     Id = "wecpol-disable-collector-telemetry",
                     Label = "Disable Windows Event Collector Telemetry to Microsoft",
-                    Category = "Security Audit Policy",
+                    Category = "Security",
                     Description =
                         "Prevents the Windows Event Collector service from sending diagnostic and telemetry data about subscription health and performance to Microsoft, protecting internal event collection architecture from cloud disclosure.",
                     Tags = ["event-collector", "telemetry", "privacy", "microsoft", "policy"],
@@ -2063,7 +2063,7 @@ internal static class PolicyAudit
             {
                 Id = "evttrc-disable-etw-telemetry",
                 Label = "Disable ETW Telemetry Data Collection",
-                Category = "Security Audit Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -2080,7 +2080,7 @@ internal static class PolicyAudit
             {
                 Id = "evttrc-restrict-etw-provider-registration",
                 Label = "Restrict ETW Provider Registration to Admins",
-                Category = "Security Audit Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -2097,7 +2097,7 @@ internal static class PolicyAudit
             {
                 Id = "evttrc-disable-process-trace-access",
                 Label = "Disable Process-Wide ETW Trace Access",
-                Category = "Security Audit Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -2114,7 +2114,7 @@ internal static class PolicyAudit
             {
                 Id = "evttrc-set-trace-buffer-size",
                 Label = "Set Maximum ETW Trace Buffer Size",
-                Category = "Security Audit Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 1,
@@ -2131,7 +2131,7 @@ internal static class PolicyAudit
             {
                 Id = "evttrc-disable-live-etw-consumption",
                 Label = "Disable Unauthorized Live ETW Event Consumption",
-                Category = "Security Audit Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -2148,7 +2148,7 @@ internal static class PolicyAudit
             {
                 Id = "evttrc-enable-etw-audit-policy",
                 Label = "Enable ETW Security Audit Logging",
-                Category = "Security Audit Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -2165,7 +2165,7 @@ internal static class PolicyAudit
             {
                 Id = "evttrc-disable-circular-buffer-overwrite",
                 Label = "Disable ETW Circular Buffer Overwrite",
-                Category = "Security Audit Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -2182,7 +2182,7 @@ internal static class PolicyAudit
             {
                 Id = "evttrc-restrict-etw-logfile-access",
                 Label = "Restrict ETW Log File Access Permissions",
-                Category = "Security Audit Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -2199,7 +2199,7 @@ internal static class PolicyAudit
             {
                 Id = "evttrc-disable-process-trace-auto-logger",
                 Label = "Disable Unauthorized AutoLogger Sessions",
-                Category = "Security Audit Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -2216,7 +2216,7 @@ internal static class PolicyAudit
             {
                 Id = "evttrc-set-event-log-file-size",
                 Label = "Set Event Log Maximum File Size",
-                Category = "Security Audit Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -2244,7 +2244,7 @@ internal static class PolicyAudit
             {
                 Id = "logonaudit-audit-logon-success-failure",
                 Label = "Logon Audit: Enable Success+Failure Auditing for All Interactive and Network Logon Events",
-                Category = "Security Audit Policy",
+                Category = "Security",
                 Description = "Sets AuditLogon=3 (Success+Failure) in Advanced Audit Policy Logon/Logoff category. Generates Security events 4624 (successful logon) with logon type, source IP, and authentication protocol, and 4625 (failed logon) with error code, source IP, and account name for every interactive (Type 2), network (Type 3), service (Type 5), batch (Type 4), and remote desktop (Type 10) logon and logon failure. " +
                     "Event 4624 and 4625 are the most fundamental SOC monitoring events — all lateral movement paths (SMB, RDP, WinRM, PsExec, WMI) generate logon events on the destination endpoint. Without logon auditing, there is no on-endpoint record of who authenticated, from where, and using what mechanism. The combination of 4624 (successful network logon) from an unexpected IP with 4648 (explicit credential use) from the same timeframe is a high-fidelity indicator for pass-the-hash lateral movement.",
                 Tags = ["logon-audit", "event-4624", "event-4625", "lateral-movement", "rdp", "smb"],
@@ -2261,7 +2261,7 @@ internal static class PolicyAudit
             {
                 Id = "logonaudit-audit-logoff-events",
                 Label = "Logon Audit: Enable Logoff Event Auditing to Calculate Session Duration",
-                Category = "Security Audit Policy",
+                Category = "Security",
                 Description = "Sets AuditLogoff=1 (Success) in Advanced Audit Policy Logon/Logoff category. Generates Security event 4634 (account logoff) when an interactive or network session ends, enabling SIEM correlation to calculate session duration by pairing each 4624 logon event with its 4634 logoff counterpart. Session duration is an important context signal for anomalous access detection. " +
                     "Session duration analysis enables detection of anomalous access patterns. A network logon (4624 Type 3) that lasts 0.3 seconds followed by a logoff (4634) is consistent with automated tool access (PsExec command execution, SMB enumeration). A session from an external IP lasting 4 hours at 2 AM is anomalous for a finance analyst's account. Without logoff events, session duration calculations are impossible and the analyst must infer session end from other activity gaps in the log.",
                 Tags = ["logon-audit", "event-4634", "session-duration", "anomaly-detection", "siem"],
@@ -2278,7 +2278,7 @@ internal static class PolicyAudit
             {
                 Id = "logonaudit-audit-account-lockout-logon",
                 Label = "Logon Audit: Enable Account Lockout Event Auditing at Logon (4740 on Destination)",
-                Category = "Security Audit Policy",
+                Category = "Security",
                 Description = "Sets AuditAccountLockout=1 (Success) in Advanced Audit Policy Logon/Logoff category (logon-side complement to the Account Management lockout setting). Generates Security event 4625 subtype failure events on the endpoint where a locked-out account attempts logon in addition to the domain controller-generated 4740. Provides per-endpoint lockout event rather than only DC-centric events. " +
                     "Domain controller-generated lockout events (4740) identify that an account locked out but report only the last DC that processed the lockout, not all the individual endpoints generating failed logon attempts that accumulated to the lockout threshold. Endpoint-generated 4625 Failure / Sub-status 0xC0000234 (account locked out at logon time) events pinpoint exactly which endpoints are producing the lockout-triggering authentication failures, enabling source system identification for spray attack forensics.",
                 Tags = ["logon-audit", "account-lockout", "4740", "4625", "spray-attack", "source-identification"],
@@ -2295,7 +2295,7 @@ internal static class PolicyAudit
             {
                 Id = "logonaudit-audit-network-policy-server",
                 Label = "Logon Audit: Enable Network Policy Server Radius/NPS Authentication Auditing",
-                Category = "Security Audit Policy",
+                Category = "Security",
                 Description = "Sets AuditNetworkPolicyServer=3 (Success+Failure) in Advanced Audit Policy Logon/Logoff category. Generates Security events 6272 (NPS granted access), 6273 (NPS denied access), 6274 (NPS discarded request), 6275 (NPS discarded accounting request), 6276 (NPS quarantined client), 6277/6278 (NPS granted probation/revoked access) for RADIUS network access control decisions made by the local NPS role. " +
                     "Network Policy Server (NPS/RADIUS) is the authentication gateway for 802.1X network access control (wired and wireless NAC), VPN authentication, and DirectAccess. NPS audit events record every network access authentication decision — including which machine certificates or user credentials were validated, which NPS policy matched, and whether access was granted or denied. A compromised certificate used to authenticate to the corporate wireless network generates NPS event 6272 with the certificate thumbprint, enabling certificate abuse detection.",
                 Tags = ["logon-audit", "nps", "radius", "802.1x", "vpn", "nac"],
@@ -2312,7 +2312,7 @@ internal static class PolicyAudit
             {
                 Id = "logonaudit-audit-other-logon-logoff-events",
                 Label = "Logon Audit: Enable 'Other Logon/Logoff Events' for Session Reconnection Tracking",
-                Category = "Security Audit Policy",
+                Category = "Security",
                 Description = "Sets AuditOtherLogonLogoffEvents=3 (Success+Failure) in Advanced Audit Policy Logon/Logoff category. Generates Security events 4649 (replay attack detected), 4778 (session reconnected to Window Station), 4779 (session disconnected from Window Station), 4800 (workstation locked), 4801 (workstation unlocked), 4802/4803 (screensaver invoked/dismissed), 5378 (credential delegation requested), 5632/5633 (wireless/wired 802.1X authentication). " +
                     "Events 4778/4779 (RDP/Terminal Services session reconnect and disconnect) are critical for RDP lateral movement forensics. Each reconnect event records the source IP, session ID, and account name separately from the initial logon event. Without other logon/logoff events, an attacker who uses RDP shadowing or session hijacking (connecting to an existing session without creating a new logon event) may not generate additional 4624 events. The 4778 reconnect event captures this post-logon session reuse.",
                 Tags = ["logon-audit", "other-logon", "4778", "4779", "rdp-session", "session-hijacking"],
@@ -2329,7 +2329,7 @@ internal static class PolicyAudit
             {
                 Id = "logonaudit-audit-explicit-credential-use",
                 Label = "Logon Audit: Enable Explicit Credential Use Auditing (RunAs, Over-Pass-the-Hash, WinRM)",
-                Category = "Security Audit Policy",
+                Category = "Security",
                 Description = "Sets AuditExplicitCredentialUse=3 (Success+Failure) in Advanced Audit Policy Logon/Logoff category. Generates Security event 4648 (logon using explicit credentials) when a process uses a different set of credentials to create a new logon session — covering RunAs executions, WMI remote command execution using explicit credentials, WinRM with credential parameters, and Over-Pass-the-Hash (explicit logon using an injected NTLM hash). " +
                     "Event 4648 is a direct detection signal for Over-Pass-the-Hash and Overpass-the-Hash attacks. When Mimikatz performs an OverPTH (inject NTLM hash into a new logon session using explicit credential logon), Windows generates a 4648 event on the source machine. The combination of 4648 from Machine-A with 4624 Type 3 from Machine-B to Machine-A within the same second is a high-fidelity indicator of pass-the-hash lateral movement initiation from Machine-A.",
                 Tags = ["logon-audit", "explicit-credentials", "event-4648", "overpass-the-hash", "winrm", "runas"],
@@ -2346,7 +2346,7 @@ internal static class PolicyAudit
             {
                 Id = "logonaudit-audit-special-logon-sensitive-groups",
                 Label = "Logon Audit: Enable Special Logon Auditing for Privileged Group Member Authentication",
-                Category = "Security Audit Policy",
+                Category = "Security",
                 Description = "Sets AuditSpecialLogon=1 (Success) in Advanced Audit Policy Logon/Logoff category (logon-side complement to the Account Management special logon setting). Generates Security event 4964 whenever a user whose account is a member of the Special Groups list (typically Domain Admins, Enterprise Admins) authenticates interactively or via the network, providing privileged account authentication monitoring without the noise of universal 4624 auditing. " +
                     "Privileged account authentication monitoring serves as a low-effort approximation of Privileged Access Workstation (PAW) compliance enforcement. If Domain Admins should only authenticate from designated admin workstations, Event 4964 events where the source computer name is not in the approved PAW list indicate a policy violation — an admin authenticated from a regular user workstation. This SIEM rule requires only two data sources: the 4964 event and the approved PAW machine list.",
                 Tags = ["logon-audit", "event-4964", "domain-admins", "paw", "privileged-access", "compliance"],
@@ -2363,7 +2363,7 @@ internal static class PolicyAudit
             {
                 Id = "logonaudit-audit-group-membership-at-logon",
                 Label = "Logon Audit: Enable Group Membership Enumeration at Logon for Privilege Visibility",
-                Category = "Security Audit Policy",
+                Category = "Security",
                 Description = "Sets AuditGroupMembership=1 (Success) in Advanced Audit Policy Logon/Logoff category. Generates Security event 4627 which lists the full group membership of the logon token at logon time, complementing Event 4624 with the list of all security groups the logging-on user is a member of at the moment of logon. Enables detection of SID injection and Kerberos golden ticket attacks using extra group SIDs. " +
                     "Kerberos golden tickets can be crafted with extra group SIDs added to the PAC (Privileged Account Certificate) that were not in the account's actual group membership. When such a ticket is used for authentication, Windows generates a 4627 event showing the effective group membership of the logon token. By comparing 4627 group membership against the account's actual AD group membership, anomalous extra SIDs (e.g., Domain Admins SID for a non-admin account) are immediately visible as golden ticket indicators.",
                 Tags = ["logon-audit", "group-membership", "event-4627", "golden-ticket", "pac", "kerberos"],
@@ -2380,7 +2380,7 @@ internal static class PolicyAudit
             {
                 Id = "logonaudit-audit-ipsec-extended-mode",
                 Label = "Logon Audit: Enable IPSec Extended Mode Auditing for Network Authentication Failures",
-                Category = "Security Audit Policy",
+                Category = "Security",
                 Description = "Sets AuditIPSecExtendedMode=3 (Success+Failure) in Advanced Audit Policy Logon/Logoff category. Generates Security events for IPSec IKEv2 extended mode negotiation (4978/4979/4980/4983/4984), recording Kerberos, certificate, or preshared-key authentication exchanges, useful in environments using IPSec machine authentication for network segmentation enforcement via Windows Firewall with Advanced Security rules. " +
                     "IPSec extended mode authentication provides machine-level authentication for encrypted connections between Windows endpoints in isolated network segments. Failure events from IPSec extended mode indicate endpoints attempting cross-segment communication that is blocked by IPSec policy — a potential indicator of lateral movement attempts that a compromised endpoint's attacker is trying to reach an isolated server segment. Extended mode failures highlight network segmentation policy violations in real time.",
                 Tags = ["logon-audit", "ipsec", "ike", "extended-mode", "network-segmentation", "firewall"],
@@ -2397,7 +2397,7 @@ internal static class PolicyAudit
             {
                 Id = "logonaudit-audit-user-device-claims",
                 Label = "Logon Audit: Enable User and Device Claims Auditing for Dynamic Access Control",
-                Category = "Security Audit Policy",
+                Category = "Security",
                 Description = "Sets AuditUserDeviceClaims=1 (Success) in Advanced Audit Policy Logon/Logoff category. Generates Security event 4626 at logon time, which records the user and device claims embedded in the Kerberos authentication token when Dynamic Access Control (DAC) is used — providing visibility into the claims used for conditional access decisions in DAC-protected file server and classification label systems. " +
                     "Dynamic Access Control uses Kerberos claims (user department, device compliance state, classification clearance level) to make file access decisions on Windows Server file shares. A user whose Kerberos token contains an incorrect department claim (e.g., claim was modified at token issue time by a Kerberos token forgery attack) could gain access to files classified for a different department. Event 4626 records the actual claims present at logon time, enabling post-incident review of whether inappropriate access was gated on correct claim values.",
                 Tags = ["logon-audit", "claims", "dynamic-access-control", "event-4626", "kerberos", "dac"],
@@ -2425,7 +2425,7 @@ internal static class PolicyAudit
             {
                 Id = "objacs-enable-file-system-auditing",
                 Label = "Enable File System Object Access Auditing",
-                Category = "Security Audit Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -2442,7 +2442,7 @@ internal static class PolicyAudit
             {
                 Id = "objacs-enable-registry-auditing",
                 Label = "Enable Registry Object Access Auditing",
-                Category = "Security Audit Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -2459,7 +2459,7 @@ internal static class PolicyAudit
             {
                 Id = "objacs-enable-kernel-object-auditing",
                 Label = "Enable Kernel Object Access Auditing",
-                Category = "Security Audit Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -2476,7 +2476,7 @@ internal static class PolicyAudit
             {
                 Id = "objacs-audit-sam-access",
                 Label = "Enable SAM Database Object Access Auditing",
-                Category = "Security Audit Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -2493,7 +2493,7 @@ internal static class PolicyAudit
             {
                 Id = "objacs-audit-lsass-access",
                 Label = "Enable LSASS Process Access Auditing",
-                Category = "Security Audit Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -2510,7 +2510,7 @@ internal static class PolicyAudit
             {
                 Id = "objacs-enable-detailed-file-share-audit",
                 Label = "Enable Detailed File Share Access Auditing",
-                Category = "Security Audit Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -2527,7 +2527,7 @@ internal static class PolicyAudit
             {
                 Id = "objacs-audit-removable-storage",
                 Label = "Enable Removable Storage Access Auditing",
-                Category = "Security Audit Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -2544,7 +2544,7 @@ internal static class PolicyAudit
             {
                 Id = "objacs-audit-cert-services",
                 Label = "Enable Certification Authority Object Auditing",
-                Category = "Security Audit Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -2561,7 +2561,7 @@ internal static class PolicyAudit
             {
                 Id = "objacs-audit-object-handle-manipulation",
                 Label = "Enable Object Handle Manipulation Auditing",
-                Category = "Security Audit Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -2578,7 +2578,7 @@ internal static class PolicyAudit
             {
                 Id = "objacs-audit-central-access-policy",
                 Label = "Enable Central Access Policy Staging Auditing",
-                Category = "Security Audit Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -2610,7 +2610,7 @@ internal static class PolicyAudit
                 {
                     Id = "prtaud-enable-print-job-auditing",
                     Label = "Print Audit: Enable Print Job Audit Events",
-                    Category = "Security Audit Policy",
+                    Category = "Security",
                     Description =
                         "Sets AuditPrintJobs=1 in AuditPrint policy. Enables security audit events for every print job processed by the Windows print spooler. When enabled, the Windows Security event log receives Event ID 4624 (document print event) for each job including: user name, computer name, printer name, document name, job ID, number of pages, and bytes printed. This provides a complete record of document print activity — essential for data loss prevention auditing (detecting mass printing of PII), compliance (HIPAA, SOX printed document requirements), and forensic investigation.",
                     Tags = ["print-audit", "security-log", "dlp", "print-jobs", "monitoring"],
@@ -2627,7 +2627,7 @@ internal static class PolicyAudit
                 {
                     Id = "prtaud-enable-printer-config-auditing",
                     Label = "Print Audit: Enable Printer Configuration Change Auditing",
-                    Category = "Security Audit Policy",
+                    Category = "Security",
                     Description =
                         "Sets AuditPrinterConfiguration=1 in AuditPrint policy. Enables audit events when printer configuration changes are made: printer added, printer deleted, default printer changed, printer properties modified, printer sharing enabled or disabled. Unauthorised printer configuration changes can be used by attackers to redirect print jobs (malicious printer substitution attack) or to create new printer shares for lateral movement. Configuration change auditing creates an immutable log of every printer infrastructure modification for forensic review.",
                     Tags = ["print-audit", "configuration", "printer-add", "security", "compliance"],
@@ -2644,7 +2644,7 @@ internal static class PolicyAudit
                 {
                     Id = "prtaud-enable-driver-install-auditing",
                     Label = "Print Audit: Enable Printer Driver Installation Auditing",
-                    Category = "Security Audit Policy",
+                    Category = "Security",
                     Description =
                         "Sets AuditDriverInstall=1 in AuditPrint policy. Enables audit events for printer driver installation and removal operations. Printer driver installations are a critical security event path — PrintNightmare and related exploits specifically used driver installation as the code execution vector. Auditing every driver install event provides a detection opportunity: SIEM rules can alert on driver installations by non-IT accounts, installations of unexpected driver names, or driver installs that occur at unusual times. Complements the restriction policies that require admin rights for driver installation.",
                     Tags = ["print-audit", "driver-install", "printnightmare", "security", "detection"],
@@ -2661,7 +2661,7 @@ internal static class PolicyAudit
                 {
                     Id = "prtaud-enable-print-server-connections",
                     Label = "Print Audit: Enable Audit for Print Server Connection Events",
-                    Category = "Security Audit Policy",
+                    Category = "Security",
                     Description =
                         "Sets AuditServerConnections=1 in AuditPrint policy. Enables audit events when clients connect to and disconnect from the print server's spooler service via RPC. Each connection event records the client machine name, user account, and connection timestamp. Print server connection auditing is particularly valuable for detecting exploitation of print spooler RPC vulnerabilities: an attacker scanning for PrintNightmare-vulnerable servers will generate connection events before any exploit payload is sent. The connection pattern (connection from unusual machines, outside business hours) is detectable.",
                     Tags = ["print-audit", "server-connections", "rpc", "security", "detection"],
@@ -2678,7 +2678,7 @@ internal static class PolicyAudit
                 {
                     Id = "prtaud-set-print-log-max-7days",
                     Label = "Print Audit: Retain Print Audit Log for 7 Days",
-                    Category = "Security Audit Policy",
+                    Category = "Security",
                     Description =
                         "Sets AuditLogRetentionDays=7 in AuditPrint policy. Sets the minimum retention period for print audit log entries to 7 days. Print audit log retention of at least 7 days satisfies most operational investigation requirements: typical incident detection occurs within 24-48 hours, and 7 days provides sufficient lookback to correlate print events with the full timeline of an incident. Retaining logs beyond 30 days without SIEM export strains local storage on print servers. This policy sets the minimum — logs should be forwarded to a SIEM for long-term retention independently.",
                     Tags = ["print-audit", "log-retention", "compliance", "siem", "investigation"],
@@ -2695,7 +2695,7 @@ internal static class PolicyAudit
                 {
                     Id = "prtaud-disable-direct-printing-bypass",
                     Label = "Print Audit: Disable Direct Printing Bypass (Enforce Spooler Path)",
-                    Category = "Security Audit Policy",
+                    Category = "Security",
                     Description =
                         "Sets DisableDirectPrinting=1 in Printers policy. Prevents applications from sending print jobs directly to printer hardware ports, bypassing the Windows print spooler. Applications that print directly to a port (WriteFile to LPT1:, socket to port 9100, or direct Win32 printer I/O) bypass the entire print audit chain — no job events, no audit log, no DLP scanning. Enforcing the spooler path ensures all print output is intercepted, logged, and subject to print quota policies. Required for complete print audit coverage.",
                     Tags = ["direct-printing", "spooler-bypass", "dlp", "audit", "control"],
@@ -2712,7 +2712,7 @@ internal static class PolicyAudit
                 {
                     Id = "prtaud-enable-page-count-tracking",
                     Label = "Print Audit: Enable Per-User Print Page Count Tracking",
-                    Category = "Security Audit Policy",
+                    Category = "Security",
                     Description =
                         "Sets EnablePageTracking=1 in AuditPrint policy. Enables per-user print page count tracking in the Windows print spooler. Page count data is accumulated in the print quota subsystem and can be consumed by print accounting software, print management consoles, and quota enforcement systems. Without page tracking, print accountability is based on job counts rather than page volumes — a user printing 500-page documents daily appears identical to one printing 10 single-page emails. Page tracking is prerequisite to enforcing any meaningful print volume policy.",
                     Tags = ["print-audit", "page-tracking", "quota", "accounting", "usage"],
@@ -2729,7 +2729,7 @@ internal static class PolicyAudit
                 {
                     Id = "prtaud-restrict-color-printing",
                     Label = "Print Audit: Restrict Colour Printing to Authorised Users",
-                    Category = "Security Audit Policy",
+                    Category = "Security",
                     Description =
                         "Sets RestrictColorPrinting=1 in AuditPrint policy. Restricts colour printing capability on managed printers to users who are members of an authorised colour printing security group. All other users are limited to monochrome (black and white) output. Colour printing costs are typically 5-10× higher than monochrome per page. Unrestricted colour printing is a significant operational cost driver in large organisations. Restricting colour printing to users with a business need (design, marketing, executive) provides measurable cost reduction without impacting most users.",
                     Tags = ["print-audit", "colour-printing", "cost-control", "restriction", "compliance"],
@@ -2746,7 +2746,7 @@ internal static class PolicyAudit
                 {
                     Id = "prtaud-enable-secure-print-release",
                     Label = "Print Audit: Enable Secure Print Release (Hold-and-Release)",
-                    Category = "Security Audit Policy",
+                    Category = "Security",
                     Description =
                         "Sets EnableSecurePrint=1 in AuditPrint policy. Enables print job hold-and-release (secure print) mode: jobs are queued on the print server but not released to the physical printer until the user authenticates at the printer panel (PIN, smart card, or badge). Documents are not printed and left unattended on the printer tray — a significant physical security and confidentiality control. Sensitive documents printed to shared office printers routinely sit uncollected for minutes to hours. Secure print release eliminates physical information disclosure.",
                     Tags = ["print-audit", "secure-print", "hold-release", "physical-security", "confidentiality"],
@@ -2763,7 +2763,7 @@ internal static class PolicyAudit
                 {
                     Id = "prtaud-log-deleted-print-jobs",
                     Label = "Print Audit: Log Deleted and Cancelled Print Jobs",
-                    Category = "Security Audit Policy",
+                    Category = "Security",
                     Description =
                         "Sets AuditDeletedJobs=1 in AuditPrint policy. Enables audit events when print jobs are deleted or cancelled from the print queue. Print job deletion events capture the who (user account that cancelled), what (document name, printer, job ID), and when (timestamp). Deletions by accounts that did not submit the job indicate queue manipulation — an administrator (or attacker with elevated privileges) deleting another user's print job. This is relevant in secure print environments where deleted-before-release events indicate tampering with the print queue.",
                     Tags = ["print-audit", "deleted-jobs", "queue-manipulation", "security", "forensics"],
@@ -2792,7 +2792,7 @@ internal static class PolicyAudit
             {
                 Id = "privaudit-audit-sensitive-privilege-use",
                 Label = "Privilege Audit: Enable Auditing of Sensitive Privilege Use (SeDebug, SeTcb, SeBackup)",
-                Category = "Security Audit Policy",
+                Category = "Security",
                 Description = "Sets 'Audit Sensitive Privilege Use'=3 (Success+Failure) in the Advanced Audit Policy. Generates Security event 4673/4674 whenever a process invokes a sensitive privilege — SeDebugPrivilege (used by Mimikatz for LSASS dump), SeTcbPrivilege (act as operating system), SeBackupPrivilege (bypass file ACLs for backup), SeRestorePrivilege, SeTakeOwnershipPrivilege — providing direct detection signal for privilege-abuse attack techniques. " +
                     "SeDebugPrivilege invocation is a binary trigger for LSASS credential dumping — every major credential harvesting tool (Mimikatz, ProcDump LSASS, Task Manager LSASS dump) requires SeDebugPrivilege to access LSASS memory. Auditing sensitive privilege use generates Security event 4673 the instant any process invokes SeDebugPrivilege, providing near-real-time detection of credential theft attempts through SIEM correlation — typically one of the highest-fidelity, lowest-noise detection rules in an enterprise SIEM.",
                 Tags = ["privilege-audit", "sensitive-privilege", "sedebug", "mimikatz", "lsass", "credential-theft"],
@@ -2809,7 +2809,7 @@ internal static class PolicyAudit
             {
                 Id = "privaudit-audit-nonsensitive-privilege-use",
                 Label = "Privilege Audit: Enable Auditing of Non-Sensitive Privilege Use (SeShutdown, SeLoad)",
-                Category = "Security Audit Policy",
+                Category = "Security",
                 Description = "Sets 'Audit Non-Sensitive Privilege Use'=1 (Success) in the Advanced Audit Policy. Generates Security event 4673/4674 for non-sensitive privilege invocations (SeShutdownPrivilege, SeUndockPrivilege, SeLoadDriverPrivilege, SeSystemtimePrivilege, SeTimeZonePrivilege, SeChangeNotifyPrivilege). Non-sensitive privilege events complement sensitive privilege events to provide a complete picture of privilege hierarchy escalation. " +
                     "SeLoadDriverPrivilege invocation is the second critical attack signal — attackers who load a signed-but-vulnerable driver as a vector for privilege escalation (BYOVD, Bring Your Own Vulnerable Driver) must invoke SeLoadDriverPrivilege to install the driver. Auditing this privilege provides detection for BYOVD attacks (used by Lazarus Group, BlackMatter ransomware) before the vulnerable driver is loaded and exploited.",
                 Tags = ["privilege-audit", "nonsensitive-privilege", "seloaddriver", "byovd", "driver-exploit"],
@@ -2826,7 +2826,7 @@ internal static class PolicyAudit
             {
                 Id = "privaudit-audit-other-privilege-use-events",
                 Label = "Privilege Audit: Enable 'Other Privilege Use Events' for Complete Privilege Coverage",
-                Category = "Security Audit Policy",
+                Category = "Security",
                 Description = "Sets 'Audit Other Privilege Use Events'=3 (Success+Failure) in the Advanced Audit Policy. Generates Security events for miscellaneous privilege use scenarios not captured by Sensitive or Non-Sensitive subcategories, including encrypted data recovery, user right assignments via Direct Access, and scheduled task privilege overrides. Completes the privilege use audit coverage across all three subcategories. " +
                     "The 'Other Privilege Use Events' subcategory captures edge-case privilege invocations that don't neatly fit the Sensitive/Non-Sensitive taxonomy — including cross-domain encrypted data access (EFS recovery) and some legacy DCOM privilege transitions. While individually lower-signal than SeDebugPrivilege events, collectively these events fill gaps in the privilege audit trail that sophisticated threat actors may attempt to exploit by routing privilege escalation through lesser-audited paths.",
                 Tags = ["privilege-audit", "other-privilege", "efs", "dcom", "complete-coverage"],
@@ -2843,7 +2843,7 @@ internal static class PolicyAudit
             {
                 Id = "privaudit-audit-file-system-failures",
                 Label = "Privilege Audit: Enable File System Access Failure Auditing for ACL Bypass Detection",
-                Category = "Security Audit Policy",
+                Category = "Security",
                 Description = "Sets 'Audit File System Failures'=2 (Failure) in the Advanced Audit Policy Object Access category. Generates Security event 4656/4663 (Failure) whenever a process is denied access to a file or folder due to DACL permissions, recording the file path, access type requested, requesting process, and user account — providing detection for access scanning and ACL enumeration attacks. " +
                     "Access failure events are high-signal early warning indicators for insider threat and lateral movement reconnaissance. A compromised account scanning the file system for accessible data will generate hundreds of access failure events as it attempts to read protected files and directories above its permission level. A volume spike in Event 4656 Failure events from a single user account is a reliable indicator of data access scanning or Shadow IT application attempting to read sensitive data repositories.",
                 Tags = ["privilege-audit", "file-system", "access-failure", "acl", "insider-threat", "scanning"],
@@ -2860,7 +2860,7 @@ internal static class PolicyAudit
             {
                 Id = "privaudit-audit-registry-object-access",
                 Label = "Privilege Audit: Enable Sensitive Registry Key Access Auditing",
-                Category = "Security Audit Policy",
+                Category = "Security",
                 Description = "Sets 'Audit Registry Object Access'=3 (Success+Failure) in the Advanced Audit Policy Object Access category. Generates Security events 4656/4663 for registry key access operations on SACL-protected registry keys (keys with an assigned Security Audit ACL), enabling detection of access to AutoRun keys, service configuration keys, and other persistence mechanism registry locations. " +
                     "Registry-based persistence (Run keys, Services, COM hijacking targets) are the most common dwell-time persistence mechanisms. Auditing access to SACL-protected registry keys (HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Run, HKLM\\SYSTEM\\CurrentControlSet\\Services, HKLM\\SOFTWARE\\Classes\\CLSID) detects both initial persistence registration (write access) and the periodic re-invocation of persistence (read access at logon). When SACL-protected keys are configured on high-value locations, SIEM rules can alert on unexpected write access creating new persistence entries.",
                 Tags = ["privilege-audit", "registry", "sacl", "persistence", "run-keys", "com-hijacking"],
@@ -2877,7 +2877,7 @@ internal static class PolicyAudit
             {
                 Id = "privaudit-audit-removable-storage-access",
                 Label = "Privilege Audit: Enable Removable Storage Access Audit Events for USB DLP",
-                Category = "Security Audit Policy",
+                Category = "Security",
                 Description = "Sets 'Audit Removable Storage'=3 (Success+Failure) in the Advanced Audit Policy Object Access category. Generates Security event 4663 for all read and write operations to removable storage devices (USB drives, SD cards, DVD writers), recording the file name, operation type, and user account for every file accessed on removable media — enabling DLP monitoring without a dedicated DLP agent. " +
                     "Removable storage audit provides per-file visibility of data access on USB drives. Where standard PnP audit (plug/unplug events) only shows that a device was connected, removable storage audit shows exactly which files were copied to or read from the device. This enables insider threat scenarios to be reconstructed precisely — ACME employee connected USB drive X at 14:32, copied 47 files totalling 2.3 GB from the SharePoint mapped drive, disconnected at 14:35 — from on-device event log evidence alone.",
                 Tags = ["privilege-audit", "removable-storage", "usb", "dlp", "insider-threat", "data-exfiltration"],
@@ -2894,7 +2894,7 @@ internal static class PolicyAudit
             {
                 Id = "privaudit-audit-token-right-adjustment",
                 Label = "Privilege Audit: Enable Token Privilege Adjustment Auditing for UAC Bypass Detection",
-                Category = "Security Audit Policy",
+                Category = "Security",
                 Description = "Sets AuditTokenPrivilegeAdjustment=3 (Success+Failure) in the Windows System policy privilege section. Generates Security event 4703 (Token privilege adjustment) when a process enables or disables a privilege in its own access token, providing detection for UAC bypass techniques that involve enabling disabled privileges in a standard user token to perform privileged operations without triggering a UAC prompt. " +
                     "Many UAC bypass techniques (mockdirs, fodhelper, eventvwr, DLL UAC auto-elevations) work by enabling privileges that are present but disabled in the current token (e.g., SeImpersonatePrivilege, SeAssignPrimaryTokenPrivilege) through techniques that avoid the standard UAC elevation flow. Token privilege adjustment events (4703) generated when these operations occur provide a direct detection signal for UAC bypass patterns — especially in combination with process creation events showing the bypassed elevated process that spawns immediately after the token adjustment.",
                 Tags = ["privilege-audit", "token-adjustment", "uac-bypass", "event-4703", "impersonation"],
@@ -2911,7 +2911,7 @@ internal static class PolicyAudit
             {
                 Id = "privaudit-audit-special-logon",
                 Label = "Privilege Audit: Enable Special Logon Auditing (Admin Equivalent or Special Group Logons)",
-                Category = "Security Audit Policy",
+                Category = "Security",
                 Description = "Sets AuditSpecialLogon=1 (Success) in the Advanced Audit Policy Logon/Logoff category. Generates Security event 4964 (Special groups assigned to new logon) when an Entra ID or domain user whose account is a member of a Special Groups audit list logs on, providing targeted monitoring for high-privilege accounts without the event volume of full logon auditing for all users. " +
                     "Special Logon auditing enables selective privileged account monitoring. By configuring the Special Groups list to include Domain Admins, Enterprise Admins, Backup Operators, and other critical security groups, the enterprise gets immediate Security event notification every time any member of those groups authenticates to any endpoint in the domain — without generating Event 4624 for every employee logon. This powers 'privileged account logon monitoring' SIEM rules with precise scope and minimal noise.",
                 Tags = ["privilege-audit", "special-logon", "event-4964", "admin-monitoring", "privileged-accounts"],
@@ -2928,7 +2928,7 @@ internal static class PolicyAudit
             {
                 Id = "privaudit-audit-sam-sam-access",
                 Label = "Privilege Audit: Enable SAM Database Access Auditing for Credential Database Protection",
-                Category = "Security Audit Policy",
+                Category = "Security",
                 Description = "Sets AuditSAMAccess=3 (Success+Failure) in the Advanced Audit Policy. Generates Security events when the Security Account Manager (SAM) database is accessed, providing detection for credential dumping techniques that target the local SAM database (offline dump of SYSTEM and SAM hive, volume shadow copy SAM extraction, or SecretsDump against local accounts). " +
                     "The SAM database contains the NTLM password hashes for all local Windows user accounts. SAM database access is a common post-exploitation step — after gaining SYSTEM privileges, threat actors extract SAM to harvest local account hashes for Pass-the-Hash attacks or for offline cracking. Auditing SAM access generates Security events whenever the SAM hive is opened with access beyond normal system operations, providing detection signals for credential harvesting operations against local accounts.",
                 Tags = ["privilege-audit", "sam", "credential-dumping", "ntlm", "pass-the-hash", "secretsdump"],
@@ -2945,7 +2945,7 @@ internal static class PolicyAudit
             {
                 Id = "privaudit-audit-lsa-secrets-access",
                 Label = "Privilege Audit: Enable LSA Secrets Access Auditing for Service Credential Protection",
-                Category = "Security Audit Policy",
+                Category = "Security",
                 Description = "Sets AuditLSASecretsAccess=3 (Success+Failure) in the Advanced Audit Policy. Generates Security events when the Local Security Authority (LSA) secrets store is accessed, detecting attempts to harvest service account credentials and DPAPI master keys stored in the LSA secrets store by tools such as Mimikatz's lsadump::secrets command or reg.exe SYSTEM hive extraction. " +
                     "LSA secrets contain auto-logon account passwords, service account passwords for Windows services configured to run as domain accounts, DPAPI master key encryption keys, and cached domain credentials (DCC2 hashes). These are higher-value credentials than local SAM hashes because service account credentials are often over-provisioned domain accounts with access to multiple servers. Auditing LSA secrets access detects the critical early step of service account credential harvesting that enables subsequent lateral movement.",
                 Tags = ["privilege-audit", "lsa-secrets", "service-credentials", "dpapi", "mimikatz", "lateral-movement"],
@@ -2973,7 +2973,7 @@ internal static class PolicyAudit
             {
                 Id = "pcaudit-enable-cmdline-in-process-creation-events",
                 Label = "Process Audit: Enable Full Command Line in Process Creation Security Events",
-                Category = "Security Audit Policy",
+                Category = "Security",
                 Description = "Sets ProcessCreationIncludeCmdLine_Enabled=1 in the Windows System policy. Enables Windows Security event 4688 (Process Creation) to include the full command-line argument string of the spawned process in the event, rather than only the process executable path. This allows SIEM systems to detect living-off-the-land attacks, fileless malware, and suspicious PowerShell invocations by analysing the full arguments of every process created. " +
                     "Process creation event 4688 without command-line inclusion only shows the executable path (e.g., powershell.exe), not the arguments (-EncodedCommand, -ExecutionPolicy Bypass, -WindowStyle Hidden). Without arguments visible, encoded PowerShell commands, Mimikatz execution via living-off-the-land binaries (LOLBins), and command injection attacks are almost entirely opaque in the Security event log. Command-line auditing is the foundational enabling control for advanced threat detection.",
                 Tags = ["process-audit", "cmdline", "process-creation", "event-4688", "siem", "lolbins"],
@@ -2990,7 +2990,7 @@ internal static class PolicyAudit
             {
                 Id = "pcaudit-enable-wmi-activity-auditing",
                 Label = "Process Audit: Enable WMI Activity Audit Log for Process-Level WMI Operations",
-                Category = "Security Audit Policy",
+                Category = "Security",
                 Description = "Sets EnableWMIActivityAudit=1 in the Windows System policy. Enables the Microsoft-Windows-WMI-Activity/Operational event log channel, causing WMI query execution, WMI provider invocations, and WMI subscription modifications to be logged. WMI is a primary lateral movement and persistence technique used by threat actors to execute code remotely without spawning a child process visible in process creation audit logs. " +
                     "WMI-based attacks (used in APT28, Carbanak, and most enterprise-targeted ransomware operators) execute payload code through the WMI provider host (WmiPrvSE.exe) as a child of svchost.exe, bypassing process creation rules that watch for powershell.exe or cmd.exe. WMI activity logging provides a parallel audit trail for WMI-executed commands that cannot be correlated from process creation events alone, enabling detection of WMI-based fileless lateral movement.",
                 Tags = ["process-audit", "wmi", "lateral-movement", "wmiprvse", "apt", "fileless"],
@@ -3007,7 +3007,7 @@ internal static class PolicyAudit
             {
                 Id = "pcaudit-enable-psh-module-logging",
                 Label = "Process Audit: Enable PowerShell Module Logging for All Script Block Execution",
-                Category = "Security Audit Policy",
+                Category = "Security",
                 Description = "Sets EnableModuleLogging=1 in the Windows System policy. Enables PowerShell module logging, which records the full content of every PowerShell pipeline execution (all commands, scripts, and functions invoked) to the PowerShell event log (Microsoft-Windows-PowerShell/Operational, Event ID 4103), providing complete visibility into what code PowerShell executes even when scripts are obfuscated. " +
                     "PowerShell is the most commonly abused administrative tool for post-exploitation activities. Module logging captures the deobfuscated execution of AMSI-aware scripts — when a malicious actor uses encoded base64 commands or string manipulation to evade static detection, PowerShell must decode the payload before execution. Module logging captures the post-decode execution pipeline, revealing the actual malicious commands regardless of the obfuscation layering.",
                 Tags = ["process-audit", "powershell", "module-logging", "obfuscation", "amsi", "script-block"],
@@ -3024,7 +3024,7 @@ internal static class PolicyAudit
             {
                 Id = "pcaudit-enable-psh-script-block-logging",
                 Label = "Process Audit: Enable PowerShell Script Block Logging with Obfuscation Auto-Logging",
-                Category = "Security Audit Policy",
+                Category = "Security",
                 Description = "Sets EnableScriptBlockLogging=1 in the Windows System policy. Enables PowerShell Script Block logging (Event ID 4104), which captures every script block (function body, scriptblock literal, and processed script pipeline) executed by PowerShell into the event log. When combined with AMSI integration, suspicious script block content is automatically promoted to 'suspicious script block' events (4104 with level Warning) without requiring rule tuning. " +
                     "Script block logging is stronger than module logging because it operates at a lower level (the PowerShell engine's block compilation step) and captures the content of scripts before they are executed, even when the script is loaded from memory or piped from another command. Script block logging is complementary to AMSI — AMSI inspects content before execution for malware signatures; script block logging captures all execution for post-incident investigation.",
                 Tags = ["process-audit", "powershell", "script-block-logging", "event-4104", "amsi", "memory-only"],
@@ -3041,7 +3041,7 @@ internal static class PolicyAudit
             {
                 Id = "pcaudit-enable-psh-transcription",
                 Label = "Process Audit: Enable PowerShell Transcription to Centralised Audit Share",
-                Category = "Security Audit Policy",
+                Category = "Security",
                 Description = "Sets EnableTranscripting=1 in the Windows System policy. Enables PowerShell transcription, which writes a text transcript of every PowerShell session (all input commands and output) to a log file. When combined with a centralised transcript output directory (network share or DFS path), all PowerShell session activity from all endpoints is written to a central searchable store. " +
                     "PowerShell transcripts capture information that neither script block logging nor module logging captures: the full interactive session flow including the output returned by commands (e.g., the contents of Get-ChildItem output, netstat results captured by commands, or credentials visible in command output). While transcripts are more verbose than event log entries, they provide a continuous narrative of a PowerShell session that is invaluable for incident reconstruction when reconstructing what a threat actor did during a dwell-time period.",
                 Tags = ["process-audit", "powershell", "transcription", "session-log", "incident-response"],
@@ -3058,7 +3058,7 @@ internal static class PolicyAudit
             {
                 Id = "pcaudit-enable-protected-event-logging",
                 Label = "Process Audit: Enable Protected Event Logging for PowerShell Encrypted Log Entries",
-                Category = "Security Audit Policy",
+                Category = "Security",
                 Description = "Sets EnableProtectedEventLogging=1 in the Windows System policy. Enables Protected Event Logging, which encrypts the content of sensitive PowerShell script block log entries (Event 4104) using a specified asymmetric public key certificate, so that the log content can only be read by the private key holder on the log analysis server, protecting sensitive command content (passwords, tokens) in the event log from local plaintext exposure. " +
                     "Standard PowerShell script block logging writes command content in plaintext to the event log. If an administrative PowerShell script processes credentials, API keys, or sensitive data, those values appear in the local Security event log in cleartext. Any process with read access to the Security event log (including some malware) can harvest these credentials from the log. Protected Event Logging encrypts sensitive entries, allowing detection while protecting the content from local extraction.",
                 Tags = ["process-audit", "powershell", "protected-event-logging", "encryption", "credentials", "log-protection"],
@@ -3075,7 +3075,7 @@ internal static class PolicyAudit
             {
                 Id = "pcaudit-enable-security-audit-process-termination",
                 Label = "Process Audit: Enable Security Audit Events for Process Termination (Event 4689)",
-                Category = "Security Audit Policy",
+                Category = "Security",
                 Description = "Sets AuditProcessTermination=1 in the Windows System policy. Enables Security event log event 4689 (A process has exited), which records the process name, PID, user account, and exit code when any process terminates. When correlated with Event 4688 (process creation), this enables calculation of exact process lifetimes, detection of very-short-lived suspicious processes, and analysis of process trees during incident investigation. " +
                     "Process termination audit enables detection of living-off-the-land binary (LOLBin) usage where a legitimately signed binary (e.g., certutil.exe, regsvr32.exe) is spawned, executes a malicious payload, and exits in milliseconds. Without process termination events, the SIEM only has the creation event and no end marker, making it impossible to calculate process lifetime or determine what happened between creation and exit. Short-lifetime processes (sub-second) that accomplish significant work are high-fidelity attack indicators.",
                 Tags = ["process-audit", "process-termination", "event-4689", "lolbins", "process-lifetime", "siem"],
@@ -3092,7 +3092,7 @@ internal static class PolicyAudit
             {
                 Id = "pcaudit-enable-pnp-activity-audit",
                 Label = "Process Audit: Enable Plug-and-Play Device Connection/Disconnection Audit Events",
-                Category = "Security Audit Policy",
+                Category = "Security",
                 Description = "Sets AuditPNPActivity=1 in the Windows System policy. Enables Security event log events 6416/6419/6420/6421/6423/6424 (Plug and Play activity) that record when new hardware devices are connected or disconnected from the system, including USB drives, network adapters, Bluetooth dongles, and other peripherals — recording the device ID, device type, and connecting user account. " +
                     "USB removable storage is a primary exfiltration vector and a common way to deliver malware (BadUSB, autorun malware). Without PnP audit events, there is no Security event log record of which USB devices were connected, to which endpoints, by which user, at what time. PnP audit events provide DLP and insider threat detection capability — a user who copies data to a USB drive that was connected to their endpoint for 3 minutes generates a complete audit trail of the connection without requiring endpoint DLP software.",
                 Tags = ["process-audit", "pnp", "usb", "device-connection", "exfiltration", "baduusb"],
@@ -3109,7 +3109,7 @@ internal static class PolicyAudit
             {
                 Id = "pcaudit-enable-network-connection-events-sysmon-style",
                 Label = "Process Audit: Enable Network Connection Events in Windows Event Log Without Sysmon",
-                Category = "Security Audit Policy",
+                Category = "Security",
                 Description = "Sets AuditNetworkConnectionEvents=1 in the Windows System policy. Enables network connection audit events in the Security event log, recording each TCP/UDP connection attempt with the originating process ID, source address/port, and destination address/port, providing network process binding visibility without requiring Sysmon or third-party endpoint agents. " +
                     "Network connection logging is standard in Sysmon Event ID 3, but many enterprises cannot deploy Sysmon due to policy or operational constraints. Windows Security event log network connection auditing (when configured) provides a subset of the same visibility natively. Detecting beaconing to C2 infrastructure requires correlation of process creation events with the network connections those processes make. Without network connection events, process creation auditing alone cannot establish which external hosts a suspicious process contacted.",
                 Tags = ["process-audit", "network-connections", "c2-detection", "beaconing", "sysmon-alternative"],
@@ -3126,7 +3126,7 @@ internal static class PolicyAudit
             {
                 Id = "pcaudit-set-min-security-event-log-size-512mb",
                 Label = "Process Audit: Set Minimum Security Event Log Size to 512 MB",
-                Category = "Security Audit Policy",
+                Category = "Security",
                 Description = "Sets SecurityEventLogMinSizeMB=512 in the Windows System policy. Enforces a minimum Security event log file size of 512 MB, ensuring that the on-device event log buffer is large enough to sustain at least 30 days of security audit event retention without log rotation truncating investigative evidence before it can be forwarded to a SIEM. " +
                     "The default Windows Security event log size is 20 MB. With process creation auditing, command-line auditing, and PnP auditing all enabled, a busy endpoint can generate several MB of Security events per hour. A 20 MB log buffer retains as little as a few hours of events. On endpoints without a SIEM agent forwarding events in real time, a 20 MB log means that events from an overnight incident may have been overwritten before the morning IT team investigates. A 512 MB buffer provides several weeks of local retention.",
                 Tags = ["process-audit", "event-log", "retention", "siem", "forensics"],
@@ -3162,7 +3162,7 @@ internal static class PolicyAudit
             {
                 Id = "audit-enable-verbose-audit-policy",
                 Label = "Enable Verbose Security Audit Policy Subcategory",
-                Category = "Security Audit Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -3180,7 +3180,7 @@ internal static class PolicyAudit
             {
                 Id = "audit-require-sign-seal-dc",
                 Label = "Require Secure Channel Signing and Sealing",
-                Category = "Security Audit Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -3198,7 +3198,7 @@ internal static class PolicyAudit
             {
                 Id = "audit-disable-ntlm-v1",
                 Label = "Disable NTLMv1 Authentication (Require NTLMv2)",
-                Category = "Security Audit Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -3216,7 +3216,7 @@ internal static class PolicyAudit
             {
                 Id = "audit-disable-lm-hash-storage",
                 Label = "Disable LAN Manager Hash Storage",
-                Category = "Security Audit Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -3234,7 +3234,7 @@ internal static class PolicyAudit
             {
                 Id = "audit-restrict-anonymous-access",
                 Label = "Restrict Anonymous SAM/LSA Access",
-                Category = "Security Audit Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -3252,7 +3252,7 @@ internal static class PolicyAudit
             {
                 Id = "audit-restrict-anonymous-full",
                 Label = "Fully Restrict Anonymous Network Access",
-                Category = "Security Audit Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -3270,7 +3270,7 @@ internal static class PolicyAudit
             {
                 Id = "audit-force-audit-policy-on-logon",
                 Label = "Force Audit Policy Update on Every Logon",
-                Category = "Security Audit Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -3288,7 +3288,7 @@ internal static class PolicyAudit
             {
                 Id = "audit-enable-crash-on-audit-fail",
                 Label = "Enable System Halt on Security Audit Failure",
-                Category = "Security Audit Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = false,
                 ImpactScore = 5,
@@ -3307,7 +3307,7 @@ internal static class PolicyAudit
             {
                 Id = "audit-disable-anonymous-token-enumeration",
                 Label = "Disable Anonymous Account Token Enumeration",
-                Category = "Security Audit Policy",
+                Category = "Security",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -3337,7 +3337,7 @@ internal static class PolicyAudit
                 {
                     Id          = "sqlaup-enable-full-login-audit",
                     Label       = "Enable Full SQL Server Login Audit (Success + Failure)",
-                    Category = "Security Audit Policy",
+                    Category = "Security",
                     Description = "Sets AuditLevel=3 in the MSSQLServer instance key. Controls the level of SQL Server login auditing: 0=none, 1=success only, 2=failure only, 3=both success and failure. Full auditing (level 3) records every authentication attempt to the SQL error log, enabling detection of brute-force attacks and unauthorised access. Required by most security compliance frameworks (CIS SQL Server Benchmark, STIG).",
                     Tags        = ["sql-server", "audit", "login", "compliance", "hardening"],
                     NeedsAdmin  = true,
@@ -3353,7 +3353,7 @@ internal static class PolicyAudit
                 {
                     Id          = "sqlaup-enforce-windows-auth-only",
                     Label       = "Enforce Windows Authentication Only for SQL Server",
-                    Category = "Security Audit Policy",
+                    Category = "Security",
                     Description = "Sets LoginMode=1 in the MSSQLServer instance key. Restricts SQL Server to Windows Authentication (Integrated Security) mode only, disabling SQL Server login accounts (LoginMode=2 enables mixed mode). Windows Authentication uses Kerberos or NTLM, benefits from Active Directory password policies, is audited by Windows Security event logs, and eliminates the risk of weak SQL-only passwords.",
                     Tags        = ["sql-server", "authentication", "windows-auth", "security", "hardening"],
                     NeedsAdmin  = true,
@@ -3369,7 +3369,7 @@ internal static class PolicyAudit
                 {
                     Id          = "sqlaup-disable-named-pipes",
                     Label       = "Disable SQL Server Named Pipe Protocol",
-                    Category = "Security Audit Policy",
+                    Category = "Security",
                     Description = "Sets NpEnabled=0 in the SQL Server SuperSocketNetLib key. Disables the Named Pipes network protocol for SQL Server connections. Named Pipes traverses SMB and can expose the SQL Server service through Windows file-sharing ports (445/TCP). Disabling Named Pipes forces all connections through TCP/IP which can be precisely port-filtered by a firewall.",
                     Tags        = ["sql-server", "network", "named-pipes", "protocol", "hardening"],
                     NeedsAdmin  = true,
@@ -3385,7 +3385,7 @@ internal static class PolicyAudit
                 {
                     Id          = "sqlaup-disable-shared-memory",
                     Label       = "Disable SQL Server Shared Memory Protocol",
-                    Category = "Security Audit Policy",
+                    Category = "Security",
                     Description = "Sets SmEnabled=0 in the SQL Server SuperSocketNetLib key. Disables the Shared Memory protocol that allows local processes to connect to SQL Server via memory-mapped communication. While convenient, Shared Memory connections bypass network-layer access controls entirely. Disabling it forces all connections (even local) through explicit TCP/IP, ensuring firewall rules and port-level controls apply uniformly.",
                     Tags        = ["sql-server", "network", "shared-memory", "protocol", "hardening"],
                     NeedsAdmin  = true,
@@ -3401,7 +3401,7 @@ internal static class PolicyAudit
                 {
                     Id          = "sqlaup-enable-tcp-protocol",
                     Label       = "Ensure SQL Server TCP/IP Protocol Is Enabled",
-                    Category = "Security Audit Policy",
+                    Category = "Security",
                     Description = "Sets TcpEnabled=1 in the SQL Server SuperSocketNetLib key. Guarantees the TCP/IP network protocol is active for SQL Server, which is the only protocol that can be properly firewalled and port-filtered. Combined with disabling Named Pipes and Shared Memory, this ensures all SQL Server traffic traverses TCP so network access controls are consistently applied.",
                     Tags        = ["sql-server", "network", "tcp", "protocol", "hardening"],
                     NeedsAdmin  = true,
@@ -3417,7 +3417,7 @@ internal static class PolicyAudit
                 {
                     Id          = "sqlaup-hide-sql-instance",
                     Label       = "Hide SQL Server Instance from Network Browsers",
-                    Category = "Security Audit Policy",
+                    Category = "Security",
                     Description = "Sets HideInstance=1 in the MSSQLServer key. Instructs SQL Server Browser to not return the instance name in response to network enumeration requests. When hidden, clients must supply the explicit server name and port; they cannot discover it through SQL Server Browser UDP broadcasts. This reduces the attack surface by preventing automated scanners from locating the SQL instance via port 1434 UDP enumeration.",
                     Tags        = ["sql-server", "browser", "discovery", "network", "hardening"],
                     NeedsAdmin  = true,
@@ -3433,7 +3433,7 @@ internal static class PolicyAudit
                 {
                     Id          = "sqlaup-disable-xp-cmdshell-flag",
                     Label       = "Record xp_cmdshell Disabled State in Registry",
-                    Category = "Security Audit Policy",
+                    Category = "Security",
                     Description = "Sets XPCmdShellEnabled=0 in the MSSQLServer key. This registry flag indicates that the xp_cmdshell extended stored procedure (which executes OS shell commands from T-SQL) must remain disabled. While the authoritative control is sp_configure inside SQL Server, recording the intended state in the registry allows compliance scanning tools that audit registry keys to verify xp_cmdshell is disabled without querying the SQL instance directly.",
                     Tags        = ["sql-server", "xp-cmdshell", "compliance", "policy", "hardening"],
                     NeedsAdmin  = true,
@@ -3449,7 +3449,7 @@ internal static class PolicyAudit
                 {
                     Id          = "sqlaup-enable-error-reporting",
                     Label       = "Enable SQL Server Error Log Verbosity",
-                    Category = "Security Audit Policy",
+                    Category = "Security",
                     Description = "Sets NumErrorLogs=10 in the MSSQLServer key. Controls how many SQL Server error log files are retained in rotation. Increasing from the default (6) to 10 prevents aggressive error log cycling that could make forensic investigation of incidents difficult. Retaining more log cycles ensures a longer audit trail is available when a security incident is discovered days or weeks after it occurred.",
                     Tags        = ["sql-server", "error-log", "audit", "retention", "hardening"],
                     NeedsAdmin  = true,
@@ -3465,7 +3465,7 @@ internal static class PolicyAudit
                 {
                     Id          = "sqlaup-disable-olap-remote-connect",
                     Label       = "Disable SQL Server OLAP Remote Connections Flag",
-                    Category = "Security Audit Policy",
+                    Category = "Security",
                     Description = "Sets AllowRemoteConnections=0 in the SQL Server SuperSocketNetLib key. Disables incoming remote connections through the OLAP/Analysis Services network library path. When SQL Server Analysis Services is not deployed or when OLAP connectivity should be restricted to the local machine, disabling remote connections through this protocol handler reduces the network-exposed attack surface of the SQL Server installation.",
                     Tags        = ["sql-server", "olap", "remote", "network", "hardening"],
                     NeedsAdmin  = true,
@@ -3481,7 +3481,7 @@ internal static class PolicyAudit
                 {
                     Id          = "sqlaup-enable-sql-server-encryption",
                     Label       = "Enable SQL Server Force Encryption Flag",
-                    Category = "Security Audit Policy",
+                    Category = "Security",
                     Description = "Sets ForceEncryption=1 in the SQL Server SuperSocketNetLib key. Instructs SQL Server to require encrypted connections (TLS/SSL) for all client connections. Without forced encryption, clients may connect without TLS, transmitting queries and data in plaintext across the network. This registry flag mirrors the Force Encryption option in SQL Server Configuration Manager and should be set alongside a valid server certificate.",
                     Tags        = ["sql-server", "encryption", "tls", "network", "hardening"],
                     NeedsAdmin  = true,
@@ -3508,7 +3508,7 @@ internal static class PolicyAudit
                 {
                     Id = "wefsubpol-enable-event-forwarding",
                     Label = "Enable Windows Event Forwarding Subscription Service",
-                    Category = "Security Audit Policy",
+                    Category = "Security",
                     Description =
                         "Enables the Windows Event Collector service subscription mechanism allowing this machine to forward events to a WEF collector server via WinRM, centralising log collection in a SIEM-compatible pipeline.",
                     Tags = ["wef", "event-forwarding", "winrm", "siem", "policy"],
@@ -3525,7 +3525,7 @@ internal static class PolicyAudit
                 {
                     Id = "wefsubpol-use-https-transport",
                     Label = "Require HTTPS Transport for Event Forwarding",
-                    Category = "Security Audit Policy",
+                    Category = "Security",
                     Description =
                         "Configures Windows Event Forwarding to use HTTPS (encrypted) transport instead of plain HTTP, ensuring that event data in transit between sources and the collector cannot be intercepted.",
                     Tags = ["wef", "https", "encryption", "transport", "policy"],
@@ -3542,7 +3542,7 @@ internal static class PolicyAudit
                 {
                     Id = "wefsubpol-require-kerberos-auth",
                     Label = "Require Kerberos Authentication for Event Forwarding",
-                    Category = "Security Audit Policy",
+                    Category = "Security",
                     Description =
                         "Requires Kerberos authentication for Windows Event Forwarding connections, ensuring only domain-joined machines with valid Kerberos tickets can forward events.",
                     Tags = ["wef", "kerberos", "authentication", "security", "policy"],
@@ -3559,7 +3559,7 @@ internal static class PolicyAudit
                 {
                     Id = "wefsubpol-set-max-batch-50",
                     Label = "Set Event Forwarding Maximum Batch Size to 50",
-                    Category = "Security Audit Policy",
+                    Category = "Security",
                     Description =
                         "Limits the maximum number of events in a single Windows Event Forwarding delivery batch to 50, reducing peak network bandwidth bursts while ensuring timely delivery of security events.",
                     Tags = ["wef", "batch-size", "network", "bandwidth", "policy"],
@@ -3576,7 +3576,7 @@ internal static class PolicyAudit
                 {
                     Id = "wefsubpol-push-delivery-mode",
                     Label = "Set Event Forwarding Delivery Mode to Push",
-                    Category = "Security Audit Policy",
+                    Category = "Security",
                     Description =
                         "Configures Windows Event Forwarding to use push delivery mode where the source machine initiates delivery, enabling more timely forwarding of security events versus poll-based pull mode.",
                     Tags = ["wef", "delivery-mode", "push", "timeliness", "policy"],
@@ -3593,7 +3593,7 @@ internal static class PolicyAudit
                 {
                     Id = "wefsubpol-block-untrusted-collectors",
                     Label = "Block Event Forwarding to Untrusted Collector Servers",
-                    Category = "Security Audit Policy",
+                    Category = "Security",
                     Description =
                         "Prevents event forwarding connections to collector servers whose certificates are not trusted by the local certificate store, blocking forwarding hijacks to rogue collection endpoints.",
                     Tags = ["wef", "trusted-collector", "certificate", "security", "policy"],
@@ -3610,7 +3610,7 @@ internal static class PolicyAudit
                 {
                     Id = "wefsubpol-retain-on-failure",
                     Label = "Retain Local Events When Forwarding Fails",
-                    Category = "Security Audit Policy",
+                    Category = "Security",
                     Description =
                         "Configures the event forwarding pipeline to retain events in the local event log when the collector is unreachable, ensuring no security event loss during network outages.",
                     Tags = ["wef", "retention", "resilience", "no-drop", "policy"],
@@ -3627,7 +3627,7 @@ internal static class PolicyAudit
                 {
                     Id = "wefsubpol-log-forwarding-failures",
                     Label = "Log Event Forwarding Connection Failures",
-                    Category = "Security Audit Policy",
+                    Category = "Security",
                     Description =
                         "Enables event log recording of Windows Event Forwarding connection failures, making pipeline outages visible in the local System event log for diagnostics.",
                     Tags = ["wef", "failure-logging", "connectivity", "diagnostics", "policy"],
@@ -3644,7 +3644,7 @@ internal static class PolicyAudit
                 {
                     Id = "wefsubpol-disable-unauthenticated",
                     Label = "Disable Unauthenticated Windows Event Forwarding",
-                    Category = "Security Audit Policy",
+                    Category = "Security",
                     Description =
                         "Blocks event forwarding sessions that do not supply authentication credentials, preventing anonymous forwarding connections that could be used to exfiltrate logs to external endpoints.",
                     Tags = ["wef", "authentication", "security", "anonymous", "policy"],
@@ -3661,7 +3661,7 @@ internal static class PolicyAudit
                 {
                     Id = "wefsubpol-disable-health-telemetry",
                     Label = "Disable Event Forwarding Health Telemetry to Microsoft",
-                    Category = "Security Audit Policy",
+                    Category = "Security",
                     Description =
                         "Prevents the Windows Event Forwarding service from sending health and reliability telemetry about the forwarding pipeline to Microsoft, keeping internal event collection topology out of cloud telemetry.",
                     Tags = ["wef", "telemetry", "privacy", "microsoft", "policy"],

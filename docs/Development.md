@@ -179,3 +179,59 @@ dotnet test --collect:"XPlat Code Coverage"
 - Push only at end of chat session
 - Conventional Commits: `type(scope): description`
 - See `.github/instructions/git-workflow.instructions.md` for full details
+
+---
+
+## Performance Profiling
+
+### Performance Overview
+
+| Root Cause | Symptoms | Diagnostic Tool |
+|---|---|---|
+| **CPU-bound** | High CPU, UI freezes during computation | dotTrace, PerfView, BenchmarkDotNet |
+| **I/O-bound** | Freeze waiting for registry/disk | PerfView, `Stopwatch` around I/O calls |
+| **Rendering stall** | UI feels heavy on scroll/resize | WinForms DoubleBuffered, profile `OnPaint` |
+| **Allocation pressure** | GC pauses, memory growth | dotMemory, `GC.GetTotalMemory()` |
+
+> **Golden rule** — The UI thread must never block for more than ~16 ms. Long operations should run via `Task.Run()`.
+
+### Built-in Diagnostics
+
+```csharp
+var sw = System.Diagnostics.Stopwatch.StartNew();
+var statuses = engine.StatusMap(parallel: true);
+sw.Stop();
+Console.WriteLine($"StatusMap took {sw.ElapsedMilliseconds} ms");
+```
+
+`RegistrySession.DryRun = true` prevents registry writes — safe for profiling apply/remove operations.
+
+### .NET Profiling Tools
+
+- **PerfView** (free): `PerfView collect dotnet run --project src/RegiLattice.CLI -- --list`
+- **dotTrace** (JetBrains): attach to running WinForms process; timeline view shows UI thread stalls
+- **Visual Studio Profiler**: Debug → Performance Profiler → CPU Usage / .NET Object Allocation
+
+### Common Bottlenecks
+
+| Bottleneck | Cause | Fix |
+|---|---|---|
+| Slow `RegisterBuiltins()` | Large number of tweak modules | Pre-compile, lazy-load modules |
+| Slow `StatusMap()` | Sequential registry reads | Use `parallel: true` parameter |
+| UI freeze on apply/remove | Blocking UI thread | `Task.Run()` + `Invoke()` for UI updates |
+| Theme switch lag | Repainting many controls | Double-buffered rendering (already enabled) |
+
+### WinForms Performance
+
+Double buffering is already enabled in `MainForm`:
+
+```csharp
+SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.AllPaintingInWmPaint, true);
+```
+
+Use `SuspendLayout()`/`ResumeLayout()` during batch control updates. Never block the UI thread:
+
+```csharp
+await Task.Run(() => engine.ApplyBatch(ids));
+Invoke(() => RefreshStatusBadges());
+```

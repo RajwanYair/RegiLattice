@@ -58,7 +58,7 @@ internal static class PolicyAuth
                 {
                     Id = "aadca-require-mfa-device-compliance",
                     Label = "Require MFA and Device Compliance for AAD Sign-In",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description =
                         "Enforces that Azure AD sign-in sessions require multi-factor authentication and device compliance status checks before granting access to cloud resources.",
                     Tags = ["azure-ad", "mfa", "conditional-access", "compliance", "policy"],
@@ -75,7 +75,7 @@ internal static class PolicyAuth
                 {
                     Id = "aadca-disable-legacy-auth",
                     Label = "Disable Legacy Authentication Protocols for AAD",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description =
                         "Blocks legacy authentication protocols (Basic Auth, NTLM over AAD) that cannot enforce MFA, preventing bypass of Conditional Access policies through legacy clients.",
                     Tags = ["azure-ad", "legacy-auth", "security", "policy"],
@@ -92,7 +92,7 @@ internal static class PolicyAuth
                 {
                     Id = "aadca-enforce-tap-policy",
                     Label = "Enforce Temporary Access Pass Policy for AAD",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description =
                         "Enforces the Temporary Access Pass (TAP) policy for Azure AD, ensuring one-time codes for account recovery are time-limited and comply with organisational policy.",
                     Tags = ["azure-ad", "tap", "recovery", "policy"],
@@ -109,7 +109,7 @@ internal static class PolicyAuth
                 {
                     Id = "aadca-block-personal-accounts",
                     Label = "Block Personal Microsoft Accounts from AAD Sign-In",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description =
                         "Blocks personal (consumer) Microsoft accounts from being used for Azure AD sign-in on managed devices, preventing account mixing between personal and corporate identities.",
                     Tags = ["azure-ad", "personal-accounts", "account-control", "policy"],
@@ -126,7 +126,7 @@ internal static class PolicyAuth
                 {
                     Id = "aadca-restrict-tenant-access",
                     Label = "Restrict AAD Sign-In to Approved Tenants Only",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description =
                         "Restricts Azure AD authentication on this device to specific approved tenant IDs, preventing credential phishing attacks that redirect users to rogue AAD tenants.",
                     Tags = ["azure-ad", "tenant-restriction", "phishing", "security", "policy"],
@@ -143,7 +143,7 @@ internal static class PolicyAuth
                 {
                     Id = "aadca-block-workplace-join",
                     Label = "Block Workplace Join for Non-Compliant Devices",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description =
                         "Blocks Azure AD Workplace Join (soft join) for devices that do not meet compliance requirements, preventing non-compliant devices from obtaining SSO tokens.",
                     Tags = ["azure-ad", "workplace-join", "compliance", "policy"],
@@ -160,7 +160,7 @@ internal static class PolicyAuth
                 {
                     Id = "aadca-disable-workplace-join-telemetry",
                     Label = "Disable Workplace Join Telemetry",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description =
                         "Disables telemetry collection during and after Azure AD Workplace Join operations, preventing registration events and diagnostic data from being sent to Microsoft.",
                     Tags = ["azure-ad", "workplace-join", "telemetry", "privacy", "policy"],
@@ -177,7 +177,7 @@ internal static class PolicyAuth
                 {
                     Id = "aadca-disable-wj-cert-prompt",
                     Label = "Disable Workplace Join Certificate Notification",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description =
                         "Disables the certificate-related notification prompts that appear during Workplace Join, preventing user interaction with certificate provisioning dialogs.",
                     Tags = ["azure-ad", "workplace-join", "certificate", "policy"],
@@ -194,7 +194,7 @@ internal static class PolicyAuth
                 {
                     Id = "aadca-block-guest-access",
                     Label = "Block Guest Account AAD Sign-In",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description =
                         "Prevents guest and B2B collaboration accounts from signing into Azure AD resources on this device, restricting access to direct organisational members only.",
                     Tags = ["azure-ad", "guest", "b2b", "access-control", "policy"],
@@ -211,7 +211,7 @@ internal static class PolicyAuth
                 {
                     Id = "aadca-require-intune-compliance",
                     Label = "Require Intune Compliance for AAD Token Issuance",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description =
                         "Requires that the device passes Microsoft Intune compliance policy checks before AAD issues access tokens, blocking cloud resource access from unmanaged or non-compliant devices.",
                     Tags = ["azure-ad", "intune", "compliance", "conditional-access", "policy"],
@@ -239,7 +239,7 @@ internal static class PolicyAuth
                 {
                     Id = "aadprt-enable-prt-sso",
                     Label = "Enable Primary Refresh Token SSO",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description =
                         "Enables Primary Refresh Token (PRT)-based Single Sign-On via the Web Account Manager (WAM) broker, allowing seamless SSO to Azure AD applications without password re-entry.",
                     Tags = ["azure-ad", "prt", "sso", "wam", "policy"],
@@ -256,7 +256,7 @@ internal static class PolicyAuth
                 {
                     Id = "aadprt-enable-cae",
                     Label = "Enable Continuous Access Evaluation (CAE) for Tokens",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description =
                         "Enables Continuous Access Evaluation for AAD tokens, ensuring that risk events (user revocation, location change, password reset) immediately invalidate existing access tokens.",
                     Tags = ["azure-ad", "cae", "token-revocation", "security", "policy"],
@@ -273,7 +273,7 @@ internal static class PolicyAuth
                 {
                     Id = "aadprt-require-phishing-resistant-mfa",
                     Label = "Require Phishing-Resistant MFA for PRT Issuance",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description =
                         "Requires phishing-resistant MFA methods (FIDO2, Windows Hello, Certificate) for issuing Primary Refresh Tokens, blocking PRT issuance via SMS/email OTP which can be phished.",
                     Tags = ["azure-ad", "prt", "mfa", "phishing-resistant", "policy"],
@@ -290,7 +290,7 @@ internal static class PolicyAuth
                 {
                     Id = "aadprt-disable-roaming-creds",
                     Label = "Disable PRT Credential Roaming to Other Devices",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description =
                         "Prevents Primary Refresh Token-based credential material from roaming between devices, ensuring each device maintains its own device-bound authentication state.",
                     Tags = ["azure-ad", "prt", "credential-roaming", "security", "policy"],
@@ -307,7 +307,7 @@ internal static class PolicyAuth
                 {
                     Id = "aadprt-set-token-cache-lifetime",
                     Label = "Set PRT Token Cache Lifetime to 4 Hours",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description =
                         "Limits the PRT-derived access token cache lifetime to 4 hours, requiring more frequent token refreshes and reducing the window for token theft exploitation.",
                     Tags = ["azure-ad", "prt", "token-cache", "security", "policy"],
@@ -324,7 +324,7 @@ internal static class PolicyAuth
                 {
                     Id = "aadprt-enable-ip-bound-tokens",
                     Label = "Enable IP-Bound Token Binding for PRT SSO",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description =
                         "Enables IP address binding for PRT-derived access tokens, causing AAD to reject tokens presented from IP addresses different from those during token issuance.",
                     Tags = ["azure-ad", "prt", "ip-binding", "security", "policy"],
@@ -341,7 +341,7 @@ internal static class PolicyAuth
                 {
                     Id = "aadprt-block-browser-prt-use",
                     Label = "Block Browser Access to PRT SSO Tokens",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description =
                         "Restricts browser extensions from accessing PRT SSO tokens through the WAM broker, preventing potentially malicious browser extensions from stealing SSO session material.",
                     Tags = ["azure-ad", "prt", "browser", "extensions", "security", "policy"],
@@ -358,7 +358,7 @@ internal static class PolicyAuth
                 {
                     Id = "aadprt-enable-wam-logging",
                     Label = "Enable WAM Broker Audit Logging",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description =
                         "Enables detailed audit logging for the Web Account Manager (WAM) token broker operations, providing a forensic trail of all SSO token issuance and refresh events.",
                     Tags = ["azure-ad", "wam", "logging", "audit", "policy"],
@@ -375,7 +375,7 @@ internal static class PolicyAuth
                 {
                     Id = "aadprt-require-device-compliance-for-prt",
                     Label = "Require Device Compliance Status for PRT Issuance",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description =
                         "Blocks PRT issuance on devices that do not have a valid Intune compliance status, ensuring that only compliant devices can participate in PRT-based SSO.",
                     Tags = ["azure-ad", "prt", "compliance", "intune", "policy"],
@@ -392,7 +392,7 @@ internal static class PolicyAuth
                 {
                     Id = "aadprt-block-prt-on-shared-device",
                     Label = "Block PRT SSO on Shared/Kiosk Devices",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description =
                         "Blocks Primary Refresh Token-based SSO on devices configured as shared or kiosk devices, preventing cross-user SSO token leakage on multi-user workstations.",
                     Tags = ["azure-ad", "prt", "shared-device", "kiosk", "policy"],
@@ -420,7 +420,7 @@ internal static class PolicyAuth
                 {
                     Id = "aadsspr-require-two-methods",
                     Label = "Require Two Methods for SSPR Authentication",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description =
                         "Configures Azure AD Self-Service Password Reset to require two authentication methods (e.g., email + phone, or authenticator app + security questions) before a password can be reset.",
                     Tags = ["azure-ad", "sspr", "mfa", "password-reset", "policy"],
@@ -437,7 +437,7 @@ internal static class PolicyAuth
                 {
                     Id = "aadsspr-block-sms-method",
                     Label = "Block SMS as SSPR Authentication Method",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description =
                         "Disables SMS (one-time PIN via text message) as an allowed authentication method for SSPR, preventing SIM-swapping attacks from enabling account takeover via password reset.",
                     Tags = ["azure-ad", "sspr", "sms", "sim-swap", "security", "policy"],
@@ -454,7 +454,7 @@ internal static class PolicyAuth
                 {
                     Id = "aadsspr-block-email-method",
                     Label = "Block External Email as SSPR Authentication Method",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description =
                         "Disables external email address (non-corporate) as an allowed authentication method for SSPR, forcing use of corporate email or authenticator apps.",
                     Tags = ["azure-ad", "sspr", "email", "security", "policy"],
@@ -471,7 +471,7 @@ internal static class PolicyAuth
                 {
                     Id = "aadsspr-require-security-questions-count",
                     Label = "Require Minimum 5 Security Questions for SSPR",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description =
                         "Requires users to answer at least 5 security questions for SSPR if the security questions method is enabled, increasing the difficulty of social engineering attacks.",
                     Tags = ["azure-ad", "sspr", "security-questions", "policy"],
@@ -488,7 +488,7 @@ internal static class PolicyAuth
                 {
                     Id = "aadsspr-enforce-registration-at-logon",
                     Label = "Enforce SSPR Registration at Next Logon",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description =
                         "Forces users who have not registered SSPR methods to register at their next logon, ensuring all accounts have recovery methods configured before they need them.",
                     Tags = ["azure-ad", "sspr", "registration", "policy"],
@@ -505,7 +505,7 @@ internal static class PolicyAuth
                 {
                     Id = "aadsspr-set-reconfirm-interval",
                     Label = "Set SSPR Auth Method Reconfirmation to 180 Days",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description =
                         "Configures the SSPR method reconfirmation interval to 180 days, requiring users to verify their registered authentication methods are still valid every six months.",
                     Tags = ["azure-ad", "sspr", "reconfirmation", "policy"],
@@ -522,7 +522,7 @@ internal static class PolicyAuth
                 {
                     Id = "aadsspr-require-authenticator-app",
                     Label = "Require Microsoft Authenticator App for SSPR",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description =
                         "Requires the Microsoft Authenticator app notification or code as an allowed (and preferred) SSPR method, providing stronger MFA-equivalent strength for password resets.",
                     Tags = ["azure-ad", "sspr", "authenticator", "mfa", "policy"],
@@ -539,7 +539,7 @@ internal static class PolicyAuth
                 {
                     Id = "aadsspr-block-writeback-on-premises",
                     Label = "Block SSPR Password Writeback to On-Premises",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description =
                         "Disables SSPR Password Writeback which synchronises cloud reset passwords back to the on-premises Active Directory, preventing cloud-initiated account takeover from affecting on-prem.",
                     Tags = ["azure-ad", "sspr", "writeback", "on-premises", "security", "policy"],
@@ -556,7 +556,7 @@ internal static class PolicyAuth
                 {
                     Id = "aadsspr-notify-admin-on-reset",
                     Label = "Notify Admins on SSPR Use",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description =
                         "Enables administrator notification when a user uses SSPR to reset their password, creating an audit trail and alerting IT to potential account compromise events.",
                     Tags = ["azure-ad", "sspr", "notification", "audit", "policy"],
@@ -573,7 +573,7 @@ internal static class PolicyAuth
                 {
                     Id = "aadsspr-limit-self-service-unlock",
                     Label = "Limit SSPR Self-Service Account Unlock Attempts",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description =
                         "Limits the number of self-service account unlock attempts via SSPR per hour to prevent brute-force enumeration of SSPR methods against locked accounts.",
                     Tags = ["azure-ad", "sspr", "account-unlock", "brute-force", "policy"],
@@ -601,7 +601,7 @@ internal static class PolicyAuth
                 {
                     Id = "aadtenant-block-email-signin",
                     Label = "Block Azure AD Email (MSA) Sign-In",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description =
                         "Sets AllowEmailSignIn=0 to prevent users from signing in with personal Microsoft accounts or email credentials instead of their enterprise Azure AD identity. Enforces corporate identity exclusivity.",
                     Tags = ["aad", "signin", "msa", "policy", "identity"],
@@ -618,7 +618,7 @@ internal static class PolicyAuth
                 {
                     Id = "aadtenant-block-non-enterprise-join",
                     Label = "Block Non-Enterprise Azure AD Device Join",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description =
                         "Sets BlockNonEnterpriseAADUserFromJoining=1. Prevents consumer or personal Azure AD accounts from joining this device, limiting device registration exclusively to managed enterprise tenants.",
                     Tags = ["aad", "join", "enterprise", "policy", "device"],
@@ -635,7 +635,7 @@ internal static class PolicyAuth
                 {
                     Id = "aadtenant-disable-consumer-apps",
                     Label = "Disable Consumer Azure AD App Enrollment",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description =
                         "Sets AllowWindowsConsumerApps=0. Prevents consumer-oriented Azure AD application enrollment on this device, blocking personal-use apps from registering with the user's Microsoft account identity.",
                     Tags = ["aad", "consumer", "apps", "policy", "enrollment"],
@@ -652,7 +652,7 @@ internal static class PolicyAuth
                 {
                     Id = "aadtenant-enforce-tenant-restrictions",
                     Label = "Enforce Azure AD Tenant Restrictions",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description =
                         "Sets EnableTenantRestrictions=1. Activates tenant restriction policy, limiting which Azure AD tenants users can authenticate against. Works with network-level tenant restriction headers to block unauthorised tenant sign-ins.",
                     Tags = ["aad", "tenant", "restrictions", "policy", "compliance"],
@@ -669,7 +669,7 @@ internal static class PolicyAuth
                 {
                     Id = "aadtenant-block-guest-accounts",
                     Label = "Block Azure AD Guest Account Sign-In",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description =
                         "Sets AllowGuestAccounts=0. Prevents guest or B2B invited user accounts from signing into this device, restricting access to member accounts belonging to the managed enterprise tenant only.",
                     Tags = ["aad", "guest", "b2b", "policy", "access"],
@@ -686,7 +686,7 @@ internal static class PolicyAuth
                 {
                     Id = "aadtenant-block-personal-accounts",
                     Label = "Block Personal Microsoft Account Links",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description =
                         "Sets BlockPersonalMicrosoftAccounts=1. Prevents users from adding or connecting personal Microsoft accounts to this device, ensuring only work/school accounts are provisioned.",
                     Tags = ["aad", "personal", "microsoft", "account", "policy"],
@@ -703,7 +703,7 @@ internal static class PolicyAuth
                 {
                     Id = "aadtenant-require-privacy-consent",
                     Label = "Require Azure AD Privacy Consent",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description =
                         "Sets RequirePrivacyConsent=1. Forces display of the enterprise privacy consent dialog before Azure AD account setup, ensuring users acknowledge the organisation's data handling policy.",
                     Tags = ["aad", "privacy", "consent", "policy", "gdpr"],
@@ -720,7 +720,7 @@ internal static class PolicyAuth
                 {
                     Id = "aadtenant-disable-shared-device-signin",
                     Label = "Disable Shared Azure AD Device Sign-In Mode",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description =
                         "Sets AllowSharedLocalAppData=0. Prevents Azure AD shared device mode from allowing local app data to persist between users, protecting data isolation on shared Windows kiosks and shared endpoints.",
                     Tags = ["aad", "shared", "kiosk", "policy", "isolation"],
@@ -737,7 +737,7 @@ internal static class PolicyAuth
                 {
                     Id = "aadtenant-block-home-edition-join",
                     Label = "Block AAD Join on Windows Home Editions",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description =
                         "Sets AllowAADPasswordReset=0. Disables self-service password reset sign-in from the Windows lock screen for Azure AD accounts, preventing unauthenticated SSPR attempts that could expose reset links.",
                     Tags = ["aad", "password", "reset", "policy", "lockscreen"],
@@ -754,7 +754,7 @@ internal static class PolicyAuth
                 {
                     Id = "aadtenant-disable-cloud-clipboard-aad",
                     Label = "Disable Azure AD Cloud Clipboard Sync",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description =
                         "Sets AllowCrossDeviceClipboard=0 in the Azure AD account policy scope. Prevents clipboard history from syncing to other Azure AD-joined or registered devices via the Microsoft cloud clipboard service.",
                     Tags = ["aad", "clipboard", "sync", "policy", "privacy"],
@@ -782,7 +782,7 @@ internal static class PolicyAuth
                 {
                     Id = "biometric-disable-biometrics-service",
                     Label = "Disable Windows Biometrics Service",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description =
                         "Disables the Windows Biometric Service (WBS), preventing any biometric authentication including Windows Hello fingerprint and face recognition. Use on systems where biometrics are not permitted.",
                     Tags = ["biometrics", "windows-hello", "fingerprint", "face", "policy"],
@@ -799,7 +799,7 @@ internal static class PolicyAuth
                 {
                     Id = "biometric-disable-face-recognition",
                     Label = "Disable Windows Hello Face Recognition",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description =
                         "Disables Windows Hello Face Recognition, preventing camera-based biometric sign-in without disabling other biometric factors like fingerprint.",
                     Tags = ["biometrics", "windows-hello", "face", "camera", "policy"],
@@ -816,7 +816,7 @@ internal static class PolicyAuth
                 {
                     Id = "biometric-disable-fingerprint",
                     Label = "Disable Windows Hello Fingerprint Sign-In",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description =
                         "Disables Windows Hello fingerprint sign-in without disabling other biometric or WHfB credential types, useful in environments where fingerprint readers present a shared contamination risk.",
                     Tags = ["biometrics", "windows-hello", "fingerprint", "policy"],
@@ -833,7 +833,7 @@ internal static class PolicyAuth
                 {
                     Id = "biometric-require-anti-spoofing",
                     Label = "Require Anti-Spoofing for Face Recognition",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description =
                         "Requires that Windows Hello Face Recognition use enhanced anti-spoofing (infrared liveness detection), rejecting 2D photo attacks and blocking face sign-in from cameras without IR.",
                     Tags = ["biometrics", "windows-hello", "anti-spoofing", "face", "policy"],
@@ -850,7 +850,7 @@ internal static class PolicyAuth
                 {
                     Id = "biometric-block-domain-users-biometrics",
                     Label = "Block Biometric Sign-In for Domain Accounts",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description =
                         "Disables biometric sign-in for domain (Active Directory) accounts, requiring domain users to authenticate with WHfB PIN or password instead of biometrics for high-security domains.",
                     Tags = ["biometrics", "domain-account", "windows-hello", "policy"],
@@ -867,7 +867,7 @@ internal static class PolicyAuth
                 {
                     Id = "biometric-disable-biometrics-for-uac",
                     Label = "Disable Biometric Authentication for UAC Prompts",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description =
                         "Prevents biometrics (fingerprint or face) from being used to approve User Account Control elevation prompts, requiring a PIN or password for admin approval dialogs.",
                     Tags = ["biometrics", "uac", "elevation", "windows-hello", "policy"],
@@ -884,7 +884,7 @@ internal static class PolicyAuth
                 {
                     Id = "biometric-require-admin-enroll",
                     Label = "Require Admin Approval to Enroll Biometrics",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description =
                         "Requires administrator approval to enroll new biometric credentials on managed devices, preventing unauthorized enrollment of biometrics on shared or managed workstations.",
                     Tags = ["biometrics", "enrollment", "admin", "policy"],
@@ -901,7 +901,7 @@ internal static class PolicyAuth
                 {
                     Id = "biometric-log-biometric-auth-events",
                     Label = "Enable Audit Logging for All Biometric Authentication Events",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description =
                         "Enables Windows event log entries for every biometric authentication attempt (success, failure, lockout), providing an audit trail for biometric sign-in usage.",
                     Tags = ["biometrics", "audit-log", "windows-hello", "policy"],
@@ -918,7 +918,7 @@ internal static class PolicyAuth
                 {
                     Id = "biometric-disable-biometric-third-party",
                     Label = "Block Third-Party Biometric Device Drivers",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description =
                         "Prevents third-party biometric device drivers from registering with the Windows Biometric Framework, restricting biometric authentication to Microsoft-signed and WHQL-certified biometric hardware.",
                     Tags = ["biometrics", "third-party", "driver", "policy"],
@@ -935,7 +935,7 @@ internal static class PolicyAuth
                 {
                     Id = "biometric-clear-biometrics-on-lock",
                     Label = "Clear Biometric Authentication Cache on Screen Lock",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description =
                         "Clears cached biometric authentication tokens when the screen locks, requiring a fresh biometric scan after every lock event rather than allowing replay of a recently cached biometric match.",
                     Tags = ["biometrics", "cache", "screen-lock", "security", "policy"],
@@ -967,7 +967,7 @@ internal static class PolicyAuth
             {
                 Id = "bio-disable-biometrics",
                 Label = "Disable Windows Biometrics Service",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -986,7 +986,7 @@ internal static class PolicyAuth
             {
                 Id = "bio-disable-biometrics-domain",
                 Label = "Disable Biometrics for Domain / AAD Users",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -1004,7 +1004,7 @@ internal static class PolicyAuth
             {
                 Id = "bio-disable-biometric-sign-in",
                 Label = "Disable Biometric Sign-In via Credential Provider",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -1022,7 +1022,7 @@ internal static class PolicyAuth
             {
                 Id = "bio-enable-facial-anti-spoofing",
                 Label = "Enable Windows Hello Facial Anti-Spoofing (ESS)",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -1041,7 +1041,7 @@ internal static class PolicyAuth
             {
                 Id = "bio-whfb-require-tpm",
                 Label = "Require TPM for Windows Hello for Business Keys",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -1060,7 +1060,7 @@ internal static class PolicyAuth
             {
                 Id = "bio-whfb-pin-min-length",
                 Label = "Set Minimum Windows Hello PIN Length to 8",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -1079,7 +1079,7 @@ internal static class PolicyAuth
             {
                 Id = "bio-whfb-pin-require-digits",
                 Label = "Require Digits in Windows Hello PIN",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -1097,7 +1097,7 @@ internal static class PolicyAuth
             {
                 Id = "bio-whfb-pin-require-uppercase",
                 Label = "Require Uppercase Letters in Windows Hello PIN",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -1115,7 +1115,7 @@ internal static class PolicyAuth
             {
                 Id = "bio-whfb-pin-require-lowercase",
                 Label = "Require Lowercase Letters in Windows Hello PIN",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -1133,7 +1133,7 @@ internal static class PolicyAuth
             {
                 Id = "bio-whfb-pin-expiry",
                 Label = "Set Windows Hello PIN Expiration to 90 Days",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -1165,7 +1165,7 @@ internal static class PolicyAuth
                 {
                     Id = "biopol-disable-biometrics",
                     Label = "Disable Windows Biometrics Service",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description =
                         "Sets Enabled=0 in the Biometrics policy key to disable the Windows biometric framework. Prevents all biometric sign-in methods including fingerprint and facial recognition.",
                     Tags = ["biometrics", "security", "policy", "sign-in"],
@@ -1182,7 +1182,7 @@ internal static class PolicyAuth
                 {
                     Id = "biopol-block-domain-biometric-logon",
                     Label = "Block Biometric Domain Logon",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description =
                         "Sets Enabled=0 under the DomainAccounts subkey to block domain-joined users from authenticating with biometrics. Useful in high-security enterprise environments.",
                     Tags = ["biometrics", "domain", "security", "policy"],
@@ -1199,7 +1199,7 @@ internal static class PolicyAuth
                 {
                     Id = "biopol-disable-secondary-auth-factor",
                     Label = "Disable Biometric Secondary Authentication Factor",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description =
                         "Sets SecondaryAuthenticationFactor=0 to prevent biometrics from being used as a secondary authentication factor on top of primary credentials.",
                     Tags = ["biometrics", "mfa", "security", "policy"],
@@ -1216,7 +1216,7 @@ internal static class PolicyAuth
                 {
                     Id = "biopol-disable-domain-secondary-auth",
                     Label = "Block Domain Biometric Secondary Authentication",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description =
                         "Sets SecondaryAuthenticationFactor=0 under DomainAccounts to prevent domain users from using biometrics as a secondary authentication factor.",
                     Tags = ["biometrics", "domain", "mfa", "policy"],
@@ -1233,7 +1233,7 @@ internal static class PolicyAuth
                 {
                     Id = "biopol-enforce-enhanced-anti-spoofing",
                     Label = "Enforce Enhanced Facial Anti-Spoofing",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description =
                         "Sets EnhancedAntiSpoofing=1 under FacialFeatures to require cameras with IR depth sensors for facial recognition, blocking photo or video spoofing attempts.",
                     Tags = ["biometrics", "face", "anti-spoofing", "security"],
@@ -1250,7 +1250,7 @@ internal static class PolicyAuth
                 {
                     Id = "biopol-disable-alternative-auth-factor",
                     Label = "Disable Alternative Authentication Factor via Biometrics",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description =
                         "Sets AlternativeAuthenticationFactor=0 to disable alternative biometric authentication factors such as vein pattern readers or external biometric devices.",
                     Tags = ["biometrics", "security", "policy", "authentication"],
@@ -1267,7 +1267,7 @@ internal static class PolicyAuth
                 {
                     Id = "biopol-block-biometric-enrollment",
                     Label = "Block New Biometric Credential Enrollment",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description =
                         "Sets BlockNewEnrollment=1 under the Enrollment subkey to prevent users from enrolling new biometric credentials (fingerprints or face). Existing credentials remain usable.",
                     Tags = ["biometrics", "enrollment", "security", "policy"],
@@ -1284,7 +1284,7 @@ internal static class PolicyAuth
                 {
                     Id = "biopol-disable-biometric-logon-ui",
                     Label = "Disable Biometric Sign-In UI",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description =
                         "Sets AllowLogon=0 to remove the biometric sign-in option from the Windows sign-in screen, ensuring only PIN, password, or smart card options are presented.",
                     Tags = ["biometrics", "logon", "ui", "security"],
@@ -1301,7 +1301,7 @@ internal static class PolicyAuth
                 {
                     Id = "biopol-disable-biometric-cred-provider",
                     Label = "Disable Biometric Credential Provider",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description =
                         "Sets DisableCredentialProviders=1 to disable the Windows biometric credential provider at the system level, removing biometric authentication from all credential prompts.",
                     Tags = ["biometrics", "credential", "provider", "policy"],
@@ -1318,7 +1318,7 @@ internal static class PolicyAuth
                 {
                     Id = "biopol-disable-face-id-enrollment",
                     Label = "Disable Windows Hello Face Recognition Enrollment",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description =
                         "Sets Enabled=0 under the FacialFeatures key to disable facial recognition in Windows Hello entirely, while other biometric methods may remain available.",
                     Tags = ["biometrics", "face", "windows-hello", "policy"],
@@ -1355,7 +1355,7 @@ internal static class PolicyAuth
             {
                 Id = "credcache-mitigate-credssp-oracle",
                 Label = "Mitigate CredSSP oracle vulnerability (CVE-2018-0886)",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 Description =
@@ -1371,7 +1371,7 @@ internal static class PolicyAuth
             {
                 Id = "credcache-restrict-rdp-admin-delegation",
                 Label = "Restrict remote admin credential delegation",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 Description =
@@ -1386,7 +1386,7 @@ internal static class PolicyAuth
             {
                 Id = "credcache-rdp-admin-type-protect",
                 Label = "Require Protected Users or Restricted Admin for RDP",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 Description =
@@ -1401,7 +1401,7 @@ internal static class PolicyAuth
             {
                 Id = "credcache-disable-wdigest",
                 Label = "Disable WDigest plaintext credential caching",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 Description =
@@ -1416,7 +1416,7 @@ internal static class PolicyAuth
             {
                 Id = "credcache-enable-lsa-protection",
                 Label = "Enable LSA Protected Process Light (PPL)",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 NeedsAdmin = true,
                 CorpSafe = false,
                 Description =
@@ -1431,7 +1431,7 @@ internal static class PolicyAuth
             {
                 Id = "credcache-disable-domain-creds",
                 Label = "Block storing network authentication credentials",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 Description =
@@ -1446,7 +1446,7 @@ internal static class PolicyAuth
             {
                 Id = "credcache-restrict-anonymous",
                 Label = "Restrict anonymous enumeration of accounts and shares",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 Description =
@@ -1461,7 +1461,7 @@ internal static class PolicyAuth
             {
                 Id = "credcache-restrict-anonymous-sam",
                 Label = "Restrict anonymous enumeration of SAM account names",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 Description =
@@ -1476,7 +1476,7 @@ internal static class PolicyAuth
             {
                 Id = "credcache-disable-everyone-anonymous",
                 Label = "Remove Anonymous from the Everyone group",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 Description =
@@ -1491,7 +1491,7 @@ internal static class PolicyAuth
             {
                 Id = "credcache-disable-lm-hash",
                 Label = "Disable LM hash storage for passwords",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 Description =
@@ -1517,7 +1517,7 @@ internal static class PolicyAuth
             {
                 Id = "creddel-enable-restricted-admin",
                 Label = "Enable Restricted Admin Mode for RDP",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 Description = "Forces Remote Desktop connections to use Restricted Admin mode, preventing credential forwarding to remote hosts.",
                 Tags = ["credentials", "delegation", "rdp", "restricted-admin", "security"],
                 NeedsAdmin = true,
@@ -1533,7 +1533,7 @@ internal static class PolicyAuth
             {
                 Id = "creddel-disable-remote-host-delegation",
                 Label = "Disable Credential Delegation to Remote Hosts",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 Description = "Prevents Windows from forwarding saved credentials to remote hosts via CredSSP delegation.",
                 Tags = ["credentials", "delegation", "credssp", "remote", "security"],
                 NeedsAdmin = true,
@@ -1549,7 +1549,7 @@ internal static class PolicyAuth
             {
                 Id = "creddel-allow-only-ntlm-protected",
                 Label = "Restrict CredSSP to NTLM-Protected Servers Only",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 Description = "Limits CredSSP fresh credential delegation to servers that authenticate via NTLM challenge-response.",
                 Tags = ["credentials", "delegation", "ntlm", "credssp", "security"],
                 NeedsAdmin = true,
@@ -1565,7 +1565,7 @@ internal static class PolicyAuth
             {
                 Id = "creddel-deny-default-credential-delegation",
                 Label = "Deny Default Credential Delegation",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 Description = "Prevents the default Windows behaviour of delegating credentials to any server when CredSSP is negotiated.",
                 Tags = ["credentials", "delegation", "default", "credssp", "security"],
                 NeedsAdmin = true,
@@ -1581,7 +1581,7 @@ internal static class PolicyAuth
             {
                 Id = "creddel-deny-saved-credential-delegation",
                 Label = "Deny Saved Credential Delegation",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 Description = "Prevents Windows Credential Manager saved credentials from being forwarded to remote servers via CredSSP.",
                 Tags = ["credentials", "delegation", "saved", "credential-manager", "security"],
                 NeedsAdmin = true,
@@ -1597,7 +1597,7 @@ internal static class PolicyAuth
             {
                 Id = "creddel-deny-fresh-credential-delegation",
                 Label = "Deny Fresh Credential Delegation",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 Description = "Blocks CredSSP from forwarding freshly entered credentials to servers in all delegation categories.",
                 Tags = ["credentials", "delegation", "fresh", "credssp", "security"],
                 NeedsAdmin = true,
@@ -1613,7 +1613,7 @@ internal static class PolicyAuth
             {
                 Id = "creddel-require-remote-auth-mutual",
                 Label = "Require Mutual Authentication for Remote Sessions",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 Description = "Mandates that remote session targets present valid Kerberos or certificate credentials before accepting connections.",
                 Tags = ["credentials", "delegation", "mutual-auth", "kerberos", "security"],
                 NeedsAdmin = true,
@@ -1629,7 +1629,7 @@ internal static class PolicyAuth
             {
                 Id = "creddel-disable-credssp-v1",
                 Label = "Disable CredSSP Protocol Version 1",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 Description = "Disables CredSSP version 1 to enforce use of patched versions that mitigate credential forwarding vulnerabilities.",
                 Tags = ["credentials", "delegation", "credssp", "version", "security"],
                 NeedsAdmin = true,
@@ -1645,7 +1645,7 @@ internal static class PolicyAuth
             {
                 Id = "creddel-audit-delegation-events",
                 Label = "Enable Credential Delegation Audit Logging",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 Description = "Records credential delegation events in the Security event log for monitoring and forensic analysis.",
                 Tags = ["credentials", "delegation", "audit", "logging", "security"],
                 NeedsAdmin = true,
@@ -1661,7 +1661,7 @@ internal static class PolicyAuth
             {
                 Id = "creddel-block-delegation-to-workgroups",
                 Label = "Block Credential Delegation to Workgroup Machines",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 Description = "Prevents credentials from being delegated to non-domain-joined (workgroup) computers to reduce attack surface.",
                 Tags = ["credentials", "delegation", "workgroup", "domain", "security"],
                 NeedsAdmin = true,
@@ -1688,7 +1688,7 @@ internal static class PolicyAuth
             {
                 Id = "credmgr-restrict-default-credentials-delegation",
                 Label = "Restrict Default Credential Delegation to Specific Servers",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 5,
@@ -1705,7 +1705,7 @@ internal static class PolicyAuth
             {
                 Id = "credmgr-restrict-fresh-credentials",
                 Label = "Restrict Fresh Credential Delegation to Trusted Servers Only",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -1722,7 +1722,7 @@ internal static class PolicyAuth
             {
                 Id = "credmgr-deny-remote-desktop-credential-delegation",
                 Label = "Deny Credential Delegation through Remote Desktop without NLA",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 5,
@@ -1739,7 +1739,7 @@ internal static class PolicyAuth
             {
                 Id = "credmgr-restrict-saved-rdp-credentials",
                 Label = "Prevent Saving of Remote Desktop Connection Credentials",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -1756,7 +1756,7 @@ internal static class PolicyAuth
             {
                 Id = "credmgr-enable-restricted-admin-mode",
                 Label = "Enable Restricted Admin Mode for Remote Desktop Connections",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 5,
@@ -1773,7 +1773,7 @@ internal static class PolicyAuth
             {
                 Id = "credmgr-disable-wdigest-authentication",
                 Label = "Disable WDigest Authentication to Prevent Cleartext Password Storage in Memory",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 5,
@@ -1790,7 +1790,7 @@ internal static class PolicyAuth
             {
                 Id = "credmgr-enable-lsass-process-protection",
                 Label = "Enable LSASS Process Protection to Prevent Credential Dumping",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 5,
@@ -1807,7 +1807,7 @@ internal static class PolicyAuth
             {
                 Id = "credmgr-restrict-credential-manager-api-access",
                 Label = "Restrict API Access to Windows Credential Manager Store",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -1824,7 +1824,7 @@ internal static class PolicyAuth
             {
                 Id = "credmgr-enable-remote-host-credential-guard",
                 Label = "Enable Remote Credential Guard for Protected Credential Delegation",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 5,
@@ -1841,7 +1841,7 @@ internal static class PolicyAuth
             {
                 Id = "credmgr-block-ntlm-credential-delegation",
                 Label = "Block NTLM Credential Delegation in Restricted Networks",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -1871,7 +1871,7 @@ internal static class PolicyAuth
             {
                 Id           = "credroam-disable-credential-roaming",
                 Label        = "Disable User Credential Roaming Between Domain Computers",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 Description  = "Prevents user credentials (certificates, private keys, smart card PINs) from being copied to the user's roaming profile and thus synchronised to other domain computers, keeping credentials machine-local and reducing the credential surface exposed if a profile is compromised.",
                 Tags         = ["credential-roaming", "certificates", "private-keys", "roaming-profile", "policy"],
                 NeedsAdmin   = true,
@@ -1887,7 +1887,7 @@ internal static class PolicyAuth
             {
                 Id           = "credroam-block-certificate-roaming",
                 Label        = "Block Roaming of User Certificates via User Profile",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 Description  = "Specifically blocks the roaming of user certificates and key containers via the Windows credential roaming feature, preventing certificates imported on one machine from appearing on all machines on next logon.",
                 Tags         = ["credential-roaming", "certificates", "key-container", "profile-sync", "policy"],
                 NeedsAdmin   = true,
@@ -1903,7 +1903,7 @@ internal static class PolicyAuth
             {
                 Id           = "credroam-restrict-profile-sync-to-domain",
                 Label        = "Restrict Roaming Profile Sync to Domain Networks Only",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 Description  = "Prevents roaming profile synchronisation from occurring over non-domain networks (public WiFi, VPN), ensuring credential and profile data is only synced when connected to the corporate domain network.",
                 Tags         = ["roaming-profile", "domain-network", "profile-sync", "security", "policy"],
                 NeedsAdmin   = true,
@@ -1919,7 +1919,7 @@ internal static class PolicyAuth
             {
                 Id           = "credroam-delete-cached-roaming-profiles",
                 Label        = "Delete Cached Copies of Roaming Profiles at Logoff",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 Description  = "Configures Windows to delete the locally cached copy of the roaming profile when the user logs off, ensuring credential data and profile contents are not left on shared or non-primary workstations after user sessions.",
                 Tags         = ["roaming-profile", "cached-profile", "logoff", "data-cleanup", "policy"],
                 NeedsAdmin   = true,
@@ -1935,7 +1935,7 @@ internal static class PolicyAuth
             {
                 Id           = "credroam-disable-smart-card-pin-roaming",
                 Label        = "Disable Smart Card PIN Roaming via Credential Roaming Service",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 Description  = "Prevents smart card PINs cached by the Windows Smart Card PIN cache from being synchronised between machines via the credential roaming service, keeping smart card PIN caches strictly machine-local.",
                 Tags         = ["credroam", "smart-card", "pin-cache", "roaming", "policy"],
                 NeedsAdmin   = true,
@@ -1951,7 +1951,7 @@ internal static class PolicyAuth
             {
                 Id           = "credroam-require-admin-roaming-profile",
                 Label        = "Block Administrator Accounts from Using Roaming Profiles",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 Description  = "Prevents administrator accounts from using roaming profiles, ensuring that elevated account credentials, SAM keys, and administrative certificates are never synchronised to roaming profile storage.",
                 Tags         = ["credroam", "admin-account", "roaming-profile", "privilege", "policy"],
                 NeedsAdmin   = true,
@@ -1967,7 +1967,7 @@ internal static class PolicyAuth
             {
                 Id           = "credroam-encrypt-roaming-profile-at-rest",
                 Label        = "Encrypt Roaming Profile Server-Side Copy at Rest",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 Description  = "Requires the roaming profile share to encrypt profile data server-side before writing to the UNC profile path, ensuring that the server-side copy of the roaming profile is EFS-protected and not readable by share administrators.",
                 Tags         = ["credroam", "efs", "encryption", "profile-server", "policy"],
                 NeedsAdmin   = true,
@@ -1983,7 +1983,7 @@ internal static class PolicyAuth
             {
                 Id           = "credroam-log-profile-sync-events",
                 Label        = "Log Roaming Profile Synchronisation Events in System Log",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 Description  = "Enables System event log entries for all roaming profile synchronisation operations, including sync success, failure, conflict, and truncation events, providing audit visibility into profile and credential roaming activity.",
                 Tags         = ["credroam", "event-log", "audit", "profile-sync", "policy"],
                 NeedsAdmin   = true,
@@ -1999,7 +1999,7 @@ internal static class PolicyAuth
             {
                 Id           = "credroam-block-plaintext-credential-cache",
                 Label        = "Block Caching of Plaintext Credentials in Roaming Profile",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 Description  = "Prevents the credentials manager and credential providers from storing reversible (plaintext-equivalent) credential blobs in the user's roaming profile, ensuring only hashed or certificate-protected credentials are ever written to profile storage.",
                 Tags         = ["credroam", "plaintext-credential", "credential-cache", "security", "policy"],
                 NeedsAdmin   = true,
@@ -2015,7 +2015,7 @@ internal static class PolicyAuth
             {
                 Id           = "credroam-disable-credential-roaming-telemetry",
                 Label        = "Disable Credential Roaming Telemetry to Microsoft",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 Description  = "Prevents the Windows credential roaming service from sending certificate sync counts, roaming failures, and credential manager sync statistics to Microsoft.",
                 Tags         = ["credroam", "telemetry", "privacy", "microsoft", "policy"],
                 NeedsAdmin   = true,
@@ -2043,7 +2043,7 @@ internal static class PolicyAuth
             {
                 Id = "credui-disable-password-reveal",
                 Label = "Disable Password Reveal Button in Credential UI",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 Description = "Hides the password-reveal eye icon in credential dialogs and the lock screen, reducing shoulder-surfing risk.",
                 Tags = ["credential", "security", "group-policy", "hardening", "password"],
                 NeedsAdmin = true,
@@ -2056,7 +2056,7 @@ internal static class PolicyAuth
             {
                 Id = "credui-disable-administrator-enumeration",
                 Label = "Disable Administrator Account Enumeration in Credential UI",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 Description = "Prevents the credential prompt from enumerating or listing administrator accounts, reducing account information leakage.",
                 Tags = ["credential", "security", "group-policy", "hardening"],
                 NeedsAdmin = true,
@@ -2069,7 +2069,7 @@ internal static class PolicyAuth
             {
                 Id = "credui-no-local-password-reset-questions",
                 Label = "Disable Local Account Password Reset Security Questions",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 Description = "Prevents setup and use of security questions for local account password resets, requiring admin intervention for locked-out accounts.",
                 Tags = ["credential", "security", "group-policy", "hardening", "password"],
                 NeedsAdmin = true,
@@ -2082,7 +2082,7 @@ internal static class PolicyAuth
             {
                 Id = "credui-enable-secure-credential-prompting",
                 Label = "Require Secure Desktop for Credential UI Prompts",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 Description = "Forces credential dialogs to appear on the secure desktop, preventing malicious programs from intercepting or spoofing credential prompts.",
                 Tags = ["credential", "security", "group-policy", "hardening", "uac"],
                 NeedsAdmin = true,
@@ -2095,7 +2095,7 @@ internal static class PolicyAuth
             {
                 Id = "credui-disable-visual-prompt",
                 Label = "Disable Credential UI Visual Prompt Animation",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 Description = "Suppresses the animated shimmer/glow visual prompt in the credential UI, reducing distraction in kiosk and focused-work environments.",
                 Tags = ["credential", "ui", "group-policy", "kiosk"],
                 NeedsAdmin = true,
@@ -2108,7 +2108,7 @@ internal static class PolicyAuth
             {
                 Id = "credui-disable-save-credentials",
                 Label = "Disable Save Credentials for RDP",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 Description = "Prevents the OS from saving RDP credentials in the Windows Credential Manager, requiring re-entry on each connection.",
                 Tags = ["credential", "security", "group-policy", "rdp", "hardening"],
                 NeedsAdmin = true,
@@ -2121,7 +2121,7 @@ internal static class PolicyAuth
             {
                 Id = "credui-disable-windows-hello-pinlogin",
                 Label = "Disable Windows Hello PIN Login from Credential UI",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 Description = "Prevents PIN authentication from appearing as an option in network credential prompts, enforcing password-only authentication.",
                 Tags = ["credential", "security", "group-policy", "windows-hello", "pin"],
                 NeedsAdmin = true,
@@ -2134,7 +2134,7 @@ internal static class PolicyAuth
             {
                 Id = "credui-disable-user-password-reveal-cu",
                 Label = "Disable Password Reveal (User Policy)",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 Description = "Applies the disable-password-reveal rule at the current-user scope, ensuring the eye icon is hidden even without machine admin rights.",
                 Tags = ["credential", "security", "group-policy", "password"],
                 NeedsAdmin = false,
@@ -2147,7 +2147,7 @@ internal static class PolicyAuth
             {
                 Id = "credui-block-generic-credential-caching",
                 Label = "Block Generic Network Credential Caching",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 Description = "Prevents Windows from caching plaintext generic network credentials in the Credential Manager store.",
                 Tags = ["credential", "security", "group-policy", "hardening"],
                 NeedsAdmin = true,
@@ -2160,7 +2160,7 @@ internal static class PolicyAuth
             {
                 Id = "credui-disable-autofill-on-credential-forms",
                 Label = "Disable Auto-Fill on Credential Input Forms",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 Description = "Prevents the credential UI from auto-filling remembered usernames and passwords on domain credential dialogs.",
                 Tags = ["credential", "security", "group-policy", "password"],
                 NeedsAdmin = true,
@@ -2185,7 +2185,7 @@ internal static class PolicyAuth
                 {
                     Id = "entrareg-disable-auto-registration",
                     Label = "Disable Automatic Device Registration with Entra ID",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description =
                         "Disables automatic Entra ID (Azure AD) device registration triggered by domain join, preventing unintended hybrid join of machines that should remain unregistered.",
                     Tags = ["entra", "device-registration", "azure-ad", "policy"],
@@ -2202,7 +2202,7 @@ internal static class PolicyAuth
                 {
                     Id = "entrareg-require-mdm-enrollment",
                     Label = "Require MDM Enrollment for Device Registration",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description =
                         "Requires MDM (Microsoft Intune or third-party MDM) enrollment as a prerequisite for completing Entra ID device registration, ensuring all registered devices are also managed.",
                     Tags = ["entra", "mdm", "enrollment", "policy"],
@@ -2219,7 +2219,7 @@ internal static class PolicyAuth
                 {
                     Id = "entrareg-disable-auto-mdm-enroll",
                     Label = "Disable Automatic MDM Auto-Enrollment",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description =
                         "Disables automatic MDM auto-enrollment that triggers when a device joins Entra ID, giving IT control over which devices are enrolled in mobile device management.",
                     Tags = ["entra", "mdm", "auto-enrollment", "policy"],
@@ -2236,7 +2236,7 @@ internal static class PolicyAuth
                 {
                     Id = "entrareg-block-ngc-key-reset",
                     Label = "Block NGC Key Reset During Device Registration",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description =
                         "Blocks Next Generation Credentials (NGC) key reset operations during device registration events, preventing credential rotation that could lock users out after re-registration.",
                     Tags = ["entra", "ngc", "key", "credentials", "policy"],
@@ -2253,7 +2253,7 @@ internal static class PolicyAuth
                 {
                     Id = "entrareg-disable-user-consent-registration",
                     Label = "Disable User-Initiated Device Registration",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description =
                         "Disables the ability for standard users to self-initiate Entra ID device registration via the Settings > Accounts > Work or School Account page.",
                     Tags = ["entra", "device-registration", "user-consent", "policy"],
@@ -2270,7 +2270,7 @@ internal static class PolicyAuth
                 {
                     Id = "entrareg-enforce-hybrid-join-cert",
                     Label = "Enforce Certificate Validation in Hybrid Join",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description =
                         "Enforces certificate validation during hybrid Entra ID join, ensuring the device identity certificate issued during hybrid join is verified against the enterprise Root CA.",
                     Tags = ["entra", "hybrid-join", "certificate", "policy"],
@@ -2287,7 +2287,7 @@ internal static class PolicyAuth
                 {
                     Id = "entrareg-block-stale-device-tokens",
                     Label = "Block Stale Device Token Use",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description =
                         "Blocks the use of stale or revoked Primary Refresh Tokens (PRT) from deregistered devices, preventing old device registrations from accessing cloud resources.",
                     Tags = ["entra", "prt", "stale-tokens", "security", "policy"],
@@ -2304,7 +2304,7 @@ internal static class PolicyAuth
                 {
                     Id = "entrareg-set-prt-lifetime",
                     Label = "Set Primary Refresh Token Lifetime to 14 Days",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description =
                         "Limits the lifetime of Primary Refresh Tokens (PRT) to 14 days, requiring devices to re-authenticate with Entra ID every two weeks and reducing the window for stolen PRT abuse.",
                     Tags = ["entra", "prt", "lifetime", "security", "policy"],
@@ -2321,7 +2321,7 @@ internal static class PolicyAuth
                 {
                     Id = "entrareg-disable-self-service-bjoin",
                     Label = "Disable Self-Service BYOD Registration in Settings",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description =
                         "Prevents BYOD users from adding personal devices to the organisation by disabling the Add Work or School Account option for non-admin users.",
                     Tags = ["entra", "byod", "self-service", "policy"],
@@ -2338,7 +2338,7 @@ internal static class PolicyAuth
                 {
                     Id = "entrareg-require-compliant-device-for-wu",
                     Label = "Require Entra-Compliant Device for Windows Update",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description =
                         "Requires the device to maintain a valid Entra ID compliance status (via Intune Compliance Policy) to receive Windows Update policy configurations from the cloud.",
                     Tags = ["entra", "windows-update", "compliance", "policy"],
@@ -2367,7 +2367,7 @@ internal static class PolicyAuth
                 {
                     Id          = "kerbmit-disable-rc4-encryption",
                     Label       = "Disable RC4 for Kerberos Ticket Encryption",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description = "Sets SupportedEncryptionTypes=0x18 (24) in Kerberos Parameters to allow only AES-128 and AES-256, removing RC4-HMAC support. Kerberoasting succeeds primarily because service tickets encrypted with RC4-HMAC can be cracked offline in hours or days on a GPU. Enforcing AES-only encryption requires 10×–100× more compute for offline attacks, making cracking economically infeasible for properly generated key material.",
                     Tags        = ["kerberos", "rc4", "aes", "kerberoasting", "hardening"],
                     NeedsAdmin  = true,
@@ -2383,7 +2383,7 @@ internal static class PolicyAuth
                 {
                     Id          = "kerbmit-set-max-service-ticket-age",
                     Label       = "Reduce Kerberos Service Ticket Lifetime (600 min)",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description = "Sets MaxServiceAge=600 in Kerberos Parameters. Reduces the maximum service ticket (TGS) lifetime from the Windows default of 600 minutes. Shorter ticket lifetimes reduce the window of opportunity for Kerberoasted tickets to be cracked and used: a ticket valid for 10 hours gives an attacker 10 hours to crack it; reducing to 10 minutes means the ticket expires before most cracking jobs complete.",
                     Tags        = ["kerberos", "ticket-lifetime", "tgs", "kerberoasting", "hardening"],
                     NeedsAdmin  = true,
@@ -2399,7 +2399,7 @@ internal static class PolicyAuth
                 {
                     Id          = "kerbmit-reduce-max-tgt-age",
                     Label       = "Reduce Kerberos TGT Lifetime (600 min)",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description = "Sets MaxTicketAge=600 in Kerberos Parameters. Limits the maximum lifetime of Kerberos Ticket-Granting Tickets. A shorter TGT lifetime limits how long a compromised TGT can be used for privilege escalation (Pass-the-Ticket attacks). After TGT expiry the user must re-authenticate, providing a natural checkpoint to detect and respond to compromised credentials before they can be used further.",
                     Tags        = ["kerberos", "tgt", "ticket-lifetime", "pass-the-ticket", "hardening"],
                     NeedsAdmin  = true,
@@ -2415,7 +2415,7 @@ internal static class PolicyAuth
                 {
                     Id          = "kerbmit-tighten-clock-skew",
                     Label       = "Tighten Kerberos Clock Skew Tolerance (2 min)",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description = "Sets MaxClockSkew=2 in Kerberos Parameters. Reduces the tolerated clock difference between the client and the KDC from the default 5 minutes to 2 minutes. Kerberos uses timestamps as a replay-protection mechanism; a tighter skew window shrinks the replay attack window. It also limits the usability of pre-computed Kerberos tickets that rely on timestamp tolerance.",
                     Tags        = ["kerberos", "clock-skew", "replay", "timestamp", "hardening"],
                     NeedsAdmin  = true,
@@ -2431,7 +2431,7 @@ internal static class PolicyAuth
                 {
                     Id          = "kerbmit-enable-pac-validation",
                     Label       = "Enable KDC PAC Signature Validation",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description = "Sets ValidateKdcPacSignature=1 in the LSA key. Instructs Windows services to validate the KDC Privilege Attribute Certificate (PAC) server signature embedded in Kerberos service tickets. Without validation, a compromised or modified PAC (as exploited by MS14-068) can be used to forge group memberships and escalate privileges. This is the KDC PAC defence against the MS14-068 Kerberos privilege escalation vulnerability.",
                     Tags        = ["kerberos", "pac", "signature", "ms14-068", "hardening"],
                     NeedsAdmin  = true,
@@ -2447,7 +2447,7 @@ internal static class PolicyAuth
                 {
                     Id          = "kerbmit-restrict-unconstrained-delegation",
                     Label       = "Block Kerberos Unconstrained Delegation by Default",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description = "Sets RestrictReceivingNTLMTraffic=2 in Kerberos Parameters. Restricts services from accepting unconstrained Kerberos delegation tokens by default. Unconstrained delegation allows a compromised service to impersonate any user to any other service — it is the primary mechanism exploited in Golden Ticket and delegation-based lateral movement attacks. Setting RestrictReceivingNTLMTraffic also limits NTLM passthrough that accompanies delegation abuse.",
                     Tags        = ["kerberos", "delegation", "unconstrained", "lateral-movement", "hardening"],
                     NeedsAdmin  = true,
@@ -2463,7 +2463,7 @@ internal static class PolicyAuth
                 {
                     Id          = "kerbmit-set-renewal-window",
                     Label       = "Reduce Kerberos Ticket Renewal Window (4 days)",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description = "Sets MaxRenewAge=4 in Kerberos Parameters. Limits how long a Kerberos TGT can be renewed without full re-authentication. The Windows default is 7 days — meaning a stolen TGT can be continuously renewed for a week without the user re-entering credentials. Reducing to 4 days tightens the window during which a compromised TGT provides persistent access, improving detection opportunities.",
                     Tags        = ["kerberos", "renewal", "tgt", "persistence", "hardening"],
                     NeedsAdmin  = true,
@@ -2479,7 +2479,7 @@ internal static class PolicyAuth
                 {
                     Id          = "kerbmit-enable-armoring",
                     Label       = "Enable FAST Kerberos Armoring (Tunnel Mode)",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description = "Sets KdcArmoring=1 in Kerberos Parameters. Enables Kerberos Flexible Authentication via Secure Tunneling (FAST, RFC 6113) which wraps Kerberos authentication messages in an encrypted tunnel. FAST armoring prevents eavesdropping on pre-authentication data (AS-REQ) that would otherwise expose user principal names and enable AS-REP Roasting attacks against accounts without Kerberos pre-authentication required.",
                     Tags        = ["kerberos", "fast", "armoring", "as-rep-roasting", "hardening"],
                     NeedsAdmin  = true,
@@ -2495,7 +2495,7 @@ internal static class PolicyAuth
                 {
                     Id          = "kerbmit-disable-msskip-delegation",
                     Label       = "Block NTLM Delegation to All Servers",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description = "Sets AllowNTLMSessionSecurity=0 in Kerberos Parameters. Prevents Kerberos from falling back to NTLM session security for delegation, closing a common path by which attackers convert Kerberos delegation abuse into NTLM-based lateral movement. Forcing pure Kerberos delegation eliminates the NTLM relay component of many sophisticated delegation attacks.",
                     Tags        = ["kerberos", "ntlm", "delegation", "session-security", "hardening"],
                     NeedsAdmin  = true,
@@ -2511,7 +2511,7 @@ internal static class PolicyAuth
                 {
                     Id          = "kerbmit-enforce-preauth-required",
                     Label       = "Enforce Kerberos Pre-Authentication Requirement",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description = "Sets ClientRequireStrictKDCValidation=1 in Kerberos Parameters. Instructs Kerberos clients to enforce strict KDC validation requirements including pre-authentication enforcement. Accounts with 'Do not require Kerberos preauthentication' (DONT_REQUIRE_PREAUTH) are trivially AS-REP Roastable — an attacker can request their encrypted TGT reply without knowing their password. This policy ensures the client enforces pre-auth at the KDC level.",
                     Tags        = ["kerberos", "preauthentication", "as-rep-roasting", "kdc", "hardening"],
                     NeedsAdmin  = true,
@@ -2539,7 +2539,7 @@ internal static class PolicyAuth
             {
                 Id = "krb-require-aes256-encryption",
                 Label = "Kerberos: Require AES-256 Encryption for Ticket Grants",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 MinBuild = 17763,
@@ -2560,7 +2560,7 @@ internal static class PolicyAuth
             {
                 Id = "krb-disable-des-encryption",
                 Label = "Kerberos: Disable DES Encryption Types",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 MinBuild = 17763,
@@ -2581,7 +2581,7 @@ internal static class PolicyAuth
             {
                 Id = "krb-set-max-ticket-life-8h",
                 Label = "Kerberos: Set Maximum Ticket Lifetime to 8 Hours",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 MinBuild = 17763,
@@ -2602,7 +2602,7 @@ internal static class PolicyAuth
             {
                 Id = "krb-set-max-renewable-ticket-life-7d",
                 Label = "Kerberos: Set Maximum Renewable Ticket Lifetime to 7 Days",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 MinBuild = 17763,
@@ -2623,7 +2623,7 @@ internal static class PolicyAuth
             {
                 Id = "krb-disable-clock-skew-tolerance",
                 Label = "Kerberos: Tighten Clock-Skew Tolerance to 3 Minutes",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 NeedsAdmin = true,
                 CorpSafe = false,
                 MinBuild = 17763,
@@ -2644,7 +2644,7 @@ internal static class PolicyAuth
             {
                 Id = "krb-require-preauth",
                 Label = "Kerberos: Require Pre-Authentication for All Accounts",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 MinBuild = 17763,
@@ -2665,7 +2665,7 @@ internal static class PolicyAuth
             {
                 Id = "krb-enable-cbac",
                 Label = "Kerberos: Enable Claims-Based Access Control (CBAC)",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 MinBuild = 17763,
@@ -2687,7 +2687,7 @@ internal static class PolicyAuth
             {
                 Id = "krb-disable-rc4-hmac",
                 Label = "Kerberos: Explicitly Disable RC4-HMAC (ARCFOUR) Encryption",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 MinBuild = 19041,
@@ -2708,7 +2708,7 @@ internal static class PolicyAuth
             {
                 Id = "krb-log-authentication-events",
                 Label = "Kerberos: Enable Verbose Authentication Logging",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 MinBuild = 17763,
@@ -2729,7 +2729,7 @@ internal static class PolicyAuth
             {
                 Id = "krb-purge-ticket-cache-on-logoff",
                 Label = "Kerberos: Purge Kerberos Ticket Cache on User Logoff",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 MinBuild = 17763,
@@ -2763,7 +2763,7 @@ internal static class PolicyAuth
             {
                 Id = "krbadv-enable-kdc-armoring",
                 Label = "Enable Kerberos Armoring (FAST) on KDC",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 Description = "Enables Flexible Authentication Secure Tunneling (FAST / Kerberos armoring) on the KDC. FAST wraps KDC requests in an armored tunnel, protecting pre-authentication data from offline attacks and downgrade attempts.",
                 Tags = ["kerberos", "fast", "armoring", "kdc", "pre-authentication"],
                 NeedsAdmin = true,
@@ -2780,7 +2780,7 @@ internal static class PolicyAuth
             {
                 Id = "krbadv-require-client-armoring",
                 Label = "Require Kerberos Armoring for Client Authentication",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 Description = "Forces Kerberos clients to use FAST armoring when requesting tickets from the KDC. Clients that do not support FAST will be denied authentication, ensuring all ticket exchanges occur through an encrypted tunnel.",
                 Tags = ["kerberos", "fast", "armoring", "client", "enforcement"],
                 NeedsAdmin = true,
@@ -2797,7 +2797,7 @@ internal static class PolicyAuth
             {
                 Id = "krbadv-disable-des-encryption",
                 Label = "Disable DES Encryption Types for Kerberos",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 Description = "Disables DES-CBC-CRC and DES-CBC-MD5 encryption types for Kerberos. DES is a 56-bit algorithm broken by modern cracking rigs in hours. Only AES128 and AES256 should remain enabled.",
                 Tags = ["kerberos", "des", "encryption", "cipher", "hardening"],
                 NeedsAdmin = true,
@@ -2814,7 +2814,7 @@ internal static class PolicyAuth
             {
                 Id = "krbadv-require-strict-kdc-validation",
                 Label = "Require Strict KDC Validation (Authenticate the KDC)",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 Description = "Enables strict KDC validation so the client verifies the KDC's identity before trusting the returned tickets. Prevents rogue or spoofed KDCs from issuing valid-looking tickets to the client.",
                 Tags = ["kerberos", "kdc-validation", "rogue-kdc", "trust", "security"],
                 NeedsAdmin = true,
@@ -2831,7 +2831,7 @@ internal static class PolicyAuth
             {
                 Id = "krbadv-enable-pkinit-freshness",
                 Label = "Enable PKInit Freshness Extension for Kerberos",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 Description = "Enables the PKInit Freshness Extension (RFC 8070), which binds Kerberos authentication tokens to a freshness endpoint in the TGT. Prevents certificate-based credential relay and Golden Certificate attacks.",
                 Tags = ["kerberos", "pkinit", "freshness", "golden-ticket", "certificate"],
                 NeedsAdmin = true,
@@ -2848,7 +2848,7 @@ internal static class PolicyAuth
             {
                 Id = "krbadv-set-max-service-ticket-lifetime",
                 Label = "Reduce Maximum Kerberos Service Ticket Lifetime to 600 Minutes",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 Description = "Sets the maximum Kerberos service ticket (TGS) lifetime to 600 minutes (10 hours). Shorter lifetimes reduce the window in which a captured ticket can be replayed; the default is 600 minutes but some environments set it higher.",
                 Tags = ["kerberos", "ticket-lifetime", "tgs", "replay-prevention", "session"],
                 NeedsAdmin = true,
@@ -2865,7 +2865,7 @@ internal static class PolicyAuth
             {
                 Id = "krbadv-set-max-tgt-lifetime",
                 Label = "Set Maximum Kerberos TGT Lifetime to 10 Hours",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 Description = "Limits the Ticket-Granting Ticket (TGT) lifetime to 10 hours (600 minutes). Reduces the window for Golden Ticket attacks — if a TGT is captured, the attacker has a bounded exploitation window.",
                 Tags = ["kerberos", "tgt", "golden-ticket", "ticket-lifetime", "security"],
                 NeedsAdmin = true,
@@ -2882,7 +2882,7 @@ internal static class PolicyAuth
             {
                 Id = "krbadv-enforce-tgs-renewal-deadline",
                 Label = "Enforce Strict Kerberos Ticket Renewal Deadline (7 Days)",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 Description = "Sets the maximum Kerberos ticket renewal lifetime to 7 days. After 7 days a ticket cannot be renewed and the user must obtain a fresh TGT; this ensures stale or stolen tickets expire regardless of continuous renewal.",
                 Tags = ["kerberos", "ticket-renewal", "expiry", "stolen-ticket", "security"],
                 NeedsAdmin = true,
@@ -2899,7 +2899,7 @@ internal static class PolicyAuth
             {
                 Id = "krbadv-enforce-clock-sync",
                 Label = "Enforce Strict Kerberos Clock Synchronisation Tolerance (5 Minutes)",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 Description = "Sets the Kerberos clock skew tolerance to 5 minutes (the standard RFC 4120 maximum). Clock skew is required for replay-protection; allowing large skew enables ticket replay. Enforce NTP synchronisation alongside this policy.",
                 Tags = ["kerberos", "clock-sync", "ntp", "replay-protection", "time"],
                 NeedsAdmin = true,
@@ -2916,7 +2916,7 @@ internal static class PolicyAuth
             {
                 Id = "krbadv-disable-rc4-hmac-encryption",
                 Label = "Disable RC4-HMAC Encryption for Kerberos (Require AES)",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 Description = "Removes RC4-HMAC (ARCFOUR-HMAC-MD5) from the supported Kerberos encryption type list. RC4-HMAC is vulnerable to offline cracking (AS-REP roasting, Kerberoasting); AES128 and AES256 should be the only accepted types.",
                 Tags = ["kerberos", "rc4", "arcfour", "encryption", "kerberoasting"],
                 NeedsAdmin = true,
@@ -2946,7 +2946,7 @@ internal static class PolicyAuth
                 {
                     Id = "krbdel-require-kdc-validation",
                     Label = "Kerberos Delegation: Require KDC Certificate Validation for PKINIT",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description =
                         "Sets RequireKdcCertificate=1 in the Kerberos policy hive. Requires that the KDC (Key Distribution Center) presents a valid certificate during PKINIT (Public Key Initial Authentication) operations. Without KDC certificate validation, a rogue KDC on the network could successfully complete PKINIT authentication, allowing an attacker who performs an ARP or DNS spoofing attack to position a fake KDC and capture Kerberos TGT requests. This setting is particularly important in environments using smartcard or certificate-based authentication — certificate-based Kerberos without KDC validation is vulnerable to man-in-the-middle attacks.",
                     Tags = ["kerberos", "kdc", "pkinit", "certificate", "validation"],
@@ -2964,7 +2964,7 @@ internal static class PolicyAuth
                 {
                     Id = "krbdel-enable-claims-and-compound-auth",
                     Label = "Kerberos Delegation: Enable Kerberos Claims and Compound Authentication",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description =
                         "Sets EnableCbacAndArmor=3 in the Kerberos policy hive (always enable armoring and CBAC). Kerberos Armoring (FAST — Flexible Authentication Secure Tunneling) wraps Kerberos AS and TGS exchange messages in a protective tunnel, preventing offline cracking of AS-REQ pre-authentication data (a technique used by Kerberoasting attacks). Claims-Based Access Control (CBAC) augments Kerberos tickets with user and device claims for Dynamic Access Control. Setting value 3 (always armor — not just when supported) ensures the strongest protection for all authenticating clients.",
                     Tags = ["kerberos", "fast", "armoring", "claims", "cbac", "kerberoasting"],
@@ -2982,7 +2982,7 @@ internal static class PolicyAuth
                 {
                     Id = "krbdel-set-ticket-lifetime-600",
                     Label = "Kerberos Delegation: Set TGT Maximum Lifetime to 600 Minutes",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description =
                         "Sets MaxTicketAge=600 in the Kerberos WinLogon hive. Caps the Kerberos Ticket-Granting Ticket (TGT) lifetime at 600 minutes (10 hours). A TGT is a long-lived credential that allows a user to obtain service tickets without re-authenticating to the KDC. If an attacker compromises a TGT (e.g., via Pass-the-Ticket or Golden Ticket attacks), the ticket is valid until its expiry. The default TGT lifetime is 10 hours; reducing it to 600 minutes aligns with a single work session and minimises the window in which a stolen TGT is valid. Combine with 10-minute service ticket lifetime for strongest protection.",
                     Tags = ["kerberos", "tgt", "ticket-lifetime", "pass-the-ticket", "golden-ticket"],
@@ -3000,7 +3000,7 @@ internal static class PolicyAuth
                 {
                     Id = "krbdel-set-service-ticket-lifetime-10",
                     Label = "Kerberos Delegation: Set TGS Service Ticket Lifetime to 10 Minutes",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description =
                         "Sets MaxServiceAge=10 in the Kerberos WinLogon hive. Sets the maximum lifetime for Kerberos service tickets (TGS tickets) to 10 minutes. Service tickets are short-lived credentials used for authenticating to a specific service (file share, SQL server, web application). If a service ticket is intercepted (e.g., via Kerberoasting — requesting a service ticket for an SPN and attempting offline cracking), a 10-minute lifetime means the cracked ticket is useful for only a very short window. Combined with strong service account passwords, this severely limits the utility of Kerberoasted tickets.",
                     Tags = ["kerberos", "service-ticket", "tgs", "kerberoasting", "lifetime"],
@@ -3018,7 +3018,7 @@ internal static class PolicyAuth
                 {
                     Id = "krbdel-set-renewable-ticket-lifetime-7days",
                     Label = "Kerberos Delegation: Set Renewable Ticket Maximum Lifetime to 7 Days",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description =
                         "Sets MaxRenewAge=7 in the Kerberos WinLogon hive (units: days). Limits the window during which a Kerberos TGT can be renewed without re-authentication to 7 days. Kerberos TGTs can be marked as renewable: a client can present an expired TGT to the KDC and obtain a fresh one without providing a password, as long as the renewal request is within the MaxRenewAge window. If an attacker gets a copy of a TGT before it expires, they can potentially keep renewing it for up to the MaxRenewAge period. Setting 7 days limits the long-tail abuse window while supporting common Remote Desktop and service account usage patterns.",
                     Tags = ["kerberos", "renewable-ticket", "renewal-window", "tgt", "pass-the-ticket"],
@@ -3036,7 +3036,7 @@ internal static class PolicyAuth
                 {
                     Id = "krbdel-enforce-strict-kdc-clock-skew-5min",
                     Label = "Kerberos Delegation: Enforce Strict 5-Minute Clock Skew Tolerance",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description =
                         "Sets MaxClockSkew=5 in the Kerberos WinLogon hive (units: minutes). Enforces a 5-minute maximum clock skew between client and KDC for Kerberos authentication. Kerberos relies on timestamps to prevent replay attacks — a Service ticket is only valid within a specific time window. If the clock skew limit is large, an attacker can capture a Kerberos service ticket and replay it successfully within the extended window. The default is 5 minutes (matching RFC 4120 recommendation). Explicitly setting it prevents GPO inheritance from accidentally relaxing this to a larger value.",
                     Tags = ["kerberos", "clock-skew", "replay-attack", "ntp", "timestamp"],
@@ -3054,7 +3054,7 @@ internal static class PolicyAuth
                 {
                     Id = "krbdel-enable-pac-validation",
                     Label = "Kerberos Delegation: Enable PAC Request Validation on Kerberos Tickets",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description =
                         "Sets ValidateKdcPacSignature=1 in the Kerberos WinLogon hive. Enables validation of the Privilege Attribute Certificate (PAC) signature in Kerberos service tickets. The PAC contains group membership, logon hours, user rights, and other authorisation data. The MS14-068 vulnerability (a critical KDC privilege escalation) allowed an attacker to forge the PAC signature and elevate to Domain Admin. Enabling PAC signature validation ensures that all PACs in Kerberos tickets are cryptographically validated by the KDC before authorisation data is trusted. This closes a class of Kerberos PAC forgery attacks.",
                     Tags = ["kerberos", "pac", "ms14-068", "signature-validation", "privilege-escalation"],
@@ -3072,7 +3072,7 @@ internal static class PolicyAuth
                 {
                     Id = "krbdel-enable-aes256-kerberos-encryption",
                     Label = "Kerberos Delegation: Enforce AES-256 Kerberos Encryption, Disable RC4",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description =
                         "Sets SupportedEncryptionTypes=0x7FFFFFF8 in the Kerberos policy hive (enables AES256-HMAC-SHA1, AES128-HMAC-SHA1, DES-CBC-MD5 is excluded; RC4 HMAC is disabled). RC4-HMAC (also known as ARCFOUR-HMAC or Kerberos etype 17) is broken for Kerberos purposes — the NTLM hash of the user's password is directly usable as the Kerberos session key (enabling Pass-the-Hash attacks that bypass Kerberos entirely). Forcing AES-256 and AES-128 only means that stolen NTLM hashes cannot be used to forge Kerberos session keys, and Kerberoasted service ticket encryption must be broken as strong AES rather than weak RC4.",
                     Tags = ["kerberos", "aes256", "rc4", "encryption-type", "kerberoasting", "pass-the-hash"],
@@ -3090,7 +3090,7 @@ internal static class PolicyAuth
                 {
                     Id = "krbdel-disable-des-kerberos-encryption",
                     Label = "Kerberos Delegation: Disable DES Kerberos Encryption Types",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description =
                         "Sets NtlmMinClientSec=0x20080000 in the Kerberos policy to explicitly exclude DES-based Kerberos encryption types (DES-CBC-CRC and DES-CBC-MD5). DES is a 56-bit block cipher that is comprehensively broken and should never be used in any security context. In Kerberos, DES encryption types (etypes 1 and 3) are retained for backwards compatibility with very old systems (pre-Windows 2000). An attacker who obtains a DES-encrypted Kerberos ticket can crack it in seconds to hours with commodity hardware. Windows Vista+ disabled DES by default; this policy ensures no Group Policy can accidentally re-enable it.",
                     Tags = ["kerberos", "des", "broken-crypto", "encryption-type", "etype"],
@@ -3108,7 +3108,7 @@ internal static class PolicyAuth
                 {
                     Id = "krbdel-enable-kerberos-pre-auth-required",
                     Label = "Kerberos Delegation: Require Kerberos Pre-Authentication for All Accounts",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description =
                         "Sets DoNotRequirePreauth=0 in the Kerberos policy hive. Ensures that Kerberos pre-authentication is required for all accounts by policy. By default, any account in Active Directory with the 'Do not require Kerberos preauthentication' flag set (DONT_REQ_PREAUTH) will respond to an AS-REQ with an AS-REP without the client first proving knowledge of the password. This is the condition that enables AS-REP Roasting — an attacker can request an AS-REP for any account with this flag and attempt offline cracking of the encrypted portion. This policy setting prevents the environment from inadvertently introducing accounts with this flag via attribute editors.",
                     Tags = ["kerberos", "pre-auth", "as-rep-roasting", "asrep", "preauth"],
@@ -3138,7 +3138,7 @@ internal static class PolicyAuth
             {
                 Id = "kerb-disable-des-encryption",
                 Label = "Disable DES Encryption for Kerberos",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 Description = "Prevents Kerberos from using the broken DES (56-bit) encryption type for tickets.",
                 Tags = ["kerberos", "des", "encryption", "hardening"],
                 NeedsAdmin = true,
@@ -3154,7 +3154,7 @@ internal static class PolicyAuth
             {
                 Id = "kerb-disable-rc4-encryption",
                 Label = "Disable RC4-HMAC Encryption for Kerberos",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 Description = "Removes RC4-HMAC from Kerberos supported encryption types, forcing AES128/AES256 only.",
                 Tags = ["kerberos", "rc4", "encryption", "hardening"],
                 NeedsAdmin = true,
@@ -3171,7 +3171,7 @@ internal static class PolicyAuth
             {
                 Id = "kerb-require-aes256",
                 Label = "Require AES256 for Kerberos",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 Description = "Configures Kerberos to prefer AES256-CTS-HMAC-SHA1-96 as the sole supported encryption type.",
                 Tags = ["kerberos", "aes256", "encryption", "hardening"],
                 NeedsAdmin = true,
@@ -3187,7 +3187,7 @@ internal static class PolicyAuth
             {
                 Id = "kerb-set-max-ticket-age-600",
                 Label = "Set Kerberos Maximum Ticket Age to 600 Minutes",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 Description = "Limits Kerberos TGT lifetime to 10 hours (600 minutes) to reduce stolen-ticket window.",
                 Tags = ["kerberos", "ticket-age", "tgt", "policy"],
                 NeedsAdmin = true,
@@ -3203,7 +3203,7 @@ internal static class PolicyAuth
             {
                 Id = "kerb-set-max-renew-age-7days",
                 Label = "Set Kerberos Maximum Ticket Renewal Age to 7 Days",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 Description = "Limits how long a Kerberos TGT can be renewed before requiring full re-authentication.",
                 Tags = ["kerberos", "renewal", "tgt", "policy"],
                 NeedsAdmin = true,
@@ -3219,7 +3219,7 @@ internal static class PolicyAuth
             {
                 Id = "kerb-set-max-service-ticket-600",
                 Label = "Set Kerberos Maximum Service Ticket Age to 600 Minutes",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 Description = "Limits service ticket lifetime to 600 minutes to reduce the stolen service ticket window.",
                 Tags = ["kerberos", "service-ticket", "st", "policy"],
                 NeedsAdmin = true,
@@ -3235,7 +3235,7 @@ internal static class PolicyAuth
             {
                 Id = "kerb-set-clock-skew-5min",
                 Label = "Set Kerberos Maximum Clock Skew to 5 Minutes",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 Description = "Enforces a 5-minute maximum clock skew between client and KDC to prevent replay attacks.",
                 Tags = ["kerberos", "clock-skew", "replay", "security"],
                 NeedsAdmin = true,
@@ -3251,7 +3251,7 @@ internal static class PolicyAuth
             {
                 Id = "kerb-enable-armoring",
                 Label = "Enable Kerberos Armoring (FAST)",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 Description = "Enables Kerberos Flexible Authentication Secure Tunnelling (FAST/armoring) to protect AS-REQ exchanges.",
                 Tags = ["kerberos", "armoring", "fast", "hardening"],
                 NeedsAdmin = true,
@@ -3267,7 +3267,7 @@ internal static class PolicyAuth
             {
                 Id = "kerb-disable-upn-hint",
                 Label = "Disable Kerberos UPN Hint Leakage",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 Description = "Prevents Kerberos error responses from leaking UPN/username hints to unauthenticated requesters.",
                 Tags = ["kerberos", "upn", "enumeration", "security"],
                 NeedsAdmin = true,
@@ -3283,7 +3283,7 @@ internal static class PolicyAuth
             {
                 Id = "kerb-set-preauthentication-required",
                 Label = "Require Kerberos Preauthentication",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 Description = "Enforces Kerberos preauthentication to prevent AS-REP roasting on accounts that have it disabled.",
                 Tags = ["kerberos", "preauthentication", "as-rep-roasting", "hardening"],
                 NeedsAdmin = true,
@@ -3312,7 +3312,7 @@ internal static class PolicyAuth
             {
                 Id           = "krbadv-enable-claims-support",
                 Label        = "Enable Kerberos Claims and Compound Authentication Support",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 Description  = "Enables Kerberos claims-based authentication and compound authentication (user + device claims), required for Dynamic Access Control (DAC) file share access and conditional access policies based on device health claims.",
                 Tags         = ["kerberos", "claims", "compound-auth", "dac", "policy"],
                 NeedsAdmin   = true,
@@ -3328,7 +3328,7 @@ internal static class PolicyAuth
             {
                 Id           = "krbadv-require-fast-armoring",
                 Label        = "Require Kerberos Armoring (FAST) for All Authentication",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 Description  = "Requires Kerberos Flexible Authentication Secure Tunneling (FAST/Kerberos Armoring) for all Kerberos exchanges, providing protection against offline pre-authentication blob cracking attacks (AS-REP roasting).",
                 Tags         = ["kerberos", "fast", "armoring", "asrep-roasting", "security", "policy"],
                 NeedsAdmin   = true,
@@ -3344,7 +3344,7 @@ internal static class PolicyAuth
             {
                 Id           = "krbadv-block-rc4-encryption",
                 Label        = "Block RC4-HMAC Encryption for Kerberos Tickets",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 Description  = "Disables the RC4-HMAC cipher suite for Kerberos ticket encryption, forcing all tickets to use AES-128 or AES-256 encryption, which is significantly stronger than the legacy RC4 encryption still used by some service accounts.",
                 Tags         = ["kerberos", "rc4", "aes", "encryption", "security", "policy"],
                 NeedsAdmin   = true,
@@ -3360,7 +3360,7 @@ internal static class PolicyAuth
             {
                 Id           = "krbadv-enable-des-encryption-off",
                 Label        = "Disable DES Cipher for Kerberos (Legacy Removal)",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 Description  = "Disables DES (Data Encryption Standard) cipher support in Kerberos, eliminating the use of the cryptographically broken DES algorithm that was still negotiated with very old service accounts in some mixed environments.",
                 Tags         = ["kerberos", "des", "legacy-cipher", "encryption", "policy"],
                 NeedsAdmin   = true,
@@ -3376,7 +3376,7 @@ internal static class PolicyAuth
             {
                 Id           = "krbadv-set-ticket-lifetime-8h",
                 Label        = "Set Kerberos Ticket Maximum Lifetime to 8 Hours",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 Description  = "Configures the Kerberos TGT (Ticket Granting Ticket) maximum lifetime to 8 hours, ensuring tickets expire during a typical business day so stolen tickets cannot be replayed indefinitely.",
                 Tags         = ["kerberos", "ticket-lifetime", "tgt", "security", "policy"],
                 NeedsAdmin   = true,
@@ -3392,7 +3392,7 @@ internal static class PolicyAuth
             {
                 Id           = "krbadv-set-service-ticket-lifetime-10m",
                 Label        = "Set Kerberos Service Ticket Maximum Lifetime to 600 Minutes",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 Description  = "Sets the maximum service ticket (TGS) lifetime to 600 minutes (10 hours), which is long enough for a business day session while limiting the window during which a stolen service ticket could be replayed against a service.",
                 Tags         = ["kerberos", "service-ticket", "tgs", "lifetime", "policy"],
                 NeedsAdmin   = true,
@@ -3408,7 +3408,7 @@ internal static class PolicyAuth
             {
                 Id           = "krbadv-set-renew-lifetime-7d",
                 Label        = "Set Kerberos Ticket Maximum Renewal Lifetime to 7 Days",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 Description  = "Sets the maximum TGT renewal lifetime to 7 days, after which the user must fully re-authenticate with their password or smart card rather than just renewing an existing ticket.",
                 Tags         = ["kerberos", "renewal-lifetime", "tgt", "re-authentication", "policy"],
                 NeedsAdmin   = true,
@@ -3424,7 +3424,7 @@ internal static class PolicyAuth
             {
                 Id           = "krbadv-log-kerberos-failures",
                 Label        = "Log Kerberos Pre-Authentication Failure Events",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 Description  = "Enables Security audit logging for Kerberos AS exchange pre-authentication failures (EventID 4771), providing visibility into password-spraying and Kerberoasting attempts against domain accounts.",
                 Tags         = ["kerberos", "pre-auth-failure", "audit", "event-log", "policy"],
                 NeedsAdmin   = true,
@@ -3440,7 +3440,7 @@ internal static class PolicyAuth
             {
                 Id           = "krbadv-block-unconstrained-delegation",
                 Label        = "Block Accounts from Using Unconstrained Kerberos Delegation",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 Description  = "Enables the 'Account is sensitive and cannot be delegated' flag enforcement at policy level, blocking non-protected accounts from being marked for unconstrained delegation which allows impersonation of any user who authenticates to the delegate.",
                 Tags         = ["kerberos", "delegation", "unconstrained", "impersonation", "policy"],
                 NeedsAdmin   = true,
@@ -3456,7 +3456,7 @@ internal static class PolicyAuth
             {
                 Id           = "krbadv-disable-kerberos-telemetry",
                 Label        = "Disable Kerberos Authentication Telemetry to Microsoft",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 Description  = "Prevents the Windows Kerberos provider from sending cipher negotiation stats, authentication failure rates, and encryption algorithm telemetry to Microsoft.",
                 Tags         = ["kerberos", "telemetry", "privacy", "microsoft", "policy"],
                 NeedsAdmin   = true,
@@ -3483,7 +3483,7 @@ internal static class PolicyAuth
             {
                 Id = "lapspol-enable-ad-backup",
                 Label = "Configure LAPS to Back Up Password to Active Directory",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 Description = "Directs Windows LAPS to store the managed local administrator password in Active Directory DS.",
                 Tags = ["laps", "password", "active-directory", "backup", "security"],
                 NeedsAdmin = true,
@@ -3499,7 +3499,7 @@ internal static class PolicyAuth
             {
                 Id = "lapspol-set-password-age-30",
                 Label = "Set LAPS Maximum Password Age to 30 Days",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 Description = "Configures the Windows LAPS managed account password to expire after a maximum of 30 days.",
                 Tags = ["laps", "password", "expiry", "rotation", "security"],
                 NeedsAdmin = true,
@@ -3515,7 +3515,7 @@ internal static class PolicyAuth
             {
                 Id = "lapspol-set-password-length-20",
                 Label = "Set LAPS Minimum Password Length to 20",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 Description = "Forces the LAPS-managed local administrator password to be at least 20 characters long.",
                 Tags = ["laps", "password", "length", "complexity", "security"],
                 NeedsAdmin = true,
@@ -3531,7 +3531,7 @@ internal static class PolicyAuth
             {
                 Id = "lapspol-set-password-complexity-full",
                 Label = "Set LAPS Password Complexity to Full",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 Description = "Requires the LAPS-generated password to include uppercase, lowercase, digits, and special characters.",
                 Tags = ["laps", "password", "complexity", "security"],
                 NeedsAdmin = true,
@@ -3547,7 +3547,7 @@ internal static class PolicyAuth
             {
                 Id = "lapspol-post-auth-reset-logoff",
                 Label = "Reset LAPS Password and Log Off After Admin Use",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 Description = "Automatically resets the managed local admin password and logs off the session after it is used for authentication.",
                 Tags = ["laps", "password", "post-auth", "rotation", "security"],
                 NeedsAdmin = true,
@@ -3563,7 +3563,7 @@ internal static class PolicyAuth
             {
                 Id = "lapspol-set-post-auth-delay-24h",
                 Label = "Set LAPS Post-Auth Reset Delay to 24 Hours",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 Description = "Delays the post-authentication password reset for 24 hours to allow admin tasks to complete before rotation.",
                 Tags = ["laps", "password", "post-auth", "delay", "security"],
                 NeedsAdmin = true,
@@ -3579,7 +3579,7 @@ internal static class PolicyAuth
             {
                 Id = "lapspol-enable-ad-encryption",
                 Label = "Encrypt LAPS Password in Active Directory",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 Description = "Stores the LAPS-managed password in Active Directory using AES-256 encryption instead of plain text.",
                 Tags = ["laps", "password", "encryption", "active-directory", "security"],
                 NeedsAdmin = true,
@@ -3595,7 +3595,7 @@ internal static class PolicyAuth
             {
                 Id = "lapspol-enable-expiry-protection",
                 Label = "Enable LAPS Password Expiry Protection",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 Description = "Prevents the LAPS password expiry date from being set into the future by unauthorised parties.",
                 Tags = ["laps", "password", "expiry", "protection", "security"],
                 NeedsAdmin = true,
@@ -3611,7 +3611,7 @@ internal static class PolicyAuth
             {
                 Id = "lapspol-enable-audit-policy",
                 Label = "Enable LAPS Audit Policy",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 Description = "Enables Windows LAPS audit logging to track password read and update events in the Security event log.",
                 Tags = ["laps", "audit", "logging", "security"],
                 NeedsAdmin = true,
@@ -3627,7 +3627,7 @@ internal static class PolicyAuth
             {
                 Id = "lapspol-set-expiry-notify-7d",
                 Label = "Notify 7 Days Before LAPS Password Expiry",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 Description = "Sends a warning notification to administrators 7 days before the LAPS-managed password expires.",
                 Tags = ["laps", "password", "expiry", "notification", "security"],
                 NeedsAdmin = true,
@@ -3654,7 +3654,7 @@ internal static class PolicyAuth
             {
                 Id = "laps-backup-to-azure-ad",
                 Label = "LAPS: Back Up Local Admin Password to Azure AD / Entra ID",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 MinBuild = 22621,
@@ -3674,7 +3674,7 @@ internal static class PolicyAuth
             {
                 Id = "laps-backup-to-ad",
                 Label = "LAPS: Back Up Local Admin Password to Active Directory",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 MinBuild = 22621,
@@ -3694,7 +3694,7 @@ internal static class PolicyAuth
             {
                 Id = "laps-max-age-14-days",
                 Label = "LAPS: Set Maximum Password Age to 14 Days",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 MinBuild = 22621,
@@ -3714,7 +3714,7 @@ internal static class PolicyAuth
             {
                 Id = "laps-password-length-20",
                 Label = "LAPS: Set Minimum Password Length to 20 Characters",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 MinBuild = 22621,
@@ -3734,7 +3734,7 @@ internal static class PolicyAuth
             {
                 Id = "laps-password-max-complexity",
                 Label = "LAPS: Require Maximum Password Complexity (All Character Types)",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 MinBuild = 22621,
@@ -3754,7 +3754,7 @@ internal static class PolicyAuth
             {
                 Id = "laps-enable-password-encryption",
                 Label = "LAPS: Enable Encrypted Password Storage in Active Directory",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 MinBuild = 22621,
@@ -3774,7 +3774,7 @@ internal static class PolicyAuth
             {
                 Id = "laps-post-auth-reset-and-logoff",
                 Label = "LAPS: Reset Password and Log Off After Admin Authentication",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 MinBuild = 22621,
@@ -3794,7 +3794,7 @@ internal static class PolicyAuth
             {
                 Id = "laps-post-auth-delay-24h",
                 Label = "LAPS: Set 24-Hour Grace Period Before Post-Auth Password Reset",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 MinBuild = 22621,
@@ -3815,7 +3815,7 @@ internal static class PolicyAuth
             {
                 Id = "laps-encrypt-history-12",
                 Label = "LAPS: Retain 12 Encrypted Previous Passwords in AD History",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 MinBuild = 22621,
@@ -3835,7 +3835,7 @@ internal static class PolicyAuth
             {
                 Id = "laps-disable-legacy-laps",
                 Label = "LAPS: Disable Legacy Microsoft LAPS (Allow Only Windows LAPS)",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 MinBuild = 22621,
@@ -3866,7 +3866,7 @@ internal static class PolicyAuth
             {
                 Id = "legauth-disable-lm-response",
                 Label = "Disable LAN Manager Hash Response (LM Authentication)",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 5,
@@ -3883,7 +3883,7 @@ internal static class PolicyAuth
             {
                 Id = "legauth-disable-ntlm-v1",
                 Label = "Disable NTLMv1 Authentication Protocol",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 5,
@@ -3900,7 +3900,7 @@ internal static class PolicyAuth
             {
                 Id = "legauth-require-ntlmv2",
                 Label = "Require NTLMv2 Response Only for Network Authentication",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -3917,7 +3917,7 @@ internal static class PolicyAuth
             {
                 Id = "legauth-disable-weak-hash-storing",
                 Label = "Prevent Storage of LAN Manager Hashes in SAM Database",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 5,
@@ -3934,7 +3934,7 @@ internal static class PolicyAuth
             {
                 Id = "legauth-disable-ntlm-outbound",
                 Label = "Restrict Outbound NTLM Authentication Requests",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -3951,7 +3951,7 @@ internal static class PolicyAuth
             {
                 Id = "legauth-restrict-ntlm-inbound",
                 Label = "Restrict Inbound NTLM Authentication to Domain Accounts",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -3968,7 +3968,7 @@ internal static class PolicyAuth
             {
                 Id = "legauth-enable-ntlm-audit",
                 Label = "Enable NTLM Authentication Event Auditing",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -3985,7 +3985,7 @@ internal static class PolicyAuth
             {
                 Id = "legauth-disable-basic-auth",
                 Label = "Disable Basic HTTP Authentication for Network Providers",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 5,
@@ -4002,7 +4002,7 @@ internal static class PolicyAuth
             {
                 Id = "legauth-disable-digest-auth",
                 Label = "Disable Digest Authentication for Network Connections",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -4019,7 +4019,7 @@ internal static class PolicyAuth
             {
                 Id = "legauth-enable-extended-protection",
                 Label = "Enable Extended Protection for Authentication (EPA)",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 5,
@@ -4049,7 +4049,7 @@ internal static class PolicyAuth
             {
                 Id           = "lsapol-enable-lsa-runasppl",
                 Label        = "Enable LSA Protected Process Light (RunAsPPL) Credential Guard",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 Description  = "Enables RunAsPPL for lsass.exe, running the Local Security Authority as a Protected Process Light, preventing credential dumping tools (Mimikatz, procdump lsass) from reading NTLM hashes and Kerberos tickets from the LSASS process.",
                 Tags         = ["lsa", "runasppl", "credential-dump", "mimikatz", "security", "policy"],
                 NeedsAdmin   = true,
@@ -4065,7 +4065,7 @@ internal static class PolicyAuth
             {
                 Id           = "lsapol-disable-anonymous-enumeration-sam",
                 Label        = "Disable Anonymous SAM Account and Share Enumeration",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 Description  = "Prevents anonymous network connections from enumerating local SAM accounts and security groups, blocking reconnaissance that discovers usernames for use in password spraying or brute-force attacks.",
                 Tags         = ["lsa", "anonymous-enumeration", "sam", "reconnaissance", "policy"],
                 NeedsAdmin   = true,
@@ -4081,7 +4081,7 @@ internal static class PolicyAuth
             {
                 Id           = "lsapol-restrict-anonymous-access",
                 Label        = "Restrict Anonymous Access to Named Pipes and Shares",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 Description  = "Blocks anonymous access to all named pipes and network shares, preventing unauthenticated connections that could be used for pass-the-hash attacks or to access network resources without valid credentials.",
                 Tags         = ["lsa", "anonymous-access", "named-pipes", "shares", "policy"],
                 NeedsAdmin   = true,
@@ -4097,7 +4097,7 @@ internal static class PolicyAuth
             {
                 Id           = "lsapol-disable-wdigest-cleartext",
                 Label        = "Disable WDigest Cleartext Password Caching in LSASS",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 Description  = "Disables the WDigest authentication provider's cleartext password caching in LSASS memory, preventing credential dumping tools from extracting reversible plaintext passwords from the WDigest cache.",
                 Tags         = ["lsa", "wdigest", "cleartext-password", "mimikatz", "policy"],
                 NeedsAdmin   = true,
@@ -4113,7 +4113,7 @@ internal static class PolicyAuth
             {
                 Id           = "lsapol-enable-lsa-audit",
                 Label        = "Enable LSA Authentication Audit Logging",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 Description  = "Enables comprehensive Security audit logging for all LSA authentication events, including logon successes, failures, privilege escalations, and token creation, supporting SIEM-based authentication anomaly detection.",
                 Tags         = ["lsa", "audit", "authentication", "event-log", "policy"],
                 NeedsAdmin   = true,
@@ -4129,7 +4129,7 @@ internal static class PolicyAuth
             {
                 Id           = "lsapol-crash-on-audit-fail",
                 Label        = "Crash System When Security Audit Log Is Full (CrashOnAuditFail)",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 Description  = "Configures LSA to crash the system with a BSOD when the Security audit log becomes full and events cannot be written, ensuring audit records are never silently dropped on high-security systems that require complete audit trails.",
                 Tags         = ["lsa", "audit-fail", "crash-on-full", "compliance", "policy"],
                 NeedsAdmin   = true,
@@ -4145,7 +4145,7 @@ internal static class PolicyAuth
             {
                 Id           = "lsapol-disable-legacy-auth-packages",
                 Label        = "Remove Legacy Security Support Provider Packages from LSA",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 Description  = "Removes legacy SSPI authentication packages (msapsspc, msnsspc) from the LSA Security Packages list, preventing these deprecated packages from being loaded as SSPI providers that could be backdoored or exploited.",
                 Tags         = ["lsa", "sspi", "legacy-packages", "authentication", "policy"],
                 NeedsAdmin   = true,
@@ -4161,7 +4161,7 @@ internal static class PolicyAuth
             {
                 Id           = "lsapol-deny-network-logon-local-accounts",
                 Label        = "Deny Network Logon for Local Administrator Accounts",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 Description  = "Blocks local administrator accounts (SID S-1-5-113) from performing network logons (interactive pass-the-hash, NTLM relay), ensuring only domain accounts can authenticate over the network and local creds cannot be used for lateral movement.",
                 Tags         = ["lsa", "network-logon", "local-admin", "lateral-movement", "policy"],
                 NeedsAdmin   = true,
@@ -4177,7 +4177,7 @@ internal static class PolicyAuth
             {
                 Id           = "lsapol-enable-token-filter-policy",
                 Label        = "Enable Local Account Token Filter Policy (Full Token on Network)",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 Description  = "Enables LocalAccountTokenFilterPolicy which allows local admin accounts that authenticate over the network to receive a full elevated token (rather than a filtered one), enabling legitimate remote administration without requiring domain accounts. Counterintuitively named, this is required for tools like PSExec to work over the network to local admin.",
                 Tags         = ["lsa", "token-filter", "local-admin", "remote-admin", "policy"],
                 NeedsAdmin   = true,
@@ -4193,7 +4193,7 @@ internal static class PolicyAuth
             {
                 Id           = "lsapol-disable-lsa-telemetry",
                 Label        = "Disable LSA / Authentication Provider Telemetry to Microsoft",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 Description  = "Prevents the LSA and Windows authentication providers from sending authentication event rates, credential provider selection, and logon failure telemetry to Microsoft.",
                 Tags         = ["lsa", "telemetry", "privacy", "microsoft", "policy"],
                 NeedsAdmin   = true,
@@ -4223,7 +4223,7 @@ internal static class PolicyAuth
             {
                 Id = "lgncache-reduce-cached-logons",
                 Label = "Logon Cache: Set Cached Domain Logon Count to 2",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 RegistryKeys = [Winlogon],
@@ -4240,7 +4240,7 @@ internal static class PolicyAuth
             {
                 Id = "lgncache-disable-cached-logons",
                 Label = "Logon Cache: Disable Cached Domain Logons (0 Cached)",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 RegistryKeys = [Winlogon],
@@ -4257,7 +4257,7 @@ internal static class PolicyAuth
             {
                 Id = "lgncache-sc-remove-lock",
                 Label = "Logon Cache: Lock Workstation on Smart Card Removal",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 RegistryKeys = [Winlogon],
@@ -4274,7 +4274,7 @@ internal static class PolicyAuth
             {
                 Id = "lgncache-password-expiry-warning-14d",
                 Label = "Logon Cache: Set Password Expiry Warning to 14 Days",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 RegistryKeys = [Winlogon],
@@ -4291,7 +4291,7 @@ internal static class PolicyAuth
             {
                 Id = "lgncache-force-unlock-logon",
                 Label = "Logon Cache: Require Domain Credential to Unlock Workstation",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 RegistryKeys = [Winlogon],
@@ -4308,7 +4308,7 @@ internal static class PolicyAuth
             {
                 Id = "lgncache-netlogon-require-strong-key",
                 Label = "Logon Cache: Require Strong Session Keys for Netlogon",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 RegistryKeys = [NetlogonParams],
@@ -4325,7 +4325,7 @@ internal static class PolicyAuth
             {
                 Id = "lgncache-netlogon-require-sign-seal",
                 Label = "Logon Cache: Require Signing and Sealing of Netlogon Channel",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 RegistryKeys = [NetlogonParams],
@@ -4342,7 +4342,7 @@ internal static class PolicyAuth
             {
                 Id = "lgncache-netlogon-seal-secure-channel",
                 Label = "Logon Cache: Seal Netlogon Secure Channel When Possible",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 RegistryKeys = [NetlogonParams],
@@ -4359,7 +4359,7 @@ internal static class PolicyAuth
             {
                 Id = "lgncache-netlogon-sign-secure-channel",
                 Label = "Logon Cache: Sign Netlogon Secure Channel When Possible",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 RegistryKeys = [NetlogonParams],
@@ -4376,7 +4376,7 @@ internal static class PolicyAuth
             {
                 Id = "lgncache-disable-domain-password-cache",
                 Label = "Logon Cache: Disable Domain Password Caching in Credential Manager",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 RegistryKeys = [Lsa],
@@ -4405,7 +4405,7 @@ internal static class PolicyAuth
             {
                 Id = "logonpol-hide-last-username",
                 Label = "Hide last signed-in username at logon screen (policy)",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 Description =
@@ -4420,7 +4420,7 @@ internal static class PolicyAuth
             {
                 Id = "logonpol-hide-network-selection",
                 Label = "Hide network selection UI at logon screen (policy)",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 Description =
@@ -4435,7 +4435,7 @@ internal static class PolicyAuth
             {
                 Id = "logonpol-hide-account-details-on-signin",
                 Label = "Block users from showing account details at sign-in (policy)",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 Description =
@@ -4450,7 +4450,7 @@ internal static class PolicyAuth
             {
                 Id = "logonpol-disable-arso",
                 Label = "Disable Automatic Restart Sign-On (ARSO) (policy)",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 Description =
@@ -4465,7 +4465,7 @@ internal static class PolicyAuth
             {
                 Id = "logonpol-disable-startup-sound",
                 Label = "Disable Windows startup sound (policy)",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 Description =
@@ -4480,7 +4480,7 @@ internal static class PolicyAuth
             {
                 Id = "logonpol-block-msa-connected-account",
                 Label = "Block Microsoft Account connected users (policy)",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 Description =
@@ -4495,7 +4495,7 @@ internal static class PolicyAuth
             {
                 Id = "logonpol-hide-locked-user-id",
                 Label = "Hide locked user info on the lock screen (policy)",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 Description =
@@ -4511,7 +4511,7 @@ internal static class PolicyAuth
             {
                 Id = "logonpol-max-device-password-failed-attempts",
                 Label = "Lock device after failed sign-in attempts (policy)",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 Description =
@@ -4527,7 +4527,7 @@ internal static class PolicyAuth
             {
                 Id = "logonpol-disable-lock-screen-app-notifications",
                 Label = "Disable app notifications on the lock screen (policy)",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 Description =
@@ -4543,7 +4543,7 @@ internal static class PolicyAuth
             {
                 Id = "logonpol-hide-power-button-at-logon",
                 Label = "Hide power button on logon screen (policy)",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 Description =
@@ -4572,7 +4572,7 @@ internal static class PolicyAuth
                 {
                     Id = "lsapol-enable-lsa-run-as-ppl",
                     Label = "Enable LSA Run as Protected Process Light (PPL)",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description =
                         "Configures lsass.exe to run as a Protected Process Light (PPL). PPL enforces ELAM (Early Launch Anti-Malware) restrictions: only Microsoft-signed binaries can inject into or read lsass memory. Directly prevents Mimikatz credential dumping.",
                     Tags = ["lsa", "ppl", "credential-dump", "mimikatz", "hardening"],
@@ -4591,7 +4591,7 @@ internal static class PolicyAuth
                 {
                     Id = "lsapol-audit-lsass-access-attempts",
                     Label = "Audit LSASS Memory Access Attempts",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description =
                         "Enables audit logging of all OpenProcess calls that attempt to read lsass.exe memory. Even without PPL enforcement this detects credential-dumping tools (Mimikatz, ProcDump /ma) and logs the calling process for SIEM analysis.",
                     Tags = ["lsa", "audit", "credential-dump", "memory-access", "event-log"],
@@ -4610,7 +4610,7 @@ internal static class PolicyAuth
                 {
                     Id = "lsapol-disable-reversible-encryption",
                     Label = "Disable Reversible Password Encryption in LSA",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description =
                         "Prevents Windows from storing user passwords in LSA using reversible encryption. Reversible password storage is equivalent to plaintext storage; disabling it ensures only one-way NTLM hashes are retained in the SAM database.",
                     Tags = ["lsa", "password-storage", "reversible-encryption", "sam", "hardening"],
@@ -4629,7 +4629,7 @@ internal static class PolicyAuth
                 {
                     Id = "lsapol-block-credential-delegation-to-unknown",
                     Label = "Block Credential Delegation to Unknown or Untrusted Servers",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description =
                         "Denies credential delegation (CredSSP / Kerberos constrained delegation) to servers not explicitly listed in the trusted servers allowlist. Prevents pass-the-hash relay attacks that trick the client into delegating credentials to a rogue server.",
                     Tags = ["lsa", "credential-delegation", "credssp", "relay", "hardening"],
@@ -4648,7 +4648,7 @@ internal static class PolicyAuth
                 {
                     Id = "lsapol-restrict-anonymous-lsa-access",
                     Label = "Restrict Anonymous LSA Name and Account Lookups",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description =
                         "Prevents anonymous connections (null sessions) from enumerating LSA account names, SIDs, and local group memberships. Blocks the reconnaissance phase of account enumeration attacks.",
                     Tags = ["lsa", "anonymous-access", "null-session", "enumeration", "hardening"],
@@ -4667,7 +4667,7 @@ internal static class PolicyAuth
                 {
                     Id = "lsapol-disable-lm-hash-storage",
                     Label = "Disable LM Hash Storage in LSA Credential Store",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description =
                         "Permanently disables storage of LAN Manager (LM) password hashes in the LSA credential cache. LM hashes are solvable in seconds with modern GPUs; this ensures only NTLM and Kerberos hashes are retained.",
                     Tags = ["lsa", "lm-hash", "ntlm", "password-hash", "hardening"],
@@ -4686,7 +4686,7 @@ internal static class PolicyAuth
                 {
                     Id = "lsapol-enable-securechannel-sealing",
                     Label = "Require Secure Channel Data Encryption and Signing",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description =
                         "Forces all Netlogon secure channel traffic to be encrypted and signed. A secure channel is the authenticated tunnel between a domain member and its DC; unsigned channels can be hijacked to inject forged authentication responses.",
                     Tags = ["lsa", "netlogon", "secure-channel", "encryption", "signing"],
@@ -4705,7 +4705,7 @@ internal static class PolicyAuth
                 {
                     Id = "lsapol-restrict-cached-logons",
                     Label = "Restrict Cached Domain Logon Count to 1",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description =
                         "Limits the number of cached domain credential sets stored in the LSA to 1 (minimum). Cached logons allow domain users to authenticate offline; a high cache count means a physical attacker can harvest multiple domain hashes from a stolen laptop.",
                     Tags = ["lsa", "cached-logon", "credential-cache", "physical-security", "hardening"],
@@ -4724,7 +4724,7 @@ internal static class PolicyAuth
                 {
                     Id = "lsapol-enable-credential-guard",
                     Label = "Enable Windows Defender Credential Guard (Isolated LSA)",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description =
                         "Enables Credential Guard, which runs the LSA credential store inside a secure Hyper-V isolated container (VSM). Even if the host OS is fully compromised lsass cannot be dumped because credentials live in a separate VM-protected memory region.",
                     Tags = ["lsa", "credential-guard", "vsm", "secure-enclave", "advanced"],
@@ -4743,7 +4743,7 @@ internal static class PolicyAuth
                 {
                     Id = "lsapol-block-wdigest-plaintext-creds",
                     Label = "Block WDigest from Storing Plaintext Credentials in LSASS",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description =
                         "Disables WDigest authentication protocol caching in LSASS memory. WDigest was designed for HTTP Digest authentication and cached plaintext-equivalent credentials in LSASS; attackers (Mimikatz sekurlsa::wdigest) can extract these.",
                     Tags = ["lsa", "wdigest", "plaintext", "credential-cache", "mimikatz"],
@@ -4773,7 +4773,7 @@ internal static class PolicyAuth
                 {
                     Id = "pwdless-enforce-whfb",
                     Label = "Enforce Windows Hello for Business Enrollment",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description =
                         "Requires all users to enroll in Windows Hello for Business during first sign-in, enforcing passwordless primary authentication and deprecating the use of traditional passwords for Windows sign-in.",
                     Tags = ["whfb", "passwordless", "windows-hello", "policy"],
@@ -4790,7 +4790,7 @@ internal static class PolicyAuth
                 {
                     Id = "pwdless-require-tpm",
                     Label = "Require TPM for Windows Hello for Business",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description =
                         "Mandates that WHfB private keys are protected by the device TPM, preventing WHfB credentials from being stored in software (file-based storage) where they could be exported.",
                     Tags = ["whfb", "tpm", "passwordless", "windows-hello", "policy"],
@@ -4807,7 +4807,7 @@ internal static class PolicyAuth
                 {
                     Id = "pwdless-disable-password-fallback",
                     Label = "Disable Password Fallback for WHfB Sign-In",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description =
                         "Prevents users from falling back to password authentication when WHfB is available, forcing passwordless primary sign-in and eliminating the password as a secondary path attackers could target.",
                     Tags = ["whfb", "passwordless", "password-fallback", "policy"],
@@ -4824,7 +4824,7 @@ internal static class PolicyAuth
                 {
                     Id = "pwdless-enable-fido2-keys",
                     Label = "Enable FIDO2 Security Key Sign-In",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description =
                         "Enables FIDO2 hardware security keys (YubiKey, Titan key, etc.) as a credential type for Windows sign-in alongside WHfB, allowing phishing-resistant passwordless authentication from the lock screen.",
                     Tags = ["fido2", "security-key", "passwordless", "policy"],
@@ -4841,7 +4841,7 @@ internal static class PolicyAuth
                 {
                     Id = "pwdless-disable-convenience-pin",
                     Label = "Disable Convenience PIN (Non-WHfB) for Local Accounts",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description =
                         "Disables the simple convenience PIN for local accounts that does not benefit from WHfB's asymmetric key protection, forcing WHfB PIN (TPM-backed) for all PIN sign-in scenarios.",
                     Tags = ["whfb", "convenience-pin", "local-account", "passwordless", "policy"],
@@ -4858,7 +4858,7 @@ internal static class PolicyAuth
                 {
                     Id = "pwdless-block-phone-sign-in",
                     Label = "Block Phone/Companion Device Sign-In",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description =
                         "Disables the companion device (phone-based Windows Hello sign-in) framework, preventing authentication via Bluetooth phone approval where physical possession of the phone is the only factor.",
                     Tags = ["whfb", "phone-sign-in", "companion-device", "passwordless", "policy"],
@@ -4875,7 +4875,7 @@ internal static class PolicyAuth
                 {
                     Id = "pwdless-require-mfa-for-whfb-provision",
                     Label = "Require MFA During WHfB Provisioning",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description =
                         "Requires multi-factor authentication during the WHfB provisioning ceremony, ensuring that only users who have already authenticated with a second factor can register WHfB credentials.",
                     Tags = ["whfb", "mfa", "provisioning", "passwordless", "policy"],
@@ -4892,7 +4892,7 @@ internal static class PolicyAuth
                 {
                     Id = "pwdless-block-whfb-on-unmanaged",
                     Label = "Block WHfB Enrollment on Unmanaged Devices",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description =
                         "Prevents Windows Hello for Business enrollment on devices not enrolled in an MDM policy (Intune/SCCM), ensuring WHfB credentials are only provisioned on corp-managed endpoints.",
                     Tags = ["whfb", "mdm", "managed-device", "passwordless", "policy"],
@@ -4909,7 +4909,7 @@ internal static class PolicyAuth
                 {
                     Id = "pwdless-disable-whfb-personal",
                     Label = "Disable WHfB for Personal Microsoft Accounts",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description =
                         "Prevents Windows Hello from being used for personal Microsoft account sign-in, restricting WHfB to work or school accounts only and preventing personal-account credential leakage.",
                     Tags = ["whfb", "personal-account", "microsoft-account", "passwordless", "policy"],
@@ -4926,7 +4926,7 @@ internal static class PolicyAuth
                 {
                     Id = "pwdless-audit-whfb-provisioning",
                     Label = "Enable Audit Logging for WHfB Provisioning Events",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description =
                         "Enables security audit events for all WHfB provisioning, re-provisioning, and credential deletion events, providing traceability for passwordless credential lifecycle management.",
                     Tags = ["whfb", "audit-log", "provisioning", "passwordless", "policy"],
@@ -4955,7 +4955,7 @@ internal static class PolicyAuth
             {
                 Id = "sccredpol-allow-certificates-with-no-extended-key-usage",
                 Label = "SC Credentials: Allow Smart Card Certificates Without Extended Key Usage for Logon",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 Description = "Sets AllowCertificatesWithNoEKU=0 in Smart Card Credential Provider policy. Prevents smart card certificates without an Extended Key Usage (EKU) extension — or with an EKU that doesn't include Client Authentication (1.3.6.1.5.5.7.3.2) — from being used for Windows logon. " +
                     "Smart card certificates without an EKU or with an all-inclusive EKU (Any Purpose) are certificates that were issued without specifying a legitimate use constraint. Such certificates are typically misconfigured CA root certificates or test certificates. If Windows allows logon with any certificate present on a smart card regardless of EKU, an attacker who compromises a user's smart card PIN and inserts a root CA certificate or code signing certificate into the card can attempt logon with the inappropriate certificate. Requiring Client Authentication EKU ensures only purpose-constrained logon certificates can authenticate to interactive sessions.",
                 Tags = ["sccredpol", "smart-card", "eku", "certificate", "logon", "client-auth"],
@@ -4972,7 +4972,7 @@ internal static class PolicyAuth
             {
                 Id = "sccredpol-enforce-certificate-time-validity",
                 Label = "SC Credentials: Reject Expired Smart Card Certificates from Logon",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 Description = "Sets EnforceCAExpiry=1 in Smart Card Credential Provider policy. Enforces certificate validity period checking — prevents Windows from accepting smart card certificates for logon that have expired or whose issuing CA certificate chain has expired. By default, Windows may allow logon with expired smart card certificates in some scenarios (offline cached logon) if the certificate was previously valid. " +
                     "Expired certificates represent an operational risk in smart card deployments: when a user's smart card certificate expires but the card PIN remains valid, Windows may continue to accept the card for domain logon relying on cached credentials — even though the PKI infrastructure considers the certificate expired. An attacker who obtains an expired certificate and the corresponding private key (from a compromised card) can attempt offline certificate logon. EnforceCAExpiry=1 ensures the current certificate validity timestamp is always checked, preventing expired certificate acceptance even in cached credential scenarios.",
                 Tags = ["sccredpol", "smart-card", "certificate-expiry", "ca-expiry", "validity", "pki"],
@@ -4989,7 +4989,7 @@ internal static class PolicyAuth
             {
                 Id = "sccredpol-filter-duplicate-certificates",
                 Label = "SC Credentials: Filter Duplicate Smart Card Certificates Shown in Logon Picker",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 Description = "Sets FilterDuplicateCerts=1 in Smart Card Credential Provider policy. When a smart card contains multiple certificates with the same Subject and public key (e.g., during certificate renewal where both old and new certificates co-exist on the card), this setting shows only the most recently issued certificate in the Windows logon certificate picker, preventing user confusion from duplicate entries. " +
                     "During smart card certificate lifecycle management, cards frequently transition through a state where both the old (near-expired) and new (freshly issued) certificates are on the card simultaneously — to allow the renewal to proceed without requiring the user to surrender their card. The Windows logon certificate picker displays all certificates, presenting two identical-looking entries to the user. Users who select the expired certificate will experience logon failures. FilterDuplicateCerts reduces the duplicate entries to one (the most recent), eliminating this user experience issue.",
                 Tags = ["sccredpol", "smart-card", "duplicate-certificate", "certificate-renewal", "logon-picker"],
@@ -5006,7 +5006,7 @@ internal static class PolicyAuth
             {
                 Id = "sccredpol-force-read-all-certificates",
                 Label = "SC Credentials: Force Reading All Certificates from Smart Card (Not Just Root/Signing)",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 Description = "Sets ForceReadingAllCertificates=1 in Smart Card Credential Provider policy. Forces Windows to read all certificates stored on the smart card during authentication enumeration, rather than only examining the first matching certificate. Some cards store certificate-based logon credentials on non-default slots or with non-standard EKU ordering — without ForceReadingAllCertificates, Windows may skip valid authentication certificates. " +
                     "Smart card credential providers have an optimisation that stops scanning the card after finding the first usable certificate. On cards with multiple valid Client Authentication certificates (multi-profile cards, cards issued by different CAs for different resource domains), the optimisation may select a certificate for a different trust domain, causing failed authentication. ForceReadingAllCertificates ensures the complete certificate set is enumerated and the credential provider selects the certificate with the best chain match for the current domain.",
                 Tags = ["sccredpol", "smart-card", "certificate-enumeration", "multi-profile", "credential-provider"],
@@ -5023,7 +5023,7 @@ internal static class PolicyAuth
             {
                 Id = "sccredpol-require-smart-card-for-logon",
                 Label = "SC Credentials: Require Smart Card for Interactive Logon (Disable Password-Based Logon)",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 Description = "Sets ScForceOption=1 in Windows System policy. Requires users to authenticate with a smart card for interactive (local and Remote Desktop) logon. Password-based interactive logon is disabled. This setting is the full enforcement of a smart card-mandatory authentication policy — ensuring that physical possession of the smart card is required for every interactive logon event, eliminating password-based bypass paths. " +
                     "Password-based logon as a fallback for smart card environments creates a persistent weak authentication path: users who 'lose' their smart card can fall back to passwords, which are substantially easier to steal via phishing or shoulder surfing than compromising a physical authentication token plus PIN. In high-assurance environments (financial trading, government classified systems, nuclear facility IT, PCI DSS Level 1), all interactive logon must be protected by a physical authentication factor. ScForceOption=1 eliminates the password fallback and enforces the physical factor requirement absolutely.",
                 Tags = ["sccredpol", "smart-card", "force-logon", "disable-password-logon", "mfa", "high-assurance"],
@@ -5040,7 +5040,7 @@ internal static class PolicyAuth
             {
                 Id = "sccredpol-enable-smart-card-lock-on-removal",
                 Label = "SC Credentials: Lock Workstation Automatically When Smart Card is Removed",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 Description = "Sets SmartCardRemovalOption=1 in Windows System policy. Automatically locks the workstation when the user removes their smart card from the reader, replacing the 'no action' default. Ensures the workstation is immediately locked when the user physically departs (smart card is typically in their lanyard or pocket which they take with them). " +
                     "Smart card removal detection is a behavioural lock triggered by physical possession of the authentication token. The security premise: a person who removes their smart card from the reader is physically leaving the workstation. Without removal lock, the authenticated session remains unlocked and accessible to anyone who approaches the workstation during the user's brief absence (printer, coffee, restroom). SmartCardRemovalOption=1 means the session locks within seconds of card removal — the physical authentication token acts as a proximity-based session lock device.",
                 Tags = ["sccredpol", "smart-card", "removal-lock", "session-lock", "physical-security"],
@@ -5057,7 +5057,7 @@ internal static class PolicyAuth
             {
                 Id = "sccredpol-disable-smart-card-credential-caching",
                 Label = "SC Credentials: Disable Windows Cached Credentials for Smart Card Logons",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 Description = "Sets DisableSmartCardLogonCheck=0 in Smart Card Credential Provider policy. Ensures Windows performs a full smart card authentication challenge on every logon attempt — disabling any cached credential shortcut paths that might allow logon without re-validating the current smart card state against the DC. " +
                     "Cached credential logon for smart card authentication creates an inconsistency: the cached domain credential may be valid even after the smart card certificate has been revoked (e.g., following employee termination or card loss). If Windows allows cached credential logon for smart card sessions, a terminated employee's workstation retains the logon capability for up to the domain cache lifetime (default 10 cached logons). Ensuring full smart card validation on each logon forces certificate revocation to be effective immediately — revoked smart cards are rejected on first logon attempt after CRL update.",
                 Tags = ["sccredpol", "smart-card", "credential-cache", "revocation", "crl", "terminated-employee"],
@@ -5074,7 +5074,7 @@ internal static class PolicyAuth
             {
                 Id = "sccredpol-enable-smart-card-puk-logging",
                 Label = "SC Credentials: Enable Smart Card PUK/PIN Operation Logging",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 Description = "Sets EnableSmartCardLogonLogging=1 in Smart Card Credential Provider policy. Enables logging of smart card PIN entry events, PUK (PIN Unblocking Key) operations, and certificate selection events to the Windows Application event log. PIN operation logging provides an audit trail of smart card authentication activity at the workstation — enabling detection of PIN brute-force attempts (excessive failed PIN entries), card blocking events (PUK operation triggered), and certificate selection anomalies. " +
                     "Smart card PIN brute-force attacks are rate-limited by card hardware (typically 3-10 failed attempts before card lockout), but without logging, an attacker who attempts multiple combinations across the threshold boundary and reinserts the card leaves no system event trace. Smart card logging events can be collected by SIEM, enabling detection of cards that are being tested for PIN guessing (rapid sequence of failed PIN events at an unexpected workstation), identifying potentially compromised or stolen cards before the card locks.",
                 Tags = ["sccredpol", "smart-card", "logging", "pin-brute-force", "puk", "audit"],
@@ -5091,7 +5091,7 @@ internal static class PolicyAuth
             {
                 Id = "sccredpol-restrict-to-root-trusted-certificates",
                 Label = "SC Credentials: Restrict Smart Card Logon to Root-CA Trusted Certificates Only",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 Description = "Sets RootCA=1 in Smart Card Credential Provider policy. Restricts smart card logon to only accept certificates that chain to a root CA in the machine's Trusted Root Certification Authorities store — preventing certificates issued by intermediate-only CAs or enterprise subordinate CAs whose root is not in the machine trust store from being used for logon. " +
                     "In multi-forest or partner organisation environments, smart cards issued by external PKI hierarchies may be physically interoperable (same card form factor, compatible reader drivers) but should not grant logon access to the local domain unless their issuing CA root is explicitly trusted. Without RootCA=1, certificates from any technically valid PKI chain — including self-signed certificates added to a card by an attacker — could be used for logon. Restricting to root-CA-trusted certs ensures the local domain trust policy governs which PKI hierarchies are authorised for smart card authentication.",
                 Tags = ["sccredpol", "smart-card", "root-ca", "trust", "pki", "cross-forest"],
@@ -5108,7 +5108,7 @@ internal static class PolicyAuth
             {
                 Id = "sccredpol-enable-integrated-unblock",
                 Label = "SC Credentials: Enable Integrated Smart Card Unblock Screen at Logon",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 Description = "Sets EnableIntegratedUnblock=1 in Smart Card Credential Provider policy. Enables the Windows integrated smart card unblock screen — presented at the Ctrl+Alt+Del logon screen when a smart card's PIN is blocked (after exceeding the incorrect PIN attempt limit). The integrated unblock screen allows users to unblock their card at the logon screen using PUK without requiring a separate unblock tool or helpdesk intervention. " +
                     "Without integrated unblock, a user whose card PIN is blocked must call the IT helpdesk, be issued a temporary PUK, and use a separate smart card management utility to unblock the card. This process typically takes 15–60 minutes depending on helpdesk availability. The integrated unblock screen presents the PUK entry interface directly at the Windows logon screen — the user provides their PUK and new PIN, the card is immediately unblocked, and logon proceeds. EnableIntegratedUnblock reduces helpdesk call volume for card lockouts by eliminating the manual unblock workflow.",
                 Tags = ["sccredpol", "smart-card", "unblock", "puk", "helpdesk", "user-experience"],
@@ -5137,7 +5137,7 @@ internal static class PolicyAuth
                 {
                     Id = "scprov-block-no-eku-certs",
                     Label = "Block Smart Card Certs Without EKU",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description =
                         "Blocks smart card certificates that lack Extended Key Usage (EKU) extensions from being accepted for logon. Prevents improperly issued certificates from authenticating. Default: 1 (allow). Recommended: 0 (block).",
                     Tags = ["smart-card", "pki", "eku", "certificate", "policy"],
@@ -5154,7 +5154,7 @@ internal static class PolicyAuth
                 {
                     Id = "scprov-block-signature-only-keys",
                     Label = "Block Signature-Only Smart Card Keys",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description =
                         "Prevents smart cards with signature-only keys from being used for interactive logon. Signature keys should not be used for authentication. Default: 1 (allow). Recommended: 0 (block).",
                     Tags = ["smart-card", "pki", "signature", "key-usage", "policy"],
@@ -5171,7 +5171,7 @@ internal static class PolicyAuth
                 {
                     Id = "scprov-block-time-invalid-certs",
                     Label = "Block Expired Smart Card Certificates",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description =
                         "Prevents authentication using time-invalid (expired or not yet valid) smart card certificates. Enforces certificate lifecycle compliance. Default: 1 (allow). Recommended: 0 (block).",
                     Tags = ["smart-card", "pki", "expiry", "certificate", "policy"],
@@ -5188,7 +5188,7 @@ internal static class PolicyAuth
                 {
                     Id = "scprov-enumerate-ecc-certs",
                     Label = "Enumerate ECC Certificates by Default",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description =
                         "Enables enumeration of elliptic-curve cryptography certificates on smart cards by default. Required when the organisation uses ECDSA/ECDH smart card certificates. Default: 0. Recommended: 1 when ECC certs are deployed.",
                     Tags = ["smart-card", "ecc", "pki", "enumeration", "policy"],
@@ -5205,7 +5205,7 @@ internal static class PolicyAuth
                 {
                     Id = "scprov-filter-dup-certs",
                     Label = "Filter Duplicate Logon Certificates",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description =
                         "De-duplicates certificates shown in the smart card logon picker when a card carries multiple identical certificates. Prevents UI confusion during logon. Default: 0. Recommended: 1.",
                     Tags = ["smart-card", "duplicate", "certificate", "logon", "policy"],
@@ -5222,7 +5222,7 @@ internal static class PolicyAuth
                 {
                     Id = "scprov-force-read-all-certs",
                     Label = "Force Reading All Smart Card Certificates",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description =
                         "Forces the system to read all certificates from a smart card rather than stopping at the first valid one. Ensures complete certificate inventory for logon selection. Default: 0. Recommended: 1 for multi-cert cards.",
                     Tags = ["smart-card", "certificate", "enumeration", "policy"],
@@ -5239,7 +5239,7 @@ internal static class PolicyAuth
                 {
                     Id = "scprov-no-reverse-subject",
                     Label = "Normalise Certificate Subject Display Order",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description =
                         "Prevents the credential provider from reversing certificate subject field order in the logon UI. Ensures consistent CN/OU display regardless of CA issuance order. Default: not set. Recommended: 0 (normal order).",
                     Tags = ["smart-card", "subject", "display", "certificate", "policy"],
@@ -5256,7 +5256,7 @@ internal static class PolicyAuth
                 {
                     Id = "scprov-suppress-x509-hints",
                     Label = "Suppress X.509 Certificate Hint Display",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description =
                         "Suppresses X.509 certificate hint prompts shown when multiple certificates are available during smart card logon. Reduces UI noise in managed environments. Default: 1. Recommended: 0.",
                     Tags = ["smart-card", "x509", "hint", "logon", "policy"],
@@ -5273,7 +5273,7 @@ internal static class PolicyAuth
                 {
                     Id = "scprov-disallow-plaintext-pin",
                     Label = "Disallow Plaintext Smart Card PIN Transmission",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description =
                         "Prevents smart card PINs from being returned or transmitted in clear text by the Credential Manager. Critical for preventing PIN interception on hosts with memory inspection. Default: 0. Recommended: 1.",
                     Tags = ["smart-card", "pin", "plaintext", "credential", "policy"],
@@ -5290,7 +5290,7 @@ internal static class PolicyAuth
                 {
                     Id = "scprov-logon-hours-notify",
                     Label = "Enable Logon Hours Change Notification",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description =
                         "Notifies users when their allowed logon hours are about to expire or have changed, using smart card credential context. Helps users save work before forced logoff. Default: 0. Recommended: 1.",
                     Tags = ["smart-card", "logon-hours", "notification", "policy"],
@@ -5318,7 +5318,7 @@ internal static class PolicyAuth
             {
                 Id = "wauthn-disable-touch-id-fallback",
                 Label = "Disable WebAuthn Biometric Fallback to PIN",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 NeedsAdmin = true, CorpSafe = true, ImpactScore = 3, SafetyRating = 5,
                 Description =
                     "Sets DisableBiometricFallback=1 in the WebAuthn policy key. Prevents the "
@@ -5338,7 +5338,7 @@ internal static class PolicyAuth
             {
                 Id = "wauthn-require-enterprise-attestation",
                 Label = "Require Enterprise Attestation for FIDO Keys",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 NeedsAdmin = true, CorpSafe = true, ImpactScore = 3, SafetyRating = 5,
                 Description =
                     "Sets RequireEnterpriseAttestation=1 in the WebAuthn policy key. Forces "
@@ -5358,7 +5358,7 @@ internal static class PolicyAuth
             {
                 Id = "wauthn-disable-cross-origin-auth",
                 Label = "Disable Cross-Origin WebAuthn Authentication",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 NeedsAdmin = true, CorpSafe = true, ImpactScore = 4, SafetyRating = 5,
                 Description =
                     "Sets DisableCrossOriginAuth=1 in the WebAuthn policy key. Prevents "
@@ -5377,7 +5377,7 @@ internal static class PolicyAuth
             {
                 Id = "wauthn-disable-password-auth-fallback",
                 Label = "Disable WebAuthn Password Authentication Fallback",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 NeedsAdmin = true, CorpSafe = true, ImpactScore = 4, SafetyRating = 5,
                 Description =
                     "Sets DisablePasswordFallback=1 in the WebAuthn policy key. Prevents "
@@ -5396,7 +5396,7 @@ internal static class PolicyAuth
             {
                 Id = "wauthn-disable-cloud-passkey-sync",
                 Label = "Disable Cloud Passkey Sync",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 NeedsAdmin = true, CorpSafe = true, ImpactScore = 4, SafetyRating = 5,
                 Description =
                     "Sets DisableCloudPasskeySync=1 in the WebAuthn policy key. Prevents "
@@ -5415,7 +5415,7 @@ internal static class PolicyAuth
             {
                 Id = "wauthn-disable-webauthn-telemetry",
                 Label = "Disable WebAuthn Telemetry",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 NeedsAdmin = true, CorpSafe = true, ImpactScore = 2, SafetyRating = 5,
                 Description =
                     "Sets DisableWebAuthnTelemetry=1 in the WebAuthn policy key. Prevents "
@@ -5434,7 +5434,7 @@ internal static class PolicyAuth
             {
                 Id = "wauthn-disable-security-key-enrollment",
                 Label = "Block Unauthorised Security Key Enrollment",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 NeedsAdmin = true, CorpSafe = true, ImpactScore = 3, SafetyRating = 5,
                 Description =
                     "Sets DisableSecurityKeyEnrollment=1 in the WebAuthn policy key. Prevents "
@@ -5454,7 +5454,7 @@ internal static class PolicyAuth
             {
                 Id = "wauthn-enforce-user-verification",
                 Label = "Enforce User Verification for All WebAuthn Calls",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 NeedsAdmin = true, CorpSafe = true, ImpactScore = 4, SafetyRating = 5,
                 Description =
                     "Sets EnforceUserVerification=1 in the WebAuthn policy key. Forces the "
@@ -5474,7 +5474,7 @@ internal static class PolicyAuth
             {
                 Id = "wauthn-disable-nfc-transport",
                 Label = "Disable NFC Transport for FIDO2 Keys",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 NeedsAdmin = true, CorpSafe = true, ImpactScore = 3, SafetyRating = 4,
                 Description =
                     "Sets DisableNfcTransport=1 in the WebAuthn policy key. Prevents the "
@@ -5493,7 +5493,7 @@ internal static class PolicyAuth
             {
                 Id = "wauthn-disable-bluetooth-transport",
                 Label = "Disable Bluetooth Transport for FIDO2 Keys",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 NeedsAdmin = true, CorpSafe = true, ImpactScore = 3, SafetyRating = 4,
                 Description =
                     "Sets DisableBluetoothTransport=1 in the WebAuthn policy key. Disables "
@@ -5523,7 +5523,7 @@ internal static class PolicyAuth
                 {
                     Id = "whfbpin-set-minimum-length-8",
                     Label = "Set WHfB PIN Minimum Length to 8 Digits",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description =
                         "Sets the minimum Windows Hello for Business PIN length to 8 characters, exceeding the Windows default of 6 characters and increasing PIN brute-force resistance.",
                     Tags = ["whfb", "windows-hello", "pin", "policy"],
@@ -5540,7 +5540,7 @@ internal static class PolicyAuth
                 {
                     Id = "whfbpin-set-maximum-length-16",
                     Label = "Set WHfB PIN Maximum Length to 16 Digits",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description =
                         "Sets the maximum Windows Hello for Business PIN length to 16 characters, balancing usability with security and preventing excessively long PINs that users may forget.",
                     Tags = ["whfb", "windows-hello", "pin", "policy"],
@@ -5557,7 +5557,7 @@ internal static class PolicyAuth
                 {
                     Id = "whfbpin-require-uppercase",
                     Label = "Require Uppercase Letters in WHfB PIN",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description =
                         "Requires that WHfB PINs contain at least one uppercase letter when using an alphanumeric PIN, increasing PIN complexity and resistance to dictionary attacks.",
                     Tags = ["whfb", "windows-hello", "pin", "complexity", "policy"],
@@ -5574,7 +5574,7 @@ internal static class PolicyAuth
                 {
                     Id = "whfbpin-require-lowercase",
                     Label = "Require Lowercase Letters in WHfB PIN",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description =
                         "Requires that WHfB PINs contain at least one lowercase letter, enforcing mixed-case alphanumeric PINs for greater entropy.",
                     Tags = ["whfb", "windows-hello", "pin", "complexity", "policy"],
@@ -5591,7 +5591,7 @@ internal static class PolicyAuth
                 {
                     Id = "whfbpin-require-special-chars",
                     Label = "Require Special Characters in WHfB PIN",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description =
                         "Requires at least one special character in Windows Hello for Business PINs, maximising PIN entropy and preventing trivially guessable numeric or alphabetic patterns.",
                     Tags = ["whfb", "windows-hello", "pin", "special-chars", "policy"],
@@ -5608,7 +5608,7 @@ internal static class PolicyAuth
                 {
                     Id = "whfbpin-set-pin-history-5",
                     Label = "Set WHfB PIN History to 5 Previous PINs",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description =
                         "Prevents reuse of the last 5 WHfB PINs, stopping users from cycling back to recently used PINs immediately after a mandatory PIN change.",
                     Tags = ["whfb", "windows-hello", "pin", "history", "policy"],
@@ -5625,7 +5625,7 @@ internal static class PolicyAuth
                 {
                     Id = "whfbpin-set-expiry-180-days",
                     Label = "Set WHfB PIN Expiry to 180 Days",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description =
                         "Sets the Windows Hello for Business PIN expiry period to 180 days, requiring periodic PIN rotation to limit the impact of a compromised PIN.",
                     Tags = ["whfb", "windows-hello", "pin", "expiry", "policy"],
@@ -5642,7 +5642,7 @@ internal static class PolicyAuth
                 {
                     Id = "whfbpin-require-digits",
                     Label = "Require Digits in WHfB Alphanumeric PIN",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description =
                         "Requires that alphanumeric WHfB PINs contain at least one digit, preventing purely alphabetic PINs and ensuring a minimum numeric component in the PIN.",
                     Tags = ["whfb", "windows-hello", "pin", "digits", "policy"],
@@ -5659,7 +5659,7 @@ internal static class PolicyAuth
                 {
                     Id = "whfbpin-block-simple-patterns",
                     Label = "Block Simple/Sequential WHfB PIN Patterns",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description =
                         "Blocks common sequential (1234, abcd) and repeated-character (1111, aaaa) PIN patterns for WHfB, preventing trivially guessable PINs from being set.",
                     Tags = ["whfb", "windows-hello", "pin", "patterns", "policy"],
@@ -5676,7 +5676,7 @@ internal static class PolicyAuth
                 {
                     Id = "whfbpin-lockout-after-5-failures",
                     Label = "Lock Out WHfB PIN After 5 Failed Attempts",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description =
                         "Locks the WHfB PIN credential after 5 consecutive failed login attempts, requiring a PIN reset via recovery, defending against online brute-force attacks.",
                     Tags = ["whfb", "windows-hello", "pin", "lockout", "brute-force", "policy"],
@@ -5704,7 +5704,7 @@ internal static class PolicyAuth
             {
                 Id = "helloadv-require-hello-for-domain-auth",
                 Label = "Require Windows Hello as Primary Domain Authentication Method",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 5,
@@ -5721,7 +5721,7 @@ internal static class PolicyAuth
             {
                 Id = "helloadv-require-tpm-for-hello",
                 Label = "Require TPM Chip for Windows Hello Key Storage",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 5,
@@ -5738,7 +5738,7 @@ internal static class PolicyAuth
             {
                 Id = "helloadv-set-minimum-pin-length",
                 Label = "Enforce Minimum PIN Length for Windows Hello Authentication",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -5755,7 +5755,7 @@ internal static class PolicyAuth
             {
                 Id = "helloadv-enable-biometric-authentication",
                 Label = "Enable Biometric Authentication for Windows Hello Sign-in",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -5772,7 +5772,7 @@ internal static class PolicyAuth
             {
                 Id = "helloadv-disable-hello-provisioning-on-shared-pcs",
                 Label = "Disable Windows Hello Provisioning on Shared or Kiosk Devices",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -5789,7 +5789,7 @@ internal static class PolicyAuth
             {
                 Id = "helloadv-enable-certificate-trust",
                 Label = "Enable Certificate Trust Model for Windows Hello for Business",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -5806,7 +5806,7 @@ internal static class PolicyAuth
             {
                 Id = "helloadv-set-pin-expiry",
                 Label = "Set Maximum PIN Expiry Period for Windows Hello Authentication",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -5823,7 +5823,7 @@ internal static class PolicyAuth
             {
                 Id = "helloadv-block-simple-pins",
                 Label = "Block Simple or Sequential PINs for Windows Hello Authentication",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -5840,7 +5840,7 @@ internal static class PolicyAuth
             {
                 Id = "helloadv-enable-remote-unlock",
                 Label = "Enable Remote Unlock Capability for Windows Hello Registered Devices",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -5857,7 +5857,7 @@ internal static class PolicyAuth
             {
                 Id = "helloadv-require-enhanced-anti-spoofing",
                 Label = "Require Enhanced Anti-Spoofing for Windows Hello Facial Recognition",
-                Category = "Authentication & Identity Policy",
+                Category = "User Account",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -5886,7 +5886,7 @@ internal static class PolicyAuth
                 {
                     Id = "wpjoin-disable-auto",
                     Label = "Disable Automatic Workplace Join",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description =
                         "Prevents devices from automatically joining the workplace (Azure AD or on-prem Workplace Join). Requires explicit administrator action to register. Default: 1 (auto). Recommended: 0 (manual only) for managed environments.",
                     Tags = ["workplace-join", "azure-ad", "device-registration", "policy"],
@@ -5903,7 +5903,7 @@ internal static class PolicyAuth
                 {
                     Id = "wpjoin-block-aad",
                     Label = "Block Azure AD Workplace Join",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description =
                         "Prevents users from performing Azure AD Workplace Join on the device. Useful in air-gapped environments or where cloud synchronisation is not permitted. Default: 0. Recommended: 1 for offline/air-gapped networks.",
                     Tags = ["workplace-join", "azure-ad", "block", "cloud", "policy"],
@@ -5920,7 +5920,7 @@ internal static class PolicyAuth
                 {
                     Id = "wpjoin-require-tls",
                     Label = "Require TLS for Workplace Join",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description =
                         "Requires Transport Layer Security (TLS/HTTPS) for all Workplace Join registration traffic. Prevents downgrade to unencrypted registration. Default: not enforced. Recommended: 1.",
                     Tags = ["workplace-join", "tls", "encryption", "transport", "policy"],
@@ -5937,7 +5937,7 @@ internal static class PolicyAuth
                 {
                     Id = "wpjoin-require-integrity-check",
                     Label = "Require Device Integrity Check Before Join",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description =
                         "Requires a device integrity check (TPM attestation or health attestation) before allowing Workplace Join registration. Prevents compromised devices from registering. Default: 0. Recommended: 1.",
                     Tags = ["workplace-join", "integrity", "attestation", "tpm", "policy"],
@@ -5954,7 +5954,7 @@ internal static class PolicyAuth
                 {
                     Id = "wpjoin-require-consent-ui",
                     Label = "Require User Consent for Device Registration",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description =
                         "Presents the user with a consent dialog before the device is registered in the workplace. Prevents silent registration without user awareness. Default: 0. Recommended: 1.",
                     Tags = ["workplace-join", "consent", "user", "registration", "policy"],
@@ -5971,7 +5971,7 @@ internal static class PolicyAuth
                 {
                     Id = "wpjoin-disable-silent-reg",
                     Label = "Disable Silent Device Registration",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description =
                         "Prevents the device from silently registering itself with Azure AD or on-prem directory services without user interaction. Default: 1 (allow silent). Recommended: 0.",
                     Tags = ["workplace-join", "silent", "registration", "policy"],
@@ -5988,7 +5988,7 @@ internal static class PolicyAuth
                 {
                     Id = "wpjoin-limit-max-device-count",
                     Label = "Limit Workplace-Joined Device Count Per User",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description =
                         "Sets the maximum number of devices a user can register in the workplace. Limits lateral spread of identities across many devices. Default: not set. Recommended: 3–5.",
                     Tags = ["workplace-join", "device-limit", "quota", "policy"],
@@ -6005,7 +6005,7 @@ internal static class PolicyAuth
                 {
                     Id = "wpjoin-enable-join-audit",
                     Label = "Enable Workplace Join Audit Logging",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description =
                         "Enables detailed audit logging of all Workplace Join registration and de-registration events. Captures device identity, user, and timestamp for compliance. Default: 0. Recommended: 1.",
                     Tags = ["workplace-join", "audit", "logging", "compliance", "policy"],
@@ -6022,7 +6022,7 @@ internal static class PolicyAuth
                 {
                     Id = "wpjoin-block-non-compliant",
                     Label = "Block Non-Compliant Device Join",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description =
                         "Prevents devices that fail compliance checks from completing Workplace Join registration. Works with Intune or SCCM compliance policies. Default: 0. Recommended: 1 in managed environments.",
                     Tags = ["workplace-join", "compliance", "mdm", "policy"],
@@ -6039,7 +6039,7 @@ internal static class PolicyAuth
                 {
                     Id = "wpjoin-require-secure-channel",
                     Label = "Require Secure Channel for Workplace Join",
-                    Category = "Authentication & Identity Policy",
+                    Category = "User Account",
                     Description =
                         "Requires an established and authenticated secure channel before allowing Workplace Join. Prevents join attempts over untrusted or ad hoc network connections. Default: 0. Recommended: 1.",
                     Tags = ["workplace-join", "secure-channel", "authentication", "network", "policy"],

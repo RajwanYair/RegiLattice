@@ -32,7 +32,7 @@ internal static class PolicyCommunication
             {
                 Id = "confbw-cap-max-video-resolution-720p",
                 Label = "Conferencing BW: Cap Maximum Video Resolution at 720p",
-                Category = "Communication Policy",
+                Category = "Communication",
                 Description = "Sets MaxVideoResolution=540 in Teams policy. Limits outbound camera video to 720p HD (1280x720) per participant rather than allowing uncapped 1080p Full HD. " +
                     "On office networks with multiple concurrent video calls, permitting 1080p per user (3–5 Mbps) versus 720p (1–1.5 Mbps) can triple per-user bandwidth consumption. " +
                     "Capping at 720p maintains good call quality while substantially reducing aggregate bandwidth demand across the org.",
@@ -50,7 +50,7 @@ internal static class PolicyCommunication
             {
                 Id = "confbw-set-max-call-bandwidth-1500kbps",
                 Label = "Conferencing BW: Set Maximum Per-Call Bandwidth to 1500 Kbps",
-                Category = "Communication Policy",
+                Category = "Communication",
                 Description = "Sets MaxCallBitsPerSecond=1500000 (1.5 Mbps) in Teams policy. Sets an absolute ceiling on the total bandwidth consumed by a single Teams audio+video call. " +
                     "At 1.5 Mbps the call can sustain 720p video and high-fidelity audio with comfortable headroom. Without this cap, Teams adaptively scales to fill all available bandwidth including on uncongested gigabit networks, crowding out background file transfers and other services.",
                 Tags = ["teams", "bandwidth", "cap", "qos", "policy"],
@@ -67,7 +67,7 @@ internal static class PolicyCommunication
             {
                 Id = "confbw-set-content-share-bandwidth-500kbps",
                 Label = "Conferencing BW: Set Maximum Content-Sharing Bandwidth to 500 Kbps",
-                Category = "Communication Policy",
+                Category = "Communication",
                 Description = "Sets ContentSharingBitsPerSecond=500000 (500 Kbps) in Teams policy. Limits the bandwidth available for desktop and application sharing streams to 500 Kbps. " +
                     "Screen share generates high-frequency updates on busy screens (IDEs, spreadsheets, PowerPoint animations) which can spike to 10+ Mbps without a cap. " +
                     "500 Kbps delivers smooth sharing for most presentation use cases while preventing screen share from saturating call bandwidth.",
@@ -85,7 +85,7 @@ internal static class PolicyCommunication
             {
                 Id = "confbw-disable-hd-1080p-outbound-video",
                 Label = "Conferencing BW: Disable 1080p Full HD Outbound Video",
-                Category = "Communication Policy",
+                Category = "Communication",
                 Description = "Sets AllowHD1080p=0 in Teams policy. Explicitly disables sending 1080p video from the local camera during Teams meetings. " +
                     "This is a secondary control that works alongside MaxVideoResolution. DisableHD1080p is evaluated at the Teams client layer, while MaxVideoResolution is evaluated by the media negotiation. " +
                     "Setting both prevents 1080p video from being negotiated even on high-capacity links where the resolution cap alone may be overridden.",
@@ -103,7 +103,7 @@ internal static class PolicyCommunication
             {
                 Id = "confbw-set-screen-share-max-framerate-15",
                 Label = "Conferencing BW: Cap Screen-Share Frame Rate at 15 FPS",
-                Category = "Communication Policy",
+                Category = "Communication",
                 Description = "Sets ScreenSharingFrameRate=15 in Teams policy. Reduces the maximum frame rate for Teams desktop and application sharing from the default (up to 30 FPS) to 15 FPS. " +
                     "For typical presentation and document review use cases, 15 FPS is indistinguishable from 30 FPS. The bandwidth saving is proportional: halving frame rate nearly halves the constant stream bitrate for static content and substantially reduces peak rates during screen transitions.",
                 Tags = ["teams", "screenshare", "framerate", "bandwidth", "policy"],
@@ -120,7 +120,7 @@ internal static class PolicyCommunication
             {
                 Id = "confbw-disable-together-mode-video",
                 Label = "Conferencing BW: Disable Together Mode Video Layout",
-                Category = "Communication Policy",
+                Category = "Communication",
                 Description = "Sets AllowTogetherMode=0 in Teams policy. Disables the Together Mode virtual background layout that places all participants in a shared scene. " +
                     "Together Mode requires high-resolution video feeds from all participants and performs client-side compositing. On meetings with 10+ participants this doubles effective video bandwidth versus gallery view. " +
                     "Disabling it is a straightforward bandwidth saving for large meetings on constrained networks.",
@@ -138,7 +138,7 @@ internal static class PolicyCommunication
             {
                 Id = "confbw-disable-panorama-video",
                 Label = "Conferencing BW: Disable Panoramic Room Video",
-                Category = "Communication Policy",
+                Category = "Communication",
                 Description = "Sets AllowPanoramaVideo=0 in Teams policy. Disables the panoramic (wide-angle) room video mode available on Teams Rooms devices. " +
                     "Panoramic video streams require significantly higher resolution and frame rates than standard participant video. For most remote participants, a standard camera view of the room is functionally equivalent. " +
                     "Disabling panoramic saves 30–50% of per-room outbound bandwidth.",
@@ -156,7 +156,7 @@ internal static class PolicyCommunication
             {
                 Id = "confbw-enable-adaptive-bitrate-control",
                 Label = "Conferencing BW: Enable Adaptive Bitrate Control for Calls",
-                Category = "Communication Policy",
+                Category = "Communication",
                 Description = "Sets EnableAdaptiveBitrateForCalling=1 in Teams policy. Enables the Teams adaptive bitrate algorithm to dynamically reduce video quality when packet loss or congestion is detected rather than maintaining maximum quality until the call breaks. " +
                     "Without adaptive bitrate the media engine attempts to hold resolution fixed, which causes burst packet loss and call freezes. With it, video gracefully degrades to audio-only before dropping the call.",
                 Tags = ["teams", "video", "adaptive-bitrate", "resilience", "policy"],
@@ -173,7 +173,7 @@ internal static class PolicyCommunication
             {
                 Id = "confbw-set-auto-degrade-threshold-50pct",
                 Label = "Conferencing BW: Trigger Auto Quality Downgrade at 50% Bandwidth",
-                Category = "Communication Policy",
+                Category = "Communication",
                 Description = "Sets AutoDegradeBandwidthThresholdPercent=50 in Teams policy. Configures the Teams media engine to start downgrading video resolution and frame rate once available bandwidth falls below 50% of the negotiated session maximum. " +
                     "An earlier trigger (50% vs. default 75%) gives the adaptive algorithm more headroom to reduce bitrate before packetloss becomes perceptible, resulting in smoother degradation rather than abrupt quality drops.",
                 Tags = ["teams", "video", "adaptive-bitrate", "degradation", "policy"],
@@ -190,7 +190,7 @@ internal static class PolicyCommunication
             {
                 Id = "confbw-disable-immersive-spaces",
                 Label = "Conferencing BW: Disable Teams Immersive Spaces (3D Metaverse)",
-                Category = "Communication Policy",
+                Category = "Communication",
                 Description = "Sets AllowImmersiveSpaces=0 in Teams policy. Disables the Teams Immersive Spaces feature which renders a 3D virtual meeting environment using the Mesh platform. " +
                     "Immersive Spaces require GPU-accelerated 3D rendering and a dedicated high-bandwidth video stream that is typically 2–4× the bandwidth of a standard gallery view call. " +
                     "Disabling this feature is appropriate for organisations where standard HD video meetings are the expected standard and 3D environments are unnecessary.",
@@ -220,7 +220,7 @@ internal static class PolicyCommunication
             {
                 Id = "confer-disable-meeting-space",
                 Label = "Conferencing Policy: Disable Windows Meeting Space",
-                Category = "Communication Policy",
+                Category = "Communication",
                 Description =
                     "Disables Windows Meeting Space (the Vista/7 peer-to-peer collaboration platform). Meeting Space connects devices via ad-hoc Wi-Fi or Bluetooth without authentication requirements. Disabling it removes a legacy unmanaged collaboration channel from the endpoint.",
                 Tags = ["conferencing", "meeting-space", "p2p", "legacy", "disable", "policy"],
@@ -238,7 +238,7 @@ internal static class PolicyCommunication
             {
                 Id = "confer-disable-peer-invitations",
                 Label = "Conferencing Policy: Disable Peer-to-Peer Meeting Invitations",
-                Category = "Communication Policy",
+                Category = "Communication",
                 Description =
                     "Prevents users from sending or receiving Windows Meeting Space invitations. Ad-hoc peer invitations in Windows Conferencing use People Near Me (PNRP) which broadcasts user presence on the local network without per-session authentication.",
                 Tags = ["conferencing", "invitations", "p2p", "pnrp", "security", "policy"],
@@ -256,7 +256,7 @@ internal static class PolicyCommunication
             {
                 Id = "confer-disable-session-hosting",
                 Label = "Conferencing Policy: Disable Session Hosting for Collaborations",
-                Category = "Communication Policy",
+                Category = "Communication",
                 Description =
                     "Prevents the local machine from acting as a host for Windows Meeting Space sessions. Disabling hosting prevents the machine from accepting incoming PNRP peer connections that are used to establish collaboration sessions without requiring inbound firewall rules.",
                 Tags = ["conferencing", "host", "pnrp", "security", "policy"],
@@ -274,7 +274,7 @@ internal static class PolicyCommunication
             {
                 Id = "confer-disable-remote-app-sharing",
                 Label = "Conferencing Policy: Disable Remote Application Sharing in Conferences",
-                Category = "Communication Policy",
+                Category = "Communication",
                 Description =
                     "Disables the remote application sharing capability within Windows conferencing sessions. Application sharing transmits screen content of individual windows to all session participants without per-participant audit logging.",
                 Tags = ["conferencing", "app-sharing", "remote", "screen", "policy"],
@@ -292,7 +292,7 @@ internal static class PolicyCommunication
             {
                 Id = "confer-disable-document-handouts",
                 Label = "Conferencing Policy: Disable Document Handouts in Conferences",
-                Category = "Communication Policy",
+                Category = "Communication",
                 Description =
                     "Prevents Windows Meeting Space participants from distributing document handouts to other session members. Document handout distribution bypasses DLP controls because files are transferred over the PNRP peer channel rather than email or SharePoint.",
                 Tags = ["conferencing", "documents", "handouts", "dlp", "security", "policy"],
@@ -310,7 +310,7 @@ internal static class PolicyCommunication
             {
                 Id = "confer-block-bandwidth-unlimited",
                 Label = "Conferencing Policy: Enforce Maximum Bandwidth Limit for Sessions",
-                Category = "Communication Policy",
+                Category = "Communication",
                 Description =
                     "Enforces a bandwidth ceiling on Windows Conferencing sessions. Without a policy limit, conferencing sessions can saturate available network bandwidth affecting all other services sharing the network segment.",
                 Tags = ["conferencing", "bandwidth", "limit", "network", "policy"],
@@ -328,7 +328,7 @@ internal static class PolicyCommunication
             {
                 Id = "confer-disable-direct-p2p-connect",
                 Label = "Conferencing Policy: Block Direct Peer-to-Peer Connections",
-                Category = "Communication Policy",
+                Category = "Communication",
                 Description =
                     "Forces Windows Conferencing to route all traffic through a relay server instead of establishing direct peer-to-peer connections. Direct P2P connections bypass network egress monitoring and expose internal IP addressing information to remote participants.",
                 Tags = ["conferencing", "p2p", "relay", "network-monitoring", "policy"],
@@ -346,7 +346,7 @@ internal static class PolicyCommunication
             {
                 Id = "confer-disable-people-near-me",
                 Label = "Conferencing Policy: Disable People Near Me / PNRP Discovery",
-                Category = "Communication Policy",
+                Category = "Communication",
                 Description =
                     "Prevents the machine from broadcasting its presence to other machines on the local network via the People Near Me (PNRP) service used by Windows Conferencing. PNRP presence broadcasts reveal device names, user accounts, and network position to all devices on the subnet.",
                 Tags = ["conferencing", "pnrp", "people-near-me", "discovery", "privacy", "policy"],
@@ -364,7 +364,7 @@ internal static class PolicyCommunication
             {
                 Id = "confer-disable-meeting-autostart",
                 Label = "Conferencing Policy: Disable Windows Meeting Space Autostart",
-                Category = "Communication Policy",
+                Category = "Communication",
                 Description =
                     "Prevents Windows Meeting Space from automatically starting during user logon or when other conferencing-related events are triggered (such as projector connection). Autostart increases the attack surface by leaving the PNRP service active even when the user is not actively collaborating.",
                 Tags = ["conferencing", "autostart", "startup", "pnrp", "policy"],
@@ -382,7 +382,7 @@ internal static class PolicyCommunication
             {
                 Id = "confer-disable-remember-passwords",
                 Label = "Conferencing Policy: Disable Password Storage for Meeting Rooms",
-                Category = "Communication Policy",
+                Category = "Communication",
                 Description =
                     "Prevents Windows Conferencing from storing meeting room passwords in the credential manager or conference history. Cached meeting passwords can be extracted from the Windows credential store, allowing replay attacks against password-protected legacy meeting rooms.",
                 Tags = ["conferencing", "password", "credential-manager", "security", "policy"],
@@ -412,7 +412,7 @@ internal static class PolicyCommunication
             {
                 Id = "netmeet-disable-netmeeting",
                 Label = "NetMeeting Policy: Disable NetMeeting Service",
-                Category = "Communication Policy",
+                Category = "Communication",
                 Description =
                     "Disables Microsoft NetMeeting entirely via the policy key. NetMeeting is a legacy Windows collaboration tool that should be disabled in all modern enterprise environments as it uses unencrypted legacy protocols (T.120, H.323) with no modern authentication support.",
                 Tags = ["netmeeting", "legacy", "collaboration", "disable", "policy"],
@@ -430,7 +430,7 @@ internal static class PolicyCommunication
             {
                 Id = "netmeet-disable-app-sharing",
                 Label = "NetMeeting Policy: Disable Application Sharing",
-                Category = "Communication Policy",
+                Category = "Communication",
                 Description =
                     "Prevents NetMeeting from sharing application windows with remote participants. Application sharing over legacy NetMeeting is unencrypted and allows full control of the shared application without Windows authentication, making it a remote code execution risk.",
                 Tags = ["netmeeting", "app-sharing", "remote", "security", "policy"],
@@ -448,7 +448,7 @@ internal static class PolicyCommunication
             {
                 Id = "netmeet-disable-file-transfer",
                 Label = "NetMeeting Policy: Disable File Transfer via NetMeeting",
-                Category = "Communication Policy",
+                Category = "Communication",
                 Description =
                     "Blocks the NetMeeting file transfer feature that allows participants to send files to each other during a conference. File transfer over NetMeeting bypasses DLP and AV controls and can be used for data exfiltration or malware delivery.",
                 Tags = ["netmeeting", "file-transfer", "dlp", "security", "policy"],
@@ -466,7 +466,7 @@ internal static class PolicyCommunication
             {
                 Id = "netmeet-disable-remote-desktop-sharing",
                 Label = "NetMeeting Policy: Disable Remote Desktop Sharing",
-                Category = "Communication Policy",
+                Category = "Communication",
                 Description =
                     "Disables the Remote Desktop Sharing feature in NetMeeting that allows unattended remote access to a machine. NetMeeting RDS does not require Windows credentials, runs without encryption, and represents a complete remote takeover risk on any network where the port is reachable.",
                 Tags = ["netmeeting", "remote-desktop", "rdp", "rds", "unattended", "policy"],
@@ -484,7 +484,7 @@ internal static class PolicyCommunication
             {
                 Id = "netmeet-disable-whiteboard",
                 Label = "NetMeeting Policy: Disable NetMeeting Whiteboard",
-                Category = "Communication Policy",
+                Category = "Communication",
                 Description =
                     "Disables the shared Whiteboard feature in NetMeeting. The whiteboard transmits screen content without encryption. Disabling it as part of a full NetMeeting hardening profile reduces the attack surface for legacy T.120 data channel exploits.",
                 Tags = ["netmeeting", "whiteboard", "legacy", "t120", "policy"],
@@ -502,7 +502,7 @@ internal static class PolicyCommunication
             {
                 Id = "netmeet-disable-chat",
                 Label = "NetMeeting Policy: Disable NetMeeting Chat",
-                Category = "Communication Policy",
+                Category = "Communication",
                 Description =
                     "Disables the chat feature in NetMeeting. Chat transmits messages in plaintext over the T.120 channel. On modern networks, legacy chat channels are potential exfiltration paths that bypass modern DLP solutions monitoring HTTPS or SMTP.",
                 Tags = ["netmeeting", "chat", "plaintext", "exfiltration", "policy"],
@@ -520,7 +520,7 @@ internal static class PolicyCommunication
             {
                 Id = "netmeet-disable-directory-service",
                 Label = "NetMeeting Policy: Disable ILS Directory Service Registration",
-                Category = "Communication Policy",
+                Category = "Communication",
                 Description =
                     "Prevents NetMeeting from registering the current user with an ILS (Internet Locator Service) directory. ILS directories expose the user's IP address and NetMeeting status to anyone querying the directory server, creating a reconnaissance risk.",
                 Tags = ["netmeeting", "ils", "directory", "registration", "privacy", "policy"],
@@ -538,7 +538,7 @@ internal static class PolicyCommunication
             {
                 Id = "netmeet-disable-audio",
                 Label = "NetMeeting Policy: Disable NetMeeting Audio (VoIP)",
-                Category = "Communication Policy",
+                Category = "Communication",
                 Description =
                     "Disables the audio (VoIP) component of NetMeeting. NetMeeting audio uses unencrypted RTP streams, making all voice content trivially interceptable by any network observer. On corporate networks, all voice comms should be routed through encrypted platforms (Teams, Cisco).",
                 Tags = ["netmeeting", "audio", "voip", "rtp", "encryption", "policy"],
@@ -556,7 +556,7 @@ internal static class PolicyCommunication
             {
                 Id = "netmeet-disable-video",
                 Label = "NetMeeting Policy: Disable NetMeeting Video Conferencing",
-                Category = "Communication Policy",
+                Category = "Communication",
                 Description =
                     "Disables the video conferencing feature of NetMeeting. NetMeeting video streams are unencrypted H.263-over-RTP. Video content captured without encryption on a corporate LAN is a significant information disclosure risk.",
                 Tags = ["netmeeting", "video", "webcam", "h263", "encryption", "policy"],
@@ -574,7 +574,7 @@ internal static class PolicyCommunication
             {
                 Id = "netmeet-disable-incoming-calls",
                 Label = "NetMeeting Policy: Block Incoming NetMeeting Calls",
-                Category = "Communication Policy",
+                Category = "Communication",
                 Description =
                     "Prevents the workstation from accepting incoming NetMeeting calls. Even on systems where NetMeeting is not actively used, the service may be listening on ports 1503/1720 if not explicitly blocked. This policy prevents spontaneous incoming session establishment.",
                 Tags = ["netmeeting", "incoming", "block", "ports", "h323", "policy"],
@@ -604,7 +604,7 @@ internal static class PolicyCommunication
             {
                 Id = "teams-disable-meeting-recording",
                 Label = "Disable Teams Meeting Recording",
-                Category = "Communication Policy",
+                Category = "Communication",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -621,7 +621,7 @@ internal static class PolicyCommunication
             {
                 Id = "teams-disable-anonymous-join",
                 Label = "Disable Anonymous Meeting Join",
-                Category = "Communication Policy",
+                Category = "Communication",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -638,7 +638,7 @@ internal static class PolicyCommunication
             {
                 Id = "teams-disable-anon-start-meeting",
                 Label = "Prevent Anonymous Users from Starting Meetings",
-                Category = "Communication Policy",
+                Category = "Communication",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -655,7 +655,7 @@ internal static class PolicyCommunication
             {
                 Id = "teams-disable-giphy",
                 Label = "Disable Giphy in Teams Chat",
-                Category = "Communication Policy",
+                Category = "Communication",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -672,7 +672,7 @@ internal static class PolicyCommunication
             {
                 Id = "teams-disable-stickers",
                 Label = "Disable Stickers in Teams",
-                Category = "Communication Policy",
+                Category = "Communication",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -689,7 +689,7 @@ internal static class PolicyCommunication
             {
                 Id = "teams-disable-memes",
                 Label = "Disable Meme Images in Teams",
-                Category = "Communication Policy",
+                Category = "Communication",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -706,7 +706,7 @@ internal static class PolicyCommunication
             {
                 Id = "teams-disable-discover-private-channels",
                 Label = "Hide Private Channels from Search",
-                Category = "Communication Policy",
+                Category = "Communication",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -723,7 +723,7 @@ internal static class PolicyCommunication
             {
                 Id = "teams-disable-org-wide-team-creation",
                 Label = "Restrict Org-Wide Team Creation",
-                Category = "Communication Policy",
+                Category = "Communication",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -740,7 +740,7 @@ internal static class PolicyCommunication
             {
                 Id = "teams-set-giphy-rating-strict",
                 Label = "Set Teams Giphy Content to Strict (G-Rated)",
-                Category = "Communication Policy",
+                Category = "Communication",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -757,7 +757,7 @@ internal static class PolicyCommunication
             {
                 Id = "teams-disable-private-calling",
                 Label = "Disable Teams Private Calling",
-                Category = "Communication Policy",
+                Category = "Communication",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -786,7 +786,7 @@ internal static class PolicyCommunication
             {
                 Id = "tmscall-enable-voicemail-routing",
                 Label = "Teams Calling: Enable Voicemail Routing for Missed Calls",
-                Category = "Communication Policy",
+                Category = "Communication",
                 Description = "Sets AllowVoicemail=1 in MicrosoftTeams policy. Enables voicemail as a call routing target when a call is unanswered. " +
                     "Without voicemail routing, unanswered calls drop silently. This is required for Teams Phone users to have a compliant missed-call record and supports call centre audit trails.",
                 Tags = ["teams", "calling", "voicemail", "routing", "policy"],
@@ -803,7 +803,7 @@ internal static class PolicyCommunication
             {
                 Id = "tmscall-enable-shared-line-delegation",
                 Label = "Teams Calling: Enable Boss-Delegate Shared Line Appearance",
-                Category = "Communication Policy",
+                Category = "Communication",
                 Description = "Sets AllowDelegation=1 in MicrosoftTeams policy. Enables shared line appearance (SLA) so a delegate (admin assistant) can answer calls on behalf of an executive. " +
                     "Without this, only direct Teams-to-Teams calls are supported and PSTN delegation is not available to non-admin accounts.",
                 Tags = ["teams", "calling", "delegation", "sla", "policy"],
@@ -820,7 +820,7 @@ internal static class PolicyCommunication
             {
                 Id = "tmscall-enable-call-park-feature",
                 Label = "Teams Calling: Enable Call Park and Retrieve",
-                Category = "Communication Policy",
+                Category = "Communication",
                 Description = "Sets AllowCallPark=1 in MicrosoftTeams policy. Enables the call park feature so users can place an active call on hold and retrieve it from any Teams endpoint. " +
                     "Widely used in healthcare and hospitality environments where calls must be handed off between staff without transferring or dropping.",
                 Tags = ["teams", "calling", "call-park", "enterprise", "policy"],
@@ -837,7 +837,7 @@ internal static class PolicyCommunication
             {
                 Id = "tmscall-disable-external-call-forwarding",
                 Label = "Teams Calling: Block Call Forwarding to External Numbers",
-                Category = "Communication Policy",
+                Category = "Communication",
                 Description = "Sets AllowCallForwardingToExternalNumbers=0 in MicrosoftTeams policy. Prevents users from forwarding Teams calls to external PSTN numbers. " +
                     "This reduces the risk of toll fraud and data exfiltration through forwarded calls, which is a common security concern in regulated financial and legal organisations.",
                 Tags = ["teams", "calling", "forwarding", "security", "policy"],
@@ -854,7 +854,7 @@ internal static class PolicyCommunication
             {
                 Id = "tmscall-enable-busy-on-busy",
                 Label = "Teams Calling: Enable Busy-on-Busy for Active Calls",
-                Category = "Communication Policy",
+                Category = "Communication",
                 Description = "Sets BusyOnBusyEnabled=1 in MicrosoftTeams policy. When a user is already in a Teams call, additional incoming PSTN calls will hear a busy signal instead of ringing through or diverting to voicemail. " +
                     "This gives callers a clear signal and prevents voicemail from filling up during back-to-back meetings.",
                 Tags = ["teams", "calling", "busy", "pstn", "policy"],
@@ -871,7 +871,7 @@ internal static class PolicyCommunication
             {
                 Id = "tmscall-disable-simultaneous-ring-external",
                 Label = "Teams Calling: Block Simultaneous Ring to External Numbers",
-                Category = "Communication Policy",
+                Category = "Communication",
                 Description = "Sets AllowSimultaneousRingToExternalNumbers=0 in MicrosoftTeams policy. Prevents Teams calls from simultaneously ringing external PSTN phone numbers. " +
                     "Similar to blocking external forwarding, this eliminates a toll-fraud vector and prevents users from bypassing corporate monitoring by routing calls to personal mobiles.",
                 Tags = ["teams", "calling", "simultaneous-ring", "security", "policy"],
@@ -888,7 +888,7 @@ internal static class PolicyCommunication
             {
                 Id = "tmscall-enable-call-transcription",
                 Label = "Teams Calling: Enable Automatic Call Transcription",
-                Category = "Communication Policy",
+                Category = "Communication",
                 Description = "Sets AllowTranscriptionForCalling=1 in MicrosoftTeams policy. Enables automatic real-time transcription for Teams PSTN and VoIP calls. " +
                     "Transcripts are stored in Teams call history and can be reviewed for accessibility, compliance, and knowledge capture without requiring a call recorder.",
                 Tags = ["teams", "calling", "transcription", "accessibility", "policy"],
@@ -905,7 +905,7 @@ internal static class PolicyCommunication
             {
                 Id = "tmscall-disable-external-call-transfer",
                 Label = "Teams Calling: Block Blind Transfer to External PSTN Numbers",
-                Category = "Communication Policy",
+                Category = "Communication",
                 Description = "Sets AllowTransferToExternalNumbers=0 in MicrosoftTeams policy. Prevents users from blind-transferring active Teams calls to external PSTN telephone numbers. " +
                     "Complements the external forwarding block. Call transfers bypass recording infrastructure, making this a key control for MiFID II and financial sector compliance.",
                 Tags = ["teams", "calling", "transfer", "compliance", "policy"],
@@ -922,7 +922,7 @@ internal static class PolicyCommunication
             {
                 Id = "tmscall-enable-caller-id-override-policy",
                 Label = "Teams Calling: Enable Caller ID Override Policy",
-                Category = "Communication Policy",
+                Category = "Communication",
                 Description = "Sets CallerIdPolicyEnabled=1 in MicrosoftTeams policy. Allows IT to override the outbound caller ID for Teams PSTN calls. " +
                     "This is needed when multiple departments share a single external number and calls should display a generic department DID rather than the individual user's direct number. Also required to block presentation of personal mobile numbers to external parties.",
                 Tags = ["teams", "calling", "caller-id", "pstn", "policy"],
@@ -939,7 +939,7 @@ internal static class PolicyCommunication
             {
                 Id = "tmscall-enable-music-on-hold",
                 Label = "Teams Calling: Enable Music on Hold for PSTN Calls",
-                Category = "Communication Policy",
+                Category = "Communication",
                 Description = "Sets AllowMusicOnHold=1 in MicrosoftTeams policy. Plays hold music to external PSTN callers when a Teams user places them on hold. " +
                     "Without this, external callers hear silence during hold, leading to call abandonment. Music on hold is a standard business telephony expectation for enterprise PSTN deployments.",
                 Tags = ["teams", "calling", "hold", "pstn", "policy"],
@@ -969,7 +969,7 @@ internal static class PolicyCommunication
                 {
                     Id = "tmsaud-disable-bypass-local-media-optimization",
                     Label = "Teams Audio: Enable Local Media Optimization (Bypass Direct Routing Media Server)",
-                    Category = "Communication Policy",
+                    Category = "Communication",
                     Description =
                         "Sets DisableLocalMediaOptimization=0 in the Teams policy key. Enables Local Media Optimization (LMO) for Teams Phone Direct Routing — when enabled, Teams routes media (audio/video) directly between the SBC (Session Border Controller) and client endpoints that are on the same network, bypassing the Teams media relay server in Microsoft Azure. This dramatically reduces latency for on-premises Teams Phone calls by keeping media traffic local instead of routing via Azure data centres thousands of miles away. LMO is the primary quality improvement for enterprises using Teams Phone with on-premises SBC infrastructure.",
                     Tags = ["teams", "local-media-optimization", "direct-routing", "sbc", "latency"],
@@ -987,7 +987,7 @@ internal static class PolicyCommunication
                 {
                     Id = "tmsaud-require-e2e-media-encryption",
                     Label = "Teams Audio: Require End-to-End Media Encryption for All Teams Calls",
-                    Category = "Communication Policy",
+                    Category = "Communication",
                     Description =
                         "Sets RequireE2EEncryption=1 in the Teams policy key. Requires end-to-end encrypted (E2EE) audio and video for all Teams one-on-one calls. Standard Teams calls use SRTP encryption in transit (client-to-Microsoft-server), but with E2EE the encryption is applied client-to-client and the Teams server cannot decrypt the media streams. E2EE prevents a man-in-the-middle attack at the Microsoft server layer from intercepting meeting audio. E2EE calls do not support recording, transcription, PSTN access, or conference room devices — it is designed specifically for sensitive bilateral conversations.",
                     Tags = ["teams", "e2e-encryption", "srtp", "media-encryption", "end-to-end"],
@@ -1005,7 +1005,7 @@ internal static class PolicyCommunication
                 {
                     Id = "tmsaud-enable-noise-suppression",
                     Label = "Teams Audio: Enable Deep Learning-Based Noise Suppression (AI audio)",
-                    Category = "Communication Policy",
+                    Category = "Communication",
                     Description =
                         "Sets DisableNoiseSuppression=0 in the Teams policy key. Enables the Teams AI-powered noise suppression feature that uses a deep neural network (DNN) to filter background sounds during calls and meetings. The DNN model identifies non-speech audio patterns (keyboard typing, HVAC noise, office background chatter, train/plane noise) and removes them in real time before transmitting audio to other participants. Noise suppression significantly improves call quality in open-plan offices, home environments, and noisy locations.",
                     Tags = ["teams", "noise-suppression", "ai-audio", "dnn", "call-quality"],
@@ -1023,7 +1023,7 @@ internal static class PolicyCommunication
                 {
                     Id = "tmsaud-enable-high-fidelity-audio",
                     Label = "Teams Audio: Enable High Fidelity Music Mode (48 kHz Stereo Audio Codec)",
-                    Category = "Communication Policy",
+                    Category = "Communication",
                     Description =
                         "Sets DisableHighFidelityAudio=0 in the Teams policy key. Enables High Fidelity Audio mode — Teams uses a 48 kHz stereo audio codec (OPUS stereo at ~128 kbps) instead of the default 16 kHz mono speech codec. High Fidelity Audio is critical for Teams meetings that include music playback (instrument demos, music education, virtual concerts, media production reviews) — standard speech-optimised codecs process frequencies up to 8 kHz, which makes music sound muffled. High Fidelity mode passes the full audible range to remote participants.",
                     Tags = ["teams", "high-fidelity-audio", "music-mode", "opus", "48khz"],
@@ -1041,7 +1041,7 @@ internal static class PolicyCommunication
                 {
                     Id = "tmsaud-restrict-meeting-recording-auto-retention",
                     Label = "Teams Audio: Restrict Automatic Meeting Recording Retention to 60 Days",
-                    Category = "Communication Policy",
+                    Category = "Communication",
                     Description =
                         "Sets MeetingRecordingExpirationDays=60 in the Teams policy key. Sets the automatic expiration period for Teams meeting recordings to 60 days. Without an expiration policy, meeting recordings are retained indefinitely in OneDrive/SharePoint — accumulating storage at 300–500 MB per hour of recording. Recordings of regular team meetings rarely need retention beyond 60 days. Sensitive recordings, compliance recordings, and training recordings can be manually marked to retain beyond the default period. 60 days balances storage cost against ad-hoc lookback access requirements.",
                     Tags = ["teams", "meeting-recording", "retention", "expiration", "storage"],
@@ -1059,7 +1059,7 @@ internal static class PolicyCommunication
                 {
                     Id = "tmsaud-disable-third-party-audio-device-telemetry",
                     Label = "Teams Audio: Disable Third-Party Audio Device Telemetry in Teams",
-                    Category = "Communication Policy",
+                    Category = "Communication",
                     Description =
                         "Sets DisableDeviceTelemetry=1 in the Teams policy key. Prevents Teams from transmitting audio device quality telemetry (audio hardware model, driver version, audio quality metrics, audio device firmware) to Microsoft's Teams Quality Analytics platform. While device telemetry is used by Microsoft to improve Teams audio quality diagnostics, in privacy-sensitive environments the audio hardware inventory data may be subject to data governance controls. Disabling telemetry prevents the Teams client from transmitting hardware details to third-party analytics services.",
                     Tags = ["teams", "telemetry", "audio-device", "privacy", "analytics"],
@@ -1077,7 +1077,7 @@ internal static class PolicyCommunication
                 {
                     Id = "tmsaud-enable-call-quality-reporting",
                     Label = "Teams Audio: Enable per-Call Quality Diagnostics Reporting to Teams Admin Centre",
-                    Category = "Communication Policy",
+                    Category = "Communication",
                     Description =
                         "Sets DisableCallQualityReporting=0 in the Teams policy key. Enables per-call quality diagnostics reporting to the Teams admin centre (Call Quality Dashboard — CQD). CQD receives per-call statistics including audio quality metrics (jitter, packet loss, round-trip time), stream quality scores, network path information, and device performance data. The CQD dashboard allows IT to identify poor call quality by building type, user group, network segment, or device model — essential for diagnosing systematic Teams audio quality problems in the enterprise network.",
                     Tags = ["teams", "call-quality", "cqd", "jitter", "packet-loss"],
@@ -1095,7 +1095,7 @@ internal static class PolicyCommunication
                 {
                     Id = "tmsaud-block-third-party-meeting-audio-apps",
                     Label = "Teams Audio: Block Third-Party Audio App Integration in Teams Meetings",
-                    Category = "Communication Policy",
+                    Category = "Communication",
                     Description =
                         "Sets BlockThirdPartyAudioApps=1 in the Teams policy key. Prevents third-party audio applications (Krisp, RTX Voice, NVIDIA RTX Voice, Dolby Voice) from being registered or used as audio processing filters within Teams meetings. Third-party audio apps integrate with Teams via the Windows AudioGraph API or virtual audio device drivers to process mic/speaker audio. While often beneficial for noise suppression, these apps have system-level access to all audio data — in high-security environments, audio filtering apps from third-party vendors may not meet data handling requirements.",
                     Tags = ["teams", "third-party-audio", "audio-filter", "krisp", "audio-app"],
@@ -1113,7 +1113,7 @@ internal static class PolicyCommunication
                 {
                     Id = "tmsaud-set-dynamic-emergency-calling",
                     Label = "Teams Audio: Enable Dynamic Emergency Calling (E911 Location Services)",
-                    Category = "Communication Policy",
+                    Category = "Communication",
                     Description =
                         "Sets EnableDynamicEmergencyCalling=1 in the Teams policy key. Enables dynamic emergency calling for Teams Phone — when a user dials 911 (or equivalent country emergency service number), Teams automatically determines the user's physical location based on network topology (IP subnet, wireless BSSID, chassis ID from LLDP) and sends it to the emergency service. Without dynamic emergency calling, 911 callers' locations may be registered to the main corporate headquarters address regardless of which office they are in, causing emergency responders to be dispatched to the wrong location.",
                     Tags = ["teams", "e911", "emergency-calling", "location", "dynamic-e911"],
@@ -1131,7 +1131,7 @@ internal static class PolicyCommunication
                 {
                     Id = "tmsaud-enable-compliance-recording",
                     Label = "Teams Audio: Enable Compliance Recording Policy Flag (Regulatory Recording Prerequisite)",
-                    Category = "Communication Policy",
+                    Category = "Communication",
                     Description =
                         "Sets EnableComplianceRecording=1 in the Teams policy key. Sets the policy flag marking that this organisation uses Microsoft Teams Compliance Recording (a Teams certified compliance recording solution). Compliance Recording differs from regular meeting recording — it captures all calls and meetings automatically, is tamper-proof, and is retained according to the compliance policy rather than user action. In regulated industries (financial services, healthcare, legal), all communications must be recorded for regulatory compliance. Setting this flag enables the compliance recording infrastructure in the Teams client.",
                     Tags = ["teams", "compliance-recording", "regulatory", "financial-services", "tamper-proof"],
@@ -1160,7 +1160,7 @@ internal static class PolicyCommunication
                 {
                     Id = "tmsmsg-disable-external-chat",
                     Label = "Teams Messaging: Block Chat Messages with External (Federated) Teams Users",
-                    Category = "Communication Policy",
+                    Category = "Communication",
                     Description =
                         "Sets AllowExternalChat=0 in the Teams policy key. Prevents Teams users from initiating or receiving chat messages with external Teams users from other organisations (federation). Teams federation allows users in different Microsoft 365 tenants to message each other directly — this capability creates a potential data exfiltration channel where sensitive information can be transmitted to non-corporate Teams users via chat. In high-security environments, all external collaboration should go through approved collaboration channels with proper DLP controls rather than open federation.",
                     Tags = ["teams", "external-chat", "federation", "dlp", "external-messaging"],
@@ -1178,7 +1178,7 @@ internal static class PolicyCommunication
                 {
                     Id = "tmsmsg-enable-message-immutability",
                     Label = "Teams Messaging: Enable Message Immutability (Prevent User Delete/Edit of Sent Messages)",
-                    Category = "Communication Policy",
+                    Category = "Communication",
                     Description =
                         "Sets AllowUserDeleteChat=0 and AllowUserEditMessage=0 in the Teams policy key. Prevents users from deleting or editing messages after they have been sent in Teams chat and channels. Message immutability is required in regulated industries — in financial services, legal, and healthcare, chat communications must be retained unaltered as a complete record. Allowing message deletion or editing enables users to delete incriminating or non-compliant messages after the fact. This policy ensures that the full chat history is preserved for eDiscovery and compliance review.",
                     Tags = ["teams", "message-immutability", "delete-message", "compliance", "ediscovery"],
@@ -1196,7 +1196,7 @@ internal static class PolicyCommunication
                 {
                     Id = "tmsmsg-disable-giphy-in-chat",
                     Label = "Teams Messaging: Disable Giphy GIF Integration in Teams Chat",
-                    Category = "Communication Policy",
+                    Category = "Communication",
                     Description =
                         "Sets AllowGiphy=0 in the Teams policy key. Disables the Giphy GIF search and insertion feature in Teams chat. The Giphy integration sends search queries to the Giphy CDN (external service) to retrieve GIF content. This creates an implicit data disclosure: search terms typed in the Teams chat GIF search box are transmitted to Giphy's servers. Additionally, GIF content retrieved from Giphy is subject to Giphy's content policies — in professional environments, inappropriate GIFs inserted in public channels can create a hostile work environment compliance risk.",
                     Tags = ["teams", "giphy", "gif", "external-service", "content-moderation"],
@@ -1214,7 +1214,7 @@ internal static class PolicyCommunication
                 {
                     Id = "tmsmsg-disable-memes-in-chat",
                     Label = "Teams Messaging: Disable Meme/Praise Card Creation in Teams Chat",
-                    Category = "Communication Policy",
+                    Category = "Communication",
                     Description =
                         "Sets AllowMemes=0 combined with AllowPraise=0 in the Teams policy key. Disables the built-in meme editor (Meme Generator) and Praise badge cards in Teams chat. The meme generator allows users to create and send image-overlaid text memes in chat — content that may range from benign to potentially offensive or harassment-enabling. Praise cards are appreciation cards with badge icons. In risk-averse enterprise environments where all chat content is subject to legal hold and compliance review, meme content in corporate chat creates legal and policy exposure.",
                     Tags = ["teams", "memes", "praise", "content-moderation", "enterprise-policy"],
@@ -1232,7 +1232,7 @@ internal static class PolicyCommunication
                 {
                     Id = "tmsmsg-enable-priority-notifications",
                     Label = "Teams Messaging: Enable Priority (Urgent) Notifications with Repeated Alerts",
-                    Category = "Communication Policy",
+                    Category = "Communication",
                     Description =
                         "Sets AllowPriorityMessages=1 in the Teams policy key. Enables the Priority Notifications feature in Teams — senders can mark a message as 'Urgent' which causes the notification to repeat every 2 minutes for 20 minutes until the recipient opens the message (or the notification expires). Priority notifications provide a mechanism for genuinely time-critical communications (on-call incidents, security alerts, physical emergency notifications) that need guaranteed attention within minutes. Without priority notifications, all messages are treated equally regardless of urgency.",
                     Tags = ["teams", "priority-notifications", "urgent", "on-call", "incident-response"],
@@ -1250,7 +1250,7 @@ internal static class PolicyCommunication
                 {
                     Id = "tmsmsg-enable-read-receipts",
                     Label = "Teams Messaging: Enable Read Receipts in Teams Chat (Sent/Read Indicators)",
-                    Category = "Communication Policy",
+                    Category = "Communication",
                     Description =
                         "Sets AllowReadReceipts=1 in the Teams policy key. Enables message read receipts in Teams one-on-one chat and small group chats — senders can see which recipients have read their messages (tick mark under message). Read receipts improve communication efficiency by allowing senders to determine whether a recipient has seen a message without needing to ask 'did you see my message?'. This is particularly valuable for hybrid teams where asynchronous communication is common and message delivery confirmation improves workflow coordination.",
                     Tags = ["teams", "read-receipts", "message-delivery", "async-communication", "confirmation"],
@@ -1268,7 +1268,7 @@ internal static class PolicyCommunication
                 {
                     Id = "tmsmsg-disable-meeting-chat-during-meeting",
                     Label = "Teams Messaging: Allow Meeting Chat Only During Meeting (Disable Chat After)",
-                    Category = "Communication Policy",
+                    Category = "Communication",
                     Description =
                         "Sets AllowMeetingChat=1 (1 = enabled during meeting only) in the Teams policy key. Configures meeting chat to be available only during the meeting session. After the meeting ends, the chat thread closes and becomes read-only. Meeting chat threads that remain open post-meeting become informal communication channels where sensitive discussions from the meeting continue outside the meeting context, potentially without proper retention policies. Closing chat after the meeting ensures the meeting context is preserved in the recording/transcript rather than scattered across a chat thread.",
                     Tags = ["teams", "meeting-chat", "post-meeting", "retention", "governance"],
@@ -1286,7 +1286,7 @@ internal static class PolicyCommunication
                 {
                     Id = "tmsmsg-disable-teams-anonymous-join",
                     Label = "Teams Messaging: Disable Anonymous User Join to Teams Meetings",
-                    Category = "Communication Policy",
+                    Category = "Communication",
                     Description =
                         "Sets AllowAnonymousUsersToJoinMeeting=0 in the Teams policy key. Prevents anonymous (unauthenticated) users from joining Teams meetings hosted by this organisation. By default, Teams allows anyone with a meeting link to join without signing in — appearing as 'Joseph (Guest)' or similar. Anonymous join poses security risks: meeting links can be forwarded, posted publicly, or guessed, allowing unintended parties to eavesdrop on meetings. Requiring authentication ensures only intentionally invited users can participate.",
                     Tags = ["teams", "anonymous-join", "meeting-security", "unauthenticated", "meeting-link"],
@@ -1304,7 +1304,7 @@ internal static class PolicyCommunication
                 {
                     Id = "tmsmsg-enable-supervised-chat",
                     Label = "Teams Messaging: Enable Supervised Chat (Educator/Supervisor Oversight Mode)",
-                    Category = "Communication Policy",
+                    Category = "Communication",
                     Description =
                         "Sets SupervisedChatEnabled=1 in the Teams policy key. Enables Supervised Chat mode for Teams — a Teams for Education feature that allows supervisors (teachers, managers) to monitor chat conversations between specific user groups. In supervised chat mode, restricted users (e.g., students, apprentices) can only initiate chats with supervisors — they cannot start direct chats with peers without a supervisor present. For non-education enterprises, supervised chat provides a management layer for compliance monitoring in sensitive departments (trading floors, customer service, healthcare).",
                     Tags = ["teams", "supervised-chat", "education", "monitoring", "compliance"],
@@ -1322,7 +1322,7 @@ internal static class PolicyCommunication
                 {
                     Id = "tmsmsg-disable-teams-consumer-accounts",
                     Label = "Teams Messaging: Block Teams (Free) Personal Consumer Account Chat Federation",
-                    Category = "Communication Policy",
+                    Category = "Communication",
                     Description =
                         "Sets DisableConsumerFederation=1 in the Teams policy key. Blocks Teams Work accounts from messaging Teams Personal (Teams Free/consumer) account users. Microsoft introduced consumer-to-work Teams messaging in 2022 — corporate employees can chat with personal 'Teams Free' account holders. This creates a data governance gap: regulatory and compliance controls on Teams work accounts do not extend to the consumer federation path. Blocking consumer federation ensures that all Teams communications into and out of the organisation go through the governed work account channel.",
                     Tags = ["teams", "consumer-federation", "teams-free", "data-governance", "dlp"],
@@ -1351,7 +1351,7 @@ internal static class PolicyCommunication
             {
                 Id = "telpol-disable-call-telemetry",
                 Label = "Disable Phone Call Telemetry",
-                Category = "Communication Policy",
+                Category = "Communication",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -1368,7 +1368,7 @@ internal static class PolicyCommunication
             {
                 Id = "telpol-block-phone-app",
                 Label = "Block Phone App",
-                Category = "Communication Policy",
+                Category = "Communication",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -1385,7 +1385,7 @@ internal static class PolicyCommunication
             {
                 Id = "telpol-disable-voice-capture",
                 Label = "Disable Voice Capture in Telephony",
-                Category = "Communication Policy",
+                Category = "Communication",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -1402,7 +1402,7 @@ internal static class PolicyCommunication
             {
                 Id = "telpol-disable-phone-integration",
                 Label = "Disable Phone Integration",
-                Category = "Communication Policy",
+                Category = "Communication",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -1419,7 +1419,7 @@ internal static class PolicyCommunication
             {
                 Id = "telpol-disable-callerid-uploads",
                 Label = "Disable Caller ID Upload",
-                Category = "Communication Policy",
+                Category = "Communication",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -1436,7 +1436,7 @@ internal static class PolicyCommunication
             {
                 Id = "telpol-disable-phone-number",
                 Label = "Disable Phone Number Access",
-                Category = "Communication Policy",
+                Category = "Communication",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -1453,7 +1453,7 @@ internal static class PolicyCommunication
             {
                 Id = "telpol-disable-dialer-app",
                 Label = "Disable Dialer Application",
-                Category = "Communication Policy",
+                Category = "Communication",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -1470,7 +1470,7 @@ internal static class PolicyCommunication
             {
                 Id = "telpol-disable-phone-sync-history",
                 Label = "Disable Phone Sync History",
-                Category = "Communication Policy",
+                Category = "Communication",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -1487,7 +1487,7 @@ internal static class PolicyCommunication
             {
                 Id = "telpol-disable-phone-book-access",
                 Label = "Disable Phone Book Access",
-                Category = "Communication Policy",
+                Category = "Communication",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -1504,7 +1504,7 @@ internal static class PolicyCommunication
             {
                 Id = "telpol-disable-incoming-call-notif",
                 Label = "Disable Incoming Call Notification",
-                Category = "Communication Policy",
+                Category = "Communication",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
