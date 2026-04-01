@@ -1,5 +1,5 @@
 // RegiLattice.Core.Tests — LocaleSupplementalTests.cs
-// Supplemental locale coverage for Sprint 108 — extends beyond the 12 tests
+// Supplemental locale coverage — extends beyond the 12 tests
 // already present in ServicesTests.cs:LocaleTests.
 // Covers: Hebrew/Japanese built-ins, LoadLocaleFile(), AvailableLocales count,
 // unknown-locale fallback, hot-cache coherence, and AvailableKeys completeness.
@@ -211,7 +211,7 @@ public sealed class LocaleSupplementalTests : IDisposable
         Assert.Null(ex);
     }
 
-    // ── Sprint 120: expanded key set (200+ keys) ────────────────────────────
+    // ── Expanded key set (200+ keys) ──
 
     [Fact]
     public void AvailableKeys_EnglishHasAtLeast200Keys()

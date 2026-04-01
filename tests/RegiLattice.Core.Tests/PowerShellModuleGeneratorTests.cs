@@ -1,5 +1,5 @@
 // RegiLattice.Core.Tests — PowerShellModuleGeneratorTests.cs
-// Sprint 70 — Phase D1: PowerShell module generator tests.
+// PowerShell module generator tests.
 
 using System;
 using System.IO;

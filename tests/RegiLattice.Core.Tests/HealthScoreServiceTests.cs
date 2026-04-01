@@ -1,5 +1,5 @@
 // tests/RegiLattice.Core.Tests/HealthScoreServiceTests.cs
-// Sprint 62 — HealthScoreService bucket membership and score calculation tests.
+// HealthScoreService bucket membership and score calculation tests.
 
 using RegiLattice.Core;
 using RegiLattice.Core.Models;
@@ -8,7 +8,7 @@ using Xunit;
 
 namespace RegiLattice.Core.Tests;
 
-/// <summary>Tests for Sprint 62: HealthScoreService.</summary>
+/// <summary>HealthScoreService tests.</summary>
 public sealed class HealthScoreServiceTests : IClassFixture<BuiltinsFixture>
 {
     private readonly TweakEngine _engine;
@@ -142,7 +142,7 @@ public sealed class HealthScoreServiceTests : IClassFixture<BuiltinsFixture>
 }
 
 // ── merged from HealthScoreServicePreviewTests.cs ──────────────────────────────────
-/// <summary>Tests for Sprint 71: HealthScoreService.PreviewCategoryImpact.</summary>
+/// <summary>HealthScoreService.PreviewCategoryImpact tests.</summary>
 public sealed class HealthScoreServicePreviewTests : IClassFixture<BuiltinsFixture>
 {
     private readonly TweakEngine _engine;

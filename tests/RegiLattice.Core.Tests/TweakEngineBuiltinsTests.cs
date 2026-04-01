@@ -932,7 +932,7 @@ public sealed class TweakEngineBuiltinsTests : IClassFixture<BuiltinsFixture>
 }
 
 // ── merged from NewTweakModulesTests.cs ──────────────────────────────────
-/// <summary>Tests for Sprint 63: 5 new tweak modules (50 new tweaks total).</summary>
+/// <summary>Tests for new tweak modules (50 new tweaks total).</summary>
 public sealed class NewTweakModulesTests : IClassFixture<BuiltinsFixture>
 {
     private readonly TweakEngine _engine;
@@ -969,7 +969,7 @@ public sealed class NewTweakModulesTests : IClassFixture<BuiltinsFixture>
         var prefixes = new[] { "xbgb-", "hello-", "sac-", "energy-", "cplplus-" };
         var total = engine.AllTweaks().Count(t => prefixes.Any(p => t.Id.StartsWith(p, StringComparison.OrdinalIgnoreCase)));
 
-        Assert.True(total >= 50, $"Expected ≥50 new tweaks across the 5 Sprint 63 modules, but found {total}.");
+        Assert.True(total >= 50, $"Expected ≥50 new tweaks across the 5 new modules, but found {total}.");
     }
 
     // ── All new IDs are globally unique ──────────────────────────────────
@@ -1052,12 +1052,9 @@ public sealed class NewTweakModulesTests : IClassFixture<BuiltinsFixture>
         Assert.Contains(categoryName, categories, StringComparer.OrdinalIgnoreCase);
     }
 
-    // ═══════════════════════════════════════════════════════════════════
-    // Sprint 69 — Phase H: BitLockerAdvanced, AppLockerWdac, HyperVAdvanced,
-    //             WindowsSandboxAdv, PrinterAdvanced (+50 tweaks)
-    // ═══════════════════════════════════════════════════════════════════
+    // ── Advanced Security Modules: BitLockerAdvanced, AppLockerWdac, HyperVAdvanced, WindowsSandboxAdv, PrinterAdvanced
 
-    private static readonly string[] _sprint69Prefixes = ["bitlocker-", "apl-", "hyperv-", "sandbox-", "prnta-"];
+    private static readonly string[] _advancedSecurityPrefixes = ["bitlocker-", "apl-", "hyperv-", "sandbox-", "prnta-"];
 
     [Theory]
     [InlineData("bitlocker-", "BitLocker Advanced", 12)]
@@ -1065,7 +1062,7 @@ public sealed class NewTweakModulesTests : IClassFixture<BuiltinsFixture>
     [InlineData("hyperv-", "Hyper-V Advanced", 10)]
     [InlineData("sandbox-", "Windows Sandbox", 8)]
     [InlineData("prnta-", "Printer Advanced", 10)]
-    public void Sprint69_Module_RegistersExpectedCount(string idPrefix, string moduleName, int minCount)
+    public void AdvancedSecurity_Module_RegistersExpectedCount(string idPrefix, string moduleName, int minCount)
     {
         var engine = BuildEngine();
         var count = engine.AllTweaks().Count(t => t.Id.StartsWith(idPrefix, StringComparison.OrdinalIgnoreCase));
@@ -1074,21 +1071,21 @@ public sealed class NewTweakModulesTests : IClassFixture<BuiltinsFixture>
     }
 
     [Fact]
-    public void Sprint69_AllModules_TotalAtLeastFiftyTweaks()
+    public void AdvancedSecurity_AllModules_TotalAtLeastFiftyTweaks()
     {
         var engine = BuildEngine();
-        var total = engine.AllTweaks().Count(t => _sprint69Prefixes.Any(p => t.Id.StartsWith(p, StringComparison.OrdinalIgnoreCase)));
+        var total = engine.AllTweaks().Count(t => _advancedSecurityPrefixes.Any(p => t.Id.StartsWith(p, StringComparison.OrdinalIgnoreCase)));
 
-        Assert.True(total >= 50, $"Sprint 69 Phase H modules produced {total} tweaks, expected ≥50.");
+        Assert.True(total >= 50, $"Advanced security modules produced {total} tweaks, expected ≥50.");
     }
 
     [Fact]
-    public void Sprint69_AllIdsAreUnique()
+    public void AdvancedSecurity_AllIdsAreUnique()
     {
         var engine = BuildEngine();
         var newIds = engine
             .AllTweaks()
-            .Where(t => _sprint69Prefixes.Any(p => t.Id.StartsWith(p, StringComparison.OrdinalIgnoreCase)))
+            .Where(t => _advancedSecurityPrefixes.Any(p => t.Id.StartsWith(p, StringComparison.OrdinalIgnoreCase)))
             .Select(t => t.Id)
             .ToList();
 
@@ -1097,19 +1094,25 @@ public sealed class NewTweakModulesTests : IClassFixture<BuiltinsFixture>
     }
 
     [Fact]
-    public void Sprint69_AllTweaks_HaveOperations()
+    public void AdvancedSecurity_AllTweaks_HaveOperations()
     {
         var engine = BuildEngine();
-        var newTweaks = engine.AllTweaks().Where(t => _sprint69Prefixes.Any(p => t.Id.StartsWith(p, StringComparison.OrdinalIgnoreCase))).ToList();
+        var newTweaks = engine
+            .AllTweaks()
+            .Where(t => _advancedSecurityPrefixes.Any(p => t.Id.StartsWith(p, StringComparison.OrdinalIgnoreCase)))
+            .ToList();
 
-        Assert.All(newTweaks, t => Assert.True(t.HasOperations, $"Sprint 69 tweak {t.Id} has no operations"));
+        Assert.All(newTweaks, t => Assert.True(t.HasOperations, $"Tweak {t.Id} has no operations"));
     }
 
     [Fact]
-    public void Sprint69_AllTweaks_HaveNonEmptyLabelAndDescription()
+    public void AdvancedSecurity_AllTweaks_HaveNonEmptyLabelAndDescription()
     {
         var engine = BuildEngine();
-        var newTweaks = engine.AllTweaks().Where(t => _sprint69Prefixes.Any(p => t.Id.StartsWith(p, StringComparison.OrdinalIgnoreCase))).ToList();
+        var newTweaks = engine
+            .AllTweaks()
+            .Where(t => _advancedSecurityPrefixes.Any(p => t.Id.StartsWith(p, StringComparison.OrdinalIgnoreCase)))
+            .ToList();
 
         Assert.All(
             newTweaks,
@@ -1125,32 +1128,28 @@ public sealed class NewTweakModulesTests : IClassFixture<BuiltinsFixture>
     [InlineData("Encryption")] // was "BitLocker Advanced" — merged into Encryption
     [InlineData("Application Control Policy")]
     [InlineData("Virtualization")] // was "Hyper-V Advanced" / "Windows Sandbox" — merged into Virtualization
-    public void Sprint69_NewCategories_RegisteredInEngine(string categoryName)
+    public void AdvancedSecurity_NewCategories_RegisteredInEngine(string categoryName)
     {
         var engine = BuildEngine();
         Assert.Contains(categoryName, engine.Categories(), StringComparer.OrdinalIgnoreCase);
     }
 
     [Fact]
-    public void Sprint69_ValidatorReturnsNoErrors()
+    public void AdvancedSecurity_ValidatorReturnsNoErrors()
     {
         var engine = BuildEngine();
-        var newTweaks = engine.AllTweaks().Where(t => _sprint69Prefixes.Any(p => t.Id.StartsWith(p, StringComparison.OrdinalIgnoreCase))).ToList();
+        var newTweaks = engine
+            .AllTweaks()
+            .Where(t => _advancedSecurityPrefixes.Any(p => t.Id.StartsWith(p, StringComparison.OrdinalIgnoreCase)))
+            .ToList();
 
         var errors = TweakValidator.Validate(newTweaks, id => engine.GetTweak(id));
         Assert.Empty(errors);
     }
 
-    // ═══════════════════════════════════════════════════════════════════
-    // Sprints 412-416 — v5.51.0: 5 Edge Policy modules
-    //   EdgePrintAndPdfPolicy      (edgepdp-)   +10
-    //   EdgeSearchAddressBarPolicy (edgesrch-)  +10
-    //   EdgeMediaCapturePolicy     (edgemedia-) +10
-    //   EdgeTrackingProtectionPolicy (edgetrack-) +10
-    //   EdgeInternetExplorerModePolicy (iemode-) +10
-    // ═══════════════════════════════════════════════════════════════════
+    // ── Edge Policy Group A: EdgePrintAndPdf, EdgeSearchAddressBar, EdgeMediaCapture, EdgeTrackingProtection, EdgeInternetExplorerMode
 
-    private static readonly string[] _sprint412Prefixes = ["edgepdp-", "edgesrch-", "edgemedia-", "edgetrack-", "iemode-"];
+    private static readonly string[] _edgePolicyGroupAPrefixes = ["edgepdp-", "edgesrch-", "edgemedia-", "edgetrack-", "iemode-"];
 
     [Theory]
     [InlineData("edgepdp-", "Edge Print & PDF Policy", 10)]
@@ -1158,7 +1157,7 @@ public sealed class NewTweakModulesTests : IClassFixture<BuiltinsFixture>
     [InlineData("edgemedia-", "Edge Media Capture Policy", 10)]
     [InlineData("edgetrack-", "Edge Tracking Protection Policy", 10)]
     [InlineData("iemode-", "Edge IE Mode Policy", 10)]
-    public void Sprint412_Module_RegistersExpectedCount(string idPrefix, string moduleName, int minCount)
+    public void EdgePolicyGroupA_Module_RegistersExpectedCount(string idPrefix, string moduleName, int minCount)
     {
         var count = BuildEngine().AllTweaks().Count(t => t.Id.StartsWith(idPrefix, StringComparison.OrdinalIgnoreCase));
 
@@ -1166,19 +1165,19 @@ public sealed class NewTweakModulesTests : IClassFixture<BuiltinsFixture>
     }
 
     [Fact]
-    public void Sprint412_AllModules_TotalAtLeastFiftyTweaks()
+    public void EdgePolicyGroupA_AllModules_TotalAtLeastFiftyTweaks()
     {
-        var total = BuildEngine().AllTweaks().Count(t => _sprint412Prefixes.Any(p => t.Id.StartsWith(p, StringComparison.OrdinalIgnoreCase)));
+        var total = BuildEngine().AllTweaks().Count(t => _edgePolicyGroupAPrefixes.Any(p => t.Id.StartsWith(p, StringComparison.OrdinalIgnoreCase)));
 
-        Assert.True(total >= 50, $"Sprint 412-416 modules produced {total} tweaks, expected ≥50.");
+        Assert.True(total >= 50, $"Edge policy group A modules produced {total} tweaks, expected ≥50.");
     }
 
     [Fact]
-    public void Sprint412_AllIds_AreUnique()
+    public void EdgePolicyGroupA_AllIds_AreUnique()
     {
         var ids = BuildEngine()
             .AllTweaks()
-            .Where(t => _sprint412Prefixes.Any(p => t.Id.StartsWith(p, StringComparison.OrdinalIgnoreCase)))
+            .Where(t => _edgePolicyGroupAPrefixes.Any(p => t.Id.StartsWith(p, StringComparison.OrdinalIgnoreCase)))
             .Select(t => t.Id)
             .ToList();
 
@@ -1186,22 +1185,22 @@ public sealed class NewTweakModulesTests : IClassFixture<BuiltinsFixture>
     }
 
     [Fact]
-    public void Sprint412_AllTweaks_HaveOperations()
+    public void EdgePolicyGroupA_AllTweaks_HaveOperations()
     {
         var tweaks = BuildEngine()
             .AllTweaks()
-            .Where(t => _sprint412Prefixes.Any(p => t.Id.StartsWith(p, StringComparison.OrdinalIgnoreCase)))
+            .Where(t => _edgePolicyGroupAPrefixes.Any(p => t.Id.StartsWith(p, StringComparison.OrdinalIgnoreCase)))
             .ToList();
 
-        Assert.All(tweaks, t => Assert.True(t.HasOperations, $"Sprint 412-416 tweak {t.Id} has no operations"));
+        Assert.All(tweaks, t => Assert.True(t.HasOperations, $"Tweak {t.Id} has no operations"));
     }
 
     [Fact]
-    public void Sprint412_AllTweaks_HaveNonEmptyLabelDescriptionCategory()
+    public void EdgePolicyGroupA_AllTweaks_HaveNonEmptyLabelDescriptionCategory()
     {
         var tweaks = BuildEngine()
             .AllTweaks()
-            .Where(t => _sprint412Prefixes.Any(p => t.Id.StartsWith(p, StringComparison.OrdinalIgnoreCase)))
+            .Where(t => _edgePolicyGroupAPrefixes.Any(p => t.Id.StartsWith(p, StringComparison.OrdinalIgnoreCase)))
             .ToList();
 
         Assert.All(
@@ -1216,11 +1215,11 @@ public sealed class NewTweakModulesTests : IClassFixture<BuiltinsFixture>
     }
 
     [Fact]
-    public void Sprint412_AllTweaks_HaveImpactAndSafetyScoresInRange()
+    public void EdgePolicyGroupA_AllTweaks_HaveImpactAndSafetyScoresInRange()
     {
         var tweaks = BuildEngine()
             .AllTweaks()
-            .Where(t => _sprint412Prefixes.Any(p => t.Id.StartsWith(p, StringComparison.OrdinalIgnoreCase)))
+            .Where(t => _edgePolicyGroupAPrefixes.Any(p => t.Id.StartsWith(p, StringComparison.OrdinalIgnoreCase)))
             .ToList();
 
         Assert.All(
@@ -1234,13 +1233,13 @@ public sealed class NewTweakModulesTests : IClassFixture<BuiltinsFixture>
     }
 
     [Fact]
-    public void Sprint412_AllTweaks_ApplyOpsTargetEdgePolicyKey()
+    public void EdgePolicyGroupA_AllTweaks_ApplyOpsTargetEdgePolicyKey()
     {
         const string expectedKeyPrefix = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge";
 
         var tweaks = BuildEngine()
             .AllTweaks()
-            .Where(t => _sprint412Prefixes.Any(p => t.Id.StartsWith(p, StringComparison.OrdinalIgnoreCase)))
+            .Where(t => _edgePolicyGroupAPrefixes.Any(p => t.Id.StartsWith(p, StringComparison.OrdinalIgnoreCase)))
             .ToList();
 
         Assert.All(
@@ -1258,21 +1257,24 @@ public sealed class NewTweakModulesTests : IClassFixture<BuiltinsFixture>
     }
 
     [Fact]
-    public void Sprint412_AllTweaks_AreCorpSafe()
+    public void EdgePolicyGroupA_AllTweaks_AreCorpSafe()
     {
         var tweaks = BuildEngine()
             .AllTweaks()
-            .Where(t => _sprint412Prefixes.Any(p => t.Id.StartsWith(p, StringComparison.OrdinalIgnoreCase)))
+            .Where(t => _edgePolicyGroupAPrefixes.Any(p => t.Id.StartsWith(p, StringComparison.OrdinalIgnoreCase)))
             .ToList();
 
         Assert.All(tweaks, t => Assert.True(t.CorpSafe, $"{t.Id} is not CorpSafe (policy tweaks should be CorpSafe=true)"));
     }
 
     [Fact]
-    public void Sprint412_ValidatorReturnsNoErrors()
+    public void EdgePolicyGroupA_ValidatorReturnsNoErrors()
     {
         var engine = BuildEngine();
-        var tweaks = engine.AllTweaks().Where(t => _sprint412Prefixes.Any(p => t.Id.StartsWith(p, StringComparison.OrdinalIgnoreCase))).ToList();
+        var tweaks = engine
+            .AllTweaks()
+            .Where(t => _edgePolicyGroupAPrefixes.Any(p => t.Id.StartsWith(p, StringComparison.OrdinalIgnoreCase)))
+            .ToList();
 
         var errors = TweakValidator.Validate(tweaks, id => engine.GetTweak(id));
         Assert.Empty(errors);
@@ -1280,21 +1282,14 @@ public sealed class NewTweakModulesTests : IClassFixture<BuiltinsFixture>
 
     [Theory]
     [InlineData("Browser Policy")]
-    public void Sprint412_NewCategories_RegisteredInEngine(string categoryName)
+    public void EdgePolicyGroupA_NewCategories_RegisteredInEngine(string categoryName)
     {
         Assert.Contains(categoryName, BuildEngine().Categories(), StringComparer.OrdinalIgnoreCase);
     }
 
-    // ═══════════════════════════════════════════════════════════════════
-    // Sprints 417-421 — v5.52.0: 5 Edge Policy modules
-    //   EdgeSecureBrowsingPolicy             (edgesec-)  +10
-    //   EdgeProfileSignInPolicy              (edgeprof-) +10
-    //   EdgeNotificationsAndPopupPolicy      (edgenotif-) +10
-    //   EdgeDownloadHistoryPolicy            (edgedl-)   +10
-    //   EdgeSmartScreenAndSiteIsolationPolicy (edgessf-) +10
-    // ═══════════════════════════════════════════════════════════════════
+    // ── Edge Policy Group B: EdgeSecureBrowsing, EdgeProfileSignIn, EdgeNotificationsAndPopup, EdgeDownloadHistory, EdgeSmartScreenAndSiteIsolation
 
-    private static readonly string[] _sprint417Prefixes = ["edgesec-", "edgeprof-", "edgenotif-", "edgedl-", "edgessf-"];
+    private static readonly string[] _edgePolicyGroupBPrefixes = ["edgesec-", "edgeprof-", "edgenotif-", "edgedl-", "edgessf-"];
 
     [Theory]
     [InlineData("edgesec-", "Edge Secure Browsing Policy", 10)]
@@ -1302,7 +1297,7 @@ public sealed class NewTweakModulesTests : IClassFixture<BuiltinsFixture>
     [InlineData("edgenotif-", "Edge Notifications & Popup Policy", 10)]
     [InlineData("edgedl-", "Edge Download & History Policy", 10)]
     [InlineData("edgessf-", "Edge SmartScreen & Site Isolation Policy", 10)]
-    public void Sprint417_Module_RegistersExpectedCount(string idPrefix, string moduleName, int minCount)
+    public void EdgePolicyGroupB_Module_RegistersExpectedCount(string idPrefix, string moduleName, int minCount)
     {
         var count = BuildEngine().AllTweaks().Count(t => t.Id.StartsWith(idPrefix, StringComparison.OrdinalIgnoreCase));
 
@@ -1310,19 +1305,19 @@ public sealed class NewTweakModulesTests : IClassFixture<BuiltinsFixture>
     }
 
     [Fact]
-    public void Sprint417_AllModules_TotalAtLeastFiftyTweaks()
+    public void EdgePolicyGroupB_AllModules_TotalAtLeastFiftyTweaks()
     {
-        var total = BuildEngine().AllTweaks().Count(t => _sprint417Prefixes.Any(p => t.Id.StartsWith(p, StringComparison.OrdinalIgnoreCase)));
+        var total = BuildEngine().AllTweaks().Count(t => _edgePolicyGroupBPrefixes.Any(p => t.Id.StartsWith(p, StringComparison.OrdinalIgnoreCase)));
 
-        Assert.True(total >= 50, $"Sprint 417-421 modules produced {total} tweaks, expected ≥50.");
+        Assert.True(total >= 50, $"Edge policy group B modules produced {total} tweaks, expected ≥50.");
     }
 
     [Fact]
-    public void Sprint417_AllIds_AreUnique()
+    public void EdgePolicyGroupB_AllIds_AreUnique()
     {
         var ids = BuildEngine()
             .AllTweaks()
-            .Where(t => _sprint417Prefixes.Any(p => t.Id.StartsWith(p, StringComparison.OrdinalIgnoreCase)))
+            .Where(t => _edgePolicyGroupBPrefixes.Any(p => t.Id.StartsWith(p, StringComparison.OrdinalIgnoreCase)))
             .Select(t => t.Id)
             .ToList();
 
@@ -1330,22 +1325,22 @@ public sealed class NewTweakModulesTests : IClassFixture<BuiltinsFixture>
     }
 
     [Fact]
-    public void Sprint417_AllTweaks_HaveOperations()
+    public void EdgePolicyGroupB_AllTweaks_HaveOperations()
     {
         var tweaks = BuildEngine()
             .AllTweaks()
-            .Where(t => _sprint417Prefixes.Any(p => t.Id.StartsWith(p, StringComparison.OrdinalIgnoreCase)))
+            .Where(t => _edgePolicyGroupBPrefixes.Any(p => t.Id.StartsWith(p, StringComparison.OrdinalIgnoreCase)))
             .ToList();
 
-        Assert.All(tweaks, t => Assert.True(t.HasOperations, $"Sprint 417-421 tweak {t.Id} has no operations"));
+        Assert.All(tweaks, t => Assert.True(t.HasOperations, $"Tweak {t.Id} has no operations"));
     }
 
     [Fact]
-    public void Sprint417_AllTweaks_HaveNonEmptyLabelDescriptionCategory()
+    public void EdgePolicyGroupB_AllTweaks_HaveNonEmptyLabelDescriptionCategory()
     {
         var tweaks = BuildEngine()
             .AllTweaks()
-            .Where(t => _sprint417Prefixes.Any(p => t.Id.StartsWith(p, StringComparison.OrdinalIgnoreCase)))
+            .Where(t => _edgePolicyGroupBPrefixes.Any(p => t.Id.StartsWith(p, StringComparison.OrdinalIgnoreCase)))
             .ToList();
 
         Assert.All(
@@ -1360,11 +1355,11 @@ public sealed class NewTweakModulesTests : IClassFixture<BuiltinsFixture>
     }
 
     [Fact]
-    public void Sprint417_AllTweaks_HaveImpactAndSafetyScoresInRange()
+    public void EdgePolicyGroupB_AllTweaks_HaveImpactAndSafetyScoresInRange()
     {
         var tweaks = BuildEngine()
             .AllTweaks()
-            .Where(t => _sprint417Prefixes.Any(p => t.Id.StartsWith(p, StringComparison.OrdinalIgnoreCase)))
+            .Where(t => _edgePolicyGroupBPrefixes.Any(p => t.Id.StartsWith(p, StringComparison.OrdinalIgnoreCase)))
             .ToList();
 
         Assert.All(
@@ -1378,13 +1373,13 @@ public sealed class NewTweakModulesTests : IClassFixture<BuiltinsFixture>
     }
 
     [Fact]
-    public void Sprint417_AllTweaks_ApplyOpsTargetEdgePolicyKey()
+    public void EdgePolicyGroupB_AllTweaks_ApplyOpsTargetEdgePolicyKey()
     {
         const string expectedKeyPrefix = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge";
 
         var tweaks = BuildEngine()
             .AllTweaks()
-            .Where(t => _sprint417Prefixes.Any(p => t.Id.StartsWith(p, StringComparison.OrdinalIgnoreCase)))
+            .Where(t => _edgePolicyGroupBPrefixes.Any(p => t.Id.StartsWith(p, StringComparison.OrdinalIgnoreCase)))
             .ToList();
 
         Assert.All(
@@ -1402,30 +1397,30 @@ public sealed class NewTweakModulesTests : IClassFixture<BuiltinsFixture>
     }
 
     [Fact]
-    public void Sprint417_AllTweaks_AreCorpSafe()
+    public void EdgePolicyGroupB_AllTweaks_AreCorpSafe()
     {
         var tweaks = BuildEngine()
             .AllTweaks()
-            .Where(t => _sprint417Prefixes.Any(p => t.Id.StartsWith(p, StringComparison.OrdinalIgnoreCase)))
+            .Where(t => _edgePolicyGroupBPrefixes.Any(p => t.Id.StartsWith(p, StringComparison.OrdinalIgnoreCase)))
             .ToList();
 
         Assert.All(tweaks, t => Assert.True(t.CorpSafe, $"{t.Id} is not CorpSafe (Edge policy tweaks should be CorpSafe=true)"));
     }
 
     [Fact]
-    public void Sprint417_AllTweaks_NoCrossModuleIdCollisionWithSprint412()
+    public void EdgePolicyGroupB_AllTweaks_NoCrossModuleIdCollisionWithSprint412()
     {
         var s412Ids = new HashSet<string>(
             BuildEngine()
                 .AllTweaks()
-                .Where(t => _sprint412Prefixes.Any(p => t.Id.StartsWith(p, StringComparison.OrdinalIgnoreCase)))
+                .Where(t => _edgePolicyGroupAPrefixes.Any(p => t.Id.StartsWith(p, StringComparison.OrdinalIgnoreCase)))
                 .Select(t => t.Id),
             StringComparer.OrdinalIgnoreCase
         );
 
         var s417Ids = BuildEngine()
             .AllTweaks()
-            .Where(t => _sprint417Prefixes.Any(p => t.Id.StartsWith(p, StringComparison.OrdinalIgnoreCase)))
+            .Where(t => _edgePolicyGroupBPrefixes.Any(p => t.Id.StartsWith(p, StringComparison.OrdinalIgnoreCase)))
             .Select(t => t.Id)
             .ToList();
 
@@ -1434,10 +1429,13 @@ public sealed class NewTweakModulesTests : IClassFixture<BuiltinsFixture>
     }
 
     [Fact]
-    public void Sprint417_ValidatorReturnsNoErrors()
+    public void EdgePolicyGroupB_ValidatorReturnsNoErrors()
     {
         var engine = BuildEngine();
-        var tweaks = engine.AllTweaks().Where(t => _sprint417Prefixes.Any(p => t.Id.StartsWith(p, StringComparison.OrdinalIgnoreCase))).ToList();
+        var tweaks = engine
+            .AllTweaks()
+            .Where(t => _edgePolicyGroupBPrefixes.Any(p => t.Id.StartsWith(p, StringComparison.OrdinalIgnoreCase)))
+            .ToList();
 
         var errors = TweakValidator.Validate(tweaks, id => engine.GetTweak(id));
         Assert.Empty(errors);
@@ -1445,7 +1443,7 @@ public sealed class NewTweakModulesTests : IClassFixture<BuiltinsFixture>
 
     [Theory]
     [InlineData("Browser Policy")]
-    public void Sprint417_NewCategories_RegisteredInEngine(string categoryName)
+    public void EdgePolicyGroupB_NewCategories_RegisteredInEngine(string categoryName)
     {
         Assert.Contains(categoryName, BuildEngine().Categories(), StringComparer.OrdinalIgnoreCase);
     }
@@ -1455,9 +1453,9 @@ public sealed class NewTweakModulesTests : IClassFixture<BuiltinsFixture>
     /// path — a common copy-paste bug where the detect op targets the wrong registry key.
     /// </summary>
     [Fact]
-    public void Sprints412To421_AllDetectOps_HaveNonEmptyPath()
+    public void EdgePolicyAllGroups_AllDetectOps_HaveNonEmptyPath()
     {
-        var allPrefixes = _sprint412Prefixes.Concat(_sprint417Prefixes).ToArray();
+        var allPrefixes = _edgePolicyGroupAPrefixes.Concat(_edgePolicyGroupBPrefixes).ToArray();
         var tweaks = BuildEngine().AllTweaks().Where(t => allPrefixes.Any(p => t.Id.StartsWith(p, StringComparison.OrdinalIgnoreCase))).ToList();
 
         Assert.All(tweaks, t => Assert.All(t.DetectOps, op => Assert.False(string.IsNullOrWhiteSpace(op.Path), $"{t.Id}: DetectOp has empty Path")));
@@ -1468,9 +1466,9 @@ public sealed class NewTweakModulesTests : IClassFixture<BuiltinsFixture>
     /// PATH\ValueName combination (intra-batch duplicate registry ops).
     /// </summary>
     [Fact]
-    public void Sprints412To421_NoIntraBatchDuplicateRegistryOps()
+    public void EdgePolicyAllGroups_NoIntraBatchDuplicateRegistryOps()
     {
-        var allPrefixes = _sprint412Prefixes.Concat(_sprint417Prefixes).ToArray();
+        var allPrefixes = _edgePolicyGroupAPrefixes.Concat(_edgePolicyGroupBPrefixes).ToArray();
         var tweaks = BuildEngine().AllTweaks().Where(t => allPrefixes.Any(p => t.Id.StartsWith(p, StringComparison.OrdinalIgnoreCase))).ToList();
 
         var seen = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
@@ -1493,7 +1491,7 @@ public sealed class NewTweakModulesTests : IClassFixture<BuiltinsFixture>
 }
 
 // ── merged from PolicyModulesV574Tests.cs ──────────────────────────────────
-/// <summary>Tests for the 94 new policy modules added in v5.74.0 (Sprints 437-531).</summary>
+/// <summary>Tests for the 94 new policy modules added in v5.74.0.</summary>
 public sealed class PolicyModulesV574Tests : IClassFixture<BuiltinsFixture>
 {
     private readonly TweakEngine _engine;
@@ -1506,102 +1504,102 @@ public sealed class PolicyModulesV574Tests : IClassFixture<BuiltinsFixture>
     /// Each new policy module must register at least 10 tweaks with its canonical ID prefix.
     /// </summary>
     [Theory]
-    // Sprint 437-441 — Network Security
+    // Network Security
     [InlineData("fwadv-", "DefenderFirewallAdvanced")]
     [InlineData("ipsecpol-", "IpsecRule")]
     [InlineData("nlapol-", "NetworkLocationAwareness")]
     [InlineData("dohpol-", "DohEnforcement")]
     [InlineData("proxbyp-", "ProxyBypass")]
-    // Sprint 442-446 — Clipboard
+    // Clipboard
     [InlineData("clipadv-", "ClipboardHistoryAdvanced")]
     [InlineData("cliprdp-", "ClipboardRdpRedirection")]
     [InlineData("shrdclip-", "SharedClipboardControl")]
     [InlineData("uniclip-", "UniversalClipboardSync")]
     [InlineData("clipsens-", "ClipboardSensitivity")]
-    // Sprint 447-451 — PowerShell / Terminal
+    // PowerShell / Terminal
     [InlineData("termadv-", "WindowsTerminalAdvanced")]
     [InlineData("ps7exec-", "Ps7ExecutionMode")]
     [InlineData("isedep-", "IseDeprecation")]
     [InlineData("sbloga-", "ScriptBlockLoggingAdvanced")]
     [InlineData("psjea-", "RemotePsJea")]
-    // Sprint 452-456 — Edge
+    // Edge (WebView2, AppGuard, SleepingTabs, SiteIsolation, EarlyHints)
     [InlineData("wv2pol-", "EdgeWebView2")]
     [InlineData("eaguard-", "EdgeAppGuard")]
     [InlineData("edgsleep-", "EdgeSleepingTabs")]
     [InlineData("edgiso-", "EdgeSiteIsolation")]
     [InlineData("edgehint-", "EdgeEarlyHints")]
-    // Sprint 457-461 — Azure AD / Entra
+    // Azure AD / Entra
     [InlineData("aadca-", "AzureAdConditionalAccess")]
     [InlineData("entrareg-", "EntraDeviceRegistration")]
     [InlineData("aadprt-", "AzureAdPrtSso")]
     [InlineData("aadsspr-", "AzureAdSspr")]
     [InlineData("hjdns-", "HybridJoinDns")]
-    // Sprint 462-466 — VBS / Security Isolation
+    // VBS / Security Isolation
     [InlineData("vbsenf-", "VbsEnforcement")]
     [InlineData("hvci-", "Hvci")]
     [InlineData("sldrtm-", "SecureLaunchDrtm")]
     [InlineData("sgrm-", "SystemGuardRuntime")]
     [InlineData("kdmapol-", "KernelDmaProtection")]
-    // Sprint 467-471 — WSA / Android
+    // WSA / Android
     [InlineData("wsacore-", "WsaAndroid")]
     [InlineData("wsadbg-", "AndroidAppDebugging")]
     [InlineData("wsanet-", "WsaNetworkIsolation")]
     [InlineData("wsasnsr-", "AndroidSensorAccess")]
     [InlineData("wsastor-", "WsaStorage")]
-    // Sprint 472-476 — Print Stack
+    // Print Stack
     [InlineData("spladv-", "PrintSpoolerAdvanced")]
     [InlineData("pdrv-", "PrinterDriverIsolation")]
     [InlineData("inetprt-", "InternetPrinting")]
     [InlineData("wsdprt-", "WsdPrintDiscovery")]
     [InlineData("ippevy-", "IppEverywhere")]
-    // Sprint 477-481 — Auth / Identity
+    // Auth / Identity
     [InlineData("whfbpin-", "WhfbPin")]
     [InlineData("pwdless-", "PasswordlessSignIn")]
     [InlineData("biometric-", "BiometricAuth")]
     [InlineData("wpd-", "PortableDevice")]
     [InlineData("cbapol-", "CertificateBasedAuth")]
-    // Sprint 482-486 — AI / Recall
+    // AI / Recall
     [InlineData("rcsnap-", "RecallAiSnapshot")]
     [InlineData("copnpu-", "CopilotPlusNpu")]
     [InlineData("aipol-", "WindowsAiPlatform")]
     [InlineData("aimod-", "AiContentModeration")]
     [InlineData("copsbar-", "CopilotSidebar")]
-    // Sprint 487-491 — Storage Advanced
+    // Storage Advanced
     [InlineData("sspol-", "StorageSpaces")]
     [InlineData("refspol-", "RefsFs")]
     [InlineData("dquota-", "DiskQuotaAdvanced")]
     [InlineData("vdspol-", "VirtualDiskService")]
     [InlineData("stobus-", "StorageBus")]
-    // Sprint 492-496 — Event Logging
+    // Event Logging
     [InlineData("evtchan-", "EventLogChannel")]
     [InlineData("wecpol-", "EventSubscription")]
     [InlineData("wefsubpol-", "WefSubscription")]
     [InlineData("etwses-", "EtwSession")]
-    // Sprint 497-501 — Network / NIC
+    // Network / NIC
     [InlineData("netbridge-", "NetworkBridge")]
     [InlineData("lltdpol-", "LltdProtocol")]
     [InlineData("nicteam-", "NicTeaming")]
     [InlineData("nlaadv-", "NetLocationAwarenessAdvanced")]
-    // Sprint 502-506 — Defender Suite
+    // Defender Suite
     [InlineData("ssadv-", "SmartScreenAdvanced")]
     [InlineData("avadv-", "DefenderAntivirusAdvanced")]
     [InlineData("egpol-", "ExploitGuard")]
     [InlineData("alockadv-", "AppLockerAdvanced")]
     [InlineData("fwprof-", "FirewallProfileHardening")]
-    // Sprint 507-511 — Fonts
+    // Fonts
     [InlineData("fontpol-", "FontInstallation")]
     [InlineData("otfpol-", "OpenTypeSecurity")]
     [InlineData("gdipol-", "GdiRenderer")]
-    // Sprint 512-516 — DirectX / GPU
+    // DirectX / GPU
     [InlineData("d3dpol-", "DirectXRendering")]
     [InlineData("gpucmp-", "GpuCompute")]
     [InlineData("wddmpol-", "WddmDriver")]
     [InlineData("gamebar-", "GameBar")]
-    // Sprint 517-521 — Xbox / Gaming
+    // Xbox / Gaming
     [InlineData("xboxnet-", "XboxNetworking")]
-    // Sprint 522-526 — MS Store
+    // MS Store
     [InlineData("storepol-", "MicrosoftStore")]
-    // Sprint 527-531 — Containers / Virtualization
+    // Containers / Virtualization
     [InlineData("sbpol-", "WindowsSandbox")]
     [InlineData("hvcon-", "HyperVContainer")]
     [InlineData("wsl2adv-", "Wsl2Advanced")]

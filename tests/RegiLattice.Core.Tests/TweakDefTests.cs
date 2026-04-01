@@ -680,7 +680,7 @@ public sealed class RegOpExtendedTests
         Assert.Equal("", op.Name);
     }
 
-    // ── Sprint 21: Coverage boost — ComputeScope, GetExpectedResult, Kind detection ──
+    // ── Coverage boost — ComputeScope, GetExpectedResult, Kind detection ──
 
     [Fact]
     public void Scope_HKCR_ReturnsMachine()
@@ -1013,7 +1013,7 @@ public sealed class RegOpExtendedTests
 }
 
 // ── merged from TweakDefMetadataTests.cs ──────────────────────────────────
-/// <summary>Tests for Sprint 57: ImpactScore and SafetyRating metadata fields.</summary>
+/// <summary>ImpactScore and SafetyRating metadata field tests.</summary>
 public sealed class TweakDefMetadataTests
 {
     private static TweakDef MakeWithOps(string id = "meta-test") =>
@@ -1154,7 +1154,7 @@ public sealed class TweakDefMetadataTests
 }
 // ── merged from TweakDefPropertyTests.cs ──────────────────────────────────
 /// <summary>
-/// Sprint 73 — Universal invariant / property tests.
+/// Universal invariant / property tests.
 /// Each test verifies a structural property that must hold across ALL registered tweaks.
 /// Failing here means a regression in the tweak corpus or engine, not just a single tweak.
 /// </summary>
@@ -1432,7 +1432,7 @@ public sealed class TweakDefPropertyTests
 
 // ── merged from TweakDefBranchCoverageTests.cs ──────────────────────────────────
 /// <summary>
-/// Sprint 111 — Targets the 20 uncovered category-note switch arms in
+/// Targets the 20 uncovered category-note switch arms in
 /// <c>TweakDef.GenerateExpectedResult()</c> and the 2 uncovered restart-note
 /// branches (RegistryKeys-driven, NeedsAdmin=false).
 /// Each test exercises exactly one previously untested branch.

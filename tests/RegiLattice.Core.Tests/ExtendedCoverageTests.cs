@@ -1,5 +1,5 @@
 // tests/RegiLattice.Core.Tests/BranchCoverage7Tests.cs
-// Sprint 121 — BC7: Additional branch coverage to reach ≥75% (1738/2317).
+// Additional branch coverage.
 // Targeting 12 uncovered branches identified from cov121f Cobertura XML analysis.
 
 #nullable enable

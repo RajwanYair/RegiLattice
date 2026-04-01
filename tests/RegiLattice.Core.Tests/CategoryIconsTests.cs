@@ -1,6 +1,6 @@
 // RegiLattice.Core.Tests — CategoryIconsTests.cs
 // Tests for CategoryIcons.GetIcon, GetSymbol, GetKindSymbol (ZERO previous coverage).
-// Sprint 24 — complete coverage of the static helper.
+// Complete coverage of the static helper.
 
 #nullable enable
 

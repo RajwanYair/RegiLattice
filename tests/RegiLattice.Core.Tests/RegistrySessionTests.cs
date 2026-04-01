@@ -426,7 +426,7 @@ public sealed class RegistrySessionTests
         Assert.Equal(@"*\shell", subKey);
     }
 
-    // ── Sprint 21: Coverage boost — DryRun ops, Execute dispatch, Evaluate, ParsePath, Events ──
+    // ── DryRun ops, Execute dispatch, Evaluate, ParsePath, Events ──
 
     [Fact]
     public void DryRun_SetExpandString_IncrementsCounter()
@@ -669,11 +669,11 @@ public sealed class RegistrySessionTests
     }
 }
 
-// ── Sprint 24: CheckValueMatch branches, ReadQword/Binary/MultiSz/Value ────
+// ── CheckValueMatch branches, ReadQword/Binary/MultiSz/Value ──
 
-public sealed class RegistrySessionSprint24Tests : IDisposable
+public sealed class RegistrySessionAdditionalTests : IDisposable
 {
-    private const string TestKey = @"HKEY_CURRENT_USER\Software\RegiLattice\TestTemp_Sprint24";
+    private const string TestKey = @"HKEY_CURRENT_USER\Software\RegiLattice\TestTemp";
 
     public void Dispose()
     {

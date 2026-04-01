@@ -772,7 +772,7 @@ public sealed class PluginTests
 
 // ── PackSignatureVerifier tests (T7.3) ──────────────────────────────────────
 
-/// <summary>Tests for RSA-SHA256 pack signature verification (Sprint 131, T7.3).</summary>
+/// <summary>Tests for RSA-SHA256 pack signature verification.</summary>
 public sealed class PackSignatureVerifierTests
 {
     private const string SamplePackJson = """{"name":"test","version":"1.0.0","author":"A","tweaks":[]}""";
@@ -956,7 +956,7 @@ public sealed class PackSignatureVerifierTests
 
 /// <summary>
 /// Tests for <see cref="PluginSandbox"/>: DTO conversions, JSON protocol
-/// serialization, and failure handling (Sprint 132–133).
+/// serialization, and failure handling .
 /// </summary>
 public sealed class PluginSandboxTests
 {

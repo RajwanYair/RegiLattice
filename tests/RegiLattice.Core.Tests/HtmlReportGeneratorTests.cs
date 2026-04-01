@@ -1,5 +1,5 @@
 // tests/RegiLattice.Core.Tests/HtmlReportGeneratorTests.cs
-// Sprint 72 — HtmlReportGenerator tests.
+// HtmlReportGenerator tests.
 
 #nullable enable
 
@@ -10,7 +10,7 @@ using Xunit;
 
 namespace RegiLattice.Core.Tests;
 
-/// <summary>Tests for Sprint 72: HtmlReportGenerator.</summary>
+/// <summary>HtmlReportGenerator tests.</summary>
 public sealed class HtmlReportGeneratorTests : IClassFixture<BuiltinsFixture>
 {
     private readonly TweakEngine _engine;

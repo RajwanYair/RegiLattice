@@ -1,5 +1,5 @@
 // RegiLattice.Core.Tests — ComplianceHistoryTests.cs
-// Unit tests for ComplianceHistory (Sprint 108).
+// Unit tests for ComplianceHistory.
 // ComplianceHistory persists ComplianceReport results to a rolling JSON log,
 // capped at MaxEntries (90). Tests use file-system isolation: the history file
 // is deleted before and after each test to prevent cross-test contamination.

@@ -1,5 +1,5 @@
 // tests/RegiLattice.Core.Tests/ComplianceServiceTests.cs
-// Sprint 72 — ComplianceService tests.
+// ComplianceService tests.
 
 #nullable enable
 
@@ -9,7 +9,7 @@ using Xunit;
 
 namespace RegiLattice.Core.Tests;
 
-/// <summary>Tests for Sprint 72: ComplianceService check logic.</summary>
+/// <summary>ComplianceService check logic tests.</summary>
 public sealed class ComplianceServiceTests : IClassFixture<BuiltinsFixture>
 {
     private readonly TweakEngine _engine;
