@@ -16,6 +16,9 @@ public partial class MainForm : Form
     private readonly TweakEngine _engine = new();
     private CancellationTokenSource _cts = new();
 
+    // In-session undo/redo stack (D1 — command-pattern undo/redo).
+    private readonly TweakOperationStack _opStack = new();
+
     // Cached status per tweak ID — refreshed on demand.
     private Dictionary<string, TweakResult> _statusCache = [];
 
@@ -255,6 +258,7 @@ public partial class MainForm : Form
         _btnRefresh.Text = Locale.T("toolbar_refresh");
         _btnSettings.Text = "\u2699 " + Locale.T("toolbar_settings");
         _btnUndoLast.Text = "\u21A9 " + Locale.T("toolbar_undo");
+        _btnRedo.Text = "\u21AA " + Locale.T("toolbar_redo");
         _filterLabel.Text = Locale.T("label_filter");
         _profileLabel.Text = Locale.T("label_profile");
         _scopeLabel.Text = Locale.T("label_scope");
@@ -808,6 +812,9 @@ public partial class MainForm : Form
                 {
                     _pendingRebootIds.Add(id);
                     AppendLog($"\u2705 Applied: {id} — pending reboot/restart to take effect");
+                    var td2 = _engine.GetTweak(id);
+                    if (td2 is not null)
+                        _opStack.Push(new TweakOperation(id, td2.Label, OperationKind.Apply, DateTimeOffset.Now));
                 }
                 else
                 {
@@ -882,7 +889,12 @@ public partial class MainForm : Form
                 _statusCache[id] = _engine.DetectStatus(_engine.GetTweak(id)!);
                 _pendingRebootIds.Remove(id);
                 if (result == TweakResult.NotApplied)
+                {
                     AppendLog($"\u2705 Removed: {id}");
+                    var td2 = _engine.GetTweak(id);
+                    if (td2 is not null)
+                        _opStack.Push(new TweakOperation(id, td2.Label, OperationKind.Remove, DateTimeOffset.Now));
+                }
                 else
                     AppendLog($"\u274C Remove failed: {id} — {result}");
             }
@@ -1723,7 +1735,7 @@ public partial class MainForm : Form
         _btnApply.Enabled = !busy;
         _btnRemove.Enabled = !busy;
         _btnRefresh.Enabled = !busy;
-        _btnUndoLast.Enabled = !busy && TweakHistory.Count > 0;
+        UpdateUndoRedoButtons(!busy);
         if (message is not null)
             SetStatus(message);
         else if (!busy)
@@ -1866,22 +1878,59 @@ public partial class MainForm : Form
 
     private async void OnRemoveClicked(object? sender, EventArgs e) => await RemoveSelectedAsync();
 
+    /// <summary>Updates undo/redo button enabled-state and tooltips from the in-session op-stack.</summary>
+    private void UpdateUndoRedoButtons(bool interactive = true)
+    {
+        _btnUndoLast.Enabled = interactive && _opStack.CanUndo;
+        _btnRedo.Enabled = interactive && _opStack.CanRedo;
+
+        if (_opStack.PeekUndo is TweakOperation undo)
+        {
+            string ago = FormatAgo(undo.ExecutedAt);
+            _btnUndoLast.ToolTipText = $"Undo: {undo.Label} ({ago}) — Ctrl+Z";
+        }
+        else
+        {
+            _btnUndoLast.ToolTipText = "Nothing to undo";
+        }
+
+        if (_opStack.PeekRedo is TweakOperation redo)
+        {
+            string ago = FormatAgo(redo.ExecutedAt);
+            _btnRedo.ToolTipText = $"Redo: {redo.Label} ({ago}) — Ctrl+Y";
+        }
+        else
+        {
+            _btnRedo.ToolTipText = "Nothing to redo";
+        }
+    }
+
+    private static string FormatAgo(DateTimeOffset ts)
+    {
+        var elapsed = DateTimeOffset.Now - ts;
+        return elapsed.TotalSeconds < 60 ? $"{(int)elapsed.TotalSeconds}s ago"
+            : elapsed.TotalMinutes < 60 ? $"{(int)elapsed.TotalMinutes} min ago"
+            : $"{(int)elapsed.TotalHours}h ago";
+    }
+
     private async Task OnUndoLastAsync()
     {
-        var recent = TweakHistory.Recent(1);
-        if (recent.Count == 0)
+        TweakOperation? popped = _opStack.Undo();
+        if (popped is null)
         {
             SetStatus("Nothing to undo.");
+            UpdateUndoRedoButtons();
             return;
         }
 
-        HistoryEntry last = recent[0];
-        TweakDef? tweak = _engine.AllTweaks().FirstOrDefault(t => t.Id.Equals(last.TweakId, StringComparison.OrdinalIgnoreCase));
+        TweakOperation op = popped.Value;
+        TweakDef? tweak = _engine.GetTweak(op.TweakId);
 
         if (tweak is null)
         {
-            SetStatus($"Tweak '{last.TweakId}' not found \u2014 cannot undo.");
-            AppendLog($"\u26A0 Undo skipped: tweak '{last.TweakId}' is not registered.");
+            SetStatus($"Tweak '{op.TweakId}' not found \u2014 cannot undo.");
+            AppendLog($"\u26A0 Undo skipped: tweak '{op.TweakId}' is not registered.");
+            UpdateUndoRedoButtons();
             return;
         }
 
@@ -1890,16 +1939,13 @@ public partial class MainForm : Form
         if (!_logPanel.Visible)
             _logPanel.Visible = true;
 
-        string inverseLabel = last.Action.Equals("apply", StringComparison.OrdinalIgnoreCase) ? "removing" : "re-applying";
-        AppendLog($"\u21A9 Undoing last op \u2014 {inverseLabel} '{tweak.Label}' ({tweak.Id})");
+        string inverseLabel = op.Kind == OperationKind.Apply ? "removing" : "re-applying";
+        AppendLog($"\u21A9 Undoing \u2014 {inverseLabel} '{tweak.Label}' ({tweak.Id})");
         SetBusy(true, $"Undoing: {tweak.Label}\u2026", totalSteps: 1);
         try
         {
             var result = await Task.Run(
-                () =>
-                    last.Action.Equals("apply", StringComparison.OrdinalIgnoreCase)
-                        ? _engine.Remove(tweak, forceCorp: force)
-                        : _engine.Apply(tweak, forceCorp: force),
+                () => op.Kind == OperationKind.Apply ? _engine.Remove(tweak, forceCorp: force) : _engine.Apply(tweak, forceCorp: force),
                 _cts.Token
             );
 
@@ -1921,7 +1967,65 @@ public partial class MainForm : Form
         finally
         {
             SetBusy(false);
-            _btnUndoLast.Enabled = TweakHistory.Count > 0;
+            UpdateUndoRedoButtons();
+        }
+    }
+
+    private async Task OnRedoAsync()
+    {
+        TweakOperation? popped = _opStack.Redo();
+        if (popped is null)
+        {
+            SetStatus("Nothing to redo.");
+            UpdateUndoRedoButtons();
+            return;
+        }
+
+        TweakOperation op = popped.Value;
+        TweakDef? tweak = _engine.GetTweak(op.TweakId);
+
+        if (tweak is null)
+        {
+            SetStatus($"Tweak '{op.TweakId}' not found \u2014 cannot redo.");
+            AppendLog($"\u26A0 Redo skipped: tweak '{op.TweakId}' is not registered.");
+            UpdateUndoRedoButtons();
+            return;
+        }
+
+        bool force = _forceCheck.Checked;
+
+        if (!_logPanel.Visible)
+            _logPanel.Visible = true;
+
+        string actionLabel = op.Kind == OperationKind.Apply ? "re-applying" : "removing";
+        AppendLog($"\u21AA Redoing \u2014 {actionLabel} '{tweak.Label}' ({tweak.Id})");
+        SetBusy(true, $"Redoing: {tweak.Label}\u2026", totalSteps: 1);
+        try
+        {
+            var result = await Task.Run(
+                () => op.Kind == OperationKind.Apply ? _engine.Apply(tweak, forceCorp: force) : _engine.Remove(tweak, forceCorp: force),
+                _cts.Token
+            );
+
+            _statusCache[tweak.Id] = _engine.DetectStatus(tweak);
+            PopulateTree();
+            RefreshListView();
+            UpdateCounters();
+
+            string icon = result is TweakResult.Applied or TweakResult.NotApplied ? "\u2705" : "\u26A0";
+            AppendLog($"{icon} Redo result for '{tweak.Id}': {result}");
+            SetStatus($"Redo complete: {tweak.Label} \u2192 {result}");
+        }
+        catch (OperationCanceledException) { }
+        catch (Exception ex)
+        {
+            SetStatus($"Redo error: {ex.Message}");
+            AppendLog($"\u274C Redo error: {ex.Message}");
+        }
+        finally
+        {
+            SetBusy(false);
+            UpdateUndoRedoButtons();
         }
     }
 
@@ -2359,6 +2463,13 @@ public partial class MainForm : Form
         if (e.Control && e.KeyCode == Keys.Z && _btnUndoLast.Enabled)
         {
             _ = OnUndoLastAsync();
+            e.Handled = true;
+            return;
+        }
+        // Ctrl+Y — redo last undone operation
+        if (e.Control && e.KeyCode == Keys.Y && _btnRedo.Enabled)
+        {
+            _ = OnRedoAsync();
             e.Handled = true;
             return;
         }
