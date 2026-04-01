@@ -101,9 +101,9 @@ internal static class Program
         if (a.HwInfo)
             return RunHwInfo();
         if (a.ListProfiles)
-            return RunListProfiles();
+            return RunListProfiles(a);
         if (a.ListUserProfiles)
-            return RunListUserProfiles();
+            return RunListUserProfiles(a);
         if (a.ProfileCreate is not null)
             return RunProfileCreate(a);
         if (a.ProfileDelete is not null)
@@ -125,7 +125,7 @@ internal static class Program
         if (a.Report)
             return RunReport(a);
         if (a.Check)
-            return RunCheck();
+            return RunCheck(a);
         if (a.Diff is not null)
             return RunDiff(a.Diff);
         if (a.DependsOn is not null)
@@ -187,7 +187,7 @@ internal static class Program
 
         // Positional: mode + tweak
         if (a.Mode == "status" && a.Tweak is not null)
-            return RunStatus(a.Tweak);
+            return RunStatus(a);
         if (a.Mode == "update" && a.Tweak is not null)
             return RunUpdate(a);
         if (a.Mode is "apply" or "remove" && a.Tweak is not null)
@@ -295,8 +295,19 @@ internal static class Program
 
     // ── List profiles ───────────────────────────────────────────────────
 
-    private static int RunListProfiles()
+    private static int RunListProfiles(CliArgs a)
     {
+        if (a.OutputFormat == "json")
+        {
+            var allProfiles = TweakEngine.Profiles
+                .Select(p => new ProfileInfo(p.Name, p.Description, _engine.TweaksForProfile(p.Name).Count, "builtin"))
+                .Concat(UserProfileService.GetProfiles()
+                    .Select(p => new ProfileInfo(p.Name, p.Description, p.TweakIds.Count, "user")))
+                .ToList();
+            Console.WriteLine(JsonSerializer.Serialize(allProfiles, new JsonSerializerOptions { WriteIndented = true }));
+            return 0;
+        }
+
         Console.WriteLine($"{"Profile",-12} {"Tweaks",-8} Description");
         Console.WriteLine(new string('-', 60));
         foreach (var p in TweakEngine.Profiles)
@@ -320,9 +331,22 @@ internal static class Program
 
     // ── User-profile management (Sprint 127) ────────────────────────────
 
-    private static int RunListUserProfiles()
+    private static int RunListUserProfiles(CliArgs a)
     {
         var profiles = UserProfileService.GetProfiles();
+        if (a.OutputFormat == "json")
+        {
+            var data = profiles.Select(up => new
+            {
+                up.Name,
+                up.Description,
+                TweakCount = up.TweakIds.Count,
+                CreatedAt = up.CreatedAt.ToUniversalTime().ToString("o"),
+            });
+            Console.WriteLine(JsonSerializer.Serialize(data, new JsonSerializerOptions { WriteIndented = true }));
+            return 0;
+        }
+
         if (profiles.Count == 0)
         {
             Console.WriteLine("No user-defined profiles found.");
@@ -655,11 +679,25 @@ internal static class Program
 
     // ── Check (audit) ───────────────────────────────────────────────────
 
-    private static int RunCheck()
+    private static int RunCheck(CliArgs a)
     {
-        Console.Write("Checking");
+        if (a.OutputFormat != "json")
+            Console.Write("Checking");
         var smap = _engine.StatusMap(parallel: true);
-        Console.WriteLine(" done.");
+        if (a.OutputFormat != "json")
+            Console.WriteLine(" done.");
+
+        if (a.OutputFormat == "json")
+        {
+            var data = smap.OrderBy(kv => kv.Key).Select(kv => new
+            {
+                Id = kv.Key,
+                Status = kv.Value.ToString(),
+                Label = _engine.GetTweak(kv.Key)?.Label,
+            });
+            Console.WriteLine(JsonSerializer.Serialize(data, new JsonSerializerOptions { WriteIndented = true }));
+            return 0;
+        }
 
         int applied = smap.Count(kv => kv.Value == TweakResult.Applied);
         int def = smap.Count(kv => kv.Value == TweakResult.NotApplied);
@@ -981,7 +1019,7 @@ internal static class Program
         if (!a.Force && CorporateGuard.IsCorporateNetwork())
         {
             Console.WriteLine("\U0001f6d1 Corporate network detected. Use --force to override.");
-            return 6;
+            return 4;
         }
 
         var targets = _engine.TweaksForProfile(a.Profile!);
@@ -1027,7 +1065,7 @@ internal static class Program
         if (!a.Force && CorporateGuard.IsCorporateNetwork())
         {
             Console.WriteLine("\U0001f6d1 Corporate network detected. Use --force to override.");
-            return 6;
+            return 4;
         }
 
         string label = $"{(a.Mode == "apply" ? "Apply" : "Remove")} {catTweaks.Count} tweaks in '{a.Category}'";
@@ -1070,7 +1108,7 @@ internal static class Program
         if (!a.Force && CorporateGuard.IsCorporateNetwork())
         {
             Console.WriteLine("\U0001f6d1 Corporate network detected. Use --force to override.");
-            return 6;
+            return 4;
         }
 
         List<string>? ids;
@@ -1147,16 +1185,24 @@ internal static class Program
 
     // ── Status ──────────────────────────────────────────────────────────
 
-    private static int RunStatus(string tweakId)
+    private static int RunStatus(CliArgs a)
     {
-        var td = _engine.GetTweak(tweakId);
+        var td = _engine.GetTweak(a.Tweak!);
         if (td is null)
         {
-            Console.WriteLine($"\u274c Unknown tweak '{tweakId}'.");
+            Console.WriteLine($"\u274c Unknown tweak '{a.Tweak}'.");
             return 2;
         }
         var status = _engine.DetectStatus(td);
-        Console.WriteLine($"{td.Label}: {status}");
+        if (a.OutputFormat == "json")
+        {
+            var data = new { td.Id, td.Label, td.Category, Status = status.ToString(), td.NeedsAdmin, td.CorpSafe };
+            Console.WriteLine(JsonSerializer.Serialize(data, new JsonSerializerOptions { WriteIndented = true }));
+        }
+        else
+        {
+            Console.WriteLine($"{td.Label}: {status}");
+        }
         return 0;
     }
 
@@ -1167,7 +1213,7 @@ internal static class Program
         if (!a.Force && CorporateGuard.IsCorporateNetwork())
         {
             Console.WriteLine("\U0001f6d1 Corporate network detected. Use --force to override.");
-            return 6;
+            return 4;
         }
 
         bool isApply = a.Mode == "apply";
@@ -1226,7 +1272,12 @@ internal static class Program
         else if (result is TweakResult.Error)
             Analytics.RecordError(td.Id);
 
-        if (_session.DryRun)
+        if (a.OutputFormat == "json")
+        {
+            var data = new { td.Id, td.Label, Mode = a.Mode, Status = result.ToString(), DryRun = _session.DryRun };
+            Console.WriteLine(JsonSerializer.Serialize(data, new JsonSerializerOptions { WriteIndented = true }));
+        }
+        else if (_session.DryRun)
             Console.WriteLine($"\U0001f50d Dry-run: {td.Label} — {result} ({_session.DryOps} ops skipped).");
         else
             Console.WriteLine($"\u2705 {td.Label}: {result}");
@@ -1241,7 +1292,7 @@ internal static class Program
         if (!a.Force && CorporateGuard.IsCorporateNetwork())
         {
             Console.WriteLine("\U0001f6d1 Corporate network detected. Use --force to override.");
-            return 6;
+            return 4;
         }
 
         var td = _engine.GetTweak(a.Tweak!);
@@ -1688,7 +1739,7 @@ internal static class Program
         if (!a.Force && CorporateGuard.IsCorporateNetwork())
         {
             Console.WriteLine("\U0001f6d1 Corporate network detected. Use --force to override.");
-            return 6;
+            return 4;
         }
 
         string label = $"Apply {validIds.Count} tweaks from config '{config.Name}'";
@@ -2186,6 +2237,7 @@ internal static class Program
               1  One or more operations failed
               2  Bad arguments / tweak or profile not found
               3  Administrator privileges required
+              4  Corporate network guard blocked the operation (use --force to override)
             """
         );
     }
@@ -2696,10 +2748,14 @@ internal static class Program
     private static string PlatformSummaryStatic() => $".NET {Environment.Version} | {RuntimeInformation.OSDescription}";
 }
 
+// ── B2: Profile serialisation DTO ────────────────────────────────────────────
+/// <summary>Lightweight DTO for --list-profiles --output json output.</summary>
+internal sealed record ProfileInfo(string Name, string Description, int TweakCount, string Type);
+
 // ── B5: Stable exit codes ─────────────────────────────────────────────────────
 /// <summary>
 /// Stable exit codes for scripting and automation.
-/// Uses 0/1/2/3 matching common POSIX conventions and the help text contract.
+/// Uses 0/1/2/3/4 matching common POSIX conventions and the help text contract.
 /// </summary>
 internal static class ExitCodes
 {
@@ -2714,4 +2770,7 @@ internal static class ExitCodes
 
     /// <summary>Administrator privileges required for one or more operations.</summary>
     public const int AdminRequired = 3;
+
+    /// <summary>Corporate network guard blocked the operation. Use --force to override.</summary>
+    public const int CorpGuardBlocked = 4;
 }

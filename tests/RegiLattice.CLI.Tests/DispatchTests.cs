@@ -1233,3 +1233,298 @@ public sealed class RunExportRegTests(DispatchTestFixture fixture) : DispatchTes
         }
     }
 }
+
+// ─────────────────────────────────────────────────────────────────────────────
+// A3: B2 Contract — JSON output: status command
+// ─────────────────────────────────────────────────────────────────────────────
+
+[Collection("CliDispatch")]
+public sealed class B2ContractTests_Status(DispatchTestFixture fixture) : DispatchTestBase(fixture)
+{
+    [Fact]
+    public void Dispatch_Status_Json_IsValidJson()
+    {
+        Program.Dispatch(new CliArgs { Mode = "status", Tweak = DispatchTestFixture.KnownId, OutputFormat = "json" });
+        Assert.True(IsValidJson(Output), $"Expected valid JSON, got: {Output}");
+    }
+
+    [Fact]
+    public void Dispatch_Status_Json_ContainsIdField()
+    {
+        Program.Dispatch(new CliArgs { Mode = "status", Tweak = DispatchTestFixture.KnownId, OutputFormat = "json" });
+        using var doc = JsonDocument.Parse(Output.Trim());
+        Assert.True(doc.RootElement.TryGetProperty("Id", out _), "JSON missing 'Id' field");
+    }
+
+    [Fact]
+    public void Dispatch_Status_Json_ContainsStatusField()
+    {
+        Program.Dispatch(new CliArgs { Mode = "status", Tweak = DispatchTestFixture.KnownId, OutputFormat = "json" });
+        using var doc = JsonDocument.Parse(Output.Trim());
+        Assert.True(doc.RootElement.TryGetProperty("Status", out _), "JSON missing 'Status' field");
+    }
+
+    [Fact]
+    public void Dispatch_Status_Json_IdMatchesRequested()
+    {
+        Program.Dispatch(new CliArgs { Mode = "status", Tweak = DispatchTestFixture.KnownId, OutputFormat = "json" });
+        using var doc = JsonDocument.Parse(Output.Trim());
+        Assert.Equal(DispatchTestFixture.KnownId, doc.RootElement.GetProperty("Id").GetString());
+    }
+
+    [Fact]
+    public void Dispatch_Status_UnknownTweak_Returns2()
+    {
+        int exit = Program.Dispatch(new CliArgs { Mode = "status", Tweak = "zzz-does-not-exist-zzz" });
+        Assert.Equal(2, exit);
+    }
+
+    [Fact]
+    public void Dispatch_Status_Table_ReturnsZero()
+    {
+        int exit = Program.Dispatch(new CliArgs { Mode = "status", Tweak = DispatchTestFixture.KnownId });
+        Assert.Equal(0, exit);
+    }
+
+    private static bool IsValidJson(string s)
+    {
+        try { JsonDocument.Parse(s.Trim()); return true; }
+        catch { return false; }
+    }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// A3: B2 Contract — JSON output: apply command
+// ─────────────────────────────────────────────────────────────────────────────
+
+[Collection("CliDispatch")]
+public sealed class B2ContractTests_Apply(DispatchTestFixture fixture) : DispatchTestBase(fixture)
+{
+    [Fact]
+    public void Dispatch_Apply_Json_IsValidJson()
+    {
+        // Force=true bypasses CorporateGuard so the test is environment-independent
+        int exit = Program.Dispatch(new CliArgs { Mode = "apply", Tweak = DispatchTestFixture.KnownId, AssumeYes = true, Force = true, OutputFormat = "json" });
+        Assert.Equal(0, exit);
+        Assert.True(IsValidJson(Output), $"Expected valid JSON, got: {Output}");
+    }
+
+    [Fact]
+    public void Dispatch_Apply_Json_ContainsIdField()
+    {
+        Program.Dispatch(new CliArgs { Mode = "apply", Tweak = DispatchTestFixture.KnownId, AssumeYes = true, Force = true, OutputFormat = "json" });
+        using var doc = JsonDocument.Parse(Output.Trim());
+        Assert.True(doc.RootElement.TryGetProperty("Id", out _), "JSON missing 'Id' field");
+    }
+
+    [Fact]
+    public void Dispatch_Apply_Json_IdMatchesRequested()
+    {
+        Program.Dispatch(new CliArgs { Mode = "apply", Tweak = DispatchTestFixture.KnownId, AssumeYes = true, Force = true, OutputFormat = "json" });
+        using var doc = JsonDocument.Parse(Output.Trim());
+        Assert.Equal(DispatchTestFixture.KnownId, doc.RootElement.GetProperty("Id").GetString());
+    }
+
+    [Fact]
+    public void Dispatch_Apply_Json_ModeIsApply()
+    {
+        Program.Dispatch(new CliArgs { Mode = "apply", Tweak = DispatchTestFixture.KnownId, AssumeYes = true, Force = true, OutputFormat = "json" });
+        using var doc = JsonDocument.Parse(Output.Trim());
+        Assert.Equal("apply", doc.RootElement.GetProperty("Mode").GetString());
+    }
+
+    [Fact]
+    public void Dispatch_Apply_UnknownTweak_Returns2()
+    {
+        // Force=true bypasses CorporateGuard so tweak-not-found (exit 2) is tested
+        int exit = Program.Dispatch(new CliArgs { Mode = "apply", Tweak = "zzz-no-such-tweak-zzz", AssumeYes = true, Force = true });
+        Assert.Equal(2, exit);
+    }
+
+    private static bool IsValidJson(string s)
+    {
+        try { JsonDocument.Parse(s.Trim()); return true; }
+        catch { return false; }
+    }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// A3: B2 Contract — JSON output: list-profiles command
+// ─────────────────────────────────────────────────────────────────────────────
+
+[Collection("CliDispatch")]
+public sealed class B2ContractTests_ListProfiles(DispatchTestFixture fixture) : DispatchTestBase(fixture)
+{
+    [Fact]
+    public void Dispatch_ListProfiles_Json_IsValidJson()
+    {
+        Program.Dispatch(new CliArgs { ListProfiles = true, OutputFormat = "json" });
+        Assert.True(IsValidJson(Output), $"Expected valid JSON from --list-profiles, got: {Output}");
+    }
+
+    [Fact]
+    public void Dispatch_ListProfiles_Json_IsArray()
+    {
+        Program.Dispatch(new CliArgs { ListProfiles = true, OutputFormat = "json" });
+        using var doc = JsonDocument.Parse(Output.Trim());
+        Assert.Equal(JsonValueKind.Array, doc.RootElement.ValueKind);
+    }
+
+    [Fact]
+    public void Dispatch_ListProfiles_Json_ContainsNameField()
+    {
+        Program.Dispatch(new CliArgs { ListProfiles = true, OutputFormat = "json" });
+        using var doc = JsonDocument.Parse(Output.Trim());
+        var first = doc.RootElement.EnumerateArray().First();
+        Assert.True(first.TryGetProperty("Name", out _), "JSON profile object missing 'Name' field");
+    }
+
+    [Fact]
+    public void Dispatch_ListProfiles_Json_ContainsTweakCountField()
+    {
+        Program.Dispatch(new CliArgs { ListProfiles = true, OutputFormat = "json" });
+        using var doc = JsonDocument.Parse(Output.Trim());
+        var first = doc.RootElement.EnumerateArray().First();
+        Assert.True(first.TryGetProperty("TweakCount", out _), "JSON profile object missing 'TweakCount' field");
+    }
+
+    [Fact]
+    public void Dispatch_ListProfiles_Json_ContainsAllBuiltinProfiles()
+    {
+        Program.Dispatch(new CliArgs { ListProfiles = true, OutputFormat = "json" });
+        var names = Output.ToLowerInvariant();
+        Assert.Contains("gaming", names);
+        Assert.Contains("privacy", names);
+        Assert.Contains("minimal", names);
+        Assert.Contains("business", names);
+        Assert.Contains("server", names);
+    }
+
+    private static bool IsValidJson(string s)
+    {
+        try { JsonDocument.Parse(s.Trim()); return true; }
+        catch { return false; }
+    }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// A3: B2 Contract — JSON output: check command
+// ─────────────────────────────────────────────────────────────────────────────
+
+[Collection("CliDispatch")]
+public sealed class B2ContractTests_Check(DispatchTestFixture fixture) : DispatchTestBase(fixture)
+{
+    [Fact]
+    public void Dispatch_Check_Json_IsValidJson()
+    {
+        Program.Dispatch(new CliArgs { Check = true, OutputFormat = "json" });
+        Assert.True(IsValidJson(Output), $"Expected valid JSON from --check, got: {Output}");
+    }
+
+    [Fact]
+    public void Dispatch_Check_Json_IsArray()
+    {
+        Program.Dispatch(new CliArgs { Check = true, OutputFormat = "json" });
+        using var doc = JsonDocument.Parse(Output.Trim());
+        Assert.Equal(JsonValueKind.Array, doc.RootElement.ValueKind);
+    }
+
+    [Fact]
+    public void Dispatch_Check_Json_EachItemHasIdAndStatus()
+    {
+        Program.Dispatch(new CliArgs { Check = true, OutputFormat = "json" });
+        using var doc = JsonDocument.Parse(Output.Trim());
+        foreach (var item in doc.RootElement.EnumerateArray())
+        {
+            Assert.True(item.TryGetProperty("Id", out _), "Check JSON item missing 'Id'");
+            Assert.True(item.TryGetProperty("Status", out _), "Check JSON item missing 'Status'");
+        }
+    }
+
+    [Fact]
+    public void Dispatch_Check_Table_ReturnsZero()
+    {
+        int exit = Program.Dispatch(new CliArgs { Check = true });
+        Assert.Equal(0, exit);
+    }
+
+    private static bool IsValidJson(string s)
+    {
+        try { JsonDocument.Parse(s.Trim()); return true; }
+        catch { return false; }
+    }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// A3: B2 Contract — exit code constants
+// ─────────────────────────────────────────────────────────────────────────────
+
+[Collection("CliDispatch")]
+public sealed class B2ContractTests_ExitCodes(DispatchTestFixture fixture) : DispatchTestBase(fixture)
+{
+    [Fact]
+    public void ExitCodes_Success_Is0()
+    {
+        Assert.Equal(0, ExitCodes.Success);
+    }
+
+    [Fact]
+    public void ExitCodes_PartialFail_Is1()
+    {
+        Assert.Equal(1, ExitCodes.PartialFail);
+    }
+
+    [Fact]
+    public void ExitCodes_UserError_Is2()
+    {
+        Assert.Equal(2, ExitCodes.UserError);
+    }
+
+    [Fact]
+    public void ExitCodes_AdminRequired_Is3()
+    {
+        Assert.Equal(3, ExitCodes.AdminRequired);
+    }
+
+    [Fact]
+    public void ExitCodes_CorpGuardBlocked_Is4()
+    {
+        Assert.Equal(4, ExitCodes.CorpGuardBlocked);
+    }
+
+    [Fact]
+    public void Dispatch_UnknownTweak_Apply_Returns2()
+    {
+        // Force=true bypasses CorporateGuard so tweak-not-found (exit 2) is tested
+        int exit = Program.Dispatch(new CliArgs { Mode = "apply", Tweak = "zzz-nonexistent-zzz", AssumeYes = true, Force = true });
+        Assert.Equal(2, exit);
+    }
+
+    [Fact]
+    public void Dispatch_UnknownTweak_Status_Returns2()
+    {
+        int exit = Program.Dispatch(new CliArgs { Mode = "status", Tweak = "zzz-nonexistent-zzz" });
+        Assert.Equal(2, exit);
+    }
+
+    [Fact]
+    public void Dispatch_Stats_Returns0()
+    {
+        int exit = Program.Dispatch(new CliArgs { Stats = true });
+        Assert.Equal(0, exit);
+    }
+
+    [Fact]
+    public void Dispatch_Validate_Returns0()
+    {
+        int exit = Program.Dispatch(new CliArgs { Validate = true });
+        Assert.Equal(0, exit);
+    }
+
+    [Fact]
+    public void Dispatch_List_Returns0()
+    {
+        int exit = Program.Dispatch(new CliArgs { ShowList = true });
+        Assert.Equal(0, exit);
+    }
+}
