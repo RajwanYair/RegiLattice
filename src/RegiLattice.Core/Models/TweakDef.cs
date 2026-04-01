@@ -160,8 +160,9 @@ public sealed class TweakDef
     /// </summary>
     public string ImpactNote { get; init; } = "";
 
-    /// <summary>How this tweak performs its work (auto-detected if KindHint not set).</summary>
-    public TweakKind Kind => KindHint ?? (ApplyAction is not null ? TweakKind.PowerShell : DetectKindFromOps());
+    /// <summary>How this tweak performs its work (auto-detected if KindHint not set, cached).</summary>
+    public TweakKind Kind => _kind ??= KindHint ?? (ApplyAction is not null ? TweakKind.PowerShell : DetectKindFromOps());
+    private TweakKind? _kind;
 
     /// <summary>Whether this tweak has any operations defined (not a stub).</summary>
     public bool HasOperations => ApplyOps.Count > 0 || ApplyAction is not null;
@@ -195,8 +196,10 @@ public sealed class TweakDef
         return TweakScope.Machine;
     }
 
-    /// <summary>Returns ExpectedResult if explicitly set, otherwise auto-generates from metadata.</summary>
-    public string GetExpectedResult() => ExpectedResult.Length > 0 ? ExpectedResult : GenerateExpectedResult();
+    /// <summary>Returns ExpectedResult if explicitly set, otherwise auto-generates from metadata (cached).</summary>
+    public string GetExpectedResult() => _cachedExpectedResult ??= (ExpectedResult.Length > 0 ? ExpectedResult : GenerateExpectedResult());
+
+    private string? _cachedExpectedResult;
 
     private string GenerateExpectedResult()
     {
