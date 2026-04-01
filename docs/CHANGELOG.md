@@ -4,6 +4,20 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [6.0.6] — 2026-04-01
+
+#### Added
+
+- **B7 batch mode**: New `batch apply|remove <file>` CLI subcommand. Reads tweak IDs from a text file and applies or removes them in one operation. Three input formats supported: plain text (one ID per line, `#` comments ignored), JSON array `["id1","id2"]`, and snapshot JSON (`"applied"`, `"tweaks"`, or `"ids"` key). Respects `--dry-run`, `--force`, `--yes`; exits 0 on full success, 1 on partial, 2 on bad input
+- **B4 PowerShell module parity**: Six new cmdlets added to `powershell/RegiLattice.psm1` — `Set-RLTweak` (apply/remove shorthand, pipeline-friendly), `Get-RLProfile` (-Type filter: all/builtin/user), `Set-RLProfile` (ShouldProcess/ConfirmImpact=High), `Export-RLSnapshot`, `Restore-RLSnapshot` (-DryRun/-Force), `Invoke-RLBatch` (-Remove/-DryRun/-Force). Module version bumped 5.0.0 → 6.0.6; `FunctionsToExport` now 11 cmdlets; `AliasesToExport` now 8 (`grt`, `grts`, `ira`, `irr`, `srt`, `grp`, `srp`, `irb`)
+- **B6 shell completions**: `completions/RegiLattice.ps1` fully rewritten. Subcommand list expanded from 4 to 18 verbs; second-level noun completion via `$_rl_nouns` hashtable; context-aware — cursor position determines whether verb or noun is offered. `Register-ArgumentCompleter` blocks for `Set-RLTweak`, `Invoke-RLApply`, `Invoke-RLRemove`, `Get-RLTweakStatus` (live tweak IDs), `Set-RLProfile`/`Get-RLProfile` (profile names)
+- **B7 tests**: +17 new tests — `RunBatchTests` in DispatchTests.cs (10 tests: plain-text, JSON-array, snapshot-format, remove verb, missing/empty file, all-unknown IDs, partial-unknown warning skipping) and `BatchSubcmdParseTests` in ParseArgsTests.cs (7 tests: apply/remove/no-verb/unknown-verb/no-file/with-flags)
+
+#### Stats
+
+- Tweaks: 9,190 | Categories: 101 | Modules: 83
+- Tests: **3,009** (Core 2,291 + CLI **379** + GUI 339) — 0 failures
+
 ## [6.0.5] — 2026-04-04
 
 #### Added

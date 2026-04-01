@@ -145,4 +145,15 @@ internal sealed class CliArgs
 
     /// <summary>Named pipe name passed via <c>--plugin-host &lt;pipeName&gt;</c>.</summary>
     public string? PluginPipeName { get; set; }
+
+    // ── B7: Batch apply/remove mode ──────────────────────────────────────
+    /// <summary>
+    /// When non-null, reads tweak IDs from a file and applies or removes each in sequence.
+    /// Accepts a text file with one ID per line, a JSON array of IDs, or a snapshot JSON.
+    /// Set via <c>batch apply &lt;file&gt;</c> or <c>batch remove &lt;file&gt;</c>.
+    /// </summary>
+    public string? BatchFile { get; set; }
+
+    /// <summary>"apply" or "remove" — the batch operation to perform.</summary>
+    public string? BatchMode { get; set; }
 }

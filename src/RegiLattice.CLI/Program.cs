@@ -150,6 +150,9 @@ internal static class Program
             return RunImportJson(a);
         if (a.Marketplace is not null)
             return RunMarketplace(a);
+        // B7: Batch apply/remove
+        if (a.BatchFile is not null && a.BatchMode is "apply" or "remove")
+            return RunBatch(a);
         if (a.ExportConfig is not null)
             return RunExportConfig(a);
         if (a.ImportConfig is not null)
@@ -1183,6 +1186,150 @@ internal static class Program
         return 0;
     }
 
+    // ── Batch ────────────────────────────────────────────────────────────
+
+    private static int RunBatch(CliArgs a)
+    {
+        if (!a.Force && CorporateGuard.IsCorporateNetwork())
+        {
+            Console.WriteLine("\U0001f6d1 Corporate network detected. Use --force to override.");
+            return ExitCodes.CorpGuardBlocked;
+        }
+
+        var ids = LoadIdsFromFile(a.BatchFile!, out string loadError);
+        if (ids is null)
+        {
+            Console.WriteLine($"\u274c {loadError}");
+            return ExitCodes.UserError;
+        }
+        if (ids.Count == 0)
+        {
+            Console.WriteLine("No tweak IDs found in file.");
+            return ExitCodes.UserError;
+        }
+
+        var targets = new List<TweakDef>();
+        foreach (var id in ids)
+        {
+            var td = _engine.GetTweak(id.Trim());
+            if (td is null)
+                Console.WriteLine($"\u26a0\ufe0f Skipping unknown tweak '{id.Trim()}'");
+            else
+                targets.Add(td);
+        }
+        if (targets.Count == 0)
+        {
+            Console.WriteLine("No valid tweaks found.");
+            return ExitCodes.UserError;
+        }
+
+        string actionLabel = a.BatchMode == "apply" ? "Apply" : "Remove";
+        string label = $"{actionLabel} {targets.Count} tweaks from {Path.GetFileName(a.BatchFile)}";
+        if (!a.AssumeYes && !Confirm(label))
+        {
+            Console.WriteLine("Aborted.");
+            return ExitCodes.PartialFail;
+        }
+
+        var results = a.BatchMode == "apply"
+            ? _engine.ApplyBatch(targets, forceCorp: a.Force)
+            : _engine.RemoveBatch(targets, forceCorp: a.Force);
+
+        bool isApply = a.BatchMode == "apply";
+        int ok = 0;
+        foreach (var (id, res) in results)
+        {
+            string icon = res switch
+            {
+                TweakResult.Applied => "\u2705",
+                TweakResult.NotApplied => "\u2705",
+                TweakResult.Error => "\u274c",
+                TweakResult.SkippedCorp => "\U0001f6d1",
+                _ => "\u26a0\ufe0f",
+            };
+            if (res is TweakResult.Applied or TweakResult.NotApplied)
+            {
+                ok++;
+                if (isApply) Analytics.RecordApply(id); else Analytics.RecordRemove(id);
+            }
+            else if (res is TweakResult.Error)
+            {
+                Analytics.RecordError(id);
+            }
+            Console.WriteLine($"{icon} {id} — {ColourisedStatus(res)}");
+        }
+
+        if (_session.DryRun)
+            Console.WriteLine($"\U0001f50d Dry-run: {ok}/{targets.Count} tweaks would be processed ({_session.DryOps} ops skipped).");
+        else
+            Console.WriteLine($"\u2705 {ok}/{targets.Count} tweaks processed.");
+
+        return ok == targets.Count ? ExitCodes.Success : ExitCodes.PartialFail;
+    }
+
+    /// <summary>
+    /// Reads tweak IDs from a batch file.
+    /// Supports three formats:
+    ///   • Plain text — one ID per line (blank lines and # comments ignored)
+    ///   • JSON array — ["id1", "id2", ...]
+    ///   • Snapshot JSON — {"tweaks":["id1", ...]} or {"applied":["id1", ...]}
+    /// </summary>
+    private static List<string>? LoadIdsFromFile(string path, out string error)
+    {
+        error = "";
+        if (!File.Exists(path))
+        {
+            error = $"File not found: {path}";
+            return null;
+        }
+
+        string raw;
+        try { raw = File.ReadAllText(path); }
+        catch (Exception ex) { error = $"Cannot read file: {ex.Message}"; return null; }
+
+        raw = raw.Trim();
+
+        // JSON formats
+        if (raw.StartsWith('[') || raw.StartsWith('{'))
+        {
+            try
+            {
+                if (raw.StartsWith('['))
+                    return JsonSerializer.Deserialize<List<string>>(raw) ?? [];
+
+                var doc = JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(raw);
+                if (doc is null) { error = "Empty JSON object."; return null; }
+
+                // Snapshot format: check "applied", "tweaks", or "ids" key
+                foreach (var key in new[] { "applied", "tweaks", "ids" })
+                {
+                    if (doc.TryGetValue(key, out var el) && el.ValueKind == JsonValueKind.Array)
+                        return el.Deserialize<List<string>>() ?? [];
+                }
+
+                // SnapshotManager native format: { "tweak-id": "applied"|"notapplied"|... }
+                // All values are TweakResult strings — the keys are the tweak IDs.
+                if (doc.Values.All(v => v.ValueKind == JsonValueKind.String))
+                    return [.. doc.Keys];
+
+                error = "JSON object has no 'applied', 'tweaks', or 'ids' array.";
+                return null;
+            }
+            catch (Exception ex)
+            {
+                error = $"Invalid JSON: {ex.Message}";
+                return null;
+            }
+        }
+
+        // Plain-text: one ID per line, skip blanks and # comments
+        return raw.Split(['\r', '\n'], StringSplitOptions.RemoveEmptyEntries)
+                  .Where(line => !line.TrimStart().StartsWith('#'))
+                  .Select(line => line.Trim())
+                  .Where(line => line.Length > 0)
+                  .ToList();
+    }
+
     // ── Status ──────────────────────────────────────────────────────────
 
     private static int RunStatus(CliArgs a)
@@ -1193,11 +1340,20 @@ internal static class Program
             Console.WriteLine($"\u274c Unknown tweak '{a.Tweak}'.");
             return 2;
         }
+
         var status = _engine.DetectStatus(td);
         if (a.OutputFormat == "json")
         {
-            var data = new { td.Id, td.Label, td.Category, Status = status.ToString(), td.NeedsAdmin, td.CorpSafe };
-            Console.WriteLine(JsonSerializer.Serialize(data, new JsonSerializerOptions { WriteIndented = true }));
+            var obj = new
+            {
+                Id = td.Id,
+                Label = td.Label,
+                Category = td.Category,
+                Status = status.ToString(),
+                NeedsAdmin = td.NeedsAdmin,
+                CorpSafe = td.CorpSafe,
+            };
+            Console.WriteLine(JsonSerializer.Serialize(obj));
         }
         else
         {
@@ -2184,6 +2340,14 @@ internal static class Program
               Flag equivalents: --snapshot <path>  --restore <path>
                                 --snapshot-diff A B  --html <path>
 
+            ── Batch Operations (B7) ─────────────────────────────────────────────────
+              batch apply  <file>        Apply IDs from a file (txt/JSON/snapshot)
+              batch remove <file>        Remove IDs from a file
+
+              File formats: plain text (one ID per line, # comments ok)
+                            JSON array: ["id1", "id2", ...]
+                            Snapshot JSON with "applied" / "tweaks" / "ids" key
+
             ── Export / Import ───────────────────────────────────────────────────────
               export json   <path>       Export tweak definitions to JSON
               export reg    <path>       Export registry state to .reg file
@@ -2439,6 +2603,24 @@ internal static class Program
                         i = 1;
                     else
                         i = path is not null ? 3 : 2;
+                    break;
+                }
+
+                // ── B7: Batch apply/remove ────────────────────────────────────────
+                case "batch":
+                {
+                    p.SubVerb = "batch";
+                    string verb = args.Length > 1 ? args[1].ToLowerInvariant() : "";
+                    string? file = args.Length > 2 && !args[2].StartsWith('-') ? args[2] : null;
+                    if (verb is "apply" or "remove")
+                    {
+                        p.BatchMode = verb;
+                        p.BatchFile = file;
+                    }
+                    if (verb.Length == 0 || verb.StartsWith('-'))
+                        i = 1;
+                    else
+                        i = file is not null ? 3 : 2;
                     break;
                 }
 
