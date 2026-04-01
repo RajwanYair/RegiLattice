@@ -4,6 +4,24 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [6.0.5] — 2026-04-04
+
+#### Added
+
+- **B2 structured `--output json`**: JSON output added to `tweak status`, `tweak apply/remove` (single tweak), `profile list`, and `check` commands. Schema: `{Id, Label, Category, Status, NeedsAdmin, CorpSafe}` for status; `{Id, Label, Mode, Status, DryRun}` for apply/remove; `[{Name, Description, TweakCount, Type}]` for profiles; `[{Id, Status, Label}]` for check. `--check` JSON mode also suppresses the "Checking done." progress prefix for clean piping
+- **ExitCodes.CorpGuardBlocked = 4**: Corporate network guard now returns documented exit code 4 (was undocumented 6). All 6 call sites fixed (`RunAction`, `RunUpdate`, `RunApplyProfile`, `RunCategoryAction`, `RunImportJson`, `RunImportConfig`). `--help` exit codes section updated
+- **ProfileInfo DTO**: New `internal sealed record ProfileInfo(...)` for type-safe JSON serialisation of profile lists (replaces anonymous type limitation)
+- **A3 CLI contract tests**: +30 new tests (362 total, was 332) asserting JSON output validity, field presence, and exit code contract for all B2-updated commands. Tests use `Force = true` to be corporate-machine-safe
+
+#### Fixed
+
+- Corporate guard exit code: `return 6` → `return 4` at all 6 `RunAction`/`RunUpdate`/profile/category/import locations
+
+#### Stats
+
+- Tweaks: 9,190 | Categories: 101 | Modules: 83
+- Tests: **2,992** (Core 2,291 + CLI **362** + GUI 339) — 0 failures
+
 ## [6.0.4] — 2026-03-31
 
 #### Added
