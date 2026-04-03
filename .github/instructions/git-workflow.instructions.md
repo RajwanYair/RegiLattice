@@ -162,9 +162,11 @@ When bumping:
 2. Update `installer/Package.wxs` → `Version="X.Y.Z.0"`
 3. Add `## [X.Y.Z] — YYYY-MM-DD` section to `docs/CHANGELOG.md`
 4. Update `Readme.md` version badge and tweak/test counts if changed
-5. Commit: `chore: bump version to vX.Y.Z`
-6. Tag: `git tag vX.Y.Z`
-7. Push at session end: `git push; git push --tags`
+5. Update all count-bearing metadata files — **see the full 16-file checklist** in `lessons-learned.instructions.md` (section "stats.svg Uses Space-Separated Thousands"). Counts tracked across files: **tweaks · categories · modules · tests · themes · profiles · pkg-managers**
+6. Update GitHub About sidebar: `gh repo edit RajwanYair/RegiLattice --description "... N,NNN tweaks ..."`
+7. Commit: `chore: bump version to vX.Y.Z`
+8. Tag: `git tag vX.Y.Z`
+9. Push: `git push; git push --tags`
 
 ---
 
