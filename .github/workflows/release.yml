@@ -163,7 +163,8 @@ jobs:
           Copy-Item 'publish/cli/RegiLattice.exe' "publish/RegiLatticeCLI-$tag-win-x64.exe"
           Write-Host "CLI EXE  : RegiLatticeCLI-$tag-win-x64.exe"
           # MSI (optional — copy from WiX build output if present)
-          $msi = Get-ChildItem 'installer/bin/Release' -Recurse -Filter '*.msi' -ErrorAction SilentlyContinue | Select-Object -First 1
+          # WiX SDK with InstallerPlatform=x64 outputs to installer/bin/x64/Release/
+          $msi = Get-ChildItem 'installer/bin' -Recurse -Filter '*.msi' -ErrorAction SilentlyContinue | Select-Object -First 1
           if ($msi) {
             Copy-Item $msi.FullName "publish/RegiLattice-$tag-win-x64.msi"
             Write-Host "MSI      : RegiLattice-$tag-win-x64.msi"

@@ -1255,6 +1255,23 @@ must match the exact format including the space.
 | `winget/RegiLattice.RegiLattice.installer.yaml`     | `PackageVersion`, `InstallerUrl`                                                                      |
 | `winget/RegiLattice.RegiLattice.locale.en-US.yaml`  | `PackageVersion`, description counts                                                                  |
 
+**Release artifact naming convention (from v6.2.0 onward)** — all EXE, MSI, and MSIX files
+include the version tag in their filename. The `release.yml` "Rename artifacts for release" step
+handles this automatically. The naming pattern to verify in each release:
+
+| Artifact               | Versioned filename pattern          |
+| ---------------------- | ----------------------------------- |
+| GUI EXE (portable)     | `RegiLattice-vX.Y.Z-win-x64.exe`   |
+| CLI EXE (portable)     | `RegiLatticeCLI-vX.Y.Z-win-x64.exe` |
+| MSI installer          | `RegiLattice-vX.Y.Z-win-x64.msi`   |
+| MSIX package           | `RegiLattice-vX.Y.Z-win-x64.msix`  |
+| ZIP (Chocolatey input) | `RegiLattice-vX.Y.Z-win-x64.zip`   |
+| Checksums              | `SHA256SUMS.txt`                    |
+
+The MSIX and ZIP filenames are set directly in the build scripts that produce them.
+The MSI rename searches `installer/bin` recursively (not `installer/bin/Release`) because
+WiX SDK with `InstallerPlatform=x64` outputs to `installer/bin/x64/Release/`.
+
 **GitHub About sidebar** — update via CLI after every version bump that changes counts:
 
 ```powershell
