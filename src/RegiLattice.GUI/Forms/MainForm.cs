@@ -787,8 +787,6 @@ public partial class MainForm : Form
     // ── Tools hub registration ─────────────────────────────────────────────
     private void RegisterToolsHub()
     {
-        static string Lbl(string key) => Locale.T(key);
-
         // System Diagnostics
         _toolsPanel.RegisterTool("\uEA6C", "Windows Health",        "DISM / SFC / BCD checks",      "System Diagnostics",    () => OnOpenWindowsHealth(),       adminRequired: true);
         _toolsPanel.RegisterTool("\uEBE8", "Tool Versions",         "Check installed tool versions", "System Diagnostics",    () => OnOpenToolVersions(),        adminRequired: false);

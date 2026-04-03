@@ -48,6 +48,7 @@ internal sealed class SidebarNavControl : Control
     internal void AddFooterItem(string key, string icon, string label)
         => _footerItems.Add(new NavItem(key, icon, label));
 
+    [System.ComponentModel.DesignerSerializationVisibility(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
     internal string SelectedKey
     {
         get => _selectedKey;
@@ -151,7 +152,7 @@ internal sealed class SidebarNavControl : Control
         // Icon (Segoe Fluent Icons glyph)
         Color iconColor = isSelected ? AppTheme.Accent : (isHovered ? AppTheme.Fg : AppTheme.FgDim);
         int iconY = y + (ItemHeight - IconSize) / 2;
-        FluentIcons.DrawGlyph(g, item.Icon, new Rectangle(PaddingLeft + 4, iconY, IconSize, IconSize), iconColor);
+        FluentIcons.DrawGlyph(g, item.Icon, iconColor, new PointF(PaddingLeft + 4, iconY), IconSize);
 
         // Label
         Color labelColor = isSelected ? AppTheme.Fg : (isHovered ? AppTheme.Fg : AppTheme.FgDim);
@@ -172,7 +173,8 @@ internal sealed class SidebarNavControl : Control
             float bh = 16;
             float bx = Width - bw - 12;
             float by = y + (ItemHeight - bh) / 2f;
-            AppTheme.FillRoundedRect(g, new RectangleF(bx, by, bw, bh), AppTheme.Accent, 8);
+            using var accentBadgeBrush = new SolidBrush(AppTheme.Accent);
+            AppTheme.FillRoundedRect(g, accentBadgeBrush, Rectangle.Round(new RectangleF(bx, by, bw, bh)), 8);
             using var badgeBrush = new SolidBrush(AppTheme.Bg);
             var bsf = new StringFormat { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center };
             g.DrawString(item.Badge, badgeFont, badgeBrush, new RectangleF(bx, by, bw, bh), bsf);

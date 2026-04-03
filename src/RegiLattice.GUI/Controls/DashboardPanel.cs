@@ -190,10 +190,12 @@ internal sealed class DashboardPanel : Panel
     private static void DrawStatCard(Graphics g, Rectangle r, string value, string label, Color accent)
     {
         // Card background
-        AppTheme.FillRoundedRect(g, r, AppTheme.Surface, 10);
+        using var surfBrush = new SolidBrush(AppTheme.Surface);
+        AppTheme.FillRoundedRect(g, surfBrush, r, 10);
 
         // Left accent stripe
-        AppTheme.FillRoundedRect(g, new RectangleF(r.Left, r.Top + 10, 3, r.Height - 20), accent, 2);
+        using var accentBrush = new SolidBrush(accent);
+        AppTheme.FillRoundedRect(g, accentBrush, new Rectangle(r.Left, r.Top + 10, 3, r.Height - 20), 2);
 
         // Value
         using var valFont = new Font(AppTheme.Bold.FontFamily, 22f, FontStyle.Bold);
@@ -249,7 +251,6 @@ internal sealed class DashboardPanel : Panel
         int rowH   = r.Height / Math.Max(_catStats.Count, 1);
         int labelW = 110;
         int maxBarW = r.Width - labelW - 48;
-        int countW  = 40;
 
         for (int i = 0; i < _catStats.Count; i++)
         {
@@ -262,18 +263,20 @@ internal sealed class DashboardPanel : Panel
             g.DrawString(shortName, catFont, catBrush, r.X, midY);
 
             // Track
-            var trackRect = new RectangleF(r.X + labelW, midY, maxBarW, barH);
-            AppTheme.FillRoundedRect(g, trackRect, AppTheme.Surface, 4);
+            var trackRect = new Rectangle(r.X + labelW, midY, maxBarW, barH);
+            using var trackBrush = new SolidBrush(AppTheme.Surface);
+            AppTheme.FillRoundedRect(g, trackBrush, trackRect, 4);
 
             // Progress
             float fillFrac = stat.Total == 0 ? 0 : (float)stat.Applied / stat.Total;
-            float fillW = fillFrac * maxBarW;
+            int fillW = (int)(fillFrac * maxBarW);
             if (fillW > 0)
             {
                 Color barColor = fillFrac >= 0.8f ? AppTheme.Green
                               : fillFrac >= 0.4f ? AppTheme.Accent
                               : AppTheme.FgDim;
-                AppTheme.FillRoundedRect(g, new RectangleF(trackRect.X, midY, fillW, barH), barColor, 4);
+                using var barBrush = new SolidBrush(barColor);
+                AppTheme.FillRoundedRect(g, barBrush, new Rectangle(trackRect.X, midY, fillW, barH), 4);
             }
 
             // Count
@@ -304,7 +307,8 @@ internal sealed class DashboardPanel : Panel
             // Row background
             if (i % 2 == 0)
             {
-                AppTheme.FillRoundedRect(g, new RectangleF(x, rowY, width, rowH - 2), AppTheme.Surface, 4);
+                using var rowBrush = new SolidBrush(AppTheme.Surface);
+                AppTheme.FillRoundedRect(g, rowBrush, new Rectangle(x, rowY, width, rowH - 2), 4);
             }
 
             string tweakId = _recentTweaks[i];

@@ -260,7 +260,7 @@ internal sealed class TweakBrowserPanel : Panel
         if (!string.IsNullOrEmpty(_searchText))
             tweaks = _engine.Search(_searchText);
         else if (!string.IsNullOrEmpty(_selectedCategory))
-            tweaks = _engine.TweaksByCategory(_selectedCategory);
+            tweaks = _engine.TweaksByCategory().GetValueOrDefault(_selectedCategory) ?? [];
         else
             tweaks = _engine.AllTweaks();
 

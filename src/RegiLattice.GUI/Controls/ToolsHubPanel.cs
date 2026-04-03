@@ -212,16 +212,17 @@ internal sealed class ToolButton : Control
 
         // Card background
         Color bg = _hovered ? AppTheme.Surface : AppTheme.Bg;
-        AppTheme.FillRoundedRect(g, ClientRectangle, bg, 8);
+        using var bgBrush = new SolidBrush(bg);
+        AppTheme.FillRoundedRect(g, bgBrush, ClientRectangle, 8);
 
         // Border
         using var pen = new Pen(_hovered ? AppTheme.Accent : AppTheme.Border, 1);
-        AppTheme.DrawRoundedRect(g, ClientRectangle, pen, 8);
+        AppTheme.DrawRoundedRect(g, pen, ClientRectangle, 8);
 
         // Icon
         var iconRect = new Rectangle(12, 14, 26, 26);
         Color iconColor = _hovered ? AppTheme.Accent : AppTheme.FgDim;
-        FluentIcons.DrawGlyph(g, _icon, iconRect, iconColor);
+        FluentIcons.DrawGlyph(g, _icon, iconColor, new PointF(iconRect.X, iconRect.Y), iconRect.Height);
 
         // Admin badge
         if (_adminRequired)
