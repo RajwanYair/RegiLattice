@@ -4,6 +4,34 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [6.2.0] — 2026-04-03
+
+### Added
+
+- **Identity & authentication policy module** (`Identity.cs`) — 50 new Group Policy tweaks across 5 modules:
+  - `PolicyFido` (10) — FIDO2 passkey enforcement, transport restrictions, credential provider and platform authenticator controls
+  - `PolicyWindowsHello` (10) — Windows Hello for Business PIN complexity, biometric enforcement, device credentials, and cloud trust settings
+  - `PolicyEntraId` (10) — Entra ID / Azure AD workplace join, MDM enrollment, Microsoft account restrictions, privacy settings, Find My Device, and Phone Link controls
+  - `PolicyKerberos` (10) — Kerberos claims support, armoring, renewable ticket lifetime, reversible encryption, and resource SID compression policies
+  - `PolicyAppInstaller` (10) — AppInstaller (winget sideload) feature flags: MSIX protocol, update sources, experimental features, and allowed sources
+
+### Fixed
+
+- **GH Actions: Dependency Review** — Enabled GitHub Dependency Graph via API; added `continue-on-error: true` to job as fallback
+- **GH Actions: Release MSI rename path** — Fixed `Get-ChildItem` search path from `installer/bin/Release` to `installer/bin` (recursive) to cover WiX `InstallerPlatform=x64` output under `installer/bin/x64/Release/`
+
+### Updated
+
+- `docs/assets/features.svg` — Per-category tweak count badges updated: Privacy 2 800+, Performance 2 100+, Security 1 650+, Debloat 2 000+, Dev Tools 640+
+- `docs/assets/banner.svg` — Test count corrected: `2 931` → `3 035`
+
+### Stats
+
+- Tweaks: **9,240** (+50) | Categories: **101** | Modules: **88** (+5)
+- Tests: **3,035** passing (Core 2,317 + CLI 379 + GUI 339) — 0 failures
+
+---
+
 ## [6.1.0] — 2026-04-03
 
 ### Added
