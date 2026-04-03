@@ -21,7 +21,7 @@ public sealed class TweakEngineBuiltinsTests : IClassFixture<BuiltinsFixture>
     public void RegisterBuiltins_LoadsAllTweaks()
     {
         Assert.True(_engine.TweakCount > 1000, $"Expected >1000 tweaks, got {_engine.TweakCount}");
-        Assert.True(_engine.CategoryCount >= 50, $"Expected >=50 categories, got {_engine.CategoryCount}");
+        Assert.True(_engine.CategoryCount >= 25, $"Expected >=25 categories, got {_engine.CategoryCount}");
     }
 
     [Fact]
@@ -88,21 +88,21 @@ public sealed class TweakEngineBuiltinsTests : IClassFixture<BuiltinsFixture>
     }
 
     [Theory]
-    [InlineData("PowerShell")] // was "Command Line" — merged into PowerShell
-    [InlineData("Security")] // was "Hardening" — merged into Security
-    [InlineData("Developer")]
-    [InlineData("Performance")] // was "Memory" — merged into Performance
-    [InlineData("Maintenance")] // was "Disk Cleanup" + "Event Logging" — merged into Maintenance
-    [InlineData("Windows 11")] // was "Debloat" + "App Compatibility" — merged into Windows 11
-    [InlineData("Network")] // was "Network Optimization" — merged into Network
-    [InlineData("Power")] // was "Power Management" — merged into Power
-    [InlineData("Storage")] // was "SSD Optimization" — merged into Storage
+    [InlineData("PowerShell")] // was Command Line → PowerShell
+    [InlineData("Security")] // was Hardening + Firewall → Security
+    [InlineData("Developer")] // was Developer + Package Management + Java
+    [InlineData("System")] // was Performance + Memory + Startup + Services
+    [InlineData("Maintenance")] // was Disk Cleanup + Event Logging + Scheduled Tasks + Printing
+    [InlineData("Windows 11")] // was Debloat + App Compatibility + Widgets + Notifications + Taskbar + Search
+    [InlineData("Network")] // was Network + Network Optimization + Proxy & VPN
+    [InlineData("Power")]
+    [InlineData("Storage")] // was SSD Optimization + Backup & Recovery + System Restore
     [InlineData("User Account")]
-    [InlineData("Browser Common")]
-    [InlineData("Privacy")] // was "Windows Recall" — merged into Privacy
-    [InlineData("Proxy & VPN")]
-    [InlineData("Backup & Recovery")] // was "System Restore" — merged into Backup & Recovery
-    [InlineData("Scheduled Tasks")]
+    [InlineData("Browser")] // was Browser Common + Chrome + Firefox + Edge
+    [InlineData("Privacy")]
+    [InlineData("Display")] // was Display + Desktop Customization + GPU / Graphics
+    [InlineData("Peripherals")] // was USB & Peripherals + Bluetooth
+    [InlineData("AI / Copilot")]
     public void RegisterBuiltins_CategoryExists(string category)
     {
         Assert.Contains(category, _engine.Categories());
@@ -202,47 +202,33 @@ public sealed class TweakEngineBuiltinsTests : IClassFixture<BuiltinsFixture>
 
     // ── Category counts ─────────────────────────────────────────────────
 
-    // Window Appearance was merged into Desktop Customization (v5.99.0 consolidation)
+    // Window Appearance → Desktop Customization → Display (v6.1.0 consolidation)
     [Fact]
-    public void RegisterBuiltins_HasWindowAppearanceCategory() => Assert.Contains("Desktop Customization", _engine.Categories());
+    public void RegisterBuiltins_HasDisplayCategory() => Assert.Contains("Display", _engine.Categories());
 
     [Fact]
-    public void RegisterBuiltins_WindowAppearance_HasAtLeast40Tweaks()
+    public void RegisterBuiltins_Display_HasAtLeast40Tweaks()
     {
         var byCat = _engine.TweaksByCategory();
-        Assert.True(byCat.ContainsKey("Desktop Customization"));
+        Assert.True(byCat.ContainsKey("Display"));
         Assert.True(
-            byCat["Desktop Customization"].Count >= 40,
-            $"Expected ≥40 Desktop Customization tweaks, got {byCat["Desktop Customization"].Count}"
+            byCat["Display"].Count >= 40,
+            $"Expected ≥40 Display tweaks, got {byCat["Display"].Count}"
         );
     }
 
-    // System Optimization was merged into Performance (v5.99.0 consolidation)
+    // System Optimization → Performance → System (v6.1.0 consolidation)
     [Fact]
-    public void RegisterBuiltins_HasSystemOptimizationCategory() => Assert.Contains("Performance", _engine.Categories());
+    public void RegisterBuiltins_HasSystemCategory() => Assert.Contains("System", _engine.Categories());
 
     [Fact]
-    public void RegisterBuiltins_SystemOptimization_HasAtLeast30Tweaks()
+    public void RegisterBuiltins_System_HasAtLeast28Tweaks()
     {
         var byCat = _engine.TweaksByCategory();
-        Assert.True(byCat.ContainsKey("Performance"));
+        Assert.True(byCat.ContainsKey("System"));
         Assert.True(
-            byCat["Performance"].Count >= 28,
-            $"Expected ≥28 Performance tweaks (merged from System Optimization), got {byCat["Performance"].Count}"
-        );
-    }
-
-    [Fact]
-    public void RegisterBuiltins_HasDesktopCustomizationCategory() => Assert.Contains("Desktop Customization", _engine.Categories());
-
-    [Fact]
-    public void RegisterBuiltins_DesktopCustomization_HasAtLeast30Tweaks()
-    {
-        var byCat = _engine.TweaksByCategory();
-        Assert.True(byCat.ContainsKey("Desktop Customization"));
-        Assert.True(
-            byCat["Desktop Customization"].Count >= 30,
-            $"Expected ≥30 Desktop Customization tweaks, got {byCat["Desktop Customization"].Count}"
+            byCat["System"].Count >= 28,
+            $"Expected ≥28 System tweaks, got {byCat["System"].Count}"
         );
     }
 
@@ -1126,7 +1112,7 @@ public sealed class NewTweakModulesTests : IClassFixture<BuiltinsFixture>
 
     [Theory]
     [InlineData("Encryption")] // was "BitLocker Advanced" — merged into Encryption
-    [InlineData("Application Control Policy")]
+    [InlineData("Security")] // was "Application Control Policy" — merged into Security
     [InlineData("Virtualization")] // was "Hyper-V Advanced" / "Windows Sandbox" — merged into Virtualization
     public void AdvancedSecurity_NewCategories_RegisteredInEngine(string categoryName)
     {
@@ -1281,7 +1267,7 @@ public sealed class NewTweakModulesTests : IClassFixture<BuiltinsFixture>
     }
 
     [Theory]
-    [InlineData("Browser Policy")]
+    [InlineData("Browser")] // was "Browser Policy" — merged into Browser
     public void EdgePolicyGroupA_NewCategories_RegisteredInEngine(string categoryName)
     {
         Assert.Contains(categoryName, BuildEngine().Categories(), StringComparer.OrdinalIgnoreCase);
@@ -1442,7 +1428,7 @@ public sealed class NewTweakModulesTests : IClassFixture<BuiltinsFixture>
     }
 
     [Theory]
-    [InlineData("Browser Policy")]
+    [InlineData("Browser")] // was "Browser Policy" — merged into Browser
     public void EdgePolicyGroupB_NewCategories_RegisteredInEngine(string categoryName)
     {
         Assert.Contains(categoryName, BuildEngine().Categories(), StringComparer.OrdinalIgnoreCase);

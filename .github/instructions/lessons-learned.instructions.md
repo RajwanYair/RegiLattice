@@ -7,7 +7,67 @@ applyTo: "**/*.cs,**/tests/**,**/*Tests/**"
 > Accumulated hard-won insights from the Python → C# migration, test coverage sprints,
 > and the 453-tweak restoration campaign.
 > These rules are **as important as the coding standards** — they prevent recurring mistakes.
-> Last updated: 2026-03-31 (v6.0.3, C# 13 / .NET 10.0-windows, ~9190 tweaks, 101 categories, 2955 tests)
+> Last updated: 2026-04-01 (v6.0.7, C# 13 / .NET 10.0-windows, ~9190 tweaks, 101 categories, 3035 tests)
+
+---
+
+## `WebRequest.GetSystemWebProxy()` in Static Initializers Hangs the Test Runner
+
+Calling `System.Net.WebRequest.GetSystemWebProxy()` eagerly (in a `static readonly` field
+initialiser) on Intel/Intune/SCCM corporate machines triggers **WPAD proxy auto-discovery**
+via WinHTTP. This performs a DNS lookup for `wpad.<domain>` and an HTTP fetch of `wpad.dat`,
+which can block for **20–30+ seconds** or hang permanently when the corporate proxy is
+unreachable or the Intune filter-driver intercepts WinHTTP calls.
+
+**Problem in `PackManager.cs`**: The `static readonly HttpClient s_http` field was
+initialised with `Proxy = System.Net.WebRequest.GetSystemWebProxy()`. Because it is a
+`static readonly` field, it is initialised the first time **any member** of `PackManager` is
+accessed — including `new PackManager()` in the test
+`Dispatch_Marketplace_Installed_CallsMethod_ReturnsZero`. This froze the test runner
+before the test body even ran.
+
+**Fix (v6.0.8)**:
+```csharp
+// ✅ CORRECT — no eager proxy resolution; system proxy resolved lazily per-request
+private static readonly HttpClient s_http = new(
+    new HttpClientHandler { UseDefaultCredentials = true, UseProxy = true }
+) { Timeout = TimeSpan.FromSeconds(30) };
+
+// ❌ BROKEN — GetSystemWebProxy() blocks the static initialiser on corporate machines
+private static readonly HttpClient s_http = new(
+    new HttpClientHandler { Proxy = System.Net.WebRequest.GetSystemWebProxy() }
+);
+```
+
+**Rule**: **Never** call `WebRequest.GetSystemWebProxy()`, `WebProxy.GetDefaultProxy()`, or
+any synchronous proxy/DNS discovery API in a `static` field initialiser, static constructor,
+or anywhere that runs at class-load time. Proxy resolution must happen at request time (lazy).
+
+---
+
+## `CorporateGuard.Status()` Blocks Test Threads on Intune Machines — Use StubCorporate
+
+`CorporateGuard.Status()` calls all four detection methods sequentially every time it is
+invoked: `IsDomainJoined()`, `IsAzureAdJoined()`, `HasGroupPolicy()`,
+`HasManagementAgent()`. On Intel machines enrolled in Intune, these registry reads go
+through the Intune/SCCM registry filter driver, which can block for several seconds per
+call. Across 3+ `RunDoctorTests`, this adds up and can stall the test runner.
+
+**Fix (v6.0.8)**: Added `internal static bool? StubCorporate { get; set; }` to
+`CorporateGuard`. When set, both `IsCorporateNetwork()` and `Status()` return the stub
+value immediately, bypassing all detection logic. Test fixtures must set this:
+
+```csharp
+// In DispatchTestFixture constructor:
+CorporateGuard.StubCorporate = false;   // Bypasses all registry/P-Invoke detection
+
+// In DispatchTestFixture.Dispose():
+CorporateGuard.StubCorporate = null;    // Reset so non-test code is unaffected
+```
+
+**Rule**: Every test fixture that invokes any code path reaching `CorporateGuard` MUST set
+`StubCorporate = false` (or `true` to simulate a corporate machine). Never let real corporate
+detection run during unit/integration tests on a developer machine.
 
 ---
 

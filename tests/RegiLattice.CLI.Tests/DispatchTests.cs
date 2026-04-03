@@ -22,7 +22,7 @@ public sealed class CliDispatchCollection : ICollectionFixture<DispatchTestFixtu
 /// Registers a minimal set of deterministic tweaks so tests are fast
 /// (no 3 800-tweak RegisterBuiltins call needed for most scenarios).
 /// </summary>
-public sealed class DispatchTestFixture
+public sealed class DispatchTestFixture : IDisposable
 {
     public TweakEngine Engine { get; }
     public RegistrySession Session { get; }
@@ -59,6 +59,12 @@ public sealed class DispatchTestFixture
             GuiBatchSize = 200,
         };
 
+        // Bypass corporate environment detection for all CLI dispatch tests.
+        // On Intel Intune machines, CorporateGuard.Status() calls IsDomainJoined() /
+        // IsAzureAdJoined() / HasGroupPolicy() / HasManagementAgent() which can trigger
+        // slow registry filter-driver callbacks from Intune/SCCM and hang the test runner.
+        CorporateGuard.StubCorporate = false;
+
         Engine.Register([
             new TweakDef
             {
@@ -91,6 +97,12 @@ public sealed class DispatchTestFixture
                 DetectOps = [RegOp.CheckDword(@"HKCU\Software\RegiLattice\DispTest", "Gamma", 0)],
             },
         ]);
+    }
+
+    public void Dispose()
+    {
+        HardwareInfo.StubProfile = null;
+        CorporateGuard.StubCorporate = null;
     }
 }
 

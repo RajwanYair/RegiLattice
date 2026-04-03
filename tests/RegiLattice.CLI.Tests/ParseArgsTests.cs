@@ -1620,10 +1620,10 @@ public sealed class ComplianceAndManagerParseTests
     [Fact]
     public void ParseArgs_Manager_WithCategory_BothSet()
     {
-        var result = Program.ParseArgs(["--manager", "winget", "--category", "Package Management"]);
+        var result = Program.ParseArgs(["--manager", "winget", "--category", "Developer"]);
         Assert.NotNull(result);
         Assert.Equal("winget", result.Manager);
-        Assert.Equal("Package Management", result.Category);
+        Assert.Equal("Developer", result.Category);
     }
 }
 

@@ -6,11 +6,15 @@
          compliance-history.json file; parallel execution causes non-deterministic
          failures in AddEntry_ExceedsMaxEntries_TrimsOldestEntries). -->
     <MaxCpuCount>1</MaxCpuCount>
-    <!-- 300 s total session hard limit per assembly (each project runs separately, not as solution).
-         Raised from 60 s → 300 s: the Core.Tests assembly has 700+ tests and the 60 s wall-clock
-         limit caused "Test Run Aborted" on slower machines / OneDrive-backed builds. -->
-    <TestSessionTimeout>300000</TestSessionTimeout>
-    <!-- 20 s per individual test — generous for slow CI systems -->
+    <!-- 2000 s total session hard limit per assembly.
+         CLI tests were hanging indefinitely on Intel/Intune machines due to:
+           1. PackManager static HttpClient eager-calling WebRequest.GetSystemWebProxy() (WPAD hang)
+           2. CorporateGuard.Status() hitting slow registry filter callbacks from Intune/SCCM
+         Both root causes are now fixed. This 2000 s limit is a last-resort safety net.
+         The Blame data collector (below) kills a single stuck test after 30 s — more reliable
+         for per-test hangs than TestCaseTimeout which is MSTest-only. -->
+    <TestSessionTimeout>2000000</TestSessionTimeout>
+    <!-- 20 s per individual test — only honoured by MSTest adapter; kept as belt-and-suspenders -->
     <TestCaseTimeout>20000</TestCaseTimeout>
     <!--
       IMPORTANT: Always run per-project, NOT solution-level:
@@ -21,4 +25,20 @@
       The 'test: All' VS Code task and CI workflows both use per-project runs.
     -->
   </RunConfiguration>
+
+  <!-- Blame data collector: kills any test that hangs for > 30 s.
+       Equivalent to passing --blame-hang-timeout 30s on the CLI, but applies even when
+       tests are run from the VS Code Test Explorer which does not forward that flag.
+       DumpType="None" kills the test host without writing a memory dump (avoids large
+       files on OneDrive-hosted workspaces). -->
+  <DataCollectionRunSettings>
+    <DataCollectors>
+      <DataCollector friendlyName="blame" enabled="True">
+        <Configuration>
+          <CollectAlways>false</CollectAlways>
+          <CollectDumpOnTestSessionHang DumpType="None" HangTimeout="30000" />
+        </Configuration>
+      </DataCollector>
+    </DataCollectors>
+  </DataCollectionRunSettings>
 </RunSettings>

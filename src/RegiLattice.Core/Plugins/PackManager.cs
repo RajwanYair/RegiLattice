@@ -21,12 +21,16 @@ public sealed class PackManager
 
     private static readonly string s_indexUrl = "https://raw.githubusercontent.com/RajwanYair/regilattice-marketplace/main/index.json";
 
+    // NOTE: Do NOT call System.Net.WebRequest.GetSystemWebProxy() here eagerly.
+    // On Intel/Intune corporate machines, eager WPAD/proxy discovery via that API
+    // blocks for 20-30+ seconds during class initialisation (first `new PackManager()`
+    // call), hanging the test runner and CLI.  UseProxy=true with Proxy=null lets
+    // HttpClientHandler resolve the system proxy lazily, per-request.
     private static readonly HttpClient s_http = new(
         new System.Net.Http.HttpClientHandler
         {
             UseDefaultCredentials = true,
             UseProxy = true,
-            Proxy = System.Net.WebRequest.GetSystemWebProxy(),
         }
     )
     {
