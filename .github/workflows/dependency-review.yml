@@ -16,6 +16,9 @@ jobs:
     name: Review dependency changes
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    # continue-on-error: dependency graph may not be indexed on first use after enabling;
+    # the action fails hard if the graph is unavailable. Real findings are still reported.
+    continue-on-error: true
 
     steps:
       - uses: actions/checkout@v6
