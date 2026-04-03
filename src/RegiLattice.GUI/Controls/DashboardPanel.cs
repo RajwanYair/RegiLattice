@@ -1,6 +1,7 @@
 #nullable enable
 using System.Drawing.Drawing2D;
 using RegiLattice.Core;
+using RegiLattice.Core.Models;
 using RegiLattice.Core.Services;
 
 namespace RegiLattice.GUI.Controls;
