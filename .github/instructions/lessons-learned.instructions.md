@@ -1394,17 +1394,18 @@ exist for codeql-action; latest stable is `@v3`). Fixed in commit `bc51a02`.
 
 | Action | Latest Stable |
 |--------|--------------|
-| `actions/checkout` | `@v4` |
-| `actions/setup-dotnet` | `@v4` |
-| `actions/cache` | `@v4` |
-| `actions/upload-artifact` | `@v4` |
-| `github/codeql-action/init` | `@v3` |
-| `github/codeql-action/analyze` | `@v3` |
-| `github/codeql-action/upload-sarif` | `@v3` |
+| `actions/checkout` | `@v6` |
+| `actions/setup-dotnet` | `@v5` |
+| `actions/cache` | `@v5` |
+| `actions/upload-artifact` | `@v7` |
+| `github/codeql-action/init` | `@v4` |
+| `github/codeql-action/analyze` | `@v4` |
+| `github/codeql-action/upload-sarif` | `@v4` |
 | `actions/dependency-review-action` | `@v4` |
-| `actions/labeler` | `@v5` |
-| `actions/github-script` | `@v7` |
-| `actions/stale` | `@v9` |
+| `actions/labeler` | `@v6` |
+| `actions/github-script` | `@v8` |
+| `actions/stale` | `@v10` |
+| `codecov/codecov-action` | `@v6` |
 
 **Rule**: Before committing any new or bumped action version, verify it exists:
 
