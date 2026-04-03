@@ -27,7 +27,7 @@
   </RunConfiguration>
 
   <!-- Blame data collector: kills any test that hangs for > 30 s.
-       Equivalent to passing --blame-hang-timeout 30s on the CLI, but applies even when
+       Equivalent to passing the blame-hang-timeout 30s flag on the CLI, but applies even when
        tests are run from the VS Code Test Explorer which does not forward that flag.
        DumpType="None" kills the test host without writing a memory dump (avoids large
        files on OneDrive-hosted workspaces). -->
