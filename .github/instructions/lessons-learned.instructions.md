@@ -1239,16 +1239,27 @@ a thousands separator: `5 025`, `5 075` — **not** `5025`, `5075`.
 all markdown and SVG files to use this format. `replace_string_in_file` against the SVG
 must match the exact format including the space.
 
-**What to update on each version bump (6 files, listed in order)**:
+**What to update on each version bump (11 files, listed in order)**:
 
-| File                              | What changes                                                                                          |
-| --------------------------------- | ----------------------------------------------------------------------------------------------------- |
-| `docs/assets/stats.svg`           | Tweak count + category count (space-separated thousands)                                              |
-| `Directory.Build.props`           | All 4 version properties: `<Version>`, `<AssemblyVersion>`, `<FileVersion>`, `<InformationalVersion>` |
-| `installer/Package.wxs`           | `Version="X.Y.Z"` (no `.0` suffix here)                                                               |
-| `README.md`                       | Badge, download link, description line, features bullet, diagram count, folder tree count, footer     |
-| `.github/copilot-instructions.md` | Header line, version table row, tweaks/categories/modules row                                         |
-| `docs/CHANGELOG.md`               | Prepend new `## [X.Y.Z]` section                                                                      |
+| File                                                | What changes                                                                                          |
+| --------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
+| `docs/assets/stats.svg`                             | Tweak count + category count (space-separated thousands)                                              |
+| `Directory.Build.props`                             | All 4 version properties: `<Version>`, `<AssemblyVersion>`, `<FileVersion>`, `<InformationalVersion>` |
+| `installer/Package.wxs`                             | `Version="X.Y.Z"` (no `.0` suffix here)                                                               |
+| `README.md`                                         | Badge, download link, description line, features bullet, diagram counts, test count                   |
+| `.github/copilot-instructions.md`                   | Header line, version table row, tweaks/categories/modules/tests row                                   |
+| `docs/CHANGELOG.md`                                 | Prepend new `## [X.Y.Z]` section                                                                      |
+| `chocolatey/regilattice.nuspec`                     | `<version>`, description counts                                                                       |
+| `scoop/regilattice.json`                            | `version`, `url` (both under `architecture.64bit` and `autoupdate`)                                   |
+| `winget/RegiLattice.RegiLattice.yaml`               | `PackageVersion`                                                                                      |
+| `winget/RegiLattice.RegiLattice.installer.yaml`     | `PackageVersion`, `InstallerUrl`                                                                      |
+| `winget/RegiLattice.RegiLattice.locale.en-US.yaml`  | `PackageVersion`, description counts                                                                  |
+
+**GitHub About sidebar** — update via CLI after every version bump that changes counts:
+
+```powershell
+gh repo edit RajwanYair/RegiLattice --description "Windows 10/11 registry tweaks toolkit — 9,190 tweaks, debloater, privacy hardening, performance optimizer, security hardening, group policy alternative, compliance audit. WinForms GUI + CLI. .NET 10, C# 13. Open source."
+```
 
 ---
 
