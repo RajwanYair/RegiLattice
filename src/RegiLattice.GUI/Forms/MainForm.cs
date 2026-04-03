@@ -88,6 +88,23 @@ public partial class MainForm : Form
         Text = "RegiLattice";
         Icon = AppIcons.AppIcon;
 
+        // ── Sidebar navigation wiring ──────────────────────────────────────
+        _sidebar.ItemSelected += OnSidebarNavSelected;
+
+        // ── TweakBrowserPanel events ───────────────────────────────────────
+        _tweakPanel.TweakToggled += async (td, enable) =>
+        {
+            if (enable) await ApplyTweaks(new[] { td });
+            else        await RemoveTweaks(new[] { td });
+        };
+        _tweakPanel.TweakInfoRequested += td => ShowTweakDetail(td);
+        _tweakPanel.AdvancedViewRequested += OnShowAdvancedView;
+
+        // ── DashboardPanel events ──────────────────────────────────────────
+        _dashPanel.SmartScanRequested    += () => OnOpenSmartScan();
+        _dashPanel.ProfileWizardRequested += () => OnOpenProfileWizard();
+        _dashPanel.TweaksRequested       += () => _sidebar.SelectedKey = "tweaks";
+
         _searchDebounceTimer.Tick += OnSearchDebounceTick;
         _profileScheduleTimer.Tick += OnProfileScheduleTick;
         _treeView.NodeMouseHover += OnTreeNodeScoreHover;
@@ -239,6 +256,33 @@ public partial class MainForm : Form
         WindowState = FormWindowState.Normal;
         _trayIcon.Visible = false;
         Activate();
+    }
+
+    // ── Sidebar navigation ─────────────────────────────────────────────────
+    private void OnSidebarNavSelected(string key)
+    {
+        _dashPanel.Visible     = key == "home";
+        _tweakPanel.Visible    = key == "tweaks";
+        _toolsPanel.Visible    = key == "tools";
+        _packagesPanel.Visible = key == "packages";
+
+        // Classic view stays hidden unless explicitly shown via AdvancedViewRequested
+        if (key != "tweaks")
+            _split.Visible = false;
+
+        if (key == "settings")
+        {
+            _sidebar.SelectedKey = _dashPanel.Visible ? "home" : (
+                                   _tweakPanel.Visible ? "tweaks" : (
+                                   _toolsPanel.Visible ? "tools" : "packages"));
+            OnOpenPreferences();
+        }
+    }
+
+    private void OnShowAdvancedView()
+    {
+        _tweakPanel.Visible = false;
+        _split.Visible = true;
     }
 
     // ── Localization ───────────────────────────────────────────────────────
@@ -409,6 +453,14 @@ public partial class MainForm : Form
         // Re-colour tree nodes
         foreach (TreeNode node in _treeView.Nodes)
             node.ForeColor = AppTheme.Fg;
+
+        // Propagate to new sidebar + content panels
+        _sidebar.BackColor = AppTheme.Bg;
+        _sidebar.Invalidate();
+        _dashPanel.ApplyTheme();
+        _tweakPanel.ApplyTheme();
+        _packagesPanel.ApplyTheme();
+        _toolsPanel.ApplyTheme();
 
         RefreshMenuImages();
         ResumeLayout(true);
@@ -714,6 +766,11 @@ public partial class MainForm : Form
             // Tweak statuses are lazy-loaded when the user clicks a category.
             PopulateTree(autoSelect: false);
             UpdateCounters();
+
+            // ── Wire new panels after engine is ready ──────────────────────
+            _tweakPanel.SetEngine(_engine, _statusCache, _inapplicableIds);
+            _dashPanel.SetData(_engine, _statusCache, []);
+            RegisterToolsHub();
         }
         catch (OperationCanceledException) { }
         catch (Exception ex)
@@ -727,7 +784,162 @@ public partial class MainForm : Form
         }
     }
 
+    // ── Tools hub registration ─────────────────────────────────────────────
+    private void RegisterToolsHub()
+    {
+        static string Lbl(string key) => Locale.T(key);
+
+        // System Diagnostics
+        _toolsPanel.RegisterTool("\uEA6C", "Windows Health",        "DISM / SFC / BCD checks",      "System Diagnostics",    () => OnOpenWindowsHealth(),       adminRequired: true);
+        _toolsPanel.RegisterTool("\uEBE8", "Tool Versions",         "Check installed tool versions", "System Diagnostics",    () => OnOpenToolVersions(),        adminRequired: false);
+        _toolsPanel.RegisterTool("\uEC57", "Boot Analyzer",         "Analyse boot time entries",     "System Diagnostics",    () => OnOpenBootAnalyzer(),        adminRequired: false);
+        _toolsPanel.RegisterTool("\uECC5", "Windows Update",        "Control update settings",       "System Diagnostics",    () => OnOpenWuControl(),           adminRequired: false);
+        _toolsPanel.RegisterTool("\uE77F", "Driver Checker",        "Check driver updates",          "System Diagnostics",    () => OnOpenDriverChecker(),       adminRequired: false);
+        _toolsPanel.RegisterTool("\uF1C1", "Battery Health",        "View battery report",           "System Diagnostics",    () => OnOpenBatteryHealth(),       adminRequired: false);
+        _toolsPanel.RegisterTool("\uE7F4", "Hardware Temp",         "Monitor CPU / GPU temps",       "System Diagnostics",    () => OnOpenHardwareTemp(),        adminRequired: false);
+
+        // System Management
+        _toolsPanel.RegisterTool("\uEBE8", "Startup Manager",       "Manage startup entries",        "System Management",     () => OnOpenStartupManager(),      adminRequired: false);
+        _toolsPanel.RegisterTool("\uE90C", "Service Manager",       "Control Windows services",      "System Management",     () => OnOpenServiceManager(),      adminRequired: false);
+        _toolsPanel.RegisterTool("\uE823", "Scheduled Tasks",       "Manage scheduled tasks",        "System Management",     () => OnOpenScheduledTaskManager(), adminRequired: false);
+        _toolsPanel.RegisterTool("\uECAA", "Installed Apps",        "Browse installed software",     "System Management",     () => OnOpenInstalledApps(),       adminRequired: false);
+        _toolsPanel.RegisterTool("\uE8E2", "Context Menu Mgr",      "Edit right-click menu entries", "System Management",     () => OnOpenContextMenuManager(),  adminRequired: false);
+        _toolsPanel.RegisterTool("\uE8A5", "Shell Extensions",      "Manage shell extensions",       "System Management",     () => OnOpenShellExtensions(),     adminRequired: false);
+
+        // Power & Energy
+        _toolsPanel.RegisterTool("\uE945", "Power Plan",            "Switch active power plan",      "Power & Energy",        () => OnOpenPowerPlan(),           adminRequired: true);
+        _toolsPanel.RegisterTool("\uE7EE", "Power Scheduler",       "Schedule plan changes",         "Power & Energy",        () => OnOpenPowerScheduler(),      adminRequired: true);
+        _toolsPanel.RegisterTool("\uF19E", "Sleep Timer",           "Schedule sleep / hibernate",    "Power & Energy",        () => OnOpenSleepTimer(),          adminRequired: false);
+        _toolsPanel.RegisterTool("\uEBAB", "Battery Saver",         "Configure battery saver",       "Power & Energy",        () => OnOpenBatterySaver(),        adminRequired: true);
+        _toolsPanel.RegisterTool("\uE83F", "USB Power",             "USB selective suspend",         "Power & Energy",        () => OnOpenUsbPower(),            adminRequired: true);
+        _toolsPanel.RegisterTool("\uE706", "Brightness",            "Schedule brightness changes",   "Power & Energy",        () => OnOpenBrightness(),          adminRequired: false);
+
+        // Privacy & Security
+        _toolsPanel.RegisterTool("\uF552", "Privacy Dashboard",     "Review privacy settings",       "Privacy & Security",    () => OnOpenPrivacyDashboard(),    adminRequired: false);
+        _toolsPanel.RegisterTool("\uEA8C", "Ad & Tip Removal",      "Remove sponsored content",      "Privacy & Security",    () => OnOpenAdRemoval(),           adminRequired: false);
+        _toolsPanel.RegisterTool("\uEBE8", "Telemetry Dashboard",   "View telemetry pipeline",       "Privacy & Security",    () => OnOpenTelemetryDashboard(),  adminRequired: false);
+        _toolsPanel.RegisterTool("\uEF20", "App Permissions",       "Review app privacy perms",      "Privacy & Security",    () => OnOpenAppPermissions(),      adminRequired: true);
+        _toolsPanel.RegisterTool("\uE72E", "Firewall Rules",        "Manage inbound/outbound rules", "Privacy & Security",    () => OnOpenFirewallRules(),       adminRequired: false);
+        _toolsPanel.RegisterTool("\uEA8F", "Notifications",         "Manage notification sources",   "Privacy & Security",    () => OnOpenNotifMgr(),            adminRequired: false);
+
+        // Network
+        _toolsPanel.RegisterTool("\uE701", "Network Tools",         "Ping, trace, DNS lookup",       "Network",               () => OnOpenNetworkTools(),        adminRequired: false);
+        _toolsPanel.RegisterTool("\uE8AD", "Network Repair",        "Reset TCP/IP stack",            "Network",               () => OnOpenNetworkRepair(),       adminRequired: true);
+        _toolsPanel.RegisterTool("\uEC05", "Network Adapter",       "Enable/disable adapters",       "Network",               () => OnOpenNetworkAdapter(),      adminRequired: true);
+        _toolsPanel.RegisterTool("\uE704", "Wi-Fi Profiles",        "Manage saved Wi-Fi networks",   "Network",               () => OnOpenWiFiProfiles(),        adminRequired: false);
+        _toolsPanel.RegisterTool("\uE71D", "Hosts File",            "Edit hosts file entries",       "Network",               () => OnOpenHostsFileManager(),    adminRequired: false);
+        _toolsPanel.RegisterTool("\uF404", "Proxy Config",          "Configure proxy settings",      "Network",               () => OnOpenProxyConfig(),         adminRequired: false);
+        _toolsPanel.RegisterTool("\uE8C1", "DNS Switcher",          "Quick-switch DNS servers",      "Network",               () => OnOpenDnsSwitcher(),         adminRequired: true);
+        _toolsPanel.RegisterTool("\uE8C4", "DNS over HTTPS",        "Enable DoH per adapter",        "Network",               () => OnOpenDnsOverHttps(),        adminRequired: true);
+        _toolsPanel.RegisterTool("\uE874", "Port Scanner",          "Test connectivity/ports",       "Network",               () => OnOpenPortScanner(),         adminRequired: false);
+        _toolsPanel.RegisterTool("\uE703", "Bandwidth Monitor",     "Live bandwidth usage",          "Network",               () => OnOpenNetBandwidth(),        adminRequired: false);
+        _toolsPanel.RegisterTool("\uF19E", "Wake-on-LAN",           "Send magic packets",            "Network",               () => OnOpenWakeOnLan(),           adminRequired: false);
+        _toolsPanel.RegisterTool("\uE8C8", "MAC Address",           "Manage MAC addresses",          "Network",               () => OnOpenMacAddress(),          adminRequired: false);
+
+        // Cleanup & Performance
+        _toolsPanel.RegisterTool("\uE74D", "Temp File Cleaner",     "Delete temporary files",        "Cleanup & Performance", () => OnOpenTempFileCleaner(),     adminRequired: false);
+        _toolsPanel.RegisterTool("\uE74D", "Browser Cache",         "Clear browser caches",          "Cleanup & Performance", () => OnOpenBrowserCache(),        adminRequired: false);
+        _toolsPanel.RegisterTool("\uEBD2", "Memory Cleaner",        "Trim working sets",             "Cleanup & Performance", () => OnOpenMemoryCleaner(),       adminRequired: false);
+        _toolsPanel.RegisterTool("\uEDA2", "Disk Space",            "View disk usage",               "Cleanup & Performance", () => OnOpenDiskSpace(),           adminRequired: false);
+
+        // Smart Tools
+        _toolsPanel.RegisterTool("\uE945", "Smart Scan",            "AI-powered tweak recommendations", "Smart Tools",        () => OnOpenSmartScan(),           adminRequired: false);
+        _toolsPanel.RegisterTool("\uE8EF", "Profile Wizard",        "Guided profile selection",      "Smart Tools",           () => OnOpenProfileWizard(),       adminRequired: false);
+        _toolsPanel.RegisterTool("\uEBEF", "Profile Compare",       "Compare two profiles side-by-side","Smart Tools",        () => OnOpenProfileCompare(),      adminRequired: false);
+        _toolsPanel.RegisterTool("\uF1E4", "Dependency Graph",      "Visualise tweak dependencies",  "Smart Tools",           () => OnOpenDepGraph(),            adminRequired: false);
+
+        _toolsPanel.Build();
+    }
+
+    // ── Tweak detail helper (used by TweakBrowserPanel) ───────────────────
+    private void ShowTweakDetail(TweakDef td)
+    {
+        var sb = new StringBuilder();
+        sb.AppendLine($"ID: {td.Id}");
+        sb.AppendLine($"Category: {td.Category}");
+        sb.AppendLine($"Kind: {td.Kind}");
+        sb.AppendLine($"Scope: {td.Scope}");
+        sb.AppendLine($"Needs Admin: {td.NeedsAdmin}");
+        sb.AppendLine($"Corp Safe: {td.CorpSafe}");
+        if (!string.IsNullOrEmpty(td.Description))
+            sb.AppendLine($"\n{td.Description}");
+        if (!string.IsNullOrEmpty(td.SideEffects))
+            sb.AppendLine($"\nSide effects: {td.SideEffects}");
+
+        MessageBox.Show(sb.ToString(), td.Label, MessageBoxButtons.OK, MessageBoxIcon.Information);
+    }
+
     // ── Actions ────────────────────────────────────────────────────────────
+
+    /// <summary>Apply a specific list of tweaks (used by TweakBrowserPanel toggle events).</summary>
+    private async Task ApplyTweaks(IReadOnlyList<TweakDef> tweaks)
+    {
+        bool force = _forceCheck.Checked;
+        SetBusy(true, $"Applying {tweaks.Count} tweak(s)...", totalSteps: tweaks.Count);
+        try
+        {
+            var results = await Task.Run(() =>
+            {
+                var res = new Dictionary<string, TweakResult>(StringComparer.Ordinal);
+                foreach (var td in tweaks)
+                {
+                    var r = _engine.Apply(td, forceCorp: force);
+                    res[td.Id] = r;
+                }
+                return res;
+            }, _cts.Token);
+
+            foreach (var (id, result) in results)
+            {
+                _statusCache[id] = result;
+                if (result == TweakResult.Applied)
+                {
+                    _pendingRebootIds.Add(id);
+                    var td2 = _engine.GetTweak(id);
+                    if (td2 is not null)
+                        _opStack.Push(new TweakOperation(id, td2.Label, OperationKind.Apply, DateTimeOffset.Now));
+                }
+                AppendLog(result == TweakResult.Applied ? $"\u2705 Applied: {id}" : $"\u274C Failed: {id} — {result}");
+            }
+
+            _tweakPanel.UpdateStatusCache(_statusCache);
+        }
+        catch (OperationCanceledException) { }
+        finally { SetBusy(false); }
+    }
+
+    /// <summary>Remove a specific list of tweaks (used by TweakBrowserPanel toggle events).</summary>
+    private async Task RemoveTweaks(IReadOnlyList<TweakDef> tweaks)
+    {
+        bool force = _forceCheck.Checked;
+        SetBusy(true, $"Removing {tweaks.Count} tweak(s)...", totalSteps: tweaks.Count);
+        try
+        {
+            var results = await Task.Run(() =>
+            {
+                var res = new Dictionary<string, TweakResult>(StringComparer.Ordinal);
+                foreach (var td in tweaks)
+                {
+                    var r = _engine.Remove(td, forceCorp: force);
+                    res[td.Id] = r;
+                }
+                return res;
+            }, _cts.Token);
+
+            foreach (var (id, result) in results)
+            {
+                _statusCache[id] = result;
+                if (result == TweakResult.NotApplied)
+                    _pendingRebootIds.Remove(id);
+                AppendLog(result == TweakResult.NotApplied ? $"\u2705 Removed: {id}" : $"\u274C Failed: {id} — {result}");
+            }
+
+            _tweakPanel.UpdateStatusCache(_statusCache);
+        }
+        catch (OperationCanceledException) { }
+        finally { SetBusy(false); }
+    }
+
     internal async Task RefreshStatusAsync()
     {
         SetBusy(true, "Detecting tweak statuses...");
