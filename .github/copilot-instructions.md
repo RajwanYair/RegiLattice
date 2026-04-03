@@ -364,7 +364,7 @@ Canonical category slugs:
 
 > Full test file inventory and coverage targets: see `.github/instructions/testing.instructions.md` — Test File Structure section.
 
-Projects: `RegiLattice.Core.Tests` (2291 tests), `RegiLattice.CLI.Tests` (362 tests), `RegiLattice.GUI.Tests` (339 tests). Total: 2992.
+Projects: `RegiLattice.Core.Tests` (2,317 tests), `RegiLattice.CLI.Tests` (379 tests), `RegiLattice.GUI.Tests` (339 tests). Total: 3,035.
 
 ## Adding a New Tweak — Checklist
 
