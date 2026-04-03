@@ -152,42 +152,59 @@ jobs:
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           Write-Host "MSIX: $out ($([math]::Round((Get-Item $out).Length / 1MB, 1)) MB)"
 
+      - name: Rename artifacts for release
+        shell: pwsh
+        run: |
+          $tag = '${{ inputs.tag_name || github.ref_name }}'
+          # GUI EXE: RegiLattice-vX.Y.Z-win-x64.exe
+          Copy-Item 'publish/gui/RegiLattice.GUI.exe' "publish/RegiLattice-$tag-win-x64.exe"
+          Write-Host "GUI EXE  : RegiLattice-$tag-win-x64.exe"
+          # CLI EXE: RegiLatticeCLI-vX.Y.Z-win-x64.exe
+          Copy-Item 'publish/cli/RegiLattice.exe' "publish/RegiLatticeCLI-$tag-win-x64.exe"
+          Write-Host "CLI EXE  : RegiLatticeCLI-$tag-win-x64.exe"
+          # MSI (optional — copy from WiX build output if present)
+          $msi = Get-ChildItem 'installer/bin/Release' -Recurse -Filter '*.msi' -ErrorAction SilentlyContinue | Select-Object -First 1
+          if ($msi) {
+            Copy-Item $msi.FullName "publish/RegiLattice-$tag-win-x64.msi"
+            Write-Host "MSI      : RegiLattice-$tag-win-x64.msi"
+          } else {
+            Write-Host "MSI      : not built (WiX optional — skipped)"
+          }
+
       - name: Validate required release artifacts
         shell: pwsh
         run: |
+          $tag = '${{ inputs.tag_name || github.ref_name }}'
           # Mandatory: GUI and CLI EXEs must exist — fail the release if either is missing.
           $missing = @()
-          if (-not (Test-Path 'publish/gui/RegiLattice.GUI.exe')) { $missing += 'publish/gui/RegiLattice.GUI.exe' }
-          if (-not (Test-Path 'publish/cli/RegiLattice.exe'))     { $missing += 'publish/cli/RegiLattice.exe'     }
+          if (-not (Test-Path "publish/RegiLattice-$tag-win-x64.exe"))    { $missing += "RegiLattice-$tag-win-x64.exe" }
+          if (-not (Test-Path "publish/RegiLatticeCLI-$tag-win-x64.exe")) { $missing += "RegiLatticeCLI-$tag-win-x64.exe" }
           if ($missing.Count -gt 0) {
             Write-Error "Required release artifacts missing — aborting release:`n  $($missing -join "`n  ")"
             exit 1
           }
-          $guiMb = [math]::Round((Get-Item 'publish/gui/RegiLattice.GUI.exe').Length / 1MB, 1)
-          $cliMb = [math]::Round((Get-Item 'publish/cli/RegiLattice.exe').Length / 1MB, 1)
+          $guiMb = [math]::Round((Get-Item "publish/RegiLattice-$tag-win-x64.exe").Length / 1MB, 1)
+          $cliMb = [math]::Round((Get-Item "publish/RegiLatticeCLI-$tag-win-x64.exe").Length / 1MB, 1)
           Write-Host "Required artifacts present:"
-          Write-Host "  GUI exe : publish/gui/RegiLattice.GUI.exe  ($guiMb MB)"
-          Write-Host "  CLI exe : publish/cli/RegiLattice.exe  ($cliMb MB)"
+          Write-Host "  GUI exe : RegiLattice-$tag-win-x64.exe  ($guiMb MB)"
+          Write-Host "  CLI exe : RegiLatticeCLI-$tag-win-x64.exe  ($cliMb MB)"
           # Report optional artifacts (MSI / MSIX)
-          $msi  = Get-ChildItem 'installer/bin/Release' -Recurse -Filter '*.msi'  -ErrorAction SilentlyContinue | Select-Object -First 1
-          $msix = Get-ChildItem 'publish'               -Filter   '*.msix'        -ErrorAction SilentlyContinue | Select-Object -First 1
-          if ($msi)  { Write-Host "  MSI     : $($msi.FullName)  ($([math]::Round($msi.Length/1MB,1)) MB)" }
+          $msi  = Get-ChildItem 'publish' -Filter '*-win-x64.msi' -ErrorAction SilentlyContinue | Select-Object -First 1
+          $msix = Get-ChildItem 'publish' -Filter '*.msix'        -ErrorAction SilentlyContinue | Select-Object -First 1
+          if ($msi)  { Write-Host "  MSI     : $($msi.Name)  ($([math]::Round($msi.Length/1MB,1)) MB)" }
           else       { Write-Host "  MSI     : not built (WiX optional — skipped)" }
-          if ($msix) { Write-Host "  MSIX    : $($msix.FullName)  ($([math]::Round($msix.Length/1MB,1)) MB)" }
+          if ($msix) { Write-Host "  MSIX    : $($msix.Name)  ($([math]::Round($msix.Length/1MB,1)) MB)" }
           else       { Write-Host "  MSIX    : not built (makeappx optional — skipped)" }
 
       - name: Generate checksums
         shell: pwsh
         run: |
           $all = @()
-          $all += Get-ChildItem "publish/gui" -File -Filter "*.exe" -ErrorAction SilentlyContinue
-          $all += Get-ChildItem "publish/cli" -File -Filter "*.exe" -ErrorAction SilentlyContinue
-          $all += Get-ChildItem "publish"     -File -Filter "*.msix" -ErrorAction SilentlyContinue
-          $all += Get-ChildItem "publish"     -File -Filter "*.zip"  -ErrorAction SilentlyContinue
-          $all += Get-ChildItem "publish"     -File -Filter "*.nupkg" -ErrorAction SilentlyContinue
-          if (Test-Path "installer/bin/Release") {
-            $all += Get-ChildItem "installer/bin/Release" -Recurse -File -Filter "*.msi"
-          }
+          $all += Get-ChildItem "publish" -File -Filter "*-win-x64.exe"  -ErrorAction SilentlyContinue
+          $all += Get-ChildItem "publish" -File -Filter "*-win-x64.msi"  -ErrorAction SilentlyContinue
+          $all += Get-ChildItem "publish" -File -Filter "*.msix"          -ErrorAction SilentlyContinue
+          $all += Get-ChildItem "publish" -File -Filter "*.zip"           -ErrorAction SilentlyContinue
+          $all += Get-ChildItem "publish" -File -Filter "*.nupkg"         -ErrorAction SilentlyContinue
           $hashes = foreach ($f in $all) { Get-FileHash $f.FullName -Algorithm SHA256 }
           $hashes | ForEach-Object {
             $rel = $_.Path -replace [regex]::Escape((Get-Location).Path + '\'), '' -replace '\\', '/'
@@ -265,18 +282,15 @@ jobs:
           $tag = '${{ inputs.tag_name || github.ref_name }}'
           $files = [System.Collections.Generic.List[string]]::new()
 
-          # Required artifacts
-          if (Test-Path 'publish/gui/RegiLattice.GUI.exe') { $files.Add('publish/gui/RegiLattice.GUI.exe') }
-          if (Test-Path 'publish/cli/RegiLattice.exe')     { $files.Add('publish/cli/RegiLattice.exe') }
-          if (Test-Path 'publish/SHA256SUMS.txt')          { $files.Add('publish/SHA256SUMS.txt') }
-          # Optional artifacts (continue-on-error steps — may not exist)
-          Get-ChildItem 'publish' -Filter '*.zip'   -ErrorAction SilentlyContinue | ForEach-Object { $files.Add($_.FullName) }
-          Get-ChildItem 'publish' -Filter '*.nupkg' -ErrorAction SilentlyContinue | ForEach-Object { $files.Add($_.FullName) }
-          Get-ChildItem 'publish' -Filter '*.msix'  -ErrorAction SilentlyContinue | ForEach-Object { $files.Add($_.FullName) }
-          if (Test-Path 'installer/bin/Release') {
-            Get-ChildItem 'installer/bin/Release' -Recurse -Filter '*.msi' -ErrorAction SilentlyContinue |
-              ForEach-Object { $files.Add($_.FullName) }
-          }
+          # Required artifacts (versioned names)
+          if (Test-Path "publish/RegiLattice-$tag-win-x64.exe")    { $files.Add("publish/RegiLattice-$tag-win-x64.exe") }
+          if (Test-Path "publish/RegiLatticeCLI-$tag-win-x64.exe") { $files.Add("publish/RegiLatticeCLI-$tag-win-x64.exe") }
+          if (Test-Path 'publish/SHA256SUMS.txt')                  { $files.Add('publish/SHA256SUMS.txt') }
+          # Optional artifacts (all versioned — continue-on-error steps may not produce them)
+          Get-ChildItem 'publish' -Filter '*.zip'         -ErrorAction SilentlyContinue | ForEach-Object { $files.Add($_.FullName) }
+          Get-ChildItem 'publish' -Filter '*.nupkg'       -ErrorAction SilentlyContinue | ForEach-Object { $files.Add($_.FullName) }
+          Get-ChildItem 'publish' -Filter '*.msix'        -ErrorAction SilentlyContinue | ForEach-Object { $files.Add($_.FullName) }
+          Get-ChildItem 'publish' -Filter '*-win-x64.msi' -ErrorAction SilentlyContinue | ForEach-Object { $files.Add($_.FullName) }
 
           Write-Host "Release $tag — $($files.Count) artifact(s):"
           $files | ForEach-Object { Write-Host "  $_" }
@@ -319,8 +333,8 @@ jobs:
           $assetList | ForEach-Object { Write-Host "  $_" }
 
           $missing = @()
-          if ($assetList -notcontains 'RegiLattice.GUI.exe') { $missing += 'RegiLattice.GUI.exe' }
-          if ($assetList -notcontains 'RegiLattice.exe')     { $missing += 'RegiLattice.exe' }
+          if ($assetList -notcontains "RegiLattice-$tag-win-x64.exe")    { $missing += "RegiLattice-$tag-win-x64.exe" }
+          if ($assetList -notcontains "RegiLatticeCLI-$tag-win-x64.exe") { $missing += "RegiLatticeCLI-$tag-win-x64.exe" }
           if ($missing.Count -gt 0) {
             Write-Error "Release $tag is MISSING required assets: $($missing -join ', ')"
             exit 1
