@@ -3255,7 +3255,7 @@ public sealed class TweakEngineIsApplicableBranchTests
     [Fact]
     public void IsApplicable_CategoryWSL_ReturnsBool()
     {
-        Assert.IsType<bool>(TweakEngine.IsApplicableOnHardware(Td("bc4-wsl-c", "WSL")));
+        Assert.IsType<bool>(TweakEngine.IsApplicableOnHardware(Td("bc4-wsl-c", "Virtualization")));
     }
 
     [Fact]
@@ -3824,7 +3824,7 @@ public sealed class WslDetectActionSweepTests
         engine.RegisterBuiltins();
 
         var dict = engine.TweaksByCategory();
-        if (!dict.TryGetValue("WSL", out var tweaks))
+        if (!dict.TryGetValue("Virtualization", out var tweaks))
             return;
 
         Assert.True(tweaks.Count >= 5, $"Expected ≥5 WSL tweaks; found {tweaks.Count}");
@@ -3871,19 +3871,19 @@ public sealed class OtherTweakDetectActionSweepTests
     public void DetectAction_DeveloperTweaks_CanBeInvoked() => AssertCategoryHasTweaks("Developer");
 
     [Fact]
-    public void DetectAction_PowerManagementTweaks_CanBeInvoked() => AssertCategoryHasTweaks("Power Management");
+    public void DetectAction_PowerManagementTweaks_CanBeInvoked() => AssertCategoryHasTweaks("Power");
 
     [Fact]
-    public void DetectAction_CommandLineTweaks_CanBeInvoked() => AssertCategoryHasTweaks("Command Line");
+    public void DetectAction_CommandLineTweaks_CanBeInvoked() => AssertCategoryHasTweaks("PowerShell");
 
     [Fact]
     public void DetectAction_AppCompatibilityTweaks_CanBeInvoked() => AssertCategoryHasTweaks("Windows 11"); // was "App Compatibility" — merged into Windows 11
 
     [Fact]
-    public void DetectAction_PackageManagementTweaks_CanBeInvoked() => AssertCategoryHasTweaks("Package Management");
+    public void DetectAction_PackageManagementTweaks_CanBeInvoked() => AssertCategoryHasTweaks("Developer");
 
     [Fact]
-    public void DetectAction_ServicesTweaks_CanBeInvoked() => AssertCategoryHasTweaks("Services");
+    public void DetectAction_ServicesTweaks_CanBeInvoked() => AssertCategoryHasTweaks("System");
 
     [Fact]
     public void DetectAction_SshConfigurationTweaks_CanBeInvoked() => AssertCategoryHasTweaks("SSH Configuration");
@@ -3892,10 +3892,10 @@ public sealed class OtherTweakDetectActionSweepTests
     public void DetectAction_VirtualizationTweaks_CanBeInvoked() => AssertCategoryHasTweaks("Virtualization");
 
     [Fact]
-    public void DetectAction_NetworkOptimizationTweaks_CanBeInvoked() => AssertCategoryHasTweaks("Network Optimization");
+    public void DetectAction_NetworkOptimizationTweaks_CanBeInvoked() => AssertCategoryHasTweaks("Network");
 
     [Fact]
-    public void DetectAction_PrintingTweaks_CanBeInvoked() => AssertCategoryHasTweaks("Printing");
+    public void DetectAction_PrintingTweaks_CanBeInvoked() => AssertCategoryHasTweaks("Maintenance");
 }
 
 // ── 8. SshHardening helper branches via action delegates ───────────────────

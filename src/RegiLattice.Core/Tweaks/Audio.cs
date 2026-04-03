@@ -1116,7 +1116,7 @@ internal static class Multimedia
         {
             Id = "media-disable-autorun",
             Label = "Disable AutoRun for All Drives",
-            Category = "Multimedia",
+            Category = "Audio",
             NeedsAdmin = true,
             CorpSafe = false,
             Description =
@@ -1131,7 +1131,7 @@ internal static class Multimedia
         {
             Id = "media-disable-media-sharing",
             Label = "Disable Media Streaming/Sharing Service",
-            Category = "Multimedia",
+            Category = "Audio",
             NeedsAdmin = true,
             CorpSafe = false,
             Description =
@@ -1146,7 +1146,7 @@ internal static class Multimedia
         {
             Id = "media-set-wallpaper-quality",
             Label = "Set Wallpaper JPEG Quality to Maximum",
-            Category = "Multimedia",
+            Category = "Audio",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -1163,7 +1163,7 @@ internal static class Multimedia
         {
             Id = "media-disable-media-streaming",
             Label = "Disable Windows Media Streaming (Policy)",
-            Category = "Multimedia",
+            Category = "Audio",
             NeedsAdmin = true,
             CorpSafe = false,
             Description =
@@ -1178,7 +1178,7 @@ internal static class Multimedia
         {
             Id = "media-set-default-player-assoc",
             Label = "Set Default Media Player Associations",
-            Category = "Multimedia",
+            Category = "Audio",
             NeedsAdmin = true,
             CorpSafe = false,
             Description =
@@ -1201,7 +1201,7 @@ internal static class Multimedia
         {
             Id = "media-disable-wm-drm",
             Label = "Disable Windows Media DRM",
-            Category = "Multimedia",
+            Category = "Audio",
             NeedsAdmin = true,
             CorpSafe = false,
             Description =
@@ -1216,7 +1216,7 @@ internal static class Multimedia
         {
             Id = "media-disable-gamebar-policy",
             Label = "Disable Xbox Game Bar (Policy)",
-            Category = "Multimedia",
+            Category = "Audio",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -1231,7 +1231,7 @@ internal static class Multimedia
         {
             Id = "media-reduce-tooltip-delay",
             Label = "Instant Tooltip Display (0 ms)",
-            Category = "Multimedia",
+            Category = "Audio",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -1250,7 +1250,7 @@ internal static class Multimedia
         {
             Id = "media-set-wmf-no-telemetry",
             Label = "Disable Windows Media Foundation Telemetry",
-            Category = "Multimedia",
+            Category = "Audio",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables telemetry/DRM phone-home in Windows Media Foundation components. Default: enabled.",
@@ -1264,7 +1264,7 @@ internal static class Multimedia
         {
             Id = "media-disable-casting",
             Label = "Disable Media Casting to Device",
-            Category = "Multimedia",
+            Category = "Audio",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables the Cast to Device feature for media streaming. Default: enabled.",
@@ -1278,7 +1278,7 @@ internal static class Multimedia
         {
             Id = "media-disable-media-player-sharing",
             Label = "Disable Windows Media Player Network Sharing",
-            Category = "Multimedia",
+            Category = "Audio",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables the Windows Media Player Network Sharing Service. Prevents DLNA media streaming. Default: enabled.",
@@ -1292,7 +1292,7 @@ internal static class Multimedia
         {
             Id = "media-disable-disc-burning",
             Label = "Disable CD/DVD Burning in Explorer",
-            Category = "Multimedia",
+            Category = "Audio",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Disables the built-in CD/DVD burning capability in Windows Explorer. Default: enabled.",
@@ -1306,7 +1306,7 @@ internal static class Multimedia
         {
             Id = "media-disable-sound-scheme",
             Label = "Disable System Sound Scheme",
-            Category = "Multimedia",
+            Category = "Audio",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -1321,7 +1321,7 @@ internal static class Multimedia
         {
             Id = "media-disable-wmp-network-sharing",
             Label = "Disable WMP Network Sharing",
-            Category = "Multimedia",
+            Category = "Audio",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -1337,7 +1337,7 @@ internal static class Multimedia
         {
             Id = "media-disable-wmp-autoplay",
             Label = "Disable WMP AutoPlay",
-            Category = "Multimedia",
+            Category = "Audio",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Prevents Windows Media Player from automatically playing media when inserted.",
@@ -1351,7 +1351,7 @@ internal static class Multimedia
         {
             Id = "media-disable-wmp-codec-download",
             Label = "Disable WMP Automatic Codec Download",
-            Category = "Multimedia",
+            Category = "Audio",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Prevents Windows Media Player from automatically downloading codecs from the internet.",
@@ -1365,7 +1365,7 @@ internal static class Multimedia
         {
             Id = "media-disable-video-thumbnail-cache",
             Label = "Disable Video Thumbnail Cache",
-            Category = "Multimedia",
+            Category = "Audio",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Stops Windows from caching video thumbnail images in hidden system folders.",
@@ -1379,7 +1379,7 @@ internal static class Multimedia
         {
             Id = "media-set-system-responsiveness-media",
             Label = "Optimise System Responsiveness for Media",
-            Category = "Multimedia",
+            Category = "Audio",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Sets MMCSS SystemResponsiveness to 0 so multimedia threads get maximum CPU time.",
@@ -1414,7 +1414,7 @@ internal static class Multimedia
         {
             Id = "media-enable-hardware-video-decode",
             Label = "Enable Hardware-Accelerated Video Decode",
-            Category = "Multimedia",
+            Category = "Audio",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Forces Windows apps to use GPU hardware decoding for video playback to reduce CPU load.",
@@ -1428,7 +1428,7 @@ internal static class Multimedia
         {
             Id = "media-set-pro-audio-latency",
             Label = "Set Pro Audio Scheduling Latency",
-            Category = "Multimedia",
+            Category = "Audio",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Sets MMCSS Pro Audio task scheduling key for lower latency; optimises for audio production.",
@@ -1462,7 +1462,7 @@ internal static class Multimedia
         {
             Id = "media-disable-casting-extension",
             Label = "Disable Cast to Device Extension",
-            Category = "Multimedia",
+            Category = "Audio",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Removes the 'Cast to device' option from Explorer context menus.",
@@ -1496,7 +1496,7 @@ internal static class Multimedia
         {
             Id = "media-disable-media-metadata-streaming",
             Label = "Disable Media Metadata Internet Lookup",
-            Category = "Multimedia",
+            Category = "Audio",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Prevents Media Player from downloading album art and track metadata from the internet.",
@@ -1510,7 +1510,7 @@ internal static class Multimedia
         {
             Id = "media-disable-media-usage-reporting",
             Label = "Disable Media Usage Reporting",
-            Category = "Multimedia",
+            Category = "Audio",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables anonymous usage reporting sent from Windows Media Player to Microsoft.",

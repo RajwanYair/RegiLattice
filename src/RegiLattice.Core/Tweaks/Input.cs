@@ -585,7 +585,7 @@ internal static class TouchPen
         {
             Id = "touch-disable-ink-workspace",
             Label = "Disable Windows Ink Workspace",
-            Category = "Touch & Pen",
+            Category = "Input",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables the Windows Ink Workspace via Group Policy. Hides the Ink Workspace button and features.",
@@ -599,7 +599,7 @@ internal static class TouchPen
         {
             Id = "touch-disable-pen-button",
             Label = "Hide Pen Workspace Taskbar Button",
-            Category = "Touch & Pen",
+            Category = "Input",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Hides the Windows Ink Workspace button from the taskbar. Pen still works; only the shortcut button is hidden.",
@@ -626,7 +626,7 @@ internal static class TouchPen
         {
             Id = "touch-disable-ink-suggestions",
             Label = "Disable Ink Work Suggested Apps",
-            Category = "Touch & Pen",
+            Category = "Input",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Removes suggested apps from the Windows Ink Workspace. Policy setting.",
@@ -649,7 +649,7 @@ internal static class TouchPen
         {
             Id = "touch-pen-screenshot",
             Label = "Pen Double-Click: Screen Sketch",
-            Category = "Touch & Pen",
+            Category = "Input",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Maps pen button double-click to Screen Sketch (screenshot annotation). Default: Nothing.",
@@ -663,7 +663,7 @@ internal static class TouchPen
         {
             Id = "touch-pen-longpress",
             Label = "Pen Long-Press: Ink Workspace",
-            Category = "Touch & Pen",
+            Category = "Input",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Maps pen button long-press to open the Ink Workspace. Default: Nothing.",
@@ -677,7 +677,7 @@ internal static class TouchPen
         {
             Id = "touch-disable-tablet-auto",
             Label = "Disable Tablet Mode Auto-Switch",
-            Category = "Touch & Pen",
+            Category = "Input",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Prevents Windows from switching to tablet mode when a keyboard is detached or folded.",
@@ -706,7 +706,7 @@ internal static class TouchPen
         {
             Id = "touch-disable-3finger",
             Label = "Disable Three-Finger Gestures",
-            Category = "Touch & Pen",
+            Category = "Input",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Disables three-finger tap and slide gestures on precision touchpads (task view, volume, etc.).",
@@ -731,7 +731,7 @@ internal static class TouchPen
         {
             Id = "touch-disable-4finger",
             Label = "Disable Four-Finger Gestures",
-            Category = "Touch & Pen",
+            Category = "Input",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Disables four-finger tap and slide gestures on precision touchpads (desktop switch, etc.).",
@@ -756,7 +756,7 @@ internal static class TouchPen
         {
             Id = "touch-disable-edge-swipe",
             Label = "Disable Edge Swipe Gesture (Policy)",
-            Category = "Touch & Pen",
+            Category = "Input",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables the screen-edge swipe gesture that opens Action Centre / notification pane. Prevents accidental triggers.",
@@ -770,7 +770,7 @@ internal static class TouchPen
         {
             Id = "touch-disable-flicks",
             Label = "Disable Pen Flick Gestures",
-            Category = "Touch & Pen",
+            Category = "Input",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Disables pen flick gestures (quick strokes for scroll, back, forward). Prevents accidental navigation.",
@@ -784,7 +784,7 @@ internal static class TouchPen
         {
             Id = "touch-disable-2finger-tap",
             Label = "Disable Two-Finger Tap (Right-Click)",
-            Category = "Touch & Pen",
+            Category = "Input",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -802,7 +802,7 @@ internal static class TouchPen
         {
             Id = "touch-disable-pinch-zoom",
             Label = "Disable Touchpad Pinch-to-Zoom",
-            Category = "Touch & Pen",
+            Category = "Input",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Disables the two-finger pinch-to-zoom gesture on precision touchpads. Prevents accidental zoom changes. Default: Enabled.",
@@ -816,7 +816,7 @@ internal static class TouchPen
         {
             Id = "touch-reverse-scroll",
             Label = "Enable Reverse (Natural) Scrolling",
-            Category = "Touch & Pen",
+            Category = "Input",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -831,7 +831,7 @@ internal static class TouchPen
         {
             Id = "touch-sensitivity-high",
             Label = "Set Touchpad Sensitivity to High",
-            Category = "Touch & Pen",
+            Category = "Input",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -846,7 +846,7 @@ internal static class TouchPen
         {
             Id = "touch-disable-palm-rejection",
             Label = "Disable Touchpad Palm Rejection",
-            Category = "Touch & Pen",
+            Category = "Input",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -861,7 +861,7 @@ internal static class TouchPen
         {
             Id = "touch-disable-touch-feedback",
             Label = "Disable Touch Visual Feedback",
-            Category = "Touch & Pen",
+            Category = "Input",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Disables the visual ripple effect when touching the screen. Default: enabled.",
@@ -875,7 +875,7 @@ internal static class TouchPen
         {
             Id = "touch-disable-gesture-feedback",
             Label = "Disable Touch Gesture Visual Feedback",
-            Category = "Touch & Pen",
+            Category = "Input",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Disables the visual feedback for multi-finger gestures (pinch, swipe). Default: enabled.",
@@ -889,7 +889,7 @@ internal static class TouchPen
         {
             Id = "touch-disable-touch-screen",
             Label = "Disable Touch Screen Input (HID)",
-            Category = "Touch & Pen",
+            Category = "Input",
             NeedsAdmin = true,
             CorpSafe = false,
             Description = "Disables the HID-compliant touch screen. Touch will not work until re-enabled. Default: enabled.",
@@ -903,7 +903,7 @@ internal static class TouchPen
         {
             Id = "touch-disable-pen-handwriting-panel",
             Label = "Disable Pen Handwriting Panel Auto-Invoke",
-            Category = "Touch & Pen",
+            Category = "Input",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Prevents the handwriting panel from auto-appearing when using a pen in text fields. Default: auto.",
@@ -917,7 +917,7 @@ internal static class TouchPen
         {
             Id = "touch-disable-pen-workspace",
             Label = "Disable Pen Workspace Button",
-            Category = "Touch & Pen",
+            Category = "Input",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Hides the Windows Ink Workspace button from the taskbar system tray. Default: visible.",
@@ -944,7 +944,7 @@ internal static class TouchPen
         {
             Id = "touch-disable-visual-feedback",
             Label = "Disable Touch Visual Feedback",
-            Category = "Touch & Pen",
+            Category = "Input",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -959,7 +959,7 @@ internal static class TouchPen
         {
             Id = "touch-disable-flicks-policy",
             Label = "Disable Pen Flicks via Group Policy",
-            Category = "Touch & Pen",
+            Category = "Input",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables pen flicks (gesture shortcuts) system-wide via Group Policy. Default: pen flicks enabled.",
@@ -973,7 +973,7 @@ internal static class TouchPen
         {
             Id = "touch-disable-ink-workspace-app-suggestions",
             Label = "Disable Ink Workspace App Suggestions",
-            Category = "Touch & Pen",
+            Category = "Input",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Disables suggested app recommendations inside the Windows Ink Workspace. Default: enabled.",
@@ -996,7 +996,7 @@ internal static class TouchPen
         {
             Id = "touch-disable-handwriting-panel-auto",
             Label = "Disable Handwriting Panel Auto-Invoke",
-            Category = "Touch & Pen",
+            Category = "Input",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -1011,7 +1011,7 @@ internal static class TouchPen
         {
             Id = "touch-disable-touch-keyboard-deploy",
             Label = "Disable Auto Touch Keyboard Deployment",
-            Category = "Touch & Pen",
+            Category = "Input",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -1026,7 +1026,7 @@ internal static class TouchPen
         {
             Id = "touch-disable-touch-keyboard-suggestions",
             Label = "Disable Touch Keyboard Autocomplete Suggestions",
-            Category = "Touch & Pen",
+            Category = "Input",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -1041,7 +1041,7 @@ internal static class TouchPen
         {
             Id = "touch-set-double-tap-speed",
             Label = "Reduce Pen Double-Tap Detection Speed",
-            Category = "Touch & Pen",
+            Category = "Input",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Reduces the time window for pen double-tap detection. Makes double-tap feel snappier. Default: 500ms window.",
@@ -1055,7 +1055,7 @@ internal static class TouchPen
         {
             Id = "touch-disable-tablet-pc-input-service",
             Label = "Disable Tablet PC Input Service",
-            Category = "Touch & Pen",
+            Category = "Input",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -1070,7 +1070,7 @@ internal static class TouchPen
         {
             Id = "touch-disable-pen-flick-sound",
             Label = "Disable Pen Flick Sound",
-            Category = "Touch & Pen",
+            Category = "Input",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Disables the sound effect played when performing pen flick gestures. Default: sound enabled.",
@@ -1084,7 +1084,7 @@ internal static class TouchPen
         {
             Id = "touch-disable-touch-prediction",
             Label = "Disable Touch Input Prediction",
-            Category = "Touch & Pen",
+            Category = "Input",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Disables predictive touch movement smoothing. Reduces latency for precise stylus work. Default: prediction enabled.",
@@ -1107,7 +1107,7 @@ internal static class TouchPen
         {
             Id = "touch-disable-pen-workspace-button",
             Label = "Hide Pen Workspace Button from Taskbar",
-            Category = "Touch & Pen",
+            Category = "Input",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Removes the pen workspace icon from the taskbar notification area. Default: visible when pen is attached.",
@@ -1134,7 +1134,7 @@ internal static class TouchPen
         {
             Id = "touch-disable-autocorrect",
             Label = "Disable Touch Keyboard Auto-Correct",
-            Category = "Touch & Pen",
+            Category = "Input",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -1149,7 +1149,7 @@ internal static class TouchPen
         {
             Id = "touch-disable-text-suggestions",
             Label = "Disable Touch Keyboard Text Suggestions",
-            Category = "Touch & Pen",
+            Category = "Input",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -1164,7 +1164,7 @@ internal static class TouchPen
         {
             Id = "touch-disable-spell-check",
             Label = "Disable Touch Keyboard Spell Check",
-            Category = "Touch & Pen",
+            Category = "Input",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -1179,7 +1179,7 @@ internal static class TouchPen
         {
             Id = "touch-hide-tip-band",
             Label = "Hide Touch Keyboard Tip Band",
-            Category = "Touch & Pen",
+            Category = "Input",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -1194,7 +1194,7 @@ internal static class TouchPen
         {
             Id = "touch-restrict-handwriting-personalization",
             Label = "Restrict Handwriting Personalization via Policy",
-            Category = "Touch & Pen",
+            Category = "Input",
             NeedsAdmin = true,
             CorpSafe = false,
             Description =
@@ -1212,7 +1212,7 @@ internal static class TouchPen
         {
             Id = "touch-disable-tablet-mode-auto-switch",
             Label = "Disable Automatic Tablet Mode Switching",
-            Category = "Touch & Pen",
+            Category = "Input",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -1227,7 +1227,7 @@ internal static class TouchPen
         {
             Id = "touch-disable-auto-keyboard-invoke",
             Label = "Disable Automatic Touch Keyboard Pop-Up",
-            Category = "Touch & Pen",
+            Category = "Input",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -1242,7 +1242,7 @@ internal static class TouchPen
         {
             Id = "touch-disable-input-personalization",
             Label = "Disable Text Input Personalisation Data Collection",
-            Category = "Touch & Pen",
+            Category = "Input",
             NeedsAdmin = false,
             CorpSafe = false,
             Description =
@@ -1257,7 +1257,7 @@ internal static class TouchPen
         {
             Id = "touch-disable-edge-gesture",
             Label = "Disable Touch Edge Gesture Swipe",
-            Category = "Touch & Pen",
+            Category = "Input",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -1293,7 +1293,7 @@ internal static class WindowsInk
         {
             Id = "ink-disable-workspace",
             Label = "Disable Windows Ink Workspace",
-            Category = "Touch & Pen",
+            Category = "Input",
             NeedsAdmin = true,
             CorpSafe = true,
             ImpactScore = 2,
@@ -1311,7 +1311,7 @@ internal static class WindowsInk
         {
             Id = "ink-disable-workspace-above-lock",
             Label = "Disable Windows Ink Workspace Access Above Lock Screen",
-            Category = "Touch & Pen",
+            Category = "Input",
             NeedsAdmin = true,
             CorpSafe = true,
             ImpactScore = 3,
@@ -1329,7 +1329,7 @@ internal static class WindowsInk
         {
             Id = "ink-disable-pen-workspace-button",
             Label = "Disable Pen and Ink Workspace Taskbar Button",
-            Category = "Touch & Pen",
+            Category = "Input",
             NeedsAdmin = false,
             CorpSafe = true,
             ImpactScore = 1,
@@ -1344,7 +1344,7 @@ internal static class WindowsInk
         {
             Id = "ink-disable-handwriting-panel",
             Label = "Disable Touch Keyboard / Handwriting Panel Auto-Show",
-            Category = "Touch & Pen",
+            Category = "Input",
             NeedsAdmin = true,
             CorpSafe = true,
             ImpactScore = 2,
@@ -1362,7 +1362,7 @@ internal static class WindowsInk
         {
             Id = "ink-disable-ink-personalization",
             Label = "Disable Ink Personalization Data Collection",
-            Category = "Touch & Pen",
+            Category = "Input",
             NeedsAdmin = true,
             CorpSafe = false,
             ImpactScore = 2,
@@ -1380,7 +1380,7 @@ internal static class WindowsInk
         {
             Id = "ink-disable-text-prediction",
             Label = "Disable Ink Text Prediction and Recommendations",
-            Category = "Touch & Pen",
+            Category = "Input",
             NeedsAdmin = false,
             CorpSafe = true,
             ImpactScore = 1,
@@ -1398,7 +1398,7 @@ internal static class WindowsInk
         {
             Id = "ink-disable-flicks",
             Label = "Disable Pen Flicks (Swipe Gestures)",
-            Category = "Touch & Pen",
+            Category = "Input",
             NeedsAdmin = false,
             CorpSafe = true,
             ImpactScore = 1,
@@ -1416,7 +1416,7 @@ internal static class WindowsInk
         {
             Id = "ink-disable-press-and-hold",
             Label = "Disable Pen Press-and-Hold for Right-Click",
-            Category = "Touch & Pen",
+            Category = "Input",
             NeedsAdmin = false,
             CorpSafe = true,
             ImpactScore = 1,
@@ -1434,7 +1434,7 @@ internal static class WindowsInk
         {
             Id = "ink-disable-typing-data-collection",
             Label = "Disable Typing and Text Input Data Collection",
-            Category = "Touch & Pen",
+            Category = "Input",
             NeedsAdmin = true,
             CorpSafe = false,
             ImpactScore = 2,
@@ -1451,7 +1451,7 @@ internal static class WindowsInk
         {
             Id = "ink-disable-learn-from-this-device",
             Label = "Disable 'Learn from This Device' for Input Personalization",
-            Category = "Touch & Pen",
+            Category = "Input",
             NeedsAdmin = false,
             CorpSafe = false,
             ImpactScore = 2,
@@ -1469,7 +1469,7 @@ internal static class WindowsInk
         {
             Id = "ink-disable-touch-visual-feedback",
             Label = "Disable Touch Visual Feedback",
-            Category = "Touch & Pen",
+            Category = "Input",
             Description =
                 "Removes the contact-point circle animations shown when touching the screen. "
                 + "Reduces visual noise and slightly improves rendering performance on touch-enabled displays.",
@@ -1483,7 +1483,7 @@ internal static class WindowsInk
         {
             Id = "ink-disable-pen-visual-feedback",
             Label = "Disable Pen Visual Feedback",
-            Category = "Touch & Pen",
+            Category = "Input",
             Description =
                 "Removes the cursor/halo effects shown when using a stylus. "
                 + "Useful on high-DPI tablets where the glow overlay obscures fine linework.",
@@ -1497,7 +1497,7 @@ internal static class WindowsInk
         {
             Id = "ink-disable-pen-workspace-startup",
             Label = "Hide Pen Workspace Button on Startup",
-            Category = "Touch & Pen",
+            Category = "Input",
             Description =
                 "Prevents the Pen Workspace button from appearing in the taskbar notification area. "
                 + "Equivalent to unchecking 'Show the pen workspace button' in Pen & Windows Ink settings.",
@@ -1511,7 +1511,7 @@ internal static class WindowsInk
         {
             Id = "ink-disable-pen-workspace-app-launch",
             Label = "Block App Launches from Pen Workspace",
-            Category = "Touch & Pen",
+            Category = "Input",
             Description =
                 "Disables the ability to launch apps from the Pen Workspace panel. "
                 + "Reduces attack surface on shared devices where pen-launched apps should be restricted.",
@@ -1526,7 +1526,7 @@ internal static class WindowsInk
         {
             Id = "ink-disable-pen-right-click-hold",
             Label = "Disable Pen Press-and-Hold for Right-Click",
-            Category = "Touch & Pen",
+            Category = "Input",
             Description =
                 "Disables the 'press and hold' pen gesture that simulates a right-click. "
                 + "Prevents accidental context menus when resting the pen on the screen.",
@@ -1540,7 +1540,7 @@ internal static class WindowsInk
         {
             Id = "ink-disable-tablet-ink-policy",
             Label = "Disable Ink Programs via Group Policy",
-            Category = "Touch & Pen",
+            Category = "Input",
             Description =
                 "Applies the TabletPC policy to disable InkBall and other built-in ink-based games/apps. "
                 + "Recommended for corporate tablets to prevent access to entertainment apps.",
@@ -1555,7 +1555,7 @@ internal static class WindowsInk
         {
             Id = "ink-disable-handwriting-error-reports",
             Label = "Disable Handwriting Error Reporting",
-            Category = "Touch & Pen",
+            Category = "Input",
             Description =
                 "Blocks implicit collection of ink samples (strokes) used to improve handwriting recognition. "
                 + "Prevents ink input data from being sent to Microsoft for model training.",
@@ -1569,7 +1569,7 @@ internal static class WindowsInk
         {
             Id = "ink-disable-handwriting-text-collection",
             Label = "Disable Handwriting Text Data Collection",
-            Category = "Touch & Pen",
+            Category = "Input",
             Description =
                 "Blocks implicit collection of handwritten text samples used to improve recognition accuracy. "
                 + "Complements 'ink-disable-handwriting-error-reports' for full input-data privacy.",
@@ -1583,7 +1583,7 @@ internal static class WindowsInk
         {
             Id = "ink-set-pen-double-tap-speed",
             Label = "Set Pen Double-Tap Speed to 400 ms",
-            Category = "Touch & Pen",
+            Category = "Input",
             Description =
                 "Increases the pen double-tap recognition window to 400 ms (default 200 ms). "
                 + "Helps users with motor impairment or those using thick-nib styluses to register double-taps reliably.",
@@ -1597,7 +1597,7 @@ internal static class WindowsInk
         {
             Id = "ink-disable-pen-customization-page",
             Label = "Disable Pen Customization Settings Page",
-            Category = "Touch & Pen",
+            Category = "Input",
             Description =
                 "Hides the Pen Customization settings page from the Settings app via Group Policy. "
                 + "Prevents users from rebinding pen buttons on managed/shared devices.",

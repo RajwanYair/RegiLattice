@@ -14,8 +14,15 @@ public static class CorporateGuard
 
     private static bool ComputeIsCorporate() => IsDomainJoined() || IsAzureAdJoined() || HasGroupPolicy() || HasManagementAgent();
 
+    /// <summary>
+    /// For testing only — set to bypass all detection methods and return a fixed result.
+    /// Set to <c>false</c> in test fixtures to prevent slow registry/P-Invoke
+    /// detection from hanging the test runner on corporate (Intune/SCCM) machines.
+    /// </summary>
+    internal static bool? StubCorporate { get; set; }
+
     /// <summary>Returns true if this machine is in a corporate/managed environment.</summary>
-    public static bool IsCorporateNetwork() => _cached.Value;
+    public static bool IsCorporateNetwork() => StubCorporate ?? _cached.Value;
 
     /// <summary>Reset cached result (for testing or when environment changes).</summary>
     public static void ClearCache() => _cached = new(ComputeIsCorporate, LazyThreadSafetyMode.ExecutionAndPublication);
@@ -23,6 +30,8 @@ public static class CorporateGuard
     /// <summary>Detailed status for UI display.</summary>
     public static (bool IsCorporate, string Reason) Status()
     {
+        if (StubCorporate.HasValue)
+            return (StubCorporate.Value, StubCorporate.Value ? "test stub (corporate)" : "Not a managed environment");
         if (IsDomainJoined())
             return (true, "Active Directory domain member");
         if (IsAzureAdJoined())

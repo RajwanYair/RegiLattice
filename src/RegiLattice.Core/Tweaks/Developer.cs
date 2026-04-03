@@ -1807,5 +1807,3176 @@ internal static class VsCode
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\VSCode", "output.linkify")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\VSCode", "output.linkify", 0)],
         },
+        // ── merged from: Wsl.cs ──────────────────────────────────────────────────
+        new TweakDef
+        {
+            Id = "wsl-nested-virt",
+            Label = "WSL Nested Virtualisation",
+            Category = "Virtualization",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description = "Enables nested virtualisation for WSL 2 guests, allowing Docker Desktop, KVM, and other VM workloads inside WSL.",
+            Tags = ["wsl", "virtualisation", "docker"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Virtualization"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss", "EnableNestedVirtualization", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss", "EnableNestedVirtualization")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss", "EnableNestedVirtualization", 1)],
+        },
+        new TweakDef
+        {
+            Id = "wsl-disable-interop",
+            Label = "Disable WSL Windows Interop",
+            Category = "Virtualization",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description =
+                "Disables WSL Windows interop (running Windows executables from WSL). Default: Enabled. Recommended: Disabled for isolation.",
+            Tags = ["wsl", "interop", "windows", "security"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss", "WslInterop", 0)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss", "WslInterop", 1)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss", "WslInterop", 0)],
+        },
+        new TweakDef
+        {
+            Id = "wsl-sparse-vhd",
+            Label = "Enable WSL Sparse VHD",
+            Category = "Virtualization",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Enables sparse VHD mode so WSL2 virtual disks automatically shrink when free space is released inside the distro. Win11 22H2+. Default: disabled. Recommended: enabled.",
+            Tags = ["wsl", "sparse", "vhd", "disk", "storage"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows", "EnableSparseVhd", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows", "EnableSparseVhd")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows", "EnableSparseVhd", 1)],
+        },
+        new TweakDef
+        {
+            Id = "wsl-firewall",
+            Label = "Enable WSL Firewall Integration",
+            Category = "Virtualization",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Enables Windows Firewall integration for WSL2 network traffic. Allows corporate firewall rules to apply to WSL traffic. Win11 22H2+. Default: disabled. Recommended: enabled on managed networks.",
+            Tags = ["wsl", "firewall", "security", "network"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows", "EnableFirewall", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows", "EnableFirewall")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows", "EnableFirewall", 1)],
+        },
+        new TweakDef
+        {
+            Id = "wsl-disable-gui",
+            Label = "Disable WSLg (GUI App Support)",
+            Category = "Virtualization",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Disables WSLg (Windows Subsystem for Linux GUI) to reduce memory and GPU overhead when only CLI workloads are needed. Default: enabled. Recommended: disabled for CLI-only usage.",
+            Tags = ["wsl", "gui", "wslg", "performance", "memory"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows", "EnableWslGraphics", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows", "EnableWslGraphics")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows", "EnableWslGraphics", 0)],
+        },
+        new TweakDef
+        {
+            Id = "wsl-safe-mode",
+            Label = "Enable WSL Safe Mode",
+            Category = "Virtualization",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Enables WSL safe mode which bypasses custom /etc/wsl.conf settings for troubleshooting. Useful when a bad config prevents WSL from starting. Default: disabled. Recommended: disabled (enable only for debugging).",
+            Tags = ["wsl", "safe-mode", "diagnostic", "troubleshooting"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows", "SafeMode", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows", "SafeMode")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows", "SafeMode", 1)],
+        },
+        new TweakDef
+        {
+            Id = "wsl-debug-console",
+            Label = "Enable WSL Debug Console",
+            Category = "Virtualization",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Enables the WSL debug console for kernel log output and diagnostics. Default: disabled. Recommended: disabled (enable only for debugging).",
+            Tags = ["wsl", "debug", "console", "kernel", "diagnostic"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows", "DebugConsole", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows", "DebugConsole")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows", "DebugConsole", 1)],
+        },
+        new TweakDef
+        {
+            Id = "wsl-enforce-v2-policy",
+            Label = "Enforce WSL Version 2 as Default (Policy)",
+            Category = "Virtualization",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Enforces WSL version 2 as the default for all new distributions via machine-wide Group Policy. Default: not set. Recommended: version 2.",
+            Tags = ["wsl", "version", "v2", "policy", "default"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Lxss"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Lxss", "DefaultVersion", 2)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Lxss", "DefaultVersion")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Lxss", "DefaultVersion", 2)],
+        },
+        new TweakDef
+        {
+            Id = "wsl-limit-memory",
+            Label = "Limit WSL Memory to 4 GB",
+            Category = "Virtualization",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description =
+                "Limits the maximum memory allocated to WSL2 virtual machines to 4096 MB. Prevents WSL from consuming excessive host RAM. Default: 50%% of host RAM. Recommended: 4 GB.",
+            Tags = ["wsl", "memory", "limit", "ram", "performance"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss", "MaxVmMemory", 4096)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss", "MaxVmMemory")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss", "MaxVmMemory", 4096)],
+        },
+        new TweakDef
+        {
+            Id = "wsl-systemd-default",
+            Label = "Enable Systemd as Default Init (Policy)",
+            Category = "Virtualization",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Enables systemd as the default init system for WSL2 distributions via Group Policy. Required for services like snap and Docker. Default: disabled. Recommended: enabled.",
+            Tags = ["wsl", "systemd", "init", "policy", "services"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Lxss"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Lxss", "SystemdEnabled", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Lxss", "SystemdEnabled")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Lxss", "SystemdEnabled", 1)],
+        },
+        new TweakDef
+        {
+            Id = "wsl-automount-metadata",
+            Label = "Enable DrvFs Auto-Mount with Metadata",
+            Category = "Virtualization",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Enables DrvFs metadata on Windows drive mounts inside WSL, allowing proper Linux file permissions (chmod/chown) on /mnt/c etc. Default: disabled. Recommended: enabled for development.",
+            Tags = ["wsl", "drvfs", "mount", "metadata", "permissions"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows", "DrvFsEnableMetadata", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows", "DrvFsEnableMetadata")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows", "DrvFsEnableMetadata", 1)],
+        },
+        new TweakDef
+        {
+            Id = "wsl-no-windows-path",
+            Label = "Disable Windows PATH Append in WSL",
+            Category = "Virtualization",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Prevents WSL from appending Windows system PATH directories to the Linux $PATH. Keeps the Linux environment clean and avoids Windows executable conflicts. Default: append enabled. Recommended: disabled for isolated dev environments.",
+            Tags = ["wsl", "path", "interop", "isolation", "development"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows", "AppendNtPath", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows", "AppendNtPath")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows", "AppendNtPath", 0)],
+        },
+        new TweakDef
+        {
+            Id = "wsl-swap-size",
+            Label = "Limit WSL2 Swap to 2 GB",
+            Category = "Virtualization",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Limits the WSL2 virtual machine swap file to 2 GB to prevent excessive disk usage. Default: 25%% of host RAM. Recommended: 2 GB for most workloads.",
+            Tags = ["wsl", "swap", "disk", "memory", "performance"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows", "SwapSize", 2048)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows", "SwapSize")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows", "SwapSize", 2048)],
+        },
+        new TweakDef
+        {
+            Id = "wsl-gpu-compute",
+            Label = "Enable GPU Compute Pass-Through (CUDA/DirectML)",
+            Category = "Virtualization",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Enables GPU compute pass-through in WSL2 for CUDA, DirectML, and OpenCL workloads. Required for machine learning and GPU-accelerated applications inside WSL. Default: enabled on Win11. Recommended: enabled.",
+            Tags = ["wsl", "gpu", "cuda", "directml", "compute", "ml"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows", "EnableGpuSupport", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows", "EnableGpuSupport")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows", "EnableGpuSupport", 1)],
+        },
+        new TweakDef
+        {
+            Id = "wsl-interop-off-policy",
+            Label = "Disable WSL Windows Interop",
+            Category = "Virtualization",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description =
+                "Disables WSL interoperability with Windows (launching Windows .exe from WSL). Reduces attack surface and eliminates Windows path leakage. Default: enabled. Recommended: disabled for isolated/security workloads.",
+            Tags = ["wsl", "interop", "security", "isolation"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss", "EnableInterop", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss", "EnableInterop")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss", "EnableInterop", 0)],
+        },
+        new TweakDef
+        {
+            Id = "wsl-disable-binfmt-misc",
+            Label = "Disable WSL Binfmt Misc Registration",
+            Category = "Virtualization",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description =
+                "Disables binfmt_misc registration in WSL2, preventing the kernel from automatically running Windows executables from Linux paths. Default: enabled. Recommended: disabled for pure-Linux dev environments.",
+            Tags = ["wsl", "binfmt", "kernel", "interop", "isolation"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss", "EnableBinfmtMisc", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss", "EnableBinfmtMisc")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss", "EnableBinfmtMisc", 0)],
+        },
+        new TweakDef
+        {
+            Id = "wsl-limit-processors",
+            Label = "Limit WSL2 VM to 4 Processors",
+            Category = "Virtualization",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Caps the number of logical processors available to the WSL2 VM to 4. Prevents WSL from starving the host of CPU resources during builds. Default: all host processors. Recommended: 4 for background dev use.",
+            Tags = ["wsl", "cpu", "performance", "vm", "resource"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss", "ProcessorCount", 4)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss", "ProcessorCount")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss", "ProcessorCount", 4)],
+        },
+        new TweakDef
+        {
+            Id = "wsl-disable-crash-reporting",
+            Label = "Disable WSL Crash Dump Creation",
+            Category = "Virtualization",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Prevents Watson (crash reporting) from creating crash dumps for WSL processes. Frees disk space and avoids slow post-crash dump write. Default: enabled. Recommended: disabled on developer machines.",
+            Tags = ["wsl", "crash", "dump", "telemetry", "disk"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\DrWatson"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\DrWatson", "CreateCrashDump", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\DrWatson", "CreateCrashDump")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\DrWatson", "CreateCrashDump", 0)],
+        },
+        new TweakDef
+        {
+            Id = "wsl-disable-telemetry",
+            Label = "Disable WSL Telemetry",
+            Category = "Virtualization",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Disables WSL subsystem telemetry data collection sent to Microsoft. Default: enabled. Recommended: disabled for privacy-focused environments.",
+            Tags = ["wsl", "telemetry", "privacy", "microsoft"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss", "EnableTelemetry", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss", "EnableTelemetry")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss", "EnableTelemetry", 0)],
+        },
+        new TweakDef
+        {
+            Id = "wsl-disable-windows-path-interop",
+            Label = "Disable Windows PATH Interop in WSL",
+            Category = "Virtualization",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Prevents Windows PATH from being appended to WSL $PATH. Avoids conflicts with Windows executables. Default: enabled.",
+            Tags = ["wsl", "path", "interop", "isolation"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss", "AppendNtPath", 0)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss", "AppendNtPath", 1)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss", "AppendNtPath", 0)],
+        },
+        new TweakDef
+        {
+            Id = "wsl-disable-gui-support",
+            Label = "Disable WSLg (GUI App Support)",
+            Category = "Virtualization",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables WSLg (Linux GUI app support via Wayland/X11). Reduces memory and resource usage. Default: enabled.",
+            Tags = ["wsl", "wslg", "gui", "disable"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss", "EnableGUIApplications", 0)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss", "EnableGUIApplications", 1)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss", "EnableGUIApplications", 0)],
+        },
+        new TweakDef
+        {
+            Id = "wsl-set-default-version-2",
+            Label = "Set Default WSL Version to 2",
+            Category = "Virtualization",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Sets the default WSL version to 2 for new distro installations. WSL2 uses a real Linux kernel. Default: 1.",
+            Tags = ["wsl", "version", "wsl2", "default"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss", "DefaultVersion", 2)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss", "DefaultVersion", 1)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss", "DefaultVersion", 2)],
+        },
+        new TweakDef
+        {
+            Id = "wsl-disable-dns-tunneling",
+            Label = "Disable WSL DNS Tunneling",
+            Category = "Virtualization",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables DNS tunneling in WSL2. Uses host DNS resolution instead. Default: enabled in newer builds.",
+            Tags = ["wsl", "dns", "tunneling", "networking"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss", "EnableDnsTunneling", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss", "EnableDnsTunneling")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss", "EnableDnsTunneling", 0)],
+        },
+        new TweakDef
+        {
+            Id = "wsl-disable-auto-memory-reclaim",
+            Label = "Disable WSL Auto Memory Reclaim",
+            Category = "Virtualization",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables automatic memory reclaim in WSL2. Prevents WSL from releasing cached memory back to Windows. Default: enabled.",
+            Tags = ["wsl", "memory", "reclaim", "performance"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss", "EnableAutoMemoryReclaim", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss", "EnableAutoMemoryReclaim")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss", "EnableAutoMemoryReclaim", 0)],
+        },
+        // ── Command-based WSL tweaks ───────────────────────────────────────
+        new TweakDef
+        {
+            Id = "wsl-enable-feature",
+            Label = "Enable WSL Windows Feature (DISM)",
+            Category = "Virtualization",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description = "Enables the Microsoft-Windows-Subsystem-Linux optional feature via DISM. Requires reboot.",
+            Tags = ["wsl", "feature", "dism", "install"],
+            KindHint = TweakKind.SystemCommand,
+            SideEffects = "Requires reboot to take effect.",
+            ApplyAction = (admin) =>
+            {
+                Elevation.AssertAdmin(admin);
+                var (code, _, stderr) = Elevation.RunElevated(
+                    "dism",
+                    ["/online", "/enable-feature", "/featurename:Microsoft-Windows-Subsystem-Linux", "/norestart"]
+                );
+                if (code != 0 && !stderr.Contains("already enabled", StringComparison.OrdinalIgnoreCase))
+                    throw new InvalidOperationException($"DISM enable WSL feature failed: {stderr}");
+            },
+            RemoveAction = (admin) =>
+            {
+                Elevation.AssertAdmin(admin);
+                Elevation.RunElevated("dism", ["/online", "/disable-feature", "/featurename:Microsoft-Windows-Subsystem-Linux", "/norestart"]);
+            },
+            DetectAction = () =>
+            {
+                var (code, stdout, _) = Elevation.RunElevated(
+                    "dism",
+                    ["/online", "/get-featureinfo", "/featurename:Microsoft-Windows-Subsystem-Linux"]
+                );
+                return code == 0 && stdout.Contains("State : Enabled", StringComparison.OrdinalIgnoreCase);
+            },
+        },
+        new TweakDef
+        {
+            Id = "wsl-enable-vmplatform",
+            Label = "Enable Virtual Machine Platform (DISM)",
+            Category = "Virtualization",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description = "Enables the VirtualMachinePlatform feature required for WSL2. Requires reboot.",
+            Tags = ["wsl", "vm", "platform", "dism", "install"],
+            KindHint = TweakKind.SystemCommand,
+            SideEffects = "Requires reboot to take effect.",
+            ApplyAction = (admin) =>
+            {
+                Elevation.AssertAdmin(admin);
+                var (code, _, stderr) = Elevation.RunElevated(
+                    "dism",
+                    ["/online", "/enable-feature", "/featurename:VirtualMachinePlatform", "/norestart"]
+                );
+                if (code != 0 && !stderr.Contains("already enabled", StringComparison.OrdinalIgnoreCase))
+                    throw new InvalidOperationException($"DISM enable VirtualMachinePlatform failed: {stderr}");
+            },
+            RemoveAction = (admin) =>
+            {
+                Elevation.AssertAdmin(admin);
+                Elevation.RunElevated("dism", ["/online", "/disable-feature", "/featurename:VirtualMachinePlatform", "/norestart"]);
+            },
+            DetectAction = () =>
+            {
+                var (code, stdout, _) = Elevation.RunElevated("dism", ["/online", "/get-featureinfo", "/featurename:VirtualMachinePlatform"]);
+                return code == 0 && stdout.Contains("State : Enabled", StringComparison.OrdinalIgnoreCase);
+            },
+        },
+        new TweakDef
+        {
+            Id = "wsl-compact-vhd",
+            Label = "Compact WSL2 VHD Disks",
+            Category = "Virtualization",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Terminates running WSL instances and compacts all .vhdx virtual disk files to reclaim unused space. One-time action.",
+            Tags = ["wsl", "vhd", "compact", "disk", "storage"],
+            KindHint = TweakKind.PowerShell,
+            SideEffects = "Shuts down all running WSL2 instances.",
+            ApplyAction = (_) =>
+            {
+                // Shut down WSL
+                ShellRunner.Run("wsl", ["--shutdown"]);
+
+                // Find and compact all .vhdx files under the WSL Lxss directory
+                string lxssPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Packages");
+                if (!Directory.Exists(lxssPath))
+                    return;
+
+                foreach (var vhdx in Directory.EnumerateFiles(lxssPath, "ext4.vhdx", SearchOption.AllDirectories))
+                {
+                    ShellRunner.RunPowerShell($"Optimize-VHD -Path '{vhdx.Replace("'", "''")}' -Mode Full");
+                }
+            },
+            DetectAction = () => false, // One-time action, always shows as "not applied"
+        },
+        new TweakDef
+        {
+            Id = "wsl-shutdown",
+            Label = "Shutdown All WSL2 Instances",
+            Category = "Virtualization",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Immediately terminates all running WSL2 distributions and the lightweight utility VM. Frees memory and CPU resources.",
+            Tags = ["wsl", "shutdown", "memory", "resource"],
+            KindHint = TweakKind.SystemCommand,
+            SideEffects = "All running WSL sessions will be terminated.",
+            ApplyAction = (_) =>
+            {
+                ShellRunner.Run("wsl", ["--shutdown"]);
+            },
+            DetectAction = () => false,
+        },
+        // ── Restored tweaks ───────────────────────────────────────────────
+
+        new TweakDef
+        {
+            Id = "wsl-autostart",
+            Label = "Auto-Start WSL2 at Logon",
+            Category = "Virtualization",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description =
+                "Adds a Run key to pre-boot the WSL2 lightweight VM at logon, eliminating cold-start latency for the first wsl.exe invocation.",
+            Tags = ["wsl", "startup", "performance", "boot"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run"],
+            ApplyOps =
+            [
+                RegOp.SetString(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run", "WSLBootstrap", @"wsl.exe --exec /bin/true"),
+            ],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run", "WSLBootstrap")],
+            DetectOps =
+            [
+                RegOp.CheckString(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run", "WSLBootstrap", @"wsl.exe --exec /bin/true"),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "wsl-compact-disk",
+            Label = "Enable WSL Automatic Disk Compaction",
+            Category = "Virtualization",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Enables automatic compaction of WSL2 virtual disks to reclaim unused space without manual intervention. Win11 22H2+.",
+            Tags = ["wsl", "disk", "compact", "storage", "performance"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss", "EnableAutoCompact", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss", "EnableAutoCompact")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss", "EnableAutoCompact", 1)],
+        },
+        new TweakDef
+        {
+            Id = "wsl-default-v2",
+            Label = "Set Default WSL Version to 2 (CLI)",
+            Category = "Virtualization",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description =
+                "Sets the default WSL version to 2 via the wsl.exe CLI. WSL2 uses a full Linux kernel with better I/O and syscall compatibility.",
+            Tags = ["wsl", "version", "wsl2", "default", "cli"],
+            KindHint = TweakKind.SystemCommand,
+            ApplyAction = (_) =>
+            {
+                ShellRunner.Run("wsl", ["--set-default-version", "2"]);
+            },
+            DetectAction = () =>
+            {
+                var (code, stdout, _) = ShellRunner.Run("wsl", ["--status"]);
+                return code == 0 && stdout.Contains("Default Version: 2", StringComparison.OrdinalIgnoreCase);
+            },
+        },
+        new TweakDef
+        {
+            Id = "wsl-default-version-2",
+            Label = "Set Default WSL Version to 2 (User Registry)",
+            Category = "Virtualization",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Sets the default WSL version to 2 via the user-level Lxss registry key. New distro installations will use WSL2.",
+            Tags = ["wsl", "version", "wsl2", "default", "registry"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Lxss"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Lxss", "DefaultVersion", 2)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Lxss", "DefaultVersion")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Lxss", "DefaultVersion", 2)],
+        },
+        new TweakDef
+        {
+            Id = "wsl-disable-auto-update",
+            Label = "Disable WSL Auto-Update",
+            Category = "Virtualization",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Prevents WSL from automatically checking for and installing kernel/runtime updates. Useful for controlled environments.",
+            Tags = ["wsl", "update", "auto-update", "disable"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss", "EnableAutoUpdate", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss", "EnableAutoUpdate")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss", "EnableAutoUpdate", 0)],
+        },
+        new TweakDef
+        {
+            Id = "wsl-disable-nested-virt",
+            Label = "Disable WSL Nested Virtualisation",
+            Category = "Virtualization",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Explicitly disables nested virtualisation for WSL2 guests. Reduces attack surface when Docker/KVM inside WSL is not needed.",
+            Tags = ["wsl", "virtualisation", "security", "hardening"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss", "EnableNestedVirtualization", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss", "EnableNestedVirtualization")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss", "EnableNestedVirtualization", 0)],
+        },
+        new TweakDef
+        {
+            Id = "wsl-dns-tunneling",
+            Label = "Enable WSL DNS Tunneling",
+            Category = "Virtualization",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Enables DNS tunneling in WSL2 so DNS requests are routed through the Windows host. Improves name resolution behind VPNs/proxies.",
+            Tags = ["wsl", "dns", "tunneling", "networking", "vpn"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss", "EnableDnsTunneling", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss", "EnableDnsTunneling")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss", "EnableDnsTunneling", 1)],
+        },
+        new TweakDef
+        {
+            Id = "wsl-enable-localhost-forward",
+            Label = "Enable WSL Localhost Forwarding",
+            Category = "Virtualization",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Enables automatic forwarding of WSL2 ports to localhost on the Windows host, allowing access to WSL services via 127.0.0.1.",
+            Tags = ["wsl", "localhost", "forwarding", "networking", "port"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss", "LocalhostForwarding", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss", "LocalhostForwarding")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss", "LocalhostForwarding", 1)],
+        },
+        new TweakDef
+        {
+            Id = "wsl-enable-nested-virt-policy",
+            Label = "Enable Nested Virtualisation (Hyper-V Policy)",
+            Category = "Virtualization",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description =
+                "Enables nested virtualisation via Hyper-V Group Policy. Required by some organisations before the per-VM Lxss setting takes effect.",
+            Tags = ["wsl", "virtualisation", "policy", "hyperv", "nested"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\HyperV"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\HyperV", "AllowNestedVirtualization", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\HyperV", "AllowNestedVirtualization")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\HyperV", "AllowNestedVirtualization", 1)],
+        },
+        new TweakDef
+        {
+            Id = "wsl-enable-systemd",
+            Label = "Enable Systemd (User Registry)",
+            Category = "Virtualization",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description =
+                "Enables systemd as the default init system for WSL2 via the user-level Lxss key. Services like snap, Docker, and journald require systemd.",
+            Tags = ["wsl", "systemd", "init", "services", "user"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Lxss"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Lxss", "EnableSystemd", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Lxss", "EnableSystemd")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Lxss", "EnableSystemd", 1)],
+        },
+        new TweakDef
+        {
+            Id = "wsl-feature",
+            Label = "Enable WSL Feature (PowerShell)",
+            Category = "Virtualization",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description =
+                "Enables the Microsoft-Windows-Subsystem-Linux optional feature via PowerShell cmdlet. Requires reboot. Alternative to DISM approach.",
+            Tags = ["wsl", "feature", "install", "powershell"],
+            KindHint = TweakKind.SystemCommand,
+            SideEffects = "Requires reboot to take effect.",
+            ApplyAction = (admin) =>
+            {
+                Elevation.AssertAdmin(admin);
+                ShellRunner.RunPowerShell("Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Windows-Subsystem-Linux -NoRestart");
+            },
+            RemoveAction = (admin) =>
+            {
+                Elevation.AssertAdmin(admin);
+                ShellRunner.RunPowerShell("Disable-WindowsOptionalFeature -Online -FeatureName Microsoft-Windows-Subsystem-Linux -NoRestart");
+            },
+            DetectAction = () =>
+            {
+                var (_, stdout, _2) = ShellRunner.RunPowerShell(
+                    "(Get-WindowsOptionalFeature -Online -FeatureName Microsoft-Windows-Subsystem-Linux).State"
+                );
+                return stdout.Trim().Equals("Enabled", StringComparison.OrdinalIgnoreCase);
+            },
+        },
+        new TweakDef
+        {
+            Id = "wsl-kernel-update",
+            Label = "Update WSL Kernel to Latest",
+            Category = "Virtualization",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Runs wsl --update to download and install the latest WSL kernel and runtime. One-time action.",
+            Tags = ["wsl", "kernel", "update", "maintenance"],
+            KindHint = TweakKind.SystemCommand,
+            ApplyAction = (_) =>
+            {
+                ShellRunner.Run("wsl", ["--update"]);
+            },
+            DetectAction = () => false,
+        },
+        new TweakDef
+        {
+            Id = "wsl-memory-reclaim",
+            Label = "Enable WSL Auto Memory Reclaim",
+            Category = "Virtualization",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Enables automatic memory reclaim so WSL2 returns unused cached memory to Windows. Reduces host memory pressure. Win11 22H2+.",
+            Tags = ["wsl", "memory", "reclaim", "performance"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss", "EnableAutoMemoryReclaim", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss", "EnableAutoMemoryReclaim")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss", "EnableAutoMemoryReclaim", 1)],
+        },
+        new TweakDef
+        {
+            Id = "wsl-mirrored-network",
+            Label = "Enable WSL Mirrored Networking",
+            Category = "Virtualization",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Switches WSL2 to mirrored networking mode. WSL shares the host network stack for full LAN visibility and IPv6 support. Win11 23H2+.",
+            Tags = ["wsl", "network", "mirrored", "networking"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss", "MirroredNetworkingMode", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss", "MirroredNetworkingMode")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss", "MirroredNetworkingMode", 1)],
+        },
+        new TweakDef
+        {
+            Id = "wsl-update-distro",
+            Label = "Update WSL Distributions (Web Download)",
+            Category = "Virtualization",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Runs wsl --update --web-download to update WSL components directly from the web. One-time action.",
+            Tags = ["wsl", "update", "distro", "maintenance"],
+            KindHint = TweakKind.SystemCommand,
+            ApplyAction = (_) =>
+            {
+                ShellRunner.Run("wsl", ["--update", "--web-download"]);
+            },
+            DetectAction = () => false,
+        },
+        new TweakDef
+        {
+            Id = "wsl-vm-platform",
+            Label = "Enable VM Platform (PowerShell)",
+            Category = "Virtualization",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description =
+                "Enables the VirtualMachinePlatform optional feature via PowerShell cmdlet. Required for WSL2. Requires reboot. Alternative to DISM approach.",
+            Tags = ["wsl", "vm", "platform", "install", "powershell"],
+            KindHint = TweakKind.SystemCommand,
+            SideEffects = "Requires reboot to take effect.",
+            ApplyAction = (admin) =>
+            {
+                Elevation.AssertAdmin(admin);
+                ShellRunner.RunPowerShell("Enable-WindowsOptionalFeature -Online -FeatureName VirtualMachinePlatform -NoRestart");
+            },
+            RemoveAction = (admin) =>
+            {
+                Elevation.AssertAdmin(admin);
+                ShellRunner.RunPowerShell("Disable-WindowsOptionalFeature -Online -FeatureName VirtualMachinePlatform -NoRestart");
+            },
+            DetectAction = () =>
+            {
+                var (_, stdout, _2) = ShellRunner.RunPowerShell("(Get-WindowsOptionalFeature -Online -FeatureName VirtualMachinePlatform).State");
+                return stdout.Trim().Equals("Enabled", StringComparison.OrdinalIgnoreCase);
+            },
+        },
+    ];
+}
+
+// ── merged from PackageManagement.cs ──
+internal static class PackageManagement
+{
+    internal static IReadOnlyList<TweakDef> Tweaks { get; } =
+    [
+        new TweakDef
+        {
+            Id = "pkg-disable-suggested-apps",
+            Label = "Disable Suggested App Installations",
+            Category = "Developer",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Prevents Windows from silently installing suggested apps. Default: Enabled. Recommended: Disabled.",
+            Tags = ["packages", "suggested", "bloatware"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager"],
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
+                    "SilentInstalledAppsEnabled",
+                    0
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
+                    "SilentInstalledAppsEnabled",
+                    1
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
+                    "SilentInstalledAppsEnabled",
+                    0
+                ),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "pkg-disable-winget-auto-update",
+            Label = "Disable WinGet Auto-Update",
+            Category = "Developer",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description =
+                "Disables automatic WinGet package manager self-updates via policy. Default: Enabled. Recommended: Disabled for controlled environments.",
+            Tags = ["packages", "winget", "auto-update", "policy"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppInstaller"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppInstaller", "EnableAutoUpdate", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppInstaller", "EnableAutoUpdate")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppInstaller", "EnableAutoUpdate", 0)],
+        },
+        new TweakDef
+        {
+            Id = "pkg-choco-proxy",
+            Label = "Set Chocolatey System Proxy",
+            Category = "Developer",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description =
+                "Configures Chocolatey to use the system proxy for package downloads. Useful in corporate environments behind a proxy. Default: Direct. Recommended: Enabled behind proxy.",
+            Tags = ["packages", "chocolatey", "proxy", "corporate"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Chocolatey"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Chocolatey", "UseSystemProxy", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Chocolatey", "UseSystemProxy")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Chocolatey", "UseSystemProxy", 1)],
+        },
+        new TweakDef
+        {
+            Id = "pkg-source-validation",
+            Label = "Enable Package Source Validation",
+            Category = "Developer",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description =
+                "Prevents WinGet from overriding package hash validation. Ensures integrity checks are enforced for all package sources. Default: Override allowed. Recommended: Disabled (validation enforced).",
+            Tags = ["packages", "winget", "hash", "validation", "security"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppInstaller"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppInstaller", "EnableHashOverride", 0)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppInstaller", "EnableHashOverride", 1)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppInstaller", "EnableHashOverride", 0)],
+        },
+        new TweakDef
+        {
+            Id = "pkg-disable-ms-store",
+            Label = "Disable Microsoft Store via Policy",
+            Category = "Developer",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables access to the Microsoft Store via Group Policy. Default: enabled.",
+            Tags = ["package", "msstore", "disable", "policy"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsStore"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsStore", "RemoveWindowsStore", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsStore", "RemoveWindowsStore")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsStore", "RemoveWindowsStore", 1)],
+        },
+        new TweakDef
+        {
+            Id = "pkg-enable-developer-sideload",
+            Label = "Enable Developer Mode Sideloading",
+            Category = "Developer",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Enables developer mode to allow sideloading of apps without the Store. Default: disabled.",
+            Tags = ["package", "developer", "sideload", "appx"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Appx"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Appx", "AllowDevelopmentWithoutDevLicense", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Appx", "AllowDevelopmentWithoutDevLicense")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Appx", "AllowDevelopmentWithoutDevLicense", 1)],
+        },
+        new TweakDef
+        {
+            Id = "pkg-disable-appinstaller-protocol",
+            Label = "Disable ms-appinstaller Protocol",
+            Category = "Developer",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables the ms-appinstaller URI protocol. Prevents drive-by installs from web links. Default: enabled.",
+            Tags = ["package", "appinstaller", "protocol", "security"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppInstaller"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppInstaller", "EnableMSAppInstallerProtocol", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppInstaller", "EnableMSAppInstallerProtocol")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppInstaller", "EnableMSAppInstallerProtocol", 0)],
+        },
+        new TweakDef
+        {
+            Id = "pkg-disable-auto-repair-apps",
+            Label = "Disable Auto-Repair of Windows Apps",
+            Category = "Developer",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Prevents Windows from automatically repairing broken UWP/MSIX apps. Default: enabled.",
+            Tags = ["package", "auto-repair", "uwp", "msix"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Appx"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Appx", "AllowAutomaticAppArchiving", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Appx", "AllowAutomaticAppArchiving")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Appx", "AllowAutomaticAppArchiving", 0)],
+        },
+        new TweakDef
+        {
+            Id = "pkg-disable-shared-experiences",
+            Label = "Disable Cross-Device App Experiences",
+            Category = "Developer",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Disables shared experiences (app hand-off between devices). Default: enabled.",
+            Tags = ["package", "shared-experiences", "cross-device", "cdp"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\CDP"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\CDP", "RomeSdkChannelUserAuthzPolicy", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\CDP", "RomeSdkChannelUserAuthzPolicy")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\CDP", "RomeSdkChannelUserAuthzPolicy", 0)],
+        },
+        // ── Command-based package management tweaks ────────────────────────
+        new TweakDef
+        {
+            Id = "pkg-trust-psgallery",
+            Label = "Trust PSGallery Repository",
+            Category = "Developer",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Sets the PowerShell Gallery as a trusted repository, eliminating installation prompts for modules.",
+            Tags = ["package", "powershell", "psgallery", "trust", "module"],
+            KindHint = TweakKind.PowerShell,
+            ApplyAction = (_) =>
+            {
+                ShellRunner.RunPowerShell("Set-PSRepository -Name PSGallery -InstallationPolicy Trusted");
+            },
+            RemoveAction = (_) =>
+            {
+                ShellRunner.RunPowerShell("Set-PSRepository -Name PSGallery -InstallationPolicy Untrusted");
+            },
+            DetectAction = () =>
+            {
+                var (code, stdout, _) = ShellRunner.RunPowerShell("(Get-PSRepository -Name PSGallery).InstallationPolicy");
+                return code == 0 && stdout.Trim().Equals("Trusted", StringComparison.OrdinalIgnoreCase);
+            },
+        },
+        new TweakDef
+        {
+            Id = "pkg-install-scoop",
+            Label = "Install Scoop Package Manager",
+            Category = "Developer",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Installs Scoop — a CLI package manager for Windows. Scoop installs apps to ~/scoop by default and requires no admin.",
+            Tags = ["package", "scoop", "install", "cli"],
+            KindHint = TweakKind.PackageManager,
+            ApplyAction = (_) =>
+            {
+                ShellRunner.RunPowerShell(
+                    "Set-ExecutionPolicy RemoteSigned -Scope CurrentUser -Force; " + "Invoke-RestMethod -Uri https://get.scoop.sh | Invoke-Expression"
+                );
+            },
+            DetectAction = () =>
+            {
+                string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "scoop", "shims", "scoop.ps1");
+                return File.Exists(path);
+            },
+        },
+        new TweakDef
+        {
+            Id = "pkg-update-powershellget",
+            Label = "Update PowerShellGet to Latest",
+            Category = "Developer",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Updates PowerShellGet module to the latest version for improved module management.",
+            Tags = ["package", "powershell", "powershellget", "update"],
+            KindHint = TweakKind.PackageManager,
+            ApplyAction = (_) =>
+            {
+                ShellRunner.RunPowerShell("Install-Module -Name PowerShellGet -Force -AllowClobber -Scope CurrentUser");
+            },
+            DetectAction = () =>
+            {
+                var (code, stdout, _) = ShellRunner.RunPowerShell(
+                    "(Get-Module -ListAvailable PowerShellGet | Sort-Object Version -Descending | Select-Object -First 1).Version.ToString()"
+                );
+                if (code != 0)
+                    return false;
+                // If version >= 2.2.5, consider "applied"
+                return Version.TryParse(stdout.Trim(), out var ver) && ver >= new Version(2, 2, 5);
+            },
+        },
+        new TweakDef
+        {
+            Id = "pkg-enable-winget",
+            Label = "Enable WinGet App Installer",
+            Category = "Developer",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Enables the WinGet package manager via App Installer policy. Ensures WinGet is available on managed devices. Default: enabled.",
+            Tags = ["packages", "winget", "enable", "policy"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppInstaller"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppInstaller", "EnableAppInstaller", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppInstaller", "EnableAppInstaller")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppInstaller", "EnableAppInstaller", 1)],
+        },
+        new TweakDef
+        {
+            Id = "pkg-npm-prefer-offline",
+            Label = "NPM Prefer Offline Cache",
+            Category = "Developer",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description =
+                "Configures npm to prefer cached packages over network requests. Speeds up installs when packages are already cached. Default: online first.",
+            Tags = ["packages", "npm", "offline", "cache"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Environment"],
+            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Environment", "NPM_CONFIG_PREFER_OFFLINE", "true")],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Environment", "NPM_CONFIG_PREFER_OFFLINE")],
+            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Environment", "NPM_CONFIG_PREFER_OFFLINE", "true")],
+        },
+        new TweakDef
+        {
+            Id = "pkg-pip-disable-version-check",
+            Label = "Disable pip Version Check",
+            Category = "Developer",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Disables pip from checking for newer versions on every run. Speeds up pip operations. Default: checks on every run.",
+            Tags = ["packages", "pip", "version-check", "speed"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Environment"],
+            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Environment", "PIP_DISABLE_PIP_VERSION_CHECK", "1")],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Environment", "PIP_DISABLE_PIP_VERSION_CHECK")],
+            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Environment", "PIP_DISABLE_PIP_VERSION_CHECK", "1")],
+        },
+        new TweakDef
+        {
+            Id = "pkg-pip-no-cache",
+            Label = "Disable pip Cache",
+            Category = "Developer",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Disables pip download caching. Saves disk space at the cost of re-downloading packages. Default: caching enabled.",
+            Tags = ["packages", "pip", "cache", "disable"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Environment"],
+            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Environment", "PIP_NO_CACHE_DIR", "1")],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Environment", "PIP_NO_CACHE_DIR")],
+            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Environment", "PIP_NO_CACHE_DIR", "1")],
+        },
+        new TweakDef
+        {
+            Id = "pkg-pip-require-venv",
+            Label = "Require Virtualenv for pip Install",
+            Category = "Developer",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description =
+                "Forces pip to only install packages inside a virtual environment. Prevents accidental global installs. Default: allows global.",
+            Tags = ["packages", "pip", "virtualenv", "safety"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Environment"],
+            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Environment", "PIP_REQUIRE_VIRTUALENV", "1")],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Environment", "PIP_REQUIRE_VIRTUALENV")],
+            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Environment", "PIP_REQUIRE_VIRTUALENV", "1")],
+        },
+        new TweakDef
+        {
+            Id = "pkg-pip-system-index",
+            Label = "Set System pip Index URL",
+            Category = "Developer",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Sets the default PyPI index URL for all users at the system level. Useful for corporate mirrors. Default: pypi.org.",
+            Tags = ["packages", "pip", "index", "system"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Environment"],
+            ApplyOps =
+            [
+                RegOp.SetString(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Environment",
+                    "PIP_INDEX_URL",
+                    "https://pypi.org/simple"
+                ),
+            ],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Environment", "PIP_INDEX_URL")],
+            DetectOps =
+            [
+                RegOp.CheckString(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Environment",
+                    "PIP_INDEX_URL",
+                    "https://pypi.org/simple"
+                ),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "pkg-pip-system-no-cache",
+            Label = "Disable pip Cache (System)",
+            Category = "Developer",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables pip download caching at the system level for all users. Default: caching enabled.",
+            Tags = ["packages", "pip", "cache", "system"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Environment"],
+            ApplyOps = [RegOp.SetString(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Environment", "PIP_NO_CACHE_DIR", "1")],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Environment", "PIP_NO_CACHE_DIR")],
+            DetectOps =
+            [
+                RegOp.CheckString(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Environment", "PIP_NO_CACHE_DIR", "1"),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "pkg-pip-system-require-venv",
+            Label = "Require Virtualenv for pip (System)",
+            Category = "Developer",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Forces pip to only install inside virtual environments at the system level for all users. Default: allows global.",
+            Tags = ["packages", "pip", "virtualenv", "system"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Environment"],
+            ApplyOps =
+            [
+                RegOp.SetString(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Environment", "PIP_REQUIRE_VIRTUALENV", "1"),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Environment", "PIP_REQUIRE_VIRTUALENV"),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckString(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Environment", "PIP_REQUIRE_VIRTUALENV", "1"),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "pkg-pip-system-trusted-host",
+            Label = "Set pip Trusted Hosts (System)",
+            Category = "Developer",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Sets trusted pip hosts at the system level to bypass SSL verification. Useful for corporate proxies. Default: none.",
+            Tags = ["packages", "pip", "trusted-host", "system"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Environment"],
+            ApplyOps =
+            [
+                RegOp.SetString(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Environment",
+                    "PIP_TRUSTED_HOST",
+                    "pypi.org files.pythonhosted.org"
+                ),
+            ],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Environment", "PIP_TRUSTED_HOST")],
+            DetectOps =
+            [
+                RegOp.CheckString(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Environment",
+                    "PIP_TRUSTED_HOST",
+                    "pypi.org files.pythonhosted.org"
+                ),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "pkg-pip-timeout",
+            Label = "Set pip Network Timeout",
+            Category = "Developer",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description =
+                "Sets the pip network timeout to 30 seconds. Prevents hangs on slow connections while allowing reasonable wait time. Default: 15 seconds.",
+            Tags = ["packages", "pip", "timeout", "network"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Environment"],
+            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Environment", "PIP_TIMEOUT", "30")],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Environment", "PIP_TIMEOUT")],
+            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Environment", "PIP_TIMEOUT", "30")],
+        },
+        new TweakDef
+        {
+            Id = "pkg-pip-trusted-host",
+            Label = "Set pip Trusted Hosts",
+            Category = "Developer",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Sets trusted pip hosts for the current user to bypass SSL verification. Useful for corporate proxies. Default: none.",
+            Tags = ["packages", "pip", "trusted-host", "ssl"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Environment"],
+            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Environment", "PIP_TRUSTED_HOST", "pypi.org files.pythonhosted.org")],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Environment", "PIP_TRUSTED_HOST")],
+            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Environment", "PIP_TRUSTED_HOST", "pypi.org files.pythonhosted.org")],
+        },
+        new TweakDef
+        {
+            Id = "pkg-pip-user-default",
+            Label = "pip Install to User Site by Default",
+            Category = "Developer",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description =
+                "Configures pip to install packages to the user site-packages directory by default. Avoids needing admin for pip install. Default: system site.",
+            Tags = ["packages", "pip", "user", "install"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Environment"],
+            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Environment", "PIP_USER", "1")],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Environment", "PIP_USER")],
+            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Environment", "PIP_USER", "1")],
+        },
+        new TweakDef
+        {
+            Id = "pkg-ps-gallery-trust",
+            Label = "Trust PowerShell Gallery",
+            Category = "Developer",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            KindHint = TweakKind.PowerShell,
+            Description = "Sets the PSGallery repository as trusted to suppress install prompts. Default: untrusted.",
+            Tags = ["packages", "powershell", "gallery", "trust"],
+            ApplyAction = _ => ShellRunner.RunPowerShell("Set-PSRepository -Name PSGallery -InstallationPolicy Trusted"),
+            RemoveAction = _ => ShellRunner.RunPowerShell("Set-PSRepository -Name PSGallery -InstallationPolicy Untrusted"),
+            DetectAction = () =>
+            {
+                var (code, stdout, _) = ShellRunner.RunPowerShell("(Get-PSRepository -Name PSGallery).InstallationPolicy");
+                return code == 0 && stdout.Trim().Equals("Trusted", StringComparison.OrdinalIgnoreCase);
+            },
+        },
+        new TweakDef
+        {
+            Id = "pkg-ps-remotesigned",
+            Label = "Set PowerShell ExecutionPolicy to RemoteSigned",
+            Category = "Developer",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description =
+                "Sets the PowerShell execution policy to RemoteSigned for the current user. Allows local scripts to run. Default: Restricted.",
+            Tags = ["packages", "powershell", "execution-policy", "remotesigned"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\PowerShell\1\ShellIds\Microsoft.PowerShell"],
+            ApplyOps =
+            [
+                RegOp.SetString(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\PowerShell\1\ShellIds\Microsoft.PowerShell",
+                    "ExecutionPolicy",
+                    "RemoteSigned"
+                ),
+            ],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\PowerShell\1\ShellIds\Microsoft.PowerShell", "ExecutionPolicy")],
+            DetectOps =
+            [
+                RegOp.CheckString(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\PowerShell\1\ShellIds\Microsoft.PowerShell",
+                    "ExecutionPolicy",
+                    "RemoteSigned"
+                ),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "pkg-scoop-setup",
+            Label = "Install Scoop Package Manager",
+            Category = "Developer",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            KindHint = TweakKind.PackageManager,
+            Description =
+                "Installs the Scoop package manager for Windows. Provides command-line app installation without admin. Default: not installed.",
+            Tags = ["packages", "scoop", "install", "setup"],
+            ApplyAction = _ => ShellRunner.RunPowerShell("irm get.scoop.sh | iex"),
+            RemoveAction = _ => ShellRunner.RunPowerShell("scoop uninstall scoop"),
+            DetectAction = () =>
+            {
+                var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "scoop", "shims", "scoop.ps1");
+                return File.Exists(path);
+            },
+        },
+        new TweakDef
+        {
+            Id = "pkg-winget-disable-auto-update",
+            Label = "Disable WinGet Auto-Upgrade",
+            Category = "Developer",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables automatic package upgrades via WinGet auto-update policy. Prevents unattended app updates. Default: enabled.",
+            Tags = ["packages", "winget", "auto-upgrade", "disable"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppInstaller"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppInstaller", "EnableAutoUpgrade", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppInstaller", "EnableAutoUpgrade")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppInstaller", "EnableAutoUpgrade", 0)],
+        },
+        new TweakDef
+        {
+            Id = "pkg-winget-disable-msstore-source",
+            Label = "Disable WinGet Microsoft Store Source",
+            Category = "Developer",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables the Microsoft Store source in WinGet. Limits installs to winget community repository only. Default: enabled.",
+            Tags = ["packages", "winget", "msstore", "source"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppInstaller"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppInstaller", "EnableMSStoreSource", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppInstaller", "EnableMSStoreSource")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppInstaller", "EnableMSStoreSource", 0)],
+        },
+    ];
+}
+
+// ── Merged from ScoopTools.cs ──────────────────────────────────────────────────
+
+internal static class ScoopTools
+{
+    internal static IReadOnlyList<TweakDef> Tweaks { get; } =
+    [
+        new TweakDef
+        {
+            Id = "scoop-disable-autoupdate",
+            Label = "Disable Scoop Auto-Update on Install",
+            Category = "Developer",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description =
+                "Sets SCOOP_NO_AUTO_UPDATE=1 to prevent Scoop from auto-updating itself before every app install. Default: auto-update. Recommended: disabled for speed.",
+            Tags = ["scoop", "autoupdate", "speed", "environment"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Environment"],
+            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Environment", "SCOOP_NO_AUTO_UPDATE", "1")],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Environment", "SCOOP_NO_AUTO_UPDATE")],
+            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Environment", "SCOOP_NO_AUTO_UPDATE", "1")],
+        },
+        new TweakDef
+        {
+            Id = "scoop-parallel-downloads",
+            Label = "Enable Scoop Parallel Downloads (aria2)",
+            Category = "Developer",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description =
+                "Sets SCOOP_ARIA2_ENABLED=true to enable parallel downloads via aria2 for faster Scoop package installs. Default: disabled. Recommended: enabled.",
+            Tags = ["scoop", "parallel", "downloads", "aria2", "speed"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Environment"],
+            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Environment", "SCOOP_ARIA2_ENABLED", "true")],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Environment", "SCOOP_ARIA2_ENABLED")],
+            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Environment", "SCOOP_ARIA2_ENABLED", "true")],
+        },
+        new TweakDef
+        {
+            Id = "scoop-set-global-install-dir",
+            Label = "Set Scoop Global Install Directory",
+            Category = "Developer",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Sets the global Scoop install directory to C:\\Scoop via environment variable. Default: C:\\ProgramData\\scoop.",
+            Tags = ["scoop", "global", "install", "directory"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Environment"],
+            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Environment", "SCOOP_GLOBAL", @"C:\Scoop")],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Environment", "SCOOP_GLOBAL")],
+            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Environment", "SCOOP_GLOBAL", @"C:\Scoop")],
+        },
+        new TweakDef
+        {
+            Id = "scoop-set-cache-dir",
+            Label = "Set Scoop Cache Directory",
+            Category = "Developer",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Sets Scoop download cache to C:\\ScoopCache. Keeps downloads separate from installs. Default: ~\\scoop\\cache.",
+            Tags = ["scoop", "cache", "directory", "download"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Environment"],
+            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Environment", "SCOOP_CACHE", @"C:\ScoopCache")],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Environment", "SCOOP_CACHE")],
+            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Environment", "SCOOP_CACHE", @"C:\ScoopCache")],
+        },
+        new TweakDef
+        {
+            Id = "scoop-enable-debug-mode",
+            Label = "Enable Scoop Debug Mode",
+            Category = "Developer",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Enables Scoop debug output for troubleshooting install failures. Default: disabled.",
+            Tags = ["scoop", "debug", "verbose", "troubleshooting"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Environment"],
+            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Environment", "SCOOP_DEBUG", "true")],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Environment", "SCOOP_DEBUG")],
+            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Environment", "SCOOP_DEBUG", "true")],
+        },
+        new TweakDef
+        {
+            Id = "scoop-set-aria2-max-connections",
+            Label = "Set Scoop Aria2 Max Connections to 16",
+            Category = "Developer",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Sets Scoop Aria2 max connections per server to 16. Speeds up downloads. Default: not set (Aria2 default is 1).",
+            Tags = ["scoop", "aria2", "connections", "speed"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Environment"],
+            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Environment", "SCOOP_ARIA2_OPTIONS", "-x 16 -s 16")],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Environment", "SCOOP_ARIA2_OPTIONS")],
+            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Environment", "SCOOP_ARIA2_OPTIONS", "-x 16 -s 16")],
+        },
+        new TweakDef
+        {
+            Id = "scoop-set-global-install-path",
+            Label = "Set Scoop Global Install Path",
+            Category = "Developer",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description =
+                "Sets the Scoop global apps install directory to C:\\ScoopGlobal. Keeps system programs organised. Default: %ProgramData%\\scoop.",
+            Tags = ["scoop", "global", "install-path", "directory"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Environment"],
+            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Environment", "SCOOP_GLOBAL", @"C:\ScoopGlobal")],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Environment", "SCOOP_GLOBAL")],
+            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Environment", "SCOOP_GLOBAL", @"C:\ScoopGlobal")],
+        },
+        new TweakDef
+        {
+            Id = "scoop-set-virustotal-api-key",
+            Label = "Set Scoop VirusTotal API Key Variable",
+            Category = "Developer",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description =
+                "Sets the SCOOP_VIRUSTOTAL_API_KEY environment variable placeholder. Replace with your actual key for automatic malware scanning. Default: not set.",
+            Tags = ["scoop", "virustotal", "security", "scanning"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Environment"],
+            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Environment", "SCOOP_VIRUSTOTAL_API_KEY", "YOUR_API_KEY_HERE")],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Environment", "SCOOP_VIRUSTOTAL_API_KEY")],
+            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Environment", "SCOOP_VIRUSTOTAL_API_KEY", "YOUR_API_KEY_HERE")],
+        },
+        new TweakDef
+        {
+            Id = "scoop-disable-checkver",
+            Label = "Disable Scoop Auto-Version Check",
+            Category = "Developer",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Sets SCOOP_NO_CHECKVER=1 to skip automatic version checks. Speeds up 'scoop status'. Default: checks versions.",
+            Tags = ["scoop", "checkver", "speed", "environment"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Environment"],
+            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Environment", "SCOOP_NO_CHECKVER", "1")],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Environment", "SCOOP_NO_CHECKVER")],
+            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Environment", "SCOOP_NO_CHECKVER", "1")],
+        },
+        new TweakDef
+        {
+            Id = "scoop-add-extras-bucket",
+            Label = "Add Scoop Extras Bucket",
+            Category = "Developer",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            KindHint = TweakKind.PowerShell,
+            Description = "Adds the Scoop 'extras' bucket which contains popular GUI apps. Default: not added.",
+            Tags = ["scoop", "extras", "bucket", "apps"],
+            ApplyAction = _ => ShellRunner.RunPowerShell("scoop bucket add extras"),
+            RemoveAction = _ => ShellRunner.RunPowerShell("scoop bucket rm extras"),
+            DetectAction = () =>
+            {
+                var (exit, _, _) = ShellRunner.Run("scoop", ["bucket", "list"]);
+                return exit == 0;
+            },
+        },
+        new TweakDef
+        {
+            Id = "scoop-cleanup-all",
+            Label = "Clean Up All Scoop Caches",
+            Category = "Developer",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            KindHint = TweakKind.PowerShell,
+            Description = "Runs scoop cleanup * and scoop cache rm * to free disk space from old versions and downloads.",
+            Tags = ["scoop", "cleanup", "cache", "disk-space"],
+            ApplyAction = _ =>
+            {
+                ShellRunner.RunPowerShell("scoop cleanup *");
+                ShellRunner.RunPowerShell("scoop cache rm *");
+            },
+            DetectAction = () => false,
+        },
+        new TweakDef
+        {
+            Id = "scoop-install-aria2",
+            Label = "Install Aria2 for Scoop Downloads",
+            Category = "Developer",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            KindHint = TweakKind.PackageManager,
+            Description = "Installs aria2 download manager for faster parallel Scoop downloads. Default: not installed.",
+            Tags = ["scoop", "aria2", "download", "install"],
+            ApplyAction = _ => ShellRunner.RunPowerShell("scoop install aria2"),
+            RemoveAction = _ => ShellRunner.RunPowerShell("scoop uninstall aria2"),
+            DetectAction = () =>
+            {
+                var scoopDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "scoop", "apps", "aria2");
+                return Directory.Exists(scoopDir);
+            },
+        },
+        new TweakDef
+        {
+            Id = "scoop-7zip",
+            Label = "Install 7-Zip via Scoop",
+            Category = "Developer",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            KindHint = TweakKind.PackageManager,
+            Description = "Installs 7-Zip file archiver via Scoop. Supports 7z, ZIP, RAR, and many other formats.",
+            Tags = ["scoop", "7zip", "archive", "install"],
+            ApplyAction = _ => ShellRunner.RunPowerShell("scoop install 7zip"),
+            RemoveAction = _ => ShellRunner.RunPowerShell("scoop uninstall 7zip"),
+            DetectAction = () =>
+                Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "scoop", "apps", "7zip")),
+        },
+        new TweakDef
+        {
+            Id = "scoop-bat",
+            Label = "Install bat via Scoop",
+            Category = "Developer",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            KindHint = TweakKind.PackageManager,
+            Description = "Installs bat — a cat clone with syntax highlighting and Git integration.",
+            Tags = ["scoop", "bat", "cat", "install"],
+            ApplyAction = _ => ShellRunner.RunPowerShell("scoop install bat"),
+            RemoveAction = _ => ShellRunner.RunPowerShell("scoop uninstall bat"),
+            DetectAction = () =>
+                Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "scoop", "apps", "bat")),
+        },
+        new TweakDef
+        {
+            Id = "scoop-btop",
+            Label = "Install btop via Scoop",
+            Category = "Developer",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            KindHint = TweakKind.PackageManager,
+            Description = "Installs btop — a resource monitor with CPU, memory, disk, network, and process stats.",
+            Tags = ["scoop", "btop", "monitor", "install"],
+            ApplyAction = _ => ShellRunner.RunPowerShell("scoop install btop"),
+            RemoveAction = _ => ShellRunner.RunPowerShell("scoop uninstall btop"),
+            DetectAction = () =>
+                Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "scoop", "apps", "btop")),
+        },
+        new TweakDef
+        {
+            Id = "scoop-curl",
+            Label = "Install curl via Scoop",
+            Category = "Developer",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            KindHint = TweakKind.PackageManager,
+            Description = "Installs curl — command-line tool for transferring data with URLs.",
+            Tags = ["scoop", "curl", "http", "install"],
+            ApplyAction = _ => ShellRunner.RunPowerShell("scoop install curl"),
+            RemoveAction = _ => ShellRunner.RunPowerShell("scoop uninstall curl"),
+            DetectAction = () =>
+                Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "scoop", "apps", "curl")),
+        },
+        new TweakDef
+        {
+            Id = "scoop-delta",
+            Label = "Install delta via Scoop",
+            Category = "Developer",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            KindHint = TweakKind.PackageManager,
+            Description = "Installs delta — a syntax-highlighting pager for git, diff, and grep output.",
+            Tags = ["scoop", "delta", "diff", "install"],
+            ApplyAction = _ => ShellRunner.RunPowerShell("scoop install delta"),
+            RemoveAction = _ => ShellRunner.RunPowerShell("scoop uninstall delta"),
+            DetectAction = () =>
+                Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "scoop", "apps", "delta")),
+        },
+        new TweakDef
+        {
+            Id = "scoop-duf",
+            Label = "Install duf via Scoop",
+            Category = "Developer",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            KindHint = TweakKind.PackageManager,
+            Description = "Installs duf — a better df alternative for viewing disk usage with a modern UI.",
+            Tags = ["scoop", "duf", "disk", "install"],
+            ApplyAction = _ => ShellRunner.RunPowerShell("scoop install duf"),
+            RemoveAction = _ => ShellRunner.RunPowerShell("scoop uninstall duf"),
+            DetectAction = () =>
+                Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "scoop", "apps", "duf")),
+        },
+        new TweakDef
+        {
+            Id = "scoop-dust",
+            Label = "Install dust via Scoop",
+            Category = "Developer",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            KindHint = TweakKind.PackageManager,
+            Description = "Installs dust — a more intuitive version of du showing disk usage as a tree.",
+            Tags = ["scoop", "dust", "disk-usage", "install"],
+            ApplyAction = _ => ShellRunner.RunPowerShell("scoop install dust"),
+            RemoveAction = _ => ShellRunner.RunPowerShell("scoop uninstall dust"),
+            DetectAction = () =>
+                Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "scoop", "apps", "dust")),
+        },
+        new TweakDef
+        {
+            Id = "scoop-everything",
+            Label = "Install Everything via Scoop",
+            Category = "Developer",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            KindHint = TweakKind.PackageManager,
+            Description = "Installs Everything — instant file search engine for Windows with real-time indexing.",
+            Tags = ["scoop", "everything", "search", "install"],
+            ApplyAction = _ => ShellRunner.RunPowerShell("scoop install everything"),
+            RemoveAction = _ => ShellRunner.RunPowerShell("scoop uninstall everything"),
+            DetectAction = () =>
+                Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "scoop", "apps", "everything")),
+        },
+        new TweakDef
+        {
+            Id = "scoop-fd",
+            Label = "Install fd via Scoop",
+            Category = "Developer",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            KindHint = TweakKind.PackageManager,
+            Description = "Installs fd — a fast and user-friendly alternative to find.",
+            Tags = ["scoop", "fd", "find", "install"],
+            ApplyAction = _ => ShellRunner.RunPowerShell("scoop install fd"),
+            RemoveAction = _ => ShellRunner.RunPowerShell("scoop uninstall fd"),
+            DetectAction = () =>
+                Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "scoop", "apps", "fd")),
+        },
+        new TweakDef
+        {
+            Id = "scoop-fzf",
+            Label = "Install fzf via Scoop",
+            Category = "Developer",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            KindHint = TweakKind.PackageManager,
+            Description = "Installs fzf — a general-purpose command-line fuzzy finder.",
+            Tags = ["scoop", "fzf", "fuzzy", "install"],
+            ApplyAction = _ => ShellRunner.RunPowerShell("scoop install fzf"),
+            RemoveAction = _ => ShellRunner.RunPowerShell("scoop uninstall fzf"),
+            DetectAction = () =>
+                Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "scoop", "apps", "fzf")),
+        },
+        new TweakDef
+        {
+            Id = "scoop-git",
+            Label = "Install Git via Scoop",
+            Category = "Developer",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            KindHint = TweakKind.PackageManager,
+            Description = "Installs Git distributed version control system via Scoop.",
+            Tags = ["scoop", "git", "vcs", "install"],
+            ApplyAction = _ => ShellRunner.RunPowerShell("scoop install git"),
+            RemoveAction = _ => ShellRunner.RunPowerShell("scoop uninstall git"),
+            DetectAction = () =>
+                Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "scoop", "apps", "git")),
+        },
+        new TweakDef
+        {
+            Id = "scoop-gsudo",
+            Label = "Install gsudo via Scoop",
+            Category = "Developer",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            KindHint = TweakKind.PackageManager,
+            Description = "Installs gsudo — a sudo equivalent for Windows that elevates commands inline.",
+            Tags = ["scoop", "gsudo", "sudo", "install"],
+            ApplyAction = _ => ShellRunner.RunPowerShell("scoop install gsudo"),
+            RemoveAction = _ => ShellRunner.RunPowerShell("scoop uninstall gsudo"),
+            DetectAction = () =>
+                Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "scoop", "apps", "gsudo")),
+        },
+        new TweakDef
+        {
+            Id = "scoop-hyperfine",
+            Label = "Install hyperfine via Scoop",
+            Category = "Developer",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            KindHint = TweakKind.PackageManager,
+            Description = "Installs hyperfine — a command-line benchmarking tool with statistical analysis.",
+            Tags = ["scoop", "hyperfine", "benchmark", "install"],
+            ApplyAction = _ => ShellRunner.RunPowerShell("scoop install hyperfine"),
+            RemoveAction = _ => ShellRunner.RunPowerShell("scoop uninstall hyperfine"),
+            DetectAction = () =>
+                Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "scoop", "apps", "hyperfine")),
+        },
+        new TweakDef
+        {
+            Id = "scoop-jq",
+            Label = "Install jq via Scoop",
+            Category = "Developer",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            KindHint = TweakKind.PackageManager,
+            Description = "Installs jq — a lightweight command-line JSON processor.",
+            Tags = ["scoop", "jq", "json", "install"],
+            ApplyAction = _ => ShellRunner.RunPowerShell("scoop install jq"),
+            RemoveAction = _ => ShellRunner.RunPowerShell("scoop uninstall jq"),
+            DetectAction = () =>
+                Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "scoop", "apps", "jq")),
+        },
+        new TweakDef
+        {
+            Id = "scoop-lazygit",
+            Label = "Install lazygit via Scoop",
+            Category = "Developer",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            KindHint = TweakKind.PackageManager,
+            Description = "Installs lazygit — a simple terminal UI for Git commands.",
+            Tags = ["scoop", "lazygit", "git", "install"],
+            ApplyAction = _ => ShellRunner.RunPowerShell("scoop install lazygit"),
+            RemoveAction = _ => ShellRunner.RunPowerShell("scoop uninstall lazygit"),
+            DetectAction = () =>
+                Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "scoop", "apps", "lazygit")),
+        },
+        new TweakDef
+        {
+            Id = "scoop-neovim",
+            Label = "Install Neovim via Scoop",
+            Category = "Developer",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            KindHint = TweakKind.PackageManager,
+            Description = "Installs Neovim — a hyperextensible Vim-based text editor.",
+            Tags = ["scoop", "neovim", "editor", "install"],
+            ApplyAction = _ => ShellRunner.RunPowerShell("scoop install neovim"),
+            RemoveAction = _ => ShellRunner.RunPowerShell("scoop uninstall neovim"),
+            DetectAction = () =>
+                Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "scoop", "apps", "neovim")),
+        },
+        new TweakDef
+        {
+            Id = "scoop-nodejs",
+            Label = "Install Node.js via Scoop",
+            Category = "Developer",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            KindHint = TweakKind.PackageManager,
+            Description = "Installs Node.js JavaScript runtime via Scoop.",
+            Tags = ["scoop", "nodejs", "javascript", "install"],
+            ApplyAction = _ => ShellRunner.RunPowerShell("scoop install nodejs"),
+            RemoveAction = _ => ShellRunner.RunPowerShell("scoop uninstall nodejs"),
+            DetectAction = () =>
+                Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "scoop", "apps", "nodejs")),
+        },
+        new TweakDef
+        {
+            Id = "scoop-python",
+            Label = "Install Python via Scoop",
+            Category = "Developer",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            KindHint = TweakKind.PackageManager,
+            Description = "Installs Python interpreter via Scoop.",
+            Tags = ["scoop", "python", "interpreter", "install"],
+            ApplyAction = _ => ShellRunner.RunPowerShell("scoop install python"),
+            RemoveAction = _ => ShellRunner.RunPowerShell("scoop uninstall python"),
+            DetectAction = () =>
+                Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "scoop", "apps", "python")),
+        },
+        new TweakDef
+        {
+            Id = "scoop-ripgrep",
+            Label = "Install ripgrep via Scoop",
+            Category = "Developer",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            KindHint = TweakKind.PackageManager,
+            Description = "Installs ripgrep — a line-oriented search tool that recursively searches directories.",
+            Tags = ["scoop", "ripgrep", "search", "install"],
+            ApplyAction = _ => ShellRunner.RunPowerShell("scoop install ripgrep"),
+            RemoveAction = _ => ShellRunner.RunPowerShell("scoop uninstall ripgrep"),
+            DetectAction = () =>
+                Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "scoop", "apps", "ripgrep")),
+        },
+        new TweakDef
+        {
+            Id = "scoop-set-global-path",
+            Label = "Add Scoop Global Apps to PATH",
+            Category = "Developer",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Adds the Scoop global apps directory to the system PATH. Allows globally installed Scoop apps to be available to all users. Default: not in PATH.",
+            Tags = ["scoop", "global", "path", "environment"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Environment"],
+            ApplyOps =
+            [
+                RegOp.SetExpandString(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Environment",
+                    "SCOOP_GLOBAL",
+                    @"%ProgramData%\scoop"
+                ),
+            ],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Environment", "SCOOP_GLOBAL")],
+            DetectOps =
+            [
+                RegOp.CheckString(
+                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Environment",
+                    "SCOOP_GLOBAL",
+                    @"%ProgramData%\scoop"
+                ),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "scoop-starship",
+            Label = "Install Starship via Scoop",
+            Category = "Developer",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            KindHint = TweakKind.PackageManager,
+            Description = "Installs Starship — a minimal, blazing-fast cross-shell prompt.",
+            Tags = ["scoop", "starship", "prompt", "install"],
+            ApplyAction = _ => ShellRunner.RunPowerShell("scoop install starship"),
+            RemoveAction = _ => ShellRunner.RunPowerShell("scoop uninstall starship"),
+            DetectAction = () =>
+                Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "scoop", "apps", "starship")),
+        },
+        new TweakDef
+        {
+            Id = "scoop-tldr",
+            Label = "Install tldr via Scoop",
+            Category = "Developer",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            KindHint = TweakKind.PackageManager,
+            Description = "Installs tldr — simplified and community-driven man pages.",
+            Tags = ["scoop", "tldr", "man", "install"],
+            ApplyAction = _ => ShellRunner.RunPowerShell("scoop install tldr"),
+            RemoveAction = _ => ShellRunner.RunPowerShell("scoop uninstall tldr"),
+            DetectAction = () =>
+                Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "scoop", "apps", "tldr")),
+        },
+        new TweakDef
+        {
+            Id = "scoop-wget",
+            Label = "Install wget via Scoop",
+            Category = "Developer",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            KindHint = TweakKind.PackageManager,
+            Description = "Installs wget — a non-interactive network downloader for HTTP, HTTPS, and FTP.",
+            Tags = ["scoop", "wget", "download", "install"],
+            ApplyAction = _ => ShellRunner.RunPowerShell("scoop install wget"),
+            RemoveAction = _ => ShellRunner.RunPowerShell("scoop uninstall wget"),
+            DetectAction = () =>
+                Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "scoop", "apps", "wget")),
+        },
+        new TweakDef
+        {
+            Id = "scoop-zoxide",
+            Label = "Install zoxide via Scoop",
+            Category = "Developer",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            KindHint = TweakKind.PackageManager,
+            Description = "Installs zoxide — a smarter cd command that learns your most-used directories and jumps to them intelligently.",
+            Tags = ["scoop", "zoxide", "navigation", "install"],
+            ApplyAction = _ => ShellRunner.RunPowerShell("scoop install zoxide"),
+            RemoveAction = _ => ShellRunner.RunPowerShell("scoop uninstall zoxide"),
+            DetectAction = () =>
+                Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "scoop", "apps", "zoxide")),
+        },
+        new TweakDef
+        {
+            Id = "scoop-lsd",
+            Label = "Install lsd via Scoop",
+            Category = "Developer",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            KindHint = TweakKind.PackageManager,
+            Description = "Installs lsd — a modern ls replacement with icons, colours, and tree view.",
+            Tags = ["scoop", "lsd", "files", "install"],
+            ApplyAction = _ => ShellRunner.RunPowerShell("scoop install lsd"),
+            RemoveAction = _ => ShellRunner.RunPowerShell("scoop uninstall lsd"),
+            DetectAction = () =>
+                Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "scoop", "apps", "lsd")),
+        },
+        new TweakDef
+        {
+            Id = "scoop-sd",
+            Label = "Install sd via Scoop",
+            Category = "Developer",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            KindHint = TweakKind.PackageManager,
+            Description = "Installs sd — a modern sed/awk replacement for intuitive find-and-replace operations.",
+            Tags = ["scoop", "sd", "text", "install"],
+            ApplyAction = _ => ShellRunner.RunPowerShell("scoop install sd"),
+            RemoveAction = _ => ShellRunner.RunPowerShell("scoop uninstall sd"),
+            DetectAction = () =>
+                Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "scoop", "apps", "sd")),
+        },
+        new TweakDef
+        {
+            Id = "scoop-procs",
+            Label = "Install procs via Scoop",
+            Category = "Developer",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            KindHint = TweakKind.PackageManager,
+            Description = "Installs procs — a modern replacement for ps that shows processes with colour-coded resource usage.",
+            Tags = ["scoop", "procs", "processes", "install"],
+            ApplyAction = _ => ShellRunner.RunPowerShell("scoop install procs"),
+            RemoveAction = _ => ShellRunner.RunPowerShell("scoop uninstall procs"),
+            DetectAction = () =>
+                Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "scoop", "apps", "procs")),
+        },
+        new TweakDef
+        {
+            Id = "scoop-bottom",
+            Label = "Install bottom via Scoop",
+            Category = "Developer",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            KindHint = TweakKind.PackageManager,
+            Description = "Installs bottom (btm) — a graphical system monitor for CPU, RAM, disk, and network.",
+            Tags = ["scoop", "bottom", "monitor", "install"],
+            ApplyAction = _ => ShellRunner.RunPowerShell("scoop install bottom"),
+            RemoveAction = _ => ShellRunner.RunPowerShell("scoop uninstall bottom"),
+            DetectAction = () =>
+                Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "scoop", "apps", "bottom")),
+        },
+        new TweakDef
+        {
+            Id = "scoop-xh",
+            Label = "Install xh via Scoop",
+            Category = "Developer",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            KindHint = TweakKind.PackageManager,
+            Description = "Installs xh — a friendly and fast HTTP client similar to HTTPie.",
+            Tags = ["scoop", "xh", "http", "install"],
+            ApplyAction = _ => ShellRunner.RunPowerShell("scoop install xh"),
+            RemoveAction = _ => ShellRunner.RunPowerShell("scoop uninstall xh"),
+            DetectAction = () =>
+                Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "scoop", "apps", "xh")),
+        },
+        new TweakDef
+        {
+            Id = "scoop-gping",
+            Label = "Install gping via Scoop",
+            Category = "Developer",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            KindHint = TweakKind.PackageManager,
+            Description = "Installs gping — a graphical ping tool that displays network latency as a real-time graph.",
+            Tags = ["scoop", "gping", "network", "install"],
+            ApplyAction = _ => ShellRunner.RunPowerShell("scoop install gping"),
+            RemoveAction = _ => ShellRunner.RunPowerShell("scoop uninstall gping"),
+            DetectAction = () =>
+                Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "scoop", "apps", "gping")),
+        },
+        new TweakDef
+        {
+            Id = "scoop-tokei",
+            Label = "Install tokei via Scoop",
+            Category = "Developer",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            KindHint = TweakKind.PackageManager,
+            Description = "Installs tokei — a fast code statistics tool that counts lines of code by language.",
+            Tags = ["scoop", "tokei", "code", "install"],
+            ApplyAction = _ => ShellRunner.RunPowerShell("scoop install tokei"),
+            RemoveAction = _ => ShellRunner.RunPowerShell("scoop uninstall tokei"),
+            DetectAction = () =>
+                Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "scoop", "apps", "tokei")),
+        },
+        new TweakDef
+        {
+            Id = "scoop-tealdeer",
+            Label = "Install tealdeer via Scoop",
+            Category = "Developer",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            KindHint = TweakKind.PackageManager,
+            Description = "Installs tealdeer — a fast Rust-based tldr pages client for quick command summaries.",
+            Tags = ["scoop", "tealdeer", "tldr", "install"],
+            ApplyAction = _ => ShellRunner.RunPowerShell("scoop install tealdeer"),
+            RemoveAction = _ => ShellRunner.RunPowerShell("scoop uninstall tealdeer"),
+            DetectAction = () =>
+                Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "scoop", "apps", "tealdeer")),
+        },
+        new TweakDef
+        {
+            Id = "scoop-carapace-bin",
+            Label = "Install carapace-bin via Scoop",
+            Category = "Developer",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            KindHint = TweakKind.PackageManager,
+            Description = "Installs carapace-bin — a multi-shell completion engine supporting PowerShell, bash, zsh, and more.",
+            Tags = ["scoop", "carapace", "completion", "install"],
+            ApplyAction = _ => ShellRunner.RunPowerShell("scoop install carapace-bin"),
+            RemoveAction = _ => ShellRunner.RunPowerShell("scoop uninstall carapace-bin"),
+            DetectAction = () =>
+                Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "scoop", "apps", "carapace-bin")),
+        },
+        new TweakDef
+        {
+            Id = "scoop-eza",
+            Label = "Install eza via Scoop",
+            Category = "Developer",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            KindHint = TweakKind.PackageManager,
+            Description =
+                "Installs eza — a modern, maintained replacement for ls with colour output, icons, and git integration. Replaces the deprecated exa.",
+            Tags = ["scoop", "eza", "ls", "files", "install"],
+            ApplyAction = _ => ShellRunner.RunPowerShell("scoop install eza"),
+            RemoveAction = _ => ShellRunner.RunPowerShell("scoop uninstall eza"),
+            DetectAction = () =>
+                Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "scoop", "apps", "eza")),
+        },
+        new TweakDef
+        {
+            Id = "scoop-yazi",
+            Label = "Install yazi via Scoop",
+            Category = "Developer",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            KindHint = TweakKind.PackageManager,
+            Description = "Installs yazi — a blazing-fast terminal file manager written in Rust with async I/O and vim-style navigation.",
+            Tags = ["scoop", "yazi", "file-manager", "terminal", "install"],
+            ApplyAction = _ => ShellRunner.RunPowerShell("scoop install yazi"),
+            RemoveAction = _ => ShellRunner.RunPowerShell("scoop uninstall yazi"),
+            DetectAction = () =>
+                Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "scoop", "apps", "yazi")),
+        },
+        new TweakDef
+        {
+            Id = "scoop-helix",
+            Label = "Install Helix editor via Scoop",
+            Category = "Developer",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            KindHint = TweakKind.PackageManager,
+            Description =
+                "Installs Helix — a post-modern modal text editor inspired by Kakoune and Neovim, with built-in LSP and tree-sitter support.",
+            Tags = ["scoop", "helix", "editor", "modal", "install"],
+            ApplyAction = _ => ShellRunner.RunPowerShell("scoop install helix"),
+            RemoveAction = _ => ShellRunner.RunPowerShell("scoop uninstall helix"),
+            DetectAction = () =>
+                Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "scoop", "apps", "helix")),
+        },
+        new TweakDef
+        {
+            Id = "scoop-nushell",
+            Label = "Install Nushell via Scoop",
+            Category = "Developer",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            KindHint = TweakKind.PackageManager,
+            Description = "Installs Nushell (nu) — a modern shell with structured, type-aware pipelines. Treats output as tables, not plain text.",
+            Tags = ["scoop", "nushell", "shell", "nu", "install"],
+            ApplyAction = _ => ShellRunner.RunPowerShell("scoop install nu"),
+            RemoveAction = _ => ShellRunner.RunPowerShell("scoop uninstall nu"),
+            DetectAction = () =>
+                Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "scoop", "apps", "nu")),
+        },
+        new TweakDef
+        {
+            Id = "scoop-zellij",
+            Label = "Install Zellij via Scoop",
+            Category = "Developer",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            KindHint = TweakKind.PackageManager,
+            Description = "Installs Zellij — a terminal workspace with panes, tabs, and a plugin system. Modern Rust-based tmux alternative.",
+            Tags = ["scoop", "zellij", "terminal", "multiplexer", "install"],
+            ApplyAction = _ => ShellRunner.RunPowerShell("scoop install zellij"),
+            RemoveAction = _ => ShellRunner.RunPowerShell("scoop uninstall zellij"),
+            DetectAction = () =>
+                Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "scoop", "apps", "zellij")),
+        },
+        new TweakDef
+        {
+            Id = "scoop-gitoxide",
+            Label = "Install gitoxide (gix) via Scoop",
+            Category = "Developer",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            KindHint = TweakKind.PackageManager,
+            Description = "Installs gitoxide — a pure Rust git implementation providing the gix CLI tool for fast, safe git operations.",
+            Tags = ["scoop", "gitoxide", "git", "rust", "install"],
+            ApplyAction = _ => ShellRunner.RunPowerShell("scoop install gitoxide"),
+            RemoveAction = _ => ShellRunner.RunPowerShell("scoop uninstall gitoxide"),
+            DetectAction = () =>
+                Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "scoop", "apps", "gitoxide")),
+        },
+        new TweakDef
+        {
+            Id = "scoop-watchexec",
+            Label = "Install watchexec via Scoop",
+            Category = "Developer",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            KindHint = TweakKind.PackageManager,
+            Description =
+                "Installs watchexec — a tool that watches files for changes and re-runs a command automatically. Ideal for dev and build workflows.",
+            Tags = ["scoop", "watchexec", "watch", "automation", "install"],
+            ApplyAction = _ => ShellRunner.RunPowerShell("scoop install watchexec"),
+            RemoveAction = _ => ShellRunner.RunPowerShell("scoop uninstall watchexec"),
+            DetectAction = () =>
+                Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "scoop", "apps", "watchexec")),
+        },
+        new TweakDef
+        {
+            Id = "scoop-topgrade",
+            Label = "Install topgrade via Scoop",
+            Category = "Developer",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            KindHint = TweakKind.PackageManager,
+            Description = "Installs topgrade — a one-command upgrade tool for all package managers, shells, plugins, and tools on the system.",
+            Tags = ["scoop", "topgrade", "upgrade", "maintenance", "install"],
+            ApplyAction = _ => ShellRunner.RunPowerShell("scoop install topgrade"),
+            RemoveAction = _ => ShellRunner.RunPowerShell("scoop uninstall topgrade"),
+            DetectAction = () =>
+                Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "scoop", "apps", "topgrade")),
+        },
+        new TweakDef
+        {
+            Id = "scoop-pueue",
+            Label = "Install pueue via Scoop",
+            Category = "Developer",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            KindHint = TweakKind.PackageManager,
+            Description = "Installs pueue — a background task queue manager for long-running shell commands with pause, abort, and log features.",
+            Tags = ["scoop", "pueue", "task-queue", "background", "install"],
+            ApplyAction = _ => ShellRunner.RunPowerShell("scoop install pueue"),
+            RemoveAction = _ => ShellRunner.RunPowerShell("scoop uninstall pueue"),
+            DetectAction = () =>
+                Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "scoop", "apps", "pueue")),
+        },
+        new TweakDef
+        {
+            Id = "scoop-oha",
+            Label = "Install oha via Scoop",
+            Category = "Developer",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            KindHint = TweakKind.PackageManager,
+            Description = "Installs oha — a fast HTTP load generator written in Rust for benchmarking web endpoints from the command line.",
+            Tags = ["scoop", "oha", "http", "load-test", "install"],
+            ApplyAction = _ => ShellRunner.RunPowerShell("scoop install oha"),
+            RemoveAction = _ => ShellRunner.RunPowerShell("scoop uninstall oha"),
+            DetectAction = () =>
+                Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "scoop", "apps", "oha")),
+        },
+    ];
+}
+
+// ── merged from Java.cs ──
+internal static class Java
+{
+    internal static IReadOnlyList<TweakDef> Tweaks { get; } =
+    [
+        new TweakDef
+        {
+            Id = "java-security-high",
+            Label = "Java: Set Security Level to Very High",
+            Category = "Developer",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Raises the Java security level to VERY_HIGH, blocking unsigned applets.",
+            Tags = ["java", "security"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties"],
+            ApplyOps =
+            [
+                RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties", "deployment.security.level", "VERY_HIGH"),
+            ],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties", "deployment.security.level")],
+            DetectOps =
+            [
+                RegOp.CheckString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties", "deployment.security.level", "VERY_HIGH"),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "java-disable-java-tip-of-day",
+            Label = "Disable Java Tip of the Day",
+            Category = "Developer",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables the 'Tip of the Day' pop-up dialog in Java Control Panel.",
+            Tags = ["java", "ui", "annoyance"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties"],
+            ApplyOps = [RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties", "deployment.javaws.tip.day", "false")],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties", "deployment.javaws.tip.day")],
+            DetectOps =
+            [
+                RegOp.CheckString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties", "deployment.javaws.tip.day", "false"),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "java-disable-update-check",
+            Label = "Disable Java Auto-Update Check",
+            Category = "Developer",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Disables Java's automatic update check at startup. Reduces background network traffic. Default: Enabled. Recommended: Disabled for managed environments.",
+            Tags = ["java", "update", "performance"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft\Java Update\Policy"],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft\Java Update\Policy", "EnableJavaUpdate", 0),
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft\Java Update\Policy", "NotifyDownload", 0),
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\JavaSoft\Java Update\Policy", "EnableJavaUpdate", 0),
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\JavaSoft\Java Update\Policy", "NotifyDownload", 0),
+            ],
+            RemoveOps =
+            [
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft\Java Update\Policy", "EnableJavaUpdate", 1),
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\JavaSoft\Java Update\Policy", "EnableJavaUpdate", 1),
+            ],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft\Java Update\Policy", "EnableJavaUpdate", 0)],
+        },
+        new TweakDef
+        {
+            Id = "java-high-perf-graphics",
+            Label = "Java High Performance Graphics",
+            Category = "Developer",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Enables hardware graphics acceleration for Java/JavaFX applications. Improves rendering performance. Default: Software. Recommended: Hardware.",
+            Tags = ["java", "graphics", "performance"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft\Java Runtime Environment"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft\Java Runtime Environment", "JavaFXHardwareAcceleration", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft\Java Runtime Environment", "JavaFXHardwareAcceleration")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft\Java Runtime Environment", "JavaFXHardwareAcceleration", 1)],
+        },
+        new TweakDef
+        {
+            Id = "java-disable-sponsor-offers",
+            Label = "Disable Java Sponsor Offers",
+            Category = "Developer",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description = "Disables sponsor/adware offers bundled with Java updates. Default: Enabled. Recommended: Disabled.",
+            Tags = ["java", "sponsor", "adware", "offers"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft\Java Update\Policy"],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft\Java Update\Policy", "EnableAutoUpdateCheck", 0),
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\JavaSoft\Java Update\Policy", "EnableAutoUpdateCheck", 0),
+            ],
+            RemoveOps =
+            [
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft\Java Update\Policy", "EnableAutoUpdateCheck", 1),
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\JavaSoft\Java Update\Policy", "EnableAutoUpdateCheck", 1),
+            ],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft\Java Update\Policy", "EnableAutoUpdateCheck", 0)],
+        },
+        new TweakDef
+        {
+            Id = "java-disable-update-scheduler",
+            Label = "Disable Java Update Scheduler Notifications",
+            Category = "Developer",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description = "Disables Java update scheduler download/install notifications. Default: Enabled. Recommended: Disabled.",
+            Tags = ["java", "update", "scheduler", "notifications"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft\Java Update\Policy"],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft\Java Update\Policy", "EnableJavaUpdate", 0),
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft\Java Update\Policy", "NotifyDownload", 0),
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\JavaSoft\Java Update\Policy", "EnableJavaUpdate", 0),
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\JavaSoft\Java Update\Policy", "NotifyDownload", 0),
+            ],
+            RemoveOps =
+            [
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft\Java Update\Policy", "EnableJavaUpdate", 1),
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\JavaSoft\Java Update\Policy", "EnableJavaUpdate", 1),
+            ],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft\Java Update\Policy", "EnableJavaUpdate", 0)],
+        },
+        new TweakDef
+        {
+            Id = "java-security-veryhigh",
+            Label = "Set Java Security Level to Very High",
+            Category = "Developer",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description = "Sets Java deployment security level to VERY_HIGH via policy. Default: HIGH. Recommended: VERY_HIGH.",
+            Tags = ["java", "security", "deployment", "veryhigh"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties"],
+            ApplyOps =
+            [
+                RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties", "deployment.security.level", "VERY_HIGH"),
+            ],
+            RemoveOps = [RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties", "deployment.security.level", "HIGH")],
+            DetectOps =
+            [
+                RegOp.CheckString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties", "deployment.security.level", "VERY_HIGH"),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "java-disable-usage-tracking",
+            Label = "Disable Java Usage Tracking",
+            Category = "Developer",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description = "Disables Java usage tracker analytics. Default: Enabled. Recommended: Disabled for privacy.",
+            Tags = ["java", "usage", "tracking", "analytics", "privacy"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft\DeploymentProperties"],
+            ApplyOps = [RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft\DeploymentProperties", "deployment.usagetracker.enabled", "false")],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft\DeploymentProperties", "deployment.usagetracker.enabled")],
+            DetectOps = [RegOp.CheckString(@"HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft\DeploymentProperties", "deployment.usagetracker.enabled", "false")],
+        },
+        new TweakDef
+        {
+            Id = "java-set-high-security",
+            Label = "Set Java Security Level to Very High",
+            Category = "Developer",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Sets Java Web Start / applet security level to Very High. Only signed and trusted apps run. Default: High.",
+            Tags = ["java", "security", "level", "applet"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft\DeploymentProperties"],
+            ApplyOps = [RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft\DeploymentProperties", "deployment.security.level", "VERY_HIGH")],
+            RemoveOps = [RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft\DeploymentProperties", "deployment.security.level", "HIGH")],
+            DetectOps = [RegOp.CheckString(@"HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft\DeploymentProperties", "deployment.security.level", "VERY_HIGH")],
+        },
+        new TweakDef
+        {
+            Id = "java-disable-web-plugin",
+            Label = "Disable Java Browser Plugin",
+            Category = "Developer",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables the Java browser plugin (applets). Reduces browser attack surface. Default: enabled.",
+            Tags = ["java", "browser", "plugin", "applet", "security"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft\DeploymentProperties"],
+            ApplyOps = [RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft\DeploymentProperties", "deployment.webjava.enabled", "false")],
+            RemoveOps = [RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft\DeploymentProperties", "deployment.webjava.enabled", "true")],
+            DetectOps = [RegOp.CheckString(@"HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft\DeploymentProperties", "deployment.webjava.enabled", "false")],
+        },
+        new TweakDef
+        {
+            Id = "java-disable-log-file",
+            Label = "Disable Java Console Log File",
+            Category = "Developer",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables Java console log file creation. Reduces disk writes from Java applications. Default: enabled.",
+            Tags = ["java", "console", "log", "disk"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft\DeploymentProperties"],
+            ApplyOps = [RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft\DeploymentProperties", "deployment.javaws.logFileName", "")],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft\DeploymentProperties", "deployment.javaws.logFileName")],
+            DetectOps = [RegOp.CheckString(@"HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft\DeploymentProperties", "deployment.javaws.logFileName", "")],
+        },
+        new TweakDef
+        {
+            Id = "java-set-high-dpi-awareness",
+            Label = "Enable Java High DPI Awareness",
+            Category = "Developer",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Enables high-DPI awareness for Java applications. Prevents blurry rendering on HiDPI displays. Default: system-aware.",
+            Tags = ["java", "dpi", "hidpi", "scaling"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft\DeploymentProperties"],
+            ApplyOps = [RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft\DeploymentProperties", "deployment.javafx.highDPIAware", "true")],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft\DeploymentProperties", "deployment.javafx.highDPIAware")],
+            DetectOps = [RegOp.CheckString(@"HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft\DeploymentProperties", "deployment.javafx.highDPIAware", "true")],
+        },
+        new TweakDef
+        {
+            Id = "java-disable-usage-tracker",
+            Label = "Disable Java Usage Tracker",
+            Category = "Developer",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables the Java Usage Tracker that reports Java runtime usage data to Oracle. Default: enabled.",
+            Tags = ["java", "usage", "tracker", "telemetry"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft\DeploymentProperties"],
+            ApplyOps =
+            [
+                RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft\DeploymentProperties", "com.oracle.usagetracker.track.last.usage", "false"),
+            ],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft\DeploymentProperties", "com.oracle.usagetracker.track.last.usage")],
+            DetectOps =
+            [
+                RegOp.CheckString(@"HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft\DeploymentProperties", "com.oracle.usagetracker.track.last.usage", "false"),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "java-disable-auto-update",
+            Label = "Disable Java Auto-Update",
+            Category = "Developer",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables Java automatic update checks. Prevents background update service from consuming resources. Default: enabled.",
+            Tags = ["java", "update", "auto-update", "background"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft\Java Update\Policy"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft\Java Update\Policy", "EnableJavaUpdate", 0)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft\Java Update\Policy", "EnableJavaUpdate", 1)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft\Java Update\Policy", "EnableJavaUpdate", 0)],
+        },
+        new TweakDef
+        {
+            Id = "java-disable-java-cert-revoke",
+            Label = "Disable Java Certificate Revocation Check",
+            Category = "Developer",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description = "Disables Java certificate revocation list checking. Speeds up Java applet loading but reduces security. Default: enabled.",
+            Tags = ["java", "certificate", "revocation", "security"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft\DeploymentProperties"],
+            ApplyOps = [RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft\DeploymentProperties", "deployment.security.validation.crl", "false")],
+            RemoveOps = [RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft\DeploymentProperties", "deployment.security.validation.crl", "true")],
+            DetectOps =
+            [
+                RegOp.CheckString(@"HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft\DeploymentProperties", "deployment.security.validation.crl", "false"),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "java-disable-java-error-reporting",
+            Label = "Disable Java Error Reporting",
+            Category = "Developer",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables Java crash and error reporting to Oracle. Prevents error data from being sent externally. Default: enabled.",
+            Tags = ["java", "error", "reporting", "telemetry"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft\DeploymentProperties"],
+            ApplyOps =
+            [
+                RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft\DeploymentProperties", "deployment.user.security.exception.sites", "false"),
+            ],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft\DeploymentProperties", "deployment.user.security.exception.sites")],
+            DetectOps =
+            [
+                RegOp.CheckString(@"HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft\DeploymentProperties", "deployment.user.security.exception.sites", "false"),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "java-disable-java-sponsor",
+            Label = "Disable Java Sponsor Offers",
+            Category = "Developer",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Disables sponsor offers (toolbars, search engines) during Java updates. Prevents bundled software installation. Default: enabled.",
+            Tags = ["java", "sponsor", "offers", "bloatware"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft\Java Update\Policy"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft\Java Update\Policy", "EnableAutoUpdateCheck", 0)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft\Java Update\Policy", "EnableAutoUpdateCheck", 1)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft\Java Update\Policy", "EnableAutoUpdateCheck", 0)],
+        },
+        new TweakDef
+        {
+            Id = "java-disable-java-tracking",
+            Label = "Disable Java Analytics Tracking",
+            Category = "Developer",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables Java analytics and tracking features. Prevents collection of usage patterns by Oracle. Default: enabled.",
+            Tags = ["java", "analytics", "tracking", "privacy"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft\DeploymentProperties"],
+            ApplyOps = [RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft\DeploymentProperties", "deployment.javaws.shortcut", "false")],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft\DeploymentProperties", "deployment.javaws.shortcut")],
+            DetectOps = [RegOp.CheckString(@"HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft\DeploymentProperties", "deployment.javaws.shortcut", "false")],
+        },
+        new TweakDef
+        {
+            Id = "java-disable-java-update",
+            Label = "Disable Java Update Service",
+            Category = "Developer",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Disables the Java Update Scheduler (jusched.exe) at the Run key level. Prevents background update checks. Default: enabled.",
+            Tags = ["java", "update", "scheduler", "service"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\JavaSoft\Java Update\Policy"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\JavaSoft\Java Update\Policy", "EnableJavaUpdate", 0)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\JavaSoft\Java Update\Policy", "EnableJavaUpdate", 1)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\JavaSoft\Java Update\Policy", "EnableJavaUpdate", 0)],
+        },
+        new TweakDef
+        {
+            Id = "java-disable-java-web-plugin",
+            Label = "Disable Java Web Browser Plugin",
+            Category = "Developer",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Disables the Java browser plugin for all browsers. Reduces attack surface from browser-based Java exploits. Default: enabled.",
+            Tags = ["java", "browser", "plugin", "security"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft\DeploymentProperties"],
+            ApplyOps = [RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft\DeploymentProperties", "deployment.webjava.enabled", "false")],
+            RemoveOps = [RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft\DeploymentProperties", "deployment.webjava.enabled", "true")],
+            DetectOps = [RegOp.CheckString(@"HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft\DeploymentProperties", "deployment.webjava.enabled", "false")],
+        },
+        new TweakDef
+        {
+            Id = "java-high-dpi",
+            Label = "Enable Java High DPI Scaling",
+            Category = "Developer",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Enables high DPI scaling awareness for Java applications. Prevents blurry rendering on high-resolution displays. Default: not set.",
+            Tags = ["java", "dpi", "scaling", "display"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft\DeploymentProperties"],
+            ApplyOps =
+            [
+                RegOp.SetString(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft\DeploymentProperties",
+                    "deployment.javaws.jre.platform.version",
+                    "sun.java2d.uiScale.enabled=true"
+                ),
+            ],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft\DeploymentProperties", "deployment.javaws.jre.platform.version")],
+            DetectOps =
+            [
+                RegOp.CheckString(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft\DeploymentProperties",
+                    "deployment.javaws.jre.platform.version",
+                    "sun.java2d.uiScale.enabled=true"
+                ),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "java-disable-installer-sponsor",
+            Label = "Disable Java Sponsor Offers",
+            Category = "Developer",
+            NeedsAdmin = true,
+            Description = "Prevents Java installer from showing third-party sponsor offers (e.g., Ask Toolbar). Default: enabled.",
+            Tags = ["java", "sponsor", "ads", "installer"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft"],
+            ApplyOps = [RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft", "SPONSORS", "DISABLE")],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft", "SPONSORS")],
+            DetectOps = [RegOp.CheckString(@"HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft", "SPONSORS", "DISABLE")],
+        },
+        new TweakDef
+        {
+            Id = "java-disable-auto-update-notify",
+            Label = "Disable Java Auto-Update Notification",
+            Category = "Developer",
+            NeedsAdmin = true,
+            Description = "Prevents Java from checking for updates and showing update notifications. Default: enabled.",
+            Tags = ["java", "update", "notification"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft\Java Update\Policy"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft\Java Update\Policy", "EnableAutoUpdateCheck", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft\Java Update\Policy", "EnableAutoUpdateCheck")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft\Java Update\Policy", "EnableAutoUpdateCheck", 0)],
+        },
+        new TweakDef
+        {
+            Id = "java-disable-tls-10",
+            Label = "Disable TLS 1.0 in Java",
+            Category = "Developer",
+            NeedsAdmin = true,
+            Description = "Disables TLS 1.0 in Java deployment properties. TLS 1.0 is deprecated. Default: enabled.",
+            Tags = ["java", "tls", "security", "encryption"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties"],
+            ApplyOps = [RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties", "deployment.security.TLSv1", "false")],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties", "deployment.security.TLSv1")],
+            DetectOps =
+            [
+                RegOp.CheckString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties", "deployment.security.TLSv1", "false"),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "java-disable-tls-11",
+            Label = "Disable TLS 1.1 in Java",
+            Category = "Developer",
+            NeedsAdmin = true,
+            Description = "Disables TLS 1.1 in Java deployment properties. TLS 1.1 is deprecated. Default: enabled.",
+            Tags = ["java", "tls", "security", "encryption"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties"],
+            ApplyOps =
+            [
+                RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties", "deployment.security.TLSv1.1", "false"),
+            ],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties", "deployment.security.TLSv1.1")],
+            DetectOps =
+            [
+                RegOp.CheckString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties", "deployment.security.TLSv1.1", "false"),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "java-set-security-very-high",
+            Label = "Set Java Security Level to Very High",
+            Category = "Developer",
+            NeedsAdmin = true,
+            Description = "Sets the Java security slider to Very High, requiring all applets to be signed and valid. Default: High.",
+            Tags = ["java", "security", "applet", "hardening"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties"],
+            ApplyOps =
+            [
+                RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties", "deployment.security.level", "VERY_HIGH"),
+            ],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties", "deployment.security.level")],
+            DetectOps =
+            [
+                RegOp.CheckString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties", "deployment.security.level", "VERY_HIGH"),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "java-disable-browser-plugin",
+            Label = "Disable Java Browser Plugin",
+            Category = "Developer",
+            NeedsAdmin = true,
+            Description = "Disables the Java browser plugin. Java applets in browsers are obsolete and a security risk. Default: enabled.",
+            Tags = ["java", "browser", "plugin", "security"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties"],
+            ApplyOps =
+            [
+                RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties", "deployment.webjava.enabled", "false"),
+            ],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties", "deployment.webjava.enabled")],
+            DetectOps =
+            [
+                RegOp.CheckString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties", "deployment.webjava.enabled", "false"),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "java-enable-certificate-revocation",
+            Label = "Enable Certificate Revocation Checking",
+            Category = "Developer",
+            NeedsAdmin = true,
+            Description = "Enables certificate revocation checking via CRL and OCSP in Java. Default: enabled.",
+            Tags = ["java", "certificate", "revocation", "security"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties"],
+            ApplyOps =
+            [
+                RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties", "deployment.security.validation.crl", "true"),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties", "deployment.security.validation.crl"),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckString(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties",
+                    "deployment.security.validation.crl",
+                    "true"
+                ),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "java-enable-ocsp",
+            Label = "Enable OCSP Certificate Checking",
+            Category = "Developer",
+            NeedsAdmin = true,
+            Description = "Enables Online Certificate Status Protocol (OCSP) checking for Java certificates. Default: enabled.",
+            Tags = ["java", "ocsp", "certificate", "security"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties"],
+            ApplyOps =
+            [
+                RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties", "deployment.security.validation.ocsp", "true"),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties", "deployment.security.validation.ocsp"),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckString(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties",
+                    "deployment.security.validation.ocsp",
+                    "true"
+                ),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "java-disable-jnlp-association",
+            Label = "Disable JNLP File Association",
+            Category = "Developer",
+            NeedsAdmin = true,
+            Description = "Disables Java Web Start JNLP file association. Prevents accidental launch of Web Start apps. Default: enabled.",
+            Tags = ["java", "jnlp", "web-start", "security"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties"],
+            ApplyOps =
+            [
+                RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties", "deployment.javaws.shortcut", "NEVER"),
+            ],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties", "deployment.javaws.shortcut")],
+            DetectOps =
+            [
+                RegOp.CheckString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties", "deployment.javaws.shortcut", "NEVER"),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "java-disable-console-output",
+            Label = "Disable Java Console Output",
+            Category = "Developer",
+            NeedsAdmin = true,
+            Description = "Hides the Java console for deployed applications. Reduces clutter for end users. Default: show console.",
+            Tags = ["java", "console", "output"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties"],
+            ApplyOps =
+            [
+                RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties", "deployment.console.startup.mode", "HIDE"),
+            ],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties", "deployment.console.startup.mode")],
+            DetectOps =
+            [
+                RegOp.CheckString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties", "deployment.console.startup.mode", "HIDE"),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "java-set-proxy-direct",
+            Label = "Set Java Proxy to Direct (No Proxy)",
+            Category = "Developer",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Configures Java to use a direct connection (no proxy). Default: uses browser proxy settings.",
+            Tags = ["java", "proxy", "network"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties"],
+            ApplyOps = [RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties", "deployment.proxy.type", "0")],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties", "deployment.proxy.type")],
+            DetectOps = [RegOp.CheckString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties", "deployment.proxy.type", "0")],
+        },
+        new TweakDef
+        {
+            Id = "java-set-cache-max-100mb",
+            Label = "Set Java Cache Max Size to 100 MB",
+            Category = "Developer",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Limits the Java deployment cache to 100 MB. Prevents unbounded cache growth on developer systems. Default: unlimited.",
+            Tags = ["java", "cache", "disk-space"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties"],
+            ApplyOps =
+            [
+                RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties", "deployment.cache.max.size.file.mb", "100"),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties", "deployment.cache.max.size.file.mb"),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties", "deployment.cache.max.size.file.mb", "100"),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "java-disable-webstart-splash",
+            Label = "Disable Java Web Start Splash Screen",
+            Category = "Developer",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Suppresses the splash screen shown when launching Java Web Start applications. Default: splash screen shown.",
+            Tags = ["java", "webstart", "splash", "ui"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties"],
+            ApplyOps =
+            [
+                RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties", "deployment.javaws.splash.enabled", "false"),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties", "deployment.javaws.splash.enabled"),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties", "deployment.javaws.splash.enabled", "false"),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "java-set-connect-timeout-10s",
+            Label = "Set Java Socket Connection Timeout to 10s",
+            Category = "Developer",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Sets the Java socket connection timeout to 10 seconds. Prevents indefinite hangs when connecting to unreachable resources.",
+            Tags = ["java", "timeout", "socket", "network"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties"],
+            ApplyOps =
+            [
+                RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties", "deployment.timeout.socket.connect", "10000"),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties", "deployment.timeout.socket.connect"),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckString(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties",
+                    "deployment.timeout.socket.connect",
+                    "10000"
+                ),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "java-set-read-timeout-30s",
+            Label = "Set Java Socket Read Timeout to 30s",
+            Category = "Developer",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Sets the Java socket read timeout to 30 seconds. Prevents indefinite hangs when reading from slow or hung resources.",
+            Tags = ["java", "timeout", "socket", "network"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties"],
+            ApplyOps =
+            [
+                RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties", "deployment.timeout.socket.read", "30000"),
+            ],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties", "deployment.timeout.socket.read")],
+            DetectOps =
+            [
+                RegOp.CheckString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties", "deployment.timeout.socket.read", "30000"),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "java-disable-update-check-interval",
+            Label = "Disable Java Update Check Interval",
+            Category = "Developer",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Disables periodic Java update check background scheduling. Prevents background processes polling for updates. Default: periodic checks enabled.",
+            Tags = ["java", "update", "background"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties"],
+            ApplyOps =
+            [
+                RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties", "deployment.update.check.interval.days", "-1"),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties", "deployment.update.check.interval.days"),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckString(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties",
+                    "deployment.update.check.interval.days",
+                    "-1"
+                ),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "java-disable-eula-check",
+            Label = "Disable Java EULA Check on First Run",
+            Category = "Developer",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Marks Java EULA as accepted to suppress the first-run EULA dialog in enterprise deployments. Default: shows EULA on first launch.",
+            Tags = ["java", "eula", "first-run", "enterprise"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties"],
+            ApplyOps = [RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties", "deployment.eula.dismissed", "true")],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties", "deployment.eula.dismissed")],
+            DetectOps =
+            [
+                RegOp.CheckString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties", "deployment.eula.dismissed", "true"),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "java-disable-application-description",
+            Label = "Disable Java Application Description Prompt",
+            Category = "Developer",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Suppresses the application description tooltip shown when launching Java Web Start applications. Default: shown.",
+            Tags = ["java", "ui", "prompt", "silent"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties"],
+            ApplyOps =
+            [
+                RegOp.SetString(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties",
+                    "deployment.application.description.shown",
+                    "false"
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties", "deployment.application.description.shown"),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckString(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties",
+                    "deployment.application.description.shown",
+                    "false"
+                ),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "java-set-concurrent-downloads-3",
+            Label = "Set Java Concurrent Downloads to 3",
+            Category = "Developer",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Allows Java to download up to 3 resources concurrently. Improves load time for Java apps with many classpath resources. Default: 1.",
+            Tags = ["java", "download", "concurrency", "performance"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties"],
+            ApplyOps =
+            [
+                RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties", "deployment.concurrent.downloads", "3"),
+            ],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties", "deployment.concurrent.downloads")],
+            DetectOps =
+            [
+                RegOp.CheckString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties", "deployment.concurrent.downloads", "3"),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "java-enable-strict-security",
+            Label = "Enable Java Strict Security Mode",
+            Category = "Developer",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Enables strict security validation for Java deployments. Enforces all certificate and permission checks. Default: standard mode.",
+            Tags = ["java", "security", "strict", "hardening"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties"],
+            ApplyOps =
+            [
+                RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties", "deployment.security.strict.mode", "true"),
+            ],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties", "deployment.security.strict.mode")],
+            DetectOps =
+            [
+                RegOp.CheckString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties", "deployment.security.strict.mode", "true"),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "java-disable-web-java",
+            Label = "Disable Java in Web Browsers",
+            Category = "Developer",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Disables Java execution in web browsers via the deployment policy. Prevents Java applets from running in any browser with the Java plugin. Default: web Java enabled.",
+            Tags = ["java", "browser", "web", "security"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties"],
+            ApplyOps =
+            [
+                RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties", "deployment.webjava.enabled", "false"),
+            ],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties", "deployment.webjava.enabled")],
+            DetectOps =
+            [
+                RegOp.CheckString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties", "deployment.webjava.enabled", "false"),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "java-lock-security-level",
+            Label = "Lock Java Security Level (Prevent User Change)",
+            Category = "Developer",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Locks the Java security level setting so users cannot lower it. Prevents accidental or deliberate reduction of Java security from the Java Control Panel. Default: unlocked.",
+            Tags = ["java", "security", "lock", "hardening"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties"],
+            ApplyOps =
+            [
+                RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties", "deployment.security.level.locked", "true"),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties", "deployment.security.level.locked"),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties", "deployment.security.level.locked", "true"),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "java-disable-console-autostart",
+            Label = "Disable Java Console Auto-Start",
+            Category = "Developer",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Sets the Java console startup mode to NEVER so it does not automatically open during applet execution. Reduces UI clutter in production and user environments. Default: HIDE.",
+            Tags = ["java", "console", "startup", "ui"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties"],
+            ApplyOps =
+            [
+                RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties", "deployment.console.startup.mode", "NEVER"),
+            ],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties", "deployment.console.startup.mode")],
+            DetectOps =
+            [
+                RegOp.CheckString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties", "deployment.console.startup.mode", "NEVER"),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "java-set-revocation-all-certs",
+            Label = "Enable Java Revocation Check for All Certificates",
+            Category = "Developer",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Configures Java to check certificate revocation for all certificates in the chain (not just the end entity). Provides stronger PKI validation. Default: PUBLISHER_ONLY.",
+            Tags = ["java", "security", "revocation", "pki"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties"],
+            ApplyOps =
+            [
+                RegOp.SetString(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties",
+                    "deployment.security.revocation.check",
+                    "ALL_CERTIFICATES"
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties", "deployment.security.revocation.check"),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckString(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties",
+                    "deployment.security.revocation.check",
+                    "ALL_CERTIFICATES"
+                ),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "java-lock-update-check",
+            Label = "Lock Java Update Check Setting",
+            Category = "Developer",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Locks the Java update check setting via deployment policy so users cannot re-enable automatic update checking. Complements java-disable-auto-update. Default: unlocked.",
+            Tags = ["java", "update", "lock", "policy"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties"],
+            ApplyOps =
+            [
+                RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties", "deployment.updatecheck.locked", "true"),
+            ],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties", "deployment.updatecheck.locked")],
+            DetectOps =
+            [
+                RegOp.CheckString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties", "deployment.updatecheck.locked", "true"),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "java-set-plugin-session-lifetime",
+            Label = "Set Java Plugin Session Lifetime Mode",
+            Category = "Developer",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Sets the Java plugin credential and session lifetime to SESSION mode so temporary data is cleared when the browser exits. Reduces residual data exposure. Default: FOREVER.",
+            Tags = ["java", "session", "privacy", "plugin"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties"],
+            ApplyOps =
+            [
+                RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties", "deployment.plugin.lifetime", "SESSION"),
+            ],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties", "deployment.plugin.lifetime")],
+            DetectOps =
+            [
+                RegOp.CheckString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties", "deployment.plugin.lifetime", "SESSION"),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "java-disable-jre-auto-install",
+            Label = "Disable Automatic JRE Installation",
+            Category = "Developer",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Disables automatic JRE installation triggered by Java Web Start or the browser plugin. Prevents Java from downloading and installing JRE versions without admin consent. Default: auto-install enabled.",
+            Tags = ["java", "install", "auto-update", "security"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties"],
+            ApplyOps =
+            [
+                RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties", "deployment.jre.install.enabled", "false"),
+            ],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties", "deployment.jre.install.enabled")],
+            DetectOps =
+            [
+                RegOp.CheckString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties", "deployment.jre.install.enabled", "false"),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "java-enable-blacklist-revocation",
+            Label = "Enable Java Blacklist Revocation Check",
+            Category = "Developer",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Enables checking of Java's built-in certificate blacklist for revoked or compromised certificates during applet launch. Default: enabled (explicit policy reinforces it).",
+            Tags = ["java", "security", "blacklist", "revocation"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties"],
+            ApplyOps =
+            [
+                RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties", "deployment.security.blacklist.check", "true"),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties", "deployment.security.blacklist.check"),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckString(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties",
+                    "deployment.security.blacklist.check",
+                    "true"
+                ),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "java-disable-applet-caching",
+            Label = "Disable Java Applet Cache",
+            Category = "Developer",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description =
+                "Disables the Java deployment cache for applets and Web Start applications. Prevents local caching of Java class files and reduces disk exposure from cached untrusted code. Default: cache enabled.",
+            Tags = ["java", "cache", "privacy", "security"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties"],
+            ApplyOps = [RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties", "deployment.cache.enabled", "false")],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties", "deployment.cache.enabled")],
+            DetectOps =
+            [
+                RegOp.CheckString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties", "deployment.cache.enabled", "false"),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "java-lock-expiration-check",
+            Label = "Lock Java JRE Expiration Check",
+            Category = "Developer",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Locks the Java JRE expiration check via deployment policy so users cannot disable the warning when running an expired or outdated JRE version. Default: unlocked.",
+            Tags = ["java", "expiration", "lock", "security"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties"],
+            ApplyOps =
+            [
+                RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties", "deployment.expiration.check.locked", "true"),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties", "deployment.expiration.check.locked"),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckString(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties",
+                    "deployment.expiration.check.locked",
+                    "true"
+                ),
+            ],
+        },
     ];
 }
