@@ -95,7 +95,15 @@ partial class MainForm
     private ToolStripMenuItem _subNetwork = null!;
     private ToolStripMenuItem _subCleanup = null!;
 
-    // ── Main layout ────────────────────────────────────────────────────────
+    // ── New sidebar + content panels (redesign v6.1) ───────────────────────
+    private Controls.SidebarNavControl _sidebar = null!;
+    private Panel _contentArea = null!;
+    private Controls.DashboardPanel _dashPanel = null!;
+    private Controls.TweakBrowserPanel _tweakPanel = null!;
+    private Controls.PackagesHubPanel _packagesPanel = null!;
+    private Controls.ToolsHubPanel _toolsPanel = null!;
+
+    // ── Main layout (classic Advanced View — preserved) ───────────────────
     private SplitContainer _split = null!;
     private TreeView _treeView = null!;
     private ImageList _categoryImageList = null!;
@@ -689,6 +697,32 @@ partial class MainForm
         };
         _trayIcon.DoubleClick += (_, _) => RestoreFromTray();
 
+        // ── Sidebar navigation (redesign) ──────────────────────────────────
+        _sidebar = new Controls.SidebarNavControl { Dock = DockStyle.Left };
+        _sidebar.AddItem("home",     "\uE80F", "Home");
+        _sidebar.AddItem("tweaks",   "\uE74C", "Tweaks");
+        _sidebar.AddItem("tools",    "\uF1AD", "Tools");
+        _sidebar.AddItem("packages", "\uE7B8", "Packages");
+        _sidebar.AddFooterItem("settings", "\uE713", "Settings");
+        _sidebar.SelectedKey = "home";
+
+        // ── Content panels (one visible at a time) ──────────────────────────
+        _dashPanel     = new Controls.DashboardPanel    { Dock = DockStyle.Fill, Visible = true };
+        _tweakPanel    = new Controls.TweakBrowserPanel { Dock = DockStyle.Fill, Visible = false };
+        _packagesPanel = new Controls.PackagesHubPanel  { Dock = DockStyle.Fill, Visible = false };
+        _toolsPanel    = new Controls.ToolsHubPanel     { Dock = DockStyle.Fill, Visible = false };
+
+        // Classic Advanced View — hidden by default, accessible from TweakBrowserPanel
+        _split.Visible = false;
+        _split.Dock = DockStyle.Fill;
+
+        _contentArea = new Panel { Dock = DockStyle.Fill };
+        _contentArea.Controls.Add(_split);         // below all visible panels
+        _contentArea.Controls.Add(_toolsPanel);
+        _contentArea.Controls.Add(_packagesPanel);
+        _contentArea.Controls.Add(_tweakPanel);
+        _contentArea.Controls.Add(_dashPanel);
+
         // ── Form ───────────────────────────────────────────────────────────
         AutoScaleDimensions = new SizeF(96f, 96f);
         AutoScaleMode = AutoScaleMode.Dpi;
@@ -696,7 +730,8 @@ partial class MainForm
         MinimumSize = new Size(800, 500);
         Font = AppTheme.Regular;
 
-        Controls.Add(_split);
+        Controls.Add(_contentArea);
+        Controls.Add(_sidebar);
         Controls.Add(_toolStrip);
         Controls.Add(_menuStrip);
         Controls.Add(_logPanel);
