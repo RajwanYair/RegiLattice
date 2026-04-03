@@ -86,3 +86,42 @@ jobs:
               });
               core.notice(`Created failure issue #${issue.number}: ${issue.html_url}`);
             }
+
+  close-on-success:
+    name: Close failure issue on success
+    # Auto-close any open ci-failure issues when the triggering workflow succeeds
+    if: github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Close open ci-failure issues for this workflow
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+            const run = context.payload.workflow_run;
+            const shortSha = run.head_sha.substring(0, 8);
+
+            const { data: existing } = await github.rest.issues.listForRepo({
+              owner, repo, state: 'open', labels: 'ci-failure', per_page: 20,
+            });
+            const toClose = existing.filter(i => i.title.includes(run.name));
+
+            for (const issue of toClose) {
+              await github.rest.issues.createComment({
+                owner, repo,
+                issue_number: issue.number,
+                body: [
+                  `### ✅ ${run.name} is green — auto-closing`,
+                  ``,
+                  `[Run #${run.run_number}](${run.html_url}) on [\`${shortSha}\`](https://github.com/${owner}/${repo}/commit/${run.head_sha}) completed successfully.`,
+                ].join('\n'),
+              });
+              await github.rest.issues.update({
+                owner, repo,
+                issue_number: issue.number,
+                state: 'closed',
+              });
+              core.notice(`Auto-closed failure issue #${issue.number}`);
+            }
