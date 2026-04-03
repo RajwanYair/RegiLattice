@@ -7,7 +7,78 @@ applyTo: "**/*.cs,**/tests/**,**/*Tests/**"
 > Accumulated hard-won insights from the Python → C# migration, test coverage sprints,
 > and the 453-tweak restoration campaign.
 > These rules are **as important as the coding standards** — they prevent recurring mistakes.
-> Last updated: 2026-04-01 (v6.0.7, C# 13 / .NET 10.0-windows, ~9190 tweaks, 101 categories, 3035 tests)
+> Last updated: 2026-04-02 (v6.1.0, C# 13 / .NET 10.0-windows, ~9190 tweaks, 101 categories, 3035 tests)
+
+---
+
+## XML Comments Must Not Contain `--` — `.runsettings` Fatal Error on .NET SDK 10.0.201+
+
+XML 1.0 prohibits `--` (double hyphen) anywhere inside XML comment content (between `<!--`
+and `-->`). Prior to .NET SDK 10.0.201, the vstest XML parser silently ignored this.
+Starting with SDK 10.0.201, it raises a **fatal parse error** that causes `dotnet test` to
+exit immediately with code 1 before running a single test.
+
+**Error**: `"Settings file provided does not conform to required format. An XML comment cannot
+contain '--', and '-' cannot be the last character. Line NN, position PP."`
+
+**How it was found (v6.1.0)**: `tests/.runsettings` contained the comment
+`<!-- Equivalent to passing --blame-hang-timeout 30s on the CLI, but applies even when` — the
+`--blame-hang-timeout` text (double hyphen) was the culprit. CI failed in 1-3s on Test(Core)
+and Test(CLI) despite the code being perfectly valid.
+
+```xml
+<!-- ❌ BAD — "--" is forbidden in XML 1.0 comment content -->
+<!-- Equivalent to passing --blame-hang-timeout 30s on the CLI -->
+
+<!-- ✅ GOOD — remove double-hyphen from comment text -->
+<!-- Equivalent to passing the blame-hang-timeout 30s flag on the CLI -->
+```
+
+**Why CI failed but local passed**: Local test runs were done WITHOUT `--settings tests/.runsettings`
+(the XML file was never parsed). CI always passes `--settings tests/.runsettings`, so CI always
+triggered the XML error. The discrepancy masked the issue during development.
+
+**Fix**: Changed `--blame-hang-timeout` → `blame-hang-timeout` (removed `--`) in the XML comment.
+All other instances of `--` in `.runsettings` are `<!--` or `-->` (the XML delimiters themselves),
+which are valid.
+
+**Rule**: Never use `--flag-syntax` or any `--` sequence inside XML comment text, especially in
+`.runsettings`, `.csproj`, `.targets`, or any XML file parsed by the .NET toolchain.
+
+---
+
+## `--no-build` in `dotnet test` Requires All Test DLLs To Already Exist
+
+`dotnet test --no-build` skips the project build step entirely. If the test DLL doesn't exist
+at the expected output path, the command exits immediately with:
+`"The test source file ... was not found."` (exit code 1, ~2s).
+
+**When this matters in CI**: Adding `--no-build` to test steps with the intent of "using
+pre-built binaries from the Build step" is only safe if:
+1. The Build step builds EVERY test project (confirmed in the `.sln` configuration)
+2. The Build step output paths exactly match what `dotnet test` expects
+3. No test DLL was skipped, failed to copy, or went to a different path
+
+**In this project (v6.1.0)**: `dotnet build RegiLattice.sln -c Release` was confirmed to
+build Core.Tests but NOT CLI.Tests (reason unclear — possibly a race condition with a
+running `testhost` holding the Core DLL locked, preventing CLI.Tests from being built).
+Test(Core) passed with `--no-build`, Test(CLI) failed with "DLL not found."
+
+**Fix**: Remove `--no-build` from all test steps. Without it, `dotnet test ... --no-restore`
+performs an incremental build (near-instant if deps are already built) before running tests.
+This is the safe, robust approach: each test step is self-contained.
+
+```yaml
+# ✅ CORRECT — test step builds its own project (near-instant incremental)
+dotnet test tests/RegiLattice.CLI.Tests/... -c Release --no-restore --settings ...
+
+# ❌ RISKY — fails if DLL wasn't built by a prior Build step
+dotnet test tests/RegiLattice.CLI.Tests/... -c Release --no-build --no-restore --settings ...
+```
+
+**Performance note**: Without `--no-build`, the test step does a few extra MSBuild
+evaluation steps. On CI this adds ~5-15s per test project — negligible compared to a
+broken build.
 
 ---
 
