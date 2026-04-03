@@ -4,6 +4,31 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [6.1.0] — 2026-04-03
+
+### Added
+
+- **Sidebar navigation** — New 180px `SidebarNavControl` with Home / Tweaks / Tools / Packages / Settings sections replaces the flat top-menu approach. Each item shows an icon + label; the active item has an accent bar on the left; items support dynamic badge counts.
+- **Analytics dashboard (Home)** — `DashboardPanel` is now the landing page: 4 stat cards (Health%, Applied, Not Applied, Total), a health donut ring, a top-8 category bar chart, a recent-activity list, and three quick-action buttons (Smart Scan, Profile Wizard, View All Tweaks).
+- **Toggle-switch tweak browser (Tweaks)** — `TweakBrowserPanel` replaces the classic 7-column ListView as the default view. Each tweak renders as a 64 px card row with a `ToggleSwitchControl`, name, description, status badge, and ⓘ info button. Category tree on the left, search + status filter bar above the card area. Card pool reuse avoids GC pressure on filter changes.
+- **Packages hub (Packages)** — `PackagesHubPanel` embeds all five package-manager dialogs (Scoop, WinGet, Chocolatey, pip, PowerShell Modules) in a single tabbed panel with lazy instantiation — the dialog for a tab is only created when first selected.
+- **Tools hub (Tools)** — `ToolsHubPanel` replaces the 60-item nested Tools menu with a searchable visual grid: 47 tools displayed as 152×80 px icon buttons, grouped into six sections (System Diagnostics, System Management, Power & Energy, Privacy & Security, Network, Cleanup & Performance, Smart Tools). Admin-required tools display a shield badge.
+- **Classic Advanced View preserved** — The original 7-column ListView with TreeView sidebar is accessible via the "Advanced View" button inside the Tweaks section and via the existing menu. All existing search, filter, sort, undo/redo, and multi-select functionality is unchanged.
+- **ApplyTweaks / RemoveTweaks helpers** — New `MainForm` methods allow the toggle-switch panel to apply or remove a single tweak without going through the ListView selection, properly updating the status cache and propagating to the card panel.
+
+### Changed
+
+- `MainForm` layout restructured: `SidebarNavControl` (left) + `Panel _contentArea` (fill) containing all section panels. Dashboard is visible by default on launch.
+- `ApplyTheme()` now propagates theme changes to all new panels (`_sidebar`, `_dashPanel`, `_tweakPanel`, `_packagesPanel`, `_toolsPanel`).
+- Version bumped `6.0.7` → `6.1.0`
+
+### Stats
+
+- Tweaks: **9,190** | Categories: **101** | Modules: **83**
+- Tests: **3,035** passing (Core 2,317 + CLI 379 + GUI 339) — 0 failures
+
+---
+
 ## [6.0.7] — 2026-04-01
 
 #### Added
