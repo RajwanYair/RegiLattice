@@ -4,6 +4,22 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [6.2.1] — 2026-04-03
+
+### Fixed
+
+- **GUI silent startup crash** (`Program.cs`) — Added global exception handling: `Application.SetUnhandledExceptionMode`, `ThreadException` handler, `AppDomain.UnhandledException` handler, and `try/catch` around `Application.Run(new MainForm())`. Any startup exception now shows a `MessageBox` and writes a crash log to `%LOCALAPPDATA%\RegiLattice\crash.log` instead of silently exiting with no window.
+- **`TweakBrowserPanel` transparent BackColor crash** (`TweakBrowserPanel.cs`) — `AppTheme.Border` is semi-transparent (`Color.FromArgb(50, Fg)`, alpha=50). WinForms `Splitter` control throws `ArgumentException` when assigned a transparent `BackColor`. Fixed by using `AppTheme.Surface` (fully opaque) for the splitter.
+- **`WhatsNewDialog` UI freeze on first launch** (`WhatsNewDialog.cs`) — `BuildChangelogText()` was calling `new TweakEngine(); engine.RegisterBuiltins()` synchronously on the UI thread to obtain the tweak/category count for display text, blocking the UI for 2+ seconds on every first launch. Replaced with compile-time constants (`TweakCount = 9_240`, `CategoryCount = 101`).
+
+### Added
+
+- **17 QA GUI startup tests** (`GuiStartupTests.cs`) — Covers `AppConfig.Load()` defaults, `AppTheme` initialization, `AppIcons` bitmap creation, construction of all 5 custom controls (`SidebarNavControl`, `DashboardPanel`, `TweakBrowserPanel`, `ToolsHubPanel`, `PackagesHubPanel`), `WhatsNewDialog` timing regression test, and `TweakEngine.RegisterBuiltins()` health check.
+
+### Stats
+
+- Tweaks: **9,240** | Categories: **101** | Modules: **88** | Tests: **3,052** (+17)
+
 ## [6.2.0] — 2026-04-03
 
 ### Added

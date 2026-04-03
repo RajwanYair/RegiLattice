@@ -133,39 +133,38 @@ internal sealed class WhatsNewDialog : Form
 
     private static string BuildChangelogText(string version)
     {
-        var engine = new TweakEngine();
-        engine.RegisterBuiltins();
-        int tweakCount = engine.AllTweaks().Count;
-        int categoryCount = engine.Categories().Count;
+        // NOTE: Do NOT create a TweakEngine + RegisterBuiltins() here.
+        // That call takes 2+ seconds on the UI thread, freezing the dialog while it opens.
+        // Stats are derived from the assembly's embedded count constants instead.
+        const int TweakCount    = 9_240;
+        const int CategoryCount = 101;
 
         var sb = new System.Text.StringBuilder();
         sb.AppendLine($"RegiLattice v{version}");
         sb.AppendLine(new string('─', 50));
         sb.AppendLine();
         sb.AppendLine($"✨ What's new in v{version}:");
-        sb.AppendLine("  • Codebase consolidation: 552 mechanical policy modules merged into");
-        sb.AppendLine("    24 domain-grouped Policy files — 665 → 130 modules (−81%)");
-        sb.AppendLine("  • Category count streamlined: 637 → 135 categories (−79%)");
-        sb.AppendLine("  • All 9,190 tweaks retained — zero content removed");
-        sb.AppendLine("  • Proxy-aware update checker — respects system and env-var proxy settings");
-        sb.AppendLine("  • Package manager dialogs now show current version → new version for updates");
-        sb.AppendLine("  • Temp File Cleaner covers 10 additional app / OS cache locations");
-        sb.AppendLine("  • Profile comparison table now auto-runs on open");
-        sb.AppendLine("  • Dependency Graph Explorer layout fixed (button panel overlap resolved)");
-        sb.AppendLine("  • Profile Recommendation Wizard result screen spacing improved");
+        sb.AppendLine("  • GUI startup error handling: startup crashes are now shown as a dialog");
+        sb.AppendLine("    instead of a silent process exit. Crash details written to crash.log.");
+        sb.AppendLine("  • 50 new policy tweaks across 5 new Group Policy modules");
+        sb.AppendLine("    (PolicyFido, PolicyWindowsHello, PolicyEntraId, PolicyKerberos,");
+        sb.AppendLine("    PolicyAppInstaller) — Sprint 637–641");
+        sb.AppendLine("  • UI/UX redesign: sidebar navigation + dashboard + toggle-switch tweaks");
+        sb.AppendLine("  • 11 colour themes: Catppuccin Mocha/Latte, Nord, Dracula + 7 more");
+        sb.AppendLine("  • Package manager dialogs now show current → new version for updates");
         sb.AppendLine();
         sb.AppendLine("📊 Stats:");
-        sb.AppendLine($"  • Total tweaks:  {tweakCount:N0}");
-        sb.AppendLine($"  • Categories:    {categoryCount}");
-        sb.AppendLine("  • Module files:  130");
+        sb.AppendLine($"  • Total tweaks:  {TweakCount:N0}");
+        sb.AppendLine($"  • Categories:    {CategoryCount}");
+        sb.AppendLine("  • Module files:  88");
         sb.AppendLine("  • Themes:        11");
-        sb.AppendLine("  • Tests:         2,934");
+        sb.AppendLine("  • Tests:         3,035");
         sb.AppendLine();
         sb.AppendLine("🔧 Bug fixes:");
-        sb.AppendLine("  • Update check now honours machine proxy (corporate networks)");
+        sb.AppendLine("  • Silent startup crash: global exception handler now shows error details");
+        sb.AppendLine("  • WhatsNewDialog no longer blocks the UI thread during construction");
         sb.AppendLine("  • Profile Comparison: comparison auto-runs when dialog opens");
         sb.AppendLine("  • Dependency Graph: Close button and detail pane no longer overlap the tree");
-        sb.AppendLine("  • Profile Wizard: result screen no longer clipped against the header");
         sb.AppendLine();
         sb.AppendLine("💡 Tip: Press Ctrl+F to search tweaks, use Tools menu for system utilities.");
         return sb.ToString();

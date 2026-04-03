@@ -140,12 +140,13 @@ internal sealed class TweakBrowserPanel : Panel
         _rightPane.Controls.Add(_cardArea);
         _rightPane.Controls.Add(_filterBar);
 
-        // Splitter
+        // Splitter — must use an opaque colour; AppTheme.Border is semi-transparent
+        // (alpha < 255) and WinForms Splitter throws ArgumentException on transparent BackColor.
         var splitter = new Splitter
         {
             Dock  = DockStyle.Left,
             Width = 5,
-            BackColor = AppTheme.Border,
+            BackColor = AppTheme.Surface,
         };
 
         Controls.Add(_rightPane);
