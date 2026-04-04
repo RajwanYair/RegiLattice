@@ -99,12 +99,12 @@
     <!-- Tweaks pill -->
     <rect x="235" y="430" width="160" height="36" rx="18" fill="#313244"/>
     <text x="252" y="454" font-size="13" font-weight="600" fill="#a6e3a1">&#x2713;</text>
-    <text x="268" y="454" font-size="14" font-weight="600" fill="#cdd6f4">9 290 Tweaks</text>
+    <text x="268" y="454" font-size="14" font-weight="600" fill="#cdd6f4">9 340 Tweaks</text>
 
     <!-- Categories pill -->
     <rect x="415" y="430" width="175" height="36" rx="18" fill="#313244"/>
     <text x="432" y="454" font-size="13" font-weight="600" fill="#89b4fa">&#x25A0;</text>
-    <text x="448" y="454" font-size="14" font-weight="600" fill="#cdd6f4">101 Categories</text>
+    <text x="448" y="454" font-size="14" font-weight="600" fill="#cdd6f4">106 Categories</text>
 
     <!-- Tests pill -->
     <rect x="610" y="430" width="160" height="36" rx="18" fill="#313244"/>

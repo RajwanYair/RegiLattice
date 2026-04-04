@@ -1409,8 +1409,9 @@ Version history:
 | v6.0.0 | 0 | 0 | — (consolidation: merged 15 more secondary modules; 98→83 modules, 101 categories unchanged) |
 | v6.2.0 | 5 | 50 | 637–641 (Identity.cs: PolicyFido/WindowsHello/EntraId/Kerberos/AppInstaller) |
 | v6.3.0 | 5 | 50 | 642–646 (SystemPolicy.cs: PolicyBitLocker/WindowsInk/LocationSensors/CloudClipboard/NetworkIsolation) |
+| v6.4.0 | 5 | 50 | 647–651 (PolicyConfig.cs: PolicyFirewallProfiles/NetLogon/ReliabilityMonitor/DNSSecurity/SmartScreenWin) |
 
-**Current version**: v6.3.0 — 9,290 tweaks, 101 categories, 93 modules. Run full gap analysis on all three phases before creating any new module.
+**Current version**: v6.4.0 — 9,340 tweaks, 106 categories, 98 modules. Run full gap analysis on all three phases before creating any new module.
 
 ---
 

@@ -4,6 +4,36 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [6.4.0] — 2026-05-25
+
+### Added
+
+- **Policy config module** (`PolicyConfig.cs`) — 50 new Group Policy tweaks across 5 modules (Sprints 647-651):
+  - `PolicyFirewallProfiles` (10) — Windows Firewall per-profile enforcement for Domain, Private, and Public profiles: enable firewall, block unsolicited inbound, allow outbound by default, and disable notifications control — locks firewall on across all three network location profiles
+  - `PolicyNetLogon` (10) — Netlogon secure channel and AD authentication hardening: signing, sealing, require sign-or-seal, strong key enforcement, NT4 crypto disable, DNS-only domain join, machine password change control, max password age (30 days), WAN PDC avoidance, and NTLM restriction with Kerberos preference
+  - `PolicyReliabilityMonitor` (10) — Windows Error Reporting and Reliability Monitor policies: shutdown reason UI, RAC event interval, WER consent, WER corporate SSL upload, kernel fault exclusion, archive disable, PCHealth disable, PCHealth silence all channels, queue mode, and per-app reporting disable
+  - `PolicyDNSSecurity` (10) — DNS client security policies: LLMNR disable, smart name resolution disable, local response preference, multicast query scope, TLD update prevention, NRPT enforcement, adapter-specific suffix fallback disable, devolution level, hosts file bypass disable, and PTR record auto-registration
+  - `PolicySmartScreenWin` (10) — SmartScreen and application reputation enforcement: shell SmartScreen enable, SmartScreen block level, Enhanced Phishing Protection capture, malicious site notification, password reuse warning, unsafe app password warning, SRP default level, SRP event logging, MRT auto-download disable, and MRT infection report upload disable
+
+### Stats
+
+- Tweaks: **9,340** (+50) | Categories: **106** (+5) | Modules: **98** (+5) | Tests: **3,052**
+
+## [6.4.0] — 2026-05-25
+
+### Added
+
+- **Policy config module** (`PolicyConfig.cs`) — 50 new Group Policy tweaks across 5 modules (Sprints 647-651):
+  - `PolicyFirewallProfiles` (10) — Windows Firewall per-profile enforcement for Domain, Private, and Public profiles: enable firewall, block unsolicited inbound, allow outbound by default, and disable notifications control — locks firewall on across all three network location profiles
+  - `PolicyNetLogon` (10) — Netlogon secure channel and AD authentication hardening: signing, sealing, require sign-or-seal, strong key enforcement, NT4 crypto disable, DNS-only domain join, machine password change control, max password age (30 days), WAN PDC avoidance, and NTLM restriction with Kerberos preference
+  - `PolicyReliabilityMonitor` (10) — Windows Error Reporting and Reliability Monitor policies: shutdown reason UI, RAC event interval, WER consent, WER corporate SSL upload, kernel fault exclusion, archive disable, PCHealth disable, PCHealth silence all channels, queue mode, and per-app reporting disable
+  - `PolicyDNSSecurity` (10) — DNS client security policies: LLMNR disable, smart name resolution disable, local response preference, multicast query scope, TLD update prevention, NRPT enforcement, adapter-specific suffix fallback disable, devolution level, hosts file bypass disable, and PTR record auto-registration
+  - `PolicySmartScreenWin` (10) — SmartScreen and application reputation enforcement: shell SmartScreen enable, SmartScreen block level, Enhanced Phishing Protection capture, malicious site notification, password reuse warning, unsafe app password warning, SRP default level, SRP event logging, MRT auto-download disable, and MRT infection report upload disable
+
+### Stats
+
+- Tweaks: **9,340** (+50) | Categories: **106** (+5) | Modules: **98** (+5) | Tests: **3,052**
+
 ## [6.3.0] — 2026-04-03
 
 ### Added

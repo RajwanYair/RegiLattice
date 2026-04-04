@@ -1,11 +1,11 @@
 {
-    "version": "6.3.0",
-    "description": "Windows registry tweak toolkit with 9,290 tweaks across 101 categories. GUI + CLI.",
+    "version": "6.4.0",
+    "description": "Windows registry tweak toolkit with 9,340 tweaks across 106 categories. GUI + CLI.",
     "homepage": "https://github.com/RajwanYair/RegiLattice",
     "license": "MIT",
     "architecture": {
         "64bit": {
-            "url": "https://github.com/RajwanYair/RegiLattice/releases/download/v6.3.0/RegiLattice-v6.3.0-win-x64.zip",
+            "url": "https://github.com/RajwanYair/RegiLattice/releases/download/v6.4.0/RegiLattice-v6.4.0-win-x64.zip",
             "hash": "0000000000000000000000000000000000000000000000000000000000000000"
         }
     },
