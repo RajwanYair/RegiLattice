@@ -1,4 +1,4 @@
-namespace RegiLattice.Core.Tweaks;
+﻿namespace RegiLattice.Core.Tweaks;
 
 using RegiLattice.Core.Models;
 
@@ -5828,3 +5828,594 @@ internal static class PolicyPrivacy
         ];
     }
 }
+
+internal static class PolicyWindowsInk
+{
+    private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsInkWorkspace";
+
+    internal static IReadOnlyList<TweakDef> Tweaks { get; } =
+    [
+        new TweakDef
+        {
+            Id = "winks-disable-ink-workspace",
+            Label = "Disable Windows Ink Workspace",
+            Category = "Privacy",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Disables the Windows Ink Workspace button and panel via Group Policy. Removes the ink toolbar from the taskbar and prevents users from accessing pen, sticky notes, and whiteboard tools.",
+            Tags = ["ink", "pen", "tablet", "policy", "privacy", "windows-ink"],
+            RegistryKeys = [Key],
+            ImpactScore = 3,
+            SafetyRating = 5,
+            ImpactNote = "Ink Workspace panel hidden; pen tablet shortcut button removed from taskbar.",
+            ApplyOps = [RegOp.SetDword(Key, "AllowWindowsInkWorkspace", 0)],
+            RemoveOps = [RegOp.DeleteValue(Key, "AllowWindowsInkWorkspace")],
+            DetectOps = [RegOp.CheckDword(Key, "AllowWindowsInkWorkspace", 0)],
+        },
+        new TweakDef
+        {
+            Id = "winks-disable-ink-above-lock",
+            Label = "Disable Ink Workspace Above Lock Screen",
+            Category = "Privacy",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Blocks access to Windows Ink Workspace when the device is locked. Prevents unauthenticated users from using ink features including sticky notes from the lock screen.",
+            Tags = ["ink", "lock-screen", "policy", "privacy", "windows-ink", "security"],
+            RegistryKeys = [Key],
+            ImpactScore = 4,
+            SafetyRating = 5,
+            ImpactNote = "Ink tools blocked on lock screen; no unauthenticated access to pen features.",
+            ApplyOps = [RegOp.SetDword(Key, "AllowWindowsInkWorkspace", 1)],
+            RemoveOps = [RegOp.DeleteValue(Key, "AllowWindowsInkWorkspace")],
+            DetectOps = [RegOp.CheckDword(Key, "AllowWindowsInkWorkspace", 1)],
+        },
+        new TweakDef
+        {
+            Id = "winks-disable-ink-suggested-apps",
+            Label = "Disable Ink Workspace Suggested Apps",
+            Category = "Privacy",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Disables Microsoft Store app suggestions shown in Windows Ink Workspace. Stops advertising-style prompts that appear alongside pen tools.",
+            Tags = ["ink", "suggested-apps", "ads", "policy", "privacy", "windows-ink"],
+            RegistryKeys = [Key],
+            ImpactScore = 2,
+            SafetyRating = 5,
+            ImpactNote = "App suggestions removed from Ink Workspace; no store prompts.",
+            ApplyOps = [RegOp.SetDword(Key, "AllowSuggestedAppsInWindowsInkWorkspace", 0)],
+            RemoveOps = [RegOp.DeleteValue(Key, "AllowSuggestedAppsInWindowsInkWorkspace")],
+            DetectOps = [RegOp.CheckDword(Key, "AllowSuggestedAppsInWindowsInkWorkspace", 0)],
+        },
+        new TweakDef
+        {
+            Id = "winks-disable-ink-touch-keyboard-autoinvoke",
+            Label = "Disable Touch Keyboard Auto-Invoke in Ink",
+            Category = "Privacy",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Prevents the touch keyboard from automatically appearing when a text field is focused in Windows Ink apps. Reduces accidental keyboard pop-ups on pen-only tablet workflows.",
+            Tags = ["ink", "touch-keyboard", "tablet", "policy", "windows-ink"],
+            RegistryKeys = [Key],
+            ImpactScore = 2,
+            SafetyRating = 5,
+            ImpactNote = "Touch keyboard no longer auto-invokes in ink context; pen workflow uninterrupted.",
+            ApplyOps = [RegOp.SetDword(Key, "TouchKeyboardAutoInvokeEnabled", 0)],
+            RemoveOps = [RegOp.DeleteValue(Key, "TouchKeyboardAutoInvokeEnabled")],
+            DetectOps = [RegOp.CheckDword(Key, "TouchKeyboardAutoInvokeEnabled", 0)],
+        },
+        new TweakDef
+        {
+            Id = "winks-disable-ink-handwriting-panel",
+            Label = "Disable Handwriting Panel",
+            Category = "Privacy",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Disables the handwriting input panel that appears when a text field is focused in tablet/pen mode. Reduces attack surface and prevents handwriting data from being sent to Microsoft for personalization.",
+            Tags = ["ink", "handwriting", "tablet", "policy", "privacy", "windows-ink"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\TabletPC"],
+            ImpactScore = 2,
+            SafetyRating = 5,
+            ImpactNote = "Handwriting panel disabled; pen input still works but input panel hidden.",
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\TabletPC", "PreventHandwritingDataSharing", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\TabletPC", "PreventHandwritingDataSharing")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\TabletPC", "PreventHandwritingDataSharing", 1)],
+        },
+        new TweakDef
+        {
+            Id = "winks-disable-ink-handwriting-error-reports",
+            Label = "Disable Handwriting Error Reporting",
+            Category = "Privacy",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Prevents Windows from sending handwriting recognition error reports to Microsoft. These reports include ink strokes and are stored on Microsoft servers for handwriting model improvement.",
+            Tags = ["ink", "handwriting", "error-report", "privacy", "telemetry", "policy"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\TabletPC"],
+            ImpactScore = 3,
+            SafetyRating = 5,
+            ImpactNote = "Ink stroke error reports not sent to Microsoft; handwriting data stays local.",
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\TabletPC", "PreventHandwritingErrorReports", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\TabletPC", "PreventHandwritingErrorReports")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\TabletPC", "PreventHandwritingErrorReports", 1)],
+        },
+        new TweakDef
+        {
+            Id = "winks-disable-ink-personalization",
+            Label = "Disable Ink Personalization Data Collection",
+            Category = "Privacy",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Disables Microsoft's collection of inking and typing data used to improve autocorrect and word suggestions. Prevents handwriting samples and typed text patterns from being uploaded to Microsoft.",
+            Tags = ["ink", "personalization", "privacy", "telemetry", "policy", "data-collection"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\InputPersonalization"],
+            ImpactScore = 3,
+            SafetyRating = 5,
+            ImpactNote = "Ink/typing personalization data collection stopped; no usage samples sent to Microsoft.",
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\InputPersonalization", "RestrictImplicitInkCollection", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\InputPersonalization", "RestrictImplicitInkCollection")],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\InputPersonalization", "RestrictImplicitInkCollection", 1),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "winks-disable-typing-personalization",
+            Label = "Disable Typing Personalization Data Collection",
+            Category = "Privacy",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Prevents Windows from collecting implicit text-input data for personalized autocorrect and text prediction. Stops background collection of typed word statistics sent to Microsoft.",
+            Tags = ["ink", "typing", "personalization", "privacy", "telemetry", "policy"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\InputPersonalization"],
+            ImpactScore = 3,
+            SafetyRating = 5,
+            ImpactNote = "Implicit typing data collection blocked; autocorrect suggestions use local data only.",
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\InputPersonalization", "RestrictImplicitTextCollection", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\InputPersonalization", "RestrictImplicitTextCollection")],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\InputPersonalization", "RestrictImplicitTextCollection", 1),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "winks-disable-ink-learning-mode",
+            Label = "Disable Ink Learning Mode",
+            Category = "Privacy",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Prevents Windows from learning your ink writing style for personalization. Disables the adaptive handwriting recognition model that builds ink profiles per user.",
+            Tags = ["ink", "learning", "personalization", "privacy", "policy", "windows-ink"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\InputPersonalization"],
+            ImpactScore = 2,
+            SafetyRating = 5,
+            ImpactNote = "Ink style learning disabled; no local ink profile built.",
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\InputPersonalization", "AllowInputPersonalization", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\InputPersonalization", "AllowInputPersonalization")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\InputPersonalization", "AllowInputPersonalization", 0)],
+        },
+        new TweakDef
+        {
+            Id = "winks-disable-ink-workspace-telemetry",
+            Label = "Disable Windows Ink Workspace Telemetry",
+            Category = "Privacy",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Blocks telemetry data collection from Windows Ink Workspace usage patterns. Prevents Microsoft from receiving information about which ink tools are used and how frequently.",
+            Tags = ["ink", "telemetry", "privacy", "policy", "windows-ink", "data-collection"],
+            RegistryKeys = [Key],
+            ImpactScore = 3,
+            SafetyRating = 5,
+            ImpactNote = "Ink workspace usage statistics not reported to Microsoft.",
+            ApplyOps = [RegOp.SetDword(Key, "AllowWindowsInkWorkspaceTelemetry", 0)],
+            RemoveOps = [RegOp.DeleteValue(Key, "AllowWindowsInkWorkspaceTelemetry")],
+            DetectOps = [RegOp.CheckDword(Key, "AllowWindowsInkWorkspaceTelemetry", 0)],
+        },
+    ];
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Sprint 644 — PolicyLocationSensors (Location & Sensors Group Policy)
+
+internal static class PolicyLocationSensors
+{
+    private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\LocationAndSensors";
+
+    internal static IReadOnlyList<TweakDef> Tweaks { get; } =
+    [
+        new TweakDef
+        {
+            Id = "locsvc-disable-location",
+            Label = "Disable Location Services (System-Wide)",
+            Category = "Privacy",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Disables the Windows Location Services system feature via Group Policy. Prevents all applications from accessing the location sensor. Stronger than the per-app user setting.",
+            Tags = ["location", "gps", "sensors", "policy", "privacy"],
+            RegistryKeys = [Key],
+            ImpactScore = 4,
+            SafetyRating = 5,
+            ImpactNote = "Location access disabled for all apps system-wide; GPS/Wi-Fi geolocation blocked.",
+            ApplyOps = [RegOp.SetDword(Key, "DisableLocation", 1)],
+            RemoveOps = [RegOp.DeleteValue(Key, "DisableLocation")],
+            DetectOps = [RegOp.CheckDword(Key, "DisableLocation", 1)],
+        },
+        new TweakDef
+        {
+            Id = "locsvc-disable-location-scripting",
+            Label = "Disable Location Scripting API",
+            Category = "Privacy",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Prevents scripts (JScript, VBScript) from accessing the Windows Location API. Blocks web-based or scripting attacks that could request fine-grained location data.",
+            Tags = ["location", "scripting", "policy", "privacy", "security"],
+            RegistryKeys = [Key],
+            ImpactScore = 3,
+            SafetyRating = 5,
+            ImpactNote = "Script-based location queries blocked; web scripts cannot access GPS/Wi-Fi location.",
+            ApplyOps = [RegOp.SetDword(Key, "DisableLocationScripting", 1)],
+            RemoveOps = [RegOp.DeleteValue(Key, "DisableLocationScripting")],
+            DetectOps = [RegOp.CheckDword(Key, "DisableLocationScripting", 1)],
+        },
+        new TweakDef
+        {
+            Id = "locsvc-disable-sensors",
+            Label = "Disable Sensor Platform",
+            Category = "Privacy",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Disables the Windows Sensor Platform that allows applications to access ambient light, accelerometer, gyroscope, and other physical sensors. Reduces hardware fingerprinting attack surface.",
+            Tags = ["sensors", "accelerometer", "ambient-light", "policy", "privacy"],
+            RegistryKeys = [Key],
+            ImpactScore = 3,
+            SafetyRating = 5,
+            ImpactNote = "Physical sensor access blocked for all apps; fingerprinting via motion sensors prevented.",
+            ApplyOps = [RegOp.SetDword(Key, "DisableSensors", 1)],
+            RemoveOps = [RegOp.DeleteValue(Key, "DisableSensors")],
+            DetectOps = [RegOp.CheckDword(Key, "DisableSensors", 1)],
+        },
+        new TweakDef
+        {
+            Id = "locsvc-disable-windows-location-provider",
+            Label = "Disable Windows Location Provider Service",
+            Category = "Privacy",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Disables the Windows Location Provider service that uses Wi-Fi, Bluetooth, and IP address data to estimate geographic location without a GPS chip.",
+            Tags = ["location", "wi-fi", "bluetooth", "geolocation", "policy", "privacy"],
+            RegistryKeys = [Key],
+            ImpactScore = 4,
+            SafetyRating = 5,
+            ImpactNote = "Wi-Fi/BT based geolocation provider disabled; IP-based location fallback also blocked.",
+            ApplyOps = [RegOp.SetDword(Key, "DisableWindowsLocationProvider", 1)],
+            RemoveOps = [RegOp.DeleteValue(Key, "DisableWindowsLocationProvider")],
+            DetectOps = [RegOp.CheckDword(Key, "DisableWindowsLocationProvider", 1)],
+        },
+        new TweakDef
+        {
+            Id = "locsvc-disable-location-awareness",
+            Label = "Disable Network Location Awareness",
+            Category = "Privacy",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Prevents Windows Network Location Awareness (NLA) from uploading network topology data used to improve geolocation services. Stops SSID/BSSID mapping data from being sent to Microsoft.",
+            Tags = ["location", "network", "nla", "privacy", "policy", "telemetry"],
+            RegistryKeys = [Key],
+            ImpactScore = 3,
+            SafetyRating = 5,
+            ImpactNote = "Network topology data not contributed to Microsoft location database.",
+            ApplyOps = [RegOp.SetDword(Key, "DisableNetworkLocationAwareness", 1)],
+            RemoveOps = [RegOp.DeleteValue(Key, "DisableNetworkLocationAwareness")],
+            DetectOps = [RegOp.CheckDword(Key, "DisableNetworkLocationAwareness", 1)],
+        },
+        new TweakDef
+        {
+            Id = "locsvc-disable-location-telemetry",
+            Label = "Disable Location Service Telemetry Upload",
+            Category = "Privacy",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Blocks Windows from uploading location service usage telemetry to Microsoft. Prevents location access frequency, accuracy levels, and app-level location events from being reported.",
+            Tags = ["location", "telemetry", "privacy", "policy", "data-collection"],
+            RegistryKeys = [Key],
+            ImpactScore = 3,
+            SafetyRating = 5,
+            ImpactNote = "Location usage telemetry not uploaded; no location event data reaches Microsoft.",
+            ApplyOps = [RegOp.SetDword(Key, "DisableLocationTelemetry", 1)],
+            RemoveOps = [RegOp.DeleteValue(Key, "DisableLocationTelemetry")],
+            DetectOps = [RegOp.CheckDword(Key, "DisableLocationTelemetry", 1)],
+        },
+        new TweakDef
+        {
+            Id = "locsvc-disable-location-history",
+            Label = "Disable Location History Storage",
+            Category = "Privacy",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Prevents Windows from storing location history on the device. Location history is used by apps like Maps to show frequently visited places; disabling it keeps no local location log.",
+            Tags = ["location", "history", "privacy", "policy", "data-storage"],
+            RegistryKeys = [Key],
+            ImpactScore = 3,
+            SafetyRating = 5,
+            ImpactNote = "No location history stored on device; visited places not recorded.",
+            ApplyOps = [RegOp.SetDword(Key, "DisableLocationHistory", 1)],
+            RemoveOps = [RegOp.DeleteValue(Key, "DisableLocationHistory")],
+            DetectOps = [RegOp.CheckDword(Key, "DisableLocationHistory", 1)],
+        },
+        new TweakDef
+        {
+            Id = "locsvc-disable-geofencing",
+            Label = "Disable Geofencing API",
+            Category = "Privacy",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Blocks the Windows Geofencing API that allows applications to define geographic boundaries and trigger events when the device enters or exits them. Prevents background location monitoring by geofencing-aware apps.",
+            Tags = ["location", "geofencing", "background", "privacy", "policy"],
+            RegistryKeys = [Key],
+            ImpactScore = 3,
+            SafetyRating = 5,
+            ImpactNote = "Geofencing triggers disabled; apps cannot monitor if device enters/exits geographic areas.",
+            ApplyOps = [RegOp.SetDword(Key, "DisableGeofencing", 1)],
+            RemoveOps = [RegOp.DeleteValue(Key, "DisableGeofencing")],
+            DetectOps = [RegOp.CheckDword(Key, "DisableGeofencing", 1)],
+        },
+        new TweakDef
+        {
+            Id = "locsvc-disable-sensor-data-service",
+            Label = "Disable Sensor Data Service",
+            Category = "Privacy",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Disables the Windows Sensor Data Service that aggregates sensor readings from multiple physical sensors and exposes them to applications. Stopping this service prevents all sensor-based fingerprinting.",
+            Tags = ["sensors", "service", "privacy", "policy", "fingerprinting"],
+            RegistryKeys = [Key],
+            ImpactScore = 3,
+            SafetyRating = 5,
+            ImpactNote = "Unified sensor aggregation service stopped; no sensor data exposed to apps.",
+            ApplyOps = [RegOp.SetDword(Key, "DisableSensorDataService", 1)],
+            RemoveOps = [RegOp.DeleteValue(Key, "DisableSensorDataService")],
+            DetectOps = [RegOp.CheckDword(Key, "DisableSensorDataService", 1)],
+        },
+        new TweakDef
+        {
+            Id = "locsvc-disable-light-sensor",
+            Label = "Disable Ambient Light Sensor",
+            Category = "Privacy",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Disables the ambient light sensor from being accessible to applications via the Windows Sensor API. Prevents light-level data from being used for screen brightness fingerprinting or environment profiling.",
+            Tags = ["sensors", "ambient-light", "privacy", "policy", "fingerprinting"],
+            RegistryKeys = [Key],
+            ImpactScore = 2,
+            SafetyRating = 5,
+            ImpactNote = "Ambient light sensor data not exposed to apps; environment-based profiling blocked.",
+            ApplyOps = [RegOp.SetDword(Key, "DisableAmbientLightSensor", 1)],
+            RemoveOps = [RegOp.DeleteValue(Key, "DisableAmbientLightSensor")],
+            DetectOps = [RegOp.CheckDword(Key, "DisableAmbientLightSensor", 1)],
+        },
+    ];
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Sprint 645 — PolicyCloudClipboard (Cloud Clipboard & Clipboard History Policy)
+
+internal static class PolicyCloudClipboard
+{
+    private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System";
+
+    internal static IReadOnlyList<TweakDef> Tweaks { get; } =
+    [
+        new TweakDef
+        {
+            Id = "clipol-disable-clipboard-history",
+            Label = "Disable Clipboard History (Win+V)",
+            Category = "Privacy",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Disables the Clipboard History feature (Win+V) via Group Policy. Clipboard history stores the last 25 items copied so users can paste previous clips; disabling prevents all copied data from being retained.",
+            Tags = ["clipboard", "history", "privacy", "policy", "win+v"],
+            RegistryKeys = [Key],
+            ImpactScore = 3,
+            SafetyRating = 5,
+            ImpactNote = "Clipboard history disabled; Win+V shows empty; only current clipboard item retained.",
+            ApplyOps = [RegOp.SetDword(Key, "AllowClipboardHistory", 0)],
+            RemoveOps = [RegOp.DeleteValue(Key, "AllowClipboardHistory")],
+            DetectOps = [RegOp.CheckDword(Key, "AllowClipboardHistory", 0)],
+        },
+        new TweakDef
+        {
+            Id = "clipol-disable-cross-device-clipboard",
+            Label = "Disable Cross-Device Clipboard Sync",
+            Category = "Privacy",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Disables the Cloud Clipboard feature that synchronises clipboard content between Windows devices signed into the same Microsoft account. Prevents copied text, images, and documents from being uploaded to Microsoft servers.",
+            Tags = ["clipboard", "cloud", "sync", "cross-device", "privacy", "policy"],
+            RegistryKeys = [Key],
+            ImpactScore = 4,
+            SafetyRating = 5,
+            ImpactNote = "Clipboard data not synced to cloud or other devices; stays local only.",
+            ApplyOps = [RegOp.SetDword(Key, "AllowCrossDeviceClipboard", 0)],
+            RemoveOps = [RegOp.DeleteValue(Key, "AllowCrossDeviceClipboard")],
+            DetectOps = [RegOp.CheckDword(Key, "AllowCrossDeviceClipboard", 0)],
+        },
+        new TweakDef
+        {
+            Id = "clipol-disable-phone-clipboard-sync",
+            Label = "Disable Phone-to-PC Clipboard Sync",
+            Category = "Privacy",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Prevents clipboard content from being shared between a paired Android/iPhone and the Windows PC via Phone Link. Disables the mobile-to-desktop clipboard relay channel.",
+            Tags = ["clipboard", "phone", "android", "phone-link", "privacy", "policy"],
+            RegistryKeys = [Key],
+            ImpactScore = 3,
+            SafetyRating = 5,
+            ImpactNote = "Phone-to-PC clipboard bridge disabled; mobile clipboard items not transferred to PC.",
+            ApplyOps = [RegOp.SetDword(Key, "DisableClipboardForPhone", 1)],
+            RemoveOps = [RegOp.DeleteValue(Key, "DisableClipboardForPhone")],
+            DetectOps = [RegOp.CheckDword(Key, "DisableClipboardForPhone", 1)],
+        },
+        new TweakDef
+        {
+            Id = "clipol-disable-clipboard-gpt-integration",
+            Label = "Disable Clipboard AI / Copilot Integration",
+            Category = "Privacy",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Blocks Windows Copilot and AI features from reading clipboard content for contextual suggestions. Prevents AI models from processing clipboard data including passwords, banking information, or confidential documents inadvertently copied.",
+            Tags = ["clipboard", "ai", "copilot", "gpt", "privacy", "policy"],
+            RegistryKeys = [Key],
+            ImpactScore = 4,
+            SafetyRating = 5,
+            ImpactNote = "AI/Copilot clipboard access blocked; sensitive copied data not processed by AI.",
+            ApplyOps = [RegOp.SetDword(Key, "AllowCopilotClipboardAccess", 0)],
+            RemoveOps = [RegOp.DeleteValue(Key, "AllowCopilotClipboardAccess")],
+            DetectOps = [RegOp.CheckDword(Key, "AllowCopilotClipboardAccess", 0)],
+        },
+        new TweakDef
+        {
+            Id = "clipol-disable-clipboard-hello-sync",
+            Label = "Disable Clipboard Sync via Windows Hello",
+            Category = "Privacy",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Prevents clipboard content from being relayed between devices using Windows Hello companion device authentication. Stops clipboard sharing initiated through the Hello companion device framework.",
+            Tags = ["clipboard", "windows-hello", "sync", "privacy", "policy"],
+            RegistryKeys = [Key],
+            ImpactScore = 3,
+            SafetyRating = 5,
+            ImpactNote = "Hello companion-device clipboard relay disabled.",
+            ApplyOps = [RegOp.SetDword(Key, "AllowCrossDeviceClipboardViaWindowsHello", 0)],
+            RemoveOps = [RegOp.DeleteValue(Key, "AllowCrossDeviceClipboardViaWindowsHello")],
+            DetectOps = [RegOp.CheckDword(Key, "AllowCrossDeviceClipboardViaWindowsHello", 0)],
+        },
+        new TweakDef
+        {
+            Id = "clipol-disable-clipboard-rdp-passthrough",
+            Label = "Disable RDP Clipboard Passthrough",
+            Category = "Security",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Blocks clipboard redirection between an RDP session and the remote machine. Prevents users from pasting data from a remote desktop session into local applications, blocking a common data-exfiltration channel.",
+            Tags = ["clipboard", "rdp", "remote-desktop", "exfiltration", "policy", "security"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services"],
+            ImpactScore = 4,
+            SafetyRating = 4,
+            ImpactNote = "RDP clipboard redirect blocked; copy-paste between RDP and local machine disabled.",
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services", "DisableClipboardRedirection", 1),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services", "DisableClipboardRedirection"),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services", "DisableClipboardRedirection", 1),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "clipol-disable-clipboard-remote-viewer",
+            Label = "Disable Clipboard in Remote Assistance Sessions",
+            Category = "Security",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Blocks clipboard access during Windows Remote Assistance sessions. Prevents the remote assistant from copying sensitive data from the user's clipboard during a coached support session.",
+            Tags = ["clipboard", "remote-assistance", "security", "policy", "privacy"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services"],
+            ImpactScore = 3,
+            SafetyRating = 5,
+            ImpactNote = "Remote assistance helper cannot access clipboard; data exfiltration during support blocked.",
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services", "fDisableClip", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services", "fDisableClip")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services", "fDisableClip", 1)],
+        },
+        new TweakDef
+        {
+            Id = "clipol-clear-clipboard-on-lock",
+            Label = "Clear Clipboard on Screen Lock",
+            Category = "Privacy",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Automatically clears all clipboard history and the current clipboard when the screen locks. Prevents sensitive information (passwords, tokens, PII) from remaining in clipboard after the user leaves their desk.",
+            Tags = ["clipboard", "lock-screen", "clear", "privacy", "policy", "security"],
+            RegistryKeys = [Key],
+            ImpactScore = 4,
+            SafetyRating = 5,
+            ImpactNote = "Clipboard contents wiped on every screen lock; sensitive data never retained when unattended.",
+            ApplyOps = [RegOp.SetDword(Key, "ClearClipboardOnLock", 1)],
+            RemoveOps = [RegOp.DeleteValue(Key, "ClearClipboardOnLock")],
+            DetectOps = [RegOp.CheckDword(Key, "ClearClipboardOnLock", 1)],
+        },
+        new TweakDef
+        {
+            Id = "clipol-disable-clipboard-audit",
+            Label = "Disable Clipboard Audit Logging",
+            Category = "Privacy",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Disables clipboard operation audit logging in the Windows Security event log. Stops clipboard read/write events from being written to Security log for privacy-focused deployments without audit requirements.",
+            Tags = ["clipboard", "audit", "logging", "privacy", "policy"],
+            RegistryKeys = [Key],
+            ImpactScore = 2,
+            SafetyRating = 4,
+            ImpactNote = "Clipboard operations not logged to Security audit log.",
+            ApplyOps = [RegOp.SetDword(Key, "ClipboardAuditLogging", 0)],
+            RemoveOps = [RegOp.DeleteValue(Key, "ClipboardAuditLogging")],
+            DetectOps = [RegOp.CheckDword(Key, "ClipboardAuditLogging", 0)],
+        },
+        new TweakDef
+        {
+            Id = "clipol-disable-clipboard-suggested-actions",
+            Label = "Disable Clipboard Smart Actions / Suggested Text Actions",
+            Category = "Privacy",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Disables the Clipboard smart actions feature that analyses copied text and suggests contextual actions (add to calendar, call a phone number, open a URL). Stops clipboard content from being sent to local AI processing pipelines.",
+            Tags = ["clipboard", "smart-actions", "ai", "privacy", "policy"],
+            RegistryKeys = [Key],
+            ImpactScore = 3,
+            SafetyRating = 5,
+            ImpactNote = "Clipboard content analysis for smart actions disabled; no AI text interpretation of copied data.",
+            ApplyOps = [RegOp.SetDword(Key, "AllowClipboardSuggestedActions", 0)],
+            RemoveOps = [RegOp.DeleteValue(Key, "AllowClipboardSuggestedActions")],
+            DetectOps = [RegOp.CheckDword(Key, "AllowClipboardSuggestedActions", 0)],
+        },
+    ];
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Sprint 646 — PolicyNetworkIsolation (Network Isolation / AppContainer Policy)

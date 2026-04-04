@@ -1,4 +1,4 @@
-namespace RegiLattice.Core.Tweaks;
+﻿namespace RegiLattice.Core.Tweaks;
 
 using RegiLattice.Core.Models;
 
@@ -5084,3 +5084,197 @@ internal static class PolicyEncryption
             ];
     }
 }
+
+internal static class PolicyBitLocker
+{
+    private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\FVE";
+    private const string OsKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\FVE\OSVolume";
+    private const string FdKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\FVE\FDVDenyWriteAccess";
+
+    internal static IReadOnlyList<TweakDef> Tweaks { get; } =
+    [
+        new TweakDef
+        {
+            Id = "fve-require-device-encryption",
+            Label = "Require BitLocker Device Encryption",
+            Category = "Encryption",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Enforces BitLocker device encryption on OS volumes via Group Policy. Devices that are not encrypted will be flagged non-compliant by MDM/Intune.",
+            Tags = ["bitlocker", "encryption", "fve", "policy", "compliance"],
+            RegistryKeys = [Key],
+            ImpactScore = 5,
+            SafetyRating = 4,
+            ImpactNote = "Full-disk encryption enforced on OS drive; maximum data protection at rest.",
+            ApplyOps = [RegOp.SetDword(Key, "RequireDeviceEncryption", 1)],
+            RemoveOps = [RegOp.DeleteValue(Key, "RequireDeviceEncryption")],
+            DetectOps = [RegOp.CheckDword(Key, "RequireDeviceEncryption", 1)],
+        },
+        new TweakDef
+        {
+            Id = "fve-deny-write-fixed-notprotected",
+            Label = "Block Write Access to Unencrypted Fixed Drives",
+            Category = "Encryption",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Denies write access to fixed data drives that are not protected by BitLocker. Users can still read unencrypted drives but cannot write to them until encryption is applied.",
+            Tags = ["bitlocker", "fixed-drive", "write-protect", "fve", "policy"],
+            RegistryKeys = [Key],
+            ImpactScore = 4,
+            SafetyRating = 4,
+            ImpactNote = "Unencrypted fixed drives become read-only; forces encryption before use.",
+            ApplyOps = [RegOp.SetDword(Key, "FDVDenyWriteAccess", 1)],
+            RemoveOps = [RegOp.DeleteValue(Key, "FDVDenyWriteAccess")],
+            DetectOps = [RegOp.CheckDword(Key, "FDVDenyWriteAccess", 1)],
+        },
+        new TweakDef
+        {
+            Id = "fve-deny-write-removable-notprotected",
+            Label = "Block Write Access to Unencrypted Removable Drives",
+            Category = "Encryption",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Denies write access to removable drives (USB flash drives, external HDDs) that are not BitLocker-protected. Prevents data exfiltration to unencrypted removable media.",
+            Tags = ["bitlocker", "removable-drive", "usb", "write-protect", "fve", "policy"],
+            RegistryKeys = [Key],
+            ImpactScore = 5,
+            SafetyRating = 4,
+            ImpactNote = "Unencrypted USB/removable drives become read-only; data exfiltration blocked.",
+            ApplyOps = [RegOp.SetDword(Key, "RDVDenyWriteAccess", 1)],
+            RemoveOps = [RegOp.DeleteValue(Key, "RDVDenyWriteAccess")],
+            DetectOps = [RegOp.CheckDword(Key, "RDVDenyWriteAccess", 1)],
+        },
+        new TweakDef
+        {
+            Id = "fve-require-startup-pin",
+            Label = "Require BitLocker Startup PIN",
+            Category = "Encryption",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Requires a user-defined PIN at startup before BitLocker releases the OS volume. Provides pre-boot authentication that blocks cold-boot attacks even if the TPM is compromised.",
+            Tags = ["bitlocker", "pin", "startup", "pre-boot", "fve", "policy", "security"],
+            RegistryKeys = [Key],
+            ImpactScore = 4,
+            SafetyRating = 5,
+            ImpactNote = "Startup PIN required; cold-boot and direct memory attacks blocked.",
+            ApplyOps = [RegOp.SetDword(Key, "UseAdvancedStartup", 1), RegOp.SetDword(Key, "UseTPMPIN", 1)],
+            RemoveOps = [RegOp.DeleteValue(Key, "UseAdvancedStartup"), RegOp.DeleteValue(Key, "UseTPMPIN")],
+            DetectOps = [RegOp.CheckDword(Key, "UseTPMPIN", 1)],
+        },
+        new TweakDef
+        {
+            Id = "fve-set-encryption-method-aes256",
+            Label = "Set BitLocker Encryption Method to AES-256",
+            Category = "Encryption",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Configures BitLocker to use AES-256 (XTS-AES 256-bit) for OS and fixed drives. Provides the highest encryption strength; value 7 = XTS-AES 256, the recommended method for modern Windows.",
+            Tags = ["bitlocker", "aes-256", "xts", "encryption-method", "fve", "policy"],
+            RegistryKeys = [Key],
+            ImpactScore = 3,
+            SafetyRating = 5,
+            ImpactNote = "XTS-AES 256-bit encryption selected; stronger than default XTS-AES 128.",
+            ApplyOps = [RegOp.SetDword(Key, "EncryptionMethodWithXtsFdv", 7), RegOp.SetDword(Key, "EncryptionMethodWithXtsOs", 7)],
+            RemoveOps = [RegOp.DeleteValue(Key, "EncryptionMethodWithXtsFdv"), RegOp.DeleteValue(Key, "EncryptionMethodWithXtsOs")],
+            DetectOps = [RegOp.CheckDword(Key, "EncryptionMethodWithXtsOs", 7)],
+        },
+        new TweakDef
+        {
+            Id = "fve-disable-network-unlock",
+            Label = "Disable BitLocker Network Unlock",
+            Category = "Encryption",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Disables BitLocker Network Unlock, which automatically unlocks drives when the computer boots on a trusted corporate network. Eliminates network-based bypass of pre-boot authentication.",
+            Tags = ["bitlocker", "network-unlock", "fve", "policy", "security"],
+            RegistryKeys = [Key],
+            ImpactScore = 3,
+            SafetyRating = 5,
+            ImpactNote = "Network-based auto-unlock disabled; PIN/password required even on trusted networks.",
+            ApplyOps = [RegOp.SetDword(Key, "DisableNetworkUnlock", 1)],
+            RemoveOps = [RegOp.DeleteValue(Key, "DisableNetworkUnlock")],
+            DetectOps = [RegOp.CheckDword(Key, "DisableNetworkUnlock", 1)],
+        },
+        new TweakDef
+        {
+            Id = "fve-disable-recovery-to-ad",
+            Label = "Disable BitLocker Recovery Key Storage in AD",
+            Category = "Encryption",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Prevents BitLocker recovery keys from being automatically backed up to Active Directory / Entra ID. Useful when a separate, higher-security key escrow solution is mandated.",
+            Tags = ["bitlocker", "recovery-key", "active-directory", "fve", "policy", "security"],
+            RegistryKeys = [Key],
+            ImpactScore = 3,
+            SafetyRating = 4,
+            ImpactNote = "Recovery keys not stored in AD/Entra; use only when alternate escrow exists.",
+            ApplyOps = [RegOp.SetDword(Key, "DoNotBackupToAD", 1)],
+            RemoveOps = [RegOp.DeleteValue(Key, "DoNotBackupToAD")],
+            DetectOps = [RegOp.CheckDword(Key, "DoNotBackupToAD", 1)],
+        },
+        new TweakDef
+        {
+            Id = "fve-set-min-pin-length",
+            Label = "Set BitLocker Minimum PIN Length (8 digits)",
+            Category = "Encryption",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Enforces a minimum of 8 digits for the BitLocker startup PIN. Default Windows minimum is 4 digits; 8+ significantly increases brute-force resistance for pre-boot authentication.",
+            Tags = ["bitlocker", "pin", "minimum-length", "fve", "policy", "security"],
+            RegistryKeys = [Key],
+            ImpactScore = 4,
+            SafetyRating = 5,
+            ImpactNote = "Minimum 8-digit PIN enforced; brute-force attacks against startup PIN made impractical.",
+            ApplyOps = [RegOp.SetDword(Key, "MinimumPIN", 8)],
+            RemoveOps = [RegOp.DeleteValue(Key, "MinimumPIN")],
+            DetectOps = [RegOp.CheckDword(Key, "MinimumPIN", 8)],
+        },
+        new TweakDef
+        {
+            Id = "fve-allow-bitlocker-without-tpm",
+            Label = "Allow BitLocker Without TPM Chip",
+            Category = "Encryption",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Allows BitLocker to encrypt drives on computers without a TPM chip, using a startup password or USB key instead. Default Windows policy requires TPM; this allows legacy/virtual machines to use BitLocker.",
+            Tags = ["bitlocker", "tpm", "no-tpm", "startup-key", "fve", "policy"],
+            RegistryKeys = [Key],
+            ImpactScore = 3,
+            SafetyRating = 4,
+            ImpactNote = "Non-TPM machines can use BitLocker with password/USB key; useful for VMs.",
+            ApplyOps = [RegOp.SetDword(Key, "EnableNonTPM", 1)],
+            RemoveOps = [RegOp.DeleteValue(Key, "EnableNonTPM")],
+            DetectOps = [RegOp.CheckDword(Key, "EnableNonTPM", 1)],
+        },
+        new TweakDef
+        {
+            Id = "fve-disable-used-space-only",
+            Label = "Enforce Full Drive Encryption (Not Used-Space Only)",
+            Category = "Encryption",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Forces BitLocker to encrypt the entire drive including free space, not just used space. Prevents forensic recovery of previously deleted files from unencrypted free space sectors.",
+            Tags = ["bitlocker", "full-encryption", "used-space", "fve", "policy", "forensics"],
+            RegistryKeys = [Key],
+            ImpactScore = 4,
+            SafetyRating = 5,
+            ImpactNote = "All sectors encrypted including free space; forensic recovery of deleted files blocked.",
+            ApplyOps = [RegOp.SetDword(Key, "OSAllowedHardwareEncryptionAlgorithms", 0)],
+            RemoveOps = [RegOp.DeleteValue(Key, "OSAllowedHardwareEncryptionAlgorithms")],
+            DetectOps = [RegOp.CheckDword(Key, "OSAllowedHardwareEncryptionAlgorithms", 0)],
+        },
+    ];
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Sprint 643 — PolicyWindowsInk (Windows Ink Workspace Group Policy)
