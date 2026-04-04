@@ -694,14 +694,17 @@ public partial class MainForm : Form
     private async Task InitialiseEngineAsync()
     {
         SetBusy(true, "Loading tweaks...");
+        string initStep = "start";
         try
         {
+            initStep = "RegisterBuiltins";
             await Task.Run(() => _engine.RegisterBuiltins(), _cts.Token);
             SetStatus($"Loaded {_engine.TweakCount} tweaks across {_engine.CategoryCount} categories.");
 
             // Evaluate hardware applicability.
             // Phase 1: Pre-warm category-level software checks in parallel (registry reads).
             // Phase 2: Fast serial loop — uses cached results, only per-tweak custom predicates run live.
+            initStep = "HardwarePhase";
             await Task.Run(
                 () =>
                 {
@@ -731,14 +734,21 @@ public partial class MainForm : Form
                     // Phase 2: fast per-tweak loop — category results cached, only custom predicates run
                     foreach (var td in _engine.AllTweaks())
                     {
+                        // Guard: skip tweaks with null ID or Category (should not occur with builtins)
+                        if (td.Id is null || td.Category is null)
+                            continue;
+
                         // Custom predicates or tag-based checks must run per-tweak
                         if (
                             td.IsApplicable is not null
                             || td.Tags.Any(t =>
-                                t.Equals("nvidia", StringComparison.OrdinalIgnoreCase)
-                                || t.Equals("amd-gpu", StringComparison.OrdinalIgnoreCase)
-                                || t.Equals("docker", StringComparison.OrdinalIgnoreCase)
-                                || t.Equals("laptop", StringComparison.OrdinalIgnoreCase)
+                                t is not null
+                                && (
+                                    t.Equals("nvidia", StringComparison.OrdinalIgnoreCase)
+                                    || t.Equals("amd-gpu", StringComparison.OrdinalIgnoreCase)
+                                    || t.Equals("docker", StringComparison.OrdinalIgnoreCase)
+                                    || t.Equals("laptop", StringComparison.OrdinalIgnoreCase)
+                                )
                             )
                         )
                         {
@@ -764,18 +774,30 @@ public partial class MainForm : Form
 
             // Populate the category tree without selecting any node.
             // Tweak statuses are lazy-loaded when the user clicks a category.
+            initStep = "PopulateTree";
             PopulateTree(autoSelect: false);
+            initStep = "UpdateCounters";
             UpdateCounters();
 
             // ── Wire new panels after engine is ready ──────────────────────
+            initStep = "SetEngine";
             _tweakPanel.SetEngine(_engine, _statusCache, _inapplicableIds);
+            initStep = "SetData";
             _dashPanel.SetData(_engine, _statusCache, []);
+            initStep = "RegisterToolsHub";
             RegisterToolsHub();
         }
         catch (OperationCanceledException) { }
         catch (Exception ex)
         {
-            MessageBox.Show($"Failed to initialise engine:\n{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            WriteCrashLog($"InitialiseEngineAsync failed at step '{initStep}':\n{ex}");
+            MessageBox.Show(
+                $"Failed to initialise engine (step: {initStep}):\n{ex.Message}\n\n"
+                + $"Full details saved to:\n%LOCALAPPDATA%\\RegiLattice\\crash.log",
+                "Error",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Error
+            );
             SetStatus("Error loading tweaks.");
         }
         finally
@@ -1646,6 +1668,24 @@ public partial class MainForm : Form
         string line = $"[{DateTime.Now:HH:mm:ss}] {message}";
         _logBox.AppendText(line + Environment.NewLine);
         _logBox.ScrollToCaret();
+    }
+
+    private static void WriteCrashLog(string details)
+    {
+        try
+        {
+            string dir = Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+                "RegiLattice"
+            );
+            Directory.CreateDirectory(dir);
+            string path = Path.Combine(dir, "crash.log");
+            File.WriteAllText(path, $"[{DateTime.Now:yyyy-MM-dd HH:mm:ss}]\n{details}\n");
+        }
+        catch (Exception)
+        {
+            // Writing the crash log must never itself crash the app.
+        }
     }
 
     private void CopySelectedId()
