@@ -15,7 +15,7 @@
   <g filter="url(#sh)" transform="translate(30, 30)">
     <rect width="150" height="140" rx="10" fill="#313244"/>
     <rect width="150" height="3" rx="2" fill="#a6e3a1"/>
-    <text x="75" y="55" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-weight="800" font-size="36" fill="#a6e3a1">9 340</text>
+    <text x="75" y="55" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-weight="800" font-size="36" fill="#a6e3a1">9 390</text>
     <text x="75" y="80" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-weight="600" font-size="14" fill="#cdd6f4">Tweaks</text>
     <text x="75" y="100" text-anchor="middle" font-family="'Cascadia Code', monospace" font-size="10" fill="#585b70">verified &amp; reversible</text>
     <text x="75" y="125" text-anchor="middle" font-size="28">&#x2699;</text>
@@ -25,7 +25,7 @@
   <g filter="url(#sh)" transform="translate(205, 30)">
     <rect width="150" height="140" rx="10" fill="#313244"/>
     <rect width="150" height="3" rx="2" fill="#89b4fa"/>
-    <text x="75" y="55" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-weight="800" font-size="36" fill="#89b4fa">106</text>
+    <text x="75" y="55" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-weight="800" font-size="36" fill="#89b4fa">111</text>
     <text x="75" y="80" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-weight="600" font-size="14" fill="#cdd6f4">Categories</text>
     <text x="75" y="100" text-anchor="middle" font-family="'Cascadia Code', monospace" font-size="10" fill="#585b70">organized modules</text>
     <text x="75" y="125" text-anchor="middle" font-size="28">&#x1F4C2;</text>
@@ -35,7 +35,7 @@
   <g filter="url(#sh)" transform="translate(380, 30)">
     <rect width="150" height="140" rx="10" fill="#313244"/>
     <rect width="150" height="3" rx="2" fill="#f9e2af"/>
-    <text x="75" y="55" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-weight="800" font-size="36" fill="#f9e2af">3 035</text>
+    <text x="75" y="55" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-weight="800" font-size="36" fill="#f9e2af">3 376</text>
     <text x="75" y="80" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-weight="600" font-size="14" fill="#cdd6f4">Tests</text>
     <text x="75" y="100" text-anchor="middle" font-family="'Cascadia Code', monospace" font-size="10" fill="#585b70">xUnit &#x2022; 0 failures</text>
     <text x="75" y="125" text-anchor="middle" font-size="28">&#x2705;</text>
