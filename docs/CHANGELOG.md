@@ -4,6 +4,21 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [6.3.0] — 2026-04-03
+
+### Added
+
+- **System policy module** (`SystemPolicy.cs`) — 50 new Group Policy tweaks across 5 modules (Sprints 642-646):
+  - `PolicyBitLocker` (10) — BitLocker drive encryption enforcement, AES-256 method, startup PIN requirement, minimum PIN length, network unlock disable, recovery key escrow, full-disk encryption, and non-TPM support
+  - `PolicyWindowsInk` (10) — Windows Ink Workspace disable, above-lock-screen access, suggested apps, touch keyboard auto-invoke, handwriting panel, handwriting error reporting, ink/typing personalization data collection, learning mode, and telemetry
+  - `PolicyLocationSensors` (10) — Location services system-wide disable, scripting API block, sensor platform, Windows Location Provider, network location awareness, location telemetry, history, geofencing, sensor data service, and ambient light sensor
+  - `PolicyCloudClipboard` (10) — Clipboard history (Win+V), cross-device sync, phone-to-PC bridge, AI/Copilot clipboard access, Windows Hello relay, RDP passthrough, Remote Assistance clipboard, clear-on-lock, audit logging, and smart actions
+  - `PolicyNetworkIsolation` (10) — AppContainer domain enterprise exception bypass, loopback exemption, package authentication, intranet auto-classification, proxy access, default-deny capability, private network declaration requirement, internet access block, debug bypass, and strict capability enforcement
+
+### Stats
+
+- Tweaks: **9,290** (+50) | Categories: **101** | Modules: **93** (+5) | Tests: **3,052**
+
 ## [6.2.1] — 2026-04-03
 
 ### Fixed

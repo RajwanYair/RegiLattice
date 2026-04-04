@@ -1407,8 +1407,10 @@ Version history:
 | v5.98.0 | 0 | 0 | — (consolidation: merged 552 policy modules into 24 domain files; 665→130 modules, 637→135 categories) |
 | v5.99.0 | 0 | -3 | — (consolidation: merged 32 secondary modules into 17 primary files; 130→98 modules, 135→101 categories) |
 | v6.0.0 | 0 | 0 | — (consolidation: merged 15 more secondary modules; 98→83 modules, 101 categories unchanged) |
+| v6.2.0 | 5 | 50 | 637–641 (Identity.cs: PolicyFido/WindowsHello/EntraId/Kerberos/AppInstaller) |
+| v6.3.0 | 5 | 50 | 642–646 (SystemPolicy.cs: PolicyBitLocker/WindowsInk/LocationSensors/CloudClipboard/NetworkIsolation) |
 
-**Current version**: v6.0.0 — 9,190 tweaks, 101 categories, 83 modules. Run full gap analysis on all three phases before creating any new module.
+**Current version**: v6.3.0 — 9,290 tweaks, 101 categories, 93 modules. Run full gap analysis on all three phases before creating any new module.
 
 ---
 

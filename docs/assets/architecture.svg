@@ -100,7 +100,7 @@
   <g filter="url(#shadow)">
     <rect x="50" y="378" width="280" height="70" rx="10" fill="#313244" stroke="#f9e2af" stroke-width="1.5"/>
     <text x="190" y="406" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-weight="700" font-size="14" fill="#f9e2af">TweakDef Modules (88)</text>
-    <text x="190" y="424" text-anchor="middle" font-family="'Cascadia Code', monospace" font-size="10" fill="#a6adc8">9 240 tweaks &#x2022; RegOp declarative</text>
+    <text x="190" y="424" text-anchor="middle" font-family="'Cascadia Code', monospace" font-size="10" fill="#a6adc8">9 290 tweaks &#x2022; RegOp declarative</text>
     <text x="190" y="440" text-anchor="middle" font-family="'Cascadia Code', monospace" font-size="10" fill="#a6adc8">ApplyOps &#x2022; RemoveOps &#x2022; DetectOps</text>
   </g>
 

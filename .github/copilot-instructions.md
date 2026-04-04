@@ -2,7 +2,7 @@
 
 > Auto-loaded by GitHub Copilot on every chat/agent session in this workspace.
 > Keep this file accurate — it is the fastest path to project understanding.
-> Last verified: 2026-04-03 (v6.2.0, ~9,240 tweaks, 101 categories, 3,035 tests).
+> Last verified: 2026-04-03 (v6.3.0, ~9,290 tweaks, 101 categories, 3,052 tests).
 
 ## Companion Instruction Files
 
@@ -79,12 +79,12 @@ Rules:
 | -------- | ------------------------------------------------------------------------ |
 | Language | C# 13 / .NET 10.0-windows (x64)                                          |
 | Build    | `dotnet build` / MSBuild via `RegiLattice.sln`                           |
-| Test     | xUnit 2.9.3 — 3,035 tests (0 failures)                                   |
+| Test     | xUnit 2.9.3 — 3,052 tests (0 failures)                                   |
 | GUI      | WinForms with 11 themes (Catppuccin Mocha/Latte, Nord, Dracula + 7 more) |
-| Version  | 6.2.0                                                                   |
+| Version  | 6.3.0                                                                   |
 | Install  | `dotnet build RegiLattice.sln -c Release`                                |
-| Tweaks   | 9,240 across 101 categories (88 module files)                            |
-| Tests    | 3035 passing (0 consistent failures)                                     |
+| Tweaks   | 9,290 across 101 categories (93 module classes, 27 files)                |
+| Tests    | 3052 passing (0 consistent failures)                                     |
 | NuGet    | System.Management 10.0.5, Microsoft.NET.Test.Sdk 17.14.1                 |
 
 ## Git Workflow (IMPORTANT — STANDING RULE)
@@ -364,7 +364,7 @@ Canonical category slugs:
 
 > Full test file inventory and coverage targets: see `.github/instructions/testing.instructions.md` — Test File Structure section.
 
-Projects: `RegiLattice.Core.Tests` (2,317 tests), `RegiLattice.CLI.Tests` (379 tests), `RegiLattice.GUI.Tests` (339 tests). Total: 3,035.
+Projects: `RegiLattice.Core.Tests` (2,315 tests), `RegiLattice.CLI.Tests` (379 tests), `RegiLattice.GUI.Tests` (358 tests). Total: 3,052.
 
 ## Adding a New Tweak — Checklist
 
