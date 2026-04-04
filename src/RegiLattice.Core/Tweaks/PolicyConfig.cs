@@ -423,10 +423,7 @@ internal static class PolicyNetLogon
                 RegOp.DeleteValue(GpKey, "RestrictNtlm"),
                 RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa\MSV1_0", "RestrictSendingNTLMTraffic", 0),
             ],
-            DetectOps =
-            [
-                RegOp.CheckDword(GpKey, "RestrictNtlm", 1),
-            ],
+            DetectOps = [RegOp.CheckDword(GpKey, "RestrictNtlm", 1)],
         },
     ];
 }
@@ -462,21 +459,9 @@ internal static class PolicyReliabilityMonitor
             ImpactScore = 3,
             SafetyRating = 5,
             ImpactNote = "Prompts for shutdown reason; visible user impact at every shutdown/restart.",
-            ApplyOps =
-            [
-                RegOp.SetDword(RacKey, "ShutdownReasonUI", 1),
-                RegOp.SetDword(RacKey, "ReasonCodeRequired", 1),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(RacKey, "ShutdownReasonUI"),
-                RegOp.DeleteValue(RacKey, "ReasonCodeRequired"),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(RacKey, "ShutdownReasonUI", 1),
-                RegOp.CheckDword(RacKey, "ReasonCodeRequired", 1),
-            ],
+            ApplyOps = [RegOp.SetDword(RacKey, "ShutdownReasonUI", 1), RegOp.SetDword(RacKey, "ReasonCodeRequired", 1)],
+            RemoveOps = [RegOp.DeleteValue(RacKey, "ShutdownReasonUI"), RegOp.DeleteValue(RacKey, "ReasonCodeRequired")],
+            DetectOps = [RegOp.CheckDword(RacKey, "ShutdownReasonUI", 1), RegOp.CheckDword(RacKey, "ReasonCodeRequired", 1)],
         },
         new TweakDef
         {
@@ -531,16 +516,8 @@ internal static class PolicyReliabilityMonitor
             ImpactScore = 3,
             SafetyRating = 5,
             ImpactNote = "Keeps local dumps; prevents transmission to Microsoft reporting endpoint.",
-            ApplyOps =
-            [
-                RegOp.SetDword(WerKey, "CorporateWerUseSSL", 1),
-                RegOp.SetDword(WerKey, "LoggingDisabled", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(WerKey, "CorporateWerUseSSL"),
-                RegOp.DeleteValue(WerKey, "LoggingDisabled"),
-            ],
+            ApplyOps = [RegOp.SetDword(WerKey, "CorporateWerUseSSL", 1), RegOp.SetDword(WerKey, "LoggingDisabled", 0)],
+            RemoveOps = [RegOp.DeleteValue(WerKey, "CorporateWerUseSSL"), RegOp.DeleteValue(WerKey, "LoggingDisabled")],
             DetectOps = [RegOp.CheckDword(WerKey, "CorporateWerUseSSL", 1)],
         },
         new TweakDef
@@ -615,21 +592,9 @@ internal static class PolicyReliabilityMonitor
             ImpactScore = 2,
             SafetyRating = 5,
             ImpactNote = "Silences legacy PCHealth error dialogs and submission queue.",
-            ApplyOps =
-            [
-                RegOp.SetDword(PcKey, "AllOrNone", 1),
-                RegOp.SetDword(PcKey, "ShowUI", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(PcKey, "AllOrNone"),
-                RegOp.DeleteValue(PcKey, "ShowUI"),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(PcKey, "AllOrNone", 1),
-                RegOp.CheckDword(PcKey, "ShowUI", 0),
-            ],
+            ApplyOps = [RegOp.SetDword(PcKey, "AllOrNone", 1), RegOp.SetDword(PcKey, "ShowUI", 0)],
+            RemoveOps = [RegOp.DeleteValue(PcKey, "AllOrNone"), RegOp.DeleteValue(PcKey, "ShowUI")],
+            DetectOps = [RegOp.CheckDword(PcKey, "AllOrNone", 1), RegOp.CheckDword(PcKey, "ShowUI", 0)],
         },
         new TweakDef
         {
@@ -665,21 +630,9 @@ internal static class PolicyReliabilityMonitor
             ImpactScore = 2,
             SafetyRating = 5,
             ImpactNote = "Blocks per-app PCHealth error submissions regardless of app preference.",
-            ApplyOps =
-            [
-                RegOp.SetDword(PcKey, "IncludeMicrosoftApps", 0),
-                RegOp.SetDword(PcKey, "IncludeWindowsApps", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(PcKey, "IncludeMicrosoftApps"),
-                RegOp.DeleteValue(PcKey, "IncludeWindowsApps"),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(PcKey, "IncludeMicrosoftApps", 0),
-                RegOp.CheckDword(PcKey, "IncludeWindowsApps", 0),
-            ],
+            ApplyOps = [RegOp.SetDword(PcKey, "IncludeMicrosoftApps", 0), RegOp.SetDword(PcKey, "IncludeWindowsApps", 0)],
+            RemoveOps = [RegOp.DeleteValue(PcKey, "IncludeMicrosoftApps"), RegOp.DeleteValue(PcKey, "IncludeWindowsApps")],
+            DetectOps = [RegOp.CheckDword(PcKey, "IncludeMicrosoftApps", 0), RegOp.CheckDword(PcKey, "IncludeWindowsApps", 0)],
         },
     ];
 }
