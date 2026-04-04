@@ -129,19 +129,13 @@ internal static class ChocolateyManager
     /// Returns estimated install sizes per package by measuring each package's directory under
     /// <c>%ChocolateyInstall%\lib\&lt;name&gt;</c>. Runs on the thread pool to avoid blocking the UI.
     /// </summary>
-    internal static Task<Dictionary<string, string>> GetInstalledSizesAsync(
-        HashSet<string> installedNames,
-        CancellationToken ct = default
-    ) =>
+    internal static Task<Dictionary<string, string>> GetInstalledSizesAsync(HashSet<string> installedNames, CancellationToken ct = default) =>
         Task.Run(
             () =>
             {
                 string chocoLib = Path.Combine(
                     Environment.GetEnvironmentVariable("ChocolateyInstall")
-                        ?? Path.Combine(
-                            Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData),
-                            "chocolatey"
-                        ),
+                        ?? Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "chocolatey"),
                     "lib"
                 );
                 var result = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
@@ -168,10 +162,14 @@ internal static class ChocolateyManager
                 {
                     size += new FileInfo(file).Length;
                 }
-                catch { /* skip locked or inaccessible files */ }
+                catch
+                { /* skip locked or inaccessible files */
+                }
             }
         }
-        catch { /* skip inaccessible root directory */ }
+        catch
+        { /* skip inaccessible root directory */
+        }
         return size;
     }
 

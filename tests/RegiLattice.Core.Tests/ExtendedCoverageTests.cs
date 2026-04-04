@@ -3,21 +3,21 @@
 // Targeting 12 uncovered branches identified from cov121f Cobertura XML analysis.
 
 #nullable enable
-using System.Reflection;
-using RegiLattice.Core;
-using RegiLattice.Core.Models;
-using RegiLattice.Core.Services;
-using Xunit;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
+using System.Reflection;
 using System.ServiceProcess;
+using System.Text.Json;
+using System.Threading.Tasks;
+using Microsoft.Win32;
+using RegiLattice.Core;
+using RegiLattice.Core.Models;
 using RegiLattice.Core.Plugins;
 using RegiLattice.Core.Registry;
-using System.Text.Json;
-using Microsoft.Win32;
+using RegiLattice.Core.Services;
+using Xunit;
 
 namespace RegiLattice.Core.Tests;
 
@@ -300,6 +300,7 @@ public sealed class AppConfigBrightnessBranchTests
         Assert.Contains(errors, e => e.Contains("brightness_day_time"));
     }
 }
+
 // ── merged from BranchCoverage2Tests.cs ──────────────────────────────────
 
 public sealed class ComplianceReportExporterBranchTests : IClassFixture<BuiltinsFixture>
@@ -962,6 +963,7 @@ public sealed class ServiceManagerBranchTests
         }
     }
 }
+
 // ── merged from BranchCoverage3Tests.cs ──────────────────────────────────
 
 public sealed class AppConfigValidateBranchTests
@@ -3605,6 +3607,7 @@ public sealed class PackConflictBranchTests
         Assert.Equal("", conflict.ValueName);
     }
 }
+
 // ── merged from BranchCoverage5Tests.cs ──────────────────────────────────
 
 public sealed class GitHubReleaseJsonTests
@@ -4235,6 +4238,7 @@ public sealed class StartupManagerRemainingBranchTests
         StartupManager.Delete(fake); // should not throw
     }
 }
+
 // ── merged from BranchCoverage6Tests.cs ──────────────────────────────────
 
 public sealed class RegistrySessionQwordBinaryBranchTests : IDisposable

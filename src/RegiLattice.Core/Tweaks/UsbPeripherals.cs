@@ -581,7 +581,6 @@ internal static class UsbPeripherals
 
 // === Merged from: Bluetooth.cs ===
 
-
 internal static class Bluetooth
 {
     internal static IReadOnlyList<TweakDef> Tweaks { get; } =
@@ -1405,7 +1404,6 @@ internal static class Bluetooth
     ];
 }
 
-
 // ── merged from PolicyDevice.cs ──
 // RegiLattice.Core — Tweaks/PolicyDevice.cs
 // Device installation, enrollment, guard, firmware, hardware, portable devices, USB storage, and kernel DMA protection policies
@@ -1623,17 +1621,14 @@ internal static class PolicyDevice
                 DetectOps = [RegOp.CheckDword(BtPolicy, "DisableSharedExperiences", 1)],
             },
         ];
-
     }
 
     // ── DeviceCompliancePolicy ──
     private static class _DeviceCompliancePolicy
     {
-        private const string DhaKey =
-            @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DeviceHealthAttestation";
+        private const string DhaKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DeviceHealthAttestation";
 
-        private const string HcKey =
-            @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\HealthCenter";
+        private const string HcKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\HealthCenter";
 
         public static IReadOnlyList<TweakDef> Data =>
             [
@@ -1649,7 +1644,8 @@ internal static class PolicyDevice
                     CorpSafe = true,
                     ImpactScore = 5,
                     SafetyRating = 5,
-                    ImpactNote = "Device boot integrity is cryptographically attested using the TPM. Requires TPM 2.0. Health certificates are generated and periodically sent to the configured DHA server. Enables hardware-backed conditional access decisions.",
+                    ImpactNote =
+                        "Device boot integrity is cryptographically attested using the TPM. Requires TPM 2.0. Health certificates are generated and periodically sent to the configured DHA server. Enables hardware-backed conditional access decisions.",
                     ApplyOps = [RegOp.SetDword(DhaKey, "EnableHealthAttestation", 1)],
                     RemoveOps = [RegOp.DeleteValue(DhaKey, "EnableHealthAttestation")],
                     DetectOps = [RegOp.CheckDword(DhaKey, "EnableHealthAttestation", 1)],
@@ -1666,7 +1662,8 @@ internal static class PolicyDevice
                     CorpSafe = true,
                     ImpactScore = 5,
                     SafetyRating = 5,
-                    ImpactNote = "Devices without BitLocker on the system drive report as non-compliant. Non-compliant devices may be blocked from corporate resources via conditional access. Requires MDM enrolment and conditional access policies to enforce the compliance gate.",
+                    ImpactNote =
+                        "Devices without BitLocker on the system drive report as non-compliant. Non-compliant devices may be blocked from corporate resources via conditional access. Requires MDM enrolment and conditional access policies to enforce the compliance gate.",
                     ApplyOps = [RegOp.SetDword(HcKey, "RequireBitLockerForCompliance", 1)],
                     RemoveOps = [RegOp.DeleteValue(HcKey, "RequireBitLockerForCompliance")],
                     DetectOps = [RegOp.CheckDword(HcKey, "RequireBitLockerForCompliance", 1)],
@@ -1683,7 +1680,8 @@ internal static class PolicyDevice
                     CorpSafe = true,
                     ImpactScore = 5,
                     SafetyRating = 5,
-                    ImpactNote = "Devices without active, up-to-date antivirus report as non-compliant. Devices with disabled or expired AV may lose access to corporate resources. Requires MDM and conditional access to enforce. Windows Defender Antivirus or any ELAM-registered product satisfies the requirement.",
+                    ImpactNote =
+                        "Devices without active, up-to-date antivirus report as non-compliant. Devices with disabled or expired AV may lose access to corporate resources. Requires MDM and conditional access to enforce. Windows Defender Antivirus or any ELAM-registered product satisfies the requirement.",
                     ApplyOps = [RegOp.SetDword(HcKey, "RequireAntivirusForCompliance", 1)],
                     RemoveOps = [RegOp.DeleteValue(HcKey, "RequireAntivirusForCompliance")],
                     DetectOps = [RegOp.CheckDword(HcKey, "RequireAntivirusForCompliance", 1)],
@@ -1700,7 +1698,8 @@ internal static class PolicyDevice
                     CorpSafe = true,
                     ImpactScore = 4,
                     SafetyRating = 5,
-                    ImpactNote = "Compliance state is evaluated every 4 hours. A device that becomes non-compliant is detected within 4 hours. Slightly higher MDM service check-in frequency — negligible network overhead.",
+                    ImpactNote =
+                        "Compliance state is evaluated every 4 hours. A device that becomes non-compliant is detected within 4 hours. Slightly higher MDM service check-in frequency — negligible network overhead.",
                     ApplyOps = [RegOp.SetDword(HcKey, "ComplianceCheckIntervalHours", 4)],
                     RemoveOps = [RegOp.DeleteValue(HcKey, "ComplianceCheckIntervalHours")],
                     DetectOps = [RegOp.CheckDword(HcKey, "ComplianceCheckIntervalHours", 4)],
@@ -1717,7 +1716,8 @@ internal static class PolicyDevice
                     CorpSafe = true,
                     ImpactScore = 5,
                     SafetyRating = 5,
-                    ImpactNote = "Devices without Secure Boot enabled report as non-compliant. Very old hardware (pre-2012) may not support Secure Boot. Devices that were deliberately configured without Secure Boot for BIOS compatibility reasons must be re-evaluated.",
+                    ImpactNote =
+                        "Devices without Secure Boot enabled report as non-compliant. Very old hardware (pre-2012) may not support Secure Boot. Devices that were deliberately configured without Secure Boot for BIOS compatibility reasons must be re-evaluated.",
                     ApplyOps = [RegOp.SetDword(HcKey, "RequireSecureBootForCompliance", 1)],
                     RemoveOps = [RegOp.DeleteValue(HcKey, "RequireSecureBootForCompliance")],
                     DetectOps = [RegOp.CheckDword(HcKey, "RequireSecureBootForCompliance", 1)],
@@ -1734,7 +1734,8 @@ internal static class PolicyDevice
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "Non-compliant devices have 7 days to reach compliance before access restrictions are applied. Provides IT time for remediation without disrupting new enrolments. After 7 days, non-compliant devices are subject to conditional access blocks.",
+                    ImpactNote =
+                        "Non-compliant devices have 7 days to reach compliance before access restrictions are applied. Provides IT time for remediation without disrupting new enrolments. After 7 days, non-compliant devices are subject to conditional access blocks.",
                     ApplyOps = [RegOp.SetDword(HcKey, "ComplianceGracePeriodDays", 7)],
                     RemoveOps = [RegOp.DeleteValue(HcKey, "ComplianceGracePeriodDays")],
                     DetectOps = [RegOp.CheckDword(HcKey, "ComplianceGracePeriodDays", 7)],
@@ -1751,7 +1752,8 @@ internal static class PolicyDevice
                     CorpSafe = true,
                     ImpactScore = 4,
                     SafetyRating = 5,
-                    ImpactNote = "Devices below the minimum OS build report as non-compliant. Requires configuring MinimumBuildNumber separately. Devices on unsupported or unpatched OS build are blocked pending upgrade. Coordinate with Windows Update deadline policies.",
+                    ImpactNote =
+                        "Devices below the minimum OS build report as non-compliant. Requires configuring MinimumBuildNumber separately. Devices on unsupported or unpatched OS build are blocked pending upgrade. Coordinate with Windows Update deadline policies.",
                     ApplyOps = [RegOp.SetDword(HcKey, "RequireMinimumOsBuild", 1)],
                     RemoveOps = [RegOp.DeleteValue(HcKey, "RequireMinimumOsBuild")],
                     DetectOps = [RegOp.CheckDword(HcKey, "RequireMinimumOsBuild", 1)],
@@ -1768,7 +1770,8 @@ internal static class PolicyDevice
                     CorpSafe = true,
                     ImpactScore = 5,
                     SafetyRating = 5,
-                    ImpactNote = "Devices with disabled Windows Defender Firewall or no registered firewall are non-compliant. Third-party firewalls registered with Security Center satisfy the requirement. Devices that turned off the firewall for temporary diagnostics and forgot to restore will be flagged.",
+                    ImpactNote =
+                        "Devices with disabled Windows Defender Firewall or no registered firewall are non-compliant. Third-party firewalls registered with Security Center satisfy the requirement. Devices that turned off the firewall for temporary diagnostics and forgot to restore will be flagged.",
                     ApplyOps = [RegOp.SetDword(HcKey, "RequireFirewallForCompliance", 1)],
                     RemoveOps = [RegOp.DeleteValue(HcKey, "RequireFirewallForCompliance")],
                     DetectOps = [RegOp.CheckDword(HcKey, "RequireFirewallForCompliance", 1)],
@@ -1785,7 +1788,8 @@ internal static class PolicyDevice
                     CorpSafe = true,
                     ImpactScore = 4,
                     SafetyRating = 3,
-                    ImpactNote = "Non-compliant devices are blocked from accessing domain network resources at the WFP layer. This is a local enforcement on the device itself — not a network-layer block. A device misidentifying its compliance state may block its own legitimate access. Test thoroughly before broad deployment.",
+                    ImpactNote =
+                        "Non-compliant devices are blocked from accessing domain network resources at the WFP layer. This is a local enforcement on the device itself — not a network-layer block. A device misidentifying its compliance state may block its own legitimate access. Test thoroughly before broad deployment.",
                     ApplyOps = [RegOp.SetDword(HcKey, "BlockNonCompliantNetworkAccess", 1)],
                     RemoveOps = [RegOp.DeleteValue(HcKey, "BlockNonCompliantNetworkAccess")],
                     DetectOps = [RegOp.CheckDword(HcKey, "BlockNonCompliantNetworkAccess", 1)],
@@ -1802,23 +1806,21 @@ internal static class PolicyDevice
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "TPM attestation events are logged. Events include certificate request, success, failure, and failure reasons. Negligible disk overhead. Enables rapid helpdesk diagnosis of attestation failures without advanced tooling.",
+                    ImpactNote =
+                        "TPM attestation events are logged. Events include certificate request, success, failure, and failure reasons. Negligible disk overhead. Enables rapid helpdesk diagnosis of attestation failures without advanced tooling.",
                     ApplyOps = [RegOp.SetDword(DhaKey, "TpmAttestationLogging", 1)],
                     RemoveOps = [RegOp.DeleteValue(DhaKey, "TpmAttestationLogging")],
                     DetectOps = [RegOp.CheckDword(DhaKey, "TpmAttestationLogging", 1)],
                 },
             ];
-
     }
 
     // ── DeviceEnrollmentLimitPolicy ──
     private static class _DeviceEnrollmentLimitPolicy
     {
-        private const string EnlKey =
-            @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DeviceEnrollment";
+        private const string EnlKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DeviceEnrollment";
 
-        private const string MdmKey =
-            @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CurrentVersion\MDM";
+        private const string MdmKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CurrentVersion\MDM";
 
         public static IReadOnlyList<TweakDef> Data =>
             [
@@ -1834,7 +1836,8 @@ internal static class PolicyDevice
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "Each user can enroll a maximum of 5 devices. Attempts to enroll a 6th device are rejected until an existing device is unenrolled. Adjust the limit if your organisation has users with more than 5 managed devices (e.g., kiosk operators managing multiple shared devices with a single service account).",
+                    ImpactNote =
+                        "Each user can enroll a maximum of 5 devices. Attempts to enroll a 6th device are rejected until an existing device is unenrolled. Adjust the limit if your organisation has users with more than 5 managed devices (e.g., kiosk operators managing multiple shared devices with a single service account).",
                     ApplyOps = [RegOp.SetDword(EnlKey, "MaxDevicesPerUser", 5)],
                     RemoveOps = [RegOp.DeleteValue(EnlKey, "MaxDevicesPerUser")],
                     DetectOps = [RegOp.CheckDword(EnlKey, "MaxDevicesPerUser", 5)],
@@ -1851,7 +1854,8 @@ internal static class PolicyDevice
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "Personal (non-AAD-Joined) devices cannot enroll in corporate MDM. Users who attempt to add a work account on a personal device get a generic failure. BYOD users should sign in with MAM-only (app-level management) via Outlook or Teams apps instead. Requires AAD Join for full MDM enrollment.",
+                    ImpactNote =
+                        "Personal (non-AAD-Joined) devices cannot enroll in corporate MDM. Users who attempt to add a work account on a personal device get a generic failure. BYOD users should sign in with MAM-only (app-level management) via Outlook or Teams apps instead. Requires AAD Join for full MDM enrollment.",
                     ApplyOps = [RegOp.SetDword(EnlKey, "BlockPersonalDeviceEnrollment", 1)],
                     RemoveOps = [RegOp.DeleteValue(EnlKey, "BlockPersonalDeviceEnrollment")],
                     DetectOps = [RegOp.CheckDword(EnlKey, "BlockPersonalDeviceEnrollment", 1)],
@@ -1868,7 +1872,8 @@ internal static class PolicyDevice
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "Device category must be assigned before enrollment completes. Enrollment fails if no category is selected. Category assignment is performed by the enrolling admin or in automated flows by the Autopilot assignment group. No user-facing UI change for standard users.",
+                    ImpactNote =
+                        "Device category must be assigned before enrollment completes. Enrollment fails if no category is selected. Category assignment is performed by the enrolling admin or in automated flows by the Autopilot assignment group. No user-facing UI change for standard users.",
                     ApplyOps = [RegOp.SetDword(EnlKey, "RequireDeviceCategoryOnEnrollment", 1)],
                     RemoveOps = [RegOp.DeleteValue(EnlKey, "RequireDeviceCategoryOnEnrollment")],
                     DetectOps = [RegOp.CheckDword(EnlKey, "RequireDeviceCategoryOnEnrollment", 1)],
@@ -1885,7 +1890,8 @@ internal static class PolicyDevice
                     CorpSafe = true,
                     ImpactScore = 4,
                     SafetyRating = 5,
-                    ImpactNote = "Only devices that match a pre-configured enrollment profile can enroll. Devices without a matching profile are rejected at enrollment. Devices must be registered in Intune/Autopilot before attempting enrollment. Prevents rogue devices from enrolling with valid user credentials.",
+                    ImpactNote =
+                        "Only devices that match a pre-configured enrollment profile can enroll. Devices without a matching profile are rejected at enrollment. Devices must be registered in Intune/Autopilot before attempting enrollment. Prevents rogue devices from enrolling with valid user credentials.",
                     ApplyOps = [RegOp.SetDword(EnlKey, "RequireEnrollmentProfile", 1)],
                     RemoveOps = [RegOp.DeleteValue(EnlKey, "RequireEnrollmentProfile")],
                     DetectOps = [RegOp.CheckDword(EnlKey, "RequireEnrollmentProfile", 1)],
@@ -1902,7 +1908,8 @@ internal static class PolicyDevice
                     CorpSafe = true,
                     ImpactScore = 4,
                     SafetyRating = 5,
-                    ImpactNote = "Enrollment is restricted to devices that complete Azure AD Join. Workplace Join-only devices cannot enroll. Hybrid Joined devices (on-premises AD + AAD) satisfy the AAD Join requirement. Purely on-premises AD-joined devices without AAD sync must Hybrid-Join before they can enroll.",
+                    ImpactNote =
+                        "Enrollment is restricted to devices that complete Azure AD Join. Workplace Join-only devices cannot enroll. Hybrid Joined devices (on-premises AD + AAD) satisfy the AAD Join requirement. Purely on-premises AD-joined devices without AAD sync must Hybrid-Join before they can enroll.",
                     ApplyOps = [RegOp.SetDword(MdmKey, "RestrictEnrollmentToAadJoin", 1)],
                     RemoveOps = [RegOp.DeleteValue(MdmKey, "RestrictEnrollmentToAadJoin")],
                     DetectOps = [RegOp.CheckDword(MdmKey, "RestrictEnrollmentToAadJoin", 1)],
@@ -1919,7 +1926,8 @@ internal static class PolicyDevice
                     CorpSafe = true,
                     ImpactScore = 4,
                     SafetyRating = 5,
-                    ImpactNote = "Enrollment Status Page is shown during Autopilot/OOBE. Users are blocked at the ESP until all required apps and policies are applied. Prevents users from using a partially-configured device. Increases initial setup time by the duration of app installations.",
+                    ImpactNote =
+                        "Enrollment Status Page is shown during Autopilot/OOBE. Users are blocked at the ESP until all required apps and policies are applied. Prevents users from using a partially-configured device. Increases initial setup time by the duration of app installations.",
                     ApplyOps = [RegOp.SetDword(EnlKey, "ShowEnrollmentStatusPage", 1)],
                     RemoveOps = [RegOp.DeleteValue(EnlKey, "ShowEnrollmentStatusPage")],
                     DetectOps = [RegOp.CheckDword(EnlKey, "ShowEnrollmentStatusPage", 1)],
@@ -1936,7 +1944,8 @@ internal static class PolicyDevice
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 3,
-                    ImpactNote = "MDM enrollment is only permitted from networks classified as corporate (domain controller reachable, NLA domain profile active). Devices on guest, public, or unclassified networks cannot enroll. This may prevent legitimate remote onboarding — coordinate with VPN policies to ensure remote enrollment is still possible via corporate VPN.",
+                    ImpactNote =
+                        "MDM enrollment is only permitted from networks classified as corporate (domain controller reachable, NLA domain profile active). Devices on guest, public, or unclassified networks cannot enroll. This may prevent legitimate remote onboarding — coordinate with VPN policies to ensure remote enrollment is still possible via corporate VPN.",
                     ApplyOps = [RegOp.SetDword(EnlKey, "RequireCorporateNetworkForEnrollment", 1)],
                     RemoveOps = [RegOp.DeleteValue(EnlKey, "RequireCorporateNetworkForEnrollment")],
                     DetectOps = [RegOp.CheckDword(EnlKey, "RequireCorporateNetworkForEnrollment", 1)],
@@ -1953,7 +1962,8 @@ internal static class PolicyDevice
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "MDM enrollment failures are logged with structured error codes and phase information. Logs written to the Microsoft-Windows-DeviceManagement-Enterprise-Diagnostics-Provider channel. No performance impact — logging only occurs on failure paths.",
+                    ImpactNote =
+                        "MDM enrollment failures are logged with structured error codes and phase information. Logs written to the Microsoft-Windows-DeviceManagement-Enterprise-Diagnostics-Provider channel. No performance impact — logging only occurs on failure paths.",
                     ApplyOps = [RegOp.SetDword(EnlKey, "LogEnrollmentFailures", 1)],
                     RemoveOps = [RegOp.DeleteValue(EnlKey, "LogEnrollmentFailures")],
                     DetectOps = [RegOp.CheckDword(EnlKey, "LogEnrollmentFailures", 1)],
@@ -1970,7 +1980,8 @@ internal static class PolicyDevice
                     CorpSafe = true,
                     ImpactScore = 5,
                     SafetyRating = 5,
-                    ImpactNote = "Users must complete MFA during MDM enrollment. Requires Azure AD MFA or equivalent. Autopilot deployments using device-identity-based enrollment (PPKG or DEM account) may need exemption. Test Autopilot flows before broad deployment.",
+                    ImpactNote =
+                        "Users must complete MFA during MDM enrollment. Requires Azure AD MFA or equivalent. Autopilot deployments using device-identity-based enrollment (PPKG or DEM account) may need exemption. Test Autopilot flows before broad deployment.",
                     ApplyOps = [RegOp.SetDword(EnlKey, "RequireMfaForEnrollment", 1)],
                     RemoveOps = [RegOp.DeleteValue(EnlKey, "RequireMfaForEnrollment")],
                     DetectOps = [RegOp.CheckDword(EnlKey, "RequireMfaForEnrollment", 1)],
@@ -1987,13 +1998,13 @@ internal static class PolicyDevice
                     CorpSafe = true,
                     ImpactScore = 4,
                     SafetyRating = 5,
-                    ImpactNote = "All enrollment attempts are logged with user, device, and outcome details. Audit events can be forwarded to SIEM. Detection: unusually high enrollment failures from a single user may indicate credential stuffing. No performance overhead — logging is asynchronous.",
+                    ImpactNote =
+                        "All enrollment attempts are logged with user, device, and outcome details. Audit events can be forwarded to SIEM. Detection: unusually high enrollment failures from a single user may indicate credential stuffing. No performance overhead — logging is asynchronous.",
                     ApplyOps = [RegOp.SetDword(EnlKey, "AuditEnrollmentActivity", 1)],
                     RemoveOps = [RegOp.DeleteValue(EnlKey, "AuditEnrollmentActivity")],
                     DetectOps = [RegOp.CheckDword(EnlKey, "AuditEnrollmentActivity", 1)],
                 },
             ];
-
     }
 
     // ── DeviceEnrollmentPolicy ──
@@ -2174,7 +2185,6 @@ internal static class PolicyDevice
                 DetectOps = [RegOp.CheckDword(Key, "RestrictToApprovedTenant", 1)],
             },
         ];
-
     }
 
     // ── DeviceGuardPolicy ──
@@ -2183,169 +2193,171 @@ internal static class PolicyDevice
         private const string DgKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DeviceGuard";
 
         public static IReadOnlyList<TweakDef> Data =>
-        [
-            new TweakDef
-            {
-                Id = "devguard-enable-vbs",
-                Label = "Enable Virtualization-Based Security (VBS)",
-                Category = "Peripherals",
-                Description = "Enables Virtualization-Based Security, which uses the hypervisor to isolate critical security processes.",
-                Tags = ["vbs", "device-guard", "virtualization", "security", "hyperv"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 5,
-                SafetyRating = 3,
-                ImpactNote = "Requires Hyper-V, UEFI, and Secure Boot; significant performance impact on systems without HVCI-capable hardware.",
-                ApplyOps = [RegOp.SetDword(DgKey, "EnableVirtualizationBasedSecurity", 1)],
-                RemoveOps = [RegOp.DeleteValue(DgKey, "EnableVirtualizationBasedSecurity")],
-                DetectOps = [RegOp.CheckDword(DgKey, "EnableVirtualizationBasedSecurity", 1)],
-            },
-            new TweakDef
-            {
-                Id = "devguard-require-secure-boot-dma",
-                Label = "Require Secure Boot and DMA Protection for VBS",
-                Category = "Peripherals",
-                Description = "Requires Secure Boot and hardware DMA protection as platform security features for VBS to run.",
-                Tags = ["vbs", "device-guard", "secure-boot", "dma", "security"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 5,
-                SafetyRating = 3,
-                ImpactNote = "Value 3 = Secure Boot + DMA; requires appropriate firmware/hardware; VBS disabled without both features.",
-                ApplyOps = [RegOp.SetDword(DgKey, "RequirePlatformSecurityFeatures", 3)],
-                RemoveOps = [RegOp.DeleteValue(DgKey, "RequirePlatformSecurityFeatures")],
-                DetectOps = [RegOp.CheckDword(DgKey, "RequirePlatformSecurityFeatures", 3)],
-            },
-            new TweakDef
-            {
-                Id = "devguard-enable-hvci",
-                Label = "Enable Hypervisor-Enforced Code Integrity (HVCI)",
-                Category = "Peripherals",
-                Description = "Enables Memory Integrity (HVCI) which uses the hypervisor to validate kernel code before execution.",
-                Tags = ["hvci", "memory-integrity", "device-guard", "kernel", "security"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 5,
-                SafetyRating = 3,
-                ImpactNote = "Value 2 = on without UEFI lock; blocks unsigned kernel drivers; may cause incompatibilities with legacy drivers.",
-                ApplyOps = [RegOp.SetDword(DgKey, "HypervisorEnforcedCodeIntegrity", 2)],
-                RemoveOps = [RegOp.DeleteValue(DgKey, "HypervisorEnforcedCodeIntegrity")],
-                DetectOps = [RegOp.CheckDword(DgKey, "HypervisorEnforcedCodeIntegrity", 2)],
-            },
-            new TweakDef
-            {
-                Id = "devguard-require-uefi-mat",
-                Label = "Require UEFI Memory Attributes Table for HVCI",
-                Category = "Peripherals",
-                Description = "Requires the firmware to expose a UEFI Memory Attributes Table, enabling stricter HVCI enforcement.",
-                Tags = ["hvci", "uefi", "mat", "device-guard", "firmware", "security"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 3,
-                ImpactNote = "Ensures UEFI properly marks regions; old firmware without UEFI MAT will fail HVCI initialisation.",
-                ApplyOps = [RegOp.SetDword(DgKey, "HVCIMATRequired", 1)],
-                RemoveOps = [RegOp.DeleteValue(DgKey, "HVCIMATRequired")],
-                DetectOps = [RegOp.CheckDword(DgKey, "HVCIMATRequired", 1)],
-            },
-            new TweakDef
-            {
-                Id = "devguard-enable-credential-guard",
-                Label = "Enable Credential Guard",
-                Category = "Peripherals",
-                Description = "Isolates NTLM hashes and Kerberos tickets inside a VBS-protected virtual machine to prevent Pass-the-Hash attacks.",
-                Tags = ["credential-guard", "device-guard", "vbs", "lsa", "security"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 5,
-                SafetyRating = 3,
-                ImpactNote = "Value 2 = enabled without UEFI lock (removable); requires VBS; breaks smart-card-only environments in some configs.",
-                ApplyOps = [RegOp.SetDword(DgKey, "LsaCfgFlags", 2)],
-                RemoveOps = [RegOp.DeleteValue(DgKey, "LsaCfgFlags")],
-                DetectOps = [RegOp.CheckDword(DgKey, "LsaCfgFlags", 2)],
-            },
-            new TweakDef
-            {
-                Id = "devguard-enable-system-guard",
-                Label = "Enable System Guard Secure Launch",
-                Category = "Peripherals",
-                Description = "Enables System Guard Secure Launch to verify platform integrity at boot using Dynamic Root of Trust (DRTM).",
-                Tags = ["system-guard", "drtm", "secure-launch", "device-guard", "security"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 4,
-                ImpactNote = "Requires Intel TXT or AMD SKINIT; boot verified via secure measurement; no effect on unsupported hardware.",
-                ApplyOps = [RegOp.SetDword(DgKey, "ConfigureSystemGuardLaunch", 1)],
-                RemoveOps = [RegOp.DeleteValue(DgKey, "ConfigureSystemGuardLaunch")],
-                DetectOps = [RegOp.CheckDword(DgKey, "ConfigureSystemGuardLaunch", 1)],
-            },
-            new TweakDef
-            {
-                Id = "devguard-enable-kernel-shadow-stack",
-                Label = "Enable Kernel Mode Hardware-Enforced Stack Protection",
-                Category = "Peripherals",
-                Description = "Activates Hardware-Enforced Call Stack Protection (CET Shadow Stack) for kernel mode to resist ROP attacks.",
-                Tags = ["cet", "shadow-stack", "device-guard", "kernel", "security", "rop"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 3,
-                ImpactNote = "Requires Intel CET (Tiger Lake+) or AMD equivalent; blocks ROP/JOP exploits in kernel; may conflict with old drivers.",
-                ApplyOps = [RegOp.SetDword(DgKey, "ConfigureKernelShadowStacksLaunchControl", 1)],
-                RemoveOps = [RegOp.DeleteValue(DgKey, "ConfigureKernelShadowStacksLaunchControl")],
-                DetectOps = [RegOp.CheckDword(DgKey, "ConfigureKernelShadowStacksLaunchControl", 1)],
-            },
-            new TweakDef
-            {
-                Id = "devguard-enable-hvci-audit-mode",
-                Label = "Disable HVCI Audit Mode (Enforce Mode)",
-                Category = "Peripherals",
-                Description = "Ensures HVCI operates in enforcement mode rather than audit-only mode for active code integrity protection.",
-                Tags = ["hvci", "audit-mode", "device-guard", "enforce", "security"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 3,
-                ImpactNote = "Audit mode only logs violations; enforce mode blocks them. Disabling audit ensures active protection.",
-                ApplyOps = [RegOp.SetDword(DgKey, "HypervisorEnforcedCodeIntegrityAuditModeEnabled", 0)],
-                RemoveOps = [RegOp.DeleteValue(DgKey, "HypervisorEnforcedCodeIntegrityAuditModeEnabled")],
-                DetectOps = [RegOp.CheckDword(DgKey, "HypervisorEnforcedCodeIntegrityAuditModeEnabled", 0)],
-            },
-            new TweakDef
-            {
-                Id = "devguard-block-unsigned-drivers",
-                Label = "Block Unsigned Kernel Drivers via Policy",
-                Category = "Peripherals",
-                Description = "Prevents loading of unsigned kernel-mode drivers, supplementing HVCI at the policy layer.",
-                Tags = ["device-guard", "drivers", "signing", "kernel", "security"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 3,
-                ImpactNote = "Blocks unsigned drivers; WHQL or Microsoft signing required; may break niche hardware with unsigned drivers.",
-                ApplyOps = [RegOp.SetDword(DgKey, "RequireDriverSignature", 1)],
-                RemoveOps = [RegOp.DeleteValue(DgKey, "RequireDriverSignature")],
-                DetectOps = [RegOp.CheckDword(DgKey, "RequireDriverSignature", 1)],
-            },
-            new TweakDef
-            {
-                Id = "devguard-audit-device-guard-status",
-                Label = "Enable Device Guard Status Auditing",
-                Category = "Peripherals",
-                Description = "Logs Device Guard and Credential Guard startup status to the event log for compliance monitoring.",
-                Tags = ["device-guard", "audit", "logging", "compliance", "security"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Writes Device Guard status events at boot; purely informational, no security side effects.",
-                ApplyOps = [RegOp.SetDword(DgKey, "AuditDeviceGuardStatus", 1)],
-                RemoveOps = [RegOp.DeleteValue(DgKey, "AuditDeviceGuardStatus")],
-                DetectOps = [RegOp.CheckDword(DgKey, "AuditDeviceGuardStatus", 1)],
-            },
-        ];
-
+            [
+                new TweakDef
+                {
+                    Id = "devguard-enable-vbs",
+                    Label = "Enable Virtualization-Based Security (VBS)",
+                    Category = "Peripherals",
+                    Description = "Enables Virtualization-Based Security, which uses the hypervisor to isolate critical security processes.",
+                    Tags = ["vbs", "device-guard", "virtualization", "security", "hyperv"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 5,
+                    SafetyRating = 3,
+                    ImpactNote = "Requires Hyper-V, UEFI, and Secure Boot; significant performance impact on systems without HVCI-capable hardware.",
+                    ApplyOps = [RegOp.SetDword(DgKey, "EnableVirtualizationBasedSecurity", 1)],
+                    RemoveOps = [RegOp.DeleteValue(DgKey, "EnableVirtualizationBasedSecurity")],
+                    DetectOps = [RegOp.CheckDword(DgKey, "EnableVirtualizationBasedSecurity", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "devguard-require-secure-boot-dma",
+                    Label = "Require Secure Boot and DMA Protection for VBS",
+                    Category = "Peripherals",
+                    Description = "Requires Secure Boot and hardware DMA protection as platform security features for VBS to run.",
+                    Tags = ["vbs", "device-guard", "secure-boot", "dma", "security"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 5,
+                    SafetyRating = 3,
+                    ImpactNote = "Value 3 = Secure Boot + DMA; requires appropriate firmware/hardware; VBS disabled without both features.",
+                    ApplyOps = [RegOp.SetDword(DgKey, "RequirePlatformSecurityFeatures", 3)],
+                    RemoveOps = [RegOp.DeleteValue(DgKey, "RequirePlatformSecurityFeatures")],
+                    DetectOps = [RegOp.CheckDword(DgKey, "RequirePlatformSecurityFeatures", 3)],
+                },
+                new TweakDef
+                {
+                    Id = "devguard-enable-hvci",
+                    Label = "Enable Hypervisor-Enforced Code Integrity (HVCI)",
+                    Category = "Peripherals",
+                    Description = "Enables Memory Integrity (HVCI) which uses the hypervisor to validate kernel code before execution.",
+                    Tags = ["hvci", "memory-integrity", "device-guard", "kernel", "security"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 5,
+                    SafetyRating = 3,
+                    ImpactNote = "Value 2 = on without UEFI lock; blocks unsigned kernel drivers; may cause incompatibilities with legacy drivers.",
+                    ApplyOps = [RegOp.SetDword(DgKey, "HypervisorEnforcedCodeIntegrity", 2)],
+                    RemoveOps = [RegOp.DeleteValue(DgKey, "HypervisorEnforcedCodeIntegrity")],
+                    DetectOps = [RegOp.CheckDword(DgKey, "HypervisorEnforcedCodeIntegrity", 2)],
+                },
+                new TweakDef
+                {
+                    Id = "devguard-require-uefi-mat",
+                    Label = "Require UEFI Memory Attributes Table for HVCI",
+                    Category = "Peripherals",
+                    Description = "Requires the firmware to expose a UEFI Memory Attributes Table, enabling stricter HVCI enforcement.",
+                    Tags = ["hvci", "uefi", "mat", "device-guard", "firmware", "security"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 3,
+                    ImpactNote = "Ensures UEFI properly marks regions; old firmware without UEFI MAT will fail HVCI initialisation.",
+                    ApplyOps = [RegOp.SetDword(DgKey, "HVCIMATRequired", 1)],
+                    RemoveOps = [RegOp.DeleteValue(DgKey, "HVCIMATRequired")],
+                    DetectOps = [RegOp.CheckDword(DgKey, "HVCIMATRequired", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "devguard-enable-credential-guard",
+                    Label = "Enable Credential Guard",
+                    Category = "Peripherals",
+                    Description =
+                        "Isolates NTLM hashes and Kerberos tickets inside a VBS-protected virtual machine to prevent Pass-the-Hash attacks.",
+                    Tags = ["credential-guard", "device-guard", "vbs", "lsa", "security"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 5,
+                    SafetyRating = 3,
+                    ImpactNote =
+                        "Value 2 = enabled without UEFI lock (removable); requires VBS; breaks smart-card-only environments in some configs.",
+                    ApplyOps = [RegOp.SetDword(DgKey, "LsaCfgFlags", 2)],
+                    RemoveOps = [RegOp.DeleteValue(DgKey, "LsaCfgFlags")],
+                    DetectOps = [RegOp.CheckDword(DgKey, "LsaCfgFlags", 2)],
+                },
+                new TweakDef
+                {
+                    Id = "devguard-enable-system-guard",
+                    Label = "Enable System Guard Secure Launch",
+                    Category = "Peripherals",
+                    Description = "Enables System Guard Secure Launch to verify platform integrity at boot using Dynamic Root of Trust (DRTM).",
+                    Tags = ["system-guard", "drtm", "secure-launch", "device-guard", "security"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 4,
+                    ImpactNote = "Requires Intel TXT or AMD SKINIT; boot verified via secure measurement; no effect on unsupported hardware.",
+                    ApplyOps = [RegOp.SetDword(DgKey, "ConfigureSystemGuardLaunch", 1)],
+                    RemoveOps = [RegOp.DeleteValue(DgKey, "ConfigureSystemGuardLaunch")],
+                    DetectOps = [RegOp.CheckDword(DgKey, "ConfigureSystemGuardLaunch", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "devguard-enable-kernel-shadow-stack",
+                    Label = "Enable Kernel Mode Hardware-Enforced Stack Protection",
+                    Category = "Peripherals",
+                    Description = "Activates Hardware-Enforced Call Stack Protection (CET Shadow Stack) for kernel mode to resist ROP attacks.",
+                    Tags = ["cet", "shadow-stack", "device-guard", "kernel", "security", "rop"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 3,
+                    ImpactNote =
+                        "Requires Intel CET (Tiger Lake+) or AMD equivalent; blocks ROP/JOP exploits in kernel; may conflict with old drivers.",
+                    ApplyOps = [RegOp.SetDword(DgKey, "ConfigureKernelShadowStacksLaunchControl", 1)],
+                    RemoveOps = [RegOp.DeleteValue(DgKey, "ConfigureKernelShadowStacksLaunchControl")],
+                    DetectOps = [RegOp.CheckDword(DgKey, "ConfigureKernelShadowStacksLaunchControl", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "devguard-enable-hvci-audit-mode",
+                    Label = "Disable HVCI Audit Mode (Enforce Mode)",
+                    Category = "Peripherals",
+                    Description = "Ensures HVCI operates in enforcement mode rather than audit-only mode for active code integrity protection.",
+                    Tags = ["hvci", "audit-mode", "device-guard", "enforce", "security"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 3,
+                    ImpactNote = "Audit mode only logs violations; enforce mode blocks them. Disabling audit ensures active protection.",
+                    ApplyOps = [RegOp.SetDword(DgKey, "HypervisorEnforcedCodeIntegrityAuditModeEnabled", 0)],
+                    RemoveOps = [RegOp.DeleteValue(DgKey, "HypervisorEnforcedCodeIntegrityAuditModeEnabled")],
+                    DetectOps = [RegOp.CheckDword(DgKey, "HypervisorEnforcedCodeIntegrityAuditModeEnabled", 0)],
+                },
+                new TweakDef
+                {
+                    Id = "devguard-block-unsigned-drivers",
+                    Label = "Block Unsigned Kernel Drivers via Policy",
+                    Category = "Peripherals",
+                    Description = "Prevents loading of unsigned kernel-mode drivers, supplementing HVCI at the policy layer.",
+                    Tags = ["device-guard", "drivers", "signing", "kernel", "security"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 3,
+                    ImpactNote = "Blocks unsigned drivers; WHQL or Microsoft signing required; may break niche hardware with unsigned drivers.",
+                    ApplyOps = [RegOp.SetDword(DgKey, "RequireDriverSignature", 1)],
+                    RemoveOps = [RegOp.DeleteValue(DgKey, "RequireDriverSignature")],
+                    DetectOps = [RegOp.CheckDword(DgKey, "RequireDriverSignature", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "devguard-audit-device-guard-status",
+                    Label = "Enable Device Guard Status Auditing",
+                    Category = "Peripherals",
+                    Description = "Logs Device Guard and Credential Guard startup status to the event log for compliance monitoring.",
+                    Tags = ["device-guard", "audit", "logging", "compliance", "security"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "Writes Device Guard status events at boot; purely informational, no security side effects.",
+                    ApplyOps = [RegOp.SetDword(DgKey, "AuditDeviceGuardStatus", 1)],
+                    RemoveOps = [RegOp.DeleteValue(DgKey, "AuditDeviceGuardStatus")],
+                    DetectOps = [RegOp.CheckDword(DgKey, "AuditDeviceGuardStatus", 1)],
+                },
+            ];
     }
 
     // ── DeviceGuardVbs ──
@@ -2355,7 +2367,8 @@ internal static class PolicyDevice
 
         private const string Scenarios = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\DeviceGuard\Scenarios";
 
-        private const string HvciScenario = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\DeviceGuard\Scenarios\HypervisorEnforcedCodeIntegrity";
+        private const string HvciScenario =
+            @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\DeviceGuard\Scenarios\HypervisorEnforcedCodeIntegrity";
 
         private const string CredentialGuard = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa";
 
@@ -2551,17 +2564,14 @@ internal static class PolicyDevice
                 DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa", "RunAsPPLBoot", 2)],
             },
         ];
-
     }
 
     // ── DeviceHealthCheckPolicy ──
     private static class _DeviceHealthCheckPolicy
     {
-        private const string HcKey =
-            @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DeviceHealthAttestation";
+        private const string HcKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DeviceHealthAttestation";
 
-        private const string TpmKey =
-            @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\TPM";
+        private const string TpmKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\TPM";
 
         public static IReadOnlyList<TweakDef> Data =>
             [
@@ -2577,7 +2587,8 @@ internal static class PolicyDevice
                     CorpSafe = true,
                     ImpactScore = 4,
                     SafetyRating = 5,
-                    ImpactNote = "TPM health is evaluated on every DHA cycle. Degraded or disabled TPM is reported as a health issue. Enables IT to detect TPM lockout or firmware-changed PCR states before they cause silent attestation failures.",
+                    ImpactNote =
+                        "TPM health is evaluated on every DHA cycle. Degraded or disabled TPM is reported as a health issue. Enables IT to detect TPM lockout or firmware-changed PCR states before they cause silent attestation failures.",
                     ApplyOps = [RegOp.SetDword(HcKey, "EnableTpmHealthCheck", 1)],
                     RemoveOps = [RegOp.DeleteValue(HcKey, "EnableTpmHealthCheck")],
                     DetectOps = [RegOp.CheckDword(HcKey, "EnableTpmHealthCheck", 1)],
@@ -2594,7 +2605,8 @@ internal static class PolicyDevice
                     CorpSafe = true,
                     ImpactScore = 5,
                     SafetyRating = 5,
-                    ImpactNote = "Devices without an active ELAM driver are reported as unhealthy by DHA. Windows Defender satisfies this requirement by default. Third-party ELAM-registered AV products also satisfy it. Devices with all AV disabled will fail this check.",
+                    ImpactNote =
+                        "Devices without an active ELAM driver are reported as unhealthy by DHA. Windows Defender satisfies this requirement by default. Third-party ELAM-registered AV products also satisfy it. Devices with all AV disabled will fail this check.",
                     ApplyOps = [RegOp.SetDword(HcKey, "RequireElamDriverForHealth", 1)],
                     RemoveOps = [RegOp.DeleteValue(HcKey, "RequireElamDriverForHealth")],
                     DetectOps = [RegOp.CheckDword(HcKey, "RequireElamDriverForHealth", 1)],
@@ -2611,7 +2623,8 @@ internal static class PolicyDevice
                     CorpSafe = true,
                     ImpactScore = 5,
                     SafetyRating = 5,
-                    ImpactNote = "Secure Boot PCR measurements are included in DHA health certificates. Changes to PCR values (firmware update, boot component change) are detected. Legitimate firmware updates may transiently mark the device as unhealthy until the DHA baseline is updated.",
+                    ImpactNote =
+                        "Secure Boot PCR measurements are included in DHA health certificates. Changes to PCR values (firmware update, boot component change) are detected. Legitimate firmware updates may transiently mark the device as unhealthy until the DHA baseline is updated.",
                     ApplyOps = [RegOp.SetDword(HcKey, "EvaluateSecureBootMeasurement", 1)],
                     RemoveOps = [RegOp.DeleteValue(HcKey, "EvaluateSecureBootMeasurement")],
                     DetectOps = [RegOp.CheckDword(HcKey, "EvaluateSecureBootMeasurement", 1)],
@@ -2628,7 +2641,8 @@ internal static class PolicyDevice
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "Health report data is retained for 30 days locally. Provides 30 days of health state history for forensic investigation. Small disk footprint — health reports are compact JSON structures, typically a few KB each.",
+                    ImpactNote =
+                        "Health report data is retained for 30 days locally. Provides 30 days of health state history for forensic investigation. Small disk footprint — health reports are compact JSON structures, typically a few KB each.",
                     ApplyOps = [RegOp.SetDword(HcKey, "HealthReportRetentionDays", 30)],
                     RemoveOps = [RegOp.DeleteValue(HcKey, "HealthReportRetentionDays")],
                     DetectOps = [RegOp.CheckDword(HcKey, "HealthReportRetentionDays", 30)],
@@ -2645,7 +2659,8 @@ internal static class PolicyDevice
                     CorpSafe = true,
                     ImpactScore = 5,
                     SafetyRating = 4,
-                    ImpactNote = "Health check processes cannot be bypassed or suppressed by local admins. Prevents malware or sophisticated users from spoofing a healthy state to conditional access systems. May complicate debugging of attestation issues in development environments.",
+                    ImpactNote =
+                        "Health check processes cannot be bypassed or suppressed by local admins. Prevents malware or sophisticated users from spoofing a healthy state to conditional access systems. May complicate debugging of attestation issues in development environments.",
                     ApplyOps = [RegOp.SetDword(HcKey, "DisableHealthCheckBypass", 1)],
                     RemoveOps = [RegOp.DeleteValue(HcKey, "DisableHealthCheckBypass")],
                     DetectOps = [RegOp.CheckDword(HcKey, "DisableHealthCheckBypass", 1)],
@@ -2662,7 +2677,8 @@ internal static class PolicyDevice
                     CorpSafe = true,
                     ImpactScore = 4,
                     SafetyRating = 4,
-                    ImpactNote = "The health agent automatically resolves known fixable issues (re-enables AV, restarts health services, re-provisions TPM EK). Only remediates known, low-risk issues — it will never force-enable BitLocker or change user-configured settings. Review the list of supported remediations for your OS build.",
+                    ImpactNote =
+                        "The health agent automatically resolves known fixable issues (re-enables AV, restarts health services, re-provisions TPM EK). Only remediates known, low-risk issues — it will never force-enable BitLocker or change user-configured settings. Review the list of supported remediations for your OS build.",
                     ApplyOps = [RegOp.SetDword(HcKey, "EnableHealthAutoRemediation", 1)],
                     RemoveOps = [RegOp.DeleteValue(HcKey, "EnableHealthAutoRemediation")],
                     DetectOps = [RegOp.CheckDword(HcKey, "EnableHealthAutoRemediation", 1)],
@@ -2679,7 +2695,8 @@ internal static class PolicyDevice
                     CorpSafe = true,
                     ImpactScore = 5,
                     SafetyRating = 4,
-                    ImpactNote = "TPM endorsement key certificates are validated against the manufacturer CA chain. VMs with software vTPM (Hyper-V vTPM, VMware vTPM) have EK certificates signed by Microsoft or the platform vendor and will pass if those CAs are trusted. Non-certified TPMs in custom hardware may fail.",
+                    ImpactNote =
+                        "TPM endorsement key certificates are validated against the manufacturer CA chain. VMs with software vTPM (Hyper-V vTPM, VMware vTPM) have EK certificates signed by Microsoft or the platform vendor and will pass if those CAs are trusted. Non-certified TPMs in custom hardware may fail.",
                     ApplyOps = [RegOp.SetDword(TpmKey, "ValidateTpmEndorsementKey", 1)],
                     RemoveOps = [RegOp.DeleteValue(TpmKey, "ValidateTpmEndorsementKey")],
                     DetectOps = [RegOp.CheckDword(TpmKey, "ValidateTpmEndorsementKey", 1)],
@@ -2696,7 +2713,8 @@ internal static class PolicyDevice
                     CorpSafe = true,
                     ImpactScore = 4,
                     SafetyRating = 4,
-                    ImpactNote = "Devices with only TPM 1.2 cannot provide health attestation and are treated as unhealthy. Hardware manufactured before 2016 may only have TPM 1.2. Devices with no TPM are already unable to attest. Review device fleet hardware compatibility before enforcing.",
+                    ImpactNote =
+                        "Devices with only TPM 1.2 cannot provide health attestation and are treated as unhealthy. Hardware manufactured before 2016 may only have TPM 1.2. Devices with no TPM are already unable to attest. Review device fleet hardware compatibility before enforcing.",
                     ApplyOps = [RegOp.SetDword(TpmKey, "RequireTpm20ForHealthAttestation", 1)],
                     RemoveOps = [RegOp.DeleteValue(TpmKey, "RequireTpm20ForHealthAttestation")],
                     DetectOps = [RegOp.CheckDword(TpmKey, "RequireTpm20ForHealthAttestation", 1)],
@@ -2713,7 +2731,8 @@ internal static class PolicyDevice
                     CorpSafe = true,
                     ImpactScore = 5,
                     SafetyRating = 5,
-                    ImpactNote = "Code Integrity (WDAC/HVCI) state is included in the DHA health certificate. Conditional access can now require that a device have CI enforcement mode active. Devices in CI audit-only mode can be flagged as less secure than those in enforcement mode.",
+                    ImpactNote =
+                        "Code Integrity (WDAC/HVCI) state is included in the DHA health certificate. Conditional access can now require that a device have CI enforcement mode active. Devices in CI audit-only mode can be flagged as less secure than those in enforcement mode.",
                     ApplyOps = [RegOp.SetDword(HcKey, "IncludeCodeIntegrityInReport", 1)],
                     RemoveOps = [RegOp.DeleteValue(HcKey, "IncludeCodeIntegrityInReport")],
                     DetectOps = [RegOp.CheckDword(HcKey, "IncludeCodeIntegrityInReport", 1)],
@@ -2730,13 +2749,13 @@ internal static class PolicyDevice
                     CorpSafe = true,
                     ImpactScore = 5,
                     SafetyRating = 5,
-                    ImpactNote = "VBS and Credential Guard state is included in DHA health certificates. Conditional access can require VBS/Credential Guard for high-privilege resource access. Devices without hardware VBS support (no hardware-enforced DEP, SLAT, or IOMMU) cannot satisfy this requirement.",
+                    ImpactNote =
+                        "VBS and Credential Guard state is included in DHA health certificates. Conditional access can require VBS/Credential Guard for high-privilege resource access. Devices without hardware VBS support (no hardware-enforced DEP, SLAT, or IOMMU) cannot satisfy this requirement.",
                     ApplyOps = [RegOp.SetDword(HcKey, "IncludeVbsStateInReport", 1)],
                     RemoveOps = [RegOp.DeleteValue(HcKey, "IncludeVbsStateInReport")],
                     DetectOps = [RegOp.CheckDword(HcKey, "IncludeVbsStateInReport", 1)],
                 },
             ];
-
     }
 
     // ── DeviceInstallPolicies ──
@@ -2950,7 +2969,6 @@ internal static class PolicyDevice
                 DetectOps = [RegOp.CheckDword(DeviceMetadata, "PreventDeviceMetadataFromNetwork", 1)],
             },
         ];
-
     }
 
     // ── DeviceInstallPolicy ──
@@ -2960,169 +2978,169 @@ internal static class PolicyDevice
         private const string DiRestrictKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DeviceInstall\Restrictions";
 
         public static IReadOnlyList<TweakDef> Data =>
-        [
-            new TweakDef
-            {
-                Id = "devinstall-deny-unspecified-devices",
-                Label = "Deny Installation of Unlisted Device Classes",
-                Category = "Peripherals",
-                Description = "Prevents Windows from installing devices whose class is not explicitly permitted by device installation policy.",
-                Tags = ["device-install", "device-class", "restriction", "security"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 3,
-                ImpactNote = "Blocks any device not on an allow-list; aggressive setting — combine with device class allow-lists.",
-                ApplyOps = [RegOp.SetDword(DiRestrictKey, "DenyUnspecified", 1)],
-                RemoveOps = [RegOp.DeleteValue(DiRestrictKey, "DenyUnspecified")],
-                DetectOps = [RegOp.CheckDword(DiRestrictKey, "DenyUnspecified", 1)],
-            },
-            new TweakDef
-            {
-                Id = "devinstall-deny-removable-devices",
-                Label = "Deny Installation of Removable Storage Devices",
-                Category = "Peripherals",
-                Description = "Blocks Windows from installing USB drives, SD cards, and other removable storage devices.",
-                Tags = ["device-install", "removable-storage", "usb", "restriction", "dlp", "security"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 4,
-                ImpactNote = "Key DLP control; blocks USB exfiltration. Removable storage that was already installed still works.",
-                ApplyOps = [RegOp.SetDword(DiRestrictKey, "DenyRemovableDevices", 1)],
-                RemoveOps = [RegOp.DeleteValue(DiRestrictKey, "DenyRemovableDevices")],
-                DetectOps = [RegOp.CheckDword(DiRestrictKey, "DenyRemovableDevices", 1)],
-            },
-            new TweakDef
-            {
-                Id = "devinstall-no-admin-override",
-                Label = "Prevent Admins from Overriding Device Installation Restrictions",
-                Category = "Peripherals",
-                Description = "Removes the administrator privilege that normally allows bypassing device installation policy restrictions.",
-                Tags = ["device-install", "admin", "restriction", "override", "security"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 4,
-                ImpactNote = "Even local admins cannot install blocked device classes; requires GPO change to allow an exception.",
-                ApplyOps = [RegOp.SetDword(DiRestrictKey, "AllowAdminInstall", 0)],
-                RemoveOps = [RegOp.DeleteValue(DiRestrictKey, "AllowAdminInstall")],
-                DetectOps = [RegOp.CheckDword(DiRestrictKey, "AllowAdminInstall", 0)],
-            },
-            new TweakDef
-            {
-                Id = "devinstall-enable-setup-logging",
-                Label = "Enable Verbose Device Installation Event Logging",
-                Category = "Peripherals",
-                Description = "Enables detailed event logging in the Windows device installation subsystem for auditing and diagnostics.",
-                Tags = ["device-install", "logging", "audit", "events", "monitoring"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                ImpactNote = "Enables verbose installation logs in the Windows Device Setup event channel; minimal performance impact.",
-                ApplyOps = [RegOp.SetDword(DiKey, "EnableSetupSystemRestoreCheckpoints", 1)],
-                RemoveOps = [RegOp.DeleteValue(DiKey, "EnableSetupSystemRestoreCheckpoints")],
-                DetectOps = [RegOp.CheckDword(DiKey, "EnableSetupSystemRestoreCheckpoints", 1)],
-            },
-            new TweakDef
-            {
-                Id = "devinstall-disable-driver-search-online",
-                Label = "Disable Online Driver Search During Device Install",
-                Category = "Peripherals",
-                Description = "Prevents Windows from searching the Internet (Windows Update) for drivers during device installation.",
-                Tags = ["device-install", "driver", "windows-update", "online", "security"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Blocks unsigned or unvetted driver downloads from WU; IT manages and deploys approved drivers.",
-                ApplyOps = [RegOp.SetDword(DiKey, "SearchOrderConfig", 1)],
-                RemoveOps = [RegOp.DeleteValue(DiKey, "SearchOrderConfig")],
-                DetectOps = [RegOp.CheckDword(DiKey, "SearchOrderConfig", 1)],
-            },
-            new TweakDef
-            {
-                Id = "devinstall-no-driver-store-from-wer",
-                Label = "Disable WER-Triggered Driver Package Downloads",
-                Category = "Peripherals",
-                Description = "Prevents Windows Error Reporting from triggering automatic driver package downloads from the Internet.",
-                Tags = ["device-install", "wer", "driver", "download", "security"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Closes a secondary driver download path triggered by crash events; driver management stays in IT control.",
-                ApplyOps = [RegOp.SetDword(DiKey, "AllowUserPnP", 0)],
-                RemoveOps = [RegOp.DeleteValue(DiKey, "AllowUserPnP")],
-                DetectOps = [RegOp.CheckDword(DiKey, "AllowUserPnP", 0)],
-            },
-            new TweakDef
-            {
-                Id = "devinstall-block-legacy-ieee1394",
-                Label = "Restrict IEEE 1394 (FireWire) Device Installation",
-                Category = "Peripherals",
-                Description = "Blocks installation of IEEE 1394 (FireWire) bus controllers, which support DMA and can bypass OS memory protection.",
-                Tags = ["device-install", "firewire", "ieee1394", "dma", "security", "hardware"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 4,
-                ImpactNote = "FireWire DMA attacks allow direct memory access bypassing the OS; only impacts systems with legacy ports.",
-                ApplyOps = [RegOp.SetDword(DiRestrictKey, "DenyDeviceIDs", 1)],
-                RemoveOps = [RegOp.DeleteValue(DiRestrictKey, "DenyDeviceIDs")],
-                DetectOps = [RegOp.CheckDword(DiRestrictKey, "DenyDeviceIDs", 1)],
-            },
-            new TweakDef
-            {
-                Id = "devinstall-create-restore-point-on-install",
-                Label = "Create System Restore Point During Driver Installation",
-                Category = "Peripherals",
-                Description = "Forces Windows to create a system restore point before installing any new device driver, enabling rollback.",
-                Tags = ["device-install", "driver", "restore-point", "rollback", "safety"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Restore point created before each driver install; enables quick recovery from bad driver installations.",
-                ApplyOps = [RegOp.SetDword(DiKey, "DisableSystemRestore", 0)],
-                RemoveOps = [RegOp.DeleteValue(DiKey, "DisableSystemRestore")],
-                DetectOps = [RegOp.CheckDword(DiKey, "DisableSystemRestore", 0)],
-            },
-            new TweakDef
-            {
-                Id = "devinstall-disable-drivers-from-cd",
-                Label = "Disable Driver Installation from Optical Media",
-                Category = "Peripherals",
-                Description = "Prevents Windows from using drivers stored on removable optical media (CD/DVD) during device installation.",
-                Tags = ["device-install", "cd", "dvd", "optical", "driver", "security"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                ImpactNote = "Blocks CD/DVD as a driver source; relevant on systems with optical drives that accept physical media.",
-                ApplyOps = [RegOp.SetDword(DiRestrictKey, "DenyRemovableDevicesRetroactive", 1)],
-                RemoveOps = [RegOp.DeleteValue(DiRestrictKey, "DenyRemovableDevicesRetroactive")],
-                DetectOps = [RegOp.CheckDword(DiRestrictKey, "DenyRemovableDevicesRetroactive", 1)],
-            },
-            new TweakDef
-            {
-                Id = "devinstall-notify-admin-on-block",
-                Label = "Notify Admins When Device Installation Is Blocked",
-                Category = "Peripherals",
-                Description = "Sends a notification to administrators when a device installation attempt is blocked by policy.",
-                Tags = ["device-install", "notification", "admin", "audit", "monitoring"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                ImpactNote = "Generates a Windows event log entry when device install is denied; helps with security monitoring.",
-                ApplyOps = [RegOp.SetDword(DiRestrictKey, "AlertOnDeviceInstallation", 1)],
-                RemoveOps = [RegOp.DeleteValue(DiRestrictKey, "AlertOnDeviceInstallation")],
-                DetectOps = [RegOp.CheckDword(DiRestrictKey, "AlertOnDeviceInstallation", 1)],
-            },
-        ];
-
+            [
+                new TweakDef
+                {
+                    Id = "devinstall-deny-unspecified-devices",
+                    Label = "Deny Installation of Unlisted Device Classes",
+                    Category = "Peripherals",
+                    Description = "Prevents Windows from installing devices whose class is not explicitly permitted by device installation policy.",
+                    Tags = ["device-install", "device-class", "restriction", "security"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 3,
+                    ImpactNote = "Blocks any device not on an allow-list; aggressive setting — combine with device class allow-lists.",
+                    ApplyOps = [RegOp.SetDword(DiRestrictKey, "DenyUnspecified", 1)],
+                    RemoveOps = [RegOp.DeleteValue(DiRestrictKey, "DenyUnspecified")],
+                    DetectOps = [RegOp.CheckDword(DiRestrictKey, "DenyUnspecified", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "devinstall-deny-removable-devices",
+                    Label = "Deny Installation of Removable Storage Devices",
+                    Category = "Peripherals",
+                    Description = "Blocks Windows from installing USB drives, SD cards, and other removable storage devices.",
+                    Tags = ["device-install", "removable-storage", "usb", "restriction", "dlp", "security"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 4,
+                    ImpactNote = "Key DLP control; blocks USB exfiltration. Removable storage that was already installed still works.",
+                    ApplyOps = [RegOp.SetDword(DiRestrictKey, "DenyRemovableDevices", 1)],
+                    RemoveOps = [RegOp.DeleteValue(DiRestrictKey, "DenyRemovableDevices")],
+                    DetectOps = [RegOp.CheckDword(DiRestrictKey, "DenyRemovableDevices", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "devinstall-no-admin-override",
+                    Label = "Prevent Admins from Overriding Device Installation Restrictions",
+                    Category = "Peripherals",
+                    Description = "Removes the administrator privilege that normally allows bypassing device installation policy restrictions.",
+                    Tags = ["device-install", "admin", "restriction", "override", "security"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 4,
+                    ImpactNote = "Even local admins cannot install blocked device classes; requires GPO change to allow an exception.",
+                    ApplyOps = [RegOp.SetDword(DiRestrictKey, "AllowAdminInstall", 0)],
+                    RemoveOps = [RegOp.DeleteValue(DiRestrictKey, "AllowAdminInstall")],
+                    DetectOps = [RegOp.CheckDword(DiRestrictKey, "AllowAdminInstall", 0)],
+                },
+                new TweakDef
+                {
+                    Id = "devinstall-enable-setup-logging",
+                    Label = "Enable Verbose Device Installation Event Logging",
+                    Category = "Peripherals",
+                    Description = "Enables detailed event logging in the Windows device installation subsystem for auditing and diagnostics.",
+                    Tags = ["device-install", "logging", "audit", "events", "monitoring"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 2,
+                    SafetyRating = 5,
+                    ImpactNote = "Enables verbose installation logs in the Windows Device Setup event channel; minimal performance impact.",
+                    ApplyOps = [RegOp.SetDword(DiKey, "EnableSetupSystemRestoreCheckpoints", 1)],
+                    RemoveOps = [RegOp.DeleteValue(DiKey, "EnableSetupSystemRestoreCheckpoints")],
+                    DetectOps = [RegOp.CheckDword(DiKey, "EnableSetupSystemRestoreCheckpoints", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "devinstall-disable-driver-search-online",
+                    Label = "Disable Online Driver Search During Device Install",
+                    Category = "Peripherals",
+                    Description = "Prevents Windows from searching the Internet (Windows Update) for drivers during device installation.",
+                    Tags = ["device-install", "driver", "windows-update", "online", "security"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "Blocks unsigned or unvetted driver downloads from WU; IT manages and deploys approved drivers.",
+                    ApplyOps = [RegOp.SetDword(DiKey, "SearchOrderConfig", 1)],
+                    RemoveOps = [RegOp.DeleteValue(DiKey, "SearchOrderConfig")],
+                    DetectOps = [RegOp.CheckDword(DiKey, "SearchOrderConfig", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "devinstall-no-driver-store-from-wer",
+                    Label = "Disable WER-Triggered Driver Package Downloads",
+                    Category = "Peripherals",
+                    Description = "Prevents Windows Error Reporting from triggering automatic driver package downloads from the Internet.",
+                    Tags = ["device-install", "wer", "driver", "download", "security"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "Closes a secondary driver download path triggered by crash events; driver management stays in IT control.",
+                    ApplyOps = [RegOp.SetDword(DiKey, "AllowUserPnP", 0)],
+                    RemoveOps = [RegOp.DeleteValue(DiKey, "AllowUserPnP")],
+                    DetectOps = [RegOp.CheckDword(DiKey, "AllowUserPnP", 0)],
+                },
+                new TweakDef
+                {
+                    Id = "devinstall-block-legacy-ieee1394",
+                    Label = "Restrict IEEE 1394 (FireWire) Device Installation",
+                    Category = "Peripherals",
+                    Description =
+                        "Blocks installation of IEEE 1394 (FireWire) bus controllers, which support DMA and can bypass OS memory protection.",
+                    Tags = ["device-install", "firewire", "ieee1394", "dma", "security", "hardware"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 4,
+                    ImpactNote = "FireWire DMA attacks allow direct memory access bypassing the OS; only impacts systems with legacy ports.",
+                    ApplyOps = [RegOp.SetDword(DiRestrictKey, "DenyDeviceIDs", 1)],
+                    RemoveOps = [RegOp.DeleteValue(DiRestrictKey, "DenyDeviceIDs")],
+                    DetectOps = [RegOp.CheckDword(DiRestrictKey, "DenyDeviceIDs", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "devinstall-create-restore-point-on-install",
+                    Label = "Create System Restore Point During Driver Installation",
+                    Category = "Peripherals",
+                    Description = "Forces Windows to create a system restore point before installing any new device driver, enabling rollback.",
+                    Tags = ["device-install", "driver", "restore-point", "rollback", "safety"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "Restore point created before each driver install; enables quick recovery from bad driver installations.",
+                    ApplyOps = [RegOp.SetDword(DiKey, "DisableSystemRestore", 0)],
+                    RemoveOps = [RegOp.DeleteValue(DiKey, "DisableSystemRestore")],
+                    DetectOps = [RegOp.CheckDword(DiKey, "DisableSystemRestore", 0)],
+                },
+                new TweakDef
+                {
+                    Id = "devinstall-disable-drivers-from-cd",
+                    Label = "Disable Driver Installation from Optical Media",
+                    Category = "Peripherals",
+                    Description = "Prevents Windows from using drivers stored on removable optical media (CD/DVD) during device installation.",
+                    Tags = ["device-install", "cd", "dvd", "optical", "driver", "security"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 2,
+                    SafetyRating = 5,
+                    ImpactNote = "Blocks CD/DVD as a driver source; relevant on systems with optical drives that accept physical media.",
+                    ApplyOps = [RegOp.SetDword(DiRestrictKey, "DenyRemovableDevicesRetroactive", 1)],
+                    RemoveOps = [RegOp.DeleteValue(DiRestrictKey, "DenyRemovableDevicesRetroactive")],
+                    DetectOps = [RegOp.CheckDword(DiRestrictKey, "DenyRemovableDevicesRetroactive", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "devinstall-notify-admin-on-block",
+                    Label = "Notify Admins When Device Installation Is Blocked",
+                    Category = "Peripherals",
+                    Description = "Sends a notification to administrators when a device installation attempt is blocked by policy.",
+                    Tags = ["device-install", "notification", "admin", "audit", "monitoring"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 2,
+                    SafetyRating = 5,
+                    ImpactNote = "Generates a Windows event log entry when device install is denied; helps with security monitoring.",
+                    ApplyOps = [RegOp.SetDword(DiRestrictKey, "AlertOnDeviceInstallation", 1)],
+                    RemoveOps = [RegOp.DeleteValue(DiRestrictKey, "AlertOnDeviceInstallation")],
+                    DetectOps = [RegOp.CheckDword(DiRestrictKey, "AlertOnDeviceInstallation", 1)],
+                },
+            ];
     }
 
     // ── DeviceLockGpoPolicy ──
@@ -3139,7 +3157,8 @@ internal static class PolicyDevice
                 Id = "devlockgpo-disable-windows-hello-business",
                 Label = "Device Lock GPO: Disable Windows Hello for Business Enrollment",
                 Category = "Peripherals",
-                Description = "Prevents users and devices from enrolling in Windows Hello for Business (WHfB), the enterprise PIN-based authentication system that replaces passwords with asymmetric-key credentials tied to the device TPM. In environments where smart cards or alternative MFA tokens are used instead of WHfB, disabling enrollment prevents credential proliferation.",
+                Description =
+                    "Prevents users and devices from enrolling in Windows Hello for Business (WHfB), the enterprise PIN-based authentication system that replaces passwords with asymmetric-key credentials tied to the device TPM. In environments where smart cards or alternative MFA tokens are used instead of WHfB, disabling enrollment prevents credential proliferation.",
                 Tags = ["windows hello", "pin", "mfa", "enrollment", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -3156,7 +3175,8 @@ internal static class PolicyDevice
                 Id = "devlockgpo-disable-hello-post-logon-provisioning",
                 Label = "Device Lock GPO: Disable Windows Hello Post-Logon Provisioning Prompt",
                 Category = "Peripherals",
-                Description = "Prevents Windows from launching the Windows Hello for Business provisioning wizard immediately after the first interactive logon. By default, Windows shows the WHfB setup screen right after AD/Azure AD join and logon. This policy suppresses that prompt so administrators can provision Windows Hello on a controlled schedule.",
+                Description =
+                    "Prevents Windows from launching the Windows Hello for Business provisioning wizard immediately after the first interactive logon. By default, Windows shows the WHfB setup screen right after AD/Azure AD join and logon. This policy suppresses that prompt so administrators can provision Windows Hello on a controlled schedule.",
                 Tags = ["windows hello", "pin", "provisioning", "logon", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -3173,7 +3193,8 @@ internal static class PolicyDevice
                 Id = "devlockgpo-disable-hello-pin-recovery",
                 Label = "Device Lock GPO: Disable Windows Hello PIN Recovery Service",
                 Category = "Peripherals",
-                Description = "Disables the cloud-based Windows Hello PIN recovery service that allows users to reset their device PIN via their Microsoft account or Azure AD credentials. The PIN recovery service sends encrypted PIN reset data to Microsoft cloud servers. In high-security environments where no cloud dependencies are allowed, this service should be disabled.",
+                Description =
+                    "Disables the cloud-based Windows Hello PIN recovery service that allows users to reset their device PIN via their Microsoft account or Azure AD credentials. The PIN recovery service sends encrypted PIN reset data to Microsoft cloud servers. In high-security environments where no cloud dependencies are allowed, this service should be disabled.",
                 Tags = ["windows hello", "pin", "recovery", "cloud", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -3190,7 +3211,8 @@ internal static class PolicyDevice
                 Id = "devlockgpo-require-tpm-for-hello",
                 Label = "Device Lock GPO: Require TPM Chip for Windows Hello Credential Storage",
                 Category = "Peripherals",
-                Description = "Requires that Windows Hello for Business private keys be stored in the device's Trusted Platform Module (TPM) hardware security chip, not in software-only storage. Without a TPM requirement, WHfB keys are stored in software, making them vulnerable to extraction from disk. TPM binding ensures that private keys never leave the secure chip.",
+                Description =
+                    "Requires that Windows Hello for Business private keys be stored in the device's Trusted Platform Module (TPM) hardware security chip, not in software-only storage. Without a TPM requirement, WHfB keys are stored in software, making them vulnerable to extraction from disk. TPM binding ensures that private keys never leave the secure chip.",
                 Tags = ["windows hello", "tpm", "security", "key storage", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -3207,7 +3229,8 @@ internal static class PolicyDevice
                 Id = "devlockgpo-require-screensaver-password",
                 Label = "Device Lock GPO: Require Password When Resuming from Screen Saver",
                 Category = "Peripherals",
-                Description = "Forces Windows to require the user's password (or PIN) when resuming from a screen saver or after a period of inactivity. This is a foundational physical security control that prevents unauthorized access to unattended workstations. Without this policy, an unlocked workstation can be accessed by anyone who sits down at the keyboard.",
+                Description =
+                    "Forces Windows to require the user's password (or PIN) when resuming from a screen saver or after a period of inactivity. This is a foundational physical security control that prevents unauthorized access to unattended workstations. Without this policy, an unlocked workstation can be accessed by anyone who sits down at the keyboard.",
                 Tags = ["screen saver", "lock", "password", "unattended", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -3224,7 +3247,8 @@ internal static class PolicyDevice
                 Id = "devlockgpo-enable-screensaver",
                 Label = "Device Lock GPO: Enable Screen Saver (Enforce Lock on Idle)",
                 Category = "Peripherals",
-                Description = "Enables and enforces the screen saver policy on the workstation, ensuring that it activates after a configurable period of user inactivity. When combined with the ScreenSaverIsSecure policy, this guarantees all unattended workstations will automatically lock. Without this policy, users can disable the screen saver entirely, defeating the auto-lock mechanism.",
+                Description =
+                    "Enables and enforces the screen saver policy on the workstation, ensuring that it activates after a configurable period of user inactivity. When combined with the ScreenSaverIsSecure policy, this guarantees all unattended workstations will automatically lock. Without this policy, users can disable the screen saver entirely, defeating the auto-lock mechanism.",
                 Tags = ["screen saver", "enable", "idle", "lock", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -3241,7 +3265,8 @@ internal static class PolicyDevice
                 Id = "devlockgpo-set-screensaver-timeout-600",
                 Label = "Device Lock GPO: Set Screen Saver Timeout to 10 Minutes (600 s)",
                 Category = "Peripherals",
-                Description = "Sets the screen saver / auto-lock timeout to 600 seconds (10 minutes). Industry security frameworks (CIS, NIST SP 800-53, PCI DSS) recommend an idle timeout of 10–15 minutes for standard workstations. A 10-minute timeout balances security with productivity, locking unattended machines before a brief absence creates risk.",
+                Description =
+                    "Sets the screen saver / auto-lock timeout to 600 seconds (10 minutes). Industry security frameworks (CIS, NIST SP 800-53, PCI DSS) recommend an idle timeout of 10–15 minutes for standard workstations. A 10-minute timeout balances security with productivity, locking unattended machines before a brief absence creates risk.",
                 Tags = ["screen saver", "timeout", "idle", "lock", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -3258,7 +3283,8 @@ internal static class PolicyDevice
                 Id = "devlockgpo-disable-lock-screen-notifications",
                 Label = "Device Lock GPO: Disable Notifications on Lock Screen",
                 Category = "Peripherals",
-                Description = "Prevents Windows from displaying app notifications (toast notifications) on the lock screen. Lock-screen notifications can expose sensitive information to passersby — email previews, chat messages, calendar events — without requiring authentication. This policy disables all notification content from appearing while the screen is locked.",
+                Description =
+                    "Prevents Windows from displaying app notifications (toast notifications) on the lock screen. Lock-screen notifications can expose sensitive information to passersby — email previews, chat messages, calendar events — without requiring authentication. This policy disables all notification content from appearing while the screen is locked.",
                 Tags = ["lock screen", "notifications", "privacy", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -3275,7 +3301,8 @@ internal static class PolicyDevice
                 Id = "devlockgpo-disable-camera-on-lockscreen",
                 Label = "Device Lock GPO: Disable Camera Access on Lock Screen",
                 Category = "Peripherals",
-                Description = "Prevents cameras (webcams, built-in laptop cameras) from being activated while the workstation is locked. Some Windows Hello facial recognition implementations allow the camera to be used on the lock screen, but malicious code or physical manipulation could trigger unauthorized image capture. Disabling the camera on the lock screen closes this attack surface.",
+                Description =
+                    "Prevents cameras (webcams, built-in laptop cameras) from being activated while the workstation is locked. Some Windows Hello facial recognition implementations allow the camera to be used on the lock screen, but malicious code or physical manipulation could trigger unauthorized image capture. Disabling the camera on the lock screen closes this attack surface.",
                 Tags = ["lock screen", "camera", "privacy", "security", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -3292,7 +3319,8 @@ internal static class PolicyDevice
                 Id = "devlockgpo-disable-ease-access-on-lockscreen",
                 Label = "Device Lock GPO: Disable Ease of Access Menu on Lock Screen",
                 Category = "Peripherals",
-                Description = "Removes the Ease of Access (accessibility) button from the Windows lock screen. The Ease of Access menu on the lock screen provides access to Narrator, Magnifier, and On-Screen Keyboard before authentication, which has historically been exploited to gain SYSTEM-level access through sticky-key and narrator command injection techniques on older Windows versions.",
+                Description =
+                    "Removes the Ease of Access (accessibility) button from the Windows lock screen. The Ease of Access menu on the lock screen provides access to Narrator, Magnifier, and On-Screen Keyboard before authentication, which has historically been exploited to gain SYSTEM-level access through sticky-key and narrator command injection techniques on older Windows versions.",
                 Tags = ["lock screen", "ease of access", "security", "accessibility", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -3305,7 +3333,6 @@ internal static class PolicyDevice
                 ImpactNote = "Removes app notifications from lock screen; does not affect standard accessibility tools at login.",
             },
         ];
-
     }
 
     // ── DeviceProvisioningPolicy ──
@@ -3469,14 +3496,12 @@ internal static class PolicyDevice
                 DetectOps = [RegOp.CheckDword(CloudContent, "DisableTailoredExperiencesWithDiagnosticData", 1)],
             },
         ];
-
     }
 
     // ── DeviceRegistrationPolicy ──
     private static class _DeviceRegistrationPolicy
     {
-        private const string Key =
-            @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DeviceRegistration";
+        private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DeviceRegistration";
 
         public static IReadOnlyList<TweakDef> Data =>
             [
@@ -3492,7 +3517,8 @@ internal static class PolicyDevice
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 4,
-                    ImpactNote = "Device does not automatically register with Azure AD/Entra on domain join; manual or scripted registration is required.",
+                    ImpactNote =
+                        "Device does not automatically register with Azure AD/Entra on domain join; manual or scripted registration is required.",
                     ApplyOps = [RegOp.SetDword(Key, "DisableAutoDeviceRegistration", 1)],
                     RemoveOps = [RegOp.DeleteValue(Key, "DisableAutoDeviceRegistration")],
                     DetectOps = [RegOp.CheckDword(Key, "DisableAutoDeviceRegistration", 1)],
@@ -3594,7 +3620,8 @@ internal static class PolicyDevice
                     CorpSafe = true,
                     ImpactScore = 5,
                     SafetyRating = 4,
-                    ImpactNote = "Non-compliant devices (missing patches, disabled Defender) cannot complete registration; gate for Conditional Access.",
+                    ImpactNote =
+                        "Non-compliant devices (missing patches, disabled Defender) cannot complete registration; gate for Conditional Access.",
                     ApplyOps = [RegOp.SetDword(Key, "RequireDeviceCompliance", 1)],
                     RemoveOps = [RegOp.DeleteValue(Key, "RequireDeviceCompliance")],
                     DetectOps = [RegOp.CheckDword(Key, "RequireDeviceCompliance", 1)],
@@ -3651,7 +3678,6 @@ internal static class PolicyDevice
                     DetectOps = [RegOp.CheckDword(Key, "BlockEnrollmentStatusPageSkip", 1)],
                 },
             ];
-
     }
 
     // ── FirmwareUpdatePolicy ──
@@ -3844,7 +3870,6 @@ internal static class PolicyDevice
                     DetectOps = [RegOp.CheckDword(FwUpdateKey, "BlockLegacyBiosUpdate", 1)],
                 },
             ];
-
     }
 
     // ── HardwareDevicePolicy ──
@@ -4025,7 +4050,6 @@ internal static class PolicyDevice
                 DetectOps = [RegOp.CheckDword(Key, "DisableOnlineDriverSearch", 1)],
             },
         ];
-
     }
 
     // ── KernelDmaProtectionPolicy ──
@@ -4207,26 +4231,20 @@ internal static class PolicyDevice
                     DetectOps = [RegOp.CheckDword(Key2, "RemappingTableRebuildTimeoutSec", 5)],
                 },
             ];
-
     }
 
     // ── MemoryDiagnostics ──
     private static class _MemoryDiagnostics
     {
-        private const string CrashControl =
-            @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl";
+        private const string CrashControl = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl";
 
-        private const string Wer =
-            @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Windows Error Reporting";
+        private const string Wer = @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Windows Error Reporting";
 
-        private const string WerQueue =
-            @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Windows Error Reporting\Queue";
+        private const string WerQueue = @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Windows Error Reporting\Queue";
 
-        private const string WerConsentPolicy =
-            @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\PCHealth\ErrorReporting";
+        private const string WerConsentPolicy = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\PCHealth\ErrorReporting";
 
-        private const string WerPolicy =
-            @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Error Reporting";
+        private const string WerPolicy = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Error Reporting";
 
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
@@ -4411,7 +4429,6 @@ internal static class PolicyDevice
                 DetectOps = [RegOp.CheckDword(CrashControl, "LogEvent", 1)],
             },
         ];
-
     }
 
     // ── PageFilePolicy ──
@@ -4592,7 +4609,6 @@ internal static class PolicyDevice
                 DetectOps = [RegOp.CheckDword(Key, "DisableMemoryDump", 1)],
             },
         ];
-
     }
 
     // ── PortableDevicePolicy ──
@@ -4773,7 +4789,6 @@ internal static class PolicyDevice
                     DetectOps = [RegOp.CheckDword(Key, "BlockThunderboltStorage", 1)],
                 },
             ];
-
     }
 
     // ── PortableDevicesPolicy ──
@@ -4954,7 +4969,6 @@ internal static class PolicyDevice
                 DetectOps = [RegOp.CheckDword(Key, "DisablePortableDeviceTelemetry", 1)],
             },
         ];
-
     }
 
     // ── ProcessorPolicy ──
@@ -5135,7 +5149,6 @@ internal static class PolicyDevice
                 DetectOps = [RegOp.CheckDword(Key, "EnableSTIBP", 1)],
             },
         ];
-
     }
 
     // ── SuperFetchSysmainPolicy ──
@@ -5150,7 +5163,10 @@ internal static class PolicyDevice
                 Id = "sfetch-disable-superfetch",
                 Label = "Disable SuperFetch (SysMain) Service",
                 Category = "Peripherals",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 3, SafetyRating = 4,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 3,
+                SafetyRating = 4,
                 Description =
                     "Sets EnableSuperfetch=0 in the SuperFetch policy key. Disables the SysMain "
                     + "service's predictive pre-loading of frequently used application binaries "
@@ -5170,7 +5186,10 @@ internal static class PolicyDevice
                 Id = "sfetch-disable-prefetch",
                 Label = "Disable Application Prefetch",
                 Category = "Peripherals",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 3, SafetyRating = 4,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 3,
+                SafetyRating = 4,
                 Description =
                     "Sets EnablePrefetcher=0 in the SuperFetch policy key. Stops Windows from "
                     + "recording application launch traces in %SystemRoot%\\Prefetch and using "
@@ -5189,7 +5208,10 @@ internal static class PolicyDevice
                 Id = "sfetch-disable-readyboost",
                 Label = "Disable ReadyBoost",
                 Category = "Peripherals",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 2, SafetyRating = 5,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 2,
+                SafetyRating = 5,
                 Description =
                     "Sets EnableReadyboost=0 in the SuperFetch policy key. Prevents SysMain "
                     + "from using removable flash storage as a ReadyBoost cache. ReadyBoost "
@@ -5208,7 +5230,10 @@ internal static class PolicyDevice
                 Id = "sfetch-disable-readydrive",
                 Label = "Disable ReadyDrive Hybrid HDD Cache",
                 Category = "Peripherals",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 2, SafetyRating = 5,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 2,
+                SafetyRating = 5,
                 Description =
                     "Sets EnableReadydrive=0 in the SuperFetch policy key. Disables ReadyDrive, "
                     + "the feature that uses the NAND cache on hybrid hard drives to speed up "
@@ -5227,7 +5252,10 @@ internal static class PolicyDevice
                 Id = "sfetch-disable-boot-trace",
                 Label = "Disable Boot Trace for Prefetch",
                 Category = "Peripherals",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 2, SafetyRating = 5,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 2,
+                SafetyRating = 5,
                 Description =
                     "Sets EnableBootTrace=0 in the SuperFetch policy key. Stops SysMain from "
                     + "collecting an I/O trace during the boot sequence to optimise disk access "
@@ -5246,7 +5274,10 @@ internal static class PolicyDevice
                 Id = "sfetch-disable-app-launch-prefetch",
                 Label = "Disable App-Launch Prefetch Optimisation",
                 Category = "Peripherals",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 2, SafetyRating = 4,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 2,
+                SafetyRating = 4,
                 Description =
                     "Sets SuperFetchMaxSecsBeforeSuspend=0 in the SuperFetch policy key. "
                     + "Prevents SysMain from pre-fetching pages for applications that were "
@@ -5265,7 +5296,10 @@ internal static class PolicyDevice
                 Id = "sfetch-disable-logon-prefetch",
                 Label = "Disable Logon Prefetch Scenario",
                 Category = "Peripherals",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 2, SafetyRating = 5,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 2,
+                SafetyRating = 5,
                 Description =
                     "Sets SuperFetchScenarioPolicyHibernate=0 in the SuperFetch policy key. "
                     + "Disables the post-logon SysMain scenario that pre-loads anticipated "
@@ -5284,7 +5318,10 @@ internal static class PolicyDevice
                 Id = "sfetch-disable-memory-profiling",
                 Label = "Disable SysMain Memory Profiling",
                 Category = "Peripherals",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 2, SafetyRating = 5,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 2,
+                SafetyRating = 5,
                 Description =
                     "Sets SuperFetchMaxSampledPageAge=0 in the SuperFetch policy key. Prevents "
                     + "SysMain from maintaining a per-page age histogram that tracks how recently "
@@ -5303,7 +5340,10 @@ internal static class PolicyDevice
                 Id = "sfetch-disable-heap-prefetch",
                 Label = "Disable Application Heap Prefetch",
                 Category = "Peripherals",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 2, SafetyRating = 5,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 2,
+                SafetyRating = 5,
                 Description =
                     "Sets SuperFetchDisableHeapDetect=1 in the SuperFetch policy key. Stops "
                     + "SysMain from recording heap-allocation patterns of active processes and "
@@ -5322,7 +5362,10 @@ internal static class PolicyDevice
                 Id = "sfetch-disable-telemetry",
                 Label = "Disable SuperFetch Telemetry",
                 Category = "Peripherals",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 2, SafetyRating = 5,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 2,
+                SafetyRating = 5,
                 Description =
                     "Sets SuperFetchDisableTelemetry=1 in the SuperFetch policy key. Prevents "
                     + "SysMain from emitting ETW events and submitting memory-usage reports to "
@@ -5337,7 +5380,6 @@ internal static class PolicyDevice
                 DetectOps = [RegOp.CheckDword(Key, "SuperFetchDisableTelemetry", 1)],
             },
         ];
-
     }
 
     // ── UsbStoragePolicy ──
@@ -5527,7 +5569,6 @@ internal static class PolicyDevice
                 DetectOps = [RegOp.CheckDword(WpdClass, "Deny_Read", 1)],
             },
         ];
-
     }
 
     // ── VirtualDiskServicePolicy ──
@@ -5708,7 +5749,5 @@ internal static class PolicyDevice
                     DetectOps = [RegOp.CheckDword(Key, "DisableAutoProvisionDisk", 1)],
                 },
             ];
-
     }
-
 }

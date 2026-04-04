@@ -1106,12 +1106,10 @@ internal static class Audio
 
 // === Merged from: Multimedia.cs ===
 
-
 internal static class Multimedia
 {
     internal static IReadOnlyList<TweakDef> Tweaks { get; } =
     [
-
         new TweakDef
         {
             Id = "media-disable-autorun",
@@ -1157,8 +1155,6 @@ internal static class Multimedia
             RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Control Panel\Desktop", "JPEGImportQuality")],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Control Panel\Desktop", "JPEGImportQuality", 100)],
         },
-
-
         new TweakDef
         {
             Id = "media-disable-media-streaming",
@@ -1245,7 +1241,6 @@ internal static class Multimedia
                 RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "ExtendedUIHoverTime", 0),
             ],
         },
-
         new TweakDef
         {
             Id = "media-set-wmf-no-telemetry",

@@ -1276,14 +1276,28 @@ public sealed class B2ContractTests_Status(DispatchTestFixture fixture) : Dispat
     [Fact]
     public void Dispatch_Status_Json_IsValidJson()
     {
-        Program.Dispatch(new CliArgs { Mode = "status", Tweak = DispatchTestFixture.KnownId, OutputFormat = "json" });
+        Program.Dispatch(
+            new CliArgs
+            {
+                Mode = "status",
+                Tweak = DispatchTestFixture.KnownId,
+                OutputFormat = "json",
+            }
+        );
         Assert.True(IsValidJson(Output), $"Expected valid JSON, got: {Output}");
     }
 
     [Fact]
     public void Dispatch_Status_Json_ContainsIdField()
     {
-        Program.Dispatch(new CliArgs { Mode = "status", Tweak = DispatchTestFixture.KnownId, OutputFormat = "json" });
+        Program.Dispatch(
+            new CliArgs
+            {
+                Mode = "status",
+                Tweak = DispatchTestFixture.KnownId,
+                OutputFormat = "json",
+            }
+        );
         using var doc = JsonDocument.Parse(Output.Trim());
         Assert.True(doc.RootElement.TryGetProperty("Id", out _), "JSON missing 'Id' field");
     }
@@ -1291,7 +1305,14 @@ public sealed class B2ContractTests_Status(DispatchTestFixture fixture) : Dispat
     [Fact]
     public void Dispatch_Status_Json_ContainsStatusField()
     {
-        Program.Dispatch(new CliArgs { Mode = "status", Tweak = DispatchTestFixture.KnownId, OutputFormat = "json" });
+        Program.Dispatch(
+            new CliArgs
+            {
+                Mode = "status",
+                Tweak = DispatchTestFixture.KnownId,
+                OutputFormat = "json",
+            }
+        );
         using var doc = JsonDocument.Parse(Output.Trim());
         Assert.True(doc.RootElement.TryGetProperty("Status", out _), "JSON missing 'Status' field");
     }
@@ -1299,7 +1320,14 @@ public sealed class B2ContractTests_Status(DispatchTestFixture fixture) : Dispat
     [Fact]
     public void Dispatch_Status_Json_IdMatchesRequested()
     {
-        Program.Dispatch(new CliArgs { Mode = "status", Tweak = DispatchTestFixture.KnownId, OutputFormat = "json" });
+        Program.Dispatch(
+            new CliArgs
+            {
+                Mode = "status",
+                Tweak = DispatchTestFixture.KnownId,
+                OutputFormat = "json",
+            }
+        );
         using var doc = JsonDocument.Parse(Output.Trim());
         Assert.Equal(DispatchTestFixture.KnownId, doc.RootElement.GetProperty("Id").GetString());
     }
@@ -1320,8 +1348,15 @@ public sealed class B2ContractTests_Status(DispatchTestFixture fixture) : Dispat
 
     private static bool IsValidJson(string s)
     {
-        try { JsonDocument.Parse(s.Trim()); return true; }
-        catch { return false; }
+        try
+        {
+            JsonDocument.Parse(s.Trim());
+            return true;
+        }
+        catch
+        {
+            return false;
+        }
     }
 }
 
@@ -1336,7 +1371,16 @@ public sealed class B2ContractTests_Apply(DispatchTestFixture fixture) : Dispatc
     public void Dispatch_Apply_Json_IsValidJson()
     {
         // Force=true bypasses CorporateGuard so the test is environment-independent
-        int exit = Program.Dispatch(new CliArgs { Mode = "apply", Tweak = DispatchTestFixture.KnownId, AssumeYes = true, Force = true, OutputFormat = "json" });
+        int exit = Program.Dispatch(
+            new CliArgs
+            {
+                Mode = "apply",
+                Tweak = DispatchTestFixture.KnownId,
+                AssumeYes = true,
+                Force = true,
+                OutputFormat = "json",
+            }
+        );
         Assert.Equal(0, exit);
         Assert.True(IsValidJson(Output), $"Expected valid JSON, got: {Output}");
     }
@@ -1344,7 +1388,16 @@ public sealed class B2ContractTests_Apply(DispatchTestFixture fixture) : Dispatc
     [Fact]
     public void Dispatch_Apply_Json_ContainsIdField()
     {
-        Program.Dispatch(new CliArgs { Mode = "apply", Tweak = DispatchTestFixture.KnownId, AssumeYes = true, Force = true, OutputFormat = "json" });
+        Program.Dispatch(
+            new CliArgs
+            {
+                Mode = "apply",
+                Tweak = DispatchTestFixture.KnownId,
+                AssumeYes = true,
+                Force = true,
+                OutputFormat = "json",
+            }
+        );
         using var doc = JsonDocument.Parse(Output.Trim());
         Assert.True(doc.RootElement.TryGetProperty("Id", out _), "JSON missing 'Id' field");
     }
@@ -1352,7 +1405,16 @@ public sealed class B2ContractTests_Apply(DispatchTestFixture fixture) : Dispatc
     [Fact]
     public void Dispatch_Apply_Json_IdMatchesRequested()
     {
-        Program.Dispatch(new CliArgs { Mode = "apply", Tweak = DispatchTestFixture.KnownId, AssumeYes = true, Force = true, OutputFormat = "json" });
+        Program.Dispatch(
+            new CliArgs
+            {
+                Mode = "apply",
+                Tweak = DispatchTestFixture.KnownId,
+                AssumeYes = true,
+                Force = true,
+                OutputFormat = "json",
+            }
+        );
         using var doc = JsonDocument.Parse(Output.Trim());
         Assert.Equal(DispatchTestFixture.KnownId, doc.RootElement.GetProperty("Id").GetString());
     }
@@ -1360,7 +1422,16 @@ public sealed class B2ContractTests_Apply(DispatchTestFixture fixture) : Dispatc
     [Fact]
     public void Dispatch_Apply_Json_ModeIsApply()
     {
-        Program.Dispatch(new CliArgs { Mode = "apply", Tweak = DispatchTestFixture.KnownId, AssumeYes = true, Force = true, OutputFormat = "json" });
+        Program.Dispatch(
+            new CliArgs
+            {
+                Mode = "apply",
+                Tweak = DispatchTestFixture.KnownId,
+                AssumeYes = true,
+                Force = true,
+                OutputFormat = "json",
+            }
+        );
         using var doc = JsonDocument.Parse(Output.Trim());
         Assert.Equal("apply", doc.RootElement.GetProperty("Mode").GetString());
     }
@@ -1369,14 +1440,29 @@ public sealed class B2ContractTests_Apply(DispatchTestFixture fixture) : Dispatc
     public void Dispatch_Apply_UnknownTweak_Returns2()
     {
         // Force=true bypasses CorporateGuard so tweak-not-found (exit 2) is tested
-        int exit = Program.Dispatch(new CliArgs { Mode = "apply", Tweak = "zzz-no-such-tweak-zzz", AssumeYes = true, Force = true });
+        int exit = Program.Dispatch(
+            new CliArgs
+            {
+                Mode = "apply",
+                Tweak = "zzz-no-such-tweak-zzz",
+                AssumeYes = true,
+                Force = true,
+            }
+        );
         Assert.Equal(2, exit);
     }
 
     private static bool IsValidJson(string s)
     {
-        try { JsonDocument.Parse(s.Trim()); return true; }
-        catch { return false; }
+        try
+        {
+            JsonDocument.Parse(s.Trim());
+            return true;
+        }
+        catch
+        {
+            return false;
+        }
     }
 }
 
@@ -1434,8 +1520,15 @@ public sealed class B2ContractTests_ListProfiles(DispatchTestFixture fixture) : 
 
     private static bool IsValidJson(string s)
     {
-        try { JsonDocument.Parse(s.Trim()); return true; }
-        catch { return false; }
+        try
+        {
+            JsonDocument.Parse(s.Trim());
+            return true;
+        }
+        catch
+        {
+            return false;
+        }
     }
 }
 
@@ -1482,8 +1575,15 @@ public sealed class B2ContractTests_Check(DispatchTestFixture fixture) : Dispatc
 
     private static bool IsValidJson(string s)
     {
-        try { JsonDocument.Parse(s.Trim()); return true; }
-        catch { return false; }
+        try
+        {
+            JsonDocument.Parse(s.Trim());
+            return true;
+        }
+        catch
+        {
+            return false;
+        }
     }
 }
 
@@ -1528,7 +1628,15 @@ public sealed class B2ContractTests_ExitCodes(DispatchTestFixture fixture) : Dis
     public void Dispatch_UnknownTweak_Apply_Returns2()
     {
         // Force=true bypasses CorporateGuard so tweak-not-found (exit 2) is tested
-        int exit = Program.Dispatch(new CliArgs { Mode = "apply", Tweak = "zzz-nonexistent-zzz", AssumeYes = true, Force = true });
+        int exit = Program.Dispatch(
+            new CliArgs
+            {
+                Mode = "apply",
+                Tweak = "zzz-nonexistent-zzz",
+                AssumeYes = true,
+                Force = true,
+            }
+        );
         Assert.Equal(2, exit);
     }
 
@@ -1577,18 +1685,21 @@ public sealed class RunBatchTests(DispatchTestFixture fixture) : DispatchTestBas
         try
         {
             File.WriteAllText(tmp, DispatchTestFixture.KnownId);
-            int exit = Program.Dispatch(new CliArgs
-            {
-                BatchMode = "apply",
-                BatchFile = tmp,
-                AssumeYes = true,
-                Force = true,
-            });
+            int exit = Program.Dispatch(
+                new CliArgs
+                {
+                    BatchMode = "apply",
+                    BatchFile = tmp,
+                    AssumeYes = true,
+                    Force = true,
+                }
+            );
             Assert.Equal(0, exit);
         }
         finally
         {
-            if (File.Exists(tmp)) File.Delete(tmp);
+            if (File.Exists(tmp))
+                File.Delete(tmp);
         }
     }
 
@@ -1599,18 +1710,21 @@ public sealed class RunBatchTests(DispatchTestFixture fixture) : DispatchTestBas
         try
         {
             File.WriteAllText(tmp, DispatchTestFixture.KnownId);
-            Program.Dispatch(new CliArgs
-            {
-                BatchMode = "apply",
-                BatchFile = tmp,
-                AssumeYes = true,
-                Force = true,
-            });
+            Program.Dispatch(
+                new CliArgs
+                {
+                    BatchMode = "apply",
+                    BatchFile = tmp,
+                    AssumeYes = true,
+                    Force = true,
+                }
+            );
             Assert.Contains(DispatchTestFixture.KnownId, Output, StringComparison.OrdinalIgnoreCase);
         }
         finally
         {
-            if (File.Exists(tmp)) File.Delete(tmp);
+            if (File.Exists(tmp))
+                File.Delete(tmp);
         }
     }
 
@@ -1620,26 +1734,24 @@ public sealed class RunBatchTests(DispatchTestFixture fixture) : DispatchTestBas
         string tmp = Path.Combine(Path.GetTempPath(), $"batch-{Guid.NewGuid():N}.txt");
         try
         {
-            File.WriteAllLines(tmp, [
-                DispatchTestFixture.KnownId,
-                "# this is a comment",
-                "",
-                DispatchTestFixture.KnownId2,
-            ]);
-            int exit = Program.Dispatch(new CliArgs
-            {
-                BatchMode = "apply",
-                BatchFile = tmp,
-                AssumeYes = true,
-                Force = true,
-            });
+            File.WriteAllLines(tmp, [DispatchTestFixture.KnownId, "# this is a comment", "", DispatchTestFixture.KnownId2]);
+            int exit = Program.Dispatch(
+                new CliArgs
+                {
+                    BatchMode = "apply",
+                    BatchFile = tmp,
+                    AssumeYes = true,
+                    Force = true,
+                }
+            );
             Assert.Equal(0, exit);
             Assert.Contains(DispatchTestFixture.KnownId, Output, StringComparison.OrdinalIgnoreCase);
             Assert.Contains(DispatchTestFixture.KnownId2, Output, StringComparison.OrdinalIgnoreCase);
         }
         finally
         {
-            if (File.Exists(tmp)) File.Delete(tmp);
+            if (File.Exists(tmp))
+                File.Delete(tmp);
         }
     }
 
@@ -1651,19 +1763,22 @@ public sealed class RunBatchTests(DispatchTestFixture fixture) : DispatchTestBas
         string tmp = Path.Combine(Path.GetTempPath(), $"batch-{Guid.NewGuid():N}.json");
         try
         {
-            File.WriteAllText(tmp, $"[\"{ DispatchTestFixture.KnownId}\",\"{DispatchTestFixture.KnownId2}\"]");
-            int exit = Program.Dispatch(new CliArgs
-            {
-                BatchMode = "apply",
-                BatchFile = tmp,
-                AssumeYes = true,
-                Force = true,
-            });
+            File.WriteAllText(tmp, $"[\"{DispatchTestFixture.KnownId}\",\"{DispatchTestFixture.KnownId2}\"]");
+            int exit = Program.Dispatch(
+                new CliArgs
+                {
+                    BatchMode = "apply",
+                    BatchFile = tmp,
+                    AssumeYes = true,
+                    Force = true,
+                }
+            );
             Assert.Equal(0, exit);
         }
         finally
         {
-            if (File.Exists(tmp)) File.Delete(tmp);
+            if (File.Exists(tmp))
+                File.Delete(tmp);
         }
     }
 
@@ -1678,21 +1793,25 @@ public sealed class RunBatchTests(DispatchTestFixture fixture) : DispatchTestBas
         {
             // Create a real snapshot file
             Program.Dispatch(new CliArgs { Snapshot = snap });
-            int exit = Program.Dispatch(new CliArgs
-            {
-                BatchMode = "apply",
-                BatchFile = snap,
-                AssumeYes = true,
-                Force = true,
-            });
+            int exit = Program.Dispatch(
+                new CliArgs
+                {
+                    BatchMode = "apply",
+                    BatchFile = snap,
+                    AssumeYes = true,
+                    Force = true,
+                }
+            );
             // Snapshot-based batch succeeds (0) or returns PartialFail (1) if no
             // tweaks were applied — both are valid outcomes for this structural test.
             Assert.True(exit is 0 or 1, $"Unexpected exit code: {exit}");
         }
         finally
         {
-            if (File.Exists(snap)) File.Delete(snap);
-            if (File.Exists(batch)) File.Delete(batch);
+            if (File.Exists(snap))
+                File.Delete(snap);
+            if (File.Exists(batch))
+                File.Delete(batch);
         }
     }
 
@@ -1705,18 +1824,21 @@ public sealed class RunBatchTests(DispatchTestFixture fixture) : DispatchTestBas
         try
         {
             File.WriteAllText(tmp, DispatchTestFixture.KnownId);
-            int exit = Program.Dispatch(new CliArgs
-            {
-                BatchMode = "remove",
-                BatchFile = tmp,
-                AssumeYes = true,
-                Force = true,
-            });
+            int exit = Program.Dispatch(
+                new CliArgs
+                {
+                    BatchMode = "remove",
+                    BatchFile = tmp,
+                    AssumeYes = true,
+                    Force = true,
+                }
+            );
             Assert.Equal(0, exit);
         }
         finally
         {
-            if (File.Exists(tmp)) File.Delete(tmp);
+            if (File.Exists(tmp))
+                File.Delete(tmp);
         }
     }
 
@@ -1726,13 +1848,15 @@ public sealed class RunBatchTests(DispatchTestFixture fixture) : DispatchTestBas
     public void Dispatch_BatchApply_MissingFile_ReturnsUserError()
     {
         string nonExistent = Path.Combine(Path.GetTempPath(), $"no-such-file-{Guid.NewGuid():N}.txt");
-        int exit = Program.Dispatch(new CliArgs
-        {
-            BatchMode = "apply",
-            BatchFile = nonExistent,
-            AssumeYes = true,
-            Force = true,
-        });
+        int exit = Program.Dispatch(
+            new CliArgs
+            {
+                BatchMode = "apply",
+                BatchFile = nonExistent,
+                AssumeYes = true,
+                Force = true,
+            }
+        );
         Assert.Equal(ExitCodes.UserError, exit);
     }
 
@@ -1743,18 +1867,21 @@ public sealed class RunBatchTests(DispatchTestFixture fixture) : DispatchTestBas
         try
         {
             File.WriteAllText(tmp, "");
-            int exit = Program.Dispatch(new CliArgs
-            {
-                BatchMode = "apply",
-                BatchFile = tmp,
-                AssumeYes = true,
-                Force = true,
-            });
+            int exit = Program.Dispatch(
+                new CliArgs
+                {
+                    BatchMode = "apply",
+                    BatchFile = tmp,
+                    AssumeYes = true,
+                    Force = true,
+                }
+            );
             Assert.Equal(ExitCodes.UserError, exit);
         }
         finally
         {
-            if (File.Exists(tmp)) File.Delete(tmp);
+            if (File.Exists(tmp))
+                File.Delete(tmp);
         }
     }
 
@@ -1765,18 +1892,21 @@ public sealed class RunBatchTests(DispatchTestFixture fixture) : DispatchTestBas
         try
         {
             File.WriteAllLines(tmp, ["zzz-no-such-tweak-1", "zzz-no-such-tweak-2"]);
-            int exit = Program.Dispatch(new CliArgs
-            {
-                BatchMode = "apply",
-                BatchFile = tmp,
-                AssumeYes = true,
-                Force = true,
-            });
+            int exit = Program.Dispatch(
+                new CliArgs
+                {
+                    BatchMode = "apply",
+                    BatchFile = tmp,
+                    AssumeYes = true,
+                    Force = true,
+                }
+            );
             Assert.Equal(ExitCodes.UserError, exit);
         }
         finally
         {
-            if (File.Exists(tmp)) File.Delete(tmp);
+            if (File.Exists(tmp))
+                File.Delete(tmp);
         }
     }
 
@@ -1787,18 +1917,21 @@ public sealed class RunBatchTests(DispatchTestFixture fixture) : DispatchTestBas
         try
         {
             File.WriteAllLines(tmp, [DispatchTestFixture.KnownId, "zzz-unknown-tweak-zzz"]);
-            Program.Dispatch(new CliArgs
-            {
-                BatchMode = "apply",
-                BatchFile = tmp,
-                AssumeYes = true,
-                Force = true,
-            });
+            Program.Dispatch(
+                new CliArgs
+                {
+                    BatchMode = "apply",
+                    BatchFile = tmp,
+                    AssumeYes = true,
+                    Force = true,
+                }
+            );
             Assert.Contains("unknown", Output, StringComparison.OrdinalIgnoreCase);
         }
         finally
         {
-            if (File.Exists(tmp)) File.Delete(tmp);
+            if (File.Exists(tmp))
+                File.Delete(tmp);
         }
     }
 }

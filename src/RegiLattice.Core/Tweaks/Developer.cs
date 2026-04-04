@@ -245,7 +245,6 @@ internal static class Developer
                 ),
             ],
         },
-
         new TweakDef
         {
             Id = "dev-enable-wsl2",
@@ -706,7 +705,6 @@ internal static class Developer
             RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "ShowSuperHidden", 0)],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "ShowSuperHidden", 1)],
         },
-
         new TweakDef
         {
             Id = "dev-disable-hide-file-ext-zone-info",
@@ -775,7 +773,6 @@ internal static class DevDrive
                 ),
             ],
         },
-
         new TweakDef
         {
             Id = "dev-disable-efs-warning",
@@ -847,9 +844,6 @@ internal static class DevDrive
                 RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsAllowExtendedCharacterIn8dot3Name", 0),
             ],
         },
-
-
-
         new TweakDef
         {
             Id = "dev-enable-developer-mode",
@@ -901,7 +895,6 @@ internal static class DevDrive
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender", "TrustDevDrive")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender", "TrustDevDrive", 1)],
         },
-
         new TweakDef
         {
             Id = "dev-disable-last-access",
@@ -974,7 +967,6 @@ internal static class DevDrive
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsMemoryUsage")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsMemoryUsage", 2)],
         },
-
         new TweakDef
         {
             Id = "dev-devdrive-filter-native",

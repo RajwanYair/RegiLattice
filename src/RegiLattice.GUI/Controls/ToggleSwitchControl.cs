@@ -13,20 +13,20 @@ public sealed class ToggleSwitchControl : Control
     private const int TrackH = 22;
     private const int TrackW = 44;
     private const int KnobPad = 3;
-    private const int AnimSteps = 8;   // frames for slide animation
+    private const int AnimSteps = 8; // frames for slide animation
     private const int AnimIntervalMs = 16; // ~60fps
 
     // ── State ──────────────────────────────────────────────────────────────
     private bool _checked;
     private bool _hovered;
     private bool _animating;
-    private float _knobPos;   // 0.0=off … 1.0=on
+    private float _knobPos; // 0.0=off … 1.0=on
     private float _knobTarget;
     private readonly System.Windows.Forms.Timer _animTimer;
 
     // ── Theme colours (updated via ApplyTheme) ─────────────────────────────
     private Color _trackOn = Color.FromArgb(137, 180, 250); // Catppuccin Blue
-    private Color _trackOff = Color.FromArgb(88, 91, 112);   // Catppuccin Surface2
+    private Color _trackOff = Color.FromArgb(88, 91, 112); // Catppuccin Surface2
     private Color _knob = Color.White;
 
     // ── Events ─────────────────────────────────────────────────────────────
@@ -39,7 +39,8 @@ public sealed class ToggleSwitchControl : Control
         get => _checked;
         set
         {
-            if (_checked == value) return;
+            if (_checked == value)
+                return;
             _checked = value;
             _knobTarget = _checked ? 1f : 0f;
             StartAnimation();
@@ -50,7 +51,8 @@ public sealed class ToggleSwitchControl : Control
     /// <summary>Toggle without raising CheckedChanged (for programmatic sync).</summary>
     public void SetCheckedSilent(bool value)
     {
-        if (_checked == value) return;
+        if (_checked == value)
+            return;
         _checked = value;
         _knobPos = _knobTarget = _checked ? 1f : 0f;
         Invalidate();
@@ -60,11 +62,12 @@ public sealed class ToggleSwitchControl : Control
     public ToggleSwitchControl()
     {
         SetStyle(
-            ControlStyles.OptimizedDoubleBuffer |
-            ControlStyles.AllPaintingInWmPaint |
-            ControlStyles.UserPaint |
-            ControlStyles.SupportsTransparentBackColor,
-            true);
+            ControlStyles.OptimizedDoubleBuffer
+                | ControlStyles.AllPaintingInWmPaint
+                | ControlStyles.UserPaint
+                | ControlStyles.SupportsTransparentBackColor,
+            true
+        );
 
         Size = new Size(TrackW + 2, TrackH + 2);
         Cursor = Cursors.Hand;
@@ -163,8 +166,7 @@ public sealed class ToggleSwitchControl : Control
         if (Focused)
         {
             using Pen focusPen = new Pen(Color.FromArgb(120, _trackOn), (int)(2 * s));
-            DrawRoundedRectOutline(g, Rectangle.Inflate(track, (int)(2 * s), (int)(2 * s)),
-                track.Height / 2 + (int)(2 * s), focusPen);
+            DrawRoundedRectOutline(g, Rectangle.Inflate(track, (int)(2 * s), (int)(2 * s)), track.Height / 2 + (int)(2 * s), focusPen);
         }
 
         // Draw knob
@@ -205,11 +207,7 @@ public sealed class ToggleSwitchControl : Control
     private static Color InterpolateColour(Color a, Color b, float t)
     {
         t = Math.Clamp(t, 0f, 1f);
-        return Color.FromArgb(
-            (int)(a.A + (b.A - a.A) * t),
-            (int)(a.R + (b.R - a.R) * t),
-            (int)(a.G + (b.G - a.G) * t),
-            (int)(a.B + (b.B - a.B) * t));
+        return Color.FromArgb((int)(a.A + (b.A - a.A) * t), (int)(a.R + (b.R - a.R) * t), (int)(a.G + (b.G - a.G) * t), (int)(a.B + (b.B - a.B) * t));
     }
 
     // ── Input ──────────────────────────────────────────────────────────────
@@ -230,20 +228,39 @@ public sealed class ToggleSwitchControl : Control
         }
     }
 
-    protected override void OnMouseEnter(EventArgs e) { base.OnMouseEnter(e); _hovered = true; Invalidate(); }
-    protected override void OnMouseLeave(EventArgs e) { base.OnMouseLeave(e); _hovered = false; Invalidate(); }
-    protected override void OnGotFocus(EventArgs e) { base.OnGotFocus(e); Invalidate(); }
-    protected override void OnLostFocus(EventArgs e) { base.OnLostFocus(e); Invalidate(); }
+    protected override void OnMouseEnter(EventArgs e)
+    {
+        base.OnMouseEnter(e);
+        _hovered = true;
+        Invalidate();
+    }
+
+    protected override void OnMouseLeave(EventArgs e)
+    {
+        base.OnMouseLeave(e);
+        _hovered = false;
+        Invalidate();
+    }
+
+    protected override void OnGotFocus(EventArgs e)
+    {
+        base.OnGotFocus(e);
+        Invalidate();
+    }
+
+    protected override void OnLostFocus(EventArgs e)
+    {
+        base.OnLostFocus(e);
+        Invalidate();
+    }
 
     // ── Preferred size ─────────────────────────────────────────────────────
     protected override Size DefaultSize => new Size(TrackW + 4, TrackH + 4);
 
-    public override Size GetPreferredSize(Size proposedSize) =>
-        new Size((int)((TrackW + 4) * DpiScale), (int)((TrackH + 4) * DpiScale));
+    public override Size GetPreferredSize(Size proposedSize) => new Size((int)((TrackW + 4) * DpiScale), (int)((TrackH + 4) * DpiScale));
 
     // ── Accessibility ──────────────────────────────────────────────────────
-    protected override AccessibleObject CreateAccessibilityInstance() =>
-        new ToggleAccessible(this);
+    protected override AccessibleObject CreateAccessibilityInstance() => new ToggleAccessible(this);
 
     protected override void Dispose(bool disposing)
     {
@@ -257,16 +274,14 @@ public sealed class ToggleSwitchControl : Control
     {
         private readonly ToggleSwitchControl _owner;
 
-        public ToggleAccessible(ToggleSwitchControl owner) : base(owner)
+        public ToggleAccessible(ToggleSwitchControl owner)
+            : base(owner)
         {
             _owner = owner;
         }
 
-        public override string Description =>
-            _owner.Checked ? "On" : "Off";
+        public override string Description => _owner.Checked ? "On" : "Off";
 
-        public override AccessibleStates State =>
-            base.State |
-            (_owner.Checked ? AccessibleStates.Checked : AccessibleStates.None);
+        public override AccessibleStates State => base.State | (_owner.Checked ? AccessibleStates.Checked : AccessibleStates.None);
     }
 }

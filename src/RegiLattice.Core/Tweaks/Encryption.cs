@@ -1876,7 +1876,6 @@ internal static class TrustedLaunchPolicy
         ];
 }
 
-
 // ── merged from PolicyEncryption.cs ──
 // RegiLattice.Core — Tweaks/PolicyEncryption.cs
 // BitLocker, EFS, FIPS, HVCI, memory integrity, Secure Boot, TLS/SCHANNEL, VBS, and data encryption policies
@@ -2002,7 +2001,11 @@ internal static class PolicyEncryption
                         "BitLocker OS drive encryption requires successful recovery key backup to AD before proceeding. If AD connectivity is unavailable during BitLocker setup (e.g., freshly imaged device not yet domain-joined), BitLocker will not complete until AD backup succeeds. For Azure AD environments, use Azure AD recovery key backup policy instead.",
                     ApplyOps = [RegOp.SetDword(FveKey, "OSRequireActiveDirectoryBackup", 1), RegOp.SetDword(FveKey, "OSActiveDirectoryBackup", 1)],
                     RemoveOps = [RegOp.DeleteValue(FveKey, "OSRequireActiveDirectoryBackup"), RegOp.DeleteValue(FveKey, "OSActiveDirectoryBackup")],
-                    DetectOps = [RegOp.CheckDword(FveKey, "OSRequireActiveDirectoryBackup", 1), RegOp.CheckDword(FveKey, "OSActiveDirectoryBackup", 1)],
+                    DetectOps =
+                    [
+                        RegOp.CheckDword(FveKey, "OSRequireActiveDirectoryBackup", 1),
+                        RegOp.CheckDword(FveKey, "OSActiveDirectoryBackup", 1),
+                    ],
                 },
                 new TweakDef
                 {
@@ -2074,7 +2077,11 @@ internal static class PolicyEncryption
                         "Fixed data drive BitLocker recovery keys backed up to AD. Requires domain connectivity during BitLocker setup on data drives. For Azure AD environments (no on-premises AD), use Azure AD recovery key backup policy via Intune. Recovery keys visible in AD Users and Computers under the computer object.",
                     ApplyOps = [RegOp.SetDword(FveKey, "FDVRequireActiveDirectoryBackup", 1), RegOp.SetDword(FveKey, "FDVActiveDirectoryBackup", 1)],
                     RemoveOps = [RegOp.DeleteValue(FveKey, "FDVRequireActiveDirectoryBackup"), RegOp.DeleteValue(FveKey, "FDVActiveDirectoryBackup")],
-                    DetectOps = [RegOp.CheckDword(FveKey, "FDVRequireActiveDirectoryBackup", 1), RegOp.CheckDword(FveKey, "FDVActiveDirectoryBackup", 1)],
+                    DetectOps =
+                    [
+                        RegOp.CheckDword(FveKey, "FDVRequireActiveDirectoryBackup", 1),
+                        RegOp.CheckDword(FveKey, "FDVActiveDirectoryBackup", 1),
+                    ],
                 },
                 new TweakDef
                 {
@@ -2095,7 +2102,6 @@ internal static class PolicyEncryption
                     DetectOps = [RegOp.CheckDword(BackupServerKey, "BackupEncryptionKeyRotationDays", 90)],
                 },
             ];
-
     }
 
     // ── BitLockerFvePolicy ──
@@ -2112,7 +2118,8 @@ internal static class PolicyEncryption
                 Id = "blfve-disable-recovery-console-dra",
                 Label = "Disable BitLocker Recovery via Data Recovery Agent",
                 Category = "Encryption",
-                Description = "Sets DisableDRA=1 in the FVE policy key. "
+                Description =
+                    "Sets DisableDRA=1 in the FVE policy key. "
                     + "Prevents the use of a Data Recovery Agent (DRA) certificate to unlock BitLocker-protected "
                     + "OS or fixed drives. DRA keys are sometimes required in enterprise environments where the "
                     + "IT department maintains a master recovery certificate. Disabling DRA means only recovery "
@@ -2125,7 +2132,7 @@ internal static class PolicyEncryption
                 ImpactScore = 3,
                 SafetyRating = 3,
                 ImpactNote = "Data Recovery Agent certificates cannot unlock BitLocker volumes; TPM or recovery key only.",
-                ApplyOps  = [RegOp.SetDword(FveKey, "DisableDRA", 1)],
+                ApplyOps = [RegOp.SetDword(FveKey, "DisableDRA", 1)],
                 RemoveOps = [RegOp.DeleteValue(FveKey, "DisableDRA")],
                 DetectOps = [RegOp.CheckDword(FveKey, "DisableDRA", 1)],
             },
@@ -2134,7 +2141,8 @@ internal static class PolicyEncryption
                 Id = "blfve-require-tpm-for-os-drive",
                 Label = "Require TPM for OS Drive BitLocker",
                 Category = "Encryption",
-                Description = "Sets OSRequireTPM=1 in the FVE policy key. "
+                Description =
+                    "Sets OSRequireTPM=1 in the FVE policy key. "
                     + "Requires the machine to have a Trusted Platform Module (TPM) present and enabled before "
                     + "BitLocker can be activated on the OS drive. Prevents BitLocker from being activated in "
                     + "TPM-passthrough or software-only mode, ensuring hardware-backed key protection. "
@@ -2146,7 +2154,7 @@ internal static class PolicyEncryption
                 ImpactScore = 3,
                 SafetyRating = 5,
                 ImpactNote = "BitLocker on OS drive requires TPM hardware; software-only mode blocked.",
-                ApplyOps  = [RegOp.SetDword(FveKey, "OSRequireTPM", 1)],
+                ApplyOps = [RegOp.SetDword(FveKey, "OSRequireTPM", 1)],
                 RemoveOps = [RegOp.DeleteValue(FveKey, "OSRequireTPM")],
                 DetectOps = [RegOp.CheckDword(FveKey, "OSRequireTPM", 1)],
             },
@@ -2155,7 +2163,8 @@ internal static class PolicyEncryption
                 Id = "blfve-set-os-encryption-aes256",
                 Label = "Set OS Drive BitLocker Encryption to AES-256-XTS",
                 Category = "Encryption",
-                Description = "Sets OSEncryptionType=7 in the FVE policy key. "
+                Description =
+                    "Sets OSEncryptionType=7 in the FVE policy key. "
                     + "Forces BitLocker on the OS drive to use AES-256 with XTS mode (the strongest "
                     + "BitLocker cipher suite available on Windows 10/11). The EncryptionMethod values: "
                     + "3=AES-128, 4=AES-256, 6=XTS-AES-128, 7=XTS-AES-256. XTS mode provides additional "
@@ -2167,7 +2176,7 @@ internal static class PolicyEncryption
                 ImpactScore = 4,
                 SafetyRating = 5,
                 ImpactNote = "OS drive BitLocker uses XTS-AES-256; stronger encryption for new BitLocker activations.",
-                ApplyOps  = [RegOp.SetDword(FveKey, "OSEncryptionType", 7)],
+                ApplyOps = [RegOp.SetDword(FveKey, "OSEncryptionType", 7)],
                 RemoveOps = [RegOp.DeleteValue(FveKey, "OSEncryptionType")],
                 DetectOps = [RegOp.CheckDword(FveKey, "OSEncryptionType", 7)],
             },
@@ -2176,7 +2185,8 @@ internal static class PolicyEncryption
                 Id = "blfve-require-recovery-key-os",
                 Label = "Require Recovery Key for OS BitLocker",
                 Category = "Encryption",
-                Description = "Sets OSRecoveryKey=1 in the FVE OSVolume policy key. "
+                Description =
+                    "Sets OSRecoveryKey=1 in the FVE OSVolume policy key. "
                     + "Requires that a recovery key (48-digit password or .bek file) be generated and saved "
                     + "when BitLocker is enabled on the OS drive. Ensures that IT helpdesk or the user always "
                     + "has a fallback path to recover the drive if TPM/PIN authentication fails. "
@@ -2187,7 +2197,7 @@ internal static class PolicyEncryption
                 ImpactScore = 3,
                 SafetyRating = 5,
                 ImpactNote = "Recovery key generation mandatory when enabling BitLocker on OS drive.",
-                ApplyOps  = [RegOp.SetDword(FveOs, "OSRecoveryKey", 1)],
+                ApplyOps = [RegOp.SetDword(FveOs, "OSRecoveryKey", 1)],
                 RemoveOps = [RegOp.DeleteValue(FveOs, "OSRecoveryKey")],
                 DetectOps = [RegOp.CheckDword(FveOs, "OSRecoveryKey", 1)],
             },
@@ -2196,7 +2206,8 @@ internal static class PolicyEncryption
                 Id = "blfve-deny-write-removable-unprotected",
                 Label = "Deny Write Access to Unprotected Removable Drives",
                 Category = "Encryption",
-                Description = "Sets RDVDenyWriteAccess=1 in the FVE RemovableDrives policy key. "
+                Description =
+                    "Sets RDVDenyWriteAccess=1 in the FVE RemovableDrives policy key. "
                     + "Prevents the Windows file system from granting write access to removable drives "
                     + "(USB flash, external HDD, SD cards) that are not BitLocker-protected. "
                     + "Read access is still allowed; only write operations are blocked. "
@@ -2208,7 +2219,7 @@ internal static class PolicyEncryption
                 ImpactScore = 4,
                 SafetyRating = 5,
                 ImpactNote = "Write access to unencrypted removable drives blocked; encrypted drives still writable.",
-                ApplyOps  = [RegOp.SetDword(FveRem, "RDVDenyWriteAccess", 1)],
+                ApplyOps = [RegOp.SetDword(FveRem, "RDVDenyWriteAccess", 1)],
                 RemoveOps = [RegOp.DeleteValue(FveRem, "RDVDenyWriteAccess")],
                 DetectOps = [RegOp.CheckDword(FveRem, "RDVDenyWriteAccess", 1)],
             },
@@ -2217,7 +2228,8 @@ internal static class PolicyEncryption
                 Id = "blfve-enable-preboot-input-protectors",
                 Label = "Enable Pre-Boot Input Protectors for BitLocker",
                 Category = "Encryption",
-                Description = "Sets OSEnablePreBootInputProtectors=1 in the FVE policy key. "
+                Description =
+                    "Sets OSEnablePreBootInputProtectors=1 in the FVE policy key. "
                     + "Allows BitLocker to use pre-boot input protectors (PIN or passphrase) even on "
                     + "systems with touch-only or non-standard input (Surface tablets, kiosk machines). "
                     + "Without this, BitLocker may refuse to set a PIN on devices it cannot detect a "
@@ -2229,7 +2241,7 @@ internal static class PolicyEncryption
                 ImpactScore = 2,
                 SafetyRating = 5,
                 ImpactNote = "Pre-boot PIN/passphrase allowed even on touch-only or non-standard keyboard devices.",
-                ApplyOps  = [RegOp.SetDword(FveKey, "OSEnablePreBootInputProtectors", 1)],
+                ApplyOps = [RegOp.SetDword(FveKey, "OSEnablePreBootInputProtectors", 1)],
                 RemoveOps = [RegOp.DeleteValue(FveKey, "OSEnablePreBootInputProtectors")],
                 DetectOps = [RegOp.CheckDword(FveKey, "OSEnablePreBootInputProtectors", 1)],
             },
@@ -2238,7 +2250,8 @@ internal static class PolicyEncryption
                 Id = "blfve-disable-standby-bitlocker",
                 Label = "Disable Standby Mode When BitLocker Is Active",
                 Category = "Encryption",
-                Description = "Sets DisallowStandbyWithBitLocker=1 in the FVE policy key. "
+                Description =
+                    "Sets DisallowStandbyWithBitLocker=1 in the FVE policy key. "
                     + "Prevents the machine from entering S1-S3 standby sleep states while a "
                     + "BitLocker-protected OS drive is active and not locked. Standby states "
                     + "preserve RAM (including encryption keys) in a low-power state, and sophisticated "
@@ -2251,7 +2264,7 @@ internal static class PolicyEncryption
                 ImpactScore = 3,
                 SafetyRating = 4,
                 ImpactNote = "Standby disabled when BitLocker is active; forces hibernate or shutdown to protect encryption keys.",
-                ApplyOps  = [RegOp.SetDword(FveKey, "DisallowStandbyWithBitLocker", 1)],
+                ApplyOps = [RegOp.SetDword(FveKey, "DisallowStandbyWithBitLocker", 1)],
                 RemoveOps = [RegOp.DeleteValue(FveKey, "DisallowStandbyWithBitLocker")],
                 DetectOps = [RegOp.CheckDword(FveKey, "DisallowStandbyWithBitLocker", 1)],
             },
@@ -2260,7 +2273,8 @@ internal static class PolicyEncryption
                 Id = "blfve-backup-recovery-to-ad",
                 Label = "Backup BitLocker Recovery Key to Active Directory",
                 Category = "Encryption",
-                Description = "Sets OSRecoveryBackupToAD=1 in the FVE OSVolume policy key. "
+                Description =
+                    "Sets OSRecoveryBackupToAD=1 in the FVE OSVolume policy key. "
                     + "Requires BitLocker to back up the OS drive recovery key to Active Directory Domain "
                     + "Services (ADDS) before finishing encryption. Prevents scenarios where the recovery "
                     + "key is stored only on the user's device or paper, ensuring IT admins can always "
@@ -2272,7 +2286,7 @@ internal static class PolicyEncryption
                 ImpactScore = 3,
                 SafetyRating = 5,
                 ImpactNote = "BitLocker recovery key backed up to Active Directory automatically.",
-                ApplyOps  = [RegOp.SetDword(FveOs, "OSRecoveryBackupToAD", 1)],
+                ApplyOps = [RegOp.SetDword(FveOs, "OSRecoveryBackupToAD", 1)],
                 RemoveOps = [RegOp.DeleteValue(FveOs, "OSRecoveryBackupToAD")],
                 DetectOps = [RegOp.CheckDword(FveOs, "OSRecoveryBackupToAD", 1)],
             },
@@ -2281,7 +2295,8 @@ internal static class PolicyEncryption
                 Id = "blfve-set-fixed-drive-aes256",
                 Label = "Set Fixed Drive BitLocker Encryption to AES-256-XTS",
                 Category = "Encryption",
-                Description = "Sets FDVEncryptionType=7 in the FVE policy key. "
+                Description =
+                    "Sets FDVEncryptionType=7 in the FVE policy key. "
                     + "Forces BitLocker on fixed data drives (secondary internal HDDs/SSDs) to use "
                     + "XTS-AES-256, the strongest available cipher. Fixed data drives often store sensitive "
                     + "user data (Documents, Downloads) that benefits from stronger encryption. "
@@ -2293,7 +2308,7 @@ internal static class PolicyEncryption
                 ImpactScore = 4,
                 SafetyRating = 5,
                 ImpactNote = "Fixed data drives encrypted with XTS-AES-256 on new BitLocker activations.",
-                ApplyOps  = [RegOp.SetDword(FveKey, "FDVEncryptionType", 7)],
+                ApplyOps = [RegOp.SetDword(FveKey, "FDVEncryptionType", 7)],
                 RemoveOps = [RegOp.DeleteValue(FveKey, "FDVEncryptionType")],
                 DetectOps = [RegOp.CheckDword(FveKey, "FDVEncryptionType", 7)],
             },
@@ -2302,7 +2317,8 @@ internal static class PolicyEncryption
                 Id = "blfve-set-removable-drive-aes128",
                 Label = "Set Removable Drive BitLocker Encryption to AES-128-XTS",
                 Category = "Encryption",
-                Description = "Sets RDVEncryptionType=6 in the FVE RemovableDrives policy key. "
+                Description =
+                    "Sets RDVEncryptionType=6 in the FVE RemovableDrives policy key. "
                     + "Forces BitLocker To Go on removable drives to use XTS-AES-128 rather than the "
                     + "default AES-128 (non-XTS). XTS mode adds ciphertext-manipulation protection on "
                     + "removable media. AES-128 (not 256) is recommended for removable drives to maintain "
@@ -2315,12 +2331,11 @@ internal static class PolicyEncryption
                 ImpactScore = 3,
                 SafetyRating = 5,
                 ImpactNote = "Removable drives use XTS-AES-128 encryption; compatible with older Windows devices.",
-                ApplyOps  = [RegOp.SetDword(FveRem, "RDVEncryptionType", 6)],
+                ApplyOps = [RegOp.SetDword(FveRem, "RDVEncryptionType", 6)],
                 RemoveOps = [RegOp.DeleteValue(FveRem, "RDVEncryptionType")],
                 DetectOps = [RegOp.CheckDword(FveRem, "RDVEncryptionType", 6)],
             },
         ];
-
     }
 
     // ── BitLockerNetworkUnlockPolicy ──
@@ -2331,169 +2346,179 @@ internal static class PolicyEncryption
         private const string NuKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\FVE\NetworkUnlock";
 
         public static IReadOnlyList<TweakDef> Data =>
-        [
-            new TweakDef
-            {
-                Id           = "blnetun-require-tpm-plus-pin",
-                Label        = "Require TPM + PIN Pre-Boot Authentication for BitLocker OS Volumes",
-                Category = "Encryption",
-                Description  = "Configures BitLocker to require both TPM attestation and a user-supplied PIN for OS volume unlock at pre-boot, providing two-factor pre-boot authentication that protects against direct memory access and cold boot attacks even on stolen hardware.",
-                Tags         = ["bitlocker", "tpm", "pin", "pre-boot", "two-factor", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 5,
-                SafetyRating = 5,
-                ImpactNote   = "BitLocker TPM+PIN required; cold boot and DMA attacks on stolen hardware mitigated by pre-boot second factor.",
-                ApplyOps     = [RegOp.SetDword(OsKey, "RequirePinForOSVolume", 1)],
-                RemoveOps    = [RegOp.DeleteValue(OsKey, "RequirePinForOSVolume")],
-                DetectOps    = [RegOp.CheckDword(OsKey, "RequirePinForOSVolume", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "blnetun-set-minimum-pin-length-8",
-                Label        = "Set Minimum BitLocker Pre-Boot PIN Length to 8 Digits",
-                Category = "Encryption",
-                Description  = "Sets the minimum pre-boot PIN length to 8 digits, preventing trivially short 4-digit PINs that could be brute-forced even against the TPM anti-hammering lockout threshold.",
-                Tags         = ["bitlocker", "pin-length", "minimum", "brute-force", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 3,
-                SafetyRating = 5,
-                ImpactNote   = "BitLocker pre-boot PIN minimum 8 digits; trivially short 4-digit PINs no longer accepted.",
-                ApplyOps     = [RegOp.SetDword(Key, "MinimumPIN", 8)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "MinimumPIN")],
-                DetectOps    = [RegOp.CheckDword(Key, "MinimumPIN", 8)],
-            },
-            new TweakDef
-            {
-                Id           = "blnetun-disable-recovery-to-ad-storage",
-                Label        = "Disable BitLocker Recovery Key Storage in Active Directory by Default",
-                Category = "Encryption",
-                Description  = "Prevents BitLocker from automatically storing the 48-digit recovery key in Active Directory by default, ensuring recovery key storage is a deliberate IT action rather than an automatic operation that could be mass-enumerated.",
-                Tags         = ["bitlocker", "recovery-key", "active-directory", "key-storage", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 4,
-                SafetyRating = 5,
-                ImpactNote   = "BitLocker auto-AD recovery key escrow disabled; deliberate admin action required to store recovery keys.",
-                ApplyOps     = [RegOp.SetDword(Key, "ActiveDirectoryBackup", 0)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "ActiveDirectoryBackup")],
-                DetectOps    = [RegOp.CheckDword(Key, "ActiveDirectoryBackup", 0)],
-            },
-            new TweakDef
-            {
-                Id           = "blnetun-block-recovery-password-print",
-                Label        = "Block Printing BitLocker Recovery Passwords",
-                Category = "Encryption",
-                Description  = "Prevents users from printing the 48-digit BitLocker recovery password, ensuring recovery passwords are not output on physical paper that could be shoulder-surfed, photographed, or left in a printer output tray.",
-                Tags         = ["bitlocker", "recovery-password", "print", "physical-security", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 3,
-                SafetyRating = 5,
-                ImpactNote   = "BitLocker recovery password printing blocked; paper copies of 48-digit recovery keys prevented.",
-                ApplyOps     = [RegOp.SetDword(Key, "BlockRecoveryPasswordPrinting", 1)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "BlockRecoveryPasswordPrinting")],
-                DetectOps    = [RegOp.CheckDword(Key, "BlockRecoveryPasswordPrinting", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "blnetun-deny-write-without-bitlocker",
-                Label        = "Deny Write Access to Removable Drives Without BitLocker",
-                Category = "Encryption",
-                Description  = "Prevents write operations to removable USB drives and portable storage that are not BitLocker-protected, ensuring sensitive data cannot be exfiltrated to unencrypted USB devices.",
-                Tags         = ["bitlocker", "removable-drive", "usb", "write-protection", "data-exfiltration", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 5,
-                SafetyRating = 5,
-                ImpactNote   = "Unencrypted USB write access blocked; data can only be written to BitLocker-encrypted removable drives.",
-                ApplyOps     = [RegOp.SetDword(Key, "RDVDenyWriteAccess", 1)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "RDVDenyWriteAccess")],
-                DetectOps    = [RegOp.CheckDword(Key, "RDVDenyWriteAccess", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "blnetun-enable-network-unlock",
-                Label        = "Enable BitLocker Network Unlock for Domain-Joined Systems",
-                Category = "Encryption",
-                Description  = "Enables BitLocker Network Unlock, allowing domain-joined systems connected to a trusted corporate network at boot time to automatically unlock the OS volume without requiring a PIN, simplifying remote management while maintaining offline protection.",
-                Tags         = ["bitlocker", "network-unlock", "domain", "remote-management", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 4,
-                SafetyRating = 5,
-                ImpactNote   = "BitLocker Network Unlock enabled; domain-joined systems auto-unlock on corporate network. PIN required off-network.",
-                ApplyOps     = [RegOp.SetDword(NuKey, "EnableNetworkUnlock", 1)],
-                RemoveOps    = [RegOp.DeleteValue(NuKey, "EnableNetworkUnlock")],
-                DetectOps    = [RegOp.CheckDword(NuKey, "EnableNetworkUnlock", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "blnetun-use-aes-256-xts",
-                Label        = "Use AES-256-XTS Encryption for New BitLocker OS Volumes",
-                Category = "Encryption",
-                Description  = "Sets the BitLocker encryption algorithm for new OS volume encryptions to AES-256 in XTS mode, which is the strongest available encryption in Windows 11, replacing the default AES-128-XTS.",
-                Tags         = ["bitlocker", "aes-256", "xts", "encryption-strength", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 4,
-                SafetyRating = 5,
-                ImpactNote   = "New BitLocker OS volumes encrypted with AES-256-XTS; maximum available encryption strength enforced.",
-                ApplyOps     = [RegOp.SetDword(Key, "EncryptionMethodWithXtsOs", 7)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "EncryptionMethodWithXtsOs")],
-                DetectOps    = [RegOp.CheckDword(Key, "EncryptionMethodWithXtsOs", 7)],
-            },
-            new TweakDef
-            {
-                Id           = "blnetun-use-aes-256-xts-fixed",
-                Label        = "Use AES-256-XTS Encryption for New BitLocker Fixed Data Volumes",
-                Category = "Encryption",
-                Description  = "Sets the BitLocker encryption algorithm for new fixed (internal) data drive encryptions to AES-256-XTS, ensuring the same maximum-strength encryption is applied to non-OS data drives.",
-                Tags         = ["bitlocker", "aes-256", "xts", "data-volume", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 4,
-                SafetyRating = 5,
-                ImpactNote   = "New BitLocker fixed data volumes encrypted with AES-256-XTS; maximum encryption on internal data drives.",
-                ApplyOps     = [RegOp.SetDword(Key, "EncryptionMethodWithXtsFdv", 7)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "EncryptionMethodWithXtsFdv")],
-                DetectOps    = [RegOp.CheckDword(Key, "EncryptionMethodWithXtsFdv", 7)],
-            },
-            new TweakDef
-            {
-                Id           = "blnetun-log-unlock-events",
-                Label        = "Log BitLocker Volume Unlock and Lock Events",
-                Category = "Encryption",
-                Description  = "Enables Security audit log entries for BitLocker volume unlock and lock events, providing visibility into drive decryption activity for forensics and compliance auditing.",
-                Tags         = ["bitlocker", "unlock-audit", "event-log", "compliance", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 3,
-                SafetyRating = 5,
-                ImpactNote   = "BitLocker unlock/lock events logged; drive decryption activity visible for forensics and compliance.",
-                ApplyOps     = [RegOp.SetDword(Key, "LogUnlockEvents", 1)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "LogUnlockEvents")],
-                DetectOps    = [RegOp.CheckDword(Key, "LogUnlockEvents", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "blnetun-disable-bitlocker-telemetry",
-                Label        = "Disable BitLocker Telemetry Reporting to Microsoft",
-                Category = "Encryption",
-                Description  = "Prevents BitLocker from reporting encryption algorithm usage, PIN complexity, recovery key storage method, and drive unlock events to Microsoft via Windows telemetry.",
-                Tags         = ["bitlocker", "telemetry", "privacy", "microsoft", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 3,
-                SafetyRating = 5,
-                ImpactNote   = "BitLocker telemetry to Microsoft disabled; encryption config and unlock event data not sent to cloud.",
-                ApplyOps     = [RegOp.SetDword(Key, "DisableBitLockerTelemetry", 1)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "DisableBitLockerTelemetry")],
-                DetectOps    = [RegOp.CheckDword(Key, "DisableBitLockerTelemetry", 1)],
-            },
-        ];
-
+            [
+                new TweakDef
+                {
+                    Id = "blnetun-require-tpm-plus-pin",
+                    Label = "Require TPM + PIN Pre-Boot Authentication for BitLocker OS Volumes",
+                    Category = "Encryption",
+                    Description =
+                        "Configures BitLocker to require both TPM attestation and a user-supplied PIN for OS volume unlock at pre-boot, providing two-factor pre-boot authentication that protects against direct memory access and cold boot attacks even on stolen hardware.",
+                    Tags = ["bitlocker", "tpm", "pin", "pre-boot", "two-factor", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 5,
+                    SafetyRating = 5,
+                    ImpactNote = "BitLocker TPM+PIN required; cold boot and DMA attacks on stolen hardware mitigated by pre-boot second factor.",
+                    ApplyOps = [RegOp.SetDword(OsKey, "RequirePinForOSVolume", 1)],
+                    RemoveOps = [RegOp.DeleteValue(OsKey, "RequirePinForOSVolume")],
+                    DetectOps = [RegOp.CheckDword(OsKey, "RequirePinForOSVolume", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "blnetun-set-minimum-pin-length-8",
+                    Label = "Set Minimum BitLocker Pre-Boot PIN Length to 8 Digits",
+                    Category = "Encryption",
+                    Description =
+                        "Sets the minimum pre-boot PIN length to 8 digits, preventing trivially short 4-digit PINs that could be brute-forced even against the TPM anti-hammering lockout threshold.",
+                    Tags = ["bitlocker", "pin-length", "minimum", "brute-force", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "BitLocker pre-boot PIN minimum 8 digits; trivially short 4-digit PINs no longer accepted.",
+                    ApplyOps = [RegOp.SetDword(Key, "MinimumPIN", 8)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "MinimumPIN")],
+                    DetectOps = [RegOp.CheckDword(Key, "MinimumPIN", 8)],
+                },
+                new TweakDef
+                {
+                    Id = "blnetun-disable-recovery-to-ad-storage",
+                    Label = "Disable BitLocker Recovery Key Storage in Active Directory by Default",
+                    Category = "Encryption",
+                    Description =
+                        "Prevents BitLocker from automatically storing the 48-digit recovery key in Active Directory by default, ensuring recovery key storage is a deliberate IT action rather than an automatic operation that could be mass-enumerated.",
+                    Tags = ["bitlocker", "recovery-key", "active-directory", "key-storage", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "BitLocker auto-AD recovery key escrow disabled; deliberate admin action required to store recovery keys.",
+                    ApplyOps = [RegOp.SetDword(Key, "ActiveDirectoryBackup", 0)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "ActiveDirectoryBackup")],
+                    DetectOps = [RegOp.CheckDword(Key, "ActiveDirectoryBackup", 0)],
+                },
+                new TweakDef
+                {
+                    Id = "blnetun-block-recovery-password-print",
+                    Label = "Block Printing BitLocker Recovery Passwords",
+                    Category = "Encryption",
+                    Description =
+                        "Prevents users from printing the 48-digit BitLocker recovery password, ensuring recovery passwords are not output on physical paper that could be shoulder-surfed, photographed, or left in a printer output tray.",
+                    Tags = ["bitlocker", "recovery-password", "print", "physical-security", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "BitLocker recovery password printing blocked; paper copies of 48-digit recovery keys prevented.",
+                    ApplyOps = [RegOp.SetDword(Key, "BlockRecoveryPasswordPrinting", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "BlockRecoveryPasswordPrinting")],
+                    DetectOps = [RegOp.CheckDword(Key, "BlockRecoveryPasswordPrinting", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "blnetun-deny-write-without-bitlocker",
+                    Label = "Deny Write Access to Removable Drives Without BitLocker",
+                    Category = "Encryption",
+                    Description =
+                        "Prevents write operations to removable USB drives and portable storage that are not BitLocker-protected, ensuring sensitive data cannot be exfiltrated to unencrypted USB devices.",
+                    Tags = ["bitlocker", "removable-drive", "usb", "write-protection", "data-exfiltration", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 5,
+                    SafetyRating = 5,
+                    ImpactNote = "Unencrypted USB write access blocked; data can only be written to BitLocker-encrypted removable drives.",
+                    ApplyOps = [RegOp.SetDword(Key, "RDVDenyWriteAccess", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "RDVDenyWriteAccess")],
+                    DetectOps = [RegOp.CheckDword(Key, "RDVDenyWriteAccess", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "blnetun-enable-network-unlock",
+                    Label = "Enable BitLocker Network Unlock for Domain-Joined Systems",
+                    Category = "Encryption",
+                    Description =
+                        "Enables BitLocker Network Unlock, allowing domain-joined systems connected to a trusted corporate network at boot time to automatically unlock the OS volume without requiring a PIN, simplifying remote management while maintaining offline protection.",
+                    Tags = ["bitlocker", "network-unlock", "domain", "remote-management", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote =
+                        "BitLocker Network Unlock enabled; domain-joined systems auto-unlock on corporate network. PIN required off-network.",
+                    ApplyOps = [RegOp.SetDword(NuKey, "EnableNetworkUnlock", 1)],
+                    RemoveOps = [RegOp.DeleteValue(NuKey, "EnableNetworkUnlock")],
+                    DetectOps = [RegOp.CheckDword(NuKey, "EnableNetworkUnlock", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "blnetun-use-aes-256-xts",
+                    Label = "Use AES-256-XTS Encryption for New BitLocker OS Volumes",
+                    Category = "Encryption",
+                    Description =
+                        "Sets the BitLocker encryption algorithm for new OS volume encryptions to AES-256 in XTS mode, which is the strongest available encryption in Windows 11, replacing the default AES-128-XTS.",
+                    Tags = ["bitlocker", "aes-256", "xts", "encryption-strength", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "New BitLocker OS volumes encrypted with AES-256-XTS; maximum available encryption strength enforced.",
+                    ApplyOps = [RegOp.SetDword(Key, "EncryptionMethodWithXtsOs", 7)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "EncryptionMethodWithXtsOs")],
+                    DetectOps = [RegOp.CheckDword(Key, "EncryptionMethodWithXtsOs", 7)],
+                },
+                new TweakDef
+                {
+                    Id = "blnetun-use-aes-256-xts-fixed",
+                    Label = "Use AES-256-XTS Encryption for New BitLocker Fixed Data Volumes",
+                    Category = "Encryption",
+                    Description =
+                        "Sets the BitLocker encryption algorithm for new fixed (internal) data drive encryptions to AES-256-XTS, ensuring the same maximum-strength encryption is applied to non-OS data drives.",
+                    Tags = ["bitlocker", "aes-256", "xts", "data-volume", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "New BitLocker fixed data volumes encrypted with AES-256-XTS; maximum encryption on internal data drives.",
+                    ApplyOps = [RegOp.SetDword(Key, "EncryptionMethodWithXtsFdv", 7)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "EncryptionMethodWithXtsFdv")],
+                    DetectOps = [RegOp.CheckDword(Key, "EncryptionMethodWithXtsFdv", 7)],
+                },
+                new TweakDef
+                {
+                    Id = "blnetun-log-unlock-events",
+                    Label = "Log BitLocker Volume Unlock and Lock Events",
+                    Category = "Encryption",
+                    Description =
+                        "Enables Security audit log entries for BitLocker volume unlock and lock events, providing visibility into drive decryption activity for forensics and compliance auditing.",
+                    Tags = ["bitlocker", "unlock-audit", "event-log", "compliance", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "BitLocker unlock/lock events logged; drive decryption activity visible for forensics and compliance.",
+                    ApplyOps = [RegOp.SetDword(Key, "LogUnlockEvents", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "LogUnlockEvents")],
+                    DetectOps = [RegOp.CheckDword(Key, "LogUnlockEvents", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "blnetun-disable-bitlocker-telemetry",
+                    Label = "Disable BitLocker Telemetry Reporting to Microsoft",
+                    Category = "Encryption",
+                    Description =
+                        "Prevents BitLocker from reporting encryption algorithm usage, PIN complexity, recovery key storage method, and drive unlock events to Microsoft via Windows telemetry.",
+                    Tags = ["bitlocker", "telemetry", "privacy", "microsoft", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "BitLocker telemetry to Microsoft disabled; encryption config and unlock event data not sent to cloud.",
+                    ApplyOps = [RegOp.SetDword(Key, "DisableBitLockerTelemetry", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "DisableBitLockerTelemetry")],
+                    DetectOps = [RegOp.CheckDword(Key, "DisableBitLockerTelemetry", 1)],
+                },
+            ];
     }
 
     // ── BitLockerPolicy ──
@@ -2502,169 +2527,168 @@ internal static class PolicyEncryption
         private const string FveKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\FVE";
 
         public static IReadOnlyList<TweakDef> Data =>
-        [
-            new TweakDef
-            {
-                Id = "bde-require-tpm",
-                Label = "Require TPM for BitLocker Encryption",
-                Category = "Encryption",
-                Description = "Prevents BitLocker from being configured without a compatible Trusted Platform Module (TPM).",
-                Tags = ["bitlocker", "tpm", "fde", "encryption", "security"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 5,
-                SafetyRating = 4,
-                ImpactNote = "BitLocker requires TPM; USB-key-only startup is blocked. Devices without TPM cannot enable BitLocker.",
-                ApplyOps = [RegOp.SetDword(FveKey, "EnableBDEWithNoTPM", 0)],
-                RemoveOps = [RegOp.DeleteValue(FveKey, "EnableBDEWithNoTPM")],
-                DetectOps = [RegOp.CheckDword(FveKey, "EnableBDEWithNoTPM", 0)],
-            },
-            new TweakDef
-            {
-                Id = "bde-allow-enhanced-pin",
-                Label = "Allow Enhanced BitLocker TPM PINs",
-                Category = "Encryption",
-                Description = "Permits the use of enhanced PINs (letters, symbols, and spaces) instead of only digits for BitLocker TPM startup.",
-                Tags = ["bitlocker", "tpm", "pin", "security", "encryption"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Increases PIN entropy; compatible with all modern UEFI firmware; users must set a new enhanced PIN.",
-                ApplyOps = [RegOp.SetDword(FveKey, "UseEnhancedPin", 1)],
-                RemoveOps = [RegOp.DeleteValue(FveKey, "UseEnhancedPin")],
-                DetectOps = [RegOp.CheckDword(FveKey, "UseEnhancedPin", 1)],
-            },
-            new TweakDef
-            {
-                Id = "bde-set-minimum-pin-8",
-                Label = "Set Minimum BitLocker TPM PIN Length to 8",
-                Category = "Encryption",
-                Description = "Requires the BitLocker TPM PIN to be at least 8 characters long.",
-                Tags = ["bitlocker", "tpm", "pin", "length", "security"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "8-character minimum; longer PINs are allowed. Users must reset PINs shorter than 8 characters.",
-                ApplyOps = [RegOp.SetDword(FveKey, "MinimumPIN", 8)],
-                RemoveOps = [RegOp.DeleteValue(FveKey, "MinimumPIN")],
-                DetectOps = [RegOp.CheckDword(FveKey, "MinimumPIN", 8)],
-            },
-            new TweakDef
-            {
-                Id = "bde-require-recovery-password",
-                Label = "Require BitLocker Recovery Password",
-                Category = "Encryption",
-                Description = "Mandates that a 48-digit numerical recovery password is generated and saved before BitLocker can be enabled.",
-                Tags = ["bitlocker", "recovery", "password", "security"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 5,
-                SafetyRating = 5,
-                ImpactNote = "Recovery passwords must be saved before encryption begins; prevents lockout without a recovery path.",
-                ApplyOps = [RegOp.SetDword(FveKey, "UseRecoveryPassword", 2)],
-                RemoveOps = [RegOp.DeleteValue(FveKey, "UseRecoveryPassword")],
-                DetectOps = [RegOp.CheckDword(FveKey, "UseRecoveryPassword", 2)],
-            },
-            new TweakDef
-            {
-                Id = "bde-backup-to-ad",
-                Label = "Back Up BitLocker Recovery Key to Active Directory",
-                Category = "Encryption",
-                Description = "Automatically backs up BitLocker recovery passwords and key packages to Active Directory DS.",
-                Tags = ["bitlocker", "recovery", "active-directory", "backup", "security"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 5,
-                SafetyRating = 5,
-                ImpactNote = "Recovery keys are escrowed in AD; requires domain-join and AD DS with BitLocker schema extension.",
-                ApplyOps = [RegOp.SetDword(FveKey, "ActiveDirectoryBackup", 1)],
-                RemoveOps = [RegOp.DeleteValue(FveKey, "ActiveDirectoryBackup")],
-                DetectOps = [RegOp.CheckDword(FveKey, "ActiveDirectoryBackup", 1)],
-            },
-            new TweakDef
-            {
-                Id = "bde-block-without-ad-backup",
-                Label = "Block BitLocker if AD Recovery Backup Fails",
-                Category = "Encryption",
-                Description = "Prevents BitLocker from completing setup if the recovery password cannot be backed up to Active Directory.",
-                Tags = ["bitlocker", "recovery", "active-directory", "policy", "security"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                ImpactNote = "Encryption fails if AD backup is unreachable; ensures no device is encrypted without a recovery path.",
-                ApplyOps = [RegOp.SetDword(FveKey, "RequireActiveDirectoryBackup", 1)],
-                RemoveOps = [RegOp.DeleteValue(FveKey, "RequireActiveDirectoryBackup")],
-                DetectOps = [RegOp.CheckDword(FveKey, "RequireActiveDirectoryBackup", 1)],
-            },
-            new TweakDef
-            {
-                Id = "bde-store-password-and-key-package",
-                Label = "Store BitLocker Recovery Password and Key Package",
-                Category = "Encryption",
-                Description = "Configures AD backup to store both the recovery password and the full key package for maximum recovery options.",
-                Tags = ["bitlocker", "recovery", "active-directory", "key-package", "security"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                ImpactNote = "Value 3 = password + key package; provides both quick recovery and full forensic key reconstruction.",
-                ApplyOps = [RegOp.SetDword(FveKey, "ActiveDirectoryInfoToStore", 3)],
-                RemoveOps = [RegOp.DeleteValue(FveKey, "ActiveDirectoryInfoToStore")],
-                DetectOps = [RegOp.CheckDword(FveKey, "ActiveDirectoryInfoToStore", 3)],
-            },
-            new TweakDef
-            {
-                Id = "bde-require-tpm-and-pin",
-                Label = "Require TPM + PIN for BitLocker OS Drive Startup",
-                Category = "Encryption",
-                Description = "Mandates both TPM presence and a user-supplied PIN for pre-boot BitLocker authentication on the OS drive.",
-                Tags = ["bitlocker", "tpm", "pin", "startup", "security", "mfa"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 5,
-                SafetyRating = 3,
-                ImpactNote = "Two-factor startup (something you have + know); PIN required at every boot; remote start requires workarounds.",
-                ApplyOps = [RegOp.SetDword(FveKey, "UseTPMPIN", 2)],
-                RemoveOps = [RegOp.DeleteValue(FveKey, "UseTPMPIN")],
-                DetectOps = [RegOp.CheckDword(FveKey, "UseTPMPIN", 2)],
-            },
-            new TweakDef
-            {
-                Id = "bde-disable-recovery-usb",
-                Label = "Disable USB Recovery Key for BitLocker OS Drive",
-                Category = "Encryption",
-                Description = "Prevents a USB recovery key flash drive from being used as a recovery method for the BitLocker OS drive.",
-                Tags = ["bitlocker", "recovery", "usb", "security"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 4,
-                ImpactNote = "Recovery via USB is blocked; only the 48-digit recovery password can be used for OS drive recovery.",
-                ApplyOps = [RegOp.SetDword(FveKey, "UseRecoveryDrive", 0)],
-                RemoveOps = [RegOp.DeleteValue(FveKey, "UseRecoveryDrive")],
-                DetectOps = [RegOp.CheckDword(FveKey, "UseRecoveryDrive", 0)],
-            },
-            new TweakDef
-            {
-                Id = "bde-set-xts-aes-256",
-                Label = "Set BitLocker Encryption to XTS-AES-256",
-                Category = "Encryption",
-                Description = "Configures BitLocker to use XTS-AES-256 encryption for all new volumes, providing maximum encryption strength.",
-                Tags = ["bitlocker", "encryption", "aes-256", "xts", "security"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                ImpactNote = "Value 7 = XTS-AES-256; applies to new volumes; existing volumes retain their encryption method.",
-                ApplyOps = [RegOp.SetDword(FveKey, "EncryptionMethodWithXtsOs", 7)],
-                RemoveOps = [RegOp.DeleteValue(FveKey, "EncryptionMethodWithXtsOs")],
-                DetectOps = [RegOp.CheckDword(FveKey, "EncryptionMethodWithXtsOs", 7)],
-            },
-        ];
-
+            [
+                new TweakDef
+                {
+                    Id = "bde-require-tpm",
+                    Label = "Require TPM for BitLocker Encryption",
+                    Category = "Encryption",
+                    Description = "Prevents BitLocker from being configured without a compatible Trusted Platform Module (TPM).",
+                    Tags = ["bitlocker", "tpm", "fde", "encryption", "security"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 5,
+                    SafetyRating = 4,
+                    ImpactNote = "BitLocker requires TPM; USB-key-only startup is blocked. Devices without TPM cannot enable BitLocker.",
+                    ApplyOps = [RegOp.SetDword(FveKey, "EnableBDEWithNoTPM", 0)],
+                    RemoveOps = [RegOp.DeleteValue(FveKey, "EnableBDEWithNoTPM")],
+                    DetectOps = [RegOp.CheckDword(FveKey, "EnableBDEWithNoTPM", 0)],
+                },
+                new TweakDef
+                {
+                    Id = "bde-allow-enhanced-pin",
+                    Label = "Allow Enhanced BitLocker TPM PINs",
+                    Category = "Encryption",
+                    Description = "Permits the use of enhanced PINs (letters, symbols, and spaces) instead of only digits for BitLocker TPM startup.",
+                    Tags = ["bitlocker", "tpm", "pin", "security", "encryption"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "Increases PIN entropy; compatible with all modern UEFI firmware; users must set a new enhanced PIN.",
+                    ApplyOps = [RegOp.SetDword(FveKey, "UseEnhancedPin", 1)],
+                    RemoveOps = [RegOp.DeleteValue(FveKey, "UseEnhancedPin")],
+                    DetectOps = [RegOp.CheckDword(FveKey, "UseEnhancedPin", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "bde-set-minimum-pin-8",
+                    Label = "Set Minimum BitLocker TPM PIN Length to 8",
+                    Category = "Encryption",
+                    Description = "Requires the BitLocker TPM PIN to be at least 8 characters long.",
+                    Tags = ["bitlocker", "tpm", "pin", "length", "security"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "8-character minimum; longer PINs are allowed. Users must reset PINs shorter than 8 characters.",
+                    ApplyOps = [RegOp.SetDword(FveKey, "MinimumPIN", 8)],
+                    RemoveOps = [RegOp.DeleteValue(FveKey, "MinimumPIN")],
+                    DetectOps = [RegOp.CheckDword(FveKey, "MinimumPIN", 8)],
+                },
+                new TweakDef
+                {
+                    Id = "bde-require-recovery-password",
+                    Label = "Require BitLocker Recovery Password",
+                    Category = "Encryption",
+                    Description = "Mandates that a 48-digit numerical recovery password is generated and saved before BitLocker can be enabled.",
+                    Tags = ["bitlocker", "recovery", "password", "security"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 5,
+                    SafetyRating = 5,
+                    ImpactNote = "Recovery passwords must be saved before encryption begins; prevents lockout without a recovery path.",
+                    ApplyOps = [RegOp.SetDword(FveKey, "UseRecoveryPassword", 2)],
+                    RemoveOps = [RegOp.DeleteValue(FveKey, "UseRecoveryPassword")],
+                    DetectOps = [RegOp.CheckDword(FveKey, "UseRecoveryPassword", 2)],
+                },
+                new TweakDef
+                {
+                    Id = "bde-backup-to-ad",
+                    Label = "Back Up BitLocker Recovery Key to Active Directory",
+                    Category = "Encryption",
+                    Description = "Automatically backs up BitLocker recovery passwords and key packages to Active Directory DS.",
+                    Tags = ["bitlocker", "recovery", "active-directory", "backup", "security"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 5,
+                    SafetyRating = 5,
+                    ImpactNote = "Recovery keys are escrowed in AD; requires domain-join and AD DS with BitLocker schema extension.",
+                    ApplyOps = [RegOp.SetDword(FveKey, "ActiveDirectoryBackup", 1)],
+                    RemoveOps = [RegOp.DeleteValue(FveKey, "ActiveDirectoryBackup")],
+                    DetectOps = [RegOp.CheckDword(FveKey, "ActiveDirectoryBackup", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "bde-block-without-ad-backup",
+                    Label = "Block BitLocker if AD Recovery Backup Fails",
+                    Category = "Encryption",
+                    Description = "Prevents BitLocker from completing setup if the recovery password cannot be backed up to Active Directory.",
+                    Tags = ["bitlocker", "recovery", "active-directory", "policy", "security"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "Encryption fails if AD backup is unreachable; ensures no device is encrypted without a recovery path.",
+                    ApplyOps = [RegOp.SetDword(FveKey, "RequireActiveDirectoryBackup", 1)],
+                    RemoveOps = [RegOp.DeleteValue(FveKey, "RequireActiveDirectoryBackup")],
+                    DetectOps = [RegOp.CheckDword(FveKey, "RequireActiveDirectoryBackup", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "bde-store-password-and-key-package",
+                    Label = "Store BitLocker Recovery Password and Key Package",
+                    Category = "Encryption",
+                    Description = "Configures AD backup to store both the recovery password and the full key package for maximum recovery options.",
+                    Tags = ["bitlocker", "recovery", "active-directory", "key-package", "security"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "Value 3 = password + key package; provides both quick recovery and full forensic key reconstruction.",
+                    ApplyOps = [RegOp.SetDword(FveKey, "ActiveDirectoryInfoToStore", 3)],
+                    RemoveOps = [RegOp.DeleteValue(FveKey, "ActiveDirectoryInfoToStore")],
+                    DetectOps = [RegOp.CheckDword(FveKey, "ActiveDirectoryInfoToStore", 3)],
+                },
+                new TweakDef
+                {
+                    Id = "bde-require-tpm-and-pin",
+                    Label = "Require TPM + PIN for BitLocker OS Drive Startup",
+                    Category = "Encryption",
+                    Description = "Mandates both TPM presence and a user-supplied PIN for pre-boot BitLocker authentication on the OS drive.",
+                    Tags = ["bitlocker", "tpm", "pin", "startup", "security", "mfa"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 5,
+                    SafetyRating = 3,
+                    ImpactNote = "Two-factor startup (something you have + know); PIN required at every boot; remote start requires workarounds.",
+                    ApplyOps = [RegOp.SetDword(FveKey, "UseTPMPIN", 2)],
+                    RemoveOps = [RegOp.DeleteValue(FveKey, "UseTPMPIN")],
+                    DetectOps = [RegOp.CheckDword(FveKey, "UseTPMPIN", 2)],
+                },
+                new TweakDef
+                {
+                    Id = "bde-disable-recovery-usb",
+                    Label = "Disable USB Recovery Key for BitLocker OS Drive",
+                    Category = "Encryption",
+                    Description = "Prevents a USB recovery key flash drive from being used as a recovery method for the BitLocker OS drive.",
+                    Tags = ["bitlocker", "recovery", "usb", "security"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 4,
+                    ImpactNote = "Recovery via USB is blocked; only the 48-digit recovery password can be used for OS drive recovery.",
+                    ApplyOps = [RegOp.SetDword(FveKey, "UseRecoveryDrive", 0)],
+                    RemoveOps = [RegOp.DeleteValue(FveKey, "UseRecoveryDrive")],
+                    DetectOps = [RegOp.CheckDword(FveKey, "UseRecoveryDrive", 0)],
+                },
+                new TweakDef
+                {
+                    Id = "bde-set-xts-aes-256",
+                    Label = "Set BitLocker Encryption to XTS-AES-256",
+                    Category = "Encryption",
+                    Description = "Configures BitLocker to use XTS-AES-256 encryption for all new volumes, providing maximum encryption strength.",
+                    Tags = ["bitlocker", "encryption", "aes-256", "xts", "security"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "Value 7 = XTS-AES-256; applies to new volumes; existing volumes retain their encryption method.",
+                    ApplyOps = [RegOp.SetDword(FveKey, "EncryptionMethodWithXtsOs", 7)],
+                    RemoveOps = [RegOp.DeleteValue(FveKey, "EncryptionMethodWithXtsOs")],
+                    DetectOps = [RegOp.CheckDword(FveKey, "EncryptionMethodWithXtsOs", 7)],
+                },
+            ];
     }
 
     // ── BitLockerRemovable ──
@@ -2689,7 +2713,8 @@ internal static class PolicyEncryption
                     + "Prevents writing any data to removable drives (USB flash drives, external HDDs, SD cards) "
                     + "unless they are protected with BitLocker. Read access remains available. "
                     + "Enforces data-at-rest encryption for all removable media leaving the organisation.",
-                SideEffects = "All removable drives without BitLocker become read-only. Existing un-encrypted drives must be encrypted before writing.",
+                SideEffects =
+                    "All removable drives without BitLocker become read-only. Existing un-encrypted drives must be encrypted before writing.",
                 ApplyOps = [RegOp.SetDword(Fve, "RDVDenyWriteAccess", 1)],
                 RemoveOps = [RegOp.DeleteValue(Fve, "RDVDenyWriteAccess")],
                 DetectOps = [RegOp.CheckDword(Fve, "RDVDenyWriteAccess", 1)],
@@ -2867,20 +2892,16 @@ internal static class PolicyEncryption
                 DetectOps = [RegOp.CheckDword(Fve, "RDVRecoveryKey", 2)],
             },
         ];
-
     }
 
     // ── CryptographicOperationsPolicy ──
     private static class _CryptographicOperationsPolicy
     {
-        private const string CryptoKey =
-            @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Cryptography";
+        private const string CryptoKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Cryptography";
 
-        private const string CngKey =
-            @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Cryptography\Configuration\SSL\00010002";
+        private const string CngKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Cryptography\Configuration\SSL\00010002";
 
-        private const string FipsKey =
-            @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa\FipsAlgorithmPolicy";
+        private const string FipsKey = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa\FipsAlgorithmPolicy";
 
         public static IReadOnlyList<TweakDef> Data =>
             [
@@ -2896,7 +2917,8 @@ internal static class PolicyEncryption
                     CorpSafe = true,
                     ImpactScore = 5,
                     SafetyRating = 3,
-                    ImpactNote = "FIPS mode breaks some applications using non-FIPS algorithms (RC4, MD5, non-validated TLS). Test all business applications before enabling in production. Known to break: some Java apps, older .NET apps, certain VPN clients that use RC4.",
+                    ImpactNote =
+                        "FIPS mode breaks some applications using non-FIPS algorithms (RC4, MD5, non-validated TLS). Test all business applications before enabling in production. Known to break: some Java apps, older .NET apps, certain VPN clients that use RC4.",
                     ApplyOps = [RegOp.SetDword(FipsKey, "Enabled", 1)],
                     RemoveOps = [RegOp.DeleteValue(FipsKey, "Enabled")],
                     DetectOps = [RegOp.CheckDword(FipsKey, "Enabled", 1)],
@@ -2913,7 +2935,8 @@ internal static class PolicyEncryption
                     CorpSafe = true,
                     ImpactScore = 4,
                     SafetyRating = 5,
-                    ImpactNote = "RC4 is removed from TLS negotiation. Very old clients that offer only RC4 cannot connect. All TLS 1.2+ clients support AES-based cipher suites.",
+                    ImpactNote =
+                        "RC4 is removed from TLS negotiation. Very old clients that offer only RC4 cannot connect. All TLS 1.2+ clients support AES-based cipher suites.",
                     ApplyOps = [RegOp.SetDword(CryptoKey, "RC4Enabled", 0)],
                     RemoveOps = [RegOp.DeleteValue(CryptoKey, "RC4Enabled")],
                     DetectOps = [RegOp.CheckDword(CryptoKey, "RC4Enabled", 0)],
@@ -2930,7 +2953,8 @@ internal static class PolicyEncryption
                     CorpSafe = true,
                     ImpactScore = 4,
                     SafetyRating = 4,
-                    ImpactNote = "MD5-signed certificates are rejected. Verify that no internal CA certs or code-signing certs in the environment use MD5. The public PKI has been using SHA-256 since 2017.",
+                    ImpactNote =
+                        "MD5-signed certificates are rejected. Verify that no internal CA certs or code-signing certs in the environment use MD5. The public PKI has been using SHA-256 since 2017.",
                     ApplyOps = [RegOp.SetDword(CryptoKey, "MD5SignatureEnabled", 0)],
                     RemoveOps = [RegOp.DeleteValue(CryptoKey, "MD5SignatureEnabled")],
                     DetectOps = [RegOp.CheckDword(CryptoKey, "MD5SignatureEnabled", 0)],
@@ -2947,7 +2971,8 @@ internal static class PolicyEncryption
                     CorpSafe = true,
                     ImpactScore = 4,
                     SafetyRating = 4,
-                    ImpactNote = "Rejects operations with RSA keys <2048 bits. Verify that no legacy certificates in the environment use 1024-bit RSA. Old code signing, S/MIME, or VPN certs may need renewal.",
+                    ImpactNote =
+                        "Rejects operations with RSA keys <2048 bits. Verify that no legacy certificates in the environment use 1024-bit RSA. Old code signing, S/MIME, or VPN certs may need renewal.",
                     ApplyOps = [RegOp.SetDword(CryptoKey, "MinRsaKeyLength", 2048)],
                     RemoveOps = [RegOp.DeleteValue(CryptoKey, "MinRsaKeyLength")],
                     DetectOps = [RegOp.CheckDword(CryptoKey, "MinRsaKeyLength", 2048)],
@@ -2964,7 +2989,8 @@ internal static class PolicyEncryption
                     CorpSafe = true,
                     ImpactScore = 4,
                     SafetyRating = 4,
-                    ImpactNote = "CRL download failures (network unavailable during cert verification) cause authentication failure. Ensure CDP/OCSP endpoints are accessible or implement OCSP caching.",
+                    ImpactNote =
+                        "CRL download failures (network unavailable during cert verification) cause authentication failure. Ensure CDP/OCSP endpoints are accessible or implement OCSP caching.",
                     ApplyOps = [RegOp.SetDword(CryptoKey, "CertificateRevocationEnabled", 1)],
                     RemoveOps = [RegOp.DeleteValue(CryptoKey, "CertificateRevocationEnabled")],
                     DetectOps = [RegOp.CheckDword(CryptoKey, "CertificateRevocationEnabled", 1)],
@@ -2981,7 +3007,8 @@ internal static class PolicyEncryption
                     CorpSafe = true,
                     ImpactScore = 4,
                     SafetyRating = 5,
-                    ImpactNote = "NULL ciphers are removed. No legitimate application should use NULL ciphers; this setting should have no operational impact.",
+                    ImpactNote =
+                        "NULL ciphers are removed. No legitimate application should use NULL ciphers; this setting should have no operational impact.",
                     ApplyOps = [RegOp.SetDword(CryptoKey, "NullCipherEnabled", 0)],
                     RemoveOps = [RegOp.DeleteValue(CryptoKey, "NullCipherEnabled")],
                     DetectOps = [RegOp.CheckDword(CryptoKey, "NullCipherEnabled", 0)],
@@ -2998,7 +3025,8 @@ internal static class PolicyEncryption
                     CorpSafe = true,
                     ImpactScore = 4,
                     SafetyRating = 4,
-                    ImpactNote = "Private key use prompts appear at every signature or decryption operation (email signing, VPN auth). Users with S/MIME-signed email or certificate-based auth will see frequent prompts.",
+                    ImpactNote =
+                        "Private key use prompts appear at every signature or decryption operation (email signing, VPN auth). Users with S/MIME-signed email or certificate-based auth will see frequent prompts.",
                     ApplyOps = [RegOp.SetDword(CryptoKey, "ForceKeyProtection", 2)],
                     RemoveOps = [RegOp.DeleteValue(CryptoKey, "ForceKeyProtection")],
                     DetectOps = [RegOp.CheckDword(CryptoKey, "ForceKeyProtection", 2)],
@@ -3015,7 +3043,8 @@ internal static class PolicyEncryption
                     CorpSafe = true,
                     ImpactScore = 4,
                     SafetyRating = 4,
-                    ImpactNote = "SHA-1 server certs are rejected. Internal web applications with SHA-1 certs will fail TLS. Audit internal CA to identify SHA-1 certs before enabling.",
+                    ImpactNote =
+                        "SHA-1 server certs are rejected. Internal web applications with SHA-1 certs will fail TLS. Audit internal CA to identify SHA-1 certs before enabling.",
                     ApplyOps = [RegOp.SetDword(CryptoKey, "SHA1ServerAuthEnabled", 0)],
                     RemoveOps = [RegOp.DeleteValue(CryptoKey, "SHA1ServerAuthEnabled")],
                     DetectOps = [RegOp.CheckDword(CryptoKey, "SHA1ServerAuthEnabled", 0)],
@@ -3032,7 +3061,8 @@ internal static class PolicyEncryption
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "Enables PKCS#11 bridge. Required for hardware token integration. No impact if no PKCS#11 applications are deployed.",
+                    ImpactNote =
+                        "Enables PKCS#11 bridge. Required for hardware token integration. No impact if no PKCS#11 applications are deployed.",
                     ApplyOps = [RegOp.SetDword(CryptoKey, "EnablePkcs11", 1)],
                     RemoveOps = [RegOp.DeleteValue(CryptoKey, "EnablePkcs11")],
                     DetectOps = [RegOp.CheckDword(CryptoKey, "EnablePkcs11", 1)],
@@ -3049,13 +3079,13 @@ internal static class PolicyEncryption
                     CorpSafe = true,
                     ImpactScore = 4,
                     SafetyRating = 4,
-                    ImpactNote = "Private keys cannot be exported. Users cannot back up their private keys or move them to another device. Ensure key archival is handled by the enterprise CA (key recovery) before enabling.",
+                    ImpactNote =
+                        "Private keys cannot be exported. Users cannot back up their private keys or move them to another device. Ensure key archival is handled by the enterprise CA (key recovery) before enabling.",
                     ApplyOps = [RegOp.SetDword(CryptoKey, "AllowKeyExport", 0)],
                     RemoveOps = [RegOp.DeleteValue(CryptoKey, "AllowKeyExport")],
                     DetectOps = [RegOp.CheckDword(CryptoKey, "AllowKeyExport", 0)],
                 },
             ];
-
     }
 
     // ── EfsEncryptionPolicy ──
@@ -3071,143 +3101,152 @@ internal static class PolicyEncryption
                 Id = "efspol-disable-efs",
                 Label = "Disable EFS (Encrypting File System)",
                 Category = "Encryption",
-                Description = "Disables the Encrypting File System (EFS) on all NTFS volumes. Prevents users from encrypting files with EFS — useful when BitLocker is the mandated encryption solution and EFS would create conflicting or unmanaged encryption. Default: 0 (enabled). Recommended: 1 for BitLocker-only environments.",
+                Description =
+                    "Disables the Encrypting File System (EFS) on all NTFS volumes. Prevents users from encrypting files with EFS — useful when BitLocker is the mandated encryption solution and EFS would create conflicting or unmanaged encryption. Default: 0 (enabled). Recommended: 1 for BitLocker-only environments.",
                 Tags = ["efs", "encryption", "filesystem", "ntfs", "security"],
                 NeedsAdmin = true,
                 CorpSafe = true,
                 RegistryKeys = [Efs],
-                ApplyOps   = [RegOp.SetDword(Efs, "EfsConfiguration", 1)],
-                RemoveOps  = [RegOp.DeleteValue(Efs, "EfsConfiguration")],
-                DetectOps  = [RegOp.CheckDword(Efs, "EfsConfiguration", 1)],
+                ApplyOps = [RegOp.SetDword(Efs, "EfsConfiguration", 1)],
+                RemoveOps = [RegOp.DeleteValue(Efs, "EfsConfiguration")],
+                DetectOps = [RegOp.CheckDword(Efs, "EfsConfiguration", 1)],
             },
             new TweakDef
             {
                 Id = "efspol-disable-cert-request",
                 Label = "Disable EFS Certificate Request UI",
                 Category = "Encryption",
-                Description = "Suppresses the EFS certificate request dialog box when a user encrypts a file and no valid EFS certificate exists. Prevents ad-hoc self-signed EFS certificates from being created outside of PKI control. Default: 0. Recommended: 1.",
+                Description =
+                    "Suppresses the EFS certificate request dialog box when a user encrypts a file and no valid EFS certificate exists. Prevents ad-hoc self-signed EFS certificates from being created outside of PKI control. Default: 0. Recommended: 1.",
                 Tags = ["efs", "certificate", "pki", "encryption"],
                 NeedsAdmin = true,
                 CorpSafe = true,
                 RegistryKeys = [Efs],
-                ApplyOps   = [RegOp.SetDword(Efs, "NoCertRequest", 1)],
-                RemoveOps  = [RegOp.DeleteValue(Efs, "NoCertRequest")],
-                DetectOps  = [RegOp.CheckDword(Efs, "NoCertRequest", 1)],
+                ApplyOps = [RegOp.SetDword(Efs, "NoCertRequest", 1)],
+                RemoveOps = [RegOp.DeleteValue(Efs, "NoCertRequest")],
+                DetectOps = [RegOp.CheckDword(Efs, "NoCertRequest", 1)],
             },
             new TweakDef
             {
                 Id = "efspol-enable-page-file-encryption",
                 Label = "Encrypt Page File via EFS Policy",
                 Category = "Encryption",
-                Description = "Enforces page file encryption at system level, preventing sensitive data in virtual memory from being read from the page file on disk after shutdown or hibernation. Default: 0. Recommended: 1.",
+                Description =
+                    "Enforces page file encryption at system level, preventing sensitive data in virtual memory from being read from the page file on disk after shutdown or hibernation. Default: 0. Recommended: 1.",
                 Tags = ["efs", "page-file", "encryption", "memory", "security"],
                 NeedsAdmin = true,
                 CorpSafe = true,
                 RegistryKeys = [Efs],
-                ApplyOps   = [RegOp.SetDword(Efs, "EfsEncryptPageFiles", 1)],
-                RemoveOps  = [RegOp.DeleteValue(Efs, "EfsEncryptPageFiles")],
-                DetectOps  = [RegOp.CheckDword(Efs, "EfsEncryptPageFiles", 1)],
+                ApplyOps = [RegOp.SetDword(Efs, "EfsEncryptPageFiles", 1)],
+                RemoveOps = [RegOp.DeleteValue(Efs, "EfsEncryptPageFiles")],
+                DetectOps = [RegOp.CheckDword(Efs, "EfsEncryptPageFiles", 1)],
             },
             new TweakDef
             {
                 Id = "efspol-set-cache-timeout",
                 Label = "Set EFS Key Cache Timeout to 8 Hours",
                 Category = "Encryption",
-                Description = "Sets the EFS key cache timeout to 28 800 seconds (8 hours). After this period of inactivity the EFS private key is evicted from memory, requiring re-authentication before encrypted files can be opened. Default: not set. Recommended: 28800.",
+                Description =
+                    "Sets the EFS key cache timeout to 28 800 seconds (8 hours). After this period of inactivity the EFS private key is evicted from memory, requiring re-authentication before encrypted files can be opened. Default: not set. Recommended: 28800.",
                 Tags = ["efs", "cache", "key", "security", "timeout"],
                 NeedsAdmin = true,
                 CorpSafe = true,
                 RegistryKeys = [Efs],
-                ApplyOps   = [RegOp.SetDword(Efs, "CacheTimeOut", 28800)],
-                RemoveOps  = [RegOp.DeleteValue(Efs, "CacheTimeOut")],
-                DetectOps  = [RegOp.CheckDword(Efs, "CacheTimeOut", 28800)],
+                ApplyOps = [RegOp.SetDword(Efs, "CacheTimeOut", 28800)],
+                RemoveOps = [RegOp.DeleteValue(Efs, "CacheTimeOut")],
+                DetectOps = [RegOp.CheckDword(Efs, "CacheTimeOut", 28800)],
             },
             new TweakDef
             {
                 Id = "efspol-require-smart-card",
                 Label = "Require Smart Card for EFS Key Storage",
                 Category = "Encryption",
-                Description = "Forces EFS to use hardware-backed smart card key storage instead of software keys. Ensures EFS encryption keys are protected by hardware rather than being stored in the software key store. Default: 0. Recommended: 1 for high-security PKI environments.",
+                Description =
+                    "Forces EFS to use hardware-backed smart card key storage instead of software keys. Ensures EFS encryption keys are protected by hardware rather than being stored in the software key store. Default: 0. Recommended: 1 for high-security PKI environments.",
                 Tags = ["efs", "smart-card", "pki", "hardware", "security"],
                 NeedsAdmin = true,
                 CorpSafe = true,
                 RegistryKeys = [Efs],
-                ApplyOps   = [RegOp.SetDword(Efs, "FIPSRequired", 1)],
-                RemoveOps  = [RegOp.DeleteValue(Efs, "FIPSRequired")],
-                DetectOps  = [RegOp.CheckDword(Efs, "FIPSRequired", 1)],
+                ApplyOps = [RegOp.SetDword(Efs, "FIPSRequired", 1)],
+                RemoveOps = [RegOp.DeleteValue(Efs, "FIPSRequired")],
+                DetectOps = [RegOp.CheckDword(Efs, "FIPSRequired", 1)],
             },
             new TweakDef
             {
                 Id = "efspol-disable-enhanced-storage-legacy",
                 Label = "Disallow Legacy Devices in Enhanced Storage",
                 Category = "Encryption",
-                Description = "Blocks non-IEEE-1667–compliant (legacy) USB storage devices from being used as enhanced storage targets. Forces use of only certified IEEE-1667 hardware-encrypted storage devices. Default: 0. Recommended: 1.",
+                Description =
+                    "Blocks non-IEEE-1667–compliant (legacy) USB storage devices from being used as enhanced storage targets. Forces use of only certified IEEE-1667 hardware-encrypted storage devices. Default: 0. Recommended: 1.",
                 Tags = ["efs", "enhanced-storage", "usb", "hardware", "security"],
                 NeedsAdmin = true,
                 CorpSafe = true,
                 RegistryKeys = [EfsAdv],
-                ApplyOps   = [RegOp.SetDword(EfsAdv, "DisallowLegacyDevices", 1)],
-                RemoveOps  = [RegOp.DeleteValue(EfsAdv, "DisallowLegacyDevices")],
-                DetectOps  = [RegOp.CheckDword(EfsAdv, "DisallowLegacyDevices", 1)],
+                ApplyOps = [RegOp.SetDword(EfsAdv, "DisallowLegacyDevices", 1)],
+                RemoveOps = [RegOp.DeleteValue(EfsAdv, "DisallowLegacyDevices")],
+                DetectOps = [RegOp.CheckDword(EfsAdv, "DisallowLegacyDevices", 1)],
             },
             new TweakDef
             {
                 Id = "efspol-disable-enhanced-storage-1394",
                 Label = "Disallow IEEE 1394 Enhanced Storage Devices",
                 Category = "Encryption",
-                Description = "Denies use of IEEE 1394 (FireWire) enhanced-storage devices as encryption targets. Eliminates a legacy port-based attack surface available through IEEE 1394 DMA. Default: 0. Recommended: 1.",
+                Description =
+                    "Denies use of IEEE 1394 (FireWire) enhanced-storage devices as encryption targets. Eliminates a legacy port-based attack surface available through IEEE 1394 DMA. Default: 0. Recommended: 1.",
                 Tags = ["efs", "enhanced-storage", "firewire", "ieee1394", "security"],
                 NeedsAdmin = true,
                 CorpSafe = true,
                 RegistryKeys = [EfsAdv],
-                ApplyOps   = [RegOp.SetDword(EfsAdv, "Deny1394Devices", 1)],
-                RemoveOps  = [RegOp.DeleteValue(EfsAdv, "Deny1394Devices")],
-                DetectOps  = [RegOp.CheckDword(EfsAdv, "Deny1394Devices", 1)],
+                ApplyOps = [RegOp.SetDword(EfsAdv, "Deny1394Devices", 1)],
+                RemoveOps = [RegOp.DeleteValue(EfsAdv, "Deny1394Devices")],
+                DetectOps = [RegOp.CheckDword(EfsAdv, "Deny1394Devices", 1)],
             },
             new TweakDef
             {
                 Id = "efspol-require-password-silo",
                 Label = "Require Password Silo Certificate for Enhanced Storage",
                 Category = "Encryption",
-                Description = "Requires a password silo certificate (from organizational CA) before access to enhanced storage devices is granted. Prevents use of consumer/personal enhanced storage in enterprise environments. Default: 0. Recommended: 1.",
+                Description =
+                    "Requires a password silo certificate (from organizational CA) before access to enhanced storage devices is granted. Prevents use of consumer/personal enhanced storage in enterprise environments. Default: 0. Recommended: 1.",
                 Tags = ["efs", "enhanced-storage", "certificate", "silo", "security"],
                 NeedsAdmin = true,
                 CorpSafe = true,
                 RegistryKeys = [EfsAdv],
-                ApplyOps   = [RegOp.SetDword(EfsAdv, "RootHubConnectedEnStorDevices", 0)],
-                RemoveOps  = [RegOp.DeleteValue(EfsAdv, "RootHubConnectedEnStorDevices")],
-                DetectOps  = [RegOp.CheckDword(EfsAdv, "RootHubConnectedEnStorDevices", 0)],
+                ApplyOps = [RegOp.SetDword(EfsAdv, "RootHubConnectedEnStorDevices", 0)],
+                RemoveOps = [RegOp.DeleteValue(EfsAdv, "RootHubConnectedEnStorDevices")],
+                DetectOps = [RegOp.CheckDword(EfsAdv, "RootHubConnectedEnStorDevices", 0)],
             },
             new TweakDef
             {
                 Id = "efspol-lock-enhanced-storage-on-lock",
                 Label = "Lock Enhanced Storage on Workstation Lock",
                 Category = "Encryption",
-                Description = "Locks (re-locks) all connected enhanced storage devices when the workstation is locked (Win+L, screensaver, idle). Ensures encrypted USB storage is inaccessible without re-authentication after lock. Default: 0. Recommended: 1.",
+                Description =
+                    "Locks (re-locks) all connected enhanced storage devices when the workstation is locked (Win+L, screensaver, idle). Ensures encrypted USB storage is inaccessible without re-authentication after lock. Default: 0. Recommended: 1.",
                 Tags = ["efs", "enhanced-storage", "lock", "usb", "security"],
                 NeedsAdmin = true,
                 CorpSafe = true,
                 RegistryKeys = [EfsAdv],
-                ApplyOps   = [RegOp.SetDword(EfsAdv, "LockDeviceOnMachineLock", 1)],
-                RemoveOps  = [RegOp.DeleteValue(EfsAdv, "LockDeviceOnMachineLock")],
-                DetectOps  = [RegOp.CheckDword(EfsAdv, "LockDeviceOnMachineLock", 1)],
+                ApplyOps = [RegOp.SetDword(EfsAdv, "LockDeviceOnMachineLock", 1)],
+                RemoveOps = [RegOp.DeleteValue(EfsAdv, "LockDeviceOnMachineLock")],
+                DetectOps = [RegOp.CheckDword(EfsAdv, "LockDeviceOnMachineLock", 1)],
             },
             new TweakDef
             {
                 Id = "efspol-disable-enhanced-storage-device-list",
                 Label = "Restrict Enhanced Storage to Approved Devices Only",
                 Category = "Encryption",
-                Description = "When set, only enhanced storage devices whose identity matches organizational approved entries are allowed. All unapproved hardware-encrypted USB drives are blocked. Default: 0. Recommended: 1 for controlled hardware environments.",
+                Description =
+                    "When set, only enhanced storage devices whose identity matches organizational approved entries are allowed. All unapproved hardware-encrypted USB drives are blocked. Default: 0. Recommended: 1 for controlled hardware environments.",
                 Tags = ["efs", "enhanced-storage", "allowlist", "usb", "security"],
                 NeedsAdmin = true,
                 CorpSafe = true,
                 RegistryKeys = [EfsAdv],
-                ApplyOps   = [RegOp.SetDword(EfsAdv, "TCGSecurityActivationDisabled", 0)],
-                RemoveOps  = [RegOp.DeleteValue(EfsAdv, "TCGSecurityActivationDisabled")],
-                DetectOps  = [RegOp.CheckDword(EfsAdv, "TCGSecurityActivationDisabled", 0)],
+                ApplyOps = [RegOp.SetDword(EfsAdv, "TCGSecurityActivationDisabled", 0)],
+                RemoveOps = [RegOp.DeleteValue(EfsAdv, "TCGSecurityActivationDisabled")],
+                DetectOps = [RegOp.CheckDword(EfsAdv, "TCGSecurityActivationDisabled", 0)],
             },
         ];
-
     }
 
     // ── FipsCompliancePolicy ──
@@ -3223,7 +3262,8 @@ internal static class PolicyEncryption
                 Id = "fips-enable-fips-algorithm-policy",
                 Label = "FIPS Compliance: Enable FIPS 140-2 Compliant Algorithms",
                 Category = "Encryption",
-                Description = "Enables the FIPS 140-2 compliant algorithm policy (FipsAlgorithmPolicy\\Enabled=1), which forces Windows security subsystems including TLS, Schannel, BitLocker, and Remote Desktop to use only FIPS-approved cryptographic algorithms. Required by NIST SP 800-53, FedRAMP, DoD STIGs, and PCI-DSS environments. Note: some older COM components and third-party applications may fail when this is enforced.",
+                Description =
+                    "Enables the FIPS 140-2 compliant algorithm policy (FipsAlgorithmPolicy\\Enabled=1), which forces Windows security subsystems including TLS, Schannel, BitLocker, and Remote Desktop to use only FIPS-approved cryptographic algorithms. Required by NIST SP 800-53, FedRAMP, DoD STIGs, and PCI-DSS environments. Note: some older COM components and third-party applications may fail when this is enforced.",
                 Tags = ["fips", "cryptography", "compliance", "security", "nist"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -3240,7 +3280,8 @@ internal static class PolicyEncryption
                 Id = "fips-disable-machine-key-caching",
                 Label = "FIPS Compliance: Disable Machine Key Caching",
                 Category = "Encryption",
-                Description = "Disables caching of machine-level CNG (Cryptography Next Generation) private keys in memory. When enabled, machine keys can remain in memory after their first use for performance reasons, but this creates a window where a privileged attacker or malicious driver could extract cached key material. Disabling caching forces fresh key derivation on each use, aligning with zero-trust key management practices.",
+                Description =
+                    "Disables caching of machine-level CNG (Cryptography Next Generation) private keys in memory. When enabled, machine keys can remain in memory after their first use for performance reasons, but this creates a window where a privileged attacker or malicious driver could extract cached key material. Disabling caching forces fresh key derivation on each use, aligning with zero-trust key management practices.",
                 Tags = ["fips", "cryptography", "machine key", "caching", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -3257,7 +3298,8 @@ internal static class PolicyEncryption
                 Id = "fips-force-strong-key-protection",
                 Label = "FIPS Compliance: Force Strong Key Protection for User Keys",
                 Category = "Encryption",
-                Description = "Configures CNG to require strong key protection (ForceKeyProtection=2), which means private keys stored in the user's personal certificate store can only be accessed after the user explicitly provides their password. This prevents silent background access to private keys by automated processes, scheduled tasks, or potentially compromised processes running in the user context without the user's consent.",
+                Description =
+                    "Configures CNG to require strong key protection (ForceKeyProtection=2), which means private keys stored in the user's personal certificate store can only be accessed after the user explicitly provides their password. This prevents silent background access to private keys by automated processes, scheduled tasks, or potentially compromised processes running in the user context without the user's consent.",
                 Tags = ["fips", "cryptography", "key protection", "certificates", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -3274,7 +3316,8 @@ internal static class PolicyEncryption
                 Id = "fips-disable-dpapi-auto-protection",
                 Label = "FIPS Compliance: Restrict DPAPI Automatic Data Protection",
                 Category = "Encryption",
-                Description = "Restricts the Data Protection API (DPAPI) from automatically enrolling new data blobs with default key generation settings that may not be FIPS-compliant. DPAPI is used by browsers (Chrome/Edge), mail clients, and credential managers to protect saved passwords and tokens. When FIPS mode is enabled but DPAPI is not restricted, legacy blobs may still be created using non-FIPS algorithms.",
+                Description =
+                    "Restricts the Data Protection API (DPAPI) from automatically enrolling new data blobs with default key generation settings that may not be FIPS-compliant. DPAPI is used by browsers (Chrome/Edge), mail clients, and credential managers to protect saved passwords and tokens. When FIPS mode is enabled but DPAPI is not restricted, legacy blobs may still be created using non-FIPS algorithms.",
                 Tags = ["fips", "cryptography", "dpapi", "data protection", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -3284,14 +3327,16 @@ internal static class PolicyEncryption
                 DetectOps = [RegOp.CheckDword(CryptoKey, "UseDPAPIForProtection", 0)],
                 ImpactScore = 3,
                 SafetyRating = 3,
-                ImpactNote = "Restricts default DPAPI auto-protection; applications that depend on DPAPI for secret storage may need reconfiguration.",
+                ImpactNote =
+                    "Restricts default DPAPI auto-protection; applications that depend on DPAPI for secret storage may need reconfiguration.",
             },
             new TweakDef
             {
                 Id = "fips-require-sha2-minimum",
                 Label = "FIPS Compliance: Require SHA-2 Minimum for Code Integrity",
                 Category = "Encryption",
-                Description = "Sets the minimum hash algorithm for Authenticode code signing to SHA-2 (SHA-256 or better), blocking execution of binaries signed only with SHA-1 or MD5. SHA-1 signatures have been deprecated by NIST since 2011 and are considered vulnerable to collision attacks. This policy aligns code integrity checking with FIPS 140-2 Annex A requirements.",
+                Description =
+                    "Sets the minimum hash algorithm for Authenticode code signing to SHA-2 (SHA-256 or better), blocking execution of binaries signed only with SHA-1 or MD5. SHA-1 signatures have been deprecated by NIST since 2011 and are considered vulnerable to collision attacks. This policy aligns code integrity checking with FIPS 140-2 Annex A requirements.",
                 Tags = ["fips", "cryptography", "sha2", "code signing", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -3308,7 +3353,8 @@ internal static class PolicyEncryption
                 Id = "fips-disable-rc4-tls",
                 Label = "FIPS Compliance: Disable RC4 Cipher in TLS",
                 Category = "Encryption",
-                Description = "Disables the RC4 stream cipher from the TLS negotiation cipher suite list at the Schannel policy level. RC4 is not FIPS-approved (NSA Suite B) and has been proven vulnerable to statistical attacks (BEAST, RC4NOMORE). Windows Server 2012 R2 and newer disable it by default, but this policy explicitly sets the registry value to ensure RC4 cannot be re-enabled by custom application cipher suite negotiation.",
+                Description =
+                    "Disables the RC4 stream cipher from the TLS negotiation cipher suite list at the Schannel policy level. RC4 is not FIPS-approved (NSA Suite B) and has been proven vulnerable to statistical attacks (BEAST, RC4NOMORE). Windows Server 2012 R2 and newer disable it by default, but this policy explicitly sets the registry value to ensure RC4 cannot be re-enabled by custom application cipher suite negotiation.",
                 Tags = ["fips", "cryptography", "rc4", "tls", "schannel"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -3318,14 +3364,16 @@ internal static class PolicyEncryption
                 DetectOps = [RegOp.CheckDword(CryptoKey, "DisableRC4InTLS", 1)],
                 ImpactScore = 4,
                 SafetyRating = 4,
-                ImpactNote = "Explicitly blocks RC4 in TLS; RC4 was already deprecated in modern Windows, so no behavioral change on up-to-date systems.",
+                ImpactNote =
+                    "Explicitly blocks RC4 in TLS; RC4 was already deprecated in modern Windows, so no behavioral change on up-to-date systems.",
             },
             new TweakDef
             {
                 Id = "fips-disable-weak-hash-algorithms",
                 Label = "FIPS Compliance: Disable MD5 and MD4 Hash Algorithms",
                 Category = "Encryption",
-                Description = "Disables MD5 and MD4 hash algorithms from being used by the Windows CNG key storage provider for new operations. MD5 and MD4 are not FIPS-approved; both have known collision vulnerabilities. While MD5 is still widely used in non-security contexts (file checksums), its use in cryptographic operations (certificate fingerprints, HMAC) must be blocked in FIPS-compliant environments.",
+                Description =
+                    "Disables MD5 and MD4 hash algorithms from being used by the Windows CNG key storage provider for new operations. MD5 and MD4 are not FIPS-approved; both have known collision vulnerabilities. While MD5 is still widely used in non-security contexts (file checksums), its use in cryptographic operations (certificate fingerprints, HMAC) must be blocked in FIPS-compliant environments.",
                 Tags = ["fips", "cryptography", "md5", "hash algorithms", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -3342,7 +3390,8 @@ internal static class PolicyEncryption
                 Id = "fips-disable-des-3des-cipher",
                 Label = "FIPS Compliance: Restrict DES and 3DES Ciphers",
                 Category = "Encryption",
-                Description = "Restricts use of DES (56-bit) and Triple-DES (3DES/TDEA) block ciphers in new cryptographic sessions. DES has been disallowed by NIST since 2005. 3DES (with 112-bit effective security) was deprecated by NIST SP 800-131A in 2023 for new use and is only approved through 2023 for legacy compatibility. This policy aligns the cipher suite with the requirement for AES-256 minimum.",
+                Description =
+                    "Restricts use of DES (56-bit) and Triple-DES (3DES/TDEA) block ciphers in new cryptographic sessions. DES has been disallowed by NIST since 2005. 3DES (with 112-bit effective security) was deprecated by NIST SP 800-131A in 2023 for new use and is only approved through 2023 for legacy compatibility. This policy aligns the cipher suite with the requirement for AES-256 minimum.",
                 Tags = ["fips", "cryptography", "des", "3des", "cipher policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -3359,7 +3408,8 @@ internal static class PolicyEncryption
                 Id = "fips-require-tls-certificate-validation",
                 Label = "FIPS Compliance: Require Full Certificate Chain Validation",
                 Category = "Encryption",
-                Description = "Requires that all TLS connections validate the complete certificate chain including OCSP stapling verification and CRL distribution point checks. In FIPS environments, certificate validation must be comprehensive — weak pinning, expired status checks, or bypassed revocation checks can introduce attack vectors. This policy sets the strict validation mode for the Windows Schannel certificate validation path.",
+                Description =
+                    "Requires that all TLS connections validate the complete certificate chain including OCSP stapling verification and CRL distribution point checks. In FIPS environments, certificate validation must be comprehensive — weak pinning, expired status checks, or bypassed revocation checks can introduce attack vectors. This policy sets the strict validation mode for the Windows Schannel certificate validation path.",
                 Tags = ["fips", "cryptography", "certificate", "tls validation", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -3376,7 +3426,8 @@ internal static class PolicyEncryption
                 Id = "fips-enforce-secure-channel-minimum",
                 Label = "FIPS Compliance: Enforce Minimum Secure Channel Protocol Version",
                 Category = "Encryption",
-                Description = "Enforces a minimum TLS 1.2 protocol version for all Windows Schannel connections, preventing fallback to SSL 3.0, TLS 1.0, or TLS 1.1. All three older versions have documented protocol-level vulnerabilities (POODLE, BEAST, DROWN, BEAST) that allow decryption of traffic by an active network attacker. FIPS 140-2 references NIST SP 800-52 which mandates TLS 1.2 as the minimum for federal systems.",
+                Description =
+                    "Enforces a minimum TLS 1.2 protocol version for all Windows Schannel connections, preventing fallback to SSL 3.0, TLS 1.0, or TLS 1.1. All three older versions have documented protocol-level vulnerabilities (POODLE, BEAST, DROWN, BEAST) that allow decryption of traffic by an active network attacker. FIPS 140-2 references NIST SP 800-52 which mandates TLS 1.2 as the minimum for federal systems.",
                 Tags = ["fips", "cryptography", "tls", "secure channel", "minimum version"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -3389,7 +3440,6 @@ internal static class PolicyEncryption
                 ImpactNote = "Enforces TLS 1.2+ minimum; connections to servers that only support TLS 1.0/1.1 or SSL 3.0 will fail.",
             },
         ];
-
     }
 
     // ── HvciPolicy ──
@@ -3571,7 +3621,6 @@ internal static class PolicyEncryption
                     DetectOps = [RegOp.CheckDword(Key, "EnableCIPolicyTelemetry", 1)],
                 },
             ];
-
     }
 
     // ── MemoryIntegrityPolicy ──
@@ -3752,7 +3801,6 @@ internal static class PolicyEncryption
                 DetectOps = [RegOp.CheckDword(Key, "KernelShadowStacksEnabled", 1)],
             },
         ];
-
     }
 
     // ── PersonalDataEncryptionPolicy ──
@@ -3763,189 +3811,201 @@ internal static class PolicyEncryption
         private const string PdeDeviceKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\PDE\Device";
 
         public static IReadOnlyList<TweakDef> Data =>
-        [
-            new TweakDef
-            {
-                Id = "pde-enable-personal-data-encryption",
-                Label = "Enable Personal Data Encryption",
-                Category = "Encryption",
-                Description = "Enables Personal Data Encryption (PDE) on the device, protecting user files in selected folders with keys tied to the signed-in user identity. Requires Windows Hello for Business.",
-                Tags = ["pde", "encryption", "personal-data", "security", "windows-11"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                MinBuild = 22621,
-                ImpactScore = 4,
-                SafetyRating = 4,
-                ImpactNote = "Files in protected folders become inaccessible until the user authenticates via Windows Hello; improves data security at rest.",
-                RegistryKeys = [PdeKey],
-                ApplyOps  = [RegOp.SetDword(PdeKey, "EnablePersonalDataEncryption", 1)],
-                RemoveOps = [RegOp.DeleteValue(PdeKey, "EnablePersonalDataEncryption")],
-                DetectOps = [RegOp.CheckDword(PdeKey, "EnablePersonalDataEncryption", 1)],
-            },
-            new TweakDef
-            {
-                Id = "pde-require-device-encryption-prereq",
-                Label = "Require BitLocker as PDE Prerequisite",
-                Category = "Encryption",
-                Description = "Requires BitLocker drive encryption to be active before Personal Data Encryption can be applied to user folders. Ensures defense-in-depth for protected content.",
-                Tags = ["pde", "encryption", "bitlocker", "prerequisite", "security"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                MinBuild = 22621,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                ImpactNote = "Enforces layered encryption: BitLocker protects the drive, PDE protects individual user files.",
-                RegistryKeys = [PdeKey],
-                ApplyOps  = [RegOp.SetDword(PdeKey, "RequireDeviceEncryption", 1)],
-                RemoveOps = [RegOp.DeleteValue(PdeKey, "RequireDeviceEncryption")],
-                DetectOps = [RegOp.CheckDword(PdeKey, "RequireDeviceEncryption", 1)],
-            },
-            new TweakDef
-            {
-                Id = "pde-block-network-content-access",
-                Label = "Block PDE Content Access from Network Accounts",
-                Category = "Encryption",
-                Description = "Prevents network service accounts and remote processes from accessing folders protected by Personal Data Encryption, limiting access to the locally signed-in user.",
-                Tags = ["pde", "encryption", "network", "access-control", "security"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                MinBuild = 22621,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Stops backup agents or network-based tools from reading PDE-protected files when the owning user is not signed in.",
-                RegistryKeys = [PdeKey],
-                ApplyOps  = [RegOp.SetDword(PdeKey, "BlockNetworkAccessToPDEContent", 1)],
-                RemoveOps = [RegOp.DeleteValue(PdeKey, "BlockNetworkAccessToPDEContent")],
-                DetectOps = [RegOp.CheckDword(PdeKey, "BlockNetworkAccessToPDEContent", 1)],
-            },
-            new TweakDef
-            {
-                Id = "pde-wipe-keys-on-lock",
-                Label = "Wipe PDE Keys on Device Lock",
-                Category = "Encryption",
-                Description = "Instructs Windows to purge in-memory Personal Data Encryption keys when the device screen locks. Files remain encrypted and inaccessible until the user unlocks with Windows Hello.",
-                Tags = ["pde", "encryption", "lock-screen", "key-management", "security"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                MinBuild = 22621,
-                ImpactScore = 4,
-                SafetyRating = 4,
-                ImpactNote = "Reduces the window during which PDE keys are resident in memory after the device is left unattended.",
-                RegistryKeys = [PdeKey],
-                ApplyOps  = [RegOp.SetDword(PdeKey, "WipeKeysOnLock", 1)],
-                RemoveOps = [RegOp.DeleteValue(PdeKey, "WipeKeysOnLock")],
-                DetectOps = [RegOp.CheckDword(PdeKey, "WipeKeysOnLock", 1)],
-            },
-            new TweakDef
-            {
-                Id = "pde-protect-desktop-folder",
-                Label = "Enable PDE Protection for Desktop Folder",
-                Category = "Encryption",
-                Description = "Applies Personal Data Encryption to the user's Desktop folder, ensuring files placed on the desktop are encrypted with the user's Windows Hello identity key.",
-                Tags = ["pde", "encryption", "desktop", "folder-protection", "windows-11"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                MinBuild = 22621,
-                ImpactScore = 3,
-                SafetyRating = 4,
-                ImpactNote = "Desktop files are frequently targeted; encrypting the Desktop folder prevents offline access by attackers with physical access.",
-                RegistryKeys = [PdeFoldersKey],
-                ApplyOps  = [RegOp.SetDword(PdeFoldersKey, "ProtectDesktopFolder", 1)],
-                RemoveOps = [RegOp.DeleteValue(PdeFoldersKey, "ProtectDesktopFolder")],
-                DetectOps = [RegOp.CheckDword(PdeFoldersKey, "ProtectDesktopFolder", 1)],
-            },
-            new TweakDef
-            {
-                Id = "pde-protect-documents-folder",
-                Label = "Enable PDE Protection for Documents Folder",
-                Category = "Encryption",
-                Description = "Applies Personal Data Encryption to the user's Documents folder. Files are encrypted with user identity keys tied to Windows Hello, preventing offline access without user authentication.",
-                Tags = ["pde", "encryption", "documents", "folder-protection", "windows-11"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                MinBuild = 22621,
-                ImpactScore = 4,
-                SafetyRating = 4,
-                ImpactNote = "Documents folder often contains sensitive business data; PDE protection prevents access when the device is lost or stolen.",
-                RegistryKeys = [PdeFoldersKey],
-                ApplyOps  = [RegOp.SetDword(PdeFoldersKey, "ProtectDocumentsFolder", 1)],
-                RemoveOps = [RegOp.DeleteValue(PdeFoldersKey, "ProtectDocumentsFolder")],
-                DetectOps = [RegOp.CheckDword(PdeFoldersKey, "ProtectDocumentsFolder", 1)],
-            },
-            new TweakDef
-            {
-                Id = "pde-protect-pictures-folder",
-                Label = "Enable PDE Protection for Pictures Folder",
-                Category = "Encryption",
-                Description = "Applies Personal Data Encryption to the user's Pictures folder, protecting images and media from offline access on lost or stolen devices.",
-                Tags = ["pde", "encryption", "pictures", "folder-protection", "windows-11"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                MinBuild = 22621,
-                ImpactScore = 3,
-                SafetyRating = 4,
-                ImpactNote = "Protects personal images from exposure during device repairs or after physical theft.",
-                RegistryKeys = [PdeFoldersKey],
-                ApplyOps  = [RegOp.SetDword(PdeFoldersKey, "ProtectPicturesFolder", 1)],
-                RemoveOps = [RegOp.DeleteValue(PdeFoldersKey, "ProtectPicturesFolder")],
-                DetectOps = [RegOp.CheckDword(PdeFoldersKey, "ProtectPicturesFolder", 1)],
-            },
-            new TweakDef
-            {
-                Id = "pde-audit-access-events",
-                Label = "Enable PDE Access Audit Events",
-                Category = "Encryption",
-                Description = "Enables Windows to generate audit events when PDE-protected content is accessed or when PDE encryption/decryption operations occur, supporting security monitoring and compliance.",
-                Tags = ["pde", "encryption", "audit", "compliance", "event-log"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                MinBuild = 22621,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Provides visibility into who accesses PDE-protected files and when, aiding incident investigation.",
-                RegistryKeys = [PdeKey],
-                ApplyOps  = [RegOp.SetDword(PdeKey, "EnablePDEAuditEvents", 1)],
-                RemoveOps = [RegOp.DeleteValue(PdeKey, "EnablePDEAuditEvents")],
-                DetectOps = [RegOp.CheckDword(PdeKey, "EnablePDEAuditEvents", 1)],
-            },
-            new TweakDef
-            {
-                Id = "pde-restrict-key-backup",
-                Label = "Restrict PDE Key Backup to Organization",
-                Category = "Encryption",
-                Description = "Limits Personal Data Encryption key backup to organization-controlled Microsoft Entra ID (Azure AD) accounts only, preventing personal Microsoft account key escrow.",
-                Tags = ["pde", "encryption", "key-backup", "azure-ad", "enterprise"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                MinBuild = 22621,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Ensures only the organization's IT department can facilitate key recovery, not personal Microsoft accounts.",
-                RegistryKeys = [PdeDeviceKey],
-                ApplyOps  = [RegOp.SetDword(PdeDeviceKey, "RestrictKeyBackupToOrganization", 1)],
-                RemoveOps = [RegOp.DeleteValue(PdeDeviceKey, "RestrictKeyBackupToOrganization")],
-                DetectOps = [RegOp.CheckDword(PdeDeviceKey, "RestrictKeyBackupToOrganization", 1)],
-            },
-            new TweakDef
-            {
-                Id = "pde-require-windows-hello-enrolment",
-                Label = "Require Windows Hello Enrollment for PDE",
-                Category = "Encryption",
-                Description = "Enforces that users must be enrolled in Windows Hello for Business before Personal Data Encryption can be activated on their device. Prevents PDE deployment without modern authentication.",
-                Tags = ["pde", "encryption", "windows-hello", "enrollment", "security"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                MinBuild = 22621,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Ensures PDE keys are always bound to strong authentication rather than password-only accounts.",
-                RegistryKeys = [PdeDeviceKey],
-                ApplyOps  = [RegOp.SetDword(PdeDeviceKey, "RequireWindowsHelloEnrollment", 1)],
-                RemoveOps = [RegOp.DeleteValue(PdeDeviceKey, "RequireWindowsHelloEnrollment")],
-                DetectOps = [RegOp.CheckDword(PdeDeviceKey, "RequireWindowsHelloEnrollment", 1)],
-            },
-        ];
-
+            [
+                new TweakDef
+                {
+                    Id = "pde-enable-personal-data-encryption",
+                    Label = "Enable Personal Data Encryption",
+                    Category = "Encryption",
+                    Description =
+                        "Enables Personal Data Encryption (PDE) on the device, protecting user files in selected folders with keys tied to the signed-in user identity. Requires Windows Hello for Business.",
+                    Tags = ["pde", "encryption", "personal-data", "security", "windows-11"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    MinBuild = 22621,
+                    ImpactScore = 4,
+                    SafetyRating = 4,
+                    ImpactNote =
+                        "Files in protected folders become inaccessible until the user authenticates via Windows Hello; improves data security at rest.",
+                    RegistryKeys = [PdeKey],
+                    ApplyOps = [RegOp.SetDword(PdeKey, "EnablePersonalDataEncryption", 1)],
+                    RemoveOps = [RegOp.DeleteValue(PdeKey, "EnablePersonalDataEncryption")],
+                    DetectOps = [RegOp.CheckDword(PdeKey, "EnablePersonalDataEncryption", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "pde-require-device-encryption-prereq",
+                    Label = "Require BitLocker as PDE Prerequisite",
+                    Category = "Encryption",
+                    Description =
+                        "Requires BitLocker drive encryption to be active before Personal Data Encryption can be applied to user folders. Ensures defense-in-depth for protected content.",
+                    Tags = ["pde", "encryption", "bitlocker", "prerequisite", "security"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    MinBuild = 22621,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "Enforces layered encryption: BitLocker protects the drive, PDE protects individual user files.",
+                    RegistryKeys = [PdeKey],
+                    ApplyOps = [RegOp.SetDword(PdeKey, "RequireDeviceEncryption", 1)],
+                    RemoveOps = [RegOp.DeleteValue(PdeKey, "RequireDeviceEncryption")],
+                    DetectOps = [RegOp.CheckDword(PdeKey, "RequireDeviceEncryption", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "pde-block-network-content-access",
+                    Label = "Block PDE Content Access from Network Accounts",
+                    Category = "Encryption",
+                    Description =
+                        "Prevents network service accounts and remote processes from accessing folders protected by Personal Data Encryption, limiting access to the locally signed-in user.",
+                    Tags = ["pde", "encryption", "network", "access-control", "security"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    MinBuild = 22621,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "Stops backup agents or network-based tools from reading PDE-protected files when the owning user is not signed in.",
+                    RegistryKeys = [PdeKey],
+                    ApplyOps = [RegOp.SetDword(PdeKey, "BlockNetworkAccessToPDEContent", 1)],
+                    RemoveOps = [RegOp.DeleteValue(PdeKey, "BlockNetworkAccessToPDEContent")],
+                    DetectOps = [RegOp.CheckDword(PdeKey, "BlockNetworkAccessToPDEContent", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "pde-wipe-keys-on-lock",
+                    Label = "Wipe PDE Keys on Device Lock",
+                    Category = "Encryption",
+                    Description =
+                        "Instructs Windows to purge in-memory Personal Data Encryption keys when the device screen locks. Files remain encrypted and inaccessible until the user unlocks with Windows Hello.",
+                    Tags = ["pde", "encryption", "lock-screen", "key-management", "security"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    MinBuild = 22621,
+                    ImpactScore = 4,
+                    SafetyRating = 4,
+                    ImpactNote = "Reduces the window during which PDE keys are resident in memory after the device is left unattended.",
+                    RegistryKeys = [PdeKey],
+                    ApplyOps = [RegOp.SetDword(PdeKey, "WipeKeysOnLock", 1)],
+                    RemoveOps = [RegOp.DeleteValue(PdeKey, "WipeKeysOnLock")],
+                    DetectOps = [RegOp.CheckDword(PdeKey, "WipeKeysOnLock", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "pde-protect-desktop-folder",
+                    Label = "Enable PDE Protection for Desktop Folder",
+                    Category = "Encryption",
+                    Description =
+                        "Applies Personal Data Encryption to the user's Desktop folder, ensuring files placed on the desktop are encrypted with the user's Windows Hello identity key.",
+                    Tags = ["pde", "encryption", "desktop", "folder-protection", "windows-11"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    MinBuild = 22621,
+                    ImpactScore = 3,
+                    SafetyRating = 4,
+                    ImpactNote =
+                        "Desktop files are frequently targeted; encrypting the Desktop folder prevents offline access by attackers with physical access.",
+                    RegistryKeys = [PdeFoldersKey],
+                    ApplyOps = [RegOp.SetDword(PdeFoldersKey, "ProtectDesktopFolder", 1)],
+                    RemoveOps = [RegOp.DeleteValue(PdeFoldersKey, "ProtectDesktopFolder")],
+                    DetectOps = [RegOp.CheckDword(PdeFoldersKey, "ProtectDesktopFolder", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "pde-protect-documents-folder",
+                    Label = "Enable PDE Protection for Documents Folder",
+                    Category = "Encryption",
+                    Description =
+                        "Applies Personal Data Encryption to the user's Documents folder. Files are encrypted with user identity keys tied to Windows Hello, preventing offline access without user authentication.",
+                    Tags = ["pde", "encryption", "documents", "folder-protection", "windows-11"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    MinBuild = 22621,
+                    ImpactScore = 4,
+                    SafetyRating = 4,
+                    ImpactNote =
+                        "Documents folder often contains sensitive business data; PDE protection prevents access when the device is lost or stolen.",
+                    RegistryKeys = [PdeFoldersKey],
+                    ApplyOps = [RegOp.SetDword(PdeFoldersKey, "ProtectDocumentsFolder", 1)],
+                    RemoveOps = [RegOp.DeleteValue(PdeFoldersKey, "ProtectDocumentsFolder")],
+                    DetectOps = [RegOp.CheckDword(PdeFoldersKey, "ProtectDocumentsFolder", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "pde-protect-pictures-folder",
+                    Label = "Enable PDE Protection for Pictures Folder",
+                    Category = "Encryption",
+                    Description =
+                        "Applies Personal Data Encryption to the user's Pictures folder, protecting images and media from offline access on lost or stolen devices.",
+                    Tags = ["pde", "encryption", "pictures", "folder-protection", "windows-11"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    MinBuild = 22621,
+                    ImpactScore = 3,
+                    SafetyRating = 4,
+                    ImpactNote = "Protects personal images from exposure during device repairs or after physical theft.",
+                    RegistryKeys = [PdeFoldersKey],
+                    ApplyOps = [RegOp.SetDword(PdeFoldersKey, "ProtectPicturesFolder", 1)],
+                    RemoveOps = [RegOp.DeleteValue(PdeFoldersKey, "ProtectPicturesFolder")],
+                    DetectOps = [RegOp.CheckDword(PdeFoldersKey, "ProtectPicturesFolder", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "pde-audit-access-events",
+                    Label = "Enable PDE Access Audit Events",
+                    Category = "Encryption",
+                    Description =
+                        "Enables Windows to generate audit events when PDE-protected content is accessed or when PDE encryption/decryption operations occur, supporting security monitoring and compliance.",
+                    Tags = ["pde", "encryption", "audit", "compliance", "event-log"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    MinBuild = 22621,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "Provides visibility into who accesses PDE-protected files and when, aiding incident investigation.",
+                    RegistryKeys = [PdeKey],
+                    ApplyOps = [RegOp.SetDword(PdeKey, "EnablePDEAuditEvents", 1)],
+                    RemoveOps = [RegOp.DeleteValue(PdeKey, "EnablePDEAuditEvents")],
+                    DetectOps = [RegOp.CheckDword(PdeKey, "EnablePDEAuditEvents", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "pde-restrict-key-backup",
+                    Label = "Restrict PDE Key Backup to Organization",
+                    Category = "Encryption",
+                    Description =
+                        "Limits Personal Data Encryption key backup to organization-controlled Microsoft Entra ID (Azure AD) accounts only, preventing personal Microsoft account key escrow.",
+                    Tags = ["pde", "encryption", "key-backup", "azure-ad", "enterprise"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    MinBuild = 22621,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "Ensures only the organization's IT department can facilitate key recovery, not personal Microsoft accounts.",
+                    RegistryKeys = [PdeDeviceKey],
+                    ApplyOps = [RegOp.SetDword(PdeDeviceKey, "RestrictKeyBackupToOrganization", 1)],
+                    RemoveOps = [RegOp.DeleteValue(PdeDeviceKey, "RestrictKeyBackupToOrganization")],
+                    DetectOps = [RegOp.CheckDword(PdeDeviceKey, "RestrictKeyBackupToOrganization", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "pde-require-windows-hello-enrolment",
+                    Label = "Require Windows Hello Enrollment for PDE",
+                    Category = "Encryption",
+                    Description =
+                        "Enforces that users must be enrolled in Windows Hello for Business before Personal Data Encryption can be activated on their device. Prevents PDE deployment without modern authentication.",
+                    Tags = ["pde", "encryption", "windows-hello", "enrollment", "security"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    MinBuild = 22621,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "Ensures PDE keys are always bound to strong authentication rather than password-only accounts.",
+                    RegistryKeys = [PdeDeviceKey],
+                    ApplyOps = [RegOp.SetDword(PdeDeviceKey, "RequireWindowsHelloEnrollment", 1)],
+                    RemoveOps = [RegOp.DeleteValue(PdeDeviceKey, "RequireWindowsHelloEnrollment")],
+                    DetectOps = [RegOp.CheckDword(PdeDeviceKey, "RequireWindowsHelloEnrollment", 1)],
+                },
+            ];
     }
 
     // ── SecureBootDbxPolicy ──
@@ -4138,7 +4198,6 @@ internal static class PolicyEncryption
                     DetectOps = [RegOp.CheckDword(UefiPolicyKey, "EnableHibernateResumeIntegrity", 1)],
                 },
             ];
-
     }
 
     // ── SecureBootPolicy ──
@@ -4153,7 +4212,10 @@ internal static class PolicyEncryption
                 Id = "secboot-enable-db-update",
                 Label = "Enable Secure Boot DB Update",
                 Category = "Encryption",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 4, SafetyRating = 5,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 4,
+                SafetyRating = 5,
                 Description =
                     "Sets AllowUpdateOfSecureBootDb=1 in the SecureBoot policy key. Permits "
                     + "Windows Update to deliver updated Secure Boot Allowed (db) and "
@@ -4173,7 +4235,10 @@ internal static class PolicyEncryption
                 Id = "secboot-disable-test-signing",
                 Label = "Disable Test-Signing Mode Boot",
                 Category = "Encryption",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 5, SafetyRating = 5,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 5,
+                SafetyRating = 5,
                 Description =
                     "Sets DisableTestSigning=1 in the SecureBoot policy key. Prevents the "
                     + "system from booting with the test-signing BCD flag enabled, which "
@@ -4192,7 +4257,10 @@ internal static class PolicyEncryption
                 Id = "secboot-enable-user-mode-ci",
                 Label = "Enable User-Mode Code Integrity (UMCI)",
                 Category = "Encryption",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 5, SafetyRating = 4,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 5,
+                SafetyRating = 4,
                 Description =
                     "Sets EnableUMCI=1 in the SecureBoot policy key. Activates User-Mode "
                     + "Code Integrity enforcement, ensuring that user-mode binaries and "
@@ -4211,7 +4279,10 @@ internal static class PolicyEncryption
                 Id = "secboot-enable-kernel-ci",
                 Label = "Enable Kernel Code Integrity Enforcement",
                 Category = "Encryption",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 5, SafetyRating = 4,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 5,
+                SafetyRating = 4,
                 Description =
                     "Sets EnableKernelCI=1 in the SecureBoot policy key. Enforces that only "
                     + "WHQL or EV-code-signed kernel-mode drivers are permitted to load "
@@ -4230,7 +4301,10 @@ internal static class PolicyEncryption
                 Id = "secboot-enable-secinitrd",
                 Label = "Enable Secure Initial Ramdisk (secInitrd)",
                 Category = "Encryption",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 4, SafetyRating = 5,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 4,
+                SafetyRating = 5,
                 Description =
                     "Sets EnableSecInitRd=1 in the SecureBoot policy key. Requires the "
                     + "Windows Recovery Environment and boot-critical drivers compressed "
@@ -4249,7 +4323,10 @@ internal static class PolicyEncryption
                 Id = "secboot-disable-network-unlock",
                 Label = "Disable Secure Boot Network Unlock",
                 Category = "Encryption",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 3, SafetyRating = 5,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 3,
+                SafetyRating = 5,
                 Description =
                     "Sets DisableNetworkUnlock=1 in the SecureBoot policy key. Prevents "
                     + "BitLocker Network Unlock from releasing the volume encryption key "
@@ -4268,7 +4345,10 @@ internal static class PolicyEncryption
                 Id = "secboot-enforce-secure-mos-policy",
                 Label = "Enforce Secure Managed OS Policy",
                 Category = "Encryption",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 4, SafetyRating = 4,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 4,
+                SafetyRating = 4,
                 Description =
                     "Sets EnforceManagedOsPolicy=1 in the SecureBoot policy key. Requires "
                     + "that the device's Secure Boot configuration matches a defined managed "
@@ -4287,7 +4367,10 @@ internal static class PolicyEncryption
                 Id = "secboot-disable-custom-pk",
                 Label = "Disable Custom Platform Key Enrollment",
                 Category = "Encryption",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 4, SafetyRating = 5,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 4,
+                SafetyRating = 5,
                 Description =
                     "Sets DisableCustomPk=1 in the SecureBoot policy key. Prevents users "
                     + "or local administrators from replacing the UEFI Platform Key (PK) "
@@ -4306,7 +4389,10 @@ internal static class PolicyEncryption
                 Id = "secboot-require-bootloader-revocation",
                 Label = "Require Bootloader Revocation Check",
                 Category = "Encryption",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 4, SafetyRating = 5,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 4,
+                SafetyRating = 5,
                 Description =
                     "Sets RequireBootloaderRevocationCheck=1 in the SecureBoot policy key. "
                     + "Forces the Windows boot manager to verify the dbx (Forbidden "
@@ -4325,7 +4411,10 @@ internal static class PolicyEncryption
                 Id = "secboot-disable-secure-boot-telemetry",
                 Label = "Disable Secure Boot Telemetry",
                 Category = "Encryption",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 2, SafetyRating = 5,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 2,
+                SafetyRating = 5,
                 Description =
                     "Sets DisableSecureBootTelemetry=1 in the SecureBoot policy key. Stops "
                     + "the Windows boot manager and Secure Boot runtime from emitting "
@@ -4340,7 +4429,6 @@ internal static class PolicyEncryption
                 DetectOps = [RegOp.CheckDword(Key, "DisableSecureBootTelemetry", 1)],
             },
         ];
-
     }
 
     // ── TlsSchannel ──
@@ -4621,7 +4709,6 @@ internal static class PolicyEncryption
                 DetectOps = [RegOp.CheckDword(SchannelRoot + @"\Protocols\TLS 1.2\Client", "Enabled", 1)],
             },
         ];
-
     }
 
     // ── UefiLockPolicy ──
@@ -4814,7 +4901,6 @@ internal static class PolicyEncryption
                     DetectOps = [RegOp.CheckDword(UefiPolicyKey, "EnablePkExpiryNotification", 1)],
                 },
             ];
-
     }
 
     // ── VbsEnforcementPolicy ──
@@ -4996,7 +5082,5 @@ internal static class PolicyEncryption
                     DetectOps = [RegOp.CheckDword(Key, "EnableCredentialGuard", 1)],
                 },
             ];
-
     }
-
 }

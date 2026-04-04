@@ -1,5 +1,4 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <!-- Benchmarks are NOT test projects; run in Release mode for accurate measurements.
@@ -14,5 +13,4 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\RegiLattice.Core\RegiLattice.Core.csproj" />
   </ItemGroup>
-
 </Project>

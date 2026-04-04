@@ -604,7 +604,6 @@ internal static class Explorer
                 RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "HideDrivesWithNoMedia", 0),
             ],
         },
-
         new TweakDef
         {
             Id = "explorer-open-to-this-pc",
@@ -619,7 +618,6 @@ internal static class Explorer
             RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "LaunchTo", 2)],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "LaunchTo", 1)],
         },
-
         new TweakDef
         {
             Id = "explorer-expand-to-open-folder",
@@ -677,7 +675,6 @@ internal static class Explorer
                 ),
             ],
         },
-
         // ── Restored stubs with real registry operations ──────────────────
 
         new TweakDef
@@ -2206,12 +2203,10 @@ internal static class Clipboard
 
 // === Merged from: Shell.cs ===
 
-
 internal static class Shell
 {
     internal static IReadOnlyList<TweakDef> Tweaks { get; } =
     [
-
         new TweakDef
         {
             Id = "shell-compact-file-explorer",
@@ -2226,7 +2221,6 @@ internal static class Shell
             RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "UseCompactMode", 0)],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "UseCompactMode", 1)],
         },
-
         new TweakDef
         {
             Id = "shell-disable-ink-workspace",
@@ -2642,7 +2636,6 @@ internal static class Shell
             RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "SharingWizardOn", 1)],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "SharingWizardOn", 0)],
         },
-
         new TweakDef
         {
             Id = "shell-restore-previous-folders",
@@ -2682,7 +2675,6 @@ internal static class Shell
                 RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "ShowEncryptCompressedColor", 1),
             ],
         },
-
         new TweakDef
         {
             Id = "shell-disable-recent-docs-policy",

@@ -28,7 +28,6 @@ internal static class Power
             ],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power", "HibernateEnabled", 0)],
         },
-
         new TweakDef
         {
             Id = "power-disable-fast-startup",
@@ -488,7 +487,6 @@ internal static class Power
                 return stdout.Contains("8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c", StringComparison.OrdinalIgnoreCase);
             },
         },
-
         new TweakDef
         {
             Id = "power-max-processor-turbo",

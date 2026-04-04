@@ -211,10 +211,7 @@ public sealed class TweakEngineBuiltinsTests : IClassFixture<BuiltinsFixture>
     {
         var byCat = _engine.TweaksByCategory();
         Assert.True(byCat.ContainsKey("Display"));
-        Assert.True(
-            byCat["Display"].Count >= 40,
-            $"Expected ≥40 Display tweaks, got {byCat["Display"].Count}"
-        );
+        Assert.True(byCat["Display"].Count >= 40, $"Expected ≥40 Display tweaks, got {byCat["Display"].Count}");
     }
 
     // System Optimization → Performance → System (v6.1.0 consolidation)
@@ -226,10 +223,7 @@ public sealed class TweakEngineBuiltinsTests : IClassFixture<BuiltinsFixture>
     {
         var byCat = _engine.TweaksByCategory();
         Assert.True(byCat.ContainsKey("System"));
-        Assert.True(
-            byCat["System"].Count >= 28,
-            $"Expected ≥28 System tweaks, got {byCat["System"].Count}"
-        );
+        Assert.True(byCat["System"].Count >= 28, $"Expected ≥28 System tweaks, got {byCat["System"].Count}");
     }
 
     // ── Performance ─────────────────────────────────────────────────────
@@ -880,11 +874,7 @@ public sealed class TweakEngineBuiltinsTests : IClassFixture<BuiltinsFixture>
         // Note: Security is excluded because it now contains harden- prefix tweaks (merged from Hardening)
         // Note: Startup is excluded because it now contains boot- prefix tweaks (merged from Boot)
         // Note: Windows Update is excluded because it now contains cbsupd- prefix tweaks (merged from PolicyUpdate)
-        var checkedCategories = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
-        {
-            ["Services"] = "svc-",
-            ["Taskbar"] = "tb-",
-        };
+        var checkedCategories = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) { ["Services"] = "svc-", ["Taskbar"] = "tb-" };
 
         var violations = new List<string>();
         foreach (var (category, prefix) in checkedCategories)
@@ -1591,11 +1581,9 @@ public sealed class PolicyModulesV574Tests : IClassFixture<BuiltinsFixture>
     [InlineData("wsl2adv-", "Wsl2Advanced")]
     public void Module_RegistersAtLeastOneTweak(string idPrefix, string moduleName)
     {
-        int count = _engine.AllTweaks()
-            .Count(t => t.Id.StartsWith(idPrefix, StringComparison.OrdinalIgnoreCase));
+        int count = _engine.AllTweaks().Count(t => t.Id.StartsWith(idPrefix, StringComparison.OrdinalIgnoreCase));
 
-        Assert.True(count >= 1,
-            $"Module '{moduleName}' (prefix '{idPrefix}') has {count} tweaks — expected ≥1.");
+        Assert.True(count >= 1, $"Module '{moduleName}' (prefix '{idPrefix}') has {count} tweaks — expected ≥1.");
     }
 
     /// <summary>
@@ -1675,11 +1663,9 @@ public sealed class PolicyModulesV574Tests : IClassFixture<BuiltinsFixture>
     [InlineData("wsl2adv-", "Wsl2Advanced")]
     public void Module_RegistersAtLeastTenTweaks(string idPrefix, string moduleName)
     {
-        int count = _engine.AllTweaks()
-            .Count(t => t.Id.StartsWith(idPrefix, StringComparison.OrdinalIgnoreCase));
+        int count = _engine.AllTweaks().Count(t => t.Id.StartsWith(idPrefix, StringComparison.OrdinalIgnoreCase));
 
-        Assert.True(count >= 10,
-            $"Module '{moduleName}' (prefix '{idPrefix}') has {count} tweaks — expected ≥10.");
+        Assert.True(count >= 10, $"Module '{moduleName}' (prefix '{idPrefix}') has {count} tweaks — expected ≥10.");
     }
 
     // ── Required field validation for all new modules ─────────────────
@@ -1693,39 +1679,96 @@ public sealed class PolicyModulesV574Tests : IClassFixture<BuiltinsFixture>
     {
         string[] newPrefixes =
         [
-            "fwadv-", "ipsecpol-", "nlapol-", "dohpol-", "proxbyp-",
-            "clipadv-", "cliprdp-", "shrdclip-", "uniclip-", "clipsens-",
-            "termadv-", "ps7exec-", "isedep-", "sbloga-", "psjea-",
-            "wv2pol-", "eaguard-", "edgsleep-", "edgiso-", "edgehint-",
-            "aadca-", "entrareg-", "aadprt-", "aadsspr-", "hjdns-",
-            "vbsenf-", "hvci-", "sldrtm-", "sgrm-", "kdmapol-",
-            "wsacore-", "wsadbg-", "wsanet-", "wsasnsr-", "wsastor-",
-            "spladv-", "pdrv-", "inetprt-", "wsdprt-", "ippevy-",
-            "whfbpin-", "pwdless-", "biometric-", "wpd-", "cbapol-",
-            "rcsnap-", "copnpu-", "aipol-", "aimod-", "copsbar-",
-            "sspol-", "refspol-", "dquota-", "vdspol-", "stobus-",
-            "evtchan-", "wecpol-", "wefsubpol-", "etwses-",
-            "netbridge-", "lltdpol-", "nicteam-", "nlaadv-",
-            "ssadv-", "avadv-", "egpol-", "alockadv-", "fwprof-",
-            "fontpol-", "otfpol-", "gdipol-",
-            "d3dpol-", "gpucmp-", "wddmpol-", "gamebar-",
+            "fwadv-",
+            "ipsecpol-",
+            "nlapol-",
+            "dohpol-",
+            "proxbyp-",
+            "clipadv-",
+            "cliprdp-",
+            "shrdclip-",
+            "uniclip-",
+            "clipsens-",
+            "termadv-",
+            "ps7exec-",
+            "isedep-",
+            "sbloga-",
+            "psjea-",
+            "wv2pol-",
+            "eaguard-",
+            "edgsleep-",
+            "edgiso-",
+            "edgehint-",
+            "aadca-",
+            "entrareg-",
+            "aadprt-",
+            "aadsspr-",
+            "hjdns-",
+            "vbsenf-",
+            "hvci-",
+            "sldrtm-",
+            "sgrm-",
+            "kdmapol-",
+            "wsacore-",
+            "wsadbg-",
+            "wsanet-",
+            "wsasnsr-",
+            "wsastor-",
+            "spladv-",
+            "pdrv-",
+            "inetprt-",
+            "wsdprt-",
+            "ippevy-",
+            "whfbpin-",
+            "pwdless-",
+            "biometric-",
+            "wpd-",
+            "cbapol-",
+            "rcsnap-",
+            "copnpu-",
+            "aipol-",
+            "aimod-",
+            "copsbar-",
+            "sspol-",
+            "refspol-",
+            "dquota-",
+            "vdspol-",
+            "stobus-",
+            "evtchan-",
+            "wecpol-",
+            "wefsubpol-",
+            "etwses-",
+            "netbridge-",
+            "lltdpol-",
+            "nicteam-",
+            "nlaadv-",
+            "ssadv-",
+            "avadv-",
+            "egpol-",
+            "alockadv-",
+            "fwprof-",
+            "fontpol-",
+            "otfpol-",
+            "gdipol-",
+            "d3dpol-",
+            "gpucmp-",
+            "wddmpol-",
+            "gamebar-",
             "xboxnet-",
             "storepol-",
-            "sbpol-", "hvcon-", "wsl2adv-",
+            "sbpol-",
+            "hvcon-",
+            "wsl2adv-",
         ];
 
-        var newTweaks = _engine.AllTweaks()
-            .Where(t => newPrefixes.Any(p => t.Id.StartsWith(p, StringComparison.OrdinalIgnoreCase)))
-            .ToList();
+        var newTweaks = _engine.AllTweaks().Where(t => newPrefixes.Any(p => t.Id.StartsWith(p, StringComparison.OrdinalIgnoreCase))).ToList();
 
         Assert.NotEmpty(newTweaks);
 
         foreach (TweakDef td in newTweaks)
         {
-            Assert.True(td.ImpactScore is >= 1 and <= 5,
-                $"Tweak '{td.Id}' has ImpactScore={td.ImpactScore} — must be 1–5.");
-            Assert.True(td.SafetyRating is >= 1 and <= 5,
-                $"Tweak '{td.Id}' has SafetyRating={td.SafetyRating} — must be 1–5.");
+            Assert.True(td.ImpactScore is >= 1 and <= 5, $"Tweak '{td.Id}' has ImpactScore={td.ImpactScore} — must be 1–5.");
+            Assert.True(td.SafetyRating is >= 1 and <= 5, $"Tweak '{td.Id}' has SafetyRating={td.SafetyRating} — must be 1–5.");
         }
     }
 
@@ -1738,23 +1781,52 @@ public sealed class PolicyModulesV574Tests : IClassFixture<BuiltinsFixture>
     {
         string[] newPrefixes =
         [
-            "fwadv-", "ipsecpol-", "nlapol-", "dohpol-", "proxbyp-",
-            "clipadv-", "cliprdp-", "shrdclip-", "uniclip-", "clipsens-",
-            "termadv-", "ps7exec-", "isedep-", "sbloga-", "psjea-",
-            "wv2pol-", "eaguard-", "edgsleep-", "edgiso-", "edgehint-",
-            "aadca-", "entrareg-", "aadprt-", "aadsspr-", "hjdns-",
-            "vbsenf-", "hvci-", "sldrtm-", "sgrm-", "kdmapol-",
-            "wsacore-", "wsadbg-", "wsanet-", "wsasnsr-", "wsastor-",
-            "spladv-", "pdrv-", "inetprt-", "wsdprt-", "ippevy-",
+            "fwadv-",
+            "ipsecpol-",
+            "nlapol-",
+            "dohpol-",
+            "proxbyp-",
+            "clipadv-",
+            "cliprdp-",
+            "shrdclip-",
+            "uniclip-",
+            "clipsens-",
+            "termadv-",
+            "ps7exec-",
+            "isedep-",
+            "sbloga-",
+            "psjea-",
+            "wv2pol-",
+            "eaguard-",
+            "edgsleep-",
+            "edgiso-",
+            "edgehint-",
+            "aadca-",
+            "entrareg-",
+            "aadprt-",
+            "aadsspr-",
+            "hjdns-",
+            "vbsenf-",
+            "hvci-",
+            "sldrtm-",
+            "sgrm-",
+            "kdmapol-",
+            "wsacore-",
+            "wsadbg-",
+            "wsanet-",
+            "wsasnsr-",
+            "wsastor-",
+            "spladv-",
+            "pdrv-",
+            "inetprt-",
+            "wsdprt-",
+            "ippevy-",
         ];
 
-        var newTweaks = _engine.AllTweaks()
-            .Where(t => newPrefixes.Any(p => t.Id.StartsWith(p, StringComparison.OrdinalIgnoreCase)))
-            .ToList();
+        var newTweaks = _engine.AllTweaks().Where(t => newPrefixes.Any(p => t.Id.StartsWith(p, StringComparison.OrdinalIgnoreCase))).ToList();
 
         Assert.NotEmpty(newTweaks);
-        Assert.All(newTweaks, td =>
-            Assert.True(td.NeedsAdmin, $"Tweak '{td.Id}' must have NeedsAdmin=true (policy key)."));
+        Assert.All(newTweaks, td => Assert.True(td.NeedsAdmin, $"Tweak '{td.Id}' must have NeedsAdmin=true (policy key)."));
     }
 
     /// <summary>
@@ -1765,38 +1837,92 @@ public sealed class PolicyModulesV574Tests : IClassFixture<BuiltinsFixture>
     {
         string[] newPrefixes =
         [
-            "fwadv-", "ipsecpol-", "nlapol-", "dohpol-", "proxbyp-",
-            "clipadv-", "cliprdp-", "shrdclip-", "uniclip-", "clipsens-",
-            "termadv-", "ps7exec-", "isedep-", "sbloga-", "psjea-",
-            "wv2pol-", "eaguard-", "edgsleep-", "edgiso-", "edgehint-",
-            "aadca-", "entrareg-", "aadprt-", "aadsspr-", "hjdns-",
-            "vbsenf-", "hvci-", "sldrtm-", "sgrm-", "kdmapol-",
-            "wsacore-", "wsadbg-", "wsanet-", "wsasnsr-", "wsastor-",
-            "spladv-", "pdrv-", "inetprt-", "wsdprt-", "ippevy-",
-            "whfbpin-", "pwdless-", "biometric-", "wpd-", "cbapol-",
-            "rcsnap-", "copnpu-", "aipol-", "aimod-", "copsbar-",
-            "sspol-", "refspol-", "dquota-", "vdspol-", "stobus-",
-            "evtchan-", "wecpol-", "wefsubpol-", "etwses-",
-            "netbridge-", "lltdpol-", "nicteam-",
-            "ssadv-", "avadv-", "egpol-", "alockadv-",
-            "fontpol-", "otfpol-",
-            "d3dpol-", "gpucmp-", "wddmpol-",
-            "xboxnet-", "storepol-",
-            "sbpol-", "hvcon-", "wsl2adv-",
+            "fwadv-",
+            "ipsecpol-",
+            "nlapol-",
+            "dohpol-",
+            "proxbyp-",
+            "clipadv-",
+            "cliprdp-",
+            "shrdclip-",
+            "uniclip-",
+            "clipsens-",
+            "termadv-",
+            "ps7exec-",
+            "isedep-",
+            "sbloga-",
+            "psjea-",
+            "wv2pol-",
+            "eaguard-",
+            "edgsleep-",
+            "edgiso-",
+            "edgehint-",
+            "aadca-",
+            "entrareg-",
+            "aadprt-",
+            "aadsspr-",
+            "hjdns-",
+            "vbsenf-",
+            "hvci-",
+            "sldrtm-",
+            "sgrm-",
+            "kdmapol-",
+            "wsacore-",
+            "wsadbg-",
+            "wsanet-",
+            "wsasnsr-",
+            "wsastor-",
+            "spladv-",
+            "pdrv-",
+            "inetprt-",
+            "wsdprt-",
+            "ippevy-",
+            "whfbpin-",
+            "pwdless-",
+            "biometric-",
+            "wpd-",
+            "cbapol-",
+            "rcsnap-",
+            "copnpu-",
+            "aipol-",
+            "aimod-",
+            "copsbar-",
+            "sspol-",
+            "refspol-",
+            "dquota-",
+            "vdspol-",
+            "stobus-",
+            "evtchan-",
+            "wecpol-",
+            "wefsubpol-",
+            "etwses-",
+            "netbridge-",
+            "lltdpol-",
+            "nicteam-",
+            "ssadv-",
+            "avadv-",
+            "egpol-",
+            "alockadv-",
+            "fontpol-",
+            "otfpol-",
+            "d3dpol-",
+            "gpucmp-",
+            "wddmpol-",
+            "xboxnet-",
+            "storepol-",
+            "sbpol-",
+            "hvcon-",
+            "wsl2adv-",
         ];
 
-        var newTweaks = _engine.AllTweaks()
-            .Where(t => newPrefixes.Any(p => t.Id.StartsWith(p, StringComparison.OrdinalIgnoreCase)))
-            .ToList();
+        var newTweaks = _engine.AllTweaks().Where(t => newPrefixes.Any(p => t.Id.StartsWith(p, StringComparison.OrdinalIgnoreCase))).ToList();
 
         Assert.NotEmpty(newTweaks);
 
         foreach (TweakDef td in newTweaks)
         {
-            Assert.False(string.IsNullOrWhiteSpace(td.Label),
-                $"Tweak '{td.Id}' must have a non-empty Label.");
-            Assert.False(string.IsNullOrWhiteSpace(td.Category),
-                $"Tweak '{td.Id}' must have a non-empty Category.");
+            Assert.False(string.IsNullOrWhiteSpace(td.Label), $"Tweak '{td.Id}' must have a non-empty Label.");
+            Assert.False(string.IsNullOrWhiteSpace(td.Category), $"Tweak '{td.Id}' must have a non-empty Category.");
         }
     }
 
@@ -1809,32 +1935,91 @@ public sealed class PolicyModulesV574Tests : IClassFixture<BuiltinsFixture>
         // We test for ≥500 to allow for minor variance in module sizes.
         string[] newPrefixes =
         [
-            "fwadv-", "ipsecpol-", "nlapol-", "dohpol-", "proxbyp-",
-            "clipadv-", "cliprdp-", "shrdclip-", "uniclip-", "clipsens-",
-            "termadv-", "ps7exec-", "isedep-", "sbloga-", "psjea-",
-            "wv2pol-", "eaguard-", "edgsleep-", "edgiso-", "edgehint-",
-            "aadca-", "entrareg-", "aadprt-", "aadsspr-", "hjdns-",
-            "vbsenf-", "hvci-", "sldrtm-", "sgrm-", "kdmapol-",
-            "wsacore-", "wsadbg-", "wsanet-", "wsasnsr-", "wsastor-",
-            "spladv-", "pdrv-", "inetprt-", "wsdprt-", "ippevy-",
-            "whfbpin-", "pwdless-", "biometric-", "wpd-", "cbapol-",
-            "rcsnap-", "copnpu-", "aipol-", "aimod-", "copsbar-",
-            "sspol-", "refspol-", "dquota-", "vdspol-", "stobus-",
-            "evtchan-", "wecpol-", "wefsubpol-", "etwses-",
-            "netbridge-", "lltdpol-", "nicteam-", "nlaadv-",
-            "ssadv-", "avadv-", "egpol-", "alockadv-", "fwprof-",
-            "fontpol-", "otfpol-", "gdipol-",
-            "d3dpol-", "gpucmp-", "wddmpol-", "gamebar-",
+            "fwadv-",
+            "ipsecpol-",
+            "nlapol-",
+            "dohpol-",
+            "proxbyp-",
+            "clipadv-",
+            "cliprdp-",
+            "shrdclip-",
+            "uniclip-",
+            "clipsens-",
+            "termadv-",
+            "ps7exec-",
+            "isedep-",
+            "sbloga-",
+            "psjea-",
+            "wv2pol-",
+            "eaguard-",
+            "edgsleep-",
+            "edgiso-",
+            "edgehint-",
+            "aadca-",
+            "entrareg-",
+            "aadprt-",
+            "aadsspr-",
+            "hjdns-",
+            "vbsenf-",
+            "hvci-",
+            "sldrtm-",
+            "sgrm-",
+            "kdmapol-",
+            "wsacore-",
+            "wsadbg-",
+            "wsanet-",
+            "wsasnsr-",
+            "wsastor-",
+            "spladv-",
+            "pdrv-",
+            "inetprt-",
+            "wsdprt-",
+            "ippevy-",
+            "whfbpin-",
+            "pwdless-",
+            "biometric-",
+            "wpd-",
+            "cbapol-",
+            "rcsnap-",
+            "copnpu-",
+            "aipol-",
+            "aimod-",
+            "copsbar-",
+            "sspol-",
+            "refspol-",
+            "dquota-",
+            "vdspol-",
+            "stobus-",
+            "evtchan-",
+            "wecpol-",
+            "wefsubpol-",
+            "etwses-",
+            "netbridge-",
+            "lltdpol-",
+            "nicteam-",
+            "nlaadv-",
+            "ssadv-",
+            "avadv-",
+            "egpol-",
+            "alockadv-",
+            "fwprof-",
+            "fontpol-",
+            "otfpol-",
+            "gdipol-",
+            "d3dpol-",
+            "gpucmp-",
+            "wddmpol-",
+            "gamebar-",
             "xboxnet-",
             "storepol-",
-            "sbpol-", "hvcon-", "wsl2adv-",
+            "sbpol-",
+            "hvcon-",
+            "wsl2adv-",
         ];
 
-        int total = _engine.AllTweaks()
-            .Count(t => newPrefixes.Any(p => t.Id.StartsWith(p, StringComparison.OrdinalIgnoreCase)));
+        int total = _engine.AllTweaks().Count(t => newPrefixes.Any(p => t.Id.StartsWith(p, StringComparison.OrdinalIgnoreCase)));
 
-        Assert.True(total >= 500,
-            $"Expected ≥500 tweaks across v5.74.0 new policy modules, found {total}.");
+        Assert.True(total >= 500, $"Expected ≥500 tweaks across v5.74.0 new policy modules, found {total}.");
     }
 
     // ── Validator passes for all new tweaks ───────────────────────────
@@ -1844,29 +2029,81 @@ public sealed class PolicyModulesV574Tests : IClassFixture<BuiltinsFixture>
     {
         string[] newPrefixes =
         [
-            "fwadv-", "ipsecpol-", "nlapol-", "dohpol-", "proxbyp-",
-            "clipadv-", "cliprdp-", "shrdclip-", "uniclip-", "clipsens-",
-            "termadv-", "ps7exec-", "isedep-", "sbloga-", "psjea-",
-            "wv2pol-", "eaguard-", "edgsleep-", "edgiso-", "edgehint-",
-            "aadca-", "entrareg-", "aadprt-", "aadsspr-", "hjdns-",
-            "vbsenf-", "hvci-", "sldrtm-", "sgrm-", "kdmapol-",
-            "wsacore-", "wsadbg-", "wsanet-", "wsasnsr-", "wsastor-",
-            "spladv-", "pdrv-", "inetprt-", "wsdprt-", "ippevy-",
-            "whfbpin-", "pwdless-", "biometric-", "wpd-", "cbapol-",
-            "rcsnap-", "copnpu-",
-            "sspol-", "refspol-", "dquota-", "vdspol-", "stobus-",
-            "evtchan-", "wecpol-", "wefsubpol-",
-            "netbridge-", "lltdpol-", "nicteam-",
-            "ssadv-", "avadv-", "egpol-", "alockadv-",
-            "fontpol-", "otfpol-",
-            "d3dpol-", "gpucmp-", "wddmpol-",
-            "xboxnet-", "storepol-",
-            "sbpol-", "hvcon-", "wsl2adv-",
+            "fwadv-",
+            "ipsecpol-",
+            "nlapol-",
+            "dohpol-",
+            "proxbyp-",
+            "clipadv-",
+            "cliprdp-",
+            "shrdclip-",
+            "uniclip-",
+            "clipsens-",
+            "termadv-",
+            "ps7exec-",
+            "isedep-",
+            "sbloga-",
+            "psjea-",
+            "wv2pol-",
+            "eaguard-",
+            "edgsleep-",
+            "edgiso-",
+            "edgehint-",
+            "aadca-",
+            "entrareg-",
+            "aadprt-",
+            "aadsspr-",
+            "hjdns-",
+            "vbsenf-",
+            "hvci-",
+            "sldrtm-",
+            "sgrm-",
+            "kdmapol-",
+            "wsacore-",
+            "wsadbg-",
+            "wsanet-",
+            "wsasnsr-",
+            "wsastor-",
+            "spladv-",
+            "pdrv-",
+            "inetprt-",
+            "wsdprt-",
+            "ippevy-",
+            "whfbpin-",
+            "pwdless-",
+            "biometric-",
+            "wpd-",
+            "cbapol-",
+            "rcsnap-",
+            "copnpu-",
+            "sspol-",
+            "refspol-",
+            "dquota-",
+            "vdspol-",
+            "stobus-",
+            "evtchan-",
+            "wecpol-",
+            "wefsubpol-",
+            "netbridge-",
+            "lltdpol-",
+            "nicteam-",
+            "ssadv-",
+            "avadv-",
+            "egpol-",
+            "alockadv-",
+            "fontpol-",
+            "otfpol-",
+            "d3dpol-",
+            "gpucmp-",
+            "wddmpol-",
+            "xboxnet-",
+            "storepol-",
+            "sbpol-",
+            "hvcon-",
+            "wsl2adv-",
         ];
 
-        var newTweaks = _engine.AllTweaks()
-            .Where(t => newPrefixes.Any(p => t.Id.StartsWith(p, StringComparison.OrdinalIgnoreCase)))
-            .ToList();
+        var newTweaks = _engine.AllTweaks().Where(t => newPrefixes.Any(p => t.Id.StartsWith(p, StringComparison.OrdinalIgnoreCase))).ToList();
 
         Assert.NotEmpty(newTweaks);
 
@@ -1882,23 +2119,46 @@ public sealed class PolicyModulesV574Tests : IClassFixture<BuiltinsFixture>
         // Policy tweaks target HKLM\SOFTWARE\Policies\... which is safe in corporate environments.
         string[] newPrefixes =
         [
-            "fwadv-", "ipsecpol-", "nlapol-", "dohpol-",
-            "clipadv-", "cliprdp-", "shrdclip-", "uniclip-",
-            "termadv-", "ps7exec-", "isedep-", "sbloga-", "psjea-",
-            "wv2pol-", "eaguard-",
-            "aadca-", "entrareg-", "aadprt-", "aadsspr-", "hjdns-",
-            "vbsenf-", "hvci-", "sldrtm-", "sgrm-", "kdmapol-",
-            "wsacore-", "wsadbg-", "wsanet-", "wsasnsr-", "wsastor-",
-            "spladv-", "pdrv-", "inetprt-", "wsdprt-", "ippevy-",
+            "fwadv-",
+            "ipsecpol-",
+            "nlapol-",
+            "dohpol-",
+            "clipadv-",
+            "cliprdp-",
+            "shrdclip-",
+            "uniclip-",
+            "termadv-",
+            "ps7exec-",
+            "isedep-",
+            "sbloga-",
+            "psjea-",
+            "wv2pol-",
+            "eaguard-",
+            "aadca-",
+            "entrareg-",
+            "aadprt-",
+            "aadsspr-",
+            "hjdns-",
+            "vbsenf-",
+            "hvci-",
+            "sldrtm-",
+            "sgrm-",
+            "kdmapol-",
+            "wsacore-",
+            "wsadbg-",
+            "wsanet-",
+            "wsasnsr-",
+            "wsastor-",
+            "spladv-",
+            "pdrv-",
+            "inetprt-",
+            "wsdprt-",
+            "ippevy-",
         ];
 
-        var policyTweaks = _engine.AllTweaks()
-            .Where(t => newPrefixes.Any(p => t.Id.StartsWith(p, StringComparison.OrdinalIgnoreCase)))
-            .ToList();
+        var policyTweaks = _engine.AllTweaks().Where(t => newPrefixes.Any(p => t.Id.StartsWith(p, StringComparison.OrdinalIgnoreCase))).ToList();
 
         Assert.NotEmpty(policyTweaks);
-        Assert.All(policyTweaks, td =>
-            Assert.True(td.CorpSafe,
-                $"Tweak '{td.Id}' must have CorpSafe=true (targets HKLM Policies key)."));
+        Assert.All(policyTweaks, td => Assert.True(td.CorpSafe, $"Tweak '{td.Id}' must have CorpSafe=true (targets HKLM Policies key)."));
     }
 }

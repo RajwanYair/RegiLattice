@@ -13,8 +13,7 @@ internal static class Program
         // than silently terminating the process (which produces "nothing shows").
         Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
         Application.ThreadException += static (_, e) => ShowFatalError(e.Exception);
-        AppDomain.CurrentDomain.UnhandledException += static (_, e) =>
-            ShowFatalError(e.ExceptionObject as Exception);
+        AppDomain.CurrentDomain.UnhandledException += static (_, e) => ShowFatalError(e.ExceptionObject as Exception);
 
         ApplicationConfiguration.Initialize();
 
@@ -42,35 +41,32 @@ internal static class Program
     /// </summary>
     private static void ShowFatalError(Exception? ex)
     {
-        string msg = ex is null
-            ? "An unexpected error occurred."
-            : $"{ex.GetType().Name}: {ex.Message}\n\n{ex.StackTrace}";
+        string msg = ex is null ? "An unexpected error occurred." : $"{ex.GetType().Name}: {ex.Message}\n\n{ex.StackTrace}";
 
         // Write crash log before showing the dialog so the file exists even if
         // the MessageBox itself hits a secondary exception.
         try
         {
-            string logDir = Path.Combine(
-                Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-                "RegiLattice");
+            string logDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "RegiLattice");
             Directory.CreateDirectory(logDir);
-            File.WriteAllText(
-                Path.Combine(logDir, "crash.log"),
-                $"[{DateTime.Now:yyyy-MM-dd HH:mm:ss}]\n{msg}\n");
+            File.WriteAllText(Path.Combine(logDir, "crash.log"), $"[{DateTime.Now:yyyy-MM-dd HH:mm:ss}]\n{msg}\n");
         }
-        catch { /* last resort; don't recurse */ }
+        catch
+        { /* last resort; don't recurse */
+        }
 
         try
         {
             MessageBox.Show(
-                $"RegiLattice failed to start.\n\n{msg}\n\n"
-                    + $"A crash log has been written to:\n"
-                    + $"%LOCALAPPDATA%\\RegiLattice\\crash.log",
+                $"RegiLattice failed to start.\n\n{msg}\n\n" + $"A crash log has been written to:\n" + $"%LOCALAPPDATA%\\RegiLattice\\crash.log",
                 "RegiLattice — Startup Error",
                 MessageBoxButtons.OK,
-                MessageBoxIcon.Error);
+                MessageBoxIcon.Error
+            );
         }
-        catch { /* absolute last resort */ }
+        catch
+        { /* absolute last resort */
+        }
     }
 
     /// <summary>

@@ -1123,7 +1123,6 @@ internal static class Adobe
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Adobe\Acrobat Reader\DC\FeatureLockDown", "bToggleToDoList")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Adobe\Acrobat Reader\DC\FeatureLockDown", "bToggleToDoList", 0)],
         },
-
         new TweakDef
         {
             Id = "adobe-disable-adobe-javascript",

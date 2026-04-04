@@ -18,7 +18,8 @@ internal static class PolicyFido
             Category = "Security",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Enables FIDO2 hardware security key logon at the Windows sign-in screen. Users can authenticate with a YubiKey, Titan Key, or any CTAP2-compliant device instead of a password.",
+            Description =
+                "Enables FIDO2 hardware security key logon at the Windows sign-in screen. Users can authenticate with a YubiKey, Titan Key, or any CTAP2-compliant device instead of a password.",
             Tags = ["fido", "security-key", "authentication", "mfa", "policy", "webauthn"],
             RegistryKeys = [Key],
             ImpactScore = 4,
@@ -35,7 +36,8 @@ internal static class PolicyFido
             Category = "Security",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Blocks FIDO2 hardware security key logon via Group Policy. Useful for environments where all authentication must go through managed identity providers.",
+            Description =
+                "Blocks FIDO2 hardware security key logon via Group Policy. Useful for environments where all authentication must go through managed identity providers.",
             Tags = ["fido", "security-key", "block", "policy", "authentication"],
             RegistryKeys = [Key],
             ImpactScore = 3,
@@ -52,7 +54,8 @@ internal static class PolicyFido
             Category = "Security",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Enforces that FIDO2 authentication always requires a physical user-presence test (button touch). Prevents silent automated authentication without user interaction.",
+            Description =
+                "Enforces that FIDO2 authentication always requires a physical user-presence test (button touch). Prevents silent automated authentication without user interaction.",
             Tags = ["fido", "user-presence", "policy", "authentication", "security"],
             RegistryKeys = [Key],
             ImpactScore = 4,
@@ -69,7 +72,8 @@ internal static class PolicyFido
             Category = "Security",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Allows NFC-based FIDO2 security keys at Windows sign-in via the FIDO device logon policy. Enables contactless hardware authentication for environments using NFC-capable keys.",
+            Description =
+                "Allows NFC-based FIDO2 security keys at Windows sign-in via the FIDO device logon policy. Enables contactless hardware authentication for environments using NFC-capable keys.",
             Tags = ["fido", "nfc", "security-key", "authentication", "policy"],
             RegistryKeys = [Key],
             ImpactScore = 3,
@@ -103,7 +107,8 @@ internal static class PolicyFido
             Category = "Security",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Allows Bluetooth LE-based FIDO2 security keys at Windows sign-in. Enables wireless hardware authentication for environments permitting BLE hardware security keys.",
+            Description =
+                "Allows Bluetooth LE-based FIDO2 security keys at Windows sign-in. Enables wireless hardware authentication for environments permitting BLE hardware security keys.",
             Tags = ["fido", "bluetooth", "ble", "security-key", "authentication", "policy"],
             RegistryKeys = [Key],
             ImpactScore = 3,
@@ -120,7 +125,8 @@ internal static class PolicyFido
             Category = "Security",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Blocks Bluetooth LE FIDO2 security keys via Group Policy. Eliminates wireless hardware key sign-in attack surface in high-security environments.",
+            Description =
+                "Blocks Bluetooth LE FIDO2 security keys via Group Policy. Eliminates wireless hardware key sign-in attack surface in high-security environments.",
             Tags = ["fido", "bluetooth", "ble", "block", "policy", "authentication"],
             RegistryKeys = [Key],
             ImpactScore = 3,
@@ -137,7 +143,8 @@ internal static class PolicyFido
             Category = "Security",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Requires attestation from FIDO2 security keys during registration. Ensures only manufacturer-verified hardware can be enrolled, blocking counterfeit or unapproved keys.",
+            Description =
+                "Requires attestation from FIDO2 security keys during registration. Ensures only manufacturer-verified hardware can be enrolled, blocking counterfeit or unapproved keys.",
             Tags = ["fido", "attestation", "policy", "authentication", "hardware", "security"],
             RegistryKeys = [Key],
             ImpactScore = 4,
@@ -154,7 +161,8 @@ internal static class PolicyFido
             Category = "Security",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Enables enterprise attestation for FIDO2 security keys. Allows the relying party to receive full manufacturer attestation data for auditing and key inventory management.",
+            Description =
+                "Enables enterprise attestation for FIDO2 security keys. Allows the relying party to receive full manufacturer attestation data for auditing and key inventory management.",
             Tags = ["fido", "enterprise", "attestation", "policy", "authentication", "audit"],
             RegistryKeys = [Key],
             ImpactScore = 3,
@@ -171,7 +179,8 @@ internal static class PolicyFido
             Category = "Security",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Prevents FIDO2 credentials from roaming between devices via Windows credential manager sync. Keeps authentication credentials strictly bound to the enrolled hardware key and device pair.",
+            Description =
+                "Prevents FIDO2 credentials from roaming between devices via Windows credential manager sync. Keeps authentication credentials strictly bound to the enrolled hardware key and device pair.",
             Tags = ["fido", "roaming", "credentials", "policy", "authentication", "isolation"],
             RegistryKeys = [Key],
             ImpactScore = 3,
@@ -201,7 +210,8 @@ internal static class PolicyWindowsHello
             Category = "Security",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Disables Windows Hello for Business provisioning via Group Policy. Prevents users from enrolling biometrics or PINs as a primary corporate credential. Does not affect local PIN sign-in.",
+            Description =
+                "Disables Windows Hello for Business provisioning via Group Policy. Prevents users from enrolling biometrics or PINs as a primary corporate credential. Does not affect local PIN sign-in.",
             Tags = ["windows-hello", "whfb", "policy", "authentication", "disable"],
             RegistryKeys = [Key],
             ImpactScore = 3,
@@ -218,7 +228,8 @@ internal static class PolicyWindowsHello
             Category = "Security",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Requires a Trusted Platform Module (TPM) chip to provision Windows Hello for Business. Prevents Hello enrollment on devices without hardware security — credentials are bound to the TPM.",
+            Description =
+                "Requires a Trusted Platform Module (TPM) chip to provision Windows Hello for Business. Prevents Hello enrollment on devices without hardware security — credentials are bound to the TPM.",
             Tags = ["windows-hello", "tpm", "policy", "authentication", "hardware"],
             RegistryKeys = [Key],
             ImpactScore = 5,
@@ -235,7 +246,8 @@ internal static class PolicyWindowsHello
             Category = "Security",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Enforces a minimum PIN length of 8 digits for Windows Hello. Short PINs are statistically easier to guess; 8 characters provides a baseline against brute-force attacks.",
+            Description =
+                "Enforces a minimum PIN length of 8 digits for Windows Hello. Short PINs are statistically easier to guess; 8 characters provides a baseline against brute-force attacks.",
             Tags = ["windows-hello", "pin", "complexity", "policy", "authentication"],
             RegistryKeys = [PinKey],
             ImpactScore = 4,
@@ -252,7 +264,8 @@ internal static class PolicyWindowsHello
             Category = "Security",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets the maximum Windows Hello PIN length to 127 characters. Allows extremely long PINs for high-security deployments that treat the PIN as a passphrase.",
+            Description =
+                "Sets the maximum Windows Hello PIN length to 127 characters. Allows extremely long PINs for high-security deployments that treat the PIN as a passphrase.",
             Tags = ["windows-hello", "pin", "complexity", "policy", "passphrase"],
             RegistryKeys = [PinKey],
             ImpactScore = 2,
@@ -269,7 +282,8 @@ internal static class PolicyWindowsHello
             Category = "Security",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Requires at least one digit (0–9) in the Windows Hello PIN. Combined with uppercase/lowercase/special requirements, significantly increases PIN entropy.",
+            Description =
+                "Requires at least one digit (0–9) in the Windows Hello PIN. Combined with uppercase/lowercase/special requirements, significantly increases PIN entropy.",
             Tags = ["windows-hello", "pin", "digits", "complexity", "policy"],
             RegistryKeys = [PinKey],
             ImpactScore = 3,
@@ -286,7 +300,8 @@ internal static class PolicyWindowsHello
             Category = "Security",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Requires at least one uppercase letter in the Windows Hello PIN. Enforces mixed-case alphanumeric PIN composition for improved entropy.",
+            Description =
+                "Requires at least one uppercase letter in the Windows Hello PIN. Enforces mixed-case alphanumeric PIN composition for improved entropy.",
             Tags = ["windows-hello", "pin", "uppercase", "complexity", "policy"],
             RegistryKeys = [PinKey],
             ImpactScore = 3,
@@ -303,7 +318,8 @@ internal static class PolicyWindowsHello
             Category = "Security",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Requires at least one lowercase letter in the Windows Hello PIN. Combined with digit and uppercase requirements, PIN entropy is substantially increased.",
+            Description =
+                "Requires at least one lowercase letter in the Windows Hello PIN. Combined with digit and uppercase requirements, PIN entropy is substantially increased.",
             Tags = ["windows-hello", "pin", "lowercase", "complexity", "policy"],
             RegistryKeys = [PinKey],
             ImpactScore = 3,
@@ -320,7 +336,8 @@ internal static class PolicyWindowsHello
             Category = "Security",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Requires at least one special character in the Windows Hello PIN (!@#$%^&* etc.). Maximum PIN entropy mode — treat the PIN like a strong password.",
+            Description =
+                "Requires at least one special character in the Windows Hello PIN (!@#$%^&* etc.). Maximum PIN entropy mode — treat the PIN like a strong password.",
             Tags = ["windows-hello", "pin", "special-chars", "complexity", "policy"],
             RegistryKeys = [PinKey],
             ImpactScore = 3,
@@ -337,7 +354,8 @@ internal static class PolicyWindowsHello
             Category = "Security",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Configures Windows Hello PINs to expire after 90 days, prompting users to create a new PIN. Aligns with common password-rotation compliance requirements.",
+            Description =
+                "Configures Windows Hello PINs to expire after 90 days, prompting users to create a new PIN. Aligns with common password-rotation compliance requirements.",
             Tags = ["windows-hello", "pin", "expiry", "rotation", "policy", "compliance"],
             RegistryKeys = [PinKey],
             ImpactScore = 3,
@@ -354,7 +372,8 @@ internal static class PolicyWindowsHello
             Category = "Security",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Prevents reuse of the last 5 Windows Hello PINs. Combined with expiry, prevents users from cycling through a small set of known PINs.",
+            Description =
+                "Prevents reuse of the last 5 Windows Hello PINs. Combined with expiry, prevents users from cycling through a small set of known PINs.",
             Tags = ["windows-hello", "pin", "history", "reuse", "policy", "compliance"],
             RegistryKeys = [PinKey],
             ImpactScore = 3,
@@ -386,7 +405,8 @@ internal static class PolicyEntraId
             Category = "Security",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Blocks Workplace Join (Entra ID / Azure AD device registration) via Group Policy. Prevents personal devices from registering with the organisation's Azure AD tenant without explicit IT approval.",
+            Description =
+                "Blocks Workplace Join (Entra ID / Azure AD device registration) via Group Policy. Prevents personal devices from registering with the organisation's Azure AD tenant without explicit IT approval.",
             Tags = ["entra", "azure-ad", "workplace-join", "device-registration", "policy"],
             RegistryKeys = [JoinKey],
             ImpactScore = 4,
@@ -403,7 +423,8 @@ internal static class PolicyEntraId
             Category = "Security",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Disables automatic Workplace Join for domain-joined hybrid devices. Prevents the OS from silently registering the device with Azure AD during domain join or user sign-in.",
+            Description =
+                "Disables automatic Workplace Join for domain-joined hybrid devices. Prevents the OS from silently registering the device with Azure AD during domain join or user sign-in.",
             Tags = ["entra", "azure-ad", "workplace-join", "auto-join", "policy"],
             RegistryKeys = [JoinKey],
             ImpactScore = 3,
@@ -420,7 +441,8 @@ internal static class PolicyEntraId
             Category = "Security",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Blocks Microsoft consumer account (MSA) sign-in and authentication via Group Policy. Forces all account activity through managed work/school accounts only — no personal microsoft.com accounts.",
+            Description =
+                "Blocks Microsoft consumer account (MSA) sign-in and authentication via Group Policy. Forces all account activity through managed work/school accounts only — no personal microsoft.com accounts.",
             Tags = ["entra", "microsoft-account", "msa", "block", "policy", "corporate"],
             RegistryKeys = [MsaKey],
             ImpactScore = 4,
@@ -437,7 +459,8 @@ internal static class PolicyEntraId
             Category = "Security",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Blocks consumer-oriented Microsoft cloud experiences (OneDrive ads, Cortana suggestions, cross-device sync prompts) via Group Policy. Ensures managed devices focus on enterprise services only.",
+            Description =
+                "Blocks consumer-oriented Microsoft cloud experiences (OneDrive ads, Cortana suggestions, cross-device sync prompts) via Group Policy. Ensures managed devices focus on enterprise services only.",
             Tags = ["entra", "cloud", "consumer", "experience", "policy", "corporate"],
             RegistryKeys = [CloudKey],
             ImpactScore = 4,
@@ -454,7 +477,8 @@ internal static class PolicyEntraId
             Category = "Security",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Prevents end users from initiating MDM (Intune/Azure AD) device enrollment from the Settings app. Enrollment must be performed by IT through approved provisioning flows.",
+            Description =
+                "Prevents end users from initiating MDM (Intune/Azure AD) device enrollment from the Settings app. Enrollment must be performed by IT through approved provisioning flows.",
             Tags = ["entra", "mdm", "enrollment", "intune", "policy", "corporate"],
             RegistryKeys = [SysKey],
             ImpactScore = 4,
@@ -471,7 +495,8 @@ internal static class PolicyEntraId
             Category = "Security",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Blocks users from adding additional work or school accounts via Settings > Accounts > Access work or school. Ensures devices have exactly one managed identity, preventing shadow account issues.",
+            Description =
+                "Blocks users from adding additional work or school accounts via Settings > Accounts > Access work or school. Ensures devices have exactly one managed identity, preventing shadow account issues.",
             Tags = ["entra", "work-account", "school-account", "policy", "corporate", "identity"],
             RegistryKeys = [SysKey],
             ImpactScore = 3,
@@ -488,7 +513,8 @@ internal static class PolicyEntraId
             Category = "Security",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Disables the Find My Device feature on Entra-joined corporate devices via Group Policy. Prevents the device location from being reported to Microsoft / the user's Microsoft account, appropriate for managed shared devices.",
+            Description =
+                "Disables the Find My Device feature on Entra-joined corporate devices via Group Policy. Prevents the device location from being reported to Microsoft / the user's Microsoft account, appropriate for managed shared devices.",
             Tags = ["entra", "find-my-device", "location", "policy", "privacy", "corporate"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\FindMyDevice"],
             ImpactScore = 3,
@@ -505,7 +531,8 @@ internal static class PolicyEntraId
             Category = "Security",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Prevents the privacy settings diagnostic prompt that appears for new users at first sign-in on Entra-joined devices. IT policies govern data settings; users should not be prompted to override them.",
+            Description =
+                "Prevents the privacy settings diagnostic prompt that appears for new users at first sign-in on Entra-joined devices. IT policies govern data settings; users should not be prompted to override them.",
             Tags = ["entra", "privacy", "oobe", "policy", "first-run", "prompt"],
             RegistryKeys = [SysKey],
             ImpactScore = 3,
@@ -522,7 +549,8 @@ internal static class PolicyEntraId
             Category = "Security",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Blocks the 'What do you want to do next?' setup prompt shown after users complete the initial Entra ID sign-in flow. Streamlines the managed first-logon experience in corporate environments.",
+            Description =
+                "Blocks the 'What do you want to do next?' setup prompt shown after users complete the initial Entra ID sign-in flow. Streamlines the managed first-logon experience in corporate environments.",
             Tags = ["entra", "setup", "oobe", "first-run", "policy", "corporate"],
             RegistryKeys = [SysKey],
             ImpactScore = 2,
@@ -539,7 +567,8 @@ internal static class PolicyEntraId
             Category = "Security",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Disables the Phone Link (Your Phone) application on Entra-joined managed devices via Group Policy. Prevents personal mobile device data — messages, notifications, photos, calls — from being accessible on corporate PCs.",
+            Description =
+                "Disables the Phone Link (Your Phone) application on Entra-joined managed devices via Group Policy. Prevents personal mobile device data — messages, notifications, photos, calls — from being accessible on corporate PCs.",
             Tags = ["entra", "phone-link", "your-phone", "policy", "data-protection", "corporate"],
             RegistryKeys = [SysKey],
             ImpactScore = 4,
@@ -569,7 +598,8 @@ internal static class PolicyKerberos
             Category = "Security",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Removes DES (des-cbc-crc and des-cbc-md5) from the Kerberos supported encryption types. DES is cryptographically broken; this forces AES-256/AES-128 and RC4 only.",
+            Description =
+                "Removes DES (des-cbc-crc and des-cbc-md5) from the Kerberos supported encryption types. DES is cryptographically broken; this forces AES-256/AES-128 and RC4 only.",
             Tags = ["kerberos", "des", "encryption", "policy", "authentication", "hardening"],
             RegistryKeys = [Key],
             ImpactScore = 5,
@@ -586,7 +616,8 @@ internal static class PolicyKerberos
             Category = "Security",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Restricts Kerberos to AES-256-CTS-HMAC-SHA1-96 only (0x10 = AES256). The strongest standard Kerberos cipher. Incompatible with legacy systems that only support RC4 or DES.",
+            Description =
+                "Restricts Kerberos to AES-256-CTS-HMAC-SHA1-96 only (0x10 = AES256). The strongest standard Kerberos cipher. Incompatible with legacy systems that only support RC4 or DES.",
             Tags = ["kerberos", "aes256", "encryption", "policy", "authentication", "hardening"],
             RegistryKeys = [Key],
             ImpactScore = 5,
@@ -603,7 +634,8 @@ internal static class PolicyKerberos
             Category = "Security",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Configures Kerberos to support AES-256, AES-128, and RC4-HMAC while explicitly excluding DES. Balanced security for environments with mixed legacy and modern systems.",
+            Description =
+                "Configures Kerberos to support AES-256, AES-128, and RC4-HMAC while explicitly excluding DES. Balanced security for environments with mixed legacy and modern systems.",
             Tags = ["kerberos", "aes", "rc4", "encryption", "policy", "authentication"],
             RegistryKeys = [Key],
             ImpactScore = 4,
@@ -620,7 +652,8 @@ internal static class PolicyKerberos
             Category = "Security",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Enables Kerberos claims-based access control (Dynamic Access Control). Allows Kerberos tickets to carry user and device claim attributes used for resource-based authorisation decisions.",
+            Description =
+                "Enables Kerberos claims-based access control (Dynamic Access Control). Allows Kerberos tickets to carry user and device claim attributes used for resource-based authorisation decisions.",
             Tags = ["kerberos", "claims", "dac", "dynamic-access-control", "policy", "authentication"],
             RegistryKeys = [LsaKey],
             ImpactScore = 3,
@@ -637,7 +670,8 @@ internal static class PolicyKerberos
             Category = "Security",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Enables Kerberos SID compression for resource group SIDs in service tickets. Reduces Kerberos ticket size when users belong to many groups, preventing ticket-too-large (KDC_ERR_RESPONSE_TOO_BIG) failures.",
+            Description =
+                "Enables Kerberos SID compression for resource group SIDs in service tickets. Reduces Kerberos ticket size when users belong to many groups, preventing ticket-too-large (KDC_ERR_RESPONSE_TOO_BIG) failures.",
             Tags = ["kerberos", "sid", "compression", "policy", "authentication", "performance"],
             RegistryKeys = [LsaKey],
             ImpactScore = 3,
@@ -654,7 +688,8 @@ internal static class PolicyKerberos
             Category = "Security",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Removes RC4-HMAC from the Kerberos supported encryption list. RC4 is considered weak (NIST deprecated 2015). Only AES-256 and AES-128 are retained. May break legacy NAS or non-Microsoft Kerberos implementations.",
+            Description =
+                "Removes RC4-HMAC from the Kerberos supported encryption list. RC4 is considered weak (NIST deprecated 2015). Only AES-256 and AES-128 are retained. May break legacy NAS or non-Microsoft Kerberos implementations.",
             Tags = ["kerberos", "rc4", "encryption", "policy", "hardening", "nist"],
             RegistryKeys = [Key],
             ImpactScore = 5,
@@ -671,7 +706,8 @@ internal static class PolicyKerberos
             Category = "Security",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets the maximum Kerberos TGT lifetime to 10 hours. Short ticket lifetimes limit the window of opportunity for a stolen ticket to be used in pass-the-ticket attacks.",
+            Description =
+                "Sets the maximum Kerberos TGT lifetime to 10 hours. Short ticket lifetimes limit the window of opportunity for a stolen ticket to be used in pass-the-ticket attacks.",
             Tags = ["kerberos", "ticket", "age", "lifetime", "policy", "pass-the-ticket"],
             RegistryKeys = [LsaKey],
             ImpactScore = 4,
@@ -688,7 +724,8 @@ internal static class PolicyKerberos
             Category = "Security",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets the maximum Kerberos TGT renewal period to 7 days. After 7 days, users must re-authenticate fully. Aligns with weekly credential attestation requirements.",
+            Description =
+                "Sets the maximum Kerberos TGT renewal period to 7 days. After 7 days, users must re-authenticate fully. Aligns with weekly credential attestation requirements.",
             Tags = ["kerberos", "ticket", "renewal", "policy", "authentication"],
             RegistryKeys = [LsaKey],
             ImpactScore = 3,
@@ -705,7 +742,8 @@ internal static class PolicyKerberos
             Category = "Security",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Reduces Kerberos tolerance for clock drift to 3 minutes (from the default 5). Tighter clock synchronisation reduces the window for replay attacks that exploit clock skew.",
+            Description =
+                "Reduces Kerberos tolerance for clock drift to 3 minutes (from the default 5). Tighter clock synchronisation reduces the window for replay attacks that exploit clock skew.",
             Tags = ["kerberos", "clock-skew", "replay-attack", "policy", "ntp", "hardening"],
             RegistryKeys = [LsaKey],
             ImpactScore = 3,
@@ -722,7 +760,8 @@ internal static class PolicyKerberos
             Category = "Security",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Enables the Kerberos KDC Proxy (KKDCP) for clients that cannot reach the domain controller directly. Authentication is tunnelled over HTTPS to the proxy, supporting remote workers without VPN.",
+            Description =
+                "Enables the Kerberos KDC Proxy (KKDCP) for clients that cannot reach the domain controller directly. Authentication is tunnelled over HTTPS to the proxy, supporting remote workers without VPN.",
             Tags = ["kerberos", "kdc-proxy", "kkdcp", "remote", "policy", "vpn-alternative"],
             RegistryKeys = [LsaKey],
             ImpactScore = 4,
@@ -751,7 +790,8 @@ internal static class PolicyAppInstaller
             Category = "Security",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Disables the Windows App Installer (WinGet) entirely via Group Policy. Prevents sideloading of MSIX packages and use of the appinstaller:// URI scheme. Enforces managed software distribution only.",
+            Description =
+                "Disables the Windows App Installer (WinGet) entirely via Group Policy. Prevents sideloading of MSIX packages and use of the appinstaller:// URI scheme. Enforces managed software distribution only.",
             Tags = ["app-installer", "winget", "msix", "sideloading", "policy", "security"],
             RegistryKeys = [Key],
             ImpactScore = 4,
@@ -768,7 +808,8 @@ internal static class PolicyAppInstaller
             Category = "Security",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Blocks the use of local YAML manifest files with App Installer / WinGet. Prevents `winget install --manifest local.yaml` for arbitrary package installation from local files.",
+            Description =
+                "Blocks the use of local YAML manifest files with App Installer / WinGet. Prevents `winget install --manifest local.yaml` for arbitrary package installation from local files.",
             Tags = ["app-installer", "winget", "manifest", "local", "policy", "sideloading"],
             RegistryKeys = [Key],
             ImpactScore = 4,
@@ -785,7 +826,8 @@ internal static class PolicyAppInstaller
             Category = "Security",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Prevents the `--ignore-security-hash` flag from bypassing App Installer's SHA-256 checksum validation. Ensures all installed packages match their verified hash — no tampered packages.",
+            Description =
+                "Prevents the `--ignore-security-hash` flag from bypassing App Installer's SHA-256 checksum validation. Ensures all installed packages match their verified hash — no tampered packages.",
             Tags = ["app-installer", "winget", "hash", "integrity", "policy", "security"],
             RegistryKeys = [Key],
             ImpactScore = 5,
@@ -802,7 +844,8 @@ internal static class PolicyAppInstaller
             Category = "Security",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Disables the ms-appinstaller:// URI scheme. This protocol has been exploited to deliver malware — legitimate hosting via Teams/Edge link redirects to MSIX packages. Blocking it prevents click-to-install phishing attacks.",
+            Description =
+                "Disables the ms-appinstaller:// URI scheme. This protocol has been exploited to deliver malware — legitimate hosting via Teams/Edge link redirects to MSIX packages. Blocking it prevents click-to-install phishing attacks.",
             Tags = ["app-installer", "msix", "protocol", "uri", "phishing", "malware", "policy"],
             RegistryKeys = [Key],
             ImpactScore = 5,
@@ -819,7 +862,8 @@ internal static class PolicyAppInstaller
             Category = "Security",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Prevents users from enabling experimental / preview features in WinGet via Group Policy. Experimental features are untested and may contain undisclosed bugs or attack surface.",
+            Description =
+                "Prevents users from enabling experimental / preview features in WinGet via Group Policy. Experimental features are untested and may contain undisclosed bugs or attack surface.",
             Tags = ["app-installer", "winget", "experimental", "policy", "security"],
             RegistryKeys = [Key],
             ImpactScore = 3,
@@ -836,7 +880,8 @@ internal static class PolicyAppInstaller
             Category = "Security",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Hides the settings page within App Installer / WinGet, preventing users from changing configuration. Locks down the managed state of the installer on corporate devices.",
+            Description =
+                "Hides the settings page within App Installer / WinGet, preventing users from changing configuration. Locks down the managed state of the installer on corporate devices.",
             Tags = ["app-installer", "winget", "settings", "lock", "policy", "corporate"],
             RegistryKeys = [Key],
             ImpactScore = 2,
@@ -853,7 +898,8 @@ internal static class PolicyAppInstaller
             Category = "Security",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Removes the Microsoft Store as a WinGet package source via Group Policy. Forces all package installations to use internal corporate repositories only, preventing unapproved Store app installations.",
+            Description =
+                "Removes the Microsoft Store as a WinGet package source via Group Policy. Forces all package installations to use internal corporate repositories only, preventing unapproved Store app installations.",
             Tags = ["app-installer", "winget", "microsoft-store", "source", "policy", "corporate"],
             RegistryKeys = [Key],
             ImpactScore = 4,
@@ -870,7 +916,8 @@ internal static class PolicyAppInstaller
             Category = "Security",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Blocks WinGet from installing applications from local archive files (ZIP, tar.gz). Prevents circumventing approved sources by extracting and installing from locally downloaded archives.",
+            Description =
+                "Blocks WinGet from installing applications from local archive files (ZIP, tar.gz). Prevents circumventing approved sources by extracting and installing from locally downloaded archives.",
             Tags = ["app-installer", "winget", "archive", "zip", "policy", "sideloading"],
             RegistryKeys = [Key],
             ImpactScore = 4,
@@ -887,7 +934,8 @@ internal static class PolicyAppInstaller
             Category = "Security",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Sets the WinGet package source auto-update interval to 1 hour. More frequent source refreshes ensure the package catalogue is always current, reducing the window where a compromised package version could be served.",
+            Description =
+                "Sets the WinGet package source auto-update interval to 1 hour. More frequent source refreshes ensure the package catalogue is always current, reducing the window where a compromised package version could be served.",
             Tags = ["app-installer", "winget", "source", "update", "interval", "policy"],
             RegistryKeys = [Key],
             ImpactScore = 2,
@@ -904,7 +952,8 @@ internal static class PolicyAppInstaller
             Category = "Security",
             NeedsAdmin = true,
             CorpSafe = true,
-            Description = "Allows App Installer to bypass certificate pinning when connecting to the Microsoft Store source. Required in corporate environments that use TLS-intercepting proxies; without this, MSIX downloads may fail.",
+            Description =
+                "Allows App Installer to bypass certificate pinning when connecting to the Microsoft Store source. Required in corporate environments that use TLS-intercepting proxies; without this, MSIX downloads may fail.",
             Tags = ["app-installer", "winget", "certificate", "pinning", "proxy", "corporate", "policy"],
             RegistryKeys = [Key],
             ImpactScore = 2,

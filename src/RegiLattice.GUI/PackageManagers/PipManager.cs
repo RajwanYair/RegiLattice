@@ -29,8 +29,11 @@ internal static class PipManager
         // 1. py launcher: 'py -0p' lists all registered installs with their full paths
         try
         {
-            var (code, stdout, _) = ShellRunner.RunAsync("py", ["-0p"], default, TimeSpan.FromSeconds(5))
-                .ConfigureAwait(false).GetAwaiter().GetResult();
+            var (code, stdout, _) = ShellRunner
+                .RunAsync("py", ["-0p"], default, TimeSpan.FromSeconds(5))
+                .ConfigureAwait(false)
+                .GetAwaiter()
+                .GetResult();
             if (code == 0)
             {
                 foreach (string raw in stdout.Split('\n', StringSplitOptions.RemoveEmptyEntries))
@@ -49,7 +52,9 @@ internal static class PipManager
                 }
             }
         }
-        catch { /* py launcher not available */ }
+        catch
+        { /* py launcher not available */
+        }
 
         // 2. User-scope: %LOCALAPPDATA%\Programs\Python\Python*\python.exe
         string localAppData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
@@ -68,14 +73,18 @@ internal static class PipManager
         // 5. Conda/Miniconda/Anaconda base environments
         string userProfile = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
         string? programData = Environment.GetEnvironmentVariable("ProgramData");
-        foreach (string condaBase in new[]
-        {
-            Path.Combine(userProfile, "miniconda3"),
-            Path.Combine(userProfile, "anaconda3"),
-            Path.Combine(userProfile, "miniforge3"),
-            programData is not null ? Path.Combine(programData, "miniconda3") : null,
-            programData is not null ? Path.Combine(programData, "anaconda3") : null,
-        }.Where(p => p is not null).Cast<string>())
+        foreach (
+            string condaBase in new[]
+            {
+                Path.Combine(userProfile, "miniconda3"),
+                Path.Combine(userProfile, "anaconda3"),
+                Path.Combine(userProfile, "miniforge3"),
+                programData is not null ? Path.Combine(programData, "miniconda3") : null,
+                programData is not null ? Path.Combine(programData, "anaconda3") : null,
+            }
+                .Where(p => p is not null)
+                .Cast<string>()
+        )
         {
             string condaPy = Path.Combine(condaBase, "python.exe");
             if (File.Exists(condaPy))
@@ -87,12 +96,17 @@ internal static class PipManager
         {
             try
             {
-                var (code, _, _) = ShellRunner.RunAsync(exe, ["--version"], default, TimeSpan.FromSeconds(5))
-                    .ConfigureAwait(false).GetAwaiter().GetResult();
+                var (code, _, _) = ShellRunner
+                    .RunAsync(exe, ["--version"], default, TimeSpan.FromSeconds(5))
+                    .ConfigureAwait(false)
+                    .GetAwaiter()
+                    .GetResult();
                 if (code == 0)
                     candidates.Add(exe);
             }
-            catch { /* not on PATH */ }
+            catch
+            { /* not on PATH */
+            }
         }
 
         // Deduplicate (resolve canonical paths), then keep only those that have pip
@@ -106,12 +120,17 @@ internal static class PipManager
                 continue;
             try
             {
-                var (code, _, _) = ShellRunner.RunAsync(cand, ["-m", "pip", "--version"], default, TimeSpan.FromSeconds(8))
-                    .ConfigureAwait(false).GetAwaiter().GetResult();
+                var (code, _, _) = ShellRunner
+                    .RunAsync(cand, ["-m", "pip", "--version"], default, TimeSpan.FromSeconds(8))
+                    .ConfigureAwait(false)
+                    .GetAwaiter()
+                    .GetResult();
                 if (code == 0)
                     working.Add(cand);
             }
-            catch { /* no pip on this interpreter */ }
+            catch
+            { /* no pip on this interpreter */
+            }
         }
         return working;
     }
@@ -121,8 +140,11 @@ internal static class PipManager
     {
         if (!Directory.Exists(root))
             yield break;
-        foreach (string dir in Directory.GetDirectories(root, "Python*", SearchOption.TopDirectoryOnly)
-                     .OrderByDescending(d => d, StringComparer.OrdinalIgnoreCase))
+        foreach (
+            string dir in Directory
+                .GetDirectories(root, "Python*", SearchOption.TopDirectoryOnly)
+                .OrderByDescending(d => d, StringComparer.OrdinalIgnoreCase)
+        )
         {
             string exe = Path.Combine(dir, "python.exe");
             if (File.Exists(exe))

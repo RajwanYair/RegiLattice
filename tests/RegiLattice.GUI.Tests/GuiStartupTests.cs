@@ -111,12 +111,23 @@ public sealed class GuiStartupTests
         AppIcons.InvalidateCache();
         var bitmaps = new[]
         {
-            AppIcons.ScoopMenuBitmap, AppIcons.PSModuleMenuBitmap, AppIcons.PipMenuBitmap,
-            AppIcons.WinGetMenuBitmap, AppIcons.ChocolateyMenuBitmap, AppIcons.ToolVersionsMenuBitmap,
-            AppIcons.WindowsHealthMenuBitmap, AppIcons.MarketplaceMenuBitmap, AppIcons.NetworkMenuBitmap,
-            AppIcons.StartupMenuBitmap, AppIcons.ServiceMenuBitmap, AppIcons.PerformanceMenuBitmap,
-            AppIcons.PrivacyMenuBitmap, AppIcons.ExportMenuBitmap, AppIcons.ThermometerMenuBitmap,
-            AppIcons.BandwidthMenuBitmap, AppIcons.MacAddressMenuBitmap,
+            AppIcons.ScoopMenuBitmap,
+            AppIcons.PSModuleMenuBitmap,
+            AppIcons.PipMenuBitmap,
+            AppIcons.WinGetMenuBitmap,
+            AppIcons.ChocolateyMenuBitmap,
+            AppIcons.ToolVersionsMenuBitmap,
+            AppIcons.WindowsHealthMenuBitmap,
+            AppIcons.MarketplaceMenuBitmap,
+            AppIcons.NetworkMenuBitmap,
+            AppIcons.StartupMenuBitmap,
+            AppIcons.ServiceMenuBitmap,
+            AppIcons.PerformanceMenuBitmap,
+            AppIcons.PrivacyMenuBitmap,
+            AppIcons.ExportMenuBitmap,
+            AppIcons.ThermometerMenuBitmap,
+            AppIcons.BandwidthMenuBitmap,
+            AppIcons.MacAddressMenuBitmap,
         };
         Assert.All(bitmaps, bmp => Assert.NotNull(bmp));
         // Restore cache so other tests reuse the same bitmaps.
@@ -181,9 +192,8 @@ public sealed class GuiStartupTests
         {
             var cfg = AppConfig.Load(tmpPath);
             // LastSeenVersion is empty string by default → should show = true
-            string current = typeof(TweakEngine).Assembly
-                .GetCustomAttribute<AssemblyInformationalVersionAttribute>()
-                ?.InformationalVersion ?? "6.0.0";
+            string current =
+                typeof(TweakEngine).Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion ?? "6.0.0";
             bool shouldShow = !string.Equals(cfg.LastSeenVersion, current, StringComparison.OrdinalIgnoreCase);
             Assert.True(shouldShow, "WhatsNewDialog.ShouldShow must return true on first launch");
         }
@@ -194,8 +204,10 @@ public sealed class GuiStartupTests
         }
 
         sw.Stop();
-        Assert.True(sw.ElapsedMilliseconds < 200,
-            $"WhatsNewDialog startup logic took {sw.ElapsedMilliseconds}ms — must be <200ms (no RegisterBuiltins call)");
+        Assert.True(
+            sw.ElapsedMilliseconds < 200,
+            $"WhatsNewDialog startup logic took {sw.ElapsedMilliseconds}ms — must be <200ms (no RegisterBuiltins call)"
+        );
     }
 
     [Fact]
@@ -203,8 +215,7 @@ public sealed class GuiStartupTests
     {
         // Fresh config has FirstRunWizardPending=true → wizard must show on first launch.
         var cfg = AppConfig.Load(Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString("N")));
-        Assert.True(cfg.FirstRunWizardPending,
-            "FirstRunWizardPending must default to true so the wizard shows on first launch");
+        Assert.True(cfg.FirstRunWizardPending, "FirstRunWizardPending must default to true so the wizard shows on first launch");
     }
 
     // ── TweakEngine ── verifies that RegisterBuiltins completes without error ──
@@ -218,8 +229,7 @@ public sealed class GuiStartupTests
         var engine = new TweakEngine();
         var ex = Record.Exception(() => engine.RegisterBuiltins());
         Assert.Null(ex);
-        Assert.True(engine.TweakCount > 9000,
-            $"Expected >9000 tweaks after RegisterBuiltins, got {engine.TweakCount}");
+        Assert.True(engine.TweakCount > 9000, $"Expected >9000 tweaks after RegisterBuiltins, got {engine.TweakCount}");
     }
 
     // ── Program.ResolveManagerArg ── logic test without instantiating any Form ──
@@ -231,6 +241,6 @@ public sealed class GuiStartupTests
         // We test the internal logic using the public-facing assembly type.
         // The method is `private static` so we verify via reflection.
         var programType = typeof(AppTheme).Assembly.GetType("RegiLattice.GUI.Program");
-        Assert.NotNull(programType);  // Program type must exist in the GUI assembly
+        Assert.NotNull(programType); // Program type must exist in the GUI assembly
     }
 }

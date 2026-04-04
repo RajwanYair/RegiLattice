@@ -41,8 +41,8 @@ internal sealed class ChocolateyManagerDialog : BasePackageManagerDialog
             string name = paren > 0 ? entry[..paren] : entry;
             string version = paren > 0 ? entry[(paren + 2)..].TrimEnd(')') : "";
             var item = new ListViewItem(name) { Tag = name };
-            item.SubItems.Add(version);            // Version
-            item.SubItems.Add("…");               // Size (computed lazily)
+            item.SubItems.Add(version); // Version
+            item.SubItems.Add("…"); // Size (computed lazily)
             item.SubItems.Add("\u2714 Up to date"); // Status
             item.ForeColor = AppTheme.Fg;
             _lstInstalled.Items.Add(item);
@@ -73,9 +73,7 @@ internal sealed class ChocolateyManagerDialog : BasePackageManagerDialog
             {
                 if (item.Tag is string pkgName && _outdatedNames.Contains(pkgName))
                 {
-                    item.SubItems[3].Text = versionMap.TryGetValue(pkgName, out string? vLabel)
-                        ? $"\u26A0 {vLabel}"
-                        : "\u26A0 Update available";
+                    item.SubItems[3].Text = versionMap.TryGetValue(pkgName, out string? vLabel) ? $"\u26A0 {vLabel}" : "\u26A0 Update available";
                     item.SubItems[3].ForeColor = AppTheme.Yellow;
                 }
             }
@@ -106,7 +104,9 @@ internal sealed class ChocolateyManagerDialog : BasePackageManagerDialog
             else
                 ApplySizes(sizes);
         }
-        catch { /* ignore — size is optional */ }
+        catch
+        { /* ignore — size is optional */
+        }
     }
 
     private void ApplySizes(Dictionary<string, string> sizes)

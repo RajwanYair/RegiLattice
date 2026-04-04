@@ -144,11 +144,15 @@ internal sealed class PipManagerDialog : BasePackageManagerDialog
         string? progFilesX86 = Environment.GetEnvironmentVariable("ProgramFiles(x86)");
 
         string scope;
-        if (exePath.StartsWith(localAppData, StringComparison.OrdinalIgnoreCase)
-            || exePath.StartsWith(userProfile, StringComparison.OrdinalIgnoreCase))
+        if (
+            exePath.StartsWith(localAppData, StringComparison.OrdinalIgnoreCase)
+            || exePath.StartsWith(userProfile, StringComparison.OrdinalIgnoreCase)
+        )
             scope = "user";
-        else if (exePath.StartsWith(progFiles, StringComparison.OrdinalIgnoreCase)
-                 || (!string.IsNullOrEmpty(progFilesX86) && exePath.StartsWith(progFilesX86, StringComparison.OrdinalIgnoreCase)))
+        else if (
+            exePath.StartsWith(progFiles, StringComparison.OrdinalIgnoreCase)
+            || (!string.IsNullOrEmpty(progFilesX86) && exePath.StartsWith(progFilesX86, StringComparison.OrdinalIgnoreCase))
+        )
             scope = "system";
         else
             scope = "";
@@ -163,7 +167,7 @@ internal sealed class PipManagerDialog : BasePackageManagerDialog
             if (digits.Length == 3 && digits.All(char.IsDigit))
                 versionHint = $"{digits[0]}.{digits[1..]}"; // 312 → 3.12
             else if (digits.Length == 2 && digits.All(char.IsDigit))
-                versionHint = $"{digits[0]}.{digits[1]}";   // 39 → 3.9
+                versionHint = $"{digits[0]}.{digits[1]}"; // 39 → 3.9
         }
 
         string display = string.IsNullOrEmpty(versionHint) ? exePath : $"Python {versionHint}";
@@ -192,8 +196,8 @@ internal sealed class PipManagerDialog : BasePackageManagerDialog
             string name = paren > 0 ? entry[..paren] : entry;
             string version = paren > 0 ? entry[(paren + 2)..].TrimEnd(')') : "";
             var item = new ListViewItem(name) { Tag = name };
-            item.SubItems.Add(version);            // Version
-            item.SubItems.Add("—");               // Size
+            item.SubItems.Add(version); // Version
+            item.SubItems.Add("—"); // Size
             item.SubItems.Add("\u2714 Up to date"); // Status
             item.ForeColor = AppTheme.Fg;
             _lstInstalled.Items.Add(item);
@@ -224,9 +228,7 @@ internal sealed class PipManagerDialog : BasePackageManagerDialog
             {
                 if (item.Tag is string pkgName && outdatedNames.Contains(pkgName))
                 {
-                    item.SubItems[3].Text = versionMap.TryGetValue(pkgName, out string? vLabel)
-                        ? $"\u26A0 {vLabel}"
-                        : "\u26A0 Update available";
+                    item.SubItems[3].Text = versionMap.TryGetValue(pkgName, out string? vLabel) ? $"\u26A0 {vLabel}" : "\u26A0 Update available";
                     item.SubItems[3].ForeColor = AppTheme.Yellow;
                 }
             }

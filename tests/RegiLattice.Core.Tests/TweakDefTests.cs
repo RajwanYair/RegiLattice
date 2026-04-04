@@ -1,14 +1,14 @@
-using RegiLattice.Core;
-using RegiLattice.Core.Models;
-using RegiLattice.Core.Registry;
-using Xunit;
-using System.Text.RegularExpressions;
-using RegiLattice.Core.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using FsCheck;
 using FsCheck.Xunit;
+using RegiLattice.Core;
+using RegiLattice.Core.Models;
+using RegiLattice.Core.Registry;
+using RegiLattice.Core.Services;
+using Xunit;
 
 namespace RegiLattice.Core.Tests;
 
@@ -1152,6 +1152,7 @@ public sealed class TweakDefMetadataTests
         );
     }
 }
+
 // ── merged from TweakDefPropertyTests.cs ──────────────────────────────────
 /// <summary>
 /// Universal invariant / property tests.
@@ -1766,6 +1767,7 @@ public sealed class TweakDefBranchCoverageTests
         Assert.Equal(TweakKind.Registry, td.Kind);
     }
 }
+
 // ── merged from PropertyTests.cs ──────────────────────────────────
 /// <summary>
 /// Property-based tests using FsCheck. Each [Property] test verifies a behavioural

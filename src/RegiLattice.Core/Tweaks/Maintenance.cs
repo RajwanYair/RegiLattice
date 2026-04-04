@@ -431,7 +431,6 @@ internal static class Maintenance
                 RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer", "ClearRecentDocsOnExit", 1),
             ],
         },
-
         new TweakDef
         {
             Id = "maint-disable-desktop-cleanup-wizard",
@@ -1272,7 +1271,6 @@ internal static class TimeSync
 
 // === Merged from: DiskCleanup.cs ===
 
-
 /// <summary>
 /// Disk cleanup and storage hygiene tweaks — automated cleanup, temp files, caches,
 /// thumbnail databases, delivery optimisation, and Windows Update cleanup.
@@ -1968,7 +1966,6 @@ internal static class DiskCleanup
 }
 
 // === Merged from: Printing.cs ===
-
 
 internal static class Printing
 {
@@ -3647,7 +3644,6 @@ internal static class EventLogging
     ];
 }
 
-
 // ── merged from ScheduledTasks.cs ──
 internal static class ScheduledTasks
 {
@@ -4064,7 +4060,6 @@ internal static class ScheduledTasks
             RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Schedule\Maintenance", "WakeUp", 1)],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Schedule\Maintenance", "WakeUp", 0)],
         },
-
         new TweakDef
         {
             Id = "schtask-task-disable-scheduled-diagnostics",
@@ -5062,7 +5057,6 @@ internal static class ScheduledTaskTweaks
     ];
 }
 
-
 // ── merged from PolicyPrint.cs ──
 // RegiLattice.Core — Tweaks/PolicyPrint.cs
 // Printer management, print spooler security, IPP, internet printing, fax, and print queue policies
@@ -5302,7 +5296,6 @@ internal static class PolicyPrint
                 DetectOps = [RegOp.CheckDword(FaxLm, "NewAccounts", 1)],
             },
         ];
-
     }
 
     // ── InternetPrintingPolicy ──
@@ -5446,7 +5439,6 @@ internal static class PolicyPrint
                 DetectOps = [RegOp.CheckDword(Prnt, "V3DriverPolicy", 1)],
             },
         ];
-
     }
 
     // ── IppEverywherePolicy ──
@@ -5627,7 +5619,6 @@ internal static class PolicyPrint
                     DetectOps = [RegOp.CheckDword(Key, "BlockAnonymousIPPEverywherePrint", 1)],
                 },
             ];
-
     }
 
     // ── IppProtocolPolicy ──
@@ -5808,7 +5799,6 @@ internal static class PolicyPrint
                     DetectOps = [RegOp.CheckDword(Key, "EnableIPPAuditLog", 1)],
                 },
             ];
-
     }
 
     // ── PrinterDirectoryServicesPolicy ──
@@ -6008,7 +5998,6 @@ internal static class PolicyPrint
                     DetectOps = [RegOp.CheckDword(DsKey, "PruningRetries", 2)],
                 },
             ];
-
     }
 
     // ── PrinterDriverIsolationPolicy ──
@@ -6189,7 +6178,6 @@ internal static class PolicyPrint
                     DetectOps = [RegOp.CheckDword(Key, "AuditDriverInstallEvents", 1)],
                 },
             ];
-
     }
 
     // ── PrinterGpoPolicy ──
@@ -6370,14 +6358,12 @@ internal static class PolicyPrint
                 DetectOps = [RegOp.CheckDword(Key, "RpcOverNamedPipes", 0)],
             },
         ];
-
     }
 
     // ── PrinterRedirectionPolicy ──
     private static class _PrinterRedirectionPolicy
     {
-        private const string TsKey =
-            @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services";
+        private const string TsKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services";
 
         public static IReadOnlyList<TweakDef> Data =>
             [
@@ -6393,7 +6379,8 @@ internal static class PolicyPrint
                     CorpSafe = true,
                     ImpactScore = 4,
                     SafetyRating = 4,
-                    ImpactNote = "Client local printers are not mapped into RDS/VDI sessions. Users print to centrally managed network printers deployed via Group Policy. Users with home printers or local USB printers cannot print from remote sessions. Best used when central print server coverage is complete.",
+                    ImpactNote =
+                        "Client local printers are not mapped into RDS/VDI sessions. Users print to centrally managed network printers deployed via Group Policy. Users with home printers or local USB printers cannot print from remote sessions. Best used when central print server coverage is complete.",
                     ApplyOps = [RegOp.SetDword(TsKey, "fDisableCam", 1)],
                     RemoveOps = [RegOp.DeleteValue(TsKey, "fDisableCam")],
                     DetectOps = [RegOp.CheckDword(TsKey, "fDisableCam", 1)],
@@ -6410,7 +6397,8 @@ internal static class PolicyPrint
                     CorpSafe = true,
                     ImpactScore = 4,
                     SafetyRating = 5,
-                    ImpactNote = "Redirected client printers use the Easy Print universal driver. Printer-specific features (stapling, booklet mode, duplex) may be unavailable through Easy Print. Print rendering is sent to the client; print quality is consistent with local direct printing.",
+                    ImpactNote =
+                        "Redirected client printers use the Easy Print universal driver. Printer-specific features (stapling, booklet mode, duplex) may be unavailable through Easy Print. Print rendering is sent to the client; print quality is consistent with local direct printing.",
                     ApplyOps = [RegOp.SetDword(TsKey, "UseUniversalPrinter", 1)],
                     RemoveOps = [RegOp.DeleteValue(TsKey, "UseUniversalPrinter")],
                     DetectOps = [RegOp.CheckDword(TsKey, "UseUniversalPrinter", 1)],
@@ -6427,7 +6415,8 @@ internal static class PolicyPrint
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "Printer redirection enumeration is limited to 60 seconds. Printers that do not enumerate within 60 seconds are not available in the session. User logon proceeds after 60 seconds regardless of printer redirection status. Slow WAN clients may see fewer redirected printers.",
+                    ImpactNote =
+                        "Printer redirection enumeration is limited to 60 seconds. Printers that do not enumerate within 60 seconds are not available in the session. User logon proceeds after 60 seconds regardless of printer redirection status. Slow WAN clients may see fewer redirected printers.",
                     ApplyOps = [RegOp.SetDword(TsKey, "PrinterRedirectionTimeout", 60)],
                     RemoveOps = [RegOp.DeleteValue(TsKey, "PrinterRedirectionTimeout")],
                     DetectOps = [RegOp.CheckDword(TsKey, "PrinterRedirectionTimeout", 60)],
@@ -6444,7 +6433,8 @@ internal static class PolicyPrint
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "XPS Document Writer is not available in RDS sessions. Users cannot create XPS files by printing from within RDS sessions. Physical and network printers are unaffected.",
+                    ImpactNote =
+                        "XPS Document Writer is not available in RDS sessions. Users cannot create XPS files by printing from within RDS sessions. Physical and network printers are unaffected.",
                     ApplyOps = [RegOp.SetDword(TsKey, "DisableXpsRedirection", 1)],
                     RemoveOps = [RegOp.DeleteValue(TsKey, "DisableXpsRedirection")],
                     DetectOps = [RegOp.CheckDword(TsKey, "DisableXpsRedirection", 1)],
@@ -6461,7 +6451,8 @@ internal static class PolicyPrint
                     CorpSafe = true,
                     ImpactScore = 4,
                     SafetyRating = 5,
-                    ImpactNote = "Only the client's default printer is mapped into RDS sessions. Secondary client printers are not available in sessions unless manually added by the user. Significant reduction in session host spooler memory usage in VDI deployments.",
+                    ImpactNote =
+                        "Only the client's default printer is mapped into RDS sessions. Secondary client printers are not available in sessions unless manually added by the user. Significant reduction in session host spooler memory usage in VDI deployments.",
                     ApplyOps = [RegOp.SetDword(TsKey, "LoadDriversForDefaultPrinterOnly", 1)],
                     RemoveOps = [RegOp.DeleteValue(TsKey, "LoadDriversForDefaultPrinterOnly")],
                     DetectOps = [RegOp.CheckDword(TsKey, "LoadDriversForDefaultPrinterOnly", 1)],
@@ -6478,7 +6469,8 @@ internal static class PolicyPrint
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "Microsoft Print to PDF is not available in RDS sessions. Users cannot create PDF files by printing from within RDS sessions. Physical and network printers are unaffected. Users relying on session-based PDF generation need an alternative (server-side PDF converter).",
+                    ImpactNote =
+                        "Microsoft Print to PDF is not available in RDS sessions. Users cannot create PDF files by printing from within RDS sessions. Physical and network printers are unaffected. Users relying on session-based PDF generation need an alternative (server-side PDF converter).",
                     ApplyOps = [RegOp.SetDword(TsKey, "DisablePDFRedirection", 1)],
                     RemoveOps = [RegOp.DeleteValue(TsKey, "DisablePDFRedirection")],
                     DetectOps = [RegOp.CheckDword(TsKey, "DisablePDFRedirection", 1)],
@@ -6495,7 +6487,8 @@ internal static class PolicyPrint
                     CorpSafe = true,
                     ImpactScore = 2,
                     SafetyRating = 5,
-                    ImpactNote = "Redirected printers report toner, paper, and status information to the RDS session. Users see accurate printer capability information in print dialogs. Requires Easy Print driver and a printer with bidi reporting capability.",
+                    ImpactNote =
+                        "Redirected printers report toner, paper, and status information to the RDS session. Users see accurate printer capability information in print dialogs. Requires Easy Print driver and a printer with bidi reporting capability.",
                     ApplyOps = [RegOp.SetDword(TsKey, "BidiComm", 1)],
                     RemoveOps = [RegOp.DeleteValue(TsKey, "BidiComm")],
                     DetectOps = [RegOp.CheckDword(TsKey, "BidiComm", 1)],
@@ -6512,7 +6505,8 @@ internal static class PolicyPrint
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "At most 5 client printers are mapped per RDS session. Clients with more than 5 printers have their first 5 (by enumeration order) mapped. Users rarely need more than 5 printers in a session. Configure in conjunction with default-printer-only policy for maximum benefit.",
+                    ImpactNote =
+                        "At most 5 client printers are mapped per RDS session. Clients with more than 5 printers have their first 5 (by enumeration order) mapped. Users rarely need more than 5 printers in a session. Configure in conjunction with default-printer-only policy for maximum benefit.",
                     ApplyOps = [RegOp.SetDword(TsKey, "MaxRedirectedPrinters", 5)],
                     RemoveOps = [RegOp.DeleteValue(TsKey, "MaxRedirectedPrinters")],
                     DetectOps = [RegOp.CheckDword(TsKey, "MaxRedirectedPrinters", 5)],
@@ -6529,7 +6523,8 @@ internal static class PolicyPrint
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "Print data is compressed before transmission through the RDP channel. Significant bandwidth savings for text-heavy documents over WAN connections. Minor CPU overhead on the session host for compression. No user-visible impact.",
+                    ImpactNote =
+                        "Print data is compressed before transmission through the RDP channel. Significant bandwidth savings for text-heavy documents over WAN connections. Minor CPU overhead on the session host for compression. No user-visible impact.",
                     ApplyOps = [RegOp.SetDword(TsKey, "CompressPrintData", 1)],
                     RemoveOps = [RegOp.DeleteValue(TsKey, "CompressPrintData")],
                     DetectOps = [RegOp.CheckDword(TsKey, "CompressPrintData", 1)],
@@ -6546,23 +6541,21 @@ internal static class PolicyPrint
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "Printers without a matching server-side driver fall back to Easy Print. All client printers are available in sessions, potentially with reduced feature sets. Eliminates printer redirection failures due to missing drivers without requiring driver installation on session hosts.",
+                    ImpactNote =
+                        "Printers without a matching server-side driver fall back to Easy Print. All client printers are available in sessions, potentially with reduced feature sets. Eliminates printer redirection failures due to missing drivers without requiring driver installation on session hosts.",
                     ApplyOps = [RegOp.SetDword(TsKey, "FallbackToEasyPrint", 1)],
                     RemoveOps = [RegOp.DeleteValue(TsKey, "FallbackToEasyPrint")],
                     DetectOps = [RegOp.CheckDword(TsKey, "FallbackToEasyPrint", 1)],
                 },
             ];
-
     }
 
     // ── PrintJobManagementPolicy ──
     private static class _PrintJobManagementPolicy
     {
-        private const string JobKey =
-            @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers\JobManagement";
+        private const string JobKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers\JobManagement";
 
-        private const string PrtKey =
-            @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers";
+        private const string PrtKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers";
 
         public static IReadOnlyList<TweakDef> Data =>
             [
@@ -6578,7 +6571,8 @@ internal static class PolicyPrint
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "Pending print jobs are lost when the spooler restarts (service restart, machine reboot). Users must resubmit their print jobs. Prevents spooler crash loops caused by corrupted spool files. Useful on print servers with history of spooler instability.",
+                    ImpactNote =
+                        "Pending print jobs are lost when the spooler restarts (service restart, machine reboot). Users must resubmit their print jobs. Prevents spooler crash loops caused by corrupted spool files. Useful on print servers with history of spooler instability.",
                     ApplyOps = [RegOp.SetDword(JobKey, "PurgeJobsOnRestart", 1)],
                     RemoveOps = [RegOp.DeleteValue(JobKey, "PurgeJobsOnRestart")],
                     DetectOps = [RegOp.CheckDword(JobKey, "PurgeJobsOnRestart", 1)],
@@ -6595,7 +6589,8 @@ internal static class PolicyPrint
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "Print jobs exceeding 1 GB spool file size are rejected. Very large print jobs (high-resolution CAD, book-length PDFs) may need to be split into smaller jobs. Protects print server disk from runaway spool consumption.",
+                    ImpactNote =
+                        "Print jobs exceeding 1 GB spool file size are rejected. Very large print jobs (high-resolution CAD, book-length PDFs) may need to be split into smaller jobs. Protects print server disk from runaway spool consumption.",
                     ApplyOps = [RegOp.SetDword(JobKey, "MaxSpoolFileSize", 1073741824)],
                     RemoveOps = [RegOp.DeleteValue(JobKey, "MaxSpoolFileSize")],
                     DetectOps = [RegOp.CheckDword(JobKey, "MaxSpoolFileSize", 1073741824)],
@@ -6612,7 +6607,8 @@ internal static class PolicyPrint
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "A separator page is printed before each job. One additional page of toner consumed per job. Users can identify their documents in the output tray. Separator page format is configured per-printer (PCL, PostScript, Windows default).",
+                    ImpactNote =
+                        "A separator page is printed before each job. One additional page of toner consumed per job. Users can identify their documents in the output tray. Separator page format is configured per-printer (PCL, PostScript, Windows default).",
                     ApplyOps = [RegOp.SetDword(JobKey, "UseSeparatorPage", 1)],
                     RemoveOps = [RegOp.DeleteValue(JobKey, "UseSeparatorPage")],
                     DetectOps = [RegOp.CheckDword(JobKey, "UseSeparatorPage", 1)],
@@ -6629,7 +6625,8 @@ internal static class PolicyPrint
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "Print jobs not printed within 8 hours are automatically removed. Users must resubmit jobs if the printer was unavailable for more than 8 hours. Prevents accumulation of stale documents in print queues.",
+                    ImpactNote =
+                        "Print jobs not printed within 8 hours are automatically removed. Users must resubmit jobs if the printer was unavailable for more than 8 hours. Prevents accumulation of stale documents in print queues.",
                     ApplyOps = [RegOp.SetDword(JobKey, "JobExpiryHours", 8)],
                     RemoveOps = [RegOp.DeleteValue(JobKey, "JobExpiryHours")],
                     DetectOps = [RegOp.CheckDword(JobKey, "JobExpiryHours", 8)],
@@ -6646,7 +6643,8 @@ internal static class PolicyPrint
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "The 'Share this printer' checkbox in Printer Properties is disabled. Users cannot share their local printers to the network. Print sharing is only possible by administrators via Print Management or Group Policy.",
+                    ImpactNote =
+                        "The 'Share this printer' checkbox in Printer Properties is disabled. Users cannot share their local printers to the network. Print sharing is only possible by administrators via Print Management or Group Policy.",
                     ApplyOps = [RegOp.SetDword(PrtKey, "DisableInteractivePrinterSharing", 1)],
                     RemoveOps = [RegOp.DeleteValue(PrtKey, "DisableInteractivePrinterSharing")],
                     DetectOps = [RegOp.CheckDword(PrtKey, "DisableInteractivePrinterSharing", 1)],
@@ -6663,7 +6661,8 @@ internal static class PolicyPrint
                     CorpSafe = true,
                     ImpactScore = 2,
                     SafetyRating = 5,
-                    ImpactNote = "Standard user print jobs use priority 49. Priority 50-99 reserved for administrator-managed high-priority queues. No change in observed behaviour for most users — priority ordering is internal to the print queue scheduler.",
+                    ImpactNote =
+                        "Standard user print jobs use priority 49. Priority 50-99 reserved for administrator-managed high-priority queues. No change in observed behaviour for most users — priority ordering is internal to the print queue scheduler.",
                     ApplyOps = [RegOp.SetDword(JobKey, "DefaultPriority", 49)],
                     RemoveOps = [RegOp.DeleteValue(JobKey, "DefaultPriority")],
                     DetectOps = [RegOp.CheckDword(JobKey, "DefaultPriority", 49)],
@@ -6680,7 +6679,8 @@ internal static class PolicyPrint
                     CorpSafe = true,
                     ImpactScore = 4,
                     SafetyRating = 5,
-                    ImpactNote = "The print spool directory is protected with restrictive ACLs. Standard users cannot read or delete other users' spool files. Third-party print monitoring software that reads spool files directly may require the SYSTEM or print administrator context.",
+                    ImpactNote =
+                        "The print spool directory is protected with restrictive ACLs. Standard users cannot read or delete other users' spool files. Third-party print monitoring software that reads spool files directly may require the SYSTEM or print administrator context.",
                     ApplyOps = [RegOp.SetDword(JobKey, "SecureSpoolDirectory", 1)],
                     RemoveOps = [RegOp.DeleteValue(JobKey, "SecureSpoolDirectory")],
                     DetectOps = [RegOp.CheckDword(JobKey, "SecureSpoolDirectory", 1)],
@@ -6697,7 +6697,8 @@ internal static class PolicyPrint
                     CorpSafe = true,
                     ImpactScore = 2,
                     SafetyRating = 5,
-                    ImpactNote = "Print job completion notifications are suppressed in the system tray. Users are not notified when their document successfully prints. Error notifications (print failure, printer offline) can be separately enabled. Reduces notification clutter in high-volume printing environments.",
+                    ImpactNote =
+                        "Print job completion notifications are suppressed in the system tray. Users are not notified when their document successfully prints. Error notifications (print failure, printer offline) can be separately enabled. Reduces notification clutter in high-volume printing environments.",
                     ApplyOps = [RegOp.SetDword(JobKey, "DisablePrinterstatusNotifications", 1)],
                     RemoveOps = [RegOp.DeleteValue(JobKey, "DisablePrinterstatusNotifications")],
                     DetectOps = [RegOp.CheckDword(JobKey, "DisablePrinterstatusNotifications", 1)],
@@ -6714,7 +6715,8 @@ internal static class PolicyPrint
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "Print calls return to the application faster. Rendering errors may not surface until after the application has completed the print call. EMF spool files are larger than RAW until rendered; more temporary disk space is needed during active large print jobs.",
+                    ImpactNote =
+                        "Print calls return to the application faster. Rendering errors may not surface until after the application has completed the print call. EMF spool files are larger than RAW until rendered; more temporary disk space is needed during active large print jobs.",
                     ApplyOps = [RegOp.SetDword(JobKey, "UseEMFSpool", 1)],
                     RemoveOps = [RegOp.DeleteValue(JobKey, "UseEMFSpool")],
                     DetectOps = [RegOp.CheckDword(JobKey, "UseEMFSpool", 1)],
@@ -6731,13 +6733,13 @@ internal static class PolicyPrint
                     CorpSafe = true,
                     ImpactScore = 4,
                     SafetyRating = 4,
-                    ImpactNote = "Print jobs containing fonts not in the system font store render with fallback fonts. Documents with custom branding fonts may look different when printed if those fonts are not installed on the print server. Impact visible on print servers processing documents with embedded non-standard fonts.",
+                    ImpactNote =
+                        "Print jobs containing fonts not in the system font store render with fallback fonts. Documents with custom branding fonts may look different when printed if those fonts are not installed on the print server. Impact visible on print servers processing documents with embedded non-standard fonts.",
                     ApplyOps = [RegOp.SetDword(JobKey, "BlockUntrustedFonts", 1)],
                     RemoveOps = [RegOp.DeleteValue(JobKey, "BlockUntrustedFonts")],
                     DetectOps = [RegOp.CheckDword(JobKey, "BlockUntrustedFonts", 1)],
                 },
             ];
-
     }
 
     // ── PrintManagementPolicy ──
@@ -6918,17 +6920,14 @@ internal static class PolicyPrint
                 DetectOps = [RegOp.CheckDword(Key, "DisableCloudPrintSharing", 1)],
             },
         ];
-
     }
 
     // ── PrintQueuePolicy ──
     private static class _PrintQueuePolicy
     {
-        private const string PrtKey =
-            @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers";
+        private const string PrtKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers";
 
-        private const string RpcKey =
-            @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers\RPC";
+        private const string RpcKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers\RPC";
 
         public static IReadOnlyList<TweakDef> Data =>
             [
@@ -6944,7 +6943,8 @@ internal static class PolicyPrint
                     CorpSafe = true,
                     ImpactScore = 5,
                     SafetyRating = 3,
-                    ImpactNote = "The Print Spooler service is disabled. Users cannot print from this machine unless it connects to a remote print server via the Remote Procedure Call path. Local printer installation is blocked. Apply to servers only — do not apply on workstations if users print locally.",
+                    ImpactNote =
+                        "The Print Spooler service is disabled. Users cannot print from this machine unless it connects to a remote print server via the Remote Procedure Call path. Local printer installation is blocked. Apply to servers only — do not apply on workstations if users print locally.",
                     ApplyOps = [RegOp.SetDword(PrtKey, "DisableSpooler", 1)],
                     RemoveOps = [RegOp.DeleteValue(PrtKey, "DisableSpooler")],
                     DetectOps = [RegOp.CheckDword(PrtKey, "DisableSpooler", 1)],
@@ -6961,7 +6961,8 @@ internal static class PolicyPrint
                     CorpSafe = true,
                     ImpactScore = 5,
                     SafetyRating = 5,
-                    ImpactNote = "Only administrators can install printer drivers. Point and Print from a remote print server requires admin rights if the server does not have a matching driver locally. IT must pre-stage approved drivers or use enterprise driver deployment tools.",
+                    ImpactNote =
+                        "Only administrators can install printer drivers. Point and Print from a remote print server requires admin rights if the server does not have a matching driver locally. IT must pre-stage approved drivers or use enterprise driver deployment tools.",
                     ApplyOps = [RegOp.SetDword(PrtKey, "RestrictDriverInstallationToAdministrators", 1)],
                     RemoveOps = [RegOp.DeleteValue(PrtKey, "RestrictDriverInstallationToAdministrators")],
                     DetectOps = [RegOp.CheckDword(PrtKey, "RestrictDriverInstallationToAdministrators", 1)],
@@ -6978,7 +6979,8 @@ internal static class PolicyPrint
                     CorpSafe = true,
                     ImpactScore = 5,
                     SafetyRating = 4,
-                    ImpactNote = "Print server RPC connections use authenticated named pipes only. Domain-joined clients connecting with valid Kerberos/NTLM credentials are unaffected. Non-domain clients or applications using anonymous RPC to print servers may fail to connect.",
+                    ImpactNote =
+                        "Print server RPC connections use authenticated named pipes only. Domain-joined clients connecting with valid Kerberos/NTLM credentials are unaffected. Non-domain clients or applications using anonymous RPC to print servers may fail to connect.",
                     ApplyOps = [RegOp.SetDword(RpcKey, "RpcUseNamedPipeProtocol", 1)],
                     RemoveOps = [RegOp.DeleteValue(RpcKey, "RpcUseNamedPipeProtocol")],
                     DetectOps = [RegOp.CheckDword(RpcKey, "RpcUseNamedPipeProtocol", 1)],
@@ -6995,7 +6997,8 @@ internal static class PolicyPrint
                     CorpSafe = true,
                     ImpactScore = 4,
                     SafetyRating = 5,
-                    ImpactNote = "IPP (HTTP/HTTPS) printing is disabled. Users cannot add printers using http:// or https:// printer URLs. Direct TCP/IP printing to IP printers via the standard TCP/IP port monitor (LPR/RAW) is unaffected. AirPrint may be affected.",
+                    ImpactNote =
+                        "IPP (HTTP/HTTPS) printing is disabled. Users cannot add printers using http:// or https:// printer URLs. Direct TCP/IP printing to IP printers via the standard TCP/IP port monitor (LPR/RAW) is unaffected. AirPrint may be affected.",
                     ApplyOps = [RegOp.SetDword(PrtKey, "DisableHTTPPrinting", 1)],
                     RemoveOps = [RegOp.DeleteValue(PrtKey, "DisableHTTPPrinting")],
                     DetectOps = [RegOp.CheckDword(PrtKey, "DisableHTTPPrinting", 1)],
@@ -7012,22 +7015,11 @@ internal static class PolicyPrint
                     CorpSafe = true,
                     ImpactScore = 5,
                     SafetyRating = 5,
-                    ImpactNote = "Point and Print driver installs and updates from servers not in the approved list require elevation. Users attempting to add printers from unlisted servers see an elevation prompt. Approved print server names must be listed in the TrustedServers policy value.",
-                    ApplyOps =
-                    [
-                        RegOp.SetDword(PrtKey, "NoWarningNoElevationOnInstall", 0),
-                        RegOp.SetDword(PrtKey, "UpdatePromptSettings", 0),
-                    ],
-                    RemoveOps =
-                    [
-                        RegOp.DeleteValue(PrtKey, "NoWarningNoElevationOnInstall"),
-                        RegOp.DeleteValue(PrtKey, "UpdatePromptSettings"),
-                    ],
-                    DetectOps =
-                    [
-                        RegOp.CheckDword(PrtKey, "NoWarningNoElevationOnInstall", 0),
-                        RegOp.CheckDword(PrtKey, "UpdatePromptSettings", 0),
-                    ],
+                    ImpactNote =
+                        "Point and Print driver installs and updates from servers not in the approved list require elevation. Users attempting to add printers from unlisted servers see an elevation prompt. Approved print server names must be listed in the TrustedServers policy value.",
+                    ApplyOps = [RegOp.SetDword(PrtKey, "NoWarningNoElevationOnInstall", 0), RegOp.SetDword(PrtKey, "UpdatePromptSettings", 0)],
+                    RemoveOps = [RegOp.DeleteValue(PrtKey, "NoWarningNoElevationOnInstall"), RegOp.DeleteValue(PrtKey, "UpdatePromptSettings")],
+                    DetectOps = [RegOp.CheckDword(PrtKey, "NoWarningNoElevationOnInstall", 0), RegOp.CheckDword(PrtKey, "UpdatePromptSettings", 0)],
                 },
                 new TweakDef
                 {
@@ -7041,7 +7033,8 @@ internal static class PolicyPrint
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "The IIS-based web print queue manager is disabled. Users cannot manage print jobs via the http://servername/printers web portal. Standard client-side print job management via the taskbar or Print Management console is unaffected.",
+                    ImpactNote =
+                        "The IIS-based web print queue manager is disabled. Users cannot manage print jobs via the http://servername/printers web portal. Standard client-side print job management via the taskbar or Print Management console is unaffected.",
                     ApplyOps = [RegOp.SetDword(PrtKey, "DisableWebBasedPrinting", 1)],
                     RemoveOps = [RegOp.DeleteValue(PrtKey, "DisableWebBasedPrinting")],
                     DetectOps = [RegOp.CheckDword(PrtKey, "DisableWebBasedPrinting", 1)],
@@ -7058,7 +7051,8 @@ internal static class PolicyPrint
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "Print spooler operational events are logged. Minor disk overhead for log writes. Events include job processing, driver activity, and printer configuration changes. Useful for DLP monitoring on machines with access to sensitive documents.",
+                    ImpactNote =
+                        "Print spooler operational events are logged. Minor disk overhead for log writes. Events include job processing, driver activity, and printer configuration changes. Useful for DLP monitoring on machines with access to sensitive documents.",
                     ApplyOps = [RegOp.SetDword(PrtKey, "EnableEventLogging", 1)],
                     RemoveOps = [RegOp.DeleteValue(PrtKey, "EnableEventLogging")],
                     DetectOps = [RegOp.CheckDword(PrtKey, "EnableEventLogging", 1)],
@@ -7075,7 +7069,8 @@ internal static class PolicyPrint
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "Printer drivers are not auto-downloaded from Windows Update. When a new printer is detected without a local driver, users see 'Driver not found' rather than automatic download. IT must pre-stage or push approved drivers.",
+                    ImpactNote =
+                        "Printer drivers are not auto-downloaded from Windows Update. When a new printer is detected without a local driver, users see 'Driver not found' rather than automatic download. IT must pre-stage or push approved drivers.",
                     ApplyOps = [RegOp.SetDword(PrtKey, "DisableWindowsUpdateDriverSearching", 1)],
                     RemoveOps = [RegOp.DeleteValue(PrtKey, "DisableWindowsUpdateDriverSearching")],
                     DetectOps = [RegOp.CheckDword(PrtKey, "DisableWindowsUpdateDriverSearching", 1)],
@@ -7092,7 +7087,8 @@ internal static class PolicyPrint
                     CorpSafe = true,
                     ImpactScore = 4,
                     SafetyRating = 4,
-                    ImpactNote = "Only v4 package-aware printer drivers are accepted via Point and Print. Legacy v3 kernel-mode printer drivers are rejected. Some older printers only have v3 drivers — they require alternative connection methods (Type 3 class driver, IPP, etc.).",
+                    ImpactNote =
+                        "Only v4 package-aware printer drivers are accepted via Point and Print. Legacy v3 kernel-mode printer drivers are rejected. Some older printers only have v3 drivers — they require alternative connection methods (Type 3 class driver, IPP, etc.).",
                     ApplyOps = [RegOp.SetDword(PrtKey, "PackagePointAndPrintOnly", 1)],
                     RemoveOps = [RegOp.DeleteValue(PrtKey, "PackagePointAndPrintOnly")],
                     DetectOps = [RegOp.CheckDword(PrtKey, "PackagePointAndPrintOnly", 1)],
@@ -7109,13 +7105,13 @@ internal static class PolicyPrint
                     CorpSafe = true,
                     ImpactScore = 2,
                     SafetyRating = 5,
-                    ImpactNote = "LPD service print job events are logged if the LPD service is installed and running. No impact if LPD is not installed. LPD service is disabled by default.",
+                    ImpactNote =
+                        "LPD service print job events are logged if the LPD service is installed and running. No impact if LPD is not installed. LPD service is disabled by default.",
                     ApplyOps = [RegOp.SetDword(PrtKey, "EnableLpdLogging", 1)],
                     RemoveOps = [RegOp.DeleteValue(PrtKey, "EnableLpdLogging")],
                     DetectOps = [RegOp.CheckDword(PrtKey, "EnableLpdLogging", 1)],
                 },
             ];
-
     }
 
     // ── PrintSpoolAdvPolicy ──
@@ -7296,7 +7292,6 @@ internal static class PolicyPrint
                 DetectOps = [RegOp.CheckDword(Key, "InheritedPolicies", 1)],
             },
         ];
-
     }
 
     // ── PrintSpoolerAdvancedPolicy ──
@@ -7305,169 +7300,178 @@ internal static class PolicyPrint
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers";
 
         public static IReadOnlyList<TweakDef> Data =>
-        [
-            new TweakDef
-            {
-                Id           = "spladv-disable-print-spooler",
-                Label        = "Disable Print Spooler Service",
-                Category = "Maintenance",
-                Description  = "Disables the Windows Print Spooler service entirely, eliminating the PrintNightmare attack surface and all spooler-related privilege escalation vectors on systems that do not need to print.",
-                Tags         = ["spooler", "printing", "security", "printnightmare", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 5,
-                SafetyRating = 4,
-                ImpactNote   = "Print Spooler fully disabled; printing and fax completely unavailable until re-enabled.",
-                ApplyOps     = [RegOp.SetDword(Key, "DisableSpooler", 1)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "DisableSpooler")],
-                DetectOps    = [RegOp.CheckDword(Key, "DisableSpooler", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "spladv-block-remote-printer-install",
-                Label        = "Block Non-Admin Remote Printer Driver Installation",
-                Category = "Maintenance",
-                Description  = "Prevents non-administrator users from installing printer drivers remotely via the spooler, closing the PrintNightmare (CVE-2021-34527) driver-install privilege escalation path.",
-                Tags         = ["spooler", "printing", "security", "printnightmare", "driver", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 5,
-                SafetyRating = 5,
-                ImpactNote   = "Non-admin remote driver install blocked; closes PrintNightmare attack path.",
-                ApplyOps     = [RegOp.SetDword(Key, "RestrictDriverInstallationToAdministrators", 1)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "RestrictDriverInstallationToAdministrators")],
-                DetectOps    = [RegOp.CheckDword(Key, "RestrictDriverInstallationToAdministrators", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "spladv-disable-mxdc-rendering",
-                Label        = "Disable MXDC Package Rendering in Print Spooler",
-                Category = "Maintenance",
-                Description  = "Disables the Microsoft XPS Document Converter (MXDC) rendering path in the spooler, blocking an attack vector where malicious XPS documents exploit the spooler RPC interface.",
-                Tags         = ["spooler", "xps", "mxdc", "security", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 3,
-                SafetyRating = 5,
-                ImpactNote   = "MXDC XPS rendering disabled in spooler; XPS print conversion requires an alternative method.",
-                ApplyOps     = [RegOp.SetDword(Key, "DisableMXDCRendering", 1)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "DisableMXDCRendering")],
-                DetectOps    = [RegOp.CheckDword(Key, "DisableMXDCRendering", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "spladv-disable-internet-printing-client",
-                Label        = "Disable Internet Printing Client (IPP over HTTP)",
-                Category = "Maintenance",
-                Description  = "Disables the Internet Printing Protocol (IPP) client in Windows, preventing print jobs from being submitted to printers over HTTP/HTTPS and closing the associated network attack surface.",
-                Tags         = ["spooler", "ipp", "internet-printing", "security", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 3,
-                SafetyRating = 5,
-                ImpactNote   = "IPP client disabled; cannot print to networked IPP printers over HTTP. Local USB printing unaffected.",
-                ApplyOps     = [RegOp.SetDword(Key, "DisableWebPrinting", 1)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "DisableWebPrinting")],
-                DetectOps    = [RegOp.CheckDword(Key, "DisableWebPrinting", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "spladv-disable-printer-browse-list",
-                Label        = "Disable Printer Browse List on Domain",
-                Category = "Maintenance",
-                Description  = "Disables the automatic browse list that advertises available printers across a domain, reducing network discovery noise and preventing spooler-based reconnaissance.",
-                Tags         = ["spooler", "printing", "browsing", "domain", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 2,
-                SafetyRating = 5,
-                ImpactNote   = "Printer browse list disabled; users must manually add printers by UNC path or IP.",
-                ApplyOps     = [RegOp.SetDword(Key, "DisablePrinterBrowsing", 1)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "DisablePrinterBrowsing")],
-                DetectOps    = [RegOp.CheckDword(Key, "DisablePrinterBrowsing", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "spladv-block-print-to-xps",
-                Label        = "Block Print to XPS Document Writer",
-                Category = "Maintenance",
-                Description  = "Blocks the Microsoft XPS Document Writer virtual printer, preventing users from saving print jobs to XPS format files and closing the XPS writer spooler attack surface.",
-                Tags         = ["spooler", "xps", "virtual-printer", "security", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 2,
-                SafetyRating = 5,
-                ImpactNote   = "XPS Document Writer virtual printer disabled; cannot save print output as .xps files.",
-                ApplyOps     = [RegOp.SetDword(Key, "DisableXPSDocumentWriter", 1)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "DisableXPSDocumentWriter")],
-                DetectOps    = [RegOp.CheckDword(Key, "DisableXPSDocumentWriter", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "spladv-block-lpt-port-printing",
-                Label        = "Block LPT Parallel Port Printer Access",
-                Category = "Maintenance",
-                Description  = "Blocks the spooler from accessing LPT (parallel port) printer connections, removing a legacy attack surface on systems that do not have or use parallel port printers.",
-                Tags         = ["spooler", "lpt", "parallel-port", "legacy", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 1,
-                SafetyRating = 5,
-                ImpactNote   = "LPT parallel port printing blocked; legacy parallel-port printers not usable.",
-                ApplyOps     = [RegOp.SetDword(Key, "DisableLPTPortPrinting", 1)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "DisableLPTPortPrinting")],
-                DetectOps    = [RegOp.CheckDword(Key, "DisableLPTPortPrinting", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "spladv-disable-com-port-printing",
-                Label        = "Block COM Serial Port Printer Access",
-                Category = "Maintenance",
-                Description  = "Blocks the spooler from accessing COM (serial port) printer connections, removing legacy serial printing capability that is not needed on modern systems.",
-                Tags         = ["spooler", "com-port", "serial-port", "legacy", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 1,
-                SafetyRating = 5,
-                ImpactNote   = "COM serial port printing blocked; legacy serial-port printers not usable.",
-                ApplyOps     = [RegOp.SetDword(Key, "DisableCOMPortPrinting", 1)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "DisableCOMPortPrinting")],
-                DetectOps    = [RegOp.CheckDword(Key, "DisableCOMPortPrinting", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "spladv-block-outbound-spool-jobs",
-                Label        = "Block Outbound Print Job Forwarding from This Machine",
-                Category = "Maintenance",
-                Description  = "Prevents this Windows machine from forwarding print jobs to remote printers via the spooler, an attack path used to steal NTLM credentials (printer capture attacks).",
-                Tags         = ["spooler", "printing", "ntlm-capture", "security", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 4,
-                SafetyRating = 5,
-                ImpactNote   = "Outbound spooler job forwarding blocked; remote printer capture attacks (e.g., RespNTLM) mitigated.",
-                ApplyOps     = [RegOp.SetDword(Key, "NoRemoteSpooler", 1)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "NoRemoteSpooler")],
-                DetectOps    = [RegOp.CheckDword(Key, "NoRemoteSpooler", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "spladv-disable-spooler-inbound-access",
-                Label        = "Disable Inbound Print Spooler RPC Access",
-                Category = "Maintenance",
-                Description  = "Disables the inbound RPC interface on the Print Spooler, preventing remote machines from submitting print jobs to this machine via the spooler, closing another PrintNightmare-family attack vector.",
-                Tags         = ["spooler", "rpc", "security", "printnightmare", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 5,
-                SafetyRating = 5,
-                ImpactNote   = "Inbound spooler RPC disabled; this machine cannot be used as a print server by remote clients.",
-                ApplyOps     = [RegOp.SetDword(Key, "DisableSpoolerInboundRPC", 1)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "DisableSpoolerInboundRPC")],
-                DetectOps    = [RegOp.CheckDword(Key, "DisableSpoolerInboundRPC", 1)],
-            },
-        ];
-
+            [
+                new TweakDef
+                {
+                    Id = "spladv-disable-print-spooler",
+                    Label = "Disable Print Spooler Service",
+                    Category = "Maintenance",
+                    Description =
+                        "Disables the Windows Print Spooler service entirely, eliminating the PrintNightmare attack surface and all spooler-related privilege escalation vectors on systems that do not need to print.",
+                    Tags = ["spooler", "printing", "security", "printnightmare", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 5,
+                    SafetyRating = 4,
+                    ImpactNote = "Print Spooler fully disabled; printing and fax completely unavailable until re-enabled.",
+                    ApplyOps = [RegOp.SetDword(Key, "DisableSpooler", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "DisableSpooler")],
+                    DetectOps = [RegOp.CheckDword(Key, "DisableSpooler", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "spladv-block-remote-printer-install",
+                    Label = "Block Non-Admin Remote Printer Driver Installation",
+                    Category = "Maintenance",
+                    Description =
+                        "Prevents non-administrator users from installing printer drivers remotely via the spooler, closing the PrintNightmare (CVE-2021-34527) driver-install privilege escalation path.",
+                    Tags = ["spooler", "printing", "security", "printnightmare", "driver", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 5,
+                    SafetyRating = 5,
+                    ImpactNote = "Non-admin remote driver install blocked; closes PrintNightmare attack path.",
+                    ApplyOps = [RegOp.SetDword(Key, "RestrictDriverInstallationToAdministrators", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "RestrictDriverInstallationToAdministrators")],
+                    DetectOps = [RegOp.CheckDword(Key, "RestrictDriverInstallationToAdministrators", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "spladv-disable-mxdc-rendering",
+                    Label = "Disable MXDC Package Rendering in Print Spooler",
+                    Category = "Maintenance",
+                    Description =
+                        "Disables the Microsoft XPS Document Converter (MXDC) rendering path in the spooler, blocking an attack vector where malicious XPS documents exploit the spooler RPC interface.",
+                    Tags = ["spooler", "xps", "mxdc", "security", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "MXDC XPS rendering disabled in spooler; XPS print conversion requires an alternative method.",
+                    ApplyOps = [RegOp.SetDword(Key, "DisableMXDCRendering", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "DisableMXDCRendering")],
+                    DetectOps = [RegOp.CheckDword(Key, "DisableMXDCRendering", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "spladv-disable-internet-printing-client",
+                    Label = "Disable Internet Printing Client (IPP over HTTP)",
+                    Category = "Maintenance",
+                    Description =
+                        "Disables the Internet Printing Protocol (IPP) client in Windows, preventing print jobs from being submitted to printers over HTTP/HTTPS and closing the associated network attack surface.",
+                    Tags = ["spooler", "ipp", "internet-printing", "security", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "IPP client disabled; cannot print to networked IPP printers over HTTP. Local USB printing unaffected.",
+                    ApplyOps = [RegOp.SetDword(Key, "DisableWebPrinting", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "DisableWebPrinting")],
+                    DetectOps = [RegOp.CheckDword(Key, "DisableWebPrinting", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "spladv-disable-printer-browse-list",
+                    Label = "Disable Printer Browse List on Domain",
+                    Category = "Maintenance",
+                    Description =
+                        "Disables the automatic browse list that advertises available printers across a domain, reducing network discovery noise and preventing spooler-based reconnaissance.",
+                    Tags = ["spooler", "printing", "browsing", "domain", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 2,
+                    SafetyRating = 5,
+                    ImpactNote = "Printer browse list disabled; users must manually add printers by UNC path or IP.",
+                    ApplyOps = [RegOp.SetDword(Key, "DisablePrinterBrowsing", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "DisablePrinterBrowsing")],
+                    DetectOps = [RegOp.CheckDword(Key, "DisablePrinterBrowsing", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "spladv-block-print-to-xps",
+                    Label = "Block Print to XPS Document Writer",
+                    Category = "Maintenance",
+                    Description =
+                        "Blocks the Microsoft XPS Document Writer virtual printer, preventing users from saving print jobs to XPS format files and closing the XPS writer spooler attack surface.",
+                    Tags = ["spooler", "xps", "virtual-printer", "security", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 2,
+                    SafetyRating = 5,
+                    ImpactNote = "XPS Document Writer virtual printer disabled; cannot save print output as .xps files.",
+                    ApplyOps = [RegOp.SetDword(Key, "DisableXPSDocumentWriter", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "DisableXPSDocumentWriter")],
+                    DetectOps = [RegOp.CheckDword(Key, "DisableXPSDocumentWriter", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "spladv-block-lpt-port-printing",
+                    Label = "Block LPT Parallel Port Printer Access",
+                    Category = "Maintenance",
+                    Description =
+                        "Blocks the spooler from accessing LPT (parallel port) printer connections, removing a legacy attack surface on systems that do not have or use parallel port printers.",
+                    Tags = ["spooler", "lpt", "parallel-port", "legacy", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 1,
+                    SafetyRating = 5,
+                    ImpactNote = "LPT parallel port printing blocked; legacy parallel-port printers not usable.",
+                    ApplyOps = [RegOp.SetDword(Key, "DisableLPTPortPrinting", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "DisableLPTPortPrinting")],
+                    DetectOps = [RegOp.CheckDword(Key, "DisableLPTPortPrinting", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "spladv-disable-com-port-printing",
+                    Label = "Block COM Serial Port Printer Access",
+                    Category = "Maintenance",
+                    Description =
+                        "Blocks the spooler from accessing COM (serial port) printer connections, removing legacy serial printing capability that is not needed on modern systems.",
+                    Tags = ["spooler", "com-port", "serial-port", "legacy", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 1,
+                    SafetyRating = 5,
+                    ImpactNote = "COM serial port printing blocked; legacy serial-port printers not usable.",
+                    ApplyOps = [RegOp.SetDword(Key, "DisableCOMPortPrinting", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "DisableCOMPortPrinting")],
+                    DetectOps = [RegOp.CheckDword(Key, "DisableCOMPortPrinting", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "spladv-block-outbound-spool-jobs",
+                    Label = "Block Outbound Print Job Forwarding from This Machine",
+                    Category = "Maintenance",
+                    Description =
+                        "Prevents this Windows machine from forwarding print jobs to remote printers via the spooler, an attack path used to steal NTLM credentials (printer capture attacks).",
+                    Tags = ["spooler", "printing", "ntlm-capture", "security", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "Outbound spooler job forwarding blocked; remote printer capture attacks (e.g., RespNTLM) mitigated.",
+                    ApplyOps = [RegOp.SetDword(Key, "NoRemoteSpooler", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "NoRemoteSpooler")],
+                    DetectOps = [RegOp.CheckDword(Key, "NoRemoteSpooler", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "spladv-disable-spooler-inbound-access",
+                    Label = "Disable Inbound Print Spooler RPC Access",
+                    Category = "Maintenance",
+                    Description =
+                        "Disables the inbound RPC interface on the Print Spooler, preventing remote machines from submitting print jobs to this machine via the spooler, closing another PrintNightmare-family attack vector.",
+                    Tags = ["spooler", "rpc", "security", "printnightmare", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 5,
+                    SafetyRating = 5,
+                    ImpactNote = "Inbound spooler RPC disabled; this machine cannot be used as a print server by remote clients.",
+                    ApplyOps = [RegOp.SetDword(Key, "DisableSpoolerInboundRPC", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "DisableSpoolerInboundRPC")],
+                    DetectOps = [RegOp.CheckDword(Key, "DisableSpoolerInboundRPC", 1)],
+                },
+            ];
     }
 
     // ── PrintSpoolerPolicy ──
@@ -7477,169 +7481,170 @@ internal static class PolicyPrint
         private const string PnPKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers\PointAndPrint";
 
         public static IReadOnlyList<TweakDef> Data =>
-        [
-            new TweakDef
-            {
-                Id = "prtspool-block-km-printer-drivers",
-                Label = "Block Kernel-Mode Printer Drivers",
-                Category = "Maintenance",
-                Description = "Prevents kernel-mode printer drivers from loading in the Windows print spooler process (PrintNightmare mitigation).",
-                Tags = ["print-spooler", "kernel-mode", "driver", "printnightmare", "security"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 5,
-                SafetyRating = 4,
-                ImpactNote = "Critical PrintNightmare fix; some legacy printer hardware may require KM drivers and stop working.",
-                ApplyOps = [RegOp.SetDword(SpoolKey, "KMPrintersAreBlocked", 1)],
-                RemoveOps = [RegOp.DeleteValue(SpoolKey, "KMPrintersAreBlocked")],
-                DetectOps = [RegOp.CheckDword(SpoolKey, "KMPrintersAreBlocked", 1)],
-            },
-            new TweakDef
-            {
-                Id = "prtspool-disable-remote-rpc",
-                Label = "Disable Remote Print Spooler RPC Endpoint",
-                Category = "Maintenance",
-                Description = "Disables the remote RPC endpoint of the print spooler, preventing remote printer enumeration and exploitation.",
-                Tags = ["print-spooler", "rpc", "remote", "printnightmare", "network", "security"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 5,
-                SafetyRating = 3,
-                ImpactNote = "Value 2 disables remote spooler; breaks network printer sharing from this machine but blocks remote exploitation.",
-                ApplyOps = [RegOp.SetDword(SpoolKey, "RegisterSpoolerRemoteRpcEndPoint", 2)],
-                RemoveOps = [RegOp.DeleteValue(SpoolKey, "RegisterSpoolerRemoteRpcEndPoint")],
-                DetectOps = [RegOp.CheckDword(SpoolKey, "RegisterSpoolerRemoteRpcEndPoint", 2)],
-            },
-            new TweakDef
-            {
-                Id = "prtspool-require-signed-copy-files",
-                Label = "Require Signed Copy Files for PnP Printers",
-                Category = "Maintenance",
-                Description = "Restricts printer driver copy-files during PnP association to only allow digitally signed drivers.",
-                Tags = ["print-spooler", "copy-files", "pnp", "signed-driver", "security"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                ImpactNote = "Value 1 = allow copy-files only from signed drivers; blocks unsigned driver payloads used in PrintNightmare.",
-                ApplyOps = [RegOp.SetDword(SpoolKey, "CopyFilesPolicy", 1)],
-                RemoveOps = [RegOp.DeleteValue(SpoolKey, "CopyFilesPolicy")],
-                DetectOps = [RegOp.CheckDword(SpoolKey, "CopyFilesPolicy", 1)],
-            },
-            new TweakDef
-            {
-                Id = "prtspool-disable-web-pnp-download",
-                Label = "Disable Printer Driver Download from Windows Update",
-                Category = "Maintenance",
-                Description = "Prevents Windows from automatically downloading printer drivers from Windows Update during PnP printer installation.",
-                Tags = ["print-spooler", "windows-update", "pnp", "driver-download", "security"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Removes an untrusted driver download path; IT must manually approve and supply printer drivers instead.",
-                ApplyOps = [RegOp.SetDword(SpoolKey, "DisableWebPnPDownload", 1)],
-                RemoveOps = [RegOp.DeleteValue(SpoolKey, "DisableWebPnPDownload")],
-                DetectOps = [RegOp.CheckDword(SpoolKey, "DisableWebPnPDownload", 1)],
-            },
-            new TweakDef
-            {
-                Id = "prtspool-disable-http-printing",
-                Label = "Disable Printing over HTTP",
-                Category = "Maintenance",
-                Description = "Blocks the Windows print spooler from connecting to or using printers over the HTTP/IPP protocol.",
-                Tags = ["print-spooler", "http", "ipp", "network", "security"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Eliminates unauthenticated HTTP printing surface; affects cloud print services that use HTTP transport.",
-                ApplyOps = [RegOp.SetDword(SpoolKey, "DisableHTTPPrinting", 1)],
-                RemoveOps = [RegOp.DeleteValue(SpoolKey, "DisableHTTPPrinting")],
-                DetectOps = [RegOp.CheckDword(SpoolKey, "DisableHTTPPrinting", 1)],
-            },
-            new TweakDef
-            {
-                Id = "prtspool-pnp-restrict-to-admins",
-                Label = "Restrict Point and Print Driver Installation to Admins",
-                Category = "Maintenance",
-                Description = "Requires administrator privileges to install printer drivers via Point and Print, regardless of the print server.",
-                Tags = ["print-spooler", "point-and-print", "admin", "driver", "security"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 5,
-                SafetyRating = 5,
-                ImpactNote = "Key PrintNightmare mitigation; non-admin users cannot install printer drivers via PnP to any server.",
-                ApplyOps = [RegOp.SetDword(PnPKey, "Restricted", 1)],
-                RemoveOps = [RegOp.DeleteValue(PnPKey, "Restricted")],
-                DetectOps = [RegOp.CheckDword(PnPKey, "Restricted", 1)],
-            },
-            new TweakDef
-            {
-                Id = "prtspool-pnp-no-trusted-servers",
-                Label = "Disable Trusted Print Server Exemption for Point and Print",
-                Category = "Maintenance",
-                Description = "Removes the trusted print server list exemption, requiring admin-level approval for ALL Point and Print servers.",
-                Tags = ["print-spooler", "point-and-print", "trusted-servers", "security"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                ImpactNote = "No servers are automatically trusted for PnP driver download; all require explicit admin consent.",
-                ApplyOps = [RegOp.SetDword(PnPKey, "TrustedServers", 0)],
-                RemoveOps = [RegOp.DeleteValue(PnPKey, "TrustedServers")],
-                DetectOps = [RegOp.CheckDword(PnPKey, "TrustedServers", 0)],
-            },
-            new TweakDef
-            {
-                Id = "prtspool-pnp-no-forest-trust",
-                Label = "Disable Forest-Level Trust for Point and Print",
-                Category = "Maintenance",
-                Description = "Disables the implicit trust granted to print servers in the same Active Directory forest for Point and Print.",
-                Tags = ["print-spooler", "point-and-print", "forest", "ad", "trust", "security"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Forest-member print servers no longer bypass driver installation prompts; treats all servers equally.",
-                ApplyOps = [RegOp.SetDword(PnPKey, "InForest", 0)],
-                RemoveOps = [RegOp.DeleteValue(PnPKey, "InForest")],
-                DetectOps = [RegOp.CheckDword(PnPKey, "InForest", 0)],
-            },
-            new TweakDef
-            {
-                Id = "prtspool-pnp-elevate-driver-update",
-                Label = "Require Elevation When Updating Printer Drivers via PnP",
-                Category = "Maintenance",
-                Description = "Forces a UAC elevation prompt when an existing printer driver is updated via Point and Print.",
-                Tags = ["print-spooler", "point-and-print", "uac", "elevation", "update", "security"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                ImpactNote = "Value 2 = always require elevation for driver updates; prevents silent malicious driver replacement.",
-                ApplyOps = [RegOp.SetDword(PnPKey, "UpdatePromptSettings", 2)],
-                RemoveOps = [RegOp.DeleteValue(PnPKey, "UpdatePromptSettings")],
-                DetectOps = [RegOp.CheckDword(PnPKey, "UpdatePromptSettings", 2)],
-            },
-            new TweakDef
-            {
-                Id = "prtspool-pnp-elevate-driver-install",
-                Label = "Require Elevation When Installing New Printer Drivers via PnP",
-                Category = "Maintenance",
-                Description = "Forces a UAC elevation prompt when a new printer driver is installed via Point and Print.",
-                Tags = ["print-spooler", "point-and-print", "uac", "elevation", "install", "security"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                ImpactNote = "Value 2 = always require elevation for new driver installs; closes a common PrintNightmare attack vector.",
-                ApplyOps = [RegOp.SetDword(PnPKey, "InstallDriverPromptSetting", 2)],
-                RemoveOps = [RegOp.DeleteValue(PnPKey, "InstallDriverPromptSetting")],
-                DetectOps = [RegOp.CheckDword(PnPKey, "InstallDriverPromptSetting", 2)],
-            },
-        ];
-
+            [
+                new TweakDef
+                {
+                    Id = "prtspool-block-km-printer-drivers",
+                    Label = "Block Kernel-Mode Printer Drivers",
+                    Category = "Maintenance",
+                    Description =
+                        "Prevents kernel-mode printer drivers from loading in the Windows print spooler process (PrintNightmare mitigation).",
+                    Tags = ["print-spooler", "kernel-mode", "driver", "printnightmare", "security"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 5,
+                    SafetyRating = 4,
+                    ImpactNote = "Critical PrintNightmare fix; some legacy printer hardware may require KM drivers and stop working.",
+                    ApplyOps = [RegOp.SetDword(SpoolKey, "KMPrintersAreBlocked", 1)],
+                    RemoveOps = [RegOp.DeleteValue(SpoolKey, "KMPrintersAreBlocked")],
+                    DetectOps = [RegOp.CheckDword(SpoolKey, "KMPrintersAreBlocked", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "prtspool-disable-remote-rpc",
+                    Label = "Disable Remote Print Spooler RPC Endpoint",
+                    Category = "Maintenance",
+                    Description = "Disables the remote RPC endpoint of the print spooler, preventing remote printer enumeration and exploitation.",
+                    Tags = ["print-spooler", "rpc", "remote", "printnightmare", "network", "security"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 5,
+                    SafetyRating = 3,
+                    ImpactNote = "Value 2 disables remote spooler; breaks network printer sharing from this machine but blocks remote exploitation.",
+                    ApplyOps = [RegOp.SetDword(SpoolKey, "RegisterSpoolerRemoteRpcEndPoint", 2)],
+                    RemoveOps = [RegOp.DeleteValue(SpoolKey, "RegisterSpoolerRemoteRpcEndPoint")],
+                    DetectOps = [RegOp.CheckDword(SpoolKey, "RegisterSpoolerRemoteRpcEndPoint", 2)],
+                },
+                new TweakDef
+                {
+                    Id = "prtspool-require-signed-copy-files",
+                    Label = "Require Signed Copy Files for PnP Printers",
+                    Category = "Maintenance",
+                    Description = "Restricts printer driver copy-files during PnP association to only allow digitally signed drivers.",
+                    Tags = ["print-spooler", "copy-files", "pnp", "signed-driver", "security"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "Value 1 = allow copy-files only from signed drivers; blocks unsigned driver payloads used in PrintNightmare.",
+                    ApplyOps = [RegOp.SetDword(SpoolKey, "CopyFilesPolicy", 1)],
+                    RemoveOps = [RegOp.DeleteValue(SpoolKey, "CopyFilesPolicy")],
+                    DetectOps = [RegOp.CheckDword(SpoolKey, "CopyFilesPolicy", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "prtspool-disable-web-pnp-download",
+                    Label = "Disable Printer Driver Download from Windows Update",
+                    Category = "Maintenance",
+                    Description =
+                        "Prevents Windows from automatically downloading printer drivers from Windows Update during PnP printer installation.",
+                    Tags = ["print-spooler", "windows-update", "pnp", "driver-download", "security"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "Removes an untrusted driver download path; IT must manually approve and supply printer drivers instead.",
+                    ApplyOps = [RegOp.SetDword(SpoolKey, "DisableWebPnPDownload", 1)],
+                    RemoveOps = [RegOp.DeleteValue(SpoolKey, "DisableWebPnPDownload")],
+                    DetectOps = [RegOp.CheckDword(SpoolKey, "DisableWebPnPDownload", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "prtspool-disable-http-printing",
+                    Label = "Disable Printing over HTTP",
+                    Category = "Maintenance",
+                    Description = "Blocks the Windows print spooler from connecting to or using printers over the HTTP/IPP protocol.",
+                    Tags = ["print-spooler", "http", "ipp", "network", "security"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "Eliminates unauthenticated HTTP printing surface; affects cloud print services that use HTTP transport.",
+                    ApplyOps = [RegOp.SetDword(SpoolKey, "DisableHTTPPrinting", 1)],
+                    RemoveOps = [RegOp.DeleteValue(SpoolKey, "DisableHTTPPrinting")],
+                    DetectOps = [RegOp.CheckDword(SpoolKey, "DisableHTTPPrinting", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "prtspool-pnp-restrict-to-admins",
+                    Label = "Restrict Point and Print Driver Installation to Admins",
+                    Category = "Maintenance",
+                    Description = "Requires administrator privileges to install printer drivers via Point and Print, regardless of the print server.",
+                    Tags = ["print-spooler", "point-and-print", "admin", "driver", "security"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 5,
+                    SafetyRating = 5,
+                    ImpactNote = "Key PrintNightmare mitigation; non-admin users cannot install printer drivers via PnP to any server.",
+                    ApplyOps = [RegOp.SetDword(PnPKey, "Restricted", 1)],
+                    RemoveOps = [RegOp.DeleteValue(PnPKey, "Restricted")],
+                    DetectOps = [RegOp.CheckDword(PnPKey, "Restricted", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "prtspool-pnp-no-trusted-servers",
+                    Label = "Disable Trusted Print Server Exemption for Point and Print",
+                    Category = "Maintenance",
+                    Description = "Removes the trusted print server list exemption, requiring admin-level approval for ALL Point and Print servers.",
+                    Tags = ["print-spooler", "point-and-print", "trusted-servers", "security"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "No servers are automatically trusted for PnP driver download; all require explicit admin consent.",
+                    ApplyOps = [RegOp.SetDword(PnPKey, "TrustedServers", 0)],
+                    RemoveOps = [RegOp.DeleteValue(PnPKey, "TrustedServers")],
+                    DetectOps = [RegOp.CheckDword(PnPKey, "TrustedServers", 0)],
+                },
+                new TweakDef
+                {
+                    Id = "prtspool-pnp-no-forest-trust",
+                    Label = "Disable Forest-Level Trust for Point and Print",
+                    Category = "Maintenance",
+                    Description = "Disables the implicit trust granted to print servers in the same Active Directory forest for Point and Print.",
+                    Tags = ["print-spooler", "point-and-print", "forest", "ad", "trust", "security"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "Forest-member print servers no longer bypass driver installation prompts; treats all servers equally.",
+                    ApplyOps = [RegOp.SetDword(PnPKey, "InForest", 0)],
+                    RemoveOps = [RegOp.DeleteValue(PnPKey, "InForest")],
+                    DetectOps = [RegOp.CheckDword(PnPKey, "InForest", 0)],
+                },
+                new TweakDef
+                {
+                    Id = "prtspool-pnp-elevate-driver-update",
+                    Label = "Require Elevation When Updating Printer Drivers via PnP",
+                    Category = "Maintenance",
+                    Description = "Forces a UAC elevation prompt when an existing printer driver is updated via Point and Print.",
+                    Tags = ["print-spooler", "point-and-print", "uac", "elevation", "update", "security"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "Value 2 = always require elevation for driver updates; prevents silent malicious driver replacement.",
+                    ApplyOps = [RegOp.SetDword(PnPKey, "UpdatePromptSettings", 2)],
+                    RemoveOps = [RegOp.DeleteValue(PnPKey, "UpdatePromptSettings")],
+                    DetectOps = [RegOp.CheckDword(PnPKey, "UpdatePromptSettings", 2)],
+                },
+                new TweakDef
+                {
+                    Id = "prtspool-pnp-elevate-driver-install",
+                    Label = "Require Elevation When Installing New Printer Drivers via PnP",
+                    Category = "Maintenance",
+                    Description = "Forces a UAC elevation prompt when a new printer driver is installed via Point and Print.",
+                    Tags = ["print-spooler", "point-and-print", "uac", "elevation", "install", "security"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "Value 2 = always require elevation for new driver installs; closes a common PrintNightmare attack vector.",
+                    ApplyOps = [RegOp.SetDword(PnPKey, "InstallDriverPromptSetting", 2)],
+                    RemoveOps = [RegOp.DeleteValue(PnPKey, "InstallDriverPromptSetting")],
+                    DetectOps = [RegOp.CheckDword(PnPKey, "InstallDriverPromptSetting", 2)],
+                },
+            ];
     }
 
     // ── PrintSpoolerSecurity ──
@@ -7807,7 +7812,11 @@ internal static class PolicyPrint
                 ],
                 DetectOps =
                 [
-                    RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DriverInstall\Restrictions", "AllowUserDeviceClasses", 0),
+                    RegOp.CheckDword(
+                        @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DriverInstall\Restrictions",
+                        "AllowUserDeviceClasses",
+                        0
+                    ),
                 ],
             },
             new TweakDef
@@ -7847,7 +7856,6 @@ internal static class PolicyPrint
                 DetectOps = [RegOp.CheckDword(SpoolerPolicy, "EventLog", 1)],
             },
         ];
-
     }
 
     // ── PrintSpoolFinalPolicy ──
@@ -7862,8 +7870,12 @@ internal static class PolicyPrint
                 Id = "splfinal-enable-print-spooler-cleanup-on-idle",
                 Label = "Enable Automatic Print Spooler Cleanup When Print Queue Is Idle",
                 Category = "Maintenance",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 2, SafetyRating = 5,
-                Description = "Enabling automatic print spooler cleanup when the print queue is idle removes completed print jobs and temporary spool files from the spooler directory ensuring that document content is not retained in the spool longer than necessary for the print operation. Print spool files contain document images in EMF or RAW format that may include sensitive content and should be removed promptly after the print job completes to minimize exposure. Automatic cleanup on idle conditions ensures that print spool data is cleared during normal operational periods without requiring administrative intervention for routine spool maintenance. Spool file cleanup reduces the attack surface on print servers by minimizing the window during which attackers can access spool files to recover document content. Organizations should verify that spool cleanup policies are applied consistently on all print servers and workstations with local print queues. Spool cleanup events should be logged to provide evidence that print data was disposed of appropriately for compliance reporting purposes.",
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 2,
+                SafetyRating = 5,
+                Description =
+                    "Enabling automatic print spooler cleanup when the print queue is idle removes completed print jobs and temporary spool files from the spooler directory ensuring that document content is not retained in the spool longer than necessary for the print operation. Print spool files contain document images in EMF or RAW format that may include sensitive content and should be removed promptly after the print job completes to minimize exposure. Automatic cleanup on idle conditions ensures that print spool data is cleared during normal operational periods without requiring administrative intervention for routine spool maintenance. Spool file cleanup reduces the attack surface on print servers by minimizing the window during which attackers can access spool files to recover document content. Organizations should verify that spool cleanup policies are applied consistently on all print servers and workstations with local print queues. Spool cleanup events should be logged to provide evidence that print data was disposed of appropriately for compliance reporting purposes.",
                 Tags = ["print-spooler", "cleanup", "spool-files", "data-retention", "policy"],
                 RegistryKeys = [Key],
                 ApplyOps = [RegOp.SetDword(Key, "EnableSpoolCleanupOnIdle", 1)],
@@ -7875,8 +7887,12 @@ internal static class PolicyPrint
                 Id = "splfinal-enforce-immediate-spool-file-deletion",
                 Label = "Enforce Immediate Deletion of Print Spool Files After Job Completion",
                 Category = "Maintenance",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 3, SafetyRating = 5,
-                Description = "Enforcing immediate deletion of print spool files upon job completion eliminates the retention window during which print spool data would otherwise be recoverable from the spool directory on print servers and workstations. Immediate spool deletion is a defense against forensic recovery of document content from print infrastructure that has been accessed by an attacker. Organizations handling sensitive information under regulatory requirements may need to implement immediate spool deletion to satisfy data minimization requirements for printed document data. Immediate deletion should be applied to all stages of the print spool including temporary intermediate files generated during EMF to device format conversion. The deletion operation should be verified to ensure files are actually removed rather than simply marked for deletion by the file system. Secure deletion using file overwrite operations rather than simple deletion should be considered for high-security environments where forensic recovery of spool data poses a significant risk.",
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 3,
+                SafetyRating = 5,
+                Description =
+                    "Enforcing immediate deletion of print spool files upon job completion eliminates the retention window during which print spool data would otherwise be recoverable from the spool directory on print servers and workstations. Immediate spool deletion is a defense against forensic recovery of document content from print infrastructure that has been accessed by an attacker. Organizations handling sensitive information under regulatory requirements may need to implement immediate spool deletion to satisfy data minimization requirements for printed document data. Immediate deletion should be applied to all stages of the print spool including temporary intermediate files generated during EMF to device format conversion. The deletion operation should be verified to ensure files are actually removed rather than simply marked for deletion by the file system. Secure deletion using file overwrite operations rather than simple deletion should be considered for high-security environments where forensic recovery of spool data poses a significant risk.",
                 Tags = ["print-spooler", "immediate-deletion", "spool-files", "secure-disposal", "policy"],
                 RegistryKeys = [Key],
                 ApplyOps = [RegOp.SetDword(Key, "EnforceImmediateSpoolFileDeletion", 1)],
@@ -7888,8 +7904,12 @@ internal static class PolicyPrint
                 Id = "splfinal-restrict-orphan-spool-file-retention",
                 Label = "Restrict Retention of Orphaned Print Spool Files to Mandatory Cleanup Period",
                 Category = "Maintenance",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 2, SafetyRating = 5,
-                Description = "Orphaned print spool files resulting from failed or interrupted print jobs are retained in the spool directory indefinitely without automatic cleanup which creates unnecessary data accumulation and potential sensitive data exposure. Restricting orphaned spool file retention period to a maximum defined duration ensures that print data from failed jobs is automatically removed within a predictable timeframe. Long-term retention of orphaned spool files on print servers can accumulate large volumes of sensitive document data from all users who have sent print jobs to the server. Cleanup of orphaned spool files should be automated through the print spooler service rather than relying on manual administrator cleanup which may not occur regularly. The retention period for orphaned spool files should be set based on the sensitivity of the documents typically printed in the environment with shorter periods for environments processing sensitive regulated data. Cleanup operations for orphaned spool files should be logged to provide an audit trail of data disposal activities.",
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 2,
+                SafetyRating = 5,
+                Description =
+                    "Orphaned print spool files resulting from failed or interrupted print jobs are retained in the spool directory indefinitely without automatic cleanup which creates unnecessary data accumulation and potential sensitive data exposure. Restricting orphaned spool file retention period to a maximum defined duration ensures that print data from failed jobs is automatically removed within a predictable timeframe. Long-term retention of orphaned spool files on print servers can accumulate large volumes of sensitive document data from all users who have sent print jobs to the server. Cleanup of orphaned spool files should be automated through the print spooler service rather than relying on manual administrator cleanup which may not occur regularly. The retention period for orphaned spool files should be set based on the sensitivity of the documents typically printed in the environment with shorter periods for environments processing sensitive regulated data. Cleanup operations for orphaned spool files should be logged to provide an audit trail of data disposal activities.",
                 Tags = ["print-spooler", "orphaned-files", "cleanup", "spool-retention", "policy"],
                 RegistryKeys = [Key],
                 ApplyOps = [RegOp.SetDword(Key, "OrphanedSpoolFileRetentionHours", 24)],
@@ -7901,8 +7921,12 @@ internal static class PolicyPrint
                 Id = "splfinal-enable-secure-spool-file-overwrite",
                 Label = "Enable Secure Multi-Pass Overwrite for Print Spool File Deletion",
                 Category = "Maintenance",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 3, SafetyRating = 5,
-                Description = "Enabling secure overwrite for spool files replaces the content of spool files with random data before deletion ensuring that the document data is irrecoverable from the storage media through standard data recovery utilities. Simple deletion of spool files marks the file system entry as free but does not overwrite the underlying disk sectors leaving document content recoverable until those sectors are reused by other files. Organizations that process classified or highly sensitive documents using print infrastructure should implement secure overwrite for spool files to satisfy media sanitization requirements. The performance impact of secure overwrite operations on print servers is generally low because spool files are relatively small but the impact should be tested before deployment in high-volume print environments. Secure overwrite should be applied to all temporary files generated during the print rendering process including intermediate format conversion files that may contain partial document images. Compliance documentation for sensitive data handling programs should reference secure spool file deletion as a control contributing to data disposal assurance.",
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 3,
+                SafetyRating = 5,
+                Description =
+                    "Enabling secure overwrite for spool files replaces the content of spool files with random data before deletion ensuring that the document data is irrecoverable from the storage media through standard data recovery utilities. Simple deletion of spool files marks the file system entry as free but does not overwrite the underlying disk sectors leaving document content recoverable until those sectors are reused by other files. Organizations that process classified or highly sensitive documents using print infrastructure should implement secure overwrite for spool files to satisfy media sanitization requirements. The performance impact of secure overwrite operations on print servers is generally low because spool files are relatively small but the impact should be tested before deployment in high-volume print environments. Secure overwrite should be applied to all temporary files generated during the print rendering process including intermediate format conversion files that may contain partial document images. Compliance documentation for sensitive data handling programs should reference secure spool file deletion as a control contributing to data disposal assurance.",
                 Tags = ["print-spooler", "secure-overwrite", "data-sanitization", "spool-security", "policy"],
                 RegistryKeys = [Key],
                 ApplyOps = [RegOp.SetDword(Key, "EnableSecureSpoolFileOverwrite", 1)],
@@ -7914,8 +7938,12 @@ internal static class PolicyPrint
                 Id = "splfinal-audit-spool-directory-access",
                 Label = "Enable Audit Logging for Print Spool Directory File System Access Events",
                 Category = "Maintenance",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 3, SafetyRating = 5,
-                Description = "Enabling audit logging for print spool directory access events records all reads writes and deletions of files in the print spool directory providing visibility into unauthorized access to spool data by processes other than the print spooler service. Unauthorized access to the print spool directory by non-spooler processes may indicate malware attempting to read document content from spool files or an attacker harvesting document data. Access to spool directory files should be restricted to the Print Spooler service and local SYSTEM account with all other access attempts generating security audit events. Spool directory access audit events should be reviewed for access by unusual processes or user identities that do not have legitimate access needs. Security audit rules for the spool directory should be configured at the object access audit level to capture both successful and failed access attempts. Spool directory access audit data should be forwarded to SIEM for correlation with other endpoint security events to identify malicious access patterns.",
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 3,
+                SafetyRating = 5,
+                Description =
+                    "Enabling audit logging for print spool directory access events records all reads writes and deletions of files in the print spool directory providing visibility into unauthorized access to spool data by processes other than the print spooler service. Unauthorized access to the print spool directory by non-spooler processes may indicate malware attempting to read document content from spool files or an attacker harvesting document data. Access to spool directory files should be restricted to the Print Spooler service and local SYSTEM account with all other access attempts generating security audit events. Spool directory access audit events should be reviewed for access by unusual processes or user identities that do not have legitimate access needs. Security audit rules for the spool directory should be configured at the object access audit level to capture both successful and failed access attempts. Spool directory access audit data should be forwarded to SIEM for correlation with other endpoint security events to identify malicious access patterns.",
                 Tags = ["print-spooler", "spool-directory", "audit-logging", "file-access", "policy"],
                 RegistryKeys = [Key],
                 ApplyOps = [RegOp.SetDword(Key, "AuditSpoolDirectoryAccess", 1)],
@@ -7927,8 +7955,12 @@ internal static class PolicyPrint
                 Id = "splfinal-restrict-spool-directory-permissions",
                 Label = "Restrict File System Permissions on Print Spool Directory to Minimum Required Access",
                 Category = "Maintenance",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 3, SafetyRating = 5,
-                Description = "Restricting file system permissions on the print spool directory ensures that only the Print Spooler service account and local administrators have access to spool files preventing unauthorized reading or modification of print job data. Default Windows configurations allow the Network Service account and some user accounts to read from the spool directory which is broader access than required for normal printing operations. Tightening spool directory ACLs to SYSTEM and Print Spooler service only requires careful testing to ensure that the print spooler functionality is not broken and that legitimate access patterns are maintained. The Windows default spool directory path is %SYSTEMROOT%\\System32\\spool\\PRINTERS which should have restrictive ACLs preventing standard user access. Spool directory permission changes should be performed with care and tested thoroughly before production deployment as misconfigured permissions can prevent printing from functioning. Periodic review of spool directory permissions should verify that ACLs have not been relaxed by software installation or administrative changes.",
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 3,
+                SafetyRating = 5,
+                Description =
+                    "Restricting file system permissions on the print spool directory ensures that only the Print Spooler service account and local administrators have access to spool files preventing unauthorized reading or modification of print job data. Default Windows configurations allow the Network Service account and some user accounts to read from the spool directory which is broader access than required for normal printing operations. Tightening spool directory ACLs to SYSTEM and Print Spooler service only requires careful testing to ensure that the print spooler functionality is not broken and that legitimate access patterns are maintained. The Windows default spool directory path is %SYSTEMROOT%\\System32\\spool\\PRINTERS which should have restrictive ACLs preventing standard user access. Spool directory permission changes should be performed with care and tested thoroughly before production deployment as misconfigured permissions can prevent printing from functioning. Periodic review of spool directory permissions should verify that ACLs have not been relaxed by software installation or administrative changes.",
                 Tags = ["print-spooler", "directory-permissions", "acl", "least-privilege", "policy"],
                 RegistryKeys = [Key],
                 ApplyOps = [RegOp.SetDword(Key, "RestrictSpoolDirectoryPermissions", 1)],
@@ -7940,8 +7972,12 @@ internal static class PolicyPrint
                 Id = "splfinal-block-spool-file-access-by-network",
                 Label = "Block Remote Network Access to Print Spooler Spool File Directory",
                 Category = "Maintenance",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 3, SafetyRating = 5,
-                Description = "Blocking remote network access to the print spool directory ensures that network shares and remote file access protocols cannot be used to read or enumerate print spool contents from remote systems without the authorization required for spooler management operations. The PrintNightmare vulnerability family demonstrated that access to the spool directory from remote network connections can be exploited for privilege escalation and remote code execution. Blocking network access to the spool directory at the file system level provides defense in depth complementing the print spooler service access controls. Network firewall rules should also block remote access to the print spooler service on port 445 from systems that are not authorized print clients or print administrators. The printer driver path within the spool directory is particularly sensitive as it can be used to load arbitrary DLLs if network access is permitted. Vulnerability assessments should specifically test for network access to the spool directory as part of print infrastructure security evaluations.",
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 3,
+                SafetyRating = 5,
+                Description =
+                    "Blocking remote network access to the print spool directory ensures that network shares and remote file access protocols cannot be used to read or enumerate print spool contents from remote systems without the authorization required for spooler management operations. The PrintNightmare vulnerability family demonstrated that access to the spool directory from remote network connections can be exploited for privilege escalation and remote code execution. Blocking network access to the spool directory at the file system level provides defense in depth complementing the print spooler service access controls. Network firewall rules should also block remote access to the print spooler service on port 445 from systems that are not authorized print clients or print administrators. The printer driver path within the spool directory is particularly sensitive as it can be used to load arbitrary DLLs if network access is permitted. Vulnerability assessments should specifically test for network access to the spool directory as part of print infrastructure security evaluations.",
                 Tags = ["print-spooler", "network-access", "printnightmare", "remote-access", "policy"],
                 RegistryKeys = [Key],
                 ApplyOps = [RegOp.SetDword(Key, "BlockNetworkSpoolFileAccess", 1)],
@@ -7953,8 +7989,12 @@ internal static class PolicyPrint
                 Id = "splfinal-enable-spool-service-hardening",
                 Label = "Enable Additional Security Hardening for Print Spooler Service Operation",
                 Category = "Maintenance",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 4, SafetyRating = 5,
-                Description = "Print spooler service hardening applies additional security restrictions to the spooler process including restricting which DLLs can be loaded controlling network communication capabilities and applying attack surface reduction rules specifically targeting the print spooler attack surface. The print spooler service has historically been a common target for privilege escalation exploit chains and running the spooler with hardened configuration significantly reduces the effectiveness of known exploit techniques. Spooler hardening includes disabling the ability for the Print Spooler to accept remote connections when the system is not intended to serve as a print server which eliminates the network attack surface. Applications on workstations that do not require serving print jobs to other computers should run the print spooler in local-only mode to prevent remote exploitation. Print server configurations that require the remote print spooler functionality should apply spooler hardening in ways that are compatible with the remote printing use case. Microsoft security updates for the print spooler should be applied promptly due to the elevated risk associated with known spooler vulnerabilities.",
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 4,
+                SafetyRating = 5,
+                Description =
+                    "Print spooler service hardening applies additional security restrictions to the spooler process including restricting which DLLs can be loaded controlling network communication capabilities and applying attack surface reduction rules specifically targeting the print spooler attack surface. The print spooler service has historically been a common target for privilege escalation exploit chains and running the spooler with hardened configuration significantly reduces the effectiveness of known exploit techniques. Spooler hardening includes disabling the ability for the Print Spooler to accept remote connections when the system is not intended to serve as a print server which eliminates the network attack surface. Applications on workstations that do not require serving print jobs to other computers should run the print spooler in local-only mode to prevent remote exploitation. Print server configurations that require the remote print spooler functionality should apply spooler hardening in ways that are compatible with the remote printing use case. Microsoft security updates for the print spooler should be applied promptly due to the elevated risk associated with known spooler vulnerabilities.",
                 Tags = ["print-spooler", "service-hardening", "attack-surface", "exploit-mitigation", "policy"],
                 RegistryKeys = [Key],
                 ApplyOps = [RegOp.SetDword(Key, "EnableSpoolServiceHardening", 1)],
@@ -7966,8 +8006,12 @@ internal static class PolicyPrint
                 Id = "splfinal-configure-spool-file-encryption",
                 Label = "Configure Encryption for Print Spool Files on Disk at Rest",
                 Category = "Maintenance",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 3, SafetyRating = 5,
-                Description = "Configuring encryption for print spool files on disk ensures that document content written to the spool directory during print operations is protected against unauthorized access by processes that can access the file system but are not authorized to access print data. Spool file encryption can be implemented through EFS Encrypting File System applied to the spool directory or through volume-level BitLocker encryption that covers the system drive where the spool directory resides. EFS applied specifically to the spool directory provides per-file encryption with the Print Spooler service as the authorized accessor while BitLocker provides volume-level protection relevant to physical media attacks. Organizations processing highly sensitive documents should evaluate spool file encryption as a control that complements access control restrictions on the spool directory. Encryption key management for spool file encryption should integrate with organizational key management practices to ensure keys are recoverable in the event of system failure. Performance testing should validate that spool file encryption does not introduce unacceptable latency in the print workflow for high-volume print environments.",
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 3,
+                SafetyRating = 5,
+                Description =
+                    "Configuring encryption for print spool files on disk ensures that document content written to the spool directory during print operations is protected against unauthorized access by processes that can access the file system but are not authorized to access print data. Spool file encryption can be implemented through EFS Encrypting File System applied to the spool directory or through volume-level BitLocker encryption that covers the system drive where the spool directory resides. EFS applied specifically to the spool directory provides per-file encryption with the Print Spooler service as the authorized accessor while BitLocker provides volume-level protection relevant to physical media attacks. Organizations processing highly sensitive documents should evaluate spool file encryption as a control that complements access control restrictions on the spool directory. Encryption key management for spool file encryption should integrate with organizational key management practices to ensure keys are recoverable in the event of system failure. Performance testing should validate that spool file encryption does not introduce unacceptable latency in the print workflow for high-volume print environments.",
                 Tags = ["print-spooler", "spool-encryption", "data-at-rest", "efs", "policy"],
                 RegistryKeys = [Key],
                 ApplyOps = [RegOp.SetDword(Key, "EnableSpoolFileEncryption", 1)],
@@ -7979,8 +8023,12 @@ internal static class PolicyPrint
                 Id = "splfinal-disable-persistently-cached-print-jobs",
                 Label = "Disable Persistent Caching of Print Jobs in Print Spool for Offline Recovery",
                 Category = "Maintenance",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 2, SafetyRating = 5,
-                Description = "Disabling persistent caching of print jobs prevents the print spooler from retaining print job data across system restarts for the purpose of re-submitting jobs that were queued when a printer was offline. Persistent print job caching means that document content can remain in the spool for extended periods including across security-relevant system events such as user logoff or system hibernation. Users who submit print jobs intending them to be printed will have a poor experience if persistent caching is disabled when the target printer is unavailable but the security benefit justifies the workflow impact in high-security environments. Organizations with strict data handling requirements for sensitive document categories should disable persistent print job caching to ensure document data does not accumulate in the spool across operational sessions. Alternative print management approaches including print management software that provides controlled job resubmission with appropriate authentication can address legitimate offline printing requirements. User communication about the impact of disabling persistent print caching should be provided before the policy is deployed.",
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 2,
+                SafetyRating = 5,
+                Description =
+                    "Disabling persistent caching of print jobs prevents the print spooler from retaining print job data across system restarts for the purpose of re-submitting jobs that were queued when a printer was offline. Persistent print job caching means that document content can remain in the spool for extended periods including across security-relevant system events such as user logoff or system hibernation. Users who submit print jobs intending them to be printed will have a poor experience if persistent caching is disabled when the target printer is unavailable but the security benefit justifies the workflow impact in high-security environments. Organizations with strict data handling requirements for sensitive document categories should disable persistent print job caching to ensure document data does not accumulate in the spool across operational sessions. Alternative print management approaches including print management software that provides controlled job resubmission with appropriate authentication can address legitimate offline printing requirements. User communication about the impact of disabling persistent print caching should be provided before the policy is deployed.",
                 Tags = ["print-spooler", "persistent-cache", "data-minimization", "offline-printing", "policy"],
                 RegistryKeys = [Key],
                 ApplyOps = [RegOp.SetDword(Key, "DisablePersistentlyCachedPrintJobs", 1)],
@@ -7988,17 +8036,14 @@ internal static class PolicyPrint
                 DetectOps = [RegOp.CheckDword(Key, "DisablePersistentlyCachedPrintJobs", 1)],
             },
         ];
-
     }
 
     // ── PrintTicketPolicy ──
     private static class _PrintTicketPolicy
     {
-        private const string TktKey =
-            @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers\PrintTicket";
+        private const string TktKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers\PrintTicket";
 
-        private const string PrtKey =
-            @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers";
+        private const string PrtKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers";
 
         public static IReadOnlyList<TweakDef> Data =>
             [
@@ -8014,7 +8059,8 @@ internal static class PolicyPrint
                     CorpSafe = true,
                     ImpactScore = 4,
                     SafetyRating = 5,
-                    ImpactNote = "Print Tickets are schema-validated before processing. Malformed or non-compliant Print Tickets cause the job to fail with an error. Well-formed Print Tickets from standard Windows print dialogs and Microsoft applications are always valid.",
+                    ImpactNote =
+                        "Print Tickets are schema-validated before processing. Malformed or non-compliant Print Tickets cause the job to fail with an error. Well-formed Print Tickets from standard Windows print dialogs and Microsoft applications are always valid.",
                     ApplyOps = [RegOp.SetDword(TktKey, "ValidatePrintTickets", 1)],
                     RemoveOps = [RegOp.DeleteValue(TktKey, "ValidatePrintTickets")],
                     DetectOps = [RegOp.CheckDword(TktKey, "ValidatePrintTickets", 1)],
@@ -8031,7 +8077,8 @@ internal static class PolicyPrint
                     CorpSafe = true,
                     ImpactScore = 4,
                     SafetyRating = 5,
-                    ImpactNote = "XPS print jobs cannot bypass the rendering sandbox. All XPS content is processed in the isolated XPS rendering host. No user-visible impact for standard printing. Prevents privilege escalation via malicious XPS payloads in print jobs.",
+                    ImpactNote =
+                        "XPS print jobs cannot bypass the rendering sandbox. All XPS content is processed in the isolated XPS rendering host. No user-visible impact for standard printing. Prevents privilege escalation via malicious XPS payloads in print jobs.",
                     ApplyOps = [RegOp.SetDword(TktKey, "DisableXpsRenderingBypass", 1)],
                     RemoveOps = [RegOp.DeleteValue(TktKey, "DisableXpsRenderingBypass")],
                     DetectOps = [RegOp.CheckDword(TktKey, "DisableXpsRenderingBypass", 1)],
@@ -8048,7 +8095,8 @@ internal static class PolicyPrint
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "Print Tickets with unapproved custom XML namespaces are rejected. Standard Print Schema namespaces (Microsoft) are always approved. Printers using proprietary extensions with unlisted namespaces may have those extensions ignored.",
+                    ImpactNote =
+                        "Print Tickets with unapproved custom XML namespaces are rejected. Standard Print Schema namespaces (Microsoft) are always approved. Printers using proprietary extensions with unlisted namespaces may have those extensions ignored.",
                     ApplyOps = [RegOp.SetDword(TktKey, "RestrictCustomNamespaces", 1)],
                     RemoveOps = [RegOp.DeleteValue(TktKey, "RestrictCustomNamespaces")],
                     DetectOps = [RegOp.CheckDword(TktKey, "RestrictCustomNamespaces", 1)],
@@ -8065,7 +8113,8 @@ internal static class PolicyPrint
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "WSD printer discovery events are logged. Provides audit trail of automatic printer installations. Useful for detecting rogue printer injection in environments with WSD-enabled networks. Minor event log volume in stable environments.",
+                    ImpactNote =
+                        "WSD printer discovery events are logged. Provides audit trail of automatic printer installations. Useful for detecting rogue printer injection in environments with WSD-enabled networks. Minor event log volume in stable environments.",
                     ApplyOps = [RegOp.SetDword(TktKey, "WsdDiscoveryLogging", 1)],
                     RemoveOps = [RegOp.DeleteValue(TktKey, "WsdDiscoveryLogging")],
                     DetectOps = [RegOp.CheckDword(TktKey, "WsdDiscoveryLogging", 1)],
@@ -8082,7 +8131,8 @@ internal static class PolicyPrint
                     CorpSafe = true,
                     ImpactScore = 4,
                     SafetyRating = 5,
-                    ImpactNote = "WSD printers on the network are not automatically installed. Users or administrators must manually add WSD printers via 'Add a printer'. Prevents rogue WSD printer injection. All new printer additions become explicit IT-authorised actions.",
+                    ImpactNote =
+                        "WSD printers on the network are not automatically installed. Users or administrators must manually add WSD printers via 'Add a printer'. Prevents rogue WSD printer injection. All new printer additions become explicit IT-authorised actions.",
                     ApplyOps = [RegOp.SetDword(PrtKey, "DisableAutoWsdInstall", 1)],
                     RemoveOps = [RegOp.DeleteValue(PrtKey, "DisableAutoWsdInstall")],
                     DetectOps = [RegOp.CheckDword(PrtKey, "DisableAutoWsdInstall", 1)],
@@ -8099,7 +8149,8 @@ internal static class PolicyPrint
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "Print Tickets larger than 64 KB are rejected. All standard Windows print dialogs generate Print Tickets well under 64 KB. Only custom or malformed Print Tickets would exceed this size. No impact on normal printing.",
+                    ImpactNote =
+                        "Print Tickets larger than 64 KB are rejected. All standard Windows print dialogs generate Print Tickets well under 64 KB. Only custom or malformed Print Tickets would exceed this size. No impact on normal printing.",
                     ApplyOps = [RegOp.SetDword(TktKey, "MaxPrintTicketSize", 65536)],
                     RemoveOps = [RegOp.DeleteValue(TktKey, "MaxPrintTicketSize")],
                     DetectOps = [RegOp.CheckDword(TktKey, "MaxPrintTicketSize", 65536)],
@@ -8116,7 +8167,8 @@ internal static class PolicyPrint
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 4,
-                    ImpactNote = "Drivers providing non-schema-conformant PrintCapabilities generate an error. Some legacy printer drivers (pre-Vista v3 drivers) may fail this check. The printer appears in print dialogs with limited options rather than crashing. Only affects non-conformant legacy drivers.",
+                    ImpactNote =
+                        "Drivers providing non-schema-conformant PrintCapabilities generate an error. Some legacy printer drivers (pre-Vista v3 drivers) may fail this check. The printer appears in print dialogs with limited options rather than crashing. Only affects non-conformant legacy drivers.",
                     ApplyOps = [RegOp.SetDword(TktKey, "EnforceCapabilitySchema", 1)],
                     RemoveOps = [RegOp.DeleteValue(TktKey, "EnforceCapabilitySchema")],
                     DetectOps = [RegOp.CheckDword(TktKey, "EnforceCapabilitySchema", 1)],
@@ -8133,7 +8185,8 @@ internal static class PolicyPrint
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "Scan-to-Print direct integration is disabled. Scanned documents are not pushed directly to the printer from the scanner. Users must initiate scanning via Windows Fax and Scan or the scanner's software. Prevents unauthorized network device injection of print data.",
+                    ImpactNote =
+                        "Scan-to-Print direct integration is disabled. Scanned documents are not pushed directly to the printer from the scanner. Users must initiate scanning via Windows Fax and Scan or the scanner's software. Prevents unauthorized network device injection of print data.",
                     ApplyOps = [RegOp.SetDword(TktKey, "DisableScanToPrint", 1)],
                     RemoveOps = [RegOp.DeleteValue(TktKey, "DisableScanToPrint")],
                     DetectOps = [RegOp.CheckDword(TktKey, "DisableScanToPrint", 1)],
@@ -8150,7 +8203,8 @@ internal static class PolicyPrint
                     CorpSafe = true,
                     ImpactScore = 4,
                     SafetyRating = 4,
-                    ImpactNote = "Network printers must use the v4 XPS print path. Printers with only v3 legacy drivers may fail to connect via network. Most printers released after Windows 8 have v4 driver packages. Legacy specialty printers (label, receipt, industrial) may only have v3 drivers.",
+                    ImpactNote =
+                        "Network printers must use the v4 XPS print path. Printers with only v3 legacy drivers may fail to connect via network. Most printers released after Windows 8 have v4 driver packages. Legacy specialty printers (label, receipt, industrial) may only have v3 drivers.",
                     ApplyOps = [RegOp.SetDword(TktKey, "EnforceXpsPrintPath", 1)],
                     RemoveOps = [RegOp.DeleteValue(TktKey, "EnforceXpsPrintPath")],
                     DetectOps = [RegOp.CheckDword(TktKey, "EnforceXpsPrintPath", 1)],
@@ -8167,13 +8221,13 @@ internal static class PolicyPrint
                     CorpSafe = true,
                     ImpactScore = 4,
                     SafetyRating = 5,
-                    ImpactNote = "Print Tickets without an authenticated user session token are rejected. Anonymous print submissions are blocked. All printing from authenticated users and services with valid user tokens is unaffected.",
+                    ImpactNote =
+                        "Print Tickets without an authenticated user session token are rejected. Anonymous print submissions are blocked. All printing from authenticated users and services with valid user tokens is unaffected.",
                     ApplyOps = [RegOp.SetDword(TktKey, "RestrictToUserSessions", 1)],
                     RemoveOps = [RegOp.DeleteValue(TktKey, "RestrictToUserSessions")],
                     DetectOps = [RegOp.CheckDword(TktKey, "RestrictToUserSessions", 1)],
                 },
             ];
-
     }
 
     // ── ProtectedPrintModePolicy ──
@@ -8184,189 +8238,205 @@ internal static class PolicyPrint
         private const string PrintSpoolerKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers\WPP";
 
         public static IReadOnlyList<TweakDef> Data =>
-        [
-            new TweakDef
-            {
-                Id = "wpp-enable-protected-print-mode",
-                Label = "Enable Windows Protected Print Mode",
-                Category = "Maintenance",
-                Description = "Enables Windows Protected Print (WPP) mode, which restricts printing to only Windows-protected printer drivers that are signed and certified by Microsoft. Prevents malicious print drivers.",
-                Tags = ["wpp", "printing", "protected-print", "driver-security", "windows-11"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                MinBuild = 26100,
-                ImpactScore = 4,
-                SafetyRating = 4,
-                ImpactNote = "Eliminates third-party unsigned print driver attack vectors; only Microsoft-supplied IPP-class drivers are permitted.",
-                RegistryKeys = [WppKey],
-                ApplyOps  = [RegOp.SetDword(WppKey, "EnableProtectedPrintMode", 1)],
-                RemoveOps = [RegOp.DeleteValue(WppKey, "EnableProtectedPrintMode")],
-                DetectOps = [RegOp.CheckDword(WppKey, "EnableProtectedPrintMode", 1)],
-            },
-            new TweakDef
-            {
-                Id = "wpp-block-legacy-print-drivers",
-                Label = "Block Legacy (Non-WPP) Print Drivers",
-                Category = "Maintenance",
-                Description = "Prevents Windows from loading or using non-WPP print drivers. Only drivers explicitly certified under the Windows Protected Print certification program are permitted to run.",
-                Tags = ["wpp", "printing", "driver-block", "legacy-driver", "security"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                MinBuild = 26100,
-                ImpactScore = 4,
-                SafetyRating = 3,
-                ImpactNote = "May prevent older printers without WPP-certified drivers from functioning. Verify printer compatibility before enabling in production.",
-                RegistryKeys = [WppKey],
-                ApplyOps  = [RegOp.SetDword(WppKey, "BlockLegacyPrintDrivers", 1)],
-                RemoveOps = [RegOp.DeleteValue(WppKey, "BlockLegacyPrintDrivers")],
-                DetectOps = [RegOp.CheckDword(WppKey, "BlockLegacyPrintDrivers", 1)],
-            },
-            new TweakDef
-            {
-                Id = "wpp-require-driver-signature",
-                Label = "Require Driver Signature Verification for Print Drivers",
-                Category = "Maintenance",
-                Description = "Enforces cryptographic signature verification for all print drivers prior to loading. Drivers without a valid Microsoft-issued signature are rejected, even in a non-WPP environment.",
-                Tags = ["wpp", "printing", "driver-signing", "code-integrity", "security"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                MinBuild = 26100,
-                ImpactScore = 4,
-                SafetyRating = 4,
-                ImpactNote = "Prevents unsigned or self-signed malicious drivers from being loaded by the print spooler service.",
-                RegistryKeys = [WppDriverKey],
-                ApplyOps  = [RegOp.SetDword(WppDriverKey, "RequireSignedDrivers", 1)],
-                RemoveOps = [RegOp.DeleteValue(WppDriverKey, "RequireSignedDrivers")],
-                DetectOps = [RegOp.CheckDword(WppDriverKey, "RequireSignedDrivers", 1)],
-            },
-            new TweakDef
-            {
-                Id = "wpp-disable-driver-installation-from-user",
-                Label = "Prevent Users from Installing Print Drivers",
-                Category = "Maintenance",
-                Description = "Restricts print driver installation to administrators only. Standard users cannot add printers with non-WPP drivers via the Windows print management UI or mapped drives.",
-                Tags = ["wpp", "printing", "driver-install", "user-restriction", "security"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                MinBuild = 26100,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "A common attack vector involves tricking users into connecting to rogue printers that install malicious drivers; this policy blocks that path.",
-                RegistryKeys = [WppDriverKey],
-                ApplyOps  = [RegOp.SetDword(WppDriverKey, "PreventUserDriverInstall", 1)],
-                RemoveOps = [RegOp.DeleteValue(WppDriverKey, "PreventUserDriverInstall")],
-                DetectOps = [RegOp.CheckDword(WppDriverKey, "PreventUserDriverInstall", 1)],
-            },
-            new TweakDef
-            {
-                Id = "wpp-audit-driver-load-events",
-                Label = "Audit Print Driver Load Events",
-                Category = "Maintenance",
-                Description = "Enables audit logging for all print driver load operations. Events include driver name, installer identity, and whether the load was permitted or denied by WPP policy.",
-                Tags = ["wpp", "printing", "driver-audit", "event-log", "compliance"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                MinBuild = 26100,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Creates a forensic trail of print driver activity, enabling detection of unexpected driver installations.",
-                RegistryKeys = [WppKey],
-                ApplyOps  = [RegOp.SetDword(WppKey, "AuditDriverLoadEvents", 1)],
-                RemoveOps = [RegOp.DeleteValue(WppKey, "AuditDriverLoadEvents")],
-                DetectOps = [RegOp.CheckDword(WppKey, "AuditDriverLoadEvents", 1)],
-            },
-            new TweakDef
-            {
-                Id = "wpp-block-raw-printing",
-                Label = "Block RAW Format Print Job Submission",
-                Category = "Maintenance",
-                Description = "Prevents applications from submitting RAW-format print jobs, which bypass the Windows print rendering pipeline and can embed arbitrary data. WPP requires rendering through the IPP stack.",
-                Tags = ["wpp", "printing", "raw-print", "ipp", "security"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                MinBuild = 26100,
-                ImpactScore = 3,
-                SafetyRating = 4,
-                ImpactNote = "RAW print jobs can exfiltrate data to printers; IPP-rendered jobs pass through the OS pipeline which can be inspected by DLP tools.",
-                RegistryKeys = [PrintSpoolerKey],
-                ApplyOps  = [RegOp.SetDword(PrintSpoolerKey, "BlockRawPrintJobs", 1)],
-                RemoveOps = [RegOp.DeleteValue(PrintSpoolerKey, "BlockRawPrintJobs")],
-                DetectOps = [RegOp.CheckDword(PrintSpoolerKey, "BlockRawPrintJobs", 1)],
-            },
-            new TweakDef
-            {
-                Id = "wpp-restrict-remote-print-driver-install",
-                Label = "Block Remote Print Driver Installation via RPC",
-                Category = "Maintenance",
-                Description = "Prevents print drivers from being remotely installed via the Print Spooler RPC interface. Remote driver installation was exploited by PrintNightmare (CVE-2021-1675); WPP mode disables this endpoint.",
-                Tags = ["wpp", "printing", "rpc", "print-spooler", "printnightmare", "cve"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                MinBuild = 26100,
-                ImpactScore = 5,
-                SafetyRating = 5,
-                ImpactNote = "Directly mitigates PrintNightmare-class RPC exploitation. Eliminates remote driver install surface from the print spooler.",
-                RegistryKeys = [PrintSpoolerKey],
-                ApplyOps  = [RegOp.SetDword(PrintSpoolerKey, "BlockRemoteDriverInstall", 1)],
-                RemoveOps = [RegOp.DeleteValue(PrintSpoolerKey, "BlockRemoteDriverInstall")],
-                DetectOps = [RegOp.CheckDword(PrintSpoolerKey, "BlockRemoteDriverInstall", 1)],
-            },
-            new TweakDef
-            {
-                Id = "wpp-require-ipp-protocol-only",
-                Label = "Restrict Print Communication to IPP Protocol Only",
-                Category = "Maintenance",
-                Description = "Configures the Windows print stack to communicate with printers using Internet Printing Protocol (IPP) only, blocking legacy LPR and SMB-based print protocols that WPP does not support.",
-                Tags = ["wpp", "printing", "ipp", "protocol", "security"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                MinBuild = 26100,
-                ImpactScore = 3,
-                SafetyRating = 3,
-                ImpactNote = "Requires printers to support IPP; legacy network printers using LPR or SMB printing will not work. Test compatibility in a pilot group first.",
-                RegistryKeys = [PrintSpoolerKey],
-                ApplyOps  = [RegOp.SetDword(PrintSpoolerKey, "RestrictToIPPOnly", 1)],
-                RemoveOps = [RegOp.DeleteValue(PrintSpoolerKey, "RestrictToIPPOnly")],
-                DetectOps = [RegOp.CheckDword(PrintSpoolerKey, "RestrictToIPPOnly", 1)],
-            },
-            new TweakDef
-            {
-                Id = "wpp-disable-printer-redirection-rdp",
-                Label = "Disable Client-Side Print Redirection in Remote Desktop",
-                Category = "Maintenance",
-                Description = "Prevents local printers from being redirected and made available in Remote Desktop sessions. Eliminates the risk of untrusted WPP-non-compliant client drivers being exposed to an RDS server.",
-                Tags = ["wpp", "printing", "rdp", "print-redirection", "remote-desktop"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                MinBuild = 26100,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Users in RDP sessions cannot print to their local printers; they must use printers accessible from the server side.",
-                RegistryKeys = [PrintSpoolerKey],
-                ApplyOps  = [RegOp.SetDword(PrintSpoolerKey, "DisableRdpPrinterRedirection", 1)],
-                RemoveOps = [RegOp.DeleteValue(PrintSpoolerKey, "DisableRdpPrinterRedirection")],
-                DetectOps = [RegOp.CheckDword(PrintSpoolerKey, "DisableRdpPrinterRedirection", 1)],
-            },
-            new TweakDef
-            {
-                Id = "wpp-enable-spooler-process-isolation",
-                Label = "Enable Print Spooler Process Isolation",
-                Category = "Maintenance",
-                Description = "Configures the Windows Print Spooler to run third-party print processors and drivers in isolated job-scoped processes rather than within the main spooler process. Limits the blast radius of a compromised driver.",
-                Tags = ["wpp", "printing", "process-isolation", "spooler", "security"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                MinBuild = 26100,
-                ImpactScore = 4,
-                SafetyRating = 4,
-                ImpactNote = "A malicious or buggy print driver only affects its isolated process rather than the entire spooler, reducing privilege escalation risk.",
-                RegistryKeys = [PrintSpoolerKey],
-                ApplyOps  = [RegOp.SetDword(PrintSpoolerKey, "EnableSpoolerProcessIsolation", 1)],
-                RemoveOps = [RegOp.DeleteValue(PrintSpoolerKey, "EnableSpoolerProcessIsolation")],
-                DetectOps = [RegOp.CheckDword(PrintSpoolerKey, "EnableSpoolerProcessIsolation", 1)],
-            },
-        ];
-
+            [
+                new TweakDef
+                {
+                    Id = "wpp-enable-protected-print-mode",
+                    Label = "Enable Windows Protected Print Mode",
+                    Category = "Maintenance",
+                    Description =
+                        "Enables Windows Protected Print (WPP) mode, which restricts printing to only Windows-protected printer drivers that are signed and certified by Microsoft. Prevents malicious print drivers.",
+                    Tags = ["wpp", "printing", "protected-print", "driver-security", "windows-11"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    MinBuild = 26100,
+                    ImpactScore = 4,
+                    SafetyRating = 4,
+                    ImpactNote =
+                        "Eliminates third-party unsigned print driver attack vectors; only Microsoft-supplied IPP-class drivers are permitted.",
+                    RegistryKeys = [WppKey],
+                    ApplyOps = [RegOp.SetDword(WppKey, "EnableProtectedPrintMode", 1)],
+                    RemoveOps = [RegOp.DeleteValue(WppKey, "EnableProtectedPrintMode")],
+                    DetectOps = [RegOp.CheckDword(WppKey, "EnableProtectedPrintMode", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "wpp-block-legacy-print-drivers",
+                    Label = "Block Legacy (Non-WPP) Print Drivers",
+                    Category = "Maintenance",
+                    Description =
+                        "Prevents Windows from loading or using non-WPP print drivers. Only drivers explicitly certified under the Windows Protected Print certification program are permitted to run.",
+                    Tags = ["wpp", "printing", "driver-block", "legacy-driver", "security"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    MinBuild = 26100,
+                    ImpactScore = 4,
+                    SafetyRating = 3,
+                    ImpactNote =
+                        "May prevent older printers without WPP-certified drivers from functioning. Verify printer compatibility before enabling in production.",
+                    RegistryKeys = [WppKey],
+                    ApplyOps = [RegOp.SetDword(WppKey, "BlockLegacyPrintDrivers", 1)],
+                    RemoveOps = [RegOp.DeleteValue(WppKey, "BlockLegacyPrintDrivers")],
+                    DetectOps = [RegOp.CheckDword(WppKey, "BlockLegacyPrintDrivers", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "wpp-require-driver-signature",
+                    Label = "Require Driver Signature Verification for Print Drivers",
+                    Category = "Maintenance",
+                    Description =
+                        "Enforces cryptographic signature verification for all print drivers prior to loading. Drivers without a valid Microsoft-issued signature are rejected, even in a non-WPP environment.",
+                    Tags = ["wpp", "printing", "driver-signing", "code-integrity", "security"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    MinBuild = 26100,
+                    ImpactScore = 4,
+                    SafetyRating = 4,
+                    ImpactNote = "Prevents unsigned or self-signed malicious drivers from being loaded by the print spooler service.",
+                    RegistryKeys = [WppDriverKey],
+                    ApplyOps = [RegOp.SetDword(WppDriverKey, "RequireSignedDrivers", 1)],
+                    RemoveOps = [RegOp.DeleteValue(WppDriverKey, "RequireSignedDrivers")],
+                    DetectOps = [RegOp.CheckDword(WppDriverKey, "RequireSignedDrivers", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "wpp-disable-driver-installation-from-user",
+                    Label = "Prevent Users from Installing Print Drivers",
+                    Category = "Maintenance",
+                    Description =
+                        "Restricts print driver installation to administrators only. Standard users cannot add printers with non-WPP drivers via the Windows print management UI or mapped drives.",
+                    Tags = ["wpp", "printing", "driver-install", "user-restriction", "security"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    MinBuild = 26100,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote =
+                        "A common attack vector involves tricking users into connecting to rogue printers that install malicious drivers; this policy blocks that path.",
+                    RegistryKeys = [WppDriverKey],
+                    ApplyOps = [RegOp.SetDword(WppDriverKey, "PreventUserDriverInstall", 1)],
+                    RemoveOps = [RegOp.DeleteValue(WppDriverKey, "PreventUserDriverInstall")],
+                    DetectOps = [RegOp.CheckDword(WppDriverKey, "PreventUserDriverInstall", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "wpp-audit-driver-load-events",
+                    Label = "Audit Print Driver Load Events",
+                    Category = "Maintenance",
+                    Description =
+                        "Enables audit logging for all print driver load operations. Events include driver name, installer identity, and whether the load was permitted or denied by WPP policy.",
+                    Tags = ["wpp", "printing", "driver-audit", "event-log", "compliance"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    MinBuild = 26100,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "Creates a forensic trail of print driver activity, enabling detection of unexpected driver installations.",
+                    RegistryKeys = [WppKey],
+                    ApplyOps = [RegOp.SetDword(WppKey, "AuditDriverLoadEvents", 1)],
+                    RemoveOps = [RegOp.DeleteValue(WppKey, "AuditDriverLoadEvents")],
+                    DetectOps = [RegOp.CheckDword(WppKey, "AuditDriverLoadEvents", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "wpp-block-raw-printing",
+                    Label = "Block RAW Format Print Job Submission",
+                    Category = "Maintenance",
+                    Description =
+                        "Prevents applications from submitting RAW-format print jobs, which bypass the Windows print rendering pipeline and can embed arbitrary data. WPP requires rendering through the IPP stack.",
+                    Tags = ["wpp", "printing", "raw-print", "ipp", "security"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    MinBuild = 26100,
+                    ImpactScore = 3,
+                    SafetyRating = 4,
+                    ImpactNote =
+                        "RAW print jobs can exfiltrate data to printers; IPP-rendered jobs pass through the OS pipeline which can be inspected by DLP tools.",
+                    RegistryKeys = [PrintSpoolerKey],
+                    ApplyOps = [RegOp.SetDword(PrintSpoolerKey, "BlockRawPrintJobs", 1)],
+                    RemoveOps = [RegOp.DeleteValue(PrintSpoolerKey, "BlockRawPrintJobs")],
+                    DetectOps = [RegOp.CheckDword(PrintSpoolerKey, "BlockRawPrintJobs", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "wpp-restrict-remote-print-driver-install",
+                    Label = "Block Remote Print Driver Installation via RPC",
+                    Category = "Maintenance",
+                    Description =
+                        "Prevents print drivers from being remotely installed via the Print Spooler RPC interface. Remote driver installation was exploited by PrintNightmare (CVE-2021-1675); WPP mode disables this endpoint.",
+                    Tags = ["wpp", "printing", "rpc", "print-spooler", "printnightmare", "cve"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    MinBuild = 26100,
+                    ImpactScore = 5,
+                    SafetyRating = 5,
+                    ImpactNote =
+                        "Directly mitigates PrintNightmare-class RPC exploitation. Eliminates remote driver install surface from the print spooler.",
+                    RegistryKeys = [PrintSpoolerKey],
+                    ApplyOps = [RegOp.SetDword(PrintSpoolerKey, "BlockRemoteDriverInstall", 1)],
+                    RemoveOps = [RegOp.DeleteValue(PrintSpoolerKey, "BlockRemoteDriverInstall")],
+                    DetectOps = [RegOp.CheckDword(PrintSpoolerKey, "BlockRemoteDriverInstall", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "wpp-require-ipp-protocol-only",
+                    Label = "Restrict Print Communication to IPP Protocol Only",
+                    Category = "Maintenance",
+                    Description =
+                        "Configures the Windows print stack to communicate with printers using Internet Printing Protocol (IPP) only, blocking legacy LPR and SMB-based print protocols that WPP does not support.",
+                    Tags = ["wpp", "printing", "ipp", "protocol", "security"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    MinBuild = 26100,
+                    ImpactScore = 3,
+                    SafetyRating = 3,
+                    ImpactNote =
+                        "Requires printers to support IPP; legacy network printers using LPR or SMB printing will not work. Test compatibility in a pilot group first.",
+                    RegistryKeys = [PrintSpoolerKey],
+                    ApplyOps = [RegOp.SetDword(PrintSpoolerKey, "RestrictToIPPOnly", 1)],
+                    RemoveOps = [RegOp.DeleteValue(PrintSpoolerKey, "RestrictToIPPOnly")],
+                    DetectOps = [RegOp.CheckDword(PrintSpoolerKey, "RestrictToIPPOnly", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "wpp-disable-printer-redirection-rdp",
+                    Label = "Disable Client-Side Print Redirection in Remote Desktop",
+                    Category = "Maintenance",
+                    Description =
+                        "Prevents local printers from being redirected and made available in Remote Desktop sessions. Eliminates the risk of untrusted WPP-non-compliant client drivers being exposed to an RDS server.",
+                    Tags = ["wpp", "printing", "rdp", "print-redirection", "remote-desktop"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    MinBuild = 26100,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote =
+                        "Users in RDP sessions cannot print to their local printers; they must use printers accessible from the server side.",
+                    RegistryKeys = [PrintSpoolerKey],
+                    ApplyOps = [RegOp.SetDword(PrintSpoolerKey, "DisableRdpPrinterRedirection", 1)],
+                    RemoveOps = [RegOp.DeleteValue(PrintSpoolerKey, "DisableRdpPrinterRedirection")],
+                    DetectOps = [RegOp.CheckDword(PrintSpoolerKey, "DisableRdpPrinterRedirection", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "wpp-enable-spooler-process-isolation",
+                    Label = "Enable Print Spooler Process Isolation",
+                    Category = "Maintenance",
+                    Description =
+                        "Configures the Windows Print Spooler to run third-party print processors and drivers in isolated job-scoped processes rather than within the main spooler process. Limits the blast radius of a compromised driver.",
+                    Tags = ["wpp", "printing", "process-isolation", "spooler", "security"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    MinBuild = 26100,
+                    ImpactScore = 4,
+                    SafetyRating = 4,
+                    ImpactNote =
+                        "A malicious or buggy print driver only affects its isolated process rather than the entire spooler, reducing privilege escalation risk.",
+                    RegistryKeys = [PrintSpoolerKey],
+                    ApplyOps = [RegOp.SetDword(PrintSpoolerKey, "EnableSpoolerProcessIsolation", 1)],
+                    RemoveOps = [RegOp.DeleteValue(PrintSpoolerKey, "EnableSpoolerProcessIsolation")],
+                    DetectOps = [RegOp.CheckDword(PrintSpoolerKey, "EnableSpoolerProcessIsolation", 1)],
+                },
+            ];
     }
-
 }

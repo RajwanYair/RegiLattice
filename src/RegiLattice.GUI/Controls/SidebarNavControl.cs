@@ -19,10 +19,10 @@ internal sealed class SidebarNavControl : Control
     private string _hoveredKey = string.Empty;
 
     // Layout constants
-    private const int ItemHeight   = 56;
-    private const int IconSize     = 22;
-    private const int PaddingLeft  = 14;
-    private const int FooterGap    = 8;    // gap between last nav item and footer items
+    private const int ItemHeight = 56;
+    private const int IconSize = 22;
+    private const int PaddingLeft = 14;
+    private const int FooterGap = 8; // gap between last nav item and footer items
     private readonly List<NavItem> _footerItems = [];
 
     // ── Events ─────────────────────────────────────────────────────────────
@@ -32,21 +32,17 @@ internal sealed class SidebarNavControl : Control
     internal SidebarNavControl()
     {
         SetStyle(
-            ControlStyles.ResizeRedraw |
-            ControlStyles.OptimizedDoubleBuffer |
-            ControlStyles.AllPaintingInWmPaint |
-            ControlStyles.UserPaint,
-            true);
+            ControlStyles.ResizeRedraw | ControlStyles.OptimizedDoubleBuffer | ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint,
+            true
+        );
         Width = 180;
         Cursor = Cursors.Hand;
     }
 
     // ── Public API ─────────────────────────────────────────────────────────
-    internal void AddItem(string key, string icon, string label, string? badge = null)
-        => _items.Add(new NavItem(key, icon, label, badge));
+    internal void AddItem(string key, string icon, string label, string? badge = null) => _items.Add(new NavItem(key, icon, label, badge));
 
-    internal void AddFooterItem(string key, string icon, string label)
-        => _footerItems.Add(new NavItem(key, icon, label));
+    internal void AddFooterItem(string key, string icon, string label) => _footerItems.Add(new NavItem(key, icon, label));
 
     [System.ComponentModel.DesignerSerializationVisibility(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
     internal string SelectedKey
@@ -54,7 +50,8 @@ internal sealed class SidebarNavControl : Control
         get => _selectedKey;
         set
         {
-            if (_selectedKey == value) return;
+            if (_selectedKey == value)
+                return;
             _selectedKey = value;
             Invalidate();
             ItemSelected?.Invoke(value);
@@ -64,7 +61,11 @@ internal sealed class SidebarNavControl : Control
     internal void SetBadge(string key, string? badge)
     {
         int idx = _items.FindIndex(i => i.Key == key);
-        if (idx >= 0) { _items[idx] = _items[idx] with { Badge = badge }; Invalidate(); }
+        if (idx >= 0)
+        {
+            _items[idx] = _items[idx] with { Badge = badge };
+            Invalidate();
+        }
     }
 
     // ── Painting ───────────────────────────────────────────────────────────
@@ -80,7 +81,7 @@ internal sealed class SidebarNavControl : Control
         DrawAppHeader(g);
 
         // Draw main items
-        int y = 70;  // below header
+        int y = 70; // below header
         foreach (var item in _items)
         {
             DrawItem(g, item, y);
@@ -130,7 +131,7 @@ internal sealed class SidebarNavControl : Control
     private void DrawItem(Graphics g, NavItem item, int y)
     {
         bool isSelected = item.Key == _selectedKey;
-        bool isHovered  = item.Key == _hoveredKey;
+        bool isHovered = item.Key == _hoveredKey;
         var itemRect = new Rectangle(0, y, Width, ItemHeight);
 
         // Background highlight
@@ -185,7 +186,11 @@ internal sealed class SidebarNavControl : Control
     protected override void OnMouseMove(MouseEventArgs e)
     {
         string hit = HitTest(e.Y);
-        if (hit != _hoveredKey) { _hoveredKey = hit; Invalidate(); }
+        if (hit != _hoveredKey)
+        {
+            _hoveredKey = hit;
+            Invalidate();
+        }
     }
 
     protected override void OnMouseLeave(EventArgs e)
@@ -226,5 +231,8 @@ internal sealed class SidebarNavControl : Control
         return string.Empty;
     }
 
-    protected override void OnMouseEnter(EventArgs e) { /* enable mousemove tracking */ }
+    protected override void OnMouseEnter(
+        EventArgs e
+    ) { /* enable mousemove tracking */
+    }
 }

@@ -26,13 +26,7 @@ public sealed class PackManager
     // blocks for 20-30+ seconds during class initialisation (first `new PackManager()`
     // call), hanging the test runner and CLI.  UseProxy=true with Proxy=null lets
     // HttpClientHandler resolve the system proxy lazily, per-request.
-    private static readonly HttpClient s_http = new(
-        new System.Net.Http.HttpClientHandler
-        {
-            UseDefaultCredentials = true,
-            UseProxy = true,
-        }
-    )
+    private static readonly HttpClient s_http = new(new System.Net.Http.HttpClientHandler { UseDefaultCredentials = true, UseProxy = true })
     {
         Timeout = TimeSpan.FromSeconds(30),
     };

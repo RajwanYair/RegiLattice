@@ -1,4 +1,4 @@
-# Changelog
+﻿# Changelog
 
 All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
@@ -319,7 +319,6 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ---
 
-
 ## [5.93.0] — 2026-03-29
 
 #### Added
@@ -331,7 +330,6 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 - Total: **9445 tweaks**, 658 categories, 655 module files
 
 ---
-
 
 ## [5.92.0] — 2026-03-29
 
@@ -345,7 +343,6 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ---
 
-
 ## [5.91.0] — 2026-03-29
 
 #### Added
@@ -357,7 +354,6 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 - Total: **9345 tweaks**, 648 categories, 645 module files
 
 ---
-
 
 ## [5.90.0] — 2026-03-29
 
@@ -371,7 +367,6 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ---
 
-
 ## [5.89.0] — 2026-03-29
 
 #### Added
@@ -383,7 +378,6 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 - Total: **9245 tweaks**, 638 categories, 635 module files
 
 ---
-
 
 ## [5.88.0] — 2026-03-29
 
@@ -397,7 +391,6 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ---
 
-
 ## [5.87.0] — 2026-03-29
 
 #### Added
@@ -409,7 +402,6 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 - Total: **9145 tweaks**, 628 categories, 625 module files
 
 ---
-
 
 ## [5.86.0] — 2026-03-29
 
@@ -423,7 +415,6 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ---
 
-
 ## [5.85.0] — 2026-03-29
 
 #### Added
@@ -435,7 +426,6 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 - Total: **9045 tweaks**, 618 categories, 615 module files
 
 ---
-
 
 ## [5.84.0] — 2026-03-29
 
@@ -449,7 +439,6 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ---
 
-
 ## [5.83.0] — 2026-03-29
 
 #### Added
@@ -461,7 +450,6 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 - Total: **8945 tweaks**, 608 categories, 605 module files
 
 ---
-
 
 ## [5.82.0] — 2026-03-29
 
@@ -475,7 +463,6 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ---
 
-
 ## [5.81.0] — 2026-03-29
 
 #### Added
@@ -487,7 +474,6 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 - Total: **8845 tweaks**, 598 categories, 595 module files
 
 ---
-
 
 ## [5.80.0] — 2026-03-29
 
@@ -501,7 +487,6 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ---
 
-
 ## [5.79.0] — 2026-03-29
 
 #### Added
@@ -513,7 +498,6 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 - Total: **8745 tweaks**, 588 categories, 585 module files
 
 ---
-
 
 ## [5.78.0] — 2026-03-29
 
@@ -527,7 +511,6 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ---
 
-
 ## [5.77.0] — 2026-03-29
 
 #### Added
@@ -540,7 +523,6 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ---
 
-
 ## [5.76.0] — 2026-03-29
 
 #### Added
@@ -552,7 +534,6 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 - Total: **8595 tweaks**, 573 categories, 570 module files
 
 ---
-
 
 ## [5.75.0] — 2026-03-29
 
