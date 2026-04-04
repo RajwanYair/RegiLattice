@@ -4,6 +4,36 @@ applyTo: "**"
 
 # Git Workflow — Commit & Push Strategy
 
+## ⛔ STANDING RULE: GitHub Release on Every Version Bump
+
+> **This rule is unconditional and applies to every session, every sprint, every change.**
+
+Every time a version is bumped (PATCH, MINOR, or MAJOR), you **MUST**:
+
+1. Commit the version bump
+2. Create a git tag matching the version (`vX.Y.Z`)
+3. Push the commit AND the tag immediately
+
+The tag push triggers the GitHub Actions `release.yml` workflow which automatically:
+- Builds self-contained `RegiLattice.GUI.exe` (win-x64, single file)
+- Builds self-contained `RegiLatticeCLI.exe` (win-x64, single file)
+- Builds the MSI installer via WiX
+- Publishes all artifacts as a new GitHub Release
+
+**No version bump may be committed, tagged, or pushed without the complete tag push sequence.**
+Deferring the `git push --tags` is a workflow violation. Release artifacts must be published simultaneously with the version tag.
+
+```powershell
+# ✅ MANDATORY — must run exactly this sequence on every version bump
+git add -A
+git commit -m "chore: bump version to vX.Y.Z"
+git tag vX.Y.Z
+git push
+git push --tags   # ← TRIGGERS release.yml → EXEs + MSI → GitHub Releases
+```
+
+---
+
 ## Core Principle
 
 **Commit often within a session. Push on every version bump.**

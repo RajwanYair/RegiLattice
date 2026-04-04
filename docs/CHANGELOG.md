@@ -4,6 +4,21 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [6.5.0] — 2026-04-05
+
+### Added
+
+- **Policy user module** (`PolicyUser.cs`) — 50 new Group Policy tweaks across 5 modules (Sprints 652-656):
+  - `PolicyWindowsSearch` (10) — Windows Search machine-wide policies: disable Cortana via policy, disable web search in Start, disable connected search web results, disable cloud search, block location in search, enforce strict SafeSearch, disable dynamic content in search box, block remote Cortana query, opt out of search privacy sharing, prevent battery indexing
+  - `PolicyAppPrivacy` (10) — App capability access policies (Force Deny): block camera, microphone, contacts, calendar, call history, messaging, voice activation, account info, background app execution, and diagnostic info access for all apps
+  - `PolicyUserExperience` (10) — Windows CloudContent policies: disable consumer features, disable Spotlight, disable third-party suggestions, disable lock screen app notifications, disable welcome experience, disable soft-landing tips, disable tailored diagnostic experiences, disable Spotlight on Action Center and Settings, disable cloud-optimised content
+  - `PolicyEventLogAudit` (10) — Event log sizing and access policies: Application/Security/System/Setup log max sizes (64/192/64/32 MB), Application/Security/System log retention mode (overwrite as needed), Application/Security/System guest access restriction
+  - `PolicySyncSettings` (10) — Windows Settings Sync policies: disable all sync, prevent user override, disable credentials sync, disable personalisation sync, disable app settings sync, disable Start layout sync, disable theme sync, disable language sync, disable accessibility sync, disable desktop theme sync
+
+### Stats
+
+- Tweaks: **9,390** (+50) | Categories: **111** (+5) | Modules: **150** (+5) | Tests: **3,376**
+
 ## [6.4.1] — 2026-04-05
 
 ### Fixed
@@ -13,7 +28,7 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ### Stats
 
-- Tweaks: **9,340** | Categories: **106** | Modules: **98** | Tests: **3,052**
+- Tweaks: **9,340** | Categories: **106** | Modules: **150** | Tests: **3,376**
 
 ## [6.4.0] — 2026-05-25
 
