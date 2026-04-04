@@ -141,7 +141,6 @@ internal static class UserAccount
                 return false;
             },
         },
-
         new TweakDef
         {
             Id = "uac-disable-credential-guard-lock-timeout",
@@ -157,7 +156,6 @@ internal static class UserAccount
             RemoveOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\Lsa", "LsaCfgFlags", 1)],
             DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\Lsa", "LsaCfgFlags", 0)],
         },
-
         new TweakDef
         {
             Id = "uac-set-lockout-duration-30",
@@ -220,7 +218,6 @@ internal static class UserAccount
             RemoveOps = [RegOp.SetDword(UacKey, "ValidateAdminCodeSignatures", 0)],
             DetectOps = [RegOp.CheckDword(UacKey, "ValidateAdminCodeSignatures", 1)],
         },
-
         new TweakDef
         {
             Id = "uac-enable-installer-detection",
@@ -1131,7 +1128,6 @@ internal static class WindowsHello
 
 // === Merged from: LockScreen.cs ===
 
-
 internal static class LockScreen
 {
     internal static IReadOnlyList<TweakDef> Tweaks { get; } =
@@ -1181,7 +1177,6 @@ internal static class LockScreen
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "EnableFirstLogonAnimation")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "EnableFirstLogonAnimation", 0)],
         },
-
         new TweakDef
         {
             Id = "lock-disable-lock-screen-ads",
@@ -1196,7 +1191,6 @@ internal static class LockScreen
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Personalization", "NoLockScreen")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Personalization", "NoLockScreen", 1)],
         },
-
         new TweakDef
         {
             Id = "lock-disable-network-ui",
@@ -1212,7 +1206,6 @@ internal static class LockScreen
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "DontDisplayNetworkSelectionUI")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "DontDisplayNetworkSelectionUI", 1)],
         },
-
         new TweakDef
         {
             Id = "lock-disable-password-reveal",
@@ -1833,7 +1826,6 @@ internal static class Screensaver
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Personalization", "NoLockScreenSlideshow")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Personalization", "NoLockScreenSlideshow", 1)],
         },
-
         new TweakDef
         {
             Id = "ss-scr-timeout-10min",
@@ -2230,9 +2222,6 @@ internal static class Accessibility
             ],
             DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Accessibility\StickyKeys", "Flags", "506")],
         },
-
-
-
         new TweakDef
         {
             Id = "acc-wide-scrollbar",
@@ -2776,7 +2765,6 @@ internal static class Accessibility
     ];
 }
 
-
 // ── merged from PolicyAuth.cs ──
 // RegiLattice.Core — Tweaks/PolicyAuth.cs
 // Kerberos, LAPS, credential management, smart card, Windows Hello, biometrics, LSA, logon, and identity policies
@@ -3001,7 +2989,6 @@ internal static class PolicyAuth
                     DetectOps = [RegOp.CheckDword(Key, "RequireIntuneCompliance", 1)],
                 },
             ];
-
     }
 
     // ── AzureAdPrtSsoPolicy ──
@@ -3182,7 +3169,6 @@ internal static class PolicyAuth
                     DetectOps = [RegOp.CheckDword(Key, "BlockPRTOnSharedDevice", 1)],
                 },
             ];
-
     }
 
     // ── AzureAdSsprPolicy ──
@@ -3363,7 +3349,6 @@ internal static class PolicyAuth
                     DetectOps = [RegOp.CheckDword(Key, "MaxUnlockAttemptsPerHour", 3)],
                 },
             ];
-
     }
 
     // ── AzureAdTenantPolicy ──
@@ -3544,7 +3529,6 @@ internal static class PolicyAuth
                     DetectOps = [RegOp.CheckDword(AadKey, "AllowCrossDeviceClipboard", 0)],
                 },
             ];
-
     }
 
     // ── BiometricAuthPolicy ──
@@ -3725,7 +3709,6 @@ internal static class PolicyAuth
                     DetectOps = [RegOp.CheckDword(Key, "ClearBiometricCacheOnLock", 1)],
                 },
             ];
-
     }
 
     // ── Biometrics ──
@@ -3861,8 +3844,7 @@ internal static class PolicyAuth
                 ImpactScore = 2,
                 SafetyRating = 5,
                 Description =
-                    "Requires at least one numeric digit in the Windows Hello PIN. "
-                    + "Prevents all-letter PINs. Digits=1 in PINComplexity.",
+                    "Requires at least one numeric digit in the Windows Hello PIN. " + "Prevents all-letter PINs. Digits=1 in PINComplexity.",
                 Tags = ["windows hello", "pin", "complexity", "digits", "security"],
                 RegistryKeys = [WhfbPin],
                 ApplyOps = [RegOp.SetDword(WhfbPin, "Digits", 1)],
@@ -3878,9 +3860,7 @@ internal static class PolicyAuth
                 CorpSafe = true,
                 ImpactScore = 2,
                 SafetyRating = 5,
-                Description =
-                    "Requires at least one uppercase letter in the Windows Hello PIN. "
-                    + "UppercaseLetters=1 in PINComplexity.",
+                Description = "Requires at least one uppercase letter in the Windows Hello PIN. " + "UppercaseLetters=1 in PINComplexity.",
                 Tags = ["windows hello", "pin", "complexity", "uppercase", "security"],
                 RegistryKeys = [WhfbPin],
                 ApplyOps = [RegOp.SetDword(WhfbPin, "UppercaseLetters", 1)],
@@ -3896,9 +3876,7 @@ internal static class PolicyAuth
                 CorpSafe = true,
                 ImpactScore = 2,
                 SafetyRating = 5,
-                Description =
-                    "Requires at least one lowercase letter in the Windows Hello PIN. "
-                    + "LowercaseLetters=1 in PINComplexity.",
+                Description = "Requires at least one lowercase letter in the Windows Hello PIN. " + "LowercaseLetters=1 in PINComplexity.",
                 Tags = ["windows hello", "pin", "complexity", "lowercase", "security"],
                 RegistryKeys = [WhfbPin],
                 ApplyOps = [RegOp.SetDword(WhfbPin, "LowercaseLetters", 1)],
@@ -3924,7 +3902,6 @@ internal static class PolicyAuth
                 DetectOps = [RegOp.CheckDword(WhfbPin, "Expiration", 90)],
             },
         ];
-
     }
 
     // ── BiometricsConfigPolicy ──
@@ -4108,20 +4085,16 @@ internal static class PolicyAuth
                     DetectOps = [RegOp.CheckDword(BioFace, "Enabled", 0)],
                 },
             ];
-
     }
 
     // ── CredentialCachingPolicy ──
     private static class _CredentialCachingPolicy
     {
-        private const string CredSSP =
-            @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System\CredSSP\Parameters";
+        private const string CredSSP = @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System\CredSSP\Parameters";
 
-        private const string CredDel =
-            @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CredentialsDelegation";
+        private const string CredDel = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CredentialsDelegation";
 
-        private const string WDigest =
-            @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\WDigest";
+        private const string WDigest = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\WDigest";
 
         private const string Lsa = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa";
 
@@ -4279,7 +4252,6 @@ internal static class PolicyAuth
                 DetectOps = [RegOp.CheckDword(Lsa, "NoLmHash", 1)],
             },
         ];
-
     }
 
     // ── CredentialDelegationPolicy ──
@@ -4288,169 +4260,170 @@ internal static class PolicyAuth
         private const string CredDelKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CredentialsDelegation";
 
         public static IReadOnlyList<TweakDef> Data =>
-        [
-            new TweakDef
-            {
-                Id = "creddel-enable-restricted-admin",
-                Label = "Enable Restricted Admin Mode for RDP",
-                Category = "User Account",
-                Description = "Forces Remote Desktop connections to use Restricted Admin mode, preventing credential forwarding to remote hosts.",
-                Tags = ["credentials", "delegation", "rdp", "restricted-admin", "security"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 5,
-                SafetyRating = 4,
-                ImpactNote = "Prevents network credential forwarding over RDP; administrators must have local admin rights on target.",
-                ApplyOps = [RegOp.SetDword(CredDelKey, "RestrictedRemoteAdministration", 1)],
-                RemoveOps = [RegOp.DeleteValue(CredDelKey, "RestrictedRemoteAdministration")],
-                DetectOps = [RegOp.CheckDword(CredDelKey, "RestrictedRemoteAdministration", 1)],
-            },
-            new TweakDef
-            {
-                Id = "creddel-disable-remote-host-delegation",
-                Label = "Disable Credential Delegation to Remote Hosts",
-                Category = "User Account",
-                Description = "Prevents Windows from forwarding saved credentials to remote hosts via CredSSP delegation.",
-                Tags = ["credentials", "delegation", "credssp", "remote", "security"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                ImpactNote = "Blocks CredSSP-based credential forwarding; may break PowerShell remoting that passes credentials to third hop.",
-                ApplyOps = [RegOp.SetDword(CredDelKey, "DelegateComputerName", 0)],
-                RemoveOps = [RegOp.DeleteValue(CredDelKey, "DelegateComputerName")],
-                DetectOps = [RegOp.CheckDword(CredDelKey, "DelegateComputerName", 0)],
-            },
-            new TweakDef
-            {
-                Id = "creddel-allow-only-ntlm-protected",
-                Label = "Restrict CredSSP to NTLM-Protected Servers Only",
-                Category = "User Account",
-                Description = "Limits CredSSP fresh credential delegation to servers that authenticate via NTLM challenge-response.",
-                Tags = ["credentials", "delegation", "ntlm", "credssp", "security"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 4,
-                ImpactNote = "Restricts delegation context; safe when servers use NTLMv2; may block delegation to Kerberos-only servers.",
-                ApplyOps = [RegOp.SetDword(CredDelKey, "AllowFreshCredentialsWhenNTLMOnly", 1)],
-                RemoveOps = [RegOp.DeleteValue(CredDelKey, "AllowFreshCredentialsWhenNTLMOnly")],
-                DetectOps = [RegOp.CheckDword(CredDelKey, "AllowFreshCredentialsWhenNTLMOnly", 1)],
-            },
-            new TweakDef
-            {
-                Id = "creddel-deny-default-credential-delegation",
-                Label = "Deny Default Credential Delegation",
-                Category = "User Account",
-                Description = "Prevents the default Windows behaviour of delegating credentials to any server when CredSSP is negotiated.",
-                Tags = ["credentials", "delegation", "default", "credssp", "security"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                ImpactNote = "Blocks unmanaged credential delegation; admins must explicitly whitelist trusted servers.",
-                ApplyOps = [RegOp.SetDword(CredDelKey, "DenyDefaultCredentials", 1)],
-                RemoveOps = [RegOp.DeleteValue(CredDelKey, "DenyDefaultCredentials")],
-                DetectOps = [RegOp.CheckDword(CredDelKey, "DenyDefaultCredentials", 1)],
-            },
-            new TweakDef
-            {
-                Id = "creddel-deny-saved-credential-delegation",
-                Label = "Deny Saved Credential Delegation",
-                Category = "User Account",
-                Description = "Prevents Windows Credential Manager saved credentials from being forwarded to remote servers via CredSSP.",
-                Tags = ["credentials", "delegation", "saved", "credential-manager", "security"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                ImpactNote = "Stops cached credential reuse in CredSSP sessions; users must manually authenticate.",
-                ApplyOps = [RegOp.SetDword(CredDelKey, "DenySavedCredentials", 1)],
-                RemoveOps = [RegOp.DeleteValue(CredDelKey, "DenySavedCredentials")],
-                DetectOps = [RegOp.CheckDword(CredDelKey, "DenySavedCredentials", 1)],
-            },
-            new TweakDef
-            {
-                Id = "creddel-deny-fresh-credential-delegation",
-                Label = "Deny Fresh Credential Delegation",
-                Category = "User Account",
-                Description = "Blocks CredSSP from forwarding freshly entered credentials to servers in all delegation categories.",
-                Tags = ["credentials", "delegation", "fresh", "credssp", "security"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 4,
-                ImpactNote = "Prevents just-in-time credential forwarding; may break multi-hop PSRemoting workflows requiring CredSSP.",
-                ApplyOps = [RegOp.SetDword(CredDelKey, "DenyFreshCredentials", 1)],
-                RemoveOps = [RegOp.DeleteValue(CredDelKey, "DenyFreshCredentials")],
-                DetectOps = [RegOp.CheckDword(CredDelKey, "DenyFreshCredentials", 1)],
-            },
-            new TweakDef
-            {
-                Id = "creddel-require-remote-auth-mutual",
-                Label = "Require Mutual Authentication for Remote Sessions",
-                Category = "User Account",
-                Description = "Mandates that remote session targets present valid Kerberos or certificate credentials before accepting connections.",
-                Tags = ["credentials", "delegation", "mutual-auth", "kerberos", "security"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                ImpactNote = "Enforces server identity verification; prevents connection to spoofed or unauthenticated remote hosts.",
-                ApplyOps = [RegOp.SetDword(CredDelKey, "RequireMutualAuthentication", 1)],
-                RemoveOps = [RegOp.DeleteValue(CredDelKey, "RequireMutualAuthentication")],
-                DetectOps = [RegOp.CheckDword(CredDelKey, "RequireMutualAuthentication", 1)],
-            },
-            new TweakDef
-            {
-                Id = "creddel-disable-credssp-v1",
-                Label = "Disable CredSSP Protocol Version 1",
-                Category = "User Account",
-                Description = "Disables CredSSP version 1 to enforce use of patched versions that mitigate credential forwarding vulnerabilities.",
-                Tags = ["credentials", "delegation", "credssp", "version", "security"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 4,
-                ImpactNote = "Forces CredSSP v5+ which includes Oracle Remediation patches (CVE-2018-0886); old clients may fail.",
-                ApplyOps = [RegOp.SetDword(CredDelKey, "AllowEncryptionOracle", 0)],
-                RemoveOps = [RegOp.DeleteValue(CredDelKey, "AllowEncryptionOracle")],
-                DetectOps = [RegOp.CheckDword(CredDelKey, "AllowEncryptionOracle", 0)],
-            },
-            new TweakDef
-            {
-                Id = "creddel-audit-delegation-events",
-                Label = "Enable Credential Delegation Audit Logging",
-                Category = "User Account",
-                Description = "Records credential delegation events in the Security event log for monitoring and forensic analysis.",
-                Tags = ["credentials", "delegation", "audit", "logging", "security"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Delegation attempts are logged; useful for detecting credential theft or misconfigured delegation policies.",
-                ApplyOps = [RegOp.SetDword(CredDelKey, "EnableCredentialDelegationAudit", 1)],
-                RemoveOps = [RegOp.DeleteValue(CredDelKey, "EnableCredentialDelegationAudit")],
-                DetectOps = [RegOp.CheckDword(CredDelKey, "EnableCredentialDelegationAudit", 1)],
-            },
-            new TweakDef
-            {
-                Id = "creddel-block-delegation-to-workgroups",
-                Label = "Block Credential Delegation to Workgroup Machines",
-                Category = "User Account",
-                Description = "Prevents credentials from being delegated to non-domain-joined (workgroup) computers to reduce attack surface.",
-                Tags = ["credentials", "delegation", "workgroup", "domain", "security"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Domain credentials cannot be forwarded to workgroup machines; reduces lateral movement risk.",
-                ApplyOps = [RegOp.SetDword(CredDelKey, "BlockDelegationToWorkgroupComputers", 1)],
-                RemoveOps = [RegOp.DeleteValue(CredDelKey, "BlockDelegationToWorkgroupComputers")],
-                DetectOps = [RegOp.CheckDword(CredDelKey, "BlockDelegationToWorkgroupComputers", 1)],
-            },
-        ];
-
+            [
+                new TweakDef
+                {
+                    Id = "creddel-enable-restricted-admin",
+                    Label = "Enable Restricted Admin Mode for RDP",
+                    Category = "User Account",
+                    Description = "Forces Remote Desktop connections to use Restricted Admin mode, preventing credential forwarding to remote hosts.",
+                    Tags = ["credentials", "delegation", "rdp", "restricted-admin", "security"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 5,
+                    SafetyRating = 4,
+                    ImpactNote = "Prevents network credential forwarding over RDP; administrators must have local admin rights on target.",
+                    ApplyOps = [RegOp.SetDword(CredDelKey, "RestrictedRemoteAdministration", 1)],
+                    RemoveOps = [RegOp.DeleteValue(CredDelKey, "RestrictedRemoteAdministration")],
+                    DetectOps = [RegOp.CheckDword(CredDelKey, "RestrictedRemoteAdministration", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "creddel-disable-remote-host-delegation",
+                    Label = "Disable Credential Delegation to Remote Hosts",
+                    Category = "User Account",
+                    Description = "Prevents Windows from forwarding saved credentials to remote hosts via CredSSP delegation.",
+                    Tags = ["credentials", "delegation", "credssp", "remote", "security"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "Blocks CredSSP-based credential forwarding; may break PowerShell remoting that passes credentials to third hop.",
+                    ApplyOps = [RegOp.SetDword(CredDelKey, "DelegateComputerName", 0)],
+                    RemoveOps = [RegOp.DeleteValue(CredDelKey, "DelegateComputerName")],
+                    DetectOps = [RegOp.CheckDword(CredDelKey, "DelegateComputerName", 0)],
+                },
+                new TweakDef
+                {
+                    Id = "creddel-allow-only-ntlm-protected",
+                    Label = "Restrict CredSSP to NTLM-Protected Servers Only",
+                    Category = "User Account",
+                    Description = "Limits CredSSP fresh credential delegation to servers that authenticate via NTLM challenge-response.",
+                    Tags = ["credentials", "delegation", "ntlm", "credssp", "security"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 4,
+                    ImpactNote = "Restricts delegation context; safe when servers use NTLMv2; may block delegation to Kerberos-only servers.",
+                    ApplyOps = [RegOp.SetDword(CredDelKey, "AllowFreshCredentialsWhenNTLMOnly", 1)],
+                    RemoveOps = [RegOp.DeleteValue(CredDelKey, "AllowFreshCredentialsWhenNTLMOnly")],
+                    DetectOps = [RegOp.CheckDword(CredDelKey, "AllowFreshCredentialsWhenNTLMOnly", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "creddel-deny-default-credential-delegation",
+                    Label = "Deny Default Credential Delegation",
+                    Category = "User Account",
+                    Description = "Prevents the default Windows behaviour of delegating credentials to any server when CredSSP is negotiated.",
+                    Tags = ["credentials", "delegation", "default", "credssp", "security"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "Blocks unmanaged credential delegation; admins must explicitly whitelist trusted servers.",
+                    ApplyOps = [RegOp.SetDword(CredDelKey, "DenyDefaultCredentials", 1)],
+                    RemoveOps = [RegOp.DeleteValue(CredDelKey, "DenyDefaultCredentials")],
+                    DetectOps = [RegOp.CheckDword(CredDelKey, "DenyDefaultCredentials", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "creddel-deny-saved-credential-delegation",
+                    Label = "Deny Saved Credential Delegation",
+                    Category = "User Account",
+                    Description = "Prevents Windows Credential Manager saved credentials from being forwarded to remote servers via CredSSP.",
+                    Tags = ["credentials", "delegation", "saved", "credential-manager", "security"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "Stops cached credential reuse in CredSSP sessions; users must manually authenticate.",
+                    ApplyOps = [RegOp.SetDword(CredDelKey, "DenySavedCredentials", 1)],
+                    RemoveOps = [RegOp.DeleteValue(CredDelKey, "DenySavedCredentials")],
+                    DetectOps = [RegOp.CheckDword(CredDelKey, "DenySavedCredentials", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "creddel-deny-fresh-credential-delegation",
+                    Label = "Deny Fresh Credential Delegation",
+                    Category = "User Account",
+                    Description = "Blocks CredSSP from forwarding freshly entered credentials to servers in all delegation categories.",
+                    Tags = ["credentials", "delegation", "fresh", "credssp", "security"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 4,
+                    ImpactNote = "Prevents just-in-time credential forwarding; may break multi-hop PSRemoting workflows requiring CredSSP.",
+                    ApplyOps = [RegOp.SetDword(CredDelKey, "DenyFreshCredentials", 1)],
+                    RemoveOps = [RegOp.DeleteValue(CredDelKey, "DenyFreshCredentials")],
+                    DetectOps = [RegOp.CheckDword(CredDelKey, "DenyFreshCredentials", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "creddel-require-remote-auth-mutual",
+                    Label = "Require Mutual Authentication for Remote Sessions",
+                    Category = "User Account",
+                    Description =
+                        "Mandates that remote session targets present valid Kerberos or certificate credentials before accepting connections.",
+                    Tags = ["credentials", "delegation", "mutual-auth", "kerberos", "security"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "Enforces server identity verification; prevents connection to spoofed or unauthenticated remote hosts.",
+                    ApplyOps = [RegOp.SetDword(CredDelKey, "RequireMutualAuthentication", 1)],
+                    RemoveOps = [RegOp.DeleteValue(CredDelKey, "RequireMutualAuthentication")],
+                    DetectOps = [RegOp.CheckDword(CredDelKey, "RequireMutualAuthentication", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "creddel-disable-credssp-v1",
+                    Label = "Disable CredSSP Protocol Version 1",
+                    Category = "User Account",
+                    Description =
+                        "Disables CredSSP version 1 to enforce use of patched versions that mitigate credential forwarding vulnerabilities.",
+                    Tags = ["credentials", "delegation", "credssp", "version", "security"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 4,
+                    ImpactNote = "Forces CredSSP v5+ which includes Oracle Remediation patches (CVE-2018-0886); old clients may fail.",
+                    ApplyOps = [RegOp.SetDword(CredDelKey, "AllowEncryptionOracle", 0)],
+                    RemoveOps = [RegOp.DeleteValue(CredDelKey, "AllowEncryptionOracle")],
+                    DetectOps = [RegOp.CheckDword(CredDelKey, "AllowEncryptionOracle", 0)],
+                },
+                new TweakDef
+                {
+                    Id = "creddel-audit-delegation-events",
+                    Label = "Enable Credential Delegation Audit Logging",
+                    Category = "User Account",
+                    Description = "Records credential delegation events in the Security event log for monitoring and forensic analysis.",
+                    Tags = ["credentials", "delegation", "audit", "logging", "security"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "Delegation attempts are logged; useful for detecting credential theft or misconfigured delegation policies.",
+                    ApplyOps = [RegOp.SetDword(CredDelKey, "EnableCredentialDelegationAudit", 1)],
+                    RemoveOps = [RegOp.DeleteValue(CredDelKey, "EnableCredentialDelegationAudit")],
+                    DetectOps = [RegOp.CheckDword(CredDelKey, "EnableCredentialDelegationAudit", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "creddel-block-delegation-to-workgroups",
+                    Label = "Block Credential Delegation to Workgroup Machines",
+                    Category = "User Account",
+                    Description = "Prevents credentials from being delegated to non-domain-joined (workgroup) computers to reduce attack surface.",
+                    Tags = ["credentials", "delegation", "workgroup", "domain", "security"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "Domain credentials cannot be forwarded to workgroup machines; reduces lateral movement risk.",
+                    ApplyOps = [RegOp.SetDword(CredDelKey, "BlockDelegationToWorkgroupComputers", 1)],
+                    RemoveOps = [RegOp.DeleteValue(CredDelKey, "BlockDelegationToWorkgroupComputers")],
+                    DetectOps = [RegOp.CheckDword(CredDelKey, "BlockDelegationToWorkgroupComputers", 1)],
+                },
+            ];
     }
 
     // ── CredentialManagerPolicy ──
@@ -4631,7 +4604,6 @@ internal static class PolicyAuth
                 DetectOps = [RegOp.CheckDword(Key, "BlockNTLMDelegation", 1)],
             },
         ];
-
     }
 
     // ── CredentialRoamingPolicy ──
@@ -4642,169 +4614,178 @@ internal static class PolicyAuth
         private const string CertKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CurrentVersion\RoamingProfile";
 
         public static IReadOnlyList<TweakDef> Data =>
-        [
-            new TweakDef
-            {
-                Id           = "credroam-disable-credential-roaming",
-                Label        = "Disable User Credential Roaming Between Domain Computers",
-                Category = "User Account",
-                Description  = "Prevents user credentials (certificates, private keys, smart card PINs) from being copied to the user's roaming profile and thus synchronised to other domain computers, keeping credentials machine-local and reducing the credential surface exposed if a profile is compromised.",
-                Tags         = ["credential-roaming", "certificates", "private-keys", "roaming-profile", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 4,
-                SafetyRating = 5,
-                ImpactNote   = "Credential roaming disabled; private keys and certificates stay machine-local, not synced via roaming profile.",
-                ApplyOps     = [RegOp.SetDword(Key, "SyncForegroundPolicy", 0)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "SyncForegroundPolicy")],
-                DetectOps    = [RegOp.CheckDword(Key, "SyncForegroundPolicy", 0)],
-            },
-            new TweakDef
-            {
-                Id           = "credroam-block-certificate-roaming",
-                Label        = "Block Roaming of User Certificates via User Profile",
-                Category = "User Account",
-                Description  = "Specifically blocks the roaming of user certificates and key containers via the Windows credential roaming feature, preventing certificates imported on one machine from appearing on all machines on next logon.",
-                Tags         = ["credential-roaming", "certificates", "key-container", "profile-sync", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 4,
-                SafetyRating = 5,
-                ImpactNote   = "Certificate roaming via user profile blocked; imported certs and keys remain on the issuing machine only.",
-                ApplyOps     = [RegOp.SetDword(CertKey, "DisableCertificateRoaming", 1)],
-                RemoveOps    = [RegOp.DeleteValue(CertKey, "DisableCertificateRoaming")],
-                DetectOps    = [RegOp.CheckDword(CertKey, "DisableCertificateRoaming", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "credroam-restrict-profile-sync-to-domain",
-                Label        = "Restrict Roaming Profile Sync to Domain Networks Only",
-                Category = "User Account",
-                Description  = "Prevents roaming profile synchronisation from occurring over non-domain networks (public WiFi, VPN), ensuring credential and profile data is only synced when connected to the corporate domain network.",
-                Tags         = ["roaming-profile", "domain-network", "profile-sync", "security", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 3,
-                SafetyRating = 5,
-                ImpactNote   = "Roaming profile sync restricted to domain networks; profile data not synced over public networks or VPN.",
-                ApplyOps     = [RegOp.SetDword(RoamKey, "SlowLinkTimeOut", 500)],
-                RemoveOps    = [RegOp.DeleteValue(RoamKey, "SlowLinkTimeOut")],
-                DetectOps    = [RegOp.CheckDword(RoamKey, "SlowLinkTimeOut", 500)],
-            },
-            new TweakDef
-            {
-                Id           = "credroam-delete-cached-roaming-profiles",
-                Label        = "Delete Cached Copies of Roaming Profiles at Logoff",
-                Category = "User Account",
-                Description  = "Configures Windows to delete the locally cached copy of the roaming profile when the user logs off, ensuring credential data and profile contents are not left on shared or non-primary workstations after user sessions.",
-                Tags         = ["roaming-profile", "cached-profile", "logoff", "data-cleanup", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 4,
-                SafetyRating = 5,
-                ImpactNote   = "Cached roaming profile deleted at logoff; credential data not retained on non-primary workstations.",
-                ApplyOps     = [RegOp.SetDword(Key, "DeleteRoamingCache", 1)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "DeleteRoamingCache")],
-                DetectOps    = [RegOp.CheckDword(Key, "DeleteRoamingCache", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "credroam-disable-smart-card-pin-roaming",
-                Label        = "Disable Smart Card PIN Roaming via Credential Roaming Service",
-                Category = "User Account",
-                Description  = "Prevents smart card PINs cached by the Windows Smart Card PIN cache from being synchronised between machines via the credential roaming service, keeping smart card PIN caches strictly machine-local.",
-                Tags         = ["credroam", "smart-card", "pin-cache", "roaming", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 3,
-                SafetyRating = 5,
-                ImpactNote   = "Smart card PIN roaming disabled; cached PINs remain machine-local only.",
-                ApplyOps     = [RegOp.SetDword(CertKey, "DisableSmartCardPINRoaming", 1)],
-                RemoveOps    = [RegOp.DeleteValue(CertKey, "DisableSmartCardPINRoaming")],
-                DetectOps    = [RegOp.CheckDword(CertKey, "DisableSmartCardPINRoaming", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "credroam-require-admin-roaming-profile",
-                Label        = "Block Administrator Accounts from Using Roaming Profiles",
-                Category = "User Account",
-                Description  = "Prevents administrator accounts from using roaming profiles, ensuring that elevated account credentials, SAM keys, and administrative certificates are never synchronised to roaming profile storage.",
-                Tags         = ["credroam", "admin-account", "roaming-profile", "privilege", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 4,
-                SafetyRating = 5,
-                ImpactNote   = "Admin accounts blocked from roaming profiles; elevated credential data never synced via profile infrastructure.",
-                ApplyOps     = [RegOp.SetDword(Key, "DisableAdminRoamingProfile", 1)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "DisableAdminRoamingProfile")],
-                DetectOps    = [RegOp.CheckDword(Key, "DisableAdminRoamingProfile", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "credroam-encrypt-roaming-profile-at-rest",
-                Label        = "Encrypt Roaming Profile Server-Side Copy at Rest",
-                Category = "User Account",
-                Description  = "Requires the roaming profile share to encrypt profile data server-side before writing to the UNC profile path, ensuring that the server-side copy of the roaming profile is EFS-protected and not readable by share administrators.",
-                Tags         = ["credroam", "efs", "encryption", "profile-server", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 4,
-                SafetyRating = 5,
-                ImpactNote   = "Roaming profile server-side copy EFS-encrypted; share admins cannot read profile credential data at rest.",
-                ApplyOps     = [RegOp.SetDword(RoamKey, "EncryptProfileData", 1)],
-                RemoveOps    = [RegOp.DeleteValue(RoamKey, "EncryptProfileData")],
-                DetectOps    = [RegOp.CheckDword(RoamKey, "EncryptProfileData", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "credroam-log-profile-sync-events",
-                Label        = "Log Roaming Profile Synchronisation Events in System Log",
-                Category = "User Account",
-                Description  = "Enables System event log entries for all roaming profile synchronisation operations, including sync success, failure, conflict, and truncation events, providing audit visibility into profile and credential roaming activity.",
-                Tags         = ["credroam", "event-log", "audit", "profile-sync", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 3,
-                SafetyRating = 5,
-                ImpactNote   = "Roaming profile sync events logged in System log; credential roaming activity visible for auditing.",
-                ApplyOps     = [RegOp.SetDword(Key, "LogProfileSyncEvents", 1)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "LogProfileSyncEvents")],
-                DetectOps    = [RegOp.CheckDword(Key, "LogProfileSyncEvents", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "credroam-block-plaintext-credential-cache",
-                Label        = "Block Caching of Plaintext Credentials in Roaming Profile",
-                Category = "User Account",
-                Description  = "Prevents the credentials manager and credential providers from storing reversible (plaintext-equivalent) credential blobs in the user's roaming profile, ensuring only hashed or certificate-protected credentials are ever written to profile storage.",
-                Tags         = ["credroam", "plaintext-credential", "credential-cache", "security", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 4,
-                SafetyRating = 5,
-                ImpactNote   = "Plaintext credential caching in roaming profile blocked; only hashed/cert-protected credentials in profile.",
-                ApplyOps     = [RegOp.SetDword(CertKey, "BlockPlaintextCredentialCache", 1)],
-                RemoveOps    = [RegOp.DeleteValue(CertKey, "BlockPlaintextCredentialCache")],
-                DetectOps    = [RegOp.CheckDword(CertKey, "BlockPlaintextCredentialCache", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "credroam-disable-credential-roaming-telemetry",
-                Label        = "Disable Credential Roaming Telemetry to Microsoft",
-                Category = "User Account",
-                Description  = "Prevents the Windows credential roaming service from sending certificate sync counts, roaming failures, and credential manager sync statistics to Microsoft.",
-                Tags         = ["credroam", "telemetry", "privacy", "microsoft", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 2,
-                SafetyRating = 5,
-                ImpactNote   = "Credential roaming telemetry to Microsoft disabled; cert sync stats and roaming activity not sent to cloud.",
-                ApplyOps     = [RegOp.SetDword(CertKey, "DisableCredentialRoamingTelemetry", 1)],
-                RemoveOps    = [RegOp.DeleteValue(CertKey, "DisableCredentialRoamingTelemetry")],
-                DetectOps    = [RegOp.CheckDword(CertKey, "DisableCredentialRoamingTelemetry", 1)],
-            },
-        ];
-
+            [
+                new TweakDef
+                {
+                    Id = "credroam-disable-credential-roaming",
+                    Label = "Disable User Credential Roaming Between Domain Computers",
+                    Category = "User Account",
+                    Description =
+                        "Prevents user credentials (certificates, private keys, smart card PINs) from being copied to the user's roaming profile and thus synchronised to other domain computers, keeping credentials machine-local and reducing the credential surface exposed if a profile is compromised.",
+                    Tags = ["credential-roaming", "certificates", "private-keys", "roaming-profile", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "Credential roaming disabled; private keys and certificates stay machine-local, not synced via roaming profile.",
+                    ApplyOps = [RegOp.SetDword(Key, "SyncForegroundPolicy", 0)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "SyncForegroundPolicy")],
+                    DetectOps = [RegOp.CheckDword(Key, "SyncForegroundPolicy", 0)],
+                },
+                new TweakDef
+                {
+                    Id = "credroam-block-certificate-roaming",
+                    Label = "Block Roaming of User Certificates via User Profile",
+                    Category = "User Account",
+                    Description =
+                        "Specifically blocks the roaming of user certificates and key containers via the Windows credential roaming feature, preventing certificates imported on one machine from appearing on all machines on next logon.",
+                    Tags = ["credential-roaming", "certificates", "key-container", "profile-sync", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "Certificate roaming via user profile blocked; imported certs and keys remain on the issuing machine only.",
+                    ApplyOps = [RegOp.SetDword(CertKey, "DisableCertificateRoaming", 1)],
+                    RemoveOps = [RegOp.DeleteValue(CertKey, "DisableCertificateRoaming")],
+                    DetectOps = [RegOp.CheckDword(CertKey, "DisableCertificateRoaming", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "credroam-restrict-profile-sync-to-domain",
+                    Label = "Restrict Roaming Profile Sync to Domain Networks Only",
+                    Category = "User Account",
+                    Description =
+                        "Prevents roaming profile synchronisation from occurring over non-domain networks (public WiFi, VPN), ensuring credential and profile data is only synced when connected to the corporate domain network.",
+                    Tags = ["roaming-profile", "domain-network", "profile-sync", "security", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "Roaming profile sync restricted to domain networks; profile data not synced over public networks or VPN.",
+                    ApplyOps = [RegOp.SetDword(RoamKey, "SlowLinkTimeOut", 500)],
+                    RemoveOps = [RegOp.DeleteValue(RoamKey, "SlowLinkTimeOut")],
+                    DetectOps = [RegOp.CheckDword(RoamKey, "SlowLinkTimeOut", 500)],
+                },
+                new TweakDef
+                {
+                    Id = "credroam-delete-cached-roaming-profiles",
+                    Label = "Delete Cached Copies of Roaming Profiles at Logoff",
+                    Category = "User Account",
+                    Description =
+                        "Configures Windows to delete the locally cached copy of the roaming profile when the user logs off, ensuring credential data and profile contents are not left on shared or non-primary workstations after user sessions.",
+                    Tags = ["roaming-profile", "cached-profile", "logoff", "data-cleanup", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "Cached roaming profile deleted at logoff; credential data not retained on non-primary workstations.",
+                    ApplyOps = [RegOp.SetDword(Key, "DeleteRoamingCache", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "DeleteRoamingCache")],
+                    DetectOps = [RegOp.CheckDword(Key, "DeleteRoamingCache", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "credroam-disable-smart-card-pin-roaming",
+                    Label = "Disable Smart Card PIN Roaming via Credential Roaming Service",
+                    Category = "User Account",
+                    Description =
+                        "Prevents smart card PINs cached by the Windows Smart Card PIN cache from being synchronised between machines via the credential roaming service, keeping smart card PIN caches strictly machine-local.",
+                    Tags = ["credroam", "smart-card", "pin-cache", "roaming", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "Smart card PIN roaming disabled; cached PINs remain machine-local only.",
+                    ApplyOps = [RegOp.SetDword(CertKey, "DisableSmartCardPINRoaming", 1)],
+                    RemoveOps = [RegOp.DeleteValue(CertKey, "DisableSmartCardPINRoaming")],
+                    DetectOps = [RegOp.CheckDword(CertKey, "DisableSmartCardPINRoaming", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "credroam-require-admin-roaming-profile",
+                    Label = "Block Administrator Accounts from Using Roaming Profiles",
+                    Category = "User Account",
+                    Description =
+                        "Prevents administrator accounts from using roaming profiles, ensuring that elevated account credentials, SAM keys, and administrative certificates are never synchronised to roaming profile storage.",
+                    Tags = ["credroam", "admin-account", "roaming-profile", "privilege", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "Admin accounts blocked from roaming profiles; elevated credential data never synced via profile infrastructure.",
+                    ApplyOps = [RegOp.SetDword(Key, "DisableAdminRoamingProfile", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "DisableAdminRoamingProfile")],
+                    DetectOps = [RegOp.CheckDword(Key, "DisableAdminRoamingProfile", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "credroam-encrypt-roaming-profile-at-rest",
+                    Label = "Encrypt Roaming Profile Server-Side Copy at Rest",
+                    Category = "User Account",
+                    Description =
+                        "Requires the roaming profile share to encrypt profile data server-side before writing to the UNC profile path, ensuring that the server-side copy of the roaming profile is EFS-protected and not readable by share administrators.",
+                    Tags = ["credroam", "efs", "encryption", "profile-server", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "Roaming profile server-side copy EFS-encrypted; share admins cannot read profile credential data at rest.",
+                    ApplyOps = [RegOp.SetDword(RoamKey, "EncryptProfileData", 1)],
+                    RemoveOps = [RegOp.DeleteValue(RoamKey, "EncryptProfileData")],
+                    DetectOps = [RegOp.CheckDword(RoamKey, "EncryptProfileData", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "credroam-log-profile-sync-events",
+                    Label = "Log Roaming Profile Synchronisation Events in System Log",
+                    Category = "User Account",
+                    Description =
+                        "Enables System event log entries for all roaming profile synchronisation operations, including sync success, failure, conflict, and truncation events, providing audit visibility into profile and credential roaming activity.",
+                    Tags = ["credroam", "event-log", "audit", "profile-sync", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "Roaming profile sync events logged in System log; credential roaming activity visible for auditing.",
+                    ApplyOps = [RegOp.SetDword(Key, "LogProfileSyncEvents", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "LogProfileSyncEvents")],
+                    DetectOps = [RegOp.CheckDword(Key, "LogProfileSyncEvents", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "credroam-block-plaintext-credential-cache",
+                    Label = "Block Caching of Plaintext Credentials in Roaming Profile",
+                    Category = "User Account",
+                    Description =
+                        "Prevents the credentials manager and credential providers from storing reversible (plaintext-equivalent) credential blobs in the user's roaming profile, ensuring only hashed or certificate-protected credentials are ever written to profile storage.",
+                    Tags = ["credroam", "plaintext-credential", "credential-cache", "security", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "Plaintext credential caching in roaming profile blocked; only hashed/cert-protected credentials in profile.",
+                    ApplyOps = [RegOp.SetDword(CertKey, "BlockPlaintextCredentialCache", 1)],
+                    RemoveOps = [RegOp.DeleteValue(CertKey, "BlockPlaintextCredentialCache")],
+                    DetectOps = [RegOp.CheckDword(CertKey, "BlockPlaintextCredentialCache", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "credroam-disable-credential-roaming-telemetry",
+                    Label = "Disable Credential Roaming Telemetry to Microsoft",
+                    Category = "User Account",
+                    Description =
+                        "Prevents the Windows credential roaming service from sending certificate sync counts, roaming failures, and credential manager sync statistics to Microsoft.",
+                    Tags = ["credroam", "telemetry", "privacy", "microsoft", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 2,
+                    SafetyRating = 5,
+                    ImpactNote = "Credential roaming telemetry to Microsoft disabled; cert sync stats and roaming activity not sent to cloud.",
+                    ApplyOps = [RegOp.SetDword(CertKey, "DisableCredentialRoamingTelemetry", 1)],
+                    RemoveOps = [RegOp.DeleteValue(CertKey, "DisableCredentialRoamingTelemetry")],
+                    DetectOps = [RegOp.CheckDword(CertKey, "DisableCredentialRoamingTelemetry", 1)],
+                },
+            ];
     }
 
     // ── CredentialUiPolicy ──
@@ -4833,7 +4814,8 @@ internal static class PolicyAuth
                 Id = "credui-disable-administrator-enumeration",
                 Label = "Disable Administrator Account Enumeration in Credential UI",
                 Category = "User Account",
-                Description = "Prevents the credential prompt from enumerating or listing administrator accounts, reducing account information leakage.",
+                Description =
+                    "Prevents the credential prompt from enumerating or listing administrator accounts, reducing account information leakage.",
                 Tags = ["credential", "security", "group-policy", "hardening"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -4846,7 +4828,8 @@ internal static class PolicyAuth
                 Id = "credui-no-local-password-reset-questions",
                 Label = "Disable Local Account Password Reset Security Questions",
                 Category = "User Account",
-                Description = "Prevents setup and use of security questions for local account password resets, requiring admin intervention for locked-out accounts.",
+                Description =
+                    "Prevents setup and use of security questions for local account password resets, requiring admin intervention for locked-out accounts.",
                 Tags = ["credential", "security", "group-policy", "hardening", "password"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -4859,7 +4842,8 @@ internal static class PolicyAuth
                 Id = "credui-enable-secure-credential-prompting",
                 Label = "Require Secure Desktop for Credential UI Prompts",
                 Category = "User Account",
-                Description = "Forces credential dialogs to appear on the secure desktop, preventing malicious programs from intercepting or spoofing credential prompts.",
+                Description =
+                    "Forces credential dialogs to appear on the secure desktop, preventing malicious programs from intercepting or spoofing credential prompts.",
                 Tags = ["credential", "security", "group-policy", "hardening", "uac"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -4872,7 +4856,8 @@ internal static class PolicyAuth
                 Id = "credui-disable-visual-prompt",
                 Label = "Disable Credential UI Visual Prompt Animation",
                 Category = "User Account",
-                Description = "Suppresses the animated shimmer/glow visual prompt in the credential UI, reducing distraction in kiosk and focused-work environments.",
+                Description =
+                    "Suppresses the animated shimmer/glow visual prompt in the credential UI, reducing distraction in kiosk and focused-work environments.",
                 Tags = ["credential", "ui", "group-policy", "kiosk"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -4898,7 +4883,8 @@ internal static class PolicyAuth
                 Id = "credui-disable-windows-hello-pinlogin",
                 Label = "Disable Windows Hello PIN Login from Credential UI",
                 Category = "User Account",
-                Description = "Prevents PIN authentication from appearing as an option in network credential prompts, enforcing password-only authentication.",
+                Description =
+                    "Prevents PIN authentication from appearing as an option in network credential prompts, enforcing password-only authentication.",
                 Tags = ["credential", "security", "group-policy", "windows-hello", "pin"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -4911,7 +4897,8 @@ internal static class PolicyAuth
                 Id = "credui-disable-user-password-reveal-cu",
                 Label = "Disable Password Reveal (User Policy)",
                 Category = "User Account",
-                Description = "Applies the disable-password-reveal rule at the current-user scope, ensuring the eye icon is hidden even without machine admin rights.",
+                Description =
+                    "Applies the disable-password-reveal rule at the current-user scope, ensuring the eye icon is hidden even without machine admin rights.",
                 Tags = ["credential", "security", "group-policy", "password"],
                 NeedsAdmin = false,
                 CorpSafe = true,
@@ -4946,7 +4933,6 @@ internal static class PolicyAuth
                 DetectOps = [RegOp.CheckDword(CredUi, "DisableAutofill", 1)],
             },
         ];
-
     }
 
     // ── EntraDeviceRegistrationPolicy ──
@@ -5128,7 +5114,6 @@ internal static class PolicyAuth
                     DetectOps = [RegOp.CheckDword(Key2, "RequireEntraCompliantForUpdate", 1)],
                 },
             ];
-
     }
 
     // ── KerberoastMitigationPolicy ──
@@ -5141,166 +5126,177 @@ internal static class PolicyAuth
             [
                 new TweakDef
                 {
-                    Id          = "kerbmit-disable-rc4-encryption",
-                    Label       = "Disable RC4 for Kerberos Ticket Encryption",
+                    Id = "kerbmit-disable-rc4-encryption",
+                    Label = "Disable RC4 for Kerberos Ticket Encryption",
                     Category = "User Account",
-                    Description = "Sets SupportedEncryptionTypes=0x18 (24) in Kerberos Parameters to allow only AES-128 and AES-256, removing RC4-HMAC support. Kerberoasting succeeds primarily because service tickets encrypted with RC4-HMAC can be cracked offline in hours or days on a GPU. Enforcing AES-only encryption requires 10×–100× more compute for offline attacks, making cracking economically infeasible for properly generated key material.",
-                    Tags        = ["kerberos", "rc4", "aes", "kerberoasting", "hardening"],
-                    NeedsAdmin  = true,
-                    CorpSafe    = true,
+                    Description =
+                        "Sets SupportedEncryptionTypes=0x18 (24) in Kerberos Parameters to allow only AES-128 and AES-256, removing RC4-HMAC support. Kerberoasting succeeds primarily because service tickets encrypted with RC4-HMAC can be cracked offline in hours or days on a GPU. Enforcing AES-only encryption requires 10×–100× more compute for offline attacks, making cracking economically infeasible for properly generated key material.",
+                    Tags = ["kerberos", "rc4", "aes", "kerberoasting", "hardening"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
                     ImpactScore = 5,
                     SafetyRating = 3,
-                    ImpactNote  = "Disables RC4 Kerberos; legacy services with RC4-only service accounts will fail TGS; upgrade service account keys first.",
-                    ApplyOps    = [RegOp.SetDword(KerbKey, "SupportedEncryptionTypes", 24)],
-                    RemoveOps   = [RegOp.DeleteValue(KerbKey, "SupportedEncryptionTypes")],
-                    DetectOps   = [RegOp.CheckDword(KerbKey, "SupportedEncryptionTypes", 24)],
+                    ImpactNote =
+                        "Disables RC4 Kerberos; legacy services with RC4-only service accounts will fail TGS; upgrade service account keys first.",
+                    ApplyOps = [RegOp.SetDword(KerbKey, "SupportedEncryptionTypes", 24)],
+                    RemoveOps = [RegOp.DeleteValue(KerbKey, "SupportedEncryptionTypes")],
+                    DetectOps = [RegOp.CheckDword(KerbKey, "SupportedEncryptionTypes", 24)],
                 },
                 new TweakDef
                 {
-                    Id          = "kerbmit-set-max-service-ticket-age",
-                    Label       = "Reduce Kerberos Service Ticket Lifetime (600 min)",
+                    Id = "kerbmit-set-max-service-ticket-age",
+                    Label = "Reduce Kerberos Service Ticket Lifetime (600 min)",
                     Category = "User Account",
-                    Description = "Sets MaxServiceAge=600 in Kerberos Parameters. Reduces the maximum service ticket (TGS) lifetime from the Windows default of 600 minutes. Shorter ticket lifetimes reduce the window of opportunity for Kerberoasted tickets to be cracked and used: a ticket valid for 10 hours gives an attacker 10 hours to crack it; reducing to 10 minutes means the ticket expires before most cracking jobs complete.",
-                    Tags        = ["kerberos", "ticket-lifetime", "tgs", "kerberoasting", "hardening"],
-                    NeedsAdmin  = true,
-                    CorpSafe    = true,
+                    Description =
+                        "Sets MaxServiceAge=600 in Kerberos Parameters. Reduces the maximum service ticket (TGS) lifetime from the Windows default of 600 minutes. Shorter ticket lifetimes reduce the window of opportunity for Kerberoasted tickets to be cracked and used: a ticket valid for 10 hours gives an attacker 10 hours to crack it; reducing to 10 minutes means the ticket expires before most cracking jobs complete.",
+                    Tags = ["kerberos", "ticket-lifetime", "tgs", "kerberoasting", "hardening"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
                     ImpactScore = 4,
                     SafetyRating = 4,
-                    ImpactNote  = "Reduces service ticket lifetime; very short lifetimes increase KDC load from more frequent ticket requests.",
-                    ApplyOps    = [RegOp.SetDword(KerbKey, "MaxServiceAge", 600)],
-                    RemoveOps   = [RegOp.DeleteValue(KerbKey, "MaxServiceAge")],
-                    DetectOps   = [RegOp.CheckDword(KerbKey, "MaxServiceAge", 600)],
+                    ImpactNote = "Reduces service ticket lifetime; very short lifetimes increase KDC load from more frequent ticket requests.",
+                    ApplyOps = [RegOp.SetDword(KerbKey, "MaxServiceAge", 600)],
+                    RemoveOps = [RegOp.DeleteValue(KerbKey, "MaxServiceAge")],
+                    DetectOps = [RegOp.CheckDword(KerbKey, "MaxServiceAge", 600)],
                 },
                 new TweakDef
                 {
-                    Id          = "kerbmit-reduce-max-tgt-age",
-                    Label       = "Reduce Kerberos TGT Lifetime (600 min)",
+                    Id = "kerbmit-reduce-max-tgt-age",
+                    Label = "Reduce Kerberos TGT Lifetime (600 min)",
                     Category = "User Account",
-                    Description = "Sets MaxTicketAge=600 in Kerberos Parameters. Limits the maximum lifetime of Kerberos Ticket-Granting Tickets. A shorter TGT lifetime limits how long a compromised TGT can be used for privilege escalation (Pass-the-Ticket attacks). After TGT expiry the user must re-authenticate, providing a natural checkpoint to detect and respond to compromised credentials before they can be used further.",
-                    Tags        = ["kerberos", "tgt", "ticket-lifetime", "pass-the-ticket", "hardening"],
-                    NeedsAdmin  = true,
-                    CorpSafe    = true,
+                    Description =
+                        "Sets MaxTicketAge=600 in Kerberos Parameters. Limits the maximum lifetime of Kerberos Ticket-Granting Tickets. A shorter TGT lifetime limits how long a compromised TGT can be used for privilege escalation (Pass-the-Ticket attacks). After TGT expiry the user must re-authenticate, providing a natural checkpoint to detect and respond to compromised credentials before they can be used further.",
+                    Tags = ["kerberos", "tgt", "ticket-lifetime", "pass-the-ticket", "hardening"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
                     ImpactScore = 4,
                     SafetyRating = 4,
-                    ImpactNote  = "Reduces TGT lifetime; users will be re-prompted for credentials more frequently in long sessions.",
-                    ApplyOps    = [RegOp.SetDword(KerbKey, "MaxTicketAge", 600)],
-                    RemoveOps   = [RegOp.DeleteValue(KerbKey, "MaxTicketAge")],
-                    DetectOps   = [RegOp.CheckDword(KerbKey, "MaxTicketAge", 600)],
+                    ImpactNote = "Reduces TGT lifetime; users will be re-prompted for credentials more frequently in long sessions.",
+                    ApplyOps = [RegOp.SetDword(KerbKey, "MaxTicketAge", 600)],
+                    RemoveOps = [RegOp.DeleteValue(KerbKey, "MaxTicketAge")],
+                    DetectOps = [RegOp.CheckDword(KerbKey, "MaxTicketAge", 600)],
                 },
                 new TweakDef
                 {
-                    Id          = "kerbmit-tighten-clock-skew",
-                    Label       = "Tighten Kerberos Clock Skew Tolerance (2 min)",
+                    Id = "kerbmit-tighten-clock-skew",
+                    Label = "Tighten Kerberos Clock Skew Tolerance (2 min)",
                     Category = "User Account",
-                    Description = "Sets MaxClockSkew=2 in Kerberos Parameters. Reduces the tolerated clock difference between the client and the KDC from the default 5 minutes to 2 minutes. Kerberos uses timestamps as a replay-protection mechanism; a tighter skew window shrinks the replay attack window. It also limits the usability of pre-computed Kerberos tickets that rely on timestamp tolerance.",
-                    Tags        = ["kerberos", "clock-skew", "replay", "timestamp", "hardening"],
-                    NeedsAdmin  = true,
-                    CorpSafe    = true,
+                    Description =
+                        "Sets MaxClockSkew=2 in Kerberos Parameters. Reduces the tolerated clock difference between the client and the KDC from the default 5 minutes to 2 minutes. Kerberos uses timestamps as a replay-protection mechanism; a tighter skew window shrinks the replay attack window. It also limits the usability of pre-computed Kerberos tickets that rely on timestamp tolerance.",
+                    Tags = ["kerberos", "clock-skew", "replay", "timestamp", "hardening"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 4,
-                    ImpactNote  = "Tighter clock skew; ensure NTP is well-configured or clients with drifted clocks will fail Kerberos auth.",
-                    ApplyOps    = [RegOp.SetDword(KerbKey, "MaxClockSkew", 2)],
-                    RemoveOps   = [RegOp.DeleteValue(KerbKey, "MaxClockSkew")],
-                    DetectOps   = [RegOp.CheckDword(KerbKey, "MaxClockSkew", 2)],
+                    ImpactNote = "Tighter clock skew; ensure NTP is well-configured or clients with drifted clocks will fail Kerberos auth.",
+                    ApplyOps = [RegOp.SetDword(KerbKey, "MaxClockSkew", 2)],
+                    RemoveOps = [RegOp.DeleteValue(KerbKey, "MaxClockSkew")],
+                    DetectOps = [RegOp.CheckDword(KerbKey, "MaxClockSkew", 2)],
                 },
                 new TweakDef
                 {
-                    Id          = "kerbmit-enable-pac-validation",
-                    Label       = "Enable KDC PAC Signature Validation",
+                    Id = "kerbmit-enable-pac-validation",
+                    Label = "Enable KDC PAC Signature Validation",
                     Category = "User Account",
-                    Description = "Sets ValidateKdcPacSignature=1 in the LSA key. Instructs Windows services to validate the KDC Privilege Attribute Certificate (PAC) server signature embedded in Kerberos service tickets. Without validation, a compromised or modified PAC (as exploited by MS14-068) can be used to forge group memberships and escalate privileges. This is the KDC PAC defence against the MS14-068 Kerberos privilege escalation vulnerability.",
-                    Tags        = ["kerberos", "pac", "signature", "ms14-068", "hardening"],
-                    NeedsAdmin  = true,
-                    CorpSafe    = true,
+                    Description =
+                        "Sets ValidateKdcPacSignature=1 in the LSA key. Instructs Windows services to validate the KDC Privilege Attribute Certificate (PAC) server signature embedded in Kerberos service tickets. Without validation, a compromised or modified PAC (as exploited by MS14-068) can be used to forge group memberships and escalate privileges. This is the KDC PAC defence against the MS14-068 Kerberos privilege escalation vulnerability.",
+                    Tags = ["kerberos", "pac", "signature", "ms14-068", "hardening"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
                     ImpactScore = 5,
                     SafetyRating = 5,
-                    ImpactNote  = "Validates PAC signatures; negligible performance impact; critical for defence against forged PAC attacks.",
-                    ApplyOps    = [RegOp.SetDword(LsaKey, "ValidateKdcPacSignature", 1)],
-                    RemoveOps   = [RegOp.DeleteValue(LsaKey, "ValidateKdcPacSignature")],
-                    DetectOps   = [RegOp.CheckDword(LsaKey, "ValidateKdcPacSignature", 1)],
+                    ImpactNote = "Validates PAC signatures; negligible performance impact; critical for defence against forged PAC attacks.",
+                    ApplyOps = [RegOp.SetDword(LsaKey, "ValidateKdcPacSignature", 1)],
+                    RemoveOps = [RegOp.DeleteValue(LsaKey, "ValidateKdcPacSignature")],
+                    DetectOps = [RegOp.CheckDword(LsaKey, "ValidateKdcPacSignature", 1)],
                 },
                 new TweakDef
                 {
-                    Id          = "kerbmit-restrict-unconstrained-delegation",
-                    Label       = "Block Kerberos Unconstrained Delegation by Default",
+                    Id = "kerbmit-restrict-unconstrained-delegation",
+                    Label = "Block Kerberos Unconstrained Delegation by Default",
                     Category = "User Account",
-                    Description = "Sets RestrictReceivingNTLMTraffic=2 in Kerberos Parameters. Restricts services from accepting unconstrained Kerberos delegation tokens by default. Unconstrained delegation allows a compromised service to impersonate any user to any other service — it is the primary mechanism exploited in Golden Ticket and delegation-based lateral movement attacks. Setting RestrictReceivingNTLMTraffic also limits NTLM passthrough that accompanies delegation abuse.",
-                    Tags        = ["kerberos", "delegation", "unconstrained", "lateral-movement", "hardening"],
-                    NeedsAdmin  = true,
-                    CorpSafe    = true,
+                    Description =
+                        "Sets RestrictReceivingNTLMTraffic=2 in Kerberos Parameters. Restricts services from accepting unconstrained Kerberos delegation tokens by default. Unconstrained delegation allows a compromised service to impersonate any user to any other service — it is the primary mechanism exploited in Golden Ticket and delegation-based lateral movement attacks. Setting RestrictReceivingNTLMTraffic also limits NTLM passthrough that accompanies delegation abuse.",
+                    Tags = ["kerberos", "delegation", "unconstrained", "lateral-movement", "hardening"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
                     ImpactScore = 4,
                     SafetyRating = 3,
-                    ImpactNote  = "Blocks unconstrained delegation; services relying on TrustedForDelegation must be audited before applying.",
-                    ApplyOps    = [RegOp.SetDword(KerbKey, "RestrictReceivingNTLMTraffic", 2)],
-                    RemoveOps   = [RegOp.DeleteValue(KerbKey, "RestrictReceivingNTLMTraffic")],
-                    DetectOps   = [RegOp.CheckDword(KerbKey, "RestrictReceivingNTLMTraffic", 2)],
+                    ImpactNote = "Blocks unconstrained delegation; services relying on TrustedForDelegation must be audited before applying.",
+                    ApplyOps = [RegOp.SetDword(KerbKey, "RestrictReceivingNTLMTraffic", 2)],
+                    RemoveOps = [RegOp.DeleteValue(KerbKey, "RestrictReceivingNTLMTraffic")],
+                    DetectOps = [RegOp.CheckDword(KerbKey, "RestrictReceivingNTLMTraffic", 2)],
                 },
                 new TweakDef
                 {
-                    Id          = "kerbmit-set-renewal-window",
-                    Label       = "Reduce Kerberos Ticket Renewal Window (4 days)",
+                    Id = "kerbmit-set-renewal-window",
+                    Label = "Reduce Kerberos Ticket Renewal Window (4 days)",
                     Category = "User Account",
-                    Description = "Sets MaxRenewAge=4 in Kerberos Parameters. Limits how long a Kerberos TGT can be renewed without full re-authentication. The Windows default is 7 days — meaning a stolen TGT can be continuously renewed for a week without the user re-entering credentials. Reducing to 4 days tightens the window during which a compromised TGT provides persistent access, improving detection opportunities.",
-                    Tags        = ["kerberos", "renewal", "tgt", "persistence", "hardening"],
-                    NeedsAdmin  = true,
-                    CorpSafe    = true,
+                    Description =
+                        "Sets MaxRenewAge=4 in Kerberos Parameters. Limits how long a Kerberos TGT can be renewed without full re-authentication. The Windows default is 7 days — meaning a stolen TGT can be continuously renewed for a week without the user re-entering credentials. Reducing to 4 days tightens the window during which a compromised TGT provides persistent access, improving detection opportunities.",
+                    Tags = ["kerberos", "renewal", "tgt", "persistence", "hardening"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote  = "Reduces TGT renewal window to 4 days; users on extended leave may need to re-authenticate on return.",
-                    ApplyOps    = [RegOp.SetDword(KerbKey, "MaxRenewAge", 4)],
-                    RemoveOps   = [RegOp.DeleteValue(KerbKey, "MaxRenewAge")],
-                    DetectOps   = [RegOp.CheckDword(KerbKey, "MaxRenewAge", 4)],
+                    ImpactNote = "Reduces TGT renewal window to 4 days; users on extended leave may need to re-authenticate on return.",
+                    ApplyOps = [RegOp.SetDword(KerbKey, "MaxRenewAge", 4)],
+                    RemoveOps = [RegOp.DeleteValue(KerbKey, "MaxRenewAge")],
+                    DetectOps = [RegOp.CheckDword(KerbKey, "MaxRenewAge", 4)],
                 },
                 new TweakDef
                 {
-                    Id          = "kerbmit-enable-armoring",
-                    Label       = "Enable FAST Kerberos Armoring (Tunnel Mode)",
+                    Id = "kerbmit-enable-armoring",
+                    Label = "Enable FAST Kerberos Armoring (Tunnel Mode)",
                     Category = "User Account",
-                    Description = "Sets KdcArmoring=1 in Kerberos Parameters. Enables Kerberos Flexible Authentication via Secure Tunneling (FAST, RFC 6113) which wraps Kerberos authentication messages in an encrypted tunnel. FAST armoring prevents eavesdropping on pre-authentication data (AS-REQ) that would otherwise expose user principal names and enable AS-REP Roasting attacks against accounts without Kerberos pre-authentication required.",
-                    Tags        = ["kerberos", "fast", "armoring", "as-rep-roasting", "hardening"],
-                    NeedsAdmin  = true,
-                    CorpSafe    = true,
+                    Description =
+                        "Sets KdcArmoring=1 in Kerberos Parameters. Enables Kerberos Flexible Authentication via Secure Tunneling (FAST, RFC 6113) which wraps Kerberos authentication messages in an encrypted tunnel. FAST armoring prevents eavesdropping on pre-authentication data (AS-REQ) that would otherwise expose user principal names and enable AS-REP Roasting attacks against accounts without Kerberos pre-authentication required.",
+                    Tags = ["kerberos", "fast", "armoring", "as-rep-roasting", "hardening"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
                     ImpactScore = 4,
                     SafetyRating = 4,
-                    ImpactNote  = "Enables FAST armoring; requires Windows 8+ domain joined clients; older clients fall back to unarmored auth.",
-                    ApplyOps    = [RegOp.SetDword(KerbKey, "KdcArmoring", 1)],
-                    RemoveOps   = [RegOp.DeleteValue(KerbKey, "KdcArmoring")],
-                    DetectOps   = [RegOp.CheckDword(KerbKey, "KdcArmoring", 1)],
+                    ImpactNote = "Enables FAST armoring; requires Windows 8+ domain joined clients; older clients fall back to unarmored auth.",
+                    ApplyOps = [RegOp.SetDword(KerbKey, "KdcArmoring", 1)],
+                    RemoveOps = [RegOp.DeleteValue(KerbKey, "KdcArmoring")],
+                    DetectOps = [RegOp.CheckDword(KerbKey, "KdcArmoring", 1)],
                 },
                 new TweakDef
                 {
-                    Id          = "kerbmit-disable-msskip-delegation",
-                    Label       = "Block NTLM Delegation to All Servers",
+                    Id = "kerbmit-disable-msskip-delegation",
+                    Label = "Block NTLM Delegation to All Servers",
                     Category = "User Account",
-                    Description = "Sets AllowNTLMSessionSecurity=0 in Kerberos Parameters. Prevents Kerberos from falling back to NTLM session security for delegation, closing a common path by which attackers convert Kerberos delegation abuse into NTLM-based lateral movement. Forcing pure Kerberos delegation eliminates the NTLM relay component of many sophisticated delegation attacks.",
-                    Tags        = ["kerberos", "ntlm", "delegation", "session-security", "hardening"],
-                    NeedsAdmin  = true,
-                    CorpSafe    = true,
+                    Description =
+                        "Sets AllowNTLMSessionSecurity=0 in Kerberos Parameters. Prevents Kerberos from falling back to NTLM session security for delegation, closing a common path by which attackers convert Kerberos delegation abuse into NTLM-based lateral movement. Forcing pure Kerberos delegation eliminates the NTLM relay component of many sophisticated delegation attacks.",
+                    Tags = ["kerberos", "ntlm", "delegation", "session-security", "hardening"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
                     ImpactScore = 4,
                     SafetyRating = 4,
-                    ImpactNote  = "Blocks NTLM session delegation fallback; ensure domain controllers and services support Kerberos delegation exclusively.",
-                    ApplyOps    = [RegOp.SetDword(KerbKey, "AllowNTLMSessionSecurity", 0)],
-                    RemoveOps   = [RegOp.DeleteValue(KerbKey, "AllowNTLMSessionSecurity")],
-                    DetectOps   = [RegOp.CheckDword(KerbKey, "AllowNTLMSessionSecurity", 0)],
+                    ImpactNote =
+                        "Blocks NTLM session delegation fallback; ensure domain controllers and services support Kerberos delegation exclusively.",
+                    ApplyOps = [RegOp.SetDword(KerbKey, "AllowNTLMSessionSecurity", 0)],
+                    RemoveOps = [RegOp.DeleteValue(KerbKey, "AllowNTLMSessionSecurity")],
+                    DetectOps = [RegOp.CheckDword(KerbKey, "AllowNTLMSessionSecurity", 0)],
                 },
                 new TweakDef
                 {
-                    Id          = "kerbmit-enforce-preauth-required",
-                    Label       = "Enforce Kerberos Pre-Authentication Requirement",
+                    Id = "kerbmit-enforce-preauth-required",
+                    Label = "Enforce Kerberos Pre-Authentication Requirement",
                     Category = "User Account",
-                    Description = "Sets ClientRequireStrictKDCValidation=1 in Kerberos Parameters. Instructs Kerberos clients to enforce strict KDC validation requirements including pre-authentication enforcement. Accounts with 'Do not require Kerberos preauthentication' (DONT_REQUIRE_PREAUTH) are trivially AS-REP Roastable — an attacker can request their encrypted TGT reply without knowing their password. This policy ensures the client enforces pre-auth at the KDC level.",
-                    Tags        = ["kerberos", "preauthentication", "as-rep-roasting", "kdc", "hardening"],
-                    NeedsAdmin  = true,
-                    CorpSafe    = true,
+                    Description =
+                        "Sets ClientRequireStrictKDCValidation=1 in Kerberos Parameters. Instructs Kerberos clients to enforce strict KDC validation requirements including pre-authentication enforcement. Accounts with 'Do not require Kerberos preauthentication' (DONT_REQUIRE_PREAUTH) are trivially AS-REP Roastable — an attacker can request their encrypted TGT reply without knowing their password. This policy ensures the client enforces pre-auth at the KDC level.",
+                    Tags = ["kerberos", "preauthentication", "as-rep-roasting", "kdc", "hardening"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
                     ImpactScore = 5,
                     SafetyRating = 4,
-                    ImpactNote  = "Requires strict KDC validation; service accounts with DONT_REQUIRE_PREAUTH flag set must have it removed first.",
-                    ApplyOps    = [RegOp.SetDword(KerbKey, "ClientRequireStrictKDCValidation", 1)],
-                    RemoveOps   = [RegOp.DeleteValue(KerbKey, "ClientRequireStrictKDCValidation")],
-                    DetectOps   = [RegOp.CheckDword(KerbKey, "ClientRequireStrictKDCValidation", 1)],
+                    ImpactNote = "Requires strict KDC validation; service accounts with DONT_REQUIRE_PREAUTH flag set must have it removed first.",
+                    ApplyOps = [RegOp.SetDword(KerbKey, "ClientRequireStrictKDCValidation", 1)],
+                    RemoveOps = [RegOp.DeleteValue(KerbKey, "ClientRequireStrictKDCValidation")],
+                    DetectOps = [RegOp.CheckDword(KerbKey, "ClientRequireStrictKDCValidation", 1)],
                 },
             ];
-
     }
 
     // ── KerberosAdvanced ──
@@ -5523,7 +5519,6 @@ internal static class PolicyAuth
                 DetectOps = [RegOp.CheckDword(KrbLsaParams, "PurgeTicketCacheOnLogoff", 1)],
             },
         ];
-
     }
 
     // ── KerberosArmoringPolicy ──
@@ -5534,179 +5529,198 @@ internal static class PolicyAuth
         private const string KrbSvcKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Kerberos\Parameters";
 
         public static IReadOnlyList<TweakDef> Data =>
-        [
-            new TweakDef
-            {
-                Id = "krbadv-enable-kdc-armoring",
-                Label = "Enable Kerberos Armoring (FAST) on KDC",
-                Category = "User Account",
-                Description = "Enables Flexible Authentication Secure Tunneling (FAST / Kerberos armoring) on the KDC. FAST wraps KDC requests in an armored tunnel, protecting pre-authentication data from offline attacks and downgrade attempts.",
-                Tags = ["kerberos", "fast", "armoring", "kdc", "pre-authentication"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 5,
-                SafetyRating = 4,
-                ImpactNote = "FAST protects Kerberos pre-auth from AS-REP roasting and offline cracking. Requires compatible DCs and clients (Windows 8.1+ / Server 2012 R2+).",
-                RegistryKeys = [KdcKey],
-                ApplyOps  = [RegOp.SetDword(KdcKey, "EnableKDCArmoring", 1)],
-                RemoveOps = [RegOp.DeleteValue(KdcKey, "EnableKDCArmoring")],
-                DetectOps = [RegOp.CheckDword(KdcKey, "EnableKDCArmoring", 1)],
-            },
-            new TweakDef
-            {
-                Id = "krbadv-require-client-armoring",
-                Label = "Require Kerberos Armoring for Client Authentication",
-                Category = "User Account",
-                Description = "Forces Kerberos clients to use FAST armoring when requesting tickets from the KDC. Clients that do not support FAST will be denied authentication, ensuring all ticket exchanges occur through an encrypted tunnel.",
-                Tags = ["kerberos", "fast", "armoring", "client", "enforcement"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 5,
-                SafetyRating = 3,
-                ImpactNote = "Requiring FAST on clients breaks authentication for Windows 7 and older clients. Audit FAST support across the domain before enforcing.",
-                RegistryKeys = [KdcKey],
-                ApplyOps  = [RegOp.SetDword(KdcKey, "RequireArmoredKrb5OnDC", 1)],
-                RemoveOps = [RegOp.DeleteValue(KdcKey, "RequireArmoredKrb5OnDC")],
-                DetectOps = [RegOp.CheckDword(KdcKey, "RequireArmoredKrb5OnDC", 1)],
-            },
-            new TweakDef
-            {
-                Id = "krbadv-disable-des-encryption",
-                Label = "Disable DES Encryption Types for Kerberos",
-                Category = "User Account",
-                Description = "Disables DES-CBC-CRC and DES-CBC-MD5 encryption types for Kerberos. DES is a 56-bit algorithm broken by modern cracking rigs in hours. Only AES128 and AES256 should remain enabled.",
-                Tags = ["kerberos", "des", "encryption", "cipher", "hardening"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 4,
-                ImpactNote = "DES key types must be re-negotiated for affected service accounts (ktpass /crypto AES256). Breaks Kerberos for systems that have DES only in their msDS-SupportedEncryptionTypes.",
-                RegistryKeys = [KrbKey],
-                ApplyOps  = [RegOp.SetDword(KrbKey, "DefaultEncryptionTypes", 2147483616)],
-                RemoveOps = [RegOp.DeleteValue(KrbKey, "DefaultEncryptionTypes")],
-                DetectOps = [RegOp.CheckDword(KrbKey, "DefaultEncryptionTypes", 2147483616)],
-            },
-            new TweakDef
-            {
-                Id = "krbadv-require-strict-kdc-validation",
-                Label = "Require Strict KDC Validation (Authenticate the KDC)",
-                Category = "User Account",
-                Description = "Enables strict KDC validation so the client verifies the KDC's identity before trusting the returned tickets. Prevents rogue or spoofed KDCs from issuing valid-looking tickets to the client.",
-                Tags = ["kerberos", "kdc-validation", "rogue-kdc", "trust", "security"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 4,
-                ImpactNote = "Resolves attacks where a rogue KDC tricks clients into accepting attacker-forged tickets. Requires DCs to have valid certificates in the NTAuth store.",
-                RegistryKeys = [KrbKey],
-                ApplyOps  = [RegOp.SetDword(KrbKey, "ValidateKDCCertUsage", 1)],
-                RemoveOps = [RegOp.DeleteValue(KrbKey, "ValidateKDCCertUsage")],
-                DetectOps = [RegOp.CheckDword(KrbKey, "ValidateKDCCertUsage", 1)],
-            },
-            new TweakDef
-            {
-                Id = "krbadv-enable-pkinit-freshness",
-                Label = "Enable PKInit Freshness Extension for Kerberos",
-                Category = "User Account",
-                Description = "Enables the PKInit Freshness Extension (RFC 8070), which binds Kerberos authentication tokens to a freshness endpoint in the TGT. Prevents certificate-based credential relay and Golden Certificate attacks.",
-                Tags = ["kerberos", "pkinit", "freshness", "golden-ticket", "certificate"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 5,
-                SafetyRating = 4,
-                ImpactNote = "Mitigates Golden Certificate attacks (CVE-2021-42278 / CVE-2022-34691 class). Requires Windows Server 2016+ DCs and Windows 10+ clients for full support.",
-                RegistryKeys = [KdcKey],
-                ApplyOps  = [RegOp.SetDword(KdcKey, "PKInitHashAlgorithmConfiguration", 1)],
-                RemoveOps = [RegOp.DeleteValue(KdcKey, "PKInitHashAlgorithmConfiguration")],
-                DetectOps = [RegOp.CheckDword(KdcKey, "PKInitHashAlgorithmConfiguration", 1)],
-            },
-            new TweakDef
-            {
-                Id = "krbadv-set-max-service-ticket-lifetime",
-                Label = "Reduce Maximum Kerberos Service Ticket Lifetime to 600 Minutes",
-                Category = "User Account",
-                Description = "Sets the maximum Kerberos service ticket (TGS) lifetime to 600 minutes (10 hours). Shorter lifetimes reduce the window in which a captured ticket can be replayed; the default is 600 minutes but some environments set it higher.",
-                Tags = ["kerberos", "ticket-lifetime", "tgs", "replay-prevention", "session"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 4,
-                ImpactNote = "Reducing ticket lifetime increases authentication load as clients renew tickets more frequently. Verify DC capacity before reducing below 60 minutes.",
-                RegistryKeys = [KrbSvcKey],
-                ApplyOps  = [RegOp.SetDword(KrbSvcKey, "MaxServiceTicketAge", 600)],
-                RemoveOps = [RegOp.DeleteValue(KrbSvcKey, "MaxServiceTicketAge")],
-                DetectOps = [RegOp.CheckDword(KrbSvcKey, "MaxServiceTicketAge", 600)],
-            },
-            new TweakDef
-            {
-                Id = "krbadv-set-max-tgt-lifetime",
-                Label = "Set Maximum Kerberos TGT Lifetime to 10 Hours",
-                Category = "User Account",
-                Description = "Limits the Ticket-Granting Ticket (TGT) lifetime to 10 hours (600 minutes). Reduces the window for Golden Ticket attacks — if a TGT is captured, the attacker has a bounded exploitation window.",
-                Tags = ["kerberos", "tgt", "golden-ticket", "ticket-lifetime", "security"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 4,
-                ImpactNote = "Shorter TGT lifetime is a key mitigation for Golden Ticket attacks. Users must re-authenticate after TGT expiry; aligns with standard domain policy (10 hours).",
-                RegistryKeys = [KrbSvcKey],
-                ApplyOps  = [RegOp.SetDword(KrbSvcKey, "MaxTicketAge", 10)],
-                RemoveOps = [RegOp.DeleteValue(KrbSvcKey, "MaxTicketAge")],
-                DetectOps = [RegOp.CheckDword(KrbSvcKey, "MaxTicketAge", 10)],
-            },
-            new TweakDef
-            {
-                Id = "krbadv-enforce-tgs-renewal-deadline",
-                Label = "Enforce Strict Kerberos Ticket Renewal Deadline (7 Days)",
-                Category = "User Account",
-                Description = "Sets the maximum Kerberos ticket renewal lifetime to 7 days. After 7 days a ticket cannot be renewed and the user must obtain a fresh TGT; this ensures stale or stolen tickets expire regardless of continuous renewal.",
-                Tags = ["kerberos", "ticket-renewal", "expiry", "stolen-ticket", "security"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Ensures long-running sessions produce fresh TGTs at least weekly. Non-disruptive for interactive users; long-running services must handle 7-day re-auth.",
-                RegistryKeys = [KrbSvcKey],
-                ApplyOps  = [RegOp.SetDword(KrbSvcKey, "MaxRenewAge", 7)],
-                RemoveOps = [RegOp.DeleteValue(KrbSvcKey, "MaxRenewAge")],
-                DetectOps = [RegOp.CheckDword(KrbSvcKey, "MaxRenewAge", 7)],
-            },
-            new TweakDef
-            {
-                Id = "krbadv-enforce-clock-sync",
-                Label = "Enforce Strict Kerberos Clock Synchronisation Tolerance (5 Minutes)",
-                Category = "User Account",
-                Description = "Sets the Kerberos clock skew tolerance to 5 minutes (the standard RFC 4120 maximum). Clock skew is required for replay-protection; allowing large skew enables ticket replay. Enforce NTP synchronisation alongside this policy.",
-                Tags = ["kerberos", "clock-sync", "ntp", "replay-protection", "time"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 4,
-                ImpactNote = "Requires reliable NTP across all domain members. Systems without time sync will fail Kerberos authentication if clock skew exceeds 5 minutes.",
-                RegistryKeys = [KrbSvcKey],
-                ApplyOps  = [RegOp.SetDword(KrbSvcKey, "MaxClockSkew", 5)],
-                RemoveOps = [RegOp.DeleteValue(KrbSvcKey, "MaxClockSkew")],
-                DetectOps = [RegOp.CheckDword(KrbSvcKey, "MaxClockSkew", 5)],
-            },
-            new TweakDef
-            {
-                Id = "krbadv-disable-rc4-hmac-encryption",
-                Label = "Disable RC4-HMAC Encryption for Kerberos (Require AES)",
-                Category = "User Account",
-                Description = "Removes RC4-HMAC (ARCFOUR-HMAC-MD5) from the supported Kerberos encryption type list. RC4-HMAC is vulnerable to offline cracking (AS-REP roasting, Kerberoasting); AES128 and AES256 should be the only accepted types.",
-                Tags = ["kerberos", "rc4", "arcfour", "encryption", "kerberoasting"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 5,
-                SafetyRating = 3,
-                ImpactNote = "Completely eliminates Kerberoasting vector. Service accounts with RC4 keys (old msDS-SupportedEncryptionTypes) will fail; re-key all SPNs with AES before enforcing.",
-                RegistryKeys = [KrbKey],
-                ApplyOps  = [RegOp.SetDword(KrbKey, "SupportedEncryptionTypes", 2147483640)],
-                RemoveOps = [RegOp.DeleteValue(KrbKey, "SupportedEncryptionTypes")],
-                DetectOps = [RegOp.CheckDword(KrbKey, "SupportedEncryptionTypes", 2147483640)],
-            },
-        ];
-
+            [
+                new TweakDef
+                {
+                    Id = "krbadv-enable-kdc-armoring",
+                    Label = "Enable Kerberos Armoring (FAST) on KDC",
+                    Category = "User Account",
+                    Description =
+                        "Enables Flexible Authentication Secure Tunneling (FAST / Kerberos armoring) on the KDC. FAST wraps KDC requests in an armored tunnel, protecting pre-authentication data from offline attacks and downgrade attempts.",
+                    Tags = ["kerberos", "fast", "armoring", "kdc", "pre-authentication"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 5,
+                    SafetyRating = 4,
+                    ImpactNote =
+                        "FAST protects Kerberos pre-auth from AS-REP roasting and offline cracking. Requires compatible DCs and clients (Windows 8.1+ / Server 2012 R2+).",
+                    RegistryKeys = [KdcKey],
+                    ApplyOps = [RegOp.SetDword(KdcKey, "EnableKDCArmoring", 1)],
+                    RemoveOps = [RegOp.DeleteValue(KdcKey, "EnableKDCArmoring")],
+                    DetectOps = [RegOp.CheckDword(KdcKey, "EnableKDCArmoring", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "krbadv-require-client-armoring",
+                    Label = "Require Kerberos Armoring for Client Authentication",
+                    Category = "User Account",
+                    Description =
+                        "Forces Kerberos clients to use FAST armoring when requesting tickets from the KDC. Clients that do not support FAST will be denied authentication, ensuring all ticket exchanges occur through an encrypted tunnel.",
+                    Tags = ["kerberos", "fast", "armoring", "client", "enforcement"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 5,
+                    SafetyRating = 3,
+                    ImpactNote =
+                        "Requiring FAST on clients breaks authentication for Windows 7 and older clients. Audit FAST support across the domain before enforcing.",
+                    RegistryKeys = [KdcKey],
+                    ApplyOps = [RegOp.SetDword(KdcKey, "RequireArmoredKrb5OnDC", 1)],
+                    RemoveOps = [RegOp.DeleteValue(KdcKey, "RequireArmoredKrb5OnDC")],
+                    DetectOps = [RegOp.CheckDword(KdcKey, "RequireArmoredKrb5OnDC", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "krbadv-disable-des-encryption",
+                    Label = "Disable DES Encryption Types for Kerberos",
+                    Category = "User Account",
+                    Description =
+                        "Disables DES-CBC-CRC and DES-CBC-MD5 encryption types for Kerberos. DES is a 56-bit algorithm broken by modern cracking rigs in hours. Only AES128 and AES256 should remain enabled.",
+                    Tags = ["kerberos", "des", "encryption", "cipher", "hardening"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 4,
+                    ImpactNote =
+                        "DES key types must be re-negotiated for affected service accounts (ktpass /crypto AES256). Breaks Kerberos for systems that have DES only in their msDS-SupportedEncryptionTypes.",
+                    RegistryKeys = [KrbKey],
+                    ApplyOps = [RegOp.SetDword(KrbKey, "DefaultEncryptionTypes", 2147483616)],
+                    RemoveOps = [RegOp.DeleteValue(KrbKey, "DefaultEncryptionTypes")],
+                    DetectOps = [RegOp.CheckDword(KrbKey, "DefaultEncryptionTypes", 2147483616)],
+                },
+                new TweakDef
+                {
+                    Id = "krbadv-require-strict-kdc-validation",
+                    Label = "Require Strict KDC Validation (Authenticate the KDC)",
+                    Category = "User Account",
+                    Description =
+                        "Enables strict KDC validation so the client verifies the KDC's identity before trusting the returned tickets. Prevents rogue or spoofed KDCs from issuing valid-looking tickets to the client.",
+                    Tags = ["kerberos", "kdc-validation", "rogue-kdc", "trust", "security"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 4,
+                    ImpactNote =
+                        "Resolves attacks where a rogue KDC tricks clients into accepting attacker-forged tickets. Requires DCs to have valid certificates in the NTAuth store.",
+                    RegistryKeys = [KrbKey],
+                    ApplyOps = [RegOp.SetDword(KrbKey, "ValidateKDCCertUsage", 1)],
+                    RemoveOps = [RegOp.DeleteValue(KrbKey, "ValidateKDCCertUsage")],
+                    DetectOps = [RegOp.CheckDword(KrbKey, "ValidateKDCCertUsage", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "krbadv-enable-pkinit-freshness",
+                    Label = "Enable PKInit Freshness Extension for Kerberos",
+                    Category = "User Account",
+                    Description =
+                        "Enables the PKInit Freshness Extension (RFC 8070), which binds Kerberos authentication tokens to a freshness endpoint in the TGT. Prevents certificate-based credential relay and Golden Certificate attacks.",
+                    Tags = ["kerberos", "pkinit", "freshness", "golden-ticket", "certificate"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 5,
+                    SafetyRating = 4,
+                    ImpactNote =
+                        "Mitigates Golden Certificate attacks (CVE-2021-42278 / CVE-2022-34691 class). Requires Windows Server 2016+ DCs and Windows 10+ clients for full support.",
+                    RegistryKeys = [KdcKey],
+                    ApplyOps = [RegOp.SetDword(KdcKey, "PKInitHashAlgorithmConfiguration", 1)],
+                    RemoveOps = [RegOp.DeleteValue(KdcKey, "PKInitHashAlgorithmConfiguration")],
+                    DetectOps = [RegOp.CheckDword(KdcKey, "PKInitHashAlgorithmConfiguration", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "krbadv-set-max-service-ticket-lifetime",
+                    Label = "Reduce Maximum Kerberos Service Ticket Lifetime to 600 Minutes",
+                    Category = "User Account",
+                    Description =
+                        "Sets the maximum Kerberos service ticket (TGS) lifetime to 600 minutes (10 hours). Shorter lifetimes reduce the window in which a captured ticket can be replayed; the default is 600 minutes but some environments set it higher.",
+                    Tags = ["kerberos", "ticket-lifetime", "tgs", "replay-prevention", "session"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 4,
+                    ImpactNote =
+                        "Reducing ticket lifetime increases authentication load as clients renew tickets more frequently. Verify DC capacity before reducing below 60 minutes.",
+                    RegistryKeys = [KrbSvcKey],
+                    ApplyOps = [RegOp.SetDword(KrbSvcKey, "MaxServiceTicketAge", 600)],
+                    RemoveOps = [RegOp.DeleteValue(KrbSvcKey, "MaxServiceTicketAge")],
+                    DetectOps = [RegOp.CheckDword(KrbSvcKey, "MaxServiceTicketAge", 600)],
+                },
+                new TweakDef
+                {
+                    Id = "krbadv-set-max-tgt-lifetime",
+                    Label = "Set Maximum Kerberos TGT Lifetime to 10 Hours",
+                    Category = "User Account",
+                    Description =
+                        "Limits the Ticket-Granting Ticket (TGT) lifetime to 10 hours (600 minutes). Reduces the window for Golden Ticket attacks — if a TGT is captured, the attacker has a bounded exploitation window.",
+                    Tags = ["kerberos", "tgt", "golden-ticket", "ticket-lifetime", "security"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 4,
+                    ImpactNote =
+                        "Shorter TGT lifetime is a key mitigation for Golden Ticket attacks. Users must re-authenticate after TGT expiry; aligns with standard domain policy (10 hours).",
+                    RegistryKeys = [KrbSvcKey],
+                    ApplyOps = [RegOp.SetDword(KrbSvcKey, "MaxTicketAge", 10)],
+                    RemoveOps = [RegOp.DeleteValue(KrbSvcKey, "MaxTicketAge")],
+                    DetectOps = [RegOp.CheckDword(KrbSvcKey, "MaxTicketAge", 10)],
+                },
+                new TweakDef
+                {
+                    Id = "krbadv-enforce-tgs-renewal-deadline",
+                    Label = "Enforce Strict Kerberos Ticket Renewal Deadline (7 Days)",
+                    Category = "User Account",
+                    Description =
+                        "Sets the maximum Kerberos ticket renewal lifetime to 7 days. After 7 days a ticket cannot be renewed and the user must obtain a fresh TGT; this ensures stale or stolen tickets expire regardless of continuous renewal.",
+                    Tags = ["kerberos", "ticket-renewal", "expiry", "stolen-ticket", "security"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote =
+                        "Ensures long-running sessions produce fresh TGTs at least weekly. Non-disruptive for interactive users; long-running services must handle 7-day re-auth.",
+                    RegistryKeys = [KrbSvcKey],
+                    ApplyOps = [RegOp.SetDword(KrbSvcKey, "MaxRenewAge", 7)],
+                    RemoveOps = [RegOp.DeleteValue(KrbSvcKey, "MaxRenewAge")],
+                    DetectOps = [RegOp.CheckDword(KrbSvcKey, "MaxRenewAge", 7)],
+                },
+                new TweakDef
+                {
+                    Id = "krbadv-enforce-clock-sync",
+                    Label = "Enforce Strict Kerberos Clock Synchronisation Tolerance (5 Minutes)",
+                    Category = "User Account",
+                    Description =
+                        "Sets the Kerberos clock skew tolerance to 5 minutes (the standard RFC 4120 maximum). Clock skew is required for replay-protection; allowing large skew enables ticket replay. Enforce NTP synchronisation alongside this policy.",
+                    Tags = ["kerberos", "clock-sync", "ntp", "replay-protection", "time"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 4,
+                    ImpactNote =
+                        "Requires reliable NTP across all domain members. Systems without time sync will fail Kerberos authentication if clock skew exceeds 5 minutes.",
+                    RegistryKeys = [KrbSvcKey],
+                    ApplyOps = [RegOp.SetDword(KrbSvcKey, "MaxClockSkew", 5)],
+                    RemoveOps = [RegOp.DeleteValue(KrbSvcKey, "MaxClockSkew")],
+                    DetectOps = [RegOp.CheckDword(KrbSvcKey, "MaxClockSkew", 5)],
+                },
+                new TweakDef
+                {
+                    Id = "krbadv-disable-rc4-hmac-encryption",
+                    Label = "Disable RC4-HMAC Encryption for Kerberos (Require AES)",
+                    Category = "User Account",
+                    Description =
+                        "Removes RC4-HMAC (ARCFOUR-HMAC-MD5) from the supported Kerberos encryption type list. RC4-HMAC is vulnerable to offline cracking (AS-REP roasting, Kerberoasting); AES128 and AES256 should be the only accepted types.",
+                    Tags = ["kerberos", "rc4", "arcfour", "encryption", "kerberoasting"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 5,
+                    SafetyRating = 3,
+                    ImpactNote =
+                        "Completely eliminates Kerberoasting vector. Service accounts with RC4 keys (old msDS-SupportedEncryptionTypes) will fail; re-key all SPNs with AES before enforcing.",
+                    RegistryKeys = [KrbKey],
+                    ApplyOps = [RegOp.SetDword(KrbKey, "SupportedEncryptionTypes", 2147483640)],
+                    RemoveOps = [RegOp.DeleteValue(KrbKey, "SupportedEncryptionTypes")],
+                    DetectOps = [RegOp.CheckDword(KrbKey, "SupportedEncryptionTypes", 2147483640)],
+                },
+            ];
     }
 
     // ── KerberosDelegationPolicy ──
@@ -5899,7 +5913,6 @@ internal static class PolicyAuth
                     DetectOps = [RegOp.CheckDword(KerbKey, "DoNotRequirePreauth", 0)],
                 },
             ];
-
     }
 
     // ── KerberosEncryptionPolicy ──
@@ -6072,7 +6085,6 @@ internal static class PolicyAuth
                 DetectOps = [RegOp.CheckDword(KerbLsaKey, "PreAuthRequiredLevel", 1)],
             },
         ];
-
     }
 
     // ── KerberosSecurityPolicy ──
@@ -6083,169 +6095,179 @@ internal static class PolicyAuth
         private const string SecKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Security\Kerberos";
 
         public static IReadOnlyList<TweakDef> Data =>
-        [
-            new TweakDef
-            {
-                Id           = "krbadv-enable-claims-support",
-                Label        = "Enable Kerberos Claims and Compound Authentication Support",
-                Category = "User Account",
-                Description  = "Enables Kerberos claims-based authentication and compound authentication (user + device claims), required for Dynamic Access Control (DAC) file share access and conditional access policies based on device health claims.",
-                Tags         = ["kerberos", "claims", "compound-auth", "dac", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 4,
-                SafetyRating = 5,
-                ImpactNote   = "Kerberos claims and compound auth enabled; required for Dynamic Access Control and device-based conditional access.",
-                ApplyOps     = [RegOp.SetDword(Key, "EnableCbacAndArmor", 1)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "EnableCbacAndArmor")],
-                DetectOps    = [RegOp.CheckDword(Key, "EnableCbacAndArmor", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "krbadv-require-fast-armoring",
-                Label        = "Require Kerberos Armoring (FAST) for All Authentication",
-                Category = "User Account",
-                Description  = "Requires Kerberos Flexible Authentication Secure Tunneling (FAST/Kerberos Armoring) for all Kerberos exchanges, providing protection against offline pre-authentication blob cracking attacks (AS-REP roasting).",
-                Tags         = ["kerberos", "fast", "armoring", "asrep-roasting", "security", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 5,
-                SafetyRating = 5,
-                ImpactNote   = "Kerberos FAST armoring required; AS-REP roasting attacks mitigated. Requires KDC support for FAST.",
-                ApplyOps     = [RegOp.SetDword(Key, "EnableKerberosArmoring", 2)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "EnableKerberosArmoring")],
-                DetectOps    = [RegOp.CheckDword(Key, "EnableKerberosArmoring", 2)],
-            },
-            new TweakDef
-            {
-                Id           = "krbadv-block-rc4-encryption",
-                Label        = "Block RC4-HMAC Encryption for Kerberos Tickets",
-                Category = "User Account",
-                Description  = "Disables the RC4-HMAC cipher suite for Kerberos ticket encryption, forcing all tickets to use AES-128 or AES-256 encryption, which is significantly stronger than the legacy RC4 encryption still used by some service accounts.",
-                Tags         = ["kerberos", "rc4", "aes", "encryption", "security", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 5,
-                SafetyRating = 5,
-                ImpactNote   = "Kerberos RC4-HMAC encryption disabled; only AES-128/AES-256 tickets accepted. Service accounts need AES keys.",
-                ApplyOps     = [RegOp.SetDword(Key, "DisableRC4Encryption", 1)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "DisableRC4Encryption")],
-                DetectOps    = [RegOp.CheckDword(Key, "DisableRC4Encryption", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "krbadv-enable-des-encryption-off",
-                Label        = "Disable DES Cipher for Kerberos (Legacy Removal)",
-                Category = "User Account",
-                Description  = "Disables DES (Data Encryption Standard) cipher support in Kerberos, eliminating the use of the cryptographically broken DES algorithm that was still negotiated with very old service accounts in some mixed environments.",
-                Tags         = ["kerberos", "des", "legacy-cipher", "encryption", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 5,
-                SafetyRating = 5,
-                ImpactNote   = "Kerberos DES encryption completely disabled; broken DES cipher no longer negotiated in any Kerberos exchange.",
-                ApplyOps     = [RegOp.SetDword(Key, "DisallowDES", 1)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "DisallowDES")],
-                DetectOps    = [RegOp.CheckDword(Key, "DisallowDES", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "krbadv-set-ticket-lifetime-8h",
-                Label        = "Set Kerberos Ticket Maximum Lifetime to 8 Hours",
-                Category = "User Account",
-                Description  = "Configures the Kerberos TGT (Ticket Granting Ticket) maximum lifetime to 8 hours, ensuring tickets expire during a typical business day so stolen tickets cannot be replayed indefinitely.",
-                Tags         = ["kerberos", "ticket-lifetime", "tgt", "security", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 4,
-                SafetyRating = 5,
-                ImpactNote   = "Kerberos TGT lifetime set to 8 hours; stolen tickets expire within a business day.",
-                ApplyOps     = [RegOp.SetDword(SecKey, "MaxTicketAge", 8)],
-                RemoveOps    = [RegOp.DeleteValue(SecKey, "MaxTicketAge")],
-                DetectOps    = [RegOp.CheckDword(SecKey, "MaxTicketAge", 8)],
-            },
-            new TweakDef
-            {
-                Id           = "krbadv-set-service-ticket-lifetime-10m",
-                Label        = "Set Kerberos Service Ticket Maximum Lifetime to 600 Minutes",
-                Category = "User Account",
-                Description  = "Sets the maximum service ticket (TGS) lifetime to 600 minutes (10 hours), which is long enough for a business day session while limiting the window during which a stolen service ticket could be replayed against a service.",
-                Tags         = ["kerberos", "service-ticket", "tgs", "lifetime", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 3,
-                SafetyRating = 5,
-                ImpactNote   = "Kerberos service ticket lifetime limited to 10 hours; limits replay window for stolen service tickets.",
-                ApplyOps     = [RegOp.SetDword(SecKey, "MaxServiceAge", 600)],
-                RemoveOps    = [RegOp.DeleteValue(SecKey, "MaxServiceAge")],
-                DetectOps    = [RegOp.CheckDword(SecKey, "MaxServiceAge", 600)],
-            },
-            new TweakDef
-            {
-                Id           = "krbadv-set-renew-lifetime-7d",
-                Label        = "Set Kerberos Ticket Maximum Renewal Lifetime to 7 Days",
-                Category = "User Account",
-                Description  = "Sets the maximum TGT renewal lifetime to 7 days, after which the user must fully re-authenticate with their password or smart card rather than just renewing an existing ticket.",
-                Tags         = ["kerberos", "renewal-lifetime", "tgt", "re-authentication", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 3,
-                SafetyRating = 5,
-                ImpactNote   = "Kerberos TGT renewable lifetime set to 7 days; full re-auth required after 1 week.",
-                ApplyOps     = [RegOp.SetDword(SecKey, "MaxRenewAge", 7)],
-                RemoveOps    = [RegOp.DeleteValue(SecKey, "MaxRenewAge")],
-                DetectOps    = [RegOp.CheckDword(SecKey, "MaxRenewAge", 7)],
-            },
-            new TweakDef
-            {
-                Id           = "krbadv-log-kerberos-failures",
-                Label        = "Log Kerberos Pre-Authentication Failure Events",
-                Category = "User Account",
-                Description  = "Enables Security audit logging for Kerberos AS exchange pre-authentication failures (EventID 4771), providing visibility into password-spraying and Kerberoasting attempts against domain accounts.",
-                Tags         = ["kerberos", "pre-auth-failure", "audit", "event-log", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 4,
-                SafetyRating = 5,
-                ImpactNote   = "Kerberos pre-auth failures logged (EventID 4771); password spray and Kerberoasting attempts visible.",
-                ApplyOps     = [RegOp.SetDword(SecKey, "AuditPreAuthFailures", 1)],
-                RemoveOps    = [RegOp.DeleteValue(SecKey, "AuditPreAuthFailures")],
-                DetectOps    = [RegOp.CheckDword(SecKey, "AuditPreAuthFailures", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "krbadv-block-unconstrained-delegation",
-                Label        = "Block Accounts from Using Unconstrained Kerberos Delegation",
-                Category = "User Account",
-                Description  = "Enables the 'Account is sensitive and cannot be delegated' flag enforcement at policy level, blocking non-protected accounts from being marked for unconstrained delegation which allows impersonation of any user who authenticates to the delegate.",
-                Tags         = ["kerberos", "delegation", "unconstrained", "impersonation", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 5,
-                SafetyRating = 5,
-                ImpactNote   = "Unconstrained Kerberos delegation blocked for new accounts; existing delegation settings unaffected.",
-                ApplyOps     = [RegOp.SetDword(Key, "BlockUnconstrainedDelegation", 1)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "BlockUnconstrainedDelegation")],
-                DetectOps    = [RegOp.CheckDword(Key, "BlockUnconstrainedDelegation", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "krbadv-disable-kerberos-telemetry",
-                Label        = "Disable Kerberos Authentication Telemetry to Microsoft",
-                Category = "User Account",
-                Description  = "Prevents the Windows Kerberos provider from sending cipher negotiation stats, authentication failure rates, and encryption algorithm telemetry to Microsoft.",
-                Tags         = ["kerberos", "telemetry", "privacy", "microsoft", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 2,
-                SafetyRating = 5,
-                ImpactNote   = "Kerberos telemetry to Microsoft disabled; cipher negotiation and failure rate data not sent to cloud.",
-                ApplyOps     = [RegOp.SetDword(Key, "DisableKerberosTelemetry", 1)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "DisableKerberosTelemetry")],
-                DetectOps    = [RegOp.CheckDword(Key, "DisableKerberosTelemetry", 1)],
-            },
-        ];
-
+            [
+                new TweakDef
+                {
+                    Id = "krbadv-enable-claims-support",
+                    Label = "Enable Kerberos Claims and Compound Authentication Support",
+                    Category = "User Account",
+                    Description =
+                        "Enables Kerberos claims-based authentication and compound authentication (user + device claims), required for Dynamic Access Control (DAC) file share access and conditional access policies based on device health claims.",
+                    Tags = ["kerberos", "claims", "compound-auth", "dac", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote =
+                        "Kerberos claims and compound auth enabled; required for Dynamic Access Control and device-based conditional access.",
+                    ApplyOps = [RegOp.SetDword(Key, "EnableCbacAndArmor", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "EnableCbacAndArmor")],
+                    DetectOps = [RegOp.CheckDword(Key, "EnableCbacAndArmor", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "krbadv-require-fast-armoring",
+                    Label = "Require Kerberos Armoring (FAST) for All Authentication",
+                    Category = "User Account",
+                    Description =
+                        "Requires Kerberos Flexible Authentication Secure Tunneling (FAST/Kerberos Armoring) for all Kerberos exchanges, providing protection against offline pre-authentication blob cracking attacks (AS-REP roasting).",
+                    Tags = ["kerberos", "fast", "armoring", "asrep-roasting", "security", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 5,
+                    SafetyRating = 5,
+                    ImpactNote = "Kerberos FAST armoring required; AS-REP roasting attacks mitigated. Requires KDC support for FAST.",
+                    ApplyOps = [RegOp.SetDword(Key, "EnableKerberosArmoring", 2)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "EnableKerberosArmoring")],
+                    DetectOps = [RegOp.CheckDword(Key, "EnableKerberosArmoring", 2)],
+                },
+                new TweakDef
+                {
+                    Id = "krbadv-block-rc4-encryption",
+                    Label = "Block RC4-HMAC Encryption for Kerberos Tickets",
+                    Category = "User Account",
+                    Description =
+                        "Disables the RC4-HMAC cipher suite for Kerberos ticket encryption, forcing all tickets to use AES-128 or AES-256 encryption, which is significantly stronger than the legacy RC4 encryption still used by some service accounts.",
+                    Tags = ["kerberos", "rc4", "aes", "encryption", "security", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 5,
+                    SafetyRating = 5,
+                    ImpactNote = "Kerberos RC4-HMAC encryption disabled; only AES-128/AES-256 tickets accepted. Service accounts need AES keys.",
+                    ApplyOps = [RegOp.SetDword(Key, "DisableRC4Encryption", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "DisableRC4Encryption")],
+                    DetectOps = [RegOp.CheckDword(Key, "DisableRC4Encryption", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "krbadv-enable-des-encryption-off",
+                    Label = "Disable DES Cipher for Kerberos (Legacy Removal)",
+                    Category = "User Account",
+                    Description =
+                        "Disables DES (Data Encryption Standard) cipher support in Kerberos, eliminating the use of the cryptographically broken DES algorithm that was still negotiated with very old service accounts in some mixed environments.",
+                    Tags = ["kerberos", "des", "legacy-cipher", "encryption", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 5,
+                    SafetyRating = 5,
+                    ImpactNote = "Kerberos DES encryption completely disabled; broken DES cipher no longer negotiated in any Kerberos exchange.",
+                    ApplyOps = [RegOp.SetDword(Key, "DisallowDES", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "DisallowDES")],
+                    DetectOps = [RegOp.CheckDword(Key, "DisallowDES", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "krbadv-set-ticket-lifetime-8h",
+                    Label = "Set Kerberos Ticket Maximum Lifetime to 8 Hours",
+                    Category = "User Account",
+                    Description =
+                        "Configures the Kerberos TGT (Ticket Granting Ticket) maximum lifetime to 8 hours, ensuring tickets expire during a typical business day so stolen tickets cannot be replayed indefinitely.",
+                    Tags = ["kerberos", "ticket-lifetime", "tgt", "security", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "Kerberos TGT lifetime set to 8 hours; stolen tickets expire within a business day.",
+                    ApplyOps = [RegOp.SetDword(SecKey, "MaxTicketAge", 8)],
+                    RemoveOps = [RegOp.DeleteValue(SecKey, "MaxTicketAge")],
+                    DetectOps = [RegOp.CheckDword(SecKey, "MaxTicketAge", 8)],
+                },
+                new TweakDef
+                {
+                    Id = "krbadv-set-service-ticket-lifetime-10m",
+                    Label = "Set Kerberos Service Ticket Maximum Lifetime to 600 Minutes",
+                    Category = "User Account",
+                    Description =
+                        "Sets the maximum service ticket (TGS) lifetime to 600 minutes (10 hours), which is long enough for a business day session while limiting the window during which a stolen service ticket could be replayed against a service.",
+                    Tags = ["kerberos", "service-ticket", "tgs", "lifetime", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "Kerberos service ticket lifetime limited to 10 hours; limits replay window for stolen service tickets.",
+                    ApplyOps = [RegOp.SetDword(SecKey, "MaxServiceAge", 600)],
+                    RemoveOps = [RegOp.DeleteValue(SecKey, "MaxServiceAge")],
+                    DetectOps = [RegOp.CheckDword(SecKey, "MaxServiceAge", 600)],
+                },
+                new TweakDef
+                {
+                    Id = "krbadv-set-renew-lifetime-7d",
+                    Label = "Set Kerberos Ticket Maximum Renewal Lifetime to 7 Days",
+                    Category = "User Account",
+                    Description =
+                        "Sets the maximum TGT renewal lifetime to 7 days, after which the user must fully re-authenticate with their password or smart card rather than just renewing an existing ticket.",
+                    Tags = ["kerberos", "renewal-lifetime", "tgt", "re-authentication", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "Kerberos TGT renewable lifetime set to 7 days; full re-auth required after 1 week.",
+                    ApplyOps = [RegOp.SetDword(SecKey, "MaxRenewAge", 7)],
+                    RemoveOps = [RegOp.DeleteValue(SecKey, "MaxRenewAge")],
+                    DetectOps = [RegOp.CheckDword(SecKey, "MaxRenewAge", 7)],
+                },
+                new TweakDef
+                {
+                    Id = "krbadv-log-kerberos-failures",
+                    Label = "Log Kerberos Pre-Authentication Failure Events",
+                    Category = "User Account",
+                    Description =
+                        "Enables Security audit logging for Kerberos AS exchange pre-authentication failures (EventID 4771), providing visibility into password-spraying and Kerberoasting attempts against domain accounts.",
+                    Tags = ["kerberos", "pre-auth-failure", "audit", "event-log", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "Kerberos pre-auth failures logged (EventID 4771); password spray and Kerberoasting attempts visible.",
+                    ApplyOps = [RegOp.SetDword(SecKey, "AuditPreAuthFailures", 1)],
+                    RemoveOps = [RegOp.DeleteValue(SecKey, "AuditPreAuthFailures")],
+                    DetectOps = [RegOp.CheckDword(SecKey, "AuditPreAuthFailures", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "krbadv-block-unconstrained-delegation",
+                    Label = "Block Accounts from Using Unconstrained Kerberos Delegation",
+                    Category = "User Account",
+                    Description =
+                        "Enables the 'Account is sensitive and cannot be delegated' flag enforcement at policy level, blocking non-protected accounts from being marked for unconstrained delegation which allows impersonation of any user who authenticates to the delegate.",
+                    Tags = ["kerberos", "delegation", "unconstrained", "impersonation", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 5,
+                    SafetyRating = 5,
+                    ImpactNote = "Unconstrained Kerberos delegation blocked for new accounts; existing delegation settings unaffected.",
+                    ApplyOps = [RegOp.SetDword(Key, "BlockUnconstrainedDelegation", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "BlockUnconstrainedDelegation")],
+                    DetectOps = [RegOp.CheckDword(Key, "BlockUnconstrainedDelegation", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "krbadv-disable-kerberos-telemetry",
+                    Label = "Disable Kerberos Authentication Telemetry to Microsoft",
+                    Category = "User Account",
+                    Description =
+                        "Prevents the Windows Kerberos provider from sending cipher negotiation stats, authentication failure rates, and encryption algorithm telemetry to Microsoft.",
+                    Tags = ["kerberos", "telemetry", "privacy", "microsoft", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 2,
+                    SafetyRating = 5,
+                    ImpactNote = "Kerberos telemetry to Microsoft disabled; cipher negotiation and failure rate data not sent to cloud.",
+                    ApplyOps = [RegOp.SetDword(Key, "DisableKerberosTelemetry", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "DisableKerberosTelemetry")],
+                    DetectOps = [RegOp.CheckDword(Key, "DisableKerberosTelemetry", 1)],
+                },
+            ];
     }
 
     // ── LapsPolicy ──
@@ -6254,169 +6276,169 @@ internal static class PolicyAuth
         private const string LapsKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\LAPS";
 
         public static IReadOnlyList<TweakDef> Data =>
-        [
-            new TweakDef
-            {
-                Id = "lapspol-enable-ad-backup",
-                Label = "Configure LAPS to Back Up Password to Active Directory",
-                Category = "User Account",
-                Description = "Directs Windows LAPS to store the managed local administrator password in Active Directory DS.",
-                Tags = ["laps", "password", "active-directory", "backup", "security"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 5,
-                SafetyRating = 5,
-                ImpactNote = "Enables centralised credential management; requires AD DS and LAPS schema extension.",
-                ApplyOps = [RegOp.SetDword(LapsKey, "BackupDirectory", 2)],
-                RemoveOps = [RegOp.DeleteValue(LapsKey, "BackupDirectory")],
-                DetectOps = [RegOp.CheckDword(LapsKey, "BackupDirectory", 2)],
-            },
-            new TweakDef
-            {
-                Id = "lapspol-set-password-age-30",
-                Label = "Set LAPS Maximum Password Age to 30 Days",
-                Category = "User Account",
-                Description = "Configures the Windows LAPS managed account password to expire after a maximum of 30 days.",
-                Tags = ["laps", "password", "expiry", "rotation", "security"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                ImpactNote = "Password is automatically rotated every 30 days; no user action required.",
-                ApplyOps = [RegOp.SetDword(LapsKey, "PasswordAgeDays", 30)],
-                RemoveOps = [RegOp.DeleteValue(LapsKey, "PasswordAgeDays")],
-                DetectOps = [RegOp.CheckDword(LapsKey, "PasswordAgeDays", 30)],
-            },
-            new TweakDef
-            {
-                Id = "lapspol-set-password-length-20",
-                Label = "Set LAPS Minimum Password Length to 20",
-                Category = "User Account",
-                Description = "Forces the LAPS-managed local administrator password to be at least 20 characters long.",
-                Tags = ["laps", "password", "length", "complexity", "security"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                ImpactNote = "Longer passwords improve brute-force resistance; LAPS manages them automatically.",
-                ApplyOps = [RegOp.SetDword(LapsKey, "PasswordLength", 20)],
-                RemoveOps = [RegOp.DeleteValue(LapsKey, "PasswordLength")],
-                DetectOps = [RegOp.CheckDword(LapsKey, "PasswordLength", 20)],
-            },
-            new TweakDef
-            {
-                Id = "lapspol-set-password-complexity-full",
-                Label = "Set LAPS Password Complexity to Full",
-                Category = "User Account",
-                Description = "Requires the LAPS-generated password to include uppercase, lowercase, digits, and special characters.",
-                Tags = ["laps", "password", "complexity", "security"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                ImpactNote = "Value 4 = large letters + small letters + digits + special chars; maximum entropy.",
-                ApplyOps = [RegOp.SetDword(LapsKey, "PasswordComplexity", 4)],
-                RemoveOps = [RegOp.DeleteValue(LapsKey, "PasswordComplexity")],
-                DetectOps = [RegOp.CheckDword(LapsKey, "PasswordComplexity", 4)],
-            },
-            new TweakDef
-            {
-                Id = "lapspol-post-auth-reset-logoff",
-                Label = "Reset LAPS Password and Log Off After Admin Use",
-                Category = "User Account",
-                Description = "Automatically resets the managed local admin password and logs off the session after it is used for authentication.",
-                Tags = ["laps", "password", "post-auth", "rotation", "security"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 5,
-                SafetyRating = 5,
-                ImpactNote = "Value 3 = reset password + terminate managed account logon sessions; prevents credential reuse.",
-                ApplyOps = [RegOp.SetDword(LapsKey, "PostAuthenticationActions", 3)],
-                RemoveOps = [RegOp.DeleteValue(LapsKey, "PostAuthenticationActions")],
-                DetectOps = [RegOp.CheckDword(LapsKey, "PostAuthenticationActions", 3)],
-            },
-            new TweakDef
-            {
-                Id = "lapspol-set-post-auth-delay-24h",
-                Label = "Set LAPS Post-Auth Reset Delay to 24 Hours",
-                Category = "User Account",
-                Description = "Delays the post-authentication password reset for 24 hours to allow admin tasks to complete before rotation.",
-                Tags = ["laps", "password", "post-auth", "delay", "security"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Gives admins 24 hours to finish tasks before the managed account password is rotated.",
-                ApplyOps = [RegOp.SetDword(LapsKey, "PostAuthenticationResetDelay", 24)],
-                RemoveOps = [RegOp.DeleteValue(LapsKey, "PostAuthenticationResetDelay")],
-                DetectOps = [RegOp.CheckDword(LapsKey, "PostAuthenticationResetDelay", 24)],
-            },
-            new TweakDef
-            {
-                Id = "lapspol-enable-ad-encryption",
-                Label = "Encrypt LAPS Password in Active Directory",
-                Category = "User Account",
-                Description = "Stores the LAPS-managed password in Active Directory using AES-256 encryption instead of plain text.",
-                Tags = ["laps", "password", "encryption", "active-directory", "security"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 5,
-                SafetyRating = 5,
-                ImpactNote = "Password is AES-256 encrypted at rest in AD; requires Windows Server 2016 DC or later.",
-                ApplyOps = [RegOp.SetDword(LapsKey, "ADPasswordEncryptionEnabled", 1)],
-                RemoveOps = [RegOp.DeleteValue(LapsKey, "ADPasswordEncryptionEnabled")],
-                DetectOps = [RegOp.CheckDword(LapsKey, "ADPasswordEncryptionEnabled", 1)],
-            },
-            new TweakDef
-            {
-                Id = "lapspol-enable-expiry-protection",
-                Label = "Enable LAPS Password Expiry Protection",
-                Category = "User Account",
-                Description = "Prevents the LAPS password expiry date from being set into the future by unauthorised parties.",
-                Tags = ["laps", "password", "expiry", "protection", "security"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                ImpactNote = "Blocks attackers from extending the LAPS password lifetime to avoid rotation.",
-                ApplyOps = [RegOp.SetDword(LapsKey, "PasswordExpirationProtectionEnabled", 1)],
-                RemoveOps = [RegOp.DeleteValue(LapsKey, "PasswordExpirationProtectionEnabled")],
-                DetectOps = [RegOp.CheckDword(LapsKey, "PasswordExpirationProtectionEnabled", 1)],
-            },
-            new TweakDef
-            {
-                Id = "lapspol-enable-audit-policy",
-                Label = "Enable LAPS Audit Policy",
-                Category = "User Account",
-                Description = "Enables Windows LAPS audit logging to track password read and update events in the Security event log.",
-                Tags = ["laps", "audit", "logging", "security"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Records LAPS credential access events; useful for detecting unauthorised admin account usage.",
-                ApplyOps = [RegOp.SetDword(LapsKey, "AuditPolicyEnabled", 1)],
-                RemoveOps = [RegOp.DeleteValue(LapsKey, "AuditPolicyEnabled")],
-                DetectOps = [RegOp.CheckDword(LapsKey, "AuditPolicyEnabled", 1)],
-            },
-            new TweakDef
-            {
-                Id = "lapspol-set-expiry-notify-7d",
-                Label = "Notify 7 Days Before LAPS Password Expiry",
-                Category = "User Account",
-                Description = "Sends a warning notification to administrators 7 days before the LAPS-managed password expires.",
-                Tags = ["laps", "password", "expiry", "notification", "security"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                ImpactNote = "Generates an event log warning 7 days before password rotation; purely informational.",
-                ApplyOps = [RegOp.SetDword(LapsKey, "NotifyPasswordExpiryDays", 7)],
-                RemoveOps = [RegOp.DeleteValue(LapsKey, "NotifyPasswordExpiryDays")],
-                DetectOps = [RegOp.CheckDword(LapsKey, "NotifyPasswordExpiryDays", 7)],
-            },
-        ];
-
+            [
+                new TweakDef
+                {
+                    Id = "lapspol-enable-ad-backup",
+                    Label = "Configure LAPS to Back Up Password to Active Directory",
+                    Category = "User Account",
+                    Description = "Directs Windows LAPS to store the managed local administrator password in Active Directory DS.",
+                    Tags = ["laps", "password", "active-directory", "backup", "security"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 5,
+                    SafetyRating = 5,
+                    ImpactNote = "Enables centralised credential management; requires AD DS and LAPS schema extension.",
+                    ApplyOps = [RegOp.SetDword(LapsKey, "BackupDirectory", 2)],
+                    RemoveOps = [RegOp.DeleteValue(LapsKey, "BackupDirectory")],
+                    DetectOps = [RegOp.CheckDword(LapsKey, "BackupDirectory", 2)],
+                },
+                new TweakDef
+                {
+                    Id = "lapspol-set-password-age-30",
+                    Label = "Set LAPS Maximum Password Age to 30 Days",
+                    Category = "User Account",
+                    Description = "Configures the Windows LAPS managed account password to expire after a maximum of 30 days.",
+                    Tags = ["laps", "password", "expiry", "rotation", "security"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "Password is automatically rotated every 30 days; no user action required.",
+                    ApplyOps = [RegOp.SetDword(LapsKey, "PasswordAgeDays", 30)],
+                    RemoveOps = [RegOp.DeleteValue(LapsKey, "PasswordAgeDays")],
+                    DetectOps = [RegOp.CheckDword(LapsKey, "PasswordAgeDays", 30)],
+                },
+                new TweakDef
+                {
+                    Id = "lapspol-set-password-length-20",
+                    Label = "Set LAPS Minimum Password Length to 20",
+                    Category = "User Account",
+                    Description = "Forces the LAPS-managed local administrator password to be at least 20 characters long.",
+                    Tags = ["laps", "password", "length", "complexity", "security"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "Longer passwords improve brute-force resistance; LAPS manages them automatically.",
+                    ApplyOps = [RegOp.SetDword(LapsKey, "PasswordLength", 20)],
+                    RemoveOps = [RegOp.DeleteValue(LapsKey, "PasswordLength")],
+                    DetectOps = [RegOp.CheckDword(LapsKey, "PasswordLength", 20)],
+                },
+                new TweakDef
+                {
+                    Id = "lapspol-set-password-complexity-full",
+                    Label = "Set LAPS Password Complexity to Full",
+                    Category = "User Account",
+                    Description = "Requires the LAPS-generated password to include uppercase, lowercase, digits, and special characters.",
+                    Tags = ["laps", "password", "complexity", "security"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "Value 4 = large letters + small letters + digits + special chars; maximum entropy.",
+                    ApplyOps = [RegOp.SetDword(LapsKey, "PasswordComplexity", 4)],
+                    RemoveOps = [RegOp.DeleteValue(LapsKey, "PasswordComplexity")],
+                    DetectOps = [RegOp.CheckDword(LapsKey, "PasswordComplexity", 4)],
+                },
+                new TweakDef
+                {
+                    Id = "lapspol-post-auth-reset-logoff",
+                    Label = "Reset LAPS Password and Log Off After Admin Use",
+                    Category = "User Account",
+                    Description =
+                        "Automatically resets the managed local admin password and logs off the session after it is used for authentication.",
+                    Tags = ["laps", "password", "post-auth", "rotation", "security"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 5,
+                    SafetyRating = 5,
+                    ImpactNote = "Value 3 = reset password + terminate managed account logon sessions; prevents credential reuse.",
+                    ApplyOps = [RegOp.SetDword(LapsKey, "PostAuthenticationActions", 3)],
+                    RemoveOps = [RegOp.DeleteValue(LapsKey, "PostAuthenticationActions")],
+                    DetectOps = [RegOp.CheckDword(LapsKey, "PostAuthenticationActions", 3)],
+                },
+                new TweakDef
+                {
+                    Id = "lapspol-set-post-auth-delay-24h",
+                    Label = "Set LAPS Post-Auth Reset Delay to 24 Hours",
+                    Category = "User Account",
+                    Description = "Delays the post-authentication password reset for 24 hours to allow admin tasks to complete before rotation.",
+                    Tags = ["laps", "password", "post-auth", "delay", "security"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "Gives admins 24 hours to finish tasks before the managed account password is rotated.",
+                    ApplyOps = [RegOp.SetDword(LapsKey, "PostAuthenticationResetDelay", 24)],
+                    RemoveOps = [RegOp.DeleteValue(LapsKey, "PostAuthenticationResetDelay")],
+                    DetectOps = [RegOp.CheckDword(LapsKey, "PostAuthenticationResetDelay", 24)],
+                },
+                new TweakDef
+                {
+                    Id = "lapspol-enable-ad-encryption",
+                    Label = "Encrypt LAPS Password in Active Directory",
+                    Category = "User Account",
+                    Description = "Stores the LAPS-managed password in Active Directory using AES-256 encryption instead of plain text.",
+                    Tags = ["laps", "password", "encryption", "active-directory", "security"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 5,
+                    SafetyRating = 5,
+                    ImpactNote = "Password is AES-256 encrypted at rest in AD; requires Windows Server 2016 DC or later.",
+                    ApplyOps = [RegOp.SetDword(LapsKey, "ADPasswordEncryptionEnabled", 1)],
+                    RemoveOps = [RegOp.DeleteValue(LapsKey, "ADPasswordEncryptionEnabled")],
+                    DetectOps = [RegOp.CheckDword(LapsKey, "ADPasswordEncryptionEnabled", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "lapspol-enable-expiry-protection",
+                    Label = "Enable LAPS Password Expiry Protection",
+                    Category = "User Account",
+                    Description = "Prevents the LAPS password expiry date from being set into the future by unauthorised parties.",
+                    Tags = ["laps", "password", "expiry", "protection", "security"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "Blocks attackers from extending the LAPS password lifetime to avoid rotation.",
+                    ApplyOps = [RegOp.SetDword(LapsKey, "PasswordExpirationProtectionEnabled", 1)],
+                    RemoveOps = [RegOp.DeleteValue(LapsKey, "PasswordExpirationProtectionEnabled")],
+                    DetectOps = [RegOp.CheckDword(LapsKey, "PasswordExpirationProtectionEnabled", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "lapspol-enable-audit-policy",
+                    Label = "Enable LAPS Audit Policy",
+                    Category = "User Account",
+                    Description = "Enables Windows LAPS audit logging to track password read and update events in the Security event log.",
+                    Tags = ["laps", "audit", "logging", "security"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "Records LAPS credential access events; useful for detecting unauthorised admin account usage.",
+                    ApplyOps = [RegOp.SetDword(LapsKey, "AuditPolicyEnabled", 1)],
+                    RemoveOps = [RegOp.DeleteValue(LapsKey, "AuditPolicyEnabled")],
+                    DetectOps = [RegOp.CheckDword(LapsKey, "AuditPolicyEnabled", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "lapspol-set-expiry-notify-7d",
+                    Label = "Notify 7 Days Before LAPS Password Expiry",
+                    Category = "User Account",
+                    Description = "Sends a warning notification to administrators 7 days before the LAPS-managed password expires.",
+                    Tags = ["laps", "password", "expiry", "notification", "security"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 2,
+                    SafetyRating = 5,
+                    ImpactNote = "Generates an event log warning 7 days before password rotation; purely informational.",
+                    ApplyOps = [RegOp.SetDword(LapsKey, "NotifyPasswordExpiryDays", 7)],
+                    RemoveOps = [RegOp.DeleteValue(LapsKey, "NotifyPasswordExpiryDays")],
+                    DetectOps = [RegOp.CheckDword(LapsKey, "NotifyPasswordExpiryDays", 7)],
+                },
+            ];
     }
 
     // ── LapsSecurity ──
@@ -6628,7 +6650,6 @@ internal static class PolicyAuth
                 DetectOps = [RegOp.CheckDword(LapsPolicy, "LegacyMicrosoftLAPSEnabled", 0)],
             },
         ];
-
     }
 
     // ── LegacyAuthPolicy ──
@@ -6809,7 +6830,6 @@ internal static class PolicyAuth
                 DetectOps = [RegOp.CheckDword(Key, "EnableExtendedProtection", 1)],
             },
         ];
-
     }
 
     // ── LocalSecurityAuthorityPolicy ──
@@ -6820,169 +6840,180 @@ internal static class PolicyAuth
         private const string CfgKey = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\WDigest";
 
         public static IReadOnlyList<TweakDef> Data =>
-        [
-            new TweakDef
-            {
-                Id           = "lsapol-enable-lsa-runasppl",
-                Label        = "Enable LSA Protected Process Light (RunAsPPL) Credential Guard",
-                Category = "User Account",
-                Description  = "Enables RunAsPPL for lsass.exe, running the Local Security Authority as a Protected Process Light, preventing credential dumping tools (Mimikatz, procdump lsass) from reading NTLM hashes and Kerberos tickets from the LSASS process.",
-                Tags         = ["lsa", "runasppl", "credential-dump", "mimikatz", "security", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 5,
-                SafetyRating = 5,
-                ImpactNote   = "LSA RunAsPPL enabled; Mimikatz and LSASS credential dumping tools blocked from reading process memory.",
-                ApplyOps     = [RegOp.SetDword(Key, "RunAsPPL", 1)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "RunAsPPL")],
-                DetectOps    = [RegOp.CheckDword(Key, "RunAsPPL", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "lsapol-disable-anonymous-enumeration-sam",
-                Label        = "Disable Anonymous SAM Account and Share Enumeration",
-                Category = "User Account",
-                Description  = "Prevents anonymous network connections from enumerating local SAM accounts and security groups, blocking reconnaissance that discovers usernames for use in password spraying or brute-force attacks.",
-                Tags         = ["lsa", "anonymous-enumeration", "sam", "reconnaissance", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 5,
-                SafetyRating = 5,
-                ImpactNote   = "Anonymous SAM enumeration disabled; usernames not discoverable by unauthenticated network connections.",
-                ApplyOps     = [RegOp.SetDword(Key, "RestrictAnonymousSAM", 1)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "RestrictAnonymousSAM")],
-                DetectOps    = [RegOp.CheckDword(Key, "RestrictAnonymousSAM", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "lsapol-restrict-anonymous-access",
-                Label        = "Restrict Anonymous Access to Named Pipes and Shares",
-                Category = "User Account",
-                Description  = "Blocks anonymous access to all named pipes and network shares, preventing unauthenticated connections that could be used for pass-the-hash attacks or to access network resources without valid credentials.",
-                Tags         = ["lsa", "anonymous-access", "named-pipes", "shares", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 5,
-                SafetyRating = 5,
-                ImpactNote   = "Anonymous named pipe and share access blocked; unauthenticated CIFS/RPC connections rejected.",
-                ApplyOps     = [RegOp.SetDword(Key, "RestrictAnonymous", 1)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "RestrictAnonymous")],
-                DetectOps    = [RegOp.CheckDword(Key, "RestrictAnonymous", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "lsapol-disable-wdigest-cleartext",
-                Label        = "Disable WDigest Cleartext Password Caching in LSASS",
-                Category = "User Account",
-                Description  = "Disables the WDigest authentication provider's cleartext password caching in LSASS memory, preventing credential dumping tools from extracting reversible plaintext passwords from the WDigest cache.",
-                Tags         = ["lsa", "wdigest", "cleartext-password", "mimikatz", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 5,
-                SafetyRating = 5,
-                ImpactNote   = "WDigest cleartext caching disabled; plaintext passwords no longer extractable from LSASS memory.",
-                ApplyOps     = [RegOp.SetDword(CfgKey, "UseLogonCredential", 0)],
-                RemoveOps    = [RegOp.DeleteValue(CfgKey, "UseLogonCredential")],
-                DetectOps    = [RegOp.CheckDword(CfgKey, "UseLogonCredential", 0)],
-            },
-            new TweakDef
-            {
-                Id           = "lsapol-enable-lsa-audit",
-                Label        = "Enable LSA Authentication Audit Logging",
-                Category = "User Account",
-                Description  = "Enables comprehensive Security audit logging for all LSA authentication events, including logon successes, failures, privilege escalations, and token creation, supporting SIEM-based authentication anomaly detection.",
-                Tags         = ["lsa", "audit", "authentication", "event-log", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 4,
-                SafetyRating = 5,
-                ImpactNote   = "LSA authentication audit logging enabled; all logon and privilege events recorded for SIEM.",
-                ApplyOps     = [RegOp.SetDword(Key, "AuditBaseObjects", 1)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "AuditBaseObjects")],
-                DetectOps    = [RegOp.CheckDword(Key, "AuditBaseObjects", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "lsapol-crash-on-audit-fail",
-                Label        = "Crash System When Security Audit Log Is Full (CrashOnAuditFail)",
-                Category = "User Account",
-                Description  = "Configures LSA to crash the system with a BSOD when the Security audit log becomes full and events cannot be written, ensuring audit records are never silently dropped on high-security systems that require complete audit trails.",
-                Tags         = ["lsa", "audit-fail", "crash-on-full", "compliance", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 4,
-                SafetyRating = 3,
-                ImpactNote   = "System BSOD on Security log full; complete audit trail guaranteed but availability risk if log fills. Use with large log size.",
-                ApplyOps     = [RegOp.SetDword(Key, "CrashOnAuditFail", 1)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "CrashOnAuditFail")],
-                DetectOps    = [RegOp.CheckDword(Key, "CrashOnAuditFail", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "lsapol-disable-legacy-auth-packages",
-                Label        = "Remove Legacy Security Support Provider Packages from LSA",
-                Category = "User Account",
-                Description  = "Removes legacy SSPI authentication packages (msapsspc, msnsspc) from the LSA Security Packages list, preventing these deprecated packages from being loaded as SSPI providers that could be backdoored or exploited.",
-                Tags         = ["lsa", "sspi", "legacy-packages", "authentication", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 3,
-                SafetyRating = 5,
-                ImpactNote   = "Legacy LSA SSPI packages removed; deprecated authentication DLLs not loaded in LSASS process.",
-                ApplyOps     = [RegOp.SetDword(SecKey, "DisableLegacyLSAPackages", 1)],
-                RemoveOps    = [RegOp.DeleteValue(SecKey, "DisableLegacyLSAPackages")],
-                DetectOps    = [RegOp.CheckDword(SecKey, "DisableLegacyLSAPackages", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "lsapol-deny-network-logon-local-accounts",
-                Label        = "Deny Network Logon for Local Administrator Accounts",
-                Category = "User Account",
-                Description  = "Blocks local administrator accounts (SID S-1-5-113) from performing network logons (interactive pass-the-hash, NTLM relay), ensuring only domain accounts can authenticate over the network and local creds cannot be used for lateral movement.",
-                Tags         = ["lsa", "network-logon", "local-admin", "lateral-movement", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 5,
-                SafetyRating = 5,
-                ImpactNote   = "Network logon denied for local administrator accounts; local account pass-the-hash lateral movement blocked.",
-                ApplyOps     = [RegOp.SetDword(Key, "DenyNetworkLogonForLocalAccounts", 1)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "DenyNetworkLogonForLocalAccounts")],
-                DetectOps    = [RegOp.CheckDword(Key, "DenyNetworkLogonForLocalAccounts", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "lsapol-enable-token-filter-policy",
-                Label        = "Enable Local Account Token Filter Policy (Full Token on Network)",
-                Category = "User Account",
-                Description  = "Enables LocalAccountTokenFilterPolicy which allows local admin accounts that authenticate over the network to receive a full elevated token (rather than a filtered one), enabling legitimate remote administration without requiring domain accounts. Counterintuitively named, this is required for tools like PSExec to work over the network to local admin.",
-                Tags         = ["lsa", "token-filter", "local-admin", "remote-admin", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 3,
-                SafetyRating = 3,
-                ImpactNote   = "Local account token filter disabled; local admin gets full elevated token on network logon. Required for PSExec-style remote admin.",
-                ApplyOps     = [RegOp.SetDword(Key, "LocalAccountTokenFilterPolicy", 1)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "LocalAccountTokenFilterPolicy")],
-                DetectOps    = [RegOp.CheckDword(Key, "LocalAccountTokenFilterPolicy", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "lsapol-disable-lsa-telemetry",
-                Label        = "Disable LSA / Authentication Provider Telemetry to Microsoft",
-                Category = "User Account",
-                Description  = "Prevents the LSA and Windows authentication providers from sending authentication event rates, credential provider selection, and logon failure telemetry to Microsoft.",
-                Tags         = ["lsa", "telemetry", "privacy", "microsoft", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 2,
-                SafetyRating = 5,
-                ImpactNote   = "LSA telemetry to Microsoft disabled; auth event data and failure rates not sent to cloud.",
-                ApplyOps     = [RegOp.SetDword(Key, "DisableLSATelemetry", 1)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "DisableLSATelemetry")],
-                DetectOps    = [RegOp.CheckDword(Key, "DisableLSATelemetry", 1)],
-            },
-        ];
-
+            [
+                new TweakDef
+                {
+                    Id = "lsapol-enable-lsa-runasppl",
+                    Label = "Enable LSA Protected Process Light (RunAsPPL) Credential Guard",
+                    Category = "User Account",
+                    Description =
+                        "Enables RunAsPPL for lsass.exe, running the Local Security Authority as a Protected Process Light, preventing credential dumping tools (Mimikatz, procdump lsass) from reading NTLM hashes and Kerberos tickets from the LSASS process.",
+                    Tags = ["lsa", "runasppl", "credential-dump", "mimikatz", "security", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 5,
+                    SafetyRating = 5,
+                    ImpactNote = "LSA RunAsPPL enabled; Mimikatz and LSASS credential dumping tools blocked from reading process memory.",
+                    ApplyOps = [RegOp.SetDword(Key, "RunAsPPL", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "RunAsPPL")],
+                    DetectOps = [RegOp.CheckDword(Key, "RunAsPPL", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "lsapol-disable-anonymous-enumeration-sam",
+                    Label = "Disable Anonymous SAM Account and Share Enumeration",
+                    Category = "User Account",
+                    Description =
+                        "Prevents anonymous network connections from enumerating local SAM accounts and security groups, blocking reconnaissance that discovers usernames for use in password spraying or brute-force attacks.",
+                    Tags = ["lsa", "anonymous-enumeration", "sam", "reconnaissance", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 5,
+                    SafetyRating = 5,
+                    ImpactNote = "Anonymous SAM enumeration disabled; usernames not discoverable by unauthenticated network connections.",
+                    ApplyOps = [RegOp.SetDword(Key, "RestrictAnonymousSAM", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "RestrictAnonymousSAM")],
+                    DetectOps = [RegOp.CheckDword(Key, "RestrictAnonymousSAM", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "lsapol-restrict-anonymous-access",
+                    Label = "Restrict Anonymous Access to Named Pipes and Shares",
+                    Category = "User Account",
+                    Description =
+                        "Blocks anonymous access to all named pipes and network shares, preventing unauthenticated connections that could be used for pass-the-hash attacks or to access network resources without valid credentials.",
+                    Tags = ["lsa", "anonymous-access", "named-pipes", "shares", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 5,
+                    SafetyRating = 5,
+                    ImpactNote = "Anonymous named pipe and share access blocked; unauthenticated CIFS/RPC connections rejected.",
+                    ApplyOps = [RegOp.SetDword(Key, "RestrictAnonymous", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "RestrictAnonymous")],
+                    DetectOps = [RegOp.CheckDword(Key, "RestrictAnonymous", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "lsapol-disable-wdigest-cleartext",
+                    Label = "Disable WDigest Cleartext Password Caching in LSASS",
+                    Category = "User Account",
+                    Description =
+                        "Disables the WDigest authentication provider's cleartext password caching in LSASS memory, preventing credential dumping tools from extracting reversible plaintext passwords from the WDigest cache.",
+                    Tags = ["lsa", "wdigest", "cleartext-password", "mimikatz", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 5,
+                    SafetyRating = 5,
+                    ImpactNote = "WDigest cleartext caching disabled; plaintext passwords no longer extractable from LSASS memory.",
+                    ApplyOps = [RegOp.SetDword(CfgKey, "UseLogonCredential", 0)],
+                    RemoveOps = [RegOp.DeleteValue(CfgKey, "UseLogonCredential")],
+                    DetectOps = [RegOp.CheckDword(CfgKey, "UseLogonCredential", 0)],
+                },
+                new TweakDef
+                {
+                    Id = "lsapol-enable-lsa-audit",
+                    Label = "Enable LSA Authentication Audit Logging",
+                    Category = "User Account",
+                    Description =
+                        "Enables comprehensive Security audit logging for all LSA authentication events, including logon successes, failures, privilege escalations, and token creation, supporting SIEM-based authentication anomaly detection.",
+                    Tags = ["lsa", "audit", "authentication", "event-log", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "LSA authentication audit logging enabled; all logon and privilege events recorded for SIEM.",
+                    ApplyOps = [RegOp.SetDword(Key, "AuditBaseObjects", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "AuditBaseObjects")],
+                    DetectOps = [RegOp.CheckDword(Key, "AuditBaseObjects", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "lsapol-crash-on-audit-fail",
+                    Label = "Crash System When Security Audit Log Is Full (CrashOnAuditFail)",
+                    Category = "User Account",
+                    Description =
+                        "Configures LSA to crash the system with a BSOD when the Security audit log becomes full and events cannot be written, ensuring audit records are never silently dropped on high-security systems that require complete audit trails.",
+                    Tags = ["lsa", "audit-fail", "crash-on-full", "compliance", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 3,
+                    ImpactNote =
+                        "System BSOD on Security log full; complete audit trail guaranteed but availability risk if log fills. Use with large log size.",
+                    ApplyOps = [RegOp.SetDword(Key, "CrashOnAuditFail", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "CrashOnAuditFail")],
+                    DetectOps = [RegOp.CheckDword(Key, "CrashOnAuditFail", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "lsapol-disable-legacy-auth-packages",
+                    Label = "Remove Legacy Security Support Provider Packages from LSA",
+                    Category = "User Account",
+                    Description =
+                        "Removes legacy SSPI authentication packages (msapsspc, msnsspc) from the LSA Security Packages list, preventing these deprecated packages from being loaded as SSPI providers that could be backdoored or exploited.",
+                    Tags = ["lsa", "sspi", "legacy-packages", "authentication", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "Legacy LSA SSPI packages removed; deprecated authentication DLLs not loaded in LSASS process.",
+                    ApplyOps = [RegOp.SetDword(SecKey, "DisableLegacyLSAPackages", 1)],
+                    RemoveOps = [RegOp.DeleteValue(SecKey, "DisableLegacyLSAPackages")],
+                    DetectOps = [RegOp.CheckDword(SecKey, "DisableLegacyLSAPackages", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "lsapol-deny-network-logon-local-accounts",
+                    Label = "Deny Network Logon for Local Administrator Accounts",
+                    Category = "User Account",
+                    Description =
+                        "Blocks local administrator accounts (SID S-1-5-113) from performing network logons (interactive pass-the-hash, NTLM relay), ensuring only domain accounts can authenticate over the network and local creds cannot be used for lateral movement.",
+                    Tags = ["lsa", "network-logon", "local-admin", "lateral-movement", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 5,
+                    SafetyRating = 5,
+                    ImpactNote = "Network logon denied for local administrator accounts; local account pass-the-hash lateral movement blocked.",
+                    ApplyOps = [RegOp.SetDword(Key, "DenyNetworkLogonForLocalAccounts", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "DenyNetworkLogonForLocalAccounts")],
+                    DetectOps = [RegOp.CheckDword(Key, "DenyNetworkLogonForLocalAccounts", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "lsapol-enable-token-filter-policy",
+                    Label = "Enable Local Account Token Filter Policy (Full Token on Network)",
+                    Category = "User Account",
+                    Description =
+                        "Enables LocalAccountTokenFilterPolicy which allows local admin accounts that authenticate over the network to receive a full elevated token (rather than a filtered one), enabling legitimate remote administration without requiring domain accounts. Counterintuitively named, this is required for tools like PSExec to work over the network to local admin.",
+                    Tags = ["lsa", "token-filter", "local-admin", "remote-admin", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 3,
+                    ImpactNote =
+                        "Local account token filter disabled; local admin gets full elevated token on network logon. Required for PSExec-style remote admin.",
+                    ApplyOps = [RegOp.SetDword(Key, "LocalAccountTokenFilterPolicy", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "LocalAccountTokenFilterPolicy")],
+                    DetectOps = [RegOp.CheckDword(Key, "LocalAccountTokenFilterPolicy", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "lsapol-disable-lsa-telemetry",
+                    Label = "Disable LSA / Authentication Provider Telemetry to Microsoft",
+                    Category = "User Account",
+                    Description =
+                        "Prevents the LSA and Windows authentication providers from sending authentication event rates, credential provider selection, and logon failure telemetry to Microsoft.",
+                    Tags = ["lsa", "telemetry", "privacy", "microsoft", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 2,
+                    SafetyRating = 5,
+                    ImpactNote = "LSA telemetry to Microsoft disabled; auth event data and failure rates not sent to cloud.",
+                    ApplyOps = [RegOp.SetDword(Key, "DisableLSATelemetry", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "DisableLSATelemetry")],
+                    DetectOps = [RegOp.CheckDword(Key, "DisableLSATelemetry", 1)],
+                },
+            ];
     }
 
     // ── LogonCachePolicy ──
@@ -7166,14 +7197,12 @@ internal static class PolicyAuth
                 DetectOps = [RegOp.CheckDword(Lsa, "DisableDomainCreds", 1)],
             },
         ];
-
     }
 
     // ── LogonGpoPolicy ──
     private static class _LogonGpoPolicy
     {
-        private const string LogonSys =
-            @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System";
+        private const string LogonSys = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System";
 
         public static IReadOnlyList<TweakDef> Data { get; } =
         [
@@ -7332,7 +7361,6 @@ internal static class PolicyAuth
                 DetectOps = [RegOp.CheckDword(LogonSys, "PowerButtonDenied", 1)],
             },
         ];
-
     }
 
     // ── LsaProtectionPolicy ──
@@ -7535,7 +7563,6 @@ internal static class PolicyAuth
                     DetectOps = [RegOp.CheckDword(LsaCtrl, "UseLogonCredential", 0)],
                 },
             ];
-
     }
 
     // ── PasswordlessSignInPolicy ──
@@ -7716,7 +7743,6 @@ internal static class PolicyAuth
                     DetectOps = [RegOp.CheckDword(Key, "AuditProvisioningEvents", 1)],
                 },
             ];
-
     }
 
     // ── SmartCardCredentialsPolicy ──
@@ -7726,186 +7752,204 @@ internal static class PolicyAuth
         private const string SysKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System";
 
         public static IReadOnlyList<TweakDef> Data =>
-        [
-            new TweakDef
-            {
-                Id = "sccredpol-allow-certificates-with-no-extended-key-usage",
-                Label = "SC Credentials: Allow Smart Card Certificates Without Extended Key Usage for Logon",
-                Category = "User Account",
-                Description = "Sets AllowCertificatesWithNoEKU=0 in Smart Card Credential Provider policy. Prevents smart card certificates without an Extended Key Usage (EKU) extension — or with an EKU that doesn't include Client Authentication (1.3.6.1.5.5.7.3.2) — from being used for Windows logon. " +
-                    "Smart card certificates without an EKU or with an all-inclusive EKU (Any Purpose) are certificates that were issued without specifying a legitimate use constraint. Such certificates are typically misconfigured CA root certificates or test certificates. If Windows allows logon with any certificate present on a smart card regardless of EKU, an attacker who compromises a user's smart card PIN and inserts a root CA certificate or code signing certificate into the card can attempt logon with the inappropriate certificate. Requiring Client Authentication EKU ensures only purpose-constrained logon certificates can authenticate to interactive sessions.",
-                Tags = ["sccredpol", "smart-card", "eku", "certificate", "logon", "client-auth"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                ImpactNote = "Smart card certificates must have Client Authentication EKU for interactive logon. Misconfigured test certs or CA-root certs cannot authenticate.",
-                ApplyOps = [RegOp.SetDword(Key, "AllowCertificatesWithNoEKU", 0)],
-                RemoveOps = [RegOp.DeleteValue(Key, "AllowCertificatesWithNoEKU")],
-                DetectOps = [RegOp.CheckDword(Key, "AllowCertificatesWithNoEKU", 0)],
-            },
-            new TweakDef
-            {
-                Id = "sccredpol-enforce-certificate-time-validity",
-                Label = "SC Credentials: Reject Expired Smart Card Certificates from Logon",
-                Category = "User Account",
-                Description = "Sets EnforceCAExpiry=1 in Smart Card Credential Provider policy. Enforces certificate validity period checking — prevents Windows from accepting smart card certificates for logon that have expired or whose issuing CA certificate chain has expired. By default, Windows may allow logon with expired smart card certificates in some scenarios (offline cached logon) if the certificate was previously valid. " +
-                    "Expired certificates represent an operational risk in smart card deployments: when a user's smart card certificate expires but the card PIN remains valid, Windows may continue to accept the card for domain logon relying on cached credentials — even though the PKI infrastructure considers the certificate expired. An attacker who obtains an expired certificate and the corresponding private key (from a compromised card) can attempt offline certificate logon. EnforceCAExpiry=1 ensures the current certificate validity timestamp is always checked, preventing expired certificate acceptance even in cached credential scenarios.",
-                Tags = ["sccredpol", "smart-card", "certificate-expiry", "ca-expiry", "validity", "pki"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 4,
-                ImpactNote = "Expired smart card certificates rejected. Users with expired certificates must renew before interactive logon works. Ensure certificate renewal reminders are in place.",
-                ApplyOps = [RegOp.SetDword(Key, "EnforceCAExpiry", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "EnforceCAExpiry")],
-                DetectOps = [RegOp.CheckDword(Key, "EnforceCAExpiry", 1)],
-            },
-            new TweakDef
-            {
-                Id = "sccredpol-filter-duplicate-certificates",
-                Label = "SC Credentials: Filter Duplicate Smart Card Certificates Shown in Logon Picker",
-                Category = "User Account",
-                Description = "Sets FilterDuplicateCerts=1 in Smart Card Credential Provider policy. When a smart card contains multiple certificates with the same Subject and public key (e.g., during certificate renewal where both old and new certificates co-exist on the card), this setting shows only the most recently issued certificate in the Windows logon certificate picker, preventing user confusion from duplicate entries. " +
-                    "During smart card certificate lifecycle management, cards frequently transition through a state where both the old (near-expired) and new (freshly issued) certificates are on the card simultaneously — to allow the renewal to proceed without requiring the user to surrender their card. The Windows logon certificate picker displays all certificates, presenting two identical-looking entries to the user. Users who select the expired certificate will experience logon failures. FilterDuplicateCerts reduces the duplicate entries to one (the most recent), eliminating this user experience issue.",
-                Tags = ["sccredpol", "smart-card", "duplicate-certificate", "certificate-renewal", "logon-picker"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                ImpactNote = "Duplicate smart card certificates filtered in logon picker. Only most recently issued certificate shown when multiple share the same subject.",
-                ApplyOps = [RegOp.SetDword(Key, "FilterDuplicateCerts", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "FilterDuplicateCerts")],
-                DetectOps = [RegOp.CheckDword(Key, "FilterDuplicateCerts", 1)],
-            },
-            new TweakDef
-            {
-                Id = "sccredpol-force-read-all-certificates",
-                Label = "SC Credentials: Force Reading All Certificates from Smart Card (Not Just Root/Signing)",
-                Category = "User Account",
-                Description = "Sets ForceReadingAllCertificates=1 in Smart Card Credential Provider policy. Forces Windows to read all certificates stored on the smart card during authentication enumeration, rather than only examining the first matching certificate. Some cards store certificate-based logon credentials on non-default slots or with non-standard EKU ordering — without ForceReadingAllCertificates, Windows may skip valid authentication certificates. " +
-                    "Smart card credential providers have an optimisation that stops scanning the card after finding the first usable certificate. On cards with multiple valid Client Authentication certificates (multi-profile cards, cards issued by different CAs for different resource domains), the optimisation may select a certificate for a different trust domain, causing failed authentication. ForceReadingAllCertificates ensures the complete certificate set is enumerated and the credential provider selects the certificate with the best chain match for the current domain.",
-                Tags = ["sccredpol", "smart-card", "certificate-enumeration", "multi-profile", "credential-provider"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                ImpactNote = "All smart card certificates read and enumerated. Slight performance increase per logon attempt; negligible on modern smart card readers.",
-                ApplyOps = [RegOp.SetDword(Key, "ForceReadingAllCertificates", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "ForceReadingAllCertificates")],
-                DetectOps = [RegOp.CheckDword(Key, "ForceReadingAllCertificates", 1)],
-            },
-            new TweakDef
-            {
-                Id = "sccredpol-require-smart-card-for-logon",
-                Label = "SC Credentials: Require Smart Card for Interactive Logon (Disable Password-Based Logon)",
-                Category = "User Account",
-                Description = "Sets ScForceOption=1 in Windows System policy. Requires users to authenticate with a smart card for interactive (local and Remote Desktop) logon. Password-based interactive logon is disabled. This setting is the full enforcement of a smart card-mandatory authentication policy — ensuring that physical possession of the smart card is required for every interactive logon event, eliminating password-based bypass paths. " +
-                    "Password-based logon as a fallback for smart card environments creates a persistent weak authentication path: users who 'lose' their smart card can fall back to passwords, which are substantially easier to steal via phishing or shoulder surfing than compromising a physical authentication token plus PIN. In high-assurance environments (financial trading, government classified systems, nuclear facility IT, PCI DSS Level 1), all interactive logon must be protected by a physical authentication factor. ScForceOption=1 eliminates the password fallback and enforces the physical factor requirement absolutely.",
-                Tags = ["sccredpol", "smart-card", "force-logon", "disable-password-logon", "mfa", "high-assurance"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 5,
-                SafetyRating = 2,
-                ImpactNote = "BREAKING: Password interactive logon fully disabled. Smart card REQUIRED for all logon. Ensure all users have working smart cards and readers before deployment. Service accounts need smartcard exemption.",
-                ApplyOps = [RegOp.SetDword(SysKey, "ScForceOption", 1)],
-                RemoveOps = [RegOp.DeleteValue(SysKey, "ScForceOption")],
-                DetectOps = [RegOp.CheckDword(SysKey, "ScForceOption", 1)],
-            },
-            new TweakDef
-            {
-                Id = "sccredpol-enable-smart-card-lock-on-removal",
-                Label = "SC Credentials: Lock Workstation Automatically When Smart Card is Removed",
-                Category = "User Account",
-                Description = "Sets SmartCardRemovalOption=1 in Windows System policy. Automatically locks the workstation when the user removes their smart card from the reader, replacing the 'no action' default. Ensures the workstation is immediately locked when the user physically departs (smart card is typically in their lanyard or pocket which they take with them). " +
-                    "Smart card removal detection is a behavioural lock triggered by physical possession of the authentication token. The security premise: a person who removes their smart card from the reader is physically leaving the workstation. Without removal lock, the authenticated session remains unlocked and accessible to anyone who approaches the workstation during the user's brief absence (printer, coffee, restroom). SmartCardRemovalOption=1 means the session locks within seconds of card removal — the physical authentication token acts as a proximity-based session lock device.",
-                Tags = ["sccredpol", "smart-card", "removal-lock", "session-lock", "physical-security"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                ImpactNote = "Workstation locks immediately on smart card removal. Users who briefly remove their card for any reason will need to re-insert and re-authenticate.",
-                ApplyOps = [RegOp.SetDword(SysKey, "SmartCardRemovalOption", 1)],
-                RemoveOps = [RegOp.DeleteValue(SysKey, "SmartCardRemovalOption")],
-                DetectOps = [RegOp.CheckDword(SysKey, "SmartCardRemovalOption", 1)],
-            },
-            new TweakDef
-            {
-                Id = "sccredpol-disable-smart-card-credential-caching",
-                Label = "SC Credentials: Disable Windows Cached Credentials for Smart Card Logons",
-                Category = "User Account",
-                Description = "Sets DisableSmartCardLogonCheck=0 in Smart Card Credential Provider policy. Ensures Windows performs a full smart card authentication challenge on every logon attempt — disabling any cached credential shortcut paths that might allow logon without re-validating the current smart card state against the DC. " +
-                    "Cached credential logon for smart card authentication creates an inconsistency: the cached domain credential may be valid even after the smart card certificate has been revoked (e.g., following employee termination or card loss). If Windows allows cached credential logon for smart card sessions, a terminated employee's workstation retains the logon capability for up to the domain cache lifetime (default 10 cached logons). Ensuring full smart card validation on each logon forces certificate revocation to be effective immediately — revoked smart cards are rejected on first logon attempt after CRL update.",
-                Tags = ["sccredpol", "smart-card", "credential-cache", "revocation", "crl", "terminated-employee"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 3,
-                ImpactNote = "Full smart card DC validation required. Offline logon (no DC reachable) requires network connectivity. Deploy alongside always-on VPN for remote workers.",
-                ApplyOps = [RegOp.SetDword(Key, "DisableSmartCardLogonCheck", 0)],
-                RemoveOps = [RegOp.DeleteValue(Key, "DisableSmartCardLogonCheck")],
-                DetectOps = [RegOp.CheckDword(Key, "DisableSmartCardLogonCheck", 0)],
-            },
-            new TweakDef
-            {
-                Id = "sccredpol-enable-smart-card-puk-logging",
-                Label = "SC Credentials: Enable Smart Card PUK/PIN Operation Logging",
-                Category = "User Account",
-                Description = "Sets EnableSmartCardLogonLogging=1 in Smart Card Credential Provider policy. Enables logging of smart card PIN entry events, PUK (PIN Unblocking Key) operations, and certificate selection events to the Windows Application event log. PIN operation logging provides an audit trail of smart card authentication activity at the workstation — enabling detection of PIN brute-force attempts (excessive failed PIN entries), card blocking events (PUK operation triggered), and certificate selection anomalies. " +
-                    "Smart card PIN brute-force attacks are rate-limited by card hardware (typically 3-10 failed attempts before card lockout), but without logging, an attacker who attempts multiple combinations across the threshold boundary and reinserts the card leaves no system event trace. Smart card logging events can be collected by SIEM, enabling detection of cards that are being tested for PIN guessing (rapid sequence of failed PIN events at an unexpected workstation), identifying potentially compromised or stolen cards before the card locks.",
-                Tags = ["sccredpol", "smart-card", "logging", "pin-brute-force", "puk", "audit"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Smart card PIN and PUK events logged to Application event log. SIEM collection of card-specific events enables PIN brute-force detection.",
-                ApplyOps = [RegOp.SetDword(Key, "EnableSmartCardLogonLogging", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "EnableSmartCardLogonLogging")],
-                DetectOps = [RegOp.CheckDword(Key, "EnableSmartCardLogonLogging", 1)],
-            },
-            new TweakDef
-            {
-                Id = "sccredpol-restrict-to-root-trusted-certificates",
-                Label = "SC Credentials: Restrict Smart Card Logon to Root-CA Trusted Certificates Only",
-                Category = "User Account",
-                Description = "Sets RootCA=1 in Smart Card Credential Provider policy. Restricts smart card logon to only accept certificates that chain to a root CA in the machine's Trusted Root Certification Authorities store — preventing certificates issued by intermediate-only CAs or enterprise subordinate CAs whose root is not in the machine trust store from being used for logon. " +
-                    "In multi-forest or partner organisation environments, smart cards issued by external PKI hierarchies may be physically interoperable (same card form factor, compatible reader drivers) but should not grant logon access to the local domain unless their issuing CA root is explicitly trusted. Without RootCA=1, certificates from any technically valid PKI chain — including self-signed certificates added to a card by an attacker — could be used for logon. Restricting to root-CA-trusted certs ensures the local domain trust policy governs which PKI hierarchies are authorised for smart card authentication.",
-                Tags = ["sccredpol", "smart-card", "root-ca", "trust", "pki", "cross-forest"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                ImpactNote = "Smart card certs must chain to machine trust store root CA. Self-signed and untrusted-root certificates rejected for logon.",
-                ApplyOps = [RegOp.SetDword(Key, "RootCA", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "RootCA")],
-                DetectOps = [RegOp.CheckDword(Key, "RootCA", 1)],
-            },
-            new TweakDef
-            {
-                Id = "sccredpol-enable-integrated-unblock",
-                Label = "SC Credentials: Enable Integrated Smart Card Unblock Screen at Logon",
-                Category = "User Account",
-                Description = "Sets EnableIntegratedUnblock=1 in Smart Card Credential Provider policy. Enables the Windows integrated smart card unblock screen — presented at the Ctrl+Alt+Del logon screen when a smart card's PIN is blocked (after exceeding the incorrect PIN attempt limit). The integrated unblock screen allows users to unblock their card at the logon screen using PUK without requiring a separate unblock tool or helpdesk intervention. " +
-                    "Without integrated unblock, a user whose card PIN is blocked must call the IT helpdesk, be issued a temporary PUK, and use a separate smart card management utility to unblock the card. This process typically takes 15–60 minutes depending on helpdesk availability. The integrated unblock screen presents the PUK entry interface directly at the Windows logon screen — the user provides their PUK and new PIN, the card is immediately unblocked, and logon proceeds. EnableIntegratedUnblock reduces helpdesk call volume for card lockouts by eliminating the manual unblock workflow.",
-                Tags = ["sccredpol", "smart-card", "unblock", "puk", "helpdesk", "user-experience"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                ImpactNote = "Smart card unblock screen shown at Windows logon when PIN is blocked. Users can self-service PUK entry. Reduces helpdesk calls for locked cards.",
-                ApplyOps = [RegOp.SetDword(Key, "EnableIntegratedUnblock", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "EnableIntegratedUnblock")],
-                DetectOps = [RegOp.CheckDword(Key, "EnableIntegratedUnblock", 1)],
-            },
-        ];
-
+            [
+                new TweakDef
+                {
+                    Id = "sccredpol-allow-certificates-with-no-extended-key-usage",
+                    Label = "SC Credentials: Allow Smart Card Certificates Without Extended Key Usage for Logon",
+                    Category = "User Account",
+                    Description =
+                        "Sets AllowCertificatesWithNoEKU=0 in Smart Card Credential Provider policy. Prevents smart card certificates without an Extended Key Usage (EKU) extension — or with an EKU that doesn't include Client Authentication (1.3.6.1.5.5.7.3.2) — from being used for Windows logon. "
+                        + "Smart card certificates without an EKU or with an all-inclusive EKU (Any Purpose) are certificates that were issued without specifying a legitimate use constraint. Such certificates are typically misconfigured CA root certificates or test certificates. If Windows allows logon with any certificate present on a smart card regardless of EKU, an attacker who compromises a user's smart card PIN and inserts a root CA certificate or code signing certificate into the card can attempt logon with the inappropriate certificate. Requiring Client Authentication EKU ensures only purpose-constrained logon certificates can authenticate to interactive sessions.",
+                    Tags = ["sccredpol", "smart-card", "eku", "certificate", "logon", "client-auth"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote =
+                        "Smart card certificates must have Client Authentication EKU for interactive logon. Misconfigured test certs or CA-root certs cannot authenticate.",
+                    ApplyOps = [RegOp.SetDword(Key, "AllowCertificatesWithNoEKU", 0)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "AllowCertificatesWithNoEKU")],
+                    DetectOps = [RegOp.CheckDword(Key, "AllowCertificatesWithNoEKU", 0)],
+                },
+                new TweakDef
+                {
+                    Id = "sccredpol-enforce-certificate-time-validity",
+                    Label = "SC Credentials: Reject Expired Smart Card Certificates from Logon",
+                    Category = "User Account",
+                    Description =
+                        "Sets EnforceCAExpiry=1 in Smart Card Credential Provider policy. Enforces certificate validity period checking — prevents Windows from accepting smart card certificates for logon that have expired or whose issuing CA certificate chain has expired. By default, Windows may allow logon with expired smart card certificates in some scenarios (offline cached logon) if the certificate was previously valid. "
+                        + "Expired certificates represent an operational risk in smart card deployments: when a user's smart card certificate expires but the card PIN remains valid, Windows may continue to accept the card for domain logon relying on cached credentials — even though the PKI infrastructure considers the certificate expired. An attacker who obtains an expired certificate and the corresponding private key (from a compromised card) can attempt offline certificate logon. EnforceCAExpiry=1 ensures the current certificate validity timestamp is always checked, preventing expired certificate acceptance even in cached credential scenarios.",
+                    Tags = ["sccredpol", "smart-card", "certificate-expiry", "ca-expiry", "validity", "pki"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 4,
+                    ImpactNote =
+                        "Expired smart card certificates rejected. Users with expired certificates must renew before interactive logon works. Ensure certificate renewal reminders are in place.",
+                    ApplyOps = [RegOp.SetDword(Key, "EnforceCAExpiry", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "EnforceCAExpiry")],
+                    DetectOps = [RegOp.CheckDword(Key, "EnforceCAExpiry", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "sccredpol-filter-duplicate-certificates",
+                    Label = "SC Credentials: Filter Duplicate Smart Card Certificates Shown in Logon Picker",
+                    Category = "User Account",
+                    Description =
+                        "Sets FilterDuplicateCerts=1 in Smart Card Credential Provider policy. When a smart card contains multiple certificates with the same Subject and public key (e.g., during certificate renewal where both old and new certificates co-exist on the card), this setting shows only the most recently issued certificate in the Windows logon certificate picker, preventing user confusion from duplicate entries. "
+                        + "During smart card certificate lifecycle management, cards frequently transition through a state where both the old (near-expired) and new (freshly issued) certificates are on the card simultaneously — to allow the renewal to proceed without requiring the user to surrender their card. The Windows logon certificate picker displays all certificates, presenting two identical-looking entries to the user. Users who select the expired certificate will experience logon failures. FilterDuplicateCerts reduces the duplicate entries to one (the most recent), eliminating this user experience issue.",
+                    Tags = ["sccredpol", "smart-card", "duplicate-certificate", "certificate-renewal", "logon-picker"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 2,
+                    SafetyRating = 5,
+                    ImpactNote =
+                        "Duplicate smart card certificates filtered in logon picker. Only most recently issued certificate shown when multiple share the same subject.",
+                    ApplyOps = [RegOp.SetDword(Key, "FilterDuplicateCerts", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "FilterDuplicateCerts")],
+                    DetectOps = [RegOp.CheckDword(Key, "FilterDuplicateCerts", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "sccredpol-force-read-all-certificates",
+                    Label = "SC Credentials: Force Reading All Certificates from Smart Card (Not Just Root/Signing)",
+                    Category = "User Account",
+                    Description =
+                        "Sets ForceReadingAllCertificates=1 in Smart Card Credential Provider policy. Forces Windows to read all certificates stored on the smart card during authentication enumeration, rather than only examining the first matching certificate. Some cards store certificate-based logon credentials on non-default slots or with non-standard EKU ordering — without ForceReadingAllCertificates, Windows may skip valid authentication certificates. "
+                        + "Smart card credential providers have an optimisation that stops scanning the card after finding the first usable certificate. On cards with multiple valid Client Authentication certificates (multi-profile cards, cards issued by different CAs for different resource domains), the optimisation may select a certificate for a different trust domain, causing failed authentication. ForceReadingAllCertificates ensures the complete certificate set is enumerated and the credential provider selects the certificate with the best chain match for the current domain.",
+                    Tags = ["sccredpol", "smart-card", "certificate-enumeration", "multi-profile", "credential-provider"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 2,
+                    SafetyRating = 5,
+                    ImpactNote =
+                        "All smart card certificates read and enumerated. Slight performance increase per logon attempt; negligible on modern smart card readers.",
+                    ApplyOps = [RegOp.SetDword(Key, "ForceReadingAllCertificates", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "ForceReadingAllCertificates")],
+                    DetectOps = [RegOp.CheckDword(Key, "ForceReadingAllCertificates", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "sccredpol-require-smart-card-for-logon",
+                    Label = "SC Credentials: Require Smart Card for Interactive Logon (Disable Password-Based Logon)",
+                    Category = "User Account",
+                    Description =
+                        "Sets ScForceOption=1 in Windows System policy. Requires users to authenticate with a smart card for interactive (local and Remote Desktop) logon. Password-based interactive logon is disabled. This setting is the full enforcement of a smart card-mandatory authentication policy — ensuring that physical possession of the smart card is required for every interactive logon event, eliminating password-based bypass paths. "
+                        + "Password-based logon as a fallback for smart card environments creates a persistent weak authentication path: users who 'lose' their smart card can fall back to passwords, which are substantially easier to steal via phishing or shoulder surfing than compromising a physical authentication token plus PIN. In high-assurance environments (financial trading, government classified systems, nuclear facility IT, PCI DSS Level 1), all interactive logon must be protected by a physical authentication factor. ScForceOption=1 eliminates the password fallback and enforces the physical factor requirement absolutely.",
+                    Tags = ["sccredpol", "smart-card", "force-logon", "disable-password-logon", "mfa", "high-assurance"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 5,
+                    SafetyRating = 2,
+                    ImpactNote =
+                        "BREAKING: Password interactive logon fully disabled. Smart card REQUIRED for all logon. Ensure all users have working smart cards and readers before deployment. Service accounts need smartcard exemption.",
+                    ApplyOps = [RegOp.SetDword(SysKey, "ScForceOption", 1)],
+                    RemoveOps = [RegOp.DeleteValue(SysKey, "ScForceOption")],
+                    DetectOps = [RegOp.CheckDword(SysKey, "ScForceOption", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "sccredpol-enable-smart-card-lock-on-removal",
+                    Label = "SC Credentials: Lock Workstation Automatically When Smart Card is Removed",
+                    Category = "User Account",
+                    Description =
+                        "Sets SmartCardRemovalOption=1 in Windows System policy. Automatically locks the workstation when the user removes their smart card from the reader, replacing the 'no action' default. Ensures the workstation is immediately locked when the user physically departs (smart card is typically in their lanyard or pocket which they take with them). "
+                        + "Smart card removal detection is a behavioural lock triggered by physical possession of the authentication token. The security premise: a person who removes their smart card from the reader is physically leaving the workstation. Without removal lock, the authenticated session remains unlocked and accessible to anyone who approaches the workstation during the user's brief absence (printer, coffee, restroom). SmartCardRemovalOption=1 means the session locks within seconds of card removal — the physical authentication token acts as a proximity-based session lock device.",
+                    Tags = ["sccredpol", "smart-card", "removal-lock", "session-lock", "physical-security"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote =
+                        "Workstation locks immediately on smart card removal. Users who briefly remove their card for any reason will need to re-insert and re-authenticate.",
+                    ApplyOps = [RegOp.SetDword(SysKey, "SmartCardRemovalOption", 1)],
+                    RemoveOps = [RegOp.DeleteValue(SysKey, "SmartCardRemovalOption")],
+                    DetectOps = [RegOp.CheckDword(SysKey, "SmartCardRemovalOption", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "sccredpol-disable-smart-card-credential-caching",
+                    Label = "SC Credentials: Disable Windows Cached Credentials for Smart Card Logons",
+                    Category = "User Account",
+                    Description =
+                        "Sets DisableSmartCardLogonCheck=0 in Smart Card Credential Provider policy. Ensures Windows performs a full smart card authentication challenge on every logon attempt — disabling any cached credential shortcut paths that might allow logon without re-validating the current smart card state against the DC. "
+                        + "Cached credential logon for smart card authentication creates an inconsistency: the cached domain credential may be valid even after the smart card certificate has been revoked (e.g., following employee termination or card loss). If Windows allows cached credential logon for smart card sessions, a terminated employee's workstation retains the logon capability for up to the domain cache lifetime (default 10 cached logons). Ensuring full smart card validation on each logon forces certificate revocation to be effective immediately — revoked smart cards are rejected on first logon attempt after CRL update.",
+                    Tags = ["sccredpol", "smart-card", "credential-cache", "revocation", "crl", "terminated-employee"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 3,
+                    ImpactNote =
+                        "Full smart card DC validation required. Offline logon (no DC reachable) requires network connectivity. Deploy alongside always-on VPN for remote workers.",
+                    ApplyOps = [RegOp.SetDword(Key, "DisableSmartCardLogonCheck", 0)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "DisableSmartCardLogonCheck")],
+                    DetectOps = [RegOp.CheckDword(Key, "DisableSmartCardLogonCheck", 0)],
+                },
+                new TweakDef
+                {
+                    Id = "sccredpol-enable-smart-card-puk-logging",
+                    Label = "SC Credentials: Enable Smart Card PUK/PIN Operation Logging",
+                    Category = "User Account",
+                    Description =
+                        "Sets EnableSmartCardLogonLogging=1 in Smart Card Credential Provider policy. Enables logging of smart card PIN entry events, PUK (PIN Unblocking Key) operations, and certificate selection events to the Windows Application event log. PIN operation logging provides an audit trail of smart card authentication activity at the workstation — enabling detection of PIN brute-force attempts (excessive failed PIN entries), card blocking events (PUK operation triggered), and certificate selection anomalies. "
+                        + "Smart card PIN brute-force attacks are rate-limited by card hardware (typically 3-10 failed attempts before card lockout), but without logging, an attacker who attempts multiple combinations across the threshold boundary and reinserts the card leaves no system event trace. Smart card logging events can be collected by SIEM, enabling detection of cards that are being tested for PIN guessing (rapid sequence of failed PIN events at an unexpected workstation), identifying potentially compromised or stolen cards before the card locks.",
+                    Tags = ["sccredpol", "smart-card", "logging", "pin-brute-force", "puk", "audit"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote =
+                        "Smart card PIN and PUK events logged to Application event log. SIEM collection of card-specific events enables PIN brute-force detection.",
+                    ApplyOps = [RegOp.SetDword(Key, "EnableSmartCardLogonLogging", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "EnableSmartCardLogonLogging")],
+                    DetectOps = [RegOp.CheckDword(Key, "EnableSmartCardLogonLogging", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "sccredpol-restrict-to-root-trusted-certificates",
+                    Label = "SC Credentials: Restrict Smart Card Logon to Root-CA Trusted Certificates Only",
+                    Category = "User Account",
+                    Description =
+                        "Sets RootCA=1 in Smart Card Credential Provider policy. Restricts smart card logon to only accept certificates that chain to a root CA in the machine's Trusted Root Certification Authorities store — preventing certificates issued by intermediate-only CAs or enterprise subordinate CAs whose root is not in the machine trust store from being used for logon. "
+                        + "In multi-forest or partner organisation environments, smart cards issued by external PKI hierarchies may be physically interoperable (same card form factor, compatible reader drivers) but should not grant logon access to the local domain unless their issuing CA root is explicitly trusted. Without RootCA=1, certificates from any technically valid PKI chain — including self-signed certificates added to a card by an attacker — could be used for logon. Restricting to root-CA-trusted certs ensures the local domain trust policy governs which PKI hierarchies are authorised for smart card authentication.",
+                    Tags = ["sccredpol", "smart-card", "root-ca", "trust", "pki", "cross-forest"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote =
+                        "Smart card certs must chain to machine trust store root CA. Self-signed and untrusted-root certificates rejected for logon.",
+                    ApplyOps = [RegOp.SetDword(Key, "RootCA", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "RootCA")],
+                    DetectOps = [RegOp.CheckDword(Key, "RootCA", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "sccredpol-enable-integrated-unblock",
+                    Label = "SC Credentials: Enable Integrated Smart Card Unblock Screen at Logon",
+                    Category = "User Account",
+                    Description =
+                        "Sets EnableIntegratedUnblock=1 in Smart Card Credential Provider policy. Enables the Windows integrated smart card unblock screen — presented at the Ctrl+Alt+Del logon screen when a smart card's PIN is blocked (after exceeding the incorrect PIN attempt limit). The integrated unblock screen allows users to unblock their card at the logon screen using PUK without requiring a separate unblock tool or helpdesk intervention. "
+                        + "Without integrated unblock, a user whose card PIN is blocked must call the IT helpdesk, be issued a temporary PUK, and use a separate smart card management utility to unblock the card. This process typically takes 15–60 minutes depending on helpdesk availability. The integrated unblock screen presents the PUK entry interface directly at the Windows logon screen — the user provides their PUK and new PIN, the card is immediately unblocked, and logon proceeds. EnableIntegratedUnblock reduces helpdesk call volume for card lockouts by eliminating the manual unblock workflow.",
+                    Tags = ["sccredpol", "smart-card", "unblock", "puk", "helpdesk", "user-experience"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 2,
+                    SafetyRating = 5,
+                    ImpactNote =
+                        "Smart card unblock screen shown at Windows logon when PIN is blocked. Users can self-service PUK entry. Reduces helpdesk calls for locked cards.",
+                    ApplyOps = [RegOp.SetDword(Key, "EnableIntegratedUnblock", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "EnableIntegratedUnblock")],
+                    DetectOps = [RegOp.CheckDword(Key, "EnableIntegratedUnblock", 1)],
+                },
+            ];
     }
 
     // ── SmartCardCredProvPolicy ──
     private static class _SmartCardCredProvPolicy
     {
-        private const string Key =
-            @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\SmartCardCredentialProvider";
+        private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\SmartCardCredentialProvider";
 
         public static IReadOnlyList<TweakDef> Data =>
             [
@@ -8080,7 +8124,6 @@ internal static class PolicyAuth
                     DetectOps = [RegOp.CheckDword(Key, "LogonHoursNotificationEnabled", 1)],
                 },
             ];
-
     }
 
     // ── WebAuthnPolicy ──
@@ -8095,7 +8138,10 @@ internal static class PolicyAuth
                 Id = "wauthn-disable-touch-id-fallback",
                 Label = "Disable WebAuthn Biometric Fallback to PIN",
                 Category = "User Account",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 3, SafetyRating = 5,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 3,
+                SafetyRating = 5,
                 Description =
                     "Sets DisableBiometricFallback=1 in the WebAuthn policy key. Prevents the "
                     + "Windows Hello FIDO2 implementation from falling back to a PIN when the "
@@ -8115,7 +8161,10 @@ internal static class PolicyAuth
                 Id = "wauthn-require-enterprise-attestation",
                 Label = "Require Enterprise Attestation for FIDO Keys",
                 Category = "User Account",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 3, SafetyRating = 5,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 3,
+                SafetyRating = 5,
                 Description =
                     "Sets RequireEnterpriseAttestation=1 in the WebAuthn policy key. Forces "
                     + "FIDO2 authenticators to provide enterprise attestation statements that "
@@ -8135,7 +8184,10 @@ internal static class PolicyAuth
                 Id = "wauthn-disable-cross-origin-auth",
                 Label = "Disable Cross-Origin WebAuthn Authentication",
                 Category = "User Account",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 4, SafetyRating = 5,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 4,
+                SafetyRating = 5,
                 Description =
                     "Sets DisableCrossOriginAuth=1 in the WebAuthn policy key. Prevents "
                     + "browser-based WebAuthn from completing authentication ceremonies where "
@@ -8154,7 +8206,10 @@ internal static class PolicyAuth
                 Id = "wauthn-disable-password-auth-fallback",
                 Label = "Disable WebAuthn Password Authentication Fallback",
                 Category = "User Account",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 4, SafetyRating = 5,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 4,
+                SafetyRating = 5,
                 Description =
                     "Sets DisablePasswordFallback=1 in the WebAuthn policy key. Prevents "
                     + "Windows Hello and FIDO2 flows from offering a password sign-in link "
@@ -8173,7 +8228,10 @@ internal static class PolicyAuth
                 Id = "wauthn-disable-cloud-passkey-sync",
                 Label = "Disable Cloud Passkey Sync",
                 Category = "User Account",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 4, SafetyRating = 5,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 4,
+                SafetyRating = 5,
                 Description =
                     "Sets DisableCloudPasskeySync=1 in the WebAuthn policy key. Prevents "
                     + "Windows Hello from backing up passkey private keys to the Microsoft "
@@ -8192,7 +8250,10 @@ internal static class PolicyAuth
                 Id = "wauthn-disable-webauthn-telemetry",
                 Label = "Disable WebAuthn Telemetry",
                 Category = "User Account",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 2, SafetyRating = 5,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 2,
+                SafetyRating = 5,
                 Description =
                     "Sets DisableWebAuthnTelemetry=1 in the WebAuthn policy key. Prevents "
                     + "the Windows WebAuthn API from sending usage events including registration "
@@ -8211,7 +8272,10 @@ internal static class PolicyAuth
                 Id = "wauthn-disable-security-key-enrollment",
                 Label = "Block Unauthorised Security Key Enrollment",
                 Category = "User Account",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 3, SafetyRating = 5,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 3,
+                SafetyRating = 5,
                 Description =
                     "Sets DisableSecurityKeyEnrollment=1 in the WebAuthn policy key. Prevents "
                     + "standard users from enrolling new FIDO2 security keys in Windows Hello "
@@ -8231,7 +8295,10 @@ internal static class PolicyAuth
                 Id = "wauthn-enforce-user-verification",
                 Label = "Enforce User Verification for All WebAuthn Calls",
                 Category = "User Account",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 4, SafetyRating = 5,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 4,
+                SafetyRating = 5,
                 Description =
                     "Sets EnforceUserVerification=1 in the WebAuthn policy key. Forces the "
                     + "Windows WebAuthn stack to set the UV (user verification) flag to "
@@ -8251,7 +8318,10 @@ internal static class PolicyAuth
                 Id = "wauthn-disable-nfc-transport",
                 Label = "Disable NFC Transport for FIDO2 Keys",
                 Category = "User Account",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 3, SafetyRating = 4,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 3,
+                SafetyRating = 4,
                 Description =
                     "Sets DisableNfcTransport=1 in the WebAuthn policy key. Prevents the "
                     + "Windows FIDO2 client from using NFC as a transport channel for security "
@@ -8270,7 +8340,10 @@ internal static class PolicyAuth
                 Id = "wauthn-disable-bluetooth-transport",
                 Label = "Disable Bluetooth Transport for FIDO2 Keys",
                 Category = "User Account",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 3, SafetyRating = 4,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 3,
+                SafetyRating = 4,
                 Description =
                     "Sets DisableBluetoothTransport=1 in the WebAuthn policy key. Disables "
                     + "Bluetooth Low Energy as a FIDO2 authenticator transport. BLE-based "
@@ -8285,7 +8358,6 @@ internal static class PolicyAuth
                 DetectOps = [RegOp.CheckDword(Key, "DisableBluetoothTransport", 1)],
             },
         ];
-
     }
 
     // ── WhfbPinPolicy ──
@@ -8466,7 +8538,6 @@ internal static class PolicyAuth
                     DetectOps = [RegOp.CheckDword(Key, "MaxFailedAttempts", 5)],
                 },
             ];
-
     }
 
     // ── WindowsHelloAdvPolicy ──
@@ -8647,14 +8718,12 @@ internal static class PolicyAuth
                 DetectOps = [RegOp.CheckDword(Key, "EnhancedAntiSpoofingForFacialFeatures", 1)],
             },
         ];
-
     }
 
     // ── WorkplaceJoinPolicy ──
     private static class _WorkplaceJoinPolicy
     {
-        private const string Key =
-            @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WorkplaceJoin";
+        private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WorkplaceJoin";
 
         public static IReadOnlyList<TweakDef> Data =>
             [
@@ -8829,7 +8898,5 @@ internal static class PolicyAuth
                     DetectOps = [RegOp.CheckDword(Key, "RequireSecureChannel", 1)],
                 },
             ];
-
     }
-
 }

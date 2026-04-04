@@ -1207,7 +1207,6 @@ internal static class Defender
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\NIS", "DisableProtocolRecognition")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\NIS", "DisableProtocolRecognition", 1)],
         },
-
         new TweakDef
         {
             Id = "sec-enable-audit-logon",
@@ -1252,7 +1251,6 @@ internal static class Defender
             RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters", "SMB1", 1)],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters", "SMB1", 0)],
         },
-
         new TweakDef
         {
             Id = "sec-enable-spectre-mitigations",
@@ -1404,8 +1402,6 @@ internal static class Defender
                 ),
             ],
         },
-
-
         new TweakDef
         {
             Id = "sec-enable-sehop",
@@ -1748,7 +1744,6 @@ internal static class Hardening
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\WDigest", "UseLogonCredential")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\WDigest", "UseLogonCredential", 0)],
         },
-
         new TweakDef
         {
             Id = "harden-restrict-ntlm-outgoing",
@@ -1995,8 +1990,6 @@ internal static class Hardening
                 RegOp.CheckString(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa", "RestrictRemoteSAM", @"O:BAG:BAD:(A;;RC;;;BA)"),
             ],
         },
-
-
         new TweakDef
         {
             Id = "harden-enable-smb-signing-server",
@@ -2020,7 +2013,6 @@ internal static class Hardening
                 RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters", "RequireSecuritySignature", 1),
             ],
         },
-
         new TweakDef
         {
             Id = "harden-enforce-smb-encryption",
@@ -2556,7 +2548,6 @@ internal static class SmartAppControl
     ];
 }
 
-
 // ── merged from PolicyCertificate.cs ──
 // RegiLattice.Core — Tweaks/PolicyCertificate.cs
 // Certificate auto-enrollment, PKI, ADCS, certificate revocation, validation, and smart card credential policies
@@ -2803,7 +2794,6 @@ internal static class PolicyCertificate
                 DetectOps = [RegOp.CheckDword(PkiLm, "DisableWeakSignatures", 1)],
             },
         ];
-
     }
 
     // ── CertificateBasedAuthPolicy ──
@@ -2984,7 +2974,6 @@ internal static class PolicyCertificate
                     DetectOps = [RegOp.CheckDword(Key, "RequireValidKDCCertificate", 1)],
                 },
             ];
-
     }
 
     // ── CertificatePolicy ──
@@ -3187,7 +3176,6 @@ internal static class PolicyCertificate
                 DetectOps = [RegOp.CheckDword(InternetSettings, "CertificateRevocation", 1)],
             },
         ];
-
     }
 
     // ── CertificateServices ──
@@ -3413,17 +3401,14 @@ internal static class PolicyCertificate
                 DetectOps = [RegOp.CheckDword(AutoEnrollMachine, "AllowUserCertTrust", 0)],
             },
         ];
-
     }
 
     // ── CertRevocationPolicy ──
     private static class _CertRevocationPolicy
     {
-        private const string CertRootKey =
-            @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\SystemCertificates";
+        private const string CertRootKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\SystemCertificates";
 
-        private const string RevocationKey =
-            @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\SystemCertificates\ChainEngine\Config";
+        private const string RevocationKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\SystemCertificates\ChainEngine\Config";
 
         public static IReadOnlyList<TweakDef> Data =>
             [
@@ -3439,7 +3424,8 @@ internal static class PolicyCertificate
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "Reduces revocation retrieval timeout from 60s to 20s. CRL/OCSP servers that respond slowly may be treated as unavailable sooner. Set to a higher value if CRL servers are known to be slow.",
+                    ImpactNote =
+                        "Reduces revocation retrieval timeout from 60s to 20s. CRL/OCSP servers that respond slowly may be treated as unavailable sooner. Set to a higher value if CRL servers are known to be slow.",
                     ApplyOps = [RegOp.SetDword(RevocationKey, "MaxURLRetrievalTimeout", 20000)],
                     RemoveOps = [RegOp.DeleteValue(RevocationKey, "MaxURLRetrievalTimeout")],
                     DetectOps = [RegOp.CheckDword(RevocationKey, "MaxURLRetrievalTimeout", 20000)],
@@ -3456,7 +3442,8 @@ internal static class PolicyCertificate
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 3,
-                    ImpactNote = "Certificates pass validation even when CRL is offline. Combined with short timeout, this is the standard enterprise setting. Hard-fail requires always-on CRL infrastructure.",
+                    ImpactNote =
+                        "Certificates pass validation even when CRL is offline. Combined with short timeout, this is the standard enterprise setting. Hard-fail requires always-on CRL infrastructure.",
                     ApplyOps = [RegOp.SetDword(RevocationKey, "WeakSignatureSettings", 0)],
                     RemoveOps = [RegOp.DeleteValue(RevocationKey, "WeakSignatureSettings")],
                     DetectOps = [RegOp.CheckDword(RevocationKey, "WeakSignatureSettings", 0)],
@@ -3473,7 +3460,8 @@ internal static class PolicyCertificate
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "OCSP checks are preferred. OCSP endpoints must be accessible from client machines. If only CRL infrastructure is deployed, this setting has no effect.",
+                    ImpactNote =
+                        "OCSP checks are preferred. OCSP endpoints must be accessible from client machines. If only CRL infrastructure is deployed, this setting has no effect.",
                     ApplyOps = [RegOp.SetDword(RevocationKey, "OCSPPreferEnabled", 1)],
                     RemoveOps = [RegOp.DeleteValue(RevocationKey, "OCSPPreferEnabled")],
                     DetectOps = [RegOp.CheckDword(RevocationKey, "OCSPPreferEnabled", 1)],
@@ -3490,19 +3478,11 @@ internal static class PolicyCertificate
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 4,
-                    ImpactNote = "CRL cache expires after 4 hours, forcing more frequent CRL downloads. Ensure CRL servers can handle the increased download frequency. Alternatively, implement CRL pre-fetch.",
-                    ApplyOps =
-                    [
-                        RegOp.SetDword(RevocationKey, "DefaultOCSPResponderURLRetrievalTimeout", 14400),
-                    ],
-                    RemoveOps =
-                    [
-                        RegOp.DeleteValue(RevocationKey, "DefaultOCSPResponderURLRetrievalTimeout"),
-                    ],
-                    DetectOps =
-                    [
-                        RegOp.CheckDword(RevocationKey, "DefaultOCSPResponderURLRetrievalTimeout", 14400),
-                    ],
+                    ImpactNote =
+                        "CRL cache expires after 4 hours, forcing more frequent CRL downloads. Ensure CRL servers can handle the increased download frequency. Alternatively, implement CRL pre-fetch.",
+                    ApplyOps = [RegOp.SetDword(RevocationKey, "DefaultOCSPResponderURLRetrievalTimeout", 14400)],
+                    RemoveOps = [RegOp.DeleteValue(RevocationKey, "DefaultOCSPResponderURLRetrievalTimeout")],
+                    DetectOps = [RegOp.CheckDword(RevocationKey, "DefaultOCSPResponderURLRetrievalTimeout", 14400)],
                 },
                 new TweakDef
                 {
@@ -3516,27 +3496,11 @@ internal static class PolicyCertificate
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 4,
-                    ImpactNote = "Certificate chains deeper than 6 links are rejected. Audit all PKI hierarchies with >1 intermediate CA before enabling. External CAs rarely exceed 3 links.",
-                    ApplyOps =
-                    [
-                        RegOp.SetDword(
-                            RevocationKey,
-                            "ChainEngineEnabledForcePathLengthConstraint",
-                            6
-                        ),
-                    ],
-                    RemoveOps =
-                    [
-                        RegOp.DeleteValue(RevocationKey, "ChainEngineEnabledForcePathLengthConstraint"),
-                    ],
-                    DetectOps =
-                    [
-                        RegOp.CheckDword(
-                            RevocationKey,
-                            "ChainEngineEnabledForcePathLengthConstraint",
-                            6
-                        ),
-                    ],
+                    ImpactNote =
+                        "Certificate chains deeper than 6 links are rejected. Audit all PKI hierarchies with >1 intermediate CA before enabling. External CAs rarely exceed 3 links.",
+                    ApplyOps = [RegOp.SetDword(RevocationKey, "ChainEngineEnabledForcePathLengthConstraint", 6)],
+                    RemoveOps = [RegOp.DeleteValue(RevocationKey, "ChainEngineEnabledForcePathLengthConstraint")],
+                    DetectOps = [RegOp.CheckDword(RevocationKey, "ChainEngineEnabledForcePathLengthConstraint", 6)],
                 },
                 new TweakDef
                 {
@@ -3550,7 +3514,8 @@ internal static class PolicyCertificate
                     CorpSafe = true,
                     ImpactScore = 4,
                     SafetyRating = 4,
-                    ImpactNote = "Revocation is checked for code signing certs. Executable files signed with a revoked cert are blocked. Ensure CRL/OCSP is accessible in offline environments or use CRL caching.",
+                    ImpactNote =
+                        "Revocation is checked for code signing certs. Executable files signed with a revoked cert are blocked. Ensure CRL/OCSP is accessible in offline environments or use CRL caching.",
                     ApplyOps = [RegOp.SetDword(CertRootKey, "CodeSigningRevocationEnabled", 1)],
                     RemoveOps = [RegOp.DeleteValue(CertRootKey, "CodeSigningRevocationEnabled")],
                     DetectOps = [RegOp.CheckDword(CertRootKey, "CodeSigningRevocationEnabled", 1)],
@@ -3567,7 +3532,8 @@ internal static class PolicyCertificate
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "Delta CRL support is enabled. Requires the issuing CA to publish Delta CRLs. If the CA does not publish Delta CRLs, this setting has no effect.",
+                    ImpactNote =
+                        "Delta CRL support is enabled. Requires the issuing CA to publish Delta CRLs. If the CA does not publish Delta CRLs, this setting has no effect.",
                     ApplyOps = [RegOp.SetDword(RevocationKey, "EnableDeltaCRL", 1)],
                     RemoveOps = [RegOp.DeleteValue(RevocationKey, "EnableDeltaCRL")],
                     DetectOps = [RegOp.CheckDword(RevocationKey, "EnableDeltaCRL", 1)],
@@ -3584,7 +3550,8 @@ internal static class PolicyCertificate
                     CorpSafe = true,
                     ImpactScore = 4,
                     SafetyRating = 3,
-                    ImpactNote = "Certificates from CAs not in the Windows Trusted Root Store are rejected. Internal enterprise CAs must be deployed via Group Policy Enterprise Trust before enabling. Self-signed certificates are rejected.",
+                    ImpactNote =
+                        "Certificates from CAs not in the Windows Trusted Root Store are rejected. Internal enterprise CAs must be deployed via Group Policy Enterprise Trust before enabling. Self-signed certificates are rejected.",
                     ApplyOps = [RegOp.SetDword(CertRootKey, "DenyUntrustedRoots", 1)],
                     RemoveOps = [RegOp.DeleteValue(CertRootKey, "DenyUntrustedRoots")],
                     DetectOps = [RegOp.CheckDword(CertRootKey, "DenyUntrustedRoots", 1)],
@@ -3601,7 +3568,8 @@ internal static class PolicyCertificate
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "Windows Update downloads root certificate list updates. Requires Windows Update access. In isolated environments, push root store updates via Group Policy instead.",
+                    ImpactNote =
+                        "Windows Update downloads root certificate list updates. Requires Windows Update access. In isolated environments, push root store updates via Group Policy instead.",
                     ApplyOps = [RegOp.SetDword(CertRootKey, "AuthRootAutoUpdateEnabled", 1)],
                     RemoveOps = [RegOp.DeleteValue(CertRootKey, "AuthRootAutoUpdateEnabled")],
                     DetectOps = [RegOp.CheckDword(CertRootKey, "AuthRootAutoUpdateEnabled", 1)],
@@ -3618,13 +3586,13 @@ internal static class PolicyCertificate
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "OCSP responses older than 24 hours trigger a new OCSP request. Ensure OCSP servers are available for certificate validation. Reduce to 4 hours for high-security environments.",
+                    ImpactNote =
+                        "OCSP responses older than 24 hours trigger a new OCSP request. Ensure OCSP servers are available for certificate validation. Reduce to 4 hours for high-security environments.",
                     ApplyOps = [RegOp.SetDword(RevocationKey, "MaxOCSPResponseAge", 86400)],
                     RemoveOps = [RegOp.DeleteValue(RevocationKey, "MaxOCSPResponseAge")],
                     DetectOps = [RegOp.CheckDword(RevocationKey, "MaxOCSPResponseAge", 86400)],
                 },
             ];
-
     }
 
     // ── CertValidationPolicy ──
@@ -3805,20 +3773,16 @@ internal static class PolicyCertificate
                 DetectOps = [RegOp.CheckDword(Key, "DisableCertValidationTelemetry", 1)],
             },
         ];
-
     }
 
     // ── PkiPublicKeyServicesPolicy ──
     private static class _PkiPublicKeyServicesPolicy
     {
-        private const string SmartCardKey =
-            @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\SmartCardCredentialProvider";
+        private const string SmartCardKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\SmartCardCredentialProvider";
 
-        private const string AutoEnrollKey =
-            @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Cryptography\AutoEnrollment";
+        private const string AutoEnrollKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Cryptography\AutoEnrollment";
 
-        private const string PkiKey =
-            @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\PKI";
+        private const string PkiKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\PKI";
 
         public static IReadOnlyList<TweakDef> Data =>
             [
@@ -3834,7 +3798,8 @@ internal static class PolicyCertificate
                     CorpSafe = true,
                     ImpactScore = 4,
                     SafetyRating = 5,
-                    ImpactNote = "Auto-enrollment requires an enterprise CA with published certificate templates. Machines silently enroll for configured templates. No impact if no enterprise CA or templates are configured.",
+                    ImpactNote =
+                        "Auto-enrollment requires an enterprise CA with published certificate templates. Machines silently enroll for configured templates. No impact if no enterprise CA or templates are configured.",
                     ApplyOps = [RegOp.SetDword(AutoEnrollKey, "AEPolicy", 7)],
                     RemoveOps = [RegOp.DeleteValue(AutoEnrollKey, "AEPolicy")],
                     DetectOps = [RegOp.CheckDword(AutoEnrollKey, "AEPolicy", 7)],
@@ -3851,7 +3816,8 @@ internal static class PolicyCertificate
                     CorpSafe = true,
                     ImpactScore = 4,
                     SafetyRating = 4,
-                    ImpactNote = "Smart card PIN recovery is disabled. Forgotten PINs require re-issuance of the smart card. Ensure lifecycle processes (lost card, forgotten PIN) are documented for users.",
+                    ImpactNote =
+                        "Smart card PIN recovery is disabled. Forgotten PINs require re-issuance of the smart card. Ensure lifecycle processes (lost card, forgotten PIN) are documented for users.",
                     ApplyOps = [RegOp.SetDword(SmartCardKey, "DisablePINRecovery", 1)],
                     RemoveOps = [RegOp.DeleteValue(SmartCardKey, "DisablePINRecovery")],
                     DetectOps = [RegOp.CheckDword(SmartCardKey, "DisablePINRecovery", 1)],
@@ -3868,7 +3834,8 @@ internal static class PolicyCertificate
                     CorpSafe = true,
                     ImpactScore = 2,
                     SafetyRating = 5,
-                    ImpactNote = "Certificate subject names in UI dialogs display in human-readable order. No functional impact — purely cosmetic change in certificate display.",
+                    ImpactNote =
+                        "Certificate subject names in UI dialogs display in human-readable order. No functional impact — purely cosmetic change in certificate display.",
                     ApplyOps = [RegOp.SetDword(PkiKey, "ReverseSubject", 1)],
                     RemoveOps = [RegOp.DeleteValue(PkiKey, "ReverseSubject")],
                     DetectOps = [RegOp.CheckDword(PkiKey, "ReverseSubject", 1)],
@@ -3885,7 +3852,8 @@ internal static class PolicyCertificate
                     CorpSafe = true,
                     ImpactScore = 5,
                     SafetyRating = 3,
-                    ImpactNote = "Smart card is required for all interactive logon. Password logon is hidden. ALL administrators must have a working smart card before enabling — lockout risk if smart card infrastructure fails.",
+                    ImpactNote =
+                        "Smart card is required for all interactive logon. Password logon is hidden. ALL administrators must have a working smart card before enabling — lockout risk if smart card infrastructure fails.",
                     ApplyOps = [RegOp.SetDword(SmartCardKey, "ScForceOption", 1)],
                     RemoveOps = [RegOp.DeleteValue(SmartCardKey, "ScForceOption")],
                     DetectOps = [RegOp.CheckDword(SmartCardKey, "ScForceOption", 1)],
@@ -3902,7 +3870,8 @@ internal static class PolicyCertificate
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "Smart card certificates are copied to user store on card insertion. Required for many applications that read from the certificate store rather than directly querying the smart card.",
+                    ImpactNote =
+                        "Smart card certificates are copied to user store on card insertion. Required for many applications that read from the certificate store rather than directly querying the smart card.",
                     ApplyOps = [RegOp.SetDword(SmartCardKey, "EnableCertPropagation", 1)],
                     RemoveOps = [RegOp.DeleteValue(SmartCardKey, "EnableCertPropagation")],
                     DetectOps = [RegOp.CheckDword(SmartCardKey, "EnableCertPropagation", 1)],
@@ -3919,7 +3888,8 @@ internal static class PolicyCertificate
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "Enterprise CA certificates are automatically propagated from Active Directory. Required for enterprise certificate-based authentication (802.1x, SSTP VPN, IPsec).",
+                    ImpactNote =
+                        "Enterprise CA certificates are automatically propagated from Active Directory. Required for enterprise certificate-based authentication (802.1x, SSTP VPN, IPsec).",
                     ApplyOps = [RegOp.SetDword(PkiKey, "EnablePKIUpdates", 1)],
                     RemoveOps = [RegOp.DeleteValue(PkiKey, "EnablePKIUpdates")],
                     DetectOps = [RegOp.CheckDword(PkiKey, "EnablePKIUpdates", 1)],
@@ -3936,7 +3906,8 @@ internal static class PolicyCertificate
                     CorpSafe = true,
                     ImpactScore = 2,
                     SafetyRating = 5,
-                    ImpactNote = "Enables PIN change option in Windows security screen. Purely usability improvement — no security impact. Requires compatible smart card middleware.",
+                    ImpactNote =
+                        "Enables PIN change option in Windows security screen. Purely usability improvement — no security impact. Requires compatible smart card middleware.",
                     ApplyOps = [RegOp.SetDword(SmartCardKey, "AllowPINChangeAtLogon", 1)],
                     RemoveOps = [RegOp.DeleteValue(SmartCardKey, "AllowPINChangeAtLogon")],
                     DetectOps = [RegOp.CheckDword(SmartCardKey, "AllowPINChangeAtLogon", 1)],
@@ -3953,19 +3924,11 @@ internal static class PolicyCertificate
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 4,
-                    ImpactNote = "Smart card logon fails when AD DC is unreachable. Off-network users (VPN users) must be able to reach a DC before authenticating. Do not enable for laptops that frequently work disconnected from the network.",
-                    ApplyOps =
-                    [
-                        RegOp.SetDword(SmartCardKey, "AllowSmartCardWithoutDirectoryService", 0),
-                    ],
-                    RemoveOps =
-                    [
-                        RegOp.DeleteValue(SmartCardKey, "AllowSmartCardWithoutDirectoryService"),
-                    ],
-                    DetectOps =
-                    [
-                        RegOp.CheckDword(SmartCardKey, "AllowSmartCardWithoutDirectoryService", 0),
-                    ],
+                    ImpactNote =
+                        "Smart card logon fails when AD DC is unreachable. Off-network users (VPN users) must be able to reach a DC before authenticating. Do not enable for laptops that frequently work disconnected from the network.",
+                    ApplyOps = [RegOp.SetDword(SmartCardKey, "AllowSmartCardWithoutDirectoryService", 0)],
+                    RemoveOps = [RegOp.DeleteValue(SmartCardKey, "AllowSmartCardWithoutDirectoryService")],
+                    DetectOps = [RegOp.CheckDword(SmartCardKey, "AllowSmartCardWithoutDirectoryService", 0)],
                 },
                 new TweakDef
                 {
@@ -3979,7 +3942,8 @@ internal static class PolicyCertificate
                     CorpSafe = true,
                     ImpactScore = 4,
                     SafetyRating = 4,
-                    ImpactNote = "TLS certificates without SCTs are rejected. Public CAs include SCTs since 2022. Internal CA certificates may lack SCTs — configure CT whitelist for internal domains.",
+                    ImpactNote =
+                        "TLS certificates without SCTs are rejected. Public CAs include SCTs since 2022. Internal CA certificates may lack SCTs — configure CT whitelist for internal domains.",
                     ApplyOps = [RegOp.SetDword(PkiKey, "EnableCTLog", 1)],
                     RemoveOps = [RegOp.DeleteValue(PkiKey, "EnableCTLog")],
                     DetectOps = [RegOp.CheckDword(PkiKey, "EnableCTLog", 1)],
@@ -3996,13 +3960,13 @@ internal static class PolicyCertificate
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "Certificate EKU constraints are strictly enforced. Certificates issued without an EKU for their intended use are rejected. Audit certificate templates to ensure correct EKU assignments.",
+                    ImpactNote =
+                        "Certificate EKU constraints are strictly enforced. Certificates issued without an EKU for their intended use are rejected. Audit certificate templates to ensure correct EKU assignments.",
                     ApplyOps = [RegOp.SetDword(PkiKey, "EKUFiltering", 1)],
                     RemoveOps = [RegOp.DeleteValue(PkiKey, "EKUFiltering")],
                     DetectOps = [RegOp.CheckDword(PkiKey, "EKUFiltering", 1)],
                 },
             ];
-
     }
 
     // ── WindowsAdcsPolicy ──
@@ -4016,170 +3980,177 @@ internal static class PolicyCertificate
             [
                 new TweakDef
                 {
-                    Id          = "adcspol-protect-root-store",
-                    Label       = "Protect Root Certificate Store Against Modification",
+                    Id = "adcspol-protect-root-store",
+                    Label = "Protect Root Certificate Store Against Modification",
                     Category = "Security",
-                    Description = "Sets ProtectedRootsAllowedToPerformCRLRetrieval=0 in the Cryptography policy. Prevents non-administrative processes from retrieving CRL (Certificate Revocation List) data through the Protected Roots API. Restricting this access reduces the risk of CRL poisoning attacks that could mark legitimate certificates as revoked or prevent revocation checks from completing correctly.",
-                    Tags        = ["adcs", "certificate", "root-store", "crl", "hardening"],
-                    NeedsAdmin  = true,
-                    CorpSafe    = true,
+                    Description =
+                        "Sets ProtectedRootsAllowedToPerformCRLRetrieval=0 in the Cryptography policy. Prevents non-administrative processes from retrieving CRL (Certificate Revocation List) data through the Protected Roots API. Restricting this access reduces the risk of CRL poisoning attacks that could mark legitimate certificates as revoked or prevent revocation checks from completing correctly.",
+                    Tags = ["adcs", "certificate", "root-store", "crl", "hardening"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
                     ImpactScore = 4,
                     SafetyRating = 4,
-                    ImpactNote  = "Restricts CRL retrieval through Protected Roots; may affect non-admin CRL checking in some scenarios.",
-                    ApplyOps    = [RegOp.SetDword(CryptoKey, "ProtectedRootsAllowedToPerformCRLRetrieval", 0)],
-                    RemoveOps   = [RegOp.DeleteValue(CryptoKey, "ProtectedRootsAllowedToPerformCRLRetrieval")],
-                    DetectOps   = [RegOp.CheckDword(CryptoKey, "ProtectedRootsAllowedToPerformCRLRetrieval", 0)],
+                    ImpactNote = "Restricts CRL retrieval through Protected Roots; may affect non-admin CRL checking in some scenarios.",
+                    ApplyOps = [RegOp.SetDword(CryptoKey, "ProtectedRootsAllowedToPerformCRLRetrieval", 0)],
+                    RemoveOps = [RegOp.DeleteValue(CryptoKey, "ProtectedRootsAllowedToPerformCRLRetrieval")],
+                    DetectOps = [RegOp.CheckDword(CryptoKey, "ProtectedRootsAllowedToPerformCRLRetrieval", 0)],
                 },
                 new TweakDef
                 {
-                    Id          = "adcspol-disable-auto-root-update",
-                    Label       = "Disable Automatic Root Certificate Update",
+                    Id = "adcspol-disable-auto-root-update",
+                    Label = "Disable Automatic Root Certificate Update",
                     Category = "Security",
-                    Description = "Sets DisableRootAutoUpdate=1 in the Cryptography policy. Prevents Windows from automatically downloading and installing new trusted root certificates from the Windows Update Certificate Distribution Point (CDP). In air-gapped or highly regulated environments this prevents silent addition of untrusted or government-mandated CA certificates. Organisations must manage root store updates manually through their own PKI if this is enabled.",
-                    Tags        = ["adcs", "certificate", "root-update", "policy", "hardening"],
-                    NeedsAdmin  = true,
-                    CorpSafe    = true,
+                    Description =
+                        "Sets DisableRootAutoUpdate=1 in the Cryptography policy. Prevents Windows from automatically downloading and installing new trusted root certificates from the Windows Update Certificate Distribution Point (CDP). In air-gapped or highly regulated environments this prevents silent addition of untrusted or government-mandated CA certificates. Organisations must manage root store updates manually through their own PKI if this is enabled.",
+                    Tags = ["adcs", "certificate", "root-update", "policy", "hardening"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 3,
-                    ImpactNote  = "Blocks automatic root cert updates from Windows Update; manage root store manually to avoid revocation issues.",
-                    ApplyOps    = [RegOp.SetDword(CryptoKey, "DisableRootAutoUpdate", 1)],
-                    RemoveOps   = [RegOp.DeleteValue(CryptoKey, "DisableRootAutoUpdate")],
-                    DetectOps   = [RegOp.CheckDword(CryptoKey, "DisableRootAutoUpdate", 1)],
+                    ImpactNote = "Blocks automatic root cert updates from Windows Update; manage root store manually to avoid revocation issues.",
+                    ApplyOps = [RegOp.SetDword(CryptoKey, "DisableRootAutoUpdate", 1)],
+                    RemoveOps = [RegOp.DeleteValue(CryptoKey, "DisableRootAutoUpdate")],
+                    DetectOps = [RegOp.CheckDword(CryptoKey, "DisableRootAutoUpdate", 1)],
                 },
                 new TweakDef
                 {
-                    Id          = "adcspol-enforce-strong-key-protection",
-                    Label       = "Enforce Strong Private Key Protection",
+                    Id = "adcspol-enforce-strong-key-protection",
+                    Label = "Enforce Strong Private Key Protection",
                     Category = "Security",
-                    Description = "Sets ForceKeyProtection=2 in the Cryptography policy. Requires a user password confirmation every time a certificate's private key is accessed by an application. Values: 0=no protection, 1=notify on first use, 2=require password for every use. Level 2 ensures that private key operations cannot happen silently in the background, protecting against malware that attempts to sign data or decrypt sensitive content using stored keys.",
-                    Tags        = ["adcs", "certificate", "private-key", "policy", "hardening"],
-                    NeedsAdmin  = true,
-                    CorpSafe    = true,
+                    Description =
+                        "Sets ForceKeyProtection=2 in the Cryptography policy. Requires a user password confirmation every time a certificate's private key is accessed by an application. Values: 0=no protection, 1=notify on first use, 2=require password for every use. Level 2 ensures that private key operations cannot happen silently in the background, protecting against malware that attempts to sign data or decrypt sensitive content using stored keys.",
+                    Tags = ["adcs", "certificate", "private-key", "policy", "hardening"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
                     ImpactScore = 4,
                     SafetyRating = 4,
-                    ImpactNote  = "Prompts for key password on every private-key operation; may interrupt automated signing workflows.",
-                    ApplyOps    = [RegOp.SetDword(CryptoKey, "ForceKeyProtection", 2)],
-                    RemoveOps   = [RegOp.DeleteValue(CryptoKey, "ForceKeyProtection")],
-                    DetectOps   = [RegOp.CheckDword(CryptoKey, "ForceKeyProtection", 2)],
+                    ImpactNote = "Prompts for key password on every private-key operation; may interrupt automated signing workflows.",
+                    ApplyOps = [RegOp.SetDword(CryptoKey, "ForceKeyProtection", 2)],
+                    RemoveOps = [RegOp.DeleteValue(CryptoKey, "ForceKeyProtection")],
+                    DetectOps = [RegOp.CheckDword(CryptoKey, "ForceKeyProtection", 2)],
                 },
                 new TweakDef
                 {
-                    Id          = "adcspol-smartcard-require-logon",
-                    Label       = "Require Smart Card for Interactive Logon",
+                    Id = "adcspol-smartcard-require-logon",
+                    Label = "Require Smart Card for Interactive Logon",
                     Category = "Security",
-                    Description = "Sets RequireSignOrSeal=1 in the SmartCardCredentialProvider policy. Enforces the Require Smart Card for Interactive Logon policy, preventing users from logging on with a password and requiring a physical smart card or Windows Hello for Business credential instead. This is the strongest form of phishing-resistant multi-factor authentication available natively in Windows.",
-                    Tags        = ["adcs", "smart-card", "mfa", "logon", "hardening"],
-                    NeedsAdmin  = true,
-                    CorpSafe    = true,
+                    Description =
+                        "Sets RequireSignOrSeal=1 in the SmartCardCredentialProvider policy. Enforces the Require Smart Card for Interactive Logon policy, preventing users from logging on with a password and requiring a physical smart card or Windows Hello for Business credential instead. This is the strongest form of phishing-resistant multi-factor authentication available natively in Windows.",
+                    Tags = ["adcs", "smart-card", "mfa", "logon", "hardening"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
                     ImpactScore = 5,
                     SafetyRating = 3,
-                    ImpactNote  = "Forces smart card logon; users without cards or Windows Hello devices will be locked out.",
-                    ApplyOps    = [RegOp.SetDword(SmartKey, "RequireSignOrSeal", 1)],
-                    RemoveOps   = [RegOp.DeleteValue(SmartKey, "RequireSignOrSeal")],
-                    DetectOps   = [RegOp.CheckDword(SmartKey, "RequireSignOrSeal", 1)],
+                    ImpactNote = "Forces smart card logon; users without cards or Windows Hello devices will be locked out.",
+                    ApplyOps = [RegOp.SetDword(SmartKey, "RequireSignOrSeal", 1)],
+                    RemoveOps = [RegOp.DeleteValue(SmartKey, "RequireSignOrSeal")],
+                    DetectOps = [RegOp.CheckDword(SmartKey, "RequireSignOrSeal", 1)],
                 },
                 new TweakDef
                 {
-                    Id          = "adcspol-smartcard-pin-blocking",
-                    Label       = "Enable Smart Card PIN Lock After 5 Failures",
+                    Id = "adcspol-smartcard-pin-blocking",
+                    Label = "Enable Smart Card PIN Lock After 5 Failures",
                     Category = "Security",
-                    Description = "Sets PINLockAfterFailedAttempts=5 in the SmartCardCredentialProvider policy. Automatically locks the smart card after 5 consecutive incorrect PIN entries, requiring an administrative PUK unlock. This prevents brute-force PIN guessing attacks where an attacker physically possesses the card and attempts to guess the PIN. Five attempts is the CIS Benchmark recommended maximum.",
-                    Tags        = ["adcs", "smart-card", "pin", "lockout", "hardening"],
-                    NeedsAdmin  = true,
-                    CorpSafe    = true,
+                    Description =
+                        "Sets PINLockAfterFailedAttempts=5 in the SmartCardCredentialProvider policy. Automatically locks the smart card after 5 consecutive incorrect PIN entries, requiring an administrative PUK unlock. This prevents brute-force PIN guessing attacks where an attacker physically possesses the card and attempts to guess the PIN. Five attempts is the CIS Benchmark recommended maximum.",
+                    Tags = ["adcs", "smart-card", "pin", "lockout", "hardening"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
                     ImpactScore = 4,
                     SafetyRating = 5,
-                    ImpactNote  = "Locks card after 5 wrong PINs; legitimate users should not exceed 5 attempts under normal usage.",
-                    ApplyOps    = [RegOp.SetDword(SmartKey, "PINLockAfterFailedAttempts", 5)],
-                    RemoveOps   = [RegOp.DeleteValue(SmartKey, "PINLockAfterFailedAttempts")],
-                    DetectOps   = [RegOp.CheckDword(SmartKey, "PINLockAfterFailedAttempts", 5)],
+                    ImpactNote = "Locks card after 5 wrong PINs; legitimate users should not exceed 5 attempts under normal usage.",
+                    ApplyOps = [RegOp.SetDword(SmartKey, "PINLockAfterFailedAttempts", 5)],
+                    RemoveOps = [RegOp.DeleteValue(SmartKey, "PINLockAfterFailedAttempts")],
+                    DetectOps = [RegOp.CheckDword(SmartKey, "PINLockAfterFailedAttempts", 5)],
                 },
                 new TweakDef
                 {
-                    Id          = "adcspol-disable-keyarchival",
-                    Label       = "Disable Certificate Key Archival to CA",
+                    Id = "adcspol-disable-keyarchival",
+                    Label = "Disable Certificate Key Archival to CA",
                     Category = "Security",
-                    Description = "Sets DisableKeyArchival=1 in the CertSvc policy key. Prevents Windows from automatically archiving private keys to the Certificate Authority during certificate enrollment. Key archival allows CA administrators to recover encrypted data if a user loses their key, but it also means private keys leave the user's device and are stored on (and thus accessible to) the CA server. Disabling archival keeps private keys on the user's device only.",
-                    Tags        = ["adcs", "certificate", "key-archival", "policy", "privacy"],
-                    NeedsAdmin  = true,
-                    CorpSafe    = true,
+                    Description =
+                        "Sets DisableKeyArchival=1 in the CertSvc policy key. Prevents Windows from automatically archiving private keys to the Certificate Authority during certificate enrollment. Key archival allows CA administrators to recover encrypted data if a user loses their key, but it also means private keys leave the user's device and are stored on (and thus accessible to) the CA server. Disabling archival keeps private keys on the user's device only.",
+                    Tags = ["adcs", "certificate", "key-archival", "policy", "privacy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 4,
-                    ImpactNote  = "No CA-assisted recovery if user loses their private key; weigh against key escrow requirements.",
-                    ApplyOps    = [RegOp.SetDword(CertSvcKey, "DisableKeyArchival", 1)],
-                    RemoveOps   = [RegOp.DeleteValue(CertSvcKey, "DisableKeyArchival")],
-                    DetectOps   = [RegOp.CheckDword(CertSvcKey, "DisableKeyArchival", 1)],
+                    ImpactNote = "No CA-assisted recovery if user loses their private key; weigh against key escrow requirements.",
+                    ApplyOps = [RegOp.SetDword(CertSvcKey, "DisableKeyArchival", 1)],
+                    RemoveOps = [RegOp.DeleteValue(CertSvcKey, "DisableKeyArchival")],
+                    DetectOps = [RegOp.CheckDword(CertSvcKey, "DisableKeyArchival", 1)],
                 },
                 new TweakDef
                 {
-                    Id          = "adcspol-disable-cert-pub-ldap",
-                    Label       = "Disable Certificate Auto-Publication to LDAP",
+                    Id = "adcspol-disable-cert-pub-ldap",
+                    Label = "Disable Certificate Auto-Publication to LDAP",
                     Category = "Security",
-                    Description = "Sets DisableLdapCertPublish=1 in the CertSvc policy. Prevents certificate enrollment from automatically publishing user or machine certificates to the LDAP directory (Active Directory). In high-security environments where only specific certificates should be visible in LDAP, disabling auto-publication prevents unnecessary certificate disclosure that could aid LDAP enumeration.",
-                    Tags        = ["adcs", "certificate", "ldap", "publish", "hardening"],
-                    NeedsAdmin  = true,
-                    CorpSafe    = true,
+                    Description =
+                        "Sets DisableLdapCertPublish=1 in the CertSvc policy. Prevents certificate enrollment from automatically publishing user or machine certificates to the LDAP directory (Active Directory). In high-security environments where only specific certificates should be visible in LDAP, disabling auto-publication prevents unnecessary certificate disclosure that could aid LDAP enumeration.",
+                    Tags = ["adcs", "certificate", "ldap", "publish", "hardening"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 4,
-                    ImpactNote  = "Stops LDAP cert publication; smart card logon and S/MIME directory lookup may require manual cert publishing.",
-                    ApplyOps    = [RegOp.SetDword(CertSvcKey, "DisableLdapCertPublish", 1)],
-                    RemoveOps   = [RegOp.DeleteValue(CertSvcKey, "DisableLdapCertPublish")],
-                    DetectOps   = [RegOp.CheckDword(CertSvcKey, "DisableLdapCertPublish", 1)],
+                    ImpactNote = "Stops LDAP cert publication; smart card logon and S/MIME directory lookup may require manual cert publishing.",
+                    ApplyOps = [RegOp.SetDword(CertSvcKey, "DisableLdapCertPublish", 1)],
+                    RemoveOps = [RegOp.DeleteValue(CertSvcKey, "DisableLdapCertPublish")],
+                    DetectOps = [RegOp.CheckDword(CertSvcKey, "DisableLdapCertPublish", 1)],
                 },
                 new TweakDef
                 {
-                    Id          = "adcspol-enable-cng-policy",
-                    Label       = "Enforce CNG Algorithm Policy (Block Legacy Crypto)",
+                    Id = "adcspol-enable-cng-policy",
+                    Label = "Enforce CNG Algorithm Policy (Block Legacy Crypto)",
                     Category = "Security",
-                    Description = "Sets EnforceCNGAlgorithmPolicy=1 in the Cryptography policy. Instructs Windows CNG (Cryptography Next Generation) to apply the configured algorithm policy when evaluating certificate signatures and key operations. When combined with a restricted algorithm suite policy, this prevents applications from using deprecated or weak cryptographic algorithms (MD5, SHA-1 RSA-1024) in certificate operations.",
-                    Tags        = ["adcs", "cryptography", "cng", "algorithm", "hardening"],
-                    NeedsAdmin  = true,
-                    CorpSafe    = true,
+                    Description =
+                        "Sets EnforceCNGAlgorithmPolicy=1 in the Cryptography policy. Instructs Windows CNG (Cryptography Next Generation) to apply the configured algorithm policy when evaluating certificate signatures and key operations. When combined with a restricted algorithm suite policy, this prevents applications from using deprecated or weak cryptographic algorithms (MD5, SHA-1 RSA-1024) in certificate operations.",
+                    Tags = ["adcs", "cryptography", "cng", "algorithm", "hardening"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
                     ImpactScore = 4,
                     SafetyRating = 4,
-                    ImpactNote  = "Enforces algorithm policy; applications using legacy algorithms for cert operations may fail validation.",
-                    ApplyOps    = [RegOp.SetDword(CryptoKey, "EnforceCNGAlgorithmPolicy", 1)],
-                    RemoveOps   = [RegOp.DeleteValue(CryptoKey, "EnforceCNGAlgorithmPolicy")],
-                    DetectOps   = [RegOp.CheckDword(CryptoKey, "EnforceCNGAlgorithmPolicy", 1)],
+                    ImpactNote = "Enforces algorithm policy; applications using legacy algorithms for cert operations may fail validation.",
+                    ApplyOps = [RegOp.SetDword(CryptoKey, "EnforceCNGAlgorithmPolicy", 1)],
+                    RemoveOps = [RegOp.DeleteValue(CryptoKey, "EnforceCNGAlgorithmPolicy")],
+                    DetectOps = [RegOp.CheckDword(CryptoKey, "EnforceCNGAlgorithmPolicy", 1)],
                 },
                 new TweakDef
                 {
-                    Id          = "adcspol-disable-cert-enrollment-ui",
-                    Label       = "Disable Certificate Enrollment UI for Non-Admins",
+                    Id = "adcspol-disable-cert-enrollment-ui",
+                    Label = "Disable Certificate Enrollment UI for Non-Admins",
                     Category = "Security",
-                    Description = "Sets DisableEnrollmentUI=1 in the CertSvc policy. Prevents the certificate enrollment wizard UI from being accessed by non-administrative users. Restricting certificate enrollment to administrators ensures that only properly authorised and audited enrollment workflows generate new certificates, preventing users from self-enrolling unapproved certificate types from the CA.",
-                    Tags        = ["adcs", "certificate", "enrollment", "ui", "hardening"],
-                    NeedsAdmin  = true,
-                    CorpSafe    = true,
+                    Description =
+                        "Sets DisableEnrollmentUI=1 in the CertSvc policy. Prevents the certificate enrollment wizard UI from being accessed by non-administrative users. Restricting certificate enrollment to administrators ensures that only properly authorised and audited enrollment workflows generate new certificates, preventing users from self-enrolling unapproved certificate types from the CA.",
+                    Tags = ["adcs", "certificate", "enrollment", "ui", "hardening"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote  = "Blocks self-service certificate enrollment UI; admin-managed enrolled certs are unaffected.",
-                    ApplyOps    = [RegOp.SetDword(CertSvcKey, "DisableEnrollmentUI", 1)],
-                    RemoveOps   = [RegOp.DeleteValue(CertSvcKey, "DisableEnrollmentUI")],
-                    DetectOps   = [RegOp.CheckDword(CertSvcKey, "DisableEnrollmentUI", 1)],
+                    ImpactNote = "Blocks self-service certificate enrollment UI; admin-managed enrolled certs are unaffected.",
+                    ApplyOps = [RegOp.SetDword(CertSvcKey, "DisableEnrollmentUI", 1)],
+                    RemoveOps = [RegOp.DeleteValue(CertSvcKey, "DisableEnrollmentUI")],
+                    DetectOps = [RegOp.CheckDword(CertSvcKey, "DisableEnrollmentUI", 1)],
                 },
                 new TweakDef
                 {
-                    Id          = "adcspol-require-cert-chain-validation",
-                    Label       = "Require Full Certificate Chain Validation",
+                    Id = "adcspol-require-cert-chain-validation",
+                    Label = "Require Full Certificate Chain Validation",
                     Category = "Security",
-                    Description = "Sets RequireChainValidation=1 in the Cryptography policy. Forces Windows to perform complete certificate chain validation (root, intermediates, and end-entity) before accepting any certificate as trusted. Disabling partial chain validation prevents applications from accepting certificates whose intermediate CA is untrusted or expired, closing a common misconfiguration that allows self-signed or invalid certificates to be accepted in some code paths.",
-                    Tags        = ["adcs", "certificate", "chain", "validation", "hardening"],
-                    NeedsAdmin  = true,
-                    CorpSafe    = true,
+                    Description =
+                        "Sets RequireChainValidation=1 in the Cryptography policy. Forces Windows to perform complete certificate chain validation (root, intermediates, and end-entity) before accepting any certificate as trusted. Disabling partial chain validation prevents applications from accepting certificates whose intermediate CA is untrusted or expired, closing a common misconfiguration that allows self-signed or invalid certificates to be accepted in some code paths.",
+                    Tags = ["adcs", "certificate", "chain", "validation", "hardening"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
                     ImpactScore = 4,
                     SafetyRating = 5,
-                    ImpactNote  = "Enforces full chain validation; certificates with missing or expired intermediates will be rejected.",
-                    ApplyOps    = [RegOp.SetDword(CryptoKey, "RequireChainValidation", 1)],
-                    RemoveOps   = [RegOp.DeleteValue(CryptoKey, "RequireChainValidation")],
-                    DetectOps   = [RegOp.CheckDword(CryptoKey, "RequireChainValidation", 1)],
+                    ImpactNote = "Enforces full chain validation; certificates with missing or expired intermediates will be rejected.",
+                    ApplyOps = [RegOp.SetDword(CryptoKey, "RequireChainValidation", 1)],
+                    RemoveOps = [RegOp.DeleteValue(CryptoKey, "RequireChainValidation")],
+                    DetectOps = [RegOp.CheckDword(CryptoKey, "RequireChainValidation", 1)],
                 },
             ];
-
     }
-
 }
-
 
 // ── merged from Firewall.cs ──
 internal static class Firewall
@@ -5690,7 +5661,6 @@ internal static class Firewall
     ];
 }
 
-
 // ── merged from PolicyAppControl.cs ──
 // RegiLattice.Core — Tweaks/PolicyAppControl.cs
 // AppLocker, WDAC, App Containers, AppX packaging, MSI installer, software restriction, and application guard policies
@@ -5939,7 +5909,6 @@ internal static class PolicyAppControl
                     DetectOps = [RegOp.CheckDword(Key, "DefaultCategory", 1)],
                 },
             ];
-
     }
 
     // ── AppCompatGpoPolicy ──
@@ -5954,7 +5923,8 @@ internal static class PolicyAppControl
                 Id = "accompat-disable-inventory-collector",
                 Label = "Disable Application Compatibility Inventory Collector",
                 Category = "Security",
-                Description = "Disables the Application Compatibility Inventory Collector, which collects program data for app compatibility telemetry.",
+                Description =
+                    "Disables the Application Compatibility Inventory Collector, which collects program data for app compatibility telemetry.",
                 Tags = ["appcompat", "privacy", "telemetry", "group-policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -6085,14 +6055,12 @@ internal static class PolicyAppControl
                 DetectOps = [RegOp.CheckDword(AppComp, "DisableWER", 1)],
             },
         ];
-
     }
 
     // ── AppCompatibilityPolicy ──
     private static class _AppCompatibilityPolicy
     {
-        private const string Key =
-            @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\ApplicationCompatibility";
+        private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\ApplicationCompatibility";
 
         public static IReadOnlyList<TweakDef> Data =>
             [
@@ -6142,7 +6110,8 @@ internal static class PolicyAppControl
                     CorpSafe = true,
                     ImpactScore = 1,
                     SafetyRating = 5,
-                    ImpactNote = "Post-install compatibility prompts are suppressed; users are not prompted to reinstall known incompatible programs.",
+                    ImpactNote =
+                        "Post-install compatibility prompts are suppressed; users are not prompted to reinstall known incompatible programs.",
                     ApplyOps = [RegOp.SetDword(Key, "DisableInventory", 1)],
                     RemoveOps = [RegOp.DeleteValue(Key, "DisableInventory")],
                     DetectOps = [RegOp.CheckDword(Key, "DisableInventory", 1)],
@@ -6227,7 +6196,8 @@ internal static class PolicyAppControl
                     CorpSafe = true,
                     ImpactScore = 1,
                     SafetyRating = 5,
-                    ImpactNote = "'Troubleshoot Compatibility' is removed from Explorer context menus; compatibility settings cannot be changed by users.",
+                    ImpactNote =
+                        "'Troubleshoot Compatibility' is removed from Explorer context menus; compatibility settings cannot be changed by users.",
                     ApplyOps = [RegOp.SetDword(Key, "DisableCompatChooserUI", 1)],
                     RemoveOps = [RegOp.DeleteValue(Key, "DisableCompatChooserUI")],
                     DetectOps = [RegOp.CheckDword(Key, "DisableCompatChooserUI", 1)],
@@ -6261,13 +6231,13 @@ internal static class PolicyAppControl
                     CorpSafe = true,
                     ImpactScore = 2,
                     SafetyRating = 5,
-                    ImpactNote = "User-level per-exe compatibility settings cannot override machine-scope policy; HKCU compatibility flags are ignored.",
+                    ImpactNote =
+                        "User-level per-exe compatibility settings cannot override machine-scope policy; HKCU compatibility flags are ignored.",
                     ApplyOps = [RegOp.SetDword(Key, "DisableSwitchesPerProcess", 1)],
                     RemoveOps = [RegOp.DeleteValue(Key, "DisableSwitchesPerProcess")],
                     DetectOps = [RegOp.CheckDword(Key, "DisableSwitchesPerProcess", 1)],
                 },
             ];
-
     }
 
     // ── AppConsentStorePolicy ──
@@ -6448,7 +6418,6 @@ internal static class PolicyAppControl
                     DetectOps = [RegOp.CheckDword(AcsKey, "DisableConsentNotifications", 1)],
                 },
             ];
-
     }
 
     // ── AppContainerPolicy ──
@@ -6629,7 +6598,6 @@ internal static class PolicyAppControl
                 DetectOps = [RegOp.CheckDword(Key, "EnforceStrictIsolation", 1)],
             },
         ];
-
     }
 
     // ── AppContainerSandboxPolicy ──
@@ -6640,169 +6608,178 @@ internal static class PolicyAppControl
         private const string AppKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Appx";
 
         public static IReadOnlyList<TweakDef> Data =>
-        [
-            new TweakDef
-            {
-                Id           = "appcon-deny-broadfileaccess",
-                Label        = "Deny Broad File System Access Capability to UWP Apps",
-                Category = "Security",
-                Description  = "Blocks UWP apps from exercising the broadFileSystemAccess capability that allows reading files outside the app's sandbox, preventing apps from reading arbitrary user files even if they declare the capability in their manifest.",
-                Tags         = ["appcontainer", "broad-file-access", "capability", "sandbox", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 4,
-                SafetyRating = 5,
-                ImpactNote   = "UWP broadFileSystemAccess capability denied; Store apps cannot read files outside their package sandbox.",
-                ApplyOps     = [RegOp.SetDword(Key, "LetAppsAccessFileSystem", 2)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "LetAppsAccessFileSystem")],
-                DetectOps    = [RegOp.CheckDword(Key, "LetAppsAccessFileSystem", 2)],
-            },
-            new TweakDef
-            {
-                Id           = "appcon-deny-uwp-microphone",
-                Label        = "Deny Microphone Access to All UWP Apps",
-                Category = "Security",
-                Description  = "Blocks all UWP applications from accessing the microphone device regardless of user-level privacy settings, ensuring that even if a user grants permission, the policy override prevents audio capture by Store apps.",
-                Tags         = ["appcontainer", "microphone", "privacy", "capability", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 4,
-                SafetyRating = 5,
-                ImpactNote   = "Microphone access denied to all UWP apps via policy; user-level grants overridden. Voice apps will not work.",
-                ApplyOps     = [RegOp.SetDword(Key, "LetAppsAccessMicrophone", 2)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "LetAppsAccessMicrophone")],
-                DetectOps    = [RegOp.CheckDword(Key, "LetAppsAccessMicrophone", 2)],
-            },
-            new TweakDef
-            {
-                Id           = "appcon-deny-uwp-camera",
-                Label        = "Deny Camera Access to All UWP Apps",
-                Category = "Security",
-                Description  = "Blocks all UWP applications from accessing the camera device via the AppContainer capability policy, preventing webcam capture by Store apps even if user-level permission has been granted.",
-                Tags         = ["appcontainer", "camera", "webcam", "privacy", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 4,
-                SafetyRating = 5,
-                ImpactNote   = "Camera access denied to all UWP apps via policy; webcam capture by Store apps blocked system-wide.",
-                ApplyOps     = [RegOp.SetDword(Key, "LetAppsAccessCamera", 2)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "LetAppsAccessCamera")],
-                DetectOps    = [RegOp.CheckDword(Key, "LetAppsAccessCamera", 2)],
-            },
-            new TweakDef
-            {
-                Id           = "appcon-deny-uwp-location",
-                Label        = "Deny Location Access to All UWP Apps",
-                Category = "Security",
-                Description  = "Blocks UWP applications from accessing GPS and Windows Location Services, preventing Store apps from determining the user's physical location regardless of user-level location permission grants.",
-                Tags         = ["appcontainer", "location", "gps", "privacy", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 3,
-                SafetyRating = 5,
-                ImpactNote   = "Location access denied to all UWP apps via policy; GPS/location not available to Store apps.",
-                ApplyOps     = [RegOp.SetDword(Key, "LetAppsAccessLocation", 2)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "LetAppsAccessLocation")],
-                DetectOps    = [RegOp.CheckDword(Key, "LetAppsAccessLocation", 2)],
-            },
-            new TweakDef
-            {
-                Id           = "appcon-deny-uwp-contacts",
-                Label        = "Deny Contacts Access to All UWP Apps",
-                Category = "Security",
-                Description  = "Blocks all UWP applications from accessing the Windows Contacts / People app contacts store, preventing Store apps from reading or exporting the user's contact list.",
-                Tags         = ["appcontainer", "contacts", "people", "privacy", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 3,
-                SafetyRating = 5,
-                ImpactNote   = "Contacts access denied to all UWP apps via policy; contact list not accessible to Store apps.",
-                ApplyOps     = [RegOp.SetDword(Key, "LetAppsAccessContacts", 2)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "LetAppsAccessContacts")],
-                DetectOps    = [RegOp.CheckDword(Key, "LetAppsAccessContacts", 2)],
-            },
-            new TweakDef
-            {
-                Id           = "appcon-deny-uwp-calendar",
-                Label        = "Deny Calendar Access to All UWP Apps",
-                Category = "Security",
-                Description  = "Blocks UWP applications from reading or modifying Windows Calendar data, preventing Store apps from accessing the user's appointment and scheduling information.",
-                Tags         = ["appcontainer", "calendar", "privacy", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 3,
-                SafetyRating = 5,
-                ImpactNote   = "Calendar access denied to all UWP apps via policy; appointment data not accessible to Store apps.",
-                ApplyOps     = [RegOp.SetDword(Key, "LetAppsAccessCalendar", 2)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "LetAppsAccessCalendar")],
-                DetectOps    = [RegOp.CheckDword(Key, "LetAppsAccessCalendar", 2)],
-            },
-            new TweakDef
-            {
-                Id           = "appcon-enable-appcontainer-network-isolation",
-                Label        = "Enable Network Isolation for AppContainer Processes",
-                Category = "Security",
-                Description  = "Enforces strict network isolation for AppContainer processes, ensuring that UWP apps can only make network connections to endpoints declared in their manifest capabilities, blocking undeclared outbound connections.",
-                Tags         = ["appcontainer", "network-isolation", "sandbox", "security", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 4,
-                SafetyRating = 5,
-                ImpactNote   = "AppContainer network isolation enforced; UWP apps can only connect to declared network endpoints.",
-                ApplyOps     = [RegOp.SetDword(IsoKey, "EnforceNetworkIsolation", 1)],
-                RemoveOps    = [RegOp.DeleteValue(IsoKey, "EnforceNetworkIsolation")],
-                DetectOps    = [RegOp.CheckDword(IsoKey, "EnforceNetworkIsolation", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "appcon-block-appcontainer-loopback",
-                Label        = "Block AppContainer Loopback Exemption by Default",
-                Category = "Security",
-                Description  = "Prevents UWP/AppContainer apps from being granted loopback network access exemptions that bypass AppContainer network isolation, ensuring all sandbox processes respect network isolation boundaries.",
-                Tags         = ["appcontainer", "loopback", "network-isolation", "security", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 4,
-                SafetyRating = 5,
-                ImpactNote   = "Loopback exemptions blocked for AppContainer; sandbox apps cannot bypass network isolation via localhost.",
-                ApplyOps     = [RegOp.SetDword(IsoKey, "BlockLoopbackExemption", 1)],
-                RemoveOps    = [RegOp.DeleteValue(IsoKey, "BlockLoopbackExemption")],
-                DetectOps    = [RegOp.CheckDword(IsoKey, "BlockLoopbackExemption", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "appcon-disable-appcontainer-telemetry",
-                Label        = "Disable AppContainer and AppPrivacy Telemetry to Microsoft",
-                Category = "Security",
-                Description  = "Prevents AppContainer isolation components and app privacy capability grant telemetry from being sent to Microsoft, protecting information about app capability usage patterns from cloud disclosure.",
-                Tags         = ["appcontainer", "telemetry", "privacy", "microsoft", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 3,
-                SafetyRating = 5,
-                ImpactNote   = "AppContainer and app privacy telemetry to Microsoft disabled; capability grant stats not sent to cloud.",
-                ApplyOps     = [RegOp.SetDword(IsoKey, "DisableIsolationTelemetry", 1)],
-                RemoveOps    = [RegOp.DeleteValue(IsoKey, "DisableIsolationTelemetry")],
-                DetectOps    = [RegOp.CheckDword(IsoKey, "DisableIsolationTelemetry", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "appcon-audit-capability-grants",
-                Label        = "Audit AppContainer Capability Grant Events in Security Log",
-                Category = "Security",
-                Description  = "Enables Security event log entries when a UWP application is granted access to a sensitive capability (location, microphone, camera, contacts, calendar), providing an audit trail of capability access grants.",
-                Tags         = ["appcontainer", "capability", "audit", "event-log", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 3,
-                SafetyRating = 5,
-                ImpactNote   = "AppContainer capability grant events logged in Security log; sensitive access grants auditable for compliance.",
-                ApplyOps     = [RegOp.SetDword(IsoKey, "AuditCapabilityGrantEvents", 1)],
-                RemoveOps    = [RegOp.DeleteValue(IsoKey, "AuditCapabilityGrantEvents")],
-                DetectOps    = [RegOp.CheckDword(IsoKey, "AuditCapabilityGrantEvents", 1)],
-            },
-        ];
-
+            [
+                new TweakDef
+                {
+                    Id = "appcon-deny-broadfileaccess",
+                    Label = "Deny Broad File System Access Capability to UWP Apps",
+                    Category = "Security",
+                    Description =
+                        "Blocks UWP apps from exercising the broadFileSystemAccess capability that allows reading files outside the app's sandbox, preventing apps from reading arbitrary user files even if they declare the capability in their manifest.",
+                    Tags = ["appcontainer", "broad-file-access", "capability", "sandbox", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "UWP broadFileSystemAccess capability denied; Store apps cannot read files outside their package sandbox.",
+                    ApplyOps = [RegOp.SetDword(Key, "LetAppsAccessFileSystem", 2)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "LetAppsAccessFileSystem")],
+                    DetectOps = [RegOp.CheckDword(Key, "LetAppsAccessFileSystem", 2)],
+                },
+                new TweakDef
+                {
+                    Id = "appcon-deny-uwp-microphone",
+                    Label = "Deny Microphone Access to All UWP Apps",
+                    Category = "Security",
+                    Description =
+                        "Blocks all UWP applications from accessing the microphone device regardless of user-level privacy settings, ensuring that even if a user grants permission, the policy override prevents audio capture by Store apps.",
+                    Tags = ["appcontainer", "microphone", "privacy", "capability", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "Microphone access denied to all UWP apps via policy; user-level grants overridden. Voice apps will not work.",
+                    ApplyOps = [RegOp.SetDword(Key, "LetAppsAccessMicrophone", 2)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "LetAppsAccessMicrophone")],
+                    DetectOps = [RegOp.CheckDword(Key, "LetAppsAccessMicrophone", 2)],
+                },
+                new TweakDef
+                {
+                    Id = "appcon-deny-uwp-camera",
+                    Label = "Deny Camera Access to All UWP Apps",
+                    Category = "Security",
+                    Description =
+                        "Blocks all UWP applications from accessing the camera device via the AppContainer capability policy, preventing webcam capture by Store apps even if user-level permission has been granted.",
+                    Tags = ["appcontainer", "camera", "webcam", "privacy", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "Camera access denied to all UWP apps via policy; webcam capture by Store apps blocked system-wide.",
+                    ApplyOps = [RegOp.SetDword(Key, "LetAppsAccessCamera", 2)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "LetAppsAccessCamera")],
+                    DetectOps = [RegOp.CheckDword(Key, "LetAppsAccessCamera", 2)],
+                },
+                new TweakDef
+                {
+                    Id = "appcon-deny-uwp-location",
+                    Label = "Deny Location Access to All UWP Apps",
+                    Category = "Security",
+                    Description =
+                        "Blocks UWP applications from accessing GPS and Windows Location Services, preventing Store apps from determining the user's physical location regardless of user-level location permission grants.",
+                    Tags = ["appcontainer", "location", "gps", "privacy", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "Location access denied to all UWP apps via policy; GPS/location not available to Store apps.",
+                    ApplyOps = [RegOp.SetDword(Key, "LetAppsAccessLocation", 2)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "LetAppsAccessLocation")],
+                    DetectOps = [RegOp.CheckDword(Key, "LetAppsAccessLocation", 2)],
+                },
+                new TweakDef
+                {
+                    Id = "appcon-deny-uwp-contacts",
+                    Label = "Deny Contacts Access to All UWP Apps",
+                    Category = "Security",
+                    Description =
+                        "Blocks all UWP applications from accessing the Windows Contacts / People app contacts store, preventing Store apps from reading or exporting the user's contact list.",
+                    Tags = ["appcontainer", "contacts", "people", "privacy", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "Contacts access denied to all UWP apps via policy; contact list not accessible to Store apps.",
+                    ApplyOps = [RegOp.SetDword(Key, "LetAppsAccessContacts", 2)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "LetAppsAccessContacts")],
+                    DetectOps = [RegOp.CheckDword(Key, "LetAppsAccessContacts", 2)],
+                },
+                new TweakDef
+                {
+                    Id = "appcon-deny-uwp-calendar",
+                    Label = "Deny Calendar Access to All UWP Apps",
+                    Category = "Security",
+                    Description =
+                        "Blocks UWP applications from reading or modifying Windows Calendar data, preventing Store apps from accessing the user's appointment and scheduling information.",
+                    Tags = ["appcontainer", "calendar", "privacy", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "Calendar access denied to all UWP apps via policy; appointment data not accessible to Store apps.",
+                    ApplyOps = [RegOp.SetDword(Key, "LetAppsAccessCalendar", 2)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "LetAppsAccessCalendar")],
+                    DetectOps = [RegOp.CheckDword(Key, "LetAppsAccessCalendar", 2)],
+                },
+                new TweakDef
+                {
+                    Id = "appcon-enable-appcontainer-network-isolation",
+                    Label = "Enable Network Isolation for AppContainer Processes",
+                    Category = "Security",
+                    Description =
+                        "Enforces strict network isolation for AppContainer processes, ensuring that UWP apps can only make network connections to endpoints declared in their manifest capabilities, blocking undeclared outbound connections.",
+                    Tags = ["appcontainer", "network-isolation", "sandbox", "security", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "AppContainer network isolation enforced; UWP apps can only connect to declared network endpoints.",
+                    ApplyOps = [RegOp.SetDword(IsoKey, "EnforceNetworkIsolation", 1)],
+                    RemoveOps = [RegOp.DeleteValue(IsoKey, "EnforceNetworkIsolation")],
+                    DetectOps = [RegOp.CheckDword(IsoKey, "EnforceNetworkIsolation", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "appcon-block-appcontainer-loopback",
+                    Label = "Block AppContainer Loopback Exemption by Default",
+                    Category = "Security",
+                    Description =
+                        "Prevents UWP/AppContainer apps from being granted loopback network access exemptions that bypass AppContainer network isolation, ensuring all sandbox processes respect network isolation boundaries.",
+                    Tags = ["appcontainer", "loopback", "network-isolation", "security", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "Loopback exemptions blocked for AppContainer; sandbox apps cannot bypass network isolation via localhost.",
+                    ApplyOps = [RegOp.SetDword(IsoKey, "BlockLoopbackExemption", 1)],
+                    RemoveOps = [RegOp.DeleteValue(IsoKey, "BlockLoopbackExemption")],
+                    DetectOps = [RegOp.CheckDword(IsoKey, "BlockLoopbackExemption", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "appcon-disable-appcontainer-telemetry",
+                    Label = "Disable AppContainer and AppPrivacy Telemetry to Microsoft",
+                    Category = "Security",
+                    Description =
+                        "Prevents AppContainer isolation components and app privacy capability grant telemetry from being sent to Microsoft, protecting information about app capability usage patterns from cloud disclosure.",
+                    Tags = ["appcontainer", "telemetry", "privacy", "microsoft", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "AppContainer and app privacy telemetry to Microsoft disabled; capability grant stats not sent to cloud.",
+                    ApplyOps = [RegOp.SetDword(IsoKey, "DisableIsolationTelemetry", 1)],
+                    RemoveOps = [RegOp.DeleteValue(IsoKey, "DisableIsolationTelemetry")],
+                    DetectOps = [RegOp.CheckDword(IsoKey, "DisableIsolationTelemetry", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "appcon-audit-capability-grants",
+                    Label = "Audit AppContainer Capability Grant Events in Security Log",
+                    Category = "Security",
+                    Description =
+                        "Enables Security event log entries when a UWP application is granted access to a sensitive capability (location, microphone, camera, contacts, calendar), providing an audit trail of capability access grants.",
+                    Tags = ["appcontainer", "capability", "audit", "event-log", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "AppContainer capability grant events logged in Security log; sensitive access grants auditable for compliance.",
+                    ApplyOps = [RegOp.SetDword(IsoKey, "AuditCapabilityGrantEvents", 1)],
+                    RemoveOps = [RegOp.DeleteValue(IsoKey, "AuditCapabilityGrantEvents")],
+                    DetectOps = [RegOp.CheckDword(IsoKey, "AuditCapabilityGrantEvents", 1)],
+                },
+            ];
     }
 
     // ── AppGuardPolicy ──
@@ -6983,7 +6960,6 @@ internal static class PolicyAppControl
                 DetectOps = [RegOp.CheckDword(Key, "AppHVSICertificateSharing", 0)],
             },
         ];
-
     }
 
     // ── AppInstallerPolicy ──
@@ -7174,7 +7150,6 @@ internal static class PolicyAppControl
                 DetectOps = [RegOp.CheckDword(Key, "EnableMicrosoftStoreSource", 0)],
             },
         ];
-
     }
 
     // ── ApplicationGuardPersistencePolicy ──
@@ -7367,7 +7342,6 @@ internal static class PolicyAppControl
                     DetectOps = [RegOp.CheckDword(WdagKey, "AppHVSINetworkIsolationLevel", 2)],
                 },
             ];
-
     }
 
     // ── ApplicationRestartPolicy ──
@@ -7551,7 +7525,6 @@ internal static class PolicyAppControl
                 DetectOps = [RegOp.CheckDword(CrashCtl, "Overwrite", 1)],
             },
         ];
-
     }
 
     // ── AppLockerAdvancedPolicy ──
@@ -7737,7 +7710,6 @@ internal static class PolicyAppControl
                     DetectOps = [RegOp.CheckDword(Key, "DisableAppLockerTelemetry", 1)],
                 },
             ];
-
     }
 
     // ── AppLockerPolicy ──
@@ -7751,169 +7723,171 @@ internal static class PolicyAppControl
         private const string AppxKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\SrpV2\Appx";
 
         public static IReadOnlyList<TweakDef> Data =>
-        [
-            new TweakDef
-            {
-                Id = "applocker-enforce-exe-rules",
-                Label = "Enforce AppLocker EXE Rules",
-                Category = "Security",
-                Description = "Puts the AppLocker EXE rule collection into enforcement mode; unauthorised executables are blocked.",
-                Tags = ["applocker", "exe", "enforce", "policy", "application-control"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 5,
-                SafetyRating = 2,
-                ImpactNote = "Value 1 = enforce; unauthorised EXE files are blocked immediately. Requires well-tested AppLocker rules first.",
-                ApplyOps = [RegOp.SetDword(ExeKey, "EnforcementMode", 1)],
-                RemoveOps = [RegOp.DeleteValue(ExeKey, "EnforcementMode")],
-                DetectOps = [RegOp.CheckDword(ExeKey, "EnforcementMode", 1)],
-            },
-            new TweakDef
-            {
-                Id = "applocker-audit-exe-rules",
-                Label = "Set AppLocker EXE Rules to Audit Mode",
-                Category = "Security",
-                Description = "Puts the AppLocker EXE rule collection in audit-only mode; blocked events are logged but execution is allowed.",
-                Tags = ["applocker", "exe", "audit", "policy", "application-control"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Value 0 = audit only; events logged to Applications and Services\\ Microsoft\\ Windows\\ AppLocker.evtx.",
-                ApplyOps = [RegOp.SetDword(ExeKey, "EnforcementMode", 0)],
-                RemoveOps = [RegOp.DeleteValue(ExeKey, "EnforcementMode")],
-                DetectOps = [RegOp.CheckDword(ExeKey, "EnforcementMode", 0)],
-            },
-            new TweakDef
-            {
-                Id = "applocker-enforce-msi-rules",
-                Label = "Enforce AppLocker MSI / Windows Installer Rules",
-                Category = "Security",
-                Description = "Puts the AppLocker Windows Installer (MSI and MSP) rule collection into enforcement mode.",
-                Tags = ["applocker", "msi", "installer", "enforce", "policy", "application-control"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 5,
-                SafetyRating = 2,
-                ImpactNote = "Blocks unapproved MSI installations; users and scripts cannot install unauthorised packages.",
-                ApplyOps = [RegOp.SetDword(MsiKey, "EnforcementMode", 1)],
-                RemoveOps = [RegOp.DeleteValue(MsiKey, "EnforcementMode")],
-                DetectOps = [RegOp.CheckDword(MsiKey, "EnforcementMode", 1)],
-            },
-            new TweakDef
-            {
-                Id = "applocker-enforce-script-rules",
-                Label = "Enforce AppLocker Script Rules",
-                Category = "Security",
-                Description = "Puts the AppLocker Script rule collection into enforcement mode; unapproved PowerShell, VBScript, and batch files are blocked.",
-                Tags = ["applocker", "script", "powershell", "enforce", "policy", "application-control"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 5,
-                SafetyRating = 2,
-                ImpactNote = "Blocks unapproved scripts across PowerShell, CMD, WSH, and HTA; test rules thoroughly before enforcing.",
-                ApplyOps = [RegOp.SetDword(ScriptKey, "EnforcementMode", 1)],
-                RemoveOps = [RegOp.DeleteValue(ScriptKey, "EnforcementMode")],
-                DetectOps = [RegOp.CheckDword(ScriptKey, "EnforcementMode", 1)],
-            },
-            new TweakDef
-            {
-                Id = "applocker-enforce-dll-rules",
-                Label = "Enforce AppLocker DLL Rules",
-                Category = "Security",
-                Description = "Puts the AppLocker DLL rule collection into enforcement mode; unapproved DLLs and OCX files are blocked from loading.",
-                Tags = ["applocker", "dll", "enforce", "policy", "application-control"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 5,
-                SafetyRating = 1,
-                ImpactNote = "High-impact; blocks unauthorised DLLs. Requires extensive testing; misconfiguration can prevent OS boot.",
-                ApplyOps = [RegOp.SetDword(DllKey, "EnforcementMode", 1)],
-                RemoveOps = [RegOp.DeleteValue(DllKey, "EnforcementMode")],
-                DetectOps = [RegOp.CheckDword(DllKey, "EnforcementMode", 1)],
-            },
-            new TweakDef
-            {
-                Id = "applocker-enforce-appx-rules",
-                Label = "Enforce AppLocker Packaged App Rules",
-                Category = "Security",
-                Description = "Puts the AppLocker Packaged App (MSIX/AppX) rule collection into enforcement mode for UWP applications.",
-                Tags = ["applocker", "appx", "msix", "uwp", "enforce", "policy", "application-control"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 3,
-                ImpactNote = "Blocks unapproved UWP and MSIX apps from launching; requires rules that allow business-critical apps.",
-                ApplyOps = [RegOp.SetDword(AppxKey, "EnforcementMode", 1)],
-                RemoveOps = [RegOp.DeleteValue(AppxKey, "EnforcementMode")],
-                DetectOps = [RegOp.CheckDword(AppxKey, "EnforcementMode", 1)],
-            },
-            new TweakDef
-            {
-                Id = "applocker-enable-appid-service",
-                Label = "Enable Application Identity Service for AppLocker",
-                Category = "Security",
-                Description = "Configures the Application Identity (AppIDSvc) service to start automatically, which is required for AppLocker enforcement.",
-                Tags = ["applocker", "appid", "service", "policy", "application-control"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 5,
-                SafetyRating = 5,
-                ImpactNote = "AppLocker will not enforce rules unless AppIDSvc is running; this tweak ensures it starts with Windows.",
-                ApplyOps = [RegOp.SetDword(SrpBase, "AppIdSvcStartType", 2)],
-                RemoveOps = [RegOp.DeleteValue(SrpBase, "AppIdSvcStartType")],
-                DetectOps = [RegOp.CheckDword(SrpBase, "AppIdSvcStartType", 2)],
-            },
-            new TweakDef
-            {
-                Id = "applocker-enable-exe-auditing",
-                Label = "Enable AppLocker EXE Execution Auditing",
-                Category = "Security",
-                Description = "Enables event log auditing for all AppLocker EXE allow and deny events for visibility without enforcement.",
-                Tags = ["applocker", "exe", "audit", "event-log", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "All executable allow/deny events written to AppLocker event log; baseline for building allow-list rules.",
-                ApplyOps = [RegOp.SetDword(SrpBase, "EnableCollectionLogging", 1)],
-                RemoveOps = [RegOp.DeleteValue(SrpBase, "EnableCollectionLogging")],
-                DetectOps = [RegOp.CheckDword(SrpBase, "EnableCollectionLogging", 1)],
-            },
-            new TweakDef
-            {
-                Id = "applocker-block-user-rule-creation",
-                Label = "Block Standard Users from Creating AppLocker Exceptions",
-                Category = "Security",
-                Description = "Prevents standard (non-administrator) users from creating AppLocker exception rules or publisher overrides.",
-                Tags = ["applocker", "user-rules", "policy", "application-control", "security"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                ImpactNote = "Only administrators can add AppLocker exceptions; prevents users from bypassing application control policy.",
-                ApplyOps = [RegOp.SetDword(SrpBase, "UsersCanCreateExceptions", 0)],
-                RemoveOps = [RegOp.DeleteValue(SrpBase, "UsersCanCreateExceptions")],
-                DetectOps = [RegOp.CheckDword(SrpBase, "UsersCanCreateExceptions", 0)],
-            },
-            new TweakDef
-            {
-                Id = "applocker-enable-performance-logging",
-                Label = "Enable AppLocker Performance Event Logging",
-                Category = "Security",
-                Description = "Enables detailed performance telemetry logging for AppLocker rule evaluations to the event log.",
-                Tags = ["applocker", "performance", "logging", "policy", "diagnostics"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                ImpactNote = "Logs AppLocker evaluation metrics; minor event log overhead; useful for tuning rule sets.",
-                ApplyOps = [RegOp.SetDword(SrpBase, "EnablePerformanceLogging", 1)],
-                RemoveOps = [RegOp.DeleteValue(SrpBase, "EnablePerformanceLogging")],
-                DetectOps = [RegOp.CheckDword(SrpBase, "EnablePerformanceLogging", 1)],
-            },
-        ];
-
+            [
+                new TweakDef
+                {
+                    Id = "applocker-enforce-exe-rules",
+                    Label = "Enforce AppLocker EXE Rules",
+                    Category = "Security",
+                    Description = "Puts the AppLocker EXE rule collection into enforcement mode; unauthorised executables are blocked.",
+                    Tags = ["applocker", "exe", "enforce", "policy", "application-control"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 5,
+                    SafetyRating = 2,
+                    ImpactNote = "Value 1 = enforce; unauthorised EXE files are blocked immediately. Requires well-tested AppLocker rules first.",
+                    ApplyOps = [RegOp.SetDword(ExeKey, "EnforcementMode", 1)],
+                    RemoveOps = [RegOp.DeleteValue(ExeKey, "EnforcementMode")],
+                    DetectOps = [RegOp.CheckDword(ExeKey, "EnforcementMode", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "applocker-audit-exe-rules",
+                    Label = "Set AppLocker EXE Rules to Audit Mode",
+                    Category = "Security",
+                    Description = "Puts the AppLocker EXE rule collection in audit-only mode; blocked events are logged but execution is allowed.",
+                    Tags = ["applocker", "exe", "audit", "policy", "application-control"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "Value 0 = audit only; events logged to Applications and Services\\ Microsoft\\ Windows\\ AppLocker.evtx.",
+                    ApplyOps = [RegOp.SetDword(ExeKey, "EnforcementMode", 0)],
+                    RemoveOps = [RegOp.DeleteValue(ExeKey, "EnforcementMode")],
+                    DetectOps = [RegOp.CheckDword(ExeKey, "EnforcementMode", 0)],
+                },
+                new TweakDef
+                {
+                    Id = "applocker-enforce-msi-rules",
+                    Label = "Enforce AppLocker MSI / Windows Installer Rules",
+                    Category = "Security",
+                    Description = "Puts the AppLocker Windows Installer (MSI and MSP) rule collection into enforcement mode.",
+                    Tags = ["applocker", "msi", "installer", "enforce", "policy", "application-control"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 5,
+                    SafetyRating = 2,
+                    ImpactNote = "Blocks unapproved MSI installations; users and scripts cannot install unauthorised packages.",
+                    ApplyOps = [RegOp.SetDword(MsiKey, "EnforcementMode", 1)],
+                    RemoveOps = [RegOp.DeleteValue(MsiKey, "EnforcementMode")],
+                    DetectOps = [RegOp.CheckDword(MsiKey, "EnforcementMode", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "applocker-enforce-script-rules",
+                    Label = "Enforce AppLocker Script Rules",
+                    Category = "Security",
+                    Description =
+                        "Puts the AppLocker Script rule collection into enforcement mode; unapproved PowerShell, VBScript, and batch files are blocked.",
+                    Tags = ["applocker", "script", "powershell", "enforce", "policy", "application-control"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 5,
+                    SafetyRating = 2,
+                    ImpactNote = "Blocks unapproved scripts across PowerShell, CMD, WSH, and HTA; test rules thoroughly before enforcing.",
+                    ApplyOps = [RegOp.SetDword(ScriptKey, "EnforcementMode", 1)],
+                    RemoveOps = [RegOp.DeleteValue(ScriptKey, "EnforcementMode")],
+                    DetectOps = [RegOp.CheckDword(ScriptKey, "EnforcementMode", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "applocker-enforce-dll-rules",
+                    Label = "Enforce AppLocker DLL Rules",
+                    Category = "Security",
+                    Description =
+                        "Puts the AppLocker DLL rule collection into enforcement mode; unapproved DLLs and OCX files are blocked from loading.",
+                    Tags = ["applocker", "dll", "enforce", "policy", "application-control"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 5,
+                    SafetyRating = 1,
+                    ImpactNote = "High-impact; blocks unauthorised DLLs. Requires extensive testing; misconfiguration can prevent OS boot.",
+                    ApplyOps = [RegOp.SetDword(DllKey, "EnforcementMode", 1)],
+                    RemoveOps = [RegOp.DeleteValue(DllKey, "EnforcementMode")],
+                    DetectOps = [RegOp.CheckDword(DllKey, "EnforcementMode", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "applocker-enforce-appx-rules",
+                    Label = "Enforce AppLocker Packaged App Rules",
+                    Category = "Security",
+                    Description = "Puts the AppLocker Packaged App (MSIX/AppX) rule collection into enforcement mode for UWP applications.",
+                    Tags = ["applocker", "appx", "msix", "uwp", "enforce", "policy", "application-control"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 3,
+                    ImpactNote = "Blocks unapproved UWP and MSIX apps from launching; requires rules that allow business-critical apps.",
+                    ApplyOps = [RegOp.SetDword(AppxKey, "EnforcementMode", 1)],
+                    RemoveOps = [RegOp.DeleteValue(AppxKey, "EnforcementMode")],
+                    DetectOps = [RegOp.CheckDword(AppxKey, "EnforcementMode", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "applocker-enable-appid-service",
+                    Label = "Enable Application Identity Service for AppLocker",
+                    Category = "Security",
+                    Description =
+                        "Configures the Application Identity (AppIDSvc) service to start automatically, which is required for AppLocker enforcement.",
+                    Tags = ["applocker", "appid", "service", "policy", "application-control"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 5,
+                    SafetyRating = 5,
+                    ImpactNote = "AppLocker will not enforce rules unless AppIDSvc is running; this tweak ensures it starts with Windows.",
+                    ApplyOps = [RegOp.SetDword(SrpBase, "AppIdSvcStartType", 2)],
+                    RemoveOps = [RegOp.DeleteValue(SrpBase, "AppIdSvcStartType")],
+                    DetectOps = [RegOp.CheckDword(SrpBase, "AppIdSvcStartType", 2)],
+                },
+                new TweakDef
+                {
+                    Id = "applocker-enable-exe-auditing",
+                    Label = "Enable AppLocker EXE Execution Auditing",
+                    Category = "Security",
+                    Description = "Enables event log auditing for all AppLocker EXE allow and deny events for visibility without enforcement.",
+                    Tags = ["applocker", "exe", "audit", "event-log", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "All executable allow/deny events written to AppLocker event log; baseline for building allow-list rules.",
+                    ApplyOps = [RegOp.SetDword(SrpBase, "EnableCollectionLogging", 1)],
+                    RemoveOps = [RegOp.DeleteValue(SrpBase, "EnableCollectionLogging")],
+                    DetectOps = [RegOp.CheckDword(SrpBase, "EnableCollectionLogging", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "applocker-block-user-rule-creation",
+                    Label = "Block Standard Users from Creating AppLocker Exceptions",
+                    Category = "Security",
+                    Description = "Prevents standard (non-administrator) users from creating AppLocker exception rules or publisher overrides.",
+                    Tags = ["applocker", "user-rules", "policy", "application-control", "security"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "Only administrators can add AppLocker exceptions; prevents users from bypassing application control policy.",
+                    ApplyOps = [RegOp.SetDword(SrpBase, "UsersCanCreateExceptions", 0)],
+                    RemoveOps = [RegOp.DeleteValue(SrpBase, "UsersCanCreateExceptions")],
+                    DetectOps = [RegOp.CheckDword(SrpBase, "UsersCanCreateExceptions", 0)],
+                },
+                new TweakDef
+                {
+                    Id = "applocker-enable-performance-logging",
+                    Label = "Enable AppLocker Performance Event Logging",
+                    Category = "Security",
+                    Description = "Enables detailed performance telemetry logging for AppLocker rule evaluations to the event log.",
+                    Tags = ["applocker", "performance", "logging", "policy", "diagnostics"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 2,
+                    SafetyRating = 5,
+                    ImpactNote = "Logs AppLocker evaluation metrics; minor event log overhead; useful for tuning rule sets.",
+                    ApplyOps = [RegOp.SetDword(SrpBase, "EnablePerformanceLogging", 1)],
+                    RemoveOps = [RegOp.DeleteValue(SrpBase, "EnablePerformanceLogging")],
+                    DetectOps = [RegOp.CheckDword(SrpBase, "EnablePerformanceLogging", 1)],
+                },
+            ];
     }
 
     // ── AppLockerWdac ──
@@ -7993,7 +7967,10 @@ internal static class PolicyAppControl
                     + "Allows learning phase before switching to enforcement. Only applicable on fresh Windows 11 installs.",
                 ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CI\Policy", "VerifiedAndReputablePolicyState", 2)],
                 RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CI\Policy", "VerifiedAndReputablePolicyState")],
-                DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CI\Policy", "VerifiedAndReputablePolicyState", 2)],
+                DetectOps =
+                [
+                    RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CI\Policy", "VerifiedAndReputablePolicyState", 2),
+                ],
             },
             new TweakDef
             {
@@ -8122,11 +8099,18 @@ internal static class PolicyAppControl
                     + "Closes one of the most common malware delivery vectors (phishing attachments with malicious macros).",
                 ApplyOps =
                 [
-                    RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Office\16.0\excel\security", "blockcontentexecutionfrominternet", 1),
+                    RegOp.SetDword(
+                        @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Office\16.0\excel\security",
+                        "blockcontentexecutionfrominternet",
+                        1
+                    ),
                 ],
                 RemoveOps =
                 [
-                    RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Office\16.0\excel\security", "blockcontentexecutionfrominternet"),
+                    RegOp.DeleteValue(
+                        @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Office\16.0\excel\security",
+                        "blockcontentexecutionfrominternet"
+                    ),
                 ],
                 DetectOps =
                 [
@@ -8138,7 +8122,6 @@ internal static class PolicyAppControl
                 ],
             },
         ];
-
     }
 
     // ── AppPermissions ──
@@ -8328,7 +8311,6 @@ internal static class PolicyAppControl
                 DetectOps = [RegOp.CheckDword(AppPrivacy, "LetAppsAccessRadios", 2)],
             },
         ];
-
     }
 
     // ── AppPrivacyPolicy ──
@@ -8475,7 +8457,8 @@ internal static class PolicyAppControl
                 ImpactScore = 2,
                 SafetyRating = 5,
                 Description =
-                    "Prevents all UWP apps from reading or writing to the system task list " + "(Cortana reminders, to-do lists). LetAppsAccessTasks=2.",
+                    "Prevents all UWP apps from reading or writing to the system task list "
+                    + "(Cortana reminders, to-do lists). LetAppsAccessTasks=2.",
                 Tags = ["tasks", "to-do", "policy", "app privacy", "uwp"],
                 RegistryKeys = [Policy],
                 ApplyOps = [RegOp.SetDword(Policy, "LetAppsAccessTasks", 2)],
@@ -8515,7 +8498,6 @@ internal static class PolicyAppControl
                 DetectOps = [RegOp.CheckDword(Policy, "LetAppsAccessVideoLibrary", 2)],
             },
         ];
-
     }
 
     // ── AppPrivacyPolicyAdv ──
@@ -8676,7 +8658,6 @@ internal static class PolicyAppControl
                 DetectOps = [RegOp.CheckDword(Policy, "LetAppsActivateWithVoiceAboveLock", 2)],
             },
         ];
-
     }
 
     // ── AppReadinessPolicy ──
@@ -8857,7 +8838,6 @@ internal static class PolicyAppControl
                 DetectOps = [RegOp.CheckDword(Key, "DisableDefaultAppsChoice", 1)],
             },
         ];
-
     }
 
     // ── AppSiloAdvPolicy ──
@@ -9038,7 +9018,6 @@ internal static class PolicyAppControl
                 DetectOps = [RegOp.CheckDword(Key, "EnforceSiloIdentityIsolation", 1)],
             },
         ];
-
     }
 
     // ── AppSiloPolicy ──
@@ -9219,7 +9198,6 @@ internal static class PolicyAppControl
                 DetectOps = [RegOp.CheckDword(Key, "EnableSiloCrashReporting", 1)],
             },
         ];
-
     }
 
     // ── AppVirtualization ──
@@ -9396,7 +9374,6 @@ internal static class PolicyAppControl
                 DetectOps = [RegOp.CheckDword(Streaming, "StreamingConnectionTimeout", 120)],
             },
         ];
-
     }
 
     // ── AppxBundlePolicy ──
@@ -9577,7 +9554,6 @@ internal static class PolicyAppControl
                 DetectOps = [RegOp.CheckDword(Key, "BlockNonStoreApps", 1)],
             },
         ];
-
     }
 
     // ── AppXPackagingPolicy ──
@@ -9758,7 +9734,6 @@ internal static class PolicyAppControl
                 DetectOps = [RegOp.CheckDword(Key, "DisableStagedRemoval", 1)],
             },
         ];
-
     }
 
     // ── AppxPolicy ──
@@ -9955,7 +9930,6 @@ internal static class PolicyAppControl
                 DetectOps = [RegOp.CheckDword(AppxPolicy2, "AllowSharedLocalAppData", 0)],
             },
         ];
-
     }
 
     // ── AppxProvisioningPolicy ──
@@ -10173,7 +10147,6 @@ internal static class PolicyAppControl
                 ImpactNote = "Blocks packaged COM activation bypass; tightens UWP sandbox isolation. May break some packaged apps.",
             },
         ];
-
     }
 
     // ── CodeIntegrityAppPolicy ──
@@ -10366,7 +10339,6 @@ internal static class PolicyAppControl
                     DetectOps = [RegOp.CheckDword(DgKey, "SmartAppControlState", 2)],
                 },
             ];
-
     }
 
     // ── CodeSigningPolicy ──
@@ -10547,7 +10519,6 @@ internal static class PolicyAppControl
                 DetectOps = [RegOp.CheckDword(Key, "EnableAuditCodeIntegrity", 1)],
             },
         ];
-
     }
 
     // ── MicrosoftStorePolicy ──
@@ -10558,169 +10529,178 @@ internal static class PolicyAppControl
         private const string LicKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppLicense";
 
         public static IReadOnlyList<TweakDef> Data =>
-        [
-            new TweakDef
-            {
-                Id           = "storepol-disable-store-entirely",
-                Label        = "Disable Microsoft Store App Entirely",
-                Category = "Security",
-                Description  = "Completely blocks access to the Microsoft Store application for all users on the machine, preventing app browsing, purchasing, and installation via the Store UI.",
-                Tags         = ["store", "disable", "uwp", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 4,
-                SafetyRating = 5,
-                ImpactNote   = "Microsoft Store completely disabled; users cannot browse, buy, or install apps from the Store UI.",
-                ApplyOps     = [RegOp.SetDword(Key, "RemoveWindowsStore", 1)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "RemoveWindowsStore")],
-                DetectOps    = [RegOp.CheckDword(Key, "RemoveWindowsStore", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "storepol-disable-auto-app-download",
-                Label        = "Disable Automatic App Download and Installation via Store",
-                Category = "Security",
-                Description  = "Prevents the Microsoft Store from automatically downloading and installing promoted applications in the background, stopping unsolicited app additions to the Start menu without user action.",
-                Tags         = ["store", "auto-download", "uwp", "bloat", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 4,
-                SafetyRating = 5,
-                ImpactNote   = "Automatic Store app downloads disabled; no apps silently installed via Store promotion pipeline.",
-                ApplyOps     = [RegOp.SetDword(Key, "AutoDownload", 2)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "AutoDownload")],
-                DetectOps    = [RegOp.CheckDword(Key, "AutoDownload", 2)],
-            },
-            new TweakDef
-            {
-                Id           = "storepol-require-private-store-only",
-                Label        = "Restrict Store to Private (Enterprise) Store Only",
-                Category = "Security",
-                Description  = "Restricts the Microsoft Store to show only the organisation's Private Store (Microsoft Intune / Business Store), preventing employees from browsing or installing from the public consumer Store catalog.",
-                Tags         = ["store", "private-store", "enterprise", "intune", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 4,
-                SafetyRating = 5,
-                ImpactNote   = "Only Private/Enterprise Store catalog shown; public consumer apps not accessible via Store.",
-                ApplyOps     = [RegOp.SetDword(Key, "RequirePrivateStoreOnly", 1)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "RequirePrivateStoreOnly")],
-                DetectOps    = [RegOp.CheckDword(Key, "RequirePrivateStoreOnly", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "storepol-disable-store-in-shelf",
-                Label        = "Disable Microsoft Store Suggestions in Taskbar (Shelf)",
-                Category = "Security",
-                Description  = "Prevents the Microsoft Store from displaying app suggestions and promotions in the Windows taskbar shelf and Start menu recommended section, reducing promotional clutter on managed corporate desktops.",
-                Tags         = ["store", "shelf", "taskbar", "suggestions", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 3,
-                SafetyRating = 5,
-                ImpactNote   = "Store promotional suggestions in taskbar shelf and Start menu disabled; no app promotions displayed.",
-                ApplyOps     = [RegOp.SetDword(Key, "DisableStoreShelf", 1)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "DisableStoreShelf")],
-                DetectOps    = [RegOp.CheckDword(Key, "DisableStoreShelf", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "storepol-disable-appx-sideloading",
-                Label        = "Disable Unsigned Appx Package Sideloading",
-                Category = "Security",
-                Description  = "Prevents installation of unsigned (developer) Appx/MSIX packages that are not from the Microsoft Store or properly signed by a trusted publisher, blocking potential malware distribution via sideloaded UWP packages.",
-                Tags         = ["store", "sideloading", "appx", "unsigned", "security", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 4,
-                SafetyRating = 5,
-                ImpactNote   = "Unsigned Appx sideloading disabled; only Store-published or enterprise-signed MSIX packages can install.",
-                ApplyOps     = [RegOp.SetDword(AppKey, "AllowAllTrustedApps", 0)],
-                RemoveOps    = [RegOp.DeleteValue(AppKey, "AllowAllTrustedApps")],
-                DetectOps    = [RegOp.CheckDword(AppKey, "AllowAllTrustedApps", 0)],
-            },
-            new TweakDef
-            {
-                Id           = "storepol-disable-appx-developer-mode",
-                Label        = "Disable Windows Developer Mode Package Installation",
-                Category = "Security",
-                Description  = "Prevents enabling Windows Developer Mode which would allow unrestricted Appx sideloading without publisher signing requirements, ensuring UWP installation policy restrictions are not bypassed via Developer Mode.",
-                Tags         = ["store", "developer-mode", "appx", "security", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 4,
-                SafetyRating = 5,
-                ImpactNote   = "Developer Mode blocked via policy; sideloading restrictions cannot be bypassed by enabling Developer Mode.",
-                ApplyOps     = [RegOp.SetDword(AppKey, "AllowDevelopmentWithoutDevLicense", 0)],
-                RemoveOps    = [RegOp.DeleteValue(AppKey, "AllowDevelopmentWithoutDevLicense")],
-                DetectOps    = [RegOp.CheckDword(AppKey, "AllowDevelopmentWithoutDevLicense", 0)],
-            },
-            new TweakDef
-            {
-                Id           = "storepol-disable-app-license-acquisition",
-                Label        = "Disable Automatic App License Acquisition from Store",
-                Category = "Security",
-                Description  = "Prevents applications from automatically acquiring new or updated licenses from the Microsoft Store License Service in the background, ensuring license state changes are predictable and do not occur without admin approval.",
-                Tags         = ["store", "license", "auto-acquisition", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 3,
-                SafetyRating = 5,
-                ImpactNote   = "Automatic app license acquisition disabled; Store license updates require manual trigger or admin action.",
-                ApplyOps     = [RegOp.SetDword(LicKey, "DisableAutoLicenseAcquisition", 1)],
-                RemoveOps    = [RegOp.DeleteValue(LicKey, "DisableAutoLicenseAcquisition")],
-                DetectOps    = [RegOp.CheckDword(LicKey, "DisableAutoLicenseAcquisition", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "storepol-disable-store-update-background",
-                Label        = "Disable Background App Update via Microsoft Store",
-                Category = "Security",
-                Description  = "Prevents installed UWP apps from automatically updating in the background via the Store update service, ensuring app version changes go through controlled deployment channels.",
-                Tags         = ["store", "auto-update", "background", "uwp", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 3,
-                SafetyRating = 5,
-                ImpactNote   = "Store background app updates disabled; UWP apps only updated on explicit user or admin trigger.",
-                ApplyOps     = [RegOp.SetDword(Key, "DisableOSUpgrade", 0)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "DisableOSUpgrade")],
-                DetectOps    = [RegOp.CheckDword(Key, "DisableOSUpgrade", 0)],
-            },
-            new TweakDef
-            {
-                Id           = "storepol-disable-store-telemetry",
-                Label        = "Disable Microsoft Store Telemetry to Microsoft",
-                Category = "Security",
-                Description  = "Prevents the Microsoft Store client from sending browsing history, search queries, purchase activity, and app installation statistics to Microsoft.",
-                Tags         = ["store", "telemetry", "privacy", "microsoft", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 3,
-                SafetyRating = 5,
-                ImpactNote   = "Store telemetry to Microsoft disabled; browsing, search, and install data not sent to cloud.",
-                ApplyOps     = [RegOp.SetDword(Key, "DisableStoreTelemetry", 1)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "DisableStoreTelemetry")],
-                DetectOps    = [RegOp.CheckDword(Key, "DisableStoreTelemetry", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "storepol-log-appx-install-events",
-                Label        = "Log Appx Package Installation Events in Security Log",
-                Category = "Security",
-                Description  = "Enables Security event log entries for every Appx/MSIX package installation, update, and removal event, providing a complete audit trail of UWP app deployments on the endpoint.",
-                Tags         = ["store", "appx", "audit", "event-log", "install", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 3,
-                SafetyRating = 5,
-                ImpactNote   = "Appx package install/update/remove events logged in Security log; full UWP deployment audit trail.",
-                ApplyOps     = [RegOp.SetDword(AppKey, "AuditAppxInstallEvents", 1)],
-                RemoveOps    = [RegOp.DeleteValue(AppKey, "AuditAppxInstallEvents")],
-                DetectOps    = [RegOp.CheckDword(AppKey, "AuditAppxInstallEvents", 1)],
-            },
-        ];
-
+            [
+                new TweakDef
+                {
+                    Id = "storepol-disable-store-entirely",
+                    Label = "Disable Microsoft Store App Entirely",
+                    Category = "Security",
+                    Description =
+                        "Completely blocks access to the Microsoft Store application for all users on the machine, preventing app browsing, purchasing, and installation via the Store UI.",
+                    Tags = ["store", "disable", "uwp", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "Microsoft Store completely disabled; users cannot browse, buy, or install apps from the Store UI.",
+                    ApplyOps = [RegOp.SetDword(Key, "RemoveWindowsStore", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "RemoveWindowsStore")],
+                    DetectOps = [RegOp.CheckDword(Key, "RemoveWindowsStore", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "storepol-disable-auto-app-download",
+                    Label = "Disable Automatic App Download and Installation via Store",
+                    Category = "Security",
+                    Description =
+                        "Prevents the Microsoft Store from automatically downloading and installing promoted applications in the background, stopping unsolicited app additions to the Start menu without user action.",
+                    Tags = ["store", "auto-download", "uwp", "bloat", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "Automatic Store app downloads disabled; no apps silently installed via Store promotion pipeline.",
+                    ApplyOps = [RegOp.SetDword(Key, "AutoDownload", 2)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "AutoDownload")],
+                    DetectOps = [RegOp.CheckDword(Key, "AutoDownload", 2)],
+                },
+                new TweakDef
+                {
+                    Id = "storepol-require-private-store-only",
+                    Label = "Restrict Store to Private (Enterprise) Store Only",
+                    Category = "Security",
+                    Description =
+                        "Restricts the Microsoft Store to show only the organisation's Private Store (Microsoft Intune / Business Store), preventing employees from browsing or installing from the public consumer Store catalog.",
+                    Tags = ["store", "private-store", "enterprise", "intune", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "Only Private/Enterprise Store catalog shown; public consumer apps not accessible via Store.",
+                    ApplyOps = [RegOp.SetDword(Key, "RequirePrivateStoreOnly", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "RequirePrivateStoreOnly")],
+                    DetectOps = [RegOp.CheckDword(Key, "RequirePrivateStoreOnly", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "storepol-disable-store-in-shelf",
+                    Label = "Disable Microsoft Store Suggestions in Taskbar (Shelf)",
+                    Category = "Security",
+                    Description =
+                        "Prevents the Microsoft Store from displaying app suggestions and promotions in the Windows taskbar shelf and Start menu recommended section, reducing promotional clutter on managed corporate desktops.",
+                    Tags = ["store", "shelf", "taskbar", "suggestions", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "Store promotional suggestions in taskbar shelf and Start menu disabled; no app promotions displayed.",
+                    ApplyOps = [RegOp.SetDword(Key, "DisableStoreShelf", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "DisableStoreShelf")],
+                    DetectOps = [RegOp.CheckDword(Key, "DisableStoreShelf", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "storepol-disable-appx-sideloading",
+                    Label = "Disable Unsigned Appx Package Sideloading",
+                    Category = "Security",
+                    Description =
+                        "Prevents installation of unsigned (developer) Appx/MSIX packages that are not from the Microsoft Store or properly signed by a trusted publisher, blocking potential malware distribution via sideloaded UWP packages.",
+                    Tags = ["store", "sideloading", "appx", "unsigned", "security", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "Unsigned Appx sideloading disabled; only Store-published or enterprise-signed MSIX packages can install.",
+                    ApplyOps = [RegOp.SetDword(AppKey, "AllowAllTrustedApps", 0)],
+                    RemoveOps = [RegOp.DeleteValue(AppKey, "AllowAllTrustedApps")],
+                    DetectOps = [RegOp.CheckDword(AppKey, "AllowAllTrustedApps", 0)],
+                },
+                new TweakDef
+                {
+                    Id = "storepol-disable-appx-developer-mode",
+                    Label = "Disable Windows Developer Mode Package Installation",
+                    Category = "Security",
+                    Description =
+                        "Prevents enabling Windows Developer Mode which would allow unrestricted Appx sideloading without publisher signing requirements, ensuring UWP installation policy restrictions are not bypassed via Developer Mode.",
+                    Tags = ["store", "developer-mode", "appx", "security", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "Developer Mode blocked via policy; sideloading restrictions cannot be bypassed by enabling Developer Mode.",
+                    ApplyOps = [RegOp.SetDword(AppKey, "AllowDevelopmentWithoutDevLicense", 0)],
+                    RemoveOps = [RegOp.DeleteValue(AppKey, "AllowDevelopmentWithoutDevLicense")],
+                    DetectOps = [RegOp.CheckDword(AppKey, "AllowDevelopmentWithoutDevLicense", 0)],
+                },
+                new TweakDef
+                {
+                    Id = "storepol-disable-app-license-acquisition",
+                    Label = "Disable Automatic App License Acquisition from Store",
+                    Category = "Security",
+                    Description =
+                        "Prevents applications from automatically acquiring new or updated licenses from the Microsoft Store License Service in the background, ensuring license state changes are predictable and do not occur without admin approval.",
+                    Tags = ["store", "license", "auto-acquisition", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "Automatic app license acquisition disabled; Store license updates require manual trigger or admin action.",
+                    ApplyOps = [RegOp.SetDword(LicKey, "DisableAutoLicenseAcquisition", 1)],
+                    RemoveOps = [RegOp.DeleteValue(LicKey, "DisableAutoLicenseAcquisition")],
+                    DetectOps = [RegOp.CheckDword(LicKey, "DisableAutoLicenseAcquisition", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "storepol-disable-store-update-background",
+                    Label = "Disable Background App Update via Microsoft Store",
+                    Category = "Security",
+                    Description =
+                        "Prevents installed UWP apps from automatically updating in the background via the Store update service, ensuring app version changes go through controlled deployment channels.",
+                    Tags = ["store", "auto-update", "background", "uwp", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "Store background app updates disabled; UWP apps only updated on explicit user or admin trigger.",
+                    ApplyOps = [RegOp.SetDword(Key, "DisableOSUpgrade", 0)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "DisableOSUpgrade")],
+                    DetectOps = [RegOp.CheckDword(Key, "DisableOSUpgrade", 0)],
+                },
+                new TweakDef
+                {
+                    Id = "storepol-disable-store-telemetry",
+                    Label = "Disable Microsoft Store Telemetry to Microsoft",
+                    Category = "Security",
+                    Description =
+                        "Prevents the Microsoft Store client from sending browsing history, search queries, purchase activity, and app installation statistics to Microsoft.",
+                    Tags = ["store", "telemetry", "privacy", "microsoft", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "Store telemetry to Microsoft disabled; browsing, search, and install data not sent to cloud.",
+                    ApplyOps = [RegOp.SetDword(Key, "DisableStoreTelemetry", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "DisableStoreTelemetry")],
+                    DetectOps = [RegOp.CheckDword(Key, "DisableStoreTelemetry", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "storepol-log-appx-install-events",
+                    Label = "Log Appx Package Installation Events in Security Log",
+                    Category = "Security",
+                    Description =
+                        "Enables Security event log entries for every Appx/MSIX package installation, update, and removal event, providing a complete audit trail of UWP app deployments on the endpoint.",
+                    Tags = ["store", "appx", "audit", "event-log", "install", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "Appx package install/update/remove events logged in Security log; full UWP deployment audit trail.",
+                    ApplyOps = [RegOp.SetDword(AppKey, "AuditAppxInstallEvents", 1)],
+                    RemoveOps = [RegOp.DeleteValue(AppKey, "AuditAppxInstallEvents")],
+                    DetectOps = [RegOp.CheckDword(AppKey, "AuditAppxInstallEvents", 1)],
+                },
+            ];
     }
 
     // ── MsiInstallerPolicy ──
@@ -10871,14 +10851,12 @@ internal static class PolicyAppControl
                 DetectOps = [RegOp.CheckDword(Inst, "DisableMedia", 1)],
             },
         ];
-
     }
 
     // ── PackagedAppDebugPolicy ──
     private static class _PackagedAppDebugPolicy
     {
-        private const string Key =
-            @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\PackagedAppXDebug";
+        private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\PackagedAppXDebug";
 
         public static IReadOnlyList<TweakDef> Data =>
             [
@@ -11053,7 +11031,6 @@ internal static class PolicyAppControl
                     DetectOps = [RegOp.CheckDword(Key, "AuditSideloadAttempts", 1)],
                 },
             ];
-
     }
 
     // ── PushToInstallPolicy ──
@@ -11275,7 +11252,6 @@ internal static class PolicyAppControl
                 DetectOps = [RegOp.CheckDword(Key, "DisablePushServiceWake", 1)],
             },
         ];
-
     }
 
     // ── SmartAppControlPolicy ──
@@ -11286,189 +11262,204 @@ internal static class PolicyAppControl
         private const string SacStateKey = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CI\Policy";
 
         public static IReadOnlyList<TweakDef> Data =>
-        [
-            new TweakDef
-            {
-                Id = "sac-block-policy-change",
-                Label = "Block User Changes to Smart App Control State",
-                Category = "Security",
-                Description = "Prevents users from changing the Smart App Control state (evaluation / on / off) via Windows Security settings. The state set by the administrator via policy is locked in place.",
-                Tags = ["sac", "smart-app-control", "policy", "user-lock", "windows-11"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                MinBuild = 22621,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                ImpactNote = "Ensures Smart App Control remains in its managed state regardless of user preferences.",
-                RegistryKeys = [SacKey],
-                ApplyOps  = [RegOp.SetDword(SacKey, "ConfigureSmartAppControl", 1)],
-                RemoveOps = [RegOp.DeleteValue(SacKey, "ConfigureSmartAppControl")],
-                DetectOps = [RegOp.CheckDword(SacKey, "ConfigureSmartAppControl", 1)],
-            },
-            new TweakDef
-            {
-                Id = "sac-enable-enforcement-mode",
-                Label = "Set Smart App Control to Enforcement Mode",
-                Category = "Security",
-                Description = "Forces Smart App Control into full Enforcement mode, blocking unsigned and reputation-negative apps from running. Moves the system out of Evaluation mode.",
-                Tags = ["sac", "smart-app-control", "enforcement", "app-block", "security"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                MinBuild = 22621,
-                ImpactScore = 5,
-                SafetyRating = 3,
-                ImpactNote = "Blocks all apps that do not have a valid code signature or positive Microsoft cloud reputation. Test on a pilot group; may block legitimate unsigned tools.",
-                RegistryKeys = [SacKey],
-                ApplyOps  = [RegOp.SetDword(SacKey, "SmartAppControlState", 1)],
-                RemoveOps = [RegOp.DeleteValue(SacKey, "SmartAppControlState")],
-                DetectOps = [RegOp.CheckDword(SacKey, "SmartAppControlState", 1)],
-            },
-            new TweakDef
-            {
-                Id = "sac-disable-evaluation-mode",
-                Label = "Disable Smart App Control Evaluation Mode",
-                Category = "Security",
-                Description = "Prevents Windows from running Smart App Control in Evaluation mode, which silently collects data about apps that would be blocked by enforcement. Requires choosing explicit On or Off state.",
-                Tags = ["sac", "smart-app-control", "evaluation", "policy", "windows-11"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                MinBuild = 22621,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Ensures the device is in a known enforcement state rather than the ambiguous evaluation state.",
-                RegistryKeys = [SacKey],
-                ApplyOps  = [RegOp.SetDword(SacKey, "DisableEvaluationMode", 1)],
-                RemoveOps = [RegOp.DeleteValue(SacKey, "DisableEvaluationMode")],
-                DetectOps = [RegOp.CheckDword(SacKey, "DisableEvaluationMode", 1)],
-            },
-            new TweakDef
-            {
-                Id = "sac-require-signed-publishers",
-                Label = "Require Signed Publishers for All Executable Content",
-                Category = "Security",
-                Description = "Configures Smart App Control to require a valid, traceable code-signing publisher certificate for all PE executables, MSI packages, and scripts. Unsigned content is blocked.",
-                Tags = ["sac", "smart-app-control", "code-signing", "publisher", "security"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                MinBuild = 22621,
-                ImpactScore = 4,
-                SafetyRating = 3,
-                ImpactNote = "Strong protection against unsigned malware; breaks all in-house tools that lack a valid code-signing certificate. Ensure all LOB apps are signed before enabling.",
-                RegistryKeys = [SacKey],
-                ApplyOps  = [RegOp.SetDword(SacKey, "RequireSignedPublishers", 1)],
-                RemoveOps = [RegOp.DeleteValue(SacKey, "RequireSignedPublishers")],
-                DetectOps = [RegOp.CheckDword(SacKey, "RequireSignedPublishers", 1)],
-            },
-            new TweakDef
-            {
-                Id = "sac-block-malicious-script-execution",
-                Label = "Block Script Files Identified as Malicious by SAC",
-                Category = "Security",
-                Description = "Enables Smart App Control to block script execution (JS, VBS, PS1, CMD) when the script file or publisher is identified as malicious by the Microsoft Intelligent Security Graph.",
-                Tags = ["sac", "smart-app-control", "scripts", "malicious", "security"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                MinBuild = 22621,
-                ImpactScore = 4,
-                SafetyRating = 4,
-                ImpactNote = "Stops script-based threats (LotL attacks) that use reputation-negative or anonymous scripts.",
-                RegistryKeys = [SacKey],
-                ApplyOps  = [RegOp.SetDword(SacKey, "BlockMaliciousScripts", 1)],
-                RemoveOps = [RegOp.DeleteValue(SacKey, "BlockMaliciousScripts")],
-                DetectOps = [RegOp.CheckDword(SacKey, "BlockMaliciousScripts", 1)],
-            },
-            new TweakDef
-            {
-                Id = "sac-audit-blocked-file-events",
-                Label = "Enable Audit Events for SAC-Blocked Files",
-                Category = "Security",
-                Description = "Configures Smart App Control to write an Windows event for every file that is blocked or audited, including the file hash, publisher, and reason for the block decision.",
-                Tags = ["sac", "smart-app-control", "audit", "event-log", "compliance"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                MinBuild = 22621,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Provides a forensic record of blocked app attempts, supporting SOC investigation and compliance reporting.",
-                RegistryKeys = [SacKey],
-                ApplyOps  = [RegOp.SetDword(SacKey, "AuditBlockedFileEvents", 1)],
-                RemoveOps = [RegOp.DeleteValue(SacKey, "AuditBlockedFileEvents")],
-                DetectOps = [RegOp.CheckDword(SacKey, "AuditBlockedFileEvents", 1)],
-            },
-            new TweakDef
-            {
-                Id = "sac-disable-cloud-lookup",
-                Label = "Disable Smart App Control Cloud Reputation Lookup",
-                Category = "Security",
-                Description = "Prevents SAC from sending file hashes and metadata to the Microsoft Intelligent Security Graph cloud service for reputation evaluation. SAC falls back to local developer-mode checks only.",
-                Tags = ["sac", "smart-app-control", "cloud", "privacy", "network-isolation"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                MinBuild = 22621,
-                ImpactScore = 3,
-                SafetyRating = 4,
-                ImpactNote = "Suitable for air-gapped or high-security environments; reduces SAC effectiveness as the cloud model is the primary signal source.",
-                RegistryKeys = [SacKey],
-                ApplyOps  = [RegOp.SetDword(SacKey, "DisableCloudReputationLookup", 1)],
-                RemoveOps = [RegOp.DeleteValue(SacKey, "DisableCloudReputationLookup")],
-                DetectOps = [RegOp.CheckDword(SacKey, "DisableCloudReputationLookup", 1)],
-            },
-            new TweakDef
-            {
-                Id = "sac-extend-to-network-paths",
-                Label = "Apply Smart App Control to Network-Path Executables",
-                Category = "Security",
-                Description = "Extends Smart App Control enforcement to executables launched from UNC network paths and mapped drives, not just local storage. Prevents bypass by placing unsigned tools on a file share.",
-                Tags = ["sac", "smart-app-control", "network", "unc-path", "security"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                MinBuild = 22621,
-                ImpactScore = 3,
-                SafetyRating = 4,
-                ImpactNote = "Network-launched binaries are less commonly signed; pilot before enforcing to avoid blocking legitimate admin tools from network shares.",
-                RegistryKeys = [SacKey],
-                ApplyOps  = [RegOp.SetDword(SacKey, "ExtendToNetworkPaths", 1)],
-                RemoveOps = [RegOp.DeleteValue(SacKey, "ExtendToNetworkPaths")],
-                DetectOps = [RegOp.CheckDword(SacKey, "ExtendToNetworkPaths", 1)],
-            },
-            new TweakDef
-            {
-                Id = "sac-block-lolbas-abuse",
-                Label = "Block Known LOLBAS Misuse via Smart App Control",
-                Category = "Security",
-                Description = "Enables additional Smart App Control rules that block known Living-off-the-Land Binaries and Scripts (LOLBAS) from being used in patterns typically associated with attackers (e.g., certutil download, regsvr32 scriptlet).",
-                Tags = ["sac", "smart-app-control", "lolbas", "living-off-land", "security"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                MinBuild = 22621,
-                ImpactScore = 4,
-                SafetyRating = 3,
-                ImpactNote = "May interfere with legitimate administrative use of tools like certutil, msiexec, or rundll32. Review the specific exclusions needed before enabling.",
-                RegistryKeys = [SacKey],
-                ApplyOps  = [RegOp.SetDword(SacKey, "BlockLolbasAbuse", 1)],
-                RemoveOps = [RegOp.DeleteValue(SacKey, "BlockLolbasAbuse")],
-                DetectOps = [RegOp.CheckDword(SacKey, "BlockLolbasAbuse", 1)],
-            },
-            new TweakDef
-            {
-                Id = "sac-enable-intelligent-security-graph",
-                Label = "Enable Intelligent Security Graph Integration for SAC",
-                Category = "Security",
-                Description = "Enables the Microsoft Intelligent Security Graph (ISG) integration for Smart App Control, allowing real-time reputation data from the Microsoft cloud threat intelligence service to inform allow/deny decisions.",
-                Tags = ["sac", "smart-app-control", "isg", "cloud-intelligence", "security"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                MinBuild = 22621,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                ImpactNote = "ISG provides continuously updated threat data; keeping it enabled ensures SAC decisions reflect the latest known-bad software intelligence.",
-                RegistryKeys = [WdCiKey],
-                ApplyOps  = [RegOp.SetDword(WdCiKey, "EnableIntelligentSecurityGraph", 1)],
-                RemoveOps = [RegOp.DeleteValue(WdCiKey, "EnableIntelligentSecurityGraph")],
-                DetectOps = [RegOp.CheckDword(WdCiKey, "EnableIntelligentSecurityGraph", 1)],
-            },
-        ];
-
+            [
+                new TweakDef
+                {
+                    Id = "sac-block-policy-change",
+                    Label = "Block User Changes to Smart App Control State",
+                    Category = "Security",
+                    Description =
+                        "Prevents users from changing the Smart App Control state (evaluation / on / off) via Windows Security settings. The state set by the administrator via policy is locked in place.",
+                    Tags = ["sac", "smart-app-control", "policy", "user-lock", "windows-11"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    MinBuild = 22621,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "Ensures Smart App Control remains in its managed state regardless of user preferences.",
+                    RegistryKeys = [SacKey],
+                    ApplyOps = [RegOp.SetDword(SacKey, "ConfigureSmartAppControl", 1)],
+                    RemoveOps = [RegOp.DeleteValue(SacKey, "ConfigureSmartAppControl")],
+                    DetectOps = [RegOp.CheckDword(SacKey, "ConfigureSmartAppControl", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "sac-enable-enforcement-mode",
+                    Label = "Set Smart App Control to Enforcement Mode",
+                    Category = "Security",
+                    Description =
+                        "Forces Smart App Control into full Enforcement mode, blocking unsigned and reputation-negative apps from running. Moves the system out of Evaluation mode.",
+                    Tags = ["sac", "smart-app-control", "enforcement", "app-block", "security"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    MinBuild = 22621,
+                    ImpactScore = 5,
+                    SafetyRating = 3,
+                    ImpactNote =
+                        "Blocks all apps that do not have a valid code signature or positive Microsoft cloud reputation. Test on a pilot group; may block legitimate unsigned tools.",
+                    RegistryKeys = [SacKey],
+                    ApplyOps = [RegOp.SetDword(SacKey, "SmartAppControlState", 1)],
+                    RemoveOps = [RegOp.DeleteValue(SacKey, "SmartAppControlState")],
+                    DetectOps = [RegOp.CheckDword(SacKey, "SmartAppControlState", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "sac-disable-evaluation-mode",
+                    Label = "Disable Smart App Control Evaluation Mode",
+                    Category = "Security",
+                    Description =
+                        "Prevents Windows from running Smart App Control in Evaluation mode, which silently collects data about apps that would be blocked by enforcement. Requires choosing explicit On or Off state.",
+                    Tags = ["sac", "smart-app-control", "evaluation", "policy", "windows-11"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    MinBuild = 22621,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "Ensures the device is in a known enforcement state rather than the ambiguous evaluation state.",
+                    RegistryKeys = [SacKey],
+                    ApplyOps = [RegOp.SetDword(SacKey, "DisableEvaluationMode", 1)],
+                    RemoveOps = [RegOp.DeleteValue(SacKey, "DisableEvaluationMode")],
+                    DetectOps = [RegOp.CheckDword(SacKey, "DisableEvaluationMode", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "sac-require-signed-publishers",
+                    Label = "Require Signed Publishers for All Executable Content",
+                    Category = "Security",
+                    Description =
+                        "Configures Smart App Control to require a valid, traceable code-signing publisher certificate for all PE executables, MSI packages, and scripts. Unsigned content is blocked.",
+                    Tags = ["sac", "smart-app-control", "code-signing", "publisher", "security"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    MinBuild = 22621,
+                    ImpactScore = 4,
+                    SafetyRating = 3,
+                    ImpactNote =
+                        "Strong protection against unsigned malware; breaks all in-house tools that lack a valid code-signing certificate. Ensure all LOB apps are signed before enabling.",
+                    RegistryKeys = [SacKey],
+                    ApplyOps = [RegOp.SetDword(SacKey, "RequireSignedPublishers", 1)],
+                    RemoveOps = [RegOp.DeleteValue(SacKey, "RequireSignedPublishers")],
+                    DetectOps = [RegOp.CheckDword(SacKey, "RequireSignedPublishers", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "sac-block-malicious-script-execution",
+                    Label = "Block Script Files Identified as Malicious by SAC",
+                    Category = "Security",
+                    Description =
+                        "Enables Smart App Control to block script execution (JS, VBS, PS1, CMD) when the script file or publisher is identified as malicious by the Microsoft Intelligent Security Graph.",
+                    Tags = ["sac", "smart-app-control", "scripts", "malicious", "security"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    MinBuild = 22621,
+                    ImpactScore = 4,
+                    SafetyRating = 4,
+                    ImpactNote = "Stops script-based threats (LotL attacks) that use reputation-negative or anonymous scripts.",
+                    RegistryKeys = [SacKey],
+                    ApplyOps = [RegOp.SetDword(SacKey, "BlockMaliciousScripts", 1)],
+                    RemoveOps = [RegOp.DeleteValue(SacKey, "BlockMaliciousScripts")],
+                    DetectOps = [RegOp.CheckDword(SacKey, "BlockMaliciousScripts", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "sac-audit-blocked-file-events",
+                    Label = "Enable Audit Events for SAC-Blocked Files",
+                    Category = "Security",
+                    Description =
+                        "Configures Smart App Control to write an Windows event for every file that is blocked or audited, including the file hash, publisher, and reason for the block decision.",
+                    Tags = ["sac", "smart-app-control", "audit", "event-log", "compliance"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    MinBuild = 22621,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "Provides a forensic record of blocked app attempts, supporting SOC investigation and compliance reporting.",
+                    RegistryKeys = [SacKey],
+                    ApplyOps = [RegOp.SetDword(SacKey, "AuditBlockedFileEvents", 1)],
+                    RemoveOps = [RegOp.DeleteValue(SacKey, "AuditBlockedFileEvents")],
+                    DetectOps = [RegOp.CheckDword(SacKey, "AuditBlockedFileEvents", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "sac-disable-cloud-lookup",
+                    Label = "Disable Smart App Control Cloud Reputation Lookup",
+                    Category = "Security",
+                    Description =
+                        "Prevents SAC from sending file hashes and metadata to the Microsoft Intelligent Security Graph cloud service for reputation evaluation. SAC falls back to local developer-mode checks only.",
+                    Tags = ["sac", "smart-app-control", "cloud", "privacy", "network-isolation"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    MinBuild = 22621,
+                    ImpactScore = 3,
+                    SafetyRating = 4,
+                    ImpactNote =
+                        "Suitable for air-gapped or high-security environments; reduces SAC effectiveness as the cloud model is the primary signal source.",
+                    RegistryKeys = [SacKey],
+                    ApplyOps = [RegOp.SetDword(SacKey, "DisableCloudReputationLookup", 1)],
+                    RemoveOps = [RegOp.DeleteValue(SacKey, "DisableCloudReputationLookup")],
+                    DetectOps = [RegOp.CheckDword(SacKey, "DisableCloudReputationLookup", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "sac-extend-to-network-paths",
+                    Label = "Apply Smart App Control to Network-Path Executables",
+                    Category = "Security",
+                    Description =
+                        "Extends Smart App Control enforcement to executables launched from UNC network paths and mapped drives, not just local storage. Prevents bypass by placing unsigned tools on a file share.",
+                    Tags = ["sac", "smart-app-control", "network", "unc-path", "security"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    MinBuild = 22621,
+                    ImpactScore = 3,
+                    SafetyRating = 4,
+                    ImpactNote =
+                        "Network-launched binaries are less commonly signed; pilot before enforcing to avoid blocking legitimate admin tools from network shares.",
+                    RegistryKeys = [SacKey],
+                    ApplyOps = [RegOp.SetDword(SacKey, "ExtendToNetworkPaths", 1)],
+                    RemoveOps = [RegOp.DeleteValue(SacKey, "ExtendToNetworkPaths")],
+                    DetectOps = [RegOp.CheckDword(SacKey, "ExtendToNetworkPaths", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "sac-block-lolbas-abuse",
+                    Label = "Block Known LOLBAS Misuse via Smart App Control",
+                    Category = "Security",
+                    Description =
+                        "Enables additional Smart App Control rules that block known Living-off-the-Land Binaries and Scripts (LOLBAS) from being used in patterns typically associated with attackers (e.g., certutil download, regsvr32 scriptlet).",
+                    Tags = ["sac", "smart-app-control", "lolbas", "living-off-land", "security"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    MinBuild = 22621,
+                    ImpactScore = 4,
+                    SafetyRating = 3,
+                    ImpactNote =
+                        "May interfere with legitimate administrative use of tools like certutil, msiexec, or rundll32. Review the specific exclusions needed before enabling.",
+                    RegistryKeys = [SacKey],
+                    ApplyOps = [RegOp.SetDword(SacKey, "BlockLolbasAbuse", 1)],
+                    RemoveOps = [RegOp.DeleteValue(SacKey, "BlockLolbasAbuse")],
+                    DetectOps = [RegOp.CheckDword(SacKey, "BlockLolbasAbuse", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "sac-enable-intelligent-security-graph",
+                    Label = "Enable Intelligent Security Graph Integration for SAC",
+                    Category = "Security",
+                    Description =
+                        "Enables the Microsoft Intelligent Security Graph (ISG) integration for Smart App Control, allowing real-time reputation data from the Microsoft cloud threat intelligence service to inform allow/deny decisions.",
+                    Tags = ["sac", "smart-app-control", "isg", "cloud-intelligence", "security"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    MinBuild = 22621,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote =
+                        "ISG provides continuously updated threat data; keeping it enabled ensures SAC decisions reflect the latest known-bad software intelligence.",
+                    RegistryKeys = [WdCiKey],
+                    ApplyOps = [RegOp.SetDword(WdCiKey, "EnableIntelligentSecurityGraph", 1)],
+                    RemoveOps = [RegOp.DeleteValue(WdCiKey, "EnableIntelligentSecurityGraph")],
+                    DetectOps = [RegOp.CheckDword(WdCiKey, "EnableIntelligentSecurityGraph", 1)],
+                },
+            ];
     }
 
     // ── SoftwareRestrictionAdvPolicy ──
@@ -11661,7 +11652,6 @@ internal static class PolicyAppControl
                     DetectOps = [RegOp.CheckDword(AlKey, "BlockOfficeChildProcesses", 1)],
                 },
             ];
-
     }
 
     // ── WdacCodeIntegrity ──
@@ -11863,7 +11853,6 @@ internal static class PolicyAppControl
                 DetectOps = [RegOp.CheckDword(AsrRules, "7674BA52-37EB-4A4F-A9A1-F0F9A1619A2C", 1)],
             },
         ];
-
     }
 
     // ── WindowsDefenderApplicationControlPolicy ──
@@ -11874,169 +11863,178 @@ internal static class PolicyAppControl
         private const string SipKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\SipEngine";
 
         public static IReadOnlyList<TweakDef> Data =>
-        [
-            new TweakDef
-            {
-                Id           = "wdacpol-enable-hvci-kernel-mode",
-                Label        = "Enable Hypervisor-Protected Code Integrity (HVCI) in Strict Mode",
-                Category = "Security",
-                Description  = "Enables HVCI (Memory integrity) in strict enforcement mode, protecting kernel-mode code and data in a Hyper-V virtual trust level, preventing kernel driver exploits from modifying kernel memory or loading unsigned drivers.",
-                Tags         = ["hvci", "memory-integrity", "kernel", "wdac", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 5,
-                SafetyRating = 5,
-                ImpactNote   = "HVCI strict mode enabled; kernel memory protected by Hyper-V. Unsigned kernel driver exploits blocked.",
-                ApplyOps     = [RegOp.SetDword(CfgKey, "EnableVirtualizationBasedSecurity", 1)],
-                RemoveOps    = [RegOp.DeleteValue(CfgKey, "EnableVirtualizationBasedSecurity")],
-                DetectOps    = [RegOp.CheckDword(CfgKey, "EnableVirtualizationBasedSecurity", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "wdacpol-require-platform-security-vbs",
-                Label        = "Require Platform Security Features for VBS (Secure Boot + DMA)",
-                Category = "Security",
-                Description  = "Configures Virtualization Based Security to require both Secure Boot and DMA protection (IOMMU) as mandatory platform security features, ensuring VBS protection cannot be enabled without proper hardware isolation.",
-                Tags         = ["vbs", "secure-boot", "dma-protection", "hvci", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 5,
-                SafetyRating = 5,
-                ImpactNote   = "VBS requires Secure Boot + DMA/IOMMU hardware; VBS cannot be bypassed by disabling hardware security.",
-                ApplyOps     = [RegOp.SetDword(CfgKey, "RequirePlatformSecurityFeatures", 3)],
-                RemoveOps    = [RegOp.DeleteValue(CfgKey, "RequirePlatformSecurityFeatures")],
-                DetectOps    = [RegOp.CheckDword(CfgKey, "RequirePlatformSecurityFeatures", 3)],
-            },
-            new TweakDef
-            {
-                Id           = "wdacpol-enable-umci-enforcement",
-                Label        = "Enable User Mode Code Integrity (UMCI) Enforcement via WDAC",
-                Category = "Security",
-                Description  = "Enables User Mode Code Integrity enforcement via Windows Defender Application Control, requiring all user-mode executables and DLLs to be signed by an allow-listed publisher or policy rule before loading.",
-                Tags         = ["wdac", "umci", "user-mode", "code-signing", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 5,
-                SafetyRating = 5,
-                ImpactNote   = "UMCI enforcement enabled; unsigned user-mode binaries blocked from executing. Requires WDAC policy deployment.",
-                ApplyOps     = [RegOp.SetDword(CfgKey, "HypervisorEnforcedCodeIntegrity", 1)],
-                RemoveOps    = [RegOp.DeleteValue(CfgKey, "HypervisorEnforcedCodeIntegrity")],
-                DetectOps    = [RegOp.CheckDword(CfgKey, "HypervisorEnforcedCodeIntegrity", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "wdacpol-disable-test-signing",
-                Label        = "Disable Kernel Test Signing Mode (Block Development Bypass)",
-                Category = "Security",
-                Description  = "Prevents the kernel from loading drivers that are only test-signed (not production WHQL or EV-signed), closing the development bypass mode that allows unsigned driver loading without hardware attestation.",
-                Tags         = ["wdac", "test-signing", "driver-signing", "kernel", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 4,
-                SafetyRating = 5,
-                ImpactNote   = "Kernel test signing disabled; only production-signed drivers load. Development signing bypass blocked.",
-                ApplyOps     = [RegOp.SetDword(Key, "DisableTestSigning", 1)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "DisableTestSigning")],
-                DetectOps    = [RegOp.CheckDword(Key, "DisableTestSigning", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "wdacpol-block-vulnerable-driver-loading",
-                Label        = "Enable WDAC Vulnerable Driver Blocklist (Microsoft HVCI Blocklist)",
-                Category = "Security",
-                Description  = "Enables the Microsoft-maintained vulnerable driver blocklist (applied via HVCI when memory integrity is on), preventing loading of known LOLBAS kernel drivers used for BYOVD (Bring Your Own Vulnerable Driver) kernel exploits.",
-                Tags         = ["wdac", "vulnerable-driver", "byovd", "hvci", "blocklist", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 5,
-                SafetyRating = 5,
-                ImpactNote   = "Microsoft vulnerable driver blocklist enforced; known BYOVD exploit driver loading blocked.",
-                ApplyOps     = [RegOp.SetDword(CfgKey, "EnableWindowsDriverBlocklist", 1)],
-                RemoveOps    = [RegOp.DeleteValue(CfgKey, "EnableWindowsDriverBlocklist")],
-                DetectOps    = [RegOp.CheckDword(CfgKey, "EnableWindowsDriverBlocklist", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "wdacpol-require-whql-for-new-drivers",
-                Label        = "Require WHQL Signature for New Kernel-Mode Drivers",
-                Category = "Security",
-                Description  = "Configures code integrity to require WHQL (Windows Hardware Quality Lab) signatures on new kernel-mode drivers, blocking loading of drivers signed only with a self-signed or EV code signing certificate without WHQL attestation.",
-                Tags         = ["wdac", "whql", "kernel-driver", "signing", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 4,
-                SafetyRating = 5,
-                ImpactNote   = "New kernel drivers require WHQL signature; EV-only signed drivers without WHQL attestation blocked.",
-                ApplyOps     = [RegOp.SetDword(Key, "RequireWHQLForNewDrivers", 1)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "RequireWHQLForNewDrivers")],
-                DetectOps    = [RegOp.CheckDword(Key, "RequireWHQLForNewDrivers", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "wdacpol-disable-dynamic-code-policy",
-                Label        = "Set WDAC Dynamic Code Security Policy to Enforce Mode",
-                Category = "Security",
-                Description  = "Sets the WDAC dynamic code policy to enforced mode, protecting dynamically generated code (JIT-compiled scripts, .NET, browsers) from injecting unsigned code pages that bypass static WDAC policy checks.",
-                Tags         = ["wdac", "dynamic-code", "jit", "enforcement", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 4,
-                SafetyRating = 5,
-                ImpactNote   = "WDAC dynamic code security enforced; JIT-injected code pages validated against code integrity policy.",
-                ApplyOps     = [RegOp.SetDword(SipKey, "DynamicCodeSecurity", 2)],
-                RemoveOps    = [RegOp.DeleteValue(SipKey, "DynamicCodeSecurity")],
-                DetectOps    = [RegOp.CheckDword(SipKey, "DynamicCodeSecurity", 2)],
-            },
-            new TweakDef
-            {
-                Id           = "wdacpol-log-ci-failures",
-                Label        = "Log Code Integrity Violation Events in CodeIntegrity Log",
-                Category = "Security",
-                Description  = "Enables logging of code integrity block decisions in the Microsoft-Windows-CodeIntegrity/Operational event log channel, providing audit records of all executables and drivers blocked by WDAC or HVCI policy.",
-                Tags         = ["wdac", "event-log", "audit", "ci-failure", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 4,
-                SafetyRating = 5,
-                ImpactNote   = "Code integrity violation events logged; all WDAC/HVCI blocked files visible in CodeIntegrity event channel.",
-                ApplyOps     = [RegOp.SetDword(Key, "LogCIFailures", 1)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "LogCIFailures")],
-                DetectOps    = [RegOp.CheckDword(Key, "LogCIFailures", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "wdacpol-disable-debug-policy",
-                Label        = "Disable WDAC Debug/Audit Mode (Enforce Kernel Debugging Disabled)",
-                Category = "Security",
-                Description  = "Prevents kernel debugging from being enabled on this system via bcdedit /debug, which would disable code integrity checks entirely, ensuring WDAC cannot be bypassed by attaching a kernel debugger.",
-                Tags         = ["wdac", "kernel-debug", "debug-mode", "bypass", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 5,
-                SafetyRating = 5,
-                ImpactNote   = "Kernel debug mode blocked; WDAC/CI cannot be bypassed via kernel debugger attachment.",
-                ApplyOps     = [RegOp.SetDword(Key, "DisableKernelDebugPolicy", 1)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "DisableKernelDebugPolicy")],
-                DetectOps    = [RegOp.CheckDword(Key, "DisableKernelDebugPolicy", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "wdacpol-disable-wdac-telemetry",
-                Label        = "Disable WDAC Code Integrity Telemetry to Microsoft",
-                Category = "Security",
-                Description  = "Prevents WDAC and Windows Code Integrity from reporting blocked binary hashes, publisher names, violation rates, and policy effectiveness telemetry to Microsoft.",
-                Tags         = ["wdac", "telemetry", "privacy", "microsoft", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 2,
-                SafetyRating = 5,
-                ImpactNote   = "WDAC telemetry to Microsoft disabled; blocked binary hashes and policy stats not sent to cloud.",
-                ApplyOps     = [RegOp.SetDword(CfgKey, "DisableWDACTelemetry", 1)],
-                RemoveOps    = [RegOp.DeleteValue(CfgKey, "DisableWDACTelemetry")],
-                DetectOps    = [RegOp.CheckDword(CfgKey, "DisableWDACTelemetry", 1)],
-            },
-        ];
-
+            [
+                new TweakDef
+                {
+                    Id = "wdacpol-enable-hvci-kernel-mode",
+                    Label = "Enable Hypervisor-Protected Code Integrity (HVCI) in Strict Mode",
+                    Category = "Security",
+                    Description =
+                        "Enables HVCI (Memory integrity) in strict enforcement mode, protecting kernel-mode code and data in a Hyper-V virtual trust level, preventing kernel driver exploits from modifying kernel memory or loading unsigned drivers.",
+                    Tags = ["hvci", "memory-integrity", "kernel", "wdac", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 5,
+                    SafetyRating = 5,
+                    ImpactNote = "HVCI strict mode enabled; kernel memory protected by Hyper-V. Unsigned kernel driver exploits blocked.",
+                    ApplyOps = [RegOp.SetDword(CfgKey, "EnableVirtualizationBasedSecurity", 1)],
+                    RemoveOps = [RegOp.DeleteValue(CfgKey, "EnableVirtualizationBasedSecurity")],
+                    DetectOps = [RegOp.CheckDword(CfgKey, "EnableVirtualizationBasedSecurity", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "wdacpol-require-platform-security-vbs",
+                    Label = "Require Platform Security Features for VBS (Secure Boot + DMA)",
+                    Category = "Security",
+                    Description =
+                        "Configures Virtualization Based Security to require both Secure Boot and DMA protection (IOMMU) as mandatory platform security features, ensuring VBS protection cannot be enabled without proper hardware isolation.",
+                    Tags = ["vbs", "secure-boot", "dma-protection", "hvci", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 5,
+                    SafetyRating = 5,
+                    ImpactNote = "VBS requires Secure Boot + DMA/IOMMU hardware; VBS cannot be bypassed by disabling hardware security.",
+                    ApplyOps = [RegOp.SetDword(CfgKey, "RequirePlatformSecurityFeatures", 3)],
+                    RemoveOps = [RegOp.DeleteValue(CfgKey, "RequirePlatformSecurityFeatures")],
+                    DetectOps = [RegOp.CheckDword(CfgKey, "RequirePlatformSecurityFeatures", 3)],
+                },
+                new TweakDef
+                {
+                    Id = "wdacpol-enable-umci-enforcement",
+                    Label = "Enable User Mode Code Integrity (UMCI) Enforcement via WDAC",
+                    Category = "Security",
+                    Description =
+                        "Enables User Mode Code Integrity enforcement via Windows Defender Application Control, requiring all user-mode executables and DLLs to be signed by an allow-listed publisher or policy rule before loading.",
+                    Tags = ["wdac", "umci", "user-mode", "code-signing", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 5,
+                    SafetyRating = 5,
+                    ImpactNote = "UMCI enforcement enabled; unsigned user-mode binaries blocked from executing. Requires WDAC policy deployment.",
+                    ApplyOps = [RegOp.SetDword(CfgKey, "HypervisorEnforcedCodeIntegrity", 1)],
+                    RemoveOps = [RegOp.DeleteValue(CfgKey, "HypervisorEnforcedCodeIntegrity")],
+                    DetectOps = [RegOp.CheckDword(CfgKey, "HypervisorEnforcedCodeIntegrity", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "wdacpol-disable-test-signing",
+                    Label = "Disable Kernel Test Signing Mode (Block Development Bypass)",
+                    Category = "Security",
+                    Description =
+                        "Prevents the kernel from loading drivers that are only test-signed (not production WHQL or EV-signed), closing the development bypass mode that allows unsigned driver loading without hardware attestation.",
+                    Tags = ["wdac", "test-signing", "driver-signing", "kernel", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "Kernel test signing disabled; only production-signed drivers load. Development signing bypass blocked.",
+                    ApplyOps = [RegOp.SetDword(Key, "DisableTestSigning", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "DisableTestSigning")],
+                    DetectOps = [RegOp.CheckDword(Key, "DisableTestSigning", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "wdacpol-block-vulnerable-driver-loading",
+                    Label = "Enable WDAC Vulnerable Driver Blocklist (Microsoft HVCI Blocklist)",
+                    Category = "Security",
+                    Description =
+                        "Enables the Microsoft-maintained vulnerable driver blocklist (applied via HVCI when memory integrity is on), preventing loading of known LOLBAS kernel drivers used for BYOVD (Bring Your Own Vulnerable Driver) kernel exploits.",
+                    Tags = ["wdac", "vulnerable-driver", "byovd", "hvci", "blocklist", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 5,
+                    SafetyRating = 5,
+                    ImpactNote = "Microsoft vulnerable driver blocklist enforced; known BYOVD exploit driver loading blocked.",
+                    ApplyOps = [RegOp.SetDword(CfgKey, "EnableWindowsDriverBlocklist", 1)],
+                    RemoveOps = [RegOp.DeleteValue(CfgKey, "EnableWindowsDriverBlocklist")],
+                    DetectOps = [RegOp.CheckDword(CfgKey, "EnableWindowsDriverBlocklist", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "wdacpol-require-whql-for-new-drivers",
+                    Label = "Require WHQL Signature for New Kernel-Mode Drivers",
+                    Category = "Security",
+                    Description =
+                        "Configures code integrity to require WHQL (Windows Hardware Quality Lab) signatures on new kernel-mode drivers, blocking loading of drivers signed only with a self-signed or EV code signing certificate without WHQL attestation.",
+                    Tags = ["wdac", "whql", "kernel-driver", "signing", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "New kernel drivers require WHQL signature; EV-only signed drivers without WHQL attestation blocked.",
+                    ApplyOps = [RegOp.SetDword(Key, "RequireWHQLForNewDrivers", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "RequireWHQLForNewDrivers")],
+                    DetectOps = [RegOp.CheckDword(Key, "RequireWHQLForNewDrivers", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "wdacpol-disable-dynamic-code-policy",
+                    Label = "Set WDAC Dynamic Code Security Policy to Enforce Mode",
+                    Category = "Security",
+                    Description =
+                        "Sets the WDAC dynamic code policy to enforced mode, protecting dynamically generated code (JIT-compiled scripts, .NET, browsers) from injecting unsigned code pages that bypass static WDAC policy checks.",
+                    Tags = ["wdac", "dynamic-code", "jit", "enforcement", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "WDAC dynamic code security enforced; JIT-injected code pages validated against code integrity policy.",
+                    ApplyOps = [RegOp.SetDword(SipKey, "DynamicCodeSecurity", 2)],
+                    RemoveOps = [RegOp.DeleteValue(SipKey, "DynamicCodeSecurity")],
+                    DetectOps = [RegOp.CheckDword(SipKey, "DynamicCodeSecurity", 2)],
+                },
+                new TweakDef
+                {
+                    Id = "wdacpol-log-ci-failures",
+                    Label = "Log Code Integrity Violation Events in CodeIntegrity Log",
+                    Category = "Security",
+                    Description =
+                        "Enables logging of code integrity block decisions in the Microsoft-Windows-CodeIntegrity/Operational event log channel, providing audit records of all executables and drivers blocked by WDAC or HVCI policy.",
+                    Tags = ["wdac", "event-log", "audit", "ci-failure", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "Code integrity violation events logged; all WDAC/HVCI blocked files visible in CodeIntegrity event channel.",
+                    ApplyOps = [RegOp.SetDword(Key, "LogCIFailures", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "LogCIFailures")],
+                    DetectOps = [RegOp.CheckDword(Key, "LogCIFailures", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "wdacpol-disable-debug-policy",
+                    Label = "Disable WDAC Debug/Audit Mode (Enforce Kernel Debugging Disabled)",
+                    Category = "Security",
+                    Description =
+                        "Prevents kernel debugging from being enabled on this system via bcdedit /debug, which would disable code integrity checks entirely, ensuring WDAC cannot be bypassed by attaching a kernel debugger.",
+                    Tags = ["wdac", "kernel-debug", "debug-mode", "bypass", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 5,
+                    SafetyRating = 5,
+                    ImpactNote = "Kernel debug mode blocked; WDAC/CI cannot be bypassed via kernel debugger attachment.",
+                    ApplyOps = [RegOp.SetDword(Key, "DisableKernelDebugPolicy", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "DisableKernelDebugPolicy")],
+                    DetectOps = [RegOp.CheckDword(Key, "DisableKernelDebugPolicy", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "wdacpol-disable-wdac-telemetry",
+                    Label = "Disable WDAC Code Integrity Telemetry to Microsoft",
+                    Category = "Security",
+                    Description =
+                        "Prevents WDAC and Windows Code Integrity from reporting blocked binary hashes, publisher names, violation rates, and policy effectiveness telemetry to Microsoft.",
+                    Tags = ["wdac", "telemetry", "privacy", "microsoft", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 2,
+                    SafetyRating = 5,
+                    ImpactNote = "WDAC telemetry to Microsoft disabled; blocked binary hashes and policy stats not sent to cloud.",
+                    ApplyOps = [RegOp.SetDword(CfgKey, "DisableWDACTelemetry", 1)],
+                    RemoveOps = [RegOp.DeleteValue(CfgKey, "DisableWDACTelemetry")],
+                    DetectOps = [RegOp.CheckDword(CfgKey, "DisableWDACTelemetry", 1)],
+                },
+            ];
     }
 
     // ── WindowsInstallerAdvPolicy ──
@@ -12045,179 +12043,198 @@ internal static class PolicyAppControl
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Installer";
 
         public static IReadOnlyList<TweakDef> Data =>
-        [
-            new TweakDef
-            {
-                Id = "winstadv-disable-always-install-elevated",
-                Label = "Installer Adv: Disable AlwaysInstallElevated to Prevent MSI Privilege Escalation",
-                Category = "Security",
-                Description = "Sets AlwaysInstallElevated=0 in the machine-scope Windows Installer policy. The AlwaysInstallElevated policy (when set to 1 in BOTH HKLM and HKCU) allows standard users to run MSI installers with SYSTEM-level privileges. This is a critical privilege escalation vector: any malicious MSI file dropped by an attacker on a machine with both keys set to 1 will execute its custom actions with SYSTEM rights, enabling immediate privilege escalation to SYSTEM for any standard user. " +
-                    "AlwaysInstallElevated is one of the most well-known Windows privilege escalation misconfigurations — it is checked as a first-step by tools like PowerUp, BeRoot, and Sherlock. In penetration tests of enterprise environments, this setting is frequently found enabled on developer machines where IT set it to allow software installation without admin prompts. The fix is zero-cost: AlwaysInstallElevated=0 requires no user-visible workflow changes while eliminating a binary privilege escalation path for any attacker who can write a temporary MSI file.",
-                Tags = ["winstadv", "msi", "alwaysinstallelevated", "privilege-escalation", "powerup", "system-priv"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 5,
-                SafetyRating = 5,
-                ImpactNote = "MSI privilege escalation via AlwaysInstallElevated disabled. Standard users cannot install in elevated context — no breakage if admin approval was already required.",
-                ApplyOps = [RegOp.SetDword(Key, "AlwaysInstallElevated", 0)],
-                RemoveOps = [RegOp.DeleteValue(Key, "AlwaysInstallElevated")],
-                DetectOps = [RegOp.CheckDword(Key, "AlwaysInstallElevated", 0)],
-            },
-            new TweakDef
-            {
-                Id = "winstadv-disable-user-control-over-install",
-                Label = "Installer Adv: Remove User Control Over Windows Installer Behaviour",
-                Category = "Security",
-                Description = "Sets EnableUserControl=0 in Windows Installer policy. Prevents standard users from changing Windows Installer installation options — including installation location, install/remove component selection, and rollback behaviour — during a privileged MSI installation. Without this restriction, a carefully crafted UI sequence in a malicious MSI can be used to direct installation output to attacker-controlled paths during an elevated installer run. " +
-                    "The EnableUserControl=1 setting allows the Transform (MST) feature to accept user-provided transforms that modify the installer's property table. In a DLL planting scenario: an elevated MSI installer that copies DLLs to a system path writes them to a location specified as INSTALLDIR. If the user can influence INSTALLDIR (e.g., via a malicious transform), they can redirect DLL installation to a subfolder they control — and a privileged service that loads from that path will load the attacker's DLL. Disabling user control eliminates this transform injection vector.",
-                Tags = ["winstadv", "msi", "user-control", "transform-injection", "dll-planting"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                ImpactNote = "Standard users cannot modify Windows Installer options during elevated installations. Custom MST transforms under user control are rejected.",
-                ApplyOps = [RegOp.SetDword(Key, "EnableUserControl", 0)],
-                RemoveOps = [RegOp.DeleteValue(Key, "EnableUserControl")],
-                DetectOps = [RegOp.CheckDword(Key, "EnableUserControl", 0)],
-            },
-            new TweakDef
-            {
-                Id = "winstadv-disable-patch-installation",
-                Label = "Installer Adv: Prevent Standard Users from Applying MSI Patches Directly",
-                Category = "Security",
-                Description = "Sets DisablePatch=1 in Windows Installer policy. Prevents standard users from applying MSP (Microsoft Patch) files directly to installed MSI applications without administrator approval. Standard user MSP application runs at the user's privilege level; however, if the base MSI was installed at elevated privilege and the patch modifies system-scope files, inconsistency between patch installation context and base package context can leave system files in a mixed state exploitable by privilege escalation. " +
-                    "Patch files (MSP) can replace arbitrary files within an installed product by referencing the original MSI's file table. An attacker who controls a well-crafted MSP for an installed enterprise MSI (e.g., a third-party vendor application) can use a modified patch to replace an application DLL with a malicious version. If the original MSI installed files to a system-protected path but the MSP runs at user privilege, the Windows Installer service's elevated write context (used for patching) can be manipulated to write attacker-controlled content to protected paths.",
-                Tags = ["winstadv", "msi", "msp", "patch", "disable-patch", "dll-replacement"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 4,
-                ImpactNote = "Standard users cannot install MSP patches directly. IT-managed patching (WSUS, SCCM) unaffected — only manual MSP execution by standard users is blocked.",
-                ApplyOps = [RegOp.SetDword(Key, "DisablePatch", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "DisablePatch")],
-                DetectOps = [RegOp.CheckDword(Key, "DisablePatch", 1)],
-            },
-            new TweakDef
-            {
-                Id = "winstadv-prevent-rollback-cleanup",
-                Label = "Installer Adv: Disable MSI Rollback to Prevent Temporary File Persistence",
-                Category = "Security",
-                Description = "Sets DisableRollback=1 in Windows Installer policy. Disables the Windows Installer rollback feature. Rollback creates temporary backup copies of files before overwriting them, enabling restoration if the installation fails. These rollback files (stored in %TEMP%\\MSI*) persist on disk during the installation and are deleted on success/failure. On machines with malware that monitors %TEMP% for incoming files, rollback temporary files can expose sensitive installation data. " +
-                    "The installer rollback mechanism creates temporary copies of existing files before overwriting them. These temporary rollback files contain the complete binary content of production files (DLLs, EXEs, config files, encryption keys bundled in MSI packages) and are world-readable during installation. A process running as a standard user at the same time as an elevated MSI installation can read the rollback files in %TEMP% and obtain sensitive data that the MSI package installs to protected locations. Disabling rollback eliminates these temporary file exposures at the cost of post-failure manual cleanup.",
-                Tags = ["winstadv", "msi", "rollback", "temp-files", "sensitive-data"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 3,
-                ImpactNote = "MSI rollback disabled. Failed installations require manual cleanup — MSIZMA files will not be automatically removed. Test on non-production before deploying widely.",
-                ApplyOps = [RegOp.SetDword(Key, "DisableRollback", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "DisableRollback")],
-                DetectOps = [RegOp.CheckDword(Key, "DisableRollback", 1)],
-            },
-            new TweakDef
-            {
-                Id = "winstadv-disable-msi-internet-sources",
-                Label = "Installer Adv: Disable MSI Package Installation from Internet Sources",
-                Category = "Security",
-                Description = "Sets DisableWebInstall=1 in Windows Installer policy. Prevents Windows Installer from downloading and installing MSI packages directly from internet URLs (http://, https://, ftp:// paths). Without this restriction, a shortcut or script can trigger an MSI download-and-install directly from an external web server. " +
-                    "Internet-sourced MSI installation is an attack vector in phishing campaigns: a click on a malicious email attachment or web link can trigger a Windows Installer URL handler that downloads and executes a malicious MSI from an attacker-controlled server. The MSI runs with the context of the logged-in user and can contain PowerShell/VBScript custom actions. Modern LOLBins-based attacks use MSI download-and-run as a code execution mechanism that bypasses application whitelisting. Blocking internet MSI sources forces all installations to originate from approved internal sources (SCCM, Intune, network shares). ",
-                Tags = ["winstadv", "msi", "internet-install", "url-install", "phishing", "lolbins"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                ImpactNote = "MSI installation from internet URLs blocked. Enterprise deployment tools (SCCM, Intune, internal network shares) are unaffected.",
-                ApplyOps = [RegOp.SetDword(Key, "DisableWebInstall", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "DisableWebInstall")],
-                DetectOps = [RegOp.CheckDword(Key, "DisableWebInstall", 1)],
-            },
-            new TweakDef
-            {
-                Id = "winstadv-enable-logging",
-                Label = "Installer Adv: Enable Verbose MSI Logging for Installation Audit Trail",
-                Category = "Security",
-                Description = "Sets Logging='voicewarmupx' in Windows Installer policy (REG_SZ). Enables verbose Windows Installer logging to %TEMP%\\MSI*.log for all installations. Each character in the logging string controls a category: v=verbose, o=out-of-disk status, i=status messages, c=initial UI parameters, e=error messages, w=warning messages, a=action start, r=action-specific records, m=memory used, u=user requests, p=terminal properties, x=extra debug info. " +
-                    "Without installer logging, a failed or malicious MSI installation leaves no audit trail. When investigating a security incident where an attacker installed malware via MSI, the absence of installer logs makes forensic reconstruction of the installation impossible. MSI logs record every action taken during the installation — including all file copies, registry writes, custom action command lines, DLL invocations, and error codes. MSI logs are critical for SOC investigations of supply chain attacks, trojanised enterprise software, and malicious package installations.",
-                Tags = ["winstadv", "msi", "logging", "audit", "forensics", "malware-investigation"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Verbose MSI logging enabled to %TEMP%\\MSI*.log. Log files accumulate over time; clean up log files periodically. No performance impact on installation itself.",
-                ApplyOps = [RegOp.SetString(Key, "Logging", "voicewarmupx")],
-                RemoveOps = [RegOp.DeleteValue(Key, "Logging")],
-                DetectOps = [RegOp.CheckString(Key, "Logging", "voicewarmupx")],
-            },
-            new TweakDef
-            {
-                Id = "winstadv-disable-advertised-shortcuts",
-                Label = "Installer Adv: Disable Advertised Shortcut Install-on-Demand to Prevent Elevation Abuse",
-                Category = "Security",
-                Description = "Sets DisableAdvertisedShortcuts=1 in Windows Installer policy. Disables the Windows Installer install-on-demand feature triggered by advertised shortcuts. Advertised shortcuts are MSI feature installation triggers — clicking an advertised shortcut to a feature that was not fully installed causes Windows Installer to complete the feature installation on demand, potentially with elevated privileges if the original product was installed elevated. " +
-                    "Install-on-demand via advertised shortcut is a privilege escalation vector: if an MSI product was installed with elevated privileges and an advertised shortcut triggers on-demand installation of a not-yet-installed component, the Windows Installer service performs the installation at elevated privilege on behalf of the user. An attacker who can manipulate an advertised shortcut (via shortcut write access to a shared profile directory) can point it at a malicious MSI component ID — causing the Installer service to execute attacker-controlled code at SYSTEM privilege.",
-                Tags = ["winstadv", "msi", "advertised-shortcut", "install-on-demand", "privilege-escalation"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Install-on-demand via advertised shortcuts disabled. Some Office features (install-on-demand Office languages, click-to-run components) may require full pre-installation.",
-                ApplyOps = [RegOp.SetDword(Key, "DisableAdvertisedShortcuts", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "DisableAdvertisedShortcuts")],
-                DetectOps = [RegOp.CheckDword(Key, "DisableAdvertisedShortcuts", 1)],
-            },
-            new TweakDef
-            {
-                Id = "winstadv-limit-system-restore-checkpoints",
-                Label = "Installer Adv: Limit System Restore Checkpoint Creation During MSI Installs",
-                Category = "Security",
-                Description = "Sets LimitSystemRestoreCheckpointing=1 in Windows Installer policy. Prevents Windows Installer from creating a System Restore checkpoint for every MSI installation. By default, each MSI install creates a restore point — on machines that install many packages (e.g., during software deployment runs), this generates numerous restore points that consume significant disk space and slow down batch installations. " +
-                    "On a freshly provisioned endpoint receiving its full software stack (100+ MSI packages via SCCM/Intune), each installation creates an individual system restore point — resulting in 100 restore points consuming many gigabytes. Shadow storage fills up, causing earlier restore points to be deleted, rendering pre-provisioning baseline restore points inaccessible. For enterprise-managed endpoints, System Center Config Manager provides a superior rollback mechanism — MSI restore points on managed machines create overhead without providing actionable rollback capability.",
-                Tags = ["winstadv", "msi", "system-restore", "checkpoint", "disk-space", "provisioning"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                ImpactNote = "System Restore checkpoints not created during MSI installations. Reduces restore point proliferation and disk usage during batch software deployment.",
-                ApplyOps = [RegOp.SetDword(Key, "LimitSystemRestoreCheckpointing", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "LimitSystemRestoreCheckpointing")],
-                DetectOps = [RegOp.CheckDword(Key, "LimitSystemRestoreCheckpointing", 1)],
-            },
-            new TweakDef
-            {
-                Id = "winstadv-disable-safe-mode-installs",
-                Label = "Installer Adv: Block MSI Installation in Windows Safe Mode",
-                Category = "Security",
-                Description = "Sets SafeForScripting=1 in Windows Installer policy. Disables MSI installation in Windows Safe Mode. Windows Safe Mode loads a minimal driver set — security software (AV, EDR, application control) may not load in safe mode, leaving the endpoint unprotected. An attacker who can force a reboot into Safe Mode (e.g., using bcdedit, AutoRuns persistence on safeboot key, or physical access) gains an environment where Windows Installer would normally still function without security controls active. " +
-                    "Safe Mode abuse is a known attacker technique for bypassing endpoint security tools: ESET, Symantec, CrowdStrike, and other security agents do not load their kernel-mode components in Safe Mode. Ransomware variants (LockerGoga, SunCrypt, REvil) have been observed forcing reboots into Safe Mode before executing their payload precisely to bypass endpoint security. Blocking MSI installation in Safe Mode prevents this technique from deploying additional malware payloads during the unprotected Safe Mode boot window.",
-                Tags = ["winstadv", "msi", "safe-mode", "edralert bypass", "ransomware", "safeboot"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                ImpactNote = "MSI installation blocked in Windows Safe Mode. Legitimate safe mode maintenance that requires MSI installation must be performed from normal mode.",
-                ApplyOps = [RegOp.SetDword(Key, "SafeForScripting", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "SafeForScripting")],
-                DetectOps = [RegOp.CheckDword(Key, "SafeForScripting", 1)],
-            },
-            new TweakDef
-            {
-                Id = "winstadv-disable-msi-in-locked-session",
-                Label = "Installer Adv: Block Elevated MSI Installs When Session is Locked",
-                Category = "Security",
-                Description = "Sets DisableLockdownInstall=1 in Windows Installer policy. Prevents elevation of Windows Installer packages when the user desktop is locked. Without this restriction, a standard user can trigger an elevated MSI installation (via RunAs or Invoke-Item) for a package that has a UI sequence, then lock their desktop — the Installer continues processing and a crafted DLL extraction step can write to system locations while the desktop is locked and unmonitored. " +
-                    "Locked desktop MSI exploitation requires a multi-step attack: (1) trigger an elevated MSI with a crafted UI sequence, (2) lock the desktop before the custom action phase, (3) the custom action executes at SYSTEM during the locked desktop window delivering attacker payloads. This works because Windows Installer continues installation even while the session is locked (installation UI is suppressed but custom actions continue). DisableLockdownInstall=1 aborts any pending elevated installation when the desktop is locked.",
-                Tags = ["winstadv", "msi", "locked-session", "custom-action", "elevation-control"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 4,
-                ImpactNote = "Elevated MSI installations aborted when session locked. Users installing software must keep desktop unlocked until completion.",
-                ApplyOps = [RegOp.SetDword(Key, "DisableLockdownInstall", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "DisableLockdownInstall")],
-                DetectOps = [RegOp.CheckDword(Key, "DisableLockdownInstall", 1)],
-            },
-        ];
-
+            [
+                new TweakDef
+                {
+                    Id = "winstadv-disable-always-install-elevated",
+                    Label = "Installer Adv: Disable AlwaysInstallElevated to Prevent MSI Privilege Escalation",
+                    Category = "Security",
+                    Description =
+                        "Sets AlwaysInstallElevated=0 in the machine-scope Windows Installer policy. The AlwaysInstallElevated policy (when set to 1 in BOTH HKLM and HKCU) allows standard users to run MSI installers with SYSTEM-level privileges. This is a critical privilege escalation vector: any malicious MSI file dropped by an attacker on a machine with both keys set to 1 will execute its custom actions with SYSTEM rights, enabling immediate privilege escalation to SYSTEM for any standard user. "
+                        + "AlwaysInstallElevated is one of the most well-known Windows privilege escalation misconfigurations — it is checked as a first-step by tools like PowerUp, BeRoot, and Sherlock. In penetration tests of enterprise environments, this setting is frequently found enabled on developer machines where IT set it to allow software installation without admin prompts. The fix is zero-cost: AlwaysInstallElevated=0 requires no user-visible workflow changes while eliminating a binary privilege escalation path for any attacker who can write a temporary MSI file.",
+                    Tags = ["winstadv", "msi", "alwaysinstallelevated", "privilege-escalation", "powerup", "system-priv"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 5,
+                    SafetyRating = 5,
+                    ImpactNote =
+                        "MSI privilege escalation via AlwaysInstallElevated disabled. Standard users cannot install in elevated context — no breakage if admin approval was already required.",
+                    ApplyOps = [RegOp.SetDword(Key, "AlwaysInstallElevated", 0)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "AlwaysInstallElevated")],
+                    DetectOps = [RegOp.CheckDword(Key, "AlwaysInstallElevated", 0)],
+                },
+                new TweakDef
+                {
+                    Id = "winstadv-disable-user-control-over-install",
+                    Label = "Installer Adv: Remove User Control Over Windows Installer Behaviour",
+                    Category = "Security",
+                    Description =
+                        "Sets EnableUserControl=0 in Windows Installer policy. Prevents standard users from changing Windows Installer installation options — including installation location, install/remove component selection, and rollback behaviour — during a privileged MSI installation. Without this restriction, a carefully crafted UI sequence in a malicious MSI can be used to direct installation output to attacker-controlled paths during an elevated installer run. "
+                        + "The EnableUserControl=1 setting allows the Transform (MST) feature to accept user-provided transforms that modify the installer's property table. In a DLL planting scenario: an elevated MSI installer that copies DLLs to a system path writes them to a location specified as INSTALLDIR. If the user can influence INSTALLDIR (e.g., via a malicious transform), they can redirect DLL installation to a subfolder they control — and a privileged service that loads from that path will load the attacker's DLL. Disabling user control eliminates this transform injection vector.",
+                    Tags = ["winstadv", "msi", "user-control", "transform-injection", "dll-planting"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote =
+                        "Standard users cannot modify Windows Installer options during elevated installations. Custom MST transforms under user control are rejected.",
+                    ApplyOps = [RegOp.SetDword(Key, "EnableUserControl", 0)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "EnableUserControl")],
+                    DetectOps = [RegOp.CheckDword(Key, "EnableUserControl", 0)],
+                },
+                new TweakDef
+                {
+                    Id = "winstadv-disable-patch-installation",
+                    Label = "Installer Adv: Prevent Standard Users from Applying MSI Patches Directly",
+                    Category = "Security",
+                    Description =
+                        "Sets DisablePatch=1 in Windows Installer policy. Prevents standard users from applying MSP (Microsoft Patch) files directly to installed MSI applications without administrator approval. Standard user MSP application runs at the user's privilege level; however, if the base MSI was installed at elevated privilege and the patch modifies system-scope files, inconsistency between patch installation context and base package context can leave system files in a mixed state exploitable by privilege escalation. "
+                        + "Patch files (MSP) can replace arbitrary files within an installed product by referencing the original MSI's file table. An attacker who controls a well-crafted MSP for an installed enterprise MSI (e.g., a third-party vendor application) can use a modified patch to replace an application DLL with a malicious version. If the original MSI installed files to a system-protected path but the MSP runs at user privilege, the Windows Installer service's elevated write context (used for patching) can be manipulated to write attacker-controlled content to protected paths.",
+                    Tags = ["winstadv", "msi", "msp", "patch", "disable-patch", "dll-replacement"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 4,
+                    ImpactNote =
+                        "Standard users cannot install MSP patches directly. IT-managed patching (WSUS, SCCM) unaffected — only manual MSP execution by standard users is blocked.",
+                    ApplyOps = [RegOp.SetDword(Key, "DisablePatch", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "DisablePatch")],
+                    DetectOps = [RegOp.CheckDword(Key, "DisablePatch", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "winstadv-prevent-rollback-cleanup",
+                    Label = "Installer Adv: Disable MSI Rollback to Prevent Temporary File Persistence",
+                    Category = "Security",
+                    Description =
+                        "Sets DisableRollback=1 in Windows Installer policy. Disables the Windows Installer rollback feature. Rollback creates temporary backup copies of files before overwriting them, enabling restoration if the installation fails. These rollback files (stored in %TEMP%\\MSI*) persist on disk during the installation and are deleted on success/failure. On machines with malware that monitors %TEMP% for incoming files, rollback temporary files can expose sensitive installation data. "
+                        + "The installer rollback mechanism creates temporary copies of existing files before overwriting them. These temporary rollback files contain the complete binary content of production files (DLLs, EXEs, config files, encryption keys bundled in MSI packages) and are world-readable during installation. A process running as a standard user at the same time as an elevated MSI installation can read the rollback files in %TEMP% and obtain sensitive data that the MSI package installs to protected locations. Disabling rollback eliminates these temporary file exposures at the cost of post-failure manual cleanup.",
+                    Tags = ["winstadv", "msi", "rollback", "temp-files", "sensitive-data"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 3,
+                    ImpactNote =
+                        "MSI rollback disabled. Failed installations require manual cleanup — MSIZMA files will not be automatically removed. Test on non-production before deploying widely.",
+                    ApplyOps = [RegOp.SetDword(Key, "DisableRollback", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "DisableRollback")],
+                    DetectOps = [RegOp.CheckDword(Key, "DisableRollback", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "winstadv-disable-msi-internet-sources",
+                    Label = "Installer Adv: Disable MSI Package Installation from Internet Sources",
+                    Category = "Security",
+                    Description =
+                        "Sets DisableWebInstall=1 in Windows Installer policy. Prevents Windows Installer from downloading and installing MSI packages directly from internet URLs (http://, https://, ftp:// paths). Without this restriction, a shortcut or script can trigger an MSI download-and-install directly from an external web server. "
+                        + "Internet-sourced MSI installation is an attack vector in phishing campaigns: a click on a malicious email attachment or web link can trigger a Windows Installer URL handler that downloads and executes a malicious MSI from an attacker-controlled server. The MSI runs with the context of the logged-in user and can contain PowerShell/VBScript custom actions. Modern LOLBins-based attacks use MSI download-and-run as a code execution mechanism that bypasses application whitelisting. Blocking internet MSI sources forces all installations to originate from approved internal sources (SCCM, Intune, network shares). ",
+                    Tags = ["winstadv", "msi", "internet-install", "url-install", "phishing", "lolbins"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote =
+                        "MSI installation from internet URLs blocked. Enterprise deployment tools (SCCM, Intune, internal network shares) are unaffected.",
+                    ApplyOps = [RegOp.SetDword(Key, "DisableWebInstall", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "DisableWebInstall")],
+                    DetectOps = [RegOp.CheckDword(Key, "DisableWebInstall", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "winstadv-enable-logging",
+                    Label = "Installer Adv: Enable Verbose MSI Logging for Installation Audit Trail",
+                    Category = "Security",
+                    Description =
+                        "Sets Logging='voicewarmupx' in Windows Installer policy (REG_SZ). Enables verbose Windows Installer logging to %TEMP%\\MSI*.log for all installations. Each character in the logging string controls a category: v=verbose, o=out-of-disk status, i=status messages, c=initial UI parameters, e=error messages, w=warning messages, a=action start, r=action-specific records, m=memory used, u=user requests, p=terminal properties, x=extra debug info. "
+                        + "Without installer logging, a failed or malicious MSI installation leaves no audit trail. When investigating a security incident where an attacker installed malware via MSI, the absence of installer logs makes forensic reconstruction of the installation impossible. MSI logs record every action taken during the installation — including all file copies, registry writes, custom action command lines, DLL invocations, and error codes. MSI logs are critical for SOC investigations of supply chain attacks, trojanised enterprise software, and malicious package installations.",
+                    Tags = ["winstadv", "msi", "logging", "audit", "forensics", "malware-investigation"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote =
+                        "Verbose MSI logging enabled to %TEMP%\\MSI*.log. Log files accumulate over time; clean up log files periodically. No performance impact on installation itself.",
+                    ApplyOps = [RegOp.SetString(Key, "Logging", "voicewarmupx")],
+                    RemoveOps = [RegOp.DeleteValue(Key, "Logging")],
+                    DetectOps = [RegOp.CheckString(Key, "Logging", "voicewarmupx")],
+                },
+                new TweakDef
+                {
+                    Id = "winstadv-disable-advertised-shortcuts",
+                    Label = "Installer Adv: Disable Advertised Shortcut Install-on-Demand to Prevent Elevation Abuse",
+                    Category = "Security",
+                    Description =
+                        "Sets DisableAdvertisedShortcuts=1 in Windows Installer policy. Disables the Windows Installer install-on-demand feature triggered by advertised shortcuts. Advertised shortcuts are MSI feature installation triggers — clicking an advertised shortcut to a feature that was not fully installed causes Windows Installer to complete the feature installation on demand, potentially with elevated privileges if the original product was installed elevated. "
+                        + "Install-on-demand via advertised shortcut is a privilege escalation vector: if an MSI product was installed with elevated privileges and an advertised shortcut triggers on-demand installation of a not-yet-installed component, the Windows Installer service performs the installation at elevated privilege on behalf of the user. An attacker who can manipulate an advertised shortcut (via shortcut write access to a shared profile directory) can point it at a malicious MSI component ID — causing the Installer service to execute attacker-controlled code at SYSTEM privilege.",
+                    Tags = ["winstadv", "msi", "advertised-shortcut", "install-on-demand", "privilege-escalation"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote =
+                        "Install-on-demand via advertised shortcuts disabled. Some Office features (install-on-demand Office languages, click-to-run components) may require full pre-installation.",
+                    ApplyOps = [RegOp.SetDword(Key, "DisableAdvertisedShortcuts", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "DisableAdvertisedShortcuts")],
+                    DetectOps = [RegOp.CheckDword(Key, "DisableAdvertisedShortcuts", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "winstadv-limit-system-restore-checkpoints",
+                    Label = "Installer Adv: Limit System Restore Checkpoint Creation During MSI Installs",
+                    Category = "Security",
+                    Description =
+                        "Sets LimitSystemRestoreCheckpointing=1 in Windows Installer policy. Prevents Windows Installer from creating a System Restore checkpoint for every MSI installation. By default, each MSI install creates a restore point — on machines that install many packages (e.g., during software deployment runs), this generates numerous restore points that consume significant disk space and slow down batch installations. "
+                        + "On a freshly provisioned endpoint receiving its full software stack (100+ MSI packages via SCCM/Intune), each installation creates an individual system restore point — resulting in 100 restore points consuming many gigabytes. Shadow storage fills up, causing earlier restore points to be deleted, rendering pre-provisioning baseline restore points inaccessible. For enterprise-managed endpoints, System Center Config Manager provides a superior rollback mechanism — MSI restore points on managed machines create overhead without providing actionable rollback capability.",
+                    Tags = ["winstadv", "msi", "system-restore", "checkpoint", "disk-space", "provisioning"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 2,
+                    SafetyRating = 5,
+                    ImpactNote =
+                        "System Restore checkpoints not created during MSI installations. Reduces restore point proliferation and disk usage during batch software deployment.",
+                    ApplyOps = [RegOp.SetDword(Key, "LimitSystemRestoreCheckpointing", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "LimitSystemRestoreCheckpointing")],
+                    DetectOps = [RegOp.CheckDword(Key, "LimitSystemRestoreCheckpointing", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "winstadv-disable-safe-mode-installs",
+                    Label = "Installer Adv: Block MSI Installation in Windows Safe Mode",
+                    Category = "Security",
+                    Description =
+                        "Sets SafeForScripting=1 in Windows Installer policy. Disables MSI installation in Windows Safe Mode. Windows Safe Mode loads a minimal driver set — security software (AV, EDR, application control) may not load in safe mode, leaving the endpoint unprotected. An attacker who can force a reboot into Safe Mode (e.g., using bcdedit, AutoRuns persistence on safeboot key, or physical access) gains an environment where Windows Installer would normally still function without security controls active. "
+                        + "Safe Mode abuse is a known attacker technique for bypassing endpoint security tools: ESET, Symantec, CrowdStrike, and other security agents do not load their kernel-mode components in Safe Mode. Ransomware variants (LockerGoga, SunCrypt, REvil) have been observed forcing reboots into Safe Mode before executing their payload precisely to bypass endpoint security. Blocking MSI installation in Safe Mode prevents this technique from deploying additional malware payloads during the unprotected Safe Mode boot window.",
+                    Tags = ["winstadv", "msi", "safe-mode", "edralert bypass", "ransomware", "safeboot"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote =
+                        "MSI installation blocked in Windows Safe Mode. Legitimate safe mode maintenance that requires MSI installation must be performed from normal mode.",
+                    ApplyOps = [RegOp.SetDword(Key, "SafeForScripting", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "SafeForScripting")],
+                    DetectOps = [RegOp.CheckDword(Key, "SafeForScripting", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "winstadv-disable-msi-in-locked-session",
+                    Label = "Installer Adv: Block Elevated MSI Installs When Session is Locked",
+                    Category = "Security",
+                    Description =
+                        "Sets DisableLockdownInstall=1 in Windows Installer policy. Prevents elevation of Windows Installer packages when the user desktop is locked. Without this restriction, a standard user can trigger an elevated MSI installation (via RunAs or Invoke-Item) for a package that has a UI sequence, then lock their desktop — the Installer continues processing and a crafted DLL extraction step can write to system locations while the desktop is locked and unmonitored. "
+                        + "Locked desktop MSI exploitation requires a multi-step attack: (1) trigger an elevated MSI with a crafted UI sequence, (2) lock the desktop before the custom action phase, (3) the custom action executes at SYSTEM during the locked desktop window delivering attacker payloads. This works because Windows Installer continues installation even while the session is locked (installation UI is suppressed but custom actions continue). DisableLockdownInstall=1 aborts any pending elevated installation when the desktop is locked.",
+                    Tags = ["winstadv", "msi", "locked-session", "custom-action", "elevation-control"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 4,
+                    ImpactNote =
+                        "Elevated MSI installations aborted when session locked. Users installing software must keep desktop unlocked until completion.",
+                    ApplyOps = [RegOp.SetDword(Key, "DisableLockdownInstall", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "DisableLockdownInstall")],
+                    DetectOps = [RegOp.CheckDword(Key, "DisableLockdownInstall", 1)],
+                },
+            ];
     }
 
     // ── WindowsInstallerPolicy ──
@@ -12408,7 +12425,6 @@ internal static class PolicyAppControl
                     DetectOps = [RegOp.CheckString(Key, "Logging", "voicewarmupx")],
                 },
             ];
-
     }
 
     // ── WindowsScriptHostPolicy ──
@@ -12579,7 +12595,6 @@ internal static class PolicyAppControl
                 DetectOps = [RegOp.CheckDword(WshKey, "IgnoreUserSettings", 1)],
             },
         ];
-
     }
 
     // ── WindowsStoreForBusinessPolicy ──
@@ -12800,11 +12815,8 @@ internal static class PolicyAppControl
                 ImpactNote = "Blocks Store-driven pre-installs and OOBE promotions; keeps SOE image clean.",
             },
         ];
-
     }
-
 }
-
 
 // ── merged from PolicySecurityHardening.cs ──
 // RegiLattice.Core — Tweaks/PolicySecurityHardening.cs
@@ -12867,7 +12879,8 @@ internal static class PolicySecurityHardening
                 Id = "acctlkout-disable-locked-account-message",
                 Label = "Account Lockout Policy: Do Not Display Locked Account Message",
                 Category = "Security",
-                Description = "Suppresses the message informing a user that their account is locked out. Showing a lockout message leaks information to an attacker performing a password-spray attack — confirming correct usernames. Hiding the message converts an unlocking error into a generic access denied.",
+                Description =
+                    "Suppresses the message informing a user that their account is locked out. Showing a lockout message leaks information to an attacker performing a password-spray attack — confirming correct usernames. Hiding the message converts an unlocking error into a generic access denied.",
                 Tags = ["logon", "lockout", "message", "privacy", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -12884,7 +12897,8 @@ internal static class PolicySecurityHardening
                 Id = "acctlkout-disable-automatic-admin-logon",
                 Label = "Account Lockout Policy: Disable Automatic Administrator Logon",
                 Category = "Security",
-                Description = "Clears the AutoAdminLogon registry value that enables Windows to log on automatically with saved administrator credentials. Autologon with elevated credentials bypasses all logon security and allows anyone with physical access to the machine to gain an admin session simply by rebooting.",
+                Description =
+                    "Clears the AutoAdminLogon registry value that enables Windows to log on automatically with saved administrator credentials. Autologon with elevated credentials bypasses all logon security and allows anyone with physical access to the machine to gain an admin session simply by rebooting.",
                 Tags = ["logon", "autologon", "admin", "lockout", "security"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -12901,7 +12915,8 @@ internal static class PolicySecurityHardening
                 Id = "acctlkout-limit-ras-lockout-count",
                 Label = "Account Lockout Policy: Limit RAS Account Lockout Attempts to 3",
                 Category = "Security",
-                Description = "Sets the Remote Access Service (RAS/VPN) account lockout threshold to 3 failed authentication attempts. Without a RAS lockout threshold, attackers can brute-force VPN credentials indefinitely without triggering a local account lockout. Applies only to RAS/VPN dial-in connections.",
+                Description =
+                    "Sets the Remote Access Service (RAS/VPN) account lockout threshold to 3 failed authentication attempts. Without a RAS lockout threshold, attackers can brute-force VPN credentials indefinitely without triggering a local account lockout. Applies only to RAS/VPN dial-in connections.",
                 Tags = ["ras", "vpn", "lockout", "brute force", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -12918,7 +12933,8 @@ internal static class PolicySecurityHardening
                 Id = "acctlkout-set-ras-lockout-reset-interval",
                 Label = "Account Lockout Policy: Set RAS Lockout Reset Interval to 60 Minutes",
                 Category = "Security",
-                Description = "Configures the RAS account lockout observation window (reset interval) to 60 minutes. After a RAS account is locked due to too many failed authentication attempts, the failure counter is reset after 60 minutes without requiring administrative intervention.",
+                Description =
+                    "Configures the RAS account lockout observation window (reset interval) to 60 minutes. After a RAS account is locked due to too many failed authentication attempts, the failure counter is reset after 60 minutes without requiring administrative intervention.",
                 Tags = ["ras", "vpn", "lockout", "reset", "interval", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -12935,7 +12951,8 @@ internal static class PolicySecurityHardening
                 Id = "acctlkout-disable-logon-hours-lock",
                 Label = "Account Lockout Policy: Force Logoff When Logon Hours Expire",
                 Category = "Security",
-                Description = "Configures Windows to disconnect users when their logon hours expire instead of allowing continued access. Without this setting, users who are already logged on continue working past their permitted logon window, defeating time-based access controls.",
+                Description =
+                    "Configures Windows to disconnect users when their logon hours expire instead of allowing continued access. Without this setting, users who are already logged on continue working past their permitted logon window, defeating time-based access controls.",
                 Tags = ["logon", "hours", "force logoff", "access control", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -12952,7 +12969,8 @@ internal static class PolicySecurityHardening
                 Id = "acctlkout-disable-network-unlock-message",
                 Label = "Account Lockout Policy: Hide Network Logon Username",
                 Category = "Security",
-                Description = "Prevents Windows from pre-populating the username field on network authentication dialogs with the currently signed-in user account name. Pre-populated usernames expose account credentials to shoulder-surfing and reduce the security of multi-user environments.",
+                Description =
+                    "Prevents Windows from pre-populating the username field on network authentication dialogs with the currently signed-in user account name. Pre-populated usernames expose account credentials to shoulder-surfing and reduce the security of multi-user environments.",
                 Tags = ["logon", "network", "username", "privacy", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -12969,20 +12987,29 @@ internal static class PolicySecurityHardening
                 Id = "acctlkout-enable-inactive-account-shutdown",
                 Label = "Account Lockout Policy: Require Password After Screen Saver Activation",
                 Category = "Security",
-                Description = "Forces password re-entry when the screen saver activates. This ensures that an unattended workstation is effectively locked — any user returning must authenticate before accessing the desktop. Prevents tailgating attacks on unattended, logged-in workstations.",
+                Description =
+                    "Forces password re-entry when the screen saver activates. This ensures that an unattended workstation is effectively locked — any user returning must authenticate before accessing the desktop. Prevents tailgating attacks on unattended, logged-in workstations.",
                 Tags = ["logon", "screen saver", "password", "inactive", "lock", "policy"],
                 NeedsAdmin = false,
                 CorpSafe = true,
                 RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Policies\Microsoft\Windows\Control Panel\Desktop"],
-                ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\SOFTWARE\Policies\Microsoft\Windows\Control Panel\Desktop", "ScreenSaverIsSecure", "1")],
-                RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\SOFTWARE\Policies\Microsoft\Windows\Control Panel\Desktop", "ScreenSaverIsSecure")],
-                DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\SOFTWARE\Policies\Microsoft\Windows\Control Panel\Desktop", "ScreenSaverIsSecure", "1")],
+                ApplyOps =
+                [
+                    RegOp.SetString(@"HKEY_CURRENT_USER\SOFTWARE\Policies\Microsoft\Windows\Control Panel\Desktop", "ScreenSaverIsSecure", "1"),
+                ],
+                RemoveOps =
+                [
+                    RegOp.DeleteValue(@"HKEY_CURRENT_USER\SOFTWARE\Policies\Microsoft\Windows\Control Panel\Desktop", "ScreenSaverIsSecure"),
+                ],
+                DetectOps =
+                [
+                    RegOp.CheckString(@"HKEY_CURRENT_USER\SOFTWARE\Policies\Microsoft\Windows\Control Panel\Desktop", "ScreenSaverIsSecure", "1"),
+                ],
                 ImpactScore = 4,
                 SafetyRating = 5,
                 ImpactNote = "Enforces password-on-resume from screen saver; prevents tailgating attacks.",
             },
         ];
-
     }
 
     // ── AccountProtection ──
@@ -13075,8 +13102,6 @@ internal static class PolicySecurityHardening
                 RemoveOps = [RegOp.DeleteValue(LsaKey, "DisableDomainCreds")],
                 DetectOps = [RegOp.CheckDword(LsaKey, "DisableDomainCreds", 1)],
             },
-
-
             new TweakDef
             {
                 Id = "acctprot-display-last-logon-info",
@@ -13113,7 +13138,6 @@ internal static class PolicySecurityHardening
                 RemoveOps = [RegOp.DeleteValue(LsaKey, "LocalAccountTokenFilterPolicy")],
                 DetectOps = [RegOp.CheckDword(LsaKey, "LocalAccountTokenFilterPolicy", 0)],
             },
-
             new TweakDef
             {
                 Id = "acctprot-audit-lsa-anonymous",
@@ -13133,7 +13157,6 @@ internal static class PolicySecurityHardening
                 DetectOps = [RegOp.CheckDword(LsaKey, "auditbaseobjects", 1)],
             },
         ];
-
     }
 
     // ── BuiltinAdminPolicy ──
@@ -13150,7 +13173,8 @@ internal static class PolicySecurityHardening
                 Id = "biadmin-disable-guest-account-elevate",
                 Label = "Built-in Admin Policy: Disable Guest Account Network Access",
                 Category = "Security",
-                Description = "Restricts the local Guest account from being used for network resource access. The Guest account has no password by default and, if network access is not blocked, can be used to access shares and remote services anonymously. This setting forces Guest logon attempts to fail at the network level.",
+                Description =
+                    "Restricts the local Guest account from being used for network resource access. The Guest account has no password by default and, if network access is not blocked, can be used to access shares and remote services anonymously. This setting forces Guest logon attempts to fail at the network level.",
                 Tags = ["guest", "network", "access", "builtin", "admin", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -13167,7 +13191,8 @@ internal static class PolicySecurityHardening
                 Id = "biadmin-disable-anonymous-sam-enumeration",
                 Label = "Built-in Admin Policy: Prevent Anonymous SAM Account Enumeration",
                 Category = "Security",
-                Description = "Prevents anonymous users from enumerating SAM account names and shares. Without this restriction, attackers on the local network can list all local user accounts and share names via null-session connections — a classic pre-XP recon technique still exploitable in default configurations.",
+                Description =
+                    "Prevents anonymous users from enumerating SAM account names and shares. Without this restriction, attackers on the local network can list all local user accounts and share names via null-session connections — a classic pre-XP recon technique still exploitable in default configurations.",
                 Tags = ["sam", "anonymous", "enumeration", "builtin", "admin", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -13184,14 +13209,24 @@ internal static class PolicySecurityHardening
                 Id = "biadmin-enable-admin-approval-mode",
                 Label = "Built-in Admin Policy: Enable Admin Approval Mode for Built-in Administrator",
                 Category = "Security",
-                Description = "Enables UAC Admin Approval Mode (AAM) for the built-in Administrator account. By default, the built-in Administrator runs all programs at full administrator privilege without UAC prompts. Enabling AAM forces the built-in admin through standard elevation prompts, matching the security model used for all other admin accounts.",
+                Description =
+                    "Enables UAC Admin Approval Mode (AAM) for the built-in Administrator account. By default, the built-in Administrator runs all programs at full administrator privilege without UAC prompts. Enabling AAM forces the built-in admin through standard elevation prompts, matching the security model used for all other admin accounts.",
                 Tags = ["uac", "admin approval", "builtin", "admin", "elevation", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
                 RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System"],
-                ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "FilterAdministratorToken", 1)],
-                RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "FilterAdministratorToken")],
-                DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "FilterAdministratorToken", 1)],
+                ApplyOps =
+                [
+                    RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "FilterAdministratorToken", 1),
+                ],
+                RemoveOps =
+                [
+                    RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "FilterAdministratorToken"),
+                ],
+                DetectOps =
+                [
+                    RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "FilterAdministratorToken", 1),
+                ],
                 ImpactScore = 4,
                 SafetyRating = 4,
                 ImpactNote = "Forces built-in Administrator through UAC elevation prompts like any other admin account.",
@@ -13201,7 +13236,8 @@ internal static class PolicySecurityHardening
                 Id = "biadmin-disable-local-system-blank-password",
                 Label = "Built-in Admin Policy: Restrict System Logon to Local Accounts with Blank Passwords",
                 Category = "Security",
-                Description = "Prevents local accounts that have blank passwords from being used for interactive or remote logon via services, scheduled tasks, or batch jobs. This closes a privilege escalation vector where an unattended service running as a blank-password local admin could be exploited.",
+                Description =
+                    "Prevents local accounts that have blank passwords from being used for interactive or remote logon via services, scheduled tasks, or batch jobs. This closes a privilege escalation vector where an unattended service running as a blank-password local admin could be exploited.",
                 Tags = ["blank password", "local account", "system service", "builtin", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -13218,14 +13254,28 @@ internal static class PolicySecurityHardening
                 Id = "biadmin-require-elevation-uac",
                 Label = "Built-in Admin Policy: Elevate Only Signed Executables Without Prompting Admin",
                 Category = "Security",
-                Description = "Configures UAC to silently elevate only executables that are securely signed and validated. Unsigned executables that request elevation will prompt the administrator. This prevents unsigned trojans and malware from silently elevating by mimicking a legitimate system binary.",
+                Description =
+                    "Configures UAC to silently elevate only executables that are securely signed and validated. Unsigned executables that request elevation will prompt the administrator. This prevents unsigned trojans and malware from silently elevating by mimicking a legitimate system binary.",
                 Tags = ["uac", "elevation", "signed", "builtin", "admin", "security", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
                 RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System"],
-                ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "ConsentPromptBehaviorAdmin", 2)],
-                RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "ConsentPromptBehaviorAdmin")],
-                DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "ConsentPromptBehaviorAdmin", 2)],
+                ApplyOps =
+                [
+                    RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "ConsentPromptBehaviorAdmin", 2),
+                ],
+                RemoveOps =
+                [
+                    RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "ConsentPromptBehaviorAdmin"),
+                ],
+                DetectOps =
+                [
+                    RegOp.CheckDword(
+                        @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System",
+                        "ConsentPromptBehaviorAdmin",
+                        2
+                    ),
+                ],
                 ImpactScore = 4,
                 SafetyRating = 4,
                 ImpactNote = "UAC prompts admin for unsigned elevations; signed system binaries elevate silently.",
@@ -13235,14 +13285,24 @@ internal static class PolicySecurityHardening
                 Id = "biadmin-block-uac-virtualization",
                 Label = "Built-in Admin Policy: Disable UAC File/Registry Virtualization for Admins",
                 Category = "Security",
-                Description = "Disables User Account Control file and registry write virtualization for administrators. UAC virtualization redirects writes from protected system locations to per-user virtual stores for standard users. Admins who need direct writes should use elevation rather than rely on virtualization, which may mask application privilege requirements.",
+                Description =
+                    "Disables User Account Control file and registry write virtualization for administrators. UAC virtualization redirects writes from protected system locations to per-user virtual stores for standard users. Admins who need direct writes should use elevation rather than rely on virtualization, which may mask application privilege requirements.",
                 Tags = ["uac", "virtualization", "registry", "file", "admin", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
                 RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System"],
-                ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "EnableVirtualization", 0)],
-                RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "EnableVirtualization")],
-                DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "EnableVirtualization", 0)],
+                ApplyOps =
+                [
+                    RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "EnableVirtualization", 0),
+                ],
+                RemoveOps =
+                [
+                    RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "EnableVirtualization"),
+                ],
+                DetectOps =
+                [
+                    RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "EnableVirtualization", 0),
+                ],
                 ImpactScore = 3,
                 SafetyRating = 3,
                 ImpactNote = "Disables UAC write virtualization; legacy apps writing to HKLM or Program Files may break.",
@@ -13252,14 +13312,24 @@ internal static class PolicySecurityHardening
                 Id = "biadmin-disable-uac-installer-detection",
                 Label = "Built-in Admin Policy: Enable UAC Installer Detection for All Users",
                 Category = "Security",
-                Description = "Enables the UAC installer detection algorithm that heuristically detects setup programs and automatically prompts for elevation. Without this, legacy installers that do not include a proper elevation manifest silently fail without requesting admin rights, leaving software partially or incorrectly installed.",
+                Description =
+                    "Enables the UAC installer detection algorithm that heuristically detects setup programs and automatically prompts for elevation. Without this, legacy installers that do not include a proper elevation manifest silently fail without requesting admin rights, leaving software partially or incorrectly installed.",
                 Tags = ["uac", "installer", "detection", "elevation", "admin", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
                 RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System"],
-                ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "EnableInstallerDetection", 1)],
-                RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "EnableInstallerDetection")],
-                DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "EnableInstallerDetection", 1)],
+                ApplyOps =
+                [
+                    RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "EnableInstallerDetection", 1),
+                ],
+                RemoveOps =
+                [
+                    RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "EnableInstallerDetection"),
+                ],
+                DetectOps =
+                [
+                    RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "EnableInstallerDetection", 1),
+                ],
                 ImpactScore = 3,
                 SafetyRating = 4,
                 ImpactNote = "Heuristically detects legacy installers and prompts for elevation to prevent silent failures.",
@@ -13269,7 +13339,8 @@ internal static class PolicySecurityHardening
                 Id = "biadmin-restrict-run-as-logon",
                 Label = "Built-in Admin Policy: Restrict Secondary Logon (RunAs) Service",
                 Category = "Security",
-                Description = "Applies policy restrictions to the Secondary Logon (RunAs) service, limiting which users can invoke it. Secondary Logon can be abused by malware to silently launch processes under alternative credentials without displaying a logon UI. Policy restriction prevents abuse of the service on non-administrative accounts.",
+                Description =
+                    "Applies policy restrictions to the Secondary Logon (RunAs) service, limiting which users can invoke it. Secondary Logon can be abused by malware to silently launch processes under alternative credentials without displaying a logon UI. Policy restriction prevents abuse of the service on non-administrative accounts.",
                 Tags = ["runas", "secondary logon", "logon", "admin", "builtin", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -13286,7 +13357,8 @@ internal static class PolicySecurityHardening
                 Id = "biadmin-enable-uac-main-switch",
                 Label = "Built-in Admin Policy: Ensure UAC Main Switch Is Enabled",
                 Category = "Security",
-                Description = "Ensures that the master User Account Control (UAC) enable switch is set to 1 (enabled). If UAC is disabled globally, all elevation prompts are suppressed and all processes run at the full token of whichever user is logged on. This is the single most impactful UAC configuration value.",
+                Description =
+                    "Ensures that the master User Account Control (UAC) enable switch is set to 1 (enabled). If UAC is disabled globally, all elevation prompts are suppressed and all processes run at the full token of whichever user is logged on. This is the single most impactful UAC configuration value.",
                 Tags = ["uac", "main switch", "elevation", "admin", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -13299,7 +13371,6 @@ internal static class PolicySecurityHardening
                 ImpactNote = "Master UAC switch — must be 1 for any UAC elevation to function at all.",
             },
         ];
-
     }
 
     // ── CameraPrivacyPolicy ──
@@ -13315,7 +13386,8 @@ internal static class PolicySecurityHardening
                 Id = "camprivacy-block-all-apps-camera",
                 Label = "Camera Privacy Policy: Block All Store Apps from Accessing Camera",
                 Category = "Security",
-                Description = "Denies all Windows Store (UWP) application access to the camera device at the Group Policy level. Individual per-app camera permissions are irrelevant when this policy is set to Force Deny — no UWP app can activate the camera sensor regardless of user settings.",
+                Description =
+                    "Denies all Windows Store (UWP) application access to the camera device at the Group Policy level. Individual per-app camera permissions are irrelevant when this policy is set to Force Deny — no UWP app can activate the camera sensor regardless of user settings.",
                 Tags = ["camera", "privacy", "app", "uwp", "store", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -13332,7 +13404,8 @@ internal static class PolicySecurityHardening
                 Id = "camprivacy-block-background-camera",
                 Label = "Camera Privacy Policy: Prevent Camera Access from Background Apps",
                 Category = "Security",
-                Description = "Prevents background Windows applications from activating the camera while they are not in the foreground. A background app that can silently activate the camera is a surveillance risk. This policy forces apps to request camera access only while actively in use.",
+                Description =
+                    "Prevents background Windows applications from activating the camera while they are not in the foreground. A background app that can silently activate the camera is a surveillance risk. This policy forces apps to request camera access only while actively in use.",
                 Tags = ["camera", "background", "privacy", "uwp", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -13349,7 +13422,8 @@ internal static class PolicySecurityHardening
                 Id = "camprivacy-disable-camera-roll-cloud-upload",
                 Label = "Camera Privacy Policy: Disable Camera Roll Cloud Upload",
                 Category = "Security",
-                Description = "Prevents the Camera Roll library from automatically uploading captured photos and videos to OneDrive or other cloud services. Disabling auto-upload ensures that images taken by the camera application remain local to the device until explicitly shared by the user.",
+                Description =
+                    "Prevents the Camera Roll library from automatically uploading captured photos and videos to OneDrive or other cloud services. Disabling auto-upload ensures that images taken by the camera application remain local to the device until explicitly shared by the user.",
                 Tags = ["camera", "cloud", "upload", "onedrive", "privacy", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -13366,7 +13440,8 @@ internal static class PolicySecurityHardening
                 Id = "camprivacy-disable-camera-for-lockscreen",
                 Label = "Camera Privacy Policy: Disable Camera Access on Lock Screen",
                 Category = "Security",
-                Description = "Prevents the camera from being activated while the device is at the lock screen. Allowing camera access on the lock screen means anyone who picks up a device can activate it to take photos without unlocking — bypassing the user authentication barrier entirely.",
+                Description =
+                    "Prevents the camera from being activated while the device is at the lock screen. Allowing camera access on the lock screen means anyone who picks up a device can activate it to take photos without unlocking — bypassing the user authentication barrier entirely.",
                 Tags = ["camera", "lock screen", "privacy", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -13383,14 +13458,35 @@ internal static class PolicySecurityHardening
                 Id = "camprivacy-block-desktop-app-camera",
                 Label = "Camera Privacy Policy: Audit Desktop App Camera Access",
                 Category = "Security",
-                Description = "Enables privacy auditing for desktop applications (Win32/COM) that access the camera. Desktop apps (unlike UWP/Universal apps) are not subject to UWP privacy controls by default, but when auditing is enabled, camera activations by desktop apps are recorded in the diagnostic log.",
+                Description =
+                    "Enables privacy auditing for desktop applications (Win32/COM) that access the camera. Desktop apps (unlike UWP/Universal apps) are not subject to UWP privacy controls by default, but when auditing is enabled, camera activations by desktop apps are recorded in the diagnostic log.",
                 Tags = ["camera", "desktop app", "win32", "audit", "privacy", "policy"],
                 NeedsAdmin = false,
                 CorpSafe = true,
                 RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\webcam"],
-                ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\webcam", "Value", "Allow")],
-                RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\webcam", "Value")],
-                DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\webcam", "Value", "Allow")],
+                ApplyOps =
+                [
+                    RegOp.SetString(
+                        @"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\webcam",
+                        "Value",
+                        "Allow"
+                    ),
+                ],
+                RemoveOps =
+                [
+                    RegOp.DeleteValue(
+                        @"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\webcam",
+                        "Value"
+                    ),
+                ],
+                DetectOps =
+                [
+                    RegOp.CheckString(
+                        @"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\webcam",
+                        "Value",
+                        "Allow"
+                    ),
+                ],
                 ImpactScore = 3,
                 SafetyRating = 5,
                 ImpactNote = "Sets camera access consent store baseline; modify to Deny to block all camera access.",
@@ -13400,14 +13496,39 @@ internal static class PolicySecurityHardening
                 Id = "camprivacy-block-win32-app-camera",
                 Label = "Camera Privacy Policy: Block Win32 Desktop App Camera Access",
                 Category = "Security",
-                Description = "Denies all Win32 (desktop) applications from accessing the camera at the system consent store level. Unlike UWP apps subject to app-level policy, Win32 apps bypass the Windows privacy store by default. Setting the NonPackaged value to Deny blocks all desktop apps from activating the webcam.",
+                Description =
+                    "Denies all Win32 (desktop) applications from accessing the camera at the system consent store level. Unlike UWP apps subject to app-level policy, Win32 apps bypass the Windows privacy store by default. Setting the NonPackaged value to Deny blocks all desktop apps from activating the webcam.",
                 Tags = ["camera", "win32", "non-packaged", "deny", "privacy", "policy"],
                 NeedsAdmin = false,
                 CorpSafe = true,
-                RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\webcam\NonPackaged"],
-                ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\webcam\NonPackaged", "Value", "Deny")],
-                RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\webcam\NonPackaged", "Value", "Allow")],
-                DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\webcam\NonPackaged", "Value", "Deny")],
+                RegistryKeys =
+                [
+                    @"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\webcam\NonPackaged",
+                ],
+                ApplyOps =
+                [
+                    RegOp.SetString(
+                        @"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\webcam\NonPackaged",
+                        "Value",
+                        "Deny"
+                    ),
+                ],
+                RemoveOps =
+                [
+                    RegOp.SetString(
+                        @"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\webcam\NonPackaged",
+                        "Value",
+                        "Allow"
+                    ),
+                ],
+                DetectOps =
+                [
+                    RegOp.CheckString(
+                        @"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\webcam\NonPackaged",
+                        "Value",
+                        "Deny"
+                    ),
+                ],
                 ImpactScore = 4,
                 SafetyRating = 3,
                 ImpactNote = "Blocks all Win32 apps from camera; Teams, Zoom, OBS and other desktop apps will be denied.",
@@ -13417,7 +13538,8 @@ internal static class PolicySecurityHardening
                 Id = "camprivacy-disable-face-analysis-services",
                 Label = "Camera Privacy Policy: Restrict Facial Analysis Services Access to Camera",
                 Category = "Security",
-                Description = "Prevents facial recognition and biometric analysis services (such as Windows Hello Face and third-party face unlock SDKs) from accessing the camera in the background while a user session is active. Restricts ambient face scanning outside of explicit user-initiated authentication flows.",
+                Description =
+                    "Prevents facial recognition and biometric analysis services (such as Windows Hello Face and third-party face unlock SDKs) from accessing the camera in the background while a user session is active. Restricts ambient face scanning outside of explicit user-initiated authentication flows.",
                 Tags = ["camera", "facial recognition", "biometric", "background", "privacy", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -13434,7 +13556,8 @@ internal static class PolicySecurityHardening
                 Id = "camprivacy-restrict-cortana-camera",
                 Label = "Camera Privacy Policy: Block Cortana from Accessing Camera",
                 Category = "Security",
-                Description = "Prevents the Cortana voice and AI assistant from activating or accessing the device camera. Cortana camera access enables continuous visual context gathering — a privacy concern on device without hardware camera shutters.",
+                Description =
+                    "Prevents the Cortana voice and AI assistant from activating or accessing the device camera. Cortana camera access enables continuous visual context gathering — a privacy concern on device without hardware camera shutters.",
                 Tags = ["camera", "cortana", "privacy", "ai", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -13451,20 +13574,40 @@ internal static class PolicySecurityHardening
                 Id = "camprivacy-require-user-consent-camera",
                 Label = "Camera Privacy Policy: Default Camera Consent to User-Controlled",
                 Category = "Security",
-                Description = "Resets the system-wide camera consent store to require per-user approval rather than allowing blanket access. This ensures that newly installed applications must explicitly request and receive user consent before the camera sensor can be activated, enforcing a privacy-by-default camera access model.",
+                Description =
+                    "Resets the system-wide camera consent store to require per-user approval rather than allowing blanket access. This ensures that newly installed applications must explicitly request and receive user consent before the camera sensor can be activated, enforcing a privacy-by-default camera access model.",
                 Tags = ["camera", "consent", "user control", "privacy", "policy"],
                 NeedsAdmin = false,
                 CorpSafe = true,
                 RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\webcam"],
-                ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\webcam", "Value", "Allow")],
-                RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\webcam", "Value")],
-                DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\webcam", "Value", "Allow")],
+                ApplyOps =
+                [
+                    RegOp.SetString(
+                        @"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\webcam",
+                        "Value",
+                        "Allow"
+                    ),
+                ],
+                RemoveOps =
+                [
+                    RegOp.DeleteValue(
+                        @"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\webcam",
+                        "Value"
+                    ),
+                ],
+                DetectOps =
+                [
+                    RegOp.CheckString(
+                        @"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\webcam",
+                        "Value",
+                        "Allow"
+                    ),
+                ],
                 ImpactScore = 3,
                 SafetyRating = 5,
                 ImpactNote = "Sets camera consent store to Allow (user-controlled); per-app decisions remain active.",
             },
         ];
-
     }
 
     // ── CapabilityAccessPolicy ──
@@ -13645,7 +13788,6 @@ internal static class PolicySecurityHardening
                 DetectOps = [RegOp.CheckDword(Key, "LetAppsGetDiagnosticInfo", 2)],
             },
         ];
-
     }
 
     // ── DcomSecurityPolicy ──
@@ -13817,7 +13959,6 @@ internal static class PolicySecurityHardening
                 DetectOps = [RegOp.CheckDword(DcomKey, "NonAdminActivation", 0)],
             },
         ];
-
     }
 
     // ── HealthAttestationPolicy ──
@@ -13832,7 +13973,10 @@ internal static class PolicySecurityHardening
                 Id = "hltha-disable-remote-health-attestation",
                 Label = "Disable Remote Health Attestation",
                 Category = "Security",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 4, SafetyRating = 4,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 4,
+                SafetyRating = 4,
                 Description =
                     "Sets Enabled=0 in the HealthAttestation policy key. Prevents Windows "
                     + "from sending TPM-sealed health attestation reports to a remote Health "
@@ -13852,7 +13996,10 @@ internal static class PolicySecurityHardening
                 Id = "hltha-disable-attestation-telemetry",
                 Label = "Disable Health Attestation Telemetry",
                 Category = "Security",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 3, SafetyRating = 5,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 3,
+                SafetyRating = 5,
                 Description =
                     "Sets DisableAttestation Telemetry=1 in the HealthAttestation policy key. "
                     + "Prevents the HealthAttestation service from emitting diagnostic events "
@@ -13872,7 +14019,10 @@ internal static class PolicySecurityHardening
                 Id = "hltha-require-tpm-attestation",
                 Label = "Require TPM for Device Health Attestation",
                 Category = "Security",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 4, SafetyRating = 5,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 4,
+                SafetyRating = 5,
                 Description =
                     "Sets RequireTpmAttestation=1 in the HealthAttestation policy key. Enforces "
                     + "that all device health reports are backed by a hardware TPM quote rather "
@@ -13891,7 +14041,10 @@ internal static class PolicySecurityHardening
                 Id = "hltha-set-custom-has-url",
                 Label = "Use Private Health Attestation Service",
                 Category = "Security",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 3, SafetyRating = 5,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 3,
+                SafetyRating = 5,
                 Description =
                     "Sets UseCustomHasUrl=1 in the HealthAttestation policy key. Signals that "
                     + "the device should submit attestation requests to an organisation-"
@@ -13910,7 +14063,10 @@ internal static class PolicySecurityHardening
                 Id = "hltha-disable-has-caching",
                 Label = "Disable Health Attestation Report Caching",
                 Category = "Security",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 2, SafetyRating = 5,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 2,
+                SafetyRating = 5,
                 Description =
                     "Sets DisableAttestation Caching=1 in the HealthAttestation policy key. "
                     + "Forces the HAS client to generate a fresh attestation quote for each "
@@ -13929,7 +14085,10 @@ internal static class PolicySecurityHardening
                 Id = "hltha-enforce-secureboot-check",
                 Label = "Enforce Secure Boot in Health Check",
                 Category = "Security",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 5, SafetyRating = 5,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 5,
+                SafetyRating = 5,
                 Description =
                     "Sets EnforceSecureBootCheck=1 in the HealthAttestation policy key. "
                     + "Marks devices as non-compliant in attestation reports if Secure Boot "
@@ -13949,7 +14108,10 @@ internal static class PolicySecurityHardening
                 Id = "hltha-enforce-bitlocker-check",
                 Label = "Enforce BitLocker in Health Attestation",
                 Category = "Security",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 5, SafetyRating = 5,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 5,
+                SafetyRating = 5,
                 Description =
                     "Sets EnforceBitLockerCheck=1 in the HealthAttestation policy key. Marks "
                     + "devices as non-compliant if BitLocker drive encryption is not active "
@@ -13968,7 +14130,10 @@ internal static class PolicySecurityHardening
                 Id = "hltha-enforce-elam-check",
                 Label = "Enforce Early Launch Antimalware in Health Check",
                 Category = "Security",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 4, SafetyRating = 5,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 4,
+                SafetyRating = 5,
                 Description =
                     "Sets EnforceElamCheck=1 in the HealthAttestation policy key. Requires "
                     + "that an ELAM-certified antimalware driver was active during the boot "
@@ -13987,7 +14152,10 @@ internal static class PolicySecurityHardening
                 Id = "hltha-enforce-vsm-check",
                 Label = "Enforce Virtualization Based Security in Health Check",
                 Category = "Security",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 4, SafetyRating = 5,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 4,
+                SafetyRating = 5,
                 Description =
                     "Sets EnforceVsmCheck=1 in the HealthAttestation policy key. Marks devices "
                     + "as non-compliant if Virtualization Based Security (VBS) is not enabled "
@@ -14006,7 +14174,10 @@ internal static class PolicySecurityHardening
                 Id = "hltha-set-attestation-interval",
                 Label = "Set Health Attestation Report Interval",
                 Category = "Security",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 3, SafetyRating = 5,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 3,
+                SafetyRating = 5,
                 Description =
                     "Sets AttestationInterval=60 in the HealthAttestation policy key. Instructs "
                     + "the HAS client to refresh compliance attestation reports every 60 minutes. "
@@ -14021,7 +14192,6 @@ internal static class PolicySecurityHardening
                 DetectOps = [RegOp.CheckDword(Key, "AttestationInterval", 60)],
             },
         ];
-
     }
 
     // ── IisHardeningPolicy ──
@@ -14203,7 +14373,6 @@ internal static class PolicySecurityHardening
                     DetectOps = [RegOp.CheckDword(HttpKey, "LogErrorRequests", 1)],
                 },
             ];
-
     }
 
     // ── LockdownBrowsingPolicy ──
@@ -14384,14 +14553,12 @@ internal static class PolicySecurityHardening
                 DetectOps = [RegOp.CheckDword(Key, "EnableIdleSessionReset", 1)],
             },
         ];
-
     }
 
     // ── MessagingSecurityPolicy ──
     private static class _MessagingSecurityPolicy
     {
-        private const string Key =
-            @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Messaging";
+        private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Messaging";
 
         public static IReadOnlyList<TweakDef> Data =>
             [
@@ -14566,7 +14733,6 @@ internal static class PolicySecurityHardening
                     DetectOps = [RegOp.CheckDword(Key, "DisableSmartReply", 1)],
                 },
             ];
-
     }
 
     // ── NtlmAuthentication ──
@@ -14776,7 +14942,6 @@ internal static class PolicySecurityHardening
                 DetectOps = [RegOp.CheckDword(Msv10, "NtlmMinClientSec", 536870912)],
             },
         ];
-
     }
 
     // ── NtlmAuthenticationPolicy ──
@@ -14788,179 +14953,196 @@ internal static class PolicySecurityHardening
         private const string NtlmAuditKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\NetworkProvider";
 
         public static IReadOnlyList<TweakDef> Data =>
-        [
-            new TweakDef
-            {
-                Id = "ntlm-restrict-outgoing-ntlm-to-servers",
-                Label = "Restrict Outgoing NTLM Authentication to Remote Servers",
-                Category = "Security",
-                Description = "Restricts NTLM authentication for outgoing network connections from this machine. Supports deny-all or allowlist modes; prevents NTLM relay and pass-the-hash attacks via outbound credential exposure.",
-                Tags = ["ntlm", "authentication", "relay", "pass-the-hash", "security"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 3,
-                ImpactNote = "Restricting outbound NTLM can break access to older servers or NAS devices that do not support Kerberos or NTLMv2. Audit before blocking.",
-                RegistryKeys = [NtlmClientKey],
-                ApplyOps  = [RegOp.SetDword(NtlmClientKey, "RestrictSendingNTLMTraffic", 2)],
-                RemoveOps = [RegOp.DeleteValue(NtlmClientKey, "RestrictSendingNTLMTraffic")],
-                DetectOps = [RegOp.CheckDword(NtlmClientKey, "RestrictSendingNTLMTraffic", 2)],
-            },
-            new TweakDef
-            {
-                Id = "ntlm-block-incoming-ntlm-auth",
-                Label = "Block Incoming NTLM Authentication on This Server",
-                Category = "Security",
-                Description = "Prevents this machine from accepting NTLM authentication for inbound network connections. Forces clients to negotiate a stronger protocol (Kerberos or NegotiateExt). Effective against NTLM relay to this host.",
-                Tags = ["ntlm", "authentication", "server", "relay-protection", "hardening"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 5,
-                SafetyRating = 3,
-                ImpactNote = "Completely eliminates NTLM relay attack surface on this host. Will break legacy clients that cannot negotiate Kerberos; test extensively.",
-                RegistryKeys = [NtlmServerKey],
-                ApplyOps  = [RegOp.SetDword(NtlmServerKey, "RestrictReceivingNTLMTraffic", 2)],
-                RemoveOps = [RegOp.DeleteValue(NtlmServerKey, "RestrictReceivingNTLMTraffic")],
-                DetectOps = [RegOp.CheckDword(NtlmServerKey, "RestrictReceivingNTLMTraffic", 2)],
-            },
-            new TweakDef
-            {
-                Id = "ntlm-audit-outgoing-ntlm-traffic",
-                Label = "Audit Outgoing NTLM Authentication Requests",
-                Category = "Security",
-                Description = "Enables audit-only mode for outbound NTLM authentication, logging every server to which this machine sends NTLM credentials. Use audit data to build an allowlist before enforcing restrictions.",
-                Tags = ["ntlm", "authentication", "audit", "event-log", "compliance"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Non-disruptive; only produces event log entries. Essential preparatory step before enforcing NTLM restrictions.",
-                RegistryKeys = [NtlmClientKey],
-                ApplyOps  = [RegOp.SetDword(NtlmClientKey, "AuditReceivingNTLMTraffic", 2)],
-                RemoveOps = [RegOp.DeleteValue(NtlmClientKey, "AuditReceivingNTLMTraffic")],
-                DetectOps = [RegOp.CheckDword(NtlmClientKey, "AuditReceivingNTLMTraffic", 2)],
-            },
-            new TweakDef
-            {
-                Id = "ntlm-disable-ntlmv1",
-                Label = "Disable NTLMv1 Authentication (Require NTLMv2 Minimum)",
-                Category = "Security",
-                Description = "Configures the LAN Manager authentication level to refuse NTLMv1 and LM authentication. Requires NTLMv2 as the minimum level, or Kerberos where available. NTLMv1 is cryptographically weak and bruteforceable.",
-                Tags = ["ntlm", "ntlmv1", "lm-hash", "authentication-level", "hardening"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 4,
-                ImpactNote = "NTLMv1 and LM hashes can be cracked in minutes. Setting LmCompatibilityLevel=5 enforces NTLMv2+; legacy Windows 9x clients cannot authenticate.",
-                RegistryKeys = [NtlmClientKey],
-                ApplyOps  = [RegOp.SetDword(NtlmClientKey, "LmCompatibilityLevel", 5)],
-                RemoveOps = [RegOp.DeleteValue(NtlmClientKey, "LmCompatibilityLevel")],
-                DetectOps = [RegOp.CheckDword(NtlmClientKey, "LmCompatibilityLevel", 5)],
-            },
-            new TweakDef
-            {
-                Id = "ntlm-require-session-security",
-                Label = "Require NTLMv2 Session Security (128-bit Encryption)",
-                Category = "Security",
-                Description = "Enforces 128-bit message confidentiality and integrity for all NTLM-based network sessions. Clients and servers that do not support 128-bit NTLMv2 session security cannot establish NTLM sessions.",
-                Tags = ["ntlm", "session-security", "encryption", "ntlmv2", "hardening"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 4,
-                ImpactNote = "Requires both message confidentiality and integrity (537395200 = 0x20080000 bitmask). Network monitoring tools and legacy SMB clients may fail.",
-                RegistryKeys = [NtlmClientKey],
-                ApplyOps  = [RegOp.SetDword(NtlmClientKey, "MinimumSessionSecurity", 537395200)],
-                RemoveOps = [RegOp.DeleteValue(NtlmClientKey, "MinimumSessionSecurity")],
-                DetectOps = [RegOp.CheckDword(NtlmClientKey, "MinimumSessionSecurity", 537395200)],
-            },
-            new TweakDef
-            {
-                Id = "ntlm-block-ntlm-over-http",
-                Label = "Block NTLM Authentication over HTTP (IWA Web Authentication)",
-                Category = "Security",
-                Description = "Prevents Integrated Windows Authentication from presenting NTLM credentials to web proxies and HTTP endpoints. Restricts IWA to Kerberos-capable servers only, preventing NTLM relay via HTTP.",
-                Tags = ["ntlm", "http", "iwa", "web-auth", "security"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 3,
-                ImpactNote = "Can break intranet web apps that rely on NTLM-based IWA. Ensure web servers support Kerberos IWA (SPN registered, constrained delegation configured) before enabling.",
-                RegistryKeys = [NtlmWorkKey],
-                ApplyOps  = [RegOp.SetDword(NtlmWorkKey, "BlockNTLMOverHTTP", 1)],
-                RemoveOps = [RegOp.DeleteValue(NtlmWorkKey, "BlockNTLMOverHTTP")],
-                DetectOps = [RegOp.CheckDword(NtlmWorkKey, "BlockNTLMOverHTTP", 1)],
-            },
-            new TweakDef
-            {
-                Id = "ntlm-require-extended-protection",
-                Label = "Require Extended Protection for NTLM Authentication",
-                Category = "Security",
-                Description = "Enables Extended Protection for Authentication (EPA), binding NTLM tokens to the TLS channel they're sent over. Prevents cross-protocol NTLM relay even when credentials are intercepted in transit.",
-                Tags = ["ntlm", "epa", "extended-protection", "channel-binding", "security"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 5,
-                SafetyRating = 4,
-                ImpactNote = "Most effective defence against NTLM relay. Requires server-side EPA support (IIS, LDAP, SMB). Old application servers may not support EPA.",
-                RegistryKeys = [NtlmServerKey],
-                ApplyOps  = [RegOp.SetDword(NtlmServerKey, "ExtendedProtectionForAuthentication", 2)],
-                RemoveOps = [RegOp.DeleteValue(NtlmServerKey, "ExtendedProtectionForAuthentication")],
-                DetectOps = [RegOp.CheckDword(NtlmServerKey, "ExtendedProtectionForAuthentication", 2)],
-            },
-            new TweakDef
-            {
-                Id = "ntlm-audit-all-domain-ntlm",
-                Label = "Enable Domain-Level NTLM Authentication Audit",
-                Category = "Security",
-                Description = "Configures domain-level NTLM auditing to log every NTLM authentication event across the domain, including accounts, client names, and server names. Essential for NTLM-reduction baselining.",
-                Tags = ["ntlm", "domain", "audit", "event-log", "active-directory"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Generates high-volume events on Active Directory DCs during initial audit; filter before forwarding to SIEM.",
-                RegistryKeys = [NtlmAuditKey],
-                ApplyOps  = [RegOp.SetDword(NtlmAuditKey, "AuditNTLMAuthenticationInDomain", 7)],
-                RemoveOps = [RegOp.DeleteValue(NtlmAuditKey, "AuditNTLMAuthenticationInDomain")],
-                DetectOps = [RegOp.CheckDword(NtlmAuditKey, "AuditNTLMAuthenticationInDomain", 7)],
-            },
-            new TweakDef
-            {
-                Id = "ntlm-enable-server-allowlist",
-                Label = "Enable NTLM Server Allowlist (Exception List) Enforcement",
-                Category = "Security",
-                Description = "Activates enforcement of the NTLM server exception allowlist, permitting NTLM only to servers explicitly named in the AllowlistedServers value. All other NTLM outbound traffic is blocked.",
-                Tags = ["ntlm", "allowlist", "exception", "server-list", "hardening"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 4,
-                ImpactNote = "Must define AllowlistedServers (Multi-SZ) before enabling enforcement; otherwise all NTLM outbound traffic is blocked.",
-                RegistryKeys = [NtlmClientKey],
-                ApplyOps  = [RegOp.SetDword(NtlmClientKey, "EnableNTLMAllowList", 1)],
-                RemoveOps = [RegOp.DeleteValue(NtlmClientKey, "EnableNTLMAllowList")],
-                DetectOps = [RegOp.CheckDword(NtlmClientKey, "EnableNTLMAllowList", 1)],
-            },
-            new TweakDef
-            {
-                Id = "ntlm-block-ntlm-to-ldap",
-                Label = "Block NTLM Authentication to LDAP (Require Kerberos for AD)",
-                Category = "Security",
-                Description = "Prevents LDAP clients on this machine from using NTLM to authenticate to Active Directory Domain Controllers. Forces Kerberos-based LDAP authentication, eliminating LDAP relay attack vectors.",
-                Tags = ["ntlm", "ldap", "active-directory", "kerberos", "hardening"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 3,
-                ImpactNote = "Can break LDAP queries from scripts or tools that hardcode NTLM. Verify all LDAP clients can use Kerberos before enforcing.",
-                RegistryKeys = [NtlmWorkKey],
-                ApplyOps  = [RegOp.SetDword(NtlmWorkKey, "BlockNTLMToLDAP", 1)],
-                RemoveOps = [RegOp.DeleteValue(NtlmWorkKey, "BlockNTLMToLDAP")],
-                DetectOps = [RegOp.CheckDword(NtlmWorkKey, "BlockNTLMToLDAP", 1)],
-            },
-        ];
-
+            [
+                new TweakDef
+                {
+                    Id = "ntlm-restrict-outgoing-ntlm-to-servers",
+                    Label = "Restrict Outgoing NTLM Authentication to Remote Servers",
+                    Category = "Security",
+                    Description =
+                        "Restricts NTLM authentication for outgoing network connections from this machine. Supports deny-all or allowlist modes; prevents NTLM relay and pass-the-hash attacks via outbound credential exposure.",
+                    Tags = ["ntlm", "authentication", "relay", "pass-the-hash", "security"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 3,
+                    ImpactNote =
+                        "Restricting outbound NTLM can break access to older servers or NAS devices that do not support Kerberos or NTLMv2. Audit before blocking.",
+                    RegistryKeys = [NtlmClientKey],
+                    ApplyOps = [RegOp.SetDword(NtlmClientKey, "RestrictSendingNTLMTraffic", 2)],
+                    RemoveOps = [RegOp.DeleteValue(NtlmClientKey, "RestrictSendingNTLMTraffic")],
+                    DetectOps = [RegOp.CheckDword(NtlmClientKey, "RestrictSendingNTLMTraffic", 2)],
+                },
+                new TweakDef
+                {
+                    Id = "ntlm-block-incoming-ntlm-auth",
+                    Label = "Block Incoming NTLM Authentication on This Server",
+                    Category = "Security",
+                    Description =
+                        "Prevents this machine from accepting NTLM authentication for inbound network connections. Forces clients to negotiate a stronger protocol (Kerberos or NegotiateExt). Effective against NTLM relay to this host.",
+                    Tags = ["ntlm", "authentication", "server", "relay-protection", "hardening"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 5,
+                    SafetyRating = 3,
+                    ImpactNote =
+                        "Completely eliminates NTLM relay attack surface on this host. Will break legacy clients that cannot negotiate Kerberos; test extensively.",
+                    RegistryKeys = [NtlmServerKey],
+                    ApplyOps = [RegOp.SetDword(NtlmServerKey, "RestrictReceivingNTLMTraffic", 2)],
+                    RemoveOps = [RegOp.DeleteValue(NtlmServerKey, "RestrictReceivingNTLMTraffic")],
+                    DetectOps = [RegOp.CheckDword(NtlmServerKey, "RestrictReceivingNTLMTraffic", 2)],
+                },
+                new TweakDef
+                {
+                    Id = "ntlm-audit-outgoing-ntlm-traffic",
+                    Label = "Audit Outgoing NTLM Authentication Requests",
+                    Category = "Security",
+                    Description =
+                        "Enables audit-only mode for outbound NTLM authentication, logging every server to which this machine sends NTLM credentials. Use audit data to build an allowlist before enforcing restrictions.",
+                    Tags = ["ntlm", "authentication", "audit", "event-log", "compliance"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "Non-disruptive; only produces event log entries. Essential preparatory step before enforcing NTLM restrictions.",
+                    RegistryKeys = [NtlmClientKey],
+                    ApplyOps = [RegOp.SetDword(NtlmClientKey, "AuditReceivingNTLMTraffic", 2)],
+                    RemoveOps = [RegOp.DeleteValue(NtlmClientKey, "AuditReceivingNTLMTraffic")],
+                    DetectOps = [RegOp.CheckDword(NtlmClientKey, "AuditReceivingNTLMTraffic", 2)],
+                },
+                new TweakDef
+                {
+                    Id = "ntlm-disable-ntlmv1",
+                    Label = "Disable NTLMv1 Authentication (Require NTLMv2 Minimum)",
+                    Category = "Security",
+                    Description =
+                        "Configures the LAN Manager authentication level to refuse NTLMv1 and LM authentication. Requires NTLMv2 as the minimum level, or Kerberos where available. NTLMv1 is cryptographically weak and bruteforceable.",
+                    Tags = ["ntlm", "ntlmv1", "lm-hash", "authentication-level", "hardening"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 4,
+                    ImpactNote =
+                        "NTLMv1 and LM hashes can be cracked in minutes. Setting LmCompatibilityLevel=5 enforces NTLMv2+; legacy Windows 9x clients cannot authenticate.",
+                    RegistryKeys = [NtlmClientKey],
+                    ApplyOps = [RegOp.SetDword(NtlmClientKey, "LmCompatibilityLevel", 5)],
+                    RemoveOps = [RegOp.DeleteValue(NtlmClientKey, "LmCompatibilityLevel")],
+                    DetectOps = [RegOp.CheckDword(NtlmClientKey, "LmCompatibilityLevel", 5)],
+                },
+                new TweakDef
+                {
+                    Id = "ntlm-require-session-security",
+                    Label = "Require NTLMv2 Session Security (128-bit Encryption)",
+                    Category = "Security",
+                    Description =
+                        "Enforces 128-bit message confidentiality and integrity for all NTLM-based network sessions. Clients and servers that do not support 128-bit NTLMv2 session security cannot establish NTLM sessions.",
+                    Tags = ["ntlm", "session-security", "encryption", "ntlmv2", "hardening"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 4,
+                    ImpactNote =
+                        "Requires both message confidentiality and integrity (537395200 = 0x20080000 bitmask). Network monitoring tools and legacy SMB clients may fail.",
+                    RegistryKeys = [NtlmClientKey],
+                    ApplyOps = [RegOp.SetDword(NtlmClientKey, "MinimumSessionSecurity", 537395200)],
+                    RemoveOps = [RegOp.DeleteValue(NtlmClientKey, "MinimumSessionSecurity")],
+                    DetectOps = [RegOp.CheckDword(NtlmClientKey, "MinimumSessionSecurity", 537395200)],
+                },
+                new TweakDef
+                {
+                    Id = "ntlm-block-ntlm-over-http",
+                    Label = "Block NTLM Authentication over HTTP (IWA Web Authentication)",
+                    Category = "Security",
+                    Description =
+                        "Prevents Integrated Windows Authentication from presenting NTLM credentials to web proxies and HTTP endpoints. Restricts IWA to Kerberos-capable servers only, preventing NTLM relay via HTTP.",
+                    Tags = ["ntlm", "http", "iwa", "web-auth", "security"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 3,
+                    ImpactNote =
+                        "Can break intranet web apps that rely on NTLM-based IWA. Ensure web servers support Kerberos IWA (SPN registered, constrained delegation configured) before enabling.",
+                    RegistryKeys = [NtlmWorkKey],
+                    ApplyOps = [RegOp.SetDword(NtlmWorkKey, "BlockNTLMOverHTTP", 1)],
+                    RemoveOps = [RegOp.DeleteValue(NtlmWorkKey, "BlockNTLMOverHTTP")],
+                    DetectOps = [RegOp.CheckDword(NtlmWorkKey, "BlockNTLMOverHTTP", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "ntlm-require-extended-protection",
+                    Label = "Require Extended Protection for NTLM Authentication",
+                    Category = "Security",
+                    Description =
+                        "Enables Extended Protection for Authentication (EPA), binding NTLM tokens to the TLS channel they're sent over. Prevents cross-protocol NTLM relay even when credentials are intercepted in transit.",
+                    Tags = ["ntlm", "epa", "extended-protection", "channel-binding", "security"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 5,
+                    SafetyRating = 4,
+                    ImpactNote =
+                        "Most effective defence against NTLM relay. Requires server-side EPA support (IIS, LDAP, SMB). Old application servers may not support EPA.",
+                    RegistryKeys = [NtlmServerKey],
+                    ApplyOps = [RegOp.SetDword(NtlmServerKey, "ExtendedProtectionForAuthentication", 2)],
+                    RemoveOps = [RegOp.DeleteValue(NtlmServerKey, "ExtendedProtectionForAuthentication")],
+                    DetectOps = [RegOp.CheckDword(NtlmServerKey, "ExtendedProtectionForAuthentication", 2)],
+                },
+                new TweakDef
+                {
+                    Id = "ntlm-audit-all-domain-ntlm",
+                    Label = "Enable Domain-Level NTLM Authentication Audit",
+                    Category = "Security",
+                    Description =
+                        "Configures domain-level NTLM auditing to log every NTLM authentication event across the domain, including accounts, client names, and server names. Essential for NTLM-reduction baselining.",
+                    Tags = ["ntlm", "domain", "audit", "event-log", "active-directory"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "Generates high-volume events on Active Directory DCs during initial audit; filter before forwarding to SIEM.",
+                    RegistryKeys = [NtlmAuditKey],
+                    ApplyOps = [RegOp.SetDword(NtlmAuditKey, "AuditNTLMAuthenticationInDomain", 7)],
+                    RemoveOps = [RegOp.DeleteValue(NtlmAuditKey, "AuditNTLMAuthenticationInDomain")],
+                    DetectOps = [RegOp.CheckDword(NtlmAuditKey, "AuditNTLMAuthenticationInDomain", 7)],
+                },
+                new TweakDef
+                {
+                    Id = "ntlm-enable-server-allowlist",
+                    Label = "Enable NTLM Server Allowlist (Exception List) Enforcement",
+                    Category = "Security",
+                    Description =
+                        "Activates enforcement of the NTLM server exception allowlist, permitting NTLM only to servers explicitly named in the AllowlistedServers value. All other NTLM outbound traffic is blocked.",
+                    Tags = ["ntlm", "allowlist", "exception", "server-list", "hardening"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 4,
+                    ImpactNote =
+                        "Must define AllowlistedServers (Multi-SZ) before enabling enforcement; otherwise all NTLM outbound traffic is blocked.",
+                    RegistryKeys = [NtlmClientKey],
+                    ApplyOps = [RegOp.SetDword(NtlmClientKey, "EnableNTLMAllowList", 1)],
+                    RemoveOps = [RegOp.DeleteValue(NtlmClientKey, "EnableNTLMAllowList")],
+                    DetectOps = [RegOp.CheckDword(NtlmClientKey, "EnableNTLMAllowList", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "ntlm-block-ntlm-to-ldap",
+                    Label = "Block NTLM Authentication to LDAP (Require Kerberos for AD)",
+                    Category = "Security",
+                    Description =
+                        "Prevents LDAP clients on this machine from using NTLM to authenticate to Active Directory Domain Controllers. Forces Kerberos-based LDAP authentication, eliminating LDAP relay attack vectors.",
+                    Tags = ["ntlm", "ldap", "active-directory", "kerberos", "hardening"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 3,
+                    ImpactNote =
+                        "Can break LDAP queries from scripts or tools that hardcode NTLM. Verify all LDAP clients can use Kerberos before enforcing.",
+                    RegistryKeys = [NtlmWorkKey],
+                    ApplyOps = [RegOp.SetDword(NtlmWorkKey, "BlockNTLMToLDAP", 1)],
+                    RemoveOps = [RegOp.DeleteValue(NtlmWorkKey, "BlockNTLMToLDAP")],
+                    DetectOps = [RegOp.CheckDword(NtlmWorkKey, "BlockNTLMToLDAP", 1)],
+                },
+            ];
     }
 
     // ── NtlmAuthPolicy ──
@@ -15133,7 +15315,6 @@ internal static class PolicySecurityHardening
                 DetectOps = [RegOp.CheckDword(NetlogonKey, "RequireStrongKey", 1)],
             },
         ];
-
     }
 
     // ── NtlmRestrictionPolicy ──
@@ -15144,169 +15325,178 @@ internal static class PolicySecurityHardening
         private const string PolKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System";
 
         public static IReadOnlyList<TweakDef> Data =>
-        [
-            new TweakDef
-            {
-                Id           = "ntlmadv-block-ntlmv1",
-                Label        = "Block NTLMv1 Authentication (Allow NTLMv2 Only)",
-                Category = "Security",
-                Description  = "Configures LAN Manager authentication level to disallow NTLMv1 and LM authentication, accepting only NTLMv2 challenge-response and Kerberos, protecting against pass-the-hash from weak NTLMv1 hashes.",
-                Tags         = ["ntlm", "ntlmv1", "ntlmv2", "pass-the-hash", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 5,
-                SafetyRating = 5,
-                ImpactNote   = "NTLMv1 and LM responses blocked; only NTLMv2 accepted. Prevents weak hash capture attacks.",
-                ApplyOps     = [RegOp.SetDword(LsaKey, "LmCompatibilityLevel", 5)],
-                RemoveOps    = [RegOp.DeleteValue(LsaKey, "LmCompatibilityLevel")],
-                DetectOps    = [RegOp.CheckDword(LsaKey, "LmCompatibilityLevel", 5)],
-            },
-            new TweakDef
-            {
-                Id           = "ntlmadv-require-ntlmv2-session-security",
-                Label        = "Require NTLMv2 Session Security with 128-Bit Encryption",
-                Category = "Security",
-                Description  = "Configures NTLM session security to require NTLMv2 session security and 128-bit encryption for all NTLM sessions, preventing NTLM session reduction attacks that downgrade to weaker LM session security.",
-                Tags         = ["ntlm", "session-security", "128-bit", "ntlmv2", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 5,
-                SafetyRating = 5,
-                ImpactNote   = "NTLM sessions require NTLMv2 + 128-bit encryption; session downgrade attacks blocked.",
-                ApplyOps     = [RegOp.SetDword(Key, "NTLMMinClientSec", 537395200)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "NTLMMinClientSec")],
-                DetectOps    = [RegOp.CheckDword(Key, "NTLMMinClientSec", 537395200)],
-            },
-            new TweakDef
-            {
-                Id           = "ntlmadv-enable-extended-protection",
-                Label        = "Enable NTLM Extended Protection for Authentication (EPA)",
-                Category = "Security",
-                Description  = "Enables NTLM Extended Protection for Authentication (EPA/CBT) on the client, adding channel binding tokens to NTLM authentication ensuring credentials can only be used on the TLS channel over which they were captured, preventing relay attacks.",
-                Tags         = ["ntlm", "epa", "channel-binding", "relay-attack", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 5,
-                SafetyRating = 5,
-                ImpactNote   = "NTLM EPA/CBT enabled; captured NTLM credentials cannot be replayed on a different TLS channel.",
-                ApplyOps     = [RegOp.SetDword(Key, "EnableExtendedProtection", 2)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "EnableExtendedProtection")],
-                DetectOps    = [RegOp.CheckDword(Key, "EnableExtendedProtection", 2)],
-            },
-            new TweakDef
-            {
-                Id           = "ntlmadv-disable-lm-hash-storage",
-                Label        = "Disable LAN Manager (LM) Hash Storage in SAM",
-                Category = "Security",
-                Description  = "Prevents Windows from storing LAN Manager password hashes in the local SAM database, eliminating the easily cracked LM hash from credential stores that could be extracted by credential dumping tools.",
-                Tags         = ["ntlm", "lm-hash", "sam", "credential-dump", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 5,
-                SafetyRating = 5,
-                ImpactNote   = "LM hash storage disabled; SAM/LSASS no longer contains crackable LM password hashes.",
-                ApplyOps     = [RegOp.SetDword(Key, "NoLMHash", 1)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "NoLMHash")],
-                DetectOps    = [RegOp.CheckDword(Key, "NoLMHash", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "ntlmadv-restrict-outbound-ntlm-to-negotiate",
-                Label        = "Restrict Outbound NTLM Authentication to Negotiate Only",
-                Category = "Security",
-                Description  = "Configures the system to only use NTLM via the Negotiate (SPNEGO) mechanism for outbound authentication, preventing direct NTLM usage that bypasses Kerberos preference and could expose NTLM hashes to non-domain servers.",
-                Tags         = ["ntlm", "outbound", "negotiate", "spnego", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 4,
-                SafetyRating = 5,
-                ImpactNote   = "Outbound NTLM restricted to Negotiate/SPNEGO; direct NTLM to non-domain servers blocked.",
-                ApplyOps     = [RegOp.SetDword(Key, "RestrictSendingNTLMTraffic", 2)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "RestrictSendingNTLMTraffic")],
-                DetectOps    = [RegOp.CheckDword(Key, "RestrictSendingNTLMTraffic", 2)],
-            },
-            new TweakDef
-            {
-                Id           = "ntlmadv-restrict-incoming-ntlm",
-                Label        = "Restrict Incoming NTLM Authentication to Domain Accounts Only",
-                Category = "Security",
-                Description  = "Configures the server component to only accept NTLM authentication from accounts in the domain (rejecting local SAM account NTLM), reducing the attack surface from pass-the-hash attacks using local account credentials.",
-                Tags         = ["ntlm", "incoming", "domain-only", "pass-the-hash", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 4,
-                SafetyRating = 5,
-                ImpactNote   = "Incoming NTLM restricted to domain accounts; local SAM account NTLM authentication blocked.",
-                ApplyOps     = [RegOp.SetDword(Key, "RestrictReceivingNTLMTraffic", 2)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "RestrictReceivingNTLMTraffic")],
-                DetectOps    = [RegOp.CheckDword(Key, "RestrictReceivingNTLMTraffic", 2)],
-            },
-            new TweakDef
-            {
-                Id           = "ntlmadv-enable-ntlm-audit-mode",
-                Label        = "Enable NTLM Authentication Audit Logging",
-                Category = "Security",
-                Description  = "Enables system audit logging for all NTLM authentication attempts, recording both successful and failed NTLM sessions in the Security event log to support detection of lateral movement and pass-the-hash activity.",
-                Tags         = ["ntlm", "audit", "event-log", "lateral-movement", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 4,
-                SafetyRating = 5,
-                ImpactNote   = "NTLM authentication audit logging enabled; all NTLM sessions recorded for lateral movement detection.",
-                ApplyOps     = [RegOp.SetDword(Key, "AuditReceivingNTLMTraffic", 2)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "AuditReceivingNTLMTraffic")],
-                DetectOps    = [RegOp.CheckDword(Key, "AuditReceivingNTLMTraffic", 2)],
-            },
-            new TweakDef
-            {
-                Id           = "ntlmadv-enable-outbound-audit",
-                Label        = "Enable Audit Logging for Outbound NTLM Authentication",
-                Category = "Security",
-                Description  = "Enables audit logging for all outbound NTLM authentication attempts from this machine, providing visibility into which remote servers receive NTLM credentials from applications running on this endpoint.",
-                Tags         = ["ntlm", "outbound-audit", "credential-exposure", "logging", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 4,
-                SafetyRating = 5,
-                ImpactNote   = "Outbound NTLM audit enabled; all remote servers receiving NTLM credentials from this machine logged.",
-                ApplyOps     = [RegOp.SetDword(Key, "AuditSendingNTLMTraffic", 2)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "AuditSendingNTLMTraffic")],
-                DetectOps    = [RegOp.CheckDword(Key, "AuditSendingNTLMTraffic", 2)],
-            },
-            new TweakDef
-            {
-                Id           = "ntlmadv-disable-ntlm-auth-in-smb",
-                Label        = "Require Kerberos Authentication for SMB (Block NTLM in SMB)",
-                Category = "Security",
-                Description  = "Configures SMB over network shares to require Kerberos authentication rather than NTLM, preventing NTLM relay attacks that capture and forward SMB authentication to remote shares or other services.",
-                Tags         = ["ntlm", "smb", "kerberos", "relay-attack", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 5,
-                SafetyRating = 5,
-                ImpactNote   = "SMB NTLM authentication blocked; Kerberos required for network share access. Relay attacks via SMB mitigated.",
-                ApplyOps     = [RegOp.SetDword(PolKey, "RequireDomainAuthForSMB", 1)],
-                RemoveOps    = [RegOp.DeleteValue(PolKey, "RequireDomainAuthForSMB")],
-                DetectOps    = [RegOp.CheckDword(PolKey, "RequireDomainAuthForSMB", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "ntlmadv-disable-ntlm-telemetry",
-                Label        = "Disable NTLM Authentication Telemetry to Microsoft",
-                Category = "Security",
-                Description  = "Prevents the Windows NTLM authentication provider from sending authentication success/failure rates, cipher usage, and session fallback telemetry to Microsoft.",
-                Tags         = ["ntlm", "telemetry", "privacy", "microsoft", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 2,
-                SafetyRating = 5,
-                ImpactNote   = "NTLM telemetry to Microsoft disabled; auth stats and session data not sent to cloud.",
-                ApplyOps     = [RegOp.SetDword(Key, "DisableNTLMTelemetry", 1)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "DisableNTLMTelemetry")],
-                DetectOps    = [RegOp.CheckDword(Key, "DisableNTLMTelemetry", 1)],
-            },
-        ];
-
+            [
+                new TweakDef
+                {
+                    Id = "ntlmadv-block-ntlmv1",
+                    Label = "Block NTLMv1 Authentication (Allow NTLMv2 Only)",
+                    Category = "Security",
+                    Description =
+                        "Configures LAN Manager authentication level to disallow NTLMv1 and LM authentication, accepting only NTLMv2 challenge-response and Kerberos, protecting against pass-the-hash from weak NTLMv1 hashes.",
+                    Tags = ["ntlm", "ntlmv1", "ntlmv2", "pass-the-hash", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 5,
+                    SafetyRating = 5,
+                    ImpactNote = "NTLMv1 and LM responses blocked; only NTLMv2 accepted. Prevents weak hash capture attacks.",
+                    ApplyOps = [RegOp.SetDword(LsaKey, "LmCompatibilityLevel", 5)],
+                    RemoveOps = [RegOp.DeleteValue(LsaKey, "LmCompatibilityLevel")],
+                    DetectOps = [RegOp.CheckDword(LsaKey, "LmCompatibilityLevel", 5)],
+                },
+                new TweakDef
+                {
+                    Id = "ntlmadv-require-ntlmv2-session-security",
+                    Label = "Require NTLMv2 Session Security with 128-Bit Encryption",
+                    Category = "Security",
+                    Description =
+                        "Configures NTLM session security to require NTLMv2 session security and 128-bit encryption for all NTLM sessions, preventing NTLM session reduction attacks that downgrade to weaker LM session security.",
+                    Tags = ["ntlm", "session-security", "128-bit", "ntlmv2", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 5,
+                    SafetyRating = 5,
+                    ImpactNote = "NTLM sessions require NTLMv2 + 128-bit encryption; session downgrade attacks blocked.",
+                    ApplyOps = [RegOp.SetDword(Key, "NTLMMinClientSec", 537395200)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "NTLMMinClientSec")],
+                    DetectOps = [RegOp.CheckDword(Key, "NTLMMinClientSec", 537395200)],
+                },
+                new TweakDef
+                {
+                    Id = "ntlmadv-enable-extended-protection",
+                    Label = "Enable NTLM Extended Protection for Authentication (EPA)",
+                    Category = "Security",
+                    Description =
+                        "Enables NTLM Extended Protection for Authentication (EPA/CBT) on the client, adding channel binding tokens to NTLM authentication ensuring credentials can only be used on the TLS channel over which they were captured, preventing relay attacks.",
+                    Tags = ["ntlm", "epa", "channel-binding", "relay-attack", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 5,
+                    SafetyRating = 5,
+                    ImpactNote = "NTLM EPA/CBT enabled; captured NTLM credentials cannot be replayed on a different TLS channel.",
+                    ApplyOps = [RegOp.SetDword(Key, "EnableExtendedProtection", 2)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "EnableExtendedProtection")],
+                    DetectOps = [RegOp.CheckDword(Key, "EnableExtendedProtection", 2)],
+                },
+                new TweakDef
+                {
+                    Id = "ntlmadv-disable-lm-hash-storage",
+                    Label = "Disable LAN Manager (LM) Hash Storage in SAM",
+                    Category = "Security",
+                    Description =
+                        "Prevents Windows from storing LAN Manager password hashes in the local SAM database, eliminating the easily cracked LM hash from credential stores that could be extracted by credential dumping tools.",
+                    Tags = ["ntlm", "lm-hash", "sam", "credential-dump", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 5,
+                    SafetyRating = 5,
+                    ImpactNote = "LM hash storage disabled; SAM/LSASS no longer contains crackable LM password hashes.",
+                    ApplyOps = [RegOp.SetDword(Key, "NoLMHash", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "NoLMHash")],
+                    DetectOps = [RegOp.CheckDword(Key, "NoLMHash", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "ntlmadv-restrict-outbound-ntlm-to-negotiate",
+                    Label = "Restrict Outbound NTLM Authentication to Negotiate Only",
+                    Category = "Security",
+                    Description =
+                        "Configures the system to only use NTLM via the Negotiate (SPNEGO) mechanism for outbound authentication, preventing direct NTLM usage that bypasses Kerberos preference and could expose NTLM hashes to non-domain servers.",
+                    Tags = ["ntlm", "outbound", "negotiate", "spnego", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "Outbound NTLM restricted to Negotiate/SPNEGO; direct NTLM to non-domain servers blocked.",
+                    ApplyOps = [RegOp.SetDword(Key, "RestrictSendingNTLMTraffic", 2)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "RestrictSendingNTLMTraffic")],
+                    DetectOps = [RegOp.CheckDword(Key, "RestrictSendingNTLMTraffic", 2)],
+                },
+                new TweakDef
+                {
+                    Id = "ntlmadv-restrict-incoming-ntlm",
+                    Label = "Restrict Incoming NTLM Authentication to Domain Accounts Only",
+                    Category = "Security",
+                    Description =
+                        "Configures the server component to only accept NTLM authentication from accounts in the domain (rejecting local SAM account NTLM), reducing the attack surface from pass-the-hash attacks using local account credentials.",
+                    Tags = ["ntlm", "incoming", "domain-only", "pass-the-hash", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "Incoming NTLM restricted to domain accounts; local SAM account NTLM authentication blocked.",
+                    ApplyOps = [RegOp.SetDword(Key, "RestrictReceivingNTLMTraffic", 2)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "RestrictReceivingNTLMTraffic")],
+                    DetectOps = [RegOp.CheckDword(Key, "RestrictReceivingNTLMTraffic", 2)],
+                },
+                new TweakDef
+                {
+                    Id = "ntlmadv-enable-ntlm-audit-mode",
+                    Label = "Enable NTLM Authentication Audit Logging",
+                    Category = "Security",
+                    Description =
+                        "Enables system audit logging for all NTLM authentication attempts, recording both successful and failed NTLM sessions in the Security event log to support detection of lateral movement and pass-the-hash activity.",
+                    Tags = ["ntlm", "audit", "event-log", "lateral-movement", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "NTLM authentication audit logging enabled; all NTLM sessions recorded for lateral movement detection.",
+                    ApplyOps = [RegOp.SetDword(Key, "AuditReceivingNTLMTraffic", 2)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "AuditReceivingNTLMTraffic")],
+                    DetectOps = [RegOp.CheckDword(Key, "AuditReceivingNTLMTraffic", 2)],
+                },
+                new TweakDef
+                {
+                    Id = "ntlmadv-enable-outbound-audit",
+                    Label = "Enable Audit Logging for Outbound NTLM Authentication",
+                    Category = "Security",
+                    Description =
+                        "Enables audit logging for all outbound NTLM authentication attempts from this machine, providing visibility into which remote servers receive NTLM credentials from applications running on this endpoint.",
+                    Tags = ["ntlm", "outbound-audit", "credential-exposure", "logging", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "Outbound NTLM audit enabled; all remote servers receiving NTLM credentials from this machine logged.",
+                    ApplyOps = [RegOp.SetDword(Key, "AuditSendingNTLMTraffic", 2)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "AuditSendingNTLMTraffic")],
+                    DetectOps = [RegOp.CheckDword(Key, "AuditSendingNTLMTraffic", 2)],
+                },
+                new TweakDef
+                {
+                    Id = "ntlmadv-disable-ntlm-auth-in-smb",
+                    Label = "Require Kerberos Authentication for SMB (Block NTLM in SMB)",
+                    Category = "Security",
+                    Description =
+                        "Configures SMB over network shares to require Kerberos authentication rather than NTLM, preventing NTLM relay attacks that capture and forward SMB authentication to remote shares or other services.",
+                    Tags = ["ntlm", "smb", "kerberos", "relay-attack", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 5,
+                    SafetyRating = 5,
+                    ImpactNote = "SMB NTLM authentication blocked; Kerberos required for network share access. Relay attacks via SMB mitigated.",
+                    ApplyOps = [RegOp.SetDword(PolKey, "RequireDomainAuthForSMB", 1)],
+                    RemoveOps = [RegOp.DeleteValue(PolKey, "RequireDomainAuthForSMB")],
+                    DetectOps = [RegOp.CheckDword(PolKey, "RequireDomainAuthForSMB", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "ntlmadv-disable-ntlm-telemetry",
+                    Label = "Disable NTLM Authentication Telemetry to Microsoft",
+                    Category = "Security",
+                    Description =
+                        "Prevents the Windows NTLM authentication provider from sending authentication success/failure rates, cipher usage, and session fallback telemetry to Microsoft.",
+                    Tags = ["ntlm", "telemetry", "privacy", "microsoft", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 2,
+                    SafetyRating = 5,
+                    ImpactNote = "NTLM telemetry to Microsoft disabled; auth stats and session data not sent to cloud.",
+                    ApplyOps = [RegOp.SetDword(Key, "DisableNTLMTelemetry", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "DisableNTLMTelemetry")],
+                    DetectOps = [RegOp.CheckDword(Key, "DisableNTLMTelemetry", 1)],
+                },
+            ];
     }
 
     // ── ProcessMitigationPolicy ──
@@ -15477,7 +15667,6 @@ internal static class PolicySecurityHardening
                 DetectOps = [RegOp.CheckDword(MemMgmt, "ClearPageFileAtShutdown", 1)],
             },
         ];
-
     }
 
     // ── SecureChannelPolicy ──
@@ -15492,8 +15681,12 @@ internal static class PolicySecurityHardening
                 Id = "secchan-require-secure-channel-signing",
                 Label = "Require Signing on Domain Secure Channel Communication",
                 Category = "Security",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 5, SafetyRating = 5,
-                Description = "Domain secure channel signing ensures that NetLogon traffic between domain members and domain controllers is cryptographically signed to prevent replay and man-in-the-middle attacks. Requiring secure channel signing prevents an attacker from intercepting and replaying domain authentication traffic to authenticate as legitimate domain users. Unsigned secure channel traffic can be captured and manipulated by an attacker with network access to forge authentication responses from a domain controller. Secure channel signing is required in addition to sealing to provide both integrity and confidentiality protection for domain authentication. Organizations with older legacy clients that do not support secure channel signing must upgrade those systems before requiring signing across the domain. Microsoft requires secure channel signing in all hardened domain configurations and it is enforced in Windows Server 2022 default hardening baselines.",
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 5,
+                SafetyRating = 5,
+                Description =
+                    "Domain secure channel signing ensures that NetLogon traffic between domain members and domain controllers is cryptographically signed to prevent replay and man-in-the-middle attacks. Requiring secure channel signing prevents an attacker from intercepting and replaying domain authentication traffic to authenticate as legitimate domain users. Unsigned secure channel traffic can be captured and manipulated by an attacker with network access to forge authentication responses from a domain controller. Secure channel signing is required in addition to sealing to provide both integrity and confidentiality protection for domain authentication. Organizations with older legacy clients that do not support secure channel signing must upgrade those systems before requiring signing across the domain. Microsoft requires secure channel signing in all hardened domain configurations and it is enforced in Windows Server 2022 default hardening baselines.",
                 Tags = ["secure-channel", "signing", "netlogon", "authentication", "policy"],
                 RegistryKeys = [Key],
                 ApplyOps = [RegOp.SetDword(Key, "RequireSignOrSeal", 1)],
@@ -15505,8 +15698,12 @@ internal static class PolicySecurityHardening
                 Id = "secchan-require-secure-channel-sealing",
                 Label = "Require Encryption Sealing on Domain Secure Channel",
                 Category = "Security",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 5, SafetyRating = 5,
-                Description = "Secure channel sealing encrypts all NetLogon traffic between domain members and domain controllers protecting authentication data from network eavesdropping. Requiring secure channel sealing prevents credential harvesting from network captures by encrypting all domain authentication communication. Secure channel sealing uses the session key negotiated during the NetLogon authentication to provide symmetric encryption of subsequent traffic. The combination of signing and sealing provides both integrity and confidentiality protection for domain authentication channels. Organizations should enable both RequireSignOrSeal and SealSecureChannel to enforce maximum security on domain communication. Secure channel sealing has negligible performance impact on modern systems and should be enabled universally across all domain-joined systems.",
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 5,
+                SafetyRating = 5,
+                Description =
+                    "Secure channel sealing encrypts all NetLogon traffic between domain members and domain controllers protecting authentication data from network eavesdropping. Requiring secure channel sealing prevents credential harvesting from network captures by encrypting all domain authentication communication. Secure channel sealing uses the session key negotiated during the NetLogon authentication to provide symmetric encryption of subsequent traffic. The combination of signing and sealing provides both integrity and confidentiality protection for domain authentication channels. Organizations should enable both RequireSignOrSeal and SealSecureChannel to enforce maximum security on domain communication. Secure channel sealing has negligible performance impact on modern systems and should be enabled universally across all domain-joined systems.",
                 Tags = ["secure-channel", "sealing", "encryption", "netlogon", "policy"],
                 RegistryKeys = [Key],
                 ApplyOps = [RegOp.SetDword(Key, "SealSecureChannel", 1)],
@@ -15518,8 +15715,12 @@ internal static class PolicySecurityHardening
                 Id = "secchan-require-strong-session-key",
                 Label = "Require Strong Session Keys for Domain Secure Channel",
                 Category = "Security",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 4, SafetyRating = 5,
-                Description = "Strong secure channel session keys require the use of 128-bit encryption for NetLogon channel protection replacing older 40-bit and 56-bit keys that are trivially crackable. Requiring strong session keys ensures that encrypted secure channel traffic cannot be decrypted by an attacker even with captured traffic and offline attacks. Older Windows NT systems used 40-bit session keys that can be broken in minutes on modern hardware making strong key requirements essential for current environments. Strong session key requirements are enabled by default on Windows Vista and later but should be explicitly required through policy to prevent negotiation of weaker keys. Organizations must ensure all domain-joined systems running Windows Vista or later which support 128-bit keys before enabling this requirement. The transition from weak to strong session keys is part of the NetLogon hardening changes in the Zerologon vulnerability remediation.",
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 4,
+                SafetyRating = 5,
+                Description =
+                    "Strong secure channel session keys require the use of 128-bit encryption for NetLogon channel protection replacing older 40-bit and 56-bit keys that are trivially crackable. Requiring strong session keys ensures that encrypted secure channel traffic cannot be decrypted by an attacker even with captured traffic and offline attacks. Older Windows NT systems used 40-bit session keys that can be broken in minutes on modern hardware making strong key requirements essential for current environments. Strong session key requirements are enabled by default on Windows Vista and later but should be explicitly required through policy to prevent negotiation of weaker keys. Organizations must ensure all domain-joined systems running Windows Vista or later which support 128-bit keys before enabling this requirement. The transition from weak to strong session keys is part of the NetLogon hardening changes in the Zerologon vulnerability remediation.",
                 Tags = ["secure-channel", "session-keys", "encryption", "netlogon", "policy"],
                 RegistryKeys = [Key],
                 ApplyOps = [RegOp.SetDword(Key, "RequireStrongKey", 1)],
@@ -15531,8 +15732,12 @@ internal static class PolicySecurityHardening
                 Id = "secchan-enable-full-netlogon-audit",
                 Label = "Enable Full Audit Logging for NetLogon Secure Channel Events",
                 Category = "Security",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 4, SafetyRating = 5,
-                Description = "NetLogon audit logging captures secure channel establishment failures and anomalous authentication events for security monitoring and incident response. Enabling full NetLogon audit creates visibility into domain authentication attempts that may indicate credential attacks or infrastructure problems. NetLogon failures during secure channel establishment can indicate Zerologon-style attacks or misconfigured domain trust relationships. The NetLogon log is stored on domain controllers and should be forwarded to SIEM for centralized analysis and alerting. Domain controller NetLogon log data combined with Security event log data provides comprehensive coverage of authentication threats. NetLogon audit data is particularly valuable during incident response to trace lateral movement paths through domain authentication.",
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 4,
+                SafetyRating = 5,
+                Description =
+                    "NetLogon audit logging captures secure channel establishment failures and anomalous authentication events for security monitoring and incident response. Enabling full NetLogon audit creates visibility into domain authentication attempts that may indicate credential attacks or infrastructure problems. NetLogon failures during secure channel establishment can indicate Zerologon-style attacks or misconfigured domain trust relationships. The NetLogon log is stored on domain controllers and should be forwarded to SIEM for centralized analysis and alerting. Domain controller NetLogon log data combined with Security event log data provides comprehensive coverage of authentication threats. NetLogon audit data is particularly valuable during incident response to trace lateral movement paths through domain authentication.",
                 Tags = ["secure-channel", "audit", "netlogon", "monitoring", "policy"],
                 RegistryKeys = [Key],
                 ApplyOps = [RegOp.SetDword(Key, "FullSecureChannelAudit", 1)],
@@ -15544,8 +15749,12 @@ internal static class PolicySecurityHardening
                 Id = "secchan-disable-vulnerable-netlogon",
                 Label = "Block Vulnerable NetLogon Connections from Non-Compliant Devices",
                 Category = "Security",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 5, SafetyRating = 4,
-                Description = "The Zerologon vulnerability (CVE-2020-1472) exploits a flaw in the NetLogon secure channel allowing unauthenticated clients to set machine account passwords and gain domain administrator access. Blocking vulnerable NetLogon connections enforces the second phase of CVE-2020-1472 remediation denying connections from clients that do not use secure RPC. Microsoft released this as a phased fix where the initial patch logged vulnerable connections and the second phase blocked them outright. All Windows clients released after 2016 use secure RPC for NetLogon by default making this restriction safe for modern environments. Non-Windows devices like Linux Samba domain members may require updates to support secure RPC NetLogon before enforcement mode can be enabled. Organizations should review the NetLogon event log for any vulnerable client connections before enabling enforcement mode.",
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 5,
+                SafetyRating = 4,
+                Description =
+                    "The Zerologon vulnerability (CVE-2020-1472) exploits a flaw in the NetLogon secure channel allowing unauthenticated clients to set machine account passwords and gain domain administrator access. Blocking vulnerable NetLogon connections enforces the second phase of CVE-2020-1472 remediation denying connections from clients that do not use secure RPC. Microsoft released this as a phased fix where the initial patch logged vulnerable connections and the second phase blocked them outright. All Windows clients released after 2016 use secure RPC for NetLogon by default making this restriction safe for modern environments. Non-Windows devices like Linux Samba domain members may require updates to support secure RPC NetLogon before enforcement mode can be enabled. Organizations should review the NetLogon event log for any vulnerable client connections before enabling enforcement mode.",
                 Tags = ["secure-channel", "zerologon", "cve-2020-1472", "netlogon", "policy"],
                 RegistryKeys = [Key],
                 ApplyOps = [RegOp.SetDword(Key, "FullSecureChannelProtection", 1)],
@@ -15557,8 +15766,12 @@ internal static class PolicySecurityHardening
                 Id = "secchan-set-machine-account-password-age",
                 Label = "Set Maximum Machine Account Password Age for Secure Channel",
                 Category = "Security",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 3, SafetyRating = 5,
-                Description = "Machine account password age controls how frequently domain-joined computers automatically rotate their computer account passwords as part of secure channel maintenance. Setting maximum machine account password age ensures regular rotation of computer credentials that are used to establish the secure channel to domain controllers. Computer account passwords are automatically changed every 30 days by default in Active Directory but this setting can enforce a shorter maximum. Environments with compliance requirements for credential rotation should set machine account password age to align with their policy requirements. Machine accounts with very old passwords may indicate stale or abandoned systems that should be reviewed for decommissioning. Disabling machine account password changes creates long-lived credentials that are a security risk if the machine is compromised.",
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 3,
+                SafetyRating = 5,
+                Description =
+                    "Machine account password age controls how frequently domain-joined computers automatically rotate their computer account passwords as part of secure channel maintenance. Setting maximum machine account password age ensures regular rotation of computer credentials that are used to establish the secure channel to domain controllers. Computer account passwords are automatically changed every 30 days by default in Active Directory but this setting can enforce a shorter maximum. Environments with compliance requirements for credential rotation should set machine account password age to align with their policy requirements. Machine accounts with very old passwords may indicate stale or abandoned systems that should be reviewed for decommissioning. Disabling machine account password changes creates long-lived credentials that are a security risk if the machine is compromised.",
                 Tags = ["secure-channel", "machine-account", "password-rotation", "netlogon", "policy"],
                 RegistryKeys = [Key],
                 ApplyOps = [RegOp.SetDword(Key, "MaximumPasswordAge", 30)],
@@ -15570,8 +15783,12 @@ internal static class PolicySecurityHardening
                 Id = "secchan-disable-machine-account-password-changes",
                 Label = "Prevent Disabling of Automatic Machine Account Password Changes",
                 Category = "Security",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 4, SafetyRating = 5,
-                Description = "Automatic machine account password rotation maintains the security of domain trust relationships by regularly changing computer account credentials. Preventing administrators from disabling machine account password changes ensures that automated credential rotation is not bypassed which would create static long-term credentials. Some organizations disable machine account password changes for problematic legacy systems but this creates long-lived credentials that weaken domain security. Machine account password change failures are often the cause of systems falling off the domain which should be addressed by fixing root causes rather than disabling rotation. DisablePasswordChange set to 1 is a common misconfiguration that should be detected and remediated during security assessments. Domain controllers should always enforce machine account password rotation as part of a healthy Active Directory environment.",
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 4,
+                SafetyRating = 5,
+                Description =
+                    "Automatic machine account password rotation maintains the security of domain trust relationships by regularly changing computer account credentials. Preventing administrators from disabling machine account password changes ensures that automated credential rotation is not bypassed which would create static long-term credentials. Some organizations disable machine account password changes for problematic legacy systems but this creates long-lived credentials that weaken domain security. Machine account password change failures are often the cause of systems falling off the domain which should be addressed by fixing root causes rather than disabling rotation. DisablePasswordChange set to 1 is a common misconfiguration that should be detected and remediated during security assessments. Domain controllers should always enforce machine account password rotation as part of a healthy Active Directory environment.",
                 Tags = ["secure-channel", "machine-account", "password-changes", "netlogon", "policy"],
                 RegistryKeys = [Key],
                 ApplyOps = [RegOp.SetDword(Key, "DisablePasswordChange", 0)],
@@ -15583,8 +15800,12 @@ internal static class PolicySecurityHardening
                 Id = "secchan-restrict-domain-controller-replication",
                 Label = "Restrict Unauthorized Domain Controller Replication Requests",
                 Category = "Security",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 5, SafetyRating = 4,
-                Description = "DC Sync attacks exploit domain replication rights to steal password hashes from Active Directory without requiring code execution on a domain controller. Restricting domain controller replication ensures that only authorized domain controller accounts have rights to request replication of sensitive AD information. DCSync attacks use DRSUAPI replication calls to extract KRBTGT and other sensitive account hashes enabling further credential attacks. Replication rights should be limited exclusively to accounts with the DS-Replication-Get-Changes and DS-Replication-Get-Changes-All permissions that are domain controllers and select administrative accounts. Monitoring for DS-Replication-Get-Changes events from non-domain-controller accounts is a high-fidelity detection indicator for DCSync attacks. Organizations should audit replication permissions quarterly and remove any accounts that do not require these rights.",
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 5,
+                SafetyRating = 4,
+                Description =
+                    "DC Sync attacks exploit domain replication rights to steal password hashes from Active Directory without requiring code execution on a domain controller. Restricting domain controller replication ensures that only authorized domain controller accounts have rights to request replication of sensitive AD information. DCSync attacks use DRSUAPI replication calls to extract KRBTGT and other sensitive account hashes enabling further credential attacks. Replication rights should be limited exclusively to accounts with the DS-Replication-Get-Changes and DS-Replication-Get-Changes-All permissions that are domain controllers and select administrative accounts. Monitoring for DS-Replication-Get-Changes events from non-domain-controller accounts is a high-fidelity detection indicator for DCSync attacks. Organizations should audit replication permissions quarterly and remove any accounts that do not require these rights.",
                 Tags = ["secure-channel", "dcsync", "replication", "netlogon", "policy"],
                 RegistryKeys = [Key],
                 ApplyOps = [RegOp.SetDword(Key, "RestrictDCReplication", 1)],
@@ -15596,8 +15817,12 @@ internal static class PolicySecurityHardening
                 Id = "secchan-enforce-netlogon-service-hardening",
                 Label = "Enforce NetLogon Service Security Hardening Settings",
                 Category = "Security",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 4, SafetyRating = 5,
-                Description = "NetLogon service hardening enforces additional security constraints on the NetLogon service that handles domain authentication preventing exploitation of service vulnerabilities. Enabling NetLogon service hardening sets a higher security bar for all NetLogon operations reducing the attack surface available to vulnerabilities like Zerologon. NetLogon service hardening was introduced as part of the CVE-2020-1472 remediation and Microsoft recommends it for all domain-joined systems. Service hardening configuration ensures the NetLogon service uses maximally secure communication parameters for all domain authentication operations. Organizations should monitor for NetLogon service failures after enabling hardening as service misconfiguration may prevent authentication. Testing NetLogon hardening in a non-production environment is recommended before wide deployment in complex multi-domain environments.",
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 4,
+                SafetyRating = 5,
+                Description =
+                    "NetLogon service hardening enforces additional security constraints on the NetLogon service that handles domain authentication preventing exploitation of service vulnerabilities. Enabling NetLogon service hardening sets a higher security bar for all NetLogon operations reducing the attack surface available to vulnerabilities like Zerologon. NetLogon service hardening was introduced as part of the CVE-2020-1472 remediation and Microsoft recommends it for all domain-joined systems. Service hardening configuration ensures the NetLogon service uses maximally secure communication parameters for all domain authentication operations. Organizations should monitor for NetLogon service failures after enabling hardening as service misconfiguration may prevent authentication. Testing NetLogon hardening in a non-production environment is recommended before wide deployment in complex multi-domain environments.",
                 Tags = ["secure-channel", "service-hardening", "netlogon", "zero-day", "policy"],
                 RegistryKeys = [Key],
                 ApplyOps = [RegOp.SetDword(Key, "ServiceHardeningEnabled", 1)],
@@ -15609,8 +15834,12 @@ internal static class PolicySecurityHardening
                 Id = "secchan-set-account-lockout-on-channel-failure",
                 Label = "Enable Account Lockout after Secure Channel Authentication Failures",
                 Category = "Security",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 3, SafetyRating = 4,
-                Description = "Account lockout on secure channel authentication failure provides protection against brute-force attacks that attempt to guess machine account passwords or negotiate vulnerable secure channel parameters. Enabling lockout after repeated secure channel failures prevents automated attacks from making unlimited authentication guesses against domain accounts. Secure channel authentication failure lockout thresholds should be set high enough to avoid locking out systems with legitimate authentication problems such as time synchronization issues. The lockout threshold for machine accounts should be higher than interactive user accounts since machines do not have users who can notice and unlock their accounts. Organizations should implement account lockout monitoring to identify systems triggering lockout as this indicates either misconfiguration or active attack attempts. Automatically unlocking accounts after a short observation period balances security protection with operational availability.",
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 3,
+                SafetyRating = 4,
+                Description =
+                    "Account lockout on secure channel authentication failure provides protection against brute-force attacks that attempt to guess machine account passwords or negotiate vulnerable secure channel parameters. Enabling lockout after repeated secure channel failures prevents automated attacks from making unlimited authentication guesses against domain accounts. Secure channel authentication failure lockout thresholds should be set high enough to avoid locking out systems with legitimate authentication problems such as time synchronization issues. The lockout threshold for machine accounts should be higher than interactive user accounts since machines do not have users who can notice and unlock their accounts. Organizations should implement account lockout monitoring to identify systems triggering lockout as this indicates either misconfiguration or active attack attempts. Automatically unlocking accounts after a short observation period balances security protection with operational availability.",
                 Tags = ["secure-channel", "account-lockout", "brute-force", "netlogon", "policy"],
                 RegistryKeys = [Key],
                 ApplyOps = [RegOp.SetDword(Key, "LockoutOnChannelFailure", 1)],
@@ -15618,7 +15847,6 @@ internal static class PolicySecurityHardening
                 DetectOps = [RegOp.CheckDword(Key, "LockoutOnChannelFailure", 1)],
             },
         ];
-
     }
 
     // ── SecureConnectionPolicy ──
@@ -15799,7 +16027,6 @@ internal static class PolicySecurityHardening
                 DetectOps = [RegOp.CheckDword(Key, "MinimumRsaKeySize", 2048)],
             },
         ];
-
     }
 
     // ── SecureLaunchDrtmPolicy ──
@@ -15822,7 +16049,8 @@ internal static class PolicySecurityHardening
                     CorpSafe = true,
                     ImpactScore = 5,
                     SafetyRating = 4,
-                    ImpactNote = "DRTM-based Secure Launch active; firmware compromise isolated from OS boot chain. Requires Intel TXT or AMD SKINIT.",
+                    ImpactNote =
+                        "DRTM-based Secure Launch active; firmware compromise isolated from OS boot chain. Requires Intel TXT or AMD SKINIT.",
                     ApplyOps = [RegOp.SetDword(Key, "Enabled", 1)],
                     RemoveOps = [RegOp.DeleteValue(Key, "Enabled")],
                     DetectOps = [RegOp.CheckDword(Key, "Enabled", 1)],
@@ -15981,7 +16209,6 @@ internal static class PolicySecurityHardening
                     DetectOps = [RegOp.CheckDword(Key, "RequireTPMPCR17Attestation", 1)],
                 },
             ];
-
     }
 
     // ── SecurityCenterPolicy ──
@@ -16206,7 +16433,6 @@ internal static class PolicySecurityHardening
                 DetectOps = [RegOp.CheckDword(Key, "DisableNotifications", 1)],
             },
         ];
-
     }
 
     // ── ServiceAccountPolicy ──
@@ -16387,7 +16613,6 @@ internal static class PolicySecurityHardening
                 DetectOps = [RegOp.CheckDword(Key, "EnableJITServiceAccess", 1)],
             },
         ];
-
     }
 
     // ── SystemGuardRuntimePolicy ──
@@ -16568,7 +16793,6 @@ internal static class PolicySecurityHardening
                     DetectOps = [RegOp.CheckDword(Key, "EnablePostBootRuntimeCheck", 1)],
                 },
             ];
-
     }
 
     // ── TaskSchedulerSecurityPolicy ──
@@ -16579,169 +16803,178 @@ internal static class PolicySecurityHardening
         private const string MaintKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Task Scheduler5.0\Maintenance";
 
         public static IReadOnlyList<TweakDef> Data =>
-        [
-            new TweakDef
-            {
-                Id           = "schtasksec-disable-task-creation",
-                Label        = "Prevent Non-Admin Task Creation",
-                Category = "Security",
-                Description  = "Prevents standard users from creating new scheduled tasks. Only administrators can create, modify, or delete tasks. Default: allowed. Recommended for hardened systems.",
-                Tags         = ["scheduled-tasks", "security", "hardening", "user-restriction", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 4,
-                SafetyRating = 3,
-                ImpactNote   = "Standard users cannot create scheduled tasks; admin tasks unaffected.",
-                ApplyOps     = [RegOp.SetDword(Key, "TaskCreation", 0)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "TaskCreation")],
-                DetectOps    = [RegOp.CheckDword(Key, "TaskCreation", 0)],
-            },
-            new TweakDef
-            {
-                Id           = "schtasksec-disable-task-deletion",
-                Label        = "Prevent Non-Admin Task Deletion",
-                Category = "Security",
-                Description  = "Prevents standard users from deleting existing scheduled tasks. Protects system maintenance and backup tasks from accidental removal. Default: allowed.",
-                Tags         = ["scheduled-tasks", "security", "hardening", "user-restriction", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 4,
-                SafetyRating = 3,
-                ImpactNote   = "Standard users cannot remove any scheduled tasks.",
-                ApplyOps     = [RegOp.SetDword(Key, "TaskDeletion", 0)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "TaskDeletion")],
-                DetectOps    = [RegOp.CheckDword(Key, "TaskDeletion", 0)],
-            },
-            new TweakDef
-            {
-                Id           = "schtasksec-disable-execution-control",
-                Label        = "Prevent Non-Admin Manual Task Execution",
-                Category = "Security",
-                Description  = "Prevents standard users from running existing tasks on-demand (right-click → Run). Tasks still execute on their configured schedule. Default: allowed.",
-                Tags         = ["scheduled-tasks", "security", "hardening", "execution", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 3,
-                SafetyRating = 4,
-                ImpactNote   = "Standard users can't manually trigger tasks; scheduled execution continues normally.",
-                ApplyOps     = [RegOp.SetDword(Key, "Execution", 0)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "Execution")],
-                DetectOps    = [RegOp.CheckDword(Key, "Execution", 0)],
-            },
-            new TweakDef
-            {
-                Id           = "schtasksec-disable-drag-drop-run",
-                Label        = "Disable Drag-and-Drop Task Execution",
-                Category = "Security",
-                Description  = "Prevents running a scheduled task by dragging and dropping a file onto its entry. Reduces accidental or social-engineering-based task execution. Default: allowed.",
-                Tags         = ["scheduled-tasks", "security", "hardening", "drag-drop", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 2,
-                SafetyRating = 5,
-                ImpactNote   = "Drag-and-drop execution blocked; no impact on normal scheduled execution.",
-                ApplyOps     = [RegOp.SetDword(Key, "DragAndDrop", 0)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "DragAndDrop")],
-                DetectOps    = [RegOp.CheckDword(Key, "DragAndDrop", 0)],
-            },
-            new TweakDef
-            {
-                Id           = "schtasksec-disable-property-pages",
-                Label        = "Hide Task Scheduler Property Pages",
-                Category = "Security",
-                Description  = "Hides the property pages (settings, triggers, conditions, history) for existing scheduled tasks from standard users. Prevents information disclosure of task details. Default: visible.",
-                Tags         = ["scheduled-tasks", "security", "information-disclosure", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 2,
-                SafetyRating = 5,
-                ImpactNote   = "Standard users cannot view task configuration details; admin view unaffected.",
-                ApplyOps     = [RegOp.SetDword(Key, "PropertyPages", 0)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "PropertyPages")],
-                DetectOps    = [RegOp.CheckDword(Key, "PropertyPages", 0)],
-            },
-            new TweakDef
-            {
-                Id           = "schtasksec-disable-browse-network",
-                Label        = "Disable Network Browse in Task Scheduler",
-                Category = "Security",
-                Description  = "Prevents the Task Scheduler from browsing the network for remote task targets. Limits attack surface when managing scheduled tasks. Default: allowed.",
-                Tags         = ["scheduled-tasks", "security", "network", "hardening", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 2,
-                SafetyRating = 5,
-                ImpactNote   = "Cannot browse remote computers from Task Scheduler; local management unaffected.",
-                ApplyOps     = [RegOp.SetDword(Key, "AllowBrowse", 0)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "AllowBrowse")],
-                DetectOps    = [RegOp.CheckDword(Key, "AllowBrowse", 0)],
-            },
-            new TweakDef
-            {
-                Id           = "schtasksec-disable-at-compatibility",
-                Label        = "Disable AT Command Compatibility in Task Scheduler",
-                Category = "Security",
-                Description  = "Disables the legacy AT.exe command compatibility layer. AT-scheduled tasks bypass modern security controls. Default: compatible.",
-                Tags         = ["scheduled-tasks", "security", "legacy", "at-command", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 4,
-                SafetyRating = 4,
-                ImpactNote   = "Legacy AT.exe tasks no longer execute; modern schtasks/Task Scheduler UI unaffected.",
-                ApplyOps     = [RegOp.SetDword(CompatKey, "DisableATCompatibility", 1)],
-                RemoveOps    = [RegOp.DeleteValue(CompatKey, "DisableATCompatibility")],
-                DetectOps    = [RegOp.CheckDword(CompatKey, "DisableATCompatibility", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "schtasksec-disable-v1-api",
-                Label        = "Disable Task Scheduler 1.0 API Compatibility",
-                Category = "Security",
-                Description  = "Disables the legacy Task Scheduler 1.0 COM API. Prevents applications using the old interface from creating or modifying tasks. Default: enabled.",
-                Tags         = ["scheduled-tasks", "security", "legacy", "api", "com", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 3,
-                SafetyRating = 3,
-                ImpactNote   = "Legacy COM-based task management disabled; may break old automation scripts.",
-                ApplyOps     = [RegOp.SetDword(CompatKey, "DisableV1Api", 1)],
-                RemoveOps    = [RegOp.DeleteValue(CompatKey, "DisableV1Api")],
-                DetectOps    = [RegOp.CheckDword(CompatKey, "DisableV1Api", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "schtasksec-set-maint-boundary-days",
-                Label        = "Set Maintenance Task Deadline to 7 Days",
-                Category = "Security",
-                Description  = "Sets the automatic maintenance activation boundary to 7 days. If maintenance has not run in 7 days, the system forces it on next idle. Default: 2 days.",
-                Tags         = ["scheduled-tasks", "maintenance", "deadline", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 2,
-                SafetyRating = 5,
-                ImpactNote   = "Maintenance forced after 7 days of missed windows; more lenient than default 2 days.",
-                ApplyOps     = [RegOp.SetDword(MaintKey, "DeadlineDays", 7)],
-                RemoveOps    = [RegOp.DeleteValue(MaintKey, "DeadlineDays")],
-                DetectOps    = [RegOp.CheckDword(MaintKey, "DeadlineDays", 7)],
-            },
-            new TweakDef
-            {
-                Id           = "schtasksec-disable-maint-wakeup",
-                Label        = "Disable Maintenance Task Wake-Up Timer",
-                Category = "Security",
-                Description  = "Prevents the automatic maintenance task from waking the computer from sleep. Maintenance only runs when the device is already awake. Default: may wake.",
-                Tags         = ["scheduled-tasks", "maintenance", "wake-timer", "power", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 3,
-                SafetyRating = 5,
-                ImpactNote   = "Computer not woken from sleep for maintenance; maintenance runs on next idle wake.",
-                ApplyOps     = [RegOp.SetDword(MaintKey, "WakeUp", 0)],
-                RemoveOps    = [RegOp.DeleteValue(MaintKey, "WakeUp")],
-                DetectOps    = [RegOp.CheckDword(MaintKey, "WakeUp", 0)],
-            },
-        ];
-
+            [
+                new TweakDef
+                {
+                    Id = "schtasksec-disable-task-creation",
+                    Label = "Prevent Non-Admin Task Creation",
+                    Category = "Security",
+                    Description =
+                        "Prevents standard users from creating new scheduled tasks. Only administrators can create, modify, or delete tasks. Default: allowed. Recommended for hardened systems.",
+                    Tags = ["scheduled-tasks", "security", "hardening", "user-restriction", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 3,
+                    ImpactNote = "Standard users cannot create scheduled tasks; admin tasks unaffected.",
+                    ApplyOps = [RegOp.SetDword(Key, "TaskCreation", 0)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "TaskCreation")],
+                    DetectOps = [RegOp.CheckDword(Key, "TaskCreation", 0)],
+                },
+                new TweakDef
+                {
+                    Id = "schtasksec-disable-task-deletion",
+                    Label = "Prevent Non-Admin Task Deletion",
+                    Category = "Security",
+                    Description =
+                        "Prevents standard users from deleting existing scheduled tasks. Protects system maintenance and backup tasks from accidental removal. Default: allowed.",
+                    Tags = ["scheduled-tasks", "security", "hardening", "user-restriction", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 3,
+                    ImpactNote = "Standard users cannot remove any scheduled tasks.",
+                    ApplyOps = [RegOp.SetDword(Key, "TaskDeletion", 0)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "TaskDeletion")],
+                    DetectOps = [RegOp.CheckDword(Key, "TaskDeletion", 0)],
+                },
+                new TweakDef
+                {
+                    Id = "schtasksec-disable-execution-control",
+                    Label = "Prevent Non-Admin Manual Task Execution",
+                    Category = "Security",
+                    Description =
+                        "Prevents standard users from running existing tasks on-demand (right-click → Run). Tasks still execute on their configured schedule. Default: allowed.",
+                    Tags = ["scheduled-tasks", "security", "hardening", "execution", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 4,
+                    ImpactNote = "Standard users can't manually trigger tasks; scheduled execution continues normally.",
+                    ApplyOps = [RegOp.SetDword(Key, "Execution", 0)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "Execution")],
+                    DetectOps = [RegOp.CheckDword(Key, "Execution", 0)],
+                },
+                new TweakDef
+                {
+                    Id = "schtasksec-disable-drag-drop-run",
+                    Label = "Disable Drag-and-Drop Task Execution",
+                    Category = "Security",
+                    Description =
+                        "Prevents running a scheduled task by dragging and dropping a file onto its entry. Reduces accidental or social-engineering-based task execution. Default: allowed.",
+                    Tags = ["scheduled-tasks", "security", "hardening", "drag-drop", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 2,
+                    SafetyRating = 5,
+                    ImpactNote = "Drag-and-drop execution blocked; no impact on normal scheduled execution.",
+                    ApplyOps = [RegOp.SetDword(Key, "DragAndDrop", 0)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "DragAndDrop")],
+                    DetectOps = [RegOp.CheckDword(Key, "DragAndDrop", 0)],
+                },
+                new TweakDef
+                {
+                    Id = "schtasksec-disable-property-pages",
+                    Label = "Hide Task Scheduler Property Pages",
+                    Category = "Security",
+                    Description =
+                        "Hides the property pages (settings, triggers, conditions, history) for existing scheduled tasks from standard users. Prevents information disclosure of task details. Default: visible.",
+                    Tags = ["scheduled-tasks", "security", "information-disclosure", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 2,
+                    SafetyRating = 5,
+                    ImpactNote = "Standard users cannot view task configuration details; admin view unaffected.",
+                    ApplyOps = [RegOp.SetDword(Key, "PropertyPages", 0)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "PropertyPages")],
+                    DetectOps = [RegOp.CheckDword(Key, "PropertyPages", 0)],
+                },
+                new TweakDef
+                {
+                    Id = "schtasksec-disable-browse-network",
+                    Label = "Disable Network Browse in Task Scheduler",
+                    Category = "Security",
+                    Description =
+                        "Prevents the Task Scheduler from browsing the network for remote task targets. Limits attack surface when managing scheduled tasks. Default: allowed.",
+                    Tags = ["scheduled-tasks", "security", "network", "hardening", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 2,
+                    SafetyRating = 5,
+                    ImpactNote = "Cannot browse remote computers from Task Scheduler; local management unaffected.",
+                    ApplyOps = [RegOp.SetDword(Key, "AllowBrowse", 0)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "AllowBrowse")],
+                    DetectOps = [RegOp.CheckDword(Key, "AllowBrowse", 0)],
+                },
+                new TweakDef
+                {
+                    Id = "schtasksec-disable-at-compatibility",
+                    Label = "Disable AT Command Compatibility in Task Scheduler",
+                    Category = "Security",
+                    Description =
+                        "Disables the legacy AT.exe command compatibility layer. AT-scheduled tasks bypass modern security controls. Default: compatible.",
+                    Tags = ["scheduled-tasks", "security", "legacy", "at-command", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 4,
+                    ImpactNote = "Legacy AT.exe tasks no longer execute; modern schtasks/Task Scheduler UI unaffected.",
+                    ApplyOps = [RegOp.SetDword(CompatKey, "DisableATCompatibility", 1)],
+                    RemoveOps = [RegOp.DeleteValue(CompatKey, "DisableATCompatibility")],
+                    DetectOps = [RegOp.CheckDword(CompatKey, "DisableATCompatibility", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "schtasksec-disable-v1-api",
+                    Label = "Disable Task Scheduler 1.0 API Compatibility",
+                    Category = "Security",
+                    Description =
+                        "Disables the legacy Task Scheduler 1.0 COM API. Prevents applications using the old interface from creating or modifying tasks. Default: enabled.",
+                    Tags = ["scheduled-tasks", "security", "legacy", "api", "com", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 3,
+                    ImpactNote = "Legacy COM-based task management disabled; may break old automation scripts.",
+                    ApplyOps = [RegOp.SetDword(CompatKey, "DisableV1Api", 1)],
+                    RemoveOps = [RegOp.DeleteValue(CompatKey, "DisableV1Api")],
+                    DetectOps = [RegOp.CheckDword(CompatKey, "DisableV1Api", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "schtasksec-set-maint-boundary-days",
+                    Label = "Set Maintenance Task Deadline to 7 Days",
+                    Category = "Security",
+                    Description =
+                        "Sets the automatic maintenance activation boundary to 7 days. If maintenance has not run in 7 days, the system forces it on next idle. Default: 2 days.",
+                    Tags = ["scheduled-tasks", "maintenance", "deadline", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 2,
+                    SafetyRating = 5,
+                    ImpactNote = "Maintenance forced after 7 days of missed windows; more lenient than default 2 days.",
+                    ApplyOps = [RegOp.SetDword(MaintKey, "DeadlineDays", 7)],
+                    RemoveOps = [RegOp.DeleteValue(MaintKey, "DeadlineDays")],
+                    DetectOps = [RegOp.CheckDword(MaintKey, "DeadlineDays", 7)],
+                },
+                new TweakDef
+                {
+                    Id = "schtasksec-disable-maint-wakeup",
+                    Label = "Disable Maintenance Task Wake-Up Timer",
+                    Category = "Security",
+                    Description =
+                        "Prevents the automatic maintenance task from waking the computer from sleep. Maintenance only runs when the device is already awake. Default: may wake.",
+                    Tags = ["scheduled-tasks", "maintenance", "wake-timer", "power", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "Computer not woken from sleep for maintenance; maintenance runs on next idle wake.",
+                    ApplyOps = [RegOp.SetDword(MaintKey, "WakeUp", 0)],
+                    RemoveOps = [RegOp.DeleteValue(MaintKey, "WakeUp")],
+                    DetectOps = [RegOp.CheckDword(MaintKey, "WakeUp", 0)],
+                },
+            ];
     }
 
     // ── TokenBrokerPolicy ──
@@ -16756,7 +16989,10 @@ internal static class PolicySecurityHardening
                 Id = "tokbrk-disable-token-broker",
                 Label = "Disable Web Account Token Broker",
                 Category = "Security",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 4, SafetyRating = 4,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 4,
+                SafetyRating = 4,
                 Description =
                     "Sets DisableTokenBroker=1 in the TokenBroker policy key. Prevents the "
                     + "Web Account Manager (WAM) token broker from brokering OAuth access "
@@ -16775,7 +17011,10 @@ internal static class PolicySecurityHardening
                 Id = "tokbrk-disable-persistent-token-cache",
                 Label = "Disable Persistent Token Cache",
                 Category = "Security",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 3, SafetyRating = 4,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 3,
+                SafetyRating = 4,
                 Description =
                     "Sets DisablePersistentTokenCache=1 in the TokenBroker policy key. "
                     + "Prevents Web Account Manager from persisting OAuth refresh tokens to "
@@ -16794,7 +17033,10 @@ internal static class PolicySecurityHardening
                 Id = "tokbrk-disable-background-token-refresh",
                 Label = "Disable Background Token Refresh",
                 Category = "Security",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 3, SafetyRating = 4,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 3,
+                SafetyRating = 4,
                 Description =
                     "Sets DisableBackgroundTokenRefresh=1 in the TokenBroker policy key. "
                     + "Prevents WAM from silently refreshing expiring access tokens in the "
@@ -16813,7 +17055,10 @@ internal static class PolicySecurityHardening
                 Id = "tokbrk-disable-aad-token-sharing",
                 Label = "Disable Azure AD Token Sharing Between Apps",
                 Category = "Security",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 3, SafetyRating = 5,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 3,
+                SafetyRating = 5,
                 Description =
                     "Sets DisableAadTokenSharing=1 in the TokenBroker policy key. Blocks WAM "
                     + "from sharing a single Azure AD access token issued to one application "
@@ -16832,7 +17077,10 @@ internal static class PolicySecurityHardening
                 Id = "tokbrk-disable-msa-token-sharing",
                 Label = "Disable Microsoft Account Token Sharing",
                 Category = "Security",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 3, SafetyRating = 5,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 3,
+                SafetyRating = 5,
                 Description =
                     "Sets DisableMsaTokenSharing=1 in the TokenBroker policy key. Prevents WAM "
                     + "from sharing MSA (personal Microsoft account) access tokens between "
@@ -16851,7 +17099,10 @@ internal static class PolicySecurityHardening
                 Id = "tokbrk-require-user-consent",
                 Label = "Require Explicit User Consent for Token Grants",
                 Category = "Security",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 4, SafetyRating = 5,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 4,
+                SafetyRating = 5,
                 Description =
                     "Sets RequireUserConsentForTokenGrant=1 in the TokenBroker policy key. "
                     + "Forces WAM to display a consent dialog each time an application requests "
@@ -16870,7 +17121,10 @@ internal static class PolicySecurityHardening
                 Id = "tokbrk-disable-token-telemetry",
                 Label = "Disable Token Broker Telemetry",
                 Category = "Security",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 2, SafetyRating = 5,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 2,
+                SafetyRating = 5,
                 Description =
                     "Sets DisableTokenBrokerTelemetry=1 in the TokenBroker policy key. Stops "
                     + "WAM from emitting diagnostic events that log token-request attempts, "
@@ -16889,7 +17143,10 @@ internal static class PolicySecurityHardening
                 Id = "tokbrk-disable-implicit-account-discovery",
                 Label = "Disable Implicit Account Discovery",
                 Category = "Security",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 3, SafetyRating = 5,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 3,
+                SafetyRating = 5,
                 Description =
                     "Sets DisableImplicitAccountDiscovery=1 in the TokenBroker policy key. "
                     + "Prevents WAM from enumerating Microsoft accounts and Azure AD accounts "
@@ -16908,7 +17165,10 @@ internal static class PolicySecurityHardening
                 Id = "tokbrk-limit-token-lifetime",
                 Label = "Limit OAuth Token Lifetime",
                 Category = "Security",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 3, SafetyRating = 4,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 3,
+                SafetyRating = 4,
                 Description =
                     "Sets MaxTokenLifetimeMinutes=60 in the TokenBroker policy key. Caps the "
                     + "maximum lifetime of access tokens cached by WAM to 60 minutes. Short "
@@ -16927,7 +17187,10 @@ internal static class PolicySecurityHardening
                 Id = "tokbrk-disable-enterprise-sso",
                 Label = "Disable Enterprise SSO Token Propagation",
                 Category = "Security",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 3, SafetyRating = 4,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 3,
+                SafetyRating = 4,
                 Description =
                     "Sets DisableEnterpriseSso=1 in the TokenBroker policy key. Prevents WAM "
                     + "from propagating a Kerberos or NTLM enterprise SSO token to non-enrolled "
@@ -16942,7 +17205,6 @@ internal static class PolicySecurityHardening
                 DetectOps = [RegOp.CheckDword(Key, "DisableEnterpriseSso", 1)],
             },
         ];
-
     }
 
     // ── TokenPrivilegePolicy ──
@@ -17123,7 +17385,6 @@ internal static class PolicySecurityHardening
                 DetectOps = [RegOp.CheckDword(Key, "BlockAssignPrimaryTokenPrivilege", 1)],
             },
         ];
-
     }
 
     // ── TpmAdvancedPolicy ──
@@ -17304,7 +17565,6 @@ internal static class PolicySecurityHardening
                 DetectOps = [RegOp.CheckDword(Key, "AllowFirmwareUpdate", 1)],
             },
         ];
-
     }
 
     // ── TpmAttestationPolicy ──
@@ -17315,169 +17575,178 @@ internal static class PolicySecurityHardening
         private const string HaKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\HealthAttestation";
 
         public static IReadOnlyList<TweakDef> Data =>
-        [
-            new TweakDef
-            {
-                Id           = "tpmpol-require-tpm-for-bitlocker",
-                Label        = "Require TPM for All BitLocker Encrypted Volumes",
-                Category = "Security",
-                Description  = "Requires that all BitLocker encrypted volumes use a TPM protector, preventing BitLocker in password-only mode which does not provide pre-boot hardware attestation or protection against direct memory access attacks.",
-                Tags         = ["tpm", "bitlocker", "hardware-security", "attestation", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 5,
-                SafetyRating = 5,
-                ImpactNote   = "TPM required for BitLocker; password-only mode blocked. DMA attacks against BitLocker volumes prevented.",
-                ApplyOps     = [RegOp.SetDword(Key, "RequireTPMForBitLocker", 1)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "RequireTPMForBitLocker")],
-                DetectOps    = [RegOp.CheckDword(Key, "RequireTPMForBitLocker", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "tpmpol-enable-device-health-attestation",
-                Label        = "Enable Device Health Attestation (DHA) Service",
-                Category = "Security",
-                Description  = "Enables the Windows Device Health Attestation service which uses TPM measurements to produce a signed boot health certificate, allowing MDM policies to verify device security posture before granting access.",
-                Tags         = ["tpm", "dha", "health-attestation", "mdm", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 5,
-                SafetyRating = 5,
-                ImpactNote   = "Device Health Attestation enabled; TPM boot measurements sent to DHA service for MDM compliance checking.",
-                ApplyOps     = [RegOp.SetDword(HaKey, "EnableDeviceHealthAttestationService", 1)],
-                RemoveOps    = [RegOp.DeleteValue(HaKey, "EnableDeviceHealthAttestationService")],
-                DetectOps    = [RegOp.CheckDword(HaKey, "EnableDeviceHealthAttestationService", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "tpmpol-set-lockout-threshold-10",
-                Label        = "Set TPM Anti-Hammering Lockout Threshold to 10 Failures",
-                Category = "Security",
-                Description  = "Configures the TPM anti-hammering lockout threshold to 10 failed authorisation attempts, after which the TPM enters lockout mode requiring administrative reset, protecting against brute-force TPM dictionary attacks.",
-                Tags         = ["tpm", "lockout", "anti-hammering", "brute-force", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 4,
-                SafetyRating = 5,
-                ImpactNote   = "TPM lockout after 10 failed auth attempts; brute-force dictionary attacks against TPM mitigated.",
-                ApplyOps     = [RegOp.SetDword(Key, "StandardUserAuthorizationFailureDuration_Name", 10)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "StandardUserAuthorizationFailureDuration_Name")],
-                DetectOps    = [RegOp.CheckDword(Key, "StandardUserAuthorizationFailureDuration_Name", 10)],
-            },
-            new TweakDef
-            {
-                Id           = "tpmpol-block-tpm-clear-by-standard-user",
-                Label        = "Block Standard Users from Clearing the TPM",
-                Category = "Security",
-                Description  = "Prevents standard (non-administrator) users from clearing the TPM chip, which would destroy all TPM-protected keys and could be used to defeat BitLocker and Credential Guard protections.",
-                Tags         = ["tpm", "clear-tpm", "standard-user", "bitlocker", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 5,
-                SafetyRating = 5,
-                ImpactNote   = "TPM clear blocked for standard users; only admins can clear TPM. Prevents BitLocker key destruction.",
-                ApplyOps     = [RegOp.SetDword(Key, "BlockStandardUserClearTPM", 1)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "BlockStandardUserClearTPM")],
-                DetectOps    = [RegOp.CheckDword(Key, "BlockStandardUserClearTPM", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "tpmpol-require-tpm2-minimum",
-                Label        = "Require TPM 2.0 Minimum for Secure Device Operations",
-                Category = "Security",
-                Description  = "Enforces that all security operations requiring TPM attestation (BitLocker, Credential Guard, Device Guard, Windows Hello) use TPM 2.0, blocking fallback to the weaker TPM 1.2 specification.",
-                Tags         = ["tpm", "tpm-2.0", "version-requirement", "security", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 4,
-                SafetyRating = 5,
-                ImpactNote   = "TPM 2.0 required minimum; security features that fall back to TPM 1.2 are blocked.",
-                ApplyOps     = [RegOp.SetDword(Key, "RequireTPM20", 1)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "RequireTPM20")],
-                DetectOps    = [RegOp.CheckDword(Key, "RequireTPM20", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "tpmpol-enable-measured-boot",
-                Label        = "Enable Windows Measured Boot with TPM PCR Logging",
-                Category = "Security",
-                Description  = "Enables Measured Boot on the Windows bootloader, ensuring that each boot component hash is recorded in TPM PCR registers, creating an immutable tamper-evident boot measurement log.",
-                Tags         = ["tpm", "measured-boot", "pcr", "boot-security", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 5,
-                SafetyRating = 5,
-                ImpactNote   = "Measured Boot with TPM PCR logging enabled; boot chain tamper evident and verifiable via attestation.",
-                ApplyOps     = [RegOp.SetDword(MbKey, "EnableMeasuredBoot", 1)],
-                RemoveOps    = [RegOp.DeleteValue(MbKey, "EnableMeasuredBoot")],
-                DetectOps    = [RegOp.CheckDword(MbKey, "EnableMeasuredBoot", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "tpmpol-disable-tpm-auto-provisioning",
-                Label        = "Disable Automatic TPM Provisioning by Windows",
-                Category = "Security",
-                Description  = "Prevents Windows from automatically taking ownership of the TPM during first boot provisioning, requiring explicit administrative TPM initialisation and ensuring TPM ownership is a deliberate IT action.",
-                Tags         = ["tpm", "provisioning", "ownership", "admin", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 3,
-                SafetyRating = 5,
-                ImpactNote   = "Automatic TPM provisioning disabled; TPM ownership requires explicit admin initialisation.",
-                ApplyOps     = [RegOp.SetDword(Key, "DisableAutoProvisioning", 1)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "DisableAutoProvisioning")],
-                DetectOps    = [RegOp.CheckDword(Key, "DisableAutoProvisioning", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "tpmpol-log-tpm-events",
-                Label        = "Log TPM Attestation and Lockout Events in Security Log",
-                Category = "Security",
-                Description  = "Enables Security event log entries for TPM lockout events, attestation failures, and TPM provisioning changes, providing audit visibility into hardware security chip state changes.",
-                Tags         = ["tpm", "event-log", "audit", "lockout", "attestation", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 3,
-                SafetyRating = 5,
-                ImpactNote   = "TPM lockout and attestation events logged in Security log; hardware security chip state visible for auditing.",
-                ApplyOps     = [RegOp.SetDword(Key, "LogTPMEvents", 1)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "LogTPMEvents")],
-                DetectOps    = [RegOp.CheckDword(Key, "LogTPMEvents", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "tpmpol-disable-tpm-remote-management",
-                Label        = "Disable Remote TPM Management via DCOM",
-                Category = "Security",
-                Description  = "Prevents remote administration of the TPM chip via the DCOM TPM management interface, ensuring all TPM configuration changes require local administrator access to the physical or virtual machine.",
-                Tags         = ["tpm", "remote-management", "dcom", "security", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 4,
-                SafetyRating = 5,
-                ImpactNote   = "Remote TPM management via DCOM disabled; TPM configuration requires local admin access only.",
-                ApplyOps     = [RegOp.SetDword(Key, "DisableRemoteTPMManagement", 1)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "DisableRemoteTPMManagement")],
-                DetectOps    = [RegOp.CheckDword(Key, "DisableRemoteTPMManagement", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "tpmpol-disable-tpm-telemetry",
-                Label        = "Disable TPM Telemetry Reporting to Microsoft",
-                Category = "Security",
-                Description  = "Prevents Windows from sending TPM chip model, firmware version, PCR configuration, and health attestation result telemetry to Microsoft.",
-                Tags         = ["tpm", "telemetry", "privacy", "microsoft", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 3,
-                SafetyRating = 5,
-                ImpactNote   = "TPM telemetry to Microsoft disabled; chip model, firmware, and attestation data not sent to cloud.",
-                ApplyOps     = [RegOp.SetDword(Key, "DisableTPMTelemetry", 1)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "DisableTPMTelemetry")],
-                DetectOps    = [RegOp.CheckDword(Key, "DisableTPMTelemetry", 1)],
-            },
-        ];
-
+            [
+                new TweakDef
+                {
+                    Id = "tpmpol-require-tpm-for-bitlocker",
+                    Label = "Require TPM for All BitLocker Encrypted Volumes",
+                    Category = "Security",
+                    Description =
+                        "Requires that all BitLocker encrypted volumes use a TPM protector, preventing BitLocker in password-only mode which does not provide pre-boot hardware attestation or protection against direct memory access attacks.",
+                    Tags = ["tpm", "bitlocker", "hardware-security", "attestation", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 5,
+                    SafetyRating = 5,
+                    ImpactNote = "TPM required for BitLocker; password-only mode blocked. DMA attacks against BitLocker volumes prevented.",
+                    ApplyOps = [RegOp.SetDword(Key, "RequireTPMForBitLocker", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "RequireTPMForBitLocker")],
+                    DetectOps = [RegOp.CheckDword(Key, "RequireTPMForBitLocker", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "tpmpol-enable-device-health-attestation",
+                    Label = "Enable Device Health Attestation (DHA) Service",
+                    Category = "Security",
+                    Description =
+                        "Enables the Windows Device Health Attestation service which uses TPM measurements to produce a signed boot health certificate, allowing MDM policies to verify device security posture before granting access.",
+                    Tags = ["tpm", "dha", "health-attestation", "mdm", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 5,
+                    SafetyRating = 5,
+                    ImpactNote = "Device Health Attestation enabled; TPM boot measurements sent to DHA service for MDM compliance checking.",
+                    ApplyOps = [RegOp.SetDword(HaKey, "EnableDeviceHealthAttestationService", 1)],
+                    RemoveOps = [RegOp.DeleteValue(HaKey, "EnableDeviceHealthAttestationService")],
+                    DetectOps = [RegOp.CheckDword(HaKey, "EnableDeviceHealthAttestationService", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "tpmpol-set-lockout-threshold-10",
+                    Label = "Set TPM Anti-Hammering Lockout Threshold to 10 Failures",
+                    Category = "Security",
+                    Description =
+                        "Configures the TPM anti-hammering lockout threshold to 10 failed authorisation attempts, after which the TPM enters lockout mode requiring administrative reset, protecting against brute-force TPM dictionary attacks.",
+                    Tags = ["tpm", "lockout", "anti-hammering", "brute-force", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "TPM lockout after 10 failed auth attempts; brute-force dictionary attacks against TPM mitigated.",
+                    ApplyOps = [RegOp.SetDword(Key, "StandardUserAuthorizationFailureDuration_Name", 10)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "StandardUserAuthorizationFailureDuration_Name")],
+                    DetectOps = [RegOp.CheckDword(Key, "StandardUserAuthorizationFailureDuration_Name", 10)],
+                },
+                new TweakDef
+                {
+                    Id = "tpmpol-block-tpm-clear-by-standard-user",
+                    Label = "Block Standard Users from Clearing the TPM",
+                    Category = "Security",
+                    Description =
+                        "Prevents standard (non-administrator) users from clearing the TPM chip, which would destroy all TPM-protected keys and could be used to defeat BitLocker and Credential Guard protections.",
+                    Tags = ["tpm", "clear-tpm", "standard-user", "bitlocker", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 5,
+                    SafetyRating = 5,
+                    ImpactNote = "TPM clear blocked for standard users; only admins can clear TPM. Prevents BitLocker key destruction.",
+                    ApplyOps = [RegOp.SetDword(Key, "BlockStandardUserClearTPM", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "BlockStandardUserClearTPM")],
+                    DetectOps = [RegOp.CheckDword(Key, "BlockStandardUserClearTPM", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "tpmpol-require-tpm2-minimum",
+                    Label = "Require TPM 2.0 Minimum for Secure Device Operations",
+                    Category = "Security",
+                    Description =
+                        "Enforces that all security operations requiring TPM attestation (BitLocker, Credential Guard, Device Guard, Windows Hello) use TPM 2.0, blocking fallback to the weaker TPM 1.2 specification.",
+                    Tags = ["tpm", "tpm-2.0", "version-requirement", "security", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "TPM 2.0 required minimum; security features that fall back to TPM 1.2 are blocked.",
+                    ApplyOps = [RegOp.SetDword(Key, "RequireTPM20", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "RequireTPM20")],
+                    DetectOps = [RegOp.CheckDword(Key, "RequireTPM20", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "tpmpol-enable-measured-boot",
+                    Label = "Enable Windows Measured Boot with TPM PCR Logging",
+                    Category = "Security",
+                    Description =
+                        "Enables Measured Boot on the Windows bootloader, ensuring that each boot component hash is recorded in TPM PCR registers, creating an immutable tamper-evident boot measurement log.",
+                    Tags = ["tpm", "measured-boot", "pcr", "boot-security", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 5,
+                    SafetyRating = 5,
+                    ImpactNote = "Measured Boot with TPM PCR logging enabled; boot chain tamper evident and verifiable via attestation.",
+                    ApplyOps = [RegOp.SetDword(MbKey, "EnableMeasuredBoot", 1)],
+                    RemoveOps = [RegOp.DeleteValue(MbKey, "EnableMeasuredBoot")],
+                    DetectOps = [RegOp.CheckDword(MbKey, "EnableMeasuredBoot", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "tpmpol-disable-tpm-auto-provisioning",
+                    Label = "Disable Automatic TPM Provisioning by Windows",
+                    Category = "Security",
+                    Description =
+                        "Prevents Windows from automatically taking ownership of the TPM during first boot provisioning, requiring explicit administrative TPM initialisation and ensuring TPM ownership is a deliberate IT action.",
+                    Tags = ["tpm", "provisioning", "ownership", "admin", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "Automatic TPM provisioning disabled; TPM ownership requires explicit admin initialisation.",
+                    ApplyOps = [RegOp.SetDword(Key, "DisableAutoProvisioning", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "DisableAutoProvisioning")],
+                    DetectOps = [RegOp.CheckDword(Key, "DisableAutoProvisioning", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "tpmpol-log-tpm-events",
+                    Label = "Log TPM Attestation and Lockout Events in Security Log",
+                    Category = "Security",
+                    Description =
+                        "Enables Security event log entries for TPM lockout events, attestation failures, and TPM provisioning changes, providing audit visibility into hardware security chip state changes.",
+                    Tags = ["tpm", "event-log", "audit", "lockout", "attestation", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "TPM lockout and attestation events logged in Security log; hardware security chip state visible for auditing.",
+                    ApplyOps = [RegOp.SetDword(Key, "LogTPMEvents", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "LogTPMEvents")],
+                    DetectOps = [RegOp.CheckDword(Key, "LogTPMEvents", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "tpmpol-disable-tpm-remote-management",
+                    Label = "Disable Remote TPM Management via DCOM",
+                    Category = "Security",
+                    Description =
+                        "Prevents remote administration of the TPM chip via the DCOM TPM management interface, ensuring all TPM configuration changes require local administrator access to the physical or virtual machine.",
+                    Tags = ["tpm", "remote-management", "dcom", "security", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "Remote TPM management via DCOM disabled; TPM configuration requires local admin access only.",
+                    ApplyOps = [RegOp.SetDword(Key, "DisableRemoteTPMManagement", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "DisableRemoteTPMManagement")],
+                    DetectOps = [RegOp.CheckDword(Key, "DisableRemoteTPMManagement", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "tpmpol-disable-tpm-telemetry",
+                    Label = "Disable TPM Telemetry Reporting to Microsoft",
+                    Category = "Security",
+                    Description =
+                        "Prevents Windows from sending TPM chip model, firmware version, PCR configuration, and health attestation result telemetry to Microsoft.",
+                    Tags = ["tpm", "telemetry", "privacy", "microsoft", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "TPM telemetry to Microsoft disabled; chip model, firmware, and attestation data not sent to cloud.",
+                    ApplyOps = [RegOp.SetDword(Key, "DisableTPMTelemetry", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "DisableTPMTelemetry")],
+                    DetectOps = [RegOp.CheckDword(Key, "DisableTPMTelemetry", 1)],
+                },
+            ];
     }
 
     // ── TpmRecoveryPolicy ──
@@ -17679,7 +17948,6 @@ internal static class PolicySecurityHardening
                     DetectOps = [RegOp.CheckDword(TpmKey, "EnableTPMAttestation", 1)],
                 },
             ];
-
     }
 
     // ── TpmSecurityPolicy ──
@@ -17695,143 +17963,152 @@ internal static class PolicySecurityHardening
                 Id = "tpmgpo-require-active-directory-backup",
                 Label = "Require TPM Owner Info Backup to Active Directory",
                 Category = "Security",
-                Description = "Requires TPM owner authorization information to be backed up to Active Directory before TPM operations are allowed. Prevents TPM ownership from being set on machines where AD backup fails, ensuring recoverability. Default: 0. Recommended: 1 for AD-joined enterprise machines.",
+                Description =
+                    "Requires TPM owner authorization information to be backed up to Active Directory before TPM operations are allowed. Prevents TPM ownership from being set on machines where AD backup fails, ensuring recoverability. Default: 0. Recommended: 1 for AD-joined enterprise machines.",
                 Tags = ["tpm", "active-directory", "backup", "security"],
                 NeedsAdmin = true,
                 CorpSafe = true,
                 RegistryKeys = [Tpm],
-                ApplyOps   = [RegOp.SetDword(Tpm, "RequireActiveDirectoryBackup", 1)],
-                RemoveOps  = [RegOp.DeleteValue(Tpm, "RequireActiveDirectoryBackup")],
-                DetectOps  = [RegOp.CheckDword(Tpm, "RequireActiveDirectoryBackup", 1)],
+                ApplyOps = [RegOp.SetDword(Tpm, "RequireActiveDirectoryBackup", 1)],
+                RemoveOps = [RegOp.DeleteValue(Tpm, "RequireActiveDirectoryBackup")],
+                DetectOps = [RegOp.CheckDword(Tpm, "RequireActiveDirectoryBackup", 1)],
             },
             new TweakDef
             {
                 Id = "tpmgpo-enable-active-directory-backup",
                 Label = "Enable TPM Owner Info Active Directory Backup",
                 Category = "Security",
-                Description = "Enables automatic backup of TPM owner authorization to Active Directory. When combined with RequireActiveDirectoryBackup, ensures all TPM-protected machines have recoverable owner keys in AD. Default: 0. Recommended: 1.",
+                Description =
+                    "Enables automatic backup of TPM owner authorization to Active Directory. When combined with RequireActiveDirectoryBackup, ensures all TPM-protected machines have recoverable owner keys in AD. Default: 0. Recommended: 1.",
                 Tags = ["tpm", "active-directory", "backup", "security"],
                 NeedsAdmin = true,
                 CorpSafe = true,
                 RegistryKeys = [Tpm],
-                ApplyOps   = [RegOp.SetDword(Tpm, "ActiveDirectoryBackup", 1)],
-                RemoveOps  = [RegOp.DeleteValue(Tpm, "ActiveDirectoryBackup")],
-                DetectOps  = [RegOp.CheckDword(Tpm, "ActiveDirectoryBackup", 1)],
+                ApplyOps = [RegOp.SetDword(Tpm, "ActiveDirectoryBackup", 1)],
+                RemoveOps = [RegOp.DeleteValue(Tpm, "ActiveDirectoryBackup")],
+                DetectOps = [RegOp.CheckDword(Tpm, "ActiveDirectoryBackup", 1)],
             },
             new TweakDef
             {
                 Id = "tpmgpo-os-managed-auth-level",
                 Label = "Set TPM OS-Managed Auth Level to Full Delegation",
                 Category = "Security",
-                Description = "Sets OS-managed TPM auth level to 4 (full delegation). This determines how much of the TPM authorization is delegated to the OS vs retained by the hardware. Level 4 allows OS full control needed for BitLocker and Device Guard. Default: 4. Recommended: 4.",
+                Description =
+                    "Sets OS-managed TPM auth level to 4 (full delegation). This determines how much of the TPM authorization is delegated to the OS vs retained by the hardware. Level 4 allows OS full control needed for BitLocker and Device Guard. Default: 4. Recommended: 4.",
                 Tags = ["tpm", "auth", "delegation", "bitlocker"],
                 NeedsAdmin = true,
                 CorpSafe = true,
                 RegistryKeys = [Tpm],
-                ApplyOps   = [RegOp.SetDword(Tpm, "OSManagedAuthLevel", 4)],
-                RemoveOps  = [RegOp.DeleteValue(Tpm, "OSManagedAuthLevel")],
-                DetectOps  = [RegOp.CheckDword(Tpm, "OSManagedAuthLevel", 4)],
+                ApplyOps = [RegOp.SetDword(Tpm, "OSManagedAuthLevel", 4)],
+                RemoveOps = [RegOp.DeleteValue(Tpm, "OSManagedAuthLevel")],
+                DetectOps = [RegOp.CheckDword(Tpm, "OSManagedAuthLevel", 4)],
             },
             new TweakDef
             {
                 Id = "tpmgpo-standard-user-lockout-threshold",
                 Label = "Set TPM Standard-User Authorization Failure Threshold",
                 Category = "Security",
-                Description = "Sets the TPM lockout threshold for standard users to 32 failed authorization attempts before the TPM enters lockout mode. Balances brute-force protection with usability. Default: 32. Recommended: 9 for stricter environments.",
+                Description =
+                    "Sets the TPM lockout threshold for standard users to 32 failed authorization attempts before the TPM enters lockout mode. Balances brute-force protection with usability. Default: 32. Recommended: 9 for stricter environments.",
                 Tags = ["tpm", "lockout", "brute-force", "security"],
                 NeedsAdmin = true,
                 CorpSafe = true,
                 RegistryKeys = [Tpm],
-                ApplyOps   = [RegOp.SetDword(Tpm, "StandardUserAuthorizationFailureTotalThreshold", 9)],
-                RemoveOps  = [RegOp.DeleteValue(Tpm, "StandardUserAuthorizationFailureTotalThreshold")],
-                DetectOps  = [RegOp.CheckDword(Tpm, "StandardUserAuthorizationFailureTotalThreshold", 9)],
+                ApplyOps = [RegOp.SetDword(Tpm, "StandardUserAuthorizationFailureTotalThreshold", 9)],
+                RemoveOps = [RegOp.DeleteValue(Tpm, "StandardUserAuthorizationFailureTotalThreshold")],
+                DetectOps = [RegOp.CheckDword(Tpm, "StandardUserAuthorizationFailureTotalThreshold", 9)],
             },
             new TweakDef
             {
                 Id = "tpmgpo-standard-user-lockout-duration",
                 Label = "Set TPM Standard-User Lockout Duration to 1 Hour",
                 Category = "Security",
-                Description = "Sets the TPM lockout observation window to 3 600 seconds (1 hour). Failed authorization attempts within this window count toward the lockout threshold. After the window expires, failed counts reset. Default: 7200. Recommended: 3600.",
+                Description =
+                    "Sets the TPM lockout observation window to 3 600 seconds (1 hour). Failed authorization attempts within this window count toward the lockout threshold. After the window expires, failed counts reset. Default: 7200. Recommended: 3600.",
                 Tags = ["tpm", "lockout", "duration", "security"],
                 NeedsAdmin = true,
                 CorpSafe = true,
                 RegistryKeys = [Tpm],
-                ApplyOps   = [RegOp.SetDword(Tpm, "StandardUserAuthorizationFailureDuration", 3600)],
-                RemoveOps  = [RegOp.DeleteValue(Tpm, "StandardUserAuthorizationFailureDuration")],
-                DetectOps  = [RegOp.CheckDword(Tpm, "StandardUserAuthorizationFailureDuration", 3600)],
+                ApplyOps = [RegOp.SetDword(Tpm, "StandardUserAuthorizationFailureDuration", 3600)],
+                RemoveOps = [RegOp.DeleteValue(Tpm, "StandardUserAuthorizationFailureDuration")],
+                DetectOps = [RegOp.CheckDword(Tpm, "StandardUserAuthorizationFailureDuration", 3600)],
             },
             new TweakDef
             {
                 Id = "tpmgpo-standard-user-individual-lockout",
                 Label = "Set TPM Standard-User Individual Auth Failure Threshold",
                 Category = "Security",
-                Description = "Sets the TPM individual authorization failure threshold for standard users to 4. A single TPM authorization can fail at most 4 times within the observation window before triggering lockout for that key. Default: 4. Recommended: 4.",
+                Description =
+                    "Sets the TPM individual authorization failure threshold for standard users to 4. A single TPM authorization can fail at most 4 times within the observation window before triggering lockout for that key. Default: 4. Recommended: 4.",
                 Tags = ["tpm", "lockout", "individual", "security"],
                 NeedsAdmin = true,
                 CorpSafe = true,
                 RegistryKeys = [Tpm],
-                ApplyOps   = [RegOp.SetDword(Tpm, "StandardUserAuthorizationFailureIndividualThreshold", 4)],
-                RemoveOps  = [RegOp.DeleteValue(Tpm, "StandardUserAuthorizationFailureIndividualThreshold")],
-                DetectOps  = [RegOp.CheckDword(Tpm, "StandardUserAuthorizationFailureIndividualThreshold", 4)],
+                ApplyOps = [RegOp.SetDword(Tpm, "StandardUserAuthorizationFailureIndividualThreshold", 4)],
+                RemoveOps = [RegOp.DeleteValue(Tpm, "StandardUserAuthorizationFailureIndividualThreshold")],
+                DetectOps = [RegOp.CheckDword(Tpm, "StandardUserAuthorizationFailureIndividualThreshold", 4)],
             },
             new TweakDef
             {
                 Id = "tpmgpo-enable-credential-guard",
                 Label = "Enable Credential Guard via Device Guard Policy",
                 Category = "Security",
-                Description = "Enables Windows Defender Credential Guard through Group Policy. Credential Guard uses VBS to isolate LSA credential storage, protecting NTLM hashes and Kerberos tickets from pass-the-hash attacks. Default: 0. Recommended: 1.",
+                Description =
+                    "Enables Windows Defender Credential Guard through Group Policy. Credential Guard uses VBS to isolate LSA credential storage, protecting NTLM hashes and Kerberos tickets from pass-the-hash attacks. Default: 0. Recommended: 1.",
                 Tags = ["tpm", "credential-guard", "vbs", "security", "lsa"],
                 NeedsAdmin = true,
                 CorpSafe = true,
                 RegistryKeys = [TpmDg],
-                ApplyOps   = [RegOp.SetDword(TpmDg, "LsaCfgFlags", 1)],
-                RemoveOps  = [RegOp.DeleteValue(TpmDg, "LsaCfgFlags")],
-                DetectOps  = [RegOp.CheckDword(TpmDg, "LsaCfgFlags", 1)],
+                ApplyOps = [RegOp.SetDword(TpmDg, "LsaCfgFlags", 1)],
+                RemoveOps = [RegOp.DeleteValue(TpmDg, "LsaCfgFlags")],
+                DetectOps = [RegOp.CheckDword(TpmDg, "LsaCfgFlags", 1)],
             },
             new TweakDef
             {
                 Id = "tpmgpo-enable-hvci",
                 Label = "Enable Hypervisor-Protected Code Integrity (HVCI)",
                 Category = "Security",
-                Description = "Enables Hypervisor-Protected Code Integrity (HVCI / Memory Integrity) via Device Guard GPO policy. HVCI uses VBS to ensure only code signed by trusted authorities runs in kernel mode, blocking unsigned driver exploits. Default: 0. Recommended: 1.",
+                Description =
+                    "Enables Hypervisor-Protected Code Integrity (HVCI / Memory Integrity) via Device Guard GPO policy. HVCI uses VBS to ensure only code signed by trusted authorities runs in kernel mode, blocking unsigned driver exploits. Default: 0. Recommended: 1.",
                 Tags = ["tpm", "hvci", "memory-integrity", "vbs", "kernel", "security"],
                 NeedsAdmin = true,
                 CorpSafe = true,
                 RegistryKeys = [TpmDg],
-                ApplyOps   = [RegOp.SetDword(TpmDg, "HypervisorEnforcedCodeIntegrity", 1)],
-                RemoveOps  = [RegOp.DeleteValue(TpmDg, "HypervisorEnforcedCodeIntegrity")],
-                DetectOps  = [RegOp.CheckDword(TpmDg, "HypervisorEnforcedCodeIntegrity", 1)],
+                ApplyOps = [RegOp.SetDword(TpmDg, "HypervisorEnforcedCodeIntegrity", 1)],
+                RemoveOps = [RegOp.DeleteValue(TpmDg, "HypervisorEnforcedCodeIntegrity")],
+                DetectOps = [RegOp.CheckDword(TpmDg, "HypervisorEnforcedCodeIntegrity", 1)],
             },
             new TweakDef
             {
                 Id = "tpmgpo-enable-secure-launch",
                 Label = "Enable Secure Launch (DRTM) via Device Guard",
                 Category = "Security",
-                Description = "Enables Secure Launch (Dynamic Root of Trust for Measurement / DRTM) through Device Guard GPO. DRTM provides a hardware-attested boot chain using Intel TXT or AMD Skinit, protecting firmware from being modified. Default: 0. Recommended: 1 on supported hardware.",
+                Description =
+                    "Enables Secure Launch (Dynamic Root of Trust for Measurement / DRTM) through Device Guard GPO. DRTM provides a hardware-attested boot chain using Intel TXT or AMD Skinit, protecting firmware from being modified. Default: 0. Recommended: 1 on supported hardware.",
                 Tags = ["tpm", "secure-launch", "drtm", "firmware", "security"],
                 NeedsAdmin = true,
                 CorpSafe = true,
                 RegistryKeys = [TpmDg],
-                ApplyOps   = [RegOp.SetDword(TpmDg, "ConfigureSystemGuardLaunch", 1)],
-                RemoveOps  = [RegOp.DeleteValue(TpmDg, "ConfigureSystemGuardLaunch")],
-                DetectOps  = [RegOp.CheckDword(TpmDg, "ConfigureSystemGuardLaunch", 1)],
+                ApplyOps = [RegOp.SetDword(TpmDg, "ConfigureSystemGuardLaunch", 1)],
+                RemoveOps = [RegOp.DeleteValue(TpmDg, "ConfigureSystemGuardLaunch")],
+                DetectOps = [RegOp.CheckDword(TpmDg, "ConfigureSystemGuardLaunch", 1)],
             },
             new TweakDef
             {
                 Id = "tpmgpo-enable-vbs",
                 Label = "Enable Virtualization-Based Security (VBS)",
                 Category = "Security",
-                Description = "Enables Virtualization-Based Security (VBS) through Device Guard GPO. VBS uses the hypervisor to create an isolated memory region for security code — prerequisite for Credential Guard and HVCI. Default: 0. Recommended: 1.",
+                Description =
+                    "Enables Virtualization-Based Security (VBS) through Device Guard GPO. VBS uses the hypervisor to create an isolated memory region for security code — prerequisite for Credential Guard and HVCI. Default: 0. Recommended: 1.",
                 Tags = ["tpm", "vbs", "virtualization", "security", "hypervisor"],
                 NeedsAdmin = true,
                 CorpSafe = true,
                 RegistryKeys = [TpmDg],
-                ApplyOps   = [RegOp.SetDword(TpmDg, "EnableVirtualizationBasedSecurity", 1)],
-                RemoveOps  = [RegOp.DeleteValue(TpmDg, "EnableVirtualizationBasedSecurity")],
-                DetectOps  = [RegOp.CheckDword(TpmDg, "EnableVirtualizationBasedSecurity", 1)],
+                ApplyOps = [RegOp.SetDword(TpmDg, "EnableVirtualizationBasedSecurity", 1)],
+                RemoveOps = [RegOp.DeleteValue(TpmDg, "EnableVirtualizationBasedSecurity")],
+                DetectOps = [RegOp.CheckDword(TpmDg, "EnableVirtualizationBasedSecurity", 1)],
             },
         ];
-
     }
 
     // ── TrustProviderPolicy ──
@@ -18012,7 +18289,6 @@ internal static class PolicySecurityHardening
                 DetectOps = [RegOp.CheckDword(Key, "EnableTrustDecisionLogging", 1)],
             },
         ];
-
     }
 
     // ── UserAccountControlAdvPolicy ──
@@ -18176,7 +18452,6 @@ internal static class PolicySecurityHardening
                 DetectOps = [RegOp.CheckDword(UacAdv, "DisableTaskMgr", 1)],
             },
         ];
-
     }
 
     // ── UserProfilePolicy ──
@@ -18185,169 +18460,170 @@ internal static class PolicySecurityHardening
         private const string SysKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System";
 
         public static IReadOnlyList<TweakDef> Data =>
-        [
-            new TweakDef
-            {
-                Id = "upprof-enable-smartscreen-apps",
-                Label = "Enable SmartScreen for Apps and Files",
-                Category = "Security",
-                Description = "Activates Windows SmartScreen to check apps and files downloaded from the Internet before execution.",
-                Tags = ["smartscreen", "security", "malware", "downloads", "system"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 5,
-                SafetyRating = 5,
-                ImpactNote = "SmartScreen value 1 = enabled; blocks unrecognized downloaded apps and shows a warning prompt.",
-                ApplyOps = [RegOp.SetDword(SysKey, "EnableSmartScreen", 1)],
-                RemoveOps = [RegOp.DeleteValue(SysKey, "EnableSmartScreen")],
-                DetectOps = [RegOp.CheckDword(SysKey, "EnableSmartScreen", 1)],
-            },
-            new TweakDef
-            {
-                Id = "upprof-restrict-cmd-for-users",
-                Label = "Restrict Command Prompt Access for Standard Users",
-                Category = "Security",
-                Description = "Prevents standard (non-admin) users from launching Command Prompt (cmd.exe) directly.",
-                Tags = ["cmd", "command-prompt", "restriction", "users", "security"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 4,
-                ImpactNote = "Value 2 = disable cmd for users but allow cmd scripts; value 1 = disable both. Admins are unaffected.",
-                ApplyOps = [RegOp.SetDword(SysKey, "DisableCMD", 2)],
-                RemoveOps = [RegOp.DeleteValue(SysKey, "DisableCMD")],
-                DetectOps = [RegOp.CheckDword(SysKey, "DisableCMD", 2)],
-            },
-            new TweakDef
-            {
-                Id = "upprof-run-logon-scripts-sync",
-                Label = "Run Logon and Startup Scripts Synchronously",
-                Category = "Security",
-                Description = "Runs all Group Policy logon and startup scripts synchronously before presenting the user desktop.",
-                Tags = ["logon-scripts", "startup-scripts", "gpo", "synchronous", "user-profile"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Desktop shown only after all scripts complete; ensures drive mappings and profile settings are applied before login.",
-                ApplyOps = [RegOp.SetDword(SysKey, "RunLogonScriptSync", 1)],
-                RemoveOps = [RegOp.DeleteValue(SysKey, "RunLogonScriptSync")],
-                DetectOps = [RegOp.CheckDword(SysKey, "RunLogonScriptSync", 1)],
-            },
-            new TweakDef
-            {
-                Id = "upprof-max-gpo-script-wait",
-                Label = "Set Maximum Wait Time for Group Policy Scripts",
-                Category = "Security",
-                Description = "Configures the maximum time (in seconds) Windows waits for Group Policy startup and shutdown scripts to complete.",
-                Tags = ["gpo-scripts", "timeout", "logon", "user-profile"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                ImpactNote = "Default is 600 seconds; prevents scripts from hanging system shutdown or logon indefinitely.",
-                ApplyOps = [RegOp.SetDword(SysKey, "MaxGPOScriptWait", 600)],
-                RemoveOps = [RegOp.DeleteValue(SysKey, "MaxGPOScriptWait")],
-                DetectOps = [RegOp.CheckDword(SysKey, "MaxGPOScriptWait", 600)],
-            },
-            new TweakDef
-            {
-                Id = "upprof-enable-gp-refresh",
-                Label = "Enable Background Group Policy Refresh",
-                Category = "Security",
-                Description = "Ensures Group Policy is refreshed in the background on a schedule, even when the user is logged in.",
-                Tags = ["group-policy", "gpo-refresh", "background", "user-profile"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Value 0 = allow background GP refresh (default-on but explicitly set via policy for enforcement).",
-                ApplyOps = [RegOp.SetDword(SysKey, "DisableBkGndGroupPolicy", 0)],
-                RemoveOps = [RegOp.DeleteValue(SysKey, "DisableBkGndGroupPolicy")],
-                DetectOps = [RegOp.CheckDword(SysKey, "DisableBkGndGroupPolicy", 0)],
-            },
-            new TweakDef
-            {
-                Id = "upprof-block-roaming-profile-changes",
-                Label = "Prevent Local Changes from Syncing Back to Roaming Profile",
-                Category = "Security",
-                Description = "Prevents any changes made to a roaming user profile during a session from syncing back to the network share.",
-                Tags = ["roaming-profile", "user-profile", "sync", "restriction"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 4,
-                ImpactNote = "Discards local profile changes at logoff; changes made in the session are lost unless saved explicitly.",
-                ApplyOps = [RegOp.SetDword(SysKey, "SlowLinkDefaultForDirectAccess", 0)],
-                RemoveOps = [RegOp.DeleteValue(SysKey, "SlowLinkDefaultForDirectAccess")],
-                DetectOps = [RegOp.CheckDword(SysKey, "SlowLinkDefaultForDirectAccess", 0)],
-            },
-            new TweakDef
-            {
-                Id = "upprof-verbose-logon-status",
-                Label = "Disable Verbose Logon Status Messages",
-                Category = "Security",
-                Description = "Suppresses the verbose 'Please wait...' and 'Applying computer settings...' status messages during logon.",
-                Tags = ["logon", "status-messages", "ui", "boot", "user-profile"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                ImpactNote = "Removes verbose status text at logon/logoff; cleaner experience in enterprise and kiosk deployments.",
-                ApplyOps = [RegOp.SetDword(SysKey, "VerboseStatus", 0)],
-                RemoveOps = [RegOp.DeleteValue(SysKey, "VerboseStatus")],
-                DetectOps = [RegOp.CheckDword(SysKey, "VerboseStatus", 0)],
-            },
-            new TweakDef
-            {
-                Id = "upprof-block-profile-list-enumeration",
-                Label = "Block Switching to Another User's Profile",
-                Category = "Security",
-                Description = "Restricts the ability to download or load another user's roaming profile on this machine during interactive logon.",
-                Tags = ["user-profile", "roaming-profile", "multi-user", "security"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Prevents profile hijacking and cross-user profile leakage on shared workstations.",
-                ApplyOps = [RegOp.SetDword(SysKey, "LocalProfile", 1)],
-                RemoveOps = [RegOp.DeleteValue(SysKey, "LocalProfile")],
-                DetectOps = [RegOp.CheckDword(SysKey, "LocalProfile", 1)],
-            },
-            new TweakDef
-            {
-                Id = "upprof-enable-logon-scripts-for-admins",
-                Label = "Run Logon Scripts for Administrator Accounts",
-                Category = "Security",
-                Description = "Ensures Group Policy logon scripts execute even when an administrator account is used to log on.",
-                Tags = ["logon-scripts", "admin", "gpo", "user-profile"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                ImpactNote = "By default, some admin configs skip scripts; this enforces scripts run for admins too.",
-                ApplyOps = [RegOp.SetDword(SysKey, "UserPoliciesAreMachinePolicies", 0)],
-                RemoveOps = [RegOp.DeleteValue(SysKey, "UserPoliciesAreMachinePolicies")],
-                DetectOps = [RegOp.CheckDword(SysKey, "UserPoliciesAreMachinePolicies", 0)],
-            },
-            new TweakDef
-            {
-                Id = "upprof-clear-recent-docs-on-logoff",
-                Label = "Clear Recent Document Lists on Logoff",
-                Category = "Security",
-                Description = "Deletes the list of recently accessed documents and applications from the user profile when they log off.",
-                Tags = ["recent-docs", "logoff", "privacy", "user-profile"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Recent file list cleared at each logoff; improves privacy on shared workstations and kiosk machines.",
-                ApplyOps = [RegOp.SetDword(SysKey, "ClearRecentDocsOnExit", 1)],
-                RemoveOps = [RegOp.DeleteValue(SysKey, "ClearRecentDocsOnExit")],
-                DetectOps = [RegOp.CheckDword(SysKey, "ClearRecentDocsOnExit", 1)],
-            },
-        ];
-
+            [
+                new TweakDef
+                {
+                    Id = "upprof-enable-smartscreen-apps",
+                    Label = "Enable SmartScreen for Apps and Files",
+                    Category = "Security",
+                    Description = "Activates Windows SmartScreen to check apps and files downloaded from the Internet before execution.",
+                    Tags = ["smartscreen", "security", "malware", "downloads", "system"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 5,
+                    SafetyRating = 5,
+                    ImpactNote = "SmartScreen value 1 = enabled; blocks unrecognized downloaded apps and shows a warning prompt.",
+                    ApplyOps = [RegOp.SetDword(SysKey, "EnableSmartScreen", 1)],
+                    RemoveOps = [RegOp.DeleteValue(SysKey, "EnableSmartScreen")],
+                    DetectOps = [RegOp.CheckDword(SysKey, "EnableSmartScreen", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "upprof-restrict-cmd-for-users",
+                    Label = "Restrict Command Prompt Access for Standard Users",
+                    Category = "Security",
+                    Description = "Prevents standard (non-admin) users from launching Command Prompt (cmd.exe) directly.",
+                    Tags = ["cmd", "command-prompt", "restriction", "users", "security"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 4,
+                    ImpactNote = "Value 2 = disable cmd for users but allow cmd scripts; value 1 = disable both. Admins are unaffected.",
+                    ApplyOps = [RegOp.SetDword(SysKey, "DisableCMD", 2)],
+                    RemoveOps = [RegOp.DeleteValue(SysKey, "DisableCMD")],
+                    DetectOps = [RegOp.CheckDword(SysKey, "DisableCMD", 2)],
+                },
+                new TweakDef
+                {
+                    Id = "upprof-run-logon-scripts-sync",
+                    Label = "Run Logon and Startup Scripts Synchronously",
+                    Category = "Security",
+                    Description = "Runs all Group Policy logon and startup scripts synchronously before presenting the user desktop.",
+                    Tags = ["logon-scripts", "startup-scripts", "gpo", "synchronous", "user-profile"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote =
+                        "Desktop shown only after all scripts complete; ensures drive mappings and profile settings are applied before login.",
+                    ApplyOps = [RegOp.SetDword(SysKey, "RunLogonScriptSync", 1)],
+                    RemoveOps = [RegOp.DeleteValue(SysKey, "RunLogonScriptSync")],
+                    DetectOps = [RegOp.CheckDword(SysKey, "RunLogonScriptSync", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "upprof-max-gpo-script-wait",
+                    Label = "Set Maximum Wait Time for Group Policy Scripts",
+                    Category = "Security",
+                    Description = "Configures the maximum time (in seconds) Windows waits for Group Policy startup and shutdown scripts to complete.",
+                    Tags = ["gpo-scripts", "timeout", "logon", "user-profile"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 2,
+                    SafetyRating = 5,
+                    ImpactNote = "Default is 600 seconds; prevents scripts from hanging system shutdown or logon indefinitely.",
+                    ApplyOps = [RegOp.SetDword(SysKey, "MaxGPOScriptWait", 600)],
+                    RemoveOps = [RegOp.DeleteValue(SysKey, "MaxGPOScriptWait")],
+                    DetectOps = [RegOp.CheckDword(SysKey, "MaxGPOScriptWait", 600)],
+                },
+                new TweakDef
+                {
+                    Id = "upprof-enable-gp-refresh",
+                    Label = "Enable Background Group Policy Refresh",
+                    Category = "Security",
+                    Description = "Ensures Group Policy is refreshed in the background on a schedule, even when the user is logged in.",
+                    Tags = ["group-policy", "gpo-refresh", "background", "user-profile"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "Value 0 = allow background GP refresh (default-on but explicitly set via policy for enforcement).",
+                    ApplyOps = [RegOp.SetDword(SysKey, "DisableBkGndGroupPolicy", 0)],
+                    RemoveOps = [RegOp.DeleteValue(SysKey, "DisableBkGndGroupPolicy")],
+                    DetectOps = [RegOp.CheckDword(SysKey, "DisableBkGndGroupPolicy", 0)],
+                },
+                new TweakDef
+                {
+                    Id = "upprof-block-roaming-profile-changes",
+                    Label = "Prevent Local Changes from Syncing Back to Roaming Profile",
+                    Category = "Security",
+                    Description = "Prevents any changes made to a roaming user profile during a session from syncing back to the network share.",
+                    Tags = ["roaming-profile", "user-profile", "sync", "restriction"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 2,
+                    SafetyRating = 4,
+                    ImpactNote = "Discards local profile changes at logoff; changes made in the session are lost unless saved explicitly.",
+                    ApplyOps = [RegOp.SetDword(SysKey, "SlowLinkDefaultForDirectAccess", 0)],
+                    RemoveOps = [RegOp.DeleteValue(SysKey, "SlowLinkDefaultForDirectAccess")],
+                    DetectOps = [RegOp.CheckDword(SysKey, "SlowLinkDefaultForDirectAccess", 0)],
+                },
+                new TweakDef
+                {
+                    Id = "upprof-verbose-logon-status",
+                    Label = "Disable Verbose Logon Status Messages",
+                    Category = "Security",
+                    Description = "Suppresses the verbose 'Please wait...' and 'Applying computer settings...' status messages during logon.",
+                    Tags = ["logon", "status-messages", "ui", "boot", "user-profile"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 2,
+                    SafetyRating = 5,
+                    ImpactNote = "Removes verbose status text at logon/logoff; cleaner experience in enterprise and kiosk deployments.",
+                    ApplyOps = [RegOp.SetDword(SysKey, "VerboseStatus", 0)],
+                    RemoveOps = [RegOp.DeleteValue(SysKey, "VerboseStatus")],
+                    DetectOps = [RegOp.CheckDword(SysKey, "VerboseStatus", 0)],
+                },
+                new TweakDef
+                {
+                    Id = "upprof-block-profile-list-enumeration",
+                    Label = "Block Switching to Another User's Profile",
+                    Category = "Security",
+                    Description =
+                        "Restricts the ability to download or load another user's roaming profile on this machine during interactive logon.",
+                    Tags = ["user-profile", "roaming-profile", "multi-user", "security"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "Prevents profile hijacking and cross-user profile leakage on shared workstations.",
+                    ApplyOps = [RegOp.SetDword(SysKey, "LocalProfile", 1)],
+                    RemoveOps = [RegOp.DeleteValue(SysKey, "LocalProfile")],
+                    DetectOps = [RegOp.CheckDword(SysKey, "LocalProfile", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "upprof-enable-logon-scripts-for-admins",
+                    Label = "Run Logon Scripts for Administrator Accounts",
+                    Category = "Security",
+                    Description = "Ensures Group Policy logon scripts execute even when an administrator account is used to log on.",
+                    Tags = ["logon-scripts", "admin", "gpo", "user-profile"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 2,
+                    SafetyRating = 5,
+                    ImpactNote = "By default, some admin configs skip scripts; this enforces scripts run for admins too.",
+                    ApplyOps = [RegOp.SetDword(SysKey, "UserPoliciesAreMachinePolicies", 0)],
+                    RemoveOps = [RegOp.DeleteValue(SysKey, "UserPoliciesAreMachinePolicies")],
+                    DetectOps = [RegOp.CheckDword(SysKey, "UserPoliciesAreMachinePolicies", 0)],
+                },
+                new TweakDef
+                {
+                    Id = "upprof-clear-recent-docs-on-logoff",
+                    Label = "Clear Recent Document Lists on Logoff",
+                    Category = "Security",
+                    Description = "Deletes the list of recently accessed documents and applications from the user profile when they log off.",
+                    Tags = ["recent-docs", "logoff", "privacy", "user-profile"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "Recent file list cleared at each logoff; improves privacy on shared workstations and kiosk machines.",
+                    ApplyOps = [RegOp.SetDword(SysKey, "ClearRecentDocsOnExit", 1)],
+                    RemoveOps = [RegOp.DeleteValue(SysKey, "ClearRecentDocsOnExit")],
+                    DetectOps = [RegOp.CheckDword(SysKey, "ClearRecentDocsOnExit", 1)],
+                },
+            ];
     }
 
     // ── UserProfilesPolicy ──
@@ -18562,7 +18838,6 @@ internal static class PolicySecurityHardening
                 DetectOps = [RegOp.CheckDword(Key, "EnableProfileQuota", 0)],
             },
         ];
-
     }
 
     // ── UserRightsPolicy ──
@@ -18743,7 +19018,6 @@ internal static class PolicySecurityHardening
                 DetectOps = [RegOp.CheckDword(Key, "RestrictSeTcbPrivilege", 1)],
             },
         ];
-
     }
 
     // ── WindowsAttachmentsPolicy ──
@@ -18934,7 +19208,6 @@ internal static class PolicySecurityHardening
                 ImpactNote = "MIME content-type sniffing cannot downgrade executable risk classification.",
             },
         ];
-
     }
 
     // ── WindowsEventLogAccessPolicy ──
@@ -19158,11 +19431,8 @@ internal static class PolicySecurityHardening
                 ImpactNote = "Archives system log on overflow; ensures hardware/service events are not lost.",
             },
         ];
-
     }
-
 }
-
 
 // ── merged from PolicyDefender.cs ──
 // RegiLattice.Core — Tweaks/PolicyDefender.cs
@@ -19379,7 +19649,6 @@ internal static class PolicyDefender
                 DetectOps = [RegOp.CheckDword(PshPolicy, "EnableV2", 0)],
             },
         ];
-
     }
 
     // ── AsrAttackSurfacePolicy ──
@@ -19563,7 +19832,6 @@ internal static class PolicyDefender
                     DetectOps = [RegOp.CheckDword(AsrBaseKey, "ExploitGuard_ASR_Rules", 2)],
                 },
             ];
-
     }
 
     // ── ControlledFolderAccessPolicy ──
@@ -19746,7 +20014,6 @@ internal static class PolicyDefender
                     DetectOps = [RegOp.CheckDword(CfaKey, "OnlyEnforceAllowedApplicationsList", 1)],
                 },
             ];
-
     }
 
     // ── DefenderAdvanced ──
@@ -19948,7 +20215,6 @@ internal static class PolicyDefender
                 DetectOps = [RegOp.CheckDword(Scan, "RandomizeScheduleTaskTimes", 1)],
             },
         ];
-
     }
 
     // ── DefenderAntivirusAdvancedPolicy ──
@@ -20192,7 +20458,6 @@ internal static class PolicyDefender
                     DetectOps = [RegOp.CheckDword(Key, "DisableMpTelemetry", 1)],
                 },
             ];
-
     }
 
     // ── DefenderExclusionsPolicy ──
@@ -20373,7 +20638,6 @@ internal static class PolicyDefender
                     DetectOps = [RegOp.CheckDword(ExclKey, "RestrictWildcardExclusions", 1)],
                 },
             ];
-
     }
 
     // ── DefenderExploitSystemPolicy ──
@@ -20414,7 +20678,8 @@ internal static class PolicyDefender
                     CorpSafe = true,
                     ImpactScore = 4,
                     SafetyRating = 5,
-                    ImpactNote = "SEHOP is compatible with nearly all modern applications. Very rare incompatibilities with deeply nested SEH chains.",
+                    ImpactNote =
+                        "SEHOP is compatible with nearly all modern applications. Very rare incompatibilities with deeply nested SEH chains.",
                     ApplyOps = [RegOp.SetDword(ExploitKey, "EnableSEHOP", 1)],
                     RemoveOps = [RegOp.DeleteValue(ExploitKey, "EnableSEHOP")],
                     DetectOps = [RegOp.CheckDword(ExploitKey, "EnableSEHOP", 1)],
@@ -20561,7 +20826,6 @@ internal static class PolicyDefender
                     DetectOps = [RegOp.CheckDword(MpKey, "MpCloudBlockLevel", 6)],
                 },
             ];
-
     }
 
     // ── DefenderFirewallAdvancedPolicy ──
@@ -20643,7 +20907,8 @@ internal static class PolicyDefender
                     Id = "fwadv-enable-notifications-domain",
                     Label = "Enable Blocked-App Notifications — Domain Profile",
                     Category = "Security",
-                    Description = "Sets DisableNotifications=0 so users see a notification when the firewall blocks a new program on the domain profile.",
+                    Description =
+                        "Sets DisableNotifications=0 so users see a notification when the firewall blocks a new program on the domain profile.",
                     Tags = ["firewall", "notifications", "domain", "policy"],
                     NeedsAdmin = true,
                     CorpSafe = true,
@@ -20740,7 +21005,6 @@ internal static class PolicyDefender
                     DetectOps = [RegOp.CheckDword(Domain, "DisableUnicastResponsesToMulticastBroadcast", 1)],
                 },
             ];
-
     }
 
     // ── DefenderNetworkProtectionPolicy ──
@@ -20867,7 +21131,8 @@ internal static class PolicyDefender
                     CorpSafe = true,
                     ImpactScore = 4,
                     SafetyRating = 4,
-                    ImpactNote = "Behavioral analysis adds minor network latency. Rare false positives on legitimate beaconing apps (monitoring agents).",
+                    ImpactNote =
+                        "Behavioral analysis adds minor network latency. Rare false positives on legitimate beaconing apps (monitoring agents).",
                     ApplyOps = [RegOp.SetDword(NetProtKey, "EnableBehavioralNetworkBlocks", 1)],
                     RemoveOps = [RegOp.DeleteValue(NetProtKey, "EnableBehavioralNetworkBlocks")],
                     DetectOps = [RegOp.CheckDword(NetProtKey, "EnableBehavioralNetworkBlocks", 1)],
@@ -20901,7 +21166,8 @@ internal static class PolicyDefender
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "Adds up to 5 s latency on first connections to novel domains. Subsequent connections to the same domain are cached.",
+                    ImpactNote =
+                        "Adds up to 5 s latency on first connections to novel domains. Subsequent connections to the same domain are cached.",
                     ApplyOps = [RegOp.SetDword(NetProtKey, "CloudExtendedTimeout", 50)],
                     RemoveOps = [RegOp.DeleteValue(NetProtKey, "CloudExtendedTimeout")],
                     DetectOps = [RegOp.CheckDword(NetProtKey, "CloudExtendedTimeout", 50)],
@@ -20924,7 +21190,6 @@ internal static class PolicyDefender
                     DetectOps = [RegOp.CheckDword(NetProtKey, "DisableLoopbackExemption", 1)],
                 },
             ];
-
     }
 
     // ── DefenderSignatureUpdatePolicy ──
@@ -21102,13 +21367,13 @@ internal static class PolicyDefender
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 4,
-                    ImpactNote = "May use limited disk space for signature files when disk is nearly full. Ensure adequate disk space management policy.",
+                    ImpactNote =
+                        "May use limited disk space for signature files when disk is nearly full. Ensure adequate disk space management policy.",
                     ApplyOps = [RegOp.SetDword(SigKey, "ForceUpdateFromMU", 1)],
                     RemoveOps = [RegOp.DeleteValue(SigKey, "ForceUpdateFromMU")],
                     DetectOps = [RegOp.CheckDword(SigKey, "ForceUpdateFromMU", 1)],
                 },
             ];
-
     }
 
     // ── EarlyLaunchAMPolicy ──
@@ -21335,7 +21600,6 @@ internal static class PolicyDefender
                 DetectOps = [RegOp.CheckDword(ElaKey, "PersistBootLog", 1)],
             },
         ];
-
     }
 
     // ── EnhancedPhishingProtectionPolicy ──
@@ -21535,7 +21799,6 @@ internal static class PolicyDefender
                 DetectOps = [RegOp.CheckDword(WtdsKey, "NotifyPasswordChangeReuse", 1)],
             },
         ];
-
     }
 
     // ── ExploitGuardPolicy ──
@@ -21799,20 +22062,16 @@ internal static class PolicyDefender
                     DetectOps = [RegOp.CheckDword(EgKey, "DisableExploitGuardTelemetry", 1)],
                 },
             ];
-
     }
 
     // ── FirewallLogPolicy ──
     private static class _FirewallLogPolicy
     {
-        private const string DomainLog =
-            @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsFirewall\DomainProfile\Logging";
+        private const string DomainLog = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsFirewall\DomainProfile\Logging";
 
-        private const string PrivateLog =
-            @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsFirewall\PrivateProfile\Logging";
+        private const string PrivateLog = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsFirewall\PrivateProfile\Logging";
 
-        private const string PublicLog =
-            @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsFirewall\PublicProfile\Logging";
+        private const string PublicLog = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsFirewall\PublicProfile\Logging";
 
         public static IReadOnlyList<TweakDef> Data { get; } =
         [
@@ -21899,8 +22158,7 @@ internal static class PolicyDefender
                 NeedsAdmin = true,
                 CorpSafe = true,
                 Description =
-                    "Sets the maximum Private profile firewall log file size to 16 MB via GPO policy. "
-                    + "LogFileSize=16384 (KB). Default: 4096 KB.",
+                    "Sets the maximum Private profile firewall log file size to 16 MB via GPO policy. " + "LogFileSize=16384 (KB). Default: 4096 KB.",
                 Tags = ["firewall", "logging", "size", "private", "policy"],
                 ApplyOps = [RegOp.SetDword(PrivateLog, "LogFileSize", 16384)],
                 RemoveOps = [RegOp.DeleteValue(PrivateLog, "LogFileSize")],
@@ -21963,26 +22221,11 @@ internal static class PolicyDefender
                     + "LogFilePath=%systemroot%\\system32\\LogFiles\\Firewall\\pfirewall-domain.log. "
                     + "Default: pfirewall.log (shared with all profiles).",
                 Tags = ["firewall", "logging", "path", "domain", "policy"],
-                ApplyOps =
-                [
-                    RegOp.SetExpandString(
-                        DomainLog,
-                        "LogFilePath",
-                        @"%systemroot%\system32\LogFiles\Firewall\pfirewall-domain.log"
-                    ),
-                ],
+                ApplyOps = [RegOp.SetExpandString(DomainLog, "LogFilePath", @"%systemroot%\system32\LogFiles\Firewall\pfirewall-domain.log")],
                 RemoveOps = [RegOp.DeleteValue(DomainLog, "LogFilePath")],
-                DetectOps =
-                [
-                    RegOp.CheckString(
-                        DomainLog,
-                        "LogFilePath",
-                        @"%systemroot%\system32\LogFiles\Firewall\pfirewall-domain.log"
-                    ),
-                ],
+                DetectOps = [RegOp.CheckString(DomainLog, "LogFilePath", @"%systemroot%\system32\LogFiles\Firewall\pfirewall-domain.log")],
             },
         ];
-
     }
 
     // ── FirewallProfileHardeningPolicy ──
@@ -22167,7 +22410,6 @@ internal static class PolicyDefender
                     DetectOps = [RegOp.CheckDword(DomainKey, "IPsecExemptMulticast", 0)],
                 },
             ];
-
     }
 
     // ── SmartControlBypassPolicy ──
@@ -22362,7 +22604,6 @@ internal static class PolicyDefender
                     DetectOps = [RegOp.CheckDword(SysKey, "BlockCertutilDownload", 1)],
                 },
             ];
-
     }
 
     // ── SmartScreenAdvancedPolicy ──
@@ -22545,7 +22786,6 @@ internal static class PolicyDefender
                     DetectOps = [RegOp.CheckDword(Key, "DisableSmartScreenTelemetry", 1)],
                 },
             ];
-
     }
 
     // ── SmartScreenPolicy ──
@@ -22684,7 +22924,8 @@ internal static class PolicyDefender
                 NeedsAdmin = true,
                 CorpSafe = true,
                 Description =
-                    "Enables Microsoft Edge SmartScreen detection and blocking of Potentially Unwanted Applications (PUA). " + "SmartScreenPuaEnabled=1.",
+                    "Enables Microsoft Edge SmartScreen detection and blocking of Potentially Unwanted Applications (PUA). "
+                    + "SmartScreenPuaEnabled=1.",
                 Tags = ["smartscreen", "edge", "pua", "policy"],
                 ApplyOps = [RegOp.SetDword(EdgePol, "SmartScreenPuaEnabled", 1)],
                 RemoveOps = [RegOp.DeleteValue(EdgePol, "SmartScreenPuaEnabled")],
@@ -22706,7 +22947,6 @@ internal static class PolicyDefender
                 DetectOps = [RegOp.CheckDword(EdgePol, "SmartScreenForceEnabled", 1)],
             },
         ];
-
     }
 
     // ── WebThreatDefensePolicy ──
@@ -22935,7 +23175,6 @@ internal static class PolicyDefender
                 DetectOps = [RegOp.CheckDword(Key, "DisableCredentialWarning", 1)],
             },
         ];
-
     }
 
     // ── WindowsFirewallPolicy ──
@@ -22947,173 +23186,170 @@ internal static class PolicyDefender
         private const string PublicKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsFirewall\PublicProfile";
 
         public static IReadOnlyList<TweakDef> Data =>
-        [
-            new TweakDef
-            {
-                Id = "fwpol-enable-domain-profile",
-                Label = "Enable Firewall on Domain Profile",
-                Category = "Security",
-                Description = "Ensures Windows Defender Firewall is active on Domain network profile connections.",
-                Tags = ["firewall", "domain", "profile", "policy", "security"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 5,
-                SafetyRating = 5,
-                ImpactNote = "Firewall enforced on domain-joined networks; prevents admin from disabling it without policy change.",
-                ApplyOps = [RegOp.SetDword(DomainKey, "EnableFirewall", 1)],
-                RemoveOps = [RegOp.DeleteValue(DomainKey, "EnableFirewall")],
-                DetectOps = [RegOp.CheckDword(DomainKey, "EnableFirewall", 1)],
-            },
-            new TweakDef
-            {
-                Id = "fwpol-enable-private-profile",
-                Label = "Enable Firewall on Private Profile",
-                Category = "Security",
-                Description = "Ensures Windows Defender Firewall is active on Private (trusted home/work) network profile connections.",
-                Tags = ["firewall", "private", "profile", "policy", "security"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 5,
-                SafetyRating = 5,
-                ImpactNote = "Firewall enforced on private networks; required for defence-in-depth on non-domain devices.",
-                ApplyOps = [RegOp.SetDword(PrivateKey, "EnableFirewall", 1)],
-                RemoveOps = [RegOp.DeleteValue(PrivateKey, "EnableFirewall")],
-                DetectOps = [RegOp.CheckDword(PrivateKey, "EnableFirewall", 1)],
-            },
-            new TweakDef
-            {
-                Id = "fwpol-enable-public-profile",
-                Label = "Enable Firewall on Public Profile",
-                Category = "Security",
-                Description = "Ensures Windows Defender Firewall is active on Public (untrusted) network profile connections.",
-                Tags = ["firewall", "public", "profile", "policy", "security"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 5,
-                SafetyRating = 5,
-                ImpactNote = "Firewall enforced on public networks; highest risk profile; critical for laptops on hotel/café Wi-Fi.",
-                ApplyOps = [RegOp.SetDword(PublicKey, "EnableFirewall", 1)],
-                RemoveOps = [RegOp.DeleteValue(PublicKey, "EnableFirewall")],
-                DetectOps = [RegOp.CheckDword(PublicKey, "EnableFirewall", 1)],
-            },
-            new TweakDef
-            {
-                Id = "fwpol-block-inbound-domain",
-                Label = "Block All Inbound Connections on Domain Profile",
-                Category = "Security",
-                Description = "Sets the default inbound action to block all inbound connections on the domain network profile.",
-                Tags = ["firewall", "domain", "inbound", "block", "policy", "security"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 3,
-                ImpactNote = "Blocks all unsolicited inbound traffic on domain networks; explicit allow rules required for managed services.",
-                ApplyOps = [RegOp.SetDword(DomainKey, "DefaultInboundAction", 1)],
-                RemoveOps = [RegOp.DeleteValue(DomainKey, "DefaultInboundAction")],
-                DetectOps = [RegOp.CheckDword(DomainKey, "DefaultInboundAction", 1)],
-            },
-            new TweakDef
-            {
-                Id = "fwpol-block-inbound-public",
-                Label = "Block All Inbound Connections on Public Profile",
-                Category = "Security",
-                Description = "Sets the default action to block all inbound connections on the Public network profile.",
-                Tags = ["firewall", "public", "inbound", "block", "policy", "security"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 5,
-                SafetyRating = 5,
-                ImpactNote = "Blocks all inbound on public networks; most secure setting for untrusted/mobile scenarios.",
-                ApplyOps = [RegOp.SetDword(PublicKey, "DefaultInboundAction", 1)],
-                RemoveOps = [RegOp.DeleteValue(PublicKey, "DefaultInboundAction")],
-                DetectOps = [RegOp.CheckDword(PublicKey, "DefaultInboundAction", 1)],
-            },
-            new TweakDef
-            {
-                Id = "fwpol-no-local-rules-domain",
-                Label = "Prevent Local Firewall Rules on Domain Profile",
-                Category = "Security",
-                Description = "Disallows local administrators from creating firewall allow-rules that bypass Group Policy domain profile rules.",
-                Tags = ["firewall", "domain", "local-rules", "policy", "security"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 4,
-                ImpactNote = "Only GP-delivered firewall rules apply on the Domain profile; local exceptions are ignored.",
-                ApplyOps = [RegOp.SetDword(DomainKey, "AllowLocalPolicyMerge", 0)],
-                RemoveOps = [RegOp.DeleteValue(DomainKey, "AllowLocalPolicyMerge")],
-                DetectOps = [RegOp.CheckDword(DomainKey, "AllowLocalPolicyMerge", 0)],
-            },
-            new TweakDef
-            {
-                Id = "fwpol-no-local-rules-public",
-                Label = "Prevent Local Firewall Rules on Public Profile",
-                Category = "Security",
-                Description = "Disallows local firewall rule creation on the Public profile, enforcing only policy-delivered rules.",
-                Tags = ["firewall", "public", "local-rules", "policy", "security"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 4,
-                ImpactNote = "GP rules are authoritative on public networks; local admin cannot weaken public profile protection.",
-                ApplyOps = [RegOp.SetDword(PublicKey, "AllowLocalPolicyMerge", 0)],
-                RemoveOps = [RegOp.DeleteValue(PublicKey, "AllowLocalPolicyMerge")],
-                DetectOps = [RegOp.CheckDword(PublicKey, "AllowLocalPolicyMerge", 0)],
-            },
-            new TweakDef
-            {
-                Id = "fwpol-unicast-response-domain",
-                Label = "Disable Unicast Response to Multicast on Domain Profile",
-                Category = "Security",
-                Description = "Prevents the firewall from allowing unicast responses to multicast/broadcast packets on Domain networks.",
-                Tags = ["firewall", "domain", "multicast", "unicast", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 4,
-                ImpactNote = "Reduces information disclosure via multicast; may affect some network discovery features.",
-                ApplyOps = [RegOp.SetDword(DomainKey, "DisableUnicastResponsesToMulticastBroadcast", 1)],
-                RemoveOps = [RegOp.DeleteValue(DomainKey, "DisableUnicastResponsesToMulticastBroadcast")],
-                DetectOps = [RegOp.CheckDword(DomainKey, "DisableUnicastResponsesToMulticastBroadcast", 1)],
-            },
-            new TweakDef
-            {
-                Id = "fwpol-unicast-response-public",
-                Label = "Disable Unicast Response to Multicast on Public Profile",
-                Category = "Security",
-                Description = "Prevents the firewall from sending unicast responses to multicast/broadcast probes on Public networks.",
-                Tags = ["firewall", "public", "multicast", "unicast", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Helps hide the device on public Wi-Fi; reduces exposure to broadcast-based network enumeration.",
-                ApplyOps = [RegOp.SetDword(PublicKey, "DisableUnicastResponsesToMulticastBroadcast", 1)],
-                RemoveOps = [RegOp.DeleteValue(PublicKey, "DisableUnicastResponsesToMulticastBroadcast")],
-                DetectOps = [RegOp.CheckDword(PublicKey, "DisableUnicastResponsesToMulticastBroadcast", 1)],
-            },
-            new TweakDef
-            {
-                Id = "fwpol-disable-notifications-public",
-                Label = "Disable Firewall Notifications on Public Profile",
-                Category = "Security",
-                Description = "Suppresses Windows Defender Firewall blocked-connection notifications when on a Public network profile.",
-                Tags = ["firewall", "public", "notifications", "policy", "ui"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                ImpactNote = "Blocks pop-up notifications for blocked connections; users won't see firewall alert dialogs.",
-                ApplyOps = [RegOp.SetDword(PublicKey, "DisableNotifications", 1)],
-                RemoveOps = [RegOp.DeleteValue(PublicKey, "DisableNotifications")],
-                DetectOps = [RegOp.CheckDword(PublicKey, "DisableNotifications", 1)],
-            },
-        ];
-
+            [
+                new TweakDef
+                {
+                    Id = "fwpol-enable-domain-profile",
+                    Label = "Enable Firewall on Domain Profile",
+                    Category = "Security",
+                    Description = "Ensures Windows Defender Firewall is active on Domain network profile connections.",
+                    Tags = ["firewall", "domain", "profile", "policy", "security"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 5,
+                    SafetyRating = 5,
+                    ImpactNote = "Firewall enforced on domain-joined networks; prevents admin from disabling it without policy change.",
+                    ApplyOps = [RegOp.SetDword(DomainKey, "EnableFirewall", 1)],
+                    RemoveOps = [RegOp.DeleteValue(DomainKey, "EnableFirewall")],
+                    DetectOps = [RegOp.CheckDword(DomainKey, "EnableFirewall", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "fwpol-enable-private-profile",
+                    Label = "Enable Firewall on Private Profile",
+                    Category = "Security",
+                    Description = "Ensures Windows Defender Firewall is active on Private (trusted home/work) network profile connections.",
+                    Tags = ["firewall", "private", "profile", "policy", "security"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 5,
+                    SafetyRating = 5,
+                    ImpactNote = "Firewall enforced on private networks; required for defence-in-depth on non-domain devices.",
+                    ApplyOps = [RegOp.SetDword(PrivateKey, "EnableFirewall", 1)],
+                    RemoveOps = [RegOp.DeleteValue(PrivateKey, "EnableFirewall")],
+                    DetectOps = [RegOp.CheckDword(PrivateKey, "EnableFirewall", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "fwpol-enable-public-profile",
+                    Label = "Enable Firewall on Public Profile",
+                    Category = "Security",
+                    Description = "Ensures Windows Defender Firewall is active on Public (untrusted) network profile connections.",
+                    Tags = ["firewall", "public", "profile", "policy", "security"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 5,
+                    SafetyRating = 5,
+                    ImpactNote = "Firewall enforced on public networks; highest risk profile; critical for laptops on hotel/café Wi-Fi.",
+                    ApplyOps = [RegOp.SetDword(PublicKey, "EnableFirewall", 1)],
+                    RemoveOps = [RegOp.DeleteValue(PublicKey, "EnableFirewall")],
+                    DetectOps = [RegOp.CheckDword(PublicKey, "EnableFirewall", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "fwpol-block-inbound-domain",
+                    Label = "Block All Inbound Connections on Domain Profile",
+                    Category = "Security",
+                    Description = "Sets the default inbound action to block all inbound connections on the domain network profile.",
+                    Tags = ["firewall", "domain", "inbound", "block", "policy", "security"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 3,
+                    ImpactNote = "Blocks all unsolicited inbound traffic on domain networks; explicit allow rules required for managed services.",
+                    ApplyOps = [RegOp.SetDword(DomainKey, "DefaultInboundAction", 1)],
+                    RemoveOps = [RegOp.DeleteValue(DomainKey, "DefaultInboundAction")],
+                    DetectOps = [RegOp.CheckDword(DomainKey, "DefaultInboundAction", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "fwpol-block-inbound-public",
+                    Label = "Block All Inbound Connections on Public Profile",
+                    Category = "Security",
+                    Description = "Sets the default action to block all inbound connections on the Public network profile.",
+                    Tags = ["firewall", "public", "inbound", "block", "policy", "security"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 5,
+                    SafetyRating = 5,
+                    ImpactNote = "Blocks all inbound on public networks; most secure setting for untrusted/mobile scenarios.",
+                    ApplyOps = [RegOp.SetDword(PublicKey, "DefaultInboundAction", 1)],
+                    RemoveOps = [RegOp.DeleteValue(PublicKey, "DefaultInboundAction")],
+                    DetectOps = [RegOp.CheckDword(PublicKey, "DefaultInboundAction", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "fwpol-no-local-rules-domain",
+                    Label = "Prevent Local Firewall Rules on Domain Profile",
+                    Category = "Security",
+                    Description = "Disallows local administrators from creating firewall allow-rules that bypass Group Policy domain profile rules.",
+                    Tags = ["firewall", "domain", "local-rules", "policy", "security"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 4,
+                    ImpactNote = "Only GP-delivered firewall rules apply on the Domain profile; local exceptions are ignored.",
+                    ApplyOps = [RegOp.SetDword(DomainKey, "AllowLocalPolicyMerge", 0)],
+                    RemoveOps = [RegOp.DeleteValue(DomainKey, "AllowLocalPolicyMerge")],
+                    DetectOps = [RegOp.CheckDword(DomainKey, "AllowLocalPolicyMerge", 0)],
+                },
+                new TweakDef
+                {
+                    Id = "fwpol-no-local-rules-public",
+                    Label = "Prevent Local Firewall Rules on Public Profile",
+                    Category = "Security",
+                    Description = "Disallows local firewall rule creation on the Public profile, enforcing only policy-delivered rules.",
+                    Tags = ["firewall", "public", "local-rules", "policy", "security"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 4,
+                    ImpactNote = "GP rules are authoritative on public networks; local admin cannot weaken public profile protection.",
+                    ApplyOps = [RegOp.SetDword(PublicKey, "AllowLocalPolicyMerge", 0)],
+                    RemoveOps = [RegOp.DeleteValue(PublicKey, "AllowLocalPolicyMerge")],
+                    DetectOps = [RegOp.CheckDword(PublicKey, "AllowLocalPolicyMerge", 0)],
+                },
+                new TweakDef
+                {
+                    Id = "fwpol-unicast-response-domain",
+                    Label = "Disable Unicast Response to Multicast on Domain Profile",
+                    Category = "Security",
+                    Description = "Prevents the firewall from allowing unicast responses to multicast/broadcast packets on Domain networks.",
+                    Tags = ["firewall", "domain", "multicast", "unicast", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 4,
+                    ImpactNote = "Reduces information disclosure via multicast; may affect some network discovery features.",
+                    ApplyOps = [RegOp.SetDword(DomainKey, "DisableUnicastResponsesToMulticastBroadcast", 1)],
+                    RemoveOps = [RegOp.DeleteValue(DomainKey, "DisableUnicastResponsesToMulticastBroadcast")],
+                    DetectOps = [RegOp.CheckDword(DomainKey, "DisableUnicastResponsesToMulticastBroadcast", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "fwpol-unicast-response-public",
+                    Label = "Disable Unicast Response to Multicast on Public Profile",
+                    Category = "Security",
+                    Description = "Prevents the firewall from sending unicast responses to multicast/broadcast probes on Public networks.",
+                    Tags = ["firewall", "public", "multicast", "unicast", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "Helps hide the device on public Wi-Fi; reduces exposure to broadcast-based network enumeration.",
+                    ApplyOps = [RegOp.SetDword(PublicKey, "DisableUnicastResponsesToMulticastBroadcast", 1)],
+                    RemoveOps = [RegOp.DeleteValue(PublicKey, "DisableUnicastResponsesToMulticastBroadcast")],
+                    DetectOps = [RegOp.CheckDword(PublicKey, "DisableUnicastResponsesToMulticastBroadcast", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "fwpol-disable-notifications-public",
+                    Label = "Disable Firewall Notifications on Public Profile",
+                    Category = "Security",
+                    Description = "Suppresses Windows Defender Firewall blocked-connection notifications when on a Public network profile.",
+                    Tags = ["firewall", "public", "notifications", "policy", "ui"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 2,
+                    SafetyRating = 5,
+                    ImpactNote = "Blocks pop-up notifications for blocked connections; users won't see firewall alert dialogs.",
+                    ApplyOps = [RegOp.SetDword(PublicKey, "DisableNotifications", 1)],
+                    RemoveOps = [RegOp.DeleteValue(PublicKey, "DisableNotifications")],
+                    DetectOps = [RegOp.CheckDword(PublicKey, "DisableNotifications", 1)],
+                },
+            ];
     }
-
 }
-
 
 // ── merged from PolicyAudit.cs ──
 // RegiLattice.Core — Tweaks/PolicyAudit.cs
@@ -23150,182 +23386,199 @@ internal static class PolicyAudit
     // ── AccountManagementAuditPolicy ──
     private static class _AccountManagementAuditPolicy
     {
-        private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AdvancedAuditPolicyConfiguration\System Audit Policies - Local Group Policy\Account Management";
+        private const string Key =
+            @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AdvancedAuditPolicyConfiguration\System Audit Policies - Local Group Policy\Account Management";
 
         public static IReadOnlyList<TweakDef> Data =>
-        [
-            new TweakDef
-            {
-                Id = "acmgmtaudit-audit-user-account-management",
-                Label = "Account Mgmt Audit: Enable Success+Failure Auditing for All User Account Changes",
-                Category = "Security",
-                Description = "Sets AuditUserAccountManagement=3 (Success+Failure) in the Advanced Audit Policy Account Management category. Generates Security events 4720 (created), 4722 (enabled), 4723 (pwd change attempt), 4724 (pwd reset), 4725 (disabled), 4726 (deleted), 4738 (changed), 4740 (locked out), 4765/4766 (SID history) for all local and domain user account lifecycle operations. Provides complete user identity lifecycle audit trail. " +
-                    "User account management events are the foundational identity audit record. Security events 4720/4726 (account create/delete) are mandatory for SOC monitoring because they record rogue account creation — a common persistence technique. Without user account management auditing enabled, a threat actor can create a new backdoor local administrator account and there is no Security event log record of the account creation. All identity governance and SoD (Separation of Duties) compliance requirements depend on this audit subcategory being active.",
-                Tags = ["account-mgmt-audit", "user-account", "account-creation", "4720", "persistence", "backdoor-account"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 5,
-                SafetyRating = 5,
-                ImpactNote = "Full user account lifecycle audited; rogue account creation generates Event 4720 — foundational SOC monitoring signal.",
-                ApplyOps = [RegOp.SetDword(Key, "AuditUserAccountManagement", 3)],
-                RemoveOps = [RegOp.DeleteValue(Key, "AuditUserAccountManagement")],
-                DetectOps = [RegOp.CheckDword(Key, "AuditUserAccountManagement", 3)],
-            },
-            new TweakDef
-            {
-                Id = "acmgmtaudit-audit-security-group-management",
-                Label = "Account Mgmt Audit: Enable Auditing for All Security Group Membership Changes",
-                Category = "Security",
-                Description = "Sets AuditSecurityGroupManagement=3 (Success+Failure) in the Advanced Audit Policy. Generates Security events 4727 (global group created), 4728 (member added), 4729 (member removed), 4730 (global group deleted), 4731 (local group created), 4732 (local group member added), 4733 (local group member removed), 4734 (local group deleted), 4735 (local group changed) for all security group membership operations. " +
-                    "Group membership changes are the primary privilege escalation audit signal in Active Directory environments. Adding a compromised account to Domain Admins, Backup Operators, or any privileged security group generates Event 4728/4732. SOC SIEM rules that alert on additions to predefined sensitive security groups (Domain Admins, Enterprise Admins, Schema Admins, Protected Users) depend entirely on this audit subcategory being active across all domain controllers and endpoints.",
-                Tags = ["account-mgmt-audit", "security-group", "group-membership", "4728", "privilege-escalation", "domain-admins"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 5,
-                SafetyRating = 5,
-                ImpactNote = "Security group membership changes audited; additions to privileged groups (Domain Admins) generate immediate SIEM detection events.",
-                ApplyOps = [RegOp.SetDword(Key, "AuditSecurityGroupManagement", 3)],
-                RemoveOps = [RegOp.DeleteValue(Key, "AuditSecurityGroupManagement")],
-                DetectOps = [RegOp.CheckDword(Key, "AuditSecurityGroupManagement", 3)],
-            },
-            new TweakDef
-            {
-                Id = "acmgmtaudit-audit-distribution-group-management",
-                Label = "Account Mgmt Audit: Enable Auditing for Distribution Group Membership Changes",
-                Category = "Security",
-                Description = "Sets AuditDistributionGroupManagement=3 (Success+Failure) in the Advanced Audit Policy. Generates Security events for distribution group lifecycle operations (4744–4758: create, change, delete, member add, member remove for global and universal distribution groups). Provides identity governance visibility for non-security-enabled groups that may have access to sensitive email distribution lists or SharePoint groups. " +
-                    "Distribution groups do not have security principals and cannot directly grant file system access, but they control email distribution reach and SharePoint group membership when used as SharePoint audience targeting groups. An attacker who adds a compromised account to a 'Finance-All' distribution group gains full visibility of financial email communications including budgets, deals, and sensitive financial data delivered through that distribution list. Auditing distribution group changes enables detection of email list infiltration.",
-                Tags = ["account-mgmt-audit", "distribution-group", "email-list", "sharepoint", "insider-threat"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Distribution group changes audited; unauthorised additions to sensitive email lists generate detection events.",
-                ApplyOps = [RegOp.SetDword(Key, "AuditDistributionGroupManagement", 3)],
-                RemoveOps = [RegOp.DeleteValue(Key, "AuditDistributionGroupManagement")],
-                DetectOps = [RegOp.CheckDword(Key, "AuditDistributionGroupManagement", 3)],
-            },
-            new TweakDef
-            {
-                Id = "acmgmtaudit-audit-computer-account-management",
-                Label = "Account Mgmt Audit: Enable Auditing for Computer Account Creation and Deletion",
-                Category = "Security",
-                Description = "Sets AuditComputerAccountManagement=3 (Success+Failure) in the Advanced Audit Policy. Generates Security events 4741 (computer account created), 4742 (computer account changed), 4743 (computer account deleted) for computer object lifecycle operations in Active Directory. Provides detection for rogue computer account creation used for Kerberos silver ticket persistence. " +
-                    "Computer account creation in Active Directory is a high-value attack technique. By default, any domain user can create up to 10 computer objects in any container they have permissions over (ms-DS-MachineAccountQuota). An attacker with a foothold in the domain can create new computer accounts (RBCD, resource-based constrained delegation attacks), configure a service principal name, and use Kerberos delegation to obtain elevated Kerberos tickets. Computer account creation events detect this persistence technique immediately.",
-                Tags = ["account-mgmt-audit", "computer-account", "4741", "rbcd", "kerberos", "silver-ticket"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                ImpactNote = "Computer account creation (Event 4741) audited; RBCD/Kerberos silver ticket attack via rogue computer account detectable.",
-                ApplyOps = [RegOp.SetDword(Key, "AuditComputerAccountManagement", 3)],
-                RemoveOps = [RegOp.DeleteValue(Key, "AuditComputerAccountManagement")],
-                DetectOps = [RegOp.CheckDword(Key, "AuditComputerAccountManagement", 3)],
-            },
-            new TweakDef
-            {
-                Id = "acmgmtaudit-audit-other-account-management-events",
-                Label = "Account Mgmt Audit: Enable Other Account Management Events (Password Hash Sync, PKI)",
-                Category = "Security",
-                Description = "Sets AuditOtherAccountManagementEvents=3 (Success+Failure) in the Advanced Audit Policy. Generates Security events 4782 (password hash was accessed), 4793 (password policy API called), 4798 (user's local group membership enumerated), 4799 (security-enabled local group members enumerated) — capturing credential database access and reconnaissance activities that fall outside the standard account management event types. " +
-                    "Events 4798 and 4799 (local group membership enumeration) are particularly significant — they are generated when a script or tool enumerates the members of the local Administrators group on an endpoint. Ransomware operators and red teams consistently enumerate local admin group membership across all endpoints immediately after initial compromise to identify which machines have Domain Admins logged in or have shared local admin passwords. These events provide direct detection of the reconnaissance phase of a ransomware campaign.",
-                Tags = ["account-mgmt-audit", "4798", "4799", "local-group-enumeration", "ransomware", "recon"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                ImpactNote = "Local group membership enumeration (4798/4799) audited; ransomware reconnaissance phase detectable in real time.",
-                ApplyOps = [RegOp.SetDword(Key, "AuditOtherAccountManagementEvents", 3)],
-                RemoveOps = [RegOp.DeleteValue(Key, "AuditOtherAccountManagementEvents")],
-                DetectOps = [RegOp.CheckDword(Key, "AuditOtherAccountManagementEvents", 3)],
-            },
-            new TweakDef
-            {
-                Id = "acmgmtaudit-audit-application-group-management",
-                Label = "Account Mgmt Audit: Enable Application Group Management Auditing",
-                Category = "Security",
-                Description = "Sets AuditApplicationGroupManagement=3 (Success+Failure) in the Advanced Audit Policy. Generates Security events for application group lifecycle operations (4783–4792: create, change, delete, member add/remove for non-Universal, non-Security application groups used by network access protection and application-specific group policies). " +
-                    "Application groups include Windows Authorization Manager (AzMan) application groups, which are used by LOB applications to define role-based access control within the application independent of Active Directory security groups. If an attacker gains write access to an AzMan policy store, they can add themselves to application-level admin roles without modifying Active Directory groups. Auditing application group changes detects this application-level privilege escalation vector.",
-                Tags = ["account-mgmt-audit", "application-group", "azman", "rbac", "app-privilege-escalation"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Application group changes audited; AzMan policy store privilege escalation generates detection events.",
-                ApplyOps = [RegOp.SetDword(Key, "AuditApplicationGroupManagement", 3)],
-                RemoveOps = [RegOp.DeleteValue(Key, "AuditApplicationGroupManagement")],
-                DetectOps = [RegOp.CheckDword(Key, "AuditApplicationGroupManagement", 3)],
-            },
-            new TweakDef
-            {
-                Id = "acmgmtaudit-enable-account-lockout-audit",
-                Label = "Account Mgmt Audit: Enable Account Lockout Event Auditing for Brute Force Detection",
-                Category = "Security",
-                Description = "Sets AuditAccountLockout=3 (Success+Failure) in the Advanced Audit Policy Logon/Logoff category. Generates Security event 4625 Failure, 4770, and 4771 for failed logon attempts and event 4740 (account locked out) when an account's failed logon threshold is exceeded, providing brute force password spray attack detection across all endpoints and authentication services. " +
-                    "Password spray attacks target a single password against an entire user list to avoid triggering per-account lockout thresholds (one attempt per account does not trigger lockout). Account lockout audit enables detection of spray patterns by correlating event 4740 (account locked out) across multiple accounts in a short time window — multiple lockouts in minutes with the same originating IP address is a high-fidelity indicator of a password spray attack. SOC SIEM rules for password spray are entirely dependent on this audit subcategory.",
-                Tags = ["account-mgmt-audit", "account-lockout", "4740", "password-spray", "brute-force", "siem"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 5,
-                SafetyRating = 5,
-                ImpactNote = "Account lockout events (4740) generated; password spray attacks create correlated lockout pattern detectable by SIEM.",
-                ApplyOps = [RegOp.SetDword(Key, "AuditAccountLockout", 3)],
-                RemoveOps = [RegOp.DeleteValue(Key, "AuditAccountLockout")],
-                DetectOps = [RegOp.CheckDword(Key, "AuditAccountLockout", 3)],
-            },
-            new TweakDef
-            {
-                Id = "acmgmtaudit-audit-user-right-assignment",
-                Label = "Account Mgmt Audit: Enable Auditing for User Right Assignment Changes",
-                Category = "Security",
-                Description = "Sets AuditPolicyChange=3 (Success+Failure) in the Advanced Audit Policy Audit Policy Change category. Generates Security events 4703 (token privilege enabled/disabled), 4704 (user right assigned), 4705 (user right removed) when any user right (SeDebugPrivilege, SeTcbPrivilege, SeImpersonatePrivilege, etc.) is granted to or removed from any security principal. Detects direct user right manipulation. " +
-                    "Granting SeDebugPrivilege or SeImpersonatePrivilege directly to a non-administrator security principal is an authoritative persistence technique — it gives the principal the same privilege as a local administrator for a specific action without adding them to the Administrators group. This bypasses monitoring rules that only watch for Administrators group membership changes. Auditing user right assignment changes detects this out-of-band privilege grant pathway.",
-                Tags = ["account-mgmt-audit", "user-rights", "4704", "sedebug", "seimpersonate", "privilege-grant"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                ImpactNote = "User right assignment changes audited; direct SeDebugPrivilege/SeImpersonatePrivilege grants generate detection events.",
-                ApplyOps = [RegOp.SetDword(Key, "AuditPolicyChange", 3)],
-                RemoveOps = [RegOp.DeleteValue(Key, "AuditPolicyChange")],
-                DetectOps = [RegOp.CheckDword(Key, "AuditPolicyChange", 3)],
-            },
-            new TweakDef
-            {
-                Id = "acmgmtaudit-audit-credential-validation-failures",
-                Label = "Account Mgmt Audit: Enable Credential Validation Failure Auditing for Auth Attack Detection",
-                Category = "Security",
-                Description = "Sets AuditCredentialValidation=3 (Success+Failure) in the Advanced Audit Policy Account Logon category. Generates Security events 4776 (NTLM authentication attempt — success/failure) and 4772/4776 failure events for failed NTLM credential validation attempts against the local SAM, enabling detection of NTLM hash relay attacks, local brute force, and pass-the-hash authentication re-use attempts against local account hashes. " +
-                    "NTLM authentication failure events (4776 Failure) are the primary detection signal for NTLM relay attacks — when an attacker captures an NTLM challenge-response and relays it to a different server, the relay attempt generates authentication failure events with the source workstation name visible. Pass-the-Hash attempts against local accounts (using a harvested NTLM hash to authenticate to SMB) also generate 4776 Failure events from unexpected source machines. These events feed the 'NTLM authentication anomaly' SIEM detection rules.",
-                Tags = ["account-mgmt-audit", "credential-validation", "ntlm", "4776", "pass-the-hash", "relay-attack"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 5,
-                SafetyRating = 5,
-                ImpactNote = "NTLM authentication failures audited (Event 4776); NTLM relay and pass-the-hash attacks generate detectable event patterns.",
-                ApplyOps = [RegOp.SetDword(Key, "AuditCredentialValidation", 3)],
-                RemoveOps = [RegOp.DeleteValue(Key, "AuditCredentialValidation")],
-                DetectOps = [RegOp.CheckDword(Key, "AuditCredentialValidation", 3)],
-            },
-            new TweakDef
-            {
-                Id = "acmgmtaudit-enable-kerberos-service-ticket-audit",
-                Label = "Account Mgmt Audit: Enable Kerberos Service Ticket Auditing for Ticket Attack Detection",
-                Category = "Security",
-                Description = "Sets AuditKerberosServiceTicket=3 (Success+Failure) in the Advanced Audit Policy Account Logon category. Generates Security events 4769 (Kerberos service ticket request — success), 4770 (Kerberos service ticket renew), and 4771 (Kerberos pre-authentication failure) for all Kerberos ticket-granting service (TGS) requests, enabling detection of Kerberoasting attacks that request service tickets for all SPNs to offline crack their RC4-encrypted password hashes. " +
-                    "Kerberoasting is one of the most common Active Directory attack techniques: any domain user can request a TGS for any service principal name, and if the service account's domain password is RC4-encrypted in the ticket (etype 0x17), the ticket can be taken offline for brute force password cracking without triggering any lockout. Auditing Kerberos TGS requests generates Event 4769 for each SPN ticket request — a Kerberoasting scan (requesting TGS for all SPNs in rapid succession) creates a distinctive volume and timing pattern detectable by SIEM.",
-                Tags = ["account-mgmt-audit", "kerberos", "4769", "kerberoasting", "tgs", "service-ticket"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 5,
-                SafetyRating = 5,
-                ImpactNote = "Kerberos TGS requests audited (Event 4769); Kerberoasting SPN scan generates distinctive volume pattern detectable by SIEM.",
-                ApplyOps = [RegOp.SetDword(Key, "AuditKerberosServiceTicket", 3)],
-                RemoveOps = [RegOp.DeleteValue(Key, "AuditKerberosServiceTicket")],
-                DetectOps = [RegOp.CheckDword(Key, "AuditKerberosServiceTicket", 3)],
-            },
-        ];
-
+            [
+                new TweakDef
+                {
+                    Id = "acmgmtaudit-audit-user-account-management",
+                    Label = "Account Mgmt Audit: Enable Success+Failure Auditing for All User Account Changes",
+                    Category = "Security",
+                    Description =
+                        "Sets AuditUserAccountManagement=3 (Success+Failure) in the Advanced Audit Policy Account Management category. Generates Security events 4720 (created), 4722 (enabled), 4723 (pwd change attempt), 4724 (pwd reset), 4725 (disabled), 4726 (deleted), 4738 (changed), 4740 (locked out), 4765/4766 (SID history) for all local and domain user account lifecycle operations. Provides complete user identity lifecycle audit trail. "
+                        + "User account management events are the foundational identity audit record. Security events 4720/4726 (account create/delete) are mandatory for SOC monitoring because they record rogue account creation — a common persistence technique. Without user account management auditing enabled, a threat actor can create a new backdoor local administrator account and there is no Security event log record of the account creation. All identity governance and SoD (Separation of Duties) compliance requirements depend on this audit subcategory being active.",
+                    Tags = ["account-mgmt-audit", "user-account", "account-creation", "4720", "persistence", "backdoor-account"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 5,
+                    SafetyRating = 5,
+                    ImpactNote =
+                        "Full user account lifecycle audited; rogue account creation generates Event 4720 — foundational SOC monitoring signal.",
+                    ApplyOps = [RegOp.SetDword(Key, "AuditUserAccountManagement", 3)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "AuditUserAccountManagement")],
+                    DetectOps = [RegOp.CheckDword(Key, "AuditUserAccountManagement", 3)],
+                },
+                new TweakDef
+                {
+                    Id = "acmgmtaudit-audit-security-group-management",
+                    Label = "Account Mgmt Audit: Enable Auditing for All Security Group Membership Changes",
+                    Category = "Security",
+                    Description =
+                        "Sets AuditSecurityGroupManagement=3 (Success+Failure) in the Advanced Audit Policy. Generates Security events 4727 (global group created), 4728 (member added), 4729 (member removed), 4730 (global group deleted), 4731 (local group created), 4732 (local group member added), 4733 (local group member removed), 4734 (local group deleted), 4735 (local group changed) for all security group membership operations. "
+                        + "Group membership changes are the primary privilege escalation audit signal in Active Directory environments. Adding a compromised account to Domain Admins, Backup Operators, or any privileged security group generates Event 4728/4732. SOC SIEM rules that alert on additions to predefined sensitive security groups (Domain Admins, Enterprise Admins, Schema Admins, Protected Users) depend entirely on this audit subcategory being active across all domain controllers and endpoints.",
+                    Tags = ["account-mgmt-audit", "security-group", "group-membership", "4728", "privilege-escalation", "domain-admins"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 5,
+                    SafetyRating = 5,
+                    ImpactNote =
+                        "Security group membership changes audited; additions to privileged groups (Domain Admins) generate immediate SIEM detection events.",
+                    ApplyOps = [RegOp.SetDword(Key, "AuditSecurityGroupManagement", 3)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "AuditSecurityGroupManagement")],
+                    DetectOps = [RegOp.CheckDword(Key, "AuditSecurityGroupManagement", 3)],
+                },
+                new TweakDef
+                {
+                    Id = "acmgmtaudit-audit-distribution-group-management",
+                    Label = "Account Mgmt Audit: Enable Auditing for Distribution Group Membership Changes",
+                    Category = "Security",
+                    Description =
+                        "Sets AuditDistributionGroupManagement=3 (Success+Failure) in the Advanced Audit Policy. Generates Security events for distribution group lifecycle operations (4744–4758: create, change, delete, member add, member remove for global and universal distribution groups). Provides identity governance visibility for non-security-enabled groups that may have access to sensitive email distribution lists or SharePoint groups. "
+                        + "Distribution groups do not have security principals and cannot directly grant file system access, but they control email distribution reach and SharePoint group membership when used as SharePoint audience targeting groups. An attacker who adds a compromised account to a 'Finance-All' distribution group gains full visibility of financial email communications including budgets, deals, and sensitive financial data delivered through that distribution list. Auditing distribution group changes enables detection of email list infiltration.",
+                    Tags = ["account-mgmt-audit", "distribution-group", "email-list", "sharepoint", "insider-threat"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "Distribution group changes audited; unauthorised additions to sensitive email lists generate detection events.",
+                    ApplyOps = [RegOp.SetDword(Key, "AuditDistributionGroupManagement", 3)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "AuditDistributionGroupManagement")],
+                    DetectOps = [RegOp.CheckDword(Key, "AuditDistributionGroupManagement", 3)],
+                },
+                new TweakDef
+                {
+                    Id = "acmgmtaudit-audit-computer-account-management",
+                    Label = "Account Mgmt Audit: Enable Auditing for Computer Account Creation and Deletion",
+                    Category = "Security",
+                    Description =
+                        "Sets AuditComputerAccountManagement=3 (Success+Failure) in the Advanced Audit Policy. Generates Security events 4741 (computer account created), 4742 (computer account changed), 4743 (computer account deleted) for computer object lifecycle operations in Active Directory. Provides detection for rogue computer account creation used for Kerberos silver ticket persistence. "
+                        + "Computer account creation in Active Directory is a high-value attack technique. By default, any domain user can create up to 10 computer objects in any container they have permissions over (ms-DS-MachineAccountQuota). An attacker with a foothold in the domain can create new computer accounts (RBCD, resource-based constrained delegation attacks), configure a service principal name, and use Kerberos delegation to obtain elevated Kerberos tickets. Computer account creation events detect this persistence technique immediately.",
+                    Tags = ["account-mgmt-audit", "computer-account", "4741", "rbcd", "kerberos", "silver-ticket"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote =
+                        "Computer account creation (Event 4741) audited; RBCD/Kerberos silver ticket attack via rogue computer account detectable.",
+                    ApplyOps = [RegOp.SetDword(Key, "AuditComputerAccountManagement", 3)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "AuditComputerAccountManagement")],
+                    DetectOps = [RegOp.CheckDword(Key, "AuditComputerAccountManagement", 3)],
+                },
+                new TweakDef
+                {
+                    Id = "acmgmtaudit-audit-other-account-management-events",
+                    Label = "Account Mgmt Audit: Enable Other Account Management Events (Password Hash Sync, PKI)",
+                    Category = "Security",
+                    Description =
+                        "Sets AuditOtherAccountManagementEvents=3 (Success+Failure) in the Advanced Audit Policy. Generates Security events 4782 (password hash was accessed), 4793 (password policy API called), 4798 (user's local group membership enumerated), 4799 (security-enabled local group members enumerated) — capturing credential database access and reconnaissance activities that fall outside the standard account management event types. "
+                        + "Events 4798 and 4799 (local group membership enumeration) are particularly significant — they are generated when a script or tool enumerates the members of the local Administrators group on an endpoint. Ransomware operators and red teams consistently enumerate local admin group membership across all endpoints immediately after initial compromise to identify which machines have Domain Admins logged in or have shared local admin passwords. These events provide direct detection of the reconnaissance phase of a ransomware campaign.",
+                    Tags = ["account-mgmt-audit", "4798", "4799", "local-group-enumeration", "ransomware", "recon"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "Local group membership enumeration (4798/4799) audited; ransomware reconnaissance phase detectable in real time.",
+                    ApplyOps = [RegOp.SetDword(Key, "AuditOtherAccountManagementEvents", 3)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "AuditOtherAccountManagementEvents")],
+                    DetectOps = [RegOp.CheckDword(Key, "AuditOtherAccountManagementEvents", 3)],
+                },
+                new TweakDef
+                {
+                    Id = "acmgmtaudit-audit-application-group-management",
+                    Label = "Account Mgmt Audit: Enable Application Group Management Auditing",
+                    Category = "Security",
+                    Description =
+                        "Sets AuditApplicationGroupManagement=3 (Success+Failure) in the Advanced Audit Policy. Generates Security events for application group lifecycle operations (4783–4792: create, change, delete, member add/remove for non-Universal, non-Security application groups used by network access protection and application-specific group policies). "
+                        + "Application groups include Windows Authorization Manager (AzMan) application groups, which are used by LOB applications to define role-based access control within the application independent of Active Directory security groups. If an attacker gains write access to an AzMan policy store, they can add themselves to application-level admin roles without modifying Active Directory groups. Auditing application group changes detects this application-level privilege escalation vector.",
+                    Tags = ["account-mgmt-audit", "application-group", "azman", "rbac", "app-privilege-escalation"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "Application group changes audited; AzMan policy store privilege escalation generates detection events.",
+                    ApplyOps = [RegOp.SetDword(Key, "AuditApplicationGroupManagement", 3)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "AuditApplicationGroupManagement")],
+                    DetectOps = [RegOp.CheckDword(Key, "AuditApplicationGroupManagement", 3)],
+                },
+                new TweakDef
+                {
+                    Id = "acmgmtaudit-enable-account-lockout-audit",
+                    Label = "Account Mgmt Audit: Enable Account Lockout Event Auditing for Brute Force Detection",
+                    Category = "Security",
+                    Description =
+                        "Sets AuditAccountLockout=3 (Success+Failure) in the Advanced Audit Policy Logon/Logoff category. Generates Security event 4625 Failure, 4770, and 4771 for failed logon attempts and event 4740 (account locked out) when an account's failed logon threshold is exceeded, providing brute force password spray attack detection across all endpoints and authentication services. "
+                        + "Password spray attacks target a single password against an entire user list to avoid triggering per-account lockout thresholds (one attempt per account does not trigger lockout). Account lockout audit enables detection of spray patterns by correlating event 4740 (account locked out) across multiple accounts in a short time window — multiple lockouts in minutes with the same originating IP address is a high-fidelity indicator of a password spray attack. SOC SIEM rules for password spray are entirely dependent on this audit subcategory.",
+                    Tags = ["account-mgmt-audit", "account-lockout", "4740", "password-spray", "brute-force", "siem"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 5,
+                    SafetyRating = 5,
+                    ImpactNote =
+                        "Account lockout events (4740) generated; password spray attacks create correlated lockout pattern detectable by SIEM.",
+                    ApplyOps = [RegOp.SetDword(Key, "AuditAccountLockout", 3)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "AuditAccountLockout")],
+                    DetectOps = [RegOp.CheckDword(Key, "AuditAccountLockout", 3)],
+                },
+                new TweakDef
+                {
+                    Id = "acmgmtaudit-audit-user-right-assignment",
+                    Label = "Account Mgmt Audit: Enable Auditing for User Right Assignment Changes",
+                    Category = "Security",
+                    Description =
+                        "Sets AuditPolicyChange=3 (Success+Failure) in the Advanced Audit Policy Audit Policy Change category. Generates Security events 4703 (token privilege enabled/disabled), 4704 (user right assigned), 4705 (user right removed) when any user right (SeDebugPrivilege, SeTcbPrivilege, SeImpersonatePrivilege, etc.) is granted to or removed from any security principal. Detects direct user right manipulation. "
+                        + "Granting SeDebugPrivilege or SeImpersonatePrivilege directly to a non-administrator security principal is an authoritative persistence technique — it gives the principal the same privilege as a local administrator for a specific action without adding them to the Administrators group. This bypasses monitoring rules that only watch for Administrators group membership changes. Auditing user right assignment changes detects this out-of-band privilege grant pathway.",
+                    Tags = ["account-mgmt-audit", "user-rights", "4704", "sedebug", "seimpersonate", "privilege-grant"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote =
+                        "User right assignment changes audited; direct SeDebugPrivilege/SeImpersonatePrivilege grants generate detection events.",
+                    ApplyOps = [RegOp.SetDword(Key, "AuditPolicyChange", 3)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "AuditPolicyChange")],
+                    DetectOps = [RegOp.CheckDword(Key, "AuditPolicyChange", 3)],
+                },
+                new TweakDef
+                {
+                    Id = "acmgmtaudit-audit-credential-validation-failures",
+                    Label = "Account Mgmt Audit: Enable Credential Validation Failure Auditing for Auth Attack Detection",
+                    Category = "Security",
+                    Description =
+                        "Sets AuditCredentialValidation=3 (Success+Failure) in the Advanced Audit Policy Account Logon category. Generates Security events 4776 (NTLM authentication attempt — success/failure) and 4772/4776 failure events for failed NTLM credential validation attempts against the local SAM, enabling detection of NTLM hash relay attacks, local brute force, and pass-the-hash authentication re-use attempts against local account hashes. "
+                        + "NTLM authentication failure events (4776 Failure) are the primary detection signal for NTLM relay attacks — when an attacker captures an NTLM challenge-response and relays it to a different server, the relay attempt generates authentication failure events with the source workstation name visible. Pass-the-Hash attempts against local accounts (using a harvested NTLM hash to authenticate to SMB) also generate 4776 Failure events from unexpected source machines. These events feed the 'NTLM authentication anomaly' SIEM detection rules.",
+                    Tags = ["account-mgmt-audit", "credential-validation", "ntlm", "4776", "pass-the-hash", "relay-attack"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 5,
+                    SafetyRating = 5,
+                    ImpactNote =
+                        "NTLM authentication failures audited (Event 4776); NTLM relay and pass-the-hash attacks generate detectable event patterns.",
+                    ApplyOps = [RegOp.SetDword(Key, "AuditCredentialValidation", 3)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "AuditCredentialValidation")],
+                    DetectOps = [RegOp.CheckDword(Key, "AuditCredentialValidation", 3)],
+                },
+                new TweakDef
+                {
+                    Id = "acmgmtaudit-enable-kerberos-service-ticket-audit",
+                    Label = "Account Mgmt Audit: Enable Kerberos Service Ticket Auditing for Ticket Attack Detection",
+                    Category = "Security",
+                    Description =
+                        "Sets AuditKerberosServiceTicket=3 (Success+Failure) in the Advanced Audit Policy Account Logon category. Generates Security events 4769 (Kerberos service ticket request — success), 4770 (Kerberos service ticket renew), and 4771 (Kerberos pre-authentication failure) for all Kerberos ticket-granting service (TGS) requests, enabling detection of Kerberoasting attacks that request service tickets for all SPNs to offline crack their RC4-encrypted password hashes. "
+                        + "Kerberoasting is one of the most common Active Directory attack techniques: any domain user can request a TGS for any service principal name, and if the service account's domain password is RC4-encrypted in the ticket (etype 0x17), the ticket can be taken offline for brute force password cracking without triggering any lockout. Auditing Kerberos TGS requests generates Event 4769 for each SPN ticket request — a Kerberoasting scan (requesting TGS for all SPNs in rapid succession) creates a distinctive volume and timing pattern detectable by SIEM.",
+                    Tags = ["account-mgmt-audit", "kerberos", "4769", "kerberoasting", "tgs", "service-ticket"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 5,
+                    SafetyRating = 5,
+                    ImpactNote =
+                        "Kerberos TGS requests audited (Event 4769); Kerberoasting SPN scan generates distinctive volume pattern detectable by SIEM.",
+                    ApplyOps = [RegOp.SetDword(Key, "AuditKerberosServiceTicket", 3)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "AuditKerberosServiceTicket")],
+                    DetectOps = [RegOp.CheckDword(Key, "AuditKerberosServiceTicket", 3)],
+                },
+            ];
     }
 
     // ── AuditEventPolicy ──
@@ -23506,7 +23759,6 @@ internal static class PolicyAudit
                 DetectOps = [RegOp.CheckDword(Key, "AuditSecuritySystemExtension", 1)],
             },
         ];
-
     }
 
     // ── AuditPolicyAdvancedPolicy ──
@@ -23687,7 +23939,6 @@ internal static class PolicyAudit
                     DetectOps = [RegOp.CheckDword(Key, "BlockUserAuditPolicyChange", 1)],
                 },
             ];
-
     }
 
     // ── DiagnosticDataViewerPolicy ──
@@ -23848,189 +24099,205 @@ internal static class PolicyAudit
                 DetectOps = [RegOp.CheckDword(DataCol, "LimitEnhancedDiagnosticDataWindowsAnalytics", 0)],
             },
         ];
-
     }
 
     // ── DsObjectAccessAuditPolicy ──
     private static class _DsObjectAccessAuditPolicy
     {
-        private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AdvancedAuditPolicyConfiguration\System Audit Policies - Local Group Policy\DS Access";
-        private const string DetailKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AdvancedAuditPolicyConfiguration\System Audit Policies - Local Group Policy\Detailed Tracking";
+        private const string Key =
+            @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AdvancedAuditPolicyConfiguration\System Audit Policies - Local Group Policy\DS Access";
+        private const string DetailKey =
+            @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AdvancedAuditPolicyConfiguration\System Audit Policies - Local Group Policy\Detailed Tracking";
 
         public static IReadOnlyList<TweakDef> Data =>
-        [
-            new TweakDef
-            {
-                Id = "dsaudit-audit-directory-service-access",
-                Label = "DS Audit: Enable Directory Service Object Access Auditing (LDAP Reads to Sensitive AD Objects)",
-                Category = "Security",
-                Description = "Sets AuditDirectoryServiceAccess=3 (Success+Failure) in Advanced Audit Policy DS Access category. Generates Security event 4661 for SACL-triggered access to Active Directory objects on domain controllers — user objects, group objects, GPO links, schema attributes, and AdminSDHolder-protected objects — providing on-DC audit records of all access to sensitive AD data. " +
-                    "Active Directory is the crown jewel of the enterprise identity infrastructure. Without directory service access auditing, an attacker who performs an LDAP dump of all user objects (including password hint attributes, lastLogon, adminCount, userAccountControl enumeration) leaves no Security event log trace on the domain controller. With SACL-protected sensitive AD objects (all adminCount=1 objects, GPO objects, schema), directory service access events generate on every LDAP read, enabling DCSync detection and AD reconnaissance identification.",
-                Tags = ["ds-audit", "directory-service", "active-directory", "ldap", "dcsync", "sacl"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 5,
-                SafetyRating = 5,
-                ImpactNote = "AD sensitive object SACL access events generated; DCSync attack (drsuapi replication) generates detection events.",
-                ApplyOps = [RegOp.SetDword(Key, "AuditDirectoryServiceAccess", 3)],
-                RemoveOps = [RegOp.DeleteValue(Key, "AuditDirectoryServiceAccess")],
-                DetectOps = [RegOp.CheckDword(Key, "AuditDirectoryServiceAccess", 3)],
-            },
-            new TweakDef
-            {
-                Id = "dsaudit-audit-directory-service-changes",
-                Label = "DS Audit: Enable Directory Service Object Modification Auditing (AD Object Changes)",
-                Category = "Security",
-                Description = "Sets AuditDirectoryServiceChanges=3 (Success+Failure) in Advanced Audit Policy DS Access category. Generates Security events 5136 (attribute modified), 5137 (object created), 5138 (object restored from tombstone), 5139 (object moved), 5141 (object deleted) for all changes to Active Directory objects, providing a granular changelog of AD modifications. " +
-                    "Event 5136 is the AD schema-level modification record — it captures every attribute write to every AD object (user, group, computer, GPO, schema). Without this auditing subcategory enabled on domain controllers, the SOC has no event log record of Group Policy Object (GPO) modifications, AdminSDHolder ACL changes, Service Principal Name (SPN) additions (Kerberoasting target creation), or Domain Trust modifications (trust injection). SOC SIEM rules for GPO modification, persistence SPN addition, and trust injection all depend on Event 5136.",
-                Tags = ["ds-audit", "directory-service-changes", "event-5136", "gpo", "spn", "trust-injection"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 5,
-                SafetyRating = 5,
-                ImpactNote = "AD attribute changes logged (Event 5136); GPO modifications, SPN additions, and trust changes generate SOC detection events.",
-                ApplyOps = [RegOp.SetDword(Key, "AuditDirectoryServiceChanges", 3)],
-                RemoveOps = [RegOp.DeleteValue(Key, "AuditDirectoryServiceChanges")],
-                DetectOps = [RegOp.CheckDword(Key, "AuditDirectoryServiceChanges", 3)],
-            },
-            new TweakDef
-            {
-                Id = "dsaudit-audit-directory-service-replication",
-                Label = "DS Audit: Enable Directory Service Replication Auditing for DCSync Detection",
-                Category = "Security",
-                Description = "Sets AuditDirectoryServiceReplication=3 (Success+Failure) in Advanced Audit Policy DS Access category. Generates Security events 4928 (source naming context established — replication initiated), 4929 (source naming context removed), 4930 (source naming context modified), 4931 (destination naming context modified) for AD replication operations. Enables detection of DCSync attacks performed by non-DC machines invoking DS-Replication-Get-Changes privileges. " +
-                    "DCSync (Mimikatz's lsadump::dcsync) mimics the behaviour of a domain controller requesting replication from another DC to obtain all account password hashes without requiring local access to the DC. The attack uses DS-Replication-Get-Changes-All privileges. Replication audit events (4928) are generated on the target DC when the replication request arrives. A 4928 event from a client workstation (not a domain controller) is a high-fidelity DCSync detection signal.",
-                Tags = ["ds-audit", "replication", "event-4928", "dcsync", "ds-replication", "mimikatz"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 5,
-                SafetyRating = 5,
-                ImpactNote = "DS replication events audited; DCSync attack from non-DC machines generates Event 4928 — high-fidelity detection signal.",
-                ApplyOps = [RegOp.SetDword(Key, "AuditDirectoryServiceReplication", 3)],
-                RemoveOps = [RegOp.DeleteValue(Key, "AuditDirectoryServiceReplication")],
-                DetectOps = [RegOp.CheckDword(Key, "AuditDirectoryServiceReplication", 3)],
-            },
-            new TweakDef
-            {
-                Id = "dsaudit-audit-detailed-replication",
-                Label = "DS Audit: Enable Detailed Directory Service Replication Auditing",
-                Category = "Security",
-                Description = "Sets AuditDetailedDirectoryServiceReplication=3 (Success+Failure) in Advanced Audit Policy DS Access category. Generates verbose Security events 4932/4933 (synchronization of a naming context has begun/ended) and 4934/4935/4937 (attribute of AD object replicated/failed/lingering object removed) for each object-level attribute synchronisation step during AD replication, providing attribute-granular replication change records. " +
-                    "Detailed replication auditing provides the object-level granularity missing from standard replication auditing. When a naming context replication session (Event 4928) encompasses thousands of object changes, the standard events identify that replication occurred but not which specific objects or attributes were synchronised. Detailed replication events (4932/4934) identify the specific objects replicated in each session, enabling investigation of which specific accounts were targeted in a DCSync attack session.",
-                Tags = ["ds-audit", "detailed-replication", "event-4932", "naming-context", "dcsync-detail"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                ImpactNote = "Detailed replication events generated; specific objects and attributes synchronised during DCSync sessions are identifiable.",
-                ApplyOps = [RegOp.SetDword(Key, "AuditDetailedDirectoryServiceReplication", 3)],
-                RemoveOps = [RegOp.DeleteValue(Key, "AuditDetailedDirectoryServiceReplication")],
-                DetectOps = [RegOp.CheckDword(Key, "AuditDetailedDirectoryServiceReplication", 3)],
-            },
-            new TweakDef
-            {
-                Id = "dsaudit-enable-dpapi-activity-audit",
-                Label = "DS Audit: Enable DPAPI Activity Auditing for Master Key Access Monitoring",
-                Category = "Security",
-                Description = "Sets AuditDPAPIActivity=3 (Success+Failure) in Advanced Audit Policy Detailed Tracking category. Generates Security events 4692 (DPAPI backup key was requested), 4693 (DPAPI data was decrypted), 4694 (DPAPI data was encrypted), 4695 (DPAPI data was decrypted in unprotected state) for all DPAPI encryption and decryption operations. Enables detection of DPAPI master key harvesting attacks. " +
-                    "DPAPI master key backup operations (Event 4692) are generated when a new DPAPI master key is created and its backup is sent to the domain controller for recovery purposes. In DPAPI masterkey harvesting attacks (used by NanoDump, SharpDPAPI), an attacker requests the DPAPI backup key from the domain controller to decrypt all locally cached DPAPI blobs across the enterprise. Event 4692 from an unexpected non-system principal is a binary indicator of DPAPI master key interception.",
-                Tags = ["ds-audit", "dpapi", "event-4692", "master-key", "credential-decryption", "sharpdpapi"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 5,
-                SafetyRating = 5,
-                ImpactNote = "DPAPI master key access events (4692) generated; DPAPI backup key harvesting attack immediately detectable.",
-                ApplyOps = [RegOp.SetDword(DetailKey, "AuditDPAPIActivity", 3)],
-                RemoveOps = [RegOp.DeleteValue(DetailKey, "AuditDPAPIActivity")],
-                DetectOps = [RegOp.CheckDword(DetailKey, "AuditDPAPIActivity", 3)],
-            },
-            new TweakDef
-            {
-                Id = "dsaudit-enable-rpc-events-audit",
-                Label = "DS Audit: Enable RPC Events Auditing for Remote Service Call Monitoring",
-                Category = "Security",
-                Description = "Sets AuditRPCEvents=3 (Success+Failure) in Advanced Audit Policy Detailed Tracking category. Generates Security event 5712 (RPC connection attempt) for remote procedure call connections with caller identity, target interface UUID, and endpoint information — enabling detection of RPC-based lateral movement techniques that use Windows RPC interfaces (MS-SAMR, MS-LSAD, MS-DRSR, MS-RPRN) to access remote system resources. " +
-                    "Remote Printer Spooler (MS-RPRN) exploitation (PrintNightmare) and RPC-based DCSync (MS-DRSR interface calls) are primary RPC-based attack techniques. Without RPC event auditing, there is no Security event log record of specific Windows RPC interface calls made to an endpoint. RPC event audit enables detection of PrintNightmare exploitation (unexpected MS-RPRN calls from non-print-server machines) and RPC-based credential access attempts targeting SAMR and LSAD interfaces.",
-                Tags = ["ds-audit", "rpc", "event-5712", "printnightmare", "ms-rprn", "samr", "lsad"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                ImpactNote = "RPC connection events (5712) generated; PrintNightmare MS-RPRN and SAMR/LSAD-based credential access detectable.",
-                ApplyOps = [RegOp.SetDword(DetailKey, "AuditRPCEvents", 3)],
-                RemoveOps = [RegOp.DeleteValue(DetailKey, "AuditRPCEvents")],
-                DetectOps = [RegOp.CheckDword(DetailKey, "AuditRPCEvents", 3)],
-            },
-            new TweakDef
-            {
-                Id = "dsaudit-enable-central-access-policy-staging",
-                Label = "DS Audit: Enable Central Access Policy Staging Audit for DAC Rule Pre-Deployment Testing",
-                Category = "Security",
-                Description = "Sets AuditCentralAccessPolicyStaging=1 (Success) in Advanced Audit Policy DS Access category. Generates Security event 4818 (proposed Central Access Policy does not grant the same access permissions as the current Central Access Policy) when a proposed Dynamic Access Control policy being tested in staging mode would grant different access than the currently active policy, identifying files that would change access before the policy is deployed. " +
-                    "Central Access Policy staging is the Windows DAC mechanism for safely testing new classification policies before deploying them to production. Without staging audit events, IT cannot determine the blast radius of a new DAC policy change — which files would gain new access grants, which would lose existing access. Event 4818 provides a non-destructive preview showing exactly which resources would receive different access treatment under the proposed policy vs the current policy.",
-                Tags = ["ds-audit", "central-access-policy", "dac", "staging", "event-4818", "policy-testing"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                ImpactNote = "DAC staging audit events (4818) generated; policy impact assessment before deployment identifies access changes without risk.",
-                ApplyOps = [RegOp.SetDword(Key, "AuditCentralAccessPolicyStaging", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "AuditCentralAccessPolicyStaging")],
-                DetectOps = [RegOp.CheckDword(Key, "AuditCentralAccessPolicyStaging", 1)],
-            },
-            new TweakDef
-            {
-                Id = "dsaudit-enable-certificate-services-audit",
-                Label = "DS Audit: Enable Active Directory Certificate Services Audit for CA Operation Monitoring",
-                Category = "Security",
-                Description = "Sets AuditCertificationServices=3 (Success+Failure) in Advanced Audit Policy Object Access category. Generates Security events 4870/4871/4872/4873/4874/4875/4876/4877 for all Active Directory Certificate Services operations — certificate requests (approved, denied, pending), certificate revocations, certificate template modifications, and CA role service start/stop. Critical for detecting AD CS-based privilege escalation (ESC1–ESC8 attacks). " +
-                    "AD Certificate Services attacks (ESC1–ESC8, as catalogued by SpecterOps) enable low-privilege users to obtain certificates that can be used for domain admin authentication or persistent machine authentication bypass. Without CS audit events, a user who requests and receives a certificate through a misconfigured template (ESC1: SANs allowed by requester) generates no Security alert. Certificate request events (4886: certificate requested, 4887: certificate issued) record the subject, certificate template, and requester — enabling detection of privilege-elevating certificate requests.",
-                Tags = ["ds-audit", "ad-cs", "certificate-services", "event-4887", "esc1", "privilege-escalation"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 5,
-                SafetyRating = 5,
-                ImpactNote = "AD CS operations audited; ESC1-ESC8 certificate template abuse and rogue CA operations generate Security events.",
-                ApplyOps = [RegOp.SetDword(Key, "AuditCertificationServices", 3)],
-                RemoveOps = [RegOp.DeleteValue(Key, "AuditCertificationServices")],
-                DetectOps = [RegOp.CheckDword(Key, "AuditCertificationServices", 3)],
-            },
-            new TweakDef
-            {
-                Id = "dsaudit-audit-filtering-platform-connection",
-                Label = "DS Audit: Enable Windows Filtering Platform Connection Auditing for Network Profiling",
-                Category = "Security",
-                Description = "Sets AuditFilteringPlatformConnection=3 (Success+Failure) in Advanced Audit Policy Object Access category. Generates Security events 5031 (WFP application blocked), 5150/5151 (WFP packet blocked/dropped), 5156/5157 (WFP connection allowed/blocked by application) for Windows Filtering Platform (Windows Firewall) connection decisions, providing process-to-network socket binding records without requiring Sysmon Event ID 3. " +
-                    "WFP connection allowed/blocked events (5156/5157) provide the same process-to-network binding information as Sysmon Event 3 but natively through Windows Security event log. Organisations that cannot deploy Sysmon can achieve equivalent network visibility using WFP auditing. Event 5156 records the process making the connection, the destination IP/port, and the protocol — enabling detection of command-and-control beaconing, lateral movement SMB connections, and data exfiltration to external IP ranges.",
-                Tags = ["ds-audit", "wfp", "windows-firewall", "event-5156", "c2-detection", "network-profiling"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 4,
-                ImpactNote = "WFP connection events (5156) generated natively; C2 beaconing and lateral movement network connections logged without Sysmon.",
-                ApplyOps = [RegOp.SetDword(Key, "AuditFilteringPlatformConnection", 3)],
-                RemoveOps = [RegOp.DeleteValue(Key, "AuditFilteringPlatformConnection")],
-                DetectOps = [RegOp.CheckDword(Key, "AuditFilteringPlatformConnection", 3)],
-            },
-            new TweakDef
-            {
-                Id = "dsaudit-audit-handle-manipulation",
-                Label = "DS Audit: Enable Handle Manipulation Auditing for LSASS Memory Access Detection",
-                Category = "Security",
-                Description = "Sets AuditHandleManipulation=3 (Success+Failure) in Advanced Audit Policy Object Access category. Generates Security event 4658 (handle to object closed) and event 4690 (attempt to duplicate handle to object) that complement the SACL-based object access events — specifically Event 4690 which records attempts to duplicate an open handle to a sensitive object (such as an LSASS process handle) to a different process. " +
-                    "Process handle duplication is an advanced LSASS dump technique used to avoid the more detectable direct process access calls. Tools like x64dump and some variants of Cobalt Strike's in-memory credential extraction duplicate an existing handle to the LSASS process (owned by csrss.exe or another trusted process) rather than opening a new handle from a suspicious process. Event 4690 captures this handle duplication attempt, providing detection for handle-based LSASS access that bypasses protection based solely on process open calls.",
-                Tags = ["ds-audit", "handle-manipulation", "event-4690", "lsass", "handle-duplication", "credential-theft"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                ImpactNote = "Handle duplication (Event 4690) audited; LSASS credential dump via handle duplication technique generates detection events.",
-                ApplyOps = [RegOp.SetDword(Key, "AuditHandleManipulation", 3)],
-                RemoveOps = [RegOp.DeleteValue(Key, "AuditHandleManipulation")],
-                DetectOps = [RegOp.CheckDword(Key, "AuditHandleManipulation", 3)],
-            },
-        ];
-
+            [
+                new TweakDef
+                {
+                    Id = "dsaudit-audit-directory-service-access",
+                    Label = "DS Audit: Enable Directory Service Object Access Auditing (LDAP Reads to Sensitive AD Objects)",
+                    Category = "Security",
+                    Description =
+                        "Sets AuditDirectoryServiceAccess=3 (Success+Failure) in Advanced Audit Policy DS Access category. Generates Security event 4661 for SACL-triggered access to Active Directory objects on domain controllers — user objects, group objects, GPO links, schema attributes, and AdminSDHolder-protected objects — providing on-DC audit records of all access to sensitive AD data. "
+                        + "Active Directory is the crown jewel of the enterprise identity infrastructure. Without directory service access auditing, an attacker who performs an LDAP dump of all user objects (including password hint attributes, lastLogon, adminCount, userAccountControl enumeration) leaves no Security event log trace on the domain controller. With SACL-protected sensitive AD objects (all adminCount=1 objects, GPO objects, schema), directory service access events generate on every LDAP read, enabling DCSync detection and AD reconnaissance identification.",
+                    Tags = ["ds-audit", "directory-service", "active-directory", "ldap", "dcsync", "sacl"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 5,
+                    SafetyRating = 5,
+                    ImpactNote = "AD sensitive object SACL access events generated; DCSync attack (drsuapi replication) generates detection events.",
+                    ApplyOps = [RegOp.SetDword(Key, "AuditDirectoryServiceAccess", 3)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "AuditDirectoryServiceAccess")],
+                    DetectOps = [RegOp.CheckDword(Key, "AuditDirectoryServiceAccess", 3)],
+                },
+                new TweakDef
+                {
+                    Id = "dsaudit-audit-directory-service-changes",
+                    Label = "DS Audit: Enable Directory Service Object Modification Auditing (AD Object Changes)",
+                    Category = "Security",
+                    Description =
+                        "Sets AuditDirectoryServiceChanges=3 (Success+Failure) in Advanced Audit Policy DS Access category. Generates Security events 5136 (attribute modified), 5137 (object created), 5138 (object restored from tombstone), 5139 (object moved), 5141 (object deleted) for all changes to Active Directory objects, providing a granular changelog of AD modifications. "
+                        + "Event 5136 is the AD schema-level modification record — it captures every attribute write to every AD object (user, group, computer, GPO, schema). Without this auditing subcategory enabled on domain controllers, the SOC has no event log record of Group Policy Object (GPO) modifications, AdminSDHolder ACL changes, Service Principal Name (SPN) additions (Kerberoasting target creation), or Domain Trust modifications (trust injection). SOC SIEM rules for GPO modification, persistence SPN addition, and trust injection all depend on Event 5136.",
+                    Tags = ["ds-audit", "directory-service-changes", "event-5136", "gpo", "spn", "trust-injection"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 5,
+                    SafetyRating = 5,
+                    ImpactNote =
+                        "AD attribute changes logged (Event 5136); GPO modifications, SPN additions, and trust changes generate SOC detection events.",
+                    ApplyOps = [RegOp.SetDword(Key, "AuditDirectoryServiceChanges", 3)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "AuditDirectoryServiceChanges")],
+                    DetectOps = [RegOp.CheckDword(Key, "AuditDirectoryServiceChanges", 3)],
+                },
+                new TweakDef
+                {
+                    Id = "dsaudit-audit-directory-service-replication",
+                    Label = "DS Audit: Enable Directory Service Replication Auditing for DCSync Detection",
+                    Category = "Security",
+                    Description =
+                        "Sets AuditDirectoryServiceReplication=3 (Success+Failure) in Advanced Audit Policy DS Access category. Generates Security events 4928 (source naming context established — replication initiated), 4929 (source naming context removed), 4930 (source naming context modified), 4931 (destination naming context modified) for AD replication operations. Enables detection of DCSync attacks performed by non-DC machines invoking DS-Replication-Get-Changes privileges. "
+                        + "DCSync (Mimikatz's lsadump::dcsync) mimics the behaviour of a domain controller requesting replication from another DC to obtain all account password hashes without requiring local access to the DC. The attack uses DS-Replication-Get-Changes-All privileges. Replication audit events (4928) are generated on the target DC when the replication request arrives. A 4928 event from a client workstation (not a domain controller) is a high-fidelity DCSync detection signal.",
+                    Tags = ["ds-audit", "replication", "event-4928", "dcsync", "ds-replication", "mimikatz"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 5,
+                    SafetyRating = 5,
+                    ImpactNote =
+                        "DS replication events audited; DCSync attack from non-DC machines generates Event 4928 — high-fidelity detection signal.",
+                    ApplyOps = [RegOp.SetDword(Key, "AuditDirectoryServiceReplication", 3)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "AuditDirectoryServiceReplication")],
+                    DetectOps = [RegOp.CheckDword(Key, "AuditDirectoryServiceReplication", 3)],
+                },
+                new TweakDef
+                {
+                    Id = "dsaudit-audit-detailed-replication",
+                    Label = "DS Audit: Enable Detailed Directory Service Replication Auditing",
+                    Category = "Security",
+                    Description =
+                        "Sets AuditDetailedDirectoryServiceReplication=3 (Success+Failure) in Advanced Audit Policy DS Access category. Generates verbose Security events 4932/4933 (synchronization of a naming context has begun/ended) and 4934/4935/4937 (attribute of AD object replicated/failed/lingering object removed) for each object-level attribute synchronisation step during AD replication, providing attribute-granular replication change records. "
+                        + "Detailed replication auditing provides the object-level granularity missing from standard replication auditing. When a naming context replication session (Event 4928) encompasses thousands of object changes, the standard events identify that replication occurred but not which specific objects or attributes were synchronised. Detailed replication events (4932/4934) identify the specific objects replicated in each session, enabling investigation of which specific accounts were targeted in a DCSync attack session.",
+                    Tags = ["ds-audit", "detailed-replication", "event-4932", "naming-context", "dcsync-detail"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote =
+                        "Detailed replication events generated; specific objects and attributes synchronised during DCSync sessions are identifiable.",
+                    ApplyOps = [RegOp.SetDword(Key, "AuditDetailedDirectoryServiceReplication", 3)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "AuditDetailedDirectoryServiceReplication")],
+                    DetectOps = [RegOp.CheckDword(Key, "AuditDetailedDirectoryServiceReplication", 3)],
+                },
+                new TweakDef
+                {
+                    Id = "dsaudit-enable-dpapi-activity-audit",
+                    Label = "DS Audit: Enable DPAPI Activity Auditing for Master Key Access Monitoring",
+                    Category = "Security",
+                    Description =
+                        "Sets AuditDPAPIActivity=3 (Success+Failure) in Advanced Audit Policy Detailed Tracking category. Generates Security events 4692 (DPAPI backup key was requested), 4693 (DPAPI data was decrypted), 4694 (DPAPI data was encrypted), 4695 (DPAPI data was decrypted in unprotected state) for all DPAPI encryption and decryption operations. Enables detection of DPAPI master key harvesting attacks. "
+                        + "DPAPI master key backup operations (Event 4692) are generated when a new DPAPI master key is created and its backup is sent to the domain controller for recovery purposes. In DPAPI masterkey harvesting attacks (used by NanoDump, SharpDPAPI), an attacker requests the DPAPI backup key from the domain controller to decrypt all locally cached DPAPI blobs across the enterprise. Event 4692 from an unexpected non-system principal is a binary indicator of DPAPI master key interception.",
+                    Tags = ["ds-audit", "dpapi", "event-4692", "master-key", "credential-decryption", "sharpdpapi"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 5,
+                    SafetyRating = 5,
+                    ImpactNote = "DPAPI master key access events (4692) generated; DPAPI backup key harvesting attack immediately detectable.",
+                    ApplyOps = [RegOp.SetDword(DetailKey, "AuditDPAPIActivity", 3)],
+                    RemoveOps = [RegOp.DeleteValue(DetailKey, "AuditDPAPIActivity")],
+                    DetectOps = [RegOp.CheckDword(DetailKey, "AuditDPAPIActivity", 3)],
+                },
+                new TweakDef
+                {
+                    Id = "dsaudit-enable-rpc-events-audit",
+                    Label = "DS Audit: Enable RPC Events Auditing for Remote Service Call Monitoring",
+                    Category = "Security",
+                    Description =
+                        "Sets AuditRPCEvents=3 (Success+Failure) in Advanced Audit Policy Detailed Tracking category. Generates Security event 5712 (RPC connection attempt) for remote procedure call connections with caller identity, target interface UUID, and endpoint information — enabling detection of RPC-based lateral movement techniques that use Windows RPC interfaces (MS-SAMR, MS-LSAD, MS-DRSR, MS-RPRN) to access remote system resources. "
+                        + "Remote Printer Spooler (MS-RPRN) exploitation (PrintNightmare) and RPC-based DCSync (MS-DRSR interface calls) are primary RPC-based attack techniques. Without RPC event auditing, there is no Security event log record of specific Windows RPC interface calls made to an endpoint. RPC event audit enables detection of PrintNightmare exploitation (unexpected MS-RPRN calls from non-print-server machines) and RPC-based credential access attempts targeting SAMR and LSAD interfaces.",
+                    Tags = ["ds-audit", "rpc", "event-5712", "printnightmare", "ms-rprn", "samr", "lsad"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "RPC connection events (5712) generated; PrintNightmare MS-RPRN and SAMR/LSAD-based credential access detectable.",
+                    ApplyOps = [RegOp.SetDword(DetailKey, "AuditRPCEvents", 3)],
+                    RemoveOps = [RegOp.DeleteValue(DetailKey, "AuditRPCEvents")],
+                    DetectOps = [RegOp.CheckDword(DetailKey, "AuditRPCEvents", 3)],
+                },
+                new TweakDef
+                {
+                    Id = "dsaudit-enable-central-access-policy-staging",
+                    Label = "DS Audit: Enable Central Access Policy Staging Audit for DAC Rule Pre-Deployment Testing",
+                    Category = "Security",
+                    Description =
+                        "Sets AuditCentralAccessPolicyStaging=1 (Success) in Advanced Audit Policy DS Access category. Generates Security event 4818 (proposed Central Access Policy does not grant the same access permissions as the current Central Access Policy) when a proposed Dynamic Access Control policy being tested in staging mode would grant different access than the currently active policy, identifying files that would change access before the policy is deployed. "
+                        + "Central Access Policy staging is the Windows DAC mechanism for safely testing new classification policies before deploying them to production. Without staging audit events, IT cannot determine the blast radius of a new DAC policy change — which files would gain new access grants, which would lose existing access. Event 4818 provides a non-destructive preview showing exactly which resources would receive different access treatment under the proposed policy vs the current policy.",
+                    Tags = ["ds-audit", "central-access-policy", "dac", "staging", "event-4818", "policy-testing"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 2,
+                    SafetyRating = 5,
+                    ImpactNote =
+                        "DAC staging audit events (4818) generated; policy impact assessment before deployment identifies access changes without risk.",
+                    ApplyOps = [RegOp.SetDword(Key, "AuditCentralAccessPolicyStaging", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "AuditCentralAccessPolicyStaging")],
+                    DetectOps = [RegOp.CheckDword(Key, "AuditCentralAccessPolicyStaging", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "dsaudit-enable-certificate-services-audit",
+                    Label = "DS Audit: Enable Active Directory Certificate Services Audit for CA Operation Monitoring",
+                    Category = "Security",
+                    Description =
+                        "Sets AuditCertificationServices=3 (Success+Failure) in Advanced Audit Policy Object Access category. Generates Security events 4870/4871/4872/4873/4874/4875/4876/4877 for all Active Directory Certificate Services operations — certificate requests (approved, denied, pending), certificate revocations, certificate template modifications, and CA role service start/stop. Critical for detecting AD CS-based privilege escalation (ESC1–ESC8 attacks). "
+                        + "AD Certificate Services attacks (ESC1–ESC8, as catalogued by SpecterOps) enable low-privilege users to obtain certificates that can be used for domain admin authentication or persistent machine authentication bypass. Without CS audit events, a user who requests and receives a certificate through a misconfigured template (ESC1: SANs allowed by requester) generates no Security alert. Certificate request events (4886: certificate requested, 4887: certificate issued) record the subject, certificate template, and requester — enabling detection of privilege-elevating certificate requests.",
+                    Tags = ["ds-audit", "ad-cs", "certificate-services", "event-4887", "esc1", "privilege-escalation"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 5,
+                    SafetyRating = 5,
+                    ImpactNote = "AD CS operations audited; ESC1-ESC8 certificate template abuse and rogue CA operations generate Security events.",
+                    ApplyOps = [RegOp.SetDword(Key, "AuditCertificationServices", 3)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "AuditCertificationServices")],
+                    DetectOps = [RegOp.CheckDword(Key, "AuditCertificationServices", 3)],
+                },
+                new TweakDef
+                {
+                    Id = "dsaudit-audit-filtering-platform-connection",
+                    Label = "DS Audit: Enable Windows Filtering Platform Connection Auditing for Network Profiling",
+                    Category = "Security",
+                    Description =
+                        "Sets AuditFilteringPlatformConnection=3 (Success+Failure) in Advanced Audit Policy Object Access category. Generates Security events 5031 (WFP application blocked), 5150/5151 (WFP packet blocked/dropped), 5156/5157 (WFP connection allowed/blocked by application) for Windows Filtering Platform (Windows Firewall) connection decisions, providing process-to-network socket binding records without requiring Sysmon Event ID 3. "
+                        + "WFP connection allowed/blocked events (5156/5157) provide the same process-to-network binding information as Sysmon Event 3 but natively through Windows Security event log. Organisations that cannot deploy Sysmon can achieve equivalent network visibility using WFP auditing. Event 5156 records the process making the connection, the destination IP/port, and the protocol — enabling detection of command-and-control beaconing, lateral movement SMB connections, and data exfiltration to external IP ranges.",
+                    Tags = ["ds-audit", "wfp", "windows-firewall", "event-5156", "c2-detection", "network-profiling"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 4,
+                    ImpactNote =
+                        "WFP connection events (5156) generated natively; C2 beaconing and lateral movement network connections logged without Sysmon.",
+                    ApplyOps = [RegOp.SetDword(Key, "AuditFilteringPlatformConnection", 3)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "AuditFilteringPlatformConnection")],
+                    DetectOps = [RegOp.CheckDword(Key, "AuditFilteringPlatformConnection", 3)],
+                },
+                new TweakDef
+                {
+                    Id = "dsaudit-audit-handle-manipulation",
+                    Label = "DS Audit: Enable Handle Manipulation Auditing for LSASS Memory Access Detection",
+                    Category = "Security",
+                    Description =
+                        "Sets AuditHandleManipulation=3 (Success+Failure) in Advanced Audit Policy Object Access category. Generates Security event 4658 (handle to object closed) and event 4690 (attempt to duplicate handle to object) that complement the SACL-based object access events — specifically Event 4690 which records attempts to duplicate an open handle to a sensitive object (such as an LSASS process handle) to a different process. "
+                        + "Process handle duplication is an advanced LSASS dump technique used to avoid the more detectable direct process access calls. Tools like x64dump and some variants of Cobalt Strike's in-memory credential extraction duplicate an existing handle to the LSASS process (owned by csrss.exe or another trusted process) rather than opening a new handle from a suspicious process. Event 4690 captures this handle duplication attempt, providing detection for handle-based LSASS access that bypasses protection based solely on process open calls.",
+                    Tags = ["ds-audit", "handle-manipulation", "event-4690", "lsass", "handle-duplication", "credential-theft"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote =
+                        "Handle duplication (Event 4690) audited; LSASS credential dump via handle duplication technique generates detection events.",
+                    ApplyOps = [RegOp.SetDword(Key, "AuditHandleManipulation", 3)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "AuditHandleManipulation")],
+                    DetectOps = [RegOp.CheckDword(Key, "AuditHandleManipulation", 3)],
+                },
+            ];
     }
 
     // ── ErrorReportingPolicy ──
@@ -24230,7 +24497,6 @@ internal static class PolicyAudit
                 DetectOps = [RegOp.CheckDword(WerPol, "MaxArchiveCount", 1)],
             },
         ];
-
     }
 
     // ── EtwSessionPolicy ──
@@ -24412,7 +24678,6 @@ internal static class PolicyAudit
                     DetectOps = [RegOp.CheckDword(Key, "DisableNTKernelLogger", 1)],
                 },
             ];
-
     }
 
     // ── EventForwardingPolicy ──
@@ -24593,7 +24858,6 @@ internal static class PolicyAudit
                     DetectOps = [RegOp.CheckDword(Key, "EnableEventConsolidation", 1)],
                 },
             ];
-
     }
 
     // ── EventLogChannelPolicy ──
@@ -24776,7 +25040,6 @@ internal static class PolicyAudit
                     DetectOps = [RegOp.CheckDword(AppKey, "DisableDirectRegistryEdit", 1)],
                 },
             ];
-
     }
 
     // ── EventLogGpoPolicy ──
@@ -24982,7 +25245,6 @@ internal static class PolicyAudit
                 DetectOps = [RegOp.CheckDword(Forwarded, "Retention", 0)],
             },
         ];
-
     }
 
     // ── EventSubscriptionPolicy ──
@@ -25163,7 +25425,6 @@ internal static class PolicyAudit
                     DetectOps = [RegOp.CheckDword(Key, "DisableCollectorTelemetry", 1)],
                 },
             ];
-
     }
 
     // ── EventTracingPolicy ──
@@ -25344,188 +25605,206 @@ internal static class PolicyAudit
                 DetectOps = [RegOp.CheckDword(Key, "MaxEventLogFileSize", 65536)],
             },
         ];
-
     }
 
     // ── LogonEventsAuditPolicy ──
     private static class _LogonEventsAuditPolicy
     {
-        private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AdvancedAuditPolicyConfiguration\System Audit Policies - Local Group Policy\Logon-Logoff";
+        private const string Key =
+            @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AdvancedAuditPolicyConfiguration\System Audit Policies - Local Group Policy\Logon-Logoff";
 
         public static IReadOnlyList<TweakDef> Data =>
-        [
-            new TweakDef
-            {
-                Id = "logonaudit-audit-logon-success-failure",
-                Label = "Logon Audit: Enable Success+Failure Auditing for All Interactive and Network Logon Events",
-                Category = "Security",
-                Description = "Sets AuditLogon=3 (Success+Failure) in Advanced Audit Policy Logon/Logoff category. Generates Security events 4624 (successful logon) with logon type, source IP, and authentication protocol, and 4625 (failed logon) with error code, source IP, and account name for every interactive (Type 2), network (Type 3), service (Type 5), batch (Type 4), and remote desktop (Type 10) logon and logon failure. " +
-                    "Event 4624 and 4625 are the most fundamental SOC monitoring events — all lateral movement paths (SMB, RDP, WinRM, PsExec, WMI) generate logon events on the destination endpoint. Without logon auditing, there is no on-endpoint record of who authenticated, from where, and using what mechanism. The combination of 4624 (successful network logon) from an unexpected IP with 4648 (explicit credential use) from the same timeframe is a high-fidelity indicator for pass-the-hash lateral movement.",
-                Tags = ["logon-audit", "event-4624", "event-4625", "lateral-movement", "rdp", "smb"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 5,
-                SafetyRating = 5,
-                ImpactNote = "All logon success and failure events generated; lateral movement via SMB/RDP/WMI leaves on-endpoint Event 4624 traces.",
-                ApplyOps = [RegOp.SetDword(Key, "AuditLogon", 3)],
-                RemoveOps = [RegOp.DeleteValue(Key, "AuditLogon")],
-                DetectOps = [RegOp.CheckDword(Key, "AuditLogon", 3)],
-            },
-            new TweakDef
-            {
-                Id = "logonaudit-audit-logoff-events",
-                Label = "Logon Audit: Enable Logoff Event Auditing to Calculate Session Duration",
-                Category = "Security",
-                Description = "Sets AuditLogoff=1 (Success) in Advanced Audit Policy Logon/Logoff category. Generates Security event 4634 (account logoff) when an interactive or network session ends, enabling SIEM correlation to calculate session duration by pairing each 4624 logon event with its 4634 logoff counterpart. Session duration is an important context signal for anomalous access detection. " +
-                    "Session duration analysis enables detection of anomalous access patterns. A network logon (4624 Type 3) that lasts 0.3 seconds followed by a logoff (4634) is consistent with automated tool access (PsExec command execution, SMB enumeration). A session from an external IP lasting 4 hours at 2 AM is anomalous for a finance analyst's account. Without logoff events, session duration calculations are impossible and the analyst must infer session end from other activity gaps in the log.",
-                Tags = ["logon-audit", "event-4634", "session-duration", "anomaly-detection", "siem"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                ImpactNote = "Logoff events generated (4634); session duration calculable; anomalous session patterns detectable via logon/logoff correlation.",
-                ApplyOps = [RegOp.SetDword(Key, "AuditLogoff", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "AuditLogoff")],
-                DetectOps = [RegOp.CheckDword(Key, "AuditLogoff", 1)],
-            },
-            new TweakDef
-            {
-                Id = "logonaudit-audit-account-lockout-logon",
-                Label = "Logon Audit: Enable Account Lockout Event Auditing at Logon (4740 on Destination)",
-                Category = "Security",
-                Description = "Sets AuditAccountLockout=1 (Success) in Advanced Audit Policy Logon/Logoff category (logon-side complement to the Account Management lockout setting). Generates Security event 4625 subtype failure events on the endpoint where a locked-out account attempts logon in addition to the domain controller-generated 4740. Provides per-endpoint lockout event rather than only DC-centric events. " +
-                    "Domain controller-generated lockout events (4740) identify that an account locked out but report only the last DC that processed the lockout, not all the individual endpoints generating failed logon attempts that accumulated to the lockout threshold. Endpoint-generated 4625 Failure / Sub-status 0xC0000234 (account locked out at logon time) events pinpoint exactly which endpoints are producing the lockout-triggering authentication failures, enabling source system identification for spray attack forensics.",
-                Tags = ["logon-audit", "account-lockout", "4740", "4625", "spray-attack", "source-identification"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                ImpactNote = "Per-endpoint lockout attempt events generated; spray attack source endpoints identifiable without relying only on DC events.",
-                ApplyOps = [RegOp.SetDword(Key, "AuditAccountLockout", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "AuditAccountLockout")],
-                DetectOps = [RegOp.CheckDword(Key, "AuditAccountLockout", 1)],
-            },
-            new TweakDef
-            {
-                Id = "logonaudit-audit-network-policy-server",
-                Label = "Logon Audit: Enable Network Policy Server Radius/NPS Authentication Auditing",
-                Category = "Security",
-                Description = "Sets AuditNetworkPolicyServer=3 (Success+Failure) in Advanced Audit Policy Logon/Logoff category. Generates Security events 6272 (NPS granted access), 6273 (NPS denied access), 6274 (NPS discarded request), 6275 (NPS discarded accounting request), 6276 (NPS quarantined client), 6277/6278 (NPS granted probation/revoked access) for RADIUS network access control decisions made by the local NPS role. " +
-                    "Network Policy Server (NPS/RADIUS) is the authentication gateway for 802.1X network access control (wired and wireless NAC), VPN authentication, and DirectAccess. NPS audit events record every network access authentication decision — including which machine certificates or user credentials were validated, which NPS policy matched, and whether access was granted or denied. A compromised certificate used to authenticate to the corporate wireless network generates NPS event 6272 with the certificate thumbprint, enabling certificate abuse detection.",
-                Tags = ["logon-audit", "nps", "radius", "802.1x", "vpn", "nac"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                ImpactNote = "NPS/RADIUS authentication decisions audited; network access control events provide NAC bypass and certificate abuse detection.",
-                ApplyOps = [RegOp.SetDword(Key, "AuditNetworkPolicyServer", 3)],
-                RemoveOps = [RegOp.DeleteValue(Key, "AuditNetworkPolicyServer")],
-                DetectOps = [RegOp.CheckDword(Key, "AuditNetworkPolicyServer", 3)],
-            },
-            new TweakDef
-            {
-                Id = "logonaudit-audit-other-logon-logoff-events",
-                Label = "Logon Audit: Enable 'Other Logon/Logoff Events' for Session Reconnection Tracking",
-                Category = "Security",
-                Description = "Sets AuditOtherLogonLogoffEvents=3 (Success+Failure) in Advanced Audit Policy Logon/Logoff category. Generates Security events 4649 (replay attack detected), 4778 (session reconnected to Window Station), 4779 (session disconnected from Window Station), 4800 (workstation locked), 4801 (workstation unlocked), 4802/4803 (screensaver invoked/dismissed), 5378 (credential delegation requested), 5632/5633 (wireless/wired 802.1X authentication). " +
-                    "Events 4778/4779 (RDP/Terminal Services session reconnect and disconnect) are critical for RDP lateral movement forensics. Each reconnect event records the source IP, session ID, and account name separately from the initial logon event. Without other logon/logoff events, an attacker who uses RDP shadowing or session hijacking (connecting to an existing session without creating a new logon event) may not generate additional 4624 events. The 4778 reconnect event captures this post-logon session reuse.",
-                Tags = ["logon-audit", "other-logon", "4778", "4779", "rdp-session", "session-hijacking"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                ImpactNote = "RDP session reconnect/disconnect events (4778/4779) audited; RDP session hijacking and shadowing generate detectable events.",
-                ApplyOps = [RegOp.SetDword(Key, "AuditOtherLogonLogoffEvents", 3)],
-                RemoveOps = [RegOp.DeleteValue(Key, "AuditOtherLogonLogoffEvents")],
-                DetectOps = [RegOp.CheckDword(Key, "AuditOtherLogonLogoffEvents", 3)],
-            },
-            new TweakDef
-            {
-                Id = "logonaudit-audit-explicit-credential-use",
-                Label = "Logon Audit: Enable Explicit Credential Use Auditing (RunAs, Over-Pass-the-Hash, WinRM)",
-                Category = "Security",
-                Description = "Sets AuditExplicitCredentialUse=3 (Success+Failure) in Advanced Audit Policy Logon/Logoff category. Generates Security event 4648 (logon using explicit credentials) when a process uses a different set of credentials to create a new logon session — covering RunAs executions, WMI remote command execution using explicit credentials, WinRM with credential parameters, and Over-Pass-the-Hash (explicit logon using an injected NTLM hash). " +
-                    "Event 4648 is a direct detection signal for Over-Pass-the-Hash and Overpass-the-Hash attacks. When Mimikatz performs an OverPTH (inject NTLM hash into a new logon session using explicit credential logon), Windows generates a 4648 event on the source machine. The combination of 4648 from Machine-A with 4624 Type 3 from Machine-B to Machine-A within the same second is a high-fidelity indicator of pass-the-hash lateral movement initiation from Machine-A.",
-                Tags = ["logon-audit", "explicit-credentials", "event-4648", "overpass-the-hash", "winrm", "runas"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 5,
-                SafetyRating = 5,
-                ImpactNote = "Explicit credential use events (4648) generated; Over-Pass-the-Hash and RunAs credential abuse directly detectable.",
-                ApplyOps = [RegOp.SetDword(Key, "AuditExplicitCredentialUse", 3)],
-                RemoveOps = [RegOp.DeleteValue(Key, "AuditExplicitCredentialUse")],
-                DetectOps = [RegOp.CheckDword(Key, "AuditExplicitCredentialUse", 3)],
-            },
-            new TweakDef
-            {
-                Id = "logonaudit-audit-special-logon-sensitive-groups",
-                Label = "Logon Audit: Enable Special Logon Auditing for Privileged Group Member Authentication",
-                Category = "Security",
-                Description = "Sets AuditSpecialLogon=1 (Success) in Advanced Audit Policy Logon/Logoff category (logon-side complement to the Account Management special logon setting). Generates Security event 4964 whenever a user whose account is a member of the Special Groups list (typically Domain Admins, Enterprise Admins) authenticates interactively or via the network, providing privileged account authentication monitoring without the noise of universal 4624 auditing. " +
-                    "Privileged account authentication monitoring serves as a low-effort approximation of Privileged Access Workstation (PAW) compliance enforcement. If Domain Admins should only authenticate from designated admin workstations, Event 4964 events where the source computer name is not in the approved PAW list indicate a policy violation — an admin authenticated from a regular user workstation. This SIEM rule requires only two data sources: the 4964 event and the approved PAW machine list.",
-                Tags = ["logon-audit", "event-4964", "domain-admins", "paw", "privileged-access", "compliance"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                ImpactNote = "Privileged group member logons generate Event 4964; admin authentication from non-PAW workstations detectable by SIEM.",
-                ApplyOps = [RegOp.SetDword(Key, "AuditSpecialLogon", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "AuditSpecialLogon")],
-                DetectOps = [RegOp.CheckDword(Key, "AuditSpecialLogon", 1)],
-            },
-            new TweakDef
-            {
-                Id = "logonaudit-audit-group-membership-at-logon",
-                Label = "Logon Audit: Enable Group Membership Enumeration at Logon for Privilege Visibility",
-                Category = "Security",
-                Description = "Sets AuditGroupMembership=1 (Success) in Advanced Audit Policy Logon/Logoff category. Generates Security event 4627 which lists the full group membership of the logon token at logon time, complementing Event 4624 with the list of all security groups the logging-on user is a member of at the moment of logon. Enables detection of SID injection and Kerberos golden ticket attacks using extra group SIDs. " +
-                    "Kerberos golden tickets can be crafted with extra group SIDs added to the PAC (Privileged Account Certificate) that were not in the account's actual group membership. When such a ticket is used for authentication, Windows generates a 4627 event showing the effective group membership of the logon token. By comparing 4627 group membership against the account's actual AD group membership, anomalous extra SIDs (e.g., Domain Admins SID for a non-admin account) are immediately visible as golden ticket indicators.",
-                Tags = ["logon-audit", "group-membership", "event-4627", "golden-ticket", "pac", "kerberos"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 5,
-                SafetyRating = 5,
-                ImpactNote = "Logon-time group membership logged (4627); Kerberos golden ticket with extra group SIDs detectable via 4627/AD membership comparison.",
-                ApplyOps = [RegOp.SetDword(Key, "AuditGroupMembership", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "AuditGroupMembership")],
-                DetectOps = [RegOp.CheckDword(Key, "AuditGroupMembership", 1)],
-            },
-            new TweakDef
-            {
-                Id = "logonaudit-audit-ipsec-extended-mode",
-                Label = "Logon Audit: Enable IPSec Extended Mode Auditing for Network Authentication Failures",
-                Category = "Security",
-                Description = "Sets AuditIPSecExtendedMode=3 (Success+Failure) in Advanced Audit Policy Logon/Logoff category. Generates Security events for IPSec IKEv2 extended mode negotiation (4978/4979/4980/4983/4984), recording Kerberos, certificate, or preshared-key authentication exchanges, useful in environments using IPSec machine authentication for network segmentation enforcement via Windows Firewall with Advanced Security rules. " +
-                    "IPSec extended mode authentication provides machine-level authentication for encrypted connections between Windows endpoints in isolated network segments. Failure events from IPSec extended mode indicate endpoints attempting cross-segment communication that is blocked by IPSec policy — a potential indicator of lateral movement attempts that a compromised endpoint's attacker is trying to reach an isolated server segment. Extended mode failures highlight network segmentation policy violations in real time.",
-                Tags = ["logon-audit", "ipsec", "ike", "extended-mode", "network-segmentation", "firewall"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "IPSec extended mode authentication events audited; cross-segment communication failures generate events indicating lateral movement.",
-                ApplyOps = [RegOp.SetDword(Key, "AuditIPSecExtendedMode", 3)],
-                RemoveOps = [RegOp.DeleteValue(Key, "AuditIPSecExtendedMode")],
-                DetectOps = [RegOp.CheckDword(Key, "AuditIPSecExtendedMode", 3)],
-            },
-            new TweakDef
-            {
-                Id = "logonaudit-audit-user-device-claims",
-                Label = "Logon Audit: Enable User and Device Claims Auditing for Dynamic Access Control",
-                Category = "Security",
-                Description = "Sets AuditUserDeviceClaims=1 (Success) in Advanced Audit Policy Logon/Logoff category. Generates Security event 4626 at logon time, which records the user and device claims embedded in the Kerberos authentication token when Dynamic Access Control (DAC) is used — providing visibility into the claims used for conditional access decisions in DAC-protected file server and classification label systems. " +
-                    "Dynamic Access Control uses Kerberos claims (user department, device compliance state, classification clearance level) to make file access decisions on Windows Server file shares. A user whose Kerberos token contains an incorrect department claim (e.g., claim was modified at token issue time by a Kerberos token forgery attack) could gain access to files classified for a different department. Event 4626 records the actual claims present at logon time, enabling post-incident review of whether inappropriate access was gated on correct claim values.",
-                Tags = ["logon-audit", "claims", "dynamic-access-control", "event-4626", "kerberos", "dac"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "User/device Kerberos claims logged at logon (4626); Dynamic Access Control claim-based access decisions auditable.",
-                ApplyOps = [RegOp.SetDword(Key, "AuditUserDeviceClaims", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "AuditUserDeviceClaims")],
-                DetectOps = [RegOp.CheckDword(Key, "AuditUserDeviceClaims", 1)],
-            },
-        ];
-
+            [
+                new TweakDef
+                {
+                    Id = "logonaudit-audit-logon-success-failure",
+                    Label = "Logon Audit: Enable Success+Failure Auditing for All Interactive and Network Logon Events",
+                    Category = "Security",
+                    Description =
+                        "Sets AuditLogon=3 (Success+Failure) in Advanced Audit Policy Logon/Logoff category. Generates Security events 4624 (successful logon) with logon type, source IP, and authentication protocol, and 4625 (failed logon) with error code, source IP, and account name for every interactive (Type 2), network (Type 3), service (Type 5), batch (Type 4), and remote desktop (Type 10) logon and logon failure. "
+                        + "Event 4624 and 4625 are the most fundamental SOC monitoring events — all lateral movement paths (SMB, RDP, WinRM, PsExec, WMI) generate logon events on the destination endpoint. Without logon auditing, there is no on-endpoint record of who authenticated, from where, and using what mechanism. The combination of 4624 (successful network logon) from an unexpected IP with 4648 (explicit credential use) from the same timeframe is a high-fidelity indicator for pass-the-hash lateral movement.",
+                    Tags = ["logon-audit", "event-4624", "event-4625", "lateral-movement", "rdp", "smb"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 5,
+                    SafetyRating = 5,
+                    ImpactNote =
+                        "All logon success and failure events generated; lateral movement via SMB/RDP/WMI leaves on-endpoint Event 4624 traces.",
+                    ApplyOps = [RegOp.SetDword(Key, "AuditLogon", 3)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "AuditLogon")],
+                    DetectOps = [RegOp.CheckDword(Key, "AuditLogon", 3)],
+                },
+                new TweakDef
+                {
+                    Id = "logonaudit-audit-logoff-events",
+                    Label = "Logon Audit: Enable Logoff Event Auditing to Calculate Session Duration",
+                    Category = "Security",
+                    Description =
+                        "Sets AuditLogoff=1 (Success) in Advanced Audit Policy Logon/Logoff category. Generates Security event 4634 (account logoff) when an interactive or network session ends, enabling SIEM correlation to calculate session duration by pairing each 4624 logon event with its 4634 logoff counterpart. Session duration is an important context signal for anomalous access detection. "
+                        + "Session duration analysis enables detection of anomalous access patterns. A network logon (4624 Type 3) that lasts 0.3 seconds followed by a logoff (4634) is consistent with automated tool access (PsExec command execution, SMB enumeration). A session from an external IP lasting 4 hours at 2 AM is anomalous for a finance analyst's account. Without logoff events, session duration calculations are impossible and the analyst must infer session end from other activity gaps in the log.",
+                    Tags = ["logon-audit", "event-4634", "session-duration", "anomaly-detection", "siem"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote =
+                        "Logoff events generated (4634); session duration calculable; anomalous session patterns detectable via logon/logoff correlation.",
+                    ApplyOps = [RegOp.SetDword(Key, "AuditLogoff", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "AuditLogoff")],
+                    DetectOps = [RegOp.CheckDword(Key, "AuditLogoff", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "logonaudit-audit-account-lockout-logon",
+                    Label = "Logon Audit: Enable Account Lockout Event Auditing at Logon (4740 on Destination)",
+                    Category = "Security",
+                    Description =
+                        "Sets AuditAccountLockout=1 (Success) in Advanced Audit Policy Logon/Logoff category (logon-side complement to the Account Management lockout setting). Generates Security event 4625 subtype failure events on the endpoint where a locked-out account attempts logon in addition to the domain controller-generated 4740. Provides per-endpoint lockout event rather than only DC-centric events. "
+                        + "Domain controller-generated lockout events (4740) identify that an account locked out but report only the last DC that processed the lockout, not all the individual endpoints generating failed logon attempts that accumulated to the lockout threshold. Endpoint-generated 4625 Failure / Sub-status 0xC0000234 (account locked out at logon time) events pinpoint exactly which endpoints are producing the lockout-triggering authentication failures, enabling source system identification for spray attack forensics.",
+                    Tags = ["logon-audit", "account-lockout", "4740", "4625", "spray-attack", "source-identification"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote =
+                        "Per-endpoint lockout attempt events generated; spray attack source endpoints identifiable without relying only on DC events.",
+                    ApplyOps = [RegOp.SetDword(Key, "AuditAccountLockout", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "AuditAccountLockout")],
+                    DetectOps = [RegOp.CheckDword(Key, "AuditAccountLockout", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "logonaudit-audit-network-policy-server",
+                    Label = "Logon Audit: Enable Network Policy Server Radius/NPS Authentication Auditing",
+                    Category = "Security",
+                    Description =
+                        "Sets AuditNetworkPolicyServer=3 (Success+Failure) in Advanced Audit Policy Logon/Logoff category. Generates Security events 6272 (NPS granted access), 6273 (NPS denied access), 6274 (NPS discarded request), 6275 (NPS discarded accounting request), 6276 (NPS quarantined client), 6277/6278 (NPS granted probation/revoked access) for RADIUS network access control decisions made by the local NPS role. "
+                        + "Network Policy Server (NPS/RADIUS) is the authentication gateway for 802.1X network access control (wired and wireless NAC), VPN authentication, and DirectAccess. NPS audit events record every network access authentication decision — including which machine certificates or user credentials were validated, which NPS policy matched, and whether access was granted or denied. A compromised certificate used to authenticate to the corporate wireless network generates NPS event 6272 with the certificate thumbprint, enabling certificate abuse detection.",
+                    Tags = ["logon-audit", "nps", "radius", "802.1x", "vpn", "nac"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote =
+                        "NPS/RADIUS authentication decisions audited; network access control events provide NAC bypass and certificate abuse detection.",
+                    ApplyOps = [RegOp.SetDword(Key, "AuditNetworkPolicyServer", 3)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "AuditNetworkPolicyServer")],
+                    DetectOps = [RegOp.CheckDword(Key, "AuditNetworkPolicyServer", 3)],
+                },
+                new TweakDef
+                {
+                    Id = "logonaudit-audit-other-logon-logoff-events",
+                    Label = "Logon Audit: Enable 'Other Logon/Logoff Events' for Session Reconnection Tracking",
+                    Category = "Security",
+                    Description =
+                        "Sets AuditOtherLogonLogoffEvents=3 (Success+Failure) in Advanced Audit Policy Logon/Logoff category. Generates Security events 4649 (replay attack detected), 4778 (session reconnected to Window Station), 4779 (session disconnected from Window Station), 4800 (workstation locked), 4801 (workstation unlocked), 4802/4803 (screensaver invoked/dismissed), 5378 (credential delegation requested), 5632/5633 (wireless/wired 802.1X authentication). "
+                        + "Events 4778/4779 (RDP/Terminal Services session reconnect and disconnect) are critical for RDP lateral movement forensics. Each reconnect event records the source IP, session ID, and account name separately from the initial logon event. Without other logon/logoff events, an attacker who uses RDP shadowing or session hijacking (connecting to an existing session without creating a new logon event) may not generate additional 4624 events. The 4778 reconnect event captures this post-logon session reuse.",
+                    Tags = ["logon-audit", "other-logon", "4778", "4779", "rdp-session", "session-hijacking"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote =
+                        "RDP session reconnect/disconnect events (4778/4779) audited; RDP session hijacking and shadowing generate detectable events.",
+                    ApplyOps = [RegOp.SetDword(Key, "AuditOtherLogonLogoffEvents", 3)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "AuditOtherLogonLogoffEvents")],
+                    DetectOps = [RegOp.CheckDword(Key, "AuditOtherLogonLogoffEvents", 3)],
+                },
+                new TweakDef
+                {
+                    Id = "logonaudit-audit-explicit-credential-use",
+                    Label = "Logon Audit: Enable Explicit Credential Use Auditing (RunAs, Over-Pass-the-Hash, WinRM)",
+                    Category = "Security",
+                    Description =
+                        "Sets AuditExplicitCredentialUse=3 (Success+Failure) in Advanced Audit Policy Logon/Logoff category. Generates Security event 4648 (logon using explicit credentials) when a process uses a different set of credentials to create a new logon session — covering RunAs executions, WMI remote command execution using explicit credentials, WinRM with credential parameters, and Over-Pass-the-Hash (explicit logon using an injected NTLM hash). "
+                        + "Event 4648 is a direct detection signal for Over-Pass-the-Hash and Overpass-the-Hash attacks. When Mimikatz performs an OverPTH (inject NTLM hash into a new logon session using explicit credential logon), Windows generates a 4648 event on the source machine. The combination of 4648 from Machine-A with 4624 Type 3 from Machine-B to Machine-A within the same second is a high-fidelity indicator of pass-the-hash lateral movement initiation from Machine-A.",
+                    Tags = ["logon-audit", "explicit-credentials", "event-4648", "overpass-the-hash", "winrm", "runas"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 5,
+                    SafetyRating = 5,
+                    ImpactNote =
+                        "Explicit credential use events (4648) generated; Over-Pass-the-Hash and RunAs credential abuse directly detectable.",
+                    ApplyOps = [RegOp.SetDword(Key, "AuditExplicitCredentialUse", 3)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "AuditExplicitCredentialUse")],
+                    DetectOps = [RegOp.CheckDword(Key, "AuditExplicitCredentialUse", 3)],
+                },
+                new TweakDef
+                {
+                    Id = "logonaudit-audit-special-logon-sensitive-groups",
+                    Label = "Logon Audit: Enable Special Logon Auditing for Privileged Group Member Authentication",
+                    Category = "Security",
+                    Description =
+                        "Sets AuditSpecialLogon=1 (Success) in Advanced Audit Policy Logon/Logoff category (logon-side complement to the Account Management special logon setting). Generates Security event 4964 whenever a user whose account is a member of the Special Groups list (typically Domain Admins, Enterprise Admins) authenticates interactively or via the network, providing privileged account authentication monitoring without the noise of universal 4624 auditing. "
+                        + "Privileged account authentication monitoring serves as a low-effort approximation of Privileged Access Workstation (PAW) compliance enforcement. If Domain Admins should only authenticate from designated admin workstations, Event 4964 events where the source computer name is not in the approved PAW list indicate a policy violation — an admin authenticated from a regular user workstation. This SIEM rule requires only two data sources: the 4964 event and the approved PAW machine list.",
+                    Tags = ["logon-audit", "event-4964", "domain-admins", "paw", "privileged-access", "compliance"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote =
+                        "Privileged group member logons generate Event 4964; admin authentication from non-PAW workstations detectable by SIEM.",
+                    ApplyOps = [RegOp.SetDword(Key, "AuditSpecialLogon", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "AuditSpecialLogon")],
+                    DetectOps = [RegOp.CheckDword(Key, "AuditSpecialLogon", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "logonaudit-audit-group-membership-at-logon",
+                    Label = "Logon Audit: Enable Group Membership Enumeration at Logon for Privilege Visibility",
+                    Category = "Security",
+                    Description =
+                        "Sets AuditGroupMembership=1 (Success) in Advanced Audit Policy Logon/Logoff category. Generates Security event 4627 which lists the full group membership of the logon token at logon time, complementing Event 4624 with the list of all security groups the logging-on user is a member of at the moment of logon. Enables detection of SID injection and Kerberos golden ticket attacks using extra group SIDs. "
+                        + "Kerberos golden tickets can be crafted with extra group SIDs added to the PAC (Privileged Account Certificate) that were not in the account's actual group membership. When such a ticket is used for authentication, Windows generates a 4627 event showing the effective group membership of the logon token. By comparing 4627 group membership against the account's actual AD group membership, anomalous extra SIDs (e.g., Domain Admins SID for a non-admin account) are immediately visible as golden ticket indicators.",
+                    Tags = ["logon-audit", "group-membership", "event-4627", "golden-ticket", "pac", "kerberos"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 5,
+                    SafetyRating = 5,
+                    ImpactNote =
+                        "Logon-time group membership logged (4627); Kerberos golden ticket with extra group SIDs detectable via 4627/AD membership comparison.",
+                    ApplyOps = [RegOp.SetDword(Key, "AuditGroupMembership", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "AuditGroupMembership")],
+                    DetectOps = [RegOp.CheckDword(Key, "AuditGroupMembership", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "logonaudit-audit-ipsec-extended-mode",
+                    Label = "Logon Audit: Enable IPSec Extended Mode Auditing for Network Authentication Failures",
+                    Category = "Security",
+                    Description =
+                        "Sets AuditIPSecExtendedMode=3 (Success+Failure) in Advanced Audit Policy Logon/Logoff category. Generates Security events for IPSec IKEv2 extended mode negotiation (4978/4979/4980/4983/4984), recording Kerberos, certificate, or preshared-key authentication exchanges, useful in environments using IPSec machine authentication for network segmentation enforcement via Windows Firewall with Advanced Security rules. "
+                        + "IPSec extended mode authentication provides machine-level authentication for encrypted connections between Windows endpoints in isolated network segments. Failure events from IPSec extended mode indicate endpoints attempting cross-segment communication that is blocked by IPSec policy — a potential indicator of lateral movement attempts that a compromised endpoint's attacker is trying to reach an isolated server segment. Extended mode failures highlight network segmentation policy violations in real time.",
+                    Tags = ["logon-audit", "ipsec", "ike", "extended-mode", "network-segmentation", "firewall"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote =
+                        "IPSec extended mode authentication events audited; cross-segment communication failures generate events indicating lateral movement.",
+                    ApplyOps = [RegOp.SetDword(Key, "AuditIPSecExtendedMode", 3)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "AuditIPSecExtendedMode")],
+                    DetectOps = [RegOp.CheckDword(Key, "AuditIPSecExtendedMode", 3)],
+                },
+                new TweakDef
+                {
+                    Id = "logonaudit-audit-user-device-claims",
+                    Label = "Logon Audit: Enable User and Device Claims Auditing for Dynamic Access Control",
+                    Category = "Security",
+                    Description =
+                        "Sets AuditUserDeviceClaims=1 (Success) in Advanced Audit Policy Logon/Logoff category. Generates Security event 4626 at logon time, which records the user and device claims embedded in the Kerberos authentication token when Dynamic Access Control (DAC) is used — providing visibility into the claims used for conditional access decisions in DAC-protected file server and classification label systems. "
+                        + "Dynamic Access Control uses Kerberos claims (user department, device compliance state, classification clearance level) to make file access decisions on Windows Server file shares. A user whose Kerberos token contains an incorrect department claim (e.g., claim was modified at token issue time by a Kerberos token forgery attack) could gain access to files classified for a different department. Event 4626 records the actual claims present at logon time, enabling post-incident review of whether inappropriate access was gated on correct claim values.",
+                    Tags = ["logon-audit", "claims", "dynamic-access-control", "event-4626", "kerberos", "dac"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "User/device Kerberos claims logged at logon (4626); Dynamic Access Control claim-based access decisions auditable.",
+                    ApplyOps = [RegOp.SetDword(Key, "AuditUserDeviceClaims", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "AuditUserDeviceClaims")],
+                    DetectOps = [RegOp.CheckDword(Key, "AuditUserDeviceClaims", 1)],
+                },
+            ];
     }
 
     // ── ObjectAccessPolicy ──
@@ -25706,17 +25985,14 @@ internal static class PolicyAudit
                 DetectOps = [RegOp.CheckDword(Key, "AuditCentralAccessPolicyStaging", 1)],
             },
         ];
-
     }
 
     // ── PrintAuditPolicy ──
     private static class _PrintAuditPolicy
     {
-        private const string AudKey =
-            @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers\AuditPrint";
+        private const string AudKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers\AuditPrint";
 
-        private const string PrtKey =
-            @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers";
+        private const string PrtKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers";
 
         public static IReadOnlyList<TweakDef> Data =>
             [
@@ -25732,7 +26008,8 @@ internal static class PolicyAudit
                     CorpSafe = true,
                     ImpactScore = 4,
                     SafetyRating = 5,
-                    ImpactNote = "Every print job generates a security audit event. Security event log volume increases — ensure the event log size is sufficient and logs are forwarded to a SIEM. Document names in the log may contain sensitive information from the job metadata.",
+                    ImpactNote =
+                        "Every print job generates a security audit event. Security event log volume increases — ensure the event log size is sufficient and logs are forwarded to a SIEM. Document names in the log may contain sensitive information from the job metadata.",
                     ApplyOps = [RegOp.SetDword(AudKey, "AuditPrintJobs", 1)],
                     RemoveOps = [RegOp.DeleteValue(AudKey, "AuditPrintJobs")],
                     DetectOps = [RegOp.CheckDword(AudKey, "AuditPrintJobs", 1)],
@@ -25749,7 +26026,8 @@ internal static class PolicyAudit
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "Printer configuration changes generate audit events. SIEM rules for suspicious printer configuration changes (printers added/modified by non-admin accounts) detect potential print spooler abuse. Minimal event volume in stable environments.",
+                    ImpactNote =
+                        "Printer configuration changes generate audit events. SIEM rules for suspicious printer configuration changes (printers added/modified by non-admin accounts) detect potential print spooler abuse. Minimal event volume in stable environments.",
                     ApplyOps = [RegOp.SetDword(AudKey, "AuditPrinterConfiguration", 1)],
                     RemoveOps = [RegOp.DeleteValue(AudKey, "AuditPrinterConfiguration")],
                     DetectOps = [RegOp.CheckDword(AudKey, "AuditPrinterConfiguration", 1)],
@@ -25766,7 +26044,8 @@ internal static class PolicyAudit
                     CorpSafe = true,
                     ImpactScore = 4,
                     SafetyRating = 5,
-                    ImpactNote = "Printer driver installations and removals generate audit events. Alerts on unexpected driver installs are a high-fidelity PrintNightmare indicator. Negligible event volume in controlled environments.",
+                    ImpactNote =
+                        "Printer driver installations and removals generate audit events. Alerts on unexpected driver installs are a high-fidelity PrintNightmare indicator. Negligible event volume in controlled environments.",
                     ApplyOps = [RegOp.SetDword(AudKey, "AuditDriverInstall", 1)],
                     RemoveOps = [RegOp.DeleteValue(AudKey, "AuditDriverInstall")],
                     DetectOps = [RegOp.CheckDword(AudKey, "AuditDriverInstall", 1)],
@@ -25783,7 +26062,8 @@ internal static class PolicyAudit
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "Print server RPC connection and disconnection events are logged. In environments with many print clients, this generates high event volume. Consider applying to high-value print servers only and forwarding to central SIEM for analysis.",
+                    ImpactNote =
+                        "Print server RPC connection and disconnection events are logged. In environments with many print clients, this generates high event volume. Consider applying to high-value print servers only and forwarding to central SIEM for analysis.",
                     ApplyOps = [RegOp.SetDword(AudKey, "AuditServerConnections", 1)],
                     RemoveOps = [RegOp.DeleteValue(AudKey, "AuditServerConnections")],
                     DetectOps = [RegOp.CheckDword(AudKey, "AuditServerConnections", 1)],
@@ -25800,7 +26080,8 @@ internal static class PolicyAudit
                     CorpSafe = true,
                     ImpactScore = 2,
                     SafetyRating = 5,
-                    ImpactNote = "Print audit logs are retained locally for at minimum 7 days. SIEM forwarding is recommended for longer retention. Local disk space consumption is proportional to job volume.",
+                    ImpactNote =
+                        "Print audit logs are retained locally for at minimum 7 days. SIEM forwarding is recommended for longer retention. Local disk space consumption is proportional to job volume.",
                     ApplyOps = [RegOp.SetDword(AudKey, "AuditLogRetentionDays", 7)],
                     RemoveOps = [RegOp.DeleteValue(AudKey, "AuditLogRetentionDays")],
                     DetectOps = [RegOp.CheckDword(AudKey, "AuditLogRetentionDays", 7)],
@@ -25817,7 +26098,8 @@ internal static class PolicyAudit
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 4,
-                    ImpactNote = "Applications that bypass the spooler with direct port I/O (legacy manufacturing, point-of-sale, label printers) may stop printing. Test with all applications that use non-standard printing methods before deploying. Standard Windows GDI/WDM/XPS printing paths are unaffected.",
+                    ImpactNote =
+                        "Applications that bypass the spooler with direct port I/O (legacy manufacturing, point-of-sale, label printers) may stop printing. Test with all applications that use non-standard printing methods before deploying. Standard Windows GDI/WDM/XPS printing paths are unaffected.",
                     ApplyOps = [RegOp.SetDword(PrtKey, "DisableDirectPrinting", 1)],
                     RemoveOps = [RegOp.DeleteValue(PrtKey, "DisableDirectPrinting")],
                     DetectOps = [RegOp.CheckDword(PrtKey, "DisableDirectPrinting", 1)],
@@ -25834,7 +26116,8 @@ internal static class PolicyAudit
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "Per-user and per-printer page count data is tracked. Negligible overhead. Data is accessible via Print Management console and print accounting APIs. Does not enforce quotas by itself — pair with a print quota enforcement solution.",
+                    ImpactNote =
+                        "Per-user and per-printer page count data is tracked. Negligible overhead. Data is accessible via Print Management console and print accounting APIs. Does not enforce quotas by itself — pair with a print quota enforcement solution.",
                     ApplyOps = [RegOp.SetDword(AudKey, "EnablePageTracking", 1)],
                     RemoveOps = [RegOp.DeleteValue(AudKey, "EnablePageTracking")],
                     DetectOps = [RegOp.CheckDword(AudKey, "EnablePageTracking", 1)],
@@ -25851,7 +26134,8 @@ internal static class PolicyAudit
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "Colour printing is restricted to authorised users. Unauthorised users print in monochrome regardless of printer capability. Colour authorisation group must be configured in print server properties. Significant toner cost reduction in large deployments.",
+                    ImpactNote =
+                        "Colour printing is restricted to authorised users. Unauthorised users print in monochrome regardless of printer capability. Colour authorisation group must be configured in print server properties. Significant toner cost reduction in large deployments.",
                     ApplyOps = [RegOp.SetDword(AudKey, "RestrictColorPrinting", 1)],
                     RemoveOps = [RegOp.DeleteValue(AudKey, "RestrictColorPrinting")],
                     DetectOps = [RegOp.CheckDword(AudKey, "RestrictColorPrinting", 1)],
@@ -25868,7 +26152,8 @@ internal static class PolicyAudit
                     CorpSafe = true,
                     ImpactScore = 4,
                     SafetyRating = 5,
-                    ImpactNote = "Print jobs are held until the submitter authenticates at the printer. Requires printer hardware that supports hold-and-release (most enterprise MFPs). Users must approach the printer to release jobs. Uncollected jobs expire after the configured timeout.",
+                    ImpactNote =
+                        "Print jobs are held until the submitter authenticates at the printer. Requires printer hardware that supports hold-and-release (most enterprise MFPs). Users must approach the printer to release jobs. Uncollected jobs expire after the configured timeout.",
                     ApplyOps = [RegOp.SetDword(AudKey, "EnableSecurePrint", 1)],
                     RemoveOps = [RegOp.DeleteValue(AudKey, "EnableSecurePrint")],
                     DetectOps = [RegOp.CheckDword(AudKey, "EnableSecurePrint", 1)],
@@ -25885,195 +26170,212 @@ internal static class PolicyAudit
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "Cancelled and deleted print jobs generate audit events. SIEM correlation of the submitter vs. the deleting account detects queue manipulation. Negligible event volume in normal environments.",
+                    ImpactNote =
+                        "Cancelled and deleted print jobs generate audit events. SIEM correlation of the submitter vs. the deleting account detects queue manipulation. Negligible event volume in normal environments.",
                     ApplyOps = [RegOp.SetDword(AudKey, "AuditDeletedJobs", 1)],
                     RemoveOps = [RegOp.DeleteValue(AudKey, "AuditDeletedJobs")],
                     DetectOps = [RegOp.CheckDword(AudKey, "AuditDeletedJobs", 1)],
                 },
             ];
-
     }
 
     // ── PrivilegeUseAuditPolicy ──
     private static class _PrivilegeUseAuditPolicy
     {
-        private const string PrivKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AdvancedAuditPolicyConfiguration\System Audit Policies - Local Group Policy\Privilege Use";
-        private const string AclKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AdvancedAuditPolicyConfiguration\System Audit Policies - Local Group Policy\Object Access";
+        private const string PrivKey =
+            @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AdvancedAuditPolicyConfiguration\System Audit Policies - Local Group Policy\Privilege Use";
+        private const string AclKey =
+            @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AdvancedAuditPolicyConfiguration\System Audit Policies - Local Group Policy\Object Access";
 
         public static IReadOnlyList<TweakDef> Data =>
-        [
-            new TweakDef
-            {
-                Id = "privaudit-audit-sensitive-privilege-use",
-                Label = "Privilege Audit: Enable Auditing of Sensitive Privilege Use (SeDebug, SeTcb, SeBackup)",
-                Category = "Security",
-                Description = "Sets 'Audit Sensitive Privilege Use'=3 (Success+Failure) in the Advanced Audit Policy. Generates Security event 4673/4674 whenever a process invokes a sensitive privilege — SeDebugPrivilege (used by Mimikatz for LSASS dump), SeTcbPrivilege (act as operating system), SeBackupPrivilege (bypass file ACLs for backup), SeRestorePrivilege, SeTakeOwnershipPrivilege — providing direct detection signal for privilege-abuse attack techniques. " +
-                    "SeDebugPrivilege invocation is a binary trigger for LSASS credential dumping — every major credential harvesting tool (Mimikatz, ProcDump LSASS, Task Manager LSASS dump) requires SeDebugPrivilege to access LSASS memory. Auditing sensitive privilege use generates Security event 4673 the instant any process invokes SeDebugPrivilege, providing near-real-time detection of credential theft attempts through SIEM correlation — typically one of the highest-fidelity, lowest-noise detection rules in an enterprise SIEM.",
-                Tags = ["privilege-audit", "sensitive-privilege", "sedebug", "mimikatz", "lsass", "credential-theft"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 5,
-                SafetyRating = 5,
-                ImpactNote = "Sensitive privilege use events generated; SeDebugPrivilege (Mimikatz/LSASS dump) detection in near-real-time.",
-                ApplyOps = [RegOp.SetDword(PrivKey, "AuditSensitivePrivilegeUse", 3)],
-                RemoveOps = [RegOp.DeleteValue(PrivKey, "AuditSensitivePrivilegeUse")],
-                DetectOps = [RegOp.CheckDword(PrivKey, "AuditSensitivePrivilegeUse", 3)],
-            },
-            new TweakDef
-            {
-                Id = "privaudit-audit-nonsensitive-privilege-use",
-                Label = "Privilege Audit: Enable Auditing of Non-Sensitive Privilege Use (SeShutdown, SeLoad)",
-                Category = "Security",
-                Description = "Sets 'Audit Non-Sensitive Privilege Use'=1 (Success) in the Advanced Audit Policy. Generates Security event 4673/4674 for non-sensitive privilege invocations (SeShutdownPrivilege, SeUndockPrivilege, SeLoadDriverPrivilege, SeSystemtimePrivilege, SeTimeZonePrivilege, SeChangeNotifyPrivilege). Non-sensitive privilege events complement sensitive privilege events to provide a complete picture of privilege hierarchy escalation. " +
-                    "SeLoadDriverPrivilege invocation is the second critical attack signal — attackers who load a signed-but-vulnerable driver as a vector for privilege escalation (BYOVD, Bring Your Own Vulnerable Driver) must invoke SeLoadDriverPrivilege to install the driver. Auditing this privilege provides detection for BYOVD attacks (used by Lazarus Group, BlackMatter ransomware) before the vulnerable driver is loaded and exploited.",
-                Tags = ["privilege-audit", "nonsensitive-privilege", "seloaddriver", "byovd", "driver-exploit"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                ImpactNote = "Non-sensitive privilege invocations audited; SeLoadDriverPrivilege (BYOVD attack vector) detectable.",
-                ApplyOps = [RegOp.SetDword(PrivKey, "AuditNonSensitivePrivilegeUse", 1)],
-                RemoveOps = [RegOp.DeleteValue(PrivKey, "AuditNonSensitivePrivilegeUse")],
-                DetectOps = [RegOp.CheckDword(PrivKey, "AuditNonSensitivePrivilegeUse", 1)],
-            },
-            new TweakDef
-            {
-                Id = "privaudit-audit-other-privilege-use-events",
-                Label = "Privilege Audit: Enable 'Other Privilege Use Events' for Complete Privilege Coverage",
-                Category = "Security",
-                Description = "Sets 'Audit Other Privilege Use Events'=3 (Success+Failure) in the Advanced Audit Policy. Generates Security events for miscellaneous privilege use scenarios not captured by Sensitive or Non-Sensitive subcategories, including encrypted data recovery, user right assignments via Direct Access, and scheduled task privilege overrides. Completes the privilege use audit coverage across all three subcategories. " +
-                    "The 'Other Privilege Use Events' subcategory captures edge-case privilege invocations that don't neatly fit the Sensitive/Non-Sensitive taxonomy — including cross-domain encrypted data access (EFS recovery) and some legacy DCOM privilege transitions. While individually lower-signal than SeDebugPrivilege events, collectively these events fill gaps in the privilege audit trail that sophisticated threat actors may attempt to exploit by routing privilege escalation through lesser-audited paths.",
-                Tags = ["privilege-audit", "other-privilege", "efs", "dcom", "complete-coverage"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Other privilege use events audited; complete privilege audit coverage across all three subcategories.",
-                ApplyOps = [RegOp.SetDword(PrivKey, "AuditOtherPrivilegeUseEvents", 3)],
-                RemoveOps = [RegOp.DeleteValue(PrivKey, "AuditOtherPrivilegeUseEvents")],
-                DetectOps = [RegOp.CheckDword(PrivKey, "AuditOtherPrivilegeUseEvents", 3)],
-            },
-            new TweakDef
-            {
-                Id = "privaudit-audit-file-system-failures",
-                Label = "Privilege Audit: Enable File System Access Failure Auditing for ACL Bypass Detection",
-                Category = "Security",
-                Description = "Sets 'Audit File System Failures'=2 (Failure) in the Advanced Audit Policy Object Access category. Generates Security event 4656/4663 (Failure) whenever a process is denied access to a file or folder due to DACL permissions, recording the file path, access type requested, requesting process, and user account — providing detection for access scanning and ACL enumeration attacks. " +
-                    "Access failure events are high-signal early warning indicators for insider threat and lateral movement reconnaissance. A compromised account scanning the file system for accessible data will generate hundreds of access failure events as it attempts to read protected files and directories above its permission level. A volume spike in Event 4656 Failure events from a single user account is a reliable indicator of data access scanning or Shadow IT application attempting to read sensitive data repositories.",
-                Tags = ["privilege-audit", "file-system", "access-failure", "acl", "insider-threat", "scanning"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                ImpactNote = "File system access failure events generated; ACL bypass attempts and access scanning produce high-fidelity detection events.",
-                ApplyOps = [RegOp.SetDword(AclKey, "AuditFileSystem", 2)],
-                RemoveOps = [RegOp.DeleteValue(AclKey, "AuditFileSystem")],
-                DetectOps = [RegOp.CheckDword(AclKey, "AuditFileSystem", 2)],
-            },
-            new TweakDef
-            {
-                Id = "privaudit-audit-registry-object-access",
-                Label = "Privilege Audit: Enable Sensitive Registry Key Access Auditing",
-                Category = "Security",
-                Description = "Sets 'Audit Registry Object Access'=3 (Success+Failure) in the Advanced Audit Policy Object Access category. Generates Security events 4656/4663 for registry key access operations on SACL-protected registry keys (keys with an assigned Security Audit ACL), enabling detection of access to AutoRun keys, service configuration keys, and other persistence mechanism registry locations. " +
-                    "Registry-based persistence (Run keys, Services, COM hijacking targets) are the most common dwell-time persistence mechanisms. Auditing access to SACL-protected registry keys (HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Run, HKLM\\SYSTEM\\CurrentControlSet\\Services, HKLM\\SOFTWARE\\Classes\\CLSID) detects both initial persistence registration (write access) and the periodic re-invocation of persistence (read access at logon). When SACL-protected keys are configured on high-value locations, SIEM rules can alert on unexpected write access creating new persistence entries.",
-                Tags = ["privilege-audit", "registry", "sacl", "persistence", "run-keys", "com-hijacking"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 5,
-                SafetyRating = 5,
-                ImpactNote = "SACL-protected registry keys generate access events; persistence mechanism modifications detectable via event correlation.",
-                ApplyOps = [RegOp.SetDword(AclKey, "AuditRegistry", 3)],
-                RemoveOps = [RegOp.DeleteValue(AclKey, "AuditRegistry")],
-                DetectOps = [RegOp.CheckDword(AclKey, "AuditRegistry", 3)],
-            },
-            new TweakDef
-            {
-                Id = "privaudit-audit-removable-storage-access",
-                Label = "Privilege Audit: Enable Removable Storage Access Audit Events for USB DLP",
-                Category = "Security",
-                Description = "Sets 'Audit Removable Storage'=3 (Success+Failure) in the Advanced Audit Policy Object Access category. Generates Security event 4663 for all read and write operations to removable storage devices (USB drives, SD cards, DVD writers), recording the file name, operation type, and user account for every file accessed on removable media — enabling DLP monitoring without a dedicated DLP agent. " +
-                    "Removable storage audit provides per-file visibility of data access on USB drives. Where standard PnP audit (plug/unplug events) only shows that a device was connected, removable storage audit shows exactly which files were copied to or read from the device. This enables insider threat scenarios to be reconstructed precisely — ACME employee connected USB drive X at 14:32, copied 47 files totalling 2.3 GB from the SharePoint mapped drive, disconnected at 14:35 — from on-device event log evidence alone.",
-                Tags = ["privilege-audit", "removable-storage", "usb", "dlp", "insider-threat", "data-exfiltration"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 5,
-                SafetyRating = 5,
-                ImpactNote = "Per-file removable storage access audited; USB data exfiltration reconstructable at file level from Security event log.",
-                ApplyOps = [RegOp.SetDword(AclKey, "AuditRemovableStorage", 3)],
-                RemoveOps = [RegOp.DeleteValue(AclKey, "AuditRemovableStorage")],
-                DetectOps = [RegOp.CheckDword(AclKey, "AuditRemovableStorage", 3)],
-            },
-            new TweakDef
-            {
-                Id = "privaudit-audit-token-right-adjustment",
-                Label = "Privilege Audit: Enable Token Privilege Adjustment Auditing for UAC Bypass Detection",
-                Category = "Security",
-                Description = "Sets AuditTokenPrivilegeAdjustment=3 (Success+Failure) in the Windows System policy privilege section. Generates Security event 4703 (Token privilege adjustment) when a process enables or disables a privilege in its own access token, providing detection for UAC bypass techniques that involve enabling disabled privileges in a standard user token to perform privileged operations without triggering a UAC prompt. " +
-                    "Many UAC bypass techniques (mockdirs, fodhelper, eventvwr, DLL UAC auto-elevations) work by enabling privileges that are present but disabled in the current token (e.g., SeImpersonatePrivilege, SeAssignPrimaryTokenPrivilege) through techniques that avoid the standard UAC elevation flow. Token privilege adjustment events (4703) generated when these operations occur provide a direct detection signal for UAC bypass patterns — especially in combination with process creation events showing the bypassed elevated process that spawns immediately after the token adjustment.",
-                Tags = ["privilege-audit", "token-adjustment", "uac-bypass", "event-4703", "impersonation"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                ImpactNote = "Token privilege adjustments generate Event 4703; UAC bypass techniques involving token privilege enabling detectable.",
-                ApplyOps = [RegOp.SetDword(PrivKey, "AuditTokenPrivilegeAdjustment", 3)],
-                RemoveOps = [RegOp.DeleteValue(PrivKey, "AuditTokenPrivilegeAdjustment")],
-                DetectOps = [RegOp.CheckDword(PrivKey, "AuditTokenPrivilegeAdjustment", 3)],
-            },
-            new TweakDef
-            {
-                Id = "privaudit-audit-special-logon",
-                Label = "Privilege Audit: Enable Special Logon Auditing (Admin Equivalent or Special Group Logons)",
-                Category = "Security",
-                Description = "Sets AuditSpecialLogon=1 (Success) in the Advanced Audit Policy Logon/Logoff category. Generates Security event 4964 (Special groups assigned to new logon) when an Entra ID or domain user whose account is a member of a Special Groups audit list logs on, providing targeted monitoring for high-privilege accounts without the event volume of full logon auditing for all users. " +
-                    "Special Logon auditing enables selective privileged account monitoring. By configuring the Special Groups list to include Domain Admins, Enterprise Admins, Backup Operators, and other critical security groups, the enterprise gets immediate Security event notification every time any member of those groups authenticates to any endpoint in the domain — without generating Event 4624 for every employee logon. This powers 'privileged account logon monitoring' SIEM rules with precise scope and minimal noise.",
-                Tags = ["privilege-audit", "special-logon", "event-4964", "admin-monitoring", "privileged-accounts"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                ImpactNote = "Special group logons generate Event 4964; privileged account authentication to any endpoint monitored in real time.",
-                ApplyOps = [RegOp.SetDword(PrivKey, "AuditSpecialLogon", 1)],
-                RemoveOps = [RegOp.DeleteValue(PrivKey, "AuditSpecialLogon")],
-                DetectOps = [RegOp.CheckDword(PrivKey, "AuditSpecialLogon", 1)],
-            },
-            new TweakDef
-            {
-                Id = "privaudit-audit-sam-sam-access",
-                Label = "Privilege Audit: Enable SAM Database Access Auditing for Credential Database Protection",
-                Category = "Security",
-                Description = "Sets AuditSAMAccess=3 (Success+Failure) in the Advanced Audit Policy. Generates Security events when the Security Account Manager (SAM) database is accessed, providing detection for credential dumping techniques that target the local SAM database (offline dump of SYSTEM and SAM hive, volume shadow copy SAM extraction, or SecretsDump against local accounts). " +
-                    "The SAM database contains the NTLM password hashes for all local Windows user accounts. SAM database access is a common post-exploitation step — after gaining SYSTEM privileges, threat actors extract SAM to harvest local account hashes for Pass-the-Hash attacks or for offline cracking. Auditing SAM access generates Security events whenever the SAM hive is opened with access beyond normal system operations, providing detection signals for credential harvesting operations against local accounts.",
-                Tags = ["privilege-audit", "sam", "credential-dumping", "ntlm", "pass-the-hash", "secretsdump"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 5,
-                SafetyRating = 5,
-                ImpactNote = "SAM database access audited; credential dumping attempts targeting local account hashes generate Security events.",
-                ApplyOps = [RegOp.SetDword(PrivKey, "AuditSAMAccess", 3)],
-                RemoveOps = [RegOp.DeleteValue(PrivKey, "AuditSAMAccess")],
-                DetectOps = [RegOp.CheckDword(PrivKey, "AuditSAMAccess", 3)],
-            },
-            new TweakDef
-            {
-                Id = "privaudit-audit-lsa-secrets-access",
-                Label = "Privilege Audit: Enable LSA Secrets Access Auditing for Service Credential Protection",
-                Category = "Security",
-                Description = "Sets AuditLSASecretsAccess=3 (Success+Failure) in the Advanced Audit Policy. Generates Security events when the Local Security Authority (LSA) secrets store is accessed, detecting attempts to harvest service account credentials and DPAPI master keys stored in the LSA secrets store by tools such as Mimikatz's lsadump::secrets command or reg.exe SYSTEM hive extraction. " +
-                    "LSA secrets contain auto-logon account passwords, service account passwords for Windows services configured to run as domain accounts, DPAPI master key encryption keys, and cached domain credentials (DCC2 hashes). These are higher-value credentials than local SAM hashes because service account credentials are often over-provisioned domain accounts with access to multiple servers. Auditing LSA secrets access detects the critical early step of service account credential harvesting that enables subsequent lateral movement.",
-                Tags = ["privilege-audit", "lsa-secrets", "service-credentials", "dpapi", "mimikatz", "lateral-movement"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 5,
-                SafetyRating = 5,
-                ImpactNote = "LSA secrets access audited; service account credential harvesting (Mimikatz lsadump::secrets) generates detection events.",
-                ApplyOps = [RegOp.SetDword(PrivKey, "AuditLSASecretsAccess", 3)],
-                RemoveOps = [RegOp.DeleteValue(PrivKey, "AuditLSASecretsAccess")],
-                DetectOps = [RegOp.CheckDword(PrivKey, "AuditLSASecretsAccess", 3)],
-            },
-        ];
-
+            [
+                new TweakDef
+                {
+                    Id = "privaudit-audit-sensitive-privilege-use",
+                    Label = "Privilege Audit: Enable Auditing of Sensitive Privilege Use (SeDebug, SeTcb, SeBackup)",
+                    Category = "Security",
+                    Description =
+                        "Sets 'Audit Sensitive Privilege Use'=3 (Success+Failure) in the Advanced Audit Policy. Generates Security event 4673/4674 whenever a process invokes a sensitive privilege — SeDebugPrivilege (used by Mimikatz for LSASS dump), SeTcbPrivilege (act as operating system), SeBackupPrivilege (bypass file ACLs for backup), SeRestorePrivilege, SeTakeOwnershipPrivilege — providing direct detection signal for privilege-abuse attack techniques. "
+                        + "SeDebugPrivilege invocation is a binary trigger for LSASS credential dumping — every major credential harvesting tool (Mimikatz, ProcDump LSASS, Task Manager LSASS dump) requires SeDebugPrivilege to access LSASS memory. Auditing sensitive privilege use generates Security event 4673 the instant any process invokes SeDebugPrivilege, providing near-real-time detection of credential theft attempts through SIEM correlation — typically one of the highest-fidelity, lowest-noise detection rules in an enterprise SIEM.",
+                    Tags = ["privilege-audit", "sensitive-privilege", "sedebug", "mimikatz", "lsass", "credential-theft"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 5,
+                    SafetyRating = 5,
+                    ImpactNote = "Sensitive privilege use events generated; SeDebugPrivilege (Mimikatz/LSASS dump) detection in near-real-time.",
+                    ApplyOps = [RegOp.SetDword(PrivKey, "AuditSensitivePrivilegeUse", 3)],
+                    RemoveOps = [RegOp.DeleteValue(PrivKey, "AuditSensitivePrivilegeUse")],
+                    DetectOps = [RegOp.CheckDword(PrivKey, "AuditSensitivePrivilegeUse", 3)],
+                },
+                new TweakDef
+                {
+                    Id = "privaudit-audit-nonsensitive-privilege-use",
+                    Label = "Privilege Audit: Enable Auditing of Non-Sensitive Privilege Use (SeShutdown, SeLoad)",
+                    Category = "Security",
+                    Description =
+                        "Sets 'Audit Non-Sensitive Privilege Use'=1 (Success) in the Advanced Audit Policy. Generates Security event 4673/4674 for non-sensitive privilege invocations (SeShutdownPrivilege, SeUndockPrivilege, SeLoadDriverPrivilege, SeSystemtimePrivilege, SeTimeZonePrivilege, SeChangeNotifyPrivilege). Non-sensitive privilege events complement sensitive privilege events to provide a complete picture of privilege hierarchy escalation. "
+                        + "SeLoadDriverPrivilege invocation is the second critical attack signal — attackers who load a signed-but-vulnerable driver as a vector for privilege escalation (BYOVD, Bring Your Own Vulnerable Driver) must invoke SeLoadDriverPrivilege to install the driver. Auditing this privilege provides detection for BYOVD attacks (used by Lazarus Group, BlackMatter ransomware) before the vulnerable driver is loaded and exploited.",
+                    Tags = ["privilege-audit", "nonsensitive-privilege", "seloaddriver", "byovd", "driver-exploit"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "Non-sensitive privilege invocations audited; SeLoadDriverPrivilege (BYOVD attack vector) detectable.",
+                    ApplyOps = [RegOp.SetDword(PrivKey, "AuditNonSensitivePrivilegeUse", 1)],
+                    RemoveOps = [RegOp.DeleteValue(PrivKey, "AuditNonSensitivePrivilegeUse")],
+                    DetectOps = [RegOp.CheckDword(PrivKey, "AuditNonSensitivePrivilegeUse", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "privaudit-audit-other-privilege-use-events",
+                    Label = "Privilege Audit: Enable 'Other Privilege Use Events' for Complete Privilege Coverage",
+                    Category = "Security",
+                    Description =
+                        "Sets 'Audit Other Privilege Use Events'=3 (Success+Failure) in the Advanced Audit Policy. Generates Security events for miscellaneous privilege use scenarios not captured by Sensitive or Non-Sensitive subcategories, including encrypted data recovery, user right assignments via Direct Access, and scheduled task privilege overrides. Completes the privilege use audit coverage across all three subcategories. "
+                        + "The 'Other Privilege Use Events' subcategory captures edge-case privilege invocations that don't neatly fit the Sensitive/Non-Sensitive taxonomy — including cross-domain encrypted data access (EFS recovery) and some legacy DCOM privilege transitions. While individually lower-signal than SeDebugPrivilege events, collectively these events fill gaps in the privilege audit trail that sophisticated threat actors may attempt to exploit by routing privilege escalation through lesser-audited paths.",
+                    Tags = ["privilege-audit", "other-privilege", "efs", "dcom", "complete-coverage"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "Other privilege use events audited; complete privilege audit coverage across all three subcategories.",
+                    ApplyOps = [RegOp.SetDword(PrivKey, "AuditOtherPrivilegeUseEvents", 3)],
+                    RemoveOps = [RegOp.DeleteValue(PrivKey, "AuditOtherPrivilegeUseEvents")],
+                    DetectOps = [RegOp.CheckDword(PrivKey, "AuditOtherPrivilegeUseEvents", 3)],
+                },
+                new TweakDef
+                {
+                    Id = "privaudit-audit-file-system-failures",
+                    Label = "Privilege Audit: Enable File System Access Failure Auditing for ACL Bypass Detection",
+                    Category = "Security",
+                    Description =
+                        "Sets 'Audit File System Failures'=2 (Failure) in the Advanced Audit Policy Object Access category. Generates Security event 4656/4663 (Failure) whenever a process is denied access to a file or folder due to DACL permissions, recording the file path, access type requested, requesting process, and user account — providing detection for access scanning and ACL enumeration attacks. "
+                        + "Access failure events are high-signal early warning indicators for insider threat and lateral movement reconnaissance. A compromised account scanning the file system for accessible data will generate hundreds of access failure events as it attempts to read protected files and directories above its permission level. A volume spike in Event 4656 Failure events from a single user account is a reliable indicator of data access scanning or Shadow IT application attempting to read sensitive data repositories.",
+                    Tags = ["privilege-audit", "file-system", "access-failure", "acl", "insider-threat", "scanning"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote =
+                        "File system access failure events generated; ACL bypass attempts and access scanning produce high-fidelity detection events.",
+                    ApplyOps = [RegOp.SetDword(AclKey, "AuditFileSystem", 2)],
+                    RemoveOps = [RegOp.DeleteValue(AclKey, "AuditFileSystem")],
+                    DetectOps = [RegOp.CheckDword(AclKey, "AuditFileSystem", 2)],
+                },
+                new TweakDef
+                {
+                    Id = "privaudit-audit-registry-object-access",
+                    Label = "Privilege Audit: Enable Sensitive Registry Key Access Auditing",
+                    Category = "Security",
+                    Description =
+                        "Sets 'Audit Registry Object Access'=3 (Success+Failure) in the Advanced Audit Policy Object Access category. Generates Security events 4656/4663 for registry key access operations on SACL-protected registry keys (keys with an assigned Security Audit ACL), enabling detection of access to AutoRun keys, service configuration keys, and other persistence mechanism registry locations. "
+                        + "Registry-based persistence (Run keys, Services, COM hijacking targets) are the most common dwell-time persistence mechanisms. Auditing access to SACL-protected registry keys (HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Run, HKLM\\SYSTEM\\CurrentControlSet\\Services, HKLM\\SOFTWARE\\Classes\\CLSID) detects both initial persistence registration (write access) and the periodic re-invocation of persistence (read access at logon). When SACL-protected keys are configured on high-value locations, SIEM rules can alert on unexpected write access creating new persistence entries.",
+                    Tags = ["privilege-audit", "registry", "sacl", "persistence", "run-keys", "com-hijacking"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 5,
+                    SafetyRating = 5,
+                    ImpactNote =
+                        "SACL-protected registry keys generate access events; persistence mechanism modifications detectable via event correlation.",
+                    ApplyOps = [RegOp.SetDword(AclKey, "AuditRegistry", 3)],
+                    RemoveOps = [RegOp.DeleteValue(AclKey, "AuditRegistry")],
+                    DetectOps = [RegOp.CheckDword(AclKey, "AuditRegistry", 3)],
+                },
+                new TweakDef
+                {
+                    Id = "privaudit-audit-removable-storage-access",
+                    Label = "Privilege Audit: Enable Removable Storage Access Audit Events for USB DLP",
+                    Category = "Security",
+                    Description =
+                        "Sets 'Audit Removable Storage'=3 (Success+Failure) in the Advanced Audit Policy Object Access category. Generates Security event 4663 for all read and write operations to removable storage devices (USB drives, SD cards, DVD writers), recording the file name, operation type, and user account for every file accessed on removable media — enabling DLP monitoring without a dedicated DLP agent. "
+                        + "Removable storage audit provides per-file visibility of data access on USB drives. Where standard PnP audit (plug/unplug events) only shows that a device was connected, removable storage audit shows exactly which files were copied to or read from the device. This enables insider threat scenarios to be reconstructed precisely — ACME employee connected USB drive X at 14:32, copied 47 files totalling 2.3 GB from the SharePoint mapped drive, disconnected at 14:35 — from on-device event log evidence alone.",
+                    Tags = ["privilege-audit", "removable-storage", "usb", "dlp", "insider-threat", "data-exfiltration"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 5,
+                    SafetyRating = 5,
+                    ImpactNote =
+                        "Per-file removable storage access audited; USB data exfiltration reconstructable at file level from Security event log.",
+                    ApplyOps = [RegOp.SetDword(AclKey, "AuditRemovableStorage", 3)],
+                    RemoveOps = [RegOp.DeleteValue(AclKey, "AuditRemovableStorage")],
+                    DetectOps = [RegOp.CheckDword(AclKey, "AuditRemovableStorage", 3)],
+                },
+                new TweakDef
+                {
+                    Id = "privaudit-audit-token-right-adjustment",
+                    Label = "Privilege Audit: Enable Token Privilege Adjustment Auditing for UAC Bypass Detection",
+                    Category = "Security",
+                    Description =
+                        "Sets AuditTokenPrivilegeAdjustment=3 (Success+Failure) in the Windows System policy privilege section. Generates Security event 4703 (Token privilege adjustment) when a process enables or disables a privilege in its own access token, providing detection for UAC bypass techniques that involve enabling disabled privileges in a standard user token to perform privileged operations without triggering a UAC prompt. "
+                        + "Many UAC bypass techniques (mockdirs, fodhelper, eventvwr, DLL UAC auto-elevations) work by enabling privileges that are present but disabled in the current token (e.g., SeImpersonatePrivilege, SeAssignPrimaryTokenPrivilege) through techniques that avoid the standard UAC elevation flow. Token privilege adjustment events (4703) generated when these operations occur provide a direct detection signal for UAC bypass patterns — especially in combination with process creation events showing the bypassed elevated process that spawns immediately after the token adjustment.",
+                    Tags = ["privilege-audit", "token-adjustment", "uac-bypass", "event-4703", "impersonation"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote =
+                        "Token privilege adjustments generate Event 4703; UAC bypass techniques involving token privilege enabling detectable.",
+                    ApplyOps = [RegOp.SetDword(PrivKey, "AuditTokenPrivilegeAdjustment", 3)],
+                    RemoveOps = [RegOp.DeleteValue(PrivKey, "AuditTokenPrivilegeAdjustment")],
+                    DetectOps = [RegOp.CheckDword(PrivKey, "AuditTokenPrivilegeAdjustment", 3)],
+                },
+                new TweakDef
+                {
+                    Id = "privaudit-audit-special-logon",
+                    Label = "Privilege Audit: Enable Special Logon Auditing (Admin Equivalent or Special Group Logons)",
+                    Category = "Security",
+                    Description =
+                        "Sets AuditSpecialLogon=1 (Success) in the Advanced Audit Policy Logon/Logoff category. Generates Security event 4964 (Special groups assigned to new logon) when an Entra ID or domain user whose account is a member of a Special Groups audit list logs on, providing targeted monitoring for high-privilege accounts without the event volume of full logon auditing for all users. "
+                        + "Special Logon auditing enables selective privileged account monitoring. By configuring the Special Groups list to include Domain Admins, Enterprise Admins, Backup Operators, and other critical security groups, the enterprise gets immediate Security event notification every time any member of those groups authenticates to any endpoint in the domain — without generating Event 4624 for every employee logon. This powers 'privileged account logon monitoring' SIEM rules with precise scope and minimal noise.",
+                    Tags = ["privilege-audit", "special-logon", "event-4964", "admin-monitoring", "privileged-accounts"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote =
+                        "Special group logons generate Event 4964; privileged account authentication to any endpoint monitored in real time.",
+                    ApplyOps = [RegOp.SetDword(PrivKey, "AuditSpecialLogon", 1)],
+                    RemoveOps = [RegOp.DeleteValue(PrivKey, "AuditSpecialLogon")],
+                    DetectOps = [RegOp.CheckDword(PrivKey, "AuditSpecialLogon", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "privaudit-audit-sam-sam-access",
+                    Label = "Privilege Audit: Enable SAM Database Access Auditing for Credential Database Protection",
+                    Category = "Security",
+                    Description =
+                        "Sets AuditSAMAccess=3 (Success+Failure) in the Advanced Audit Policy. Generates Security events when the Security Account Manager (SAM) database is accessed, providing detection for credential dumping techniques that target the local SAM database (offline dump of SYSTEM and SAM hive, volume shadow copy SAM extraction, or SecretsDump against local accounts). "
+                        + "The SAM database contains the NTLM password hashes for all local Windows user accounts. SAM database access is a common post-exploitation step — after gaining SYSTEM privileges, threat actors extract SAM to harvest local account hashes for Pass-the-Hash attacks or for offline cracking. Auditing SAM access generates Security events whenever the SAM hive is opened with access beyond normal system operations, providing detection signals for credential harvesting operations against local accounts.",
+                    Tags = ["privilege-audit", "sam", "credential-dumping", "ntlm", "pass-the-hash", "secretsdump"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 5,
+                    SafetyRating = 5,
+                    ImpactNote = "SAM database access audited; credential dumping attempts targeting local account hashes generate Security events.",
+                    ApplyOps = [RegOp.SetDword(PrivKey, "AuditSAMAccess", 3)],
+                    RemoveOps = [RegOp.DeleteValue(PrivKey, "AuditSAMAccess")],
+                    DetectOps = [RegOp.CheckDword(PrivKey, "AuditSAMAccess", 3)],
+                },
+                new TweakDef
+                {
+                    Id = "privaudit-audit-lsa-secrets-access",
+                    Label = "Privilege Audit: Enable LSA Secrets Access Auditing for Service Credential Protection",
+                    Category = "Security",
+                    Description =
+                        "Sets AuditLSASecretsAccess=3 (Success+Failure) in the Advanced Audit Policy. Generates Security events when the Local Security Authority (LSA) secrets store is accessed, detecting attempts to harvest service account credentials and DPAPI master keys stored in the LSA secrets store by tools such as Mimikatz's lsadump::secrets command or reg.exe SYSTEM hive extraction. "
+                        + "LSA secrets contain auto-logon account passwords, service account passwords for Windows services configured to run as domain accounts, DPAPI master key encryption keys, and cached domain credentials (DCC2 hashes). These are higher-value credentials than local SAM hashes because service account credentials are often over-provisioned domain accounts with access to multiple servers. Auditing LSA secrets access detects the critical early step of service account credential harvesting that enables subsequent lateral movement.",
+                    Tags = ["privilege-audit", "lsa-secrets", "service-credentials", "dpapi", "mimikatz", "lateral-movement"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 5,
+                    SafetyRating = 5,
+                    ImpactNote =
+                        "LSA secrets access audited; service account credential harvesting (Mimikatz lsadump::secrets) generates detection events.",
+                    ApplyOps = [RegOp.SetDword(PrivKey, "AuditLSASecretsAccess", 3)],
+                    RemoveOps = [RegOp.DeleteValue(PrivKey, "AuditLSASecretsAccess")],
+                    DetectOps = [RegOp.CheckDword(PrivKey, "AuditLSASecretsAccess", 3)],
+                },
+            ];
     }
 
     // ── ProcessCreationAuditPolicy ──
@@ -26082,179 +26384,194 @@ internal static class PolicyAudit
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System";
 
         public static IReadOnlyList<TweakDef> Data =>
-        [
-            new TweakDef
-            {
-                Id = "pcaudit-enable-cmdline-in-process-creation-events",
-                Label = "Process Audit: Enable Full Command Line in Process Creation Security Events",
-                Category = "Security",
-                Description = "Sets ProcessCreationIncludeCmdLine_Enabled=1 in the Windows System policy. Enables Windows Security event 4688 (Process Creation) to include the full command-line argument string of the spawned process in the event, rather than only the process executable path. This allows SIEM systems to detect living-off-the-land attacks, fileless malware, and suspicious PowerShell invocations by analysing the full arguments of every process created. " +
-                    "Process creation event 4688 without command-line inclusion only shows the executable path (e.g., powershell.exe), not the arguments (-EncodedCommand, -ExecutionPolicy Bypass, -WindowStyle Hidden). Without arguments visible, encoded PowerShell commands, Mimikatz execution via living-off-the-land binaries (LOLBins), and command injection attacks are almost entirely opaque in the Security event log. Command-line auditing is the foundational enabling control for advanced threat detection.",
-                Tags = ["process-audit", "cmdline", "process-creation", "event-4688", "siem", "lolbins"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 5,
-                SafetyRating = 5,
-                ImpactNote = "Full command lines visible in Event 4688; SIEM can detect encoded/obfuscated PowerShell, LOLBins, and injection attacks.",
-                ApplyOps = [RegOp.SetDword(Key, "ProcessCreationIncludeCmdLine_Enabled", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "ProcessCreationIncludeCmdLine_Enabled")],
-                DetectOps = [RegOp.CheckDword(Key, "ProcessCreationIncludeCmdLine_Enabled", 1)],
-            },
-            new TweakDef
-            {
-                Id = "pcaudit-enable-wmi-activity-auditing",
-                Label = "Process Audit: Enable WMI Activity Audit Log for Process-Level WMI Operations",
-                Category = "Security",
-                Description = "Sets EnableWMIActivityAudit=1 in the Windows System policy. Enables the Microsoft-Windows-WMI-Activity/Operational event log channel, causing WMI query execution, WMI provider invocations, and WMI subscription modifications to be logged. WMI is a primary lateral movement and persistence technique used by threat actors to execute code remotely without spawning a child process visible in process creation audit logs. " +
-                    "WMI-based attacks (used in APT28, Carbanak, and most enterprise-targeted ransomware operators) execute payload code through the WMI provider host (WmiPrvSE.exe) as a child of svchost.exe, bypassing process creation rules that watch for powershell.exe or cmd.exe. WMI activity logging provides a parallel audit trail for WMI-executed commands that cannot be correlated from process creation events alone, enabling detection of WMI-based fileless lateral movement.",
-                Tags = ["process-audit", "wmi", "lateral-movement", "wmiprvse", "apt", "fileless"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 5,
-                SafetyRating = 5,
-                ImpactNote = "WMI operations logged in Activity event channel; WMI-based lateral movement and persistence detectable by EDR/SIEM.",
-                ApplyOps = [RegOp.SetDword(Key, "EnableWMIActivityAudit", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "EnableWMIActivityAudit")],
-                DetectOps = [RegOp.CheckDword(Key, "EnableWMIActivityAudit", 1)],
-            },
-            new TweakDef
-            {
-                Id = "pcaudit-enable-psh-module-logging",
-                Label = "Process Audit: Enable PowerShell Module Logging for All Script Block Execution",
-                Category = "Security",
-                Description = "Sets EnableModuleLogging=1 in the Windows System policy. Enables PowerShell module logging, which records the full content of every PowerShell pipeline execution (all commands, scripts, and functions invoked) to the PowerShell event log (Microsoft-Windows-PowerShell/Operational, Event ID 4103), providing complete visibility into what code PowerShell executes even when scripts are obfuscated. " +
-                    "PowerShell is the most commonly abused administrative tool for post-exploitation activities. Module logging captures the deobfuscated execution of AMSI-aware scripts — when a malicious actor uses encoded base64 commands or string manipulation to evade static detection, PowerShell must decode the payload before execution. Module logging captures the post-decode execution pipeline, revealing the actual malicious commands regardless of the obfuscation layering.",
-                Tags = ["process-audit", "powershell", "module-logging", "obfuscation", "amsi", "script-block"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 5,
-                SafetyRating = 5,
-                ImpactNote = "PowerShell module logging active; all PowerShell execution including decoded obfuscated commands visible in event log.",
-                ApplyOps = [RegOp.SetDword(Key, "EnableModuleLogging", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "EnableModuleLogging")],
-                DetectOps = [RegOp.CheckDword(Key, "EnableModuleLogging", 1)],
-            },
-            new TweakDef
-            {
-                Id = "pcaudit-enable-psh-script-block-logging",
-                Label = "Process Audit: Enable PowerShell Script Block Logging with Obfuscation Auto-Logging",
-                Category = "Security",
-                Description = "Sets EnableScriptBlockLogging=1 in the Windows System policy. Enables PowerShell Script Block logging (Event ID 4104), which captures every script block (function body, scriptblock literal, and processed script pipeline) executed by PowerShell into the event log. When combined with AMSI integration, suspicious script block content is automatically promoted to 'suspicious script block' events (4104 with level Warning) without requiring rule tuning. " +
-                    "Script block logging is stronger than module logging because it operates at a lower level (the PowerShell engine's block compilation step) and captures the content of scripts before they are executed, even when the script is loaded from memory or piped from another command. Script block logging is complementary to AMSI — AMSI inspects content before execution for malware signatures; script block logging captures all execution for post-incident investigation.",
-                Tags = ["process-audit", "powershell", "script-block-logging", "event-4104", "amsi", "memory-only"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 5,
-                SafetyRating = 5,
-                ImpactNote = "Script block logging active (Event 4104); all PowerShell script content including memory-only scripts captured.",
-                ApplyOps = [RegOp.SetDword(Key, "EnableScriptBlockLogging", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "EnableScriptBlockLogging")],
-                DetectOps = [RegOp.CheckDword(Key, "EnableScriptBlockLogging", 1)],
-            },
-            new TweakDef
-            {
-                Id = "pcaudit-enable-psh-transcription",
-                Label = "Process Audit: Enable PowerShell Transcription to Centralised Audit Share",
-                Category = "Security",
-                Description = "Sets EnableTranscripting=1 in the Windows System policy. Enables PowerShell transcription, which writes a text transcript of every PowerShell session (all input commands and output) to a log file. When combined with a centralised transcript output directory (network share or DFS path), all PowerShell session activity from all endpoints is written to a central searchable store. " +
-                    "PowerShell transcripts capture information that neither script block logging nor module logging captures: the full interactive session flow including the output returned by commands (e.g., the contents of Get-ChildItem output, netstat results captured by commands, or credentials visible in command output). While transcripts are more verbose than event log entries, they provide a continuous narrative of a PowerShell session that is invaluable for incident reconstruction when reconstructing what a threat actor did during a dwell-time period.",
-                Tags = ["process-audit", "powershell", "transcription", "session-log", "incident-response"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                ImpactNote = "PowerShell transcription enabled; all PS session input and output logged to transcript file.",
-                ApplyOps = [RegOp.SetDword(Key, "EnableTranscripting", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "EnableTranscripting")],
-                DetectOps = [RegOp.CheckDword(Key, "EnableTranscripting", 1)],
-            },
-            new TweakDef
-            {
-                Id = "pcaudit-enable-protected-event-logging",
-                Label = "Process Audit: Enable Protected Event Logging for PowerShell Encrypted Log Entries",
-                Category = "Security",
-                Description = "Sets EnableProtectedEventLogging=1 in the Windows System policy. Enables Protected Event Logging, which encrypts the content of sensitive PowerShell script block log entries (Event 4104) using a specified asymmetric public key certificate, so that the log content can only be read by the private key holder on the log analysis server, protecting sensitive command content (passwords, tokens) in the event log from local plaintext exposure. " +
-                    "Standard PowerShell script block logging writes command content in plaintext to the event log. If an administrative PowerShell script processes credentials, API keys, or sensitive data, those values appear in the local Security event log in cleartext. Any process with read access to the Security event log (including some malware) can harvest these credentials from the log. Protected Event Logging encrypts sensitive entries, allowing detection while protecting the content from local extraction.",
-                Tags = ["process-audit", "powershell", "protected-event-logging", "encryption", "credentials", "log-protection"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                ImpactNote = "PowerShell event log entries encrypted with PKI certificate; sensitive commands protected from local plaintext access.",
-                ApplyOps = [RegOp.SetDword(Key, "EnableProtectedEventLogging", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "EnableProtectedEventLogging")],
-                DetectOps = [RegOp.CheckDword(Key, "EnableProtectedEventLogging", 1)],
-            },
-            new TweakDef
-            {
-                Id = "pcaudit-enable-security-audit-process-termination",
-                Label = "Process Audit: Enable Security Audit Events for Process Termination (Event 4689)",
-                Category = "Security",
-                Description = "Sets AuditProcessTermination=1 in the Windows System policy. Enables Security event log event 4689 (A process has exited), which records the process name, PID, user account, and exit code when any process terminates. When correlated with Event 4688 (process creation), this enables calculation of exact process lifetimes, detection of very-short-lived suspicious processes, and analysis of process trees during incident investigation. " +
-                    "Process termination audit enables detection of living-off-the-land binary (LOLBin) usage where a legitimately signed binary (e.g., certutil.exe, regsvr32.exe) is spawned, executes a malicious payload, and exits in milliseconds. Without process termination events, the SIEM only has the creation event and no end marker, making it impossible to calculate process lifetime or determine what happened between creation and exit. Short-lifetime processes (sub-second) that accomplish significant work are high-fidelity attack indicators.",
-                Tags = ["process-audit", "process-termination", "event-4689", "lolbins", "process-lifetime", "siem"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                ImpactNote = "Process termination Events 4689 generated; process lifetimes calculable; short-lived LOLBin execution detectable.",
-                ApplyOps = [RegOp.SetDword(Key, "AuditProcessTermination", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "AuditProcessTermination")],
-                DetectOps = [RegOp.CheckDword(Key, "AuditProcessTermination", 1)],
-            },
-            new TweakDef
-            {
-                Id = "pcaudit-enable-pnp-activity-audit",
-                Label = "Process Audit: Enable Plug-and-Play Device Connection/Disconnection Audit Events",
-                Category = "Security",
-                Description = "Sets AuditPNPActivity=1 in the Windows System policy. Enables Security event log events 6416/6419/6420/6421/6423/6424 (Plug and Play activity) that record when new hardware devices are connected or disconnected from the system, including USB drives, network adapters, Bluetooth dongles, and other peripherals — recording the device ID, device type, and connecting user account. " +
-                    "USB removable storage is a primary exfiltration vector and a common way to deliver malware (BadUSB, autorun malware). Without PnP audit events, there is no Security event log record of which USB devices were connected, to which endpoints, by which user, at what time. PnP audit events provide DLP and insider threat detection capability — a user who copies data to a USB drive that was connected to their endpoint for 3 minutes generates a complete audit trail of the connection without requiring endpoint DLP software.",
-                Tags = ["process-audit", "pnp", "usb", "device-connection", "exfiltration", "baduusb"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                ImpactNote = "USB/PnP device connections generate Security events; device connection history auditable for exfiltration detection.",
-                ApplyOps = [RegOp.SetDword(Key, "AuditPNPActivity", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "AuditPNPActivity")],
-                DetectOps = [RegOp.CheckDword(Key, "AuditPNPActivity", 1)],
-            },
-            new TweakDef
-            {
-                Id = "pcaudit-enable-network-connection-events-sysmon-style",
-                Label = "Process Audit: Enable Network Connection Events in Windows Event Log Without Sysmon",
-                Category = "Security",
-                Description = "Sets AuditNetworkConnectionEvents=1 in the Windows System policy. Enables network connection audit events in the Security event log, recording each TCP/UDP connection attempt with the originating process ID, source address/port, and destination address/port, providing network process binding visibility without requiring Sysmon or third-party endpoint agents. " +
-                    "Network connection logging is standard in Sysmon Event ID 3, but many enterprises cannot deploy Sysmon due to policy or operational constraints. Windows Security event log network connection auditing (when configured) provides a subset of the same visibility natively. Detecting beaconing to C2 infrastructure requires correlation of process creation events with the network connections those processes make. Without network connection events, process creation auditing alone cannot establish which external hosts a suspicious process contacted.",
-                Tags = ["process-audit", "network-connections", "c2-detection", "beaconing", "sysmon-alternative"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 5,
-                SafetyRating = 5,
-                ImpactNote = "Network connection events logged natively; C2 beaconing detectable without Sysmon deployment.",
-                ApplyOps = [RegOp.SetDword(Key, "AuditNetworkConnectionEvents", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "AuditNetworkConnectionEvents")],
-                DetectOps = [RegOp.CheckDword(Key, "AuditNetworkConnectionEvents", 1)],
-            },
-            new TweakDef
-            {
-                Id = "pcaudit-set-min-security-event-log-size-512mb",
-                Label = "Process Audit: Set Minimum Security Event Log Size to 512 MB",
-                Category = "Security",
-                Description = "Sets SecurityEventLogMinSizeMB=512 in the Windows System policy. Enforces a minimum Security event log file size of 512 MB, ensuring that the on-device event log buffer is large enough to sustain at least 30 days of security audit event retention without log rotation truncating investigative evidence before it can be forwarded to a SIEM. " +
-                    "The default Windows Security event log size is 20 MB. With process creation auditing, command-line auditing, and PnP auditing all enabled, a busy endpoint can generate several MB of Security events per hour. A 20 MB log buffer retains as little as a few hours of events. On endpoints without a SIEM agent forwarding events in real time, a 20 MB log means that events from an overnight incident may have been overwritten before the morning IT team investigates. A 512 MB buffer provides several weeks of local retention.",
-                Tags = ["process-audit", "event-log", "retention", "siem", "forensics"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                ImpactNote = "Security event log minimum size 512 MB; multi-week local retention for environments without real-time SIEM forwarding.",
-                ApplyOps = [RegOp.SetDword(Key, "SecurityEventLogMinSizeMB", 512)],
-                RemoveOps = [RegOp.DeleteValue(Key, "SecurityEventLogMinSizeMB")],
-                DetectOps = [RegOp.CheckDword(Key, "SecurityEventLogMinSizeMB", 512)],
-            },
-        ];
-
+            [
+                new TweakDef
+                {
+                    Id = "pcaudit-enable-cmdline-in-process-creation-events",
+                    Label = "Process Audit: Enable Full Command Line in Process Creation Security Events",
+                    Category = "Security",
+                    Description =
+                        "Sets ProcessCreationIncludeCmdLine_Enabled=1 in the Windows System policy. Enables Windows Security event 4688 (Process Creation) to include the full command-line argument string of the spawned process in the event, rather than only the process executable path. This allows SIEM systems to detect living-off-the-land attacks, fileless malware, and suspicious PowerShell invocations by analysing the full arguments of every process created. "
+                        + "Process creation event 4688 without command-line inclusion only shows the executable path (e.g., powershell.exe), not the arguments (-EncodedCommand, -ExecutionPolicy Bypass, -WindowStyle Hidden). Without arguments visible, encoded PowerShell commands, Mimikatz execution via living-off-the-land binaries (LOLBins), and command injection attacks are almost entirely opaque in the Security event log. Command-line auditing is the foundational enabling control for advanced threat detection.",
+                    Tags = ["process-audit", "cmdline", "process-creation", "event-4688", "siem", "lolbins"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 5,
+                    SafetyRating = 5,
+                    ImpactNote =
+                        "Full command lines visible in Event 4688; SIEM can detect encoded/obfuscated PowerShell, LOLBins, and injection attacks.",
+                    ApplyOps = [RegOp.SetDword(Key, "ProcessCreationIncludeCmdLine_Enabled", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "ProcessCreationIncludeCmdLine_Enabled")],
+                    DetectOps = [RegOp.CheckDword(Key, "ProcessCreationIncludeCmdLine_Enabled", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "pcaudit-enable-wmi-activity-auditing",
+                    Label = "Process Audit: Enable WMI Activity Audit Log for Process-Level WMI Operations",
+                    Category = "Security",
+                    Description =
+                        "Sets EnableWMIActivityAudit=1 in the Windows System policy. Enables the Microsoft-Windows-WMI-Activity/Operational event log channel, causing WMI query execution, WMI provider invocations, and WMI subscription modifications to be logged. WMI is a primary lateral movement and persistence technique used by threat actors to execute code remotely without spawning a child process visible in process creation audit logs. "
+                        + "WMI-based attacks (used in APT28, Carbanak, and most enterprise-targeted ransomware operators) execute payload code through the WMI provider host (WmiPrvSE.exe) as a child of svchost.exe, bypassing process creation rules that watch for powershell.exe or cmd.exe. WMI activity logging provides a parallel audit trail for WMI-executed commands that cannot be correlated from process creation events alone, enabling detection of WMI-based fileless lateral movement.",
+                    Tags = ["process-audit", "wmi", "lateral-movement", "wmiprvse", "apt", "fileless"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 5,
+                    SafetyRating = 5,
+                    ImpactNote =
+                        "WMI operations logged in Activity event channel; WMI-based lateral movement and persistence detectable by EDR/SIEM.",
+                    ApplyOps = [RegOp.SetDword(Key, "EnableWMIActivityAudit", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "EnableWMIActivityAudit")],
+                    DetectOps = [RegOp.CheckDword(Key, "EnableWMIActivityAudit", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "pcaudit-enable-psh-module-logging",
+                    Label = "Process Audit: Enable PowerShell Module Logging for All Script Block Execution",
+                    Category = "Security",
+                    Description =
+                        "Sets EnableModuleLogging=1 in the Windows System policy. Enables PowerShell module logging, which records the full content of every PowerShell pipeline execution (all commands, scripts, and functions invoked) to the PowerShell event log (Microsoft-Windows-PowerShell/Operational, Event ID 4103), providing complete visibility into what code PowerShell executes even when scripts are obfuscated. "
+                        + "PowerShell is the most commonly abused administrative tool for post-exploitation activities. Module logging captures the deobfuscated execution of AMSI-aware scripts — when a malicious actor uses encoded base64 commands or string manipulation to evade static detection, PowerShell must decode the payload before execution. Module logging captures the post-decode execution pipeline, revealing the actual malicious commands regardless of the obfuscation layering.",
+                    Tags = ["process-audit", "powershell", "module-logging", "obfuscation", "amsi", "script-block"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 5,
+                    SafetyRating = 5,
+                    ImpactNote =
+                        "PowerShell module logging active; all PowerShell execution including decoded obfuscated commands visible in event log.",
+                    ApplyOps = [RegOp.SetDword(Key, "EnableModuleLogging", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "EnableModuleLogging")],
+                    DetectOps = [RegOp.CheckDword(Key, "EnableModuleLogging", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "pcaudit-enable-psh-script-block-logging",
+                    Label = "Process Audit: Enable PowerShell Script Block Logging with Obfuscation Auto-Logging",
+                    Category = "Security",
+                    Description =
+                        "Sets EnableScriptBlockLogging=1 in the Windows System policy. Enables PowerShell Script Block logging (Event ID 4104), which captures every script block (function body, scriptblock literal, and processed script pipeline) executed by PowerShell into the event log. When combined with AMSI integration, suspicious script block content is automatically promoted to 'suspicious script block' events (4104 with level Warning) without requiring rule tuning. "
+                        + "Script block logging is stronger than module logging because it operates at a lower level (the PowerShell engine's block compilation step) and captures the content of scripts before they are executed, even when the script is loaded from memory or piped from another command. Script block logging is complementary to AMSI — AMSI inspects content before execution for malware signatures; script block logging captures all execution for post-incident investigation.",
+                    Tags = ["process-audit", "powershell", "script-block-logging", "event-4104", "amsi", "memory-only"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 5,
+                    SafetyRating = 5,
+                    ImpactNote = "Script block logging active (Event 4104); all PowerShell script content including memory-only scripts captured.",
+                    ApplyOps = [RegOp.SetDword(Key, "EnableScriptBlockLogging", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "EnableScriptBlockLogging")],
+                    DetectOps = [RegOp.CheckDword(Key, "EnableScriptBlockLogging", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "pcaudit-enable-psh-transcription",
+                    Label = "Process Audit: Enable PowerShell Transcription to Centralised Audit Share",
+                    Category = "Security",
+                    Description =
+                        "Sets EnableTranscripting=1 in the Windows System policy. Enables PowerShell transcription, which writes a text transcript of every PowerShell session (all input commands and output) to a log file. When combined with a centralised transcript output directory (network share or DFS path), all PowerShell session activity from all endpoints is written to a central searchable store. "
+                        + "PowerShell transcripts capture information that neither script block logging nor module logging captures: the full interactive session flow including the output returned by commands (e.g., the contents of Get-ChildItem output, netstat results captured by commands, or credentials visible in command output). While transcripts are more verbose than event log entries, they provide a continuous narrative of a PowerShell session that is invaluable for incident reconstruction when reconstructing what a threat actor did during a dwell-time period.",
+                    Tags = ["process-audit", "powershell", "transcription", "session-log", "incident-response"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "PowerShell transcription enabled; all PS session input and output logged to transcript file.",
+                    ApplyOps = [RegOp.SetDword(Key, "EnableTranscripting", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "EnableTranscripting")],
+                    DetectOps = [RegOp.CheckDword(Key, "EnableTranscripting", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "pcaudit-enable-protected-event-logging",
+                    Label = "Process Audit: Enable Protected Event Logging for PowerShell Encrypted Log Entries",
+                    Category = "Security",
+                    Description =
+                        "Sets EnableProtectedEventLogging=1 in the Windows System policy. Enables Protected Event Logging, which encrypts the content of sensitive PowerShell script block log entries (Event 4104) using a specified asymmetric public key certificate, so that the log content can only be read by the private key holder on the log analysis server, protecting sensitive command content (passwords, tokens) in the event log from local plaintext exposure. "
+                        + "Standard PowerShell script block logging writes command content in plaintext to the event log. If an administrative PowerShell script processes credentials, API keys, or sensitive data, those values appear in the local Security event log in cleartext. Any process with read access to the Security event log (including some malware) can harvest these credentials from the log. Protected Event Logging encrypts sensitive entries, allowing detection while protecting the content from local extraction.",
+                    Tags = ["process-audit", "powershell", "protected-event-logging", "encryption", "credentials", "log-protection"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote =
+                        "PowerShell event log entries encrypted with PKI certificate; sensitive commands protected from local plaintext access.",
+                    ApplyOps = [RegOp.SetDword(Key, "EnableProtectedEventLogging", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "EnableProtectedEventLogging")],
+                    DetectOps = [RegOp.CheckDword(Key, "EnableProtectedEventLogging", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "pcaudit-enable-security-audit-process-termination",
+                    Label = "Process Audit: Enable Security Audit Events for Process Termination (Event 4689)",
+                    Category = "Security",
+                    Description =
+                        "Sets AuditProcessTermination=1 in the Windows System policy. Enables Security event log event 4689 (A process has exited), which records the process name, PID, user account, and exit code when any process terminates. When correlated with Event 4688 (process creation), this enables calculation of exact process lifetimes, detection of very-short-lived suspicious processes, and analysis of process trees during incident investigation. "
+                        + "Process termination audit enables detection of living-off-the-land binary (LOLBin) usage where a legitimately signed binary (e.g., certutil.exe, regsvr32.exe) is spawned, executes a malicious payload, and exits in milliseconds. Without process termination events, the SIEM only has the creation event and no end marker, making it impossible to calculate process lifetime or determine what happened between creation and exit. Short-lifetime processes (sub-second) that accomplish significant work are high-fidelity attack indicators.",
+                    Tags = ["process-audit", "process-termination", "event-4689", "lolbins", "process-lifetime", "siem"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "Process termination Events 4689 generated; process lifetimes calculable; short-lived LOLBin execution detectable.",
+                    ApplyOps = [RegOp.SetDword(Key, "AuditProcessTermination", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "AuditProcessTermination")],
+                    DetectOps = [RegOp.CheckDword(Key, "AuditProcessTermination", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "pcaudit-enable-pnp-activity-audit",
+                    Label = "Process Audit: Enable Plug-and-Play Device Connection/Disconnection Audit Events",
+                    Category = "Security",
+                    Description =
+                        "Sets AuditPNPActivity=1 in the Windows System policy. Enables Security event log events 6416/6419/6420/6421/6423/6424 (Plug and Play activity) that record when new hardware devices are connected or disconnected from the system, including USB drives, network adapters, Bluetooth dongles, and other peripherals — recording the device ID, device type, and connecting user account. "
+                        + "USB removable storage is a primary exfiltration vector and a common way to deliver malware (BadUSB, autorun malware). Without PnP audit events, there is no Security event log record of which USB devices were connected, to which endpoints, by which user, at what time. PnP audit events provide DLP and insider threat detection capability — a user who copies data to a USB drive that was connected to their endpoint for 3 minutes generates a complete audit trail of the connection without requiring endpoint DLP software.",
+                    Tags = ["process-audit", "pnp", "usb", "device-connection", "exfiltration", "baduusb"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote =
+                        "USB/PnP device connections generate Security events; device connection history auditable for exfiltration detection.",
+                    ApplyOps = [RegOp.SetDword(Key, "AuditPNPActivity", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "AuditPNPActivity")],
+                    DetectOps = [RegOp.CheckDword(Key, "AuditPNPActivity", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "pcaudit-enable-network-connection-events-sysmon-style",
+                    Label = "Process Audit: Enable Network Connection Events in Windows Event Log Without Sysmon",
+                    Category = "Security",
+                    Description =
+                        "Sets AuditNetworkConnectionEvents=1 in the Windows System policy. Enables network connection audit events in the Security event log, recording each TCP/UDP connection attempt with the originating process ID, source address/port, and destination address/port, providing network process binding visibility without requiring Sysmon or third-party endpoint agents. "
+                        + "Network connection logging is standard in Sysmon Event ID 3, but many enterprises cannot deploy Sysmon due to policy or operational constraints. Windows Security event log network connection auditing (when configured) provides a subset of the same visibility natively. Detecting beaconing to C2 infrastructure requires correlation of process creation events with the network connections those processes make. Without network connection events, process creation auditing alone cannot establish which external hosts a suspicious process contacted.",
+                    Tags = ["process-audit", "network-connections", "c2-detection", "beaconing", "sysmon-alternative"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 5,
+                    SafetyRating = 5,
+                    ImpactNote = "Network connection events logged natively; C2 beaconing detectable without Sysmon deployment.",
+                    ApplyOps = [RegOp.SetDword(Key, "AuditNetworkConnectionEvents", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "AuditNetworkConnectionEvents")],
+                    DetectOps = [RegOp.CheckDword(Key, "AuditNetworkConnectionEvents", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "pcaudit-set-min-security-event-log-size-512mb",
+                    Label = "Process Audit: Set Minimum Security Event Log Size to 512 MB",
+                    Category = "Security",
+                    Description =
+                        "Sets SecurityEventLogMinSizeMB=512 in the Windows System policy. Enforces a minimum Security event log file size of 512 MB, ensuring that the on-device event log buffer is large enough to sustain at least 30 days of security audit event retention without log rotation truncating investigative evidence before it can be forwarded to a SIEM. "
+                        + "The default Windows Security event log size is 20 MB. With process creation auditing, command-line auditing, and PnP auditing all enabled, a busy endpoint can generate several MB of Security events per hour. A 20 MB log buffer retains as little as a few hours of events. On endpoints without a SIEM agent forwarding events in real time, a 20 MB log means that events from an overnight incident may have been overwritten before the morning IT team investigates. A 512 MB buffer provides several weeks of local retention.",
+                    Tags = ["process-audit", "event-log", "retention", "siem", "forensics"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote =
+                        "Security event log minimum size 512 MB; multi-week local retention for environments without real-time SIEM forwarding.",
+                    ApplyOps = [RegOp.SetDword(Key, "SecurityEventLogMinSizeMB", 512)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "SecurityEventLogMinSizeMB")],
+                    DetectOps = [RegOp.CheckDword(Key, "SecurityEventLogMinSizeMB", 512)],
+                },
+            ];
     }
 
     // ── SecurityAuditPolicy ──
@@ -26436,7 +26753,6 @@ internal static class PolicyAudit
                 DetectOps = [RegOp.CheckDword(Lsa, "EveryoneIncludesAnonymous", 0)],
             },
         ];
-
     }
 
     // ── SqlServerAuditPolicy ──
@@ -26449,166 +26765,176 @@ internal static class PolicyAudit
             [
                 new TweakDef
                 {
-                    Id          = "sqlaup-enable-full-login-audit",
-                    Label       = "Enable Full SQL Server Login Audit (Success + Failure)",
+                    Id = "sqlaup-enable-full-login-audit",
+                    Label = "Enable Full SQL Server Login Audit (Success + Failure)",
                     Category = "Security",
-                    Description = "Sets AuditLevel=3 in the MSSQLServer instance key. Controls the level of SQL Server login auditing: 0=none, 1=success only, 2=failure only, 3=both success and failure. Full auditing (level 3) records every authentication attempt to the SQL error log, enabling detection of brute-force attacks and unauthorised access. Required by most security compliance frameworks (CIS SQL Server Benchmark, STIG).",
-                    Tags        = ["sql-server", "audit", "login", "compliance", "hardening"],
-                    NeedsAdmin  = true,
-                    CorpSafe    = true,
+                    Description =
+                        "Sets AuditLevel=3 in the MSSQLServer instance key. Controls the level of SQL Server login auditing: 0=none, 1=success only, 2=failure only, 3=both success and failure. Full auditing (level 3) records every authentication attempt to the SQL error log, enabling detection of brute-force attacks and unauthorised access. Required by most security compliance frameworks (CIS SQL Server Benchmark, STIG).",
+                    Tags = ["sql-server", "audit", "login", "compliance", "hardening"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
                     ImpactScore = 5,
                     SafetyRating = 5,
-                    ImpactNote  = "Logs every SQL login attempt; increases SQL error log size on high-connection-rate servers.",
-                    ApplyOps    = [RegOp.SetDword(InstanceKey, "AuditLevel", 3)],
-                    RemoveOps   = [RegOp.DeleteValue(InstanceKey, "AuditLevel")],
-                    DetectOps   = [RegOp.CheckDword(InstanceKey, "AuditLevel", 3)],
+                    ImpactNote = "Logs every SQL login attempt; increases SQL error log size on high-connection-rate servers.",
+                    ApplyOps = [RegOp.SetDword(InstanceKey, "AuditLevel", 3)],
+                    RemoveOps = [RegOp.DeleteValue(InstanceKey, "AuditLevel")],
+                    DetectOps = [RegOp.CheckDword(InstanceKey, "AuditLevel", 3)],
                 },
                 new TweakDef
                 {
-                    Id          = "sqlaup-enforce-windows-auth-only",
-                    Label       = "Enforce Windows Authentication Only for SQL Server",
+                    Id = "sqlaup-enforce-windows-auth-only",
+                    Label = "Enforce Windows Authentication Only for SQL Server",
                     Category = "Security",
-                    Description = "Sets LoginMode=1 in the MSSQLServer instance key. Restricts SQL Server to Windows Authentication (Integrated Security) mode only, disabling SQL Server login accounts (LoginMode=2 enables mixed mode). Windows Authentication uses Kerberos or NTLM, benefits from Active Directory password policies, is audited by Windows Security event logs, and eliminates the risk of weak SQL-only passwords.",
-                    Tags        = ["sql-server", "authentication", "windows-auth", "security", "hardening"],
-                    NeedsAdmin  = true,
-                    CorpSafe    = true,
-                    ImpactScore = 5,
-                    SafetyRating = 3,
-                    ImpactNote  = "Disables SQL login accounts; applications using SQL usernames/passwords must be migrated to Windows Auth first.",
-                    ApplyOps    = [RegOp.SetDword(InstanceKey, "LoginMode", 1)],
-                    RemoveOps   = [RegOp.DeleteValue(InstanceKey, "LoginMode")],
-                    DetectOps   = [RegOp.CheckDword(InstanceKey, "LoginMode", 1)],
-                },
-                new TweakDef
-                {
-                    Id          = "sqlaup-disable-named-pipes",
-                    Label       = "Disable SQL Server Named Pipe Protocol",
-                    Category = "Security",
-                    Description = "Sets NpEnabled=0 in the SQL Server SuperSocketNetLib key. Disables the Named Pipes network protocol for SQL Server connections. Named Pipes traverses SMB and can expose the SQL Server service through Windows file-sharing ports (445/TCP). Disabling Named Pipes forces all connections through TCP/IP which can be precisely port-filtered by a firewall.",
-                    Tags        = ["sql-server", "network", "named-pipes", "protocol", "hardening"],
-                    NeedsAdmin  = true,
-                    CorpSafe    = true,
-                    ImpactScore = 4,
-                    SafetyRating = 4,
-                    ImpactNote  = "Drops Named Pipes support; local applications using np: connection strings must switch to tcp:.",
-                    ApplyOps    = [RegOp.SetDword(NetLibKey, "NpEnabled", 0)],
-                    RemoveOps   = [RegOp.DeleteValue(NetLibKey, "NpEnabled")],
-                    DetectOps   = [RegOp.CheckDword(NetLibKey, "NpEnabled", 0)],
-                },
-                new TweakDef
-                {
-                    Id          = "sqlaup-disable-shared-memory",
-                    Label       = "Disable SQL Server Shared Memory Protocol",
-                    Category = "Security",
-                    Description = "Sets SmEnabled=0 in the SQL Server SuperSocketNetLib key. Disables the Shared Memory protocol that allows local processes to connect to SQL Server via memory-mapped communication. While convenient, Shared Memory connections bypass network-layer access controls entirely. Disabling it forces all connections (even local) through explicit TCP/IP, ensuring firewall rules and port-level controls apply uniformly.",
-                    Tags        = ["sql-server", "network", "shared-memory", "protocol", "hardening"],
-                    NeedsAdmin  = true,
-                    CorpSafe    = true,
-                    ImpactScore = 3,
-                    SafetyRating = 4,
-                    ImpactNote  = "Drops Shared Memory; local automated tools and T-SQL jobs using shared memory connections must use TCP instead.",
-                    ApplyOps    = [RegOp.SetDword(NetLibKey, "SmEnabled", 0)],
-                    RemoveOps   = [RegOp.DeleteValue(NetLibKey, "SmEnabled")],
-                    DetectOps   = [RegOp.CheckDword(NetLibKey, "SmEnabled", 0)],
-                },
-                new TweakDef
-                {
-                    Id          = "sqlaup-enable-tcp-protocol",
-                    Label       = "Ensure SQL Server TCP/IP Protocol Is Enabled",
-                    Category = "Security",
-                    Description = "Sets TcpEnabled=1 in the SQL Server SuperSocketNetLib key. Guarantees the TCP/IP network protocol is active for SQL Server, which is the only protocol that can be properly firewalled and port-filtered. Combined with disabling Named Pipes and Shared Memory, this ensures all SQL Server traffic traverses TCP so network access controls are consistently applied.",
-                    Tags        = ["sql-server", "network", "tcp", "protocol", "hardening"],
-                    NeedsAdmin  = true,
-                    CorpSafe    = true,
-                    ImpactScore = 4,
-                    SafetyRating = 5,
-                    ImpactNote  = "Ensures TCP is enabled; no business impact if TCP was already active (the common default).",
-                    ApplyOps    = [RegOp.SetDword(NetLibKey, "TcpEnabled", 1)],
-                    RemoveOps   = [RegOp.DeleteValue(NetLibKey, "TcpEnabled")],
-                    DetectOps   = [RegOp.CheckDword(NetLibKey, "TcpEnabled", 1)],
-                },
-                new TweakDef
-                {
-                    Id          = "sqlaup-hide-sql-instance",
-                    Label       = "Hide SQL Server Instance from Network Browsers",
-                    Category = "Security",
-                    Description = "Sets HideInstance=1 in the MSSQLServer key. Instructs SQL Server Browser to not return the instance name in response to network enumeration requests. When hidden, clients must supply the explicit server name and port; they cannot discover it through SQL Server Browser UDP broadcasts. This reduces the attack surface by preventing automated scanners from locating the SQL instance via port 1434 UDP enumeration.",
-                    Tags        = ["sql-server", "browser", "discovery", "network", "hardening"],
-                    NeedsAdmin  = true,
-                    CorpSafe    = true,
-                    ImpactScore = 3,
-                    SafetyRating = 5,
-                    ImpactNote  = "Hides instance from SQL Browser; connection strings must specify host\\instance explicitly.",
-                    ApplyOps    = [RegOp.SetDword(InstanceKey, "HideInstance", 1)],
-                    RemoveOps   = [RegOp.DeleteValue(InstanceKey, "HideInstance")],
-                    DetectOps   = [RegOp.CheckDword(InstanceKey, "HideInstance", 1)],
-                },
-                new TweakDef
-                {
-                    Id          = "sqlaup-disable-xp-cmdshell-flag",
-                    Label       = "Record xp_cmdshell Disabled State in Registry",
-                    Category = "Security",
-                    Description = "Sets XPCmdShellEnabled=0 in the MSSQLServer key. This registry flag indicates that the xp_cmdshell extended stored procedure (which executes OS shell commands from T-SQL) must remain disabled. While the authoritative control is sp_configure inside SQL Server, recording the intended state in the registry allows compliance scanning tools that audit registry keys to verify xp_cmdshell is disabled without querying the SQL instance directly.",
-                    Tags        = ["sql-server", "xp-cmdshell", "compliance", "policy", "hardening"],
-                    NeedsAdmin  = true,
-                    CorpSafe    = true,
-                    ImpactScore = 4,
-                    SafetyRating = 5,
-                    ImpactNote  = "Registry flag only; xp_cmdshell must also be disabled via sp_configure inside SQL Server for full protection.",
-                    ApplyOps    = [RegOp.SetDword(InstanceKey, "XPCmdShellEnabled", 0)],
-                    RemoveOps   = [RegOp.DeleteValue(InstanceKey, "XPCmdShellEnabled")],
-                    DetectOps   = [RegOp.CheckDword(InstanceKey, "XPCmdShellEnabled", 0)],
-                },
-                new TweakDef
-                {
-                    Id          = "sqlaup-enable-error-reporting",
-                    Label       = "Enable SQL Server Error Log Verbosity",
-                    Category = "Security",
-                    Description = "Sets NumErrorLogs=10 in the MSSQLServer key. Controls how many SQL Server error log files are retained in rotation. Increasing from the default (6) to 10 prevents aggressive error log cycling that could make forensic investigation of incidents difficult. Retaining more log cycles ensures a longer audit trail is available when a security incident is discovered days or weeks after it occurred.",
-                    Tags        = ["sql-server", "error-log", "audit", "retention", "hardening"],
-                    NeedsAdmin  = true,
-                    CorpSafe    = true,
-                    ImpactScore = 3,
-                    SafetyRating = 5,
-                    ImpactNote  = "Retains 10 rotated error log files instead of 6; negligible additional disk usage.",
-                    ApplyOps    = [RegOp.SetDword(InstanceKey, "NumErrorLogs", 10)],
-                    RemoveOps   = [RegOp.DeleteValue(InstanceKey, "NumErrorLogs")],
-                    DetectOps   = [RegOp.CheckDword(InstanceKey, "NumErrorLogs", 10)],
-                },
-                new TweakDef
-                {
-                    Id          = "sqlaup-disable-olap-remote-connect",
-                    Label       = "Disable SQL Server OLAP Remote Connections Flag",
-                    Category = "Security",
-                    Description = "Sets AllowRemoteConnections=0 in the SQL Server SuperSocketNetLib key. Disables incoming remote connections through the OLAP/Analysis Services network library path. When SQL Server Analysis Services is not deployed or when OLAP connectivity should be restricted to the local machine, disabling remote connections through this protocol handler reduces the network-exposed attack surface of the SQL Server installation.",
-                    Tags        = ["sql-server", "olap", "remote", "network", "hardening"],
-                    NeedsAdmin  = true,
-                    CorpSafe    = true,
-                    ImpactScore = 3,
-                    SafetyRating = 4,
-                    ImpactNote  = "Blocks OLAP remote connections; Analysis Services remote clients must connect via explicit TCP/IP instead.",
-                    ApplyOps    = [RegOp.SetDword(NetLibKey, "AllowRemoteConnections", 0)],
-                    RemoveOps   = [RegOp.DeleteValue(NetLibKey, "AllowRemoteConnections")],
-                    DetectOps   = [RegOp.CheckDword(NetLibKey, "AllowRemoteConnections", 0)],
-                },
-                new TweakDef
-                {
-                    Id          = "sqlaup-enable-sql-server-encryption",
-                    Label       = "Enable SQL Server Force Encryption Flag",
-                    Category = "Security",
-                    Description = "Sets ForceEncryption=1 in the SQL Server SuperSocketNetLib key. Instructs SQL Server to require encrypted connections (TLS/SSL) for all client connections. Without forced encryption, clients may connect without TLS, transmitting queries and data in plaintext across the network. This registry flag mirrors the Force Encryption option in SQL Server Configuration Manager and should be set alongside a valid server certificate.",
-                    Tags        = ["sql-server", "encryption", "tls", "network", "hardening"],
-                    NeedsAdmin  = true,
-                    CorpSafe    = true,
+                    Description =
+                        "Sets LoginMode=1 in the MSSQLServer instance key. Restricts SQL Server to Windows Authentication (Integrated Security) mode only, disabling SQL Server login accounts (LoginMode=2 enables mixed mode). Windows Authentication uses Kerberos or NTLM, benefits from Active Directory password policies, is audited by Windows Security event logs, and eliminates the risk of weak SQL-only passwords.",
+                    Tags = ["sql-server", "authentication", "windows-auth", "security", "hardening"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
                     ImpactScore = 5,
                     SafetyRating = 3,
-                    ImpactNote  = "Forces TLS on all connections; client connection strings must trust the SQL Server certificate or connections will fail.",
-                    ApplyOps    = [RegOp.SetDword(NetLibKey, "ForceEncryption", 1)],
-                    RemoveOps   = [RegOp.DeleteValue(NetLibKey, "ForceEncryption")],
-                    DetectOps   = [RegOp.CheckDword(NetLibKey, "ForceEncryption", 1)],
+                    ImpactNote = "Disables SQL login accounts; applications using SQL usernames/passwords must be migrated to Windows Auth first.",
+                    ApplyOps = [RegOp.SetDword(InstanceKey, "LoginMode", 1)],
+                    RemoveOps = [RegOp.DeleteValue(InstanceKey, "LoginMode")],
+                    DetectOps = [RegOp.CheckDword(InstanceKey, "LoginMode", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "sqlaup-disable-named-pipes",
+                    Label = "Disable SQL Server Named Pipe Protocol",
+                    Category = "Security",
+                    Description =
+                        "Sets NpEnabled=0 in the SQL Server SuperSocketNetLib key. Disables the Named Pipes network protocol for SQL Server connections. Named Pipes traverses SMB and can expose the SQL Server service through Windows file-sharing ports (445/TCP). Disabling Named Pipes forces all connections through TCP/IP which can be precisely port-filtered by a firewall.",
+                    Tags = ["sql-server", "network", "named-pipes", "protocol", "hardening"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 4,
+                    ImpactNote = "Drops Named Pipes support; local applications using np: connection strings must switch to tcp:.",
+                    ApplyOps = [RegOp.SetDword(NetLibKey, "NpEnabled", 0)],
+                    RemoveOps = [RegOp.DeleteValue(NetLibKey, "NpEnabled")],
+                    DetectOps = [RegOp.CheckDword(NetLibKey, "NpEnabled", 0)],
+                },
+                new TweakDef
+                {
+                    Id = "sqlaup-disable-shared-memory",
+                    Label = "Disable SQL Server Shared Memory Protocol",
+                    Category = "Security",
+                    Description =
+                        "Sets SmEnabled=0 in the SQL Server SuperSocketNetLib key. Disables the Shared Memory protocol that allows local processes to connect to SQL Server via memory-mapped communication. While convenient, Shared Memory connections bypass network-layer access controls entirely. Disabling it forces all connections (even local) through explicit TCP/IP, ensuring firewall rules and port-level controls apply uniformly.",
+                    Tags = ["sql-server", "network", "shared-memory", "protocol", "hardening"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 4,
+                    ImpactNote = "Drops Shared Memory; local automated tools and T-SQL jobs using shared memory connections must use TCP instead.",
+                    ApplyOps = [RegOp.SetDword(NetLibKey, "SmEnabled", 0)],
+                    RemoveOps = [RegOp.DeleteValue(NetLibKey, "SmEnabled")],
+                    DetectOps = [RegOp.CheckDword(NetLibKey, "SmEnabled", 0)],
+                },
+                new TweakDef
+                {
+                    Id = "sqlaup-enable-tcp-protocol",
+                    Label = "Ensure SQL Server TCP/IP Protocol Is Enabled",
+                    Category = "Security",
+                    Description =
+                        "Sets TcpEnabled=1 in the SQL Server SuperSocketNetLib key. Guarantees the TCP/IP network protocol is active for SQL Server, which is the only protocol that can be properly firewalled and port-filtered. Combined with disabling Named Pipes and Shared Memory, this ensures all SQL Server traffic traverses TCP so network access controls are consistently applied.",
+                    Tags = ["sql-server", "network", "tcp", "protocol", "hardening"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "Ensures TCP is enabled; no business impact if TCP was already active (the common default).",
+                    ApplyOps = [RegOp.SetDword(NetLibKey, "TcpEnabled", 1)],
+                    RemoveOps = [RegOp.DeleteValue(NetLibKey, "TcpEnabled")],
+                    DetectOps = [RegOp.CheckDword(NetLibKey, "TcpEnabled", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "sqlaup-hide-sql-instance",
+                    Label = "Hide SQL Server Instance from Network Browsers",
+                    Category = "Security",
+                    Description =
+                        "Sets HideInstance=1 in the MSSQLServer key. Instructs SQL Server Browser to not return the instance name in response to network enumeration requests. When hidden, clients must supply the explicit server name and port; they cannot discover it through SQL Server Browser UDP broadcasts. This reduces the attack surface by preventing automated scanners from locating the SQL instance via port 1434 UDP enumeration.",
+                    Tags = ["sql-server", "browser", "discovery", "network", "hardening"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "Hides instance from SQL Browser; connection strings must specify host\\instance explicitly.",
+                    ApplyOps = [RegOp.SetDword(InstanceKey, "HideInstance", 1)],
+                    RemoveOps = [RegOp.DeleteValue(InstanceKey, "HideInstance")],
+                    DetectOps = [RegOp.CheckDword(InstanceKey, "HideInstance", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "sqlaup-disable-xp-cmdshell-flag",
+                    Label = "Record xp_cmdshell Disabled State in Registry",
+                    Category = "Security",
+                    Description =
+                        "Sets XPCmdShellEnabled=0 in the MSSQLServer key. This registry flag indicates that the xp_cmdshell extended stored procedure (which executes OS shell commands from T-SQL) must remain disabled. While the authoritative control is sp_configure inside SQL Server, recording the intended state in the registry allows compliance scanning tools that audit registry keys to verify xp_cmdshell is disabled without querying the SQL instance directly.",
+                    Tags = ["sql-server", "xp-cmdshell", "compliance", "policy", "hardening"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "Registry flag only; xp_cmdshell must also be disabled via sp_configure inside SQL Server for full protection.",
+                    ApplyOps = [RegOp.SetDword(InstanceKey, "XPCmdShellEnabled", 0)],
+                    RemoveOps = [RegOp.DeleteValue(InstanceKey, "XPCmdShellEnabled")],
+                    DetectOps = [RegOp.CheckDword(InstanceKey, "XPCmdShellEnabled", 0)],
+                },
+                new TweakDef
+                {
+                    Id = "sqlaup-enable-error-reporting",
+                    Label = "Enable SQL Server Error Log Verbosity",
+                    Category = "Security",
+                    Description =
+                        "Sets NumErrorLogs=10 in the MSSQLServer key. Controls how many SQL Server error log files are retained in rotation. Increasing from the default (6) to 10 prevents aggressive error log cycling that could make forensic investigation of incidents difficult. Retaining more log cycles ensures a longer audit trail is available when a security incident is discovered days or weeks after it occurred.",
+                    Tags = ["sql-server", "error-log", "audit", "retention", "hardening"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "Retains 10 rotated error log files instead of 6; negligible additional disk usage.",
+                    ApplyOps = [RegOp.SetDword(InstanceKey, "NumErrorLogs", 10)],
+                    RemoveOps = [RegOp.DeleteValue(InstanceKey, "NumErrorLogs")],
+                    DetectOps = [RegOp.CheckDword(InstanceKey, "NumErrorLogs", 10)],
+                },
+                new TweakDef
+                {
+                    Id = "sqlaup-disable-olap-remote-connect",
+                    Label = "Disable SQL Server OLAP Remote Connections Flag",
+                    Category = "Security",
+                    Description =
+                        "Sets AllowRemoteConnections=0 in the SQL Server SuperSocketNetLib key. Disables incoming remote connections through the OLAP/Analysis Services network library path. When SQL Server Analysis Services is not deployed or when OLAP connectivity should be restricted to the local machine, disabling remote connections through this protocol handler reduces the network-exposed attack surface of the SQL Server installation.",
+                    Tags = ["sql-server", "olap", "remote", "network", "hardening"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 4,
+                    ImpactNote = "Blocks OLAP remote connections; Analysis Services remote clients must connect via explicit TCP/IP instead.",
+                    ApplyOps = [RegOp.SetDword(NetLibKey, "AllowRemoteConnections", 0)],
+                    RemoveOps = [RegOp.DeleteValue(NetLibKey, "AllowRemoteConnections")],
+                    DetectOps = [RegOp.CheckDword(NetLibKey, "AllowRemoteConnections", 0)],
+                },
+                new TweakDef
+                {
+                    Id = "sqlaup-enable-sql-server-encryption",
+                    Label = "Enable SQL Server Force Encryption Flag",
+                    Category = "Security",
+                    Description =
+                        "Sets ForceEncryption=1 in the SQL Server SuperSocketNetLib key. Instructs SQL Server to require encrypted connections (TLS/SSL) for all client connections. Without forced encryption, clients may connect without TLS, transmitting queries and data in plaintext across the network. This registry flag mirrors the Force Encryption option in SQL Server Configuration Manager and should be set alongside a valid server certificate.",
+                    Tags = ["sql-server", "encryption", "tls", "network", "hardening"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 5,
+                    SafetyRating = 3,
+                    ImpactNote =
+                        "Forces TLS on all connections; client connection strings must trust the SQL Server certificate or connections will fail.",
+                    ApplyOps = [RegOp.SetDword(NetLibKey, "ForceEncryption", 1)],
+                    RemoveOps = [RegOp.DeleteValue(NetLibKey, "ForceEncryption")],
+                    DetectOps = [RegOp.CheckDword(NetLibKey, "ForceEncryption", 1)],
                 },
             ];
-
     }
 
     // ── WefSubscriptionPolicy ──
@@ -26789,7 +27115,5 @@ internal static class PolicyAudit
                     DetectOps = [RegOp.CheckDword(Key, "DisableForwardingHealthTelemetry", 1)],
                 },
             ];
-
     }
-
 }

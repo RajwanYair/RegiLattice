@@ -2,8 +2,8 @@ using System.Text.Json;
 using RegiLattice.Core;
 using RegiLattice.Core.Models;
 using RegiLattice.Core.Registry;
-using Xunit;
 using RegiLattice.Core.Services;
+using Xunit;
 
 namespace RegiLattice.Core.Tests;
 
@@ -3354,6 +3354,7 @@ public sealed class TweaksForProfileTests
         Assert.Empty(engine.TweaksForProfile("completely-nonexistent-profile-xyz"));
     }
 }
+
 // ── merged from ConflictDetectorTests.cs ──────────────────────────────────
 /// <summary>ConflictDetector tests.</summary>
 public sealed class ConflictDetectorTests

@@ -2,8 +2,8 @@
 // Tests for AppConfig.Validate().
 
 using RegiLattice.Core;
-using Xunit;
 using RegiLattice.Core.Services;
+using Xunit;
 
 namespace RegiLattice.Core.Tests;
 
@@ -247,6 +247,7 @@ public sealed class AppConfigValidationTests
         Assert.True(errors.Count >= 3);
     }
 }
+
 // ── merged from AppConfigPortableTests.cs ──────────────────────────────────
 /// <summary>AppConfig portable mode tests.</summary>
 public sealed class AppConfigPortableTests

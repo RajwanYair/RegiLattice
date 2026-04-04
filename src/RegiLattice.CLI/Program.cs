@@ -266,7 +266,7 @@ internal static class Program
 
         // Report
         Console.WriteLine();
-        Console.WriteLine($"  {"RegiLattice Doctor",38}");
+        Console.WriteLine($"  {"RegiLattice Doctor", 38}");
         Console.WriteLine($"  {PlatformSummary()}");
         Console.WriteLine();
         bool allOk = true;
@@ -274,7 +274,7 @@ internal static class Program
         {
             string icon = passed ? "\u2705" : "\u274c";
             allOk &= passed;
-            Console.WriteLine($"  {icon}  {label,-30}  {detail}");
+            Console.WriteLine($"  {icon}  {label, -30}  {detail}");
         }
         Console.WriteLine();
         Console.WriteLine(
@@ -302,21 +302,20 @@ internal static class Program
     {
         if (a.OutputFormat == "json")
         {
-            var allProfiles = TweakEngine.Profiles
-                .Select(p => new ProfileInfo(p.Name, p.Description, _engine.TweaksForProfile(p.Name).Count, "builtin"))
-                .Concat(UserProfileService.GetProfiles()
-                    .Select(p => new ProfileInfo(p.Name, p.Description, p.TweakIds.Count, "user")))
+            var allProfiles = TweakEngine
+                .Profiles.Select(p => new ProfileInfo(p.Name, p.Description, _engine.TweaksForProfile(p.Name).Count, "builtin"))
+                .Concat(UserProfileService.GetProfiles().Select(p => new ProfileInfo(p.Name, p.Description, p.TweakIds.Count, "user")))
                 .ToList();
             Console.WriteLine(JsonSerializer.Serialize(allProfiles, new JsonSerializerOptions { WriteIndented = true }));
             return 0;
         }
 
-        Console.WriteLine($"{"Profile",-12} {"Tweaks",-8} Description");
+        Console.WriteLine($"{"Profile", -12} {"Tweaks", -8} Description");
         Console.WriteLine(new string('-', 60));
         foreach (var p in TweakEngine.Profiles)
         {
             int count = _engine.TweaksForProfile(p.Name).Count;
-            Console.WriteLine($"{p.Name,-12} {count,-8} {p.Description}");
+            Console.WriteLine($"{p.Name, -12} {count, -8} {p.Description}");
         }
 
         var userProfiles = UserProfileService.GetProfiles();
@@ -326,7 +325,7 @@ internal static class Program
             Console.WriteLine("User-defined profiles:");
             Console.WriteLine(new string('-', 60));
             foreach (var up in userProfiles)
-                Console.WriteLine($"{up.Name,-12} {up.TweakIds.Count,-8} {up.Description}");
+                Console.WriteLine($"{up.Name, -12} {up.TweakIds.Count, -8} {up.Description}");
         }
 
         return 0;
@@ -356,11 +355,11 @@ internal static class Program
             return 0;
         }
 
-        Console.WriteLine($"{"Profile",-20} {"Tweaks",-8} {"Created",-22} Description");
+        Console.WriteLine($"{"Profile", -20} {"Tweaks", -8} {"Created", -22} Description");
         Console.WriteLine(new string('-', 72));
         foreach (var up in profiles)
         {
-            Console.WriteLine($"{up.Name,-20} {up.TweakIds.Count,-8} {up.CreatedAt.ToLocalTime():yyyy-MM-dd HH:mm, -22} {up.Description}");
+            Console.WriteLine($"{up.Name, -20} {up.TweakIds.Count, -8} {up.CreatedAt.ToLocalTime():yyyy-MM-dd HH:mm, -22} {up.Description}");
         }
 
         return 0;
@@ -480,7 +479,7 @@ internal static class Program
         Console.WriteLine();
         Console.WriteLine("  Scope breakdown:");
         foreach (TweakScope s in Enum.GetValues<TweakScope>())
-            Console.WriteLine($"    {s,-10} {scopeCounts.GetValueOrDefault(s)}");
+            Console.WriteLine($"    {s, -10} {scopeCounts.GetValueOrDefault(s)}");
         Console.WriteLine();
         Console.WriteLine($"  Corp-safe      : {tweaks.Count(t => t.CorpSafe)}");
         Console.WriteLine($"  Needs admin    : {tweaks.Count(t => t.NeedsAdmin)}");
@@ -494,7 +493,7 @@ internal static class Program
         {
             int cnt = tweaks.Count(t => t.ImpactScore == s);
             string stars = new string('\u2605', s) + new string('\u2606', 5 - s);
-            Console.WriteLine($"    {stars}  ({s})  {cnt,4} tweaks");
+            Console.WriteLine($"    {stars}  ({s})  {cnt, 4} tweaks");
         }
         Console.WriteLine();
         Console.WriteLine("  Safety distribution (1=risky, 5=very safe):");
@@ -502,16 +501,16 @@ internal static class Program
         {
             int cnt = tweaks.Count(t => t.SafetyRating == s);
             string stars = new string('\u2605', s) + new string('\u2606', 5 - s);
-            Console.WriteLine($"    {stars}  ({s})  {cnt,4} tweaks");
+            Console.WriteLine($"    {stars}  ({s})  {cnt, 4} tweaks");
         }
         Console.WriteLine();
         int quickWins = tweaks.Count(t => t.ImpactScore >= 4 && t.SafetyRating >= 4);
         Console.WriteLine($"  Quick wins (Impact\u22654 && Safety\u22654): {quickWins}");
         Console.WriteLine();
-        Console.WriteLine($"{"Category",-30} Tweaks");
+        Console.WriteLine($"{"Category", -30} Tweaks");
         Console.WriteLine("  " + new string('-', 38));
         foreach (var cat in byCat.Keys.Order())
-            Console.WriteLine($"  {cat,-28} {byCat[cat].Count}");
+            Console.WriteLine($"  {cat, -28} {byCat[cat].Count}");
         return 0;
     }
 
@@ -527,10 +526,10 @@ internal static class Program
         }
         else
         {
-            Console.WriteLine($"{"Category",-25} Tweaks");
+            Console.WriteLine($"{"Category", -25} Tweaks");
             Console.WriteLine(new string('-', 35));
             foreach (var cat in byCat.Keys.Order())
-                Console.WriteLine($"{cat,-25} {byCat[cat].Count}");
+                Console.WriteLine($"{cat, -25} {byCat[cat].Count}");
             Console.WriteLine($"\n{byCat.Count} categories, {byCat.Values.Sum(v => v.Count)} tweaks total.");
         }
         return 0;
@@ -542,13 +541,13 @@ internal static class Program
     {
         var counts = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
         foreach (var td in _engine.AllTweaks())
-            foreach (var tag in td.Tags)
-                counts[tag] = counts.GetValueOrDefault(tag) + 1;
+        foreach (var tag in td.Tags)
+            counts[tag] = counts.GetValueOrDefault(tag) + 1;
 
-        Console.WriteLine($"{"Tag",-25} Tweaks");
+        Console.WriteLine($"{"Tag", -25} Tweaks");
         Console.WriteLine(new string('-', 35));
         foreach (var (tag, cnt) in counts.OrderBy(kv => kv.Key))
-            Console.WriteLine($"{tag,-25} {cnt}");
+            Console.WriteLine($"{tag, -25} {cnt}");
         Console.WriteLine($"\n{counts.Count} unique tags across {counts.Values.Sum()} tag usages.");
         return 0;
     }
@@ -673,7 +672,7 @@ internal static class Program
                         st == TweakResult.Applied ? "\u2713"
                         : st == TweakResult.NotApplied ? "\u2717"
                         : "?";
-                    Console.WriteLine($"  {icon} {td.Id,-35} {td.Label}");
+                    Console.WriteLine($"  {icon} {td.Id, -35} {td.Label}");
                 }
             }
         }
@@ -692,12 +691,13 @@ internal static class Program
 
         if (a.OutputFormat == "json")
         {
-            var data = smap.OrderBy(kv => kv.Key).Select(kv => new
-            {
-                Id = kv.Key,
-                Status = kv.Value.ToString(),
-                Label = _engine.GetTweak(kv.Key)?.Label,
-            });
+            var data = smap.OrderBy(kv => kv.Key)
+                .Select(kv => new
+                {
+                    Id = kv.Key,
+                    Status = kv.Value.ToString(),
+                    Label = _engine.GetTweak(kv.Key)?.Label,
+                });
             Console.WriteLine(JsonSerializer.Serialize(data, new JsonSerializerOptions { WriteIndented = true }));
             return 0;
         }
@@ -706,12 +706,12 @@ internal static class Program
         int def = smap.Count(kv => kv.Value == TweakResult.NotApplied);
         int unknown = smap.Count(kv => kv.Value == TweakResult.Unknown);
 
-        Console.WriteLine($"{"Status",-14} {"Count",-8}");
+        Console.WriteLine($"{"Status", -14} {"Count", -8}");
         Console.WriteLine(new string('-', 22));
-        Console.WriteLine($"{"Applied",-14} {applied,-8}");
-        Console.WriteLine($"{"Default",-14} {def,-8}");
-        Console.WriteLine($"{"Unknown",-14} {unknown,-8}");
-        Console.WriteLine($"{"Total",-14} {smap.Count,-8}");
+        Console.WriteLine($"{"Applied", -14} {applied, -8}");
+        Console.WriteLine($"{"Default", -14} {def, -8}");
+        Console.WriteLine($"{"Unknown", -14} {unknown, -8}");
+        Console.WriteLine($"{"Total", -14} {smap.Count, -8}");
 
         if (applied > 0)
         {
@@ -719,7 +719,7 @@ internal static class Program
             foreach (var (id, _) in smap.Where(kv => kv.Value == TweakResult.Applied).OrderBy(kv => kv.Key))
             {
                 var td = _engine.GetTweak(id);
-                Console.WriteLine($"  \u2713 {id,-35} {td?.Label ?? id}");
+                Console.WriteLine($"  \u2713 {id, -35} {td?.Label ?? id}");
             }
         }
         return 0;
@@ -749,7 +749,7 @@ internal static class Program
             foreach (var id in toApply)
             {
                 var td = _engine.GetTweak(id);
-                Console.WriteLine($"  + {id,-35} {td?.Label ?? id}");
+                Console.WriteLine($"  + {id, -35} {td?.Label ?? id}");
             }
         }
         if (toRemove.Count > 0)
@@ -758,7 +758,7 @@ internal static class Program
             foreach (var id in toRemove)
             {
                 var td = _engine.GetTweak(id);
-                Console.WriteLine($"  - {id,-35} {td?.Label ?? id}");
+                Console.WriteLine($"  - {id, -35} {td?.Label ?? id}");
             }
         }
         Console.WriteLine($"\nSummary: {toApply.Count} to apply, {toRemove.Count} extra applied.");
@@ -794,13 +794,13 @@ internal static class Program
         if (a.OutputFormat == "json")
         {
             var data = list.Select(t => new
-            {
-                t.Id,
-                t.Label,
-                t.Category,
-                t.NeedsAdmin,
-                t.CorpSafe,
-            })
+                {
+                    t.Id,
+                    t.Label,
+                    t.Category,
+                    t.NeedsAdmin,
+                    t.CorpSafe,
+                })
                 .ToList();
             Console.WriteLine(JsonSerializer.Serialize(data, new JsonSerializerOptions { WriteIndented = true }));
         }
@@ -809,14 +809,14 @@ internal static class Program
             Console.Write("Detecting status");
             var smap = _engine.StatusMap(parallel: true);
             Console.WriteLine(" done.");
-            Console.WriteLine($"{"ID",-30} {"Category",-14} {"Imp",-5} {"Status",-14} Label");
+            Console.WriteLine($"{"ID", -30} {"Category", -14} {"Imp", -5} {"Status", -14} Label");
             Console.WriteLine(new string('-', 86));
             foreach (var td in list)
             {
                 var st = smap.GetValueOrDefault(td.Id, TweakResult.Unknown);
                 var stText = ColourisedStatus(st);
                 string impStars = new string('\u2605', td.ImpactScore) + new string('\u2606', 5 - td.ImpactScore);
-                Console.WriteLine($"{td.Id,-30} {td.Category,-14} {impStars,-5} {stText,-14} {td.Label}");
+                Console.WriteLine($"{td.Id, -30} {td.Category, -14} {impStars, -5} {stText, -14} {td.Label}");
             }
         }
         return 0;
@@ -846,12 +846,12 @@ internal static class Program
         if (a.OutputFormat == "json")
         {
             var data = list.Select(t => new
-            {
-                t.Id,
-                t.Label,
-                t.Category,
-                t.Tags,
-            })
+                {
+                    t.Id,
+                    t.Label,
+                    t.Category,
+                    t.Tags,
+                })
                 .ToList();
             Console.WriteLine(JsonSerializer.Serialize(data, new JsonSerializerOptions { WriteIndented = true }));
         }
@@ -860,13 +860,13 @@ internal static class Program
             Console.Write("Detecting status");
             var smap = _engine.StatusMap(parallel: true);
             Console.WriteLine(" done.");
-            Console.WriteLine($"{"ID",-30} {"Category",-14} {"Status",-14} Label");
+            Console.WriteLine($"{"ID", -30} {"Category", -14} {"Status", -14} Label");
             Console.WriteLine(new string('-', 80));
             foreach (var td in list)
             {
                 var st = smap.GetValueOrDefault(td.Id, TweakResult.Unknown);
                 var stText = ColourisedStatus(st);
-                Console.WriteLine($"{td.Id,-30} {td.Category,-14} {stText,-14} {td.Label}");
+                Console.WriteLine($"{td.Id, -30} {td.Category, -14} {stText, -14} {td.Label}");
             }
             Console.WriteLine($"\n{list.Count} tweak(s) found.");
         }
@@ -892,9 +892,9 @@ internal static class Program
             {
                 var dep = _engine.GetTweak(depId);
                 if (dep is not null)
-                    Console.WriteLine($"  \u2192 {dep.Id,-30} {dep.Category,-14} {dep.Label}");
+                    Console.WriteLine($"  \u2192 {dep.Id, -30} {dep.Category, -14} {dep.Label}");
                 else
-                    Console.WriteLine($"  \u2192 {depId,-30} {Red("(not found)")}");
+                    Console.WriteLine($"  \u2192 {depId, -30} {Red("(not found)")}");
             }
         }
         else
@@ -908,7 +908,7 @@ internal static class Program
         {
             Console.WriteLine($"\n\u2500\u2500 Tweaks that depend on {td.Id}:");
             foreach (var dep in dependents)
-                Console.WriteLine($"  \u2190 {dep.Id,-30} {dep.Category,-14} {dep.Label}");
+                Console.WriteLine($"  \u2190 {dep.Id, -30} {dep.Category, -14} {dep.Label}");
         }
         else
         {
@@ -989,10 +989,10 @@ internal static class Program
         else
         {
             Console.WriteLine($"Snapshot diff: {Path.GetFileName(fileA)} vs {Path.GetFileName(fileB)}");
-            Console.WriteLine($"{"ID",-35} {"File A",-15} {"File B",-15}");
+            Console.WriteLine($"{"ID", -35} {"File A", -15} {"File B", -15}");
             Console.WriteLine(new string('-', 65));
             foreach (var (id, stA, stB) in diffs)
-                Console.WriteLine($"{id,-35} {stA,-15} {stB,-15}");
+                Console.WriteLine($"{id, -35} {stA, -15} {stB, -15}");
             Console.WriteLine($"\n{diffs.Count} difference(s).");
         }
         return 0;
@@ -1231,9 +1231,7 @@ internal static class Program
             return ExitCodes.PartialFail;
         }
 
-        var results = a.BatchMode == "apply"
-            ? _engine.ApplyBatch(targets, forceCorp: a.Force)
-            : _engine.RemoveBatch(targets, forceCorp: a.Force);
+        var results = a.BatchMode == "apply" ? _engine.ApplyBatch(targets, forceCorp: a.Force) : _engine.RemoveBatch(targets, forceCorp: a.Force);
 
         bool isApply = a.BatchMode == "apply";
         int ok = 0;
@@ -1250,7 +1248,10 @@ internal static class Program
             if (res is TweakResult.Applied or TweakResult.NotApplied)
             {
                 ok++;
-                if (isApply) Analytics.RecordApply(id); else Analytics.RecordRemove(id);
+                if (isApply)
+                    Analytics.RecordApply(id);
+                else
+                    Analytics.RecordRemove(id);
             }
             else if (res is TweakResult.Error)
             {
@@ -1284,8 +1285,15 @@ internal static class Program
         }
 
         string raw;
-        try { raw = File.ReadAllText(path); }
-        catch (Exception ex) { error = $"Cannot read file: {ex.Message}"; return null; }
+        try
+        {
+            raw = File.ReadAllText(path);
+        }
+        catch (Exception ex)
+        {
+            error = $"Cannot read file: {ex.Message}";
+            return null;
+        }
 
         raw = raw.Trim();
 
@@ -1298,7 +1306,11 @@ internal static class Program
                     return JsonSerializer.Deserialize<List<string>>(raw) ?? [];
 
                 var doc = JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(raw);
-                if (doc is null) { error = "Empty JSON object."; return null; }
+                if (doc is null)
+                {
+                    error = "Empty JSON object.";
+                    return null;
+                }
 
                 // Snapshot format: check "applied", "tweaks", or "ids" key
                 foreach (var key in new[] { "applied", "tweaks", "ids" })
@@ -1324,10 +1336,10 @@ internal static class Program
 
         // Plain-text: one ID per line, skip blanks and # comments
         return raw.Split(['\r', '\n'], StringSplitOptions.RemoveEmptyEntries)
-                  .Where(line => !line.TrimStart().StartsWith('#'))
-                  .Select(line => line.Trim())
-                  .Where(line => line.Length > 0)
-                  .ToList();
+            .Where(line => !line.TrimStart().StartsWith('#'))
+            .Select(line => line.Trim())
+            .Where(line => line.Length > 0)
+            .ToList();
     }
 
     // ── Status ──────────────────────────────────────────────────────────
@@ -1430,7 +1442,14 @@ internal static class Program
 
         if (a.OutputFormat == "json")
         {
-            var data = new { td.Id, td.Label, Mode = a.Mode, Status = result.ToString(), DryRun = _session.DryRun };
+            var data = new
+            {
+                td.Id,
+                td.Label,
+                Mode = a.Mode,
+                Status = result.ToString(),
+                DryRun = _session.DryRun,
+            };
             Console.WriteLine(JsonSerializer.Serialize(data, new JsonSerializerOptions { WriteIndented = true }));
         }
         else if (_session.DryRun)
@@ -1518,7 +1537,7 @@ internal static class Program
             {
                 var cat = categories[i];
                 var count = _engine.TweaksByCategory()[cat].Count;
-                Console.WriteLine($"  {i + 1,3}. {cat,-30} ({count} tweaks)");
+                Console.WriteLine($"  {i + 1, 3}. {cat, -30} ({count} tweaks)");
             }
             Console.WriteLine($"\n    0. Exit\n");
             Console.Write("Select category: ");
@@ -1547,7 +1566,7 @@ internal static class Program
                     st == TweakResult.Applied ? "\u2713"
                     : st == TweakResult.NotApplied ? "\u2717"
                     : "?";
-                Console.WriteLine($"  {i + 1,3}. [{icon}] {td.Label}");
+                Console.WriteLine($"  {i + 1, 3}. [{icon}] {td.Label}");
             }
 
             Console.WriteLine("\n  A = Apply all  |  R = Remove all  |  B = Back\n");
@@ -1613,10 +1632,10 @@ internal static class Program
             return 0;
         }
 
-        Console.WriteLine($"\n  {"Name",-25} {"Version",-10} {"Tweaks",-8} {"Description"}");
+        Console.WriteLine($"\n  {"Name", -25} {"Version", -10} {"Tweaks", -8} {"Description"}");
         Console.WriteLine($"  {new string('─', 70)}");
         foreach (var p in index.Packs)
-            Console.WriteLine($"  {p.Name,-25} {p.Version,-10} {p.TweakCount,-8} {p.Description}");
+            Console.WriteLine($"  {p.Name, -25} {p.Version, -10} {p.TweakCount, -8} {p.Description}");
         Console.WriteLine($"\n  {index.Packs.Count} packs available.\n");
         return 0;
     }
@@ -1638,10 +1657,10 @@ internal static class Program
         }
 
         Console.WriteLine($"\n  Results for '{query}':\n");
-        Console.WriteLine($"  {"Name",-25} {"Version",-10} {"Description"}");
+        Console.WriteLine($"  {"Name", -25} {"Version", -10} {"Description"}");
         Console.WriteLine($"  {new string('─', 60)}");
         foreach (var p in results)
-            Console.WriteLine($"  {p.Name,-25} {p.Version,-10} {p.Description}");
+            Console.WriteLine($"  {p.Name, -25} {p.Version, -10} {p.Description}");
         Console.WriteLine($"\n  {results.Count} packs found.\n");
         return 0;
     }
@@ -1726,10 +1745,10 @@ internal static class Program
             return 0;
         }
 
-        Console.WriteLine($"\n  {"Name",-25} {"Version",-10} {"Tweaks",-8} {"Author"}");
+        Console.WriteLine($"\n  {"Name", -25} {"Version", -10} {"Tweaks", -8} {"Author"}");
         Console.WriteLine($"  {new string('─', 60)}");
         foreach (var p in installed)
-            Console.WriteLine($"  {p.Name,-25} {p.Version,-10} {p.TweakCount,-8} {p.Author}");
+            Console.WriteLine($"  {p.Name, -25} {p.Version, -10} {p.TweakCount, -8} {p.Author}");
         Console.WriteLine($"\n  {installed.Count} packs installed.\n");
         return 0;
     }
@@ -1826,10 +1845,10 @@ internal static class Program
                 return 0;
             }
 
-            Console.WriteLine($"\n  {"Pack",-25} {"Installed",-12} {"Available"}");
+            Console.WriteLine($"\n  {"Pack", -25} {"Installed", -12} {"Available"}");
             Console.WriteLine($"  {new string('─', 50)}");
             foreach (var (local, remote) in updates)
-                Console.WriteLine($"  {local.Name,-25} {local.Version,-12} {remote.Version}");
+                Console.WriteLine($"  {local.Name, -25} {local.Version, -12} {remote.Version}");
             Console.WriteLine($"\n  {updates.Count} update(s) available.\n");
             return 0;
         }
@@ -1959,8 +1978,8 @@ internal static class Program
         foreach (var d in report.Drifted)
         {
             string arrow = $"{d.BaselineStatus} \u2192 {d.CurrentStatus}";
-            Console.WriteLine($"  {Red(d.TweakId),-50} {d.Label}");
-            Console.WriteLine($"    Category: {d.Category,-30} Change: {arrow}");
+            Console.WriteLine($"  {Red(d.TweakId), -50} {d.Label}");
+            Console.WriteLine($"    Category: {d.Category, -30} Change: {arrow}");
         }
         return 1;
     }
@@ -1977,14 +1996,14 @@ internal static class Program
         }
 
         Console.WriteLine($"Compliance Check History ({history.Count} entries)\n");
-        Console.WriteLine($"  {"Date",-22} {"Checked",-10} {"Violations",-12} {"Status",-12} Snapshot");
+        Console.WriteLine($"  {"Date", -22} {"Checked", -10} {"Violations", -12} {"Status", -12} Snapshot");
         Console.WriteLine(new string('-', 90));
 
         foreach (var e in history.AsEnumerable().Reverse().Take(30))
         {
             string status = e.IsCompliant ? Green("Compliant") : Red($"Drifted ({e.ViolationCount})");
             string snap = e.SnapshotPath is not null ? Path.GetFileName(e.SnapshotPath) : Dim("(none)");
-            Console.WriteLine($"  {e.CheckedAt:yyyy-MM-dd HH:mm:ss}  {e.TotalChecked,-10} {e.ViolationCount,-12} {status,-20} {snap}");
+            Console.WriteLine($"  {e.CheckedAt:yyyy-MM-dd HH:mm:ss}  {e.TotalChecked, -10} {e.ViolationCount, -12} {status, -20} {snap}");
         }
         return 0;
     }
@@ -2119,7 +2138,7 @@ internal static class Program
             string status = s.Enabled ? Green("[enabled] ") : Dim("[disabled]");
             string lastRun = s.LastRun.HasValue ? s.LastRun.Value.ToLocalTime().ToString("yyyy-MM-dd HH:mm") : "never";
             string interval = s.Trigger == RegiLattice.Core.Services.ScheduleTrigger.Timer ? $" every {s.IntervalMinutes}m" : "";
-            Console.WriteLine($"  {status} {s.TweakId,-40} {s.Trigger}{interval}  (last: {lastRun})");
+            Console.WriteLine($"  {status} {s.TweakId, -40} {s.Trigger}{interval}  (last: {lastRun})");
         }
         return 0;
     }
@@ -2226,9 +2245,9 @@ internal static class Program
         {
             var td = _engine.GetTweak(id);
             if (td is not null)
-                Console.WriteLine($"  {Yellow(id),-45} {td.Label}");
+                Console.WriteLine($"  {Yellow(id), -45} {td.Label}");
             else
-                Console.WriteLine($"  {Dim(id),-45} (unknown)");
+                Console.WriteLine($"  {Dim(id), -45} (unknown)");
         }
         return 0;
     }
@@ -2271,7 +2290,7 @@ internal static class Program
         {
             var timeStr = DateTimeOffset.TryParse(e.Timestamp, out var ts) ? ts.ToLocalTime().ToString("yyyy-MM-dd HH:mm") : e.Timestamp;
             var actionColor = e.Action == "apply" ? Green(e.Action) : (e.Action == "remove" ? Red(e.Action) : Yellow(e.Action));
-            Console.WriteLine($"  {Dim(timeStr)}  {actionColor,-20}  {e.TweakId,-45}  {e.Result}");
+            Console.WriteLine($"  {Dim(timeStr)}  {actionColor, -20}  {e.TweakId, -45}  {e.Result}");
         }
         return 0;
     }

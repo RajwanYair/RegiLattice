@@ -6,7 +6,6 @@ internal static class Storage
 {
     internal static IReadOnlyList<TweakDef> Tweaks { get; } =
     [
-
         new TweakDef
         {
             Id = "stor-storage-disable-reserved",
@@ -152,7 +151,6 @@ internal static class Storage
             RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsDisable8dot3NameCreation", 0)],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsDisable8dot3NameCreation", 1)],
         },
-
         new TweakDef
         {
             Id = "stor-storage-enable-long-paths",
@@ -168,7 +166,6 @@ internal static class Storage
             RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem", "LongPathsEnabled", 0)],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem", "LongPathsEnabled", 1)],
         },
-
         new TweakDef
         {
             Id = "stor-disable-storage-sense",
@@ -221,7 +218,6 @@ internal static class Storage
             RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem", "DisableDeleteNotification", 1)],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem", "DisableDeleteNotification", 0)],
         },
-
         new TweakDef
         {
             Id = "stor-disable-last-access",
@@ -287,7 +283,6 @@ internal static class Storage
             RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\BitBucket", "NukeOnDelete")],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\BitBucket", "NukeOnDelete", 0)],
         },
-
         new TweakDef
         {
             Id = "stor-compact-os",
@@ -841,7 +836,6 @@ internal static class Storage
 
 // === Merged from: FileSystem.cs ===
 
-
 internal static class FileSystem
 {
     internal static IReadOnlyList<TweakDef> Tweaks { get; } =
@@ -861,7 +855,6 @@ internal static class FileSystem
             RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\EFS", "EfsConfiguration", 0)],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\EFS", "EfsConfiguration", 1)],
         },
-
         new TweakDef
         {
             Id = "fs-disable-remote-diff-compression",
@@ -892,7 +885,6 @@ internal static class FileSystem
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Dedup\Parameters", "MaxMemory")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Dedup\Parameters", "MaxMemory", 2048)],
         },
-
         new TweakDef
         {
             Id = "fs-enable-case-sensitive",
@@ -1312,7 +1304,6 @@ internal static class FileSystem
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem", "MaximumTunnelEntries")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem", "MaximumTunnelEntries", 0)],
         },
-
         new TweakDef
         {
             Id = "fs-enable-win32-long-paths-policy",
@@ -1819,7 +1810,6 @@ internal static class SsdOptimization
             RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsEncryptPagingFile")],
             DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsEncryptPagingFile", 0)],
         },
-
         new TweakDef
         {
             Id = "ssd-set-io-priority-normal",
@@ -2225,7 +2215,6 @@ internal static class SsdOptimization
     ];
 }
 
-
 // ── merged from PolicyStorage.cs ──
 // RegiLattice.Core — Tweaks/PolicyStorage.cs
 // Disk quotas, NTFS, Storage Spaces, ReFS, VSS, shadow copies, file history, offline files, and storage management policies
@@ -2466,7 +2455,6 @@ internal static class PolicyStorage
                 DetectOps = [RegOp.CheckDword(ExplLm, "NoAutoplayfornonVolume", 1)],
             },
         ];
-
     }
 
     // ── DiskQuotaAdvancedPolicy ──
@@ -2647,7 +2635,6 @@ internal static class PolicyStorage
                     DetectOps = [RegOp.CheckDword(Key, "RestrictQuotaReportExport", 1)],
                 },
             ];
-
     }
 
     // ── DiskQuotaPolicy ──
@@ -2828,7 +2815,6 @@ internal static class PolicyStorage
                     DetectOps = [RegOp.CheckDword(Key, "ExemptAdministrators", 1)],
                 },
             ];
-
     }
 
     // ── FileHistoryPolicy ──
@@ -3036,7 +3022,6 @@ internal static class PolicyStorage
                 DetectOps = [RegOp.CheckDword(BkpKey, "DisableRestoredUI", 1)],
             },
         ];
-
     }
 
     // ── FileSharePolicy ──
@@ -3217,17 +3202,14 @@ internal static class PolicyStorage
                 DetectOps = [RegOp.CheckDword(Key, "ConfigureOplocks", 0)],
             },
         ];
-
     }
 
     // ── FileShareWitnessPolicy ──
     private static class _FileShareWitnessPolicy
     {
-        private const string SrvKey =
-            @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\LanmanServer";
+        private const string SrvKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\LanmanServer";
 
-        private const string WrkKey =
-            @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\LanmanWorkstation";
+        private const string WrkKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\LanmanWorkstation";
 
         public static IReadOnlyList<TweakDef> Data =>
             [
@@ -3243,7 +3225,8 @@ internal static class PolicyStorage
                     CorpSafe = true,
                     ImpactScore = 5,
                     SafetyRating = 4,
-                    ImpactNote = "All SMB clients must negotiate signing when connecting to this server. Legacy SMB clients that do not support signing (rare; pre-Vista) will be rejected. Slight CPU overhead per packet on high-throughput file servers.",
+                    ImpactNote =
+                        "All SMB clients must negotiate signing when connecting to this server. Legacy SMB clients that do not support signing (rare; pre-Vista) will be rejected. Slight CPU overhead per packet on high-throughput file servers.",
                     ApplyOps = [RegOp.SetDword(SrvKey, "RequireSecuritySignature", 1)],
                     RemoveOps = [RegOp.DeleteValue(SrvKey, "RequireSecuritySignature")],
                     DetectOps = [RegOp.CheckDword(SrvKey, "RequireSecuritySignature", 1)],
@@ -3260,7 +3243,8 @@ internal static class PolicyStorage
                     CorpSafe = true,
                     ImpactScore = 5,
                     SafetyRating = 4,
-                    ImpactNote = "This client only connects to SMB servers that support signing. Servers that do not support SMB signing are refused connections. Unpatched or misconfigured legacy file servers may become unreachable.",
+                    ImpactNote =
+                        "This client only connects to SMB servers that support signing. Servers that do not support SMB signing are refused connections. Unpatched or misconfigured legacy file servers may become unreachable.",
                     ApplyOps = [RegOp.SetDword(WrkKey, "RequireSecuritySignature", 1)],
                     RemoveOps = [RegOp.DeleteValue(WrkKey, "RequireSecuritySignature")],
                     DetectOps = [RegOp.CheckDword(WrkKey, "RequireSecuritySignature", 1)],
@@ -3277,7 +3261,8 @@ internal static class PolicyStorage
                     CorpSafe = true,
                     ImpactScore = 5,
                     SafetyRating = 4,
-                    ImpactNote = "SMB guest connections are blocked. Shares with misconfigured permissions that previously allowed guest may become inaccessible. SMB connections require valid credentials. Users with wrong passwords receive an authentication error rather than a guest session.",
+                    ImpactNote =
+                        "SMB guest connections are blocked. Shares with misconfigured permissions that previously allowed guest may become inaccessible. SMB connections require valid credentials. Users with wrong passwords receive an authentication error rather than a guest session.",
                     ApplyOps = [RegOp.SetDword(WrkKey, "AllowInsecureGuestAuth", 0)],
                     RemoveOps = [RegOp.DeleteValue(WrkKey, "AllowInsecureGuestAuth")],
                     DetectOps = [RegOp.CheckDword(WrkKey, "AllowInsecureGuestAuth", 0)],
@@ -3294,7 +3279,8 @@ internal static class PolicyStorage
                     CorpSafe = true,
                     ImpactScore = 5,
                     SafetyRating = 4,
-                    ImpactNote = "SMBv1 server is disabled. Clients that can only use SMBv1 (Windows XP, Server 2003, early SAMBA versions, some legacy NAS appliances) cannot connect. Verify no SMBv1-only clients exist before applying.",
+                    ImpactNote =
+                        "SMBv1 server is disabled. Clients that can only use SMBv1 (Windows XP, Server 2003, early SAMBA versions, some legacy NAS appliances) cannot connect. Verify no SMBv1-only clients exist before applying.",
                     ApplyOps = [RegOp.SetDword(SrvKey, "SMB1", 0)],
                     RemoveOps = [RegOp.DeleteValue(SrvKey, "SMB1")],
                     DetectOps = [RegOp.CheckDword(SrvKey, "SMB1", 0)],
@@ -3311,7 +3297,8 @@ internal static class PolicyStorage
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "Server processes up to 16384 simultaneous SMB work items. Improves throughput under high-concurrency file access. Consumes additional non-paged pool memory on servers with many concurrent SMB clients.",
+                    ImpactNote =
+                        "Server processes up to 16384 simultaneous SMB work items. Improves throughput under high-concurrency file access. Consumes additional non-paged pool memory on servers with many concurrent SMB clients.",
                     ApplyOps = [RegOp.SetDword(SrvKey, "MaxWorkItems", 16384)],
                     RemoveOps = [RegOp.DeleteValue(SrvKey, "MaxWorkItems")],
                     DetectOps = [RegOp.CheckDword(SrvKey, "MaxWorkItems", 16384)],
@@ -3328,7 +3315,8 @@ internal static class PolicyStorage
                     CorpSafe = true,
                     ImpactScore = 4,
                     SafetyRating = 4,
-                    ImpactNote = "All SMB3 connections to this server use encryption. Clients must support SMB3 encryption (Windows 8+ / Server 2012+). CPU overhead for encryption; significant impact on high-bandwidth file copy operations on CPU-constrained servers.",
+                    ImpactNote =
+                        "All SMB3 connections to this server use encryption. Clients must support SMB3 encryption (Windows 8+ / Server 2012+). CPU overhead for encryption; significant impact on high-bandwidth file copy operations on CPU-constrained servers.",
                     ApplyOps = [RegOp.SetDword(SrvKey, "EncryptData", 1)],
                     RemoveOps = [RegOp.DeleteValue(SrvKey, "EncryptData")],
                     DetectOps = [RegOp.CheckDword(SrvKey, "EncryptData", 1)],
@@ -3345,7 +3333,8 @@ internal static class PolicyStorage
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "Idle SMB sessions are disconnected after 15 minutes. Users reconnect transparently when accessing mapped drives after idle disconnection. Short-lived applications that hold SMB connections open but rarely use them may silently reconnect.",
+                    ImpactNote =
+                        "Idle SMB sessions are disconnected after 15 minutes. Users reconnect transparently when accessing mapped drives after idle disconnection. Short-lived applications that hold SMB connections open but rarely use them may silently reconnect.",
                     ApplyOps = [RegOp.SetDword(SrvKey, "AutoDisconnect", 15)],
                     RemoveOps = [RegOp.DeleteValue(SrvKey, "AutoDisconnect")],
                     DetectOps = [RegOp.CheckDword(SrvKey, "AutoDisconnect", 15)],
@@ -3362,7 +3351,8 @@ internal static class PolicyStorage
                     CorpSafe = true,
                     ImpactScore = 4,
                     SafetyRating = 5,
-                    ImpactNote = "Anonymous (null session) network share enumeration is blocked. Legitimate client connections with credentials are unaffected. Tools like NetScan and LanSweeper that enumerate shares with null sessions may not discover shares on this server.",
+                    ImpactNote =
+                        "Anonymous (null session) network share enumeration is blocked. Legitimate client connections with credentials are unaffected. Tools like NetScan and LanSweeper that enumerate shares with null sessions may not discover shares on this server.",
                     ApplyOps = [RegOp.SetDword(SrvKey, "RestrictNullSessAccess", 1)],
                     RemoveOps = [RegOp.DeleteValue(SrvKey, "RestrictNullSessAccess")],
                     DetectOps = [RegOp.CheckDword(SrvKey, "RestrictNullSessAccess", 1)],
@@ -3379,7 +3369,8 @@ internal static class PolicyStorage
                     CorpSafe = true,
                     ImpactScore = 5,
                     SafetyRating = 5,
-                    ImpactNote = "UNC paths to NETLOGON and SYSVOL require mutual authentication and signing. Man-in-the-middle attacks against Group Policy delivery are blocked. No impact on normal AD-joined clients with a working domain connection.",
+                    ImpactNote =
+                        "UNC paths to NETLOGON and SYSVOL require mutual authentication and signing. Man-in-the-middle attacks against Group Policy delivery are blocked. No impact on normal AD-joined clients with a working domain connection.",
                     ApplyOps = [RegOp.SetDword(WrkKey, "HardenedUNCPathsEnabled", 1)],
                     RemoveOps = [RegOp.DeleteValue(WrkKey, "HardenedUNCPathsEnabled")],
                     DetectOps = [RegOp.CheckDword(WrkKey, "HardenedUNCPathsEnabled", 1)],
@@ -3396,13 +3387,13 @@ internal static class PolicyStorage
                     CorpSafe = true,
                     ImpactScore = 4,
                     SafetyRating = 3,
-                    ImpactNote = "C$, D$, ADMIN$ administrative shares are removed. Remote administration tools that rely on these shares (PsExec, legacy SCCM push, RoboCopy to C$) stop working. Verify that all management tools use WinRM, WMI, or agent-based access before applying.",
+                    ImpactNote =
+                        "C$, D$, ADMIN$ administrative shares are removed. Remote administration tools that rely on these shares (PsExec, legacy SCCM push, RoboCopy to C$) stop working. Verify that all management tools use WinRM, WMI, or agent-based access before applying.",
                     ApplyOps = [RegOp.SetDword(SrvKey, "AutoShareWks", 0)],
                     RemoveOps = [RegOp.DeleteValue(SrvKey, "AutoShareWks")],
                     DetectOps = [RegOp.CheckDword(SrvKey, "AutoShareWks", 0)],
                 },
             ];
-
     }
 
     // ── NtfsPolicy ──
@@ -3583,7 +3574,6 @@ internal static class PolicyStorage
                 DetectOps = [RegOp.CheckDword(Key, "DisableOpportunisticLocking", 1)],
             },
         ];
-
     }
 
     // ── OfflineFilesSyncPolicy ──
@@ -3735,7 +3725,6 @@ internal static class PolicyStorage
                 DetectOps = [RegOp.CheckDword(SyncMgr, "HideOptionsForSyncProvider", 1)],
             },
         ];
-
     }
 
     // ── OpenTypeSecurityPolicy ──
@@ -3746,169 +3735,178 @@ internal static class PolicyStorage
         private const string GdipKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Fonts";
 
         public static IReadOnlyList<TweakDef> Data =>
-        [
-            new TweakDef
-            {
-                Id           = "otfpol-block-opentype-kernel-parsing",
-                Label        = "Block OpenType Font Parsing in the Windows Kernel",
-                Category = "Storage",
-                Description  = "Moves OpenType font parsing out of the Windows kernel (win32k.sys) and into a user-mode font parsing process, eliminating kernel-level font parsing vulnerabilities exploitable via specially-crafted font files in web content.",
-                Tags         = ["opentype", "font-parsing", "kernel", "security", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 5,
-                SafetyRating = 5,
-                ImpactNote   = "OpenType kernel parsing disabled; font parsing moved to user-mode — eliminates kernel font exploit surface.",
-                ApplyOps     = [RegOp.SetDword(Key, "BlockOpenTypeKernelParser", 1)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "BlockOpenTypeKernelParser")],
-                DetectOps    = [RegOp.CheckDword(Key, "BlockOpenTypeKernelParser", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "otfpol-disable-legacy-font-drivers",
-                Label        = "Disable Loading of Legacy TrueType Font Drivers",
-                Category = "Storage",
-                Description  = "Prevents legacy third-party TrueType font drivers from loading in the Windows font subsystem, reducing attack surface from unmaintained or vulnerable font drivers that may contain known CVEs.",
-                Tags         = ["truetype", "font-driver", "legacy", "security", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 4,
-                SafetyRating = 5,
-                ImpactNote   = "Legacy TrueType font drivers blocked from loading; only Windows-provided drivers used for font rendering.",
-                ApplyOps     = [RegOp.SetDword(GdipKey, "DisableLegacyFontDrivers", 1)],
-                RemoveOps    = [RegOp.DeleteValue(GdipKey, "DisableLegacyFontDrivers")],
-                DetectOps    = [RegOp.CheckDword(GdipKey, "DisableLegacyFontDrivers", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "otfpol-restrict-embedded-font-trusted",
-                Label        = "Restrict Embedded Fonts to Trusted Documents Only",
-                Category = "Storage",
-                Description  = "Sets the Windows font embedding policy so that embedded fonts in Office and PDF documents are only rendered when the document originates from a trusted location, blocking remote exploitation via malicious embedded fonts in untrusted files.",
-                Tags         = ["fonts", "embedded-font", "trusted", "office", "security", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 4,
-                SafetyRating = 5,
-                ImpactNote   = "Embedded fonts rendered only in trusted documents; fonts in untrusted attachments not processed.",
-                ApplyOps     = [RegOp.SetDword(GdipKey, "RestrictEmbeddedFontToTrusted", 1)],
-                RemoveOps    = [RegOp.DeleteValue(GdipKey, "RestrictEmbeddedFontToTrusted")],
-                DetectOps    = [RegOp.CheckDword(GdipKey, "RestrictEmbeddedFontToTrusted", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "otfpol-disable-variable-font-web",
-                Label        = "Disable Variable Font Loading from Web Content",
-                Category = "Storage",
-                Description  = "Prevents loading of OpenType Variable Fonts (OTF/TTF with variation axes) referenced in web content via browser font stacks, reducing the parsing attack surface from variable font table complexity in browser rendering engines.",
-                Tags         = ["opentype", "variable-font", "web", "browser", "security", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 3,
-                SafetyRating = 5,
-                ImpactNote   = "Variable font loading from web disabled in browser; reduces OTF/TTF parsing surface in browser renderer.",
-                ApplyOps     = [RegOp.SetDword(GdipKey, "DisableVariableFontFromWeb", 1)],
-                RemoveOps    = [RegOp.DeleteValue(GdipKey, "DisableVariableFontFromWeb")],
-                DetectOps    = [RegOp.CheckDword(GdipKey, "DisableVariableFontFromWeb", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "otfpol-enable-font-integrity-check",
-                Label        = "Enable Font File Integrity Check Before Loading",
-                Category = "Storage",
-                Description  = "Enables a Windows Security Health check that verifies the integrity of installed system fonts against known-good checksums before loading, detecting tampering with font files used in critical UI rendering.",
-                Tags         = ["fonts", "integrity-check", "security", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 3,
-                SafetyRating = 5,
-                ImpactNote   = "Font file integrity verified before loading; tampered system fonts detected before rendering.",
-                ApplyOps     = [RegOp.SetDword(GdipKey, "EnableFontIntegrityCheck", 1)],
-                RemoveOps    = [RegOp.DeleteValue(GdipKey, "EnableFontIntegrityCheck")],
-                DetectOps    = [RegOp.CheckDword(GdipKey, "EnableFontIntegrityCheck", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "otfpol-block-remote-font-download-edge",
-                Label        = "Block Remote Font Downloads in Microsoft Edge",
-                Category = "Storage",
-                Description  = "Prevents Microsoft Edge from downloading and rendering fonts referenced by web page CSS from remote URLs, eliminating an attack vector where crafted web fonts hosted externally could exploit the browser font parser.",
-                Tags         = ["fonts", "edge", "remote-font", "css", "browser-security", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 4,
-                SafetyRating = 5,
-                ImpactNote   = "Edge blocked from loading remote fonts via CSS; all fonts must be system-installed. May break web typography.",
-                ApplyOps     = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "AllowWebFonts", 0)],
-                RemoveOps    = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "AllowWebFonts")],
-                DetectOps    = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "AllowWebFonts", 0)],
-            },
-            new TweakDef
-            {
-                Id           = "otfpol-enable-gdi-font-sandbox",
-                Label        = "Enable GDI Font Sandbox in AppContainer Sessions",
-                Category = "Storage",
-                Description  = "Enables the GDI+ font rendering sandbox in AppContainer (browser sandboxed renderer) sessions, ensuring that font parsing for sandbox processes occurs in a restricted context rather than directly in win32k.sys.",
-                Tags         = ["fonts", "gdi", "sandbox", "appcontainer", "security", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 4,
-                SafetyRating = 5,
-                ImpactNote   = "GDI font sandbox enabled in AppContainer; font parsing for sandbox processes isolated from kernel.",
-                ApplyOps     = [RegOp.SetDword(GdipKey, "EnableGDIFontSandbox", 1)],
-                RemoveOps    = [RegOp.DeleteValue(GdipKey, "EnableGDIFontSandbox")],
-                DetectOps    = [RegOp.CheckDword(GdipKey, "EnableGDIFontSandbox", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "otfpol-disable-type1-fonts",
-                Label        = "Disable Loading of Legacy Type1 Fonts",
-                Category = "Storage",
-                Description  = "Disables support for loading Adobe Type 1 (PostScript) legacy fonts in GDI/GDI+, an aging format with limited security patching, reducing exposure to Type1 font parsing CVEs in the PostScript interpreter.",
-                Tags         = ["fonts", "type1", "postscript", "legacy", "security", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 3,
-                SafetyRating = 4,
-                ImpactNote   = "Type1/PostScript font loading disabled; legacy PS fonts not rendered. Most modern apps use OpenType.",
-                ApplyOps     = [RegOp.SetDword(GdipKey, "DisableType1FontRendering", 1)],
-                RemoveOps    = [RegOp.DeleteValue(GdipKey, "DisableType1FontRendering")],
-                DetectOps    = [RegOp.CheckDword(GdipKey, "DisableType1FontRendering", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "otfpol-log-font-parse-failures",
-                Label        = "Log Font File Parse Failures for Security Monitoring",
-                Category = "Storage",
-                Description  = "Enables event log entries when a font file fails parsing validation (malformed tables, invalid checksums), providing visibility into attempts to load crafted malicious fonts on the endpoint.",
-                Tags         = ["fonts", "parse-failure", "event-log", "audit", "security", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 3,
-                SafetyRating = 5,
-                ImpactNote   = "Font parse failure events logged; malformed or crafted font load attempts visible in security log.",
-                ApplyOps     = [RegOp.SetDword(GdipKey, "LogFontParseFailures", 1)],
-                RemoveOps    = [RegOp.DeleteValue(GdipKey, "LogFontParseFailures")],
-                DetectOps    = [RegOp.CheckDword(GdipKey, "LogFontParseFailures", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "otfpol-disable-font-driver-telemetry",
-                Label        = "Disable Font Driver Telemetry Reporting to Microsoft",
-                Category = "Storage",
-                Description  = "Prevents the Windows font subsystem from sending font usage, load failure, and driver interaction telemetry to Microsoft, protecting information about installed and loaded fonts from cloud disclosure.",
-                Tags         = ["fonts", "driver", "telemetry", "privacy", "microsoft", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 2,
-                SafetyRating = 5,
-                ImpactNote   = "Font driver telemetry to Microsoft disabled; font load / failure statistics not sent to cloud.",
-                ApplyOps     = [RegOp.SetDword(GdipKey, "DisableFontDriverTelemetry", 1)],
-                RemoveOps    = [RegOp.DeleteValue(GdipKey, "DisableFontDriverTelemetry")],
-                DetectOps    = [RegOp.CheckDword(GdipKey, "DisableFontDriverTelemetry", 1)],
-            },
-        ];
-
+            [
+                new TweakDef
+                {
+                    Id = "otfpol-block-opentype-kernel-parsing",
+                    Label = "Block OpenType Font Parsing in the Windows Kernel",
+                    Category = "Storage",
+                    Description =
+                        "Moves OpenType font parsing out of the Windows kernel (win32k.sys) and into a user-mode font parsing process, eliminating kernel-level font parsing vulnerabilities exploitable via specially-crafted font files in web content.",
+                    Tags = ["opentype", "font-parsing", "kernel", "security", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 5,
+                    SafetyRating = 5,
+                    ImpactNote = "OpenType kernel parsing disabled; font parsing moved to user-mode — eliminates kernel font exploit surface.",
+                    ApplyOps = [RegOp.SetDword(Key, "BlockOpenTypeKernelParser", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "BlockOpenTypeKernelParser")],
+                    DetectOps = [RegOp.CheckDword(Key, "BlockOpenTypeKernelParser", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "otfpol-disable-legacy-font-drivers",
+                    Label = "Disable Loading of Legacy TrueType Font Drivers",
+                    Category = "Storage",
+                    Description =
+                        "Prevents legacy third-party TrueType font drivers from loading in the Windows font subsystem, reducing attack surface from unmaintained or vulnerable font drivers that may contain known CVEs.",
+                    Tags = ["truetype", "font-driver", "legacy", "security", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "Legacy TrueType font drivers blocked from loading; only Windows-provided drivers used for font rendering.",
+                    ApplyOps = [RegOp.SetDword(GdipKey, "DisableLegacyFontDrivers", 1)],
+                    RemoveOps = [RegOp.DeleteValue(GdipKey, "DisableLegacyFontDrivers")],
+                    DetectOps = [RegOp.CheckDword(GdipKey, "DisableLegacyFontDrivers", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "otfpol-restrict-embedded-font-trusted",
+                    Label = "Restrict Embedded Fonts to Trusted Documents Only",
+                    Category = "Storage",
+                    Description =
+                        "Sets the Windows font embedding policy so that embedded fonts in Office and PDF documents are only rendered when the document originates from a trusted location, blocking remote exploitation via malicious embedded fonts in untrusted files.",
+                    Tags = ["fonts", "embedded-font", "trusted", "office", "security", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "Embedded fonts rendered only in trusted documents; fonts in untrusted attachments not processed.",
+                    ApplyOps = [RegOp.SetDword(GdipKey, "RestrictEmbeddedFontToTrusted", 1)],
+                    RemoveOps = [RegOp.DeleteValue(GdipKey, "RestrictEmbeddedFontToTrusted")],
+                    DetectOps = [RegOp.CheckDword(GdipKey, "RestrictEmbeddedFontToTrusted", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "otfpol-disable-variable-font-web",
+                    Label = "Disable Variable Font Loading from Web Content",
+                    Category = "Storage",
+                    Description =
+                        "Prevents loading of OpenType Variable Fonts (OTF/TTF with variation axes) referenced in web content via browser font stacks, reducing the parsing attack surface from variable font table complexity in browser rendering engines.",
+                    Tags = ["opentype", "variable-font", "web", "browser", "security", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "Variable font loading from web disabled in browser; reduces OTF/TTF parsing surface in browser renderer.",
+                    ApplyOps = [RegOp.SetDword(GdipKey, "DisableVariableFontFromWeb", 1)],
+                    RemoveOps = [RegOp.DeleteValue(GdipKey, "DisableVariableFontFromWeb")],
+                    DetectOps = [RegOp.CheckDword(GdipKey, "DisableVariableFontFromWeb", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "otfpol-enable-font-integrity-check",
+                    Label = "Enable Font File Integrity Check Before Loading",
+                    Category = "Storage",
+                    Description =
+                        "Enables a Windows Security Health check that verifies the integrity of installed system fonts against known-good checksums before loading, detecting tampering with font files used in critical UI rendering.",
+                    Tags = ["fonts", "integrity-check", "security", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "Font file integrity verified before loading; tampered system fonts detected before rendering.",
+                    ApplyOps = [RegOp.SetDword(GdipKey, "EnableFontIntegrityCheck", 1)],
+                    RemoveOps = [RegOp.DeleteValue(GdipKey, "EnableFontIntegrityCheck")],
+                    DetectOps = [RegOp.CheckDword(GdipKey, "EnableFontIntegrityCheck", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "otfpol-block-remote-font-download-edge",
+                    Label = "Block Remote Font Downloads in Microsoft Edge",
+                    Category = "Storage",
+                    Description =
+                        "Prevents Microsoft Edge from downloading and rendering fonts referenced by web page CSS from remote URLs, eliminating an attack vector where crafted web fonts hosted externally could exploit the browser font parser.",
+                    Tags = ["fonts", "edge", "remote-font", "css", "browser-security", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "Edge blocked from loading remote fonts via CSS; all fonts must be system-installed. May break web typography.",
+                    ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "AllowWebFonts", 0)],
+                    RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "AllowWebFonts")],
+                    DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "AllowWebFonts", 0)],
+                },
+                new TweakDef
+                {
+                    Id = "otfpol-enable-gdi-font-sandbox",
+                    Label = "Enable GDI Font Sandbox in AppContainer Sessions",
+                    Category = "Storage",
+                    Description =
+                        "Enables the GDI+ font rendering sandbox in AppContainer (browser sandboxed renderer) sessions, ensuring that font parsing for sandbox processes occurs in a restricted context rather than directly in win32k.sys.",
+                    Tags = ["fonts", "gdi", "sandbox", "appcontainer", "security", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "GDI font sandbox enabled in AppContainer; font parsing for sandbox processes isolated from kernel.",
+                    ApplyOps = [RegOp.SetDword(GdipKey, "EnableGDIFontSandbox", 1)],
+                    RemoveOps = [RegOp.DeleteValue(GdipKey, "EnableGDIFontSandbox")],
+                    DetectOps = [RegOp.CheckDword(GdipKey, "EnableGDIFontSandbox", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "otfpol-disable-type1-fonts",
+                    Label = "Disable Loading of Legacy Type1 Fonts",
+                    Category = "Storage",
+                    Description =
+                        "Disables support for loading Adobe Type 1 (PostScript) legacy fonts in GDI/GDI+, an aging format with limited security patching, reducing exposure to Type1 font parsing CVEs in the PostScript interpreter.",
+                    Tags = ["fonts", "type1", "postscript", "legacy", "security", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 4,
+                    ImpactNote = "Type1/PostScript font loading disabled; legacy PS fonts not rendered. Most modern apps use OpenType.",
+                    ApplyOps = [RegOp.SetDword(GdipKey, "DisableType1FontRendering", 1)],
+                    RemoveOps = [RegOp.DeleteValue(GdipKey, "DisableType1FontRendering")],
+                    DetectOps = [RegOp.CheckDword(GdipKey, "DisableType1FontRendering", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "otfpol-log-font-parse-failures",
+                    Label = "Log Font File Parse Failures for Security Monitoring",
+                    Category = "Storage",
+                    Description =
+                        "Enables event log entries when a font file fails parsing validation (malformed tables, invalid checksums), providing visibility into attempts to load crafted malicious fonts on the endpoint.",
+                    Tags = ["fonts", "parse-failure", "event-log", "audit", "security", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "Font parse failure events logged; malformed or crafted font load attempts visible in security log.",
+                    ApplyOps = [RegOp.SetDword(GdipKey, "LogFontParseFailures", 1)],
+                    RemoveOps = [RegOp.DeleteValue(GdipKey, "LogFontParseFailures")],
+                    DetectOps = [RegOp.CheckDword(GdipKey, "LogFontParseFailures", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "otfpol-disable-font-driver-telemetry",
+                    Label = "Disable Font Driver Telemetry Reporting to Microsoft",
+                    Category = "Storage",
+                    Description =
+                        "Prevents the Windows font subsystem from sending font usage, load failure, and driver interaction telemetry to Microsoft, protecting information about installed and loaded fonts from cloud disclosure.",
+                    Tags = ["fonts", "driver", "telemetry", "privacy", "microsoft", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 2,
+                    SafetyRating = 5,
+                    ImpactNote = "Font driver telemetry to Microsoft disabled; font load / failure statistics not sent to cloud.",
+                    ApplyOps = [RegOp.SetDword(GdipKey, "DisableFontDriverTelemetry", 1)],
+                    RemoveOps = [RegOp.DeleteValue(GdipKey, "DisableFontDriverTelemetry")],
+                    DetectOps = [RegOp.CheckDword(GdipKey, "DisableFontDriverTelemetry", 1)],
+                },
+            ];
     }
 
     // ── RefsFsPolicy ──
@@ -4089,7 +4087,6 @@ internal static class PolicyStorage
                     DetectOps = [RegOp.CheckDword(Key, "DisableRefsCompression", 1)],
                 },
             ];
-
     }
 
     // ── ReFSPolicy ──
@@ -4104,7 +4101,10 @@ internal static class PolicyStorage
                 Id = "refs-disable-integrity-checking",
                 Label = "Disable ReFS Integrity Checking",
                 Category = "Storage",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 3, SafetyRating = 4,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 3,
+                SafetyRating = 4,
                 Description =
                     "Sets DisableIntegrityChecking=1 in the ReFS policy key. Prevents ReFS "
                     + "from performing continuous background data integrity scrubbing using "
@@ -4123,7 +4123,10 @@ internal static class PolicyStorage
                 Id = "refs-disable-integrity-streams",
                 Label = "Disable ReFS Integrity Streams",
                 Category = "Storage",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 3, SafetyRating = 4,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 3,
+                SafetyRating = 4,
                 Description =
                     "Sets DisableIntegrityStreams=1 in the ReFS policy key. Turns off the "
                     + "integrity stream feature that tags every file region with a checksum "
@@ -4142,7 +4145,10 @@ internal static class PolicyStorage
                 Id = "refs-disable-auto-repair",
                 Label = "Disable ReFS Automatic Repair",
                 Category = "Storage",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 3, SafetyRating = 4,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 3,
+                SafetyRating = 4,
                 Description =
                     "Sets DisableAutoRepair=1 in the ReFS policy key. Prevents ReFS from "
                     + "automatically correcting detected bad sectors or checksum mismatches "
@@ -4161,7 +4167,10 @@ internal static class PolicyStorage
                 Id = "refs-disable-short-name-creation",
                 Label = "Disable ReFS Short Name Creation",
                 Category = "Storage",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 2, SafetyRating = 5,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 2,
+                SafetyRating = 5,
                 Description =
                     "Sets DisableShortNameCreation=1 in the ReFS policy key. Suppresses "
                     + "automatic generation of 8.3 DOS-compatible short names alongside "
@@ -4180,7 +4189,10 @@ internal static class PolicyStorage
                 Id = "refs-disable-last-access-update",
                 Label = "Disable ReFS Last-Access Timestamp Update",
                 Category = "Storage",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 2, SafetyRating = 5,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 2,
+                SafetyRating = 5,
                 Description =
                     "Sets DisableLastAccessUpdate=1 in the ReFS policy key. Disables the "
                     + "last-access timestamp field update on every file read operation. "
@@ -4199,7 +4211,10 @@ internal static class PolicyStorage
                 Id = "refs-disable-parity-logging",
                 Label = "Disable ReFS Parity Write Logging",
                 Category = "Storage",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 3, SafetyRating = 3,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 3,
+                SafetyRating = 3,
                 Description =
                     "Sets DisableParityLogging=1 in the ReFS policy key. Suppresses the "
                     + "write-ahead parity log that makes partial-stripe writes to parity "
@@ -4218,7 +4233,10 @@ internal static class PolicyStorage
                 Id = "refs-disable-metadata-checksum",
                 Label = "Disable ReFS Metadata Checksum",
                 Category = "Storage",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 2, SafetyRating = 3,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 2,
+                SafetyRating = 3,
                 Description =
                     "Sets DisableMetadataChecksum=1 in the ReFS policy key. Prevents ReFS "
                     + "from computing and verifying a checksum over each metadata B-tree "
@@ -4237,7 +4255,10 @@ internal static class PolicyStorage
                 Id = "refs-disable-large-mft",
                 Label = "Disable ReFS Large MFT Zone Reservation",
                 Category = "Storage",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 2, SafetyRating = 5,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 2,
+                SafetyRating = 5,
                 Description =
                     "Sets DisableLargeMft=1 in the ReFS policy key. Prevents ReFS from "
                     + "pre-reserving a large zone in the volume B-tree for anticipated "
@@ -4256,7 +4277,10 @@ internal static class PolicyStorage
                 Id = "refs-disable-delete-notify",
                 Label = "Disable ReFS Delete Notification (TRIM)",
                 Category = "Storage",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 2, SafetyRating = 5,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 2,
+                SafetyRating = 5,
                 Description =
                     "Sets DisableDeleteNotify=1 in the ReFS policy key. Stops ReFS from "
                     + "issuing TRIM or UNMAP commands to the underlying SSD or thin-"
@@ -4275,7 +4299,10 @@ internal static class PolicyStorage
                 Id = "refs-disable-compression",
                 Label = "Disable ReFS Data Compression",
                 Category = "Storage",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 2, SafetyRating = 5,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 2,
+                SafetyRating = 5,
                 Description =
                     "Sets DisableCompression=1 in the ReFS policy key. Prevents the ReFS "
                     + "driver from enabling LZ4-based file compression on volumes where "
@@ -4290,7 +4317,6 @@ internal static class PolicyStorage
                 DetectOps = [RegOp.CheckDword(Key, "DisableCompression", 1)],
             },
         ];
-
     }
 
     // ── ShadowCopyVss ──
@@ -4516,7 +4542,6 @@ internal static class PolicyStorage
                 DetectOps = [RegOp.CheckDword(SrSettings, "CreatePointBeforeCriticalPatches", 0)],
             },
         ];
-
     }
 
     // ── StorageBusPolicy ──
@@ -4697,14 +4722,12 @@ internal static class PolicyStorage
                     DetectOps = [RegOp.CheckDword(Key, "EnableStorageBusHealthLogging", 1)],
                 },
             ];
-
     }
 
     // ── StorageHealthPolicy ──
     private static class _StorageHealthPolicy
     {
-        private const string Key =
-            @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\StorageHealth";
+        private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\StorageHealth";
 
         public static IReadOnlyList<TweakDef> Data =>
             [
@@ -4879,7 +4902,6 @@ internal static class PolicyStorage
                     DetectOps = [RegOp.CheckDword(Key, "SsdSpareAlertThresholdPercent", 10)],
                 },
             ];
-
     }
 
     // ── StorageManagementPolicy ──
@@ -4894,7 +4916,10 @@ internal static class PolicyStorage
                 Id = "stormgmt-disable-storage-spaces-ui",
                 Label = "Disable Storage Spaces Configuration UI",
                 Category = "Storage",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 3, SafetyRating = 5,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 3,
+                SafetyRating = 5,
                 Description =
                     "Sets DisableStorageSpacesPanel=1 in the StorageManagement policy key. "
                     + "Prevents non-administrator users from accessing the Storage Spaces "
@@ -4914,7 +4939,10 @@ internal static class PolicyStorage
                 Id = "stormgmt-disable-storage-tiering",
                 Label = "Disable Storage Tiering Policy",
                 Category = "Storage",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 2, SafetyRating = 5,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 2,
+                SafetyRating = 5,
                 Description =
                     "Sets DisableStorageTiering=1 in the StorageManagement policy key. Prevents "
                     + "the Windows Storage Tiers Optimization task from promoting hot data to "
@@ -4934,7 +4962,10 @@ internal static class PolicyStorage
                 Id = "stormgmt-disable-vs-notification",
                 Label = "Disable Volume Shadow Copy Low-Disk Notifications",
                 Category = "Storage",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 2, SafetyRating = 5,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 2,
+                SafetyRating = 5,
                 Description =
                     "Sets DisableVSCNotification=1 in the StorageManagement policy key. "
                     + "Suppresses toast notifications that inform users when Volume Shadow Copy "
@@ -4953,7 +4984,10 @@ internal static class PolicyStorage
                 Id = "stormgmt-disable-disk-cleanup-prompt",
                 Label = "Disable Disk Cleanup Low-Space Prompt",
                 Category = "Storage",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 2, SafetyRating = 5,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 2,
+                SafetyRating = 5,
                 Description =
                     "Sets NoLowDiskSpaceChecks=1 in the StorageManagement policy key. Stops "
                     + "the Windows shell from displaying balloon or toast notifications warning "
@@ -4972,7 +5006,10 @@ internal static class PolicyStorage
                 Id = "stormgmt-disable-ntfs-tunneling",
                 Label = "Disable NTFS File Name Tunneling",
                 Category = "Storage",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 3, SafetyRating = 4,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 3,
+                SafetyRating = 4,
                 Description =
                     "Sets NtfsDisable8dot3NameCreation=1 in the StorageManagement policy key. "
                     + "Prevents NTFS from generating legacy 8.3 short file names (e.g., "
@@ -4992,7 +5029,10 @@ internal static class PolicyStorage
                 Id = "stormgmt-disable-storage-diagnostics",
                 Label = "Disable Storage Diagnostic Data Collection",
                 Category = "Storage",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 2, SafetyRating = 5,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 2,
+                SafetyRating = 5,
                 Description =
                     "Sets DisableStorageDiagnostics=1 in the StorageManagement policy key. "
                     + "Stops Windows from collecting storage-device health statistics (SMART "
@@ -5011,7 +5051,10 @@ internal static class PolicyStorage
                 Id = "stormgmt-disable-hot-spare-alert",
                 Label = "Disable Storage Spaces Hot Spare Alert",
                 Category = "Storage",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 2, SafetyRating = 5,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 2,
+                SafetyRating = 5,
                 Description =
                     "Sets DisableHotSpareAlert=1 in the StorageManagement policy key. Silences "
                     + "the action-centre notification that fires when a Storage Spaces pool hot "
@@ -5030,7 +5073,10 @@ internal static class PolicyStorage
                 Id = "stormgmt-disable-data-deduplication",
                 Label = "Disable Data Deduplication Policy",
                 Category = "Storage",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 2, SafetyRating = 4,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 2,
+                SafetyRating = 4,
                 Description =
                     "Sets DisableDataDeduplication=1 in the StorageManagement policy key. "
                     + "Prevents the Windows Data Deduplication role from being enabled on "
@@ -5049,7 +5095,10 @@ internal static class PolicyStorage
                 Id = "stormgmt-disable-disk-management-snap",
                 Label = "Restrict Disk Management Snap-In",
                 Category = "Storage",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 3, SafetyRating = 5,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 3,
+                SafetyRating = 5,
                 Description =
                     "Sets RestrictDiskMgmtSnap=1 in the StorageManagement policy key. Prevents "
                     + "standard users from launching the Disk Management MMC snap-in, which "
@@ -5068,7 +5117,10 @@ internal static class PolicyStorage
                 Id = "stormgmt-disable-low-disk-warning",
                 Label = "Disable Persistent Low-Disk-Space Warning",
                 Category = "Storage",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 1, SafetyRating = 5,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 1,
+                SafetyRating = 5,
                 Description =
                     "Sets DisableLowDiskSpaceWarning=1 in the StorageManagement policy key. "
                     + "Removes the persistent yellow warning indicator displayed in File "
@@ -5084,7 +5136,6 @@ internal static class PolicyStorage
                 DetectOps = [RegOp.CheckDword(Key, "DisableLowDiskSpaceWarning", 1)],
             },
         ];
-
     }
 
     // ── StoragePoolPolicy ──
@@ -5265,14 +5316,12 @@ internal static class PolicyStorage
                 DetectOps = [RegOp.CheckDword(Key, "AuditPoolConfigChanges", 1)],
             },
         ];
-
     }
 
     // ── StorageReplicaPolicy ──
     private static class _StorageReplicaPolicy
     {
-        private const string SrKey =
-            @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\StorageReplica";
+        private const string SrKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\StorageReplica";
 
         public static IReadOnlyList<TweakDef> Data =>
             [
@@ -5288,7 +5337,8 @@ internal static class PolicyStorage
                     CorpSafe = true,
                     ImpactScore = 4,
                     SafetyRating = 4,
-                    ImpactNote = "Storage Replica uses asynchronous replication by default. The destination replica may lag behind the source by seconds to minutes depending on network latency and bandwidth. In a failover, the most recent data on the destination is used — any writes not yet replicated are lost.",
+                    ImpactNote =
+                        "Storage Replica uses asynchronous replication by default. The destination replica may lag behind the source by seconds to minutes depending on network latency and bandwidth. In a failover, the most recent data on the destination is used — any writes not yet replicated are lost.",
                     ApplyOps = [RegOp.SetDword(SrKey, "ReplicationMode", 1)],
                     RemoveOps = [RegOp.DeleteValue(SrKey, "ReplicationMode")],
                     DetectOps = [RegOp.CheckDword(SrKey, "ReplicationMode", 1)],
@@ -5305,7 +5355,8 @@ internal static class PolicyStorage
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "Storage Replica log volumes are at least 8 GB. Prevents accidental log overflow and forced full resync. Log volumes are dedicated (no user data) and must be formatted as NTFS or ReFS.",
+                    ImpactNote =
+                        "Storage Replica log volumes are at least 8 GB. Prevents accidental log overflow and forced full resync. Log volumes are dedicated (no user data) and must be formatted as NTFS or ReFS.",
                     ApplyOps = [RegOp.SetDword(SrKey, "MinLogSize", 8192)],
                     RemoveOps = [RegOp.DeleteValue(SrKey, "MinLogSize")],
                     DetectOps = [RegOp.CheckDword(SrKey, "MinLogSize", 8192)],
@@ -5322,7 +5373,8 @@ internal static class PolicyStorage
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "Replication traffic is capped at 100 Mbps. Initial sync of large volumes is slower but the production network is protected. Adjust based on network capacity and RPO requirements — a smaller limit increases replication lag.",
+                    ImpactNote =
+                        "Replication traffic is capped at 100 Mbps. Initial sync of large volumes is slower but the production network is protected. Adjust based on network capacity and RPO requirements — a smaller limit increases replication lag.",
                     ApplyOps = [RegOp.SetDword(SrKey, "BandwidthLimit", 100)],
                     RemoveOps = [RegOp.DeleteValue(SrKey, "BandwidthLimit")],
                     DetectOps = [RegOp.CheckDword(SrKey, "BandwidthLimit", 100)],
@@ -5339,7 +5391,8 @@ internal static class PolicyStorage
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "Destination replica is accessible as a read-only snapshot. Backup and reporting workloads can be offloaded to the replica. The read-only snapshot is a point-in-time copy; it captures the state at the time of the snapshot creation.",
+                    ImpactNote =
+                        "Destination replica is accessible as a read-only snapshot. Backup and reporting workloads can be offloaded to the replica. The read-only snapshot is a point-in-time copy; it captures the state at the time of the snapshot creation.",
                     ApplyOps = [RegOp.SetDword(SrKey, "AllowReplicaRead", 1)],
                     RemoveOps = [RegOp.DeleteValue(SrKey, "AllowReplicaRead")],
                     DetectOps = [RegOp.CheckDword(SrKey, "AllowReplicaRead", 1)],
@@ -5356,7 +5409,8 @@ internal static class PolicyStorage
                     CorpSafe = true,
                     ImpactScore = 4,
                     SafetyRating = 4,
-                    ImpactNote = "All replication traffic is AES-256-GCM encrypted. CPU overhead for encryption is approximately 5-15% additional CPU usage on high-throughput replicas. Both source and destination servers must support SMB3 encryption. Negligible impact when servers have AES-NI hardware acceleration.",
+                    ImpactNote =
+                        "All replication traffic is AES-256-GCM encrypted. CPU overhead for encryption is approximately 5-15% additional CPU usage on high-throughput replicas. Both source and destination servers must support SMB3 encryption. Negligible impact when servers have AES-NI hardware acceleration.",
                     ApplyOps = [RegOp.SetDword(SrKey, "EncryptionEnabled", 1)],
                     RemoveOps = [RegOp.DeleteValue(SrKey, "EncryptionEnabled")],
                     DetectOps = [RegOp.CheckDword(SrKey, "EncryptionEnabled", 1)],
@@ -5373,7 +5427,8 @@ internal static class PolicyStorage
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "SR uses 32 MB IO buffers for replication log writes. Improves log write throughput. Uses approximately 32 MB additional kernel non-paged pool memory per SR partnership. Adjust upward for NVMe log drives.",
+                    ImpactNote =
+                        "SR uses 32 MB IO buffers for replication log writes. Improves log write throughput. Uses approximately 32 MB additional kernel non-paged pool memory per SR partnership. Adjust upward for NVMe log drives.",
                     ApplyOps = [RegOp.SetDword(SrKey, "IOBufferSize", 32)],
                     RemoveOps = [RegOp.DeleteValue(SrKey, "IOBufferSize")],
                     DetectOps = [RegOp.CheckDword(SrKey, "IOBufferSize", 32)],
@@ -5390,7 +5445,8 @@ internal static class PolicyStorage
                     CorpSafe = true,
                     ImpactScore = 4,
                     SafetyRating = 5,
-                    ImpactNote = "SR writes periodic health audit events to the Windows event log. Events include replication lag, log utilisation, and fault state. Use with event forwarding or a SIEM to alert on RPO violations. Minimal disk overhead.",
+                    ImpactNote =
+                        "SR writes periodic health audit events to the Windows event log. Events include replication lag, log utilisation, and fault state. Use with event forwarding or a SIEM to alert on RPO violations. Minimal disk overhead.",
                     ApplyOps = [RegOp.SetDword(SrKey, "HealthAuditEnabled", 1)],
                     RemoveOps = [RegOp.DeleteValue(SrKey, "HealthAuditEnabled")],
                     DetectOps = [RegOp.CheckDword(SrKey, "HealthAuditEnabled", 1)],
@@ -5407,7 +5463,8 @@ internal static class PolicyStorage
                     CorpSafe = true,
                     ImpactScore = 4,
                     SafetyRating = 5,
-                    ImpactNote = "Failover to the destination replica requires manual intervention. The destination volume is not promoted automatically if the source becomes unreachable. Human verification of failure before failover prevents split-brain data divergence. RPO and RTO must account for manual failover time.",
+                    ImpactNote =
+                        "Failover to the destination replica requires manual intervention. The destination volume is not promoted automatically if the source becomes unreachable. Human verification of failure before failover prevents split-brain data divergence. RPO and RTO must account for manual failover time.",
                     ApplyOps = [RegOp.SetDword(SrKey, "AutoFailover", 0)],
                     RemoveOps = [RegOp.DeleteValue(SrKey, "AutoFailover")],
                     DetectOps = [RegOp.CheckDword(SrKey, "AutoFailover", 0)],
@@ -5424,7 +5481,8 @@ internal static class PolicyStorage
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "SR log data is compressed before writing. Extends SSD write endurance on log drives. CPU overhead for compression is approximately 5-10% on high-throughput replicas. Incompressible data (already-compressed files) sees minimal benefit.",
+                    ImpactNote =
+                        "SR log data is compressed before writing. Extends SSD write endurance on log drives. CPU overhead for compression is approximately 5-10% on high-throughput replicas. Incompressible data (already-compressed files) sees minimal benefit.",
                     ApplyOps = [RegOp.SetDword(SrKey, "LogCompression", 1)],
                     RemoveOps = [RegOp.DeleteValue(SrKey, "LogCompression")],
                     DetectOps = [RegOp.CheckDword(SrKey, "LogCompression", 1)],
@@ -5441,13 +5499,13 @@ internal static class PolicyStorage
                     CorpSafe = true,
                     ImpactScore = 2,
                     SafetyRating = 5,
-                    ImpactNote = "SR replication control channel uses TCP 5445. Firewall policy must permit TCP 5445 bidirectionally between SR source and destination. Changing from a custom port back to the default 5445 requires SR service restart and firewall rule update.",
+                    ImpactNote =
+                        "SR replication control channel uses TCP 5445. Firewall policy must permit TCP 5445 bidirectionally between SR source and destination. Changing from a custom port back to the default 5445 requires SR service restart and firewall rule update.",
                     ApplyOps = [RegOp.SetDword(SrKey, "ReplicationPort", 5445)],
                     RemoveOps = [RegOp.DeleteValue(SrKey, "ReplicationPort")],
                     DetectOps = [RegOp.CheckDword(SrKey, "ReplicationPort", 5445)],
                 },
             ];
-
     }
 
     // ── StorageSensePolicy ──
@@ -5639,17 +5697,14 @@ internal static class PolicyStorage
                     DetectOps = [RegOp.CheckDword(Key, "ConfigStorageSenseGlobalCadence", 7)],
                 },
             ];
-
     }
 
     // ── StorageSpacesMigrationPolicy ──
     private static class _StorageSpacesMigrationPolicy
     {
-        private const string SsKey =
-            @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\StorageSpaces";
+        private const string SsKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\StorageSpaces";
 
-        private const string SmsKey =
-            @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\StorageMigrationService";
+        private const string SmsKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\StorageMigrationService";
 
         public static IReadOnlyList<TweakDef> Data =>
             [
@@ -5665,7 +5720,8 @@ internal static class PolicyStorage
                     CorpSafe = true,
                     ImpactScore = 5,
                     SafetyRating = 4,
-                    ImpactNote = "All Storage Spaces pools must be BitLocker-encrypted. Pools without encryption may have restricted write access or be unable to come online. Requires BitLocker policies and TPM to be configured.",
+                    ImpactNote =
+                        "All Storage Spaces pools must be BitLocker-encrypted. Pools without encryption may have restricted write access or be unable to come online. Requires BitLocker policies and TPM to be configured.",
                     ApplyOps = [RegOp.SetDword(SsKey, "RequireEncryption", 1)],
                     RemoveOps = [RegOp.DeleteValue(SsKey, "RequireEncryption")],
                     DetectOps = [RegOp.CheckDword(SsKey, "RequireEncryption", 1)],
@@ -5682,7 +5738,8 @@ internal static class PolicyStorage
                     CorpSafe = true,
                     ImpactScore = 4,
                     SafetyRating = 5,
-                    ImpactNote = "Hot data blocks are automatically promoted to SSD tier; cold data demoted to HDD. Requires a tiered Storage Spaces pool with both SSD and HDD tiers. Tiering optimisation runs as a background service during low-activity periods.",
+                    ImpactNote =
+                        "Hot data blocks are automatically promoted to SSD tier; cold data demoted to HDD. Requires a tiered Storage Spaces pool with both SSD and HDD tiers. Tiering optimisation runs as a background service during low-activity periods.",
                     ApplyOps = [RegOp.SetDword(SsKey, "AutoTiering", 1)],
                     RemoveOps = [RegOp.DeleteValue(SsKey, "AutoTiering")],
                     DetectOps = [RegOp.CheckDword(SsKey, "AutoTiering", 1)],
@@ -5699,7 +5756,8 @@ internal static class PolicyStorage
                     CorpSafe = true,
                     ImpactScore = 5,
                     SafetyRating = 5,
-                    ImpactNote = "Drives with SMART warnings are proactively removed from the pool and rebuilt. Pool rebuilds consume IO bandwidth and time. Pool must have sufficient spare capacity or a hot spare drive. Recommended for all production Storage Spaces deployments.",
+                    ImpactNote =
+                        "Drives with SMART warnings are proactively removed from the pool and rebuilt. Pool rebuilds consume IO bandwidth and time. Pool must have sufficient spare capacity or a hot spare drive. Recommended for all production Storage Spaces deployments.",
                     ApplyOps = [RegOp.SetDword(SsKey, "ProactiveDriveRetirement", 1)],
                     RemoveOps = [RegOp.DeleteValue(SsKey, "ProactiveDriveRetirement")],
                     DetectOps = [RegOp.CheckDword(SsKey, "ProactiveDriveRetirement", 1)],
@@ -5716,7 +5774,8 @@ internal static class PolicyStorage
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "SMS does not cache source server credentials. Migration job operators must enter credentials each time they run an inventory or transfer. Prevents credential theft if the orchestrator server is compromised.",
+                    ImpactNote =
+                        "SMS does not cache source server credentials. Migration job operators must enter credentials each time they run an inventory or transfer. Prevents credential theft if the orchestrator server is compromised.",
                     ApplyOps = [RegOp.SetDword(SmsKey, "DisableCredentialStorage", 1)],
                     RemoveOps = [RegOp.DeleteValue(SmsKey, "DisableCredentialStorage")],
                     DetectOps = [RegOp.CheckDword(SmsKey, "DisableCredentialStorage", 1)],
@@ -5733,7 +5792,8 @@ internal static class PolicyStorage
                     CorpSafe = true,
                     ImpactScore = 5,
                     SafetyRating = 5,
-                    ImpactNote = "Data copies are placed in separate fault domains (chassis/rack). Pools without configured fault domains are unaffected. Requires Storage Spaces Direct or multi-enclosure pool configuration with defined fault domains in Windows Admin Center or PowerShell.",
+                    ImpactNote =
+                        "Data copies are placed in separate fault domains (chassis/rack). Pools without configured fault domains are unaffected. Requires Storage Spaces Direct or multi-enclosure pool configuration with defined fault domains in Windows Admin Center or PowerShell.",
                     ApplyOps = [RegOp.SetDword(SsKey, "EnableFaultDomains", 1)],
                     RemoveOps = [RegOp.DeleteValue(SsKey, "EnableFaultDomains")],
                     DetectOps = [RegOp.CheckDword(SsKey, "EnableFaultDomains", 1)],
@@ -5750,7 +5810,8 @@ internal static class PolicyStorage
                     CorpSafe = true,
                     ImpactScore = 4,
                     SafetyRating = 4,
-                    ImpactNote = "All SMS file transfers use SMB3 encryption. Source and destination servers must support SMB3 encryption (Server 2012+). Migration throughput reduced by ~15-25% due to encryption overhead; acceptable for most migrations.",
+                    ImpactNote =
+                        "All SMS file transfers use SMB3 encryption. Source and destination servers must support SMB3 encryption (Server 2012+). Migration throughput reduced by ~15-25% due to encryption overhead; acceptable for most migrations.",
                     ApplyOps = [RegOp.SetDword(SmsKey, "RequireEncryptedTransfer", 1)],
                     RemoveOps = [RegOp.DeleteValue(SmsKey, "RequireEncryptedTransfer")],
                     DetectOps = [RegOp.CheckDword(SmsKey, "RequireEncryptedTransfer", 1)],
@@ -5767,7 +5828,8 @@ internal static class PolicyStorage
                     CorpSafe = true,
                     ImpactScore = 4,
                     SafetyRating = 3,
-                    ImpactNote = "Pool writes are rejected if no cache drive is healthy. Loss of a cache drive in a Storage Spaces Direct cluster causes writes to pause until a replacement cache drive is added. Requires monitoring and rapid cache drive replacement SLA.",
+                    ImpactNote =
+                        "Pool writes are rejected if no cache drive is healthy. Loss of a cache drive in a Storage Spaces Direct cluster causes writes to pause until a replacement cache drive is added. Requires monitoring and rapid cache drive replacement SLA.",
                     ApplyOps = [RegOp.SetDword(SsKey, "RequireCacheDrive", 1)],
                     RemoveOps = [RegOp.DeleteValue(SsKey, "RequireCacheDrive")],
                     DetectOps = [RegOp.CheckDword(SsKey, "RequireCacheDrive", 1)],
@@ -5784,7 +5846,8 @@ internal static class PolicyStorage
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "SMS records detailed audit events during inventory, transfer, and cutover operations. Events written to Application and Services Logs\\Microsoft\\Windows\\StorageMigrationService. Minimal performance impact.",
+                    ImpactNote =
+                        "SMS records detailed audit events during inventory, transfer, and cutover operations. Events written to Application and Services Logs\\Microsoft\\Windows\\StorageMigrationService. Minimal performance impact.",
                     ApplyOps = [RegOp.SetDword(SmsKey, "AuditLogEnabled", 1)],
                     RemoveOps = [RegOp.DeleteValue(SmsKey, "AuditLogEnabled")],
                     DetectOps = [RegOp.CheckDword(SmsKey, "AuditLogEnabled", 1)],
@@ -5801,7 +5864,8 @@ internal static class PolicyStorage
                     CorpSafe = true,
                     ImpactScore = 4,
                     SafetyRating = 4,
-                    ImpactNote = "Pool resync after drive failure runs at high IO priority. Workload IO may experience higher latency during rebuild. Rebuild completes significantly faster, reducing the window of single-drive exposure. Consider scheduling high-priority rebuild during off-hours in production environments.",
+                    ImpactNote =
+                        "Pool resync after drive failure runs at high IO priority. Workload IO may experience higher latency during rebuild. Rebuild completes significantly faster, reducing the window of single-drive exposure. Consider scheduling high-priority rebuild during off-hours in production environments.",
                     ApplyOps = [RegOp.SetDword(SsKey, "RebuildPriority", 2)],
                     RemoveOps = [RegOp.DeleteValue(SsKey, "RebuildPriority")],
                     DetectOps = [RegOp.CheckDword(SsKey, "RebuildPriority", 2)],
@@ -5818,13 +5882,13 @@ internal static class PolicyStorage
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "Storage Spaces repair and health notifications are not suppressed. IT administrators and monitoring systems receive timely notification of pool repair events. Action Center shows storage health warnings on servers where users are not present.",
+                    ImpactNote =
+                        "Storage Spaces repair and health notifications are not suppressed. IT administrators and monitoring systems receive timely notification of pool repair events. Action Center shows storage health warnings on servers where users are not present.",
                     ApplyOps = [RegOp.SetDword(SsKey, "SuppressRepairNotifications", 0)],
                     RemoveOps = [RegOp.DeleteValue(SsKey, "SuppressRepairNotifications")],
                     DetectOps = [RegOp.CheckDword(SsKey, "SuppressRepairNotifications", 0)],
                 },
             ];
-
     }
 
     // ── StorageSpacesPolicy ──
@@ -6005,7 +6069,6 @@ internal static class PolicyStorage
                     DetectOps = [RegOp.CheckDword(Key, "DisableAutoRebuildOnDriveDetection", 1)],
                 },
             ];
-
     }
 
     // ── SyncCenterPolicy ──
@@ -6177,7 +6240,6 @@ internal static class PolicyStorage
                 DetectOps = [RegOp.CheckDword(OfflineKey, "GoOfflineAction", 1)],
             },
         ];
-
     }
 
     // ── VolumeShadowCopyPolicy ──
@@ -6358,7 +6420,6 @@ internal static class PolicyStorage
                 DetectOps = [RegOp.CheckDword(Key, "DisableShadowCopyOnRemovable", 1)],
             },
         ];
-
     }
 
     // ── WorkFoldersPolicy ──
@@ -6569,11 +6630,8 @@ internal static class PolicyStorage
                 DetectOps = [RegOp.CheckDword(WfLm, "MinSyncInterval", 15)],
             },
         ];
-
     }
-
 }
-
 
 // ── merged from Backup.cs ──
 internal static class Backup
@@ -6660,9 +6718,6 @@ internal static class Backup
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer", "NoPreviousVersionsPage")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer", "NoPreviousVersionsPage", 1)],
         },
-
-
-
         new TweakDef
         {
             Id = "backup-disable-error-reporting",
@@ -6692,7 +6747,6 @@ internal static class Backup
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Reliability", "TimeStampInterval")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Reliability", "TimeStampInterval", 0)],
         },
-
         new TweakDef
         {
             Id = "backup-bak-increase-shadow-storage",
@@ -7040,9 +7094,6 @@ internal static class Recovery
                 RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Configuration Manager", "WinREEnabled", 0),
             ],
         },
-
-
-
         new TweakDef
         {
             Id = "recovery-disable-problem-reports",
@@ -7190,7 +7241,6 @@ internal static class Recovery
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "LogEvent")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "LogEvent", 1)],
         },
-
         new TweakDef
         {
             Id = "recovery-disable-send-alert",
@@ -7240,7 +7290,6 @@ internal static class Recovery
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control", "BootLog")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control", "BootLog", 1)],
         },
-
         new TweakDef
         {
             Id = "recovery-disable-winre-auto-repair",

@@ -159,9 +159,11 @@ internal static class WinGetManager
             if (!pastHeader)
             {
                 // Identify the header line by presence of both "Version" and "Available" columns
-                if (versionStart < 0
+                if (
+                    versionStart < 0
                     && line.IndexOf("Version", StringComparison.OrdinalIgnoreCase) >= 0
-                    && line.IndexOf("Available", StringComparison.OrdinalIgnoreCase) >= 0)
+                    && line.IndexOf("Available", StringComparison.OrdinalIgnoreCase) >= 0
+                )
                 {
                     versionStart = line.IndexOf("Version", StringComparison.OrdinalIgnoreCase);
                     availableStart = line.IndexOf("Available", StringComparison.OrdinalIgnoreCase);
@@ -185,9 +187,10 @@ internal static class WinGetManager
             {
                 string curVer = line[versionStart..Math.Min(availableStart, line.Length)].Trim();
                 int endAvail = line.IndexOf("  ", availableStart, StringComparison.Ordinal);
-                string newVer = line.Length > availableStart
-                    ? (endAvail > availableStart ? line[availableStart..endAvail].Trim() : line[availableStart..].Trim())
-                    : string.Empty;
+                string newVer =
+                    line.Length > availableStart
+                        ? (endAvail > availableStart ? line[availableStart..endAvail].Trim() : line[availableStart..].Trim())
+                        : string.Empty;
 
                 if (!string.IsNullOrEmpty(curVer) && !string.IsNullOrEmpty(newVer))
                 {

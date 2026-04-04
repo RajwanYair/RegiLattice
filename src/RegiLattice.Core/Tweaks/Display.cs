@@ -20,8 +20,6 @@ internal static class Display
             RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Control Panel\Desktop", "LogPixels")],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Control Panel\Desktop", "LogPixels", 96)],
         },
-
-
         new TweakDef
         {
             Id = "display-disable-transparency",
@@ -758,7 +756,6 @@ internal static class NightLight
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DWM", "DisableHDR")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DWM", "DisableHDR", 1)],
         },
-
         new TweakDef
         {
             Id = "night-enable-vivid-colour",
@@ -789,11 +786,6 @@ internal static class NightLight
             RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\ICM", "ICMSystemActivationEnabled", 1)],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\ICM", "ICMSystemActivationEnabled", 0)],
         },
-
-
-
-
-
         new TweakDef
         {
             Id = "night-disable-color-filters",
@@ -1491,7 +1483,6 @@ internal static class Fonts
         },
     ];
 }
-
 
 // ── merged from DesktopCustomization.cs ──
 /// <summary>
@@ -2848,7 +2839,6 @@ internal static class WindowAppearance
             RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "TaskbarSmallIcons", 0)],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "TaskbarSmallIcons", 1)],
         },
-
         new TweakDef
         {
             Id = "tb-taskbar-hide-task-view",
@@ -2904,7 +2894,6 @@ internal static class WindowAppearance
             RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "TaskbarMn", 1)],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "TaskbarMn", 0)],
         },
-
         new TweakDef
         {
             Id = "tb-taskbar-never-combine",
@@ -3080,7 +3069,6 @@ internal static class WindowAppearance
             RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "Start_TrackDocs")],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "Start_TrackDocs", 0)],
         },
-
         new TweakDef
         {
             Id = "tb-lock-taskbar",
@@ -3125,7 +3113,6 @@ internal static class WindowAppearance
             RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "TaskbarSmallIcons", 0)],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "TaskbarSmallIcons", 1)],
         },
-
         new TweakDef
         {
             Id = "tb-disable-taskbar-people",
@@ -3154,7 +3141,6 @@ internal static class WindowAppearance
             RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "TaskbarAl", 1)],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "TaskbarAl", 0)],
         },
-
         new TweakDef
         {
             Id = "tb-set-button-grouping",
@@ -3169,7 +3155,6 @@ internal static class WindowAppearance
             RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "TaskbarGlomLevel", 0)],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "TaskbarGlomLevel", 2)],
         },
-
         new TweakDef
         {
             Id = "tb-show-full-path-title",
@@ -3261,7 +3246,6 @@ internal static class WindowAppearance
             RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Taskband", "MaxThumbSizePx")],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Taskband", "MaxThumbSizePx", 350)],
         },
-
         new TweakDef
         {
             Id = "tb-hide-clock-from-taskbar",
@@ -3458,7 +3442,6 @@ internal static class WindowAppearance
     ];
 }
 
-
 // ── merged from PolicyDesktop.cs ──
 // RegiLattice.Core — Tweaks/PolicyDesktop.cs
 // Start menu, personalization, AutoPlay, kiosk mode, input methods, accessibility UI, display adapters, graphics, and shell restriction policies
@@ -3519,8 +3502,7 @@ internal static class PolicyDesktop
     // ── AutoPlayPolicy ──
     private static class _AutoPlayPolicy
     {
-        private const string Key =
-            @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AutoPlay";
+        private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AutoPlay";
 
         public static IReadOnlyList<TweakDef> Data =>
             [
@@ -3695,7 +3677,6 @@ internal static class PolicyDesktop
                     DetectOps = [RegOp.CheckDword(Key, "DisableAutoPlayForMTP", 1)],
                 },
             ];
-
     }
 
     // ── AutoRunPolicy ──
@@ -3892,14 +3873,12 @@ internal static class PolicyDesktop
                 DetectOps = [RegOp.CheckDword(AutoPlayUser, "UseAutoPlay", 0)],
             },
         ];
-
     }
 
     // ── ColorCalibrationPolicy ──
     private static class _ColorCalibrationPolicy
     {
-        private const string Key =
-            @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\ColorControl";
+        private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\ColorControl";
 
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
@@ -4123,7 +4102,6 @@ internal static class PolicyDesktop
                 DetectOps = [RegOp.CheckDword(Key, "DisableAutoColorCorrection", 1)],
             },
         ];
-
     }
 
     // ── ColorManagement ──
@@ -4326,7 +4304,6 @@ internal static class PolicyDesktop
                 DetectOps = [RegOp.CheckDword(VideoSettings, "ForceFullColorRange", 1)],
             },
         ];
-
     }
 
     // ── CompartmentPolicy ──
@@ -4507,7 +4484,6 @@ internal static class PolicyDesktop
                 DetectOps = [RegOp.CheckDword(Key, "RestrictCrossCompartmentIPC", 1)],
             },
         ];
-
     }
 
     // ── ControlPanelPolicy ──
@@ -4523,7 +4499,8 @@ internal static class PolicyDesktop
                 Id = "ctrlpanel-disable-all-control-panel",
                 Label = "Control Panel Policy: Disable Access to All Control Panel Items",
                 Category = "Display",
-                Description = "Prevents all users from opening the Control Panel and PC Settings app. Control Panel contains sensitive system configuration dialogs including network settings, user accounts, and security options. On locked-down workstations this policy prevents unauthorised system reconfiguration.",
+                Description =
+                    "Prevents all users from opening the Control Panel and PC Settings app. Control Panel contains sensitive system configuration dialogs including network settings, user accounts, and security options. On locked-down workstations this policy prevents unauthorised system reconfiguration.",
                 Tags = ["control panel", "restriction", "access", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -4540,7 +4517,8 @@ internal static class PolicyDesktop
                 Id = "ctrlpanel-disable-time-date-settings",
                 Label = "Control Panel Policy: Prevent Users from Changing Date and Time",
                 Category = "Display",
-                Description = "Prevents standard users from modifying the system date and time. Incorrect system time affects security certificate validation, Kerberos authentication, log timestamps, and time-based audit trails. Restricting time modification to administrators only ensures clock integrity for security logging.",
+                Description =
+                    "Prevents standard users from modifying the system date and time. Incorrect system time affects security certificate validation, Kerberos authentication, log timestamps, and time-based audit trails. Restricting time modification to administrators only ensures clock integrity for security logging.",
                 Tags = ["control panel", "date", "time", "restriction", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -4557,7 +4535,8 @@ internal static class PolicyDesktop
                 Id = "ctrlpanel-hide-personalization-settings",
                 Label = "Control Panel Policy: Hide Personalization from Control Panel",
                 Category = "Display",
-                Description = "Removes the Personalization item from the Control Panel and hides the right-click desktop personalization context menu entry. On shared/managed workstations, personalisation access can be used to change the desktop background (watermark bypass), install screen savers with custom payloads, or modify display scaling.",
+                Description =
+                    "Removes the Personalization item from the Control Panel and hides the right-click desktop personalization context menu entry. On shared/managed workstations, personalisation access can be used to change the desktop background (watermark bypass), install screen savers with custom payloads, or modify display scaling.",
                 Tags = ["control panel", "personalization", "theme", "restriction", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -4574,7 +4553,8 @@ internal static class PolicyDesktop
                 Id = "ctrlpanel-hide-user-accounts",
                 Label = "Control Panel Policy: Hide User Accounts from Control Panel",
                 Category = "Display",
-                Description = "Hides the User Accounts section from the Control Panel. Standard users should not be able to navigate the user accounts management interface where they might attempt password changes, account type modifications, or credential manager access.",
+                Description =
+                    "Hides the User Accounts section from the Control Panel. Standard users should not be able to navigate the user accounts management interface where they might attempt password changes, account type modifications, or credential manager access.",
                 Tags = ["control panel", "user accounts", "restriction", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -4591,7 +4571,8 @@ internal static class PolicyDesktop
                 Id = "ctrlpanel-hide-add-remove-programs",
                 Label = "Control Panel Policy: Restrict Add/Remove Programs in Control Panel",
                 Category = "Display",
-                Description = "Hides the Programs and Features (Add/Remove Programs) applet from the Control Panel. This prevents standard users from uninstalling installed software, adding Windows Features, or modifying installed programs. Useful on kiosk and managed endpoints where software management is IT-controlled.",
+                Description =
+                    "Hides the Programs and Features (Add/Remove Programs) applet from the Control Panel. This prevents standard users from uninstalling installed software, adding Windows Features, or modifying installed programs. Useful on kiosk and managed endpoints where software management is IT-controlled.",
                 Tags = ["control panel", "add remove programs", "uninstall", "restriction", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -4608,7 +4589,8 @@ internal static class PolicyDesktop
                 Id = "ctrlpanel-disable-change-password",
                 Label = "Control Panel Policy: Prevent Users from Changing Their Password",
                 Category = "Display",
-                Description = "Prevents standard users from navigating to Control Panel > User Accounts > Change Password. In environments where passwords are centrally managed via Active Directory or MDM policy, allowing local password changes creates synchronisation conflicts and bypasses the centralised credential management flow.",
+                Description =
+                    "Prevents standard users from navigating to Control Panel > User Accounts > Change Password. In environments where passwords are centrally managed via Active Directory or MDM policy, allowing local password changes creates synchronisation conflicts and bypasses the centralised credential management flow.",
                 Tags = ["control panel", "password", "change", "user accounts", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -4625,14 +4607,24 @@ internal static class PolicyDesktop
                 Id = "ctrlpanel-restrict-network-connections",
                 Label = "Control Panel Policy: Restrict Network Connections from Control Panel",
                 Category = "Display",
-                Description = "Prevents standard users from accessing Network Connections in the Control Panel. Network Connections allows users to add/remove VPN entries, configure DNS, change adapter settings, and create ad-hoc networks — all actions that can bypass corporate network access controls.",
+                Description =
+                    "Prevents standard users from accessing Network Connections in the Control Panel. Network Connections allows users to add/remove VPN entries, configure DNS, change adapter settings, and create ad-hoc networks — all actions that can bypass corporate network access controls.",
                 Tags = ["control panel", "network", "connections", "restriction", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
                 RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Network Connections"],
-                ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Network Connections", "NC_AddRemoveComponents", 0)],
-                RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Network Connections", "NC_AddRemoveComponents")],
-                DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Network Connections", "NC_AddRemoveComponents", 0)],
+                ApplyOps =
+                [
+                    RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Network Connections", "NC_AddRemoveComponents", 0),
+                ],
+                RemoveOps =
+                [
+                    RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Network Connections", "NC_AddRemoveComponents"),
+                ],
+                DetectOps =
+                [
+                    RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Network Connections", "NC_AddRemoveComponents", 0),
+                ],
                 ImpactScore = 3,
                 SafetyRating = 4,
                 ImpactNote = "Prevents adding/removing network components; users cannot install new network protocols.",
@@ -4642,7 +4634,8 @@ internal static class PolicyDesktop
                 Id = "ctrlpanel-hide-system-properties",
                 Label = "Control Panel Policy: Hide System Properties from Control Panel",
                 Category = "Display",
-                Description = "Prevents access to the System Properties applet (sysdm.cpl) via Control Panel. System Properties exposes settings for computer name changes, domain joins, hardware device manager, remote desktop access, and environment variables — all sensitive configuration surfaces on managed workstations.",
+                Description =
+                    "Prevents access to the System Properties applet (sysdm.cpl) via Control Panel. System Properties exposes settings for computer name changes, domain joins, hardware device manager, remote desktop access, and environment variables — all sensitive configuration surfaces on managed workstations.",
                 Tags = ["control panel", "system", "properties", "restriction", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -4659,7 +4652,8 @@ internal static class PolicyDesktop
                 Id = "ctrlpanel-disable-power-options",
                 Label = "Control Panel Policy: Prevent Access to Power Options in Control Panel",
                 Category = "Display",
-                Description = "Blocks user access to Power Options in the Control Panel. Users with access to Power Options can override sleep/hibernate settings, disable fast startup, create custom power plans, and modify sleep-on-lock behaviour — changes that may conflict with enterprise energy compliance or security lockout policies.",
+                Description =
+                    "Blocks user access to Power Options in the Control Panel. Users with access to Power Options can override sleep/hibernate settings, disable fast startup, create custom power plans, and modify sleep-on-lock behaviour — changes that may conflict with enterprise energy compliance or security lockout policies.",
                 Tags = ["control panel", "power", "sleep", "restriction", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -4676,7 +4670,8 @@ internal static class PolicyDesktop
                 Id = "ctrlpanel-hide-windows-update-settings",
                 Label = "Control Panel Policy: Hide Windows Update from Control Panel",
                 Category = "Display",
-                Description = "Hides the Windows Update item in the Control Panel. On managed devices where Windows Update is controlled by WSUS, Intune, or Configuration Manager, exposing the Windows Update control panel section allows users to manually trigger updates, pause updates, or change the update server — potentially disrupting managed patching schedules.",
+                Description =
+                    "Hides the Windows Update item in the Control Panel. On managed devices where Windows Update is controlled by WSUS, Intune, or Configuration Manager, exposing the Windows Update control panel section allows users to manually trigger updates, pause updates, or change the update server — potentially disrupting managed patching schedules.",
                 Tags = ["control panel", "windows update", "restriction", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -4689,7 +4684,6 @@ internal static class PolicyDesktop
                 ImpactNote = "Hides Windows Update from Control panel on WSUS/Intune-managed devices.",
             },
         ];
-
     }
 
     // ── DirectXRenderingPolicy ──
@@ -4700,169 +4694,178 @@ internal static class PolicyDesktop
         private const string DgiKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DXGI";
 
         public static IReadOnlyList<TweakDef> Data =>
-        [
-            new TweakDef
-            {
-                Id           = "d3dpol-disable-d3d-debug-layer",
-                Label        = "Disable Direct3D Debug Layer in Production",
-                Category = "Display",
-                Description  = "Disables the Direct3D Debug Layer (D3D11_CREATE_DEVICE_DEBUG / DX12 debug flag) in production environments, preventing verbose GPU validation from activating when debug runtimes are installed on production machines.",
-                Tags         = ["direct3d", "debug-layer", "gpu", "production", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 3,
-                SafetyRating = 5,
-                ImpactNote   = "D3D debug layer disabled; no GPU validation overhead even if debug SDK is installed on the machine.",
-                ApplyOps     = [RegOp.SetDword(Key, "DisableDebugLayer", 1)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "DisableDebugLayer")],
-                DetectOps    = [RegOp.CheckDword(Key, "DisableDebugLayer", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "d3dpol-disable-d3d-warp-fallback",
-                Label        = "Disable Direct3D WARP Software Renderer Fallback",
-                Category = "Display",
-                Description  = "Prevents applications from using the WARP (Windows Advanced Rasterisation Platform) CPU-based software renderer as a fallback when hardware Direct3D is unavailable, ensuring all D3D rendering uses physical GPU hardware.",
-                Tags         = ["direct3d", "warp", "software-renderer", "gpu", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 3,
-                SafetyRating = 4,
-                ImpactNote   = "WARP software renderer blocked; D3D apps fail without GPU rather than running at 1/100 speed on CPU.",
-                ApplyOps     = [RegOp.SetDword(Key, "DisableWARPFallback", 1)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "DisableWARPFallback")],
-                DetectOps    = [RegOp.CheckDword(Key, "DisableWARPFallback", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "d3dpol-set-feature-level-minimum-11",
-                Label        = "Require Minimum Direct3D Feature Level 11.0",
-                Category = "Display",
-                Description  = "Sets a minimum required Direct3D feature level of 11.0, preventing applications from requesting feature levels below D3D11 and ensuring all GPU workloads use modern shader models and resource bindings.",
-                Tags         = ["direct3d", "feature-level", "d3d11", "gpu", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 2,
-                SafetyRating = 5,
-                ImpactNote   = "D3D minimum feature level set to 11.0; apps cannot fall back to D3D9/D3D10 mode.",
-                ApplyOps     = [RegOp.SetDword(Key, "MinimumFeatureLevel", 0xB000)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "MinimumFeatureLevel")],
-                DetectOps    = [RegOp.CheckDword(Key, "MinimumFeatureLevel", 0xB000)],
-            },
-            new TweakDef
-            {
-                Id           = "d3dpol-disable-dxgi-fullscreen-opt",
-                Label        = "Disable DXGI Fullscreen Optimisations App-Wide",
-                Category = "Display",
-                Description  = "Disables DXGI Fullscreen Optimisations at system policy level, preventing Windows from overriding fullscreen exclusive mode with a windowed swap chain, which can cause frame timing inconsistencies in precision rendering.",
-                Tags         = ["dxgi", "fullscreen-optimisations", "exclusive-mode", "direct3d", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 3,
-                SafetyRating = 5,
-                ImpactNote   = "DXGI fullscreen optimisations disabled; true exclusive fullscreen used for all DXGI apps system-wide.",
-                ApplyOps     = [RegOp.SetDword(DgiKey, "DisableFullscreenOptimizations", 1)],
-                RemoveOps    = [RegOp.DeleteValue(DgiKey, "DisableFullscreenOptimizations")],
-                DetectOps    = [RegOp.CheckDword(DgiKey, "DisableFullscreenOptimizations", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "d3dpol-enable-auto-hdr",
-                Label        = "Enable Direct3D Auto HDR for SDR Application Upscaling",
-                Category = "Display",
-                Description  = "Enables Windows Auto HDR which algorithmically expands the luminance range of SDR Direct3D 11 and 12 applications for HDR display output, improving visual quality of DX applications without source code changes.",
-                Tags         = ["direct3d", "auto-hdr", "hdr", "display", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 3,
-                SafetyRating = 5,
-                ImpactNote   = "Auto HDR enabled; D3D SDR apps upscaled to HDR range on compatible HDR monitors.",
-                ApplyOps     = [RegOp.SetDword(Key, "AutoHDREnabled", 1)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "AutoHDREnabled")],
-                DetectOps    = [RegOp.CheckDword(Key, "AutoHDREnabled", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "d3dpol-disable-d3d-telemetry",
-                Label        = "Disable Direct3D Telemetry Reporting to Microsoft",
-                Category = "Display",
-                Description  = "Prevents the Direct3D runtime from sending application GPU usage, feature level, and performance telemetry to Microsoft, protecting information about GPU workload characteristics from cloud disclosure.",
-                Tags         = ["direct3d", "telemetry", "privacy", "microsoft", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 3,
-                SafetyRating = 5,
-                ImpactNote   = "D3D telemetry to Microsoft disabled; GPU app usage and feature level stats not sent to cloud.",
-                ApplyOps     = [RegOp.SetDword(Key, "DisableD3DTelemetry", 1)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "DisableD3DTelemetry")],
-                DetectOps    = [RegOp.CheckDword(Key, "DisableD3DTelemetry", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "d3dpol-enable-dx12-ultimate",
-                Label        = "Enable DirectX 12 Ultimate Feature Set Policy",
-                Category = "Display",
-                Description  = "Configures the system to prefer the DirectX 12 Ultimate feature set (Shader Model 6.6, Mesh Shaders, Sampler Feedback, DirectX Raytracing 1.1) when available, enabling applications to use the highest GPU capability tier.",
-                Tags         = ["direct3d", "dx12-ultimate", "raytracing", "mesh-shader", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 3,
-                SafetyRating = 5,
-                ImpactNote   = "DX12 Ultimate feature set preferred; apps can advertise SM6.6 / RT 1.1 / Mesh Shaders on compatible GPUs.",
-                ApplyOps     = [RegOp.SetDword(Key, "PreferDX12Ultimate", 1)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "PreferDX12Ultimate")],
-                DetectOps    = [RegOp.CheckDword(Key, "PreferDX12Ultimate", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "d3dpol-restrict-gpu-access-sandboxed",
-                Label        = "Restrict Direct3D GPU Access in Sandboxed AppContainer Processes",
-                Category = "Display",
-                Description  = "Configures reduced-privilege Direct3D access for AppContainer (UWP sandbox) processes, preventing sandboxed applications from accessing full GPU command queue capabilities that could be used for side-channel attacks.",
-                Tags         = ["direct3d", "appcontainer", "sandbox", "gpu-access", "security", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 4,
-                SafetyRating = 5,
-                ImpactNote   = "Sandboxed GPU access restricted; AppContainer apps have limited GPU command queue capabilities.",
-                ApplyOps     = [RegOp.SetDword(Key, "RestrictGPUAccessInSandbox", 1)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "RestrictGPUAccessInSandbox")],
-                DetectOps    = [RegOp.CheckDword(Key, "RestrictGPUAccessInSandbox", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "d3dpol-log-d3d-device-removed",
-                Label        = "Log Direct3D Device Removed Events for Diagnostics",
-                Category = "Display",
-                Description  = "Enables Application event log entries for DXGI_ERROR_DEVICE_REMOVED and DXGI_ERROR_DEVICE_HUNG events generated by Direct3D, providing diagnostic information about GPU hardware failures, driver crashes, and TDR events.",
-                Tags         = ["direct3d", "device-removed", "event-log", "diagnostics", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 3,
-                SafetyRating = 5,
-                ImpactNote   = "D3D device removed events logged; GPU failure reasons visible in Application event log for diagnostics.",
-                ApplyOps     = [RegOp.SetDword(Key, "LogDeviceRemovedEvents", 1)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "LogDeviceRemovedEvents")],
-                DetectOps    = [RegOp.CheckDword(Key, "LogDeviceRemovedEvents", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "d3dpol-disable-overlay-planes",
-                Label        = "Disable DirectX Hardware Overlay Planes",
-                Category = "Display",
-                Description  = "Disables DXGI hardware overlay planes that allow applications to render directly into GPU overlay surfaces, preventing overlay plane usage that bypasses DWM compositing and can lead to display corruption on multi-monitor setups.",
-                Tags         = ["direct3d", "dxgi", "overlay-planes", "display", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 2,
-                SafetyRating = 5,
-                ImpactNote   = "Hardware overlay planes disabled; all rendering goes through DWM compositor. Reduces display corruption risk.",
-                ApplyOps     = [RegOp.SetDword(DgiKey, "DisableHWOverlayPlanes", 1)],
-                RemoveOps    = [RegOp.DeleteValue(DgiKey, "DisableHWOverlayPlanes")],
-                DetectOps    = [RegOp.CheckDword(DgiKey, "DisableHWOverlayPlanes", 1)],
-            },
-        ];
-
+            [
+                new TweakDef
+                {
+                    Id = "d3dpol-disable-d3d-debug-layer",
+                    Label = "Disable Direct3D Debug Layer in Production",
+                    Category = "Display",
+                    Description =
+                        "Disables the Direct3D Debug Layer (D3D11_CREATE_DEVICE_DEBUG / DX12 debug flag) in production environments, preventing verbose GPU validation from activating when debug runtimes are installed on production machines.",
+                    Tags = ["direct3d", "debug-layer", "gpu", "production", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "D3D debug layer disabled; no GPU validation overhead even if debug SDK is installed on the machine.",
+                    ApplyOps = [RegOp.SetDword(Key, "DisableDebugLayer", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "DisableDebugLayer")],
+                    DetectOps = [RegOp.CheckDword(Key, "DisableDebugLayer", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "d3dpol-disable-d3d-warp-fallback",
+                    Label = "Disable Direct3D WARP Software Renderer Fallback",
+                    Category = "Display",
+                    Description =
+                        "Prevents applications from using the WARP (Windows Advanced Rasterisation Platform) CPU-based software renderer as a fallback when hardware Direct3D is unavailable, ensuring all D3D rendering uses physical GPU hardware.",
+                    Tags = ["direct3d", "warp", "software-renderer", "gpu", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 4,
+                    ImpactNote = "WARP software renderer blocked; D3D apps fail without GPU rather than running at 1/100 speed on CPU.",
+                    ApplyOps = [RegOp.SetDword(Key, "DisableWARPFallback", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "DisableWARPFallback")],
+                    DetectOps = [RegOp.CheckDword(Key, "DisableWARPFallback", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "d3dpol-set-feature-level-minimum-11",
+                    Label = "Require Minimum Direct3D Feature Level 11.0",
+                    Category = "Display",
+                    Description =
+                        "Sets a minimum required Direct3D feature level of 11.0, preventing applications from requesting feature levels below D3D11 and ensuring all GPU workloads use modern shader models and resource bindings.",
+                    Tags = ["direct3d", "feature-level", "d3d11", "gpu", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 2,
+                    SafetyRating = 5,
+                    ImpactNote = "D3D minimum feature level set to 11.0; apps cannot fall back to D3D9/D3D10 mode.",
+                    ApplyOps = [RegOp.SetDword(Key, "MinimumFeatureLevel", 0xB000)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "MinimumFeatureLevel")],
+                    DetectOps = [RegOp.CheckDword(Key, "MinimumFeatureLevel", 0xB000)],
+                },
+                new TweakDef
+                {
+                    Id = "d3dpol-disable-dxgi-fullscreen-opt",
+                    Label = "Disable DXGI Fullscreen Optimisations App-Wide",
+                    Category = "Display",
+                    Description =
+                        "Disables DXGI Fullscreen Optimisations at system policy level, preventing Windows from overriding fullscreen exclusive mode with a windowed swap chain, which can cause frame timing inconsistencies in precision rendering.",
+                    Tags = ["dxgi", "fullscreen-optimisations", "exclusive-mode", "direct3d", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "DXGI fullscreen optimisations disabled; true exclusive fullscreen used for all DXGI apps system-wide.",
+                    ApplyOps = [RegOp.SetDword(DgiKey, "DisableFullscreenOptimizations", 1)],
+                    RemoveOps = [RegOp.DeleteValue(DgiKey, "DisableFullscreenOptimizations")],
+                    DetectOps = [RegOp.CheckDword(DgiKey, "DisableFullscreenOptimizations", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "d3dpol-enable-auto-hdr",
+                    Label = "Enable Direct3D Auto HDR for SDR Application Upscaling",
+                    Category = "Display",
+                    Description =
+                        "Enables Windows Auto HDR which algorithmically expands the luminance range of SDR Direct3D 11 and 12 applications for HDR display output, improving visual quality of DX applications without source code changes.",
+                    Tags = ["direct3d", "auto-hdr", "hdr", "display", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "Auto HDR enabled; D3D SDR apps upscaled to HDR range on compatible HDR monitors.",
+                    ApplyOps = [RegOp.SetDword(Key, "AutoHDREnabled", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "AutoHDREnabled")],
+                    DetectOps = [RegOp.CheckDword(Key, "AutoHDREnabled", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "d3dpol-disable-d3d-telemetry",
+                    Label = "Disable Direct3D Telemetry Reporting to Microsoft",
+                    Category = "Display",
+                    Description =
+                        "Prevents the Direct3D runtime from sending application GPU usage, feature level, and performance telemetry to Microsoft, protecting information about GPU workload characteristics from cloud disclosure.",
+                    Tags = ["direct3d", "telemetry", "privacy", "microsoft", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "D3D telemetry to Microsoft disabled; GPU app usage and feature level stats not sent to cloud.",
+                    ApplyOps = [RegOp.SetDword(Key, "DisableD3DTelemetry", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "DisableD3DTelemetry")],
+                    DetectOps = [RegOp.CheckDword(Key, "DisableD3DTelemetry", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "d3dpol-enable-dx12-ultimate",
+                    Label = "Enable DirectX 12 Ultimate Feature Set Policy",
+                    Category = "Display",
+                    Description =
+                        "Configures the system to prefer the DirectX 12 Ultimate feature set (Shader Model 6.6, Mesh Shaders, Sampler Feedback, DirectX Raytracing 1.1) when available, enabling applications to use the highest GPU capability tier.",
+                    Tags = ["direct3d", "dx12-ultimate", "raytracing", "mesh-shader", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "DX12 Ultimate feature set preferred; apps can advertise SM6.6 / RT 1.1 / Mesh Shaders on compatible GPUs.",
+                    ApplyOps = [RegOp.SetDword(Key, "PreferDX12Ultimate", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "PreferDX12Ultimate")],
+                    DetectOps = [RegOp.CheckDword(Key, "PreferDX12Ultimate", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "d3dpol-restrict-gpu-access-sandboxed",
+                    Label = "Restrict Direct3D GPU Access in Sandboxed AppContainer Processes",
+                    Category = "Display",
+                    Description =
+                        "Configures reduced-privilege Direct3D access for AppContainer (UWP sandbox) processes, preventing sandboxed applications from accessing full GPU command queue capabilities that could be used for side-channel attacks.",
+                    Tags = ["direct3d", "appcontainer", "sandbox", "gpu-access", "security", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "Sandboxed GPU access restricted; AppContainer apps have limited GPU command queue capabilities.",
+                    ApplyOps = [RegOp.SetDword(Key, "RestrictGPUAccessInSandbox", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "RestrictGPUAccessInSandbox")],
+                    DetectOps = [RegOp.CheckDword(Key, "RestrictGPUAccessInSandbox", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "d3dpol-log-d3d-device-removed",
+                    Label = "Log Direct3D Device Removed Events for Diagnostics",
+                    Category = "Display",
+                    Description =
+                        "Enables Application event log entries for DXGI_ERROR_DEVICE_REMOVED and DXGI_ERROR_DEVICE_HUNG events generated by Direct3D, providing diagnostic information about GPU hardware failures, driver crashes, and TDR events.",
+                    Tags = ["direct3d", "device-removed", "event-log", "diagnostics", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "D3D device removed events logged; GPU failure reasons visible in Application event log for diagnostics.",
+                    ApplyOps = [RegOp.SetDword(Key, "LogDeviceRemovedEvents", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "LogDeviceRemovedEvents")],
+                    DetectOps = [RegOp.CheckDword(Key, "LogDeviceRemovedEvents", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "d3dpol-disable-overlay-planes",
+                    Label = "Disable DirectX Hardware Overlay Planes",
+                    Category = "Display",
+                    Description =
+                        "Disables DXGI hardware overlay planes that allow applications to render directly into GPU overlay surfaces, preventing overlay plane usage that bypasses DWM compositing and can lead to display corruption on multi-monitor setups.",
+                    Tags = ["direct3d", "dxgi", "overlay-planes", "display", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 2,
+                    SafetyRating = 5,
+                    ImpactNote = "Hardware overlay planes disabled; all rendering goes through DWM compositor. Reduces display corruption risk.",
+                    ApplyOps = [RegOp.SetDword(DgiKey, "DisableHWOverlayPlanes", 1)],
+                    RemoveOps = [RegOp.DeleteValue(DgiKey, "DisableHWOverlayPlanes")],
+                    DetectOps = [RegOp.CheckDword(DgiKey, "DisableHWOverlayPlanes", 1)],
+                },
+            ];
     }
 
     // ── DirectXShaderCachePolicy ──
@@ -4872,186 +4875,195 @@ internal static class PolicyDesktop
         private const string GfxKey = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers";
 
         public static IReadOnlyList<TweakDef> Data =>
-        [
-            new TweakDef
-            {
-                Id = "dxshdr-enable-hardware-accelerated-gpu-scheduling",
-                Label = "DirectX: Enable Hardware-Accelerated GPU Scheduling (HAGS)",
-                Category = "Display",
-                Description = "Sets HwSchMode=2 in GraphicsDrivers hardware scheduling registry. Enables Hardware-Accelerated GPU Scheduling (HAGS), which moves GPU memory management scheduling from the CPU-based WDDM scheduler into the GPU hardware itself. " +
-                    "HAGS reduces scheduling latency for GPU workloads by 1–3 ms in sustained GPU-bound scenarios. It improves frame pacing for games and rendering applications by letting the GPU hardware decide when to submit work rather than waiting for the OS scheduler. Requires a GPU and driver that support WDDM 2.7 or later (NVIDIA RTX 10-series+, AMD RX 5000-series+).",
-                Tags = ["gpu", "scheduling", "hags", "latency", "performance"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 4,
-                ImpactNote = "HAGS reduces GPU scheduling latency ~1–3ms for GPU-bound workloads; requires WDDM 2.7+ driver.",
-                ApplyOps = [RegOp.SetDword(GfxKey, "HwSchMode", 2)],
-                RemoveOps = [RegOp.DeleteValue(GfxKey, "HwSchMode")],
-                DetectOps = [RegOp.CheckDword(GfxKey, "HwSchMode", 2)],
-            },
-            new TweakDef
-            {
-                Id = "dxshdr-enable-d3d12-shader-cache",
-                Label = "DirectX: Enable D3D12 Shader Cache for Faster Game Load Times",
-                Category = "Display",
-                Description = "Sets D3D12AllowSoftwareFallback=0 and relies on the D3D12 shader cache (DXGI shader disk cache) enabled by default. Sets DisableD3D12ShaderCache=0 in Display policy to explicitly keep shader caching enabled. " +
-                    "D3D12 shader compilation caching stores pre-compiled GPU programs to disk so that subsequent runs of the same game or application do not need to recompile shaders from scratch. Without the cache, every game launch triggers fresh GPU shader compilation — causing stuttering and load times that can exceed 5 minutes in large open-world titles. Keeping this enabled is important on imaging/VDI scenarios where the cache may be inadvertently cleared.",
-                Tags = ["dx12", "shader-cache", "load-time", "compilation", "performance"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                ImpactNote = "Shader cache ON; eliminates per-session recompilation stutters and long load times.",
-                ApplyOps = [RegOp.SetDword(DisplayKey, "DisableD3D12ShaderCache", 0)],
-                RemoveOps = [RegOp.DeleteValue(DisplayKey, "DisableD3D12ShaderCache")],
-                DetectOps = [RegOp.CheckDword(DisplayKey, "DisableD3D12ShaderCache", 0)],
-            },
-            new TweakDef
-            {
-                Id = "dxshdr-disable-dxgi-information-queue",
-                Label = "DirectX: Disable DXGI Debug Information Queue Logging",
-                Category = "Display",
-                Description = "Sets DisableDXGIInfoQueue=1 in GraphicsDrivers registry. Disables the DXGI debug information queue, which logs verbose DXGI API validation messages to the debug output stream in debug builds. " +
-                    "The DXGI information queue is a developer debugging tool that has no benefit in production builds. Disabling it eliminates the per-frame memory allocation overhead of maintaining the queue ring buffer, which can cause visible micro-stutters when the queue fills and wraps around — particularly noticeable in frame-time sensitive applications on lower-end hardware.",
-                Tags = ["dx12", "dxgi", "debug", "performance", "micro-stutter"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                ImpactNote = "Disables DXGI debug queue; eliminates ring-buffer overhead micro-stutters in release builds.",
-                ApplyOps = [RegOp.SetDword(GfxKey, "DisableDXGIInfoQueue", 1)],
-                RemoveOps = [RegOp.DeleteValue(GfxKey, "DisableDXGIInfoQueue")],
-                DetectOps = [RegOp.CheckDword(GfxKey, "DisableDXGIInfoQueue", 1)],
-            },
-            new TweakDef
-            {
-                Id = "dxshdr-enable-preemption-granularity-dispatch",
-                Label = "DirectX: Set GPU Preemption Granularity to Dispatch Level",
-                Category = "Display",
-                Description = "Sets TdrLevel=3 in GraphicsDrivers registry. Configures graphics preemption to dispatch-call level granularity. " +
-                    "At dispatch preemption granularity, the OS can interrupt and reschedule GPU workloads between individual compute dispatch calls rather than waiting for an entire render pass to complete. This improves the responsiveness of UI compositing (DWM) and desktop interaction during heavy GPU compute loads such as machine learning inference or large render jobs, as the desktop compositor can be re-prioritised mid-frame without stalling.",
-                Tags = ["gpu", "preemption", "dispatch", "tdr", "responsiveness"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 3,
-                ImpactNote = "Dispatch-level GPU preemption; better UI responsiveness under heavy GPU load. May affect GPU-intensive workloads.",
-                ApplyOps = [RegOp.SetDword(GfxKey, "TdrLevel", 3)],
-                RemoveOps = [RegOp.DeleteValue(GfxKey, "TdrLevel")],
-                DetectOps = [RegOp.CheckDword(GfxKey, "TdrLevel", 3)],
-            },
-            new TweakDef
-            {
-                Id = "dxshdr-extend-tdr-delay-to-10sec",
-                Label = "DirectX: Extend TDR Delay to 10 Seconds for Heavy GPU Workloads",
-                Category = "Display",
-                Description = "Sets TdrDelay=10 in GraphicsDrivers registry. Extends the Timeout Detection and Recovery (TDR) timeout from the default 2 seconds to 10 seconds before Windows triggers a GPU driver reset. " +
-                    "The 2-second default TDR was designed for interactive desktop scenarios. Modern GPU workloads such as GPGPU compute, neural network inference, video transcoding, and DXR ray-tracing legitimately execute kernels for 3–8 seconds without returning to the OS. With the 2-second default, these workloads trigger false TDR resets that crash and restart the GPU, killing in-flight workloads. A 10-second timeout accommodates heavy compute without unnecessary resets.",
-                Tags = ["gpu", "tdr", "compute", "timeout", "stability"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 4,
-                ImpactNote = "TDR extended to 10s; accommodates long GPU compute kernels without false reset. Test on target hardware.",
-                ApplyOps = [RegOp.SetDword(GfxKey, "TdrDelay", 10)],
-                RemoveOps = [RegOp.DeleteValue(GfxKey, "TdrDelay")],
-                DetectOps = [RegOp.CheckDword(GfxKey, "TdrDelay", 10)],
-            },
-            new TweakDef
-            {
-                Id = "dxshdr-enable-flipex-presentation-model",
-                Label = "DirectX: Enable DXGI FlipEx Swap Chain for Reduced Presentation Latency",
-                Category = "Display",
-                Description = "Sets ForceFlipEx=1 in GraphicsDrivers registry. Instructs the DXGI flip model to use the FlipEx presentation path (Flip Discard with direct scanout) when available, bypassing the desktop window manager (DWM) composition pass. " +
-                    "FlipEx allows full-screen exclusive applications to directly control the scanout buffer without the frame going through DWM composition. This eliminates one full frame of latency compared to the DWM composition path (Blit model), reducing end-to-end input-to-photon latency by ~8–16 ms on a 60 Hz display. This is the primary latency optimisation for competitive games.",
-                Tags = ["gpu", "flipex", "presentation", "latency", "frame-time"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 4,
-                ImpactNote = "FlipEx direct scanout: ~8–16ms lower presentation latency vs DWM composition; requires full-screen exclusive mode.",
-                ApplyOps = [RegOp.SetDword(GfxKey, "ForceFlipEx", 1)],
-                RemoveOps = [RegOp.DeleteValue(GfxKey, "ForceFlipEx")],
-                DetectOps = [RegOp.CheckDword(GfxKey, "ForceFlipEx", 1)],
-            },
-            new TweakDef
-            {
-                Id = "dxshdr-disable-display-power-saving-technology",
-                Label = "DirectX: Disable Display Power-Saving Technology for Accurate Color",
-                Category = "Display",
-                Description = "Sets DisableDisplayPowerSaving=1 in GraphicsDrivers registry. Disables vendor-specific display power-saving technologies (Intel DPST, AMD VDDG, NVIDIA SmartGPU) that dynamically adjust backlight and GPU power based on displayed content brightness. " +
-                    "Display power-saving technologies alter the luminance and colour rendering of the GPU scanout in real time. This makes accurate colour reproduction impossible for photo editing, video colour grading, and design work. Disabling it restores consistent, unmodified colour output from the GPU — essential for any colour-managed workflow.",
-                Tags = ["gpu", "display", "color-accuracy", "backlight", "creative"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                ImpactNote = "Disables adaptive backlight/colour adjustment; accurate colour for design/photo workflows at cost of minor battery life.",
-                ApplyOps = [RegOp.SetDword(GfxKey, "DisableDisplayPowerSaving", 1)],
-                RemoveOps = [RegOp.DeleteValue(GfxKey, "DisableDisplayPowerSaving")],
-                DetectOps = [RegOp.CheckDword(GfxKey, "DisableDisplayPowerSaving", 1)],
-            },
-            new TweakDef
-            {
-                Id = "dxshdr-disable-directx-diagnostic-reporting",
-                Label = "DirectX: Disable DirectX Diagnostic Reporting to Microsoft",
-                Category = "Display",
-                Description = "Sets DisableDiagnosticReporting=1 in Display policy. Prevents the DirectX diagnostics subsystem from sending GPU compatibility reports, DirectX error events, and driver crash dumps to Microsoft's telemetry pipeline. " +
-                    "DirectX diagnostic reporting can include driver version information, GPU model details, and crash callstacks, which constitute system fingerprinting data. On secure or air-gapped environments, turning off all outbound diagnostic reporting channels is a standard hardening measure.",
-                Tags = ["dx", "diagnostics", "telemetry", "privacy", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                ImpactNote = "Blocks DirectX diagnostic reports to Microsoft; GPU details not included in telemetry.",
-                ApplyOps = [RegOp.SetDword(DisplayKey, "DisableDiagnosticReporting", 1)],
-                RemoveOps = [RegOp.DeleteValue(DisplayKey, "DisableDiagnosticReporting")],
-                DetectOps = [RegOp.CheckDword(DisplayKey, "DisableDiagnosticReporting", 1)],
-            },
-            new TweakDef
-            {
-                Id = "dxshdr-disable-display-driver-auto-updates",
-                Label = "DirectX: Disable Automatic Display Driver Updates via Windows Update",
-                Category = "Display",
-                Description = "Sets ExcludeWUDriversForDisplay=1 in Display policy. Prevents Windows Update from automatically installing newer display driver versions. " +
-                    "Display driver updates during production hours can cause unexpected desktop resolution changes, HDR/SDR rendering behaviour changes, WHQL validation differences, and application crashes in software that depends on specific driver API behaviour. Enterprise GPU workstations should pin driver versions through a controlled update process rather than allowing automatic WU-driven driver installs.",
-                Tags = ["gpu", "driver", "windows-update", "stability", "enterprise"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Display drivers excluded from WU auto-update; manually controlled driver versioning for production stability.",
-                ApplyOps = [RegOp.SetDword(DisplayKey, "ExcludeWUDriversForDisplay", 1)],
-                RemoveOps = [RegOp.DeleteValue(DisplayKey, "ExcludeWUDriversForDisplay")],
-                DetectOps = [RegOp.CheckDword(DisplayKey, "ExcludeWUDriversForDisplay", 1)],
-            },
-            new TweakDef
-            {
-                Id = "dxshdr-enable-gpu-virtual-memory-deduplication",
-                Label = "DirectX: Enable GPU Virtual Memory Page Deduplication",
-                Category = "Display",
-                Description = "Sets EnableGPUPageDeduplication=1 in GraphicsDrivers registry. Enables page deduplication for GPU-accessible virtual memory, allowing the OS to coalesce identical read-only GPU memory pages (common in texture streaming) into shared physical pages. " +
-                    "GPU texture streaming in games and rendering applications often loads the same texture mips into multiple contexts (shadow maps, reflection captures, environment renders). Page deduplication can reduce VRAM pressure by 5–15% in texture-heavy workloads, helping devices with lower VRAM capacities handle more assets without evicting and reloading from system RAM.",
-                Tags = ["gpu", "memory", "vram", "deduplication", "performance"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 4,
-                ImpactNote = "GPU page dedup: 5–15% VRAM savings in texture-heavy workloads; helpful on lower-VRAM GPUs.",
-                ApplyOps = [RegOp.SetDword(GfxKey, "EnableGPUPageDeduplication", 1)],
-                RemoveOps = [RegOp.DeleteValue(GfxKey, "EnableGPUPageDeduplication")],
-                DetectOps = [RegOp.CheckDword(GfxKey, "EnableGPUPageDeduplication", 1)],
-            },
-        ];
-
+            [
+                new TweakDef
+                {
+                    Id = "dxshdr-enable-hardware-accelerated-gpu-scheduling",
+                    Label = "DirectX: Enable Hardware-Accelerated GPU Scheduling (HAGS)",
+                    Category = "Display",
+                    Description =
+                        "Sets HwSchMode=2 in GraphicsDrivers hardware scheduling registry. Enables Hardware-Accelerated GPU Scheduling (HAGS), which moves GPU memory management scheduling from the CPU-based WDDM scheduler into the GPU hardware itself. "
+                        + "HAGS reduces scheduling latency for GPU workloads by 1–3 ms in sustained GPU-bound scenarios. It improves frame pacing for games and rendering applications by letting the GPU hardware decide when to submit work rather than waiting for the OS scheduler. Requires a GPU and driver that support WDDM 2.7 or later (NVIDIA RTX 10-series+, AMD RX 5000-series+).",
+                    Tags = ["gpu", "scheduling", "hags", "latency", "performance"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 4,
+                    ImpactNote = "HAGS reduces GPU scheduling latency ~1–3ms for GPU-bound workloads; requires WDDM 2.7+ driver.",
+                    ApplyOps = [RegOp.SetDword(GfxKey, "HwSchMode", 2)],
+                    RemoveOps = [RegOp.DeleteValue(GfxKey, "HwSchMode")],
+                    DetectOps = [RegOp.CheckDword(GfxKey, "HwSchMode", 2)],
+                },
+                new TweakDef
+                {
+                    Id = "dxshdr-enable-d3d12-shader-cache",
+                    Label = "DirectX: Enable D3D12 Shader Cache for Faster Game Load Times",
+                    Category = "Display",
+                    Description =
+                        "Sets D3D12AllowSoftwareFallback=0 and relies on the D3D12 shader cache (DXGI shader disk cache) enabled by default. Sets DisableD3D12ShaderCache=0 in Display policy to explicitly keep shader caching enabled. "
+                        + "D3D12 shader compilation caching stores pre-compiled GPU programs to disk so that subsequent runs of the same game or application do not need to recompile shaders from scratch. Without the cache, every game launch triggers fresh GPU shader compilation — causing stuttering and load times that can exceed 5 minutes in large open-world titles. Keeping this enabled is important on imaging/VDI scenarios where the cache may be inadvertently cleared.",
+                    Tags = ["dx12", "shader-cache", "load-time", "compilation", "performance"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "Shader cache ON; eliminates per-session recompilation stutters and long load times.",
+                    ApplyOps = [RegOp.SetDword(DisplayKey, "DisableD3D12ShaderCache", 0)],
+                    RemoveOps = [RegOp.DeleteValue(DisplayKey, "DisableD3D12ShaderCache")],
+                    DetectOps = [RegOp.CheckDword(DisplayKey, "DisableD3D12ShaderCache", 0)],
+                },
+                new TweakDef
+                {
+                    Id = "dxshdr-disable-dxgi-information-queue",
+                    Label = "DirectX: Disable DXGI Debug Information Queue Logging",
+                    Category = "Display",
+                    Description =
+                        "Sets DisableDXGIInfoQueue=1 in GraphicsDrivers registry. Disables the DXGI debug information queue, which logs verbose DXGI API validation messages to the debug output stream in debug builds. "
+                        + "The DXGI information queue is a developer debugging tool that has no benefit in production builds. Disabling it eliminates the per-frame memory allocation overhead of maintaining the queue ring buffer, which can cause visible micro-stutters when the queue fills and wraps around — particularly noticeable in frame-time sensitive applications on lower-end hardware.",
+                    Tags = ["dx12", "dxgi", "debug", "performance", "micro-stutter"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 2,
+                    SafetyRating = 5,
+                    ImpactNote = "Disables DXGI debug queue; eliminates ring-buffer overhead micro-stutters in release builds.",
+                    ApplyOps = [RegOp.SetDword(GfxKey, "DisableDXGIInfoQueue", 1)],
+                    RemoveOps = [RegOp.DeleteValue(GfxKey, "DisableDXGIInfoQueue")],
+                    DetectOps = [RegOp.CheckDword(GfxKey, "DisableDXGIInfoQueue", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "dxshdr-enable-preemption-granularity-dispatch",
+                    Label = "DirectX: Set GPU Preemption Granularity to Dispatch Level",
+                    Category = "Display",
+                    Description =
+                        "Sets TdrLevel=3 in GraphicsDrivers registry. Configures graphics preemption to dispatch-call level granularity. "
+                        + "At dispatch preemption granularity, the OS can interrupt and reschedule GPU workloads between individual compute dispatch calls rather than waiting for an entire render pass to complete. This improves the responsiveness of UI compositing (DWM) and desktop interaction during heavy GPU compute loads such as machine learning inference or large render jobs, as the desktop compositor can be re-prioritised mid-frame without stalling.",
+                    Tags = ["gpu", "preemption", "dispatch", "tdr", "responsiveness"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 3,
+                    ImpactNote = "Dispatch-level GPU preemption; better UI responsiveness under heavy GPU load. May affect GPU-intensive workloads.",
+                    ApplyOps = [RegOp.SetDword(GfxKey, "TdrLevel", 3)],
+                    RemoveOps = [RegOp.DeleteValue(GfxKey, "TdrLevel")],
+                    DetectOps = [RegOp.CheckDword(GfxKey, "TdrLevel", 3)],
+                },
+                new TweakDef
+                {
+                    Id = "dxshdr-extend-tdr-delay-to-10sec",
+                    Label = "DirectX: Extend TDR Delay to 10 Seconds for Heavy GPU Workloads",
+                    Category = "Display",
+                    Description =
+                        "Sets TdrDelay=10 in GraphicsDrivers registry. Extends the Timeout Detection and Recovery (TDR) timeout from the default 2 seconds to 10 seconds before Windows triggers a GPU driver reset. "
+                        + "The 2-second default TDR was designed for interactive desktop scenarios. Modern GPU workloads such as GPGPU compute, neural network inference, video transcoding, and DXR ray-tracing legitimately execute kernels for 3–8 seconds without returning to the OS. With the 2-second default, these workloads trigger false TDR resets that crash and restart the GPU, killing in-flight workloads. A 10-second timeout accommodates heavy compute without unnecessary resets.",
+                    Tags = ["gpu", "tdr", "compute", "timeout", "stability"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 4,
+                    ImpactNote = "TDR extended to 10s; accommodates long GPU compute kernels without false reset. Test on target hardware.",
+                    ApplyOps = [RegOp.SetDword(GfxKey, "TdrDelay", 10)],
+                    RemoveOps = [RegOp.DeleteValue(GfxKey, "TdrDelay")],
+                    DetectOps = [RegOp.CheckDword(GfxKey, "TdrDelay", 10)],
+                },
+                new TweakDef
+                {
+                    Id = "dxshdr-enable-flipex-presentation-model",
+                    Label = "DirectX: Enable DXGI FlipEx Swap Chain for Reduced Presentation Latency",
+                    Category = "Display",
+                    Description =
+                        "Sets ForceFlipEx=1 in GraphicsDrivers registry. Instructs the DXGI flip model to use the FlipEx presentation path (Flip Discard with direct scanout) when available, bypassing the desktop window manager (DWM) composition pass. "
+                        + "FlipEx allows full-screen exclusive applications to directly control the scanout buffer without the frame going through DWM composition. This eliminates one full frame of latency compared to the DWM composition path (Blit model), reducing end-to-end input-to-photon latency by ~8–16 ms on a 60 Hz display. This is the primary latency optimisation for competitive games.",
+                    Tags = ["gpu", "flipex", "presentation", "latency", "frame-time"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 4,
+                    ImpactNote = "FlipEx direct scanout: ~8–16ms lower presentation latency vs DWM composition; requires full-screen exclusive mode.",
+                    ApplyOps = [RegOp.SetDword(GfxKey, "ForceFlipEx", 1)],
+                    RemoveOps = [RegOp.DeleteValue(GfxKey, "ForceFlipEx")],
+                    DetectOps = [RegOp.CheckDword(GfxKey, "ForceFlipEx", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "dxshdr-disable-display-power-saving-technology",
+                    Label = "DirectX: Disable Display Power-Saving Technology for Accurate Color",
+                    Category = "Display",
+                    Description =
+                        "Sets DisableDisplayPowerSaving=1 in GraphicsDrivers registry. Disables vendor-specific display power-saving technologies (Intel DPST, AMD VDDG, NVIDIA SmartGPU) that dynamically adjust backlight and GPU power based on displayed content brightness. "
+                        + "Display power-saving technologies alter the luminance and colour rendering of the GPU scanout in real time. This makes accurate colour reproduction impossible for photo editing, video colour grading, and design work. Disabling it restores consistent, unmodified colour output from the GPU — essential for any colour-managed workflow.",
+                    Tags = ["gpu", "display", "color-accuracy", "backlight", "creative"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote =
+                        "Disables adaptive backlight/colour adjustment; accurate colour for design/photo workflows at cost of minor battery life.",
+                    ApplyOps = [RegOp.SetDword(GfxKey, "DisableDisplayPowerSaving", 1)],
+                    RemoveOps = [RegOp.DeleteValue(GfxKey, "DisableDisplayPowerSaving")],
+                    DetectOps = [RegOp.CheckDword(GfxKey, "DisableDisplayPowerSaving", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "dxshdr-disable-directx-diagnostic-reporting",
+                    Label = "DirectX: Disable DirectX Diagnostic Reporting to Microsoft",
+                    Category = "Display",
+                    Description =
+                        "Sets DisableDiagnosticReporting=1 in Display policy. Prevents the DirectX diagnostics subsystem from sending GPU compatibility reports, DirectX error events, and driver crash dumps to Microsoft's telemetry pipeline. "
+                        + "DirectX diagnostic reporting can include driver version information, GPU model details, and crash callstacks, which constitute system fingerprinting data. On secure or air-gapped environments, turning off all outbound diagnostic reporting channels is a standard hardening measure.",
+                    Tags = ["dx", "diagnostics", "telemetry", "privacy", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 2,
+                    SafetyRating = 5,
+                    ImpactNote = "Blocks DirectX diagnostic reports to Microsoft; GPU details not included in telemetry.",
+                    ApplyOps = [RegOp.SetDword(DisplayKey, "DisableDiagnosticReporting", 1)],
+                    RemoveOps = [RegOp.DeleteValue(DisplayKey, "DisableDiagnosticReporting")],
+                    DetectOps = [RegOp.CheckDword(DisplayKey, "DisableDiagnosticReporting", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "dxshdr-disable-display-driver-auto-updates",
+                    Label = "DirectX: Disable Automatic Display Driver Updates via Windows Update",
+                    Category = "Display",
+                    Description =
+                        "Sets ExcludeWUDriversForDisplay=1 in Display policy. Prevents Windows Update from automatically installing newer display driver versions. "
+                        + "Display driver updates during production hours can cause unexpected desktop resolution changes, HDR/SDR rendering behaviour changes, WHQL validation differences, and application crashes in software that depends on specific driver API behaviour. Enterprise GPU workstations should pin driver versions through a controlled update process rather than allowing automatic WU-driven driver installs.",
+                    Tags = ["gpu", "driver", "windows-update", "stability", "enterprise"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "Display drivers excluded from WU auto-update; manually controlled driver versioning for production stability.",
+                    ApplyOps = [RegOp.SetDword(DisplayKey, "ExcludeWUDriversForDisplay", 1)],
+                    RemoveOps = [RegOp.DeleteValue(DisplayKey, "ExcludeWUDriversForDisplay")],
+                    DetectOps = [RegOp.CheckDword(DisplayKey, "ExcludeWUDriversForDisplay", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "dxshdr-enable-gpu-virtual-memory-deduplication",
+                    Label = "DirectX: Enable GPU Virtual Memory Page Deduplication",
+                    Category = "Display",
+                    Description =
+                        "Sets EnableGPUPageDeduplication=1 in GraphicsDrivers registry. Enables page deduplication for GPU-accessible virtual memory, allowing the OS to coalesce identical read-only GPU memory pages (common in texture streaming) into shared physical pages. "
+                        + "GPU texture streaming in games and rendering applications often loads the same texture mips into multiple contexts (shadow maps, reflection captures, environment renders). Page deduplication can reduce VRAM pressure by 5–15% in texture-heavy workloads, helping devices with lower VRAM capacities handle more assets without evicting and reloading from system RAM.",
+                    Tags = ["gpu", "memory", "vram", "deduplication", "performance"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 4,
+                    ImpactNote = "GPU page dedup: 5–15% VRAM savings in texture-heavy workloads; helpful on lower-VRAM GPUs.",
+                    ApplyOps = [RegOp.SetDword(GfxKey, "EnableGPUPageDeduplication", 1)],
+                    RemoveOps = [RegOp.DeleteValue(GfxKey, "EnableGPUPageDeduplication")],
+                    DetectOps = [RegOp.CheckDword(GfxKey, "EnableGPUPageDeduplication", 1)],
+                },
+            ];
     }
 
     // ── DisplayAdapterPolicy ──
     private static class _DisplayAdapterPolicy
     {
-        private const string Key =
-            @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DisplayAdapters";
+        private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DisplayAdapters";
 
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
@@ -5275,7 +5287,6 @@ internal static class PolicyDesktop
                 DetectOps = [RegOp.CheckDword(Key, "LockColorDepth", 1)],
             },
         ];
-
     }
 
     // ── FocusAssistPolicy ──
@@ -5456,7 +5467,6 @@ internal static class PolicyDesktop
                     DetectOps = [RegOp.CheckDword(QhKey, "DefaultProfile", 1)],
                 },
             ];
-
     }
 
     // ── FontInstallationPolicy ──
@@ -5467,169 +5477,178 @@ internal static class PolicyDesktop
         private const string FontKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Fonts";
 
         public static IReadOnlyList<TweakDef> Data =>
-        [
-            new TweakDef
-            {
-                Id           = "fontpol-block-user-font-install",
-                Label        = "Block Standard Users from Installing Fonts",
-                Category = "Display",
-                Description  = "Prevents standard (non-administrator) users from installing fonts per-user via the Settings app or drag-and-drop, ensuring font management is controlled by IT and that untrusted fonts (a known exploitation vector) are not installed.",
-                Tags         = ["fonts", "installation", "standard-user", "security", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 3,
-                SafetyRating = 5,
-                ImpactNote   = "User-mode font installation blocked; only admins can install fonts system-wide.",
-                ApplyOps     = [RegOp.SetDword(Key, "BlockUserFromInstallingFonts", 1)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "BlockUserFromInstallingFonts")],
-                DetectOps    = [RegOp.CheckDword(Key, "BlockUserFromInstallingFonts", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "fontpol-disable-online-font-provider",
-                Label        = "Disable Windows Online Font Provider",
-                Category = "Display",
-                Description  = "Disables the Windows Online Font Provider service that streams fonts from Microsoft's cloud on demand, preventing outbound font download requests and ensuring all fonts used are locally installed and auditable.",
-                Tags         = ["fonts", "online-provider", "cloud", "privacy", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 3,
-                SafetyRating = 5,
-                ImpactNote   = "Online font provider disabled; no fonts streamed from Microsoft cloud. All fonts must be pre-installed.",
-                ApplyOps     = [RegOp.SetDword(FontKey, "EnableFontProviders", 0)],
-                RemoveOps    = [RegOp.DeleteValue(FontKey, "EnableFontProviders")],
-                DetectOps    = [RegOp.CheckDword(FontKey, "EnableFontProviders", 0)],
-            },
-            new TweakDef
-            {
-                Id           = "fontpol-disable-font-streaming-uap",
-                Label        = "Disable Font Streaming for Universal Apps",
-                Category = "Display",
-                Description  = "Prevents Universal Windows Platform (UWP) apps from requesting font streaming from Microsoft's online font provider, ensuring that Store apps cannot silently download fonts as part of rendering pipelines.",
-                Tags         = ["fonts", "uwp", "streaming", "cloud", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 3,
-                SafetyRating = 5,
-                ImpactNote   = "Font streaming from cloud disabled for UWP apps; fonts must be pre-installed for all Store app rendering.",
-                ApplyOps     = [RegOp.SetDword(FontKey, "DisableFontStreamingForUWP", 1)],
-                RemoveOps    = [RegOp.DeleteValue(FontKey, "DisableFontStreamingForUWP")],
-                DetectOps    = [RegOp.CheckDword(FontKey, "DisableFontStreamingForUWP", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "fontpol-block-admin-font-from-web",
-                Label        = "Warn Before Installing Fonts Downloaded from the Web",
-                Category = "Display",
-                Description  = "Configures Windows to display a security warning when an administrator attempts to install a font file downloaded from the internet, reducing the risk of admins silently installing font files with embedded exploit code.",
-                Tags         = ["fonts", "web-download", "security-warning", "admin", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 3,
-                SafetyRating = 5,
-                ImpactNote   = "Security warning shown before installing web-downloaded fonts; reduces risk of admin installing malicious fonts.",
-                ApplyOps     = [RegOp.SetDword(FontKey, "WarnBeforeInstallingWebFonts", 1)],
-                RemoveOps    = [RegOp.DeleteValue(FontKey, "WarnBeforeInstallingWebFonts")],
-                DetectOps    = [RegOp.CheckDword(FontKey, "WarnBeforeInstallingWebFonts", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "fontpol-block-font-preview",
-                Label        = "Block Font Preview in Font Viewer for Untrusted Sources",
-                Category = "Display",
-                Description  = "Prevents standard users from previewing font files from untrusted locations in the Font Viewer, reducing the attack surface for font-parsing vulnerabilities triggered simply by previewing a crafted font file.",
-                Tags         = ["fonts", "font-preview", "untrusted", "security", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 2,
-                SafetyRating = 5,
-                ImpactNote   = "Font file preview restricted for untrusted sources; reduces attack surface for malicious font parsing.",
-                ApplyOps     = [RegOp.SetDword(FontKey, "BlockFontPreviewFromUntrusted", 1)],
-                RemoveOps    = [RegOp.DeleteValue(FontKey, "BlockFontPreviewFromUntrusted")],
-                DetectOps    = [RegOp.CheckDword(FontKey, "BlockFontPreviewFromUntrusted", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "fontpol-disable-font-telemetry",
-                Label        = "Disable Font Provider Telemetry to Microsoft",
-                Category = "Display",
-                Description  = "Prevents the Windows font provider service from sending telemetry about font usage, installed font families, and font-related application activity to Microsoft.",
-                Tags         = ["fonts", "telemetry", "privacy", "microsoft", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 2,
-                SafetyRating = 5,
-                ImpactNote   = "Font provider telemetry to Microsoft disabled; font usage statistics not sent to cloud.",
-                ApplyOps     = [RegOp.SetDword(FontKey, "DisableFontTelemetry", 1)],
-                RemoveOps    = [RegOp.DeleteValue(FontKey, "DisableFontTelemetry")],
-                DetectOps    = [RegOp.CheckDword(FontKey, "DisableFontTelemetry", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "fontpol-set-font-antialiasing-cleartype",
-                Label        = "Enforce ClearType Font Antialiasing for All Users",
-                Category = "Display",
-                Description  = "Enforces ClearType sub-pixel antialiasing for all user sessions via policy, overriding per-user font smoothing settings to ensure consistent, high-quality text rendering on all LCD displays in the organisation.",
-                Tags         = ["fonts", "cleartype", "antialiasing", "rendering", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 2,
-                SafetyRating = 5,
-                ImpactNote   = "ClearType antialiasing enforced for all users; consistent sub-pixel rendering across all LCD monitors.",
-                ApplyOps     = [RegOp.SetDword(FontKey, "ForceClearType", 1)],
-                RemoveOps    = [RegOp.DeleteValue(FontKey, "ForceClearType")],
-                DetectOps    = [RegOp.CheckDword(FontKey, "ForceClearType", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "fontpol-disable-eudcedit",
-                Label        = "Disable Creation of End User Defined Character (EUDC) Fonts",
-                Category = "Display",
-                Description  = "Prevents users from creating custom EUDC (End User Defined Character) fonts using the EUDC Editor, which would install per-user font registry entries that are not centrally managed.",
-                Tags         = ["fonts", "eudc", "custom-characters", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 2,
-                SafetyRating = 5,
-                ImpactNote   = "EUDC font creation disabled; users cannot create custom character fonts via EUDC Editor.",
-                ApplyOps     = [RegOp.SetDword(FontKey, "DisableEUDCEditor", 1)],
-                RemoveOps    = [RegOp.DeleteValue(FontKey, "DisableEUDCEditor")],
-                DetectOps    = [RegOp.CheckDword(FontKey, "DisableEUDCEditor", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "fontpol-restrict-font-subsetting",
-                Label        = "Restrict Font Subsetting to Prevent Embedded Sensitive Data",
-                Category = "Display",
-                Description  = "Configures Windows font embedding policy to allow printout-only font embedding, preventing applications from creating documents with fully embedded fonts that could be used to covertly exfiltrate data via font steganography.",
-                Tags         = ["fonts", "embedding", "subsetting", "data-exfiltration", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 2,
-                SafetyRating = 5,
-                ImpactNote   = "Font subsetting restricted to print-only embedding; full font embedding in documents blocked.",
-                ApplyOps     = [RegOp.SetDword(FontKey, "RestrictFontSubsetting", 1)],
-                RemoveOps    = [RegOp.DeleteValue(FontKey, "RestrictFontSubsetting")],
-                DetectOps    = [RegOp.CheckDword(FontKey, "RestrictFontSubsetting", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "fontpol-audit-font-install-events",
-                Label        = "Audit Font Installation Events in Security Log",
-                Category = "Display",
-                Description  = "Enables Security event log entries for every font installation or removal event on the system, providing change-management visibility into font inventory changes for security and compliance auditing.",
-                Tags         = ["fonts", "audit", "event-log", "change-management", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 2,
-                SafetyRating = 5,
-                ImpactNote   = "Font install/remove events logged in Security log; font inventory changes auditable for compliance.",
-                ApplyOps     = [RegOp.SetDword(FontKey, "AuditFontInstallEvents", 1)],
-                RemoveOps    = [RegOp.DeleteValue(FontKey, "AuditFontInstallEvents")],
-                DetectOps    = [RegOp.CheckDword(FontKey, "AuditFontInstallEvents", 1)],
-            },
-        ];
-
+            [
+                new TweakDef
+                {
+                    Id = "fontpol-block-user-font-install",
+                    Label = "Block Standard Users from Installing Fonts",
+                    Category = "Display",
+                    Description =
+                        "Prevents standard (non-administrator) users from installing fonts per-user via the Settings app or drag-and-drop, ensuring font management is controlled by IT and that untrusted fonts (a known exploitation vector) are not installed.",
+                    Tags = ["fonts", "installation", "standard-user", "security", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "User-mode font installation blocked; only admins can install fonts system-wide.",
+                    ApplyOps = [RegOp.SetDword(Key, "BlockUserFromInstallingFonts", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "BlockUserFromInstallingFonts")],
+                    DetectOps = [RegOp.CheckDword(Key, "BlockUserFromInstallingFonts", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "fontpol-disable-online-font-provider",
+                    Label = "Disable Windows Online Font Provider",
+                    Category = "Display",
+                    Description =
+                        "Disables the Windows Online Font Provider service that streams fonts from Microsoft's cloud on demand, preventing outbound font download requests and ensuring all fonts used are locally installed and auditable.",
+                    Tags = ["fonts", "online-provider", "cloud", "privacy", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "Online font provider disabled; no fonts streamed from Microsoft cloud. All fonts must be pre-installed.",
+                    ApplyOps = [RegOp.SetDword(FontKey, "EnableFontProviders", 0)],
+                    RemoveOps = [RegOp.DeleteValue(FontKey, "EnableFontProviders")],
+                    DetectOps = [RegOp.CheckDword(FontKey, "EnableFontProviders", 0)],
+                },
+                new TweakDef
+                {
+                    Id = "fontpol-disable-font-streaming-uap",
+                    Label = "Disable Font Streaming for Universal Apps",
+                    Category = "Display",
+                    Description =
+                        "Prevents Universal Windows Platform (UWP) apps from requesting font streaming from Microsoft's online font provider, ensuring that Store apps cannot silently download fonts as part of rendering pipelines.",
+                    Tags = ["fonts", "uwp", "streaming", "cloud", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "Font streaming from cloud disabled for UWP apps; fonts must be pre-installed for all Store app rendering.",
+                    ApplyOps = [RegOp.SetDword(FontKey, "DisableFontStreamingForUWP", 1)],
+                    RemoveOps = [RegOp.DeleteValue(FontKey, "DisableFontStreamingForUWP")],
+                    DetectOps = [RegOp.CheckDword(FontKey, "DisableFontStreamingForUWP", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "fontpol-block-admin-font-from-web",
+                    Label = "Warn Before Installing Fonts Downloaded from the Web",
+                    Category = "Display",
+                    Description =
+                        "Configures Windows to display a security warning when an administrator attempts to install a font file downloaded from the internet, reducing the risk of admins silently installing font files with embedded exploit code.",
+                    Tags = ["fonts", "web-download", "security-warning", "admin", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "Security warning shown before installing web-downloaded fonts; reduces risk of admin installing malicious fonts.",
+                    ApplyOps = [RegOp.SetDword(FontKey, "WarnBeforeInstallingWebFonts", 1)],
+                    RemoveOps = [RegOp.DeleteValue(FontKey, "WarnBeforeInstallingWebFonts")],
+                    DetectOps = [RegOp.CheckDword(FontKey, "WarnBeforeInstallingWebFonts", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "fontpol-block-font-preview",
+                    Label = "Block Font Preview in Font Viewer for Untrusted Sources",
+                    Category = "Display",
+                    Description =
+                        "Prevents standard users from previewing font files from untrusted locations in the Font Viewer, reducing the attack surface for font-parsing vulnerabilities triggered simply by previewing a crafted font file.",
+                    Tags = ["fonts", "font-preview", "untrusted", "security", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 2,
+                    SafetyRating = 5,
+                    ImpactNote = "Font file preview restricted for untrusted sources; reduces attack surface for malicious font parsing.",
+                    ApplyOps = [RegOp.SetDword(FontKey, "BlockFontPreviewFromUntrusted", 1)],
+                    RemoveOps = [RegOp.DeleteValue(FontKey, "BlockFontPreviewFromUntrusted")],
+                    DetectOps = [RegOp.CheckDword(FontKey, "BlockFontPreviewFromUntrusted", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "fontpol-disable-font-telemetry",
+                    Label = "Disable Font Provider Telemetry to Microsoft",
+                    Category = "Display",
+                    Description =
+                        "Prevents the Windows font provider service from sending telemetry about font usage, installed font families, and font-related application activity to Microsoft.",
+                    Tags = ["fonts", "telemetry", "privacy", "microsoft", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 2,
+                    SafetyRating = 5,
+                    ImpactNote = "Font provider telemetry to Microsoft disabled; font usage statistics not sent to cloud.",
+                    ApplyOps = [RegOp.SetDword(FontKey, "DisableFontTelemetry", 1)],
+                    RemoveOps = [RegOp.DeleteValue(FontKey, "DisableFontTelemetry")],
+                    DetectOps = [RegOp.CheckDword(FontKey, "DisableFontTelemetry", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "fontpol-set-font-antialiasing-cleartype",
+                    Label = "Enforce ClearType Font Antialiasing for All Users",
+                    Category = "Display",
+                    Description =
+                        "Enforces ClearType sub-pixel antialiasing for all user sessions via policy, overriding per-user font smoothing settings to ensure consistent, high-quality text rendering on all LCD displays in the organisation.",
+                    Tags = ["fonts", "cleartype", "antialiasing", "rendering", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 2,
+                    SafetyRating = 5,
+                    ImpactNote = "ClearType antialiasing enforced for all users; consistent sub-pixel rendering across all LCD monitors.",
+                    ApplyOps = [RegOp.SetDword(FontKey, "ForceClearType", 1)],
+                    RemoveOps = [RegOp.DeleteValue(FontKey, "ForceClearType")],
+                    DetectOps = [RegOp.CheckDword(FontKey, "ForceClearType", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "fontpol-disable-eudcedit",
+                    Label = "Disable Creation of End User Defined Character (EUDC) Fonts",
+                    Category = "Display",
+                    Description =
+                        "Prevents users from creating custom EUDC (End User Defined Character) fonts using the EUDC Editor, which would install per-user font registry entries that are not centrally managed.",
+                    Tags = ["fonts", "eudc", "custom-characters", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 2,
+                    SafetyRating = 5,
+                    ImpactNote = "EUDC font creation disabled; users cannot create custom character fonts via EUDC Editor.",
+                    ApplyOps = [RegOp.SetDword(FontKey, "DisableEUDCEditor", 1)],
+                    RemoveOps = [RegOp.DeleteValue(FontKey, "DisableEUDCEditor")],
+                    DetectOps = [RegOp.CheckDword(FontKey, "DisableEUDCEditor", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "fontpol-restrict-font-subsetting",
+                    Label = "Restrict Font Subsetting to Prevent Embedded Sensitive Data",
+                    Category = "Display",
+                    Description =
+                        "Configures Windows font embedding policy to allow printout-only font embedding, preventing applications from creating documents with fully embedded fonts that could be used to covertly exfiltrate data via font steganography.",
+                    Tags = ["fonts", "embedding", "subsetting", "data-exfiltration", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 2,
+                    SafetyRating = 5,
+                    ImpactNote = "Font subsetting restricted to print-only embedding; full font embedding in documents blocked.",
+                    ApplyOps = [RegOp.SetDword(FontKey, "RestrictFontSubsetting", 1)],
+                    RemoveOps = [RegOp.DeleteValue(FontKey, "RestrictFontSubsetting")],
+                    DetectOps = [RegOp.CheckDword(FontKey, "RestrictFontSubsetting", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "fontpol-audit-font-install-events",
+                    Label = "Audit Font Installation Events in Security Log",
+                    Category = "Display",
+                    Description =
+                        "Enables Security event log entries for every font installation or removal event on the system, providing change-management visibility into font inventory changes for security and compliance auditing.",
+                    Tags = ["fonts", "audit", "event-log", "change-management", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 2,
+                    SafetyRating = 5,
+                    ImpactNote = "Font install/remove events logged in Security log; font inventory changes auditable for compliance.",
+                    ApplyOps = [RegOp.SetDword(FontKey, "AuditFontInstallEvents", 1)],
+                    RemoveOps = [RegOp.DeleteValue(FontKey, "AuditFontInstallEvents")],
+                    DetectOps = [RegOp.CheckDword(FontKey, "AuditFontInstallEvents", 1)],
+                },
+            ];
     }
 
     // ── FontProviderPolicy ──
@@ -5810,7 +5829,6 @@ internal static class PolicyDesktop
                 DetectOps = [RegOp.CheckDword(Key, "DisableThirdPartyFontProvider", 1)],
             },
         ];
-
     }
 
     // ── GdiRendererPolicy ──
@@ -5821,169 +5839,178 @@ internal static class PolicyDesktop
         private const string GdiKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\GDI";
 
         public static IReadOnlyList<TweakDef> Data =>
-        [
-            new TweakDef
-            {
-                Id           = "gdipol-enable-dwm-hardware-acceleration",
-                Label        = "Enforce DWM Hardware Acceleration is Always On",
-                Category = "Display",
-                Description  = "Ensures the Desktop Window Manager (DWM) uses GPU hardware acceleration for compositing, preventing software fallback rendering that consumes excessive CPU and produces visual artefacts on modern hardware.",
-                Tags         = ["dwm", "hardware-acceleration", "gpu", "rendering", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 3,
-                SafetyRating = 5,
-                ImpactNote   = "DWM hardware acceleration enforced; software rendering fallback blocked. GPU required for compositing.",
-                ApplyOps     = [RegOp.SetDword(Key, "DisallowRemoteDesktopCompositing", 0)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "DisallowRemoteDesktopCompositing")],
-                DetectOps    = [RegOp.CheckDword(Key, "DisallowRemoteDesktopCompositing", 0)],
-            },
-            new TweakDef
-            {
-                Id           = "gdipol-disable-rdp-software-rendering",
-                Label        = "Disable Software Rendering for RDP Sessions",
-                Category = "Display",
-                Description  = "Prevents Remote Desktop sessions from falling back to GDI software rendering when a GPU is available, ensuring RemoteFX or hardware-accelerated codec paths are always used for consistent performance.",
-                Tags         = ["gdi", "rdp", "software-rendering", "remotedesktop", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 3,
-                SafetyRating = 5,
-                ImpactNote   = "RDP software rendering fallback disabled; RemoteFX / GPU codec path used for remote sessions.",
-                ApplyOps     = [RegOp.SetDword(RdsKey, "fDisableSoftwareRendering", 1)],
-                RemoveOps    = [RegOp.DeleteValue(RdsKey, "fDisableSoftwareRendering")],
-                DetectOps    = [RegOp.CheckDword(RdsKey, "fDisableSoftwareRendering", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "gdipol-enable-gdi-scaling",
-                Label        = "Enable GDI DPI Scaling for Legacy Applications",
-                Category = "Display",
-                Description  = "Enables system-wide GDI-based DPI scaling for legacy applications that do not declare DPI awareness, preventing blurry rendering of older software on high-DPI monitors without requiring per-app compatibility flags.",
-                Tags         = ["gdi", "dpi-scaling", "high-dpi", "legacy-apps", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 3,
-                SafetyRating = 5,
-                ImpactNote   = "GDI DPI scaling enabled for non-DPI-aware apps; older software rendered crisply on high-DPI screens.",
-                ApplyOps     = [RegOp.SetDword(GdiKey, "EnableGDIScaling", 1)],
-                RemoveOps    = [RegOp.DeleteValue(GdiKey, "EnableGDIScaling")],
-                DetectOps    = [RegOp.CheckDword(GdiKey, "EnableGDIScaling", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "gdipol-disable-directdraw-hw-acceleration",
-                Label        = "Disable DirectDraw Hardware Acceleration",
-                Category = "Display",
-                Description  = "Disables DirectDraw hardware acceleration, forcing all DirectDraw rendering to use the software emulation path. Used in environments where GPU driver instability causes crashes or display corruption.",
-                Tags         = ["directdraw", "hardware-acceleration", "gpu-driver", "stability", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 2,
-                SafetyRating = 5,
-                ImpactNote   = "DirectDraw hardware acceleration disabled; DirectDraw falls back to software. Performance impacted.",
-                ApplyOps     = [RegOp.SetDword(GdiKey, "DisableDirectDrawHWAcceleration", 1)],
-                RemoveOps    = [RegOp.DeleteValue(GdiKey, "DisableDirectDrawHWAcceleration")],
-                DetectOps    = [RegOp.CheckDword(GdiKey, "DisableDirectDrawHWAcceleration", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "gdipol-set-gdi-batch-limit",
-                Label        = "Set GDI Batch Limit to Optimise Rendering Performance",
-                Category = "Display",
-                Description  = "Sets the GDI batching limit to 0 (immediate flush) to ensure all GDI drawing calls are synchronously sent to the display driver, improving rendering correctness on systems with unstable batch coalescing.",
-                Tags         = ["gdi", "batch-limit", "rendering", "performance", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 2,
-                SafetyRating = 5,
-                ImpactNote   = "GDI batch limit set to 0 (immediate flush); drawing calls not batched. Improves rendering correctness.",
-                ApplyOps     = [RegOp.SetDword(GdiKey, "BatchLimit", 0)],
-                RemoveOps    = [RegOp.DeleteValue(GdiKey, "BatchLimit")],
-                DetectOps    = [RegOp.CheckDword(GdiKey, "BatchLimit", 0)],
-            },
-            new TweakDef
-            {
-                Id           = "gdipol-block-gdi-object-table-growth",
-                Label        = "Limit Per-Process GDI Object Count to 10000",
-                Category = "Display",
-                Description  = "Sets the per-process GDI object limit to 10000 (down from the default 65536), preventing GDI handle exhaustion attacks where a single process allocates all available GDI handles and crashes other processes.",
-                Tags         = ["gdi", "handle-limit", "object-table", "dos-prevention", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 3,
-                SafetyRating = 5,
-                ImpactNote   = "GDI object limit per-process capped at 10000; GDI handle exhaustion attacks prevented.",
-                ApplyOps     = [RegOp.SetDword(GdiKey, "MaxGDIObjects", 10000)],
-                RemoveOps    = [RegOp.DeleteValue(GdiKey, "MaxGDIObjects")],
-                DetectOps    = [RegOp.CheckDword(GdiKey, "MaxGDIObjects", 10000)],
-            },
-            new TweakDef
-            {
-                Id           = "gdipol-disable-printer-gdi-metafile",
-                Label        = "Disable GDI Printer Metafile Spool Format",
-                Category = "Display",
-                Description  = "Disables the legacy EMF (Enhanced Metafile) spool format for GDI-based printing and forces direct printing via the XPS document pipeline, reducing exposure to EMF file parsing vulnerabilities in the spooler.",
-                Tags         = ["gdi", "metafile", "printing", "spooler", "security", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 3,
-                SafetyRating = 4,
-                ImpactNote   = "GDI EMF printer spool format disabled; printing uses XPS pipeline. Legacy GDI-only printers may not work.",
-                ApplyOps     = [RegOp.SetDword(GdiKey, "DisableGDIPrinterMetafile", 1)],
-                RemoveOps    = [RegOp.DeleteValue(GdiKey, "DisableGDIPrinterMetafile")],
-                DetectOps    = [RegOp.CheckDword(GdiKey, "DisableGDIPrinterMetafile", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "gdipol-enable-gdi-audit",
-                Label        = "Enable GDI Object Creation Audit Logging",
-                Category = "Display",
-                Description  = "Enables lightweight audit logging for GDI object creation and destruction at the policy level, providing visibility into unusual GDI handle consumption patterns that may indicate malicious UI automation or exploitation attempts.",
-                Tags         = ["gdi", "audit", "object-creation", "event-log", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 2,
-                SafetyRating = 5,
-                ImpactNote   = "GDI object creation auditing enabled; unusual handle patterns visible for security monitoring.",
-                ApplyOps     = [RegOp.SetDword(GdiKey, "EnableGDIObjectAudit", 1)],
-                RemoveOps    = [RegOp.DeleteValue(GdiKey, "EnableGDIObjectAudit")],
-                DetectOps    = [RegOp.CheckDword(GdiKey, "EnableGDIObjectAudit", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "gdipol-disable-gdi-screen-capture",
-                Label        = "Block GDI-Based Screen Capture by Standard Applications",
-                Category = "Display",
-                Description  = "Restricts the ability of standard (non-elevated) applications to capture the entire screen via BitBlt from the desktop DC, limiting screen capture to applications with explicit capture permissions.",
-                Tags         = ["gdi", "screen-capture", "bitblt", "privacy", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 4,
-                SafetyRating = 5,
-                ImpactNote   = "GDI full-screen BitBlt blocked for standard apps; screen capture requires explicit permission.",
-                ApplyOps     = [RegOp.SetDword(GdiKey, "DisableScreenCaptureViaGDI", 1)],
-                RemoveOps    = [RegOp.DeleteValue(GdiKey, "DisableScreenCaptureViaGDI")],
-                DetectOps    = [RegOp.CheckDword(GdiKey, "DisableScreenCaptureViaGDI", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "gdipol-disable-gdi-telemetry",
-                Label        = "Disable GDI Renderer Telemetry Reporting to Microsoft",
-                Category = "Display",
-                Description  = "Prevents the GDI rendering subsystem from sending object usage, rendering performance, and driver compatibility telemetry to Microsoft.",
-                Tags         = ["gdi", "telemetry", "privacy", "microsoft", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 2,
-                SafetyRating = 5,
-                ImpactNote   = "GDI renderer telemetry to Microsoft disabled; rendering stats and driver compat data not sent to cloud.",
-                ApplyOps     = [RegOp.SetDword(GdiKey, "DisableGDITelemetry", 1)],
-                RemoveOps    = [RegOp.DeleteValue(GdiKey, "DisableGDITelemetry")],
-                DetectOps    = [RegOp.CheckDword(GdiKey, "DisableGDITelemetry", 1)],
-            },
-        ];
-
+            [
+                new TweakDef
+                {
+                    Id = "gdipol-enable-dwm-hardware-acceleration",
+                    Label = "Enforce DWM Hardware Acceleration is Always On",
+                    Category = "Display",
+                    Description =
+                        "Ensures the Desktop Window Manager (DWM) uses GPU hardware acceleration for compositing, preventing software fallback rendering that consumes excessive CPU and produces visual artefacts on modern hardware.",
+                    Tags = ["dwm", "hardware-acceleration", "gpu", "rendering", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "DWM hardware acceleration enforced; software rendering fallback blocked. GPU required for compositing.",
+                    ApplyOps = [RegOp.SetDword(Key, "DisallowRemoteDesktopCompositing", 0)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "DisallowRemoteDesktopCompositing")],
+                    DetectOps = [RegOp.CheckDword(Key, "DisallowRemoteDesktopCompositing", 0)],
+                },
+                new TweakDef
+                {
+                    Id = "gdipol-disable-rdp-software-rendering",
+                    Label = "Disable Software Rendering for RDP Sessions",
+                    Category = "Display",
+                    Description =
+                        "Prevents Remote Desktop sessions from falling back to GDI software rendering when a GPU is available, ensuring RemoteFX or hardware-accelerated codec paths are always used for consistent performance.",
+                    Tags = ["gdi", "rdp", "software-rendering", "remotedesktop", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "RDP software rendering fallback disabled; RemoteFX / GPU codec path used for remote sessions.",
+                    ApplyOps = [RegOp.SetDword(RdsKey, "fDisableSoftwareRendering", 1)],
+                    RemoveOps = [RegOp.DeleteValue(RdsKey, "fDisableSoftwareRendering")],
+                    DetectOps = [RegOp.CheckDword(RdsKey, "fDisableSoftwareRendering", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "gdipol-enable-gdi-scaling",
+                    Label = "Enable GDI DPI Scaling for Legacy Applications",
+                    Category = "Display",
+                    Description =
+                        "Enables system-wide GDI-based DPI scaling for legacy applications that do not declare DPI awareness, preventing blurry rendering of older software on high-DPI monitors without requiring per-app compatibility flags.",
+                    Tags = ["gdi", "dpi-scaling", "high-dpi", "legacy-apps", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "GDI DPI scaling enabled for non-DPI-aware apps; older software rendered crisply on high-DPI screens.",
+                    ApplyOps = [RegOp.SetDword(GdiKey, "EnableGDIScaling", 1)],
+                    RemoveOps = [RegOp.DeleteValue(GdiKey, "EnableGDIScaling")],
+                    DetectOps = [RegOp.CheckDword(GdiKey, "EnableGDIScaling", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "gdipol-disable-directdraw-hw-acceleration",
+                    Label = "Disable DirectDraw Hardware Acceleration",
+                    Category = "Display",
+                    Description =
+                        "Disables DirectDraw hardware acceleration, forcing all DirectDraw rendering to use the software emulation path. Used in environments where GPU driver instability causes crashes or display corruption.",
+                    Tags = ["directdraw", "hardware-acceleration", "gpu-driver", "stability", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 2,
+                    SafetyRating = 5,
+                    ImpactNote = "DirectDraw hardware acceleration disabled; DirectDraw falls back to software. Performance impacted.",
+                    ApplyOps = [RegOp.SetDword(GdiKey, "DisableDirectDrawHWAcceleration", 1)],
+                    RemoveOps = [RegOp.DeleteValue(GdiKey, "DisableDirectDrawHWAcceleration")],
+                    DetectOps = [RegOp.CheckDword(GdiKey, "DisableDirectDrawHWAcceleration", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "gdipol-set-gdi-batch-limit",
+                    Label = "Set GDI Batch Limit to Optimise Rendering Performance",
+                    Category = "Display",
+                    Description =
+                        "Sets the GDI batching limit to 0 (immediate flush) to ensure all GDI drawing calls are synchronously sent to the display driver, improving rendering correctness on systems with unstable batch coalescing.",
+                    Tags = ["gdi", "batch-limit", "rendering", "performance", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 2,
+                    SafetyRating = 5,
+                    ImpactNote = "GDI batch limit set to 0 (immediate flush); drawing calls not batched. Improves rendering correctness.",
+                    ApplyOps = [RegOp.SetDword(GdiKey, "BatchLimit", 0)],
+                    RemoveOps = [RegOp.DeleteValue(GdiKey, "BatchLimit")],
+                    DetectOps = [RegOp.CheckDword(GdiKey, "BatchLimit", 0)],
+                },
+                new TweakDef
+                {
+                    Id = "gdipol-block-gdi-object-table-growth",
+                    Label = "Limit Per-Process GDI Object Count to 10000",
+                    Category = "Display",
+                    Description =
+                        "Sets the per-process GDI object limit to 10000 (down from the default 65536), preventing GDI handle exhaustion attacks where a single process allocates all available GDI handles and crashes other processes.",
+                    Tags = ["gdi", "handle-limit", "object-table", "dos-prevention", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "GDI object limit per-process capped at 10000; GDI handle exhaustion attacks prevented.",
+                    ApplyOps = [RegOp.SetDword(GdiKey, "MaxGDIObjects", 10000)],
+                    RemoveOps = [RegOp.DeleteValue(GdiKey, "MaxGDIObjects")],
+                    DetectOps = [RegOp.CheckDword(GdiKey, "MaxGDIObjects", 10000)],
+                },
+                new TweakDef
+                {
+                    Id = "gdipol-disable-printer-gdi-metafile",
+                    Label = "Disable GDI Printer Metafile Spool Format",
+                    Category = "Display",
+                    Description =
+                        "Disables the legacy EMF (Enhanced Metafile) spool format for GDI-based printing and forces direct printing via the XPS document pipeline, reducing exposure to EMF file parsing vulnerabilities in the spooler.",
+                    Tags = ["gdi", "metafile", "printing", "spooler", "security", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 4,
+                    ImpactNote = "GDI EMF printer spool format disabled; printing uses XPS pipeline. Legacy GDI-only printers may not work.",
+                    ApplyOps = [RegOp.SetDword(GdiKey, "DisableGDIPrinterMetafile", 1)],
+                    RemoveOps = [RegOp.DeleteValue(GdiKey, "DisableGDIPrinterMetafile")],
+                    DetectOps = [RegOp.CheckDword(GdiKey, "DisableGDIPrinterMetafile", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "gdipol-enable-gdi-audit",
+                    Label = "Enable GDI Object Creation Audit Logging",
+                    Category = "Display",
+                    Description =
+                        "Enables lightweight audit logging for GDI object creation and destruction at the policy level, providing visibility into unusual GDI handle consumption patterns that may indicate malicious UI automation or exploitation attempts.",
+                    Tags = ["gdi", "audit", "object-creation", "event-log", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 2,
+                    SafetyRating = 5,
+                    ImpactNote = "GDI object creation auditing enabled; unusual handle patterns visible for security monitoring.",
+                    ApplyOps = [RegOp.SetDword(GdiKey, "EnableGDIObjectAudit", 1)],
+                    RemoveOps = [RegOp.DeleteValue(GdiKey, "EnableGDIObjectAudit")],
+                    DetectOps = [RegOp.CheckDword(GdiKey, "EnableGDIObjectAudit", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "gdipol-disable-gdi-screen-capture",
+                    Label = "Block GDI-Based Screen Capture by Standard Applications",
+                    Category = "Display",
+                    Description =
+                        "Restricts the ability of standard (non-elevated) applications to capture the entire screen via BitBlt from the desktop DC, limiting screen capture to applications with explicit capture permissions.",
+                    Tags = ["gdi", "screen-capture", "bitblt", "privacy", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "GDI full-screen BitBlt blocked for standard apps; screen capture requires explicit permission.",
+                    ApplyOps = [RegOp.SetDword(GdiKey, "DisableScreenCaptureViaGDI", 1)],
+                    RemoveOps = [RegOp.DeleteValue(GdiKey, "DisableScreenCaptureViaGDI")],
+                    DetectOps = [RegOp.CheckDword(GdiKey, "DisableScreenCaptureViaGDI", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "gdipol-disable-gdi-telemetry",
+                    Label = "Disable GDI Renderer Telemetry Reporting to Microsoft",
+                    Category = "Display",
+                    Description =
+                        "Prevents the GDI rendering subsystem from sending object usage, rendering performance, and driver compatibility telemetry to Microsoft.",
+                    Tags = ["gdi", "telemetry", "privacy", "microsoft", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 2,
+                    SafetyRating = 5,
+                    ImpactNote = "GDI renderer telemetry to Microsoft disabled; rendering stats and driver compat data not sent to cloud.",
+                    ApplyOps = [RegOp.SetDword(GdiKey, "DisableGDITelemetry", 1)],
+                    RemoveOps = [RegOp.DeleteValue(GdiKey, "DisableGDITelemetry")],
+                    DetectOps = [RegOp.CheckDword(GdiKey, "DisableGDITelemetry", 1)],
+                },
+            ];
     }
 
     // ── GpuComputePolicy ──
@@ -5994,169 +6021,178 @@ internal static class PolicyDesktop
         private const string DmlKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DirectML";
 
         public static IReadOnlyList<TweakDef> Data =>
-        [
-            new TweakDef
-            {
-                Id           = "gpucmp-disable-winml-gpu",
-                Label        = "Disable Windows ML GPU Inference",
-                Category = "Display",
-                Description  = "Prevents Windows Machine Learning (WinML) from executing inference operations on the GPU, forcing model evaluation to the CPU, which can reduce power consumption and GPU memory pressure on non-AI workstation deployments.",
-                Tags         = ["windows-ml", "gpu-inference", "ai", "compute", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 3,
-                SafetyRating = 5,
-                ImpactNote   = "WinML GPU inference disabled; all ML model inference runs on CPU. AI apps may be significantly slower.",
-                ApplyOps     = [RegOp.SetDword(MlKey, "DisableGPUInference", 1)],
-                RemoveOps    = [RegOp.DeleteValue(MlKey, "DisableGPUInference")],
-                DetectOps    = [RegOp.CheckDword(MlKey, "DisableGPUInference", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "gpucmp-limit-winml-vram",
-                Label        = "Limit Windows ML VRAM Usage to 2 GB",
-                Category = "Display",
-                Description  = "Caps the amount of GPU VRAM that Windows ML inference sessions can allocate to 2048 MB, preventing WinML workloads from consuming all available GPU memory and degrading rendering performance of foreground applications.",
-                Tags         = ["windows-ml", "vram", "memory-limit", "gpu", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 3,
-                SafetyRating = 5,
-                ImpactNote   = "WinML VRAM capped at 2 GB; large ML models that exceed limit fall back to system RAM or fail.",
-                ApplyOps     = [RegOp.SetDword(MlKey, "MaxVRAMMB", 2048)],
-                RemoveOps    = [RegOp.DeleteValue(MlKey, "MaxVRAMMB")],
-                DetectOps    = [RegOp.CheckDword(MlKey, "MaxVRAMMB", 2048)],
-            },
-            new TweakDef
-            {
-                Id           = "gpucmp-disable-directml-third-party",
-                Label        = "Block Third-Party DirectML Operator Packages",
-                Category = "Display",
-                Description  = "Prevents third-party applications from loading external DirectML operator packages outside of the Windows SDK, reducing the attack surface from unsigned or malicious ML operator DLLs loaded into application GPU compute contexts.",
-                Tags         = ["directml", "operator-packages", "third-party", "security", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 4,
-                SafetyRating = 5,
-                ImpactNote   = "Third-party DirectML operator packages blocked; only SDK-bundled operators loaded in GPU compute pipelines.",
-                ApplyOps     = [RegOp.SetDword(DmlKey, "BlockThirdPartyOperators", 1)],
-                RemoveOps    = [RegOp.DeleteValue(DmlKey, "BlockThirdPartyOperators")],
-                DetectOps    = [RegOp.CheckDword(DmlKey, "BlockThirdPartyOperators", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "gpucmp-disable-winml-telemetry",
-                Label        = "Disable Windows ML Telemetry Reporting to Microsoft",
-                Category = "Display",
-                Description  = "Prevents Windows ML from sending model inference statistics, GPU capability, and API usage telemetry to Microsoft, protecting information about AI workload characteristics from cloud disclosure.",
-                Tags         = ["windows-ml", "telemetry", "privacy", "microsoft", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 3,
-                SafetyRating = 5,
-                ImpactNote   = "WinML telemetry to Microsoft disabled; inference stats and GPU model data not sent to cloud.",
-                ApplyOps     = [RegOp.SetDword(MlKey, "DisableWinMLTelemetry", 1)],
-                RemoveOps    = [RegOp.DeleteValue(MlKey, "DisableWinMLTelemetry")],
-                DetectOps    = [RegOp.CheckDword(MlKey, "DisableWinMLTelemetry", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "gpucmp-set-gpu-compute-app-priority",
-                Label        = "Set Foreground App GPU Compute Priority to High",
-                Category = "Display",
-                Description  = "Configures the GPU compute scheduler to give foreground applications higher compute queue priority than background GPU processes, ensuring interactive AI and graphics applications are not starved by background ML training jobs.",
-                Tags         = ["gpu", "compute-priority", "scheduler", "foreground", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 3,
-                SafetyRating = 5,
-                ImpactNote   = "Foreground app GPU compute priority elevated; background GPU jobs deprioritised for better interactivity.",
-                ApplyOps     = [RegOp.SetDword(Key, "ForegroundComputePriority", 2)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "ForegroundComputePriority")],
-                DetectOps    = [RegOp.CheckDword(Key, "ForegroundComputePriority", 2)],
-            },
-            new TweakDef
-            {
-                Id           = "gpucmp-disable-cuda-in-wsl",
-                Label        = "Disable CUDA GPU Passthrough into WSL2",
-                Category = "Display",
-                Description  = "Disables CUDA and DirectX GPU passthrough into WSL2 virtual machines, preventing WSL2 Linux processes from accessing GPU compute resources and potential GPU-level privilege escalation from Linux guest to Windows host.",
-                Tags         = ["gpu", "wsl2", "cuda", "gpu-passthrough", "security", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 3,
-                SafetyRating = 5,
-                ImpactNote   = "GPU passthrough to WSL2 disabled; CUDA and DirectX not accessible from Linux WSL2 processes.",
-                ApplyOps     = [RegOp.SetDword(Key, "DisableWSLGPUPassthrough", 1)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "DisableWSLGPUPassthrough")],
-                DetectOps    = [RegOp.CheckDword(Key, "DisableWSLGPUPassthrough", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "gpucmp-restrict-gpu-access-untrusted",
-                Label        = "Restrict GPU Compute Access for Untrusted Applications",
-                Category = "Display",
-                Description  = "Enables GPU access filtering for untrusted (non-publisher-verified, non-Store) applications, preventing low-reputation software from accessing GPU compute queues that could be used for crypto-mining without user consent.",
-                Tags         = ["gpu", "compute-access", "untrusted-apps", "cryptomining", "security", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 4,
-                SafetyRating = 5,
-                ImpactNote   = "GPU compute access restricted for untrusted apps; crypto-mining by unsigned background apps blocked.",
-                ApplyOps     = [RegOp.SetDword(Key, "RestrictComputeForUntrustedApps", 1)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "RestrictComputeForUntrustedApps")],
-                DetectOps    = [RegOp.CheckDword(Key, "RestrictComputeForUntrustedApps", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "gpucmp-enable-compute-audit",
-                Label        = "Enable GPU Compute Session Audit Logging",
-                Category = "Display",
-                Description  = "Enables audit logging of GPU compute session creation and destruction events, recording which processes open compute contexts on the GPU for security monitoring of GPU resource usage patterns.",
-                Tags         = ["gpu", "compute", "audit", "event-log", "session", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 2,
-                SafetyRating = 5,
-                ImpactNote   = "GPU compute session creation logged; process names and context types recorded for security monitoring.",
-                ApplyOps     = [RegOp.SetDword(Key, "EnableComputeSessionAudit", 1)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "EnableComputeSessionAudit")],
-                DetectOps    = [RegOp.CheckDword(Key, "EnableComputeSessionAudit", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "gpucmp-disable-npn-compute",
-                Label        = "Disable NPU Compute Offload for IntelAI / Microsoft NPU",
-                Category = "Display",
-                Description  = "Prevents applications from using the NPU (Neural Processing Unit) for compute offload on Copilot+ and Intel AI Boost hardware, ensuring AI workloads run on the GPU or CPU where execution can be monitored and controlled.",
-                Tags         = ["npu", "compute-offload", "ai", "copilot-plus", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 3,
-                SafetyRating = 5,
-                ImpactNote   = "NPU compute offload disabled; AI workloads route to GPU/CPU instead of NPU on Copilot+ hardware.",
-                ApplyOps     = [RegOp.SetDword(Key, "DisableNPUComputeOffload", 1)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "DisableNPUComputeOffload")],
-                DetectOps    = [RegOp.CheckDword(Key, "DisableNPUComputeOffload", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "gpucmp-set-vram-reservation",
-                Label        = "Reserve GPU VRAM Headroom for System Compositor",
-                Category = "Display",
-                Description  = "Reserves a guaranteed amount of GPU VRAM for the DWM compositor and system UI rendering, preventing GPU compute and ML workloads from exhausting VRAM and causing desktop compositing failures.",
-                Tags         = ["gpu", "vram", "reservation", "compositor", "stability", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 3,
-                SafetyRating = 5,
-                ImpactNote   = "VRAM explicitly reserved for system compositor; compute workloads cannot starve DWM of display memory.",
-                ApplyOps     = [RegOp.SetDword(Key, "CompositorVRAMReserveMB", 256)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "CompositorVRAMReserveMB")],
-                DetectOps    = [RegOp.CheckDword(Key, "CompositorVRAMReserveMB", 256)],
-            },
-        ];
-
+            [
+                new TweakDef
+                {
+                    Id = "gpucmp-disable-winml-gpu",
+                    Label = "Disable Windows ML GPU Inference",
+                    Category = "Display",
+                    Description =
+                        "Prevents Windows Machine Learning (WinML) from executing inference operations on the GPU, forcing model evaluation to the CPU, which can reduce power consumption and GPU memory pressure on non-AI workstation deployments.",
+                    Tags = ["windows-ml", "gpu-inference", "ai", "compute", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "WinML GPU inference disabled; all ML model inference runs on CPU. AI apps may be significantly slower.",
+                    ApplyOps = [RegOp.SetDword(MlKey, "DisableGPUInference", 1)],
+                    RemoveOps = [RegOp.DeleteValue(MlKey, "DisableGPUInference")],
+                    DetectOps = [RegOp.CheckDword(MlKey, "DisableGPUInference", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "gpucmp-limit-winml-vram",
+                    Label = "Limit Windows ML VRAM Usage to 2 GB",
+                    Category = "Display",
+                    Description =
+                        "Caps the amount of GPU VRAM that Windows ML inference sessions can allocate to 2048 MB, preventing WinML workloads from consuming all available GPU memory and degrading rendering performance of foreground applications.",
+                    Tags = ["windows-ml", "vram", "memory-limit", "gpu", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "WinML VRAM capped at 2 GB; large ML models that exceed limit fall back to system RAM or fail.",
+                    ApplyOps = [RegOp.SetDword(MlKey, "MaxVRAMMB", 2048)],
+                    RemoveOps = [RegOp.DeleteValue(MlKey, "MaxVRAMMB")],
+                    DetectOps = [RegOp.CheckDword(MlKey, "MaxVRAMMB", 2048)],
+                },
+                new TweakDef
+                {
+                    Id = "gpucmp-disable-directml-third-party",
+                    Label = "Block Third-Party DirectML Operator Packages",
+                    Category = "Display",
+                    Description =
+                        "Prevents third-party applications from loading external DirectML operator packages outside of the Windows SDK, reducing the attack surface from unsigned or malicious ML operator DLLs loaded into application GPU compute contexts.",
+                    Tags = ["directml", "operator-packages", "third-party", "security", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "Third-party DirectML operator packages blocked; only SDK-bundled operators loaded in GPU compute pipelines.",
+                    ApplyOps = [RegOp.SetDword(DmlKey, "BlockThirdPartyOperators", 1)],
+                    RemoveOps = [RegOp.DeleteValue(DmlKey, "BlockThirdPartyOperators")],
+                    DetectOps = [RegOp.CheckDword(DmlKey, "BlockThirdPartyOperators", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "gpucmp-disable-winml-telemetry",
+                    Label = "Disable Windows ML Telemetry Reporting to Microsoft",
+                    Category = "Display",
+                    Description =
+                        "Prevents Windows ML from sending model inference statistics, GPU capability, and API usage telemetry to Microsoft, protecting information about AI workload characteristics from cloud disclosure.",
+                    Tags = ["windows-ml", "telemetry", "privacy", "microsoft", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "WinML telemetry to Microsoft disabled; inference stats and GPU model data not sent to cloud.",
+                    ApplyOps = [RegOp.SetDword(MlKey, "DisableWinMLTelemetry", 1)],
+                    RemoveOps = [RegOp.DeleteValue(MlKey, "DisableWinMLTelemetry")],
+                    DetectOps = [RegOp.CheckDword(MlKey, "DisableWinMLTelemetry", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "gpucmp-set-gpu-compute-app-priority",
+                    Label = "Set Foreground App GPU Compute Priority to High",
+                    Category = "Display",
+                    Description =
+                        "Configures the GPU compute scheduler to give foreground applications higher compute queue priority than background GPU processes, ensuring interactive AI and graphics applications are not starved by background ML training jobs.",
+                    Tags = ["gpu", "compute-priority", "scheduler", "foreground", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "Foreground app GPU compute priority elevated; background GPU jobs deprioritised for better interactivity.",
+                    ApplyOps = [RegOp.SetDword(Key, "ForegroundComputePriority", 2)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "ForegroundComputePriority")],
+                    DetectOps = [RegOp.CheckDword(Key, "ForegroundComputePriority", 2)],
+                },
+                new TweakDef
+                {
+                    Id = "gpucmp-disable-cuda-in-wsl",
+                    Label = "Disable CUDA GPU Passthrough into WSL2",
+                    Category = "Display",
+                    Description =
+                        "Disables CUDA and DirectX GPU passthrough into WSL2 virtual machines, preventing WSL2 Linux processes from accessing GPU compute resources and potential GPU-level privilege escalation from Linux guest to Windows host.",
+                    Tags = ["gpu", "wsl2", "cuda", "gpu-passthrough", "security", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "GPU passthrough to WSL2 disabled; CUDA and DirectX not accessible from Linux WSL2 processes.",
+                    ApplyOps = [RegOp.SetDword(Key, "DisableWSLGPUPassthrough", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "DisableWSLGPUPassthrough")],
+                    DetectOps = [RegOp.CheckDword(Key, "DisableWSLGPUPassthrough", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "gpucmp-restrict-gpu-access-untrusted",
+                    Label = "Restrict GPU Compute Access for Untrusted Applications",
+                    Category = "Display",
+                    Description =
+                        "Enables GPU access filtering for untrusted (non-publisher-verified, non-Store) applications, preventing low-reputation software from accessing GPU compute queues that could be used for crypto-mining without user consent.",
+                    Tags = ["gpu", "compute-access", "untrusted-apps", "cryptomining", "security", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "GPU compute access restricted for untrusted apps; crypto-mining by unsigned background apps blocked.",
+                    ApplyOps = [RegOp.SetDword(Key, "RestrictComputeForUntrustedApps", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "RestrictComputeForUntrustedApps")],
+                    DetectOps = [RegOp.CheckDword(Key, "RestrictComputeForUntrustedApps", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "gpucmp-enable-compute-audit",
+                    Label = "Enable GPU Compute Session Audit Logging",
+                    Category = "Display",
+                    Description =
+                        "Enables audit logging of GPU compute session creation and destruction events, recording which processes open compute contexts on the GPU for security monitoring of GPU resource usage patterns.",
+                    Tags = ["gpu", "compute", "audit", "event-log", "session", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 2,
+                    SafetyRating = 5,
+                    ImpactNote = "GPU compute session creation logged; process names and context types recorded for security monitoring.",
+                    ApplyOps = [RegOp.SetDword(Key, "EnableComputeSessionAudit", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "EnableComputeSessionAudit")],
+                    DetectOps = [RegOp.CheckDword(Key, "EnableComputeSessionAudit", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "gpucmp-disable-npn-compute",
+                    Label = "Disable NPU Compute Offload for IntelAI / Microsoft NPU",
+                    Category = "Display",
+                    Description =
+                        "Prevents applications from using the NPU (Neural Processing Unit) for compute offload on Copilot+ and Intel AI Boost hardware, ensuring AI workloads run on the GPU or CPU where execution can be monitored and controlled.",
+                    Tags = ["npu", "compute-offload", "ai", "copilot-plus", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "NPU compute offload disabled; AI workloads route to GPU/CPU instead of NPU on Copilot+ hardware.",
+                    ApplyOps = [RegOp.SetDword(Key, "DisableNPUComputeOffload", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "DisableNPUComputeOffload")],
+                    DetectOps = [RegOp.CheckDword(Key, "DisableNPUComputeOffload", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "gpucmp-set-vram-reservation",
+                    Label = "Reserve GPU VRAM Headroom for System Compositor",
+                    Category = "Display",
+                    Description =
+                        "Reserves a guaranteed amount of GPU VRAM for the DWM compositor and system UI rendering, preventing GPU compute and ML workloads from exhausting VRAM and causing desktop compositing failures.",
+                    Tags = ["gpu", "vram", "reservation", "compositor", "stability", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "VRAM explicitly reserved for system compositor; compute workloads cannot starve DWM of display memory.",
+                    ApplyOps = [RegOp.SetDword(Key, "CompositorVRAMReserveMB", 256)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "CompositorVRAMReserveMB")],
+                    DetectOps = [RegOp.CheckDword(Key, "CompositorVRAMReserveMB", 256)],
+                },
+            ];
     }
 
     // ── GraphicsDriversPolicy ──
@@ -6171,7 +6207,10 @@ internal static class PolicyDesktop
                 Id = "gfxdrv-disable-dxgi-flip-model",
                 Label = "Disable DXGI Flip Model Override",
                 Category = "Display",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 3, SafetyRating = 4,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 3,
+                SafetyRating = 4,
                 Description =
                     "Sets DisableFlipModel=1 in the GraphicsDrivers policy key. Reverts DXGI "
                     + "presentation from the optimised Flip Model (DXGI_SWAP_EFFECT_FLIP_*) "
@@ -6190,7 +6229,10 @@ internal static class PolicyDesktop
                 Id = "gfxdrv-disable-mpo",
                 Label = "Disable Multi-Plane Overlay",
                 Category = "Display",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 3, SafetyRating = 4,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 3,
+                SafetyRating = 4,
                 Description =
                     "Sets DisableMultiplaneOverlay=1 in the GraphicsDrivers policy key. "
                     + "Prevents the display engine from compositing independent window "
@@ -6209,7 +6251,10 @@ internal static class PolicyDesktop
                 Id = "gfxdrv-disable-variable-refresh",
                 Label = "Disable Variable Refresh Rate (VRR/FreeSync/G-Sync) Policy",
                 Category = "Display",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 3, SafetyRating = 5,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 3,
+                SafetyRating = 5,
                 Description =
                     "Sets DisableVariableRefreshRate=1 in the GraphicsDrivers policy key. "
                     + "Prevents VRR (FreeSync / G-Sync / Adaptive Sync) from being enabled "
@@ -6228,7 +6273,10 @@ internal static class PolicyDesktop
                 Id = "gfxdrv-disable-gpu-scheduler",
                 Label = "Disable Hardware GPU Scheduler",
                 Category = "Display",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 4, SafetyRating = 4,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 4,
+                SafetyRating = 4,
                 Description =
                     "Sets HwSchMode=1 in the GraphicsDrivers policy key (1=disabled, 2=enabled). "
                     + "Reverts GPU command scheduling from the Windows Hardware GPU Scheduler "
@@ -6247,7 +6295,10 @@ internal static class PolicyDesktop
                 Id = "gfxdrv-disable-auto-hdr",
                 Label = "Disable Auto HDR Policy Enforcement",
                 Category = "Display",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 2, SafetyRating = 5,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 2,
+                SafetyRating = 5,
                 Description =
                     "Sets DisableAutoHdr=1 in the GraphicsDrivers policy key. Prevents "
                     + "Auto HDR from being applied to SDR games and applications at the "
@@ -6266,7 +6317,10 @@ internal static class PolicyDesktop
                 Id = "gfxdrv-disable-dx12-resource-binding",
                 Label = "Disable Experimental DX12 Resource Binding",
                 Category = "Display",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 2, SafetyRating = 4,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 2,
+                SafetyRating = 4,
                 Description =
                     "Sets DisableExperimentalResourceBinding=1 in the GraphicsDrivers policy "
                     + "key. Opts out of experimental DX12 resource binding tier extensions "
@@ -6285,7 +6339,10 @@ internal static class PolicyDesktop
                 Id = "gfxdrv-disable-telemetry",
                 Label = "Disable Graphics Driver Telemetry",
                 Category = "Display",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 3, SafetyRating = 5,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 3,
+                SafetyRating = 5,
                 Description =
                     "Sets DisableTelemetry=1 in the GraphicsDrivers policy key. Prevents "
                     + "the WDDM kernel-mode driver framework from emitting graphics "
@@ -6304,7 +6361,10 @@ internal static class PolicyDesktop
                 Id = "gfxdrv-disable-preemption",
                 Label = "Disable Fine-Grained GPU Preemption",
                 Category = "Display",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 3, SafetyRating = 4,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 3,
+                SafetyRating = 4,
                 Description =
                     "Sets DisableFineGrainedPreemption=1 in the GraphicsDrivers policy key. "
                     + "Reverts GPU command-list preemption from the fine-grained "
@@ -6324,7 +6384,10 @@ internal static class PolicyDesktop
                 Id = "gfxdrv-disable-d3d12-warp-updates",
                 Label = "Disable D3D12 WARP Software Renderer Updates",
                 Category = "Display",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 2, SafetyRating = 5,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 2,
+                SafetyRating = 5,
                 Description =
                     "Sets DisableWarpUpdates=1 in the GraphicsDrivers policy key. Blocks "
                     + "background delivery of updated WARP (Windows Advanced Rasterization "
@@ -6343,7 +6406,10 @@ internal static class PolicyDesktop
                 Id = "gfxdrv-disable-display-required",
                 Label = "Disable Display Required Power Request Override",
                 Category = "Display",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 2, SafetyRating = 5,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 2,
+                SafetyRating = 5,
                 Description =
                     "Sets DisableDisplayRequired=1 in the GraphicsDrivers policy key. "
                     + "Prevents the graphics subsystem from issuing a SYSTEM_REQUIRED or "
@@ -6358,7 +6424,6 @@ internal static class PolicyDesktop
                 DetectOps = [RegOp.CheckDword(Key, "DisableDisplayRequired", 1)],
             },
         ];
-
     }
 
     // ── InputMethodPolicy ──
@@ -6570,7 +6635,6 @@ internal static class PolicyDesktop
                 DetectOps = [RegOp.CheckDword(ImePol, "NoPointerSettings", 1)],
             },
         ];
-
     }
 
     // ── InputPersonalizationPolicy ──
@@ -6751,7 +6815,6 @@ internal static class PolicyDesktop
                     DetectOps = [RegOp.CheckDword(IpKey, "AllowInputDataUpload", 0)],
                 },
             ];
-
     }
 
     // ── KioskAssignedAccess ──
@@ -6936,7 +6999,6 @@ internal static class PolicyDesktop
                 DetectOps = [RegOp.CheckDword(ExplorerPolicy, "NoClose", 1)],
             },
         ];
-
     }
 
     // ── KioskBrowserPolicy ──
@@ -7117,7 +7179,6 @@ internal static class PolicyDesktop
                 DetectOps = [RegOp.CheckDword(Key, "HideAddressBar", 1)],
             },
         ];
-
     }
 
     // ── LanguageOptionsPolicy ──
@@ -7132,7 +7193,10 @@ internal static class PolicyDesktop
                 Id = "langopt-disable-language-pack-install",
                 Label = "Block User Language Pack Installation",
                 Category = "Display",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 3, SafetyRating = 5,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 3,
+                SafetyRating = 5,
                 Description =
                     "Sets BlockUserFromAddingLanguages=1 in the LanguageOptions policy key. "
                     + "Prevents standard users from adding new display languages or keyboard "
@@ -7151,7 +7215,10 @@ internal static class PolicyDesktop
                 Id = "langopt-restrict-language-change",
                 Label = "Restrict Language Display Setting Change",
                 Category = "Display",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 3, SafetyRating = 5,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 3,
+                SafetyRating = 5,
                 Description =
                     "Sets RestrictLanguageChange=1 in the LanguageOptions policy key. Prevents "
                     + "non-administrative users from changing the Windows display language that "
@@ -7170,7 +7237,10 @@ internal static class PolicyDesktop
                 Id = "langopt-disable-ime-telemetry",
                 Label = "Disable IME Telemetry Upload",
                 Category = "Display",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 3, SafetyRating = 5,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 3,
+                SafetyRating = 5,
                 Description =
                     "Sets ImeTelemetryEnabled=0 in the LanguageOptions policy key. Stops the "
                     + "Windows Input Method Editor (IME) from transmitting usage data including "
@@ -7189,7 +7259,10 @@ internal static class PolicyDesktop
                 Id = "langopt-disable-cloud-candidate",
                 Label = "Disable IME Cloud Candidate Lookup",
                 Category = "Display",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 3, SafetyRating = 5,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 3,
+                SafetyRating = 5,
                 Description =
                     "Sets BlockCloudCandidates=1 in the LanguageOptions policy key. Prevents "
                     + "the Chinese, Japanese, and Korean IME engines from sending keystrokes "
@@ -7208,7 +7281,10 @@ internal static class PolicyDesktop
                 Id = "langopt-disable-handwriting-recognition-improvement",
                 Label = "Disable Language Handwriting Recognition Improvement",
                 Category = "Display",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 2, SafetyRating = 5,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 2,
+                SafetyRating = 5,
                 Description =
                     "Sets BlockHandwritingImprovementProgram=1 in the LanguageOptions policy "
                     + "key. Prevents Windows from enrolling the device in the handwriting "
@@ -7227,7 +7303,10 @@ internal static class PolicyDesktop
                 Id = "langopt-disable-ocr-telemetry",
                 Label = "Disable Language OCR Telemetry",
                 Category = "Display",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 2, SafetyRating = 5,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 2,
+                SafetyRating = 5,
                 Description =
                     "Sets OcrTelemetryEnabled=0 in the LanguageOptions policy key. Prevents "
                     + "the Windows OCR engine from submitting recognition quality metrics and "
@@ -7246,7 +7325,10 @@ internal static class PolicyDesktop
                 Id = "langopt-disable-speech-recognition-telemetry",
                 Label = "Disable Speech Recognition Language Telemetry",
                 Category = "Display",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 3, SafetyRating = 5,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 3,
+                SafetyRating = 5,
                 Description =
                     "Sets SpeechRecognitionTelemetryEnabled=0 in the LanguageOptions policy "
                     + "key. Stops Windows Speech Recognition from uploading speech-model "
@@ -7265,7 +7347,10 @@ internal static class PolicyDesktop
                 Id = "langopt-disable-keyboard-telemetry",
                 Label = "Disable Keyboard Layout Telemetry",
                 Category = "Display",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 2, SafetyRating = 5,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 2,
+                SafetyRating = 5,
                 Description =
                     "Sets KeyboardTelemetryEnabled=0 in the LanguageOptions policy key. "
                     + "Prevents Windows from submitting keyboard-layout switch events and "
@@ -7284,7 +7369,10 @@ internal static class PolicyDesktop
                 Id = "langopt-disable-language-online-update",
                 Label = "Disable Automatic Language Pack Online Update",
                 Category = "Display",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 2, SafetyRating = 5,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 2,
+                SafetyRating = 5,
                 Description =
                     "Sets BlockLanguagePackUpdatesFromWindowsUpdate=1 in the LanguageOptions "
                     + "policy key. Stops Windows from automatically downloading updated language "
@@ -7303,7 +7391,10 @@ internal static class PolicyDesktop
                 Id = "langopt-disable-language-sync",
                 Label = "Disable Language Settings Sync",
                 Category = "Display",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 2, SafetyRating = 5,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 2,
+                SafetyRating = 5,
                 Description =
                     "Sets DoNotSyncLanguageSettings=1 in the LanguageOptions policy key. "
                     + "Prevents language preferences, keyboard layout order, and regional "
@@ -7318,7 +7409,6 @@ internal static class PolicyDesktop
                 DetectOps = [RegOp.CheckDword(Key, "DoNotSyncLanguageSettings", 1)],
             },
         ];
-
     }
 
     // ── MobilityCenterPolicy ──
@@ -7530,7 +7620,6 @@ internal static class PolicyDesktop
                 DetectOps = [RegOp.CheckDword(ExplLm, "NoMobilityCenterContextMenu", 1)],
             },
         ];
-
     }
 
     // ── ModernStandbyPolicy ──
@@ -7541,189 +7630,208 @@ internal static class PolicyDesktop
         private const string PwrSleepKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Power";
 
         public static IReadOnlyList<TweakDef> Data =>
-        [
-            new TweakDef
-            {
-                Id = "mstandby-disable-connected-standby",
-                Label = "Disable Modern Standby (S0 Low-Power Idle) — Use S3 Sleep",
-                Category = "Display",
-                Description = "Disables Modern Standby (S0ix) and falls back to the traditional S3 sleep state. S0 keeps the network and background apps active during sleep, which can interfere with security tools, drain battery unexpectedly, and create wake-on-network attack surfaces.",
-                Tags = ["modern-standby", "s0", "s3-sleep", "power", "disable"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                MinBuild = 18362,
-                ImpactScore = 4,
-                SafetyRating = 3,
-                ImpactNote = "Forces S3 sleep where hardware supports it. Network and background activity cease during sleep — improves battery life on older HW but disables instant-on and wake-on-LAN in S0. Some OEM hardware only supports S0 and cannot fall back.",
-                RegistryKeys = [MsKey],
-                ApplyOps  = [RegOp.SetDword(MsKey, "AllowStandby", 0)],
-                RemoveOps = [RegOp.DeleteValue(MsKey, "AllowStandby")],
-                DetectOps = [RegOp.CheckDword(MsKey, "AllowStandby", 0)],
-            },
-            new TweakDef
-            {
-                Id = "mstandby-block-network-during-standby",
-                Label = "Block Network Activity During Modern Standby",
-                Category = "Display",
-                Description = "Prevents the NIC from remaining active and processing network packets while the device is in Modern Standby. Reduces the attack surface from wake-on-LAN exploitation, rogue DHCP offers, and directed broadcast attacks arriving while the user is away.",
-                Tags = ["modern-standby", "network", "wifi", "attack-surface", "security"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                MinBuild = 18362,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                ImpactNote = "Push notifications, live tiles, and scheduled background sync will not occur while the device is in standby. Recommended for shared, high-security environments.",
-                RegistryKeys = [MsKey],
-                ApplyOps  = [RegOp.SetDword(MsKey, "NetworkActivityAllowed", 0)],
-                RemoveOps = [RegOp.DeleteValue(MsKey, "NetworkActivityAllowed")],
-                DetectOps = [RegOp.CheckDword(MsKey, "NetworkActivityAllowed", 0)],
-            },
-            new TweakDef
-            {
-                Id = "mstandby-disable-smart-standby",
-                Label = "Disable Adaptive Smart Standby Adjustments",
-                Category = "Display",
-                Description = "Disables the intelligent standby system that dynamically adjusts deep-sleep exit rates based on historical usage patterns. When disabled, the system uses fixed configured timeouts rather than ML-driven adaptive transitions.",
-                Tags = ["modern-standby", "adaptive", "smart-standby", "power", "predictable"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                MinBuild = 18362,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                ImpactNote = "Produces deterministic standby behaviour at the cost of optimal power efficiency. Useful for kiosk and fixed-use devices where predictable power cycling is preferred.",
-                RegistryKeys = [MsKey],
-                ApplyOps  = [RegOp.SetDword(MsKey, "DisableSmartStandby", 1)],
-                RemoveOps = [RegOp.DeleteValue(MsKey, "DisableSmartStandby")],
-                DetectOps = [RegOp.CheckDword(MsKey, "DisableSmartStandby", 1)],
-            },
-            new TweakDef
-            {
-                Id = "mstandby-disable-background-tasks-in-standby",
-                Label = "Disable Background Task Execution During Modern Standby",
-                Category = "Display",
-                Description = "Prevents application background tasks from running while the system is in Modern Standby. Background tasks in S0 consume battery, can trigger wake-locks that prevent deep sleep, and may leak user data via cloud sync while the device appears powered off.",
-                Tags = ["modern-standby", "background-tasks", "battery", "privacy", "s0"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                MinBuild = 18362,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Suppresses background app refresh during standby; notifications and cloud sync resume on user wake. Significantly improves battery life on devices with aggressive background app models.",
-                RegistryKeys = [MsKey],
-                ApplyOps  = [RegOp.SetDword(MsKey, "AllowBackgroundTasksInStandby", 0)],
-                RemoveOps = [RegOp.DeleteValue(MsKey, "AllowBackgroundTasksInStandby")],
-                DetectOps = [RegOp.CheckDword(MsKey, "AllowBackgroundTasksInStandby", 0)],
-            },
-            new TweakDef
-            {
-                Id = "mstandby-disable-maintenance-in-standby",
-                Label = "Disable Automatic Maintenance Execution During Standby",
-                Category = "Display",
-                Description = "Prevents the Windows Automatic Maintenance scheduler from running maintenance tasks (Disk Defrag, Windows Defender scans, app updates) while the device is in Modern Standby. Avoids unexpected disk I/O, CPU wake, and battery drain during standby periods.",
-                Tags = ["modern-standby", "maintenance", "automatic-maintenance", "battery", "scheduling"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                MinBuild = 18362,
-                ImpactScore = 3,
-                SafetyRating = 4,
-                ImpactNote = "Maintenance tasks (including Defender scans) will defer to the next active session. Track that maintenance completes during awake sessions to avoid indefinite deferral.",
-                RegistryKeys = [MsKey],
-                ApplyOps  = [RegOp.SetDword(MsKey, "AllowMaintenanceDuringStandby", 0)],
-                RemoveOps = [RegOp.DeleteValue(MsKey, "AllowMaintenanceDuringStandby")],
-                DetectOps = [RegOp.CheckDword(MsKey, "AllowMaintenanceDuringStandby", 0)],
-            },
-            new TweakDef
-            {
-                Id = "mstandby-require-fast-startup-disabled",
-                Label = "Disable Hybrid Shutdown / Fast Startup (Hiberboot)",
-                Category = "Display",
-                Description = "Disables Hybrid Shutdown (Fast Startup / Hiberboot) which persists kernel session to the hibernate file across reboots. Hiberboot bypasses full driver reinitialisation and can leave security tools in stale state; full cold boot is safer and more predictable.",
-                Tags = ["modern-standby", "fast-startup", "hiberboot", "hibernate", "cold-boot"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                MinBuild = 18362,
-                ImpactScore = 3,
-                SafetyRating = 4,
-                ImpactNote = "Shutdown/startup will be slightly slower but every boot is a clean cold boot. Recommended for compliance-sensitive environments and shared machines.",
-                RegistryKeys = [PwrKey],
-                ApplyOps  = [RegOp.SetDword(PwrKey, "HiberbootEnabled", 0)],
-                RemoveOps = [RegOp.DeleteValue(PwrKey, "HiberbootEnabled")],
-                DetectOps = [RegOp.CheckDword(PwrKey, "HiberbootEnabled", 0)],
-            },
-            new TweakDef
-            {
-                Id = "mstandby-set-idle-standby-timeout",
-                Label = "Set Plugged-In Idle-to-Standby Timeout to 30 Minutes",
-                Category = "Display",
-                Description = "Configures the AC (plugged-in) idle timeout before the system enters Modern Standby or sleep to 30 minutes (1800 seconds). Reduces the window in which an unattended unlocked workstation is physically accessible before it locks and suspends.",
-                Tags = ["modern-standby", "idle-timeout", "screen-lock", "power", "physical-security"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                MinBuild = 18362,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "30-minute AC idle timeout before sleep is a reasonable physical-security baseline for workstations. Pairs with screen lock and credential timeout policies.",
-                RegistryKeys = [PwrSleepKey],
-                ApplyOps  = [RegOp.SetDword(PwrSleepKey, "IdleTimeoutAC", 1800)],
-                RemoveOps = [RegOp.DeleteValue(PwrSleepKey, "IdleTimeoutAC")],
-                DetectOps = [RegOp.CheckDword(PwrSleepKey, "IdleTimeoutAC", 1800)],
-            },
-            new TweakDef
-            {
-                Id = "mstandby-block-wake-timers-in-standby",
-                Label = "Block Programmatic Wake Timers During Modern Standby",
-                Category = "Display",
-                Description = "Prevents applications and scheduled tasks from setting wake timers that force the system out of Modern Standby. Rogue or poorly coded applications can use wake timers to keep the device powered on continuously; blocking timers enforces true standby.",
-                Tags = ["modern-standby", "wake-timer", "power", "battery", "security"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                MinBuild = 18362,
-                ImpactScore = 3,
-                SafetyRating = 4,
-                ImpactNote = "Blocks all application-set wake timers during standby. Windows Update maintenance wake timers are a notable exception — it may still wake for critical updates depending on policy.",
-                RegistryKeys = [PwrSleepKey],
-                ApplyOps  = [RegOp.SetDword(PwrSleepKey, "AllowWakeTimers", 0)],
-                RemoveOps = [RegOp.DeleteValue(PwrSleepKey, "AllowWakeTimers")],
-                DetectOps = [RegOp.CheckDword(PwrSleepKey, "AllowWakeTimers", 0)],
-            },
-            new TweakDef
-            {
-                Id = "mstandby-disable-wol-in-standby",
-                Label = "Disable Wake-on-LAN During Modern Standby",
-                Category = "Display",
-                Description = "Prevents the NIC from processing Wake-on-LAN (WoL) magic packets while the device is in Modern Standby. Eliminates the network-based remote-wake attack surface; an attacker with network access cannot remotely wake and attack the device.",
-                Tags = ["modern-standby", "wake-on-lan", "wol", "network", "security"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                MinBuild = 18362,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                ImpactNote = "Disables WoL in standby; remote power-on via network magic packet will not work while in S0. BIOS/UEFI WoL may override this — also disable WoL there for full protection.",
-                RegistryKeys = [MsKey],
-                ApplyOps  = [RegOp.SetDword(MsKey, "WakeOnLanAllowed", 0)],
-                RemoveOps = [RegOp.DeleteValue(MsKey, "WakeOnLanAllowed")],
-                DetectOps = [RegOp.CheckDword(MsKey, "WakeOnLanAllowed", 0)],
-            },
-            new TweakDef
-            {
-                Id = "mstandby-require-password-on-resume",
-                Label = "Require Password When Resuming from Modern Standby",
-                Category = "Display",
-                Description = "Forces credential re-entry when the device resumes from Modern Standby or sleep. Without this policy the screen may stay unlocked after resume, exposing the session to physical access attacks on shared or temporarily unattended machines.",
-                Tags = ["modern-standby", "password-resume", "screen-lock", "credential", "physical-security"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                MinBuild = 18362,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                ImpactNote = "Ensures the screen is locked on every standby resume, requiring Windows Hello or password to re-enter the session. This is a standard physical-security baseline.",
-                RegistryKeys = [PwrSleepKey],
-                ApplyOps  = [RegOp.SetDword(PwrSleepKey, "PromptPasswordOnWakeup", 1)],
-                RemoveOps = [RegOp.DeleteValue(PwrSleepKey, "PromptPasswordOnWakeup")],
-                DetectOps = [RegOp.CheckDword(PwrSleepKey, "PromptPasswordOnWakeup", 1)],
-            },
-        ];
-
+            [
+                new TweakDef
+                {
+                    Id = "mstandby-disable-connected-standby",
+                    Label = "Disable Modern Standby (S0 Low-Power Idle) — Use S3 Sleep",
+                    Category = "Display",
+                    Description =
+                        "Disables Modern Standby (S0ix) and falls back to the traditional S3 sleep state. S0 keeps the network and background apps active during sleep, which can interfere with security tools, drain battery unexpectedly, and create wake-on-network attack surfaces.",
+                    Tags = ["modern-standby", "s0", "s3-sleep", "power", "disable"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    MinBuild = 18362,
+                    ImpactScore = 4,
+                    SafetyRating = 3,
+                    ImpactNote =
+                        "Forces S3 sleep where hardware supports it. Network and background activity cease during sleep — improves battery life on older HW but disables instant-on and wake-on-LAN in S0. Some OEM hardware only supports S0 and cannot fall back.",
+                    RegistryKeys = [MsKey],
+                    ApplyOps = [RegOp.SetDword(MsKey, "AllowStandby", 0)],
+                    RemoveOps = [RegOp.DeleteValue(MsKey, "AllowStandby")],
+                    DetectOps = [RegOp.CheckDword(MsKey, "AllowStandby", 0)],
+                },
+                new TweakDef
+                {
+                    Id = "mstandby-block-network-during-standby",
+                    Label = "Block Network Activity During Modern Standby",
+                    Category = "Display",
+                    Description =
+                        "Prevents the NIC from remaining active and processing network packets while the device is in Modern Standby. Reduces the attack surface from wake-on-LAN exploitation, rogue DHCP offers, and directed broadcast attacks arriving while the user is away.",
+                    Tags = ["modern-standby", "network", "wifi", "attack-surface", "security"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    MinBuild = 18362,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote =
+                        "Push notifications, live tiles, and scheduled background sync will not occur while the device is in standby. Recommended for shared, high-security environments.",
+                    RegistryKeys = [MsKey],
+                    ApplyOps = [RegOp.SetDword(MsKey, "NetworkActivityAllowed", 0)],
+                    RemoveOps = [RegOp.DeleteValue(MsKey, "NetworkActivityAllowed")],
+                    DetectOps = [RegOp.CheckDword(MsKey, "NetworkActivityAllowed", 0)],
+                },
+                new TweakDef
+                {
+                    Id = "mstandby-disable-smart-standby",
+                    Label = "Disable Adaptive Smart Standby Adjustments",
+                    Category = "Display",
+                    Description =
+                        "Disables the intelligent standby system that dynamically adjusts deep-sleep exit rates based on historical usage patterns. When disabled, the system uses fixed configured timeouts rather than ML-driven adaptive transitions.",
+                    Tags = ["modern-standby", "adaptive", "smart-standby", "power", "predictable"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    MinBuild = 18362,
+                    ImpactScore = 2,
+                    SafetyRating = 5,
+                    ImpactNote =
+                        "Produces deterministic standby behaviour at the cost of optimal power efficiency. Useful for kiosk and fixed-use devices where predictable power cycling is preferred.",
+                    RegistryKeys = [MsKey],
+                    ApplyOps = [RegOp.SetDword(MsKey, "DisableSmartStandby", 1)],
+                    RemoveOps = [RegOp.DeleteValue(MsKey, "DisableSmartStandby")],
+                    DetectOps = [RegOp.CheckDword(MsKey, "DisableSmartStandby", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "mstandby-disable-background-tasks-in-standby",
+                    Label = "Disable Background Task Execution During Modern Standby",
+                    Category = "Display",
+                    Description =
+                        "Prevents application background tasks from running while the system is in Modern Standby. Background tasks in S0 consume battery, can trigger wake-locks that prevent deep sleep, and may leak user data via cloud sync while the device appears powered off.",
+                    Tags = ["modern-standby", "background-tasks", "battery", "privacy", "s0"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    MinBuild = 18362,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote =
+                        "Suppresses background app refresh during standby; notifications and cloud sync resume on user wake. Significantly improves battery life on devices with aggressive background app models.",
+                    RegistryKeys = [MsKey],
+                    ApplyOps = [RegOp.SetDword(MsKey, "AllowBackgroundTasksInStandby", 0)],
+                    RemoveOps = [RegOp.DeleteValue(MsKey, "AllowBackgroundTasksInStandby")],
+                    DetectOps = [RegOp.CheckDword(MsKey, "AllowBackgroundTasksInStandby", 0)],
+                },
+                new TweakDef
+                {
+                    Id = "mstandby-disable-maintenance-in-standby",
+                    Label = "Disable Automatic Maintenance Execution During Standby",
+                    Category = "Display",
+                    Description =
+                        "Prevents the Windows Automatic Maintenance scheduler from running maintenance tasks (Disk Defrag, Windows Defender scans, app updates) while the device is in Modern Standby. Avoids unexpected disk I/O, CPU wake, and battery drain during standby periods.",
+                    Tags = ["modern-standby", "maintenance", "automatic-maintenance", "battery", "scheduling"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    MinBuild = 18362,
+                    ImpactScore = 3,
+                    SafetyRating = 4,
+                    ImpactNote =
+                        "Maintenance tasks (including Defender scans) will defer to the next active session. Track that maintenance completes during awake sessions to avoid indefinite deferral.",
+                    RegistryKeys = [MsKey],
+                    ApplyOps = [RegOp.SetDword(MsKey, "AllowMaintenanceDuringStandby", 0)],
+                    RemoveOps = [RegOp.DeleteValue(MsKey, "AllowMaintenanceDuringStandby")],
+                    DetectOps = [RegOp.CheckDword(MsKey, "AllowMaintenanceDuringStandby", 0)],
+                },
+                new TweakDef
+                {
+                    Id = "mstandby-require-fast-startup-disabled",
+                    Label = "Disable Hybrid Shutdown / Fast Startup (Hiberboot)",
+                    Category = "Display",
+                    Description =
+                        "Disables Hybrid Shutdown (Fast Startup / Hiberboot) which persists kernel session to the hibernate file across reboots. Hiberboot bypasses full driver reinitialisation and can leave security tools in stale state; full cold boot is safer and more predictable.",
+                    Tags = ["modern-standby", "fast-startup", "hiberboot", "hibernate", "cold-boot"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    MinBuild = 18362,
+                    ImpactScore = 3,
+                    SafetyRating = 4,
+                    ImpactNote =
+                        "Shutdown/startup will be slightly slower but every boot is a clean cold boot. Recommended for compliance-sensitive environments and shared machines.",
+                    RegistryKeys = [PwrKey],
+                    ApplyOps = [RegOp.SetDword(PwrKey, "HiberbootEnabled", 0)],
+                    RemoveOps = [RegOp.DeleteValue(PwrKey, "HiberbootEnabled")],
+                    DetectOps = [RegOp.CheckDword(PwrKey, "HiberbootEnabled", 0)],
+                },
+                new TweakDef
+                {
+                    Id = "mstandby-set-idle-standby-timeout",
+                    Label = "Set Plugged-In Idle-to-Standby Timeout to 30 Minutes",
+                    Category = "Display",
+                    Description =
+                        "Configures the AC (plugged-in) idle timeout before the system enters Modern Standby or sleep to 30 minutes (1800 seconds). Reduces the window in which an unattended unlocked workstation is physically accessible before it locks and suspends.",
+                    Tags = ["modern-standby", "idle-timeout", "screen-lock", "power", "physical-security"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    MinBuild = 18362,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote =
+                        "30-minute AC idle timeout before sleep is a reasonable physical-security baseline for workstations. Pairs with screen lock and credential timeout policies.",
+                    RegistryKeys = [PwrSleepKey],
+                    ApplyOps = [RegOp.SetDword(PwrSleepKey, "IdleTimeoutAC", 1800)],
+                    RemoveOps = [RegOp.DeleteValue(PwrSleepKey, "IdleTimeoutAC")],
+                    DetectOps = [RegOp.CheckDword(PwrSleepKey, "IdleTimeoutAC", 1800)],
+                },
+                new TweakDef
+                {
+                    Id = "mstandby-block-wake-timers-in-standby",
+                    Label = "Block Programmatic Wake Timers During Modern Standby",
+                    Category = "Display",
+                    Description =
+                        "Prevents applications and scheduled tasks from setting wake timers that force the system out of Modern Standby. Rogue or poorly coded applications can use wake timers to keep the device powered on continuously; blocking timers enforces true standby.",
+                    Tags = ["modern-standby", "wake-timer", "power", "battery", "security"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    MinBuild = 18362,
+                    ImpactScore = 3,
+                    SafetyRating = 4,
+                    ImpactNote =
+                        "Blocks all application-set wake timers during standby. Windows Update maintenance wake timers are a notable exception — it may still wake for critical updates depending on policy.",
+                    RegistryKeys = [PwrSleepKey],
+                    ApplyOps = [RegOp.SetDword(PwrSleepKey, "AllowWakeTimers", 0)],
+                    RemoveOps = [RegOp.DeleteValue(PwrSleepKey, "AllowWakeTimers")],
+                    DetectOps = [RegOp.CheckDword(PwrSleepKey, "AllowWakeTimers", 0)],
+                },
+                new TweakDef
+                {
+                    Id = "mstandby-disable-wol-in-standby",
+                    Label = "Disable Wake-on-LAN During Modern Standby",
+                    Category = "Display",
+                    Description =
+                        "Prevents the NIC from processing Wake-on-LAN (WoL) magic packets while the device is in Modern Standby. Eliminates the network-based remote-wake attack surface; an attacker with network access cannot remotely wake and attack the device.",
+                    Tags = ["modern-standby", "wake-on-lan", "wol", "network", "security"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    MinBuild = 18362,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote =
+                        "Disables WoL in standby; remote power-on via network magic packet will not work while in S0. BIOS/UEFI WoL may override this — also disable WoL there for full protection.",
+                    RegistryKeys = [MsKey],
+                    ApplyOps = [RegOp.SetDword(MsKey, "WakeOnLanAllowed", 0)],
+                    RemoveOps = [RegOp.DeleteValue(MsKey, "WakeOnLanAllowed")],
+                    DetectOps = [RegOp.CheckDword(MsKey, "WakeOnLanAllowed", 0)],
+                },
+                new TweakDef
+                {
+                    Id = "mstandby-require-password-on-resume",
+                    Label = "Require Password When Resuming from Modern Standby",
+                    Category = "Display",
+                    Description =
+                        "Forces credential re-entry when the device resumes from Modern Standby or sleep. Without this policy the screen may stay unlocked after resume, exposing the session to physical access attacks on shared or temporarily unattended machines.",
+                    Tags = ["modern-standby", "password-resume", "screen-lock", "credential", "physical-security"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    MinBuild = 18362,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote =
+                        "Ensures the screen is locked on every standby resume, requiring Windows Hello or password to re-enter the session. This is a standard physical-security baseline.",
+                    RegistryKeys = [PwrSleepKey],
+                    ApplyOps = [RegOp.SetDword(PwrSleepKey, "PromptPasswordOnWakeup", 1)],
+                    RemoveOps = [RegOp.DeleteValue(PwrSleepKey, "PromptPasswordOnWakeup")],
+                    DetectOps = [RegOp.CheckDword(PwrSleepKey, "PromptPasswordOnWakeup", 1)],
+                },
+            ];
     }
 
     // ── PenWorkspaceGpoPolicy ──
@@ -7738,7 +7846,10 @@ internal static class PolicyDesktop
                 Id = "penws-disable-pen-workspace",
                 Label = "Disable Pen Workspace",
                 Category = "Display",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 3, SafetyRating = 5,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 3,
+                SafetyRating = 5,
                 Description =
                     "Sets PenWorkspaceButtonDesiredVisibility=0 in the PenWorkspace policy key. "
                     + "Hides the Pen Workspace button from the taskbar and prevents the floating "
@@ -7757,7 +7868,10 @@ internal static class PolicyDesktop
                 Id = "penws-disable-above-lock",
                 Label = "Disable Pen Workspace Above Lock Screen",
                 Category = "Display",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 3, SafetyRating = 5,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 3,
+                SafetyRating = 5,
                 Description =
                     "Sets UserEducationInAboveLockAllowed=0 in the PenWorkspace policy key. "
                     + "Prevents the Windows Ink Workspace and associated onboarding prompts "
@@ -7776,7 +7890,10 @@ internal static class PolicyDesktop
                 Id = "penws-disable-touch-keyboard-onboarding",
                 Label = "Disable Touch Keyboard Onboarding",
                 Category = "Display",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 2, SafetyRating = 5,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 2,
+                SafetyRating = 5,
                 Description =
                     "Sets TouchKeyboardOnboardingAllowed=0 in the PenWorkspace policy key. "
                     + "Suppresses the promotional 'Try the new touch keyboard' onboarding banner "
@@ -7794,7 +7911,10 @@ internal static class PolicyDesktop
                 Id = "penws-disable-handwriting-panel",
                 Label = "Disable Handwriting Panel",
                 Category = "Display",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 2, SafetyRating = 5,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 2,
+                SafetyRating = 5,
                 Description =
                     "Sets PenWorkspaceHandwritingEnabled=0 in the PenWorkspace policy key. "
                     + "Disables the floating handwriting input panel that appears near text "
@@ -7813,7 +7933,10 @@ internal static class PolicyDesktop
                 Id = "penws-disable-workspace-telemetry",
                 Label = "Disable Pen Workspace Telemetry",
                 Category = "Display",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 2, SafetyRating = 5,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 2,
+                SafetyRating = 5,
                 Description =
                     "Sets PenWorkspaceTelemetryAllowed=0 in the PenWorkspace policy key. "
                     + "Stops Windows Ink Workspace from transmitting usage analytics covering "
@@ -7832,7 +7955,10 @@ internal static class PolicyDesktop
                 Id = "penws-disable-ink-replay",
                 Label = "Disable Ink Replay Logging",
                 Category = "Display",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 3, SafetyRating = 5,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 3,
+                SafetyRating = 5,
                 Description =
                     "Sets InkReplayEnabled=0 in the PenWorkspace policy key. Disables the "
                     + "Windows Ink replay feature that records the full sequence of pen strokes "
@@ -7851,7 +7977,10 @@ internal static class PolicyDesktop
                 Id = "penws-disable-pen-promo",
                 Label = "Disable Pen Workspace Hardware Promo",
                 Category = "Display",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 1, SafetyRating = 5,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 1,
+                SafetyRating = 5,
                 Description =
                     "Sets AllowSuggestedAppsInWindowsInkWorkspace=0 in the PenWorkspace policy "
                     + "key. Removes the 'Suggested Apps' section from Windows Ink Workspace "
@@ -7870,7 +7999,10 @@ internal static class PolicyDesktop
                 Id = "penws-disable-dictation",
                 Label = "Disable Ink Dictation Button",
                 Category = "Display",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 2, SafetyRating = 5,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 2,
+                SafetyRating = 5,
                 Description =
                     "Sets AllowWindowsInkWorkspace=0 via the AllowWindowsInkWorkspaceValue "
                     + "policy in the PenWorkspace policy key. Removes the microphone-dictation "
@@ -7889,7 +8021,10 @@ internal static class PolicyDesktop
                 Id = "penws-disable-sticky-notes-lock",
                 Label = "Disable Sticky Notes on Lock Screen",
                 Category = "Display",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 2, SafetyRating = 5,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 2,
+                SafetyRating = 5,
                 Description =
                     "Sets StickyNotesOnLockScreenAllowed=0 in the PenWorkspace policy key. "
                     + "Prevents Sticky Notes from appearing on the lock screen, which would "
@@ -7908,7 +8043,10 @@ internal static class PolicyDesktop
                 Id = "penws-disable-pencil-button-shortcut",
                 Label = "Disable Pen Button Shortcut to Workspace",
                 Category = "Display",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 1, SafetyRating = 5,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 1,
+                SafetyRating = 5,
                 Description =
                     "Sets PenButtonDesiredAction=2 in the PenWorkspace policy key. Changes the "
                     + "pen barrel-button shortcut from launching Windows Ink Workspace (default) "
@@ -7923,14 +8061,12 @@ internal static class PolicyDesktop
                 DetectOps = [RegOp.CheckDword(Key, "PenButtonDesiredAction", 2)],
             },
         ];
-
     }
 
     // ── PersonalizationLockPolicy ──
     private static class _PersonalizationLockPolicy
     {
-        private const string Key =
-            @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Personalization";
+        private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Personalization";
 
         public static IReadOnlyList<TweakDef> Data =>
             [
@@ -8105,7 +8241,6 @@ internal static class PolicyDesktop
                     DetectOps = [RegOp.CheckDword(Key, "DisableTransparencyEffects", 1)],
                 },
             ];
-
     }
 
     // ── PersonalizationPolicy ──
@@ -8296,7 +8431,6 @@ internal static class PolicyDesktop
                 DetectOps = [RegOp.CheckDword(SysPolicy, "NoColorChoice", 1)],
             },
         ];
-
     }
 
     // ── PlayToDevicePolicy ──
@@ -8306,186 +8440,195 @@ internal static class PolicyDesktop
         private const string WsdKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WSD";
 
         public static IReadOnlyList<TweakDef> Data =>
-        [
-            new TweakDef
-            {
-                Id = "playtodev-disable-play-to-receiver",
-                Label = "Play To: Disable Windows Play To Receiver Feature",
-                Category = "Display",
-                Description = "Sets NotAllowPlayToReceiver=1 in PlayToReceiver machine policy. Disables the Windows 'Play To' receiver capability that allows other DLNA-compatible devices on the same network to push media content to this PC for playback. " +
-                    "'Play To' opens this device as a DLNA media renderer, listening for UPnP/DLNA control point commands from any device on the local network. On a corporate network, this allows any DLNA-capable device (including personal mobile phones) to push multimedia content to corporate workstations without authentication. Disabling the receiver prevents the device from accepting unsolicited media content pushes.",
-                Tags = ["dlna", "play-to", "receiver", "media", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Disables DLNA Play To receiver; workstation cannot accept media pushes from devices on local network.",
-                ApplyOps = [RegOp.SetDword(Key, "NotAllowPlayToReceiver", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "NotAllowPlayToReceiver")],
-                DetectOps = [RegOp.CheckDword(Key, "NotAllowPlayToReceiver", 1)],
-            },
-            new TweakDef
-            {
-                Id = "playtodev-disable-play-to-sender",
-                Label = "Play To: Disable Windows Play To Media Source Sending",
-                Category = "Display",
-                Description = "Sets DisablePlayTo=1 in PlayToReceiver machine policy. Disables the ability for users to use this PC as a 'Play To' source — sending media from Windows Media Player, Photos, or other DLNA-compatible applications to an external DLNA renderer. " +
-                    "Using this PC as a 'Play To' sender connects to UPnP devices on the network and pushes streaming data to them. On a corporate network, this could be used to stream sensitive video content from a corporate machine to a personal smart TV, Chromecast, or other unmanaged renderer. Disabling 'Play To' sender functionality prevents this data exfiltration vector.",
-                Tags = ["dlna", "play-to", "sender", "media", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                ImpactNote = "Blocks DLNA media sending; screen/media content not streamable from this PC to external renderers.",
-                ApplyOps = [RegOp.SetDword(Key, "DisablePlayTo", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "DisablePlayTo")],
-                DetectOps = [RegOp.CheckDword(Key, "DisablePlayTo", 1)],
-            },
-            new TweakDef
-            {
-                Id = "playtodev-block-wsd-device-discovery",
-                Label = "Play To: Block WSD (Web Services on Devices) Network Discovery",
-                Category = "Display",
-                Description = "Sets DisableWSDDiscovery=1 in WSD machine policy. Prevents the Windows WSD (Web Services on Devices) stack from announcing this device to the local network and from probing for WSD-compatible peripherals — including networked printers, scanners, and media renderers. " +
-                    "WSD uses multicast UDP probes (WS-Discovery) that announce the device's presence to all LAN segments. These broadcasts leak device identity, OS version, and service capabilities to all network listeners. Disabling WSD discovery reduces the device's network footprint.",
-                Tags = ["wsd", "discovery", "network", "multicast", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 4,
-                ImpactNote = "Blocks WSD/WS-Discovery multicast probes; device not discoverable via WSD protocol. May affect network printer discovery.",
-                ApplyOps = [RegOp.SetDword(WsdKey, "DisableWSDDiscovery", 1)],
-                RemoveOps = [RegOp.DeleteValue(WsdKey, "DisableWSDDiscovery")],
-                DetectOps = [RegOp.CheckDword(WsdKey, "DisableWSDDiscovery", 1)],
-            },
-            new TweakDef
-            {
-                Id = "playtodev-block-wsd-printer-discovery",
-                Label = "Play To: Block WSD-Based Printer Auto-Discovery",
-                Category = "Display",
-                Description = "Sets DisableWSDPrinting=1 in WSD machine policy. Prevents auto-discovery and installation of WSD-connected network printers. " +
-                    "WSD printer discovery installs printers from the local network automatically without user approval by default on domain-joined machines. On enterprise networks with centralised print server management, rogue WSD printers could intercept print jobs if employees accidentally redirect documents to an unauthorised WSD printer device near them. Disabling WSD printer discovery enforces exclusively server-managed print queue access.",
-                Tags = ["wsd", "printer", "discovery", "print", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 4,
-                ImpactNote = "Blocks WSD printer auto-install; print queues must be added manually or via GPO print server.",
-                ApplyOps = [RegOp.SetDword(WsdKey, "DisableWSDPrinting", 1)],
-                RemoveOps = [RegOp.DeleteValue(WsdKey, "DisableWSDPrinting")],
-                DetectOps = [RegOp.CheckDword(WsdKey, "DisableWSDPrinting", 1)],
-            },
-            new TweakDef
-            {
-                Id = "playtodev-block-wsd-scanner-discovery",
-                Label = "Play To: Block WSD-Based Scanner Auto-Discovery",
-                Category = "Display",
-                Description = "Sets DisableWSDScanning=1 in WSD machine policy. Prevents automatic discovery and installation of network scanners that advertise themselves via WSD/WIA (Windows Image Acquisition). " +
-                    "WSD scanner discovery installs scanning drivers and opens WIA sessions to any WSD-compatible scanner found on the network. Unauthorised scanners on the network could be configured to receive forwarded scan-to-email jobs from misconfigured endpoints. Disabling WSD scanner discovery prevents unsolicited scanner driver installation and ensures scanning hardware is explicitly approved by IT.",
-                Tags = ["wsd", "scanner", "discovery", "wia", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 4,
-                ImpactNote = "Blocks WSD scanner auto-discovery; scanners require manual or GPO-managed WIA configuration.",
-                ApplyOps = [RegOp.SetDword(WsdKey, "DisableWSDScanning", 1)],
-                RemoveOps = [RegOp.DeleteValue(WsdKey, "DisableWSDScanning")],
-                DetectOps = [RegOp.CheckDword(WsdKey, "DisableWSDScanning", 1)],
-            },
-            new TweakDef
-            {
-                Id = "playtodev-disable-play-to-dmr-advertisement",
-                Label = "Play To: Disable DLNA Digital Media Renderer Advertisement",
-                Category = "Display",
-                Description = "Sets NotAdvertisePlayToDevice=1 in PlayToReceiver machine policy. Prevents this Windows PC from advertising itself as a DLNA Digital Media Renderer (DMR) on the local network. " +
-                    "DMR advertisement broadcasts multicast UPnP SSDP announcements that include the device's name, model, IP address, and capabilities to all devices on the network. This advertisement allows any DLNA control point (phone, tablet, smart TV) to discover and push media to the PC. Suppressing the advertisement hides the device from DLNA discovery without fully disabling the network stack services.",
-                Tags = ["dlna", "dmr", "advertisement", "ssdp", "privacy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                ImpactNote = "Suppresses DLNA DMR advertisement; PC not visible to DLNA control points on the network.",
-                ApplyOps = [RegOp.SetDword(Key, "NotAdvertisePlayToDevice", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "NotAdvertisePlayToDevice")],
-                DetectOps = [RegOp.CheckDword(Key, "NotAdvertisePlayToDevice", 1)],
-            },
-            new TweakDef
-            {
-                Id = "playtodev-disable-media-sharing-network-access",
-                Label = "Play To: Disable Media Library Network Sharing",
-                Category = "Display",
-                Description = "Sets DisableMediaSharing=1 in PlayToReceiver machine policy. Prevents this PC from sharing its media library (pictures, videos, music) with other devices on the network via the Windows Media Player network sharing service. " +
-                    "Media library sharing exposes the contents of the user's Documents, Pictures, and Music folders to any UPnP/DLNA media renderer on the local network without per-file access controls. On corporate networks, user Documents folders frequently contain sensitive files that the file-sharing component includes in its media index.",
-                Tags = ["media", "sharing", "library", "network", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                ImpactNote = "Blocks media library network sharing; document folders not exposed via DLNA/UPnP media server.",
-                ApplyOps = [RegOp.SetDword(Key, "DisableMediaSharing", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "DisableMediaSharing")],
-                DetectOps = [RegOp.CheckDword(Key, "DisableMediaSharing", 1)],
-            },
-            new TweakDef
-            {
-                Id = "playtodev-restrict-play-to-local-subnet-only",
-                Label = "Play To: Restrict Play To and DLNA to Local Subnet Only",
-                Category = "Display",
-                Description = "Sets AllowedNetworkScopes=1 in PlayToReceiver machine policy. Restricts the DLNA/Play To feature to the local subnet only, preventing cross-subnet media streaming and rendering. " +
-                    "Limiting Play To to the local subnet ensures that media streaming sessions cannot traverse network routers into other VLANs or the wide internet. This is the least-restrictive enterprise hardening option for organisations where DLNA is permitted for AV room systems on a dedicated VLAN but must not be accessible from corporate workstation VLANs.",
-                Tags = ["dlna", "subnet", "scope", "network-segmentation", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                ImpactNote = "DLNA scoped to local subnet only; cross-VLAN and internet-routed media streaming blocked.",
-                ApplyOps = [RegOp.SetDword(Key, "AllowedNetworkScopes", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "AllowedNetworkScopes")],
-                DetectOps = [RegOp.CheckDword(Key, "AllowedNetworkScopes", 1)],
-            },
-            new TweakDef
-            {
-                Id = "playtodev-disable-device-play-auto-start",
-                Label = "Play To: Disable Auto-Start of Play To Service at Logon",
-                Category = "Display",
-                Description = "Sets DisableAutoStart=1 in PlayToReceiver machine policy. Prevents the Windows Play To Receiver service from starting automatically at user logon. " +
-                    "The Play To receiver service starts in the background and maintains a network listener even when neither party has initiated a media session. This background process consumes memory, CPU, and network port capacity. Disabling auto-start ensures the service only runs when explicitly invoked, reducing the device's idle network service footprint.",
-                Tags = ["dlna", "service", "auto-start", "startup", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                ImpactNote = "Play To service not auto-started; listener not running unless explicitly launched.",
-                ApplyOps = [RegOp.SetDword(Key, "DisableAutoStart", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "DisableAutoStart")],
-                DetectOps = [RegOp.CheckDword(Key, "DisableAutoStart", 1)],
-            },
-            new TweakDef
-            {
-                Id = "playtodev-disable-wsd-host-discovery",
-                Label = "Play To: Disable WSD Function Discovery Host (FDHOST) Network Broadcast",
-                Category = "Display",
-                Description = "Sets DisableFunctionDiscoveryHostBroadcast=1 in WSD machine policy. Prevents the Function Discovery Host service from broadcasting WSD host announcements that advertise this machine's services (web services, UPnP capabilities) to other devices on the network. " +
-                    "Function Discovery is the mechanism Windows uses to populate the Network window in Explorer. Broadcasting the host's function discovery metadata exposes its installed services and capabilities to all LAN listeners. On hardened workstations, eliminating unnecessary network announcements reduces the device's identifiable surface in passive network reconnaissance.",
-                Tags = ["wsd", "fdhost", "broadcast", "discovery", "hardening"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                ImpactNote = "Suppresses WSD function discovery host broadcasts; device less identifiable via passive LAN scanning.",
-                ApplyOps = [RegOp.SetDword(WsdKey, "DisableFunctionDiscoveryHostBroadcast", 1)],
-                RemoveOps = [RegOp.DeleteValue(WsdKey, "DisableFunctionDiscoveryHostBroadcast")],
-                DetectOps = [RegOp.CheckDword(WsdKey, "DisableFunctionDiscoveryHostBroadcast", 1)],
-            },
-        ];
-
+            [
+                new TweakDef
+                {
+                    Id = "playtodev-disable-play-to-receiver",
+                    Label = "Play To: Disable Windows Play To Receiver Feature",
+                    Category = "Display",
+                    Description =
+                        "Sets NotAllowPlayToReceiver=1 in PlayToReceiver machine policy. Disables the Windows 'Play To' receiver capability that allows other DLNA-compatible devices on the same network to push media content to this PC for playback. "
+                        + "'Play To' opens this device as a DLNA media renderer, listening for UPnP/DLNA control point commands from any device on the local network. On a corporate network, this allows any DLNA-capable device (including personal mobile phones) to push multimedia content to corporate workstations without authentication. Disabling the receiver prevents the device from accepting unsolicited media content pushes.",
+                    Tags = ["dlna", "play-to", "receiver", "media", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "Disables DLNA Play To receiver; workstation cannot accept media pushes from devices on local network.",
+                    ApplyOps = [RegOp.SetDword(Key, "NotAllowPlayToReceiver", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "NotAllowPlayToReceiver")],
+                    DetectOps = [RegOp.CheckDword(Key, "NotAllowPlayToReceiver", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "playtodev-disable-play-to-sender",
+                    Label = "Play To: Disable Windows Play To Media Source Sending",
+                    Category = "Display",
+                    Description =
+                        "Sets DisablePlayTo=1 in PlayToReceiver machine policy. Disables the ability for users to use this PC as a 'Play To' source — sending media from Windows Media Player, Photos, or other DLNA-compatible applications to an external DLNA renderer. "
+                        + "Using this PC as a 'Play To' sender connects to UPnP devices on the network and pushes streaming data to them. On a corporate network, this could be used to stream sensitive video content from a corporate machine to a personal smart TV, Chromecast, or other unmanaged renderer. Disabling 'Play To' sender functionality prevents this data exfiltration vector.",
+                    Tags = ["dlna", "play-to", "sender", "media", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 2,
+                    SafetyRating = 5,
+                    ImpactNote = "Blocks DLNA media sending; screen/media content not streamable from this PC to external renderers.",
+                    ApplyOps = [RegOp.SetDword(Key, "DisablePlayTo", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "DisablePlayTo")],
+                    DetectOps = [RegOp.CheckDword(Key, "DisablePlayTo", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "playtodev-block-wsd-device-discovery",
+                    Label = "Play To: Block WSD (Web Services on Devices) Network Discovery",
+                    Category = "Display",
+                    Description =
+                        "Sets DisableWSDDiscovery=1 in WSD machine policy. Prevents the Windows WSD (Web Services on Devices) stack from announcing this device to the local network and from probing for WSD-compatible peripherals — including networked printers, scanners, and media renderers. "
+                        + "WSD uses multicast UDP probes (WS-Discovery) that announce the device's presence to all LAN segments. These broadcasts leak device identity, OS version, and service capabilities to all network listeners. Disabling WSD discovery reduces the device's network footprint.",
+                    Tags = ["wsd", "discovery", "network", "multicast", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 2,
+                    SafetyRating = 4,
+                    ImpactNote =
+                        "Blocks WSD/WS-Discovery multicast probes; device not discoverable via WSD protocol. May affect network printer discovery.",
+                    ApplyOps = [RegOp.SetDword(WsdKey, "DisableWSDDiscovery", 1)],
+                    RemoveOps = [RegOp.DeleteValue(WsdKey, "DisableWSDDiscovery")],
+                    DetectOps = [RegOp.CheckDword(WsdKey, "DisableWSDDiscovery", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "playtodev-block-wsd-printer-discovery",
+                    Label = "Play To: Block WSD-Based Printer Auto-Discovery",
+                    Category = "Display",
+                    Description =
+                        "Sets DisableWSDPrinting=1 in WSD machine policy. Prevents auto-discovery and installation of WSD-connected network printers. "
+                        + "WSD printer discovery installs printers from the local network automatically without user approval by default on domain-joined machines. On enterprise networks with centralised print server management, rogue WSD printers could intercept print jobs if employees accidentally redirect documents to an unauthorised WSD printer device near them. Disabling WSD printer discovery enforces exclusively server-managed print queue access.",
+                    Tags = ["wsd", "printer", "discovery", "print", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 2,
+                    SafetyRating = 4,
+                    ImpactNote = "Blocks WSD printer auto-install; print queues must be added manually or via GPO print server.",
+                    ApplyOps = [RegOp.SetDword(WsdKey, "DisableWSDPrinting", 1)],
+                    RemoveOps = [RegOp.DeleteValue(WsdKey, "DisableWSDPrinting")],
+                    DetectOps = [RegOp.CheckDword(WsdKey, "DisableWSDPrinting", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "playtodev-block-wsd-scanner-discovery",
+                    Label = "Play To: Block WSD-Based Scanner Auto-Discovery",
+                    Category = "Display",
+                    Description =
+                        "Sets DisableWSDScanning=1 in WSD machine policy. Prevents automatic discovery and installation of network scanners that advertise themselves via WSD/WIA (Windows Image Acquisition). "
+                        + "WSD scanner discovery installs scanning drivers and opens WIA sessions to any WSD-compatible scanner found on the network. Unauthorised scanners on the network could be configured to receive forwarded scan-to-email jobs from misconfigured endpoints. Disabling WSD scanner discovery prevents unsolicited scanner driver installation and ensures scanning hardware is explicitly approved by IT.",
+                    Tags = ["wsd", "scanner", "discovery", "wia", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 2,
+                    SafetyRating = 4,
+                    ImpactNote = "Blocks WSD scanner auto-discovery; scanners require manual or GPO-managed WIA configuration.",
+                    ApplyOps = [RegOp.SetDword(WsdKey, "DisableWSDScanning", 1)],
+                    RemoveOps = [RegOp.DeleteValue(WsdKey, "DisableWSDScanning")],
+                    DetectOps = [RegOp.CheckDword(WsdKey, "DisableWSDScanning", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "playtodev-disable-play-to-dmr-advertisement",
+                    Label = "Play To: Disable DLNA Digital Media Renderer Advertisement",
+                    Category = "Display",
+                    Description =
+                        "Sets NotAdvertisePlayToDevice=1 in PlayToReceiver machine policy. Prevents this Windows PC from advertising itself as a DLNA Digital Media Renderer (DMR) on the local network. "
+                        + "DMR advertisement broadcasts multicast UPnP SSDP announcements that include the device's name, model, IP address, and capabilities to all devices on the network. This advertisement allows any DLNA control point (phone, tablet, smart TV) to discover and push media to the PC. Suppressing the advertisement hides the device from DLNA discovery without fully disabling the network stack services.",
+                    Tags = ["dlna", "dmr", "advertisement", "ssdp", "privacy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 2,
+                    SafetyRating = 5,
+                    ImpactNote = "Suppresses DLNA DMR advertisement; PC not visible to DLNA control points on the network.",
+                    ApplyOps = [RegOp.SetDword(Key, "NotAdvertisePlayToDevice", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "NotAdvertisePlayToDevice")],
+                    DetectOps = [RegOp.CheckDword(Key, "NotAdvertisePlayToDevice", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "playtodev-disable-media-sharing-network-access",
+                    Label = "Play To: Disable Media Library Network Sharing",
+                    Category = "Display",
+                    Description =
+                        "Sets DisableMediaSharing=1 in PlayToReceiver machine policy. Prevents this PC from sharing its media library (pictures, videos, music) with other devices on the network via the Windows Media Player network sharing service. "
+                        + "Media library sharing exposes the contents of the user's Documents, Pictures, and Music folders to any UPnP/DLNA media renderer on the local network without per-file access controls. On corporate networks, user Documents folders frequently contain sensitive files that the file-sharing component includes in its media index.",
+                    Tags = ["media", "sharing", "library", "network", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 2,
+                    SafetyRating = 5,
+                    ImpactNote = "Blocks media library network sharing; document folders not exposed via DLNA/UPnP media server.",
+                    ApplyOps = [RegOp.SetDword(Key, "DisableMediaSharing", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "DisableMediaSharing")],
+                    DetectOps = [RegOp.CheckDword(Key, "DisableMediaSharing", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "playtodev-restrict-play-to-local-subnet-only",
+                    Label = "Play To: Restrict Play To and DLNA to Local Subnet Only",
+                    Category = "Display",
+                    Description =
+                        "Sets AllowedNetworkScopes=1 in PlayToReceiver machine policy. Restricts the DLNA/Play To feature to the local subnet only, preventing cross-subnet media streaming and rendering. "
+                        + "Limiting Play To to the local subnet ensures that media streaming sessions cannot traverse network routers into other VLANs or the wide internet. This is the least-restrictive enterprise hardening option for organisations where DLNA is permitted for AV room systems on a dedicated VLAN but must not be accessible from corporate workstation VLANs.",
+                    Tags = ["dlna", "subnet", "scope", "network-segmentation", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 2,
+                    SafetyRating = 5,
+                    ImpactNote = "DLNA scoped to local subnet only; cross-VLAN and internet-routed media streaming blocked.",
+                    ApplyOps = [RegOp.SetDword(Key, "AllowedNetworkScopes", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "AllowedNetworkScopes")],
+                    DetectOps = [RegOp.CheckDword(Key, "AllowedNetworkScopes", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "playtodev-disable-device-play-auto-start",
+                    Label = "Play To: Disable Auto-Start of Play To Service at Logon",
+                    Category = "Display",
+                    Description =
+                        "Sets DisableAutoStart=1 in PlayToReceiver machine policy. Prevents the Windows Play To Receiver service from starting automatically at user logon. "
+                        + "The Play To receiver service starts in the background and maintains a network listener even when neither party has initiated a media session. This background process consumes memory, CPU, and network port capacity. Disabling auto-start ensures the service only runs when explicitly invoked, reducing the device's idle network service footprint.",
+                    Tags = ["dlna", "service", "auto-start", "startup", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 2,
+                    SafetyRating = 5,
+                    ImpactNote = "Play To service not auto-started; listener not running unless explicitly launched.",
+                    ApplyOps = [RegOp.SetDword(Key, "DisableAutoStart", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "DisableAutoStart")],
+                    DetectOps = [RegOp.CheckDword(Key, "DisableAutoStart", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "playtodev-disable-wsd-host-discovery",
+                    Label = "Play To: Disable WSD Function Discovery Host (FDHOST) Network Broadcast",
+                    Category = "Display",
+                    Description =
+                        "Sets DisableFunctionDiscoveryHostBroadcast=1 in WSD machine policy. Prevents the Function Discovery Host service from broadcasting WSD host announcements that advertise this machine's services (web services, UPnP capabilities) to other devices on the network. "
+                        + "Function Discovery is the mechanism Windows uses to populate the Network window in Explorer. Broadcasting the host's function discovery metadata exposes its installed services and capabilities to all LAN listeners. On hardened workstations, eliminating unnecessary network announcements reduces the device's identifiable surface in passive network reconnaissance.",
+                    Tags = ["wsd", "fdhost", "broadcast", "discovery", "hardening"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 2,
+                    SafetyRating = 5,
+                    ImpactNote = "Suppresses WSD function discovery host broadcasts; device less identifiable via passive LAN scanning.",
+                    ApplyOps = [RegOp.SetDword(WsdKey, "DisableFunctionDiscoveryHostBroadcast", 1)],
+                    RemoveOps = [RegOp.DeleteValue(WsdKey, "DisableFunctionDiscoveryHostBroadcast")],
+                    DetectOps = [RegOp.CheckDword(WsdKey, "DisableFunctionDiscoveryHostBroadcast", 1)],
+                },
+            ];
     }
 
     // ── ScreenSaverSecurityPolicy ──
     private static class _ScreenSaverSecurityPolicy
     {
-        private const string Key =
-            @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\ScreenSaver";
+        private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\ScreenSaver";
 
         public static IReadOnlyList<TweakDef> Data =>
             [
@@ -8660,7 +8803,6 @@ internal static class PolicyDesktop
                     DetectOps = [RegOp.CheckDword(Key, "ScreenSaverGracePeriod", 0)],
                 },
             ];
-
     }
 
     // ── SharedClipboardControlPolicy ──
@@ -8842,7 +8984,6 @@ internal static class PolicyDesktop
                     DetectOps = [RegOp.CheckDword(Key2, "RestrictSameProcessClipboard", 1)],
                 },
             ];
-
     }
 
     // ── ShellRestrictionsPolicy ──
@@ -8993,7 +9134,6 @@ internal static class PolicyDesktop
                 DetectOps = [RegOp.CheckDword(Pol, "NoNetHood", 1)],
             },
         ];
-
     }
 
     // ── ShutdownOptionsPolicy ──
@@ -9008,7 +9148,10 @@ internal static class PolicyDesktop
                 Id = "shtdwn-disable-shutdown-on-ctrl-alt-del",
                 Label = "Disable Shutdown from Ctrl+Alt+Del Screen",
                 Category = "Display",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 3, SafetyRating = 5,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 3,
+                SafetyRating = 5,
                 Description =
                     "Sets NoShutdownOnCtrlAltDel=1 in the ShutdownOptions policy key. "
                     + "Removes the Shut down button from the Ctrl+Alt+Del secure attention "
@@ -9027,7 +9170,10 @@ internal static class PolicyDesktop
                 Id = "shtdwn-require-shutdown-reason",
                 Label = "Require Shutdown Reason and Comment",
                 Category = "Display",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 3, SafetyRating = 5,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 3,
+                SafetyRating = 5,
                 Description =
                     "Sets ShutdownReasonOn=1 in the ShutdownOptions policy key. Forces the "
                     + "shutdown dialog to display a reason code drop-down and optional "
@@ -9046,7 +9192,10 @@ internal static class PolicyDesktop
                 Id = "shtdwn-disable-restart-apps",
                 Label = "Disable App Restart After Reboot",
                 Category = "Display",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 3, SafetyRating = 5,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 3,
+                SafetyRating = 5,
                 Description =
                     "Sets DisableAppRestart=1 in the ShutdownOptions policy key. Prevents "
                     + "Windows from re-launching applications registered in the RunOnce "
@@ -9065,7 +9214,10 @@ internal static class PolicyDesktop
                 Id = "shtdwn-disable-automatic-restart",
                 Label = "Disable Automatic Restart After BSOD",
                 Category = "Display",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 4, SafetyRating = 5,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 4,
+                SafetyRating = 5,
                 Description =
                     "Sets DisableAutomaticRestart=1 in the ShutdownOptions policy key. "
                     + "Prevents the system from automatically rebooting after a fatal Stop "
@@ -9084,7 +9236,10 @@ internal static class PolicyDesktop
                 Id = "shtdwn-disable-legacy-logoff-script",
                 Label = "Disable Legacy Logoff Script Delay",
                 Category = "Display",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 2, SafetyRating = 5,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 2,
+                SafetyRating = 5,
                 Description =
                     "Sets MaxWaitForScriptDelay=0 in the ShutdownOptions policy key. Sets "
                     + "the maximum time the system will wait for legacy Group Policy logoff "
@@ -9103,7 +9258,10 @@ internal static class PolicyDesktop
                 Id = "shtdwn-disable-forced-reboot-notification",
                 Label = "Disable Forced Reboot Notification Banner",
                 Category = "Display",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 3, SafetyRating = 5,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 3,
+                SafetyRating = 5,
                 Description =
                     "Sets DisableForcedRebootNotification=1 in the ShutdownOptions policy "
                     + "key. Suppresses the notification banner that warns users of an "
@@ -9122,7 +9280,10 @@ internal static class PolicyDesktop
                 Id = "shtdwn-disable-power-button-action",
                 Label = "Disable Power Button Shutdown",
                 Category = "Display",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 2, SafetyRating = 5,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 2,
+                SafetyRating = 5,
                 Description =
                     "Sets DisablePowerButton=1 in the ShutdownOptions policy key. Prevents "
                     + "the physical power button from triggering a shutdown or hibernate "
@@ -9141,7 +9302,10 @@ internal static class PolicyDesktop
                 Id = "shtdwn-disable-restart-button-start",
                 Label = "Disable Restart Option in Start Menu",
                 Category = "Display",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 2, SafetyRating = 5,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 2,
+                SafetyRating = 5,
                 Description =
                     "Sets NoRestartFromStartMenu=1 in the ShutdownOptions policy key. "
                     + "Removes the Restart option from the Start Menu power button flyout, "
@@ -9160,7 +9324,10 @@ internal static class PolicyDesktop
                 Id = "shtdwn-disable-hibernate-option",
                 Label = "Disable Hibernate Option in Shutdown Menu",
                 Category = "Display",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 3, SafetyRating = 5,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 3,
+                SafetyRating = 5,
                 Description =
                     "Sets DisableHibernate=1 in the ShutdownOptions policy key. Removes "
                     + "the Hibernate entry from the shutdown and power flyout menus. "
@@ -9179,7 +9346,10 @@ internal static class PolicyDesktop
                 Id = "shtdwn-log-shutdown-events",
                 Label = "Enable Shutdown Event Logging",
                 Category = "Display",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 3, SafetyRating = 5,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 3,
+                SafetyRating = 5,
                 Description =
                     "Sets LogShutdownEvents=1 in the ShutdownOptions policy key. Enables "
                     + "recording of shutdown, restart, and logoff events with user identity, "
@@ -9194,7 +9364,6 @@ internal static class PolicyDesktop
                 DetectOps = [RegOp.CheckDword(Key, "LogShutdownEvents", 1)],
             },
         ];
-
     }
 
     // ── SidebarGadgetsPolicy ──
@@ -9385,7 +9554,6 @@ internal static class PolicyDesktop
                 DetectOps = [RegOp.CheckDword(Key, "DisableGadgetGallery", 1)],
             },
         ];
-
     }
 
     // ── StartMenuModernPolicy ──
@@ -9548,7 +9716,6 @@ internal static class PolicyDesktop
                 DetectOps = [RegOp.CheckDword(ExplPol, "NoMachineBootUninstall", 1)],
             },
         ];
-
     }
 
     // ── SudoWindowsPolicy ──
@@ -9559,189 +9726,203 @@ internal static class PolicyDesktop
         private const string UacPoliciesKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\UAC";
 
         public static IReadOnlyList<TweakDef> Data =>
-        [
-            new TweakDef
-            {
-                Id = "sudopol-disable-sudo",
-                Label = "Disable Sudo for Windows",
-                Category = "Display",
-                Description = "Prevents users from using the 'sudo' command in Windows to run programs with elevated privileges from a standard terminal. Enforces traditional UAC elevation only.",
-                Tags = ["sudo", "elevation", "uac", "security", "windows-11"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                MinBuild = 22631,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                ImpactNote = "Prevents privilege escalation via sudo from standard terminals; users must use dedicated elevated sessions.",
-                RegistryKeys = [SudoKey],
-                ApplyOps  = [RegOp.SetDword(SudoKey, "Enabled", 0)],
-                RemoveOps = [RegOp.DeleteValue(SudoKey, "Enabled")],
-                DetectOps = [RegOp.CheckDword(SudoKey, "Enabled", 0)],
-            },
-            new TweakDef
-            {
-                Id = "sudopol-force-new-window",
-                Label = "Force Sudo to Open New Window",
-                Category = "Display",
-                Description = "When sudo is permitted, forces elevated processes to launch in a new, separate console window rather than running inline in the calling shell. Increases visibility of elevated sessions.",
-                Tags = ["sudo", "elevation", "new-window", "uac", "windows-11"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                MinBuild = 22631,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Elevated process runs in a clearly separate window, reducing confusion about which shell context is privileged.",
-                RegistryKeys = [SudoKey],
-                ApplyOps  = [RegOp.SetDword(SudoKey, "SudoMode", 0)],
-                RemoveOps = [RegOp.DeleteValue(SudoKey, "SudoMode")],
-                DetectOps = [RegOp.CheckDword(SudoKey, "SudoMode", 0)],
-            },
-            new TweakDef
-            {
-                Id = "sudopol-disable-inline-mode",
-                Label = "Disable Sudo Inline Execution Mode",
-                Category = "Display",
-                Description = "Prevents the 'inline' execution mode of sudo where the elevated process shares the calling terminal session. Inline mode can mask privilege escalation; this policy requires isolated execution.",
-                Tags = ["sudo", "elevation", "inline-mode", "security", "windows-11"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                MinBuild = 22631,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Inline sudo blurs the boundary between privileged and non-privileged sessions; disabling it is recommended for corporate environments.",
-                RegistryKeys = [SudoKey],
-                ApplyOps  = [RegOp.SetDword(SudoKey, "AllowInlineMode", 0)],
-                RemoveOps = [RegOp.DeleteValue(SudoKey, "AllowInlineMode")],
-                DetectOps = [RegOp.CheckDword(SudoKey, "AllowInlineMode", 0)],
-            },
-            new TweakDef
-            {
-                Id = "sudopol-disable-input-disabled-mode",
-                Label = "Disable Sudo Input-Disabled Mode",
-                Category = "Display",
-                Description = "Prevents the 'input disabled' mode of sudo, which runs an elevated process with stdin closed. This mode is useful for non-interactive elevated scripts but may bypass certain security controls.",
-                Tags = ["sudo", "elevation", "input-disabled", "security", "windows-11"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                MinBuild = 22631,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                ImpactNote = "Prevents automated elevated scripts from running silently via sudo in environments where operator oversight is required.",
-                RegistryKeys = [SudoKey],
-                ApplyOps  = [RegOp.SetDword(SudoKey, "AllowInputDisabledMode", 0)],
-                RemoveOps = [RegOp.DeleteValue(SudoKey, "AllowInputDisabledMode")],
-                DetectOps = [RegOp.CheckDword(SudoKey, "AllowInputDisabledMode", 0)],
-            },
-            new TweakDef
-            {
-                Id = "sudopol-require-admin-group-membership",
-                Label = "Restrict Sudo to Local Administrators Group",
-                Category = "Display",
-                Description = "Ensures that only users who are members of the local Administrators group can use sudo for Windows, preventing standard users from attempting elevation via sudo.",
-                Tags = ["sudo", "elevation", "admin-group", "access-control", "security"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                MinBuild = 22631,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Provides an explicit access gate: even if sudo is enabled on the device, non-admin users receive a denial.",
-                RegistryKeys = [SudoKey],
-                ApplyOps  = [RegOp.SetDword(SudoKey, "RequireAdminGroupMembership", 1)],
-                RemoveOps = [RegOp.DeleteValue(SudoKey, "RequireAdminGroupMembership")],
-                DetectOps = [RegOp.CheckDword(SudoKey, "RequireAdminGroupMembership", 1)],
-            },
-            new TweakDef
-            {
-                Id = "sudopol-enable-audit-events",
-                Label = "Enable Sudo Elevation Audit Events",
-                Category = "Display",
-                Description = "Configures Windows to write an audit log entry whenever a process is elevated via sudo. Audit entries include the calling user, the target executable, and the elevation timestamp.",
-                Tags = ["sudo", "elevation", "audit", "compliance", "event-log"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                MinBuild = 22631,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Produces an accountable record of every sudo elevation, supporting incident response and SOC monitoring.",
-                RegistryKeys = [SudoKey],
-                ApplyOps  = [RegOp.SetDword(SudoKey, "EnableAuditEvents", 1)],
-                RemoveOps = [RegOp.DeleteValue(SudoKey, "EnableAuditEvents")],
-                DetectOps = [RegOp.CheckDword(SudoKey, "EnableAuditEvents", 1)],
-            },
-            new TweakDef
-            {
-                Id = "sudopol-block-network-elevated-processes",
-                Label = "Block Elevated Processes from Accessing Network",
-                Category = "Display",
-                Description = "Restricts network access for processes elevated via sudo, preventing elevated shells from making outbound network connections. Limits lateral movement potential from elevated contexts.",
-                Tags = ["sudo", "elevation", "network", "security", "hardening"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                MinBuild = 22631,
-                ImpactScore = 4,
-                SafetyRating = 4,
-                ImpactNote = "An elevated process with network access can pivot to other systems; this policy reduces the blast radius of a compromised sudo-elevated session.",
-                RegistryKeys = [ElevationConfigKey],
-                ApplyOps  = [RegOp.SetDword(ElevationConfigKey, "BlockNetworkFromElevatedProcesses", 1)],
-                RemoveOps = [RegOp.DeleteValue(ElevationConfigKey, "BlockNetworkFromElevatedProcesses")],
-                DetectOps = [RegOp.CheckDword(ElevationConfigKey, "BlockNetworkFromElevatedProcesses", 1)],
-            },
-            new TweakDef
-            {
-                Id = "sudopol-enforce-credential-prompt",
-                Label = "Always Prompt for Credentials on Sudo Elevation",
-                Category = "Display",
-                Description = "Requires the user to enter explicit credentials (password or Windows Hello) before each sudo elevation, even within an existing authenticated session. Prevents silent re-elevation.",
-                Tags = ["sudo", "elevation", "credential-prompt", "uac", "security"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                MinBuild = 22631,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Satisfies 'explicit approval' audit requirements by ensuring the user actively authenticates for each elevated action.",
-                RegistryKeys = [ElevationConfigKey],
-                ApplyOps  = [RegOp.SetDword(ElevationConfigKey, "AlwaysPromptCredentialsOnElevation", 1)],
-                RemoveOps = [RegOp.DeleteValue(ElevationConfigKey, "AlwaysPromptCredentialsOnElevation")],
-                DetectOps = [RegOp.CheckDword(ElevationConfigKey, "AlwaysPromptCredentialsOnElevation", 1)],
-            },
-            new TweakDef
-            {
-                Id = "sudopol-log-elevated-command-line",
-                Label = "Log Command-Line Arguments for Sudo-Elevated Processes",
-                Category = "Display",
-                Description = "Enables command-line logging for all processes elevated through sudo, recording the full command line in the Windows event log. Aids forensic investigation of elevation abuse.",
-                Tags = ["sudo", "elevation", "command-line", "audit", "forensics"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                MinBuild = 22631,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Command-line data in event logs reveals what was actually run with elevated privileges, not just that elevation occurred.",
-                RegistryKeys = [ElevationConfigKey],
-                ApplyOps  = [RegOp.SetDword(ElevationConfigKey, "LogElevatedCommandLine", 1)],
-                RemoveOps = [RegOp.DeleteValue(ElevationConfigKey, "LogElevatedCommandLine")],
-                DetectOps = [RegOp.CheckDword(ElevationConfigKey, "LogElevatedCommandLine", 1)],
-            },
-            new TweakDef
-            {
-                Id = "sudopol-block-unapproved-shells",
-                Label = "Block Sudo Elevation from Unapproved Shell Hosts",
-                Category = "Display",
-                Description = "Restricts sudo elevation to approved shell host executables (Windows Terminal, PowerShell 7, cmd.exe). Prevents elevation from unusual hosts such as scripting engines or third-party terminals.",
-                Tags = ["sudo", "elevation", "shell", "allowlist", "security"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                MinBuild = 22631,
-                ImpactScore = 3,
-                SafetyRating = 4,
-                ImpactNote = "Reduces attack surface by ensuring only known-good terminal applications can initiate sudo elevation requests.",
-                RegistryKeys = [UacPoliciesKey],
-                ApplyOps  = [RegOp.SetDword(UacPoliciesKey, "RestrictSudoToApprovedHosts", 1)],
-                RemoveOps = [RegOp.DeleteValue(UacPoliciesKey, "RestrictSudoToApprovedHosts")],
-                DetectOps = [RegOp.CheckDword(UacPoliciesKey, "RestrictSudoToApprovedHosts", 1)],
-            },
-        ];
-
+            [
+                new TweakDef
+                {
+                    Id = "sudopol-disable-sudo",
+                    Label = "Disable Sudo for Windows",
+                    Category = "Display",
+                    Description =
+                        "Prevents users from using the 'sudo' command in Windows to run programs with elevated privileges from a standard terminal. Enforces traditional UAC elevation only.",
+                    Tags = ["sudo", "elevation", "uac", "security", "windows-11"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    MinBuild = 22631,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "Prevents privilege escalation via sudo from standard terminals; users must use dedicated elevated sessions.",
+                    RegistryKeys = [SudoKey],
+                    ApplyOps = [RegOp.SetDword(SudoKey, "Enabled", 0)],
+                    RemoveOps = [RegOp.DeleteValue(SudoKey, "Enabled")],
+                    DetectOps = [RegOp.CheckDword(SudoKey, "Enabled", 0)],
+                },
+                new TweakDef
+                {
+                    Id = "sudopol-force-new-window",
+                    Label = "Force Sudo to Open New Window",
+                    Category = "Display",
+                    Description =
+                        "When sudo is permitted, forces elevated processes to launch in a new, separate console window rather than running inline in the calling shell. Increases visibility of elevated sessions.",
+                    Tags = ["sudo", "elevation", "new-window", "uac", "windows-11"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    MinBuild = 22631,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "Elevated process runs in a clearly separate window, reducing confusion about which shell context is privileged.",
+                    RegistryKeys = [SudoKey],
+                    ApplyOps = [RegOp.SetDword(SudoKey, "SudoMode", 0)],
+                    RemoveOps = [RegOp.DeleteValue(SudoKey, "SudoMode")],
+                    DetectOps = [RegOp.CheckDword(SudoKey, "SudoMode", 0)],
+                },
+                new TweakDef
+                {
+                    Id = "sudopol-disable-inline-mode",
+                    Label = "Disable Sudo Inline Execution Mode",
+                    Category = "Display",
+                    Description =
+                        "Prevents the 'inline' execution mode of sudo where the elevated process shares the calling terminal session. Inline mode can mask privilege escalation; this policy requires isolated execution.",
+                    Tags = ["sudo", "elevation", "inline-mode", "security", "windows-11"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    MinBuild = 22631,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote =
+                        "Inline sudo blurs the boundary between privileged and non-privileged sessions; disabling it is recommended for corporate environments.",
+                    RegistryKeys = [SudoKey],
+                    ApplyOps = [RegOp.SetDword(SudoKey, "AllowInlineMode", 0)],
+                    RemoveOps = [RegOp.DeleteValue(SudoKey, "AllowInlineMode")],
+                    DetectOps = [RegOp.CheckDword(SudoKey, "AllowInlineMode", 0)],
+                },
+                new TweakDef
+                {
+                    Id = "sudopol-disable-input-disabled-mode",
+                    Label = "Disable Sudo Input-Disabled Mode",
+                    Category = "Display",
+                    Description =
+                        "Prevents the 'input disabled' mode of sudo, which runs an elevated process with stdin closed. This mode is useful for non-interactive elevated scripts but may bypass certain security controls.",
+                    Tags = ["sudo", "elevation", "input-disabled", "security", "windows-11"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    MinBuild = 22631,
+                    ImpactScore = 2,
+                    SafetyRating = 5,
+                    ImpactNote =
+                        "Prevents automated elevated scripts from running silently via sudo in environments where operator oversight is required.",
+                    RegistryKeys = [SudoKey],
+                    ApplyOps = [RegOp.SetDword(SudoKey, "AllowInputDisabledMode", 0)],
+                    RemoveOps = [RegOp.DeleteValue(SudoKey, "AllowInputDisabledMode")],
+                    DetectOps = [RegOp.CheckDword(SudoKey, "AllowInputDisabledMode", 0)],
+                },
+                new TweakDef
+                {
+                    Id = "sudopol-require-admin-group-membership",
+                    Label = "Restrict Sudo to Local Administrators Group",
+                    Category = "Display",
+                    Description =
+                        "Ensures that only users who are members of the local Administrators group can use sudo for Windows, preventing standard users from attempting elevation via sudo.",
+                    Tags = ["sudo", "elevation", "admin-group", "access-control", "security"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    MinBuild = 22631,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "Provides an explicit access gate: even if sudo is enabled on the device, non-admin users receive a denial.",
+                    RegistryKeys = [SudoKey],
+                    ApplyOps = [RegOp.SetDword(SudoKey, "RequireAdminGroupMembership", 1)],
+                    RemoveOps = [RegOp.DeleteValue(SudoKey, "RequireAdminGroupMembership")],
+                    DetectOps = [RegOp.CheckDword(SudoKey, "RequireAdminGroupMembership", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "sudopol-enable-audit-events",
+                    Label = "Enable Sudo Elevation Audit Events",
+                    Category = "Display",
+                    Description =
+                        "Configures Windows to write an audit log entry whenever a process is elevated via sudo. Audit entries include the calling user, the target executable, and the elevation timestamp.",
+                    Tags = ["sudo", "elevation", "audit", "compliance", "event-log"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    MinBuild = 22631,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "Produces an accountable record of every sudo elevation, supporting incident response and SOC monitoring.",
+                    RegistryKeys = [SudoKey],
+                    ApplyOps = [RegOp.SetDword(SudoKey, "EnableAuditEvents", 1)],
+                    RemoveOps = [RegOp.DeleteValue(SudoKey, "EnableAuditEvents")],
+                    DetectOps = [RegOp.CheckDword(SudoKey, "EnableAuditEvents", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "sudopol-block-network-elevated-processes",
+                    Label = "Block Elevated Processes from Accessing Network",
+                    Category = "Display",
+                    Description =
+                        "Restricts network access for processes elevated via sudo, preventing elevated shells from making outbound network connections. Limits lateral movement potential from elevated contexts.",
+                    Tags = ["sudo", "elevation", "network", "security", "hardening"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    MinBuild = 22631,
+                    ImpactScore = 4,
+                    SafetyRating = 4,
+                    ImpactNote =
+                        "An elevated process with network access can pivot to other systems; this policy reduces the blast radius of a compromised sudo-elevated session.",
+                    RegistryKeys = [ElevationConfigKey],
+                    ApplyOps = [RegOp.SetDword(ElevationConfigKey, "BlockNetworkFromElevatedProcesses", 1)],
+                    RemoveOps = [RegOp.DeleteValue(ElevationConfigKey, "BlockNetworkFromElevatedProcesses")],
+                    DetectOps = [RegOp.CheckDword(ElevationConfigKey, "BlockNetworkFromElevatedProcesses", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "sudopol-enforce-credential-prompt",
+                    Label = "Always Prompt for Credentials on Sudo Elevation",
+                    Category = "Display",
+                    Description =
+                        "Requires the user to enter explicit credentials (password or Windows Hello) before each sudo elevation, even within an existing authenticated session. Prevents silent re-elevation.",
+                    Tags = ["sudo", "elevation", "credential-prompt", "uac", "security"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    MinBuild = 22631,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote =
+                        "Satisfies 'explicit approval' audit requirements by ensuring the user actively authenticates for each elevated action.",
+                    RegistryKeys = [ElevationConfigKey],
+                    ApplyOps = [RegOp.SetDword(ElevationConfigKey, "AlwaysPromptCredentialsOnElevation", 1)],
+                    RemoveOps = [RegOp.DeleteValue(ElevationConfigKey, "AlwaysPromptCredentialsOnElevation")],
+                    DetectOps = [RegOp.CheckDword(ElevationConfigKey, "AlwaysPromptCredentialsOnElevation", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "sudopol-log-elevated-command-line",
+                    Label = "Log Command-Line Arguments for Sudo-Elevated Processes",
+                    Category = "Display",
+                    Description =
+                        "Enables command-line logging for all processes elevated through sudo, recording the full command line in the Windows event log. Aids forensic investigation of elevation abuse.",
+                    Tags = ["sudo", "elevation", "command-line", "audit", "forensics"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    MinBuild = 22631,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote =
+                        "Command-line data in event logs reveals what was actually run with elevated privileges, not just that elevation occurred.",
+                    RegistryKeys = [ElevationConfigKey],
+                    ApplyOps = [RegOp.SetDword(ElevationConfigKey, "LogElevatedCommandLine", 1)],
+                    RemoveOps = [RegOp.DeleteValue(ElevationConfigKey, "LogElevatedCommandLine")],
+                    DetectOps = [RegOp.CheckDword(ElevationConfigKey, "LogElevatedCommandLine", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "sudopol-block-unapproved-shells",
+                    Label = "Block Sudo Elevation from Unapproved Shell Hosts",
+                    Category = "Display",
+                    Description =
+                        "Restricts sudo elevation to approved shell host executables (Windows Terminal, PowerShell 7, cmd.exe). Prevents elevation from unusual hosts such as scripting engines or third-party terminals.",
+                    Tags = ["sudo", "elevation", "shell", "allowlist", "security"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    MinBuild = 22631,
+                    ImpactScore = 3,
+                    SafetyRating = 4,
+                    ImpactNote = "Reduces attack surface by ensuring only known-good terminal applications can initiate sudo elevation requests.",
+                    RegistryKeys = [UacPoliciesKey],
+                    ApplyOps = [RegOp.SetDword(UacPoliciesKey, "RestrictSudoToApprovedHosts", 1)],
+                    RemoveOps = [RegOp.DeleteValue(UacPoliciesKey, "RestrictSudoToApprovedHosts")],
+                    DetectOps = [RegOp.CheckDword(UacPoliciesKey, "RestrictSudoToApprovedHosts", 1)],
+                },
+            ];
     }
 
     // ── SystemShutdown ──
@@ -9866,8 +10047,14 @@ internal static class PolicyDesktop
                     + "than sequentially. Reduces total script execution time during logout. "
                     + "RunLogonScriptSync=0.",
                 ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "RunLogonScriptSync", 0)],
-                RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "RunLogonScriptSync")],
-                DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "RunLogonScriptSync", 0)],
+                RemoveOps =
+                [
+                    RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "RunLogonScriptSync"),
+                ],
+                DetectOps =
+                [
+                    RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "RunLogonScriptSync", 0),
+                ],
             },
             new TweakDef
             {
@@ -9940,9 +10127,18 @@ internal static class PolicyDesktop
                     "Hides the 'Please wait for the <script> to finish' message shown when "
                     + "GPO logoff/shutdown scripts exceed MaxGPOScriptWait. Prevents the UI "
                     + "from blocking shutdown on domain machines with slow scripts.",
-                ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "HideShutdownScripts", 0)],
-                RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "HideShutdownScripts")],
-                DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "HideShutdownScripts", 0)],
+                ApplyOps =
+                [
+                    RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "HideShutdownScripts", 0),
+                ],
+                RemoveOps =
+                [
+                    RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "HideShutdownScripts"),
+                ],
+                DetectOps =
+                [
+                    RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "HideShutdownScripts", 0),
+                ],
             },
             new TweakDef
             {
@@ -9963,7 +10159,6 @@ internal static class PolicyDesktop
                 DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows NT\CurrentVersion\Winlogon", "RestartApps", 0)],
             },
         ];
-
     }
 
     // ── TabletPcInputPolicy ──
@@ -10031,7 +10226,8 @@ internal static class PolicyDesktop
                 Id = "tabpol-prevent-handwriting-personalization",
                 Label = "Prevent Handwriting Personalization Collection",
                 Category = "Display",
-                Description = "Blocks Windows from collecting typed and handwriting data to build a personalized dictionary for handwriting recognition.",
+                Description =
+                    "Blocks Windows from collecting typed and handwriting data to build a personalized dictionary for handwriting recognition.",
                 Tags = ["tablet", "privacy", "handwriting", "group-policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -10070,7 +10266,8 @@ internal static class PolicyDesktop
                 Id = "tabpol-disable-touch-input",
                 Label = "Disable Touch Input (Tablet PC Policy)",
                 Category = "Display",
-                Description = "Disables all touch-based input processing via Group Policy. Useful for kiosk or hardened deployments without touch screens.",
+                Description =
+                    "Disables all touch-based input processing via Group Policy. Useful for kiosk or hardened deployments without touch screens.",
                 Tags = ["tablet", "touch", "group-policy", "input", "kiosk"],
                 NeedsAdmin = true,
                 CorpSafe = false,
@@ -10083,7 +10280,8 @@ internal static class PolicyDesktop
                 Id = "tabpol-disable-touchscreen-scroll",
                 Label = "Disable Touchscreen Panning and Scrolling Inertia",
                 Category = "Display",
-                Description = "Disables momentum scrolling (inertia) and panning on touchscreens to reduce accidental scrolling in productivity apps.",
+                Description =
+                    "Disables momentum scrolling (inertia) and panning on touchscreens to reduce accidental scrolling in productivity apps.",
                 Tags = ["tablet", "touch", "group-policy", "input"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -10105,7 +10303,6 @@ internal static class PolicyDesktop
                 DetectOps = [RegOp.CheckDword(TabWin, "DisableFlicksFeature", 1)],
             },
         ];
-
     }
 
     // ── TouchpadGestures ──
@@ -10301,7 +10498,6 @@ internal static class PolicyDesktop
                 DetectOps = [RegOp.CheckDword(Ptp, "EdgeEnabled", 0)],
             },
         ];
-
     }
 
     // ── VideoCapturePolicy ──
@@ -10532,7 +10728,6 @@ internal static class PolicyDesktop
                 DetectOps = [RegOp.CheckDword(Key, "DisableBackgroundCapture", 1)],
             },
         ];
-
     }
 
     // ── VirtualKeyboardPolicy ──
@@ -10547,7 +10742,10 @@ internal static class PolicyDesktop
                 Id = "vkbd-disable-touch-keyboard",
                 Label = "Disable Automatic Touch Keyboard Pop-Up",
                 Category = "Display",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 3, SafetyRating = 5,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 3,
+                SafetyRating = 5,
                 Description =
                     "Sets DisableTouchKeyboard=1 in the VirtualKeyboard policy key. Prevents "
                     + "the Windows touch keyboard from appearing automatically when the user "
@@ -10566,7 +10764,10 @@ internal static class PolicyDesktop
                 Id = "vkbd-disable-emoji-panel",
                 Label = "Disable Emoji Panel (Win+.)",
                 Category = "Display",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 2, SafetyRating = 5,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 2,
+                SafetyRating = 5,
                 Description =
                     "Sets DisableEmojiPanel=1 in the VirtualKeyboard policy key. Removes the "
                     + "emoji and special-characters picker that opens via Windows + period (.) "
@@ -10585,7 +10786,10 @@ internal static class PolicyDesktop
                 Id = "vkbd-disable-keyboard-sound",
                 Label = "Disable Virtual Keyboard Key Click Sound",
                 Category = "Display",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 1, SafetyRating = 5,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 1,
+                SafetyRating = 5,
                 Description =
                     "Sets DisableKeyboardSound=1 in the VirtualKeyboard policy key. Mutes the "
                     + "click sound effect played each time a key on the on-screen touch keyboard "
@@ -10603,7 +10807,10 @@ internal static class PolicyDesktop
                 Id = "vkbd-disable-handwriting-button",
                 Label = "Disable Touch Keyboard Handwriting Button",
                 Category = "Display",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 2, SafetyRating = 5,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 2,
+                SafetyRating = 5,
                 Description =
                     "Sets DisableHandwritingButton=1 in the VirtualKeyboard policy key. Removes "
                     + "the stylus/pen button from the touch keyboard toolbar that switches "
@@ -10622,7 +10829,10 @@ internal static class PolicyDesktop
                 Id = "vkbd-disable-keyboard-telemetry",
                 Label = "Disable Virtual Keyboard Telemetry",
                 Category = "Display",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 2, SafetyRating = 5,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 2,
+                SafetyRating = 5,
                 Description =
                     "Sets DisableKeyboardTelemetry=1 in the VirtualKeyboard policy key. Stops "
                     + "the touch keyboard from reporting usage statistics including layout "
@@ -10642,7 +10852,10 @@ internal static class PolicyDesktop
                 Id = "vkbd-disable-fullscreen-keyboard",
                 Label = "Disable Full-Screen Keyboard in Desktop Apps",
                 Category = "Display",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 2, SafetyRating = 5,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 2,
+                SafetyRating = 5,
                 Description =
                     "Sets DisableFullScreenKeyboard=1 in the VirtualKeyboard policy key. "
                     + "Prevents the touch keyboard from expanding to a full-screen mode when "
@@ -10661,7 +10874,10 @@ internal static class PolicyDesktop
                 Id = "vkbd-disable-keyboard-animations",
                 Label = "Disable Touch Keyboard Animations",
                 Category = "Display",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 1, SafetyRating = 5,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 1,
+                SafetyRating = 5,
                 Description =
                     "Sets DisableKeyboardAnimations=1 in the VirtualKeyboard policy key. "
                     + "Removes the slide and fade animations for touch keyboard show/hide "
@@ -10680,7 +10896,10 @@ internal static class PolicyDesktop
                 Id = "vkbd-disable-voice-dictation-key",
                 Label = "Disable Voice Dictation Key on Touch Keyboard",
                 Category = "Display",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 2, SafetyRating = 5,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 2,
+                SafetyRating = 5,
                 Description =
                     "Sets DisableVoiceDictationKey=1 in the VirtualKeyboard policy key. Removes "
                     + "the microphone button from the touch keyboard that activates the Windows "
@@ -10699,7 +10918,10 @@ internal static class PolicyDesktop
                 Id = "vkbd-disable-split-keyboard",
                 Label = "Disable Split Touch Keyboard Mode",
                 Category = "Display",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 1, SafetyRating = 5,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 1,
+                SafetyRating = 5,
                 Description =
                     "Sets DisableSplitKeyboard=1 in the VirtualKeyboard policy key. Disables "
                     + "the split-keyboard layout that separates the keyboard into two thumb-"
@@ -10718,7 +10940,10 @@ internal static class PolicyDesktop
                 Id = "vkbd-disable-wide-keyboard",
                 Label = "Disable Wide Touch Keyboard Layout",
                 Category = "Display",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 1, SafetyRating = 5,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 1,
+                SafetyRating = 5,
                 Description =
                     "Sets DisableWideKeyboard=1 in the VirtualKeyboard policy key. Removes "
                     + "the wide (full-width undocked) touch keyboard variant from the layout "
@@ -10733,7 +10958,6 @@ internal static class PolicyDesktop
                 DetectOps = [RegOp.CheckDword(Key, "DisableWideKeyboard", 1)],
             },
         ];
-
     }
 
     // ── WddmDriverPolicy ──
@@ -10744,169 +10968,178 @@ internal static class PolicyDesktop
         private const string PolKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Display";
 
         public static IReadOnlyList<TweakDef> Data =>
-        [
-            new TweakDef
-            {
-                Id           = "wddmpol-enable-hwscheduling",
-                Label        = "Enable Hardware-Accelerated GPU Scheduling (HAGS)",
-                Category = "Display",
-                Description  = "Enables Hardware-Accelerated GPU Scheduling (HAGS/WDDM 2.7) which offloads GPU memory scheduling decisions from the CPU-based WDDM scheduler to the GPU firmware, reducing latency and CPU overhead for GPU-bound workloads.",
-                Tags         = ["wddm", "gpu-scheduling", "hags", "performance", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 4,
-                SafetyRating = 5,
-                ImpactNote   = "GPU Hardware Accelerated Scheduling enabled; reduced CPU-GPU scheduling latency and CPU overhead.",
-                ApplyOps     = [RegOp.SetDword(Key, "HwSchMode", 2)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "HwSchMode")],
-                DetectOps    = [RegOp.CheckDword(Key, "HwSchMode", 2)],
-            },
-            new TweakDef
-            {
-                Id           = "wddmpol-set-tdr-delay-8s",
-                Label        = "Set GPU Timeout Detection and Recovery Delay to 8 Seconds",
-                Category = "Display",
-                Description  = "Sets the Timeout Detection and Recovery (TDR) delay to 8 seconds (from the default 2 seconds), preventing false positive GPU resets during long compute operations (ML inference, video encoding) that legitimately use the GPU for longer than 2 seconds.",
-                Tags         = ["wddm", "tdr", "gpu-timeout", "compute", "stability", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 3,
-                SafetyRating = 5,
-                ImpactNote   = "TDR delay set to 8s; prevents false GPU resets during long compute jobs. Delays detection of real hangs.",
-                ApplyOps     = [RegOp.SetDword(Key, "TdrDelay", 8)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "TdrDelay")],
-                DetectOps    = [RegOp.CheckDword(Key, "TdrDelay", 8)],
-            },
-            new TweakDef
-            {
-                Id           = "wddmpol-set-tdr-level-recover",
-                Label        = "Set TDR Level to Recover GPU Without System Reboot",
-                Category = "Display",
-                Description  = "Configures the TDR recovery level to attempt GPU reset and recovery without a full system reboot (TdrLevelRecover=3), allowing the display driver to be restarted and the session to continue after a GPU hang.",
-                Tags         = ["wddm", "tdr", "recovery", "gpu-reset", "stability", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 3,
-                SafetyRating = 5,
-                ImpactNote   = "TDR recovery without reboot enabled; GPU hang results in driver restart, not full system crash.",
-                ApplyOps     = [RegOp.SetDword(Key, "TdrLevel", 3)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "TdrLevel")],
-                DetectOps    = [RegOp.CheckDword(Key, "TdrLevel", 3)],
-            },
-            new TweakDef
-            {
-                Id           = "wddmpol-enable-gpu-preemption-dma",
-                Label        = "Enable GPU DMA-Level Preemption for Responsiveness",
-                Category = "Display",
-                Description  = "Sets the GPU preemption granularity to DMA buffer level, allowing the WDDM scheduler to preempt running GPU workloads at DMA packet boundaries for improved UI responsiveness during background GPU-intensive tasks.",
-                Tags         = ["wddm", "preemption", "dma", "scheduler", "responsiveness", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 3,
-                SafetyRating = 5,
-                ImpactNote   = "GPU preemption at DMA level enabled; UI stays responsive during background GPU workloads.",
-                ApplyOps     = [RegOp.SetDword(ScKey, "EnablePreemption", 1)],
-                RemoveOps    = [RegOp.DeleteValue(ScKey, "EnablePreemption")],
-                DetectOps    = [RegOp.CheckDword(ScKey, "EnablePreemption", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "wddmpol-block-display-driver-fallback",
-                Label        = "Block Fallback to Microsoft Basic Display Adapter",
-                Category = "Display",
-                Description  = "Prevents Windows from falling back to the Microsoft Basic Display Adapter (2048×1152 VESA-only) when the GPU driver crashes, maintaining the last known working display driver and attempting recovery instead.",
-                Tags         = ["wddm", "basic-display", "driver-fallback", "recovery", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 3,
-                SafetyRating = 4,
-                ImpactNote   = "VGA-mode fallback blocked; driver crash triggers recovery, not basic display. May yield blank screen.",
-                ApplyOps     = [RegOp.SetDword(PolKey, "DisableBasicDisplayDriverFallback", 1)],
-                RemoveOps    = [RegOp.DeleteValue(PolKey, "DisableBasicDisplayDriverFallback")],
-                DetectOps    = [RegOp.CheckDword(PolKey, "DisableBasicDisplayDriverFallback", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "wddmpol-disable-dxgi-flip-discard",
-                Label        = "Disable Presentation Model Flip-Discard Optimisation",
-                Category = "Display",
-                Description  = "Disables the DXGI flip-discard presentation model that reuses swap chain surfaces, falling back to flip-sequential for maximum frame ordering correctness in trading and video production environments where tearing prevention is critical.",
-                Tags         = ["wddm", "dxgi", "flip-discard", "presentation", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 2,
-                SafetyRating = 5,
-                ImpactNote   = "Flip-discard presentation disabled; flip-sequential used. Maximum frame ordering correctness at slight perf cost.",
-                ApplyOps     = [RegOp.SetDword(PolKey, "DisableFlipDiscard", 1)],
-                RemoveOps    = [RegOp.DeleteValue(PolKey, "DisableFlipDiscard")],
-                DetectOps    = [RegOp.CheckDword(PolKey, "DisableFlipDiscard", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "wddmpol-log-tdr-events",
-                Label        = "Log GPU TDR Recovery Events to System Event Log",
-                Category = "Display",
-                Description  = "Enables System event log entries (EventID 4101, Display driver stopped responding and has recovered) for GPU TDR events, providing a history of GPU hangs and recovery cycles for diagnostics.",
-                Tags         = ["wddm", "tdr", "event-log", "audit", "gpu-stability", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 3,
-                SafetyRating = 5,
-                ImpactNote   = "GPU TDR events logged in System log; driver hang frequency visible for GPU stability diagnostics.",
-                ApplyOps     = [RegOp.SetDword(Key, "TdrLogging", 1)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "TdrLogging")],
-                DetectOps    = [RegOp.CheckDword(Key, "TdrLogging", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "wddmpol-disable-gpu-driver-telemetry",
-                Label        = "Disable WDDM GPU Driver Telemetry to Microsoft",
-                Category = "Display",
-                Description  = "Prevents the Windows Display Driver Model from sending GPU driver crash reports, TDR telemetry, and hardware capability telemetry to Microsoft, protecting GPU model/driver version information from cloud disclosure.",
-                Tags         = ["wddm", "telemetry", "privacy", "gpu", "microsoft", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 3,
-                SafetyRating = 5,
-                ImpactNote   = "WDDM GPU telemetry to Microsoft disabled; GPU model, driver version, and TDR events not sent to cloud.",
-                ApplyOps     = [RegOp.SetDword(PolKey, "DisableGPUTelemetry", 1)],
-                RemoveOps    = [RegOp.DeleteValue(PolKey, "DisableGPUTelemetry")],
-                DetectOps    = [RegOp.CheckDword(PolKey, "DisableGPUTelemetry", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "wddmpol-enable-virtual-display",
-                Label        = "Enable Virtual Display Adapter for Headless Operation",
-                Category = "Display",
-                Description  = "Enables the Windows virtual display adapter (IndirectDisplay) for headless server scenarios, providing a software display output that supports RDP and remote management tools without a physical GPU or monitor.",
-                Tags         = ["wddm", "virtual-display", "headless", "rdp", "server", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 2,
-                SafetyRating = 5,
-                ImpactNote   = "Virtual display adapter enabled for headless RDP; servers without physical GPU get a software display.",
-                ApplyOps     = [RegOp.SetDword(PolKey, "EnableVirtualDisplayAdapter", 1)],
-                RemoveOps    = [RegOp.DeleteValue(PolKey, "EnableVirtualDisplayAdapter")],
-                DetectOps    = [RegOp.CheckDword(PolKey, "EnableVirtualDisplayAdapter", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "wddmpol-set-gpu-priority-realtime",
-                Label        = "Set GPU Work Item Priority to Normal for System Processes",
-                Category = "Display",
-                Description  = "Configures the WDDM scheduler to run system and background GPU work items at Normal priority, preventing GPU starvation of foreground applications by long-running background ML or compute workloads.",
-                Tags         = ["wddm", "gpu-priority", "scheduler", "background", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 3,
-                SafetyRating = 5,
-                ImpactNote   = "Background GPU work items set to Normal priority; foreground app rendering not starved by compute jobs.",
-                ApplyOps     = [RegOp.SetDword(ScKey, "BackgroundGPUPriority", 1)],
-                RemoveOps    = [RegOp.DeleteValue(ScKey, "BackgroundGPUPriority")],
-                DetectOps    = [RegOp.CheckDword(ScKey, "BackgroundGPUPriority", 1)],
-            },
-        ];
-
+            [
+                new TweakDef
+                {
+                    Id = "wddmpol-enable-hwscheduling",
+                    Label = "Enable Hardware-Accelerated GPU Scheduling (HAGS)",
+                    Category = "Display",
+                    Description =
+                        "Enables Hardware-Accelerated GPU Scheduling (HAGS/WDDM 2.7) which offloads GPU memory scheduling decisions from the CPU-based WDDM scheduler to the GPU firmware, reducing latency and CPU overhead for GPU-bound workloads.",
+                    Tags = ["wddm", "gpu-scheduling", "hags", "performance", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "GPU Hardware Accelerated Scheduling enabled; reduced CPU-GPU scheduling latency and CPU overhead.",
+                    ApplyOps = [RegOp.SetDword(Key, "HwSchMode", 2)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "HwSchMode")],
+                    DetectOps = [RegOp.CheckDword(Key, "HwSchMode", 2)],
+                },
+                new TweakDef
+                {
+                    Id = "wddmpol-set-tdr-delay-8s",
+                    Label = "Set GPU Timeout Detection and Recovery Delay to 8 Seconds",
+                    Category = "Display",
+                    Description =
+                        "Sets the Timeout Detection and Recovery (TDR) delay to 8 seconds (from the default 2 seconds), preventing false positive GPU resets during long compute operations (ML inference, video encoding) that legitimately use the GPU for longer than 2 seconds.",
+                    Tags = ["wddm", "tdr", "gpu-timeout", "compute", "stability", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "TDR delay set to 8s; prevents false GPU resets during long compute jobs. Delays detection of real hangs.",
+                    ApplyOps = [RegOp.SetDword(Key, "TdrDelay", 8)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "TdrDelay")],
+                    DetectOps = [RegOp.CheckDword(Key, "TdrDelay", 8)],
+                },
+                new TweakDef
+                {
+                    Id = "wddmpol-set-tdr-level-recover",
+                    Label = "Set TDR Level to Recover GPU Without System Reboot",
+                    Category = "Display",
+                    Description =
+                        "Configures the TDR recovery level to attempt GPU reset and recovery without a full system reboot (TdrLevelRecover=3), allowing the display driver to be restarted and the session to continue after a GPU hang.",
+                    Tags = ["wddm", "tdr", "recovery", "gpu-reset", "stability", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "TDR recovery without reboot enabled; GPU hang results in driver restart, not full system crash.",
+                    ApplyOps = [RegOp.SetDword(Key, "TdrLevel", 3)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "TdrLevel")],
+                    DetectOps = [RegOp.CheckDword(Key, "TdrLevel", 3)],
+                },
+                new TweakDef
+                {
+                    Id = "wddmpol-enable-gpu-preemption-dma",
+                    Label = "Enable GPU DMA-Level Preemption for Responsiveness",
+                    Category = "Display",
+                    Description =
+                        "Sets the GPU preemption granularity to DMA buffer level, allowing the WDDM scheduler to preempt running GPU workloads at DMA packet boundaries for improved UI responsiveness during background GPU-intensive tasks.",
+                    Tags = ["wddm", "preemption", "dma", "scheduler", "responsiveness", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "GPU preemption at DMA level enabled; UI stays responsive during background GPU workloads.",
+                    ApplyOps = [RegOp.SetDword(ScKey, "EnablePreemption", 1)],
+                    RemoveOps = [RegOp.DeleteValue(ScKey, "EnablePreemption")],
+                    DetectOps = [RegOp.CheckDword(ScKey, "EnablePreemption", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "wddmpol-block-display-driver-fallback",
+                    Label = "Block Fallback to Microsoft Basic Display Adapter",
+                    Category = "Display",
+                    Description =
+                        "Prevents Windows from falling back to the Microsoft Basic Display Adapter (2048×1152 VESA-only) when the GPU driver crashes, maintaining the last known working display driver and attempting recovery instead.",
+                    Tags = ["wddm", "basic-display", "driver-fallback", "recovery", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 4,
+                    ImpactNote = "VGA-mode fallback blocked; driver crash triggers recovery, not basic display. May yield blank screen.",
+                    ApplyOps = [RegOp.SetDword(PolKey, "DisableBasicDisplayDriverFallback", 1)],
+                    RemoveOps = [RegOp.DeleteValue(PolKey, "DisableBasicDisplayDriverFallback")],
+                    DetectOps = [RegOp.CheckDword(PolKey, "DisableBasicDisplayDriverFallback", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "wddmpol-disable-dxgi-flip-discard",
+                    Label = "Disable Presentation Model Flip-Discard Optimisation",
+                    Category = "Display",
+                    Description =
+                        "Disables the DXGI flip-discard presentation model that reuses swap chain surfaces, falling back to flip-sequential for maximum frame ordering correctness in trading and video production environments where tearing prevention is critical.",
+                    Tags = ["wddm", "dxgi", "flip-discard", "presentation", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 2,
+                    SafetyRating = 5,
+                    ImpactNote = "Flip-discard presentation disabled; flip-sequential used. Maximum frame ordering correctness at slight perf cost.",
+                    ApplyOps = [RegOp.SetDword(PolKey, "DisableFlipDiscard", 1)],
+                    RemoveOps = [RegOp.DeleteValue(PolKey, "DisableFlipDiscard")],
+                    DetectOps = [RegOp.CheckDword(PolKey, "DisableFlipDiscard", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "wddmpol-log-tdr-events",
+                    Label = "Log GPU TDR Recovery Events to System Event Log",
+                    Category = "Display",
+                    Description =
+                        "Enables System event log entries (EventID 4101, Display driver stopped responding and has recovered) for GPU TDR events, providing a history of GPU hangs and recovery cycles for diagnostics.",
+                    Tags = ["wddm", "tdr", "event-log", "audit", "gpu-stability", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "GPU TDR events logged in System log; driver hang frequency visible for GPU stability diagnostics.",
+                    ApplyOps = [RegOp.SetDword(Key, "TdrLogging", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "TdrLogging")],
+                    DetectOps = [RegOp.CheckDword(Key, "TdrLogging", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "wddmpol-disable-gpu-driver-telemetry",
+                    Label = "Disable WDDM GPU Driver Telemetry to Microsoft",
+                    Category = "Display",
+                    Description =
+                        "Prevents the Windows Display Driver Model from sending GPU driver crash reports, TDR telemetry, and hardware capability telemetry to Microsoft, protecting GPU model/driver version information from cloud disclosure.",
+                    Tags = ["wddm", "telemetry", "privacy", "gpu", "microsoft", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "WDDM GPU telemetry to Microsoft disabled; GPU model, driver version, and TDR events not sent to cloud.",
+                    ApplyOps = [RegOp.SetDword(PolKey, "DisableGPUTelemetry", 1)],
+                    RemoveOps = [RegOp.DeleteValue(PolKey, "DisableGPUTelemetry")],
+                    DetectOps = [RegOp.CheckDword(PolKey, "DisableGPUTelemetry", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "wddmpol-enable-virtual-display",
+                    Label = "Enable Virtual Display Adapter for Headless Operation",
+                    Category = "Display",
+                    Description =
+                        "Enables the Windows virtual display adapter (IndirectDisplay) for headless server scenarios, providing a software display output that supports RDP and remote management tools without a physical GPU or monitor.",
+                    Tags = ["wddm", "virtual-display", "headless", "rdp", "server", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 2,
+                    SafetyRating = 5,
+                    ImpactNote = "Virtual display adapter enabled for headless RDP; servers without physical GPU get a software display.",
+                    ApplyOps = [RegOp.SetDword(PolKey, "EnableVirtualDisplayAdapter", 1)],
+                    RemoveOps = [RegOp.DeleteValue(PolKey, "EnableVirtualDisplayAdapter")],
+                    DetectOps = [RegOp.CheckDword(PolKey, "EnableVirtualDisplayAdapter", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "wddmpol-set-gpu-priority-realtime",
+                    Label = "Set GPU Work Item Priority to Normal for System Processes",
+                    Category = "Display",
+                    Description =
+                        "Configures the WDDM scheduler to run system and background GPU work items at Normal priority, preventing GPU starvation of foreground applications by long-running background ML or compute workloads.",
+                    Tags = ["wddm", "gpu-priority", "scheduler", "background", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "Background GPU work items set to Normal priority; foreground app rendering not starved by compute jobs.",
+                    ApplyOps = [RegOp.SetDword(ScKey, "BackgroundGPUPriority", 1)],
+                    RemoveOps = [RegOp.DeleteValue(ScKey, "BackgroundGPUPriority")],
+                    DetectOps = [RegOp.CheckDword(ScKey, "BackgroundGPUPriority", 1)],
+                },
+            ];
     }
 
     // ── WiaImageAcquisitionPolicy ──
@@ -10921,7 +11154,8 @@ internal static class PolicyDesktop
                 Id = "imgacquire-disable-wia-service",
                 Label = "Image Acquisition: Disable WIA (Windows Image Acquisition) Service",
                 Category = "Display",
-                Description = "Disables the Windows Image Acquisition (WIA) service via Group Policy, preventing scanners, cameras, and other WIA-compatible imaging devices from automatically launching the scanning wizard when connected. WIA devices can auto-trigger Windows Explorer and photo import dialogs. On managed workstations where scanning occurs through dedicated document management software, disabling WIA eliminates uncontrolled ad-hoc scanning to unmanaged locations.",
+                Description =
+                    "Disables the Windows Image Acquisition (WIA) service via Group Policy, preventing scanners, cameras, and other WIA-compatible imaging devices from automatically launching the scanning wizard when connected. WIA devices can auto-trigger Windows Explorer and photo import dialogs. On managed workstations where scanning occurs through dedicated document management software, disabling WIA eliminates uncontrolled ad-hoc scanning to unmanaged locations.",
                 Tags = ["image acquisition", "wia", "scanner", "camera", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -10938,7 +11172,8 @@ internal static class PolicyDesktop
                 Id = "imgacquire-restrict-user-device-install",
                 Label = "Image Acquisition: Restrict User-Initiated Device Installation for Cameras",
                 Category = "Display",
-                Description = "Prevents standard users from installing WIA-compatible cameras and imaging devices without administrator approval. Without this policy, plugging in a consumer camera can trigger a Plug-and-Play installation that adds imaging device drivers and WIA entries to the system. On managed environments, device drivers should only be installed through approved software deployment channels.",
+                Description =
+                    "Prevents standard users from installing WIA-compatible cameras and imaging devices without administrator approval. Without this policy, plugging in a consumer camera can trigger a Plug-and-Play installation that adds imaging device drivers and WIA entries to the system. On managed environments, device drivers should only be installed through approved software deployment channels.",
                 Tags = ["image acquisition", "wia", "camera", "device install", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -10955,7 +11190,8 @@ internal static class PolicyDesktop
                 Id = "imgacquire-disable-transferring-without-policy",
                 Label = "Image Acquisition: Disable Image Transfer Without Policy Approval",
                 Category = "Display",
-                Description = "Blocks WIA from transferring images from connected cameras, scanners, or memory cards to the local filesystem without an approved destination policy being applied. Without this control, users can freely dump images from connected devices to any local folder, bypassing document management systems and creating unmanaged data. Enabling this policy ensures all image transfer operations occur through sanctioned software.",
+                Description =
+                    "Blocks WIA from transferring images from connected cameras, scanners, or memory cards to the local filesystem without an approved destination policy being applied. Without this control, users can freely dump images from connected devices to any local folder, bypassing document management systems and creating unmanaged data. Enabling this policy ensures all image transfer operations occur through sanctioned software.",
                 Tags = ["image acquisition", "wia", "image transfer", "data control", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -10965,14 +11201,16 @@ internal static class PolicyDesktop
                 DetectOps = [RegOp.CheckDword(ScanKey, "DisableTransferWithoutPolicy", 1)],
                 ImpactScore = 3,
                 SafetyRating = 4,
-                ImpactNote = "Blocks ad-hoc image transfers from cameras/scanners; images must be transferred through approved document management software.",
+                ImpactNote =
+                    "Blocks ad-hoc image transfers from cameras/scanners; images must be transferred through approved document management software.",
             },
             new TweakDef
             {
                 Id = "imgacquire-disable-scan-to-fax",
                 Label = "Image Acquisition: Disable Scan-to-Fax WIA Feature",
                 Category = "Display",
-                Description = "Disables the WIA Scan-to-Fax destination that allows users to scan a document directly to a fax number through a Windows Fax and Scan workflow. Scan-to-fax functionality can be exploited to exfiltrate documents outside the organisation's content inspection boundary — fax transmissions often bypass DLP controls that monitor email and file-share uploads. Disabling this destination ensures all document workflows go through monitored channels.",
+                Description =
+                    "Disables the WIA Scan-to-Fax destination that allows users to scan a document directly to a fax number through a Windows Fax and Scan workflow. Scan-to-fax functionality can be exploited to exfiltrate documents outside the organisation's content inspection boundary — fax transmissions often bypass DLP controls that monitor email and file-share uploads. Disabling this destination ensures all document workflows go through monitored channels.",
                 Tags = ["image acquisition", "scan to fax", "wia", "data loss prevention", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -10989,7 +11227,8 @@ internal static class PolicyDesktop
                 Id = "imgacquire-disable-autoplay-camera",
                 Label = "Image Acquisition: Disable AutoPlay for Camera Devices",
                 Category = "Display",
-                Description = "Prevents Windows AutoPlay from automatically launching when a camera or memory card is inserted, suppressing the dialog that asks what action to take (view photos, import as a folder, etc.). AutoPlay-triggered actions can automatically copy images from connected devices to default Photos or OneDrive locations without user awareness. Disabling AutoPlay ensures device connections require deliberate user action.",
+                Description =
+                    "Prevents Windows AutoPlay from automatically launching when a camera or memory card is inserted, suppressing the dialog that asks what action to take (view photos, import as a folder, etc.). AutoPlay-triggered actions can automatically copy images from connected devices to default Photos or OneDrive locations without user awareness. Disabling AutoPlay ensures device connections require deliberate user action.",
                 Tags = ["image acquisition", "autoplay", "camera", "memory card", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -11006,7 +11245,8 @@ internal static class PolicyDesktop
                 Id = "imgacquire-require-driver-signing",
                 Label = "Image Acquisition: Require Signed Drivers for WIA Devices",
                 Category = "Display",
-                Description = "Enforces that only digitally-signed drivers can be loaded for WIA imaging devices. Unsigned WIA device drivers are a known malware vector — adversaries have used crafted WIA drivers to establish persistent kernel-mode access. Requiring driver signing ensures that all imaging device drivers are verifiable against Microsoft's WHQL certificate chain or a trusted enterprise root CA.",
+                Description =
+                    "Enforces that only digitally-signed drivers can be loaded for WIA imaging devices. Unsigned WIA device drivers are a known malware vector — adversaries have used crafted WIA drivers to establish persistent kernel-mode access. Requiring driver signing ensures that all imaging device drivers are verifiable against Microsoft's WHQL certificate chain or a trusted enterprise root CA.",
                 Tags = ["image acquisition", "wia", "driver signing", "security", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -11023,7 +11263,8 @@ internal static class PolicyDesktop
                 Id = "imgacquire-disable-scan-to-sharepoint",
                 Label = "Image Acquisition: Disable Scan-to-SharePoint WIA Feature",
                 Category = "Display",
-                Description = "Disables the WIA Scan-to-SharePoint destination that allows users to scan documents and automatically upload them to a SharePoint document library via the Windows Scan app. Scan-to-SharePoint can bypass normal document governance workflows by depositing files directly into collaboration sites without metadata tagging, classification, or legal-hold review. Disabling this destination ensures all scanned documents go through the organisation's records management system.",
+                Description =
+                    "Disables the WIA Scan-to-SharePoint destination that allows users to scan documents and automatically upload them to a SharePoint document library via the Windows Scan app. Scan-to-SharePoint can bypass normal document governance workflows by depositing files directly into collaboration sites without metadata tagging, classification, or legal-hold review. Disabling this destination ensures all scanned documents go through the organisation's records management system.",
                 Tags = ["image acquisition", "scan to sharepoint", "wia", "document governance", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -11040,7 +11281,8 @@ internal static class PolicyDesktop
                 Id = "imgacquire-disable-scanner-to-network",
                 Label = "Image Acquisition: Disable Scan-to-Network Share Feature",
                 Category = "Display",
-                Description = "Disables the built-in scan-to-network-share facility in the WIA STI (Still Image) architecture that allows scanners with FTP/SMB push capability to send files directly to a Windows shared folder. Scan-to-network-share bypasses normal document management channels and can be used to exfiltrate documents to unauthorized UNC paths. Managed scanning environments should use dedicated secure document capture software instead.",
+                Description =
+                    "Disables the built-in scan-to-network-share facility in the WIA STI (Still Image) architecture that allows scanners with FTP/SMB push capability to send files directly to a Windows shared folder. Scan-to-network-share bypasses normal document management channels and can be used to exfiltrate documents to unauthorized UNC paths. Managed scanning environments should use dedicated secure document capture software instead.",
                 Tags = ["image acquisition", "scanner", "network share", "data transfer", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -11057,7 +11299,8 @@ internal static class PolicyDesktop
                 Id = "imgacquire-block-scan-to-email",
                 Label = "Image Acquisition: Block Scan-to-Email Functionality",
                 Category = "Display",
-                Description = "Prevents the Windows Fax and Scan application and WIA-connected scanners from using the scan-to-email feature, which attaches scanned documents directly to email drafts. Scan-to-email can bypass DLP (Data Loss Prevention) policies by sending scanned documents through the default email client without content inspection. In regulated environments, document distribution must be controlled through DLP-aware channels.",
+                Description =
+                    "Prevents the Windows Fax and Scan application and WIA-connected scanners from using the scan-to-email feature, which attaches scanned documents directly to email drafts. Scan-to-email can bypass DLP (Data Loss Prevention) policies by sending scanned documents through the default email client without content inspection. In regulated environments, document distribution must be controlled through DLP-aware channels.",
                 Tags = ["image acquisition", "scanner", "email", "dlp", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -11074,7 +11317,8 @@ internal static class PolicyDesktop
                 Id = "imgacquire-restrict-scan-destination",
                 Label = "Image Acquisition: Restrict Scan Destination to Approved Paths Only",
                 Category = "Display",
-                Description = "Enforces that WIA scan operations can only save documents to pre-approved local paths or managed network shares defined in Group Policy. Without this restriction, users can direct scanned content to removable drives, personal cloud sync folders (OneDrive, Dropbox), or mapped drives outside the corporate network perimeter. Restricting destinations ensures all scanned documents are stored in auditable, managed locations.",
+                Description =
+                    "Enforces that WIA scan operations can only save documents to pre-approved local paths or managed network shares defined in Group Policy. Without this restriction, users can direct scanned content to removable drives, personal cloud sync folders (OneDrive, Dropbox), or mapped drives outside the corporate network perimeter. Restricting destinations ensures all scanned documents are stored in auditable, managed locations.",
                 Tags = ["image acquisition", "scanner", "destination", "restriction", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -11087,7 +11331,6 @@ internal static class PolicyDesktop
                 ImpactNote = "Limits scan destinations to IT-approved paths; scans to arbitrary local or cloud paths are blocked.",
             },
         ];
-
     }
 
     // ── WindowsAccessibilityPolicy ──
@@ -11280,7 +11523,6 @@ internal static class PolicyDesktop
                 DetectOps = [RegOp.CheckDword(NarratorKey, "DisableNarratorAutoStart", 1)],
             },
         ];
-
     }
 
     // ── WindowsInkWorkspaceAdvPolicy ──
@@ -11461,7 +11703,6 @@ internal static class PolicyDesktop
                 DetectOps = [RegOp.CheckDword(Key, "RestrictInkWorkspaceOnSharedDevices", 1)],
             },
         ];
-
     }
 
     // ── WindowsSearchAdv ──
@@ -11657,7 +11898,6 @@ internal static class PolicyDesktop
                 DetectOps = [RegOp.CheckDword(SearchUser, "SearchboxTaskbarMode", 1)],
             },
         ];
-
     }
 
     // ── WindowsSearchIndexingAdvancedPolicy ──
@@ -11666,169 +11906,177 @@ internal static class PolicyDesktop
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search";
 
         public static IReadOnlyList<TweakDef> Data =>
-        [
-            new TweakDef
-            {
-                Id           = "wsidx-prevent-remote-queries",
-                Label        = "Prevent Remote Search Queries via Windows Search",
-                Category = "Display",
-                Description  = "Blocks remote clients from querying the local Windows Search index over the network. Default: allowed. Recommended: disabled for workstations.",
-                Tags         = ["search", "indexing", "remote", "privacy", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 4,
-                SafetyRating = 5,
-                ImpactNote   = "Prevents network-based search queries against local index; local search unaffected.",
-                ApplyOps     = [RegOp.SetDword(Key, "PreventRemoteQueries", 1)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "PreventRemoteQueries")],
-                DetectOps    = [RegOp.CheckDword(Key, "PreventRemoteQueries", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "wsidx-disable-index-encrypted-stores",
-                Label        = "Disable Indexing of Encrypted Files",
-                Category = "Display",
-                Description  = "Prevents Windows Search from indexing EFS-encrypted files. Reduces index attack surface when encrypted content is present. Default: allowed. Recommended: disable on sensitive systems.",
-                Tags         = ["search", "indexing", "encryption", "efs", "privacy", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 3,
-                SafetyRating = 5,
-                ImpactNote   = "Encrypted files excluded from search index; those files won't appear in search results.",
-                ApplyOps     = [RegOp.SetDword(Key, "AllowIndexingEncryptedStoresOrItems", 0)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "AllowIndexingEncryptedStoresOrItems")],
-                DetectOps    = [RegOp.CheckDword(Key, "AllowIndexingEncryptedStoresOrItems", 0)],
-            },
-            new TweakDef
-            {
-                Id           = "wsidx-disable-location-in-search",
-                Label        = "Disable Location Usage in Search Results",
-                Category = "Display",
-                Description  = "Prevents Windows Search from using device location to refine or personalise search results. Default: allowed. Recommended: disable for privacy.",
-                Tags         = ["search", "location", "privacy", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 3,
-                SafetyRating = 5,
-                ImpactNote   = "Location data not used in search ranking; no impact on local file search.",
-                ApplyOps     = [RegOp.SetDword(Key, "AllowSearchToUseLocation", 0)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "AllowSearchToUseLocation")],
-                DetectOps    = [RegOp.CheckDword(Key, "AllowSearchToUseLocation", 0)],
-            },
-            new TweakDef
-            {
-                Id           = "wsidx-disable-removable-media-index",
-                Label        = "Disable Indexing of Removable Drives",
-                Category = "Display",
-                Description  = "Prevents the Windows Search indexer from crawling USB drives, SD cards, and other removable media. Reduces I/O on external devices. Default: allowed.",
-                Tags         = ["search", "indexing", "removable-media", "usb", "performance", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 3,
-                SafetyRating = 5,
-                ImpactNote   = "Removable drives excluded from search index; files still accessible via direct browse.",
-                ApplyOps     = [RegOp.SetDword(Key, "DisableRemovableDriveIndexing", 1)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "DisableRemovableDriveIndexing")],
-                DetectOps    = [RegOp.CheckDword(Key, "DisableRemovableDriveIndexing", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "wsidx-disable-bing-web-search",
-                Label        = "Disable Bing Web Search in Windows Search",
-                Category = "Display",
-                Description  = "Prevents Windows Search from sending queries to Bing for web results. Only local results are returned. Default: web search enabled.",
-                Tags         = ["search", "bing", "web", "privacy", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 5,
-                SafetyRating = 5,
-                ImpactNote   = "No web results in Start menu search; all queries stay local.",
-                ApplyOps     = [RegOp.SetDword(Key, "DisableWebSearch", 1)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "DisableWebSearch")],
-                DetectOps    = [RegOp.CheckDword(Key, "DisableWebSearch", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "wsidx-disable-connected-search",
-                Label        = "Disable Connected Search Suggestions",
-                Category = "Display",
-                Description  = "Disables connected search suggestions that send partial keystrokes to Microsoft as the user types in the search box. Default: enabled.",
-                Tags         = ["search", "suggestions", "privacy", "telemetry", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 5,
-                SafetyRating = 5,
-                ImpactNote   = "Search suggestions from the cloud are disabled; local suggestions still work.",
-                ApplyOps     = [RegOp.SetDword(Key, "ConnectedSearchUseWeb", 0)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "ConnectedSearchUseWeb")],
-                DetectOps    = [RegOp.CheckDword(Key, "ConnectedSearchUseWeb", 0)],
-            },
-            new TweakDef
-            {
-                Id           = "wsidx-disable-safe-search",
-                Label        = "Set Search SafeSearch to Strict via Policy",
-                Category = "Display",
-                Description  = "Enforces SafeSearch strict mode for web results in Windows Search. Applies via Group Policy. Default: moderate.",
-                Tags         = ["search", "safe-search", "content-filter", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 2,
-                SafetyRating = 5,
-                ImpactNote   = "SafeSearch forced to strict; only affects web result filtering.",
-                ApplyOps     = [RegOp.SetDword(Key, "ConnectedSearchSafeSearch", 3)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "ConnectedSearchSafeSearch")],
-                DetectOps    = [RegOp.CheckDword(Key, "ConnectedSearchSafeSearch", 3)],
-            },
-            new TweakDef
-            {
-                Id           = "wsidx-disable-search-on-metered",
-                Label        = "Disable Cloud Search on Metered Connections",
-                Category = "Display",
-                Description  = "Prevents Windows Search from sending cloud queries when on a metered network connection. Saves bandwidth and reduces data charges. Default: allowed.",
-                Tags         = ["search", "metered", "bandwidth", "network", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 3,
-                SafetyRating = 5,
-                ImpactNote   = "Cloud search queries blocked on metered networks; local search unaffected.",
-                ApplyOps     = [RegOp.SetDword(Key, "ConnectedSearchUseWebOverMeteredConnections", 0)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "ConnectedSearchUseWebOverMeteredConnections")],
-                DetectOps    = [RegOp.CheckDword(Key, "ConnectedSearchUseWebOverMeteredConnections", 0)],
-            },
-            new TweakDef
-            {
-                Id           = "wsidx-disable-index-backoff",
-                Label        = "Disable Indexer Backoff on Battery Power",
-                Category = "Display",
-                Description  = "Prevents the Windows Search indexer from reducing speed when on battery power. Useful for always-on desktops misidentified as battery-powered. Default: backoff enabled.",
-                Tags         = ["search", "indexing", "battery", "performance", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 2,
-                SafetyRating = 4,
-                ImpactNote   = "Indexer runs at full speed on battery; may increase power consumption on laptops.",
-                ApplyOps     = [RegOp.SetDword(Key, "PreventIndexOnBattery", 0)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "PreventIndexOnBattery")],
-                DetectOps    = [RegOp.CheckDword(Key, "PreventIndexOnBattery", 0)],
-            },
-            new TweakDef
-            {
-                Id           = "wsidx-force-directory-indexing",
-                Label        = "Allow Indexing Even When Low Disk Space",
-                Category = "Display",
-                Description  = "Prevents the indexer from stopping when disk space falls below the default threshold. Ensures search continues on nearly-full drives. Default: indexer pauses on low space.",
-                Tags         = ["search", "indexing", "disk-space", "performance", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 2,
-                SafetyRating = 3,
-                ImpactNote   = "Indexer keeps running on low-disk systems; could consume remaining space for index data.",
-                ApplyOps     = [RegOp.SetDword(Key, "PreventIndexingLowDiskSpaceMB", 0)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "PreventIndexingLowDiskSpaceMB")],
-                DetectOps    = [RegOp.CheckDword(Key, "PreventIndexingLowDiskSpaceMB", 0)],
-            },
-        ];
-
+            [
+                new TweakDef
+                {
+                    Id = "wsidx-prevent-remote-queries",
+                    Label = "Prevent Remote Search Queries via Windows Search",
+                    Category = "Display",
+                    Description =
+                        "Blocks remote clients from querying the local Windows Search index over the network. Default: allowed. Recommended: disabled for workstations.",
+                    Tags = ["search", "indexing", "remote", "privacy", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "Prevents network-based search queries against local index; local search unaffected.",
+                    ApplyOps = [RegOp.SetDword(Key, "PreventRemoteQueries", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "PreventRemoteQueries")],
+                    DetectOps = [RegOp.CheckDword(Key, "PreventRemoteQueries", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "wsidx-disable-index-encrypted-stores",
+                    Label = "Disable Indexing of Encrypted Files",
+                    Category = "Display",
+                    Description =
+                        "Prevents Windows Search from indexing EFS-encrypted files. Reduces index attack surface when encrypted content is present. Default: allowed. Recommended: disable on sensitive systems.",
+                    Tags = ["search", "indexing", "encryption", "efs", "privacy", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "Encrypted files excluded from search index; those files won't appear in search results.",
+                    ApplyOps = [RegOp.SetDword(Key, "AllowIndexingEncryptedStoresOrItems", 0)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "AllowIndexingEncryptedStoresOrItems")],
+                    DetectOps = [RegOp.CheckDword(Key, "AllowIndexingEncryptedStoresOrItems", 0)],
+                },
+                new TweakDef
+                {
+                    Id = "wsidx-disable-location-in-search",
+                    Label = "Disable Location Usage in Search Results",
+                    Category = "Display",
+                    Description =
+                        "Prevents Windows Search from using device location to refine or personalise search results. Default: allowed. Recommended: disable for privacy.",
+                    Tags = ["search", "location", "privacy", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "Location data not used in search ranking; no impact on local file search.",
+                    ApplyOps = [RegOp.SetDword(Key, "AllowSearchToUseLocation", 0)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "AllowSearchToUseLocation")],
+                    DetectOps = [RegOp.CheckDword(Key, "AllowSearchToUseLocation", 0)],
+                },
+                new TweakDef
+                {
+                    Id = "wsidx-disable-removable-media-index",
+                    Label = "Disable Indexing of Removable Drives",
+                    Category = "Display",
+                    Description =
+                        "Prevents the Windows Search indexer from crawling USB drives, SD cards, and other removable media. Reduces I/O on external devices. Default: allowed.",
+                    Tags = ["search", "indexing", "removable-media", "usb", "performance", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "Removable drives excluded from search index; files still accessible via direct browse.",
+                    ApplyOps = [RegOp.SetDword(Key, "DisableRemovableDriveIndexing", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "DisableRemovableDriveIndexing")],
+                    DetectOps = [RegOp.CheckDword(Key, "DisableRemovableDriveIndexing", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "wsidx-disable-bing-web-search",
+                    Label = "Disable Bing Web Search in Windows Search",
+                    Category = "Display",
+                    Description =
+                        "Prevents Windows Search from sending queries to Bing for web results. Only local results are returned. Default: web search enabled.",
+                    Tags = ["search", "bing", "web", "privacy", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 5,
+                    SafetyRating = 5,
+                    ImpactNote = "No web results in Start menu search; all queries stay local.",
+                    ApplyOps = [RegOp.SetDword(Key, "DisableWebSearch", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "DisableWebSearch")],
+                    DetectOps = [RegOp.CheckDword(Key, "DisableWebSearch", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "wsidx-disable-connected-search",
+                    Label = "Disable Connected Search Suggestions",
+                    Category = "Display",
+                    Description =
+                        "Disables connected search suggestions that send partial keystrokes to Microsoft as the user types in the search box. Default: enabled.",
+                    Tags = ["search", "suggestions", "privacy", "telemetry", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 5,
+                    SafetyRating = 5,
+                    ImpactNote = "Search suggestions from the cloud are disabled; local suggestions still work.",
+                    ApplyOps = [RegOp.SetDword(Key, "ConnectedSearchUseWeb", 0)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "ConnectedSearchUseWeb")],
+                    DetectOps = [RegOp.CheckDword(Key, "ConnectedSearchUseWeb", 0)],
+                },
+                new TweakDef
+                {
+                    Id = "wsidx-disable-safe-search",
+                    Label = "Set Search SafeSearch to Strict via Policy",
+                    Category = "Display",
+                    Description = "Enforces SafeSearch strict mode for web results in Windows Search. Applies via Group Policy. Default: moderate.",
+                    Tags = ["search", "safe-search", "content-filter", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 2,
+                    SafetyRating = 5,
+                    ImpactNote = "SafeSearch forced to strict; only affects web result filtering.",
+                    ApplyOps = [RegOp.SetDword(Key, "ConnectedSearchSafeSearch", 3)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "ConnectedSearchSafeSearch")],
+                    DetectOps = [RegOp.CheckDword(Key, "ConnectedSearchSafeSearch", 3)],
+                },
+                new TweakDef
+                {
+                    Id = "wsidx-disable-search-on-metered",
+                    Label = "Disable Cloud Search on Metered Connections",
+                    Category = "Display",
+                    Description =
+                        "Prevents Windows Search from sending cloud queries when on a metered network connection. Saves bandwidth and reduces data charges. Default: allowed.",
+                    Tags = ["search", "metered", "bandwidth", "network", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "Cloud search queries blocked on metered networks; local search unaffected.",
+                    ApplyOps = [RegOp.SetDword(Key, "ConnectedSearchUseWebOverMeteredConnections", 0)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "ConnectedSearchUseWebOverMeteredConnections")],
+                    DetectOps = [RegOp.CheckDword(Key, "ConnectedSearchUseWebOverMeteredConnections", 0)],
+                },
+                new TweakDef
+                {
+                    Id = "wsidx-disable-index-backoff",
+                    Label = "Disable Indexer Backoff on Battery Power",
+                    Category = "Display",
+                    Description =
+                        "Prevents the Windows Search indexer from reducing speed when on battery power. Useful for always-on desktops misidentified as battery-powered. Default: backoff enabled.",
+                    Tags = ["search", "indexing", "battery", "performance", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 2,
+                    SafetyRating = 4,
+                    ImpactNote = "Indexer runs at full speed on battery; may increase power consumption on laptops.",
+                    ApplyOps = [RegOp.SetDword(Key, "PreventIndexOnBattery", 0)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "PreventIndexOnBattery")],
+                    DetectOps = [RegOp.CheckDword(Key, "PreventIndexOnBattery", 0)],
+                },
+                new TweakDef
+                {
+                    Id = "wsidx-force-directory-indexing",
+                    Label = "Allow Indexing Even When Low Disk Space",
+                    Category = "Display",
+                    Description =
+                        "Prevents the indexer from stopping when disk space falls below the default threshold. Ensures search continues on nearly-full drives. Default: indexer pauses on low space.",
+                    Tags = ["search", "indexing", "disk-space", "performance", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 2,
+                    SafetyRating = 3,
+                    ImpactNote = "Indexer keeps running on low-disk systems; could consume remaining space for index data.",
+                    ApplyOps = [RegOp.SetDword(Key, "PreventIndexingLowDiskSpaceMB", 0)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "PreventIndexingLowDiskSpaceMB")],
+                    DetectOps = [RegOp.CheckDword(Key, "PreventIndexingLowDiskSpaceMB", 0)],
+                },
+            ];
     }
 
     // ── VirtualizationPolicy ──
@@ -12009,7 +12257,5 @@ internal static class PolicyDesktop
                 DetectOps = [RegOp.CheckDword(Key, "EnableEnhancedMemoryProtection", 1)],
             },
         ];
-
     }
-
 }

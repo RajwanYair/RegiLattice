@@ -107,7 +107,15 @@ public static class IntuneOmaUriExporter
 
             if (td.Kind != TweakKind.Registry && td.Kind != TweakKind.GroupPolicy)
             {
-                unmapped.Add(new UnmappedTweak { TweakId = td.Id, Label = td.Label, Kind = td.Kind.ToString(), Reason = $"TweakKind is {td.Kind}; only Registry and GroupPolicy tweaks are OMA-URI mappable." });
+                unmapped.Add(
+                    new UnmappedTweak
+                    {
+                        TweakId = td.Id,
+                        Label = td.Label,
+                        Kind = td.Kind.ToString(),
+                        Reason = $"TweakKind is {td.Kind}; only Registry and GroupPolicy tweaks are OMA-URI mappable.",
+                    }
+                );
                 continue;
             }
 
@@ -115,7 +123,17 @@ public static class IntuneOmaUriExporter
             if (mapped.Count > 0)
                 settings.AddRange(mapped);
             else
-                unmapped.Add(new UnmappedTweak { TweakId = td.Id, Label = td.Label, Kind = "Registry", Reason = machineOnly ? "No HKLM ApplyOps with supported value kinds (DWORD/QWORD/REG_SZ/REG_EXPAND_SZ)." : "No ApplyOps with supported value kinds (DWORD/QWORD/REG_SZ/REG_EXPAND_SZ)." });
+                unmapped.Add(
+                    new UnmappedTweak
+                    {
+                        TweakId = td.Id,
+                        Label = td.Label,
+                        Kind = "Registry",
+                        Reason = machineOnly
+                            ? "No HKLM ApplyOps with supported value kinds (DWORD/QWORD/REG_SZ/REG_EXPAND_SZ)."
+                            : "No ApplyOps with supported value kinds (DWORD/QWORD/REG_SZ/REG_EXPAND_SZ).",
+                    }
+                );
         }
 
         return new IntuneExportDocument { Settings = settings, UnmappedTweaks = unmapped.Count > 0 ? unmapped : null };
@@ -139,15 +157,21 @@ public static class IntuneOmaUriExporter
             if (op.Kind != RegOpKind.SetValue)
                 continue;
 
-            bool isHklm = op.Path.StartsWith("HKEY_LOCAL_MACHINE\\", StringComparison.OrdinalIgnoreCase) || op.Path.StartsWith("HKLM\\", StringComparison.OrdinalIgnoreCase);
-            bool isHkcu = op.Path.StartsWith("HKEY_CURRENT_USER\\", StringComparison.OrdinalIgnoreCase) || op.Path.StartsWith("HKCU\\", StringComparison.OrdinalIgnoreCase);
+            bool isHklm =
+                op.Path.StartsWith("HKEY_LOCAL_MACHINE\\", StringComparison.OrdinalIgnoreCase)
+                || op.Path.StartsWith("HKLM\\", StringComparison.OrdinalIgnoreCase);
+            bool isHkcu =
+                op.Path.StartsWith("HKEY_CURRENT_USER\\", StringComparison.OrdinalIgnoreCase)
+                || op.Path.StartsWith("HKCU\\", StringComparison.OrdinalIgnoreCase);
 
             if (machineOnly && !isHklm)
                 continue;
             if (!isHklm && !isHkcu)
                 continue;
 
-            if (op.ValueKind is not (RegistryValueKind.DWord or RegistryValueKind.QWord or RegistryValueKind.String or RegistryValueKind.ExpandString))
+            if (
+                op.ValueKind is not (RegistryValueKind.DWord or RegistryValueKind.QWord or RegistryValueKind.String or RegistryValueKind.ExpandString)
+            )
                 continue;
 
             string omaUri = BuildOmaUri(op.Path, op.Name, isHklm);
@@ -160,7 +184,18 @@ public static class IntuneOmaUriExporter
                 _ => ("String", ""),
             };
 
-            result.Add(new OmaUriSetting { TweakId = td.Id, Label = td.Label, Category = td.Category, OmaUri = omaUri, DataType = dataType, Value = value, Description = td.Description.Length is > 0 and <= 120 ? td.Description : null });
+            result.Add(
+                new OmaUriSetting
+                {
+                    TweakId = td.Id,
+                    Label = td.Label,
+                    Category = td.Category,
+                    OmaUri = omaUri,
+                    DataType = dataType,
+                    Value = value,
+                    Description = td.Description.Length is > 0 and <= 120 ? td.Description : null,
+                }
+            );
         }
         return result;
     }
@@ -204,7 +239,8 @@ public static class GroupPolicyExporter
         ArgumentNullException.ThrowIfNull(engine);
         ArgumentException.ThrowIfNullOrWhiteSpace(admxPath);
 
-        var gpoTweaks = engine.AllTweaks()
+        var gpoTweaks = engine
+            .AllTweaks()
             .Where(t => t.Kind == TweakKind.GroupPolicy && t.ApplyOps.Count > 0)
             .OrderBy(t => t.Category)
             .ThenBy(t => t.Label)
@@ -220,7 +256,15 @@ public static class GroupPolicyExporter
     private static string BuildAdmx(IReadOnlyList<TweakDef> tweaks)
     {
         var sb = new StringBuilder();
-        using var w = XmlWriter.Create(sb, new XmlWriterSettings { Indent = true, Encoding = Encoding.UTF8, OmitXmlDeclaration = false });
+        using var w = XmlWriter.Create(
+            sb,
+            new XmlWriterSettings
+            {
+                Indent = true,
+                Encoding = Encoding.UTF8,
+                OmitXmlDeclaration = false,
+            }
+        );
 
         w.WriteStartDocument();
         w.WriteStartElement("policyDefinitions", "http://schemas.microsoft.com/GroupPolicy/2006/07/PolicyDefinitions");
@@ -285,7 +329,15 @@ public static class GroupPolicyExporter
     private static string BuildAdml(IReadOnlyList<TweakDef> tweaks)
     {
         var sb = new StringBuilder();
-        using var w = XmlWriter.Create(sb, new XmlWriterSettings { Indent = true, Encoding = Encoding.UTF8, OmitXmlDeclaration = false });
+        using var w = XmlWriter.Create(
+            sb,
+            new XmlWriterSettings
+            {
+                Indent = true,
+                Encoding = Encoding.UTF8,
+                OmitXmlDeclaration = false,
+            }
+        );
 
         w.WriteStartDocument();
         w.WriteStartElement("policyDefinitionResources", "http://schemas.microsoft.com/GroupPolicy/2006/07/PolicyDefinitions");

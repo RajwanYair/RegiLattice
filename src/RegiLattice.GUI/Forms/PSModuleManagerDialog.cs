@@ -69,9 +69,9 @@ internal sealed class PSModuleManagerDialog : BasePackageManagerDialog
         foreach (var m in list)
         {
             var item = new ListViewItem(m) { Tag = m };
-            item.SubItems.Add("");           // Version
-            item.SubItems.Add("…");          // Size (computed lazily)
-            item.SubItems.Add("Installed");  // Status
+            item.SubItems.Add(""); // Version
+            item.SubItems.Add("…"); // Size (computed lazily)
+            item.SubItems.Add("Installed"); // Status
             item.ForeColor = AppTheme.Fg;
             _lstInstalled.Items.Add(item);
         }
@@ -101,9 +101,7 @@ internal sealed class PSModuleManagerDialog : BasePackageManagerDialog
             {
                 if (item.Tag is string name && _outdatedNames.Contains(name))
                 {
-                    item.SubItems[3].Text = versionMap.TryGetValue(name, out string? vLabel)
-                        ? $"\u26A0 {vLabel}"
-                        : "\u26A0 Update available";
+                    item.SubItems[3].Text = versionMap.TryGetValue(name, out string? vLabel) ? $"\u26A0 {vLabel}" : "\u26A0 Update available";
                     item.SubItems[3].ForeColor = AppTheme.Yellow;
                 }
             }
@@ -143,7 +141,9 @@ internal sealed class PSModuleManagerDialog : BasePackageManagerDialog
             else
                 ApplySizes(sizes);
         }
-        catch { /* ignore — size is optional */ }
+        catch
+        { /* ignore — size is optional */
+        }
     }
 
     private void ApplySizes(Dictionary<string, string> sizes)

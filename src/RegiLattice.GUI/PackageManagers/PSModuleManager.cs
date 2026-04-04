@@ -131,10 +131,7 @@ internal static class PSModuleManager
     /// <summary>
     /// Returns a mapping of module name → module base directory path (highest version wins).
     /// </summary>
-    internal static async Task<Dictionary<string, string>> GetModuleBasesAsync(
-        string scope = "CurrentUser",
-        CancellationToken ct = default
-    )
+    internal static async Task<Dictionary<string, string>> GetModuleBasesAsync(string scope = "CurrentUser", CancellationToken ct = default)
     {
         string script =
             scope == "AllUsers"
@@ -155,10 +152,7 @@ internal static class PSModuleManager
     /// Returns estimated install sizes per module by measuring each module's base directory.
     /// Runs on the thread pool to avoid blocking the UI.
     /// </summary>
-    internal static Task<Dictionary<string, string>> GetInstalledSizesAsync(
-        Dictionary<string, string> moduleBases,
-        CancellationToken ct = default
-    ) =>
+    internal static Task<Dictionary<string, string>> GetInstalledSizesAsync(Dictionary<string, string> moduleBases, CancellationToken ct = default) =>
         Task.Run(
             () =>
             {
@@ -185,10 +179,14 @@ internal static class PSModuleManager
                 {
                     size += new FileInfo(file).Length;
                 }
-                catch { /* skip locked or inaccessible files */ }
+                catch
+                { /* skip locked or inaccessible files */
+                }
             }
         }
-        catch { /* skip inaccessible root directory */ }
+        catch
+        { /* skip inaccessible root directory */
+        }
         return size;
     }
 

@@ -341,7 +341,6 @@ internal static class Copilot
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "ImageCreatorEnabled")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "ImageCreatorEnabled", 0)],
         },
-
         new TweakDef
         {
             Id = "ai-copilot-disable-tips-notifications",
@@ -573,7 +572,6 @@ internal static class Copilot
             RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "ShowCopilotButton", 1)],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "ShowCopilotButton", 0)],
         },
-
         new TweakDef
         {
             Id = "ai-disable-windows-tips",
@@ -2456,7 +2454,6 @@ internal static class Speech
     ];
 }
 
-
 // ── merged from PolicyAI.cs ──
 // RegiLattice.Core — Tweaks/PolicyAI.cs
 // AI accessibility, Copilot, machine learning, neural processing, Recall, and attention-sensing policies
@@ -2659,7 +2656,6 @@ internal static class PolicyAI
                     DetectOps = [RegOp.CheckDword(Key, "DisableOOBEAccessibilitySuggestions", 1)],
                 },
             ];
-
     }
 
     // ── AiContentModerationPolicy ──
@@ -2840,17 +2836,14 @@ internal static class PolicyAI
                     DetectOps = [RegOp.CheckDword(Key, "AuditAllAIInteractions", 1)],
                 },
             ];
-
     }
 
     // ── AiCopilotWebPolicy ──
     private static class _AiCopilotWebPolicy
     {
-        private const string CopilotKey =
-            @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AI\Copilot";
+        private const string CopilotKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AI\Copilot";
 
-        private const string EdgeAiKey =
-            @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge";
+        private const string EdgeAiKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge";
 
         public static IReadOnlyList<TweakDef> Data =>
             [
@@ -2866,7 +2859,8 @@ internal static class PolicyAI
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "Copilot taskbar button and Win+C shortcut are removed. Users cannot access Copilot from the taskbar. Copilot in browser or M365 applications is controlled separately.",
+                    ImpactNote =
+                        "Copilot taskbar button and Win+C shortcut are removed. Users cannot access Copilot from the taskbar. Copilot in browser or M365 applications is controlled separately.",
                     ApplyOps = [RegOp.SetDword(CopilotKey, "TurnOffWindowsCopilot", 1)],
                     RemoveOps = [RegOp.DeleteValue(CopilotKey, "TurnOffWindowsCopilot")],
                     DetectOps = [RegOp.CheckDword(CopilotKey, "TurnOffWindowsCopilot", 1)],
@@ -2883,7 +2877,8 @@ internal static class PolicyAI
                     CorpSafe = true,
                     ImpactScore = 5,
                     SafetyRating = 5,
-                    ImpactNote = "Commercial data protection is activated for Copilot interactions. Requires users to be signed in with a Microsoft 365 commercial account. Consumer-tier protection is automatically replaced with enterprise-tier.",
+                    ImpactNote =
+                        "Commercial data protection is activated for Copilot interactions. Requires users to be signed in with a Microsoft 365 commercial account. Consumer-tier protection is automatically replaced with enterprise-tier.",
                     ApplyOps = [RegOp.SetDword(CopilotKey, "CommercialDataProtection", 1)],
                     RemoveOps = [RegOp.DeleteValue(CopilotKey, "CommercialDataProtection")],
                     DetectOps = [RegOp.CheckDword(CopilotKey, "CommercialDataProtection", 1)],
@@ -2900,7 +2895,8 @@ internal static class PolicyAI
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "AI image generation is disabled in Copilot. Text-based Copilot features are unaffected. Recommended for K-12 education environments and organisations with strict content policies.",
+                    ImpactNote =
+                        "AI image generation is disabled in Copilot. Text-based Copilot features are unaffected. Recommended for K-12 education environments and organisations with strict content policies.",
                     ApplyOps = [RegOp.SetDword(CopilotKey, "DisableImageCreator", 1)],
                     RemoveOps = [RegOp.DeleteValue(CopilotKey, "DisableImageCreator")],
                     DetectOps = [RegOp.CheckDword(CopilotKey, "DisableImageCreator", 1)],
@@ -2917,7 +2913,8 @@ internal static class PolicyAI
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "Edge Copilot/Discover sidebar is hidden. AI writing and summarisation features in the Edge sidebar are unavailable. Core browser functionality is unchanged.",
+                    ImpactNote =
+                        "Edge Copilot/Discover sidebar is hidden. AI writing and summarisation features in the Edge sidebar are unavailable. Core browser functionality is unchanged.",
                     ApplyOps = [RegOp.SetDword(EdgeAiKey, "HubsSidebarEnabled", 0)],
                     RemoveOps = [RegOp.DeleteValue(EdgeAiKey, "HubsSidebarEnabled")],
                     DetectOps = [RegOp.CheckDword(EdgeAiKey, "HubsSidebarEnabled", 0)],
@@ -2934,7 +2931,8 @@ internal static class PolicyAI
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "Bing AI Chat is disabled in Edge search and sidebar. Standard Bing web search is unaffected. Chat button and AI suggestions in search results do not appear.",
+                    ImpactNote =
+                        "Bing AI Chat is disabled in Edge search and sidebar. Standard Bing web search is unaffected. Chat button and AI suggestions in search results do not appear.",
                     ApplyOps = [RegOp.SetDword(EdgeAiKey, "BingAIChatEnabled", 0)],
                     RemoveOps = [RegOp.DeleteValue(EdgeAiKey, "BingAIChatEnabled")],
                     DetectOps = [RegOp.CheckDword(EdgeAiKey, "BingAIChatEnabled", 0)],
@@ -2951,7 +2949,8 @@ internal static class PolicyAI
                     CorpSafe = true,
                     ImpactScore = 4,
                     SafetyRating = 5,
-                    ImpactNote = "Copilot does not receive current page content. Page summarisation and context-aware Copilot responses are disabled. Users can still ask general questions through Copilot.",
+                    ImpactNote =
+                        "Copilot does not receive current page content. Page summarisation and context-aware Copilot responses are disabled. Users can still ask general questions through Copilot.",
                     ApplyOps = [RegOp.SetDword(CopilotKey, "SendPageInfoToCopilot", 0)],
                     RemoveOps = [RegOp.DeleteValue(CopilotKey, "SendPageInfoToCopilot")],
                     DetectOps = [RegOp.CheckDword(CopilotKey, "SendPageInfoToCopilot", 0)],
@@ -2968,7 +2967,8 @@ internal static class PolicyAI
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "Copilot conversation history is not stored. Each session starts without context from prior sessions. Users cannot view or continue previous Copilot conversations.",
+                    ImpactNote =
+                        "Copilot conversation history is not stored. Each session starts without context from prior sessions. Users cannot view or continue previous Copilot conversations.",
                     ApplyOps = [RegOp.SetDword(CopilotKey, "DisableCopilotHistory", 1)],
                     RemoveOps = [RegOp.DeleteValue(CopilotKey, "DisableCopilotHistory")],
                     DetectOps = [RegOp.CheckDword(CopilotKey, "DisableCopilotHistory", 1)],
@@ -2985,7 +2985,8 @@ internal static class PolicyAI
                     CorpSafe = true,
                     ImpactScore = 4,
                     SafetyRating = 5,
-                    ImpactNote = "Copilot is only available when signed in with a work/school Microsoft account. Personal account users are redirected to sign in with a work account. M365 commercial subscription required.",
+                    ImpactNote =
+                        "Copilot is only available when signed in with a work/school Microsoft account. Personal account users are redirected to sign in with a work account. M365 commercial subscription required.",
                     ApplyOps = [RegOp.SetDword(CopilotKey, "RestrictCopilotToWorkAccount", 1)],
                     RemoveOps = [RegOp.DeleteValue(CopilotKey, "RestrictCopilotToWorkAccount")],
                     DetectOps = [RegOp.CheckDword(CopilotKey, "RestrictCopilotToWorkAccount", 1)],
@@ -3002,7 +3003,8 @@ internal static class PolicyAI
                     CorpSafe = true,
                     ImpactScore = 4,
                     SafetyRating = 5,
-                    ImpactNote = "Screen capture access for Copilot is disabled. Visual AI features (Look Up, Visual Search) are unavailable. Text-based Copilot interactions are unaffected.",
+                    ImpactNote =
+                        "Screen capture access for Copilot is disabled. Visual AI features (Look Up, Visual Search) are unavailable. Text-based Copilot interactions are unaffected.",
                     ApplyOps = [RegOp.SetDword(CopilotKey, "AllowCopilotScreenAccess", 0)],
                     RemoveOps = [RegOp.DeleteValue(CopilotKey, "AllowCopilotScreenAccess")],
                     DetectOps = [RegOp.CheckDword(CopilotKey, "AllowCopilotScreenAccess", 0)],
@@ -3019,23 +3021,21 @@ internal static class PolicyAI
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "Copilot does not automatically read clipboard contents. Users can still manually paste content into the Copilot chat. Prevents accidental AI processing of sensitive copied data.",
+                    ImpactNote =
+                        "Copilot does not automatically read clipboard contents. Users can still manually paste content into the Copilot chat. Prevents accidental AI processing of sensitive copied data.",
                     ApplyOps = [RegOp.SetDword(CopilotKey, "AllowCopilotClipboardAccess", 0)],
                     RemoveOps = [RegOp.DeleteValue(CopilotKey, "AllowCopilotClipboardAccess")],
                     DetectOps = [RegOp.CheckDword(CopilotKey, "AllowCopilotClipboardAccess", 0)],
                 },
             ];
-
     }
 
     // ── AiInferencePolicy ──
     private static class _AiInferencePolicy
     {
-        private const string AiKey =
-            @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AI";
+        private const string AiKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AI";
 
-        private const string AiInfKey =
-            @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AI\Inference";
+        private const string AiInfKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AI\Inference";
 
         public static IReadOnlyList<TweakDef> Data =>
             [
@@ -3051,7 +3051,8 @@ internal static class PolicyAI
                     CorpSafe = true,
                     ImpactScore = 4,
                     SafetyRating = 5,
-                    ImpactNote = "AI features fall back to local inference only. On devices without NPU/powerful GPU, some AI features may be slower or disabled. Required for classified/sensitive data environments.",
+                    ImpactNote =
+                        "AI features fall back to local inference only. On devices without NPU/powerful GPU, some AI features may be slower or disabled. Required for classified/sensitive data environments.",
                     ApplyOps = [RegOp.SetDword(AiInfKey, "DisableCloudAI", 1)],
                     RemoveOps = [RegOp.DeleteValue(AiInfKey, "DisableCloudAI")],
                     DetectOps = [RegOp.CheckDword(AiInfKey, "DisableCloudAI", 1)],
@@ -3068,7 +3069,8 @@ internal static class PolicyAI
                     CorpSafe = true,
                     ImpactScore = 4,
                     SafetyRating = 5,
-                    ImpactNote = "AI models must have valid signatures. Only Microsoft-signed or enterprise-signed models load. Custom or third-party unsigned models are blocked.",
+                    ImpactNote =
+                        "AI models must have valid signatures. Only Microsoft-signed or enterprise-signed models load. Custom or third-party unsigned models are blocked.",
                     ApplyOps = [RegOp.SetDword(AiInfKey, "ModelIntegrityCheck", 1)],
                     RemoveOps = [RegOp.DeleteValue(AiInfKey, "ModelIntegrityCheck")],
                     DetectOps = [RegOp.CheckDword(AiInfKey, "ModelIntegrityCheck", 1)],
@@ -3085,7 +3087,8 @@ internal static class PolicyAI
                     CorpSafe = true,
                     ImpactScore = 2,
                     SafetyRating = 5,
-                    ImpactNote = "AI feature ads and onboarding prompts are suppressed. Only affects promotional UI, not functionality. AI features that are enabled via policy continue to work.",
+                    ImpactNote =
+                        "AI feature ads and onboarding prompts are suppressed. Only affects promotional UI, not functionality. AI features that are enabled via policy continue to work.",
                     ApplyOps = [RegOp.SetDword(AiKey, "DisableAIFeatureAdvertising", 1)],
                     RemoveOps = [RegOp.DeleteValue(AiKey, "DisableAIFeatureAdvertising")],
                     DetectOps = [RegOp.CheckDword(AiKey, "DisableAIFeatureAdvertising", 1)],
@@ -3102,7 +3105,8 @@ internal static class PolicyAI
                     CorpSafe = true,
                     ImpactScore = 4,
                     SafetyRating = 5,
-                    ImpactNote = "Third-party AI models are blocked. Only Microsoft-provided and enterprise-published models load. Custom machine learning workflows using third-party models are blocked at the OS level.",
+                    ImpactNote =
+                        "Third-party AI models are blocked. Only Microsoft-provided and enterprise-published models load. Custom machine learning workflows using third-party models are blocked at the OS level.",
                     ApplyOps = [RegOp.SetDword(AiInfKey, "AllowThirdPartyModels", 0)],
                     RemoveOps = [RegOp.DeleteValue(AiInfKey, "AllowThirdPartyModels")],
                     DetectOps = [RegOp.CheckDword(AiInfKey, "AllowThirdPartyModels", 0)],
@@ -3119,7 +3123,8 @@ internal static class PolicyAI
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "AI inference audit events are written to Event Log. Storage overhead depends on AI feature usage frequency. Essential for AI governance and compliance reporting.",
+                    ImpactNote =
+                        "AI inference audit events are written to Event Log. Storage overhead depends on AI feature usage frequency. Essential for AI governance and compliance reporting.",
                     ApplyOps = [RegOp.SetDword(AiInfKey, "EnableInferenceAudit", 1)],
                     RemoveOps = [RegOp.DeleteValue(AiInfKey, "EnableInferenceAudit")],
                     DetectOps = [RegOp.CheckDword(AiInfKey, "EnableInferenceAudit", 1)],
@@ -3136,7 +3141,8 @@ internal static class PolicyAI
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "AI inference telemetry is disabled. No model usage data is sent to Microsoft. Does not affect general Windows telemetry (controlled separately). AI features continue to function.",
+                    ImpactNote =
+                        "AI inference telemetry is disabled. No model usage data is sent to Microsoft. Does not affect general Windows telemetry (controlled separately). AI features continue to function.",
                     ApplyOps = [RegOp.SetDword(AiInfKey, "DisableAITelemetry", 1)],
                     RemoveOps = [RegOp.DeleteValue(AiInfKey, "DisableAITelemetry")],
                     DetectOps = [RegOp.CheckDword(AiInfKey, "DisableAITelemetry", 1)],
@@ -3153,7 +3159,8 @@ internal static class PolicyAI
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "AI inference is limited to 2 GB GPU memory. Large models that require more VRAM fall back to CPU/NPU inference. On systems with 4+ GB VRAM, increase this limit if AI accuracy is affected.",
+                    ImpactNote =
+                        "AI inference is limited to 2 GB GPU memory. Large models that require more VRAM fall back to CPU/NPU inference. On systems with 4+ GB VRAM, increase this limit if AI accuracy is affected.",
                     ApplyOps = [RegOp.SetDword(AiInfKey, "MaxGpuMemoryMB", 2048)],
                     RemoveOps = [RegOp.DeleteValue(AiInfKey, "MaxGpuMemoryMB")],
                     DetectOps = [RegOp.CheckDword(AiInfKey, "MaxGpuMemoryMB", 2048)],
@@ -3170,7 +3177,8 @@ internal static class PolicyAI
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "Background AI inference is disabled. AI features are only processed when the user actively uses them. First-time invocation latency increases. Recommended for portable devices.",
+                    ImpactNote =
+                        "Background AI inference is disabled. AI features are only processed when the user actively uses them. First-time invocation latency increases. Recommended for portable devices.",
                     ApplyOps = [RegOp.SetDword(AiInfKey, "DisableBackgroundAI", 1)],
                     RemoveOps = [RegOp.DeleteValue(AiInfKey, "DisableBackgroundAI")],
                     DetectOps = [RegOp.CheckDword(AiInfKey, "DisableBackgroundAI", 1)],
@@ -3187,7 +3195,8 @@ internal static class PolicyAI
                     CorpSafe = true,
                     ImpactScore = 4,
                     SafetyRating = 4,
-                    ImpactNote = "AI inference runs in a sandboxed environment. Models with filesystem dependencies may fail (e.g., image-to-file save operations). Test AI features after enabling — sandboxing prevents models from accessing user documents.",
+                    ImpactNote =
+                        "AI inference runs in a sandboxed environment. Models with filesystem dependencies may fail (e.g., image-to-file save operations). Test AI features after enabling — sandboxing prevents models from accessing user documents.",
                     ApplyOps = [RegOp.SetDword(AiInfKey, "EnableInferenceSandbox", 1)],
                     RemoveOps = [RegOp.DeleteValue(AiInfKey, "EnableInferenceSandbox")],
                     DetectOps = [RegOp.CheckDword(AiInfKey, "EnableInferenceSandbox", 1)],
@@ -3204,20 +3213,19 @@ internal static class PolicyAI
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "AI personalisation is disabled. AI features respond without user-specific context — answers are more generic. Semantic search and AI-suggested completions are less precise.",
+                    ImpactNote =
+                        "AI personalisation is disabled. AI features respond without user-specific context — answers are more generic. Semantic search and AI-suggested completions are less precise.",
                     ApplyOps = [RegOp.SetDword(AiKey, "DisableAIPersonalisation", 1)],
                     RemoveOps = [RegOp.DeleteValue(AiKey, "DisableAIPersonalisation")],
                     DetectOps = [RegOp.CheckDword(AiKey, "DisableAIPersonalisation", 1)],
                 },
             ];
-
     }
 
     // ── AiSafetyPolicy ──
     private static class _AiSafetyPolicy
     {
-        private const string AiSafeKey =
-            @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AI\Safety";
+        private const string AiSafeKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AI\Safety";
 
         public static IReadOnlyList<TweakDef> Data =>
             [
@@ -3233,7 +3241,8 @@ internal static class PolicyAI
                     CorpSafe = true,
                     ImpactScore = 4,
                     SafetyRating = 5,
-                    ImpactNote = "Content safety classification adds processing overhead to each AI inference output. Expect 5–15ms additional latency per output token on CPU. Required for responsible AI deployment.",
+                    ImpactNote =
+                        "Content safety classification adds processing overhead to each AI inference output. Expect 5–15ms additional latency per output token on CPU. Required for responsible AI deployment.",
                     ApplyOps = [RegOp.SetDword(AiSafeKey, "ContentSafetyFilterEnabled", 1)],
                     RemoveOps = [RegOp.DeleteValue(AiSafeKey, "ContentSafetyFilterEnabled")],
                     DetectOps = [RegOp.CheckDword(AiSafeKey, "ContentSafetyFilterEnabled", 1)],
@@ -3250,7 +3259,8 @@ internal static class PolicyAI
                     CorpSafe = true,
                     ImpactScore = 5,
                     SafetyRating = 5,
-                    ImpactNote = "Users must confirm each AI agent action. Automation workflows using AI agents require additional clicks. Essential safety control for AI agent deployments.",
+                    ImpactNote =
+                        "Users must confirm each AI agent action. Automation workflows using AI agents require additional clicks. Essential safety control for AI agent deployments.",
                     ApplyOps = [RegOp.SetDword(AiSafeKey, "RequireActionConfirmation", 1)],
                     RemoveOps = [RegOp.DeleteValue(AiSafeKey, "RequireActionConfirmation")],
                     DetectOps = [RegOp.CheckDword(AiSafeKey, "RequireActionConfirmation", 1)],
@@ -3267,7 +3277,8 @@ internal static class PolicyAI
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "AI suggestions in productivity apps are disabled. Users compose documents and emails without AI-suggested completions. AI-powered spell/grammar check is not affected.",
+                    ImpactNote =
+                        "AI suggestions in productivity apps are disabled. Users compose documents and emails without AI-suggested completions. AI-powered spell/grammar check is not affected.",
                     ApplyOps = [RegOp.SetDword(AiSafeKey, "DisableAISuggestedActions", 1)],
                     RemoveOps = [RegOp.DeleteValue(AiSafeKey, "DisableAISuggestedActions")],
                     DetectOps = [RegOp.CheckDword(AiSafeKey, "DisableAISuggestedActions", 1)],
@@ -3284,7 +3295,8 @@ internal static class PolicyAI
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "AI-generated content is tagged with attribution metadata. Applications that read attribution data can display AI indicators. Attribution is metadata only — does not visually overlay content unless the app implements the indicator.",
+                    ImpactNote =
+                        "AI-generated content is tagged with attribution metadata. Applications that read attribution data can display AI indicators. Attribution is metadata only — does not visually overlay content unless the app implements the indicator.",
                     ApplyOps = [RegOp.SetDword(AiSafeKey, "EnableAIOutputAttribution", 1)],
                     RemoveOps = [RegOp.DeleteValue(AiSafeKey, "EnableAIOutputAttribution")],
                     DetectOps = [RegOp.CheckDword(AiSafeKey, "EnableAIOutputAttribution", 1)],
@@ -3301,7 +3313,8 @@ internal static class PolicyAI
                     CorpSafe = true,
                     ImpactScore = 4,
                     SafetyRating = 5,
-                    ImpactNote = "High sensitivity harm filter may block some legitimate AI responses (false positives). In general enterprise settings, medium sensitivity is sufficient. Recommended for K-12 and zero-tolerance environments.",
+                    ImpactNote =
+                        "High sensitivity harm filter may block some legitimate AI responses (false positives). In general enterprise settings, medium sensitivity is sufficient. Recommended for K-12 and zero-tolerance environments.",
                     ApplyOps = [RegOp.SetDword(AiSafeKey, "HarmFilterLevel", 2)],
                     RemoveOps = [RegOp.DeleteValue(AiSafeKey, "HarmFilterLevel")],
                     DetectOps = [RegOp.CheckDword(AiSafeKey, "HarmFilterLevel", 2)],
@@ -3318,7 +3331,8 @@ internal static class PolicyAI
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "AI browsing suggestions in Edge are disabled. Address bar shows standard URL history completions only. No AI-powered URL or content recommendations appear.",
+                    ImpactNote =
+                        "AI browsing suggestions in Edge are disabled. Address bar shows standard URL history completions only. No AI-powered URL or content recommendations appear.",
                     ApplyOps = [RegOp.SetDword(AiSafeKey, "DisableAIBrowsingSuggestions", 1)],
                     RemoveOps = [RegOp.DeleteValue(AiSafeKey, "DisableAIBrowsingSuggestions")],
                     DetectOps = [RegOp.CheckDword(AiSafeKey, "DisableAIBrowsingSuggestions", 1)],
@@ -3335,7 +3349,8 @@ internal static class PolicyAI
                     CorpSafe = true,
                     ImpactScore = 5,
                     SafetyRating = 5,
-                    ImpactNote = "Prompt injection detection adds overhead to AI input processing. Some documents with complex formatting may be over-sanitised. Critical safety control for AI agents with access to email and document inputs.",
+                    ImpactNote =
+                        "Prompt injection detection adds overhead to AI input processing. Some documents with complex formatting may be over-sanitised. Critical safety control for AI agents with access to email and document inputs.",
                     ApplyOps = [RegOp.SetDword(AiSafeKey, "EnablePromptInjectionProtection", 1)],
                     RemoveOps = [RegOp.DeleteValue(AiSafeKey, "EnablePromptInjectionProtection")],
                     DetectOps = [RegOp.CheckDword(AiSafeKey, "EnablePromptInjectionProtection", 1)],
@@ -3352,7 +3367,8 @@ internal static class PolicyAI
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "AI model updates require IT approval and deployment. AI features may use older model versions until updated through managed channels. New safety improvements in updated models are delayed.",
+                    ImpactNote =
+                        "AI model updates require IT approval and deployment. AI features may use older model versions until updated through managed channels. New safety improvements in updated models are delayed.",
                     ApplyOps = [RegOp.SetDword(AiSafeKey, "DisableAutoAIModelUpdate", 1)],
                     RemoveOps = [RegOp.DeleteValue(AiSafeKey, "DisableAutoAIModelUpdate")],
                     DetectOps = [RegOp.CheckDword(AiSafeKey, "DisableAutoAIModelUpdate", 1)],
@@ -3369,7 +3385,8 @@ internal static class PolicyAI
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "AI safety incidents (blocked outputs, injection detections) are logged to Event Log. Volume depends on AI feature usage. Required for AI security operations and compliance reporting.",
+                    ImpactNote =
+                        "AI safety incidents (blocked outputs, injection detections) are logged to Event Log. Volume depends on AI feature usage. Required for AI security operations and compliance reporting.",
                     ApplyOps = [RegOp.SetDword(AiSafeKey, "EnableAIIncidentReporting", 1)],
                     RemoveOps = [RegOp.DeleteValue(AiSafeKey, "EnableAIIncidentReporting")],
                     DetectOps = [RegOp.CheckDword(AiSafeKey, "EnableAIIncidentReporting", 1)],
@@ -3386,13 +3403,13 @@ internal static class PolicyAI
                     CorpSafe = true,
                     ImpactScore = 4,
                     SafetyRating = 5,
-                    ImpactNote = "New AI features require explicit activation. Users are not automatically enrolled in new AI capabilities that process user data. IT controls AI feature rollout through explicit policy enablement.",
+                    ImpactNote =
+                        "New AI features require explicit activation. Users are not automatically enrolled in new AI capabilities that process user data. IT controls AI feature rollout through explicit policy enablement.",
                     ApplyOps = [RegOp.SetDword(AiSafeKey, "DisableImplicitAIConsent", 1)],
                     RemoveOps = [RegOp.DeleteValue(AiSafeKey, "DisableImplicitAIConsent")],
                     DetectOps = [RegOp.CheckDword(AiSafeKey, "DisableImplicitAIConsent", 1)],
                 },
             ];
-
     }
 
     // ── AttentionSensingPolicy ──
@@ -3403,189 +3420,203 @@ internal static class PolicyAI
         private const string LockKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\PresenceSensing\Lock";
 
         public static IReadOnlyList<TweakDef> Data =>
-        [
-            new TweakDef
-            {
-                Id = "attsens-disable-attention-sensing",
-                Label = "Disable Attention Sensing (Gaze Detection)",
-                Category = "AI / Copilot",
-                Description = "Disables the Windows Attention Sensing feature, which uses the device camera to detect whether the user is looking at the screen. When disabled, screen-dimming and adaptive brightness based on gaze are turned off.",
-                Tags = ["attention-sensing", "presence", "camera", "privacy", "windows-11"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                MinBuild = 22621,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Prevents the front camera from being used to monitor user gaze; improves privacy and reduces background camera processing.",
-                RegistryKeys = [AttKey],
-                ApplyOps  = [RegOp.SetDword(AttKey, "Enabled", 0)],
-                RemoveOps = [RegOp.DeleteValue(AttKey, "Enabled")],
-                DetectOps = [RegOp.CheckDword(AttKey, "Enabled", 0)],
-            },
-            new TweakDef
-            {
-                Id = "attsens-disable-presence-sensing",
-                Label = "Disable Presence Sensing (Human Proximity Detection)",
-                Category = "AI / Copilot",
-                Description = "Disables the Windows Presence Sensing feature, which uses proximity sensors and camera to detect whether a person is near the device. Prevents wake-on-approach and lock-on-leave behaviours.",
-                Tags = ["presence-sensing", "proximity", "sensor", "privacy", "windows-11"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                MinBuild = 22621,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Prevents the device from continuously monitoring for human proximity, reducing background sensor and camera activity.",
-                RegistryKeys = [PresKey],
-                ApplyOps  = [RegOp.SetDword(PresKey, "UserNotPresent", 1)],
-                RemoveOps = [RegOp.DeleteValue(PresKey, "UserNotPresent")],
-                DetectOps = [RegOp.CheckDword(PresKey, "UserNotPresent", 1)],
-            },
-            new TweakDef
-            {
-                Id = "attsens-disable-wake-on-approach",
-                Label = "Disable Wake-on-Approach (Screen Wakes When User Approaches)",
-                Category = "AI / Copilot",
-                Description = "Disables Wake-on-Approach in Windows 11, which powers on the display when a presence-capable sensor detects a user walking near the device. Screen wake is controlled by normal power management instead.",
-                Tags = ["presence-sensing", "wake-on-approach", "sleep", "power", "windows-11"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                MinBuild = 22621,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                ImpactNote = "Prevents unexpected screen activation in offices or public spaces when someone walks past the device.",
-                RegistryKeys = [PresKey],
-                ApplyOps  = [RegOp.SetDword(PresKey, "DisableWakeOnApproach", 1)],
-                RemoveOps = [RegOp.DeleteValue(PresKey, "DisableWakeOnApproach")],
-                DetectOps = [RegOp.CheckDword(PresKey, "DisableWakeOnApproach", 1)],
-            },
-            new TweakDef
-            {
-                Id = "attsens-disable-lock-on-leave",
-                Label = "Disable Lock-on-Leave (Device Locks When User Departs)",
-                Category = "AI / Copilot",
-                Description = "Prevents Windows from automatically locking the screen based on presence-sensor detection of the user leaving the area. Screen lock reverts to standard timeout or manual lock controls.",
-                Tags = ["presence-sensing", "lock-on-leave", "screen-lock", "windows-11"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                MinBuild = 22621,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                ImpactNote = "Useful in environments where sensor false-positives cause disruptive mid-task lock events; standard timeout-based lock remains active.",
-                RegistryKeys = [LockKey],
-                ApplyOps  = [RegOp.SetDword(LockKey, "DisableLockOnLeave", 1)],
-                RemoveOps = [RegOp.DeleteValue(LockKey, "DisableLockOnLeave")],
-                DetectOps = [RegOp.CheckDword(LockKey, "DisableLockOnLeave", 1)],
-            },
-            new TweakDef
-            {
-                Id = "attsens-disable-dim-on-look-away",
-                Label = "Disable Screen Dim When User Looks Away",
-                Category = "AI / Copilot",
-                Description = "Prevents Windows from dimming the screen when attention sensing detects the user is no longer looking at the display. Maintains consistent screen brightness independent of gaze direction.",
-                Tags = ["attention-sensing", "screen-dim", "display", "brightness", "windows-11"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                MinBuild = 22621,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                ImpactNote = "Prevents distracting screen dimming in presentations, meetings, or side-glance scenarios.",
-                RegistryKeys = [AttKey],
-                ApplyOps  = [RegOp.SetDword(AttKey, "DimOnLookAway", 0)],
-                RemoveOps = [RegOp.DeleteValue(AttKey, "DimOnLookAway")],
-                DetectOps = [RegOp.CheckDword(AttKey, "DimOnLookAway", 0)],
-            },
-            new TweakDef
-            {
-                Id = "attsens-block-user-override",
-                Label = "Prevent Users from Changing Presence Sensing Settings",
-                Category = "AI / Copilot",
-                Description = "Locks presence-sensing and attention-sensing settings so users cannot enable or adjust them through Windows Settings, even on devices that have the required sensor hardware.",
-                Tags = ["presence-sensing", "user-lock", "policy", "settings", "privacy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                MinBuild = 22621,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Enforces a consistent presence-sensing posture across all managed devices, regardless of per-user preference.",
-                RegistryKeys = [PresKey],
-                ApplyOps  = [RegOp.SetDword(PresKey, "BlockUserOverride", 1)],
-                RemoveOps = [RegOp.DeleteValue(PresKey, "BlockUserOverride")],
-                DetectOps = [RegOp.CheckDword(PresKey, "BlockUserOverride", 1)],
-            },
-            new TweakDef
-            {
-                Id = "attsens-disable-adaptive-dimming",
-                Label = "Disable Adaptive Dimming Based on Presence",
-                Category = "AI / Copilot",
-                Description = "Disables adaptive display-dimming that uses presence sensor data to adjust screen brightness. Ensures display behaviour is governed by the configured power plan rather than sensor inference.",
-                Tags = ["presence-sensing", "adaptive-dimming", "display", "power", "windows-11"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                MinBuild = 22621,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                ImpactNote = "Provides consistent display behaviour in professional environments where sensor-based adaptive brightness is unpredictable.",
-                RegistryKeys = [AttKey],
-                ApplyOps  = [RegOp.SetDword(AttKey, "AdaptiveDimmingEnabled", 0)],
-                RemoveOps = [RegOp.DeleteValue(AttKey, "AdaptiveDimmingEnabled")],
-                DetectOps = [RegOp.CheckDword(AttKey, "AdaptiveDimmingEnabled", 0)],
-            },
-            new TweakDef
-            {
-                Id = "attsens-require-sensor-consent",
-                Label = "Require User Consent Before Enabling Presence Sensor",
-                Category = "AI / Copilot",
-                Description = "Requires explicit user consent before Windows activates the presence sensor hardware for proximity and attention detection. Consent must be re-obtained if settings are reset.",
-                Tags = ["presence-sensing", "consent", "privacy", "user-rights", "windows-11"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                MinBuild = 22621,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Ensures users are aware that their movement and gaze are being monitored before the feature activates.",
-                RegistryKeys = [PresKey],
-                ApplyOps  = [RegOp.SetDword(PresKey, "RequireUserConsentForSensor", 1)],
-                RemoveOps = [RegOp.DeleteValue(PresKey, "RequireUserConsentForSensor")],
-                DetectOps = [RegOp.CheckDword(PresKey, "RequireUserConsentForSensor", 1)],
-            },
-            new TweakDef
-            {
-                Id = "attsens-disable-presence-data-upload",
-                Label = "Block Presence Sensing Data Telemetry Upload",
-                Category = "AI / Copilot",
-                Description = "Prevents the Windows presence and attention sensing subsystem from sending usage telemetry, sensor performance data, and detection accuracy metrics to Microsoft.",
-                Tags = ["presence-sensing", "telemetry", "data-upload", "privacy", "windows-11"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                MinBuild = 22621,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Stops proximity and attention sensing interaction data from being transmitted to Microsoft's cloud services.",
-                RegistryKeys = [PresKey],
-                ApplyOps  = [RegOp.SetDword(PresKey, "DisableSensingTelemetryUpload", 1)],
-                RemoveOps = [RegOp.DeleteValue(PresKey, "DisableSensingTelemetryUpload")],
-                DetectOps = [RegOp.CheckDword(PresKey, "DisableSensingTelemetryUpload", 1)],
-            },
-            new TweakDef
-            {
-                Id = "attsens-disable-camera-in-lock-screen",
-                Label = "Disable Presence Detection on Lock Screen",
-                Category = "AI / Copilot",
-                Description = "Prevents the Windows lock screen from activating the presence or attention sensor. The camera and proximity hardware remain inactive until the user manually inputs credentials to begin unlocking.",
-                Tags = ["presence-sensing", "lock-screen", "camera", "security", "windows-11"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                MinBuild = 22621,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Prevents the lock screen from briefly activating the camera to detect approaching users, removing an ambient-monitoring concern.",
-                RegistryKeys = [LockKey],
-                ApplyOps  = [RegOp.SetDword(LockKey, "DisablePresenceOnLockScreen", 1)],
-                RemoveOps = [RegOp.DeleteValue(LockKey, "DisablePresenceOnLockScreen")],
-                DetectOps = [RegOp.CheckDword(LockKey, "DisablePresenceOnLockScreen", 1)],
-            },
-        ];
-
+            [
+                new TweakDef
+                {
+                    Id = "attsens-disable-attention-sensing",
+                    Label = "Disable Attention Sensing (Gaze Detection)",
+                    Category = "AI / Copilot",
+                    Description =
+                        "Disables the Windows Attention Sensing feature, which uses the device camera to detect whether the user is looking at the screen. When disabled, screen-dimming and adaptive brightness based on gaze are turned off.",
+                    Tags = ["attention-sensing", "presence", "camera", "privacy", "windows-11"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    MinBuild = 22621,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote =
+                        "Prevents the front camera from being used to monitor user gaze; improves privacy and reduces background camera processing.",
+                    RegistryKeys = [AttKey],
+                    ApplyOps = [RegOp.SetDword(AttKey, "Enabled", 0)],
+                    RemoveOps = [RegOp.DeleteValue(AttKey, "Enabled")],
+                    DetectOps = [RegOp.CheckDword(AttKey, "Enabled", 0)],
+                },
+                new TweakDef
+                {
+                    Id = "attsens-disable-presence-sensing",
+                    Label = "Disable Presence Sensing (Human Proximity Detection)",
+                    Category = "AI / Copilot",
+                    Description =
+                        "Disables the Windows Presence Sensing feature, which uses proximity sensors and camera to detect whether a person is near the device. Prevents wake-on-approach and lock-on-leave behaviours.",
+                    Tags = ["presence-sensing", "proximity", "sensor", "privacy", "windows-11"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    MinBuild = 22621,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote =
+                        "Prevents the device from continuously monitoring for human proximity, reducing background sensor and camera activity.",
+                    RegistryKeys = [PresKey],
+                    ApplyOps = [RegOp.SetDword(PresKey, "UserNotPresent", 1)],
+                    RemoveOps = [RegOp.DeleteValue(PresKey, "UserNotPresent")],
+                    DetectOps = [RegOp.CheckDword(PresKey, "UserNotPresent", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "attsens-disable-wake-on-approach",
+                    Label = "Disable Wake-on-Approach (Screen Wakes When User Approaches)",
+                    Category = "AI / Copilot",
+                    Description =
+                        "Disables Wake-on-Approach in Windows 11, which powers on the display when a presence-capable sensor detects a user walking near the device. Screen wake is controlled by normal power management instead.",
+                    Tags = ["presence-sensing", "wake-on-approach", "sleep", "power", "windows-11"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    MinBuild = 22621,
+                    ImpactScore = 2,
+                    SafetyRating = 5,
+                    ImpactNote = "Prevents unexpected screen activation in offices or public spaces when someone walks past the device.",
+                    RegistryKeys = [PresKey],
+                    ApplyOps = [RegOp.SetDword(PresKey, "DisableWakeOnApproach", 1)],
+                    RemoveOps = [RegOp.DeleteValue(PresKey, "DisableWakeOnApproach")],
+                    DetectOps = [RegOp.CheckDword(PresKey, "DisableWakeOnApproach", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "attsens-disable-lock-on-leave",
+                    Label = "Disable Lock-on-Leave (Device Locks When User Departs)",
+                    Category = "AI / Copilot",
+                    Description =
+                        "Prevents Windows from automatically locking the screen based on presence-sensor detection of the user leaving the area. Screen lock reverts to standard timeout or manual lock controls.",
+                    Tags = ["presence-sensing", "lock-on-leave", "screen-lock", "windows-11"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    MinBuild = 22621,
+                    ImpactScore = 2,
+                    SafetyRating = 5,
+                    ImpactNote =
+                        "Useful in environments where sensor false-positives cause disruptive mid-task lock events; standard timeout-based lock remains active.",
+                    RegistryKeys = [LockKey],
+                    ApplyOps = [RegOp.SetDword(LockKey, "DisableLockOnLeave", 1)],
+                    RemoveOps = [RegOp.DeleteValue(LockKey, "DisableLockOnLeave")],
+                    DetectOps = [RegOp.CheckDword(LockKey, "DisableLockOnLeave", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "attsens-disable-dim-on-look-away",
+                    Label = "Disable Screen Dim When User Looks Away",
+                    Category = "AI / Copilot",
+                    Description =
+                        "Prevents Windows from dimming the screen when attention sensing detects the user is no longer looking at the display. Maintains consistent screen brightness independent of gaze direction.",
+                    Tags = ["attention-sensing", "screen-dim", "display", "brightness", "windows-11"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    MinBuild = 22621,
+                    ImpactScore = 2,
+                    SafetyRating = 5,
+                    ImpactNote = "Prevents distracting screen dimming in presentations, meetings, or side-glance scenarios.",
+                    RegistryKeys = [AttKey],
+                    ApplyOps = [RegOp.SetDword(AttKey, "DimOnLookAway", 0)],
+                    RemoveOps = [RegOp.DeleteValue(AttKey, "DimOnLookAway")],
+                    DetectOps = [RegOp.CheckDword(AttKey, "DimOnLookAway", 0)],
+                },
+                new TweakDef
+                {
+                    Id = "attsens-block-user-override",
+                    Label = "Prevent Users from Changing Presence Sensing Settings",
+                    Category = "AI / Copilot",
+                    Description =
+                        "Locks presence-sensing and attention-sensing settings so users cannot enable or adjust them through Windows Settings, even on devices that have the required sensor hardware.",
+                    Tags = ["presence-sensing", "user-lock", "policy", "settings", "privacy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    MinBuild = 22621,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "Enforces a consistent presence-sensing posture across all managed devices, regardless of per-user preference.",
+                    RegistryKeys = [PresKey],
+                    ApplyOps = [RegOp.SetDword(PresKey, "BlockUserOverride", 1)],
+                    RemoveOps = [RegOp.DeleteValue(PresKey, "BlockUserOverride")],
+                    DetectOps = [RegOp.CheckDword(PresKey, "BlockUserOverride", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "attsens-disable-adaptive-dimming",
+                    Label = "Disable Adaptive Dimming Based on Presence",
+                    Category = "AI / Copilot",
+                    Description =
+                        "Disables adaptive display-dimming that uses presence sensor data to adjust screen brightness. Ensures display behaviour is governed by the configured power plan rather than sensor inference.",
+                    Tags = ["presence-sensing", "adaptive-dimming", "display", "power", "windows-11"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    MinBuild = 22621,
+                    ImpactScore = 2,
+                    SafetyRating = 5,
+                    ImpactNote =
+                        "Provides consistent display behaviour in professional environments where sensor-based adaptive brightness is unpredictable.",
+                    RegistryKeys = [AttKey],
+                    ApplyOps = [RegOp.SetDword(AttKey, "AdaptiveDimmingEnabled", 0)],
+                    RemoveOps = [RegOp.DeleteValue(AttKey, "AdaptiveDimmingEnabled")],
+                    DetectOps = [RegOp.CheckDword(AttKey, "AdaptiveDimmingEnabled", 0)],
+                },
+                new TweakDef
+                {
+                    Id = "attsens-require-sensor-consent",
+                    Label = "Require User Consent Before Enabling Presence Sensor",
+                    Category = "AI / Copilot",
+                    Description =
+                        "Requires explicit user consent before Windows activates the presence sensor hardware for proximity and attention detection. Consent must be re-obtained if settings are reset.",
+                    Tags = ["presence-sensing", "consent", "privacy", "user-rights", "windows-11"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    MinBuild = 22621,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "Ensures users are aware that their movement and gaze are being monitored before the feature activates.",
+                    RegistryKeys = [PresKey],
+                    ApplyOps = [RegOp.SetDword(PresKey, "RequireUserConsentForSensor", 1)],
+                    RemoveOps = [RegOp.DeleteValue(PresKey, "RequireUserConsentForSensor")],
+                    DetectOps = [RegOp.CheckDword(PresKey, "RequireUserConsentForSensor", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "attsens-disable-presence-data-upload",
+                    Label = "Block Presence Sensing Data Telemetry Upload",
+                    Category = "AI / Copilot",
+                    Description =
+                        "Prevents the Windows presence and attention sensing subsystem from sending usage telemetry, sensor performance data, and detection accuracy metrics to Microsoft.",
+                    Tags = ["presence-sensing", "telemetry", "data-upload", "privacy", "windows-11"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    MinBuild = 22621,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "Stops proximity and attention sensing interaction data from being transmitted to Microsoft's cloud services.",
+                    RegistryKeys = [PresKey],
+                    ApplyOps = [RegOp.SetDword(PresKey, "DisableSensingTelemetryUpload", 1)],
+                    RemoveOps = [RegOp.DeleteValue(PresKey, "DisableSensingTelemetryUpload")],
+                    DetectOps = [RegOp.CheckDword(PresKey, "DisableSensingTelemetryUpload", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "attsens-disable-camera-in-lock-screen",
+                    Label = "Disable Presence Detection on Lock Screen",
+                    Category = "AI / Copilot",
+                    Description =
+                        "Prevents the Windows lock screen from activating the presence or attention sensor. The camera and proximity hardware remain inactive until the user manually inputs credentials to begin unlocking.",
+                    Tags = ["presence-sensing", "lock-screen", "camera", "security", "windows-11"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    MinBuild = 22621,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote =
+                        "Prevents the lock screen from briefly activating the camera to detect approaching users, removing an ambient-monitoring concern.",
+                    RegistryKeys = [LockKey],
+                    ApplyOps = [RegOp.SetDword(LockKey, "DisablePresenceOnLockScreen", 1)],
+                    RemoveOps = [RegOp.DeleteValue(LockKey, "DisablePresenceOnLockScreen")],
+                    DetectOps = [RegOp.CheckDword(LockKey, "DisablePresenceOnLockScreen", 1)],
+                },
+            ];
     }
 
     // ── CopilotPlusNpuPolicy ──
@@ -3766,7 +3797,6 @@ internal static class PolicyAI
                     DetectOps = [RegOp.CheckDword(Key, "AuditNPUWorkloadDispatch", 1)],
                 },
             ];
-
     }
 
     // ── CopilotSidebarPolicy ──
@@ -3947,17 +3977,14 @@ internal static class PolicyAI
                     DetectOps = [RegOp.CheckDword(Key, "SuppressCopilotFirstRun", 1)],
                 },
             ];
-
     }
 
     // ── MachineLearningPolicy ──
     private static class _MachineLearningPolicy
     {
-        private const string MlKey =
-            @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\MachineLearning";
+        private const string MlKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\MachineLearning";
 
-        private const string OnnxKey =
-            @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\MachineLearning\ONNX";
+        private const string OnnxKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\MachineLearning\ONNX";
 
         public static IReadOnlyList<TweakDef> Data =>
             [
@@ -3973,7 +4000,8 @@ internal static class PolicyAI
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "WinML diagnostic events are written to local Event Log. Does not send data externally. Required for diagnosing WinML application failures in enterprise support scenarios.",
+                    ImpactNote =
+                        "WinML diagnostic events are written to local Event Log. Does not send data externally. Required for diagnosing WinML application failures in enterprise support scenarios.",
                     ApplyOps = [RegOp.SetDword(MlKey, "WinMLTelemetryEnabled", 1)],
                     RemoveOps = [RegOp.DeleteValue(MlKey, "WinMLTelemetryEnabled")],
                     DetectOps = [RegOp.CheckDword(MlKey, "WinMLTelemetryEnabled", 1)],
@@ -3990,7 +4018,8 @@ internal static class PolicyAI
                     CorpSafe = true,
                     ImpactScore = 4,
                     SafetyRating = 5,
-                    ImpactNote = "ONNX quantised model variants are used when available. Output quality may marginally differ from FP32 models in rare cases. Significantly improves inference performance on CPU/NPU.",
+                    ImpactNote =
+                        "ONNX quantised model variants are used when available. Output quality may marginally differ from FP32 models in rare cases. Significantly improves inference performance on CPU/NPU.",
                     ApplyOps = [RegOp.SetDword(OnnxKey, "ONNXQuantisationEnabled", 1)],
                     RemoveOps = [RegOp.DeleteValue(OnnxKey, "ONNXQuantisationEnabled")],
                     DetectOps = [RegOp.CheckDword(OnnxKey, "ONNXQuantisationEnabled", 1)],
@@ -4007,7 +4036,8 @@ internal static class PolicyAI
                     CorpSafe = true,
                     ImpactScore = 4,
                     SafetyRating = 5,
-                    ImpactNote = "Third-party DirectML GPU acceleration is blocked. Third-party AI apps fall back to CPU inference. Microsoft system components are exempt. GPU remains available for display and rendering tasks.",
+                    ImpactNote =
+                        "Third-party DirectML GPU acceleration is blocked. Third-party AI apps fall back to CPU inference. Microsoft system components are exempt. GPU remains available for display and rendering tasks.",
                     ApplyOps = [RegOp.SetDword(MlKey, "DisableDirectML", 1)],
                     RemoveOps = [RegOp.DeleteValue(MlKey, "DisableDirectML")],
                     DetectOps = [RegOp.CheckDword(MlKey, "DisableDirectML", 1)],
@@ -4024,7 +4054,8 @@ internal static class PolicyAI
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "Experimental model variants are blocked. Only release-grade AI models are loaded. AI feature behaviour is predictable and consistent across all managed devices.",
+                    ImpactNote =
+                        "Experimental model variants are blocked. Only release-grade AI models are loaded. AI feature behaviour is predictable and consistent across all managed devices.",
                     ApplyOps = [RegOp.SetDword(MlKey, "DisableExperimentalModels", 1)],
                     RemoveOps = [RegOp.DeleteValue(MlKey, "DisableExperimentalModels")],
                     DetectOps = [RegOp.CheckDword(MlKey, "DisableExperimentalModels", 1)],
@@ -4041,7 +4072,8 @@ internal static class PolicyAI
                     CorpSafe = true,
                     ImpactScore = 2,
                     SafetyRating = 5,
-                    ImpactNote = "ONNX model cache is limited to 512 MB. Least-recently-used model compilations are evicted when the limit is reached, causing re-compilation latency on first run. Increase if many distinct AI apps are deployed.",
+                    ImpactNote =
+                        "ONNX model cache is limited to 512 MB. Least-recently-used model compilations are evicted when the limit is reached, causing re-compilation latency on first run. Increase if many distinct AI apps are deployed.",
                     ApplyOps = [RegOp.SetDword(OnnxKey, "ONNXCacheSizeMB", 512)],
                     RemoveOps = [RegOp.DeleteValue(OnnxKey, "ONNXCacheSizeMB")],
                     DetectOps = [RegOp.CheckDword(OnnxKey, "ONNXCacheSizeMB", 512)],
@@ -4058,7 +4090,8 @@ internal static class PolicyAI
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "WinML applications are isolated from each other's model stores. Applications can only access models they installed or that are in the system model store. No UX impact for well-designed applications.",
+                    ImpactNote =
+                        "WinML applications are isolated from each other's model stores. Applications can only access models they installed or that are in the system model store. No UX impact for well-designed applications.",
                     ApplyOps = [RegOp.SetDword(MlKey, "WinMLAppIsolation", 1)],
                     RemoveOps = [RegOp.DeleteValue(MlKey, "WinMLAppIsolation")],
                     DetectOps = [RegOp.CheckDword(MlKey, "WinMLAppIsolation", 1)],
@@ -4075,7 +4108,8 @@ internal static class PolicyAI
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "AI model marketplace is inaccessible to users. Models can only be deployed by IT through enterprise channels. Users cannot install community AI models.",
+                    ImpactNote =
+                        "AI model marketplace is inaccessible to users. Models can only be deployed by IT through enterprise channels. Users cannot install community AI models.",
                     ApplyOps = [RegOp.SetDword(MlKey, "DisableAIModelMarketplace", 1)],
                     RemoveOps = [RegOp.DeleteValue(MlKey, "DisableAIModelMarketplace")],
                     DetectOps = [RegOp.CheckDword(MlKey, "DisableAIModelMarketplace", 1)],
@@ -4092,7 +4126,8 @@ internal static class PolicyAI
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "Federated learning participation is blocked. Local AI models are not used to improve Microsoft's global models. AI features continue to use the latest centrally-trained models deployed through Windows Update.",
+                    ImpactNote =
+                        "Federated learning participation is blocked. Local AI models are not used to improve Microsoft's global models. AI features continue to use the latest centrally-trained models deployed through Windows Update.",
                     ApplyOps = [RegOp.SetDword(MlKey, "BlockFederatedLearning", 1)],
                     RemoveOps = [RegOp.DeleteValue(MlKey, "BlockFederatedLearning")],
                     DetectOps = [RegOp.CheckDword(MlKey, "BlockFederatedLearning", 1)],
@@ -4109,7 +4144,8 @@ internal static class PolicyAI
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "AI inference is limited to 4 CPU threads. Background AI tasks run slower on high-core-count machines. Increase to 8 for AI workstation class devices.",
+                    ImpactNote =
+                        "AI inference is limited to 4 CPU threads. Background AI tasks run slower on high-core-count machines. Increase to 8 for AI workstation class devices.",
                     ApplyOps = [RegOp.SetDword(MlKey, "MaxInferenceThreads", 4)],
                     RemoveOps = [RegOp.DeleteValue(MlKey, "MaxInferenceThreads")],
                     DetectOps = [RegOp.CheckDword(MlKey, "MaxInferenceThreads", 4)],
@@ -4126,23 +4162,21 @@ internal static class PolicyAI
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "AI model access events are logged per-application per-load. Log volume is proportional to AI feature usage frequency. Essential for AI governance and security operations.",
+                    ImpactNote =
+                        "AI model access events are logged per-application per-load. Log volume is proportional to AI feature usage frequency. Essential for AI governance and security operations.",
                     ApplyOps = [RegOp.SetDword(MlKey, "EnableModelAccessAudit", 1)],
                     RemoveOps = [RegOp.DeleteValue(MlKey, "EnableModelAccessAudit")],
                     DetectOps = [RegOp.CheckDword(MlKey, "EnableModelAccessAudit", 1)],
                 },
             ];
-
     }
 
     // ── NeuralProcessingPolicy ──
     private static class _NeuralProcessingPolicy
     {
-        private const string NpuKey =
-            @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AI\NPU";
+        private const string NpuKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AI\NPU";
 
-        private const string AiHwKey =
-            @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AI\HardwareAcceleration";
+        private const string AiHwKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AI\HardwareAcceleration";
 
         public static IReadOnlyList<TweakDef> Data =>
             [
@@ -4158,7 +4192,8 @@ internal static class PolicyAI
                     CorpSafe = true,
                     ImpactScore = 4,
                     SafetyRating = 5,
-                    ImpactNote = "NPU scheduling is enabled. Requires a device with a Neural Processing Unit (Copilot+ PC). On devices without an NPU, this setting has no effect.",
+                    ImpactNote =
+                        "NPU scheduling is enabled. Requires a device with a Neural Processing Unit (Copilot+ PC). On devices without an NPU, this setting has no effect.",
                     ApplyOps = [RegOp.SetDword(NpuKey, "NPUSchedulingEnabled", 1)],
                     RemoveOps = [RegOp.DeleteValue(NpuKey, "NPUSchedulingEnabled")],
                     DetectOps = [RegOp.CheckDword(NpuKey, "NPUSchedulingEnabled", 1)],
@@ -4175,7 +4210,8 @@ internal static class PolicyAI
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "NPU telemetry is disabled. No NPU usage data is sent to Microsoft. NPU features continue to function; optimisation of NPU scheduling by Microsoft may be slower.",
+                    ImpactNote =
+                        "NPU telemetry is disabled. No NPU usage data is sent to Microsoft. NPU features continue to function; optimisation of NPU scheduling by Microsoft may be slower.",
                     ApplyOps = [RegOp.SetDword(NpuKey, "NPUTelemetryEnabled", 0)],
                     RemoveOps = [RegOp.DeleteValue(NpuKey, "NPUTelemetryEnabled")],
                     DetectOps = [RegOp.CheckDword(NpuKey, "NPUTelemetryEnabled", 0)],
@@ -4192,7 +4228,8 @@ internal static class PolicyAI
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "NPU utilisation is capped at 80%. Background AI workloads may take longer to complete. Interactive AI responses remain responsive due to reserved headroom.",
+                    ImpactNote =
+                        "NPU utilisation is capped at 80%. Background AI workloads may take longer to complete. Interactive AI responses remain responsive due to reserved headroom.",
                     ApplyOps = [RegOp.SetDword(NpuKey, "MaxNPUUtilisation", 80)],
                     RemoveOps = [RegOp.DeleteValue(NpuKey, "MaxNPUUtilisation")],
                     DetectOps = [RegOp.CheckDword(NpuKey, "MaxNPUUtilisation", 80)],
@@ -4209,7 +4246,8 @@ internal static class PolicyAI
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "NPU is disabled on battery power. AI features use CPU inference on battery with higher latency but better battery life. NPU is re-enabled when AC power is connected.",
+                    ImpactNote =
+                        "NPU is disabled on battery power. AI features use CPU inference on battery with higher latency but better battery life. NPU is re-enabled when AC power is connected.",
                     ApplyOps = [RegOp.SetDword(NpuKey, "DisableNPUOnBattery", 1)],
                     RemoveOps = [RegOp.DeleteValue(NpuKey, "DisableNPUOnBattery")],
                     DetectOps = [RegOp.CheckDword(NpuKey, "DisableNPUOnBattery", 1)],
@@ -4226,7 +4264,8 @@ internal static class PolicyAI
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "Hardware acceleration requests are logged. Log volume depends on AI feature usage. Adds Event Log entries for each inference acceleration grant.",
+                    ImpactNote =
+                        "Hardware acceleration requests are logged. Log volume depends on AI feature usage. Adds Event Log entries for each inference acceleration grant.",
                     ApplyOps = [RegOp.SetDword(AiHwKey, "HardwareAccelerationAudit", 1)],
                     RemoveOps = [RegOp.DeleteValue(AiHwKey, "HardwareAccelerationAudit")],
                     DetectOps = [RegOp.CheckDword(AiHwKey, "HardwareAccelerationAudit", 1)],
@@ -4243,7 +4282,8 @@ internal static class PolicyAI
                     CorpSafe = true,
                     ImpactScore = 4,
                     SafetyRating = 4,
-                    ImpactNote = "Third-party apps cannot use NPU for AI inference. Only Microsoft-signed system components use NPU acceleration. Third-party apps fall back to CPU with degraded AI performance.",
+                    ImpactNote =
+                        "Third-party apps cannot use NPU for AI inference. Only Microsoft-signed system components use NPU acceleration. Third-party apps fall back to CPU with degraded AI performance.",
                     ApplyOps = [RegOp.SetDword(NpuKey, "RestrictNPUToSystemApps", 1)],
                     RemoveOps = [RegOp.DeleteValue(NpuKey, "RestrictNPUToSystemApps")],
                     DetectOps = [RegOp.CheckDword(NpuKey, "RestrictNPUToSystemApps", 1)],
@@ -4260,7 +4300,8 @@ internal static class PolicyAI
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "NPU operates in power-saving mode with reduced clock speed. Background inference latency increases by ~1.5–2×. Interactive AI responses (user-initiated) run in full performance mode.",
+                    ImpactNote =
+                        "NPU operates in power-saving mode with reduced clock speed. Background inference latency increases by ~1.5–2×. Interactive AI responses (user-initiated) run in full performance mode.",
                     ApplyOps = [RegOp.SetDword(NpuKey, "NPUPowerSavingMode", 1)],
                     RemoveOps = [RegOp.DeleteValue(NpuKey, "NPUPowerSavingMode")],
                     DetectOps = [RegOp.CheckDword(NpuKey, "NPUPowerSavingMode", 1)],
@@ -4277,7 +4318,8 @@ internal static class PolicyAI
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "NPU firmware updates do not install automatically. IT must push NPU driver/firmware updates through managed channels. Keeps AI inference behaviour predictable across device fleet.",
+                    ImpactNote =
+                        "NPU firmware updates do not install automatically. IT must push NPU driver/firmware updates through managed channels. Keeps AI inference behaviour predictable across device fleet.",
                     ApplyOps = [RegOp.SetDword(NpuKey, "DisableNPUFirmwareUpdate", 1)],
                     RemoveOps = [RegOp.DeleteValue(NpuKey, "DisableNPUFirmwareUpdate")],
                     DetectOps = [RegOp.CheckDword(NpuKey, "DisableNPUFirmwareUpdate", 1)],
@@ -4294,7 +4336,8 @@ internal static class PolicyAI
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "Interactive AI requests get HIGH scheduling priority on the NPU. Background tasks may be preempted momentarily. Net user experience improvement for interactive AI features.",
+                    ImpactNote =
+                        "Interactive AI requests get HIGH scheduling priority on the NPU. Background tasks may be preempted momentarily. Net user experience improvement for interactive AI features.",
                     ApplyOps = [RegOp.SetDword(NpuKey, "NPUInteractivePriority", 2)],
                     RemoveOps = [RegOp.DeleteValue(NpuKey, "NPUInteractivePriority")],
                     DetectOps = [RegOp.CheckDword(NpuKey, "NPUInteractivePriority", 2)],
@@ -4311,13 +4354,13 @@ internal static class PolicyAI
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "NPU diagnostics data is collected locally. No additional data is sent to Microsoft beyond standard telemetry settings. Diagnostic buffer size is small (<10 MB). Required for investigating NPU-related AI failures.",
+                    ImpactNote =
+                        "NPU diagnostics data is collected locally. No additional data is sent to Microsoft beyond standard telemetry settings. Diagnostic buffer size is small (<10 MB). Required for investigating NPU-related AI failures.",
                     ApplyOps = [RegOp.SetDword(NpuKey, "NPUDiagnosticsEnabled", 1)],
                     RemoveOps = [RegOp.DeleteValue(NpuKey, "NPUDiagnosticsEnabled")],
                     DetectOps = [RegOp.CheckDword(NpuKey, "NPUDiagnosticsEnabled", 1)],
                 },
             ];
-
     }
 
     // ── RecallAiSnapshotPolicy ──
@@ -4498,7 +4541,6 @@ internal static class PolicyAI
                     DetectOps = [RegOp.CheckDword(Key, "DisableTimelineView", 1)],
                 },
             ];
-
     }
 
     // ── WindowsAiPolicy ──
@@ -4686,7 +4728,5 @@ internal static class PolicyAI
                     DetectOps = [RegOp.CheckDword(AiKey, "TurnOffSavingScreenshots", 1)],
                 },
             ];
-
     }
-
 }

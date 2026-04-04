@@ -949,7 +949,6 @@ internal static class CloudExperience
 
 // === Merged from: OneDrive.cs ===
 
-
 internal static class OneDrive
 {
     internal static IReadOnlyList<TweakDef> Tweaks { get; } =
@@ -1458,7 +1457,6 @@ internal static class OneDrive
     ];
 }
 
-
 // ── merged from PolicyCloud.cs ──
 // RegiLattice.Core — Tweaks/PolicyCloud.cs
 // OneDrive, SharePoint Online, cloud backup, delivery optimization, cloud desktop, content delivery, and cloud experience host policies
@@ -1678,7 +1676,6 @@ internal static class PolicyCloud
                     DetectOps = [RegOp.CheckDword(BackupServerKey, "MaxNetworkBandwidthPercent", 30)],
                 },
             ];
-
     }
 
     // ── CloudContentPolicy ──
@@ -1841,7 +1838,6 @@ internal static class PolicyCloud
                 DetectOps = [RegOp.CheckDword(CloudCu, "DisableWindowsSpotlightOnSettings", 1)],
             },
         ];
-
     }
 
     // ── CloudDesktopPolicy ──
@@ -1857,7 +1853,8 @@ internal static class PolicyCloud
                 Id = "clouddesk-disable-cloud-pc-entry-points",
                 Label = "Disable Cloud PC Entry Points in Windows UI",
                 Category = "Cloud Storage",
-                Description = "Sets DisableCloudPCEntryPoints=1 in the CloudDesktop policy key. "
+                Description =
+                    "Sets DisableCloudPCEntryPoints=1 in the CloudDesktop policy key. "
                     + "Removes the Windows 365 Cloud PC link, button, and notification from the "
                     + "Windows Start menu, Settings, and taskbar. Prevents users from seeing or clicking "
                     + "entry points that would prompt them to sign up for or access a Windows 365 subscription. "
@@ -1869,7 +1866,7 @@ internal static class PolicyCloud
                 ImpactScore = 2,
                 SafetyRating = 5,
                 ImpactNote = "Windows 365 Cloud PC entry points removed from Windows UI.",
-                ApplyOps  = [RegOp.SetDword(CdKey, "DisableCloudPCEntryPoints", 1)],
+                ApplyOps = [RegOp.SetDword(CdKey, "DisableCloudPCEntryPoints", 1)],
                 RemoveOps = [RegOp.DeleteValue(CdKey, "DisableCloudPCEntryPoints")],
                 DetectOps = [RegOp.CheckDword(CdKey, "DisableCloudPCEntryPoints", 1)],
             },
@@ -1878,7 +1875,8 @@ internal static class PolicyCloud
                 Id = "clouddesk-disable-provisioning",
                 Label = "Disable Cloud PC Provisioning",
                 Category = "Cloud Storage",
-                Description = "Sets EnableProvisioning=0 in the CloudDesktop policy key. "
+                Description =
+                    "Sets EnableProvisioning=0 in the CloudDesktop policy key. "
                     + "Prevents the Windows 365 agent from auto-provisioning a Cloud PC session on this device. "
                     + "Useful on physical endpoints that should never auto-redirect to a cloud desktop, "
                     + "ensuring users always work on the local machine's resources. "
@@ -1889,7 +1887,7 @@ internal static class PolicyCloud
                 ImpactScore = 2,
                 SafetyRating = 5,
                 ImpactNote = "Cloud PC auto-provisioning disabled; users must connect manually if needed.",
-                ApplyOps  = [RegOp.SetDword(CdKey, "EnableProvisioning", 0)],
+                ApplyOps = [RegOp.SetDword(CdKey, "EnableProvisioning", 0)],
                 RemoveOps = [RegOp.DeleteValue(CdKey, "EnableProvisioning")],
                 DetectOps = [RegOp.CheckDword(CdKey, "EnableProvisioning", 0)],
             },
@@ -1898,7 +1896,8 @@ internal static class PolicyCloud
                 Id = "clouddesk-disable-virtual-desktop-agent",
                 Label = "Disable Cloud PC Agent Auto-Start",
                 Category = "Cloud Storage",
-                Description = "Sets DisableCloudPCAgent=1 in the CloudDesktop policy key. "
+                Description =
+                    "Sets DisableCloudPCAgent=1 in the CloudDesktop policy key. "
                     + "Prevents the Windows 365/Cloud PC management agent from auto-starting at user login. "
                     + "The agent monitors session state and applies Cloud PC policies; disabling it prevents "
                     + "Windows 365 session management from running on machines that should not connect to "
@@ -1910,7 +1909,7 @@ internal static class PolicyCloud
                 ImpactScore = 2,
                 SafetyRating = 5,
                 ImpactNote = "Windows 365 Cloud PC management agent blocked from auto-starting at login.",
-                ApplyOps  = [RegOp.SetDword(CdKey, "DisableCloudPCAgent", 1)],
+                ApplyOps = [RegOp.SetDword(CdKey, "DisableCloudPCAgent", 1)],
                 RemoveOps = [RegOp.DeleteValue(CdKey, "DisableCloudPCAgent")],
                 DetectOps = [RegOp.CheckDword(CdKey, "DisableCloudPCAgent", 1)],
             },
@@ -1919,7 +1918,8 @@ internal static class PolicyCloud
                 Id = "clouddesk-disable-cloudpc-connection-uac",
                 Label = "Disable Cloud PC UAC Elevation Prompts",
                 Category = "Cloud Storage",
-                Description = "Sets NoAdminUACForCloudPC=1 in the CloudDesktop policy key. "
+                Description =
+                    "Sets NoAdminUACForCloudPC=1 in the CloudDesktop policy key. "
                     + "Prevents the Cloud PC connection process from triggering UAC elevation dialogs "
                     + "on the local machine. When a Cloud PC session needs elevated rights, the request "
                     + "is handled within the remote cloud session — not on the local endpoint. "
@@ -1931,7 +1931,7 @@ internal static class PolicyCloud
                 ImpactScore = 1,
                 SafetyRating = 5,
                 ImpactNote = "Cloud PC connection process does not prompt UAC elevation on the local machine.",
-                ApplyOps  = [RegOp.SetDword(CdKey, "NoAdminUACForCloudPC", 1)],
+                ApplyOps = [RegOp.SetDword(CdKey, "NoAdminUACForCloudPC", 1)],
                 RemoveOps = [RegOp.DeleteValue(CdKey, "NoAdminUACForCloudPC")],
                 DetectOps = [RegOp.CheckDword(CdKey, "NoAdminUACForCloudPC", 1)],
             },
@@ -1940,7 +1940,8 @@ internal static class PolicyCloud
                 Id = "clouddesk-disable-single-sign-on",
                 Label = "Disable Single Sign-On to Cloud PC",
                 Category = "Cloud Storage",
-                Description = "Sets DisableSSO=1 in the CloudPC policy key. "
+                Description =
+                    "Sets DisableSSO=1 in the CloudPC policy key. "
                     + "Prevents automatic single sign-on (SSO) to the Windows 365 Cloud PC using the "
                     + "local Windows account credentials. When SSO is enabled, a logged-in user is "
                     + "automatically authenticated to the Cloud PC session without re-entering credentials. "
@@ -1953,7 +1954,7 @@ internal static class PolicyCloud
                 ImpactScore = 2,
                 SafetyRating = 5,
                 ImpactNote = "Cloud PC SSO disabled; users explicitly authenticate each Cloud PC session.",
-                ApplyOps  = [RegOp.SetDword(CpcKey, "DisableSSO", 1)],
+                ApplyOps = [RegOp.SetDword(CpcKey, "DisableSSO", 1)],
                 RemoveOps = [RegOp.DeleteValue(CpcKey, "DisableSSO")],
                 DetectOps = [RegOp.CheckDword(CpcKey, "DisableSSO", 1)],
             },
@@ -1962,7 +1963,8 @@ internal static class PolicyCloud
                 Id = "clouddesk-enable-cloud-pc-telemetry-opt-out",
                 Label = "Opt Out of Cloud PC Telemetry",
                 Category = "Cloud Storage",
-                Description = "Sets DisableTelemetry=1 in the CloudPC policy key. "
+                Description =
+                    "Sets DisableTelemetry=1 in the CloudPC policy key. "
                     + "Prevents the Cloud PC client from sending diagnostics, usage telemetry, and "
                     + "session-quality metrics to Microsoft's Windows 365 service. "
                     + "Applicable in privacy-sensitive environments or air-gapped networks where "
@@ -1974,7 +1976,7 @@ internal static class PolicyCloud
                 ImpactScore = 2,
                 SafetyRating = 5,
                 ImpactNote = "Cloud PC client telemetry to Microsoft suppressed.",
-                ApplyOps  = [RegOp.SetDword(CpcKey, "DisableTelemetry", 1)],
+                ApplyOps = [RegOp.SetDword(CpcKey, "DisableTelemetry", 1)],
                 RemoveOps = [RegOp.DeleteValue(CpcKey, "DisableTelemetry")],
                 DetectOps = [RegOp.CheckDword(CpcKey, "DisableTelemetry", 1)],
             },
@@ -1983,7 +1985,8 @@ internal static class PolicyCloud
                 Id = "clouddesk-restrict-cloud-pc-regions",
                 Label = "Restrict Cloud PC Provisioning to Closest Region Only",
                 Category = "Cloud Storage",
-                Description = "Sets RegionSelectionPolicy=1 in the CloudPC policy key. "
+                Description =
+                    "Sets RegionSelectionPolicy=1 in the CloudPC policy key. "
                     + "Forces the Windows 365 provisioning system to select only the closest Azure region "
                     + "when allocating a new Cloud PC, instead of allowing cross-region or scheduled-region "
                     + "provisioning. Ensures low latency for users and keeps data residency within the "
@@ -1995,7 +1998,7 @@ internal static class PolicyCloud
                 ImpactScore = 2,
                 SafetyRating = 5,
                 ImpactNote = "Cloud PC provisioned in closest Azure region only; data stays in primary geography.",
-                ApplyOps  = [RegOp.SetDword(CpcKey, "RegionSelectionPolicy", 1)],
+                ApplyOps = [RegOp.SetDword(CpcKey, "RegionSelectionPolicy", 1)],
                 RemoveOps = [RegOp.DeleteValue(CpcKey, "RegionSelectionPolicy")],
                 DetectOps = [RegOp.CheckDword(CpcKey, "RegionSelectionPolicy", 1)],
             },
@@ -2004,7 +2007,8 @@ internal static class PolicyCloud
                 Id = "clouddesk-disable-cloud-pc-share-clipboard",
                 Label = "Disable Clipboard Sharing Between Cloud PC and Local",
                 Category = "Cloud Storage",
-                Description = "Sets DisableServerClipboard=1 in the CloudPC policy key. "
+                Description =
+                    "Sets DisableServerClipboard=1 in the CloudPC policy key. "
                     + "Prevents clipboard content from being shared between the local endpoint and the "
                     + "Windows 365 Cloud PC session. Clipboard sync can be a vector for data exfiltration "
                     + "(copy from cloud session, paste to local — or vice versa). "
@@ -2016,7 +2020,7 @@ internal static class PolicyCloud
                 ImpactScore = 3,
                 SafetyRating = 5,
                 ImpactNote = "Clipboard not shared between Cloud PC and local endpoint session.",
-                ApplyOps  = [RegOp.SetDword(CpcKey, "DisableServerClipboard", 1)],
+                ApplyOps = [RegOp.SetDword(CpcKey, "DisableServerClipboard", 1)],
                 RemoveOps = [RegOp.DeleteValue(CpcKey, "DisableServerClipboard")],
                 DetectOps = [RegOp.CheckDword(CpcKey, "DisableServerClipboard", 1)],
             },
@@ -2025,7 +2029,8 @@ internal static class PolicyCloud
                 Id = "clouddesk-disable-cloud-pc-redirect-printers",
                 Label = "Disable Printer Redirection for Cloud PC Sessions",
                 Category = "Cloud Storage",
-                Description = "Sets DisablePrinterRedirection=1 in the CloudPC policy key. "
+                Description =
+                    "Sets DisablePrinterRedirection=1 in the CloudPC policy key. "
                     + "Prevents local printers attached to the endpoint from being presented inside the "
                     + "Windows 365 Cloud PC session. Printer redirection streams print jobs from the cloud "
                     + "session to a local network printer, but can expose printer model/driver information "
@@ -2037,7 +2042,7 @@ internal static class PolicyCloud
                 ImpactScore = 2,
                 SafetyRating = 5,
                 ImpactNote = "Local printers not redirected into Cloud PC sessions.",
-                ApplyOps  = [RegOp.SetDword(CpcKey, "DisablePrinterRedirection", 1)],
+                ApplyOps = [RegOp.SetDword(CpcKey, "DisablePrinterRedirection", 1)],
                 RemoveOps = [RegOp.DeleteValue(CpcKey, "DisablePrinterRedirection")],
                 DetectOps = [RegOp.CheckDword(CpcKey, "DisablePrinterRedirection", 1)],
             },
@@ -2046,7 +2051,8 @@ internal static class PolicyCloud
                 Id = "clouddesk-set-max-session-idle-timeout",
                 Label = "Set Cloud PC Session Idle Disconnect Timeout",
                 Category = "Cloud Storage",
-                Description = "Sets IdleSessionTimeout=30 in the CloudPC policy key. "
+                Description =
+                    "Sets IdleSessionTimeout=30 in the CloudPC policy key. "
                     + "Sets the maximum idle time (in minutes) before a Windows 365 Cloud PC session is "
                     + "automatically disconnected. Idle Cloud PC sessions continue to consume Azure compute "
                     + "and network resources. Auto-disconnect after 30 minutes of inactivity reduces costs "
@@ -2058,12 +2064,11 @@ internal static class PolicyCloud
                 ImpactScore = 3,
                 SafetyRating = 5,
                 ImpactNote = "Cloud PC sessions disconnected after 30 minutes of inactivity; saves Azure compute cost.",
-                ApplyOps  = [RegOp.SetDword(CpcKey, "IdleSessionTimeout", 30)],
+                ApplyOps = [RegOp.SetDword(CpcKey, "IdleSessionTimeout", 30)],
                 RemoveOps = [RegOp.DeleteValue(CpcKey, "IdleSessionTimeout")],
                 DetectOps = [RegOp.CheckDword(CpcKey, "IdleSessionTimeout", 30)],
             },
         ];
-
     }
 
     // ── CloudExperienceHostPolicy ──
@@ -2254,17 +2259,14 @@ internal static class PolicyCloud
                 DetectOps = [RegOp.CheckDword(Key, "SkipNetworkConnectionPage", 1)],
             },
         ];
-
     }
 
     // ── CloudFileSyncPolicy ──
     private static class _CloudFileSyncPolicy
     {
-        private const string OdKey =
-            @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\OneDrive";
+        private const string OdKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\OneDrive";
 
-        private const string WfKey =
-            @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WorkFolders";
+        private const string WfKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WorkFolders";
 
         public static IReadOnlyList<TweakDef> Data =>
             [
@@ -2280,7 +2282,8 @@ internal static class PolicyCloud
                     CorpSafe = true,
                     ImpactScore = 5,
                     SafetyRating = 4,
-                    ImpactNote = "Synced files require local encryption. Work Folders clients on unencrypted devices cannot sync. Verify BitLocker or EFS is deployed before enabling — sync stops on non-compliant devices.",
+                    ImpactNote =
+                        "Synced files require local encryption. Work Folders clients on unencrypted devices cannot sync. Verify BitLocker or EFS is deployed before enabling — sync stops on non-compliant devices.",
                     ApplyOps = [RegOp.SetDword(WfKey, "RequireEncryption", 1)],
                     RemoveOps = [RegOp.DeleteValue(WfKey, "RequireEncryption")],
                     DetectOps = [RegOp.CheckDword(WfKey, "RequireEncryption", 1)],
@@ -2297,7 +2300,8 @@ internal static class PolicyCloud
                     CorpSafe = true,
                     ImpactScore = 4,
                     SafetyRating = 5,
-                    ImpactNote = "Personal OneDrive sync is blocked. Users can only sync OneDrive for Business accounts. Files cannot be moved from work OneDrive to personal OneDrive via the sync client.",
+                    ImpactNote =
+                        "Personal OneDrive sync is blocked. Users can only sync OneDrive for Business accounts. Files cannot be moved from work OneDrive to personal OneDrive via the sync client.",
                     ApplyOps = [RegOp.SetDword(OdKey, "DisablePersonalSync", 1)],
                     RemoveOps = [RegOp.DeleteValue(OdKey, "DisablePersonalSync")],
                     DetectOps = [RegOp.CheckDword(OdKey, "DisablePersonalSync", 1)],
@@ -2314,7 +2318,8 @@ internal static class PolicyCloud
                     CorpSafe = true,
                     ImpactScore = 5,
                     SafetyRating = 5,
-                    ImpactNote = "Desktop, Documents, Pictures are silently moved to OneDrive for Business. Requires M365 licences with OneDrive for Business. Users see their folders unchanged but data is now synced to cloud.",
+                    ImpactNote =
+                        "Desktop, Documents, Pictures are silently moved to OneDrive for Business. Requires M365 licences with OneDrive for Business. Users see their folders unchanged but data is now synced to cloud.",
                     ApplyOps = [RegOp.SetDword(OdKey, "EnableKnownFolderMove", 1)],
                     RemoveOps = [RegOp.DeleteValue(OdKey, "EnableKnownFolderMove")],
                     DetectOps = [RegOp.CheckDword(OdKey, "EnableKnownFolderMove", 1)],
@@ -2331,7 +2336,8 @@ internal static class PolicyCloud
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "OneDrive uploads are throttled to 50% of available bandwidth. Initial sync after KFM or large library additions takes longer. Network performance for other applications is preserved.",
+                    ImpactNote =
+                        "OneDrive uploads are throttled to 50% of available bandwidth. Initial sync after KFM or large library additions takes longer. Network performance for other applications is preserved.",
                     ApplyOps = [RegOp.SetDword(OdKey, "UploadBandwidthLimit", 50)],
                     RemoveOps = [RegOp.DeleteValue(OdKey, "UploadBandwidthLimit")],
                     DetectOps = [RegOp.CheckDword(OdKey, "UploadBandwidthLimit", 50)],
@@ -2348,7 +2354,8 @@ internal static class PolicyCloud
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "Work Folders does not auto-configure on domain join. Work Folders must be configured explicitly by IT. Prevents unintended dual-sync (Work Folders + OneDrive) on migrated environments.",
+                    ImpactNote =
+                        "Work Folders does not auto-configure on domain join. Work Folders must be configured explicitly by IT. Prevents unintended dual-sync (Work Folders + OneDrive) on migrated environments.",
                     ApplyOps = [RegOp.SetDword(WfKey, "AutoSetup", 0)],
                     RemoveOps = [RegOp.DeleteValue(WfKey, "AutoSetup")],
                     DetectOps = [RegOp.CheckDword(WfKey, "AutoSetup", 0)],
@@ -2365,7 +2372,8 @@ internal static class PolicyCloud
                     CorpSafe = true,
                     ImpactScore = 4,
                     SafetyRating = 5,
-                    ImpactNote = "OneDrive files are placeholders until opened. Files are downloaded on access. Offline access requires explicit marking. Essential for large OneDrive libraries on limited-storage devices.",
+                    ImpactNote =
+                        "OneDrive files are placeholders until opened. Files are downloaded on access. Offline access requires explicit marking. Essential for large OneDrive libraries on limited-storage devices.",
                     ApplyOps = [RegOp.SetDword(OdKey, "FilesOnDemandEnabled", 1)],
                     RemoveOps = [RegOp.DeleteValue(OdKey, "FilesOnDemandEnabled")],
                     DetectOps = [RegOp.CheckDword(OdKey, "FilesOnDemandEnabled", 1)],
@@ -2382,7 +2390,8 @@ internal static class PolicyCloud
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "OneDrive does not start at logon. Users must launch OneDrive manually or it is deployed with auto-start via Intune. No impact on Work Folders or other sync clients.",
+                    ImpactNote =
+                        "OneDrive does not start at logon. Users must launch OneDrive manually or it is deployed with auto-start via Intune. No impact on Work Folders or other sync clients.",
                     ApplyOps = [RegOp.SetDword(OdKey, "Enabled", 0)],
                     RemoveOps = [RegOp.DeleteValue(OdKey, "Enabled")],
                     DetectOps = [RegOp.CheckDword(OdKey, "Enabled", 0)],
@@ -2399,7 +2408,8 @@ internal static class PolicyCloud
                     CorpSafe = true,
                     ImpactScore = 4,
                     SafetyRating = 5,
-                    ImpactNote = "OneDrive sync is restricted to the organisation's Azure AD tenant. Employees who are guests in external Azure AD tenants cannot sync external SharePoint data. B2B collaboration via browser-based SharePoint is unaffected.",
+                    ImpactNote =
+                        "OneDrive sync is restricted to the organisation's Azure AD tenant. Employees who are guests in external Azure AD tenants cannot sync external SharePoint data. B2B collaboration via browser-based SharePoint is unaffected.",
                     ApplyOps = [RegOp.SetDword(OdKey, "TenantRestriction", 1)],
                     RemoveOps = [RegOp.DeleteValue(OdKey, "TenantRestriction")],
                     DetectOps = [RegOp.CheckDword(OdKey, "TenantRestriction", 1)],
@@ -2416,7 +2426,8 @@ internal static class PolicyCloud
                     CorpSafe = true,
                     ImpactScore = 4,
                     SafetyRating = 5,
-                    ImpactNote = "OneDrive configures automatically on Azure AD Joined / Hybrid AAD Joined devices. Users see OneDrive already configured at first logon. Requires Azure AD Join or Hybrid Azure AD Join.",
+                    ImpactNote =
+                        "OneDrive configures automatically on Azure AD Joined / Hybrid AAD Joined devices. Users see OneDrive already configured at first logon. Requires Azure AD Join or Hybrid Azure AD Join.",
                     ApplyOps = [RegOp.SetDword(OdKey, "SilentAccountConfig", 1)],
                     RemoveOps = [RegOp.DeleteValue(OdKey, "SilentAccountConfig")],
                     DetectOps = [RegOp.CheckDword(OdKey, "SilentAccountConfig", 1)],
@@ -2433,13 +2444,13 @@ internal static class PolicyCloud
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "Screen lock is required when Work Folders are configured. Devices without screen lock display a compliance warning. Does not forcibly lock the screen — it enforces existing screen lock policy configuration.",
+                    ImpactNote =
+                        "Screen lock is required when Work Folders are configured. Devices without screen lock display a compliance warning. Does not forcibly lock the screen — it enforces existing screen lock policy configuration.",
                     ApplyOps = [RegOp.SetDword(WfKey, "LockDriveOnIdle", 1)],
                     RemoveOps = [RegOp.DeleteValue(WfKey, "LockDriveOnIdle")],
                     DetectOps = [RegOp.CheckDword(WfKey, "LockDriveOnIdle", 1)],
                 },
             ];
-
     }
 
     // ── CloudNotificationsPolicy ──
@@ -2630,7 +2641,6 @@ internal static class PolicyCloud
                 ImpactNote = "Ensures user-configured quiet hours are not bypassed by cloud-classified urgent notifications.",
             },
         ];
-
     }
 
     // ── CloudPrintPolicy ──
@@ -2811,7 +2821,6 @@ internal static class PolicyCloud
                 DetectOps = [RegOp.CheckDword(Key, "EnforcePrintDataRetentionPolicy", 1)],
             },
         ];
-
     }
 
     // ── CloudStorageQuotaPolicy ──
@@ -3004,7 +3013,6 @@ internal static class PolicyCloud
                     DetectOps = [RegOp.CheckDword(CloudContentKey, "DisableCloudOptimizedContent", 1)],
                 },
             ];
-
     }
 
     // ── ContentDeliveryPolicy ──
@@ -3215,7 +3223,6 @@ internal static class PolicyCloud
                 DetectOps = [RegOp.CheckDword(CloudPol, "DisableTailoredExperiencesWithDiagnosticData", 1)],
             },
         ];
-
     }
 
     // ── DesktopAnalyticsPolicy ──
@@ -3396,7 +3403,6 @@ internal static class PolicyCloud
                 DetectOps = [RegOp.CheckDword(Key, "EnableOneSettingsAuditing", 1)],
             },
         ];
-
     }
 
     // ── OneDriveKfmPolicy ──
@@ -3587,7 +3593,6 @@ internal static class PolicyCloud
                 DetectOps = [RegOp.CheckDword(KfmKey, "DisableFirstDeleteDialog", 1)],
             },
         ];
-
     }
 
     // ── OneDriveSyncPolicy ──
@@ -3778,7 +3783,6 @@ internal static class PolicyCloud
                     DetectOps = [RegOp.CheckDword(OneDriveKey, "MinDiskFreeSpaceGB", 5)],
                 },
             ];
-
     }
 
     // ── SettingSyncAdv ──
@@ -3973,7 +3977,6 @@ internal static class PolicyCloud
                 DetectOps = [RegOp.CheckDword(InputPersPolicy, "AllowInputPersonalization", 0)],
             },
         ];
-
     }
 
     // ── SettingSyncPolicy ──
@@ -3982,169 +3985,168 @@ internal static class PolicyCloud
         private const string SyncKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\SettingSync";
 
         public static IReadOnlyList<TweakDef> Data =>
-        [
-            new TweakDef
-            {
-                Id = "syncsec-disable-all-setting-sync",
-                Label = "Disable All Settings Sync",
-                Category = "Cloud Storage",
-                Description = "Disables the Windows settings synchronisation feature entirely and prevents users from re-enabling it.",
-                Tags = ["sync", "settings", "cloud", "privacy", "microsoft-account"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                ImpactNote = "All settings sync is stopped; value 2 = forced off, user cannot override.",
-                ApplyOps = [RegOp.SetDword(SyncKey, "DisableSettingSync", 2)],
-                RemoveOps = [RegOp.DeleteValue(SyncKey, "DisableSettingSync")],
-                DetectOps = [RegOp.CheckDword(SyncKey, "DisableSettingSync", 2)],
-            },
-            new TweakDef
-            {
-                Id = "syncsec-block-user-override",
-                Label = "Block User from Changing Settings Sync",
-                Category = "Cloud Storage",
-                Description = "Prevents users from accessing the settings sync toggle in Windows Settings.",
-                Tags = ["sync", "settings", "user-override", "privacy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Removes the sync toggle from Settings UI; requires DisableSettingSync to also be set.",
-                ApplyOps = [RegOp.SetDword(SyncKey, "DisableSettingSyncUserOverride", 1)],
-                RemoveOps = [RegOp.DeleteValue(SyncKey, "DisableSettingSyncUserOverride")],
-                DetectOps = [RegOp.CheckDword(SyncKey, "DisableSettingSyncUserOverride", 1)],
-            },
-            new TweakDef
-            {
-                Id = "syncsec-disable-credentials-sync",
-                Label = "Disable Credentials and Password Sync",
-                Category = "Cloud Storage",
-                Description = "Stops Windows from syncing saved passwords and credentials across devices via a Microsoft account.",
-                Tags = ["sync", "credentials", "password", "privacy", "security"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 5,
-                SafetyRating = 5,
-                ImpactNote = "Prevents credential roaming; passwords stored locally only, not in Microsoft account cloud.",
-                ApplyOps = [RegOp.SetDword(SyncKey, "DisableCredentialsSettingSync", 2)],
-                RemoveOps = [RegOp.DeleteValue(SyncKey, "DisableCredentialsSettingSync")],
-                DetectOps = [RegOp.CheckDword(SyncKey, "DisableCredentialsSettingSync", 2)],
-            },
-            new TweakDef
-            {
-                Id = "syncsec-disable-personalization-sync",
-                Label = "Disable Personalization Settings Sync",
-                Category = "Cloud Storage",
-                Description = "Prevents Windows from syncing wallpaper, colour, themes, and other personalisation settings to the cloud.",
-                Tags = ["sync", "personalization", "theme", "privacy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Personalization stays local; no roaming of desktop background or colour accent to other devices.",
-                ApplyOps = [RegOp.SetDword(SyncKey, "DisablePersonalizationSettingSync", 2)],
-                RemoveOps = [RegOp.DeleteValue(SyncKey, "DisablePersonalizationSettingSync")],
-                DetectOps = [RegOp.CheckDword(SyncKey, "DisablePersonalizationSettingSync", 2)],
-            },
-            new TweakDef
-            {
-                Id = "syncsec-disable-app-settings-sync",
-                Label = "Disable App Settings Sync",
-                Category = "Cloud Storage",
-                Description = "Stops Windows from uploading and syncing per-app settings to a Microsoft account in the cloud.",
-                Tags = ["sync", "app-settings", "cloud", "privacy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "App preferences remain on this device; switching to another device may require re-configuring apps.",
-                ApplyOps = [RegOp.SetDword(SyncKey, "DisableApplicationSettingSync", 2)],
-                RemoveOps = [RegOp.DeleteValue(SyncKey, "DisableApplicationSettingSync")],
-                DetectOps = [RegOp.CheckDword(SyncKey, "DisableApplicationSettingSync", 2)],
-            },
-            new TweakDef
-            {
-                Id = "syncsec-disable-browser-sync",
-                Label = "Disable Browser Settings Sync",
-                Category = "Cloud Storage",
-                Description = "Disables syncing of Microsoft Edge / Internet Explorer browser settings, favourites, and history via sync.",
-                Tags = ["sync", "browser", "edge", "privacy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                ImpactNote = "Browser favourites and history stay local; no cloud upload via Windows Settings Sync.",
-                ApplyOps = [RegOp.SetDword(SyncKey, "DisableWebBrowserSettingSync", 2)],
-                RemoveOps = [RegOp.DeleteValue(SyncKey, "DisableWebBrowserSettingSync")],
-                DetectOps = [RegOp.CheckDword(SyncKey, "DisableWebBrowserSettingSync", 2)],
-            },
-            new TweakDef
-            {
-                Id = "syncsec-disable-start-layout-sync",
-                Label = "Disable Start Menu Layout Sync",
-                Category = "Cloud Storage",
-                Description = "Prevents Windows from syncing the Start menu layout, pinned apps, and tile configuration to the cloud.",
-                Tags = ["sync", "start-menu", "layout", "privacy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                ImpactNote = "Start menu customisation stays local; does not roam to other devices signed with the same account.",
-                ApplyOps = [RegOp.SetDword(SyncKey, "DisableStartLayoutSync", 2)],
-                RemoveOps = [RegOp.DeleteValue(SyncKey, "DisableStartLayoutSync")],
-                DetectOps = [RegOp.CheckDword(SyncKey, "DisableStartLayoutSync", 2)],
-            },
-            new TweakDef
-            {
-                Id = "syncsec-disable-accessibility-sync",
-                Label = "Disable Accessibility Settings Sync",
-                Category = "Cloud Storage",
-                Description = "Stops Windows from syncing accessibility options such as magnifier, narrator, and high contrast settings.",
-                Tags = ["sync", "accessibility", "privacy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                ImpactNote = "Accessibility preferences remain device-local; must be re-configured on each device.",
-                ApplyOps = [RegOp.SetDword(SyncKey, "DisableAccessibilitySettingSync", 2)],
-                RemoveOps = [RegOp.DeleteValue(SyncKey, "DisableAccessibilitySettingSync")],
-                DetectOps = [RegOp.CheckDword(SyncKey, "DisableAccessibilitySettingSync", 2)],
-            },
-            new TweakDef
-            {
-                Id = "syncsec-disable-sync-on-metered",
-                Label = "Disable Settings Sync on Metered Networks",
-                Category = "Cloud Storage",
-                Description = "Prevents Windows settings sync from running when the device is on a metered (pay-per-use) network connection.",
-                Tags = ["sync", "metered", "network", "data-usage", "privacy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Prevents unexpected data charges on cellular / capped connections; sync resumes on unmetered networks.",
-                ApplyOps = [RegOp.SetDword(SyncKey, "DisableSyncOnPaidNetwork", 1)],
-                RemoveOps = [RegOp.DeleteValue(SyncKey, "DisableSyncOnPaidNetwork")],
-                DetectOps = [RegOp.CheckDword(SyncKey, "DisableSyncOnPaidNetwork", 1)],
-            },
-            new TweakDef
-            {
-                Id = "syncsec-disable-language-sync",
-                Label = "Disable Language and Keyboard Settings Sync",
-                Category = "Cloud Storage",
-                Description = "Prevents Windows from syncing language preferences, keyboard layouts, and input method settings to the cloud.",
-                Tags = ["sync", "language", "keyboard", "input", "privacy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                ImpactNote = "Language and IME configuration stays local; no roaming of locale settings across devices.",
-                ApplyOps = [RegOp.SetDword(SyncKey, "DisableLanguageSettingSync", 2)],
-                RemoveOps = [RegOp.DeleteValue(SyncKey, "DisableLanguageSettingSync")],
-                DetectOps = [RegOp.CheckDword(SyncKey, "DisableLanguageSettingSync", 2)],
-            },
-        ];
-
+            [
+                new TweakDef
+                {
+                    Id = "syncsec-disable-all-setting-sync",
+                    Label = "Disable All Settings Sync",
+                    Category = "Cloud Storage",
+                    Description = "Disables the Windows settings synchronisation feature entirely and prevents users from re-enabling it.",
+                    Tags = ["sync", "settings", "cloud", "privacy", "microsoft-account"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "All settings sync is stopped; value 2 = forced off, user cannot override.",
+                    ApplyOps = [RegOp.SetDword(SyncKey, "DisableSettingSync", 2)],
+                    RemoveOps = [RegOp.DeleteValue(SyncKey, "DisableSettingSync")],
+                    DetectOps = [RegOp.CheckDword(SyncKey, "DisableSettingSync", 2)],
+                },
+                new TweakDef
+                {
+                    Id = "syncsec-block-user-override",
+                    Label = "Block User from Changing Settings Sync",
+                    Category = "Cloud Storage",
+                    Description = "Prevents users from accessing the settings sync toggle in Windows Settings.",
+                    Tags = ["sync", "settings", "user-override", "privacy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "Removes the sync toggle from Settings UI; requires DisableSettingSync to also be set.",
+                    ApplyOps = [RegOp.SetDword(SyncKey, "DisableSettingSyncUserOverride", 1)],
+                    RemoveOps = [RegOp.DeleteValue(SyncKey, "DisableSettingSyncUserOverride")],
+                    DetectOps = [RegOp.CheckDword(SyncKey, "DisableSettingSyncUserOverride", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "syncsec-disable-credentials-sync",
+                    Label = "Disable Credentials and Password Sync",
+                    Category = "Cloud Storage",
+                    Description = "Stops Windows from syncing saved passwords and credentials across devices via a Microsoft account.",
+                    Tags = ["sync", "credentials", "password", "privacy", "security"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 5,
+                    SafetyRating = 5,
+                    ImpactNote = "Prevents credential roaming; passwords stored locally only, not in Microsoft account cloud.",
+                    ApplyOps = [RegOp.SetDword(SyncKey, "DisableCredentialsSettingSync", 2)],
+                    RemoveOps = [RegOp.DeleteValue(SyncKey, "DisableCredentialsSettingSync")],
+                    DetectOps = [RegOp.CheckDword(SyncKey, "DisableCredentialsSettingSync", 2)],
+                },
+                new TweakDef
+                {
+                    Id = "syncsec-disable-personalization-sync",
+                    Label = "Disable Personalization Settings Sync",
+                    Category = "Cloud Storage",
+                    Description = "Prevents Windows from syncing wallpaper, colour, themes, and other personalisation settings to the cloud.",
+                    Tags = ["sync", "personalization", "theme", "privacy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "Personalization stays local; no roaming of desktop background or colour accent to other devices.",
+                    ApplyOps = [RegOp.SetDword(SyncKey, "DisablePersonalizationSettingSync", 2)],
+                    RemoveOps = [RegOp.DeleteValue(SyncKey, "DisablePersonalizationSettingSync")],
+                    DetectOps = [RegOp.CheckDword(SyncKey, "DisablePersonalizationSettingSync", 2)],
+                },
+                new TweakDef
+                {
+                    Id = "syncsec-disable-app-settings-sync",
+                    Label = "Disable App Settings Sync",
+                    Category = "Cloud Storage",
+                    Description = "Stops Windows from uploading and syncing per-app settings to a Microsoft account in the cloud.",
+                    Tags = ["sync", "app-settings", "cloud", "privacy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "App preferences remain on this device; switching to another device may require re-configuring apps.",
+                    ApplyOps = [RegOp.SetDword(SyncKey, "DisableApplicationSettingSync", 2)],
+                    RemoveOps = [RegOp.DeleteValue(SyncKey, "DisableApplicationSettingSync")],
+                    DetectOps = [RegOp.CheckDword(SyncKey, "DisableApplicationSettingSync", 2)],
+                },
+                new TweakDef
+                {
+                    Id = "syncsec-disable-browser-sync",
+                    Label = "Disable Browser Settings Sync",
+                    Category = "Cloud Storage",
+                    Description = "Disables syncing of Microsoft Edge / Internet Explorer browser settings, favourites, and history via sync.",
+                    Tags = ["sync", "browser", "edge", "privacy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "Browser favourites and history stay local; no cloud upload via Windows Settings Sync.",
+                    ApplyOps = [RegOp.SetDword(SyncKey, "DisableWebBrowserSettingSync", 2)],
+                    RemoveOps = [RegOp.DeleteValue(SyncKey, "DisableWebBrowserSettingSync")],
+                    DetectOps = [RegOp.CheckDword(SyncKey, "DisableWebBrowserSettingSync", 2)],
+                },
+                new TweakDef
+                {
+                    Id = "syncsec-disable-start-layout-sync",
+                    Label = "Disable Start Menu Layout Sync",
+                    Category = "Cloud Storage",
+                    Description = "Prevents Windows from syncing the Start menu layout, pinned apps, and tile configuration to the cloud.",
+                    Tags = ["sync", "start-menu", "layout", "privacy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 2,
+                    SafetyRating = 5,
+                    ImpactNote = "Start menu customisation stays local; does not roam to other devices signed with the same account.",
+                    ApplyOps = [RegOp.SetDword(SyncKey, "DisableStartLayoutSync", 2)],
+                    RemoveOps = [RegOp.DeleteValue(SyncKey, "DisableStartLayoutSync")],
+                    DetectOps = [RegOp.CheckDword(SyncKey, "DisableStartLayoutSync", 2)],
+                },
+                new TweakDef
+                {
+                    Id = "syncsec-disable-accessibility-sync",
+                    Label = "Disable Accessibility Settings Sync",
+                    Category = "Cloud Storage",
+                    Description = "Stops Windows from syncing accessibility options such as magnifier, narrator, and high contrast settings.",
+                    Tags = ["sync", "accessibility", "privacy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 2,
+                    SafetyRating = 5,
+                    ImpactNote = "Accessibility preferences remain device-local; must be re-configured on each device.",
+                    ApplyOps = [RegOp.SetDword(SyncKey, "DisableAccessibilitySettingSync", 2)],
+                    RemoveOps = [RegOp.DeleteValue(SyncKey, "DisableAccessibilitySettingSync")],
+                    DetectOps = [RegOp.CheckDword(SyncKey, "DisableAccessibilitySettingSync", 2)],
+                },
+                new TweakDef
+                {
+                    Id = "syncsec-disable-sync-on-metered",
+                    Label = "Disable Settings Sync on Metered Networks",
+                    Category = "Cloud Storage",
+                    Description = "Prevents Windows settings sync from running when the device is on a metered (pay-per-use) network connection.",
+                    Tags = ["sync", "metered", "network", "data-usage", "privacy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "Prevents unexpected data charges on cellular / capped connections; sync resumes on unmetered networks.",
+                    ApplyOps = [RegOp.SetDword(SyncKey, "DisableSyncOnPaidNetwork", 1)],
+                    RemoveOps = [RegOp.DeleteValue(SyncKey, "DisableSyncOnPaidNetwork")],
+                    DetectOps = [RegOp.CheckDword(SyncKey, "DisableSyncOnPaidNetwork", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "syncsec-disable-language-sync",
+                    Label = "Disable Language and Keyboard Settings Sync",
+                    Category = "Cloud Storage",
+                    Description = "Prevents Windows from syncing language preferences, keyboard layouts, and input method settings to the cloud.",
+                    Tags = ["sync", "language", "keyboard", "input", "privacy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 2,
+                    SafetyRating = 5,
+                    ImpactNote = "Language and IME configuration stays local; no roaming of locale settings across devices.",
+                    ApplyOps = [RegOp.SetDword(SyncKey, "DisableLanguageSettingSync", 2)],
+                    RemoveOps = [RegOp.DeleteValue(SyncKey, "DisableLanguageSettingSync")],
+                    DetectOps = [RegOp.CheckDword(SyncKey, "DisableLanguageSettingSync", 2)],
+                },
+            ];
     }
 
     // ── SharepointOnlinePolicy ──
@@ -4337,7 +4339,6 @@ internal static class PolicyCloud
                     DetectOps = [RegOp.CheckDword(SharepointKey, "EnableAccessAudit", 1)],
                 },
             ];
-
     }
 
     // ── SkyDrivePolicy ──
@@ -4346,179 +4347,198 @@ internal static class PolicyCloud
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\SkyDrive";
 
         public static IReadOnlyList<TweakDef> Data =>
-        [
-            new TweakDef
-            {
-                Id = "skydrive-disable-file-sync",
-                Label = "SkyDrive: Disable OneDrive File Synchronisation via Legacy SkyDrive Policy Key",
-                Category = "Cloud Storage",
-                Description = "Sets DisableFileSync=1 in the SkyDrive legacy policy key. Disables OneDrive file synchronisation at the machine policy level, preventing all users on this computer from syncing files with their OneDrive cloud storage. The SkyDrive registry key is the original legacy path (Windows 8.1/RT era) that is still read by the current Windows OneDrive client for backwards compatibility with Group Policy deployed to WS2012R2 and Win 8.1 machines. " +
-                    "In organisations that prohibit users from uploading corporate files to personal cloud storage, the SkyDrive legacy policy key ensures policy coverage extends to legacy Windows versions where the OneDrive-specific policy path did not yet exist. The SkyDrive and OneDrive policy keys are both evaluated — having both set ensures no gap in policy enforcement across heterogeneous Windows version environments. Without both keys set, a corporate laptop running the current OneDrive client on Win 8.1 would check the SkyDrive key first; if missing, OneDrive sync proceeds unblocked.",
-                Tags = ["skydrive", "onedrive", "file-sync", "cloud-storage", "policy", "disable"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 5,
-                SafetyRating = 5,
-                ImpactNote = "OneDrive file sync disabled via legacy SkyDrive policy key. Corporate files blocked from uploading to personal OneDrive accounts.",
-                ApplyOps = [RegOp.SetDword(Key, "DisableFileSync", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "DisableFileSync")],
-                DetectOps = [RegOp.CheckDword(Key, "DisableFileSync", 1)],
-            },
-            new TweakDef
-            {
-                Id = "skydrive-disable-library-default-save",
-                Label = "SkyDrive: Prevent Libraries from Defaulting Save Location to SkyDrive/OneDrive",
-                Category = "Cloud Storage",
-                Description = "Sets DisableLibrariesDefaultSaveToSkyDrive=1 in the SkyDrive policy key. Prevents Windows from configuring OneDrive's local folder as the default save location for Windows Libraries (Documents, Pictures, Music). Without this policy, Windows 8.1+ suggests OneDrive as the default save target — any document saved without explicitly choosing a location is uploaded to the user's personal OneDrive account. " +
-                    "In corporate environments where DLP (Data Loss Prevention) policies prohibit saving corporate IP to personal cloud storage, the auto-save to OneDrive/SkyDrive default library path is a subtle leakage vector — users who click 'Save' without inspecting the save dialogue may unknowingly sync sensitive documents to personal storage. Enforcing a corporate-managed default save location (a file server or SharePoint UNC path configured by Group Policy Folder Redirection) ensures all undirected file saves stay within managed storage boundaries.",
-                Tags = ["skydrive", "onedrive", "library", "default-save", "dlp", "cloud-storage"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                ImpactNote = "Libraries no longer default to SkyDrive/OneDrive as save location. Users who manually navigate to OneDrive folder can still save there until sync is also disabled.",
-                ApplyOps = [RegOp.SetDword(Key, "DisableLibrariesDefaultSaveToSkyDrive", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "DisableLibrariesDefaultSaveToSkyDrive")],
-                DetectOps = [RegOp.CheckDword(Key, "DisableLibrariesDefaultSaveToSkyDrive", 1)],
-            },
-            new TweakDef
-            {
-                Id = "skydrive-disable-metered-sync",
-                Label = "SkyDrive: Disable OneDrive Sync on Metered Network Connections",
-                Category = "Cloud Storage",
-                Description = "Sets NeverSyncOnMeteredConnection=1 in the SkyDrive policy key. Prevents OneDrive from synchronising files when the active network connection is metered (mobile data, LTE hotspot, satellite). Without this policy, OneDrive will attempt background synchronisation on metered connections, consuming potentially expensive cellular data allowances and degrading application performance for users on mobile hotspots. " +
-                    "Windows marks mobile hotspot connections, tethered cellular connections, and some Wi-Fi networks as metered to signal to applications that data usage should be minimised. OneDrive respects the metered status for foreground sync but continues background sync by default. For road warriors using laptop hotspot tethering on international trips with expensive roaming data plans, an unconstrained OneDrive background sync can silently consume gigabytes of mobile data. Disabling sync on metered connections prevents this scenario without requiring manual sync suspension.",
-                Tags = ["skydrive", "onedrive", "metered-connection", "mobile-data", "bandwidth", "roaming"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "OneDrive sync paused on metered connections (cellular hotspot, LTE). Manual sync is still available. Files upload when non-metered connection is available.",
-                ApplyOps = [RegOp.SetDword(Key, "NeverSyncOnMeteredConnection", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "NeverSyncOnMeteredConnection")],
-                DetectOps = [RegOp.CheckDword(Key, "NeverSyncOnMeteredConnection", 1)],
-            },
-            new TweakDef
-            {
-                Id = "skydrive-disable-desktop-shortcut",
-                Label = "SkyDrive: Disable Automatic OneDrive Desktop Shortcut Creation",
-                Category = "Cloud Storage",
-                Description = "Sets DisableSkyDriveDesktopIcon=1 in the SkyDrive policy key. Prevents OneDrive from adding a shortcut icon to the user's desktop during initial setup or after updates. On managed enterprise desktops where the shortcut layout is standardised by Group Policy (no unmanaged shortcuts on desktop), automatic OneDrive shortcut creation violates desktop policy and confuses users who may not be aware of cloud sync being installed. " +
-                    "Desktop shortcut proliferation on managed endpoints is a minor but persistent administrative annoyance. Each major OneDrive update can re-create the desktop shortcut if it was manually deleted, causing the shortcut to reappear after each update. Policy-driven suppression ensures the shortcut is never created, remaining consistent across updates without requiring GPO-applied shortcut deletion scripts.",
-                Tags = ["skydrive", "onedrive", "desktop-shortcut", "icon", "managed-desktop"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 1,
-                SafetyRating = 5,
-                ImpactNote = "OneDrive desktop icon not created. Users can still access OneDrive via the system tray icon or File Explorer navigation.",
-                ApplyOps = [RegOp.SetDword(Key, "DisableSkyDriveDesktopIcon", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "DisableSkyDriveDesktopIcon")],
-                DetectOps = [RegOp.CheckDword(Key, "DisableSkyDriveDesktopIcon", 1)],
-            },
-            new TweakDef
-            {
-                Id = "skydrive-prevent-usage-of-onedrive",
-                Label = "SkyDrive: Prevent All OneDrive Usage via Legacy SkyDrive Machine Policy",
-                Category = "Cloud Storage",
-                Description = "Sets PreventNetworkTrafficPreUserSignIn=1 in the SkyDrive policy key. Prevents OneDrive from generating any network traffic before the user signs in. During the Windows startup sequence, OneDrive pre-caches metadata and checks for updates before user login completes. This pre-sign-in network activity consumes bandwidth, adds to boot time, and generates outbound connections from a system in an unauthenticated state — which some network security monitoring tools flag as suspicious. " +
-                    "Pre-authentication network connections from Microsoft services are a known privacy concern: OneDrive network activity during boot can leak the device's presence, IP address, and tenant association to Microsoft servers before the user has consented to connected services for that session. In high-security environments that enforce a zero-trust model where no application should generate network traffic until after full user authentication, pre-sign-in OneDrive connections violate this control. Blocking pre-sign-in network activity ensures OneDrive only connects after a user is fully authenticated.",
-                Tags = ["skydrive", "onedrive", "pre-signin", "network-traffic", "zero-trust", "privacy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                ImpactNote = "OneDrive pre-login network activity blocked. No user-visible impact. OneDrive connects normally after user authentication completes.",
-                ApplyOps = [RegOp.SetDword(Key, "PreventNetworkTrafficPreUserSignIn", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "PreventNetworkTrafficPreUserSignIn")],
-                DetectOps = [RegOp.CheckDword(Key, "PreventNetworkTrafficPreUserSignIn", 1)],
-            },
-            new TweakDef
-            {
-                Id = "skydrive-disable-personal-sync",
-                Label = "SkyDrive: Block Sync of Personal Accounts on Domain-Joined Machines",
-                Category = "Cloud Storage",
-                Description = "Sets DisablePersonalSync=1 in the SkyDrive policy key. Prevents users from adding and syncing personal (non-corporate) Microsoft accounts with OneDrive on domain-joined or Entra ID-joined machines. Allows corporate OneDrive for Business (Entra ID accounts) to function normally while blocking personal @hotmail.com, @outlook.com, and @gmail.com accounts from syncing. " +
-                    "On corporate endpoints, personal OneDrive accounts present a data exfiltration risk: a user can drag corporate documents into their personal OneDrive sync folder and those files are immediately uploaded to their personal account, bypassing corporate DLP policies that only monitor corporate OneDrive tenants. The DisablePersonalSync policy removes the option to add personal accounts from the OneDrive settings UI while allowing the corporate account configuration to proceed normally — enabling corporate OneDrive features while blocking personal sync.",
-                Tags = ["skydrive", "onedrive", "personal-account", "corporate-policy", "dlp", "exfiltration"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                ImpactNote = "Personal Microsoft account OneDrive sync blocked. Corporate OneDrive for Business accounts unaffected. Requires Entra ID-joined device for corporate sync.",
-                ApplyOps = [RegOp.SetDword(Key, "DisablePersonalSync", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "DisablePersonalSync")],
-                DetectOps = [RegOp.CheckDword(Key, "DisablePersonalSync", 1)],
-            },
-            new TweakDef
-            {
-                Id = "skydrive-require-domain-joined-to-sync",
-                Label = "SkyDrive: Require Domain Membership Before Allowing OneDrive Sync",
-                Category = "Cloud Storage",
-                Description = "Sets RequireAccountFolderLocation=1 in the SkyDrive policy key. Requires that the user's OneDrive folder location is within a domain-accessible path before synchronisation begins. This ensures users cannot configure OneDrive to sync to a USB drive, external HDD, or a path on a non-domain-joined volume, which would bypass file auditing and DLP policies that monitor domain-accessible file paths. " +
-                    "OneDrive's default folder location is %USERPROFILE%\\OneDrive — on a domain-joined machine this is within the user profile path which may be redirected to a file server. If a user changes the OneDrive local folder to an external USB drive, sync continues to the external drive but audit policies monitoring the user profile path no longer capture OneDrive file activities. By requiring the account folder to be in an approved location, this policy prevents sync rerouting to unmonitored storage media.",
-                Tags = ["skydrive", "onedrive", "folder-location", "domain", "audit", "data-governance"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "OneDrive sync folder must be on a monitored domain-accessible path. Users cannot redirect sync to USB drives or external storage.",
-                ApplyOps = [RegOp.SetDword(Key, "RequireAccountFolderLocation", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "RequireAccountFolderLocation")],
-                DetectOps = [RegOp.CheckDword(Key, "RequireAccountFolderLocation", 1)],
-            },
-            new TweakDef
-            {
-                Id = "skydrive-disable-tutorialicon",
-                Label = "SkyDrive: Suppress OneDrive First-Run Tutorial and Balloon Notifications",
-                Category = "Cloud Storage",
-                Description = "Sets DisableTutorial=1 in the SkyDrive policy key. Suppresses the OneDrive first-run tutorial wizard and taskbar balloon notification tooltips that appear on first login or after updates. On enterprise-deployed endpoints, the OneDrive tutorial interrupts user productivity during logins, and repetitive balloon tooltips post-update create distraction and support desk calls from users who assume the notifications indicate a problem. " +
-                    "First-run wizard suppression is a routine enterprise deployment cleanliness policy — the tutorial is designed for retail consumers who have never configured OneDrive. In corporate environments where OneDrive policy is centrally managed (folder protection, retention policies, tenant binding), the tutorial presents options the user cannot change (they are set by policy) and provides misleading information about sync customisation capabilities. Suppressing the tutorial ensures users see only the relevant corporate-configured sync state without conflicting consumer-oriented guidance.",
-                Tags = ["skydrive", "onedrive", "tutorial", "notification", "enterprise-deployment"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 1,
-                SafetyRating = 5,
-                ImpactNote = "OneDrive first-run tutorial and balloon tips suppressed. No functional impact — OneDrive operates normally with tutorial hidden.",
-                ApplyOps = [RegOp.SetDword(Key, "DisableTutorial", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "DisableTutorial")],
-                DetectOps = [RegOp.CheckDword(Key, "DisableTutorial", 1)],
-            },
-            new TweakDef
-            {
-                Id = "skydrive-block-known-folder-move",
-                Label = "SkyDrive: Block Known Folder Move to Prevent Forced Desktop/Documents Redirect to OneDrive",
-                Category = "Cloud Storage",
-                Description = "Sets KFMBlockOptIn=1 in the SkyDrive policy key. Blocks OneDrive's Known Folder Move (KFM) feature from prompting users or automatically moving the Windows Known Folders (Desktop, Documents, Pictures) from their local profile path to the OneDrive folder. KFM can be deployed silently by IT to redirect these folders to OneDrive cloud storage — but without advance user notification, users may be surprised to find their desktop files suddenly synchronised to the cloud. " +
-                    "Known Folder Move can have significant consequences when deployed without proper planning: large local Desktop and Documents folders (100+ GB) begin uploading to OneDrive immediately, consuming bandwidth. Folders that contain sensitive data subject to GDPR or HIPAA retention policies may inadvertently be moved to a Microsoft-operated cloud service without completing required Data Processing Agreement reviews. By blocking KFM opt-in via this policy, organisations can plan and deploy folder redirection deliberately rather than having it trigger based on defaults.",
-                Tags = ["skydrive", "onedrive", "known-folder-move", "kfm", "desktop-redirect", "cloud-redirect"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "OneDrive Known Folder Move blocked. Desktop, Documents, Pictures remain in local profile. IT-managed folder redirection to file server is unaffected.",
-                ApplyOps = [RegOp.SetDword(Key, "KFMBlockOptIn", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "KFMBlockOptIn")],
-                DetectOps = [RegOp.CheckDword(Key, "KFMBlockOptIn", 1)],
-            },
-            new TweakDef
-            {
-                Id = "skydrive-disable-teamsync",
-                Label = "SkyDrive: Disable OneDrive SharePoint-Backed Team Site Sync",
-                Category = "Cloud Storage",
-                Description = "Sets DisableSharepointSync=1 in the SkyDrive policy key. Prevents OneDrive from synchronising SharePoint Online-backed team site document libraries to the local machine. SharePoint team site sync makes the full content of shared team library folders available for offline editing — potentially storing large volumes of multi-user shared data locally on a laptop endpoint. " +
-                    "SharePoint team site sync on secure endpoints creates data sovereignty risk: when a full team document library (containing files created by all team members) is synced locally, those files are stored in an endpoint protected only by the laptop's local encryption. If the laptop is stolen or compromised, all team documents are accessible to the attacker — not just the individual user's Documents but the entire team library. Disabling SharePoint sync ensures team content remains in the cloud and is only accessible via the browser with valid MFA credentials, not from the local disk.",
-                Tags = ["skydrive", "onedrive", "sharepoint", "team-site", "offline-sync", "data-sovereignty"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "SharePoint Online team site document library sync to local machine disabled. Team files accessed via browser/SharePoint only. Personal OneDrive sync unaffected if DisableFileSync not set.",
-                ApplyOps = [RegOp.SetDword(Key, "DisableSharepointSync", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "DisableSharepointSync")],
-                DetectOps = [RegOp.CheckDword(Key, "DisableSharepointSync", 1)],
-            },
-        ];
-
+            [
+                new TweakDef
+                {
+                    Id = "skydrive-disable-file-sync",
+                    Label = "SkyDrive: Disable OneDrive File Synchronisation via Legacy SkyDrive Policy Key",
+                    Category = "Cloud Storage",
+                    Description =
+                        "Sets DisableFileSync=1 in the SkyDrive legacy policy key. Disables OneDrive file synchronisation at the machine policy level, preventing all users on this computer from syncing files with their OneDrive cloud storage. The SkyDrive registry key is the original legacy path (Windows 8.1/RT era) that is still read by the current Windows OneDrive client for backwards compatibility with Group Policy deployed to WS2012R2 and Win 8.1 machines. "
+                        + "In organisations that prohibit users from uploading corporate files to personal cloud storage, the SkyDrive legacy policy key ensures policy coverage extends to legacy Windows versions where the OneDrive-specific policy path did not yet exist. The SkyDrive and OneDrive policy keys are both evaluated — having both set ensures no gap in policy enforcement across heterogeneous Windows version environments. Without both keys set, a corporate laptop running the current OneDrive client on Win 8.1 would check the SkyDrive key first; if missing, OneDrive sync proceeds unblocked.",
+                    Tags = ["skydrive", "onedrive", "file-sync", "cloud-storage", "policy", "disable"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 5,
+                    SafetyRating = 5,
+                    ImpactNote =
+                        "OneDrive file sync disabled via legacy SkyDrive policy key. Corporate files blocked from uploading to personal OneDrive accounts.",
+                    ApplyOps = [RegOp.SetDword(Key, "DisableFileSync", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "DisableFileSync")],
+                    DetectOps = [RegOp.CheckDword(Key, "DisableFileSync", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "skydrive-disable-library-default-save",
+                    Label = "SkyDrive: Prevent Libraries from Defaulting Save Location to SkyDrive/OneDrive",
+                    Category = "Cloud Storage",
+                    Description =
+                        "Sets DisableLibrariesDefaultSaveToSkyDrive=1 in the SkyDrive policy key. Prevents Windows from configuring OneDrive's local folder as the default save location for Windows Libraries (Documents, Pictures, Music). Without this policy, Windows 8.1+ suggests OneDrive as the default save target — any document saved without explicitly choosing a location is uploaded to the user's personal OneDrive account. "
+                        + "In corporate environments where DLP (Data Loss Prevention) policies prohibit saving corporate IP to personal cloud storage, the auto-save to OneDrive/SkyDrive default library path is a subtle leakage vector — users who click 'Save' without inspecting the save dialogue may unknowingly sync sensitive documents to personal storage. Enforcing a corporate-managed default save location (a file server or SharePoint UNC path configured by Group Policy Folder Redirection) ensures all undirected file saves stay within managed storage boundaries.",
+                    Tags = ["skydrive", "onedrive", "library", "default-save", "dlp", "cloud-storage"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote =
+                        "Libraries no longer default to SkyDrive/OneDrive as save location. Users who manually navigate to OneDrive folder can still save there until sync is also disabled.",
+                    ApplyOps = [RegOp.SetDword(Key, "DisableLibrariesDefaultSaveToSkyDrive", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "DisableLibrariesDefaultSaveToSkyDrive")],
+                    DetectOps = [RegOp.CheckDword(Key, "DisableLibrariesDefaultSaveToSkyDrive", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "skydrive-disable-metered-sync",
+                    Label = "SkyDrive: Disable OneDrive Sync on Metered Network Connections",
+                    Category = "Cloud Storage",
+                    Description =
+                        "Sets NeverSyncOnMeteredConnection=1 in the SkyDrive policy key. Prevents OneDrive from synchronising files when the active network connection is metered (mobile data, LTE hotspot, satellite). Without this policy, OneDrive will attempt background synchronisation on metered connections, consuming potentially expensive cellular data allowances and degrading application performance for users on mobile hotspots. "
+                        + "Windows marks mobile hotspot connections, tethered cellular connections, and some Wi-Fi networks as metered to signal to applications that data usage should be minimised. OneDrive respects the metered status for foreground sync but continues background sync by default. For road warriors using laptop hotspot tethering on international trips with expensive roaming data plans, an unconstrained OneDrive background sync can silently consume gigabytes of mobile data. Disabling sync on metered connections prevents this scenario without requiring manual sync suspension.",
+                    Tags = ["skydrive", "onedrive", "metered-connection", "mobile-data", "bandwidth", "roaming"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote =
+                        "OneDrive sync paused on metered connections (cellular hotspot, LTE). Manual sync is still available. Files upload when non-metered connection is available.",
+                    ApplyOps = [RegOp.SetDword(Key, "NeverSyncOnMeteredConnection", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "NeverSyncOnMeteredConnection")],
+                    DetectOps = [RegOp.CheckDword(Key, "NeverSyncOnMeteredConnection", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "skydrive-disable-desktop-shortcut",
+                    Label = "SkyDrive: Disable Automatic OneDrive Desktop Shortcut Creation",
+                    Category = "Cloud Storage",
+                    Description =
+                        "Sets DisableSkyDriveDesktopIcon=1 in the SkyDrive policy key. Prevents OneDrive from adding a shortcut icon to the user's desktop during initial setup or after updates. On managed enterprise desktops where the shortcut layout is standardised by Group Policy (no unmanaged shortcuts on desktop), automatic OneDrive shortcut creation violates desktop policy and confuses users who may not be aware of cloud sync being installed. "
+                        + "Desktop shortcut proliferation on managed endpoints is a minor but persistent administrative annoyance. Each major OneDrive update can re-create the desktop shortcut if it was manually deleted, causing the shortcut to reappear after each update. Policy-driven suppression ensures the shortcut is never created, remaining consistent across updates without requiring GPO-applied shortcut deletion scripts.",
+                    Tags = ["skydrive", "onedrive", "desktop-shortcut", "icon", "managed-desktop"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 1,
+                    SafetyRating = 5,
+                    ImpactNote =
+                        "OneDrive desktop icon not created. Users can still access OneDrive via the system tray icon or File Explorer navigation.",
+                    ApplyOps = [RegOp.SetDword(Key, "DisableSkyDriveDesktopIcon", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "DisableSkyDriveDesktopIcon")],
+                    DetectOps = [RegOp.CheckDword(Key, "DisableSkyDriveDesktopIcon", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "skydrive-prevent-usage-of-onedrive",
+                    Label = "SkyDrive: Prevent All OneDrive Usage via Legacy SkyDrive Machine Policy",
+                    Category = "Cloud Storage",
+                    Description =
+                        "Sets PreventNetworkTrafficPreUserSignIn=1 in the SkyDrive policy key. Prevents OneDrive from generating any network traffic before the user signs in. During the Windows startup sequence, OneDrive pre-caches metadata and checks for updates before user login completes. This pre-sign-in network activity consumes bandwidth, adds to boot time, and generates outbound connections from a system in an unauthenticated state — which some network security monitoring tools flag as suspicious. "
+                        + "Pre-authentication network connections from Microsoft services are a known privacy concern: OneDrive network activity during boot can leak the device's presence, IP address, and tenant association to Microsoft servers before the user has consented to connected services for that session. In high-security environments that enforce a zero-trust model where no application should generate network traffic until after full user authentication, pre-sign-in OneDrive connections violate this control. Blocking pre-sign-in network activity ensures OneDrive only connects after a user is fully authenticated.",
+                    Tags = ["skydrive", "onedrive", "pre-signin", "network-traffic", "zero-trust", "privacy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 2,
+                    SafetyRating = 5,
+                    ImpactNote =
+                        "OneDrive pre-login network activity blocked. No user-visible impact. OneDrive connects normally after user authentication completes.",
+                    ApplyOps = [RegOp.SetDword(Key, "PreventNetworkTrafficPreUserSignIn", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "PreventNetworkTrafficPreUserSignIn")],
+                    DetectOps = [RegOp.CheckDword(Key, "PreventNetworkTrafficPreUserSignIn", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "skydrive-disable-personal-sync",
+                    Label = "SkyDrive: Block Sync of Personal Accounts on Domain-Joined Machines",
+                    Category = "Cloud Storage",
+                    Description =
+                        "Sets DisablePersonalSync=1 in the SkyDrive policy key. Prevents users from adding and syncing personal (non-corporate) Microsoft accounts with OneDrive on domain-joined or Entra ID-joined machines. Allows corporate OneDrive for Business (Entra ID accounts) to function normally while blocking personal @hotmail.com, @outlook.com, and @gmail.com accounts from syncing. "
+                        + "On corporate endpoints, personal OneDrive accounts present a data exfiltration risk: a user can drag corporate documents into their personal OneDrive sync folder and those files are immediately uploaded to their personal account, bypassing corporate DLP policies that only monitor corporate OneDrive tenants. The DisablePersonalSync policy removes the option to add personal accounts from the OneDrive settings UI while allowing the corporate account configuration to proceed normally — enabling corporate OneDrive features while blocking personal sync.",
+                    Tags = ["skydrive", "onedrive", "personal-account", "corporate-policy", "dlp", "exfiltration"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote =
+                        "Personal Microsoft account OneDrive sync blocked. Corporate OneDrive for Business accounts unaffected. Requires Entra ID-joined device for corporate sync.",
+                    ApplyOps = [RegOp.SetDword(Key, "DisablePersonalSync", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "DisablePersonalSync")],
+                    DetectOps = [RegOp.CheckDword(Key, "DisablePersonalSync", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "skydrive-require-domain-joined-to-sync",
+                    Label = "SkyDrive: Require Domain Membership Before Allowing OneDrive Sync",
+                    Category = "Cloud Storage",
+                    Description =
+                        "Sets RequireAccountFolderLocation=1 in the SkyDrive policy key. Requires that the user's OneDrive folder location is within a domain-accessible path before synchronisation begins. This ensures users cannot configure OneDrive to sync to a USB drive, external HDD, or a path on a non-domain-joined volume, which would bypass file auditing and DLP policies that monitor domain-accessible file paths. "
+                        + "OneDrive's default folder location is %USERPROFILE%\\OneDrive — on a domain-joined machine this is within the user profile path which may be redirected to a file server. If a user changes the OneDrive local folder to an external USB drive, sync continues to the external drive but audit policies monitoring the user profile path no longer capture OneDrive file activities. By requiring the account folder to be in an approved location, this policy prevents sync rerouting to unmonitored storage media.",
+                    Tags = ["skydrive", "onedrive", "folder-location", "domain", "audit", "data-governance"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote =
+                        "OneDrive sync folder must be on a monitored domain-accessible path. Users cannot redirect sync to USB drives or external storage.",
+                    ApplyOps = [RegOp.SetDword(Key, "RequireAccountFolderLocation", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "RequireAccountFolderLocation")],
+                    DetectOps = [RegOp.CheckDword(Key, "RequireAccountFolderLocation", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "skydrive-disable-tutorialicon",
+                    Label = "SkyDrive: Suppress OneDrive First-Run Tutorial and Balloon Notifications",
+                    Category = "Cloud Storage",
+                    Description =
+                        "Sets DisableTutorial=1 in the SkyDrive policy key. Suppresses the OneDrive first-run tutorial wizard and taskbar balloon notification tooltips that appear on first login or after updates. On enterprise-deployed endpoints, the OneDrive tutorial interrupts user productivity during logins, and repetitive balloon tooltips post-update create distraction and support desk calls from users who assume the notifications indicate a problem. "
+                        + "First-run wizard suppression is a routine enterprise deployment cleanliness policy — the tutorial is designed for retail consumers who have never configured OneDrive. In corporate environments where OneDrive policy is centrally managed (folder protection, retention policies, tenant binding), the tutorial presents options the user cannot change (they are set by policy) and provides misleading information about sync customisation capabilities. Suppressing the tutorial ensures users see only the relevant corporate-configured sync state without conflicting consumer-oriented guidance.",
+                    Tags = ["skydrive", "onedrive", "tutorial", "notification", "enterprise-deployment"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 1,
+                    SafetyRating = 5,
+                    ImpactNote =
+                        "OneDrive first-run tutorial and balloon tips suppressed. No functional impact — OneDrive operates normally with tutorial hidden.",
+                    ApplyOps = [RegOp.SetDword(Key, "DisableTutorial", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "DisableTutorial")],
+                    DetectOps = [RegOp.CheckDword(Key, "DisableTutorial", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "skydrive-block-known-folder-move",
+                    Label = "SkyDrive: Block Known Folder Move to Prevent Forced Desktop/Documents Redirect to OneDrive",
+                    Category = "Cloud Storage",
+                    Description =
+                        "Sets KFMBlockOptIn=1 in the SkyDrive policy key. Blocks OneDrive's Known Folder Move (KFM) feature from prompting users or automatically moving the Windows Known Folders (Desktop, Documents, Pictures) from their local profile path to the OneDrive folder. KFM can be deployed silently by IT to redirect these folders to OneDrive cloud storage — but without advance user notification, users may be surprised to find their desktop files suddenly synchronised to the cloud. "
+                        + "Known Folder Move can have significant consequences when deployed without proper planning: large local Desktop and Documents folders (100+ GB) begin uploading to OneDrive immediately, consuming bandwidth. Folders that contain sensitive data subject to GDPR or HIPAA retention policies may inadvertently be moved to a Microsoft-operated cloud service without completing required Data Processing Agreement reviews. By blocking KFM opt-in via this policy, organisations can plan and deploy folder redirection deliberately rather than having it trigger based on defaults.",
+                    Tags = ["skydrive", "onedrive", "known-folder-move", "kfm", "desktop-redirect", "cloud-redirect"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote =
+                        "OneDrive Known Folder Move blocked. Desktop, Documents, Pictures remain in local profile. IT-managed folder redirection to file server is unaffected.",
+                    ApplyOps = [RegOp.SetDword(Key, "KFMBlockOptIn", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "KFMBlockOptIn")],
+                    DetectOps = [RegOp.CheckDword(Key, "KFMBlockOptIn", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "skydrive-disable-teamsync",
+                    Label = "SkyDrive: Disable OneDrive SharePoint-Backed Team Site Sync",
+                    Category = "Cloud Storage",
+                    Description =
+                        "Sets DisableSharepointSync=1 in the SkyDrive policy key. Prevents OneDrive from synchronising SharePoint Online-backed team site document libraries to the local machine. SharePoint team site sync makes the full content of shared team library folders available for offline editing — potentially storing large volumes of multi-user shared data locally on a laptop endpoint. "
+                        + "SharePoint team site sync on secure endpoints creates data sovereignty risk: when a full team document library (containing files created by all team members) is synced locally, those files are stored in an endpoint protected only by the laptop's local encryption. If the laptop is stolen or compromised, all team documents are accessible to the attacker — not just the individual user's Documents but the entire team library. Disabling SharePoint sync ensures team content remains in the cloud and is only accessible via the browser with valid MFA credentials, not from the local disk.",
+                    Tags = ["skydrive", "onedrive", "sharepoint", "team-site", "offline-sync", "data-sovereignty"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote =
+                        "SharePoint Online team site document library sync to local machine disabled. Team files accessed via browser/SharePoint only. Personal OneDrive sync unaffected if DisableFileSync not set.",
+                    ApplyOps = [RegOp.SetDword(Key, "DisableSharepointSync", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "DisableSharepointSync")],
+                    DetectOps = [RegOp.CheckDword(Key, "DisableSharepointSync", 1)],
+                },
+            ];
     }
 
     // ── UniversalClipboardSyncPolicy ──
@@ -4700,7 +4720,5 @@ internal static class PolicyCloud
                     DetectOps = [RegOp.CheckDword(Key2, "DisableEdgeClipboardManager", 1)],
                 },
             ];
-
     }
-
 }

@@ -1239,7 +1239,6 @@ internal static class WindowsSandboxAdv
     ];
 }
 
-
 // ── merged from PolicySubsystems.cs ──
 // RegiLattice.Core — Tweaks/PolicySubsystems.cs
 // WSL 2, Windows Subsystem for Android, Hyper-V containers, Windows Sandbox, and holographic device policies
@@ -1446,7 +1445,6 @@ internal static class PolicySubsystems
                     DetectOps = [RegOp.CheckDword(Key, "BlockAndroidWifiPasswordSharing", 1)],
                 },
             ];
-
     }
 
     // ── AndroidSensorAccessPolicy ──
@@ -1627,7 +1625,6 @@ internal static class PolicySubsystems
                     DetectOps = [RegOp.CheckDword(Key, "DisableStepCounterSensor", 1)],
                 },
             ];
-
     }
 
     // ── HolographicDevicePolicy ──
@@ -1808,7 +1805,6 @@ internal static class PolicySubsystems
                 DetectOps = [RegOp.CheckDword(Key, "EnableHolographicAuditEvents", 1)],
             },
         ];
-
     }
 
     // ── HyperVContainerPolicy ──
@@ -1819,169 +1815,177 @@ internal static class PolicySubsystems
         private const string CtrKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Containers";
 
         public static IReadOnlyList<TweakDef> Data =>
-        [
-            new TweakDef
-            {
-                Id           = "hvcon-require-admin-vm-creation",
-                Label        = "Require Administrator to Create Hyper-V Virtual Machines",
-                Category = "Virtualization",
-                Description  = "Restricts virtual machine creation in Hyper-V to administrator accounts only, preventing standard users from provisioning new VMs that could be used to bypass security policy controls on the host system.",
-                Tags         = ["hyper-v", "vm-creation", "admin", "security", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 4,
-                SafetyRating = 5,
-                ImpactNote   = "Hyper-V VM creation restricted to admins; standard users cannot provision new virtual machines.",
-                ApplyOps     = [RegOp.SetDword(Key, "RequireAdminForVMCreation", 1)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "RequireAdminForVMCreation")],
-                DetectOps    = [RegOp.CheckDword(Key, "RequireAdminForVMCreation", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "hvcon-disable-vm-network-passthrough",
-                Label        = "Disable Network Passthrough (SR-IOV) for Hyper-V VMs",
-                Category = "Virtualization",
-                Description  = "Prevents Hyper-V virtual machines from using SR-IOV (Single Root I/O Virtualisation) network passthrough, ensuring all VM network traffic flows through the Hyper-V virtual switch for monitoring and filtering.",
-                Tags         = ["hyper-v", "sriov", "network-passthrough", "security", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 3,
-                SafetyRating = 5,
-                ImpactNote   = "SR-IOV network passthrough disabled; VM traffic routed through vSwitch for visibility and filtering.",
-                ApplyOps     = [RegOp.SetDword(Key, "DisableSRIOVPassthrough", 1)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "DisableSRIOVPassthrough")],
-                DetectOps    = [RegOp.CheckDword(Key, "DisableSRIOVPassthrough", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "hvcon-block-live-migration-plain",
-                Label        = "Block Unencrypted Hyper-V Live Migration",
-                Category = "Virtualization",
-                Description  = "Prevents Hyper-V live migrations from using the unencrypted migration transport, requiring Kerberos authentication or SMB encryption for all live migration sessions to prevent VM memory interception during migration.",
-                Tags         = ["hyper-v", "live-migration", "encryption", "security", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 4,
-                SafetyRating = 5,
-                ImpactNote   = "Plaintext live migration blocked; Kerberos/SMB encryption required for all VM live migration sessions.",
-                ApplyOps     = [RegOp.SetDword(Key, "RequireEncryptedLiveMigration", 1)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "RequireEncryptedLiveMigration")],
-                DetectOps    = [RegOp.CheckDword(Key, "RequireEncryptedLiveMigration", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "hvcon-set-vm-memory-limit",
-                Label        = "Set Maximum Hyper-V VM Memory to 64 GB Per VM",
-                Category = "Virtualization",
-                Description  = "Limits the maximum amount of RAM that any single Hyper-V virtual machine can be assigned to 65536 MB (64 GB), preventing individual VMs from monopolising all host memory and providing fair resource sharing.",
-                Tags         = ["hyper-v", "memory-limit", "resources", "fairness", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 3,
-                SafetyRating = 5,
-                ImpactNote   = "Maximum RAM per Hyper-V VM capped at 64 GB; no single VM can consume all host memory.",
-                ApplyOps     = [RegOp.SetDword(Key, "MaxVMMemoryMB", 65536)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "MaxVMMemoryMB")],
-                DetectOps    = [RegOp.CheckDword(Key, "MaxVMMemoryMB", 65536)],
-            },
-            new TweakDef
-            {
-                Id           = "hvcon-enable-secure-boot-for-vms",
-                Label        = "Enforce Secure Boot Enabled for All New Hyper-V VMs",
-                Category = "Virtualization",
-                Description  = "Requires that all new Hyper-V Generation 2 virtual machines are created with Secure Boot enabled, preventing VMs from being provisioned with Secure Boot disabled and booting unsigned guest operating systems.",
-                Tags         = ["hyper-v", "secure-boot", "generation-2", "security", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 4,
-                SafetyRating = 5,
-                ImpactNote   = "Secure Boot enforced for all new Gen2 Hyper-V VMs; unsigned guest OS images cannot be booted.",
-                ApplyOps     = [RegOp.SetDword(Key, "EnforceSecureBootForNewVMs", 1)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "EnforceSecureBootForNewVMs")],
-                DetectOps    = [RegOp.CheckDword(Key, "EnforceSecureBootForNewVMs", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "hvcon-disable-vm-clipboard",
-                Label        = "Disable Clipboard Sharing Between Hyper-V VMs and Host",
-                Category = "Virtualization",
-                Description  = "Prevents clipboard data from being passed between Hyper-V virtual machine sessions and the host desktop, eliminating the clipboard as a data exfiltration channel between VM and host environments.",
-                Tags         = ["hyper-v", "clipboard", "isolation", "data-protection", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 3,
-                SafetyRating = 5,
-                ImpactNote   = "Clipboard sharing between Hyper-V VMs and host disabled; data cannot be copy/pasted across VM boundary.",
-                ApplyOps     = [RegOp.SetDword(VmKey, "DisableVMClipboard", 1)],
-                RemoveOps    = [RegOp.DeleteValue(VmKey, "DisableVMClipboard")],
-                DetectOps    = [RegOp.CheckDword(VmKey, "DisableVMClipboard", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "hvcon-disable-vm-drives-mount",
-                Label        = "Disable VM Drive Mounting from Guest to Host",
-                Category = "Virtualization",
-                Description  = "Prevents Hyper-V virtual machines from mounting host filesystem paths via VMBus drive sharing, ensuring guest VMs cannot read host files through the Hyper-V file share integration component.",
-                Tags         = ["hyper-v", "drive-mounting", "integration", "isolation", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 3,
-                SafetyRating = 5,
-                ImpactNote   = "VM drive mounting from guest to host disabled; Hyper-V file share integration component blocked.",
-                ApplyOps     = [RegOp.SetDword(VmKey, "DisableVMDriveSharing", 1)],
-                RemoveOps    = [RegOp.DeleteValue(VmKey, "DisableVMDriveSharing")],
-                DetectOps    = [RegOp.CheckDword(VmKey, "DisableVMDriveSharing", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "hvcon-block-container-user-creation",
-                Label        = "Block Standard Users from Creating Windows Containers",
-                Category = "Virtualization",
-                Description  = "Restricts Windows Container (Hyper-V isolation / process isolation) session creation to administrator accounts, preventing standard users from running containerised workloads that could bypass host security controls.",
-                Tags         = ["containers", "windows-container", "standard-user", "isolation", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 4,
-                SafetyRating = 5,
-                ImpactNote   = "Windows Container creation restricted to admins; standard users cannot run Docker/containerd containers.",
-                ApplyOps     = [RegOp.SetDword(CtrKey, "RequireAdminForContainerCreation", 1)],
-                RemoveOps    = [RegOp.DeleteValue(CtrKey, "RequireAdminForContainerCreation")],
-                DetectOps    = [RegOp.CheckDword(CtrKey, "RequireAdminForContainerCreation", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "hvcon-disable-hyper-v-telemetry",
-                Label        = "Disable Hyper-V and Container Management Telemetry to Microsoft",
-                Category = "Virtualization",
-                Description  = "Prevents Hyper-V and Windows Containers from sending VM usage, crash, and performance telemetry to Microsoft.",
-                Tags         = ["hyper-v", "containers", "telemetry", "privacy", "microsoft", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 3,
-                SafetyRating = 5,
-                ImpactNote   = "Hyper-V and container telemetry to Microsoft disabled; VM usage and performance data not sent to cloud.",
-                ApplyOps     = [RegOp.SetDword(Key, "DisableHyperVTelemetry", 1)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "DisableHyperVTelemetry")],
-                DetectOps    = [RegOp.CheckDword(Key, "DisableHyperVTelemetry", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "hvcon-log-vm-lifecycle-events",
-                Label        = "Log Hyper-V VM Lifecycle Events in System Event Log",
-                Category = "Virtualization",
-                Description  = "Enables System event log entries for Hyper-V virtual machine creation, deletion, start, stop, and live migration events, providing a complete audit trail of VM lifecycle changes for compliance.",
-                Tags         = ["hyper-v", "event-log", "audit", "lifecycle", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 3,
-                SafetyRating = 5,
-                ImpactNote   = "Hyper-V VM lifecycle events logged; create/start/stop/migrate events visible in System log for auditing.",
-                ApplyOps     = [RegOp.SetDword(Key, "LogVMLifecycleEvents", 1)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "LogVMLifecycleEvents")],
-                DetectOps    = [RegOp.CheckDword(Key, "LogVMLifecycleEvents", 1)],
-            },
-        ];
-
+            [
+                new TweakDef
+                {
+                    Id = "hvcon-require-admin-vm-creation",
+                    Label = "Require Administrator to Create Hyper-V Virtual Machines",
+                    Category = "Virtualization",
+                    Description =
+                        "Restricts virtual machine creation in Hyper-V to administrator accounts only, preventing standard users from provisioning new VMs that could be used to bypass security policy controls on the host system.",
+                    Tags = ["hyper-v", "vm-creation", "admin", "security", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "Hyper-V VM creation restricted to admins; standard users cannot provision new virtual machines.",
+                    ApplyOps = [RegOp.SetDword(Key, "RequireAdminForVMCreation", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "RequireAdminForVMCreation")],
+                    DetectOps = [RegOp.CheckDword(Key, "RequireAdminForVMCreation", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "hvcon-disable-vm-network-passthrough",
+                    Label = "Disable Network Passthrough (SR-IOV) for Hyper-V VMs",
+                    Category = "Virtualization",
+                    Description =
+                        "Prevents Hyper-V virtual machines from using SR-IOV (Single Root I/O Virtualisation) network passthrough, ensuring all VM network traffic flows through the Hyper-V virtual switch for monitoring and filtering.",
+                    Tags = ["hyper-v", "sriov", "network-passthrough", "security", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "SR-IOV network passthrough disabled; VM traffic routed through vSwitch for visibility and filtering.",
+                    ApplyOps = [RegOp.SetDword(Key, "DisableSRIOVPassthrough", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "DisableSRIOVPassthrough")],
+                    DetectOps = [RegOp.CheckDword(Key, "DisableSRIOVPassthrough", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "hvcon-block-live-migration-plain",
+                    Label = "Block Unencrypted Hyper-V Live Migration",
+                    Category = "Virtualization",
+                    Description =
+                        "Prevents Hyper-V live migrations from using the unencrypted migration transport, requiring Kerberos authentication or SMB encryption for all live migration sessions to prevent VM memory interception during migration.",
+                    Tags = ["hyper-v", "live-migration", "encryption", "security", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "Plaintext live migration blocked; Kerberos/SMB encryption required for all VM live migration sessions.",
+                    ApplyOps = [RegOp.SetDword(Key, "RequireEncryptedLiveMigration", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "RequireEncryptedLiveMigration")],
+                    DetectOps = [RegOp.CheckDword(Key, "RequireEncryptedLiveMigration", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "hvcon-set-vm-memory-limit",
+                    Label = "Set Maximum Hyper-V VM Memory to 64 GB Per VM",
+                    Category = "Virtualization",
+                    Description =
+                        "Limits the maximum amount of RAM that any single Hyper-V virtual machine can be assigned to 65536 MB (64 GB), preventing individual VMs from monopolising all host memory and providing fair resource sharing.",
+                    Tags = ["hyper-v", "memory-limit", "resources", "fairness", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "Maximum RAM per Hyper-V VM capped at 64 GB; no single VM can consume all host memory.",
+                    ApplyOps = [RegOp.SetDword(Key, "MaxVMMemoryMB", 65536)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "MaxVMMemoryMB")],
+                    DetectOps = [RegOp.CheckDword(Key, "MaxVMMemoryMB", 65536)],
+                },
+                new TweakDef
+                {
+                    Id = "hvcon-enable-secure-boot-for-vms",
+                    Label = "Enforce Secure Boot Enabled for All New Hyper-V VMs",
+                    Category = "Virtualization",
+                    Description =
+                        "Requires that all new Hyper-V Generation 2 virtual machines are created with Secure Boot enabled, preventing VMs from being provisioned with Secure Boot disabled and booting unsigned guest operating systems.",
+                    Tags = ["hyper-v", "secure-boot", "generation-2", "security", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "Secure Boot enforced for all new Gen2 Hyper-V VMs; unsigned guest OS images cannot be booted.",
+                    ApplyOps = [RegOp.SetDword(Key, "EnforceSecureBootForNewVMs", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "EnforceSecureBootForNewVMs")],
+                    DetectOps = [RegOp.CheckDword(Key, "EnforceSecureBootForNewVMs", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "hvcon-disable-vm-clipboard",
+                    Label = "Disable Clipboard Sharing Between Hyper-V VMs and Host",
+                    Category = "Virtualization",
+                    Description =
+                        "Prevents clipboard data from being passed between Hyper-V virtual machine sessions and the host desktop, eliminating the clipboard as a data exfiltration channel between VM and host environments.",
+                    Tags = ["hyper-v", "clipboard", "isolation", "data-protection", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "Clipboard sharing between Hyper-V VMs and host disabled; data cannot be copy/pasted across VM boundary.",
+                    ApplyOps = [RegOp.SetDword(VmKey, "DisableVMClipboard", 1)],
+                    RemoveOps = [RegOp.DeleteValue(VmKey, "DisableVMClipboard")],
+                    DetectOps = [RegOp.CheckDword(VmKey, "DisableVMClipboard", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "hvcon-disable-vm-drives-mount",
+                    Label = "Disable VM Drive Mounting from Guest to Host",
+                    Category = "Virtualization",
+                    Description =
+                        "Prevents Hyper-V virtual machines from mounting host filesystem paths via VMBus drive sharing, ensuring guest VMs cannot read host files through the Hyper-V file share integration component.",
+                    Tags = ["hyper-v", "drive-mounting", "integration", "isolation", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "VM drive mounting from guest to host disabled; Hyper-V file share integration component blocked.",
+                    ApplyOps = [RegOp.SetDword(VmKey, "DisableVMDriveSharing", 1)],
+                    RemoveOps = [RegOp.DeleteValue(VmKey, "DisableVMDriveSharing")],
+                    DetectOps = [RegOp.CheckDword(VmKey, "DisableVMDriveSharing", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "hvcon-block-container-user-creation",
+                    Label = "Block Standard Users from Creating Windows Containers",
+                    Category = "Virtualization",
+                    Description =
+                        "Restricts Windows Container (Hyper-V isolation / process isolation) session creation to administrator accounts, preventing standard users from running containerised workloads that could bypass host security controls.",
+                    Tags = ["containers", "windows-container", "standard-user", "isolation", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "Windows Container creation restricted to admins; standard users cannot run Docker/containerd containers.",
+                    ApplyOps = [RegOp.SetDword(CtrKey, "RequireAdminForContainerCreation", 1)],
+                    RemoveOps = [RegOp.DeleteValue(CtrKey, "RequireAdminForContainerCreation")],
+                    DetectOps = [RegOp.CheckDword(CtrKey, "RequireAdminForContainerCreation", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "hvcon-disable-hyper-v-telemetry",
+                    Label = "Disable Hyper-V and Container Management Telemetry to Microsoft",
+                    Category = "Virtualization",
+                    Description = "Prevents Hyper-V and Windows Containers from sending VM usage, crash, and performance telemetry to Microsoft.",
+                    Tags = ["hyper-v", "containers", "telemetry", "privacy", "microsoft", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "Hyper-V and container telemetry to Microsoft disabled; VM usage and performance data not sent to cloud.",
+                    ApplyOps = [RegOp.SetDword(Key, "DisableHyperVTelemetry", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "DisableHyperVTelemetry")],
+                    DetectOps = [RegOp.CheckDword(Key, "DisableHyperVTelemetry", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "hvcon-log-vm-lifecycle-events",
+                    Label = "Log Hyper-V VM Lifecycle Events in System Event Log",
+                    Category = "Virtualization",
+                    Description =
+                        "Enables System event log entries for Hyper-V virtual machine creation, deletion, start, stop, and live migration events, providing a complete audit trail of VM lifecycle changes for compliance.",
+                    Tags = ["hyper-v", "event-log", "audit", "lifecycle", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "Hyper-V VM lifecycle events logged; create/start/stop/migrate events visible in System log for auditing.",
+                    ApplyOps = [RegOp.SetDword(Key, "LogVMLifecycleEvents", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "LogVMLifecycleEvents")],
+                    DetectOps = [RegOp.CheckDword(Key, "LogVMLifecycleEvents", 1)],
+                },
+            ];
     }
 
     // ── WindowsContainerPolicy ──
@@ -2162,7 +2166,6 @@ internal static class PolicySubsystems
                 DetectOps = [RegOp.CheckDword(Key, "DisableContainerTelemetry", 1)],
             },
         ];
-
     }
 
     // ── WindowsSandboxPolicy ──
@@ -2177,7 +2180,8 @@ internal static class PolicySubsystems
                 Id = "sbpol-disable-sandbox",
                 Label = "Disable Windows Sandbox",
                 Category = "Virtualization",
-                Description = "Sets AllowSandbox=0 in the Sandbox policy key. "
+                Description =
+                    "Sets AllowSandbox=0 in the Sandbox policy key. "
                     + "Disables Windows Sandbox entirely via Group Policy. Windows Sandbox is a "
                     + "lightweight isolated virtual environment for running untrusted applications. "
                     + "While beneficial for security testing, it requires Hyper-V and consumes significant "
@@ -2191,7 +2195,7 @@ internal static class PolicySubsystems
                 ImpactScore = 2,
                 SafetyRating = 5,
                 ImpactNote = "Windows Sandbox blocked by policy; cannot be used even when the optional feature is installed.",
-                ApplyOps  = [RegOp.SetDword(SandboxKey, "AllowSandbox", 0)],
+                ApplyOps = [RegOp.SetDword(SandboxKey, "AllowSandbox", 0)],
                 RemoveOps = [RegOp.DeleteValue(SandboxKey, "AllowSandbox")],
                 DetectOps = [RegOp.CheckDword(SandboxKey, "AllowSandbox", 0)],
             },
@@ -2200,7 +2204,8 @@ internal static class PolicySubsystems
                 Id = "sbpol-disable-networking",
                 Label = "Disable Networking Inside Windows Sandbox",
                 Category = "Virtualization",
-                Description = "Sets AllowNetworking=0 in the Sandbox policy key. "
+                Description =
+                    "Sets AllowNetworking=0 in the Sandbox policy key. "
                     + "Prevents the Windows Sandbox environment from accessing the host's network adapters "
                     + "or the internet. Running untrusted applications with live network access allows "
                     + "them to exfiltrate data, phone home for additional payloads, or probe internal "
@@ -2213,7 +2218,7 @@ internal static class PolicySubsystems
                 ImpactScore = 3,
                 SafetyRating = 5,
                 ImpactNote = "Sandbox has no network access; untrusted apps cannot reach the internet or internal network.",
-                ApplyOps  = [RegOp.SetDword(SandboxKey, "AllowNetworking", 0)],
+                ApplyOps = [RegOp.SetDword(SandboxKey, "AllowNetworking", 0)],
                 RemoveOps = [RegOp.DeleteValue(SandboxKey, "AllowNetworking")],
                 DetectOps = [RegOp.CheckDword(SandboxKey, "AllowNetworking", 0)],
             },
@@ -2222,7 +2227,8 @@ internal static class PolicySubsystems
                 Id = "sbpol-disable-clipboard",
                 Label = "Disable Clipboard Sharing With Windows Sandbox",
                 Category = "Virtualization",
-                Description = "Sets AllowClipboardRedirection=0 in the Sandbox policy key. "
+                Description =
+                    "Sets AllowClipboardRedirection=0 in the Sandbox policy key. "
                     + "Blocks bi-directional clipboard sharing between the Windows Sandbox and the host OS. "
                     + "Without this restriction, content copied inside the sandbox (e.g., stolen credentials "
                     + "or extracted secrets harvested by a malicious app) can be trivially transferred to "
@@ -2235,7 +2241,7 @@ internal static class PolicySubsystems
                 ImpactScore = 3,
                 SafetyRating = 5,
                 ImpactNote = "Copy/paste between Sandbox and host blocked in both directions.",
-                ApplyOps  = [RegOp.SetDword(SandboxKey, "AllowClipboardRedirection", 0)],
+                ApplyOps = [RegOp.SetDword(SandboxKey, "AllowClipboardRedirection", 0)],
                 RemoveOps = [RegOp.DeleteValue(SandboxKey, "AllowClipboardRedirection")],
                 DetectOps = [RegOp.CheckDword(SandboxKey, "AllowClipboardRedirection", 0)],
             },
@@ -2244,7 +2250,8 @@ internal static class PolicySubsystems
                 Id = "sbpol-disable-vgpu",
                 Label = "Disable Virtualized GPU (vGPU) in Windows Sandbox",
                 Category = "Virtualization",
-                Description = "Sets AllowVGPU=0 in the Sandbox policy key. "
+                Description =
+                    "Sets AllowVGPU=0 in the Sandbox policy key. "
                     + "Disables GPU hardware acceleration (virtualised GPU) inside Windows Sandbox. "
                     + "vGPU in Sandbox allows the containerised environment to access the system's "
                     + "graphics adapter for accelerated rendering. However, graphics driver vulnerabilities "
@@ -2258,7 +2265,7 @@ internal static class PolicySubsystems
                 ImpactScore = 3,
                 SafetyRating = 5,
                 ImpactNote = "Sandbox uses software rendering; GPU escape paths eliminated, performance reduced.",
-                ApplyOps  = [RegOp.SetDword(SandboxKey, "AllowVGPU", 0)],
+                ApplyOps = [RegOp.SetDword(SandboxKey, "AllowVGPU", 0)],
                 RemoveOps = [RegOp.DeleteValue(SandboxKey, "AllowVGPU")],
                 DetectOps = [RegOp.CheckDword(SandboxKey, "AllowVGPU", 0)],
             },
@@ -2267,7 +2274,8 @@ internal static class PolicySubsystems
                 Id = "sbpol-disable-printer-redirection",
                 Label = "Disable Printer Redirection Into Windows Sandbox",
                 Category = "Virtualization",
-                Description = "Sets AllowPrinterRedirection=0 in the Sandbox policy key. "
+                Description =
+                    "Sets AllowPrinterRedirection=0 in the Sandbox policy key. "
                     + "Prevents printers that are in scope on the host from being redirected and made "
                     + "available inside the Windows Sandbox session. Printer redirection exposes the "
                     + "host's print subsystem to the sandbox, and a malicious application could use it "
@@ -2280,7 +2288,7 @@ internal static class PolicySubsystems
                 ImpactScore = 2,
                 SafetyRating = 5,
                 ImpactNote = "No host printers visible inside Windows Sandbox; print spooler not exposed.",
-                ApplyOps  = [RegOp.SetDword(SandboxKey, "AllowPrinterRedirection", 0)],
+                ApplyOps = [RegOp.SetDword(SandboxKey, "AllowPrinterRedirection", 0)],
                 RemoveOps = [RegOp.DeleteValue(SandboxKey, "AllowPrinterRedirection")],
                 DetectOps = [RegOp.CheckDword(SandboxKey, "AllowPrinterRedirection", 0)],
             },
@@ -2289,7 +2297,8 @@ internal static class PolicySubsystems
                 Id = "sbpol-disable-audio-input",
                 Label = "Disable Microphone (Audio Input) in Windows Sandbox",
                 Category = "Virtualization",
-                Description = "Sets AllowAudioInput=0 in the Sandbox policy key. "
+                Description =
+                    "Sets AllowAudioInput=0 in the Sandbox policy key. "
                     + "Blocks the microphone and other audio capture devices from being accessible inside "
                     + "the Windows Sandbox session. An untrusted application running in Sandbox could use "
                     + "microphone access to capture ambient audio (conversation recording, credential "
@@ -2302,7 +2311,7 @@ internal static class PolicySubsystems
                 ImpactScore = 3,
                 SafetyRating = 5,
                 ImpactNote = "Microphone not accessible inside Windows Sandbox; audio capture by sandboxed apps prevented.",
-                ApplyOps  = [RegOp.SetDword(SandboxKey, "AllowAudioInput", 0)],
+                ApplyOps = [RegOp.SetDword(SandboxKey, "AllowAudioInput", 0)],
                 RemoveOps = [RegOp.DeleteValue(SandboxKey, "AllowAudioInput")],
                 DetectOps = [RegOp.CheckDword(SandboxKey, "AllowAudioInput", 0)],
             },
@@ -2311,7 +2320,8 @@ internal static class PolicySubsystems
                 Id = "sbpol-disable-video-input",
                 Label = "Disable Camera (Video Input) in Windows Sandbox",
                 Category = "Virtualization",
-                Description = "Sets AllowVideoInput=0 in the Sandbox policy key. "
+                Description =
+                    "Sets AllowVideoInput=0 in the Sandbox policy key. "
                     + "Blocks webcams and other video capture devices from being visible inside the "
                     + "Windows Sandbox session. A sandboxed malicious application with camera access "
                     + "could silently capture images or video of the user's environment and exfiltrate it. "
@@ -2324,7 +2334,7 @@ internal static class PolicySubsystems
                 ImpactScore = 3,
                 SafetyRating = 5,
                 ImpactNote = "Camera not accessible inside Windows Sandbox; video capture by sandboxed apps prevented.",
-                ApplyOps  = [RegOp.SetDword(SandboxKey, "AllowVideoInput", 0)],
+                ApplyOps = [RegOp.SetDword(SandboxKey, "AllowVideoInput", 0)],
                 RemoveOps = [RegOp.DeleteValue(SandboxKey, "AllowVideoInput")],
                 DetectOps = [RegOp.CheckDword(SandboxKey, "AllowVideoInput", 0)],
             },
@@ -2333,7 +2343,8 @@ internal static class PolicySubsystems
                 Id = "sbpol-disable-mapped-folders",
                 Label = "Disable Host Folder Mapping Into Windows Sandbox",
                 Category = "Virtualization",
-                Description = "Sets AllowMappedFolders=0 in the Sandbox policy key. "
+                Description =
+                    "Sets AllowMappedFolders=0 in the Sandbox policy key. "
                     + "Prevents host filesystem folders from being mapped and shared into the Windows Sandbox "
                     + "environment via the Sandbox configuration file (WSB). Without this restriction, a "
                     + "carefully crafted .wsb config file can mount sensitive host directories (Documents, "
@@ -2346,7 +2357,7 @@ internal static class PolicySubsystems
                 ImpactScore = 3,
                 SafetyRating = 5,
                 ImpactNote = "Host filesystem folders cannot be mapped into Sandbox; .wsb MappedFolders entries blocked.",
-                ApplyOps  = [RegOp.SetDword(SandboxKey, "AllowMappedFolders", 0)],
+                ApplyOps = [RegOp.SetDword(SandboxKey, "AllowMappedFolders", 0)],
                 RemoveOps = [RegOp.DeleteValue(SandboxKey, "AllowMappedFolders")],
                 DetectOps = [RegOp.CheckDword(SandboxKey, "AllowMappedFolders", 0)],
             },
@@ -2355,7 +2366,8 @@ internal static class PolicySubsystems
                 Id = "sbpol-disable-mapped-folders-write",
                 Label = "Restrict Mapped Sandbox Folders to Read-Only",
                 Category = "Virtualization",
-                Description = "Sets AllowWritableSharedFolders=0 in the Sandbox policy key. "
+                Description =
+                    "Sets AllowWritableSharedFolders=0 in the Sandbox policy key. "
                     + "Even when folder mapping is allowed (AllowMappedFolders=1), this policy ensures "
                     + "that all mapped host folders are mounted as read-only inside the Sandbox. "
                     + "A sandboxed application can read shared files but cannot write back to the host "
@@ -2368,7 +2380,7 @@ internal static class PolicySubsystems
                 ImpactScore = 2,
                 SafetyRating = 5,
                 ImpactNote = "Mapped host folders accessible read-only inside Sandbox; sandbox cannot write to host filesystem.",
-                ApplyOps  = [RegOp.SetDword(SandboxKey, "AllowWritableSharedFolders", 0)],
+                ApplyOps = [RegOp.SetDword(SandboxKey, "AllowWritableSharedFolders", 0)],
                 RemoveOps = [RegOp.DeleteValue(SandboxKey, "AllowWritableSharedFolders")],
                 DetectOps = [RegOp.CheckDword(SandboxKey, "AllowWritableSharedFolders", 0)],
             },
@@ -2377,7 +2389,8 @@ internal static class PolicySubsystems
                 Id = "sbpol-restrict-logon-credentials",
                 Label = "Block Windows Logon Credential Exposure in Windows Sandbox",
                 Category = "Virtualization",
-                Description = "Sets AllowLogonCredentials=0 in the Sandbox policy key. "
+                Description =
+                    "Sets AllowLogonCredentials=0 in the Sandbox policy key. "
                     + "Prevents Windows from passing or forwarding the user's login credentials (tokens, "
                     + "tickets, or cached NTLM hashes) into the Windows Sandbox environment. Without this "
                     + "setting, a sandboxed process may be able to leverage inherited authentication tokens "
@@ -2390,12 +2403,11 @@ internal static class PolicySubsystems
                 ImpactScore = 4,
                 SafetyRating = 5,
                 ImpactNote = "Login credentials not forwarded into Sandbox; sandboxed apps cannot use domain identity.",
-                ApplyOps  = [RegOp.SetDword(SandboxKey, "AllowLogonCredentials", 0)],
+                ApplyOps = [RegOp.SetDword(SandboxKey, "AllowLogonCredentials", 0)],
                 RemoveOps = [RegOp.DeleteValue(SandboxKey, "AllowLogonCredentials")],
                 DetectOps = [RegOp.CheckDword(SandboxKey, "AllowLogonCredentials", 0)],
             },
         ];
-
     }
 
     // ── WsaAndroidPolicy ──
@@ -2576,7 +2588,6 @@ internal static class PolicySubsystems
                     DetectOps = [RegOp.CheckDword(Key, "AndroidContainerMaxMemoryMB", 4096)],
                 },
             ];
-
     }
 
     // ── WsaNetworkIsolationPolicy ──
@@ -2757,7 +2768,6 @@ internal static class PolicySubsystems
                     DetectOps = [RegOp.CheckDword(Key, "EnableAndroidNetworkAuditLog", 1)],
                 },
             ];
-
     }
 
     // ── WsaStoragePolicy ──
@@ -2932,13 +2942,13 @@ internal static class PolicySubsystems
                     CorpSafe = true,
                     ImpactScore = 4,
                     SafetyRating = 5,
-                    ImpactNote = "Android screenshot and screen recording APIs blocked in WSA; screen data cannot be saved or uploaded by Android apps.",
+                    ImpactNote =
+                        "Android screenshot and screen recording APIs blocked in WSA; screen data cannot be saved or uploaded by Android apps.",
                     ApplyOps = [RegOp.SetDword(Key, "BlockAndroidScreenCapture", 1)],
                     RemoveOps = [RegOp.DeleteValue(Key, "BlockAndroidScreenCapture")],
                     DetectOps = [RegOp.CheckDword(Key, "BlockAndroidScreenCapture", 1)],
                 },
             ];
-
     }
 
     // ── Wsl2AdvancedPolicy ──
@@ -2949,169 +2959,177 @@ internal static class PolicySubsystems
         private const string NwKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Lxss\Networking";
 
         public static IReadOnlyList<TweakDef> Data =>
-        [
-            new TweakDef
-            {
-                Id           = "wsl2adv-disable-wsl2-entirely",
-                Label        = "Disable WSL2 (Windows Subsystem for Linux 2) Entirely",
-                Category = "Virtualization",
-                Description  = "Completely disables WSL2 via policy, preventing installation of Linux distributions and blocking any WSL2 virtual machine from starting. Applied on endpoints where Linux environments are not permitted.",
-                Tags         = ["wsl2", "linux", "subsystem", "disable", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 4,
-                SafetyRating = 5,
-                ImpactNote   = "WSL2 fully disabled; no Linux distro installation or execution possible on this endpoint.",
-                ApplyOps     = [RegOp.SetDword(Key, "DefaultVersion", 0)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "DefaultVersion")],
-                DetectOps    = [RegOp.CheckDword(Key, "DefaultVersion", 0)],
-            },
-            new TweakDef
-            {
-                Id           = "wsl2adv-block-network-access",
-                Label        = "Block WSL2 Instances from Making Network Connections",
-                Category = "Virtualization",
-                Description  = "Prevents WSL2 virtual machine network interfaces from making outbound connections, isolating Linux workloads from the network when running untrusted code inside WSL2 distros.",
-                Tags         = ["wsl2", "network", "isolation", "security", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 4,
-                SafetyRating = 5,
-                ImpactNote   = "WSL2 network access blocked; Linux distros run air-gapped with no internet or LAN connectivity.",
-                ApplyOps     = [RegOp.SetDword(NwKey, "BlockOutboundNetwork", 1)],
-                RemoveOps    = [RegOp.DeleteValue(NwKey, "BlockOutboundNetwork")],
-                DetectOps    = [RegOp.CheckDword(NwKey, "BlockOutboundNetwork", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "wsl2adv-block-system-distro",
-                Label        = "Block Installation of WSL2 System Distributions",
-                Category = "Virtualization",
-                Description  = "Prevents the installation of Microsoft-managed system utility distributions (Docker Desktop backend, cloud-agent distros) from being registered in WSL2, limiting distros to user-managed ones.",
-                Tags         = ["wsl2", "system-distro", "docker", "cloud-agent", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 3,
-                SafetyRating = 5,
-                ImpactNote   = "System WSL2 distros blocked; Docker Desktop WSL2 backend and cloud agent distros cannot register.",
-                ApplyOps     = [RegOp.SetDword(Key, "BlockSystemDistros", 1)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "BlockSystemDistros")],
-                DetectOps    = [RegOp.CheckDword(Key, "BlockSystemDistros", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "wsl2adv-disable-wsl2-localhost-relay",
-                Label        = "Disable WSL2 Localhost Port Relay to Windows Host",
-                Category = "Virtualization",
-                Description  = "Prevents automatic port forwarding from WSL2 Linux network listeners to the Windows host network, stopping services running inside WSL2 from being reachable on Windows localhost without explicit configuration.",
-                Tags         = ["wsl2", "localhost-relay", "port-forwarding", "security", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 3,
-                SafetyRating = 5,
-                ImpactNote   = "WSL2 localhost port relay disabled; Linux services not automatically accessible on Windows localhost.",
-                ApplyOps     = [RegOp.SetDword(NwKey, "DisableLocalhostRelay", 1)],
-                RemoveOps    = [RegOp.DeleteValue(NwKey, "DisableLocalhostRelay")],
-                DetectOps    = [RegOp.CheckDword(NwKey, "DisableLocalhostRelay", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "wsl2adv-disable-wsl2-firewall-integration",
-                Label        = "Disable WSL2 Windows Firewall Integration",
-                Category = "Virtualization",
-                Description  = "Prevents WSL2 from applying Windows Firewall rules to the virtual machine network adapter, ensuring WSL2 network traffic is not filtered or monitored by Windows Defender Firewall rules created for WSL2.",
-                Tags         = ["wsl2", "firewall", "network", "security", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 3,
-                SafetyRating = 5,
-                ImpactNote   = "WSL2 firewall integration disabled; Windows Firewall rules not applied to WSL2 virtual network.",
-                ApplyOps     = [RegOp.SetDword(FwKey, "DisableFirewallIntegration", 1)],
-                RemoveOps    = [RegOp.DeleteValue(FwKey, "DisableFirewallIntegration")],
-                DetectOps    = [RegOp.CheckDword(FwKey, "DisableFirewallIntegration", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "wsl2adv-disable-wsl2-dns-tunneling",
-                Label        = "Disable WSL2 DNS Tunneling Mode",
-                Category = "Virtualization",
-                Description  = "Disables WSL2 DNS tunneling (introduced in Windows 11 22H2) which routes DNS queries from Linux through a Windows-side DNS proxy, reverting to the standard VM network DNS and preventing potential data disclosure via DNS-over-proxy.",
-                Tags         = ["wsl2", "dns-tunneling", "dns", "privacy", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 3,
-                SafetyRating = 5,
-                ImpactNote   = "WSL2 DNS tunneling disabled; Linux DNS queries use VM network directly, not Windows DNS proxy.",
-                ApplyOps     = [RegOp.SetDword(NwKey, "DisableDNSTunneling", 1)],
-                RemoveOps    = [RegOp.DeleteValue(NwKey, "DisableDNSTunneling")],
-                DetectOps    = [RegOp.CheckDword(NwKey, "DisableDNSTunneling", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "wsl2adv-block-gui-apps",
-                Label        = "Block WSL2 GUI (WSLg) Application Display on Windows Desktop",
-                Category = "Virtualization",
-                Description  = "Prevents WSL2 Linux GUI applications from rendering their windows on the Windows host desktop via WSLg (Windows Subsystem for Linux GUI), limiting WSL2 usage to headless/terminal-only workloads.",
-                Tags         = ["wsl2", "wslg", "gui-apps", "linux", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 3,
-                SafetyRating = 5,
-                ImpactNote   = "WSLg blocked; Linux GUI apps cannot render windows on Windows desktop. Terminal access only.",
-                ApplyOps     = [RegOp.SetDword(Key, "DisableWSLg", 1)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "DisableWSLg")],
-                DetectOps    = [RegOp.CheckDword(Key, "DisableWSLg", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "wsl2adv-disable-wsl2-telemetry",
-                Label        = "Disable WSL2 Telemetry Reporting to Microsoft",
-                Category = "Virtualization",
-                Description  = "Prevents WSL2 from sending distro usage, feature adoption, crash, and diagnostics telemetry to Microsoft.",
-                Tags         = ["wsl2", "telemetry", "privacy", "microsoft", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 3,
-                SafetyRating = 5,
-                ImpactNote   = "WSL2 telemetry to Microsoft disabled; distro usage and crash data not sent to cloud.",
-                ApplyOps     = [RegOp.SetDword(Key, "DisableTelemetry", 1)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "DisableTelemetry")],
-                DetectOps    = [RegOp.CheckDword(Key, "DisableTelemetry", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "wsl2adv-log-distro-lifecycle",
-                Label        = "Log WSL2 Distro Registration and Start Events",
-                Category = "Virtualization",
-                Description  = "Enables Windows event log entries when a WSL2 Linux distribution is registered, unregistered, started, or terminated, providing audit visibility into Linux environment usage on corporate endpoints.",
-                Tags         = ["wsl2", "event-log", "audit", "distro", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 3,
-                SafetyRating = 5,
-                ImpactNote   = "WSL2 distro lifecycle events logged; Linux environment registration and use visible for auditing.",
-                ApplyOps     = [RegOp.SetDword(Key, "LogDistroLifecycle", 1)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "LogDistroLifecycle")],
-                DetectOps    = [RegOp.CheckDword(Key, "LogDistroLifecycle", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "wsl2adv-require-admin-distro-install",
-                Label        = "Require Administrator to Install WSL2 Distributions",
-                Category = "Virtualization",
-                Description  = "Prevents standard users from installing new Linux distributions into WSL2, ensuring distro installation is an administrative action subject to change management.",
-                Tags         = ["wsl2", "distro-install", "admin", "security", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 3,
-                SafetyRating = 5,
-                ImpactNote   = "WSL2 distro installation restricted to admins; standard users cannot add new Linux distributions.",
-                ApplyOps     = [RegOp.SetDword(Key, "RequireAdminForDistroInstall", 1)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "RequireAdminForDistroInstall")],
-                DetectOps    = [RegOp.CheckDword(Key, "RequireAdminForDistroInstall", 1)],
-            },
-        ];
-
+            [
+                new TweakDef
+                {
+                    Id = "wsl2adv-disable-wsl2-entirely",
+                    Label = "Disable WSL2 (Windows Subsystem for Linux 2) Entirely",
+                    Category = "Virtualization",
+                    Description =
+                        "Completely disables WSL2 via policy, preventing installation of Linux distributions and blocking any WSL2 virtual machine from starting. Applied on endpoints where Linux environments are not permitted.",
+                    Tags = ["wsl2", "linux", "subsystem", "disable", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "WSL2 fully disabled; no Linux distro installation or execution possible on this endpoint.",
+                    ApplyOps = [RegOp.SetDword(Key, "DefaultVersion", 0)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "DefaultVersion")],
+                    DetectOps = [RegOp.CheckDword(Key, "DefaultVersion", 0)],
+                },
+                new TweakDef
+                {
+                    Id = "wsl2adv-block-network-access",
+                    Label = "Block WSL2 Instances from Making Network Connections",
+                    Category = "Virtualization",
+                    Description =
+                        "Prevents WSL2 virtual machine network interfaces from making outbound connections, isolating Linux workloads from the network when running untrusted code inside WSL2 distros.",
+                    Tags = ["wsl2", "network", "isolation", "security", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "WSL2 network access blocked; Linux distros run air-gapped with no internet or LAN connectivity.",
+                    ApplyOps = [RegOp.SetDword(NwKey, "BlockOutboundNetwork", 1)],
+                    RemoveOps = [RegOp.DeleteValue(NwKey, "BlockOutboundNetwork")],
+                    DetectOps = [RegOp.CheckDword(NwKey, "BlockOutboundNetwork", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "wsl2adv-block-system-distro",
+                    Label = "Block Installation of WSL2 System Distributions",
+                    Category = "Virtualization",
+                    Description =
+                        "Prevents the installation of Microsoft-managed system utility distributions (Docker Desktop backend, cloud-agent distros) from being registered in WSL2, limiting distros to user-managed ones.",
+                    Tags = ["wsl2", "system-distro", "docker", "cloud-agent", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "System WSL2 distros blocked; Docker Desktop WSL2 backend and cloud agent distros cannot register.",
+                    ApplyOps = [RegOp.SetDword(Key, "BlockSystemDistros", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "BlockSystemDistros")],
+                    DetectOps = [RegOp.CheckDword(Key, "BlockSystemDistros", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "wsl2adv-disable-wsl2-localhost-relay",
+                    Label = "Disable WSL2 Localhost Port Relay to Windows Host",
+                    Category = "Virtualization",
+                    Description =
+                        "Prevents automatic port forwarding from WSL2 Linux network listeners to the Windows host network, stopping services running inside WSL2 from being reachable on Windows localhost without explicit configuration.",
+                    Tags = ["wsl2", "localhost-relay", "port-forwarding", "security", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "WSL2 localhost port relay disabled; Linux services not automatically accessible on Windows localhost.",
+                    ApplyOps = [RegOp.SetDword(NwKey, "DisableLocalhostRelay", 1)],
+                    RemoveOps = [RegOp.DeleteValue(NwKey, "DisableLocalhostRelay")],
+                    DetectOps = [RegOp.CheckDword(NwKey, "DisableLocalhostRelay", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "wsl2adv-disable-wsl2-firewall-integration",
+                    Label = "Disable WSL2 Windows Firewall Integration",
+                    Category = "Virtualization",
+                    Description =
+                        "Prevents WSL2 from applying Windows Firewall rules to the virtual machine network adapter, ensuring WSL2 network traffic is not filtered or monitored by Windows Defender Firewall rules created for WSL2.",
+                    Tags = ["wsl2", "firewall", "network", "security", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "WSL2 firewall integration disabled; Windows Firewall rules not applied to WSL2 virtual network.",
+                    ApplyOps = [RegOp.SetDword(FwKey, "DisableFirewallIntegration", 1)],
+                    RemoveOps = [RegOp.DeleteValue(FwKey, "DisableFirewallIntegration")],
+                    DetectOps = [RegOp.CheckDword(FwKey, "DisableFirewallIntegration", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "wsl2adv-disable-wsl2-dns-tunneling",
+                    Label = "Disable WSL2 DNS Tunneling Mode",
+                    Category = "Virtualization",
+                    Description =
+                        "Disables WSL2 DNS tunneling (introduced in Windows 11 22H2) which routes DNS queries from Linux through a Windows-side DNS proxy, reverting to the standard VM network DNS and preventing potential data disclosure via DNS-over-proxy.",
+                    Tags = ["wsl2", "dns-tunneling", "dns", "privacy", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "WSL2 DNS tunneling disabled; Linux DNS queries use VM network directly, not Windows DNS proxy.",
+                    ApplyOps = [RegOp.SetDword(NwKey, "DisableDNSTunneling", 1)],
+                    RemoveOps = [RegOp.DeleteValue(NwKey, "DisableDNSTunneling")],
+                    DetectOps = [RegOp.CheckDword(NwKey, "DisableDNSTunneling", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "wsl2adv-block-gui-apps",
+                    Label = "Block WSL2 GUI (WSLg) Application Display on Windows Desktop",
+                    Category = "Virtualization",
+                    Description =
+                        "Prevents WSL2 Linux GUI applications from rendering their windows on the Windows host desktop via WSLg (Windows Subsystem for Linux GUI), limiting WSL2 usage to headless/terminal-only workloads.",
+                    Tags = ["wsl2", "wslg", "gui-apps", "linux", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "WSLg blocked; Linux GUI apps cannot render windows on Windows desktop. Terminal access only.",
+                    ApplyOps = [RegOp.SetDword(Key, "DisableWSLg", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "DisableWSLg")],
+                    DetectOps = [RegOp.CheckDword(Key, "DisableWSLg", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "wsl2adv-disable-wsl2-telemetry",
+                    Label = "Disable WSL2 Telemetry Reporting to Microsoft",
+                    Category = "Virtualization",
+                    Description = "Prevents WSL2 from sending distro usage, feature adoption, crash, and diagnostics telemetry to Microsoft.",
+                    Tags = ["wsl2", "telemetry", "privacy", "microsoft", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "WSL2 telemetry to Microsoft disabled; distro usage and crash data not sent to cloud.",
+                    ApplyOps = [RegOp.SetDword(Key, "DisableTelemetry", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "DisableTelemetry")],
+                    DetectOps = [RegOp.CheckDword(Key, "DisableTelemetry", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "wsl2adv-log-distro-lifecycle",
+                    Label = "Log WSL2 Distro Registration and Start Events",
+                    Category = "Virtualization",
+                    Description =
+                        "Enables Windows event log entries when a WSL2 Linux distribution is registered, unregistered, started, or terminated, providing audit visibility into Linux environment usage on corporate endpoints.",
+                    Tags = ["wsl2", "event-log", "audit", "distro", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "WSL2 distro lifecycle events logged; Linux environment registration and use visible for auditing.",
+                    ApplyOps = [RegOp.SetDword(Key, "LogDistroLifecycle", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "LogDistroLifecycle")],
+                    DetectOps = [RegOp.CheckDword(Key, "LogDistroLifecycle", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "wsl2adv-require-admin-distro-install",
+                    Label = "Require Administrator to Install WSL2 Distributions",
+                    Category = "Virtualization",
+                    Description =
+                        "Prevents standard users from installing new Linux distributions into WSL2, ensuring distro installation is an administrative action subject to change management.",
+                    Tags = ["wsl2", "distro-install", "admin", "security", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "WSL2 distro installation restricted to admins; standard users cannot add new Linux distributions.",
+                    ApplyOps = [RegOp.SetDword(Key, "RequireAdminForDistroInstall", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "RequireAdminForDistroInstall")],
+                    DetectOps = [RegOp.CheckDword(Key, "RequireAdminForDistroInstall", 1)],
+                },
+            ];
     }
 
     // ── WslDistroManagementPolicy ──
@@ -3120,179 +3138,188 @@ internal static class PolicySubsystems
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Lxss\Distros";
 
         public static IReadOnlyList<TweakDef> Data =>
-        [
-            new TweakDef
-            {
-                Id = "wsldist-block-external-distro-sources",
-                Label = "WSL Distro: Block Installation of Unverified External Distros",
-                Category = "Virtualization",
-                Description = "Sets AllowOnlyApprovedDistributions=1 in Lxss Distros policy. Restricts WSL distro installation to the set of distributions approved in this enterprise policy, blocking users from installing unverified third-party Linux distributions. " +
-                    "Third-party WSL distros installed from .tar.gz archives or custom OCI images bypass the Microsoft Store signing process, are not subject to Windows Defender malware scanning during import, and may include custom kernel modules or services that establish network connections to external command-and-control infrastructure. Restricting to approved distributions ensures all WSL environments meet the organisation's security baseline.",
-                Tags = ["wsl", "distro", "installation", "security", "enterprise"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                ImpactNote = "Only approved WSL distros installable; blocks arbitrary Linux environments from unverified sources.",
-                ApplyOps = [RegOp.SetDword(Key, "AllowOnlyApprovedDistributions", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "AllowOnlyApprovedDistributions")],
-                DetectOps = [RegOp.CheckDword(Key, "AllowOnlyApprovedDistributions", 1)],
-            },
-            new TweakDef
-            {
-                Id = "wsldist-disable-distro-export",
-                Label = "WSL Distro: Disable Distro Export to External Archive",
-                Category = "Virtualization",
-                Description = "Sets DisableDistributionExport=1 in Lxss Distros policy. Prevents users from running 'wsl --export' to create .tar.gz archives of installed WSL distributions. " +
-                    "Exporting a WSL distro creates a portable archive of the entire Linux file system — including any data, credentials, keys, or sensitive files stored within the Linux home directory. This archive can then be transferred to an unmanaged device. Blocking distro export prevents the Linux container's data from being extracted and exfiltrated outside the managed device.",
-                Tags = ["wsl", "distro", "export", "data-exfiltration", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                ImpactNote = "Blocks WSL distro export; Linux container filesystem cannot be archived and transferred off-device.",
-                ApplyOps = [RegOp.SetDword(Key, "DisableDistributionExport", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "DisableDistributionExport")],
-                DetectOps = [RegOp.CheckDword(Key, "DisableDistributionExport", 1)],
-            },
-            new TweakDef
-            {
-                Id = "wsldist-disable-distro-import",
-                Label = "WSL Distro: Disable Distro Import from External Archive",
-                Category = "Virtualization",
-                Description = "Sets DisableDistributionImport=1 in Lxss Distros policy. Prevents users from running 'wsl --import' to install a custom Linux distribution from a .tar.gz or OCI container archive. " +
-                    "Importing a custom WSL distribution bypasses all Microsoft Store distribution vetting. An attacker who has compromised a development machine can create a custom Linux distro archive with embedded persistence mechanisms, additional network listeners, or credential theft tooling, then import it on other machines using only standard user 'wsl' CLI commands. Disabling import forces all WSL distro installations through the Store pipeline.",
-                Tags = ["wsl", "distro", "import", "lateral-movement", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                ImpactNote = "Blocks WSL custom distro import; all distributions must come from the Microsoft Store.",
-                ApplyOps = [RegOp.SetDword(Key, "DisableDistributionImport", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "DisableDistributionImport")],
-                DetectOps = [RegOp.CheckDword(Key, "DisableDistributionImport", 1)],
-            },
-            new TweakDef
-            {
-                Id = "wsldist-set-max-distros-allowed-2",
-                Label = "WSL Distro: Limit Maximum Installed Distros to 2",
-                Category = "Virtualization",
-                Description = "Sets MaxDistributionsAllowed=2 in Lxss Distros policy. Caps the number of WSL distributions that a user can have installed simultaneously to 2. " +
-                    "Each installed WSL distribution adds to the attack surface: an additional Linux kernel, an additional network-accessible file system, and an additional set of Linux packages that may have known CVEs. Limiting users to 2 simultaneous distros (e.g., one primary development environment and one for testing) reduces this footprint while still supporting legitimate multi-environment development workflows.",
-                Tags = ["wsl", "distro", "limit", "attack-surface", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Max 2 WSL distros; limits Linux environment proliferation on managed devices.",
-                ApplyOps = [RegOp.SetDword(Key, "MaxDistributionsAllowed", 2)],
-                RemoveOps = [RegOp.DeleteValue(Key, "MaxDistributionsAllowed")],
-                DetectOps = [RegOp.CheckDword(Key, "MaxDistributionsAllowed", 2)],
-            },
-            new TweakDef
-            {
-                Id = "wsldist-require-admin-for-distro-removal",
-                Label = "WSL Distro: Require Administrative Approval to Unregister Distros",
-                Category = "Virtualization",
-                Description = "Sets RequireAdminForDistributionRemoval=1 in Lxss Distros policy. Requires administrator privileges to unregister or remove a WSL distribution via 'wsl --unregister'. " +
-                    "If a WSL distro becomes compromised, malware running within the Linux environment may attempt to cover its tracks by unregistering the distro after data exfiltration, destroying forensic evidence. Requiring admin elevation to remove a distro ensures that Linux environment removal is a deliberate IT/admin action, not something malware inside the WSL container can trigger via WSL CLI commands.",
-                Tags = ["wsl", "distro", "removal", "forensics", "admin"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Admin required to unregister WSL distros; prevents malware from destroying Linux container forensic evidence.",
-                ApplyOps = [RegOp.SetDword(Key, "RequireAdminForDistributionRemoval", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "RequireAdminForDistributionRemoval")],
-                DetectOps = [RegOp.CheckDword(Key, "RequireAdminForDistributionRemoval", 1)],
-            },
-            new TweakDef
-            {
-                Id = "wsldist-disable-distro-version-downgrade",
-                Label = "WSL Distro: Block Downgrading Distros to WSL 1 Mode",
-                Category = "Virtualization",
-                Description = "Sets DisableDistributionVersionDowngrade=1 in Lxss Distros policy. Prevents users from converting installed WSL 2 distributions back to WSL 1 mode via 'wsl --set-version'. " +
-                    "WSL 1 uses a translation layer (instead of a real Linux kernel) that is significantly more permissive in its Windows-Linux boundary enforcement. WSL 2 uses a Hyper-V lightweight VM with stronger isolation. Downgrading to WSL 1 weakens the isolation model and re-enables file system access patterns that WSL 2's VM architecture blocks, potentially creating a security regression on machines where WSL 2 was specifically required for its isolation guarantees.",
-                Tags = ["wsl", "wsl1", "wsl2", "isolation", "downgrade"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Prevents WSL 2→WSL 1 downgrade; preserves Hyper-V VM isolation for all distros.",
-                ApplyOps = [RegOp.SetDword(Key, "DisableDistributionVersionDowngrade", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "DisableDistributionVersionDowngrade")],
-                DetectOps = [RegOp.CheckDword(Key, "DisableDistributionVersionDowngrade", 1)],
-            },
-            new TweakDef
-            {
-                Id = "wsldist-disable-distro-backup-creation",
-                Label = "WSL Distro: Disable Automatic Distro Backup Creation",
-                Category = "Virtualization",
-                Description = "Sets DisableDistributionBackup=1 in Lxss Distros policy. Prevents automatic backup snapshots of WSL distribution state from being written to the Windows user profile directory. " +
-                    "WSL distribution backups are compressed archives of the Linux VHD that can be several gigabytes in size. On managed devices with roaming profiles or OneDrive-synced user profiles, these large backup files are undesirably synchronised to cloud storage, consuming bandwidth and cloud quota. Additionally, backups may contain sensitive Linux-resident credentials.",
-                Tags = ["wsl", "backup", "vhd", "profile", "cloud-sync"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                ImpactNote = "No automatic WSL distro backups; prevents large Linux VHD archives from consuming cloud sync quota.",
-                ApplyOps = [RegOp.SetDword(Key, "DisableDistributionBackup", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "DisableDistributionBackup")],
-                DetectOps = [RegOp.CheckDword(Key, "DisableDistributionBackup", 1)],
-            },
-            new TweakDef
-            {
-                Id = "wsldist-enable-distro-audit-logging",
-                Label = "WSL Distro: Enable Audit Logging for Distro Install and Remove Events",
-                Category = "Virtualization",
-                Description = "Sets EnableDistributionAuditLogging=1 in Lxss Distros policy. Enables Security Event Log entries when WSL distributions are registered (installed), unregistered (removed), or converted between WSL 1/2 modes. " +
-                    "Without distro lifecycle logging, there is no Security event log record of when Linux environments were created or deleted on a machine. If an attacker installs a WSL distro for lateral movement and then removes it to destroy evidence, the only forensic trace would be file system artefacts. Event log entries for distro lifecycle operations enable detection rules in SIEM systems.",
-                Tags = ["wsl", "audit", "logging", "siem", "lifecycle"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Security log entries for WSL distro install/remove; enables SIEM detection of Linux environment manipulation.",
-                ApplyOps = [RegOp.SetDword(Key, "EnableDistributionAuditLogging", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "EnableDistributionAuditLogging")],
-                DetectOps = [RegOp.CheckDword(Key, "EnableDistributionAuditLogging", 1)],
-            },
-            new TweakDef
-            {
-                Id = "wsldist-disable-distro-rename",
-                Label = "WSL Distro: Disable User Renaming of Installed Distros",
-                Category = "Virtualization",
-                Description = "Sets DisableDistributionRename=1 in Lxss Distros policy. Prevents users from renaming installed WSL distributions via 'wsl --rename' or through the Windows registry. " +
-                    "Distribution names are used by monitoring tools, DLP agents, and endpoint security software to identify WSL environments and apply appropriate policies. If a user renames a restricted distribution (e.g., a distro named 'blocked-distro') to an unrestricted name, policy enforcement based on distribution identity may be bypassed. Locking distribution names preserves the integrity of name-based policy enforcement.",
-                Tags = ["wsl", "distro", "rename", "policy-bypass", "identity"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                ImpactNote = "Distro names locked; prevents renaming to bypass name-based policy enforcement.",
-                ApplyOps = [RegOp.SetDword(Key, "DisableDistributionRename", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "DisableDistributionRename")],
-                DetectOps = [RegOp.CheckDword(Key, "DisableDistributionRename", 1)],
-            },
-            new TweakDef
-            {
-                Id = "wsldist-disable-distro-updates-without-approval",
-                Label = "WSL Distro: Require Admin Approval for Distro Auto-Updates",
-                Category = "Virtualization",
-                Description = "Sets RequireAdminForDistributionUpdates=1 in Lxss Distros policy. Requires administrator approval before a WSL distribution is allowed to automatically update its base image to a newer version from the Microsoft Store. " +
-                    "While updating a WSL base image is generally desirable for security patch coverage, uncontrolled automatic updates can change the Linux environment's toolchain version, breaking developer builds that depend on specific library or compiler versions. Requiring admin approval gates distribution updates through change management, ensuring updates are tested before deployment.",
-                Tags = ["wsl", "distro", "updates", "change-management", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                ImpactNote = "WSL distro updates require admin approval; prevents uncontrolled auto-updates breaking environment baselines.",
-                ApplyOps = [RegOp.SetDword(Key, "RequireAdminForDistributionUpdates", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "RequireAdminForDistributionUpdates")],
-                DetectOps = [RegOp.CheckDword(Key, "RequireAdminForDistributionUpdates", 1)],
-            },
-        ];
-
+            [
+                new TweakDef
+                {
+                    Id = "wsldist-block-external-distro-sources",
+                    Label = "WSL Distro: Block Installation of Unverified External Distros",
+                    Category = "Virtualization",
+                    Description =
+                        "Sets AllowOnlyApprovedDistributions=1 in Lxss Distros policy. Restricts WSL distro installation to the set of distributions approved in this enterprise policy, blocking users from installing unverified third-party Linux distributions. "
+                        + "Third-party WSL distros installed from .tar.gz archives or custom OCI images bypass the Microsoft Store signing process, are not subject to Windows Defender malware scanning during import, and may include custom kernel modules or services that establish network connections to external command-and-control infrastructure. Restricting to approved distributions ensures all WSL environments meet the organisation's security baseline.",
+                    Tags = ["wsl", "distro", "installation", "security", "enterprise"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "Only approved WSL distros installable; blocks arbitrary Linux environments from unverified sources.",
+                    ApplyOps = [RegOp.SetDword(Key, "AllowOnlyApprovedDistributions", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "AllowOnlyApprovedDistributions")],
+                    DetectOps = [RegOp.CheckDword(Key, "AllowOnlyApprovedDistributions", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "wsldist-disable-distro-export",
+                    Label = "WSL Distro: Disable Distro Export to External Archive",
+                    Category = "Virtualization",
+                    Description =
+                        "Sets DisableDistributionExport=1 in Lxss Distros policy. Prevents users from running 'wsl --export' to create .tar.gz archives of installed WSL distributions. "
+                        + "Exporting a WSL distro creates a portable archive of the entire Linux file system — including any data, credentials, keys, or sensitive files stored within the Linux home directory. This archive can then be transferred to an unmanaged device. Blocking distro export prevents the Linux container's data from being extracted and exfiltrated outside the managed device.",
+                    Tags = ["wsl", "distro", "export", "data-exfiltration", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "Blocks WSL distro export; Linux container filesystem cannot be archived and transferred off-device.",
+                    ApplyOps = [RegOp.SetDword(Key, "DisableDistributionExport", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "DisableDistributionExport")],
+                    DetectOps = [RegOp.CheckDword(Key, "DisableDistributionExport", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "wsldist-disable-distro-import",
+                    Label = "WSL Distro: Disable Distro Import from External Archive",
+                    Category = "Virtualization",
+                    Description =
+                        "Sets DisableDistributionImport=1 in Lxss Distros policy. Prevents users from running 'wsl --import' to install a custom Linux distribution from a .tar.gz or OCI container archive. "
+                        + "Importing a custom WSL distribution bypasses all Microsoft Store distribution vetting. An attacker who has compromised a development machine can create a custom Linux distro archive with embedded persistence mechanisms, additional network listeners, or credential theft tooling, then import it on other machines using only standard user 'wsl' CLI commands. Disabling import forces all WSL distro installations through the Store pipeline.",
+                    Tags = ["wsl", "distro", "import", "lateral-movement", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "Blocks WSL custom distro import; all distributions must come from the Microsoft Store.",
+                    ApplyOps = [RegOp.SetDword(Key, "DisableDistributionImport", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "DisableDistributionImport")],
+                    DetectOps = [RegOp.CheckDword(Key, "DisableDistributionImport", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "wsldist-set-max-distros-allowed-2",
+                    Label = "WSL Distro: Limit Maximum Installed Distros to 2",
+                    Category = "Virtualization",
+                    Description =
+                        "Sets MaxDistributionsAllowed=2 in Lxss Distros policy. Caps the number of WSL distributions that a user can have installed simultaneously to 2. "
+                        + "Each installed WSL distribution adds to the attack surface: an additional Linux kernel, an additional network-accessible file system, and an additional set of Linux packages that may have known CVEs. Limiting users to 2 simultaneous distros (e.g., one primary development environment and one for testing) reduces this footprint while still supporting legitimate multi-environment development workflows.",
+                    Tags = ["wsl", "distro", "limit", "attack-surface", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "Max 2 WSL distros; limits Linux environment proliferation on managed devices.",
+                    ApplyOps = [RegOp.SetDword(Key, "MaxDistributionsAllowed", 2)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "MaxDistributionsAllowed")],
+                    DetectOps = [RegOp.CheckDword(Key, "MaxDistributionsAllowed", 2)],
+                },
+                new TweakDef
+                {
+                    Id = "wsldist-require-admin-for-distro-removal",
+                    Label = "WSL Distro: Require Administrative Approval to Unregister Distros",
+                    Category = "Virtualization",
+                    Description =
+                        "Sets RequireAdminForDistributionRemoval=1 in Lxss Distros policy. Requires administrator privileges to unregister or remove a WSL distribution via 'wsl --unregister'. "
+                        + "If a WSL distro becomes compromised, malware running within the Linux environment may attempt to cover its tracks by unregistering the distro after data exfiltration, destroying forensic evidence. Requiring admin elevation to remove a distro ensures that Linux environment removal is a deliberate IT/admin action, not something malware inside the WSL container can trigger via WSL CLI commands.",
+                    Tags = ["wsl", "distro", "removal", "forensics", "admin"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "Admin required to unregister WSL distros; prevents malware from destroying Linux container forensic evidence.",
+                    ApplyOps = [RegOp.SetDword(Key, "RequireAdminForDistributionRemoval", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "RequireAdminForDistributionRemoval")],
+                    DetectOps = [RegOp.CheckDword(Key, "RequireAdminForDistributionRemoval", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "wsldist-disable-distro-version-downgrade",
+                    Label = "WSL Distro: Block Downgrading Distros to WSL 1 Mode",
+                    Category = "Virtualization",
+                    Description =
+                        "Sets DisableDistributionVersionDowngrade=1 in Lxss Distros policy. Prevents users from converting installed WSL 2 distributions back to WSL 1 mode via 'wsl --set-version'. "
+                        + "WSL 1 uses a translation layer (instead of a real Linux kernel) that is significantly more permissive in its Windows-Linux boundary enforcement. WSL 2 uses a Hyper-V lightweight VM with stronger isolation. Downgrading to WSL 1 weakens the isolation model and re-enables file system access patterns that WSL 2's VM architecture blocks, potentially creating a security regression on machines where WSL 2 was specifically required for its isolation guarantees.",
+                    Tags = ["wsl", "wsl1", "wsl2", "isolation", "downgrade"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "Prevents WSL 2→WSL 1 downgrade; preserves Hyper-V VM isolation for all distros.",
+                    ApplyOps = [RegOp.SetDword(Key, "DisableDistributionVersionDowngrade", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "DisableDistributionVersionDowngrade")],
+                    DetectOps = [RegOp.CheckDword(Key, "DisableDistributionVersionDowngrade", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "wsldist-disable-distro-backup-creation",
+                    Label = "WSL Distro: Disable Automatic Distro Backup Creation",
+                    Category = "Virtualization",
+                    Description =
+                        "Sets DisableDistributionBackup=1 in Lxss Distros policy. Prevents automatic backup snapshots of WSL distribution state from being written to the Windows user profile directory. "
+                        + "WSL distribution backups are compressed archives of the Linux VHD that can be several gigabytes in size. On managed devices with roaming profiles or OneDrive-synced user profiles, these large backup files are undesirably synchronised to cloud storage, consuming bandwidth and cloud quota. Additionally, backups may contain sensitive Linux-resident credentials.",
+                    Tags = ["wsl", "backup", "vhd", "profile", "cloud-sync"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 2,
+                    SafetyRating = 5,
+                    ImpactNote = "No automatic WSL distro backups; prevents large Linux VHD archives from consuming cloud sync quota.",
+                    ApplyOps = [RegOp.SetDword(Key, "DisableDistributionBackup", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "DisableDistributionBackup")],
+                    DetectOps = [RegOp.CheckDword(Key, "DisableDistributionBackup", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "wsldist-enable-distro-audit-logging",
+                    Label = "WSL Distro: Enable Audit Logging for Distro Install and Remove Events",
+                    Category = "Virtualization",
+                    Description =
+                        "Sets EnableDistributionAuditLogging=1 in Lxss Distros policy. Enables Security Event Log entries when WSL distributions are registered (installed), unregistered (removed), or converted between WSL 1/2 modes. "
+                        + "Without distro lifecycle logging, there is no Security event log record of when Linux environments were created or deleted on a machine. If an attacker installs a WSL distro for lateral movement and then removes it to destroy evidence, the only forensic trace would be file system artefacts. Event log entries for distro lifecycle operations enable detection rules in SIEM systems.",
+                    Tags = ["wsl", "audit", "logging", "siem", "lifecycle"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "Security log entries for WSL distro install/remove; enables SIEM detection of Linux environment manipulation.",
+                    ApplyOps = [RegOp.SetDword(Key, "EnableDistributionAuditLogging", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "EnableDistributionAuditLogging")],
+                    DetectOps = [RegOp.CheckDword(Key, "EnableDistributionAuditLogging", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "wsldist-disable-distro-rename",
+                    Label = "WSL Distro: Disable User Renaming of Installed Distros",
+                    Category = "Virtualization",
+                    Description =
+                        "Sets DisableDistributionRename=1 in Lxss Distros policy. Prevents users from renaming installed WSL distributions via 'wsl --rename' or through the Windows registry. "
+                        + "Distribution names are used by monitoring tools, DLP agents, and endpoint security software to identify WSL environments and apply appropriate policies. If a user renames a restricted distribution (e.g., a distro named 'blocked-distro') to an unrestricted name, policy enforcement based on distribution identity may be bypassed. Locking distribution names preserves the integrity of name-based policy enforcement.",
+                    Tags = ["wsl", "distro", "rename", "policy-bypass", "identity"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 2,
+                    SafetyRating = 5,
+                    ImpactNote = "Distro names locked; prevents renaming to bypass name-based policy enforcement.",
+                    ApplyOps = [RegOp.SetDword(Key, "DisableDistributionRename", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "DisableDistributionRename")],
+                    DetectOps = [RegOp.CheckDword(Key, "DisableDistributionRename", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "wsldist-disable-distro-updates-without-approval",
+                    Label = "WSL Distro: Require Admin Approval for Distro Auto-Updates",
+                    Category = "Virtualization",
+                    Description =
+                        "Sets RequireAdminForDistributionUpdates=1 in Lxss Distros policy. Requires administrator approval before a WSL distribution is allowed to automatically update its base image to a newer version from the Microsoft Store. "
+                        + "While updating a WSL base image is generally desirable for security patch coverage, uncontrolled automatic updates can change the Linux environment's toolchain version, breaking developer builds that depend on specific library or compiler versions. Requiring admin approval gates distribution updates through change management, ensuring updates are tested before deployment.",
+                    Tags = ["wsl", "distro", "updates", "change-management", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 2,
+                    SafetyRating = 5,
+                    ImpactNote = "WSL distro updates require admin approval; prevents uncontrolled auto-updates breaking environment baselines.",
+                    ApplyOps = [RegOp.SetDword(Key, "RequireAdminForDistributionUpdates", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "RequireAdminForDistributionUpdates")],
+                    DetectOps = [RegOp.CheckDword(Key, "RequireAdminForDistributionUpdates", 1)],
+                },
+            ];
     }
 
     // ── WslFileSystemPolicy ──
@@ -3301,179 +3328,190 @@ internal static class PolicySubsystems
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Lxss\FileSystem";
 
         public static IReadOnlyList<TweakDef> Data =>
-        [
-            new TweakDef
-            {
-                Id = "wslfs-disable-windows-drive-automount",
-                Label = "WSL Filesystem: Disable Auto-Mount of Windows Drives in WSL",
-                Category = "Virtualization",
-                Description = "Sets DisableWindowsDriveAutomount=1 in Lxss FileSystem policy. Prevents WSL from automatically mounting Windows drive letters (C:, D:, etc.) under /mnt/ when a terminal session starts. " +
-                    "Auto-mounting of Windows drives gives every process within the WSL environment — including any Linux malware — unrestricted read/write access to the full Windows user profile, including OneDrive, Documents, and AppData. With auto-mount disabled, a compromised Linux process cannot traverse from /mnt/c to Windows system paths without an explicit user mount command.",
-                Tags = ["wsl", "filesystem", "automount", "drvfs", "isolation"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 4,
-                ImpactNote = "Windows drives not auto-mounted in WSL; Linux processes cannot access Windows file system without explicit mount.",
-                ApplyOps = [RegOp.SetDword(Key, "DisableWindowsDriveAutomount", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "DisableWindowsDriveAutomount")],
-                DetectOps = [RegOp.CheckDword(Key, "DisableWindowsDriveAutomount", 1)],
-            },
-            new TweakDef
-            {
-                Id = "wslfs-disable-network-drive-mount",
-                Label = "WSL Filesystem: Disable Mounting of Network UNC Paths in WSL",
-                Category = "Virtualization",
-                Description = "Sets DisableNetworkDriveMount=1 in Lxss FileSystem policy. Prevents WSL from mounting UNC paths (\\\\server\\share) or mapped network drives in the WSL file system. " +
-                    "Allowing Linux processes to mount network shares expands the blast radius of WSL-based compromise to network-attached storage. Ransomware running in WSL with network drive access can encrypt network share contents with Linux-native encryption tools (openssl, gpg) that may not be detected by Windows-based endpoint protection monitoring network path writes.",
-                Tags = ["wsl", "filesystem", "network-drive", "unc", "ransomware"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                ImpactNote = "UNC/network paths not mountable in WSL; Linux processes cannot reach network shares.",
-                ApplyOps = [RegOp.SetDword(Key, "DisableNetworkDriveMount", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "DisableNetworkDriveMount")],
-                DetectOps = [RegOp.CheckDword(Key, "DisableNetworkDriveMount", 1)],
-            },
-            new TweakDef
-            {
-                Id = "wslfs-disable-wsl-host-mount",
-                Label = "WSL Filesystem: Disable WSL Host Physical Disk Mount (wsl --mount)",
-                Category = "Virtualization",
-                Description = "Sets DisableHostDiskMount=1 in Lxss FileSystem policy. Blocks the 'wsl --mount' command that allows a user to attach a physical disk or disk image directly into the WSL 2 VM, bypassing Windows file system filters. " +
-                    "The 'wsl --mount' feature was designed for accessing Linux-native file systems (ext4, btrfs) on physical disks. However, it also allows attaching NTFS volumes directly into the WSL VM's kernel, bypassing Windows NTFS ACLs and file system minifilter drivers (including DLP, AV, and EDR file access monitors). Blocking this command eliminates a Windows security control bypass vector.",
-                Tags = ["wsl", "filesystem", "disk-mount", "host-mount", "filter-bypass"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                ImpactNote = "Physical disk mount into WSL blocked; prevents Windows file system filter driver bypass via wsl --mount.",
-                ApplyOps = [RegOp.SetDword(Key, "DisableHostDiskMount", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "DisableHostDiskMount")],
-                DetectOps = [RegOp.CheckDword(Key, "DisableHostDiskMount", 1)],
-            },
-            new TweakDef
-            {
-                Id = "wslfs-disable-bind-mount",
-                Label = "WSL Filesystem: Disable Linux Bind Mounts Across Distro Boundaries",
-                Category = "Virtualization",
-                Description = "Sets DisableBindMount=1 in Lxss FileSystem policy. Prevents the use of Linux bind mounts within WSL that would map one distro's file system paths into another distro's namespace. " +
-                    "In environments where multiple WSL distros coexist, allowing bind mounts between distros removes the isolation boundary between them. A compromised distro could bind-mount another distro's home directory or secret store, reading credentials that belong to a separate Linux identity/environment. Disabling cross-distro bind mounts preserves per-distro filesystem isolation.",
-                Tags = ["wsl", "filesystem", "bind-mount", "distro-isolation", "multi-distro"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Cross-distro bind mounts blocked; each WSL distro's filesystem remains isolated from sibling distros.",
-                ApplyOps = [RegOp.SetDword(Key, "DisableBindMount", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "DisableBindMount")],
-                DetectOps = [RegOp.CheckDword(Key, "DisableBindMount", 1)],
-            },
-            new TweakDef
-            {
-                Id = "wslfs-enforce-drvfs-read-only",
-                Label = "WSL Filesystem: Enforce DrvFs Windows Drive Mounts as Read-Only",
-                Category = "Virtualization",
-                Description = "Sets EnforceDrvFsReadOnly=1 in Lxss FileSystem policy. Forces all DrvFs mounts of Windows drives (e.g., /mnt/c) to be mounted read-only, preventing Linux processes from writing to the Windows file system through the DrvFs mount point. " +
-                    "This is the strongest DrvFs hardening mode — Linux tools can read Windows files (e.g., build input files) but cannot write to Windows folders. Write-only WSL access to Windows paths is the most common vector for WSL-based file destruction: ransomware in WSL can encrypt /mnt/c/Users/... using Linux commands that bypass Windows AV real-time protection.",
-                Tags = ["wsl", "drvfs", "read-only", "ransomware", "write-protection"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 5,
-                SafetyRating = 4,
-                ImpactNote = "DrvFs mounts are read-only; Linux processes cannot write to Windows drives. Cross-environment write workflows will break.",
-                ApplyOps = [RegOp.SetDword(Key, "EnforceDrvFsReadOnly", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "EnforceDrvFsReadOnly")],
-                DetectOps = [RegOp.CheckDword(Key, "EnforceDrvFsReadOnly", 1)],
-            },
-            new TweakDef
-            {
-                Id = "wslfs-disable-drvfs-metadata-mode",
-                Label = "WSL Filesystem: Disable DrvFs Metadata Mode (Linux Permission Emulation)",
-                Category = "Virtualization",
-                Description = "Sets DisableDrvFsMetadata=1 in Lxss FileSystem policy. Disables the DrvFs metadata extension that stores Linux file permissions, ownership (UID/GID), and extended attributes in NTFS extended attributes on Windows files. " +
-                    "DrvFs metadata mode allows Linux processes to mark Windows files as setuid-root or setgid, creating files in Windows directories that, if subsequently executed by a Windows process, might behave unexpectedly due to permission metadata misinterpretation. While Windows ignores setuid bits, disabling metadata prevents Linux permission artefacts from being embedded in Windows file system objects.",
-                Tags = ["wsl", "drvfs", "metadata", "permissions", "setuid"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                ImpactNote = "No Linux permission metadata stored on Windows NTFS files; DrvFs presents all files with default umask ownership.",
-                ApplyOps = [RegOp.SetDword(Key, "DisableDrvFsMetadata", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "DisableDrvFsMetadata")],
-                DetectOps = [RegOp.CheckDword(Key, "DisableDrvFsMetadata", 1)],
-            },
-            new TweakDef
-            {
-                Id = "wslfs-disable-plan9-mount-server",
-                Label = "WSL Filesystem: Disable Plan 9 File System Mount Server",
-                Category = "Virtualization",
-                Description = "Sets DisablePlan9MountServer=1 in Lxss FileSystem policy. Disables the 9P (Plan 9 File System Protocol) server running inside the WSL 2 VM that provides the Windows←→Linux file sharing capability over a virtual Hyper-V vsock connection. " +
-                    "The 9P file server in the WSL VM is the component that handles all cross-OS file access. If a vulnerability exists in the 9P server implementation, it could be exploited by a compromised Windows process to escalate into the WSL VM, or by a compromised Linux process to reach the Windows namespace. Disabling 9P eliminates this boundary component entirely.",
-                Tags = ["wsl", "plan9", "9p", "vsock", "attack-surface"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 4,
-                ImpactNote = "9P file server disabled; cross-OS file sharing via /mnt/ will stop working entirely.",
-                ApplyOps = [RegOp.SetDword(Key, "DisablePlan9MountServer", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "DisablePlan9MountServer")],
-                DetectOps = [RegOp.CheckDword(Key, "DisablePlan9MountServer", 1)],
-            },
-            new TweakDef
-            {
-                Id = "wslfs-set-vhd-disk-quota-20gb",
-                Label = "WSL Filesystem: Set VHD Disk Quota Maximum to 20 GB",
-                Category = "Virtualization",
-                Description = "Sets VhdDiskQuotaGB=20 in Lxss FileSystem policy. Limits the maximum size that a WSL virtual hard disk (ext4.vhdx) can grow to 20 GB per distribution, preventing runaway Linux processes from filling the host disk. " +
-                    "WSL 2 VHD files start small and dynamically expand on demand up to a default cap of 1 TB. Linux processes performing large operations (building Docker images, running large ML training jobs, downloading large datasets) can inadvertently — or intentionally — fill the host disk by consuming the VHD expansion headroom. A 20 GB cap ensures WSL disk usage remains bounded.",
-                Tags = ["wsl", "vhd", "disk-quota", "disk-space", "ext4"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "WSL VHD limited to 20 GB; Linux environments filling the host disk mitigation.",
-                ApplyOps = [RegOp.SetDword(Key, "VhdDiskQuotaGB", 20)],
-                RemoveOps = [RegOp.DeleteValue(Key, "VhdDiskQuotaGB")],
-                DetectOps = [RegOp.CheckDword(Key, "VhdDiskQuotaGB", 20)],
-            },
-            new TweakDef
-            {
-                Id = "wslfs-enable-filesystem-access-audit",
-                Label = "WSL Filesystem: Enable Cross-OS Filesystem Access Audit Logging",
-                Category = "Virtualization",
-                Description = "Sets EnableFileSystemAccessAudit=1 in Lxss FileSystem policy. Enables logging of all file access events that cross the Windows-Linux filesystem boundary via DrvFs, writing entries to the Security event log under the Windows Subsystem for Linux provider. " +
-                    "Without DrvFs access auditing, there is no Windows Security event log record of which Linux processes accessed which Windows files through /mnt/. This makes it impossible to determine the scope of a WSL-based file access incident post-breach. Audit logging of DrvFs access enables forensic reconstruction and real-time SIEM alerting on unexpected Linux access to sensitive Windows paths.",
-                Tags = ["wsl", "filesystem", "audit", "siem", "drvfs"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "DrvFs cross-OS access events logged to Security event log; enables forensic reconstruction of Linux file access incidents.",
-                ApplyOps = [RegOp.SetDword(Key, "EnableFileSystemAccessAudit", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "EnableFileSystemAccessAudit")],
-                DetectOps = [RegOp.CheckDword(Key, "EnableFileSystemAccessAudit", 1)],
-            },
-            new TweakDef
-            {
-                Id = "wslfs-disable-tmpfs-overflow-to-host",
-                Label = "WSL Filesystem: Disable tmpfs Overflow Spilling to Windows Host Disk",
-                Category = "Virtualization",
-                Description = "Sets DisableTmpfsHostOverflow=1 in Lxss FileSystem policy. Prevents the WSL VM's in-memory tmpfs (/tmp, /run) from spilling overflow pages onto the Windows host disk when the VM's allocated RAM is exhausted. " +
-                    "When WSL processes fill /tmp with large temporary files and the VM's RAM is exhausted, the kernel may begin swapping tmpfs pages to a backing swap store. Allowing this swap store to be on the host Windows disk effectively extends the VM's writable footprint onto the Windows NTFS volume in a way that bypasses the explicit DrvFs mount controls, since swap activity occurs at a lower abstraction layer.",
-                Tags = ["wsl", "tmpfs", "swap", "host-disk", "overflow"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                ImpactNote = "tmpfs overflow to host disk blocked; WSL VM memory pressure will OOM-kill processes rather than spill to host.",
-                ApplyOps = [RegOp.SetDword(Key, "DisableTmpfsHostOverflow", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "DisableTmpfsHostOverflow")],
-                DetectOps = [RegOp.CheckDword(Key, "DisableTmpfsHostOverflow", 1)],
-            },
-        ];
-
+            [
+                new TweakDef
+                {
+                    Id = "wslfs-disable-windows-drive-automount",
+                    Label = "WSL Filesystem: Disable Auto-Mount of Windows Drives in WSL",
+                    Category = "Virtualization",
+                    Description =
+                        "Sets DisableWindowsDriveAutomount=1 in Lxss FileSystem policy. Prevents WSL from automatically mounting Windows drive letters (C:, D:, etc.) under /mnt/ when a terminal session starts. "
+                        + "Auto-mounting of Windows drives gives every process within the WSL environment — including any Linux malware — unrestricted read/write access to the full Windows user profile, including OneDrive, Documents, and AppData. With auto-mount disabled, a compromised Linux process cannot traverse from /mnt/c to Windows system paths without an explicit user mount command.",
+                    Tags = ["wsl", "filesystem", "automount", "drvfs", "isolation"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 4,
+                    ImpactNote = "Windows drives not auto-mounted in WSL; Linux processes cannot access Windows file system without explicit mount.",
+                    ApplyOps = [RegOp.SetDword(Key, "DisableWindowsDriveAutomount", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "DisableWindowsDriveAutomount")],
+                    DetectOps = [RegOp.CheckDword(Key, "DisableWindowsDriveAutomount", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "wslfs-disable-network-drive-mount",
+                    Label = "WSL Filesystem: Disable Mounting of Network UNC Paths in WSL",
+                    Category = "Virtualization",
+                    Description =
+                        "Sets DisableNetworkDriveMount=1 in Lxss FileSystem policy. Prevents WSL from mounting UNC paths (\\\\server\\share) or mapped network drives in the WSL file system. "
+                        + "Allowing Linux processes to mount network shares expands the blast radius of WSL-based compromise to network-attached storage. Ransomware running in WSL with network drive access can encrypt network share contents with Linux-native encryption tools (openssl, gpg) that may not be detected by Windows-based endpoint protection monitoring network path writes.",
+                    Tags = ["wsl", "filesystem", "network-drive", "unc", "ransomware"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "UNC/network paths not mountable in WSL; Linux processes cannot reach network shares.",
+                    ApplyOps = [RegOp.SetDword(Key, "DisableNetworkDriveMount", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "DisableNetworkDriveMount")],
+                    DetectOps = [RegOp.CheckDword(Key, "DisableNetworkDriveMount", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "wslfs-disable-wsl-host-mount",
+                    Label = "WSL Filesystem: Disable WSL Host Physical Disk Mount (wsl --mount)",
+                    Category = "Virtualization",
+                    Description =
+                        "Sets DisableHostDiskMount=1 in Lxss FileSystem policy. Blocks the 'wsl --mount' command that allows a user to attach a physical disk or disk image directly into the WSL 2 VM, bypassing Windows file system filters. "
+                        + "The 'wsl --mount' feature was designed for accessing Linux-native file systems (ext4, btrfs) on physical disks. However, it also allows attaching NTFS volumes directly into the WSL VM's kernel, bypassing Windows NTFS ACLs and file system minifilter drivers (including DLP, AV, and EDR file access monitors). Blocking this command eliminates a Windows security control bypass vector.",
+                    Tags = ["wsl", "filesystem", "disk-mount", "host-mount", "filter-bypass"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "Physical disk mount into WSL blocked; prevents Windows file system filter driver bypass via wsl --mount.",
+                    ApplyOps = [RegOp.SetDword(Key, "DisableHostDiskMount", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "DisableHostDiskMount")],
+                    DetectOps = [RegOp.CheckDword(Key, "DisableHostDiskMount", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "wslfs-disable-bind-mount",
+                    Label = "WSL Filesystem: Disable Linux Bind Mounts Across Distro Boundaries",
+                    Category = "Virtualization",
+                    Description =
+                        "Sets DisableBindMount=1 in Lxss FileSystem policy. Prevents the use of Linux bind mounts within WSL that would map one distro's file system paths into another distro's namespace. "
+                        + "In environments where multiple WSL distros coexist, allowing bind mounts between distros removes the isolation boundary between them. A compromised distro could bind-mount another distro's home directory or secret store, reading credentials that belong to a separate Linux identity/environment. Disabling cross-distro bind mounts preserves per-distro filesystem isolation.",
+                    Tags = ["wsl", "filesystem", "bind-mount", "distro-isolation", "multi-distro"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "Cross-distro bind mounts blocked; each WSL distro's filesystem remains isolated from sibling distros.",
+                    ApplyOps = [RegOp.SetDword(Key, "DisableBindMount", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "DisableBindMount")],
+                    DetectOps = [RegOp.CheckDword(Key, "DisableBindMount", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "wslfs-enforce-drvfs-read-only",
+                    Label = "WSL Filesystem: Enforce DrvFs Windows Drive Mounts as Read-Only",
+                    Category = "Virtualization",
+                    Description =
+                        "Sets EnforceDrvFsReadOnly=1 in Lxss FileSystem policy. Forces all DrvFs mounts of Windows drives (e.g., /mnt/c) to be mounted read-only, preventing Linux processes from writing to the Windows file system through the DrvFs mount point. "
+                        + "This is the strongest DrvFs hardening mode — Linux tools can read Windows files (e.g., build input files) but cannot write to Windows folders. Write-only WSL access to Windows paths is the most common vector for WSL-based file destruction: ransomware in WSL can encrypt /mnt/c/Users/... using Linux commands that bypass Windows AV real-time protection.",
+                    Tags = ["wsl", "drvfs", "read-only", "ransomware", "write-protection"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 5,
+                    SafetyRating = 4,
+                    ImpactNote =
+                        "DrvFs mounts are read-only; Linux processes cannot write to Windows drives. Cross-environment write workflows will break.",
+                    ApplyOps = [RegOp.SetDword(Key, "EnforceDrvFsReadOnly", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "EnforceDrvFsReadOnly")],
+                    DetectOps = [RegOp.CheckDword(Key, "EnforceDrvFsReadOnly", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "wslfs-disable-drvfs-metadata-mode",
+                    Label = "WSL Filesystem: Disable DrvFs Metadata Mode (Linux Permission Emulation)",
+                    Category = "Virtualization",
+                    Description =
+                        "Sets DisableDrvFsMetadata=1 in Lxss FileSystem policy. Disables the DrvFs metadata extension that stores Linux file permissions, ownership (UID/GID), and extended attributes in NTFS extended attributes on Windows files. "
+                        + "DrvFs metadata mode allows Linux processes to mark Windows files as setuid-root or setgid, creating files in Windows directories that, if subsequently executed by a Windows process, might behave unexpectedly due to permission metadata misinterpretation. While Windows ignores setuid bits, disabling metadata prevents Linux permission artefacts from being embedded in Windows file system objects.",
+                    Tags = ["wsl", "drvfs", "metadata", "permissions", "setuid"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 2,
+                    SafetyRating = 5,
+                    ImpactNote = "No Linux permission metadata stored on Windows NTFS files; DrvFs presents all files with default umask ownership.",
+                    ApplyOps = [RegOp.SetDword(Key, "DisableDrvFsMetadata", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "DisableDrvFsMetadata")],
+                    DetectOps = [RegOp.CheckDword(Key, "DisableDrvFsMetadata", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "wslfs-disable-plan9-mount-server",
+                    Label = "WSL Filesystem: Disable Plan 9 File System Mount Server",
+                    Category = "Virtualization",
+                    Description =
+                        "Sets DisablePlan9MountServer=1 in Lxss FileSystem policy. Disables the 9P (Plan 9 File System Protocol) server running inside the WSL 2 VM that provides the Windows←→Linux file sharing capability over a virtual Hyper-V vsock connection. "
+                        + "The 9P file server in the WSL VM is the component that handles all cross-OS file access. If a vulnerability exists in the 9P server implementation, it could be exploited by a compromised Windows process to escalate into the WSL VM, or by a compromised Linux process to reach the Windows namespace. Disabling 9P eliminates this boundary component entirely.",
+                    Tags = ["wsl", "plan9", "9p", "vsock", "attack-surface"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 4,
+                    ImpactNote = "9P file server disabled; cross-OS file sharing via /mnt/ will stop working entirely.",
+                    ApplyOps = [RegOp.SetDword(Key, "DisablePlan9MountServer", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "DisablePlan9MountServer")],
+                    DetectOps = [RegOp.CheckDword(Key, "DisablePlan9MountServer", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "wslfs-set-vhd-disk-quota-20gb",
+                    Label = "WSL Filesystem: Set VHD Disk Quota Maximum to 20 GB",
+                    Category = "Virtualization",
+                    Description =
+                        "Sets VhdDiskQuotaGB=20 in Lxss FileSystem policy. Limits the maximum size that a WSL virtual hard disk (ext4.vhdx) can grow to 20 GB per distribution, preventing runaway Linux processes from filling the host disk. "
+                        + "WSL 2 VHD files start small and dynamically expand on demand up to a default cap of 1 TB. Linux processes performing large operations (building Docker images, running large ML training jobs, downloading large datasets) can inadvertently — or intentionally — fill the host disk by consuming the VHD expansion headroom. A 20 GB cap ensures WSL disk usage remains bounded.",
+                    Tags = ["wsl", "vhd", "disk-quota", "disk-space", "ext4"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "WSL VHD limited to 20 GB; Linux environments filling the host disk mitigation.",
+                    ApplyOps = [RegOp.SetDword(Key, "VhdDiskQuotaGB", 20)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "VhdDiskQuotaGB")],
+                    DetectOps = [RegOp.CheckDword(Key, "VhdDiskQuotaGB", 20)],
+                },
+                new TweakDef
+                {
+                    Id = "wslfs-enable-filesystem-access-audit",
+                    Label = "WSL Filesystem: Enable Cross-OS Filesystem Access Audit Logging",
+                    Category = "Virtualization",
+                    Description =
+                        "Sets EnableFileSystemAccessAudit=1 in Lxss FileSystem policy. Enables logging of all file access events that cross the Windows-Linux filesystem boundary via DrvFs, writing entries to the Security event log under the Windows Subsystem for Linux provider. "
+                        + "Without DrvFs access auditing, there is no Windows Security event log record of which Linux processes accessed which Windows files through /mnt/. This makes it impossible to determine the scope of a WSL-based file access incident post-breach. Audit logging of DrvFs access enables forensic reconstruction and real-time SIEM alerting on unexpected Linux access to sensitive Windows paths.",
+                    Tags = ["wsl", "filesystem", "audit", "siem", "drvfs"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote =
+                        "DrvFs cross-OS access events logged to Security event log; enables forensic reconstruction of Linux file access incidents.",
+                    ApplyOps = [RegOp.SetDword(Key, "EnableFileSystemAccessAudit", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "EnableFileSystemAccessAudit")],
+                    DetectOps = [RegOp.CheckDword(Key, "EnableFileSystemAccessAudit", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "wslfs-disable-tmpfs-overflow-to-host",
+                    Label = "WSL Filesystem: Disable tmpfs Overflow Spilling to Windows Host Disk",
+                    Category = "Virtualization",
+                    Description =
+                        "Sets DisableTmpfsHostOverflow=1 in Lxss FileSystem policy. Prevents the WSL VM's in-memory tmpfs (/tmp, /run) from spilling overflow pages onto the Windows host disk when the VM's allocated RAM is exhausted. "
+                        + "When WSL processes fill /tmp with large temporary files and the VM's RAM is exhausted, the kernel may begin swapping tmpfs pages to a backing swap store. Allowing this swap store to be on the host Windows disk effectively extends the VM's writable footprint onto the Windows NTFS volume in a way that bypasses the explicit DrvFs mount controls, since swap activity occurs at a lower abstraction layer.",
+                    Tags = ["wsl", "tmpfs", "swap", "host-disk", "overflow"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 2,
+                    SafetyRating = 5,
+                    ImpactNote = "tmpfs overflow to host disk blocked; WSL VM memory pressure will OOM-kill processes rather than spill to host.",
+                    ApplyOps = [RegOp.SetDword(Key, "DisableTmpfsHostOverflow", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "DisableTmpfsHostOverflow")],
+                    DetectOps = [RegOp.CheckDword(Key, "DisableTmpfsHostOverflow", 1)],
+                },
+            ];
     }
 
     // ── WslKernelUpdatePolicy ──
@@ -3482,179 +3520,190 @@ internal static class PolicySubsystems
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Lxss\Updates";
 
         public static IReadOnlyList<TweakDef> Data =>
-        [
-            new TweakDef
-            {
-                Id = "wslkupd-pin-kernel-update-channel-stable",
-                Label = "WSL Kernel Update: Pin WSL Kernel Updates to Stable Channel",
-                Category = "Virtualization",
-                Description = "Sets KernelUpdateChannel=0 in Lxss Updates policy. Locks the WSL kernel update distribution channel to the 'Stable' channel (0 = stable release), preventing the system from automatically switching to preview or developer channel kernel builds via Windows Update. " +
-                    "Preview and developer channel WSL kernel builds may contain experimental features or recently introduced security changes that have not undergone the full Windows Update quality validation cycle. In enterprise environments, pinning to the stable channel ensures that WSL kernel updates receive the same update quality bar as production Windows kernel updates, reducing the risk of a kernel regression breaking production developer workflows.",
-                Tags = ["wsl", "kernel", "update-channel", "stable", "enterprise"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "WSL kernel updates restricted to Stable channel; no preview kernel builds deployed via Windows Update.",
-                ApplyOps = [RegOp.SetDword(Key, "KernelUpdateChannel", 0)],
-                RemoveOps = [RegOp.DeleteValue(Key, "KernelUpdateChannel")],
-                DetectOps = [RegOp.CheckDword(Key, "KernelUpdateChannel", 0)],
-            },
-            new TweakDef
-            {
-                Id = "wslkupd-enforce-kernel-signature-verification",
-                Label = "WSL Kernel Update: Require Digital Signature Verification on Kernel Updates",
-                Category = "Virtualization",
-                Description = "Sets EnforceKernelSignatureVerification=1 in Lxss Updates policy. Requires that every WSL kernel update package delivered via Microsoft Update is verified against Microsoft's Authenticode certificate chain before being applied, blocking tampered or unsigned kernel update packages. " +
-                    "Microsoft Update delivery of WSL kernel updates uses HTTPS transport, but a compromised Windows Update cache, WSUS proxy, or a threat actor with WSUS-level man-in-the-proxy access could substitute a malicious kernel package. Requiring explicit Authenticode signature verification ensures that even a package delivered through a compromised update pipeline is rejected if it is not signed by Microsoft's production signing keys.",
-                Tags = ["wsl", "kernel", "signature", "update", "supply-chain"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                ImpactNote = "WSL kernel packages require valid Microsoft Authenticode signature; tampered packages rejected before kernel update.",
-                ApplyOps = [RegOp.SetDword(Key, "EnforceKernelSignatureVerification", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "EnforceKernelSignatureVerification")],
-                DetectOps = [RegOp.CheckDword(Key, "EnforceKernelSignatureVerification", 1)],
-            },
-            new TweakDef
-            {
-                Id = "wslkupd-block-manual-kernel-downgrade",
-                Label = "WSL Kernel Update: Block Manual WSL Kernel Version Downgrade",
-                Category = "Virtualization",
-                Description = "Sets DisableKernelVersionDowngrade=1 in Lxss Updates policy. Prevents users from manually reverting the WSL Linux kernel to an older version via 'wsl --update --rollback' or by directly replacing the kernel package files. " +
-                    "A threat actor who knows of an unpatched kernel vulnerability in an older WSL kernel version may attempt to roll the kernel back to the vulnerable version after the enterprise has applied a security patch. Blocking downgrade ensures that once a security-relevant WSL kernel update has been applied, it cannot be reversed without administrative action, enforcing a one-way patch ratchet.",
-                Tags = ["wsl", "kernel", "downgrade", "patch", "rollback"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "WSL kernel rollback via --rollback blocked; applied kernel security patches cannot be reversed by standard users.",
-                ApplyOps = [RegOp.SetDword(Key, "DisableKernelVersionDowngrade", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "DisableKernelVersionDowngrade")],
-                DetectOps = [RegOp.CheckDword(Key, "DisableKernelVersionDowngrade", 1)],
-            },
-            new TweakDef
-            {
-                Id = "wslkupd-enable-urgent-kernel-security-updates",
-                Label = "WSL Kernel Update: Enable Urgent Security Updates via Windows Update",
-                Category = "Virtualization",
-                Description = "Sets AllowUrgentKernelSecurityUpdates=1 in Lxss Updates policy. Allows the Windows Update service to automatically apply WSL kernel updates that are classified as 'Critical' or 'Security Update' severity without waiting for the standard Patch Tuesday deployment cycle. " +
-                    "WSL kernel security vulnerabilities that are being actively exploited in the wild may be patched with emergency out-of-band updates. Without this policy, enterprises using slow deployment rings (e.g., broad ring with 14–30 day deferral) may leave systems vulnerable for weeks after Microsoft releases an emergency patch. Enabling urgent update delivery ensures critical WSL kernel fixes bypass deployment ring deferrals.",
-                Tags = ["wsl", "kernel", "security-update", "critical", "patch"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                ImpactNote = "Critical WSL kernel security updates applied immediately; bypasses deployment ring deferrals for emergency patches.",
-                ApplyOps = [RegOp.SetDword(Key, "AllowUrgentKernelSecurityUpdates", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "AllowUrgentKernelSecurityUpdates")],
-                DetectOps = [RegOp.CheckDword(Key, "AllowUrgentKernelSecurityUpdates", 1)],
-            },
-            new TweakDef
-            {
-                Id = "wslkupd-set-kernel-update-defer-days-0",
-                Label = "WSL Kernel Update: Disable WSL Kernel Update Deferral (Apply Immediately)",
-                Category = "Virtualization",
-                Description = "Sets KernelUpdateDeferralDays=0 in Lxss Updates policy. Sets the WSL kernel update deferral period to zero days, ensuring that WSL kernel updates are applied as soon as they are delivered and approved in the Windows Update service, with no additional deferral delay. " +
-                    "Unlike the Windows NT kernel which is updated on the monthly Patch Tuesday cadence, WSL kernel updates are typically small, targeted patches. Deferring them unnecessarily extends the window during which a known-patched WSL kernel vulnerability remains present. Setting deferral to zero ensures the enterprise's WSL kernel vulnerability exposure window matches the Windows Update delivery latency, not an additional IT-imposed delay.",
-                Tags = ["wsl", "kernel", "deferral", "patch", "timely"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                ImpactNote = "WSL kernel update deferral removed; updates applied as soon as Windows Update delivers them.",
-                ApplyOps = [RegOp.SetDword(Key, "KernelUpdateDeferralDays", 0)],
-                RemoveOps = [RegOp.DeleteValue(Key, "KernelUpdateDeferralDays")],
-                DetectOps = [RegOp.CheckDword(Key, "KernelUpdateDeferralDays", 0)],
-            },
-            new TweakDef
-            {
-                Id = "wslkupd-enable-kernel-update-audit-log",
-                Label = "WSL Kernel Update: Enable Security Event Log Entry on Kernel Update or Rollback",
-                Category = "Virtualization",
-                Description = "Sets EnableKernelUpdateAuditLog=1 in Lxss Updates policy. Causes a Security event log entry to be written whenever the WSL Linux kernel is updated to a new version or rolled back to a previous version, recording the previous and new kernel version strings. " +
-                    "Without audit logging of WSL kernel version changes, there is no Security event record of when WSL kernel updates were applied (or not applied) on a device. This makes it impossible to determine whether a managed device was running a vulnerable WSL kernel during a specific incident timeframe. Kernel version change events enable compliance managers to demonstrate patch deployment timelines and detect unexplained rollbacks.",
-                Tags = ["wsl", "kernel", "audit", "logging", "compliance"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Security log entry written on WSL kernel version change; kernel update history auditable in SIEM.",
-                ApplyOps = [RegOp.SetDword(Key, "EnableKernelUpdateAuditLog", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "EnableKernelUpdateAuditLog")],
-                DetectOps = [RegOp.CheckDword(Key, "EnableKernelUpdateAuditLog", 1)],
-            },
-            new TweakDef
-            {
-                Id = "wslkupd-block-user-manual-kernel-update",
-                Label = "WSL Kernel Update: Block Manual 'wsl --update' by Standard Users",
-                Category = "Virtualization",
-                Description = "Sets DisableUserManualKernelUpdate=1 in Lxss Updates policy. Removes the ability of standard (non-administrator) users to manually trigger WSL kernel updates via the 'wsl --update' command, restricting kernel update initiation to Windows Update and IT administrator action only. " +
-                    "While 'wsl --update' legitimately downloads the latest stable kernel, standard users initiating manual updates bypass the enterprise's staged Windows Update ring deployment schedule. If a specific kernel version is deferred in slow deployment rings due to a regression, users running 'wsl --update' would receive the update immediately, bypassing change management controls. Restricting update initiation to Windows Update enforces the enterprise deployment schedule.",
-                Tags = ["wsl", "kernel", "manual-update", "deployment-ring", "change-management"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                ImpactNote = "wsl --update blocked for standard users; WSL kernel updates controlled by Windows Update and admin action only.",
-                ApplyOps = [RegOp.SetDword(Key, "DisableUserManualKernelUpdate", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "DisableUserManualKernelUpdate")],
-                DetectOps = [RegOp.CheckDword(Key, "DisableUserManualKernelUpdate", 1)],
-            },
-            new TweakDef
-            {
-                Id = "wslkupd-enable-kernel-integrity-verification-on-boot",
-                Label = "WSL Kernel Update: Verify WSL Kernel Image Integrity at VM Start",
-                Category = "Virtualization",
-                Description = "Sets VerifyKernelIntegrityOnBoot=1 in Lxss Updates policy. Enables hash-based integrity verification of the WSL Linux kernel image file (vmlinux) against its stored signature each time a WSL session starts a new Hyper-V VM instance. " +
-                    "Without startup integrity verification, a threat actor with write access to the WSL kernel image path on the Windows file system can replace the kernel with a modified version that installs kernel-level hooks for all subsequent WSL sessions. Verifying the kernel image hash at each VM start ensures that any tampering with the stored kernel image is detected before the compromised kernel is loaded into the Hyper-V VM.",
-                Tags = ["wsl", "kernel", "integrity", "hash", "vm-start"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                ImpactNote = "WSL kernel image hash verified at each VM start; tampered kernel image detected before being loaded.",
-                ApplyOps = [RegOp.SetDword(Key, "VerifyKernelIntegrityOnBoot", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "VerifyKernelIntegrityOnBoot")],
-                DetectOps = [RegOp.CheckDword(Key, "VerifyKernelIntegrityOnBoot", 1)],
-            },
-            new TweakDef
-            {
-                Id = "wslkupd-block-preview-kernel-builds",
-                Label = "WSL Kernel Update: Block Preview and Insider WSL Kernel Preview Builds",
-                Category = "Virtualization",
-                Description = "Sets BlockPreviewKernelBuilds=1 in Lxss Updates policy. Prevents Windows Insider Preview and Windows Update Preview channels from delivering pre-release WSL Linux kernel builds to managed devices that are enrolled in preview rings for Windows OS preview builds. " +
-                    "Managed enterprise devices may be enrolled in Windows Insider rings for OS preview testing. However, preview WSL kernel builds may have known vulnerabilities, experimental security mitigations disabled, and debugging interfaces enabled that are inappropriate for production use. Blocking preview kernel builds ensures enterprise devices only receive production-quality WSL kernels regardless of their Windows Insider ring membership.",
-                Tags = ["wsl", "kernel", "preview", "insider", "enterprise"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Preview WSL kernel builds blocked even for Insider-enrolled devices; production kernels only.",
-                ApplyOps = [RegOp.SetDword(Key, "BlockPreviewKernelBuilds", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "BlockPreviewKernelBuilds")],
-                DetectOps = [RegOp.CheckDword(Key, "BlockPreviewKernelBuilds", 1)],
-            },
-            new TweakDef
-            {
-                Id = "wslkupd-require-restart-to-apply-kernel-update",
-                Label = "WSL Kernel Update: Require Full WSL Session Termination to Activate Kernel Updates",
-                Category = "Virtualization",
-                Description = "Sets RequireSessionRestartForKernelUpdate=1 in Lxss Updates policy. Requires that all running WSL distro sessions are fully terminated (wsl --shutdown) and a new Hyper-V VM is started before a delivered WSL kernel update becomes active. Prevents in-place kernel hot-patching that may skip the integrity verification startup checks. " +
-                    "Hot-patching-style kernel activation (patching a running VM's kernel in-memory) bypasses the startup integrity verification performed when a new VM is instantiated. By requiring a full session shutdown and VM restart after each kernel update, this policy ensures that the newly applied kernel image goes through the full chain-of-trust verification (signature check → AppArmor load → seccomp policy activation) before any distro sessions run on it.",
-                Tags = ["wsl", "kernel", "restart", "hot-patch", "chain-of-trust"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "WSL kernel updates require session restart to activate; hot-patch bypasses chain-of-trust checks prevented.",
-                ApplyOps = [RegOp.SetDword(Key, "RequireSessionRestartForKernelUpdate", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "RequireSessionRestartForKernelUpdate")],
-                DetectOps = [RegOp.CheckDword(Key, "RequireSessionRestartForKernelUpdate", 1)],
-            },
-        ];
-
+            [
+                new TweakDef
+                {
+                    Id = "wslkupd-pin-kernel-update-channel-stable",
+                    Label = "WSL Kernel Update: Pin WSL Kernel Updates to Stable Channel",
+                    Category = "Virtualization",
+                    Description =
+                        "Sets KernelUpdateChannel=0 in Lxss Updates policy. Locks the WSL kernel update distribution channel to the 'Stable' channel (0 = stable release), preventing the system from automatically switching to preview or developer channel kernel builds via Windows Update. "
+                        + "Preview and developer channel WSL kernel builds may contain experimental features or recently introduced security changes that have not undergone the full Windows Update quality validation cycle. In enterprise environments, pinning to the stable channel ensures that WSL kernel updates receive the same update quality bar as production Windows kernel updates, reducing the risk of a kernel regression breaking production developer workflows.",
+                    Tags = ["wsl", "kernel", "update-channel", "stable", "enterprise"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "WSL kernel updates restricted to Stable channel; no preview kernel builds deployed via Windows Update.",
+                    ApplyOps = [RegOp.SetDword(Key, "KernelUpdateChannel", 0)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "KernelUpdateChannel")],
+                    DetectOps = [RegOp.CheckDword(Key, "KernelUpdateChannel", 0)],
+                },
+                new TweakDef
+                {
+                    Id = "wslkupd-enforce-kernel-signature-verification",
+                    Label = "WSL Kernel Update: Require Digital Signature Verification on Kernel Updates",
+                    Category = "Virtualization",
+                    Description =
+                        "Sets EnforceKernelSignatureVerification=1 in Lxss Updates policy. Requires that every WSL kernel update package delivered via Microsoft Update is verified against Microsoft's Authenticode certificate chain before being applied, blocking tampered or unsigned kernel update packages. "
+                        + "Microsoft Update delivery of WSL kernel updates uses HTTPS transport, but a compromised Windows Update cache, WSUS proxy, or a threat actor with WSUS-level man-in-the-proxy access could substitute a malicious kernel package. Requiring explicit Authenticode signature verification ensures that even a package delivered through a compromised update pipeline is rejected if it is not signed by Microsoft's production signing keys.",
+                    Tags = ["wsl", "kernel", "signature", "update", "supply-chain"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote =
+                        "WSL kernel packages require valid Microsoft Authenticode signature; tampered packages rejected before kernel update.",
+                    ApplyOps = [RegOp.SetDword(Key, "EnforceKernelSignatureVerification", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "EnforceKernelSignatureVerification")],
+                    DetectOps = [RegOp.CheckDword(Key, "EnforceKernelSignatureVerification", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "wslkupd-block-manual-kernel-downgrade",
+                    Label = "WSL Kernel Update: Block Manual WSL Kernel Version Downgrade",
+                    Category = "Virtualization",
+                    Description =
+                        "Sets DisableKernelVersionDowngrade=1 in Lxss Updates policy. Prevents users from manually reverting the WSL Linux kernel to an older version via 'wsl --update --rollback' or by directly replacing the kernel package files. "
+                        + "A threat actor who knows of an unpatched kernel vulnerability in an older WSL kernel version may attempt to roll the kernel back to the vulnerable version after the enterprise has applied a security patch. Blocking downgrade ensures that once a security-relevant WSL kernel update has been applied, it cannot be reversed without administrative action, enforcing a one-way patch ratchet.",
+                    Tags = ["wsl", "kernel", "downgrade", "patch", "rollback"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "WSL kernel rollback via --rollback blocked; applied kernel security patches cannot be reversed by standard users.",
+                    ApplyOps = [RegOp.SetDword(Key, "DisableKernelVersionDowngrade", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "DisableKernelVersionDowngrade")],
+                    DetectOps = [RegOp.CheckDword(Key, "DisableKernelVersionDowngrade", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "wslkupd-enable-urgent-kernel-security-updates",
+                    Label = "WSL Kernel Update: Enable Urgent Security Updates via Windows Update",
+                    Category = "Virtualization",
+                    Description =
+                        "Sets AllowUrgentKernelSecurityUpdates=1 in Lxss Updates policy. Allows the Windows Update service to automatically apply WSL kernel updates that are classified as 'Critical' or 'Security Update' severity without waiting for the standard Patch Tuesday deployment cycle. "
+                        + "WSL kernel security vulnerabilities that are being actively exploited in the wild may be patched with emergency out-of-band updates. Without this policy, enterprises using slow deployment rings (e.g., broad ring with 14–30 day deferral) may leave systems vulnerable for weeks after Microsoft releases an emergency patch. Enabling urgent update delivery ensures critical WSL kernel fixes bypass deployment ring deferrals.",
+                    Tags = ["wsl", "kernel", "security-update", "critical", "patch"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote =
+                        "Critical WSL kernel security updates applied immediately; bypasses deployment ring deferrals for emergency patches.",
+                    ApplyOps = [RegOp.SetDword(Key, "AllowUrgentKernelSecurityUpdates", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "AllowUrgentKernelSecurityUpdates")],
+                    DetectOps = [RegOp.CheckDword(Key, "AllowUrgentKernelSecurityUpdates", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "wslkupd-set-kernel-update-defer-days-0",
+                    Label = "WSL Kernel Update: Disable WSL Kernel Update Deferral (Apply Immediately)",
+                    Category = "Virtualization",
+                    Description =
+                        "Sets KernelUpdateDeferralDays=0 in Lxss Updates policy. Sets the WSL kernel update deferral period to zero days, ensuring that WSL kernel updates are applied as soon as they are delivered and approved in the Windows Update service, with no additional deferral delay. "
+                        + "Unlike the Windows NT kernel which is updated on the monthly Patch Tuesday cadence, WSL kernel updates are typically small, targeted patches. Deferring them unnecessarily extends the window during which a known-patched WSL kernel vulnerability remains present. Setting deferral to zero ensures the enterprise's WSL kernel vulnerability exposure window matches the Windows Update delivery latency, not an additional IT-imposed delay.",
+                    Tags = ["wsl", "kernel", "deferral", "patch", "timely"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "WSL kernel update deferral removed; updates applied as soon as Windows Update delivers them.",
+                    ApplyOps = [RegOp.SetDword(Key, "KernelUpdateDeferralDays", 0)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "KernelUpdateDeferralDays")],
+                    DetectOps = [RegOp.CheckDword(Key, "KernelUpdateDeferralDays", 0)],
+                },
+                new TweakDef
+                {
+                    Id = "wslkupd-enable-kernel-update-audit-log",
+                    Label = "WSL Kernel Update: Enable Security Event Log Entry on Kernel Update or Rollback",
+                    Category = "Virtualization",
+                    Description =
+                        "Sets EnableKernelUpdateAuditLog=1 in Lxss Updates policy. Causes a Security event log entry to be written whenever the WSL Linux kernel is updated to a new version or rolled back to a previous version, recording the previous and new kernel version strings. "
+                        + "Without audit logging of WSL kernel version changes, there is no Security event record of when WSL kernel updates were applied (or not applied) on a device. This makes it impossible to determine whether a managed device was running a vulnerable WSL kernel during a specific incident timeframe. Kernel version change events enable compliance managers to demonstrate patch deployment timelines and detect unexplained rollbacks.",
+                    Tags = ["wsl", "kernel", "audit", "logging", "compliance"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "Security log entry written on WSL kernel version change; kernel update history auditable in SIEM.",
+                    ApplyOps = [RegOp.SetDword(Key, "EnableKernelUpdateAuditLog", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "EnableKernelUpdateAuditLog")],
+                    DetectOps = [RegOp.CheckDword(Key, "EnableKernelUpdateAuditLog", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "wslkupd-block-user-manual-kernel-update",
+                    Label = "WSL Kernel Update: Block Manual 'wsl --update' by Standard Users",
+                    Category = "Virtualization",
+                    Description =
+                        "Sets DisableUserManualKernelUpdate=1 in Lxss Updates policy. Removes the ability of standard (non-administrator) users to manually trigger WSL kernel updates via the 'wsl --update' command, restricting kernel update initiation to Windows Update and IT administrator action only. "
+                        + "While 'wsl --update' legitimately downloads the latest stable kernel, standard users initiating manual updates bypass the enterprise's staged Windows Update ring deployment schedule. If a specific kernel version is deferred in slow deployment rings due to a regression, users running 'wsl --update' would receive the update immediately, bypassing change management controls. Restricting update initiation to Windows Update enforces the enterprise deployment schedule.",
+                    Tags = ["wsl", "kernel", "manual-update", "deployment-ring", "change-management"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 2,
+                    SafetyRating = 5,
+                    ImpactNote = "wsl --update blocked for standard users; WSL kernel updates controlled by Windows Update and admin action only.",
+                    ApplyOps = [RegOp.SetDword(Key, "DisableUserManualKernelUpdate", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "DisableUserManualKernelUpdate")],
+                    DetectOps = [RegOp.CheckDword(Key, "DisableUserManualKernelUpdate", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "wslkupd-enable-kernel-integrity-verification-on-boot",
+                    Label = "WSL Kernel Update: Verify WSL Kernel Image Integrity at VM Start",
+                    Category = "Virtualization",
+                    Description =
+                        "Sets VerifyKernelIntegrityOnBoot=1 in Lxss Updates policy. Enables hash-based integrity verification of the WSL Linux kernel image file (vmlinux) against its stored signature each time a WSL session starts a new Hyper-V VM instance. "
+                        + "Without startup integrity verification, a threat actor with write access to the WSL kernel image path on the Windows file system can replace the kernel with a modified version that installs kernel-level hooks for all subsequent WSL sessions. Verifying the kernel image hash at each VM start ensures that any tampering with the stored kernel image is detected before the compromised kernel is loaded into the Hyper-V VM.",
+                    Tags = ["wsl", "kernel", "integrity", "hash", "vm-start"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "WSL kernel image hash verified at each VM start; tampered kernel image detected before being loaded.",
+                    ApplyOps = [RegOp.SetDword(Key, "VerifyKernelIntegrityOnBoot", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "VerifyKernelIntegrityOnBoot")],
+                    DetectOps = [RegOp.CheckDword(Key, "VerifyKernelIntegrityOnBoot", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "wslkupd-block-preview-kernel-builds",
+                    Label = "WSL Kernel Update: Block Preview and Insider WSL Kernel Preview Builds",
+                    Category = "Virtualization",
+                    Description =
+                        "Sets BlockPreviewKernelBuilds=1 in Lxss Updates policy. Prevents Windows Insider Preview and Windows Update Preview channels from delivering pre-release WSL Linux kernel builds to managed devices that are enrolled in preview rings for Windows OS preview builds. "
+                        + "Managed enterprise devices may be enrolled in Windows Insider rings for OS preview testing. However, preview WSL kernel builds may have known vulnerabilities, experimental security mitigations disabled, and debugging interfaces enabled that are inappropriate for production use. Blocking preview kernel builds ensures enterprise devices only receive production-quality WSL kernels regardless of their Windows Insider ring membership.",
+                    Tags = ["wsl", "kernel", "preview", "insider", "enterprise"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "Preview WSL kernel builds blocked even for Insider-enrolled devices; production kernels only.",
+                    ApplyOps = [RegOp.SetDword(Key, "BlockPreviewKernelBuilds", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "BlockPreviewKernelBuilds")],
+                    DetectOps = [RegOp.CheckDword(Key, "BlockPreviewKernelBuilds", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "wslkupd-require-restart-to-apply-kernel-update",
+                    Label = "WSL Kernel Update: Require Full WSL Session Termination to Activate Kernel Updates",
+                    Category = "Virtualization",
+                    Description =
+                        "Sets RequireSessionRestartForKernelUpdate=1 in Lxss Updates policy. Requires that all running WSL distro sessions are fully terminated (wsl --shutdown) and a new Hyper-V VM is started before a delivered WSL kernel update becomes active. Prevents in-place kernel hot-patching that may skip the integrity verification startup checks. "
+                        + "Hot-patching-style kernel activation (patching a running VM's kernel in-memory) bypasses the startup integrity verification performed when a new VM is instantiated. By requiring a full session shutdown and VM restart after each kernel update, this policy ensures that the newly applied kernel image goes through the full chain-of-trust verification (signature check → AppArmor load → seccomp policy activation) before any distro sessions run on it.",
+                    Tags = ["wsl", "kernel", "restart", "hot-patch", "chain-of-trust"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "WSL kernel updates require session restart to activate; hot-patch bypasses chain-of-trust checks prevented.",
+                    ApplyOps = [RegOp.SetDword(Key, "RequireSessionRestartForKernelUpdate", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "RequireSessionRestartForKernelUpdate")],
+                    DetectOps = [RegOp.CheckDword(Key, "RequireSessionRestartForKernelUpdate", 1)],
+                },
+            ];
     }
 
     // ── WslMemoryLimitsPolicy ──
@@ -3663,179 +3712,190 @@ internal static class PolicySubsystems
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Lxss\Memory";
 
         public static IReadOnlyList<TweakDef> Data =>
-        [
-            new TweakDef
-            {
-                Id = "wslmemlim-set-max-wsl-vm-memory-4gb",
-                Label = "WSL Memory: Cap WSL VM Maximum Memory Allocation to 4 GB",
-                Category = "Virtualization",
-                Description = "Sets MaxVmMemoryMB=4096 in Lxss Memory policy. Limits the maximum amount of host RAM the WSL 2 Hyper-V virtual machine can allocate to 4 GB, preventing WSL workloads from consuming the majority of the host system's physical memory. " +
-                    "By default, WSL 2 can claim up to 50% of host RAM (up to 8 GB total). On workstations with 16–32 GB RAM, a developer building a large project in WSL (e.g., a Linux kernel build, a large Rust project, or a Docker image layer operation) can cause the Windows desktop to become unresponsive due to memory pressure. A 4 GB cap ensures the host OS retains sufficient memory for responsive interactive use.",
-                Tags = ["wsl", "memory", "vm", "performance", "limits"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "WSL VM limited to 4 GB RAM; prevents WSL workloads from starving the Windows desktop of memory.",
-                ApplyOps = [RegOp.SetDword(Key, "MaxVmMemoryMB", 4096)],
-                RemoveOps = [RegOp.DeleteValue(Key, "MaxVmMemoryMB")],
-                DetectOps = [RegOp.CheckDword(Key, "MaxVmMemoryMB", 4096)],
-            },
-            new TweakDef
-            {
-                Id = "wslmemlim-set-max-wsl-cpu-cores-4",
-                Label = "WSL Memory: Limit WSL VM to 4 Virtual CPU Cores",
-                Category = "Virtualization",
-                Description = "Sets MaxVmProcessors=4 in Lxss Memory policy. Caps the number of virtual CPU cores visible to the WSL 2 VM to 4, limiting the maximum parallelism available to Linux workloads to prevent CPU starvation of host Windows processes. " +
-                    "WSL 2 inherits all host CPU cores by default. On a 12-core/24-thread development workstation, a Linux build job running make -j24 can saturate all CPU cores, causing Windows UI, background services, and other processes to become CPU-starved. Capping WSL at 4 cores ensures the OS retains burst capacity for interactive workloads, antivirus scans, and system services.",
-                Tags = ["wsl", "cpu", "vm", "cores", "performance"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "WSL VM limited to 4 vCPU; parallel Linux build jobs cannot saturate all host CPU cores.",
-                ApplyOps = [RegOp.SetDword(Key, "MaxVmProcessors", 4)],
-                RemoveOps = [RegOp.DeleteValue(Key, "MaxVmProcessors")],
-                DetectOps = [RegOp.CheckDword(Key, "MaxVmProcessors", 4)],
-            },
-            new TweakDef
-            {
-                Id = "wslmemlim-set-swap-file-size-2gb",
-                Label = "WSL Memory: Set WSL VM Swap File Size to 2 GB",
-                Category = "Virtualization",
-                Description = "Sets VmSwapFileSizeMB=2048 in Lxss Memory policy. Sets the WSL 2 VM's swap file (used when VM RAM is exhausted) to a fixed 2 GB size, preventing the swap file from growing unboundedly on the Windows host disk. " +
-                    "The WSL 2 VM swap file is created dynamically on the Windows NTFS volume. Without a size cap, memory-intensive Linux workloads can cause the swap file to expand to match the available NTFS free space — effectively allowing WSL to consume the entire host disk as virtual memory. A 2 GB fixed swap cap provides a safety margin for legitimate memory overcommit while preventing disk exhaustion.",
-                Tags = ["wsl", "swap", "memory", "disk-space", "limits"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "WSL swap file fixed at 2 GB; prevents WSL virtual memory usage from consuming all available host disk space.",
-                ApplyOps = [RegOp.SetDword(Key, "VmSwapFileSizeMB", 2048)],
-                RemoveOps = [RegOp.DeleteValue(Key, "VmSwapFileSizeMB")],
-                DetectOps = [RegOp.CheckDword(Key, "VmSwapFileSizeMB", 2048)],
-            },
-            new TweakDef
-            {
-                Id = "wslmemlim-enable-wsl-memory-reclaim-gradual",
-                Label = "WSL Memory: Enable Gradual Memory Reclaim from VM to Host",
-                Category = "Virtualization",
-                Description = "Sets EnableGradualMemoryReclaim=1 in Lxss Memory policy. Instructs the WSL 2 hypervisor to periodically reclaim unused virtual machine memory pages back to the Windows host pool using the gradual reclaim algorithm, rather than holding memory until the VM terminates. " +
-                    "Without memory reclaim enabled, WSL 2 acquires RAM as needed and holds it indefinitely, even after Linux processes that consumed the memory have exited. This means that after a large Linux build job completes, the RAM it consumed is not returned to the Windows pool, causing the host to appear low on memory. Gradual reclaim enables the WSL Hyper-V balloon driver to return idle pages to Windows.",
-                Tags = ["wsl", "memory", "reclaim", "vm", "balloon"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                ImpactNote = "WSL VM memory automatically returned to host when Linux processes exit; prevents post-build RAM starvation.",
-                ApplyOps = [RegOp.SetDword(Key, "EnableGradualMemoryReclaim", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "EnableGradualMemoryReclaim")],
-                DetectOps = [RegOp.CheckDword(Key, "EnableGradualMemoryReclaim", 1)],
-            },
-            new TweakDef
-            {
-                Id = "wslmemlim-disable-wsl-swap-file",
-                Label = "WSL Memory: Disable WSL VM Swap File Creation",
-                Category = "Virtualization",
-                Description = "Sets DisableVmSwapFile=1 in Lxss Memory policy. Prevents the WSL 2 virtual machine from creating a swap file on the Windows host disk. With no swap, the Linux VM operates in a pure in-memory mode and Linux processes that exhaust available VM memory will be OOM-killed rather than swap-paging. " +
-                    "The WSL swap file is a write-capable artifact on the Windows NTFS volume. Data written to Linux virtual memory (including sensitive in-memory data structures like encryption keys that are paged out under memory pressure) is persisted in a cleartext swap file on Windows disk. Disabling swap eliminates this data-at-rest exposure channel, at the cost of Linux OOM-kill risk for memory-intensive workloads.",
-                Tags = ["wsl", "swap", "memory", "data-at-rest", "oom"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 4,
-                ImpactNote = "No WSL swap file; sensitive paged-out VM memory not persisted to Windows disk; OOM-kill for memory-intensive Linux workloads.",
-                ApplyOps = [RegOp.SetDword(Key, "DisableVmSwapFile", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "DisableVmSwapFile")],
-                DetectOps = [RegOp.CheckDword(Key, "DisableVmSwapFile", 1)],
-            },
-            new TweakDef
-            {
-                Id = "wslmemlim-enable-vm-page-reporting",
-                Label = "WSL Memory: Enable VM Page Reporting for Efficient Host Memory Return",
-                Category = "Virtualization",
-                Description = "Sets EnableVmPageReporting=1 in Lxss Memory policy. Enables the Hyper-V VM page reporting guest protocol within the WSL 2 VM, allowing the Linux guest to proactively report free memory pages to the host hypervisor for immediate host memory pool reuse. " +
-                    "Page reporting is a more aggressive memory return mechanism than the balloon driver; while balloon reclaim waits for host memory pressure, page reporting proactively marks guest-free pages as available to the host. This results in faster and more complete memory return after burst WSL workloads, improving host memory availability for concurrent Windows applications.",
-                Tags = ["wsl", "memory", "page-reporting", "hyperv", "performance"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "WSL VM proactively reports free pages to host; faster host memory recovery after WSL burst workloads.",
-                ApplyOps = [RegOp.SetDword(Key, "EnableVmPageReporting", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "EnableVmPageReporting")],
-                DetectOps = [RegOp.CheckDword(Key, "EnableVmPageReporting", 1)],
-            },
-            new TweakDef
-            {
-                Id = "wslmemlim-set-vm-memory-reclaim-idle-threshold-5min",
-                Label = "WSL Memory: Set VM Memory Reclaim Idle Threshold to 5 Minutes",
-                Category = "Virtualization",
-                Description = "Sets VmMemoryReclaimIdleThresholdMin=5 in Lxss Memory policy. Sets the idle timeout after which the WSL 2 Hyper-V host will begin reclaiming memory pages from an idle WSL VM to 5 minutes. " +
-                    "The default idle threshold before WSL memory reclaim begins is typically 10–15 minutes. In enterprise environments where developers run WSL sessions intermittently (editing code in Windows, compiling in WSL, back to editing), the 5-minute threshold ensures that memory allocated during compile jobs is returned to the host within 5 minutes of the WSL VM becoming idle, rather than holding the memory for the duration of the edit cycle.",
-                Tags = ["wsl", "memory", "reclaim", "idle", "threshold"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "WSL VM memory reclaimed after 5 min idle; faster host memory recovery for intermittent WSL usage patterns.",
-                ApplyOps = [RegOp.SetDword(Key, "VmMemoryReclaimIdleThresholdMin", 5)],
-                RemoveOps = [RegOp.DeleteValue(Key, "VmMemoryReclaimIdleThresholdMin")],
-                DetectOps = [RegOp.CheckDword(Key, "VmMemoryReclaimIdleThresholdMin", 5)],
-            },
-            new TweakDef
-            {
-                Id = "wslmemlim-disable-kernel-samepage-merging",
-                Label = "WSL Memory: Disable Kernel Same-Page Merging in WSL VM",
-                Category = "Virtualization",
-                Description = "Sets DisableKernelSamepageMerging=1 in Lxss Memory policy. Disables the Linux kernel's KSM (Kernel Same-page Merging) memory deduplication feature in the WSL 2 VM, which periodically scans VM memory for identical pages and merges them into copy-on-write shared pages. " +
-                    "KSM is a known side-channel: the merge/de-merge timing of identical pages can be used to detect whether a particular secret value (e.g., a cryptographic key) exists in another process's memory. Research has demonstrated KSM-based cross-process memory probing exploits. Disabling KSM removes this timing side-channel within the WSL VM's memory subsystem.",
-                Tags = ["wsl", "memory", "ksm", "side-channel", "crypto"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "KSM disabled in WSL VM; eliminates KSM timing side-channel; slight increase in Linux VM memory usage.",
-                ApplyOps = [RegOp.SetDword(Key, "DisableKernelSamepageMerging", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "DisableKernelSamepageMerging")],
-                DetectOps = [RegOp.CheckDword(Key, "DisableKernelSamepageMerging", 1)],
-            },
-            new TweakDef
-            {
-                Id = "wslmemlim-enable-memory-pressure-notifications",
-                Label = "WSL Memory: Enable Host Memory Pressure Notifications to WSL VM",
-                Category = "Virtualization",
-                Description = "Sets EnableMemoryPressureNotifications=1 in Lxss Memory policy. Enables the WSL 2 hypervisor to send memory pressure notifications into the Linux guest when the Windows host is experiencing memory pressure, allowing the Linux kernel to invoke its own memory pressure handlers (cgroup high/low events, transparent huge page compaction) proactively. " +
-                    "Without pressure notifications, the Linux VM has no visibility into host memory pressure and will continue normal memory allocation, worsening host memory pressure. With notifications enabled, the guest can perform early memory reclaim before the hypervisor is forced to balloon-reclaim pages, resulting in more cooperative memory sharing between the WSL VM and Windows host processes.",
-                Tags = ["wsl", "memory", "pressure", "notification", "cgroup"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "WSL VM receives host memory pressure signals; Linux guest proactively reclaims memory, reducing host contention.",
-                ApplyOps = [RegOp.SetDword(Key, "EnableMemoryPressureNotifications", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "EnableMemoryPressureNotifications")],
-                DetectOps = [RegOp.CheckDword(Key, "EnableMemoryPressureNotifications", 1)],
-            },
-            new TweakDef
-            {
-                Id = "wslmemlim-disable-large-page-allocation",
-                Label = "WSL Memory: Disable Huge Page Allocation in WSL VM",
-                Category = "Virtualization",
-                Description = "Sets DisableLargePageAllocation=1 in Lxss Memory policy. Disables transparent huge page (THP) allocation within the WSL 2 VM's Linux kernel, preventing the VM from allocating 2 MB memory pages instead of 4 KB pages. " +
-                    "Transparent huge pages improve Linux application throughput for memory-intensive workloads but make host memory reclaim significantly less efficient. A 2 MB THP page cannot be reclaimed until all 512 sub-pages are free simultaneously, causing huge pages to become 'locked' memory that resists balloon and page-report reclaim. Disabling THP makes WSL VM memory more granularly reclaimable, improving host memory return latency.",
-                Tags = ["wsl", "memory", "huge-pages", "thp", "reclaim"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                ImpactNote = "THP disabled in WSL VM; slightly lower Linux throughput for memory-intensive workloads but significantly faster host memory reclaim.",
-                ApplyOps = [RegOp.SetDword(Key, "DisableLargePageAllocation", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "DisableLargePageAllocation")],
-                DetectOps = [RegOp.CheckDword(Key, "DisableLargePageAllocation", 1)],
-            },
-        ];
-
+            [
+                new TweakDef
+                {
+                    Id = "wslmemlim-set-max-wsl-vm-memory-4gb",
+                    Label = "WSL Memory: Cap WSL VM Maximum Memory Allocation to 4 GB",
+                    Category = "Virtualization",
+                    Description =
+                        "Sets MaxVmMemoryMB=4096 in Lxss Memory policy. Limits the maximum amount of host RAM the WSL 2 Hyper-V virtual machine can allocate to 4 GB, preventing WSL workloads from consuming the majority of the host system's physical memory. "
+                        + "By default, WSL 2 can claim up to 50% of host RAM (up to 8 GB total). On workstations with 16–32 GB RAM, a developer building a large project in WSL (e.g., a Linux kernel build, a large Rust project, or a Docker image layer operation) can cause the Windows desktop to become unresponsive due to memory pressure. A 4 GB cap ensures the host OS retains sufficient memory for responsive interactive use.",
+                    Tags = ["wsl", "memory", "vm", "performance", "limits"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "WSL VM limited to 4 GB RAM; prevents WSL workloads from starving the Windows desktop of memory.",
+                    ApplyOps = [RegOp.SetDword(Key, "MaxVmMemoryMB", 4096)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "MaxVmMemoryMB")],
+                    DetectOps = [RegOp.CheckDword(Key, "MaxVmMemoryMB", 4096)],
+                },
+                new TweakDef
+                {
+                    Id = "wslmemlim-set-max-wsl-cpu-cores-4",
+                    Label = "WSL Memory: Limit WSL VM to 4 Virtual CPU Cores",
+                    Category = "Virtualization",
+                    Description =
+                        "Sets MaxVmProcessors=4 in Lxss Memory policy. Caps the number of virtual CPU cores visible to the WSL 2 VM to 4, limiting the maximum parallelism available to Linux workloads to prevent CPU starvation of host Windows processes. "
+                        + "WSL 2 inherits all host CPU cores by default. On a 12-core/24-thread development workstation, a Linux build job running make -j24 can saturate all CPU cores, causing Windows UI, background services, and other processes to become CPU-starved. Capping WSL at 4 cores ensures the OS retains burst capacity for interactive workloads, antivirus scans, and system services.",
+                    Tags = ["wsl", "cpu", "vm", "cores", "performance"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "WSL VM limited to 4 vCPU; parallel Linux build jobs cannot saturate all host CPU cores.",
+                    ApplyOps = [RegOp.SetDword(Key, "MaxVmProcessors", 4)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "MaxVmProcessors")],
+                    DetectOps = [RegOp.CheckDword(Key, "MaxVmProcessors", 4)],
+                },
+                new TweakDef
+                {
+                    Id = "wslmemlim-set-swap-file-size-2gb",
+                    Label = "WSL Memory: Set WSL VM Swap File Size to 2 GB",
+                    Category = "Virtualization",
+                    Description =
+                        "Sets VmSwapFileSizeMB=2048 in Lxss Memory policy. Sets the WSL 2 VM's swap file (used when VM RAM is exhausted) to a fixed 2 GB size, preventing the swap file from growing unboundedly on the Windows host disk. "
+                        + "The WSL 2 VM swap file is created dynamically on the Windows NTFS volume. Without a size cap, memory-intensive Linux workloads can cause the swap file to expand to match the available NTFS free space — effectively allowing WSL to consume the entire host disk as virtual memory. A 2 GB fixed swap cap provides a safety margin for legitimate memory overcommit while preventing disk exhaustion.",
+                    Tags = ["wsl", "swap", "memory", "disk-space", "limits"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "WSL swap file fixed at 2 GB; prevents WSL virtual memory usage from consuming all available host disk space.",
+                    ApplyOps = [RegOp.SetDword(Key, "VmSwapFileSizeMB", 2048)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "VmSwapFileSizeMB")],
+                    DetectOps = [RegOp.CheckDword(Key, "VmSwapFileSizeMB", 2048)],
+                },
+                new TweakDef
+                {
+                    Id = "wslmemlim-enable-wsl-memory-reclaim-gradual",
+                    Label = "WSL Memory: Enable Gradual Memory Reclaim from VM to Host",
+                    Category = "Virtualization",
+                    Description =
+                        "Sets EnableGradualMemoryReclaim=1 in Lxss Memory policy. Instructs the WSL 2 hypervisor to periodically reclaim unused virtual machine memory pages back to the Windows host pool using the gradual reclaim algorithm, rather than holding memory until the VM terminates. "
+                        + "Without memory reclaim enabled, WSL 2 acquires RAM as needed and holds it indefinitely, even after Linux processes that consumed the memory have exited. This means that after a large Linux build job completes, the RAM it consumed is not returned to the Windows pool, causing the host to appear low on memory. Gradual reclaim enables the WSL Hyper-V balloon driver to return idle pages to Windows.",
+                    Tags = ["wsl", "memory", "reclaim", "vm", "balloon"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "WSL VM memory automatically returned to host when Linux processes exit; prevents post-build RAM starvation.",
+                    ApplyOps = [RegOp.SetDword(Key, "EnableGradualMemoryReclaim", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "EnableGradualMemoryReclaim")],
+                    DetectOps = [RegOp.CheckDword(Key, "EnableGradualMemoryReclaim", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "wslmemlim-disable-wsl-swap-file",
+                    Label = "WSL Memory: Disable WSL VM Swap File Creation",
+                    Category = "Virtualization",
+                    Description =
+                        "Sets DisableVmSwapFile=1 in Lxss Memory policy. Prevents the WSL 2 virtual machine from creating a swap file on the Windows host disk. With no swap, the Linux VM operates in a pure in-memory mode and Linux processes that exhaust available VM memory will be OOM-killed rather than swap-paging. "
+                        + "The WSL swap file is a write-capable artifact on the Windows NTFS volume. Data written to Linux virtual memory (including sensitive in-memory data structures like encryption keys that are paged out under memory pressure) is persisted in a cleartext swap file on Windows disk. Disabling swap eliminates this data-at-rest exposure channel, at the cost of Linux OOM-kill risk for memory-intensive workloads.",
+                    Tags = ["wsl", "swap", "memory", "data-at-rest", "oom"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 4,
+                    ImpactNote =
+                        "No WSL swap file; sensitive paged-out VM memory not persisted to Windows disk; OOM-kill for memory-intensive Linux workloads.",
+                    ApplyOps = [RegOp.SetDword(Key, "DisableVmSwapFile", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "DisableVmSwapFile")],
+                    DetectOps = [RegOp.CheckDword(Key, "DisableVmSwapFile", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "wslmemlim-enable-vm-page-reporting",
+                    Label = "WSL Memory: Enable VM Page Reporting for Efficient Host Memory Return",
+                    Category = "Virtualization",
+                    Description =
+                        "Sets EnableVmPageReporting=1 in Lxss Memory policy. Enables the Hyper-V VM page reporting guest protocol within the WSL 2 VM, allowing the Linux guest to proactively report free memory pages to the host hypervisor for immediate host memory pool reuse. "
+                        + "Page reporting is a more aggressive memory return mechanism than the balloon driver; while balloon reclaim waits for host memory pressure, page reporting proactively marks guest-free pages as available to the host. This results in faster and more complete memory return after burst WSL workloads, improving host memory availability for concurrent Windows applications.",
+                    Tags = ["wsl", "memory", "page-reporting", "hyperv", "performance"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "WSL VM proactively reports free pages to host; faster host memory recovery after WSL burst workloads.",
+                    ApplyOps = [RegOp.SetDword(Key, "EnableVmPageReporting", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "EnableVmPageReporting")],
+                    DetectOps = [RegOp.CheckDword(Key, "EnableVmPageReporting", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "wslmemlim-set-vm-memory-reclaim-idle-threshold-5min",
+                    Label = "WSL Memory: Set VM Memory Reclaim Idle Threshold to 5 Minutes",
+                    Category = "Virtualization",
+                    Description =
+                        "Sets VmMemoryReclaimIdleThresholdMin=5 in Lxss Memory policy. Sets the idle timeout after which the WSL 2 Hyper-V host will begin reclaiming memory pages from an idle WSL VM to 5 minutes. "
+                        + "The default idle threshold before WSL memory reclaim begins is typically 10–15 minutes. In enterprise environments where developers run WSL sessions intermittently (editing code in Windows, compiling in WSL, back to editing), the 5-minute threshold ensures that memory allocated during compile jobs is returned to the host within 5 minutes of the WSL VM becoming idle, rather than holding the memory for the duration of the edit cycle.",
+                    Tags = ["wsl", "memory", "reclaim", "idle", "threshold"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "WSL VM memory reclaimed after 5 min idle; faster host memory recovery for intermittent WSL usage patterns.",
+                    ApplyOps = [RegOp.SetDword(Key, "VmMemoryReclaimIdleThresholdMin", 5)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "VmMemoryReclaimIdleThresholdMin")],
+                    DetectOps = [RegOp.CheckDword(Key, "VmMemoryReclaimIdleThresholdMin", 5)],
+                },
+                new TweakDef
+                {
+                    Id = "wslmemlim-disable-kernel-samepage-merging",
+                    Label = "WSL Memory: Disable Kernel Same-Page Merging in WSL VM",
+                    Category = "Virtualization",
+                    Description =
+                        "Sets DisableKernelSamepageMerging=1 in Lxss Memory policy. Disables the Linux kernel's KSM (Kernel Same-page Merging) memory deduplication feature in the WSL 2 VM, which periodically scans VM memory for identical pages and merges them into copy-on-write shared pages. "
+                        + "KSM is a known side-channel: the merge/de-merge timing of identical pages can be used to detect whether a particular secret value (e.g., a cryptographic key) exists in another process's memory. Research has demonstrated KSM-based cross-process memory probing exploits. Disabling KSM removes this timing side-channel within the WSL VM's memory subsystem.",
+                    Tags = ["wsl", "memory", "ksm", "side-channel", "crypto"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "KSM disabled in WSL VM; eliminates KSM timing side-channel; slight increase in Linux VM memory usage.",
+                    ApplyOps = [RegOp.SetDword(Key, "DisableKernelSamepageMerging", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "DisableKernelSamepageMerging")],
+                    DetectOps = [RegOp.CheckDword(Key, "DisableKernelSamepageMerging", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "wslmemlim-enable-memory-pressure-notifications",
+                    Label = "WSL Memory: Enable Host Memory Pressure Notifications to WSL VM",
+                    Category = "Virtualization",
+                    Description =
+                        "Sets EnableMemoryPressureNotifications=1 in Lxss Memory policy. Enables the WSL 2 hypervisor to send memory pressure notifications into the Linux guest when the Windows host is experiencing memory pressure, allowing the Linux kernel to invoke its own memory pressure handlers (cgroup high/low events, transparent huge page compaction) proactively. "
+                        + "Without pressure notifications, the Linux VM has no visibility into host memory pressure and will continue normal memory allocation, worsening host memory pressure. With notifications enabled, the guest can perform early memory reclaim before the hypervisor is forced to balloon-reclaim pages, resulting in more cooperative memory sharing between the WSL VM and Windows host processes.",
+                    Tags = ["wsl", "memory", "pressure", "notification", "cgroup"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "WSL VM receives host memory pressure signals; Linux guest proactively reclaims memory, reducing host contention.",
+                    ApplyOps = [RegOp.SetDword(Key, "EnableMemoryPressureNotifications", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "EnableMemoryPressureNotifications")],
+                    DetectOps = [RegOp.CheckDword(Key, "EnableMemoryPressureNotifications", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "wslmemlim-disable-large-page-allocation",
+                    Label = "WSL Memory: Disable Huge Page Allocation in WSL VM",
+                    Category = "Virtualization",
+                    Description =
+                        "Sets DisableLargePageAllocation=1 in Lxss Memory policy. Disables transparent huge page (THP) allocation within the WSL 2 VM's Linux kernel, preventing the VM from allocating 2 MB memory pages instead of 4 KB pages. "
+                        + "Transparent huge pages improve Linux application throughput for memory-intensive workloads but make host memory reclaim significantly less efficient. A 2 MB THP page cannot be reclaimed until all 512 sub-pages are free simultaneously, causing huge pages to become 'locked' memory that resists balloon and page-report reclaim. Disabling THP makes WSL VM memory more granularly reclaimable, improving host memory return latency.",
+                    Tags = ["wsl", "memory", "huge-pages", "thp", "reclaim"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 2,
+                    SafetyRating = 5,
+                    ImpactNote =
+                        "THP disabled in WSL VM; slightly lower Linux throughput for memory-intensive workloads but significantly faster host memory reclaim.",
+                    ApplyOps = [RegOp.SetDword(Key, "DisableLargePageAllocation", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "DisableLargePageAllocation")],
+                    DetectOps = [RegOp.CheckDword(Key, "DisableLargePageAllocation", 1)],
+                },
+            ];
     }
 
     // ── WslSecurityHardeningPolicy ──
@@ -3844,179 +3904,191 @@ internal static class PolicySubsystems
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Lxss\Security";
 
         public static IReadOnlyList<TweakDef> Data =>
-        [
-            new TweakDef
-            {
-                Id = "wslsechrd-disable-linux-privileged-container",
-                Label = "WSL Security: Block Privileged Linux Containers (--privileged)",
-                Category = "Virtualization",
-                Description = "Sets DisablePrivilegedContainerMode=1 in Lxss Security policy. Prevents users from launching Linux containers in privileged mode within WSL, which would grant the container full access to the WSL kernel's device tree and capabilities. " +
-                    "Privileged Linux containers bypass cgroup and namespace isolation — a privileged container escape is effectively a WSL hypervisor boundary bypass. Container image registries routinely contain malicious images that exploit the privileged mode to escape to the host. Blocking privileged container mode ensures all Docker and podman containers within WSL remain namespace-isolated.",
-                Tags = ["wsl", "container", "privileged", "isolation", "escape"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                ImpactNote = "Privileged Linux containers blocked in WSL; Docker --privileged flag will be denied.",
-                ApplyOps = [RegOp.SetDword(Key, "DisablePrivilegedContainerMode", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "DisablePrivilegedContainerMode")],
-                DetectOps = [RegOp.CheckDword(Key, "DisablePrivilegedContainerMode", 1)],
-            },
-            new TweakDef
-            {
-                Id = "wslsechrd-require-secure-boot-for-wsl",
-                Label = "WSL Security: Require Secure Boot (UEFI) Validation Before WSL Launch",
-                Category = "Virtualization",
-                Description = "Sets RequireSecureBootForWsl=1 in Lxss Security policy. Configures WSL to verify that the host system has Secure Boot enabled and that the WSL system distro image is digitally signed before allowing any WSL distribution to launch. " +
-                    "A threat actor with physical access or bootkit privileges can replace the WSL system distro image (kernel/initramfs) with a malicious version that intercepts WSL sessions. Requiring Secure Boot validation means that only Microsoft-signed WSL kernel images will be accepted — any tampered or unsigned replacement will be rejected at launch, preventing persistent WSL-level rootkit installation.",
-                Tags = ["wsl", "secure-boot", "kernel", "integrity", "bootkit"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                ImpactNote = "WSL requires Secure Boot; unsigned or tampered WSL kernel images rejected at launch.",
-                ApplyOps = [RegOp.SetDword(Key, "RequireSecureBootForWsl", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "RequireSecureBootForWsl")],
-                DetectOps = [RegOp.CheckDword(Key, "RequireSecureBootForWsl", 1)],
-            },
-            new TweakDef
-            {
-                Id = "wslsechrd-enable-apparmor-enforcement",
-                Label = "WSL Security: Enable AppArmor Mandatory Access Control Enforcement",
-                Category = "Virtualization",
-                Description = "Sets RequireAppArmorEnforcement=1 in Lxss Security policy. Requires that AppArmor (the Linux Mandatory Access Control framework) is active and in enforcing mode within WSL distributions before those distros are permitted to run Linux processes. " +
-                    "AppArmor-enforcing mode means that every Linux process is subject to a per-executable MAC policy that limits the files, capabilities, and network resources it can access. Without AppArmor enforcement, a compromised Linux process within WSL can access any file the Linux user has permission to reach (including all DrvFs-mounted Windows files). AppArmor confines individual processes to their expected access patterns.",
-                Tags = ["wsl", "apparmor", "mac", "mandatory-access-control", "hardening"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 4,
-                ImpactNote = "AppArmor MAC enforcement required; distros without AppArmor active will be blocked from launching processes.",
-                ApplyOps = [RegOp.SetDword(Key, "RequireAppArmorEnforcement", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "RequireAppArmorEnforcement")],
-                DetectOps = [RegOp.CheckDword(Key, "RequireAppArmorEnforcement", 1)],
-            },
-            new TweakDef
-            {
-                Id = "wslsechrd-disable-wsl-sudo-escalation",
-                Label = "WSL Security: Block sudo Privilege Escalation in WSL Distributions",
-                Category = "Virtualization",
-                Description = "Sets DisableSudoEscalation=1 in Lxss Security policy. Prevents the 'sudo' and 'su' commands from granting root privileges within WSL distributions launched in standard user sessions, enforcing that all WSL processes run under the Linux user identity only. " +
-                    "sudo root access within WSL gives a Linux process full root capabilities within the WSL VM, including the ability to install kernel modules, bind to privileged ports, and reconfigure network namespaces. While the WSL VM boundary limits the blast radius, root access within WSL provides a much larger attack surface for container escape and VM privilege escalation research exploitation.",
-                Tags = ["wsl", "sudo", "root", "privilege-escalation", "least-privilege"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 4,
-                ImpactNote = "sudo/su blocked in WSL; all Linux processes run as the mapped Windows user identity only.",
-                ApplyOps = [RegOp.SetDword(Key, "DisableSudoEscalation", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "DisableSudoEscalation")],
-                DetectOps = [RegOp.CheckDword(Key, "DisableSudoEscalation", 1)],
-            },
-            new TweakDef
-            {
-                Id = "wslsechrd-enable-seccomp-enforcement",
-                Label = "WSL Security: Enable Seccomp System Call Filtering Enforcement",
-                Category = "Virtualization",
-                Description = "Sets RequireSeccompEnforcement=1 in Lxss Security policy. Requires the WSL Linux kernel to apply Seccomp-BPF (system call filtration) policies to all user-space processes, blocking access to dangerous system calls that are not needed for standard application workloads. " +
-                    "Many Linux kernel privilege escalation vulnerabilities are triggered via obscure or rarely-used system calls (ptrace, perf_event_open, io_uring). Seccomp filtering blocks these system calls unless explicitly allowed by the process's policy, preventing exploitation of kernel vulnerabilities that require those call paths. This is particularly important because the WSL Linux kernel shares the root namespace with all distros.",
-                Tags = ["wsl", "seccomp", "syscall", "kernel", "exploit-prevention"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 4,
-                ImpactNote = "Seccomp syscall filtering enforced; dangerous kernel interfaces blocked from user-space, reducing kernel exploit surface.",
-                ApplyOps = [RegOp.SetDword(Key, "RequireSeccompEnforcement", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "RequireSeccompEnforcement")],
-                DetectOps = [RegOp.CheckDword(Key, "RequireSeccompEnforcement", 1)],
-            },
-            new TweakDef
-            {
-                Id = "wslsechrd-disable-raw-socket-creation",
-                Label = "WSL Security: Block Raw Socket Creation by Non-Root Linux Processes",
-                Category = "Virtualization",
-                Description = "Sets DisableRawSocketCreation=1 in Lxss Security policy. Prevents non-root Linux processes within WSL from creating AF_PACKET (raw) network sockets, which would allow them to perform low-level network packet capture and injection without Windows-side network monitoring visibility. " +
-                    "Raw sockets enable Linux processes to capture all network traffic visible to the WSL VM's network namespace. In mirrored networking mode, this includes all traffic from the Windows host. A malicious tool running in WSL with raw socket access can perform ARP spoofing, DNS poisoning, and credential harvest from unencrypted protocol traffic, bypassing Windows network monitoring solutions.",
-                Tags = ["wsl", "raw-socket", "packet-capture", "network", "monitoring"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                ImpactNote = "Raw sockets blocked for non-root Linux processes; WSL cannot be used for network packet capture without root.",
-                ApplyOps = [RegOp.SetDword(Key, "DisableRawSocketCreation", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "DisableRawSocketCreation")],
-                DetectOps = [RegOp.CheckDword(Key, "DisableRawSocketCreation", 1)],
-            },
-            new TweakDef
-            {
-                Id = "wslsechrd-disable-ptrace-between-distros",
-                Label = "WSL Security: Block ptrace Cross-Distro Process Attachment",
-                Category = "Virtualization",
-                Description = "Sets DisableCrossDistrictPtrace=1 in Lxss Security policy. Prevents Linux processes in one WSL distribution from using ptrace() to attach to and debug processes running in another WSL distribution sharing the same Hyper-V VM. " +
-                    "When multiple WSL distros run in the same Hyper-V partition (the typical configuration), they share a Linux kernel and a process namespace at the VM level. Without a ptrace policy, a process in distro A can attach to a process in distro B and read its memory, modify its execution, or extract credentials it holds. Restricting cross-distro ptrace enforces process isolation between co-located Linux environments.",
-                Tags = ["wsl", "ptrace", "debugging", "multi-distro", "isolation"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "ptrace blocked across WSL distros; one distro cannot debug or read memory of processes in another distro.",
-                ApplyOps = [RegOp.SetDword(Key, "DisableCrossDistrictPtrace", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "DisableCrossDistrictPtrace")],
-                DetectOps = [RegOp.CheckDword(Key, "DisableCrossDistrictPtrace", 1)],
-            },
-            new TweakDef
-            {
-                Id = "wslsechrd-enable-user-namespace-restrictions",
-                Label = "WSL Security: Restrict Unprivileged Linux User Namespace Creation",
-                Category = "Virtualization",
-                Description = "Sets RestrictUnprivilegedUserNamespaces=1 in Lxss Security policy. Limits the ability of unprivileged Linux user-space processes to create new user namespaces within the WSL VM, which are frequently exploited as container escape stepping stones. " +
-                    "User namespaces are the Linux kernel primitive that enables unprivileged container tools (rootless Docker, rootless podman). However, user namespaces have also been the root cause or enabling boundary for a significant fraction of Linux kernel privilege escalation CVEs (CVE-2023-4911, CVE-2022-0847 'Dirty Pipe', CVE-2022-25375). Restricting their creation prevents their use as an escalation primitive while still allowing root-managed container workflows.",
-                Tags = ["wsl", "user-namespace", "container", "cve", "kernel-exploit"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 4,
-                ImpactNote = "Unprivileged user namespace creation restricted; rootless container tools may not function; reduces kernel namespace CVE exposure.",
-                ApplyOps = [RegOp.SetDword(Key, "RestrictUnprivilegedUserNamespaces", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "RestrictUnprivilegedUserNamespaces")],
-                DetectOps = [RegOp.CheckDword(Key, "RestrictUnprivilegedUserNamespaces", 1)],
-            },
-            new TweakDef
-            {
-                Id = "wslsechrd-enable-defender-scan-on-wsl-exec",
-                Label = "WSL Security: Enable Microsoft Defender Scanning on WSL Executable Launch",
-                Category = "Virtualization",
-                Description = "Sets EnableDefenderScanOnWslExecution=1 in Lxss Security policy. Enables Microsoft Defender for Endpoint to scan Linux ELF executables and scripts when they are launched within the WSL environment, before process execution begins. " +
-                    "By default, Defender's real-time file system protection monitors the Windows NTFS volume but may not scan Linux ELF binaries within the ext4 VHD. With WSL execution scanning enabled, Defender analyses Linux binaries using Linux threat intelligence signatures, detecting known Linux malware, coin miners, and reverse shells that reside within the WSL file system. This closes the gap between Windows AV coverage and Linux-resident threats.",
-                Tags = ["wsl", "defender", "malware", "scanning", "elf"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                ImpactNote = "Defender scans Linux ELF binaries at WSL launch time; Linux malware in the WSL VHD detected before execution.",
-                ApplyOps = [RegOp.SetDword(Key, "EnableDefenderScanOnWslExecution", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "EnableDefenderScanOnWslExecution")],
-                DetectOps = [RegOp.CheckDword(Key, "EnableDefenderScanOnWslExecution", 1)],
-            },
-            new TweakDef
-            {
-                Id = "wslsechrd-disable-wsl-kernel-module-load",
-                Label = "WSL Security: Block Loading of Unsigned Linux Kernel Modules in WSL",
-                Category = "Virtualization",
-                Description = "Sets DisableUnsignedKernelModuleLoad=1 in Lxss Security policy. Prevents the WSL Linux kernel from loading unsigned or third-party kernel modules (LKMs) that are not part of the Microsoft-signed WSL kernel image. " +
-                    "Linux kernel modules run with ring-0 (kernel mode) privileges and have unrestricted access to all memory, devices, and kernel data structures within the VM. A malicious loadable kernel module loaded in WSL can install kernel-level hooks, intercept all WSL system calls, and exfiltrate data from other processes at the kernel level. Blocking unsigned module loading enforces that only the Microsoft-vetted WSL kernel components can extend the kernel's attack surface.",
-                Tags = ["wsl", "kernel-module", "lkm", "ring0", "unsigned"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 5,
-                SafetyRating = 5,
-                ImpactNote = "Unsigned Linux kernel modules blocked in WSL; custom LKMs and third-party drivers cannot be loaded into the WSL kernel.",
-                ApplyOps = [RegOp.SetDword(Key, "DisableUnsignedKernelModuleLoad", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "DisableUnsignedKernelModuleLoad")],
-                DetectOps = [RegOp.CheckDword(Key, "DisableUnsignedKernelModuleLoad", 1)],
-            },
-        ];
-
+            [
+                new TweakDef
+                {
+                    Id = "wslsechrd-disable-linux-privileged-container",
+                    Label = "WSL Security: Block Privileged Linux Containers (--privileged)",
+                    Category = "Virtualization",
+                    Description =
+                        "Sets DisablePrivilegedContainerMode=1 in Lxss Security policy. Prevents users from launching Linux containers in privileged mode within WSL, which would grant the container full access to the WSL kernel's device tree and capabilities. "
+                        + "Privileged Linux containers bypass cgroup and namespace isolation — a privileged container escape is effectively a WSL hypervisor boundary bypass. Container image registries routinely contain malicious images that exploit the privileged mode to escape to the host. Blocking privileged container mode ensures all Docker and podman containers within WSL remain namespace-isolated.",
+                    Tags = ["wsl", "container", "privileged", "isolation", "escape"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "Privileged Linux containers blocked in WSL; Docker --privileged flag will be denied.",
+                    ApplyOps = [RegOp.SetDword(Key, "DisablePrivilegedContainerMode", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "DisablePrivilegedContainerMode")],
+                    DetectOps = [RegOp.CheckDword(Key, "DisablePrivilegedContainerMode", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "wslsechrd-require-secure-boot-for-wsl",
+                    Label = "WSL Security: Require Secure Boot (UEFI) Validation Before WSL Launch",
+                    Category = "Virtualization",
+                    Description =
+                        "Sets RequireSecureBootForWsl=1 in Lxss Security policy. Configures WSL to verify that the host system has Secure Boot enabled and that the WSL system distro image is digitally signed before allowing any WSL distribution to launch. "
+                        + "A threat actor with physical access or bootkit privileges can replace the WSL system distro image (kernel/initramfs) with a malicious version that intercepts WSL sessions. Requiring Secure Boot validation means that only Microsoft-signed WSL kernel images will be accepted — any tampered or unsigned replacement will be rejected at launch, preventing persistent WSL-level rootkit installation.",
+                    Tags = ["wsl", "secure-boot", "kernel", "integrity", "bootkit"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "WSL requires Secure Boot; unsigned or tampered WSL kernel images rejected at launch.",
+                    ApplyOps = [RegOp.SetDword(Key, "RequireSecureBootForWsl", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "RequireSecureBootForWsl")],
+                    DetectOps = [RegOp.CheckDword(Key, "RequireSecureBootForWsl", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "wslsechrd-enable-apparmor-enforcement",
+                    Label = "WSL Security: Enable AppArmor Mandatory Access Control Enforcement",
+                    Category = "Virtualization",
+                    Description =
+                        "Sets RequireAppArmorEnforcement=1 in Lxss Security policy. Requires that AppArmor (the Linux Mandatory Access Control framework) is active and in enforcing mode within WSL distributions before those distros are permitted to run Linux processes. "
+                        + "AppArmor-enforcing mode means that every Linux process is subject to a per-executable MAC policy that limits the files, capabilities, and network resources it can access. Without AppArmor enforcement, a compromised Linux process within WSL can access any file the Linux user has permission to reach (including all DrvFs-mounted Windows files). AppArmor confines individual processes to their expected access patterns.",
+                    Tags = ["wsl", "apparmor", "mac", "mandatory-access-control", "hardening"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 4,
+                    ImpactNote = "AppArmor MAC enforcement required; distros without AppArmor active will be blocked from launching processes.",
+                    ApplyOps = [RegOp.SetDword(Key, "RequireAppArmorEnforcement", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "RequireAppArmorEnforcement")],
+                    DetectOps = [RegOp.CheckDword(Key, "RequireAppArmorEnforcement", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "wslsechrd-disable-wsl-sudo-escalation",
+                    Label = "WSL Security: Block sudo Privilege Escalation in WSL Distributions",
+                    Category = "Virtualization",
+                    Description =
+                        "Sets DisableSudoEscalation=1 in Lxss Security policy. Prevents the 'sudo' and 'su' commands from granting root privileges within WSL distributions launched in standard user sessions, enforcing that all WSL processes run under the Linux user identity only. "
+                        + "sudo root access within WSL gives a Linux process full root capabilities within the WSL VM, including the ability to install kernel modules, bind to privileged ports, and reconfigure network namespaces. While the WSL VM boundary limits the blast radius, root access within WSL provides a much larger attack surface for container escape and VM privilege escalation research exploitation.",
+                    Tags = ["wsl", "sudo", "root", "privilege-escalation", "least-privilege"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 4,
+                    ImpactNote = "sudo/su blocked in WSL; all Linux processes run as the mapped Windows user identity only.",
+                    ApplyOps = [RegOp.SetDword(Key, "DisableSudoEscalation", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "DisableSudoEscalation")],
+                    DetectOps = [RegOp.CheckDword(Key, "DisableSudoEscalation", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "wslsechrd-enable-seccomp-enforcement",
+                    Label = "WSL Security: Enable Seccomp System Call Filtering Enforcement",
+                    Category = "Virtualization",
+                    Description =
+                        "Sets RequireSeccompEnforcement=1 in Lxss Security policy. Requires the WSL Linux kernel to apply Seccomp-BPF (system call filtration) policies to all user-space processes, blocking access to dangerous system calls that are not needed for standard application workloads. "
+                        + "Many Linux kernel privilege escalation vulnerabilities are triggered via obscure or rarely-used system calls (ptrace, perf_event_open, io_uring). Seccomp filtering blocks these system calls unless explicitly allowed by the process's policy, preventing exploitation of kernel vulnerabilities that require those call paths. This is particularly important because the WSL Linux kernel shares the root namespace with all distros.",
+                    Tags = ["wsl", "seccomp", "syscall", "kernel", "exploit-prevention"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 4,
+                    ImpactNote =
+                        "Seccomp syscall filtering enforced; dangerous kernel interfaces blocked from user-space, reducing kernel exploit surface.",
+                    ApplyOps = [RegOp.SetDword(Key, "RequireSeccompEnforcement", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "RequireSeccompEnforcement")],
+                    DetectOps = [RegOp.CheckDword(Key, "RequireSeccompEnforcement", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "wslsechrd-disable-raw-socket-creation",
+                    Label = "WSL Security: Block Raw Socket Creation by Non-Root Linux Processes",
+                    Category = "Virtualization",
+                    Description =
+                        "Sets DisableRawSocketCreation=1 in Lxss Security policy. Prevents non-root Linux processes within WSL from creating AF_PACKET (raw) network sockets, which would allow them to perform low-level network packet capture and injection without Windows-side network monitoring visibility. "
+                        + "Raw sockets enable Linux processes to capture all network traffic visible to the WSL VM's network namespace. In mirrored networking mode, this includes all traffic from the Windows host. A malicious tool running in WSL with raw socket access can perform ARP spoofing, DNS poisoning, and credential harvest from unencrypted protocol traffic, bypassing Windows network monitoring solutions.",
+                    Tags = ["wsl", "raw-socket", "packet-capture", "network", "monitoring"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "Raw sockets blocked for non-root Linux processes; WSL cannot be used for network packet capture without root.",
+                    ApplyOps = [RegOp.SetDword(Key, "DisableRawSocketCreation", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "DisableRawSocketCreation")],
+                    DetectOps = [RegOp.CheckDword(Key, "DisableRawSocketCreation", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "wslsechrd-disable-ptrace-between-distros",
+                    Label = "WSL Security: Block ptrace Cross-Distro Process Attachment",
+                    Category = "Virtualization",
+                    Description =
+                        "Sets DisableCrossDistrictPtrace=1 in Lxss Security policy. Prevents Linux processes in one WSL distribution from using ptrace() to attach to and debug processes running in another WSL distribution sharing the same Hyper-V VM. "
+                        + "When multiple WSL distros run in the same Hyper-V partition (the typical configuration), they share a Linux kernel and a process namespace at the VM level. Without a ptrace policy, a process in distro A can attach to a process in distro B and read its memory, modify its execution, or extract credentials it holds. Restricting cross-distro ptrace enforces process isolation between co-located Linux environments.",
+                    Tags = ["wsl", "ptrace", "debugging", "multi-distro", "isolation"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "ptrace blocked across WSL distros; one distro cannot debug or read memory of processes in another distro.",
+                    ApplyOps = [RegOp.SetDword(Key, "DisableCrossDistrictPtrace", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "DisableCrossDistrictPtrace")],
+                    DetectOps = [RegOp.CheckDword(Key, "DisableCrossDistrictPtrace", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "wslsechrd-enable-user-namespace-restrictions",
+                    Label = "WSL Security: Restrict Unprivileged Linux User Namespace Creation",
+                    Category = "Virtualization",
+                    Description =
+                        "Sets RestrictUnprivilegedUserNamespaces=1 in Lxss Security policy. Limits the ability of unprivileged Linux user-space processes to create new user namespaces within the WSL VM, which are frequently exploited as container escape stepping stones. "
+                        + "User namespaces are the Linux kernel primitive that enables unprivileged container tools (rootless Docker, rootless podman). However, user namespaces have also been the root cause or enabling boundary for a significant fraction of Linux kernel privilege escalation CVEs (CVE-2023-4911, CVE-2022-0847 'Dirty Pipe', CVE-2022-25375). Restricting their creation prevents their use as an escalation primitive while still allowing root-managed container workflows.",
+                    Tags = ["wsl", "user-namespace", "container", "cve", "kernel-exploit"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 4,
+                    ImpactNote =
+                        "Unprivileged user namespace creation restricted; rootless container tools may not function; reduces kernel namespace CVE exposure.",
+                    ApplyOps = [RegOp.SetDword(Key, "RestrictUnprivilegedUserNamespaces", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "RestrictUnprivilegedUserNamespaces")],
+                    DetectOps = [RegOp.CheckDword(Key, "RestrictUnprivilegedUserNamespaces", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "wslsechrd-enable-defender-scan-on-wsl-exec",
+                    Label = "WSL Security: Enable Microsoft Defender Scanning on WSL Executable Launch",
+                    Category = "Virtualization",
+                    Description =
+                        "Sets EnableDefenderScanOnWslExecution=1 in Lxss Security policy. Enables Microsoft Defender for Endpoint to scan Linux ELF executables and scripts when they are launched within the WSL environment, before process execution begins. "
+                        + "By default, Defender's real-time file system protection monitors the Windows NTFS volume but may not scan Linux ELF binaries within the ext4 VHD. With WSL execution scanning enabled, Defender analyses Linux binaries using Linux threat intelligence signatures, detecting known Linux malware, coin miners, and reverse shells that reside within the WSL file system. This closes the gap between Windows AV coverage and Linux-resident threats.",
+                    Tags = ["wsl", "defender", "malware", "scanning", "elf"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "Defender scans Linux ELF binaries at WSL launch time; Linux malware in the WSL VHD detected before execution.",
+                    ApplyOps = [RegOp.SetDword(Key, "EnableDefenderScanOnWslExecution", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "EnableDefenderScanOnWslExecution")],
+                    DetectOps = [RegOp.CheckDword(Key, "EnableDefenderScanOnWslExecution", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "wslsechrd-disable-wsl-kernel-module-load",
+                    Label = "WSL Security: Block Loading of Unsigned Linux Kernel Modules in WSL",
+                    Category = "Virtualization",
+                    Description =
+                        "Sets DisableUnsignedKernelModuleLoad=1 in Lxss Security policy. Prevents the WSL Linux kernel from loading unsigned or third-party kernel modules (LKMs) that are not part of the Microsoft-signed WSL kernel image. "
+                        + "Linux kernel modules run with ring-0 (kernel mode) privileges and have unrestricted access to all memory, devices, and kernel data structures within the VM. A malicious loadable kernel module loaded in WSL can install kernel-level hooks, intercept all WSL system calls, and exfiltrate data from other processes at the kernel level. Blocking unsigned module loading enforces that only the Microsoft-vetted WSL kernel components can extend the kernel's attack surface.",
+                    Tags = ["wsl", "kernel-module", "lkm", "ring0", "unsigned"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 5,
+                    SafetyRating = 5,
+                    ImpactNote =
+                        "Unsigned Linux kernel modules blocked in WSL; custom LKMs and third-party drivers cannot be loaded into the WSL kernel.",
+                    ApplyOps = [RegOp.SetDword(Key, "DisableUnsignedKernelModuleLoad", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "DisableUnsignedKernelModuleLoad")],
+                    DetectOps = [RegOp.CheckDword(Key, "DisableUnsignedKernelModuleLoad", 1)],
+                },
+            ];
     }
 
     // ── WindowsSubsystemLinuxPolicy ──
@@ -4197,7 +4269,5 @@ internal static class PolicySubsystems
                     DetectOps = [RegOp.CheckDword(LxssKey, "AllowVTPM", 0)],
                 },
             ];
-
     }
-
 }

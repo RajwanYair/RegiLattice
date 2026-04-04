@@ -1,10 +1,10 @@
-using RegiLattice.Core;
-using RegiLattice.Core.Services;
-using Xunit;
-using System.ServiceProcess;
 using System.Collections.Generic;
 using System.IO;
+using System.ServiceProcess;
+using RegiLattice.Core;
 using RegiLattice.Core.Models;
+using RegiLattice.Core.Services;
+using Xunit;
 
 namespace RegiLattice.Core.Tests;
 
@@ -2226,6 +2226,7 @@ public sealed class NetworkManagerTests
         Assert.Equal("OK", r.Message);
     }
 }
+
 // ── merged from ServiceManagerTests.cs ──────────────────────────────────
 /// <summary>Tests for the Sprint-29 ServiceManager service (read-only operations).</summary>
 public sealed class ServiceManagerTests
@@ -2445,6 +2446,7 @@ public sealed class UpdateCheckServiceTests
         Assert.Equal("", info.LatestVersion);
     }
 }
+
 // ── merged from BranchCoverageServiceTests.cs ──────────────────────────────────
 /// <summary>
 /// Branch-coverage tests for <see cref="SmartScanService"/>.

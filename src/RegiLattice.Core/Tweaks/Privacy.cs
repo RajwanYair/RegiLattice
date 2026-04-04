@@ -1547,7 +1547,6 @@ internal static class WindowsRecall
 
 // === Merged from: TelemetryAdvanced.cs ===
 
-
 internal static class TelemetryAdvanced
 {
     internal static IReadOnlyList<TweakDef> Tweaks { get; } =
@@ -2158,7 +2157,6 @@ internal static class TelemetryAdvanced
     ];
 }
 
-
 // ── merged from PolicyPrivacy.cs ──
 // RegiLattice.Core — Tweaks/PolicyPrivacy.cs
 // Advertising ID, data collection, feedback, location sensors, push notifications, Windows diagnostics, and privacy policy controls
@@ -2192,8 +2190,7 @@ internal static class PolicyPrivacy
     // ── AdvertisingInfoPolicy ──
     private static class _AdvertisingInfoPolicy
     {
-        private const string Key =
-            @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AdvertisingInfo";
+        private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AdvertisingInfo";
 
         public static IReadOnlyList<TweakDef> Data =>
             [
@@ -2368,7 +2365,6 @@ internal static class PolicyPrivacy
                     DetectOps = [RegOp.CheckDword(Key, "DisableDiagnosticAdFeedback", 1)],
                 },
             ];
-
     }
 
     // ── DataCollectionPolicy ──
@@ -2561,7 +2557,6 @@ internal static class PolicyPrivacy
                 DetectOps = [RegOp.CheckDword(Key, "HideDiagnosticPage", 1)],
             },
         ];
-
     }
 
     // ── DataIntegrityPolicy ──
@@ -2742,7 +2737,6 @@ internal static class PolicyPrivacy
                 DetectOps = [RegOp.CheckDword(Key, "EnforceIntegrityOnWrite", 1)],
             },
         ];
-
     }
 
     // ── FeedbackPolicy ──
@@ -2757,7 +2751,10 @@ internal static class PolicyPrivacy
                 Id = "fbk-disable-feedback-notifications",
                 Label = "Disable Feedback Notifications",
                 Category = "Privacy",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 3, SafetyRating = 5,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 3,
+                SafetyRating = 5,
                 Description =
                     "Sets DisableFeedbackNotifications=1 in the Feedback policy key. Prevents "
                     + "Windows from displaying in-product popups asking users to rate their "
@@ -2776,7 +2773,10 @@ internal static class PolicyPrivacy
                 Id = "fbk-disable-feedback-hub",
                 Label = "Disable Feedback Hub",
                 Category = "Privacy",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 3, SafetyRating = 5,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 3,
+                SafetyRating = 5,
                 Description =
                     "Sets DisableFeedbackHub=1 in the Feedback policy key. Blocks the "
                     + "Feedback Hub application from submitting problem reports, feature "
@@ -2795,7 +2795,10 @@ internal static class PolicyPrivacy
                 Id = "fbk-disable-feedback-hub-nps",
                 Label = "Disable Feedback Hub NPS Surveys",
                 Category = "Privacy",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 2, SafetyRating = 5,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 2,
+                SafetyRating = 5,
                 Description =
                     "Sets DisableNpsSurveys=1 in the Feedback policy key. Suppresses "
                     + "Net Promoter Score (NPS) survey overlays that ask how likely the "
@@ -2814,7 +2817,10 @@ internal static class PolicyPrivacy
                 Id = "fbk-disable-feedback-telemetry-upload",
                 Label = "Disable Feedback Telemetry Upload",
                 Category = "Privacy",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 4, SafetyRating = 5,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 4,
+                SafetyRating = 5,
                 Description =
                     "Sets DisableTelemetryUpload=1 in the Feedback policy key. Explicitly "
                     + "blocks the Feedback Hub service from uploading telemetry bundles "
@@ -2833,7 +2839,10 @@ internal static class PolicyPrivacy
                 Id = "fbk-disable-screen-capture-feedback",
                 Label = "Disable Feedback Screen Capture",
                 Category = "Privacy",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 4, SafetyRating = 5,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 4,
+                SafetyRating = 5,
                 Description =
                     "Sets DisableScreenCapture=1 in the Feedback policy key. Prevents the "
                     + "Feedback Hub from automatically capturing a screenshot when the "
@@ -2852,7 +2861,10 @@ internal static class PolicyPrivacy
                 Id = "fbk-disable-recording-feedback",
                 Label = "Disable Feedback Steps Recorder",
                 Category = "Privacy",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 3, SafetyRating = 5,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 3,
+                SafetyRating = 5,
                 Description =
                     "Sets DisableStepsRecorder=1 in the Feedback policy key. Blocks the "
                     + "Steps Recorder component of the Feedback Hub from recording a "
@@ -2871,7 +2883,10 @@ internal static class PolicyPrivacy
                 Id = "fbk-disable-feedback-app-prompts",
                 Label = "Disable In-App Feedback Prompts",
                 Category = "Privacy",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 2, SafetyRating = 5,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 2,
+                SafetyRating = 5,
                 Description =
                     "Sets DisableInAppFeedbackPrompts=1 in the Feedback policy key. Prevents "
                     + "Windows-inbox applications and UWP system apps from showing inline "
@@ -2890,7 +2905,10 @@ internal static class PolicyPrivacy
                 Id = "fbk-set-feedback-frequency-never",
                 Label = "Set Feedback Frequency to Never",
                 Category = "Privacy",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 3, SafetyRating = 5,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 3,
+                SafetyRating = 5,
                 Description =
                     "Sets FeedbackFrequency=0 in the Feedback policy key. Sets the periodic "
                     + "feedback prompt interval to 0 (Never), so Windows never schedules "
@@ -2909,7 +2927,10 @@ internal static class PolicyPrivacy
                 Id = "fbk-disable-voluntary-data-collection",
                 Label = "Disable Voluntary Data Collection via Feedback",
                 Category = "Privacy",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 3, SafetyRating = 5,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 3,
+                SafetyRating = 5,
                 Description =
                     "Sets DisableVoluntaryDataCollection=1 in the Feedback policy key. Opts "
                     + "the device out of voluntary data collection programmes (such as the "
@@ -2928,7 +2949,10 @@ internal static class PolicyPrivacy
                 Id = "fbk-disable-feedback-account-requirement",
                 Label = "Disable Feedback Account Sign-In Requirement",
                 Category = "Privacy",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 2, SafetyRating = 5,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 2,
+                SafetyRating = 5,
                 Description =
                     "Sets DisableAccountRequirement=1 in the Feedback policy key. Prevents "
                     + "the Feedback Hub from prompting users to sign in to a Microsoft "
@@ -2943,7 +2967,6 @@ internal static class PolicyPrivacy
                 DetectOps = [RegOp.CheckDword(Key, "DisableAccountRequirement", 1)],
             },
         ];
-
     }
 
     // ── LocationSensors ──
@@ -2953,8 +2976,10 @@ internal static class PolicyPrivacy
         private const string AppPrivacy = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy";
         private const string WinSearch = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search";
         private const string WifiConfig = @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\WcmSvc\wifinetworkmanager\config";
-        private const string UserLocation = @"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\location";
-        private const string UserActivity = @"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\activity";
+        private const string UserLocation =
+            @"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\location";
+        private const string UserActivity =
+            @"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\activity";
 
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
@@ -3152,7 +3177,6 @@ internal static class PolicyPrivacy
                 ],
             },
         ];
-
     }
 
     // ── LocationSensorsPolicy ──
@@ -3333,7 +3357,6 @@ internal static class PolicyPrivacy
                     DetectOps = [RegOp.CheckDword(Key, "AllowAppsToAccessLocation", 0)],
                 },
             ];
-
     }
 
     // ── MicrosoftAccount ──
@@ -3439,9 +3462,18 @@ internal static class PolicyPrivacy
                     "Disables the optional background upload of diagnostic/telemetry data "
                     + "associated with a signed-in Microsoft Account. Complements the main "
                     + "telemetry disable tweak with an MSA-scoped opt-out.",
-                ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DataCollection", "AllowDeviceNameInTelemetry", 0)],
-                RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DataCollection", "AllowDeviceNameInTelemetry")],
-                DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DataCollection", "AllowDeviceNameInTelemetry", 0)],
+                ApplyOps =
+                [
+                    RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DataCollection", "AllowDeviceNameInTelemetry", 0),
+                ],
+                RemoveOps =
+                [
+                    RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DataCollection", "AllowDeviceNameInTelemetry"),
+                ],
+                DetectOps =
+                [
+                    RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DataCollection", "AllowDeviceNameInTelemetry", 0),
+                ],
             },
             new TweakDef
             {
@@ -3576,7 +3608,6 @@ internal static class PolicyPrivacy
                 DetectOps = [RegOp.CheckDword(SyncPolicy, "DisableApplicationSettingSync", 1)],
             },
         ];
-
     }
 
     // ── PhotoAcquisitionPolicy ──
@@ -3789,7 +3820,6 @@ internal static class PolicyPrivacy
                 DetectOps = [RegOp.CheckDword(PaLm, "DisableCameraEvents", 1)],
             },
         ];
-
     }
 
     // ── PushNotificationsPolicy ──
@@ -3989,7 +4019,6 @@ internal static class PolicyPrivacy
                     DetectOps = [RegOp.CheckDword(Key, "NoNetworkNotification", 1)],
                 },
             ];
-
     }
 
     // ── SearchWebPolicy ──
@@ -4179,7 +4208,6 @@ internal static class PolicyPrivacy
                 DetectOps = [RegOp.CheckDword(Key, "AllowIndexingEncryptedStoresOrItems", 0)],
             },
         ];
-
     }
 
     // ── SensorPolicy ──
@@ -4361,7 +4389,6 @@ internal static class PolicyPrivacy
                 DetectOps = [RegOp.CheckString($@"{CamBase}\bluetoothSync", "Value", "Deny")],
             },
         ];
-
     }
 
     // ── SensorServicePolicy ──
@@ -4542,7 +4569,6 @@ internal static class PolicyPrivacy
                 DetectOps = [RegOp.CheckDword(Key, "DisableLocationBroadcast", 1)],
             },
         ];
-
     }
 
     // ── SpellingAndTypingPolicy ──
@@ -4557,7 +4583,10 @@ internal static class PolicyPrivacy
                 Id = "sptype-disable-auto-correct",
                 Label = "Disable Autocorrect via Policy",
                 Category = "Privacy",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 2, SafetyRating = 5,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 2,
+                SafetyRating = 5,
                 Description =
                     "Sets AutocorrectMisspelledWords=0 in the SpellingAndTyping policy key. "
                     + "Prevents Windows from automatically replacing mis-typed words with "
@@ -4576,7 +4605,10 @@ internal static class PolicyPrivacy
                 Id = "sptype-disable-spell-checking",
                 Label = "Disable System-Wide Spell Checking",
                 Category = "Privacy",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 2, SafetyRating = 5,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 2,
+                SafetyRating = 5,
                 Description =
                     "Sets SpellCheckingEnabled=0 in the SpellingAndTyping policy key. Disables "
                     + "the Windows spell-checking engine that underlies red-underline annotations "
@@ -4596,7 +4628,10 @@ internal static class PolicyPrivacy
                 Id = "sptype-disable-text-prediction",
                 Label = "Disable Text Prediction (Inline Suggestions)",
                 Category = "Privacy",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 2, SafetyRating = 5,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 2,
+                SafetyRating = 5,
                 Description =
                     "Sets TextPredictionEnabled=0 in the SpellingAndTyping policy key. "
                     + "Removes inline word-completion suggestions that appear while typing in "
@@ -4615,7 +4650,10 @@ internal static class PolicyPrivacy
                 Id = "sptype-disable-highlight-misspelled",
                 Label = "Disable Misspelling Underline Highlight",
                 Category = "Privacy",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 1, SafetyRating = 5,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 1,
+                SafetyRating = 5,
                 Description =
                     "Sets HighlightMisspelledWords=0 in the SpellingAndTyping policy key. "
                     + "Stops the system spell engine from drawing red wavy underlines beneath "
@@ -4634,7 +4672,10 @@ internal static class PolicyPrivacy
                 Id = "sptype-disable-typing-insights",
                 Label = "Disable Typing Insights",
                 Category = "Privacy",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 2, SafetyRating = 5,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 2,
+                SafetyRating = 5,
                 Description =
                     "Sets InsightsEnabled=0 in the SpellingAndTyping policy key. Disables "
                     + "the Windows Typing Insights feature that collects word-frequency data "
@@ -4653,7 +4694,10 @@ internal static class PolicyPrivacy
                 Id = "sptype-disable-hardware-keyboard-suggestions",
                 Label = "Disable Hardware Keyboard Suggestions Bar",
                 Category = "Privacy",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 2, SafetyRating = 5,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 2,
+                SafetyRating = 5,
                 Description =
                     "Sets HardwareKeyboardTextSuggestions=0 in the SpellingAndTyping policy key. "
                     + "Removes the candidate-word suggestions bar that Windows 11 shows above "
@@ -4672,7 +4716,10 @@ internal static class PolicyPrivacy
                 Id = "sptype-disable-swipe-typing",
                 Label = "Disable Touch Keyboard Swipe Typing",
                 Category = "Privacy",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 2, SafetyRating = 5,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 2,
+                SafetyRating = 5,
                 Description =
                     "Sets SwipeKeyboardEnabled=0 in the SpellingAndTyping policy key. Disables "
                     + "swipe (gesture) typing on the Windows touch keyboard, requiring each "
@@ -4691,7 +4738,10 @@ internal static class PolicyPrivacy
                 Id = "sptype-disable-typing-telemetry",
                 Label = "Disable Typing Telemetry Upload",
                 Category = "Privacy",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 3, SafetyRating = 5,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 3,
+                SafetyRating = 5,
                 Description =
                     "Sets TypingDataCollectionEnabled=0 in the SpellingAndTyping policy key. "
                     + "Prevents Windows from uploading typing-pattern telemetry to Microsoft's "
@@ -4711,7 +4761,10 @@ internal static class PolicyPrivacy
                 Id = "sptype-disable-handwriting-recognition",
                 Label = "Disable Handwriting Recognition Improvement",
                 Category = "Privacy",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 2, SafetyRating = 5,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 2,
+                SafetyRating = 5,
                 Description =
                     "Sets HandwritingAcceptedSamples=0 in the SpellingAndTyping policy key. "
                     + "Stops Windows from collecting pen-stroke samples to improve the on-device "
@@ -4730,7 +4783,10 @@ internal static class PolicyPrivacy
                 Id = "sptype-disable-autocomplete",
                 Label = "Disable System Autocomplete",
                 Category = "Privacy",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 2, SafetyRating = 5,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 2,
+                SafetyRating = 5,
                 Description =
                     "Sets AutoCompleteEnabled=0 in the SpellingAndTyping policy key. Disables "
                     + "the system-wide autocomplete engine that suggests previously entered "
@@ -4746,7 +4802,6 @@ internal static class PolicyPrivacy
                 DetectOps = [RegOp.CheckDword(Key, "AutoCompleteEnabled", 0)],
             },
         ];
-
     }
 
     // ── WindowsDiagnostics ──
@@ -4989,7 +5044,6 @@ internal static class PolicyPrivacy
                 DetectOps = [RegOp.CheckDword(FeedbackPolicy, "DisableWindowsConsumerFeatures", 1)],
             },
         ];
-
     }
 
     // ── WindowsDiagnosticsInfraPolicy ──
@@ -5196,7 +5250,6 @@ internal static class PolicyPrivacy
                     DetectOps = [RegOp.CheckDword(Key, "PreventDiagnosticTaskExecution", 1)],
                 },
             ];
-
     }
 
     // ── WindowsDiagTrackPolicy ──
@@ -5417,7 +5470,6 @@ internal static class PolicyPrivacy
                 ImpactNote = "Blocks clipboard telemetry via DiagTrack; prevents clipboard usage patterns from being collected.",
             },
         ];
-
     }
 
     // ── WindowsInfoProtectionPolicy ──
@@ -5610,7 +5662,6 @@ internal static class PolicyPrivacy
                 DetectOps = [RegOp.CheckDword(NetIsoKey, "EnterpriseCloudResources", 1)],
             },
         ];
-
     }
 
     // ── WindowsMapsPolicy ──
@@ -5775,7 +5826,5 @@ internal static class PolicyPrivacy
                 DetectOps = [RegOp.CheckDword(WinSearchCu, "AllowCortanaInAAD", 0)],
             },
         ];
-
     }
-
 }

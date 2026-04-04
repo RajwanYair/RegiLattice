@@ -15,28 +15,28 @@ namespace RegiLattice.GUI.Controls;
 internal sealed class TweakBrowserPanel : Panel
 {
     // ── Events ─────────────────────────────────────────────────────────────
-    internal event Func<TweakDef, bool, Task>? TweakToggled;   // (tweak, enable)
+    internal event Func<TweakDef, bool, Task>? TweakToggled; // (tweak, enable)
     internal event Action<TweakDef>? TweakInfoRequested;
     internal event Action? AdvancedViewRequested;
 
     // ── Sub-controls ───────────────────────────────────────────────────────
-    private readonly Panel      _leftPane;
-    private readonly TreeView   _categoryTree;
-    private readonly Panel      _rightPane;
-    private readonly Panel      _filterBar;
-    private readonly TextBox    _searchBox;
-    private readonly ComboBox   _statusFilter;
-    private readonly Button     _btnAdvanced;
-    private readonly Panel      _cardArea;         // scrollable card container
+    private readonly Panel _leftPane;
+    private readonly TreeView _categoryTree;
+    private readonly Panel _rightPane;
+    private readonly Panel _filterBar;
+    private readonly TextBox _searchBox;
+    private readonly ComboBox _statusFilter;
+    private readonly Button _btnAdvanced;
+    private readonly Panel _cardArea; // scrollable card container
 
     // ── State ──────────────────────────────────────────────────────────────
-    private TweakEngine?   _engine;
+    private TweakEngine? _engine;
     private IReadOnlyDictionary<string, TweakResult>? _statusCache;
     private readonly HashSet<string> _inapplicableIds = new(StringComparer.Ordinal);
-    private string  _selectedCategory = string.Empty;
-    private string  _searchText       = string.Empty;
-    private string  _statusFilterVal  = "All";
-    private bool    _rebuilding;
+    private string _selectedCategory = string.Empty;
+    private string _searchText = string.Empty;
+    private string _statusFilterVal = "All";
+    private bool _rebuilding;
 
     // Card pool to avoid excessive GC
     private readonly List<TweakCardRow> _cardPool = [];
@@ -47,51 +47,55 @@ internal sealed class TweakBrowserPanel : Panel
     // ── Construction ───────────────────────────────────────────────────────
     internal TweakBrowserPanel()
     {
-        _debounce.Tick += (_, _) => { _debounce.Stop(); RebuildCards(); };
+        _debounce.Tick += (_, _) =>
+        {
+            _debounce.Stop();
+            RebuildCards();
+        };
 
         // ── Left category pane ─────────────────────────────────────────
         _categoryTree = new TreeView
         {
-            Dock        = DockStyle.Fill,
+            Dock = DockStyle.Fill,
             BorderStyle = BorderStyle.None,
-            ShowLines   = false,
+            ShowLines = false,
             ShowPlusMinus = false,
             ShowRootLines = false,
             HotTracking = true,
-            Font        = AppTheme.Bold,
-            BackColor   = AppTheme.Surface,
-            ForeColor   = AppTheme.FgDim,
+            Font = AppTheme.Bold,
+            BackColor = AppTheme.Surface,
+            ForeColor = AppTheme.FgDim,
         };
         _categoryTree.AfterSelect += OnCategorySelected;
         _categoryTree.DrawMode = TreeViewDrawMode.OwnerDrawText;
         _categoryTree.DrawNode += OnDrawCategoryNode;
 
-        _leftPane = new Panel
-        {
-            Dock  = DockStyle.Left,
-            Width = 188,
-        };
+        _leftPane = new Panel { Dock = DockStyle.Left, Width = 188 };
         _leftPane.Controls.Add(_categoryTree);
 
         // ── Filter bar ─────────────────────────────────────────────────
         _searchBox = new TextBox
         {
-            Width       = 220,
+            Width = 220,
             BorderStyle = BorderStyle.FixedSingle,
-            Font        = AppTheme.Bold,
-            BackColor   = AppTheme.Surface,
-            ForeColor   = AppTheme.Fg,
+            Font = AppTheme.Bold,
+            BackColor = AppTheme.Surface,
+            ForeColor = AppTheme.Fg,
             PlaceholderText = "Search tweaks…",
         };
-        _searchBox.TextChanged += (_, _) => { _debounce.Stop(); _debounce.Start(); };
+        _searchBox.TextChanged += (_, _) =>
+        {
+            _debounce.Stop();
+            _debounce.Start();
+        };
 
         _statusFilter = new ComboBox
         {
             DropDownStyle = ComboBoxStyle.DropDownList,
-            Width         = 120,
-            Font          = AppTheme.Bold,
-            BackColor     = AppTheme.Surface,
-            ForeColor     = AppTheme.Fg,
+            Width = 120,
+            Font = AppTheme.Bold,
+            BackColor = AppTheme.Surface,
+            ForeColor = AppTheme.Fg,
         };
         _statusFilter.Items.AddRange(new object[] { "All", "Applied", "Not Applied", "Errors" });
         _statusFilter.SelectedIndex = 0;
@@ -103,26 +107,26 @@ internal sealed class TweakBrowserPanel : Panel
 
         _btnAdvanced = new Button
         {
-            Text      = "⊞  Advanced View",
+            Text = "⊞  Advanced View",
             FlatStyle = FlatStyle.Flat,
-            Font      = new Font(AppTheme.Bold.FontFamily, 8.5f, FontStyle.Regular),
+            Font = new Font(AppTheme.Bold.FontFamily, 8.5f, FontStyle.Regular),
             ForeColor = AppTheme.FgDim,
             BackColor = AppTheme.Surface,
-            Height    = 28,
-            AutoSize  = true,
-            Cursor    = Cursors.Hand,
+            Height = 28,
+            AutoSize = true,
+            Cursor = Cursors.Hand,
         };
         _btnAdvanced.FlatAppearance.BorderColor = AppTheme.Border;
         _btnAdvanced.Click += (_, _) => AdvancedViewRequested?.Invoke();
 
         var filterLayout = new FlowLayoutPanel
         {
-            Dock          = DockStyle.Top,
-            Height        = 40,
+            Dock = DockStyle.Top,
+            Height = 40,
             FlowDirection = FlowDirection.LeftToRight,
-            Padding       = new Padding(8, 6, 8, 0),
-            AutoScroll    = false,
-            BackColor     = AppTheme.Bg,
+            Padding = new Padding(8, 6, 8, 0),
+            AutoScroll = false,
+            BackColor = AppTheme.Bg,
         };
         filterLayout.Controls.AddRange(new Control[] { _searchBox, _statusFilter, _btnAdvanced });
         _filterBar = filterLayout;
@@ -130,10 +134,10 @@ internal sealed class TweakBrowserPanel : Panel
         // ── Card area ─────────────────────────────────────────────────
         _cardArea = new Panel
         {
-            Dock       = DockStyle.Fill,
+            Dock = DockStyle.Fill,
             AutoScroll = true,
-            BackColor  = AppTheme.Bg,
-            Padding    = new Padding(12, 8, 12, 8),
+            BackColor = AppTheme.Bg,
+            Padding = new Padding(12, 8, 12, 8),
         };
 
         _rightPane = new Panel { Dock = DockStyle.Fill };
@@ -144,7 +148,7 @@ internal sealed class TweakBrowserPanel : Panel
         // (alpha < 255) and WinForms Splitter throws ArgumentException on transparent BackColor.
         var splitter = new Splitter
         {
-            Dock  = DockStyle.Left,
+            Dock = DockStyle.Left,
             Width = 5,
             BackColor = AppTheme.Surface,
         };
@@ -155,15 +159,15 @@ internal sealed class TweakBrowserPanel : Panel
     }
 
     // ── Public API ─────────────────────────────────────────────────────────
-    internal void SetEngine(TweakEngine engine, IReadOnlyDictionary<string, TweakResult> statusCache,
-                             HashSet<string>? inapplicableIds = null)
+    internal void SetEngine(TweakEngine engine, IReadOnlyDictionary<string, TweakResult> statusCache, HashSet<string>? inapplicableIds = null)
     {
         _engine = engine;
         _statusCache = statusCache;
         if (inapplicableIds is not null)
         {
             _inapplicableIds.Clear();
-            foreach (var id in inapplicableIds) _inapplicableIds.Add(id);
+            foreach (var id in inapplicableIds)
+                _inapplicableIds.Add(id);
         }
         PopulateCategoryTree();
         RebuildCards();
@@ -185,10 +189,11 @@ internal sealed class TweakBrowserPanel : Panel
     {
         _categoryTree.BackColor = AppTheme.Surface;
         _categoryTree.ForeColor = AppTheme.FgDim;
-        _filterBar.BackColor    = AppTheme.Bg;
-        _cardArea.BackColor     = AppTheme.Bg;
-        _leftPane.BackColor     = AppTheme.Surface;
-        foreach (var card in _cardPool) card.ApplyTheme();
+        _filterBar.BackColor = AppTheme.Bg;
+        _cardArea.BackColor = AppTheme.Bg;
+        _leftPane.BackColor = AppTheme.Surface;
+        foreach (var card in _cardPool)
+            card.ApplyTheme();
         Invalidate(true);
     }
 
@@ -197,7 +202,8 @@ internal sealed class TweakBrowserPanel : Panel
     // ── Category tree population ───────────────────────────────────────────
     private void PopulateCategoryTree()
     {
-        if (_engine is null) return;
+        if (_engine is null)
+            return;
 
         _categoryTree.BeginUpdate();
         _categoryTree.Nodes.Clear();
@@ -229,7 +235,11 @@ internal sealed class TweakBrowserPanel : Panel
     {
         bool isSelected = (e.State & TreeNodeStates.Selected) != 0;
         var r = e.Bounds;
-        if (r.IsEmpty) { e.DrawDefault = true; return; }
+        if (r.IsEmpty)
+        {
+            e.DrawDefault = true;
+            return;
+        }
 
         using var bg = new SolidBrush(isSelected ? Color.FromArgb(40, AppTheme.Accent) : AppTheme.Surface);
         e.Graphics.FillRectangle(bg, r);
@@ -246,14 +256,14 @@ internal sealed class TweakBrowserPanel : Panel
             ? new Font(AppTheme.Bold.FontFamily, 9f, FontStyle.Bold)
             : new Font(AppTheme.Bold.FontFamily, 9f, FontStyle.Regular);
         var sf = new StringFormat { LineAlignment = StringAlignment.Center };
-        e.Graphics.DrawString(e.Node?.Text ?? "", font, textBrush,
-            new RectangleF(r.X + 8, r.Y, r.Width - 8, r.Height), sf);
+        e.Graphics.DrawString(e.Node?.Text ?? "", font, textBrush, new RectangleF(r.X + 8, r.Y, r.Width - 8, r.Height), sf);
     }
 
     // ── Card building ──────────────────────────────────────────────────────
     private void RebuildCards()
     {
-        if (_engine is null || _rebuilding) return;
+        if (_engine is null || _rebuilding)
+            return;
         _rebuilding = true;
         _searchText = _searchBox.Text.Trim();
 
@@ -270,10 +280,10 @@ internal sealed class TweakBrowserPanel : Panel
         {
             tweaks = _statusFilterVal switch
             {
-                "Applied"     => tweaks.Where(t => _statusCache?.GetValueOrDefault(t.Id) == TweakResult.Applied),
+                "Applied" => tweaks.Where(t => _statusCache?.GetValueOrDefault(t.Id) == TweakResult.Applied),
                 "Not Applied" => tweaks.Where(t => _statusCache?.GetValueOrDefault(t.Id) is null or TweakResult.NotApplied),
-                "Errors"      => tweaks.Where(t => _statusCache?.GetValueOrDefault(t.Id) == TweakResult.Error),
-                _             => tweaks,
+                "Errors" => tweaks.Where(t => _statusCache?.GetValueOrDefault(t.Id) == TweakResult.Error),
+                _ => tweaks,
             };
         }
 
@@ -287,7 +297,7 @@ internal sealed class TweakBrowserPanel : Panel
         {
             var card = new TweakCardRow();
             card.ToggleRequested += OnToggleRequested;
-            card.InfoRequested   += OnInfoRequested;
+            card.InfoRequested += OnInfoRequested;
             _cardPool.Add(card);
         }
 
@@ -306,8 +316,8 @@ internal sealed class TweakBrowserPanel : Panel
 
             card.SetTweak(td, status, inapplicable);
             card.Location = new Point(0, y);
-            card.Width    = _cardArea.ClientSize.Width - (SystemInformation.VerticalScrollBarWidth + 4);
-            card.Visible  = true;
+            card.Width = _cardArea.ClientSize.Width - (SystemInformation.VerticalScrollBarWidth + 4);
+            card.Visible = true;
             y += card.Height + 4;
 
             if (!_cardArea.Controls.Contains(card))
@@ -318,7 +328,11 @@ internal sealed class TweakBrowserPanel : Panel
         _rebuilding = false;
     }
 
-    protected override void OnResize(EventArgs e) { base.OnResize(e); RebuildCards(); }
+    protected override void OnResize(EventArgs e)
+    {
+        base.OnResize(e);
+        RebuildCards();
+    }
 
     // ── Events from cards ──────────────────────────────────────────────────
     private async void OnToggleRequested(TweakDef td, bool enable)
@@ -340,76 +354,76 @@ internal sealed class TweakBrowserPanel : Panel
 internal sealed class TweakCardRow : Panel
 {
     internal event Action<TweakDef, bool>? ToggleRequested;
-    internal event Action<TweakDef>?       InfoRequested;
+    internal event Action<TweakDef>? InfoRequested;
 
     internal TweakDef? TweakDef { get; private set; }
 
     private readonly ToggleSwitchControl _toggle;
-    private readonly Label               _lblName;
-    private readonly Label               _lblDesc;
-    private readonly Label               _lblBadge;
-    private readonly Button              _btnInfo;
-    private TweakResult                  _status;
-    private bool                         _inapplicable;
+    private readonly Label _lblName;
+    private readonly Label _lblDesc;
+    private readonly Label _lblBadge;
+    private readonly Button _btnInfo;
+    private TweakResult _status;
+    private bool _inapplicable;
 
     private const int CardHeight = 64;
 
     internal TweakCardRow()
     {
-        Height    = CardHeight;
+        Height = CardHeight;
         BackColor = AppTheme.Surface;
 
-        _toggle = new ToggleSwitchControl
-        {
-            Location = new Point(12, (CardHeight - 22) / 2),
-            Size     = new Size(44, 22),
-        };
+        _toggle = new ToggleSwitchControl { Location = new Point(12, (CardHeight - 22) / 2), Size = new Size(44, 22) };
         _toggle.CheckedChanged += OnToggleChanged;
 
         _lblName = new Label
         {
-            AutoSize  = false,
-            Height    = 20,
-            Top       = 12,
-            Left      = 66,
-            Font      = new Font(AppTheme.Bold.FontFamily, 9f, FontStyle.Bold),
+            AutoSize = false,
+            Height = 20,
+            Top = 12,
+            Left = 66,
+            Font = new Font(AppTheme.Bold.FontFamily, 9f, FontStyle.Bold),
             ForeColor = AppTheme.Fg,
             BackColor = Color.Transparent,
         };
 
         _lblDesc = new Label
         {
-            AutoSize  = false,
-            Height    = 16,
-            Top       = 32,
-            Left      = 66,
-            Font      = new Font(AppTheme.Bold.FontFamily, 8f, FontStyle.Regular),
+            AutoSize = false,
+            Height = 16,
+            Top = 32,
+            Left = 66,
+            Font = new Font(AppTheme.Bold.FontFamily, 8f, FontStyle.Regular),
             ForeColor = AppTheme.FgDim,
             BackColor = Color.Transparent,
         };
 
         _lblBadge = new Label
         {
-            AutoSize  = true,
-            Top       = 12,
-            Font      = new Font(AppTheme.Bold.FontFamily, 7.5f, FontStyle.Bold),
+            AutoSize = true,
+            Top = 12,
+            Font = new Font(AppTheme.Bold.FontFamily, 7.5f, FontStyle.Bold),
             ForeColor = AppTheme.Bg,
             BackColor = Color.Transparent,
         };
 
         _btnInfo = new Button
         {
-            Text      = "ⓘ",
+            Text = "ⓘ",
             FlatStyle = FlatStyle.Flat,
-            Size      = new Size(24, 24),
-            Font      = new Font(AppTheme.Bold.FontFamily, 9f, FontStyle.Regular),
+            Size = new Size(24, 24),
+            Font = new Font(AppTheme.Bold.FontFamily, 9f, FontStyle.Regular),
             ForeColor = AppTheme.FgDim,
             BackColor = Color.Transparent,
-            Cursor    = Cursors.Hand,
-            TabStop   = false,
+            Cursor = Cursors.Hand,
+            TabStop = false,
         };
         _btnInfo.FlatAppearance.BorderSize = 0;
-        _btnInfo.Click += (_, _) => { if (TweakDef is not null) InfoRequested?.Invoke(TweakDef); };
+        _btnInfo.Click += (_, _) =>
+        {
+            if (TweakDef is not null)
+                InfoRequested?.Invoke(TweakDef);
+        };
 
         Controls.AddRange(new Control[] { _toggle, _lblName, _lblDesc, _lblBadge, _btnInfo });
 
@@ -426,19 +440,20 @@ internal sealed class TweakCardRow : Panel
 
     internal void SetTweak(TweakDef td, TweakResult status, bool inapplicable)
     {
-        TweakDef     = td;
-        _status      = status;
+        TweakDef = td;
+        _status = status;
         _inapplicable = inapplicable;
 
         _lblName.Text = td.Label;
-        _lblDesc.Text = string.IsNullOrEmpty(td.Description)
-            ? $"{td.Category}  •  {td.Kind}"
-            : td.Description.Length > 80 ? td.Description[..80] + "…" : td.Description;
+        _lblDesc.Text =
+            string.IsNullOrEmpty(td.Description) ? $"{td.Category}  •  {td.Kind}"
+            : td.Description.Length > 80 ? td.Description[..80] + "…"
+            : td.Description;
 
         // Update toggle without firing events
         _toggle.SetCheckedSilent(status == TweakResult.Applied);
         _toggle.Enabled = !inapplicable;
-        _toggle.Cursor  = inapplicable ? Cursors.No : Cursors.Hand;
+        _toggle.Cursor = inapplicable ? Cursors.No : Cursors.Hand;
 
         UpdateBadge();
         LayoutControls();
@@ -465,36 +480,45 @@ internal sealed class TweakCardRow : Panel
     {
         (string text, Color color) = _status switch
         {
-            TweakResult.Applied       => ("ON",      AppTheme.Green),
-            TweakResult.NotApplied    => ("OFF",     AppTheme.FgDim),
-            TweakResult.Error         => ("ERR",     AppTheme.Red),
-            TweakResult.SkippedCorp   => ("CORP",    AppTheme.Yellow),
-            TweakResult.SkippedBuild  => ("BUILD",   AppTheme.Yellow),
-            TweakResult.SkippedHw     => ("N/A",     AppTheme.FgDim),
-            _                         => ("???",     AppTheme.FgDim),
+            TweakResult.Applied => ("ON", AppTheme.Green),
+            TweakResult.NotApplied => ("OFF", AppTheme.FgDim),
+            TweakResult.Error => ("ERR", AppTheme.Red),
+            TweakResult.SkippedCorp => ("CORP", AppTheme.Yellow),
+            TweakResult.SkippedBuild => ("BUILD", AppTheme.Yellow),
+            TweakResult.SkippedHw => ("N/A", AppTheme.FgDim),
+            _ => ("???", AppTheme.FgDim),
         };
-        if (_inapplicable) { text = "N/A"; color = AppTheme.FgDim; }
-        _lblBadge.Text      = text;
+        if (_inapplicable)
+        {
+            text = "N/A";
+            color = AppTheme.FgDim;
+        }
+        _lblBadge.Text = text;
         _lblBadge.BackColor = Color.Transparent;
         // Store color for custom paint; we'll overlay the badge in OnPaint
         _lblBadge.ForeColor = color;
     }
 
-    protected override void OnResize(EventArgs e) { base.OnResize(e); LayoutControls(); }
+    protected override void OnResize(EventArgs e)
+    {
+        base.OnResize(e);
+        LayoutControls();
+    }
 
     private void LayoutControls()
     {
         int w = Width;
-        _lblName.Width  = w - 66 - 80;   // leave room for badge + info btn on right
-        _lblDesc.Width  = w - 66 - 80;
-        _lblBadge.Left  = w - 70;
-        _btnInfo.Left   = w - 36;
-        _btnInfo.Top    = (CardHeight - 24) / 2;
+        _lblName.Width = w - 66 - 80; // leave room for badge + info btn on right
+        _lblDesc.Width = w - 66 - 80;
+        _lblBadge.Left = w - 70;
+        _btnInfo.Left = w - 36;
+        _btnInfo.Top = (CardHeight - 24) / 2;
     }
 
     private void OnToggleChanged(object? sender, EventArgs e)
     {
-        if (TweakDef is null) return;
+        if (TweakDef is null)
+            return;
         ToggleRequested?.Invoke(TweakDef, _toggle.Checked);
     }
 }

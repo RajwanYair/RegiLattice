@@ -2537,7 +2537,6 @@ internal static class DnsNetworking
 
 // === Merged from: ProxyVpn.cs ===
 
-
 /// <summary>
 /// Proxy, VPN, and network tunneling tweaks — configures system proxy settings,
 /// VPN auto-connect behaviour, and WinHTTP/WinINet proxy policies.
@@ -3148,7 +3147,6 @@ internal static class ProxyVpn
     ];
 }
 
-
 // ── merged from PolicyNetwork.cs ──
 // RegiLattice.Core — Tweaks/PolicyNetwork.cs
 // Network connectivity, SMB, DNS, WiFi, VPN, LDAP, proxy, NTP, NTFS network paths, and advanced network configuration policies
@@ -3421,20 +3419,16 @@ internal static class PolicyNetwork
                 DetectOps = [RegOp.CheckDword(Key, "RestrictWlanAutoConfig", 1)],
             },
         ];
-
     }
 
     // ── AlwaysOnVpnPolicy ──
     private static class _AlwaysOnVpnPolicy
     {
-        private const string VpnKey =
-            @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\NetworkConnectivityStatusIndicator";
+        private const string VpnKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\NetworkConnectivityStatusIndicator";
 
-        private const string AgentKey =
-            @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Internet Settings";
+        private const string AgentKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Internet Settings";
 
-        private const string RasKey =
-            @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\RasMan\Parameters";
+        private const string RasKey = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\RasMan\Parameters";
 
         public static IReadOnlyList<TweakDef> Data =>
             [
@@ -3450,7 +3444,8 @@ internal static class PolicyNetwork
                     CorpSafe = true,
                     ImpactScore = 4,
                     SafetyRating = 4,
-                    ImpactNote = "Requires valid machine certificate from enterprise CA on all AOVPN clients. Clients without certificates lose VPN connectivity.",
+                    ImpactNote =
+                        "Requires valid machine certificate from enterprise CA on all AOVPN clients. Clients without certificates lose VPN connectivity.",
                     ApplyOps = [RegOp.SetDword(RasKey, "DisableAdvancedCredentialUI", 1)],
                     RemoveOps = [RegOp.DeleteValue(RasKey, "DisableAdvancedCredentialUI")],
                     DetectOps = [RegOp.CheckDword(RasKey, "DisableAdvancedCredentialUI", 1)],
@@ -3467,7 +3462,8 @@ internal static class PolicyNetwork
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "Creates DNS A records for VPN client IPs in corporate DNS zones. DNS records must have appropriate scavenging to prevent stale accumulation.",
+                    ImpactNote =
+                        "Creates DNS A records for VPN client IPs in corporate DNS zones. DNS records must have appropriate scavenging to prevent stale accumulation.",
                     ApplyOps = [RegOp.SetDword(RasKey, "RegisterDnsARecords", 1)],
                     RemoveOps = [RegOp.DeleteValue(RasKey, "RegisterDnsARecords")],
                     DetectOps = [RegOp.CheckDword(RasKey, "RegisterDnsARecords", 1)],
@@ -3484,7 +3480,8 @@ internal static class PolicyNetwork
                     CorpSafe = true,
                     ImpactScore = 2,
                     SafetyRating = 5,
-                    ImpactNote = "VPN reconnect dialog is suppressed. AOVPN auto-reconnects silently. Users should be informed that VPN connectivity is managed automatically.",
+                    ImpactNote =
+                        "VPN reconnect dialog is suppressed. AOVPN auto-reconnects silently. Users should be informed that VPN connectivity is managed automatically.",
                     ApplyOps = [RegOp.SetDword(RasKey, "DisableReconnectToIncompatible", 1)],
                     RemoveOps = [RegOp.DeleteValue(RasKey, "DisableReconnectToIncompatible")],
                     DetectOps = [RegOp.CheckDword(RasKey, "DisableReconnectToIncompatible", 1)],
@@ -3501,7 +3498,8 @@ internal static class PolicyNetwork
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 4,
-                    ImpactNote = "Local subnet devices are accessible directly, bypassing VPN inspection. Corporate security policy may prohibit LAN bypass in sensitive environments.",
+                    ImpactNote =
+                        "Local subnet devices are accessible directly, bypassing VPN inspection. Corporate security policy may prohibit LAN bypass in sensitive environments.",
                     ApplyOps = [RegOp.SetDword(RasKey, "BypassForLocal", 1)],
                     RemoveOps = [RegOp.DeleteValue(RasKey, "BypassForLocal")],
                     DetectOps = [RegOp.CheckDword(RasKey, "BypassForLocal", 1)],
@@ -3535,7 +3533,8 @@ internal static class PolicyNetwork
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 4,
-                    ImpactNote = "RPC-over-HTTP for Outlook Anywhere is blocked when VPN is active. Exchange-over-VPN via MAPI or EAS is the supported channel.",
+                    ImpactNote =
+                        "RPC-over-HTTP for Outlook Anywhere is blocked when VPN is active. Exchange-over-VPN via MAPI or EAS is the supported channel.",
                     ApplyOps = [RegOp.SetDword(AgentKey, "RpcOverHttpEnabled", 0)],
                     RemoveOps = [RegOp.DeleteValue(AgentKey, "RpcOverHttpEnabled")],
                     DetectOps = [RegOp.CheckDword(AgentKey, "RpcOverHttpEnabled", 0)],
@@ -3552,7 +3551,8 @@ internal static class PolicyNetwork
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "Generates additional Windows Security event log entries per filter match. Event log capacity should be reviewed if filter policies are granular.",
+                    ImpactNote =
+                        "Generates additional Windows Security event log entries per filter match. Event log capacity should be reviewed if filter policies are granular.",
                     ApplyOps = [RegOp.SetDword(RasKey, "VpnFilterAudit", 1)],
                     RemoveOps = [RegOp.DeleteValue(RasKey, "VpnFilterAudit")],
                     DetectOps = [RegOp.CheckDword(RasKey, "VpnFilterAudit", 1)],
@@ -3586,7 +3586,8 @@ internal static class PolicyNetwork
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "IKE SA rekeys every 8 hours. The rekey occurs transparently without session interruption in well-configured AOVPN deployments.",
+                    ImpactNote =
+                        "IKE SA rekeys every 8 hours. The rekey occurs transparently without session interruption in well-configured AOVPN deployments.",
                     ApplyOps = [RegOp.SetDword(RasKey, "IkeProtocolStateTransitionTimeout", 28800)],
                     RemoveOps = [RegOp.DeleteValue(RasKey, "IkeProtocolStateTransitionTimeout")],
                     DetectOps = [RegOp.CheckDword(RasKey, "IkeProtocolStateTransitionTimeout", 28800)],
@@ -3603,20 +3604,19 @@ internal static class PolicyNetwork
                     CorpSafe = true,
                     ImpactScore = 5,
                     SafetyRating = 3,
-                    ImpactNote = "ALL network traffic is blocked if VPN is not connected. Pre-logon connections and emergency internet access are blocked. Use only on privileged endpoints where data sensitivity justifies the restriction.",
+                    ImpactNote =
+                        "ALL network traffic is blocked if VPN is not connected. Pre-logon connections and emergency internet access are blocked. Use only on privileged endpoints where data sensitivity justifies the restriction.",
                     ApplyOps = [RegOp.SetDword(RasKey, "VpnLockDown", 1)],
                     RemoveOps = [RegOp.DeleteValue(RasKey, "VpnLockDown")],
                     DetectOps = [RegOp.CheckDword(RasKey, "VpnLockDown", 1)],
                 },
             ];
-
     }
 
     // ── BackgroundTransferPolicy ──
     private static class _BackgroundTransferPolicy
     {
-        private const string Key =
-            @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\BackgroundIntelligentTransfer";
+        private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\BackgroundIntelligentTransfer";
 
         public static IReadOnlyList<TweakDef> Data =>
             [
@@ -3791,7 +3791,6 @@ internal static class PolicyNetwork
                     DetectOps = [RegOp.CheckDword(Key, "EnableBITSAuditLogging", 1)],
                 },
             ];
-
     }
 
     // ── BitsTransferPolicy ──
@@ -3942,7 +3941,6 @@ internal static class PolicyNetwork
                 DetectOps = [RegOp.CheckDword(BitsPol, "DisablePeerCachingServer", 1)],
             },
         ];
-
     }
 
     // ── BranchCache ──
@@ -4117,7 +4115,6 @@ internal static class PolicyNetwork
                 DetectOps = [RegOp.CheckDword(Fetch, "InitialOfferDelayInSeconds", 0)],
             },
         ];
-
     }
 
     // ── BranchCachePolicy ──
@@ -4129,169 +4126,177 @@ internal static class PolicyNetwork
         private const string HashKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\PeerDist\Retrieval";
 
         public static IReadOnlyList<TweakDef> Data =>
-        [
-            new TweakDef
-            {
-                Id           = "branchcache-enable-service",
-                Label        = "Enable BranchCache Service via Policy",
-                Category = "Network",
-                Description  = "Enables the BranchCache distributed caching service via Group Policy. BranchCache caches WAN content locally for faster repeat access. Default: not configured.",
-                Tags         = ["branchcache", "caching", "wan", "performance", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 4,
-                SafetyRating = 4,
-                ImpactNote   = "Enables local content caching; reduces WAN bandwidth for repeated downloads.",
-                ApplyOps     = [RegOp.SetDword(SvcKey, "Enable", 1)],
-                RemoveOps    = [RegOp.DeleteValue(SvcKey, "Enable")],
-                DetectOps    = [RegOp.CheckDword(SvcKey, "Enable", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "branchcache-distributed-mode",
-                Label        = "Set BranchCache to Distributed Mode",
-                Category = "Network",
-                Description  = "Configures BranchCache to operate in distributed (peer-to-peer) mode where clients share cached content with each other. Default: not configured.",
-                Tags         = ["branchcache", "distributed", "p2p", "caching", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 3,
-                SafetyRating = 4,
-                ImpactNote   = "Clients share cached content directly; reduces server and WAN load.",
-                ApplyOps     = [RegOp.SetDword(SvcCfg, "PreferredContentInformationVersion", 2)],
-                RemoveOps    = [RegOp.DeleteValue(SvcCfg, "PreferredContentInformationVersion")],
-                DetectOps    = [RegOp.CheckDword(SvcCfg, "PreferredContentInformationVersion", 2)],
-            },
-            new TweakDef
-            {
-                Id           = "branchcache-set-cache-percent",
-                Label        = "Set BranchCache Disk Cache to 10 Percent",
-                Category = "Network",
-                Description  = "Limits the BranchCache disk cache size to 10% of the data drive. Prevents runaway cache growth. Default: 5%.",
-                Tags         = ["branchcache", "cache-size", "disk", "storage", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 3,
-                SafetyRating = 5,
-                ImpactNote   = "Cache limited to 10% of disk; balances caching benefit with storage use.",
-                ApplyOps     = [RegOp.SetDword(SvcCfg, "SizePercent", 10)],
-                RemoveOps    = [RegOp.DeleteValue(SvcCfg, "SizePercent")],
-                DetectOps    = [RegOp.CheckDword(SvcCfg, "SizePercent", 10)],
-            },
-            new TweakDef
-            {
-                Id           = "branchcache-set-cache-age",
-                Label        = "Set BranchCache Maximum Content Age to 28 Days",
-                Category = "Network",
-                Description  = "Sets cached content expiry to 28 days. Content older than this is evicted from the local cache. Default: 28 days (696 hours).",
-                Tags         = ["branchcache", "cache-age", "expiry", "retention", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 2,
-                SafetyRating = 5,
-                ImpactNote   = "Stale cached content evicted after 28 days; may cause re-download of old files.",
-                ApplyOps     = [RegOp.SetDword(SvcCfg, "MaxCacheAge", 672)],
-                RemoveOps    = [RegOp.DeleteValue(SvcCfg, "MaxCacheAge")],
-                DetectOps    = [RegOp.CheckDword(SvcCfg, "MaxCacheAge", 672)],
-            },
-            new TweakDef
-            {
-                Id           = "branchcache-enable-content-discovery",
-                Label        = "Enable Automatic Hosted Cache Discovery",
-                Category = "Network",
-                Description  = "Enables automatic Service Connection Point (SCP) discovery for hosted cache servers. Clients auto-locate the nearest cache server. Default: disabled.",
-                Tags         = ["branchcache", "hosted-cache", "discovery", "scp", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 3,
-                SafetyRating = 5,
-                ImpactNote   = "Clients discover hosted cache servers via AD; useful in multi-site deployments.",
-                ApplyOps     = [RegOp.SetDword(HostedKey, "AutomaticHostedCacheDiscovery", 1)],
-                RemoveOps    = [RegOp.DeleteValue(HostedKey, "AutomaticHostedCacheDiscovery")],
-                DetectOps    = [RegOp.CheckDword(HostedKey, "AutomaticHostedCacheDiscovery", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "branchcache-enable-latency-detection",
-                Label        = "Enable Network Latency Caching Threshold",
-                Category = "Network",
-                Description  = "Enables the BranchCache latency threshold — content is cached only when WAN round-trip time exceeds the configured threshold. Default: disabled (cache all).",
-                Tags         = ["branchcache", "latency", "wan", "threshold", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 3,
-                SafetyRating = 5,
-                ImpactNote   = "Only caches content from slow WAN links; LAN-fetched content bypasses cache.",
-                ApplyOps     = [RegOp.SetDword(SvcCfg, "EnableLatencyBasedCaching", 1)],
-                RemoveOps    = [RegOp.DeleteValue(SvcCfg, "EnableLatencyBasedCaching")],
-                DetectOps    = [RegOp.CheckDword(SvcCfg, "EnableLatencyBasedCaching", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "branchcache-set-latency-threshold",
-                Label        = "Set BranchCache Latency Threshold to 80ms",
-                Category = "Network",
-                Description  = "Sets the round-trip latency threshold at 80ms. WAN content served above this latency is cached; below this it is fetched live. Default: 80ms.",
-                Tags         = ["branchcache", "latency", "threshold", "wan", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 2,
-                SafetyRating = 5,
-                ImpactNote   = "Caching only triggered for links slower than 80ms round-trip; LAN unaffected.",
-                ApplyOps     = [RegOp.SetDword(SvcCfg, "LatencyThreshold", 80)],
-                RemoveOps    = [RegOp.DeleteValue(SvcCfg, "LatencyThreshold")],
-                DetectOps    = [RegOp.CheckDword(SvcCfg, "LatencyThreshold", 80)],
-            },
-            new TweakDef
-            {
-                Id           = "branchcache-enable-http-hash",
-                Label        = "Enable HTTP Content Hash Generation",
-                Category = "Network",
-                Description  = "Enables hash generation for HTTP-based content served through BranchCache. Required for web-server content offloading. Default: disabled.",
-                Tags         = ["branchcache", "http", "hash", "web", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 3,
-                SafetyRating = 4,
-                ImpactNote   = "Enables content verification for HTTP-cached files; slight CPU overhead on server.",
-                ApplyOps     = [RegOp.SetDword(HashKey, "EnableHTTPHash", 1)],
-                RemoveOps    = [RegOp.DeleteValue(HashKey, "EnableHTTPHash")],
-                DetectOps    = [RegOp.CheckDword(HashKey, "EnableHTTPHash", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "branchcache-enable-smb-hash",
-                Label        = "Enable SMB Content Hash Generation",
-                Category = "Network",
-                Description  = "Enables hash generation for SMB/CIFS file shares. Required for file-server content caching via BranchCache. Default: disabled.",
-                Tags         = ["branchcache", "smb", "file-share", "hash", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 3,
-                SafetyRating = 4,
-                ImpactNote   = "File-share content verified and cached locally; minor CPU overhead on file server.",
-                ApplyOps     = [RegOp.SetDword(HashKey, "EnableSMBHash", 1)],
-                RemoveOps    = [RegOp.DeleteValue(HashKey, "EnableSMBHash")],
-                DetectOps    = [RegOp.CheckDword(HashKey, "EnableSMBHash", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "branchcache-enable-bits-hash",
-                Label        = "Enable BITS Content Hash for BranchCache",
-                Category = "Network",
-                Description  = "Enables hash publication for Background Intelligent Transfer Service (BITS) downloads. WSUS and ConfigMgr content benefits from BranchCache. Default: disabled.",
-                Tags         = ["branchcache", "bits", "wsus", "sccm", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 3,
-                SafetyRating = 4,
-                ImpactNote   = "Windows Update and ConfigMgr content cached locally via BranchCache.",
-                ApplyOps     = [RegOp.SetDword(HashKey, "EnableBITSHash", 1)],
-                RemoveOps    = [RegOp.DeleteValue(HashKey, "EnableBITSHash")],
-                DetectOps    = [RegOp.CheckDword(HashKey, "EnableBITSHash", 1)],
-            },
-        ];
-
+            [
+                new TweakDef
+                {
+                    Id = "branchcache-enable-service",
+                    Label = "Enable BranchCache Service via Policy",
+                    Category = "Network",
+                    Description =
+                        "Enables the BranchCache distributed caching service via Group Policy. BranchCache caches WAN content locally for faster repeat access. Default: not configured.",
+                    Tags = ["branchcache", "caching", "wan", "performance", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 4,
+                    ImpactNote = "Enables local content caching; reduces WAN bandwidth for repeated downloads.",
+                    ApplyOps = [RegOp.SetDword(SvcKey, "Enable", 1)],
+                    RemoveOps = [RegOp.DeleteValue(SvcKey, "Enable")],
+                    DetectOps = [RegOp.CheckDword(SvcKey, "Enable", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "branchcache-distributed-mode",
+                    Label = "Set BranchCache to Distributed Mode",
+                    Category = "Network",
+                    Description =
+                        "Configures BranchCache to operate in distributed (peer-to-peer) mode where clients share cached content with each other. Default: not configured.",
+                    Tags = ["branchcache", "distributed", "p2p", "caching", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 4,
+                    ImpactNote = "Clients share cached content directly; reduces server and WAN load.",
+                    ApplyOps = [RegOp.SetDword(SvcCfg, "PreferredContentInformationVersion", 2)],
+                    RemoveOps = [RegOp.DeleteValue(SvcCfg, "PreferredContentInformationVersion")],
+                    DetectOps = [RegOp.CheckDword(SvcCfg, "PreferredContentInformationVersion", 2)],
+                },
+                new TweakDef
+                {
+                    Id = "branchcache-set-cache-percent",
+                    Label = "Set BranchCache Disk Cache to 10 Percent",
+                    Category = "Network",
+                    Description = "Limits the BranchCache disk cache size to 10% of the data drive. Prevents runaway cache growth. Default: 5%.",
+                    Tags = ["branchcache", "cache-size", "disk", "storage", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "Cache limited to 10% of disk; balances caching benefit with storage use.",
+                    ApplyOps = [RegOp.SetDword(SvcCfg, "SizePercent", 10)],
+                    RemoveOps = [RegOp.DeleteValue(SvcCfg, "SizePercent")],
+                    DetectOps = [RegOp.CheckDword(SvcCfg, "SizePercent", 10)],
+                },
+                new TweakDef
+                {
+                    Id = "branchcache-set-cache-age",
+                    Label = "Set BranchCache Maximum Content Age to 28 Days",
+                    Category = "Network",
+                    Description =
+                        "Sets cached content expiry to 28 days. Content older than this is evicted from the local cache. Default: 28 days (696 hours).",
+                    Tags = ["branchcache", "cache-age", "expiry", "retention", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 2,
+                    SafetyRating = 5,
+                    ImpactNote = "Stale cached content evicted after 28 days; may cause re-download of old files.",
+                    ApplyOps = [RegOp.SetDword(SvcCfg, "MaxCacheAge", 672)],
+                    RemoveOps = [RegOp.DeleteValue(SvcCfg, "MaxCacheAge")],
+                    DetectOps = [RegOp.CheckDword(SvcCfg, "MaxCacheAge", 672)],
+                },
+                new TweakDef
+                {
+                    Id = "branchcache-enable-content-discovery",
+                    Label = "Enable Automatic Hosted Cache Discovery",
+                    Category = "Network",
+                    Description =
+                        "Enables automatic Service Connection Point (SCP) discovery for hosted cache servers. Clients auto-locate the nearest cache server. Default: disabled.",
+                    Tags = ["branchcache", "hosted-cache", "discovery", "scp", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "Clients discover hosted cache servers via AD; useful in multi-site deployments.",
+                    ApplyOps = [RegOp.SetDword(HostedKey, "AutomaticHostedCacheDiscovery", 1)],
+                    RemoveOps = [RegOp.DeleteValue(HostedKey, "AutomaticHostedCacheDiscovery")],
+                    DetectOps = [RegOp.CheckDword(HostedKey, "AutomaticHostedCacheDiscovery", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "branchcache-enable-latency-detection",
+                    Label = "Enable Network Latency Caching Threshold",
+                    Category = "Network",
+                    Description =
+                        "Enables the BranchCache latency threshold — content is cached only when WAN round-trip time exceeds the configured threshold. Default: disabled (cache all).",
+                    Tags = ["branchcache", "latency", "wan", "threshold", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "Only caches content from slow WAN links; LAN-fetched content bypasses cache.",
+                    ApplyOps = [RegOp.SetDword(SvcCfg, "EnableLatencyBasedCaching", 1)],
+                    RemoveOps = [RegOp.DeleteValue(SvcCfg, "EnableLatencyBasedCaching")],
+                    DetectOps = [RegOp.CheckDword(SvcCfg, "EnableLatencyBasedCaching", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "branchcache-set-latency-threshold",
+                    Label = "Set BranchCache Latency Threshold to 80ms",
+                    Category = "Network",
+                    Description =
+                        "Sets the round-trip latency threshold at 80ms. WAN content served above this latency is cached; below this it is fetched live. Default: 80ms.",
+                    Tags = ["branchcache", "latency", "threshold", "wan", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 2,
+                    SafetyRating = 5,
+                    ImpactNote = "Caching only triggered for links slower than 80ms round-trip; LAN unaffected.",
+                    ApplyOps = [RegOp.SetDword(SvcCfg, "LatencyThreshold", 80)],
+                    RemoveOps = [RegOp.DeleteValue(SvcCfg, "LatencyThreshold")],
+                    DetectOps = [RegOp.CheckDword(SvcCfg, "LatencyThreshold", 80)],
+                },
+                new TweakDef
+                {
+                    Id = "branchcache-enable-http-hash",
+                    Label = "Enable HTTP Content Hash Generation",
+                    Category = "Network",
+                    Description =
+                        "Enables hash generation for HTTP-based content served through BranchCache. Required for web-server content offloading. Default: disabled.",
+                    Tags = ["branchcache", "http", "hash", "web", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 4,
+                    ImpactNote = "Enables content verification for HTTP-cached files; slight CPU overhead on server.",
+                    ApplyOps = [RegOp.SetDword(HashKey, "EnableHTTPHash", 1)],
+                    RemoveOps = [RegOp.DeleteValue(HashKey, "EnableHTTPHash")],
+                    DetectOps = [RegOp.CheckDword(HashKey, "EnableHTTPHash", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "branchcache-enable-smb-hash",
+                    Label = "Enable SMB Content Hash Generation",
+                    Category = "Network",
+                    Description =
+                        "Enables hash generation for SMB/CIFS file shares. Required for file-server content caching via BranchCache. Default: disabled.",
+                    Tags = ["branchcache", "smb", "file-share", "hash", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 4,
+                    ImpactNote = "File-share content verified and cached locally; minor CPU overhead on file server.",
+                    ApplyOps = [RegOp.SetDword(HashKey, "EnableSMBHash", 1)],
+                    RemoveOps = [RegOp.DeleteValue(HashKey, "EnableSMBHash")],
+                    DetectOps = [RegOp.CheckDword(HashKey, "EnableSMBHash", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "branchcache-enable-bits-hash",
+                    Label = "Enable BITS Content Hash for BranchCache",
+                    Category = "Network",
+                    Description =
+                        "Enables hash publication for Background Intelligent Transfer Service (BITS) downloads. WSUS and ConfigMgr content benefits from BranchCache. Default: disabled.",
+                    Tags = ["branchcache", "bits", "wsus", "sccm", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 4,
+                    ImpactNote = "Windows Update and ConfigMgr content cached locally via BranchCache.",
+                    ApplyOps = [RegOp.SetDword(HashKey, "EnableBITSHash", 1)],
+                    RemoveOps = [RegOp.DeleteValue(HashKey, "EnableBITSHash")],
+                    DetectOps = [RegOp.CheckDword(HashKey, "EnableBITSHash", 1)],
+                },
+            ];
     }
 
     // ── CacheManagerPolicy ──
@@ -4472,7 +4477,6 @@ internal static class PolicyNetwork
                 DetectOps = [RegOp.CheckDword(Key, "AuditOfflineFileAccess", 1)],
             },
         ];
-
     }
 
     // ── ConnectedCachePolicy ──
@@ -4699,7 +4703,6 @@ internal static class PolicyNetwork
                     DetectOps = [RegOp.CheckDword(MccClientKey, "DisableOnMeteredConnections", 1)],
                 },
             ];
-
     }
 
     // ── DataSensePolicy ──
@@ -4880,14 +4883,12 @@ internal static class PolicyNetwork
                 DetectOps = [RegOp.CheckDword(Key, "DisableDataSenseFeature", 1)],
             },
         ];
-
     }
 
     // ── DataUsageMeteringPolicy ──
     private static class _DataUsageMeteringPolicy
     {
-        private const string Key =
-            @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DataUsage";
+        private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DataUsage";
 
         public static IReadOnlyList<TweakDef> Data =>
             [
@@ -5062,7 +5063,6 @@ internal static class PolicyNetwork
                     DetectOps = [RegOp.CheckDword(Key, "AutoResetOnBillingCycle", 1)],
                 },
             ];
-
     }
 
     // ── DeliveryOptimizationPolicy ──
@@ -5223,7 +5223,6 @@ internal static class PolicyNetwork
                 DetectOps = [RegOp.CheckDword(Do, "DOSetHoursToLimitBackgroundDownloadBandwidth", 1)],
             },
         ];
-
     }
 
     // ── DfsnPolicy ──
@@ -5240,7 +5239,8 @@ internal static class PolicyNetwork
                 Id = "dfsn-disable-offline-files",
                 Label = "DFS Namespace Policy: Disable Offline Files (Client-Side Caching)",
                 Category = "Network",
-                Description = "Disables the Offline Files (Client-Side Caching / CSC) feature that automatically caches network share content to the local disk for offline access. In environments where file servers use DFS namespaces and data sovereignty or compliance rules prohibit local caching of server content, disabling this feature ensures sensitive files never persist on endpoint storage.",
+                Description =
+                    "Disables the Offline Files (Client-Side Caching / CSC) feature that automatically caches network share content to the local disk for offline access. In environments where file servers use DFS namespaces and data sovereignty or compliance rules prohibit local caching of server content, disabling this feature ensures sensitive files never persist on endpoint storage.",
                 Tags = ["offline files", "csc", "caching", "dfs", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -5257,7 +5257,8 @@ internal static class PolicyNetwork
                 Id = "dfsn-enable-dfs-long-paths",
                 Label = "DFS Namespace Policy: Enable Long Path Support for DFS Paths",
                 Category = "Network",
-                Description = "Enables Windows to handle UNC path strings longer than MAX_PATH (260 characters) when accessing DFS namespace paths. Enterprise DFS deployments frequently use hierarchical namespace paths (e.g., \\\\corp.example.com\\dfs\\region\\department\\project\\archive) that exceed the legacy WIN32_MAX_PATH limit. Without this setting, applications may fail or truncate paths.",
+                Description =
+                    "Enables Windows to handle UNC path strings longer than MAX_PATH (260 characters) when accessing DFS namespace paths. Enterprise DFS deployments frequently use hierarchical namespace paths (e.g., \\\\corp.example.com\\dfs\\region\\department\\project\\archive) that exceed the legacy WIN32_MAX_PATH limit. Without this setting, applications may fail or truncate paths.",
                 Tags = ["dfs", "long paths", "unc", "max path", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -5274,7 +5275,8 @@ internal static class PolicyNetwork
                 Id = "dfsn-disable-add-vpn-connection-ui",
                 Label = "DFS Namespace Policy: Restrict VPN Connection Profile UI",
                 Category = "Network",
-                Description = "Prevents standard user accounts from adding new VPN (Virtual Private Network) connection profiles through the Windows Settings network UI. In enterprises where VPN access is centrally managed via Group Policy push or SCCM, allowing users to add their own VPN connection profiles can bypass security controls, split-tunnel policies, or inspection proxies.",
+                Description =
+                    "Prevents standard user accounts from adding new VPN (Virtual Private Network) connection profiles through the Windows Settings network UI. In enterprises where VPN access is centrally managed via Group Policy push or SCCM, allowing users to add their own VPN connection profiles can bypass security controls, split-tunnel policies, or inspection proxies.",
                 Tags = ["vpn", "network connections", "dfs", "restriction", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -5291,7 +5293,8 @@ internal static class PolicyNetwork
                 Id = "dfsn-restrict-ics-sharing",
                 Label = "DFS Namespace Policy: Restrict Internet Connection Sharing",
                 Category = "Network",
-                Description = "Prevents users from turning the workstation into a shared Internet connection gateway using the Windows Internet Connection Sharing (ICS) feature. ICS allows the machine to act as a router, potentially routing corporate traffic through an uncontrolled path. On enterprise networks, this creates unauthorized network egress points that bypass perimeter security controls.",
+                Description =
+                    "Prevents users from turning the workstation into a shared Internet connection gateway using the Windows Internet Connection Sharing (ICS) feature. ICS allows the machine to act as a router, potentially routing corporate traffic through an uncontrolled path. On enterprise networks, this creates unauthorized network egress points that bypass perimeter security controls.",
                 Tags = ["ics", "connection sharing", "network", "restriction", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -5308,7 +5311,8 @@ internal static class PolicyNetwork
                 Id = "dfsn-restrict-network-location-wizard",
                 Label = "DFS Namespace Policy: Restrict Network Location Wizard",
                 Category = "Network",
-                Description = "Prevents the Network Location Wizard from appearing when connecting to new networks. The wizard prompts users to classify networks as Home, Work, or Public, which affects firewall profile activation. When users misclassify a public network as Work, Windows activates less restrictive firewall rules that allow inbound connections, increasing attack surface.",
+                Description =
+                    "Prevents the Network Location Wizard from appearing when connecting to new networks. The wizard prompts users to classify networks as Home, Work, or Public, which affects firewall profile activation. When users misclassify a public network as Work, Windows activates less restrictive firewall rules that allow inbound connections, increasing attack surface.",
                 Tags = ["network location", "wizard", "firewall", "profile", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -5325,7 +5329,8 @@ internal static class PolicyNetwork
                 Id = "dfsn-disable-remote-access-ui",
                 Label = "DFS Namespace Policy: Disable Remote Access Connection Manager UI",
                 Category = "Network",
-                Description = "Hides the Remote Access Connection Manager UI from standard users, preventing them from creating or modifying dial-up, VPN, or PPPoE connections. The RA Connection Manager exposes modem and VPN profile creation which, in corporate environments, is an IT-managed function. User-created RA entries can conflict with MDM-deployed connection profiles.",
+                Description =
+                    "Hides the Remote Access Connection Manager UI from standard users, preventing them from creating or modifying dial-up, VPN, or PPPoE connections. The RA Connection Manager exposes modem and VPN profile creation which, in corporate environments, is an IT-managed function. User-created RA entries can conflict with MDM-deployed connection profiles.",
                 Tags = ["remote access", "vpn", "connection manager", "restriction", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -5342,7 +5347,8 @@ internal static class PolicyNetwork
                 Id = "dfsn-disable-network-bridge",
                 Label = "DFS Namespace Policy: Prohibit Network Bridge Creation",
                 Category = "Network",
-                Description = "Prevents users from creating network bridges between multiple network adapters. A network bridge connects two separate network segments — for example, bridging an Ethernet NIC to a Wi-Fi adapter — effectively merging the corporate LAN with external networks. This can bypass network segmentation, VLAN policies, and security zones on enterprise networks.",
+                Description =
+                    "Prevents users from creating network bridges between multiple network adapters. A network bridge connects two separate network segments — for example, bridging an Ethernet NIC to a Wi-Fi adapter — effectively merging the corporate LAN with external networks. This can bypass network segmentation, VLAN policies, and security zones on enterprise networks.",
                 Tags = ["network bridge", "segmentation", "ethernet", "wifi", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -5359,7 +5365,8 @@ internal static class PolicyNetwork
                 Id = "dfsn-disable-connection-properties-ui",
                 Label = "DFS Namespace Policy: Hide Network Connection Properties UI",
                 Category = "Network",
-                Description = "Prevents standard users from opening or modifying the properties of existing network connections (TCP/IP settings, DNS servers, IPv6 configuration). In corporate environments, network adapter settings are pushed via DHCP and GPO. Allowing users to modify these settings can break network policy compliance monitoring, static IP assignments, or proxy configuration.",
+                Description =
+                    "Prevents standard users from opening or modifying the properties of existing network connections (TCP/IP settings, DNS servers, IPv6 configuration). In corporate environments, network adapter settings are pushed via DHCP and GPO. Allowing users to modify these settings can break network policy compliance monitoring, static IP assignments, or proxy configuration.",
                 Tags = ["network", "tcp/ip", "properties", "restriction", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -5376,7 +5383,8 @@ internal static class PolicyNetwork
                 Id = "dfsn-prohibit-delete-connections",
                 Label = "DFS Namespace Policy: Prohibit Deletion of Network Connections",
                 Category = "Network",
-                Description = "Prevents standard users from deleting managed network connection entries in the Network Connections control panel. MDM-enrolled devices typically have VPN, Always On VPN, or Wi-Fi profiles pushed by Intune or SCCM; allowing users to delete these disrupts corporate connectivity and certificate trust, and may deactivate required compliance posture monitoring.",
+                Description =
+                    "Prevents standard users from deleting managed network connection entries in the Network Connections control panel. MDM-enrolled devices typically have VPN, Always On VPN, or Wi-Fi profiles pushed by Intune or SCCM; allowing users to delete these disrupts corporate connectivity and certificate trust, and may deactivate required compliance posture monitoring.",
                 Tags = ["network connections", "delete", "restriction", "vpn", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -5393,7 +5401,8 @@ internal static class PolicyNetwork
                 Id = "dfsn-prohibit-connect-disconnect-ras",
                 Label = "DFS Namespace Policy: Prohibit Connect/Disconnect of RAS Connections",
                 Category = "Network",
-                Description = "Prevents standard users from manually connecting or disconnecting remote access service (RAS) connections such as VPN tunnels and dial-up connections. On corporate machines where Always-On VPN (AOVPN) or DirectAccess must remain connected for security monitoring, allowing users to toggle the tunnel off creates a gap in endpoint visibility and protection.",
+                Description =
+                    "Prevents standard users from manually connecting or disconnecting remote access service (RAS) connections such as VPN tunnels and dial-up connections. On corporate machines where Always-On VPN (AOVPN) or DirectAccess must remain connected for security monitoring, allowing users to toggle the tunnel off creates a gap in endpoint visibility and protection.",
                 Tags = ["ras", "vpn", "connect", "disconnect", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -5406,14 +5415,12 @@ internal static class PolicyNetwork
                 ImpactNote = "Prevents standard users from modifying their own RAS connection properties and profiles.",
             },
         ];
-
     }
 
     // ── DfsrPolicy ──
     private static class _DfsrPolicy
     {
-        private const string DfsrKey =
-            @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DFSR";
+        private const string DfsrKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DFSR";
 
         public static IReadOnlyList<TweakDef> Data =>
             [
@@ -5429,7 +5436,8 @@ internal static class PolicyNetwork
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "DFS-R replication is capped at 256 Kbps per connection. Replication of large change sets takes longer. WAN bandwidth for other services is protected. Can be overridden per-connection group in DFSR replication group configuration.",
+                    ImpactNote =
+                        "DFS-R replication is capped at 256 Kbps per connection. Replication of large change sets takes longer. WAN bandwidth for other services is protected. Can be overridden per-connection group in DFSR replication group configuration.",
                     ApplyOps = [RegOp.SetDword(DfsrKey, "BandwidthThrottle", 256)],
                     RemoveOps = [RegOp.DeleteValue(DfsrKey, "BandwidthThrottle")],
                     DetectOps = [RegOp.CheckDword(DfsrKey, "BandwidthThrottle", 256)],
@@ -5446,7 +5454,8 @@ internal static class PolicyNetwork
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "DFS-R staging area cleanup triggers at 512 MB. Replication of files larger than the staging quota in a single transaction may need alternative replica placement. Prevents uncontrolled disk growth on DFS-R member servers.",
+                    ImpactNote =
+                        "DFS-R staging area cleanup triggers at 512 MB. Replication of files larger than the staging quota in a single transaction may need alternative replica placement. Prevents uncontrolled disk growth on DFS-R member servers.",
                     ApplyOps = [RegOp.SetDword(DfsrKey, "StagingCleanupQuota", 524288)],
                     RemoveOps = [RegOp.DeleteValue(DfsrKey, "StagingCleanupQuota")],
                     DetectOps = [RegOp.CheckDword(DfsrKey, "StagingCleanupQuota", 524288)],
@@ -5463,7 +5472,8 @@ internal static class PolicyNetwork
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "DFS-R writes diagnostic logs to %SystemRoot%\\debug\\dfsr*.log. Minimal disk overhead (logs are rotated). Provides crucial data for replication issue diagnosis. Logs may contain file names and paths from replicated content.",
+                    ImpactNote =
+                        "DFS-R writes diagnostic logs to %SystemRoot%\\debug\\dfsr*.log. Minimal disk overhead (logs are rotated). Provides crucial data for replication issue diagnosis. Logs may contain file names and paths from replicated content.",
                     ApplyOps = [RegOp.SetDword(DfsrKey, "DebugLogEnabled", 1)],
                     RemoveOps = [RegOp.DeleteValue(DfsrKey, "DebugLogEnabled")],
                     DetectOps = [RegOp.CheckDword(DfsrKey, "DebugLogEnabled", 1)],
@@ -5480,7 +5490,8 @@ internal static class PolicyNetwork
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "Up to 1,000 conflict files are retained per DFS-R member. Conflict files older than the retention period are purged. Administrators should monitor ConflictAndDeleted folders for important file conflicts that users may need to resolve.",
+                    ImpactNote =
+                        "Up to 1,000 conflict files are retained per DFS-R member. Conflict files older than the retention period are purged. Administrators should monitor ConflictAndDeleted folders for important file conflicts that users may need to resolve.",
                     ApplyOps = [RegOp.SetDword(DfsrKey, "MaxConflictFiles", 1000)],
                     RemoveOps = [RegOp.DeleteValue(DfsrKey, "MaxConflictFiles")],
                     DetectOps = [RegOp.CheckDword(DfsrKey, "MaxConflictFiles", 1000)],
@@ -5497,7 +5508,8 @@ internal static class PolicyNetwork
                     CorpSafe = true,
                     ImpactScore = 4,
                     SafetyRating = 5,
-                    ImpactNote = "Only changed byte ranges of files are transferred during replication. Significantly reduces WAN bandwidth for DFS-R at the cost of slightly higher CPU usage on both source and destination during block comparison. Net positive for WAN-connected sites.",
+                    ImpactNote =
+                        "Only changed byte ranges of files are transferred during replication. Significantly reduces WAN bandwidth for DFS-R at the cost of slightly higher CPU usage on both source and destination during block comparison. Net positive for WAN-connected sites.",
                     ApplyOps = [RegOp.SetDword(DfsrKey, "RdcEnabled", 1)],
                     RemoveOps = [RegOp.DeleteValue(DfsrKey, "RdcEnabled")],
                     DetectOps = [RegOp.CheckDword(DfsrKey, "RdcEnabled", 1)],
@@ -5514,7 +5526,8 @@ internal static class PolicyNetwork
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 3,
-                    ImpactNote = "DFS-R does not auto-recover from database inconsistency. A DFS-R database corruption causes replication to stop until IT intervenes. Alert monitoring for DFS-R event log errors is required. Prevents surprise WAN traffic from unplanned initial syncs.",
+                    ImpactNote =
+                        "DFS-R does not auto-recover from database inconsistency. A DFS-R database corruption causes replication to stop until IT intervenes. Alert monitoring for DFS-R event log errors is required. Prevents surprise WAN traffic from unplanned initial syncs.",
                     ApplyOps = [RegOp.SetDword(DfsrKey, "AutoRecovery", 0)],
                     RemoveOps = [RegOp.DeleteValue(DfsrKey, "AutoRecovery")],
                     DetectOps = [RegOp.CheckDword(DfsrKey, "AutoRecovery", 0)],
@@ -5531,7 +5544,8 @@ internal static class PolicyNetwork
                     CorpSafe = true,
                     ImpactScore = 2,
                     SafetyRating = 5,
-                    ImpactNote = "DFS-R polls AD for configuration changes every 60 minutes. Configuration changes (add member, update bandwidth schedule) take effect at the next poll. No impact on ongoing replication for existing connections.",
+                    ImpactNote =
+                        "DFS-R polls AD for configuration changes every 60 minutes. Configuration changes (add member, update bandwidth schedule) take effect at the next poll. No impact on ongoing replication for existing connections.",
                     ApplyOps = [RegOp.SetDword(DfsrKey, "ConfigurationPollIntervalInMin", 60)],
                     RemoveOps = [RegOp.DeleteValue(DfsrKey, "ConfigurationPollIntervalInMin")],
                     DetectOps = [RegOp.CheckDword(DfsrKey, "ConfigurationPollIntervalInMin", 60)],
@@ -5548,7 +5562,8 @@ internal static class PolicyNetwork
                     CorpSafe = true,
                     ImpactScore = 4,
                     SafetyRating = 5,
-                    ImpactNote = "Incoming DFS-R replication stops if disk free space drops below 1%. Prevents disk-full conditions caused by DFS-R. Replication lag increases until disk space is recovered. Event log entries are written when replication is suspended.",
+                    ImpactNote =
+                        "Incoming DFS-R replication stops if disk free space drops below 1%. Prevents disk-full conditions caused by DFS-R. Replication lag increases until disk space is recovered. Event log entries are written when replication is suspended.",
                     ApplyOps = [RegOp.SetDword(DfsrKey, "StopReplicationOnAutoRecovery", 1)],
                     RemoveOps = [RegOp.DeleteValue(DfsrKey, "StopReplicationOnAutoRecovery")],
                     DetectOps = [RegOp.CheckDword(DfsrKey, "StopReplicationOnAutoRecovery", 1)],
@@ -5565,7 +5580,8 @@ internal static class PolicyNetwork
                     CorpSafe = true,
                     ImpactScore = 2,
                     SafetyRating = 5,
-                    ImpactNote = "Staged files are retained for at least 3 days before cleanup eligibility. Staging area may hold more data than strictly minimum required. Reduces the need to re-stage large files after transient network outages.",
+                    ImpactNote =
+                        "Staged files are retained for at least 3 days before cleanup eligibility. Staging area may hold more data than strictly minimum required. Reduces the need to re-stage large files after transient network outages.",
                     ApplyOps = [RegOp.SetDword(DfsrKey, "MinStagingAge", 3)],
                     RemoveOps = [RegOp.DeleteValue(DfsrKey, "MinStagingAge")],
                     DetectOps = [RegOp.CheckDword(DfsrKey, "MinStagingAge", 3)],
@@ -5582,23 +5598,21 @@ internal static class PolicyNetwork
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "DFS-R uses pre-existing content on new members to seed initial replication. First-time member addition to large replication groups requires physical data pre-seeding setup. No impact on ongoing replication of already-seeded members.",
+                    ImpactNote =
+                        "DFS-R uses pre-existing content on new members to seed initial replication. First-time member addition to large replication groups requires physical data pre-seeding setup. No impact on ongoing replication of already-seeded members.",
                     ApplyOps = [RegOp.SetDword(DfsrKey, "PreseedingEnabled", 1)],
                     RemoveOps = [RegOp.DeleteValue(DfsrKey, "PreseedingEnabled")],
                     DetectOps = [RegOp.CheckDword(DfsrKey, "PreseedingEnabled", 1)],
                 },
             ];
-
     }
 
     // ── DiffServQosPolicy ──
     private static class _DiffServQosPolicy
     {
-        private const string QosKey =
-            @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\QoS";
+        private const string QosKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\QoS";
 
-        private const string PsvKey =
-            @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Psched";
+        private const string PsvKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Psched";
 
         public static IReadOnlyList<TweakDef> Data =>
             [
@@ -5614,7 +5628,8 @@ internal static class PolicyNetwork
                     CorpSafe = true,
                     ImpactScore = 4,
                     SafetyRating = 5,
-                    ImpactNote = "Benefits require DSCP-honoring network switches and routers. On flat networks without DSCP QoS, the DSCP markings are applied but have no effect at the switch level.",
+                    ImpactNote =
+                        "Benefits require DSCP-honoring network switches and routers. On flat networks without DSCP QoS, the DSCP markings are applied but have no effect at the switch level.",
                     ApplyOps = [RegOp.SetDword(PsvKey, "MultimediaNetworkClientSchedulingRate", 1)],
                     RemoveOps = [RegOp.DeleteValue(PsvKey, "MultimediaNetworkClientSchedulingRate")],
                     DetectOps = [RegOp.CheckDword(PsvKey, "MultimediaNetworkClientSchedulingRate", 1)],
@@ -5631,7 +5646,8 @@ internal static class PolicyNetwork
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "20% bandwidth reservation released. On high-traffic servers with active QoS, this may reduce effectiveness of QoS markings.",
+                    ImpactNote =
+                        "20% bandwidth reservation released. On high-traffic servers with active QoS, this may reduce effectiveness of QoS markings.",
                     ApplyOps = [RegOp.SetDword(PsvKey, "NonBestEffortLimit", 0)],
                     RemoveOps = [RegOp.DeleteValue(PsvKey, "NonBestEffortLimit")],
                     DetectOps = [RegOp.CheckDword(PsvKey, "NonBestEffortLimit", 0)],
@@ -5648,7 +5664,8 @@ internal static class PolicyNetwork
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "Enables QoS packet scheduler. Negligible CPU overhead on modern hardware. Prerequisite for DSCP-based QoS policies.",
+                    ImpactNote =
+                        "Enables QoS packet scheduler. Negligible CPU overhead on modern hardware. Prerequisite for DSCP-based QoS policies.",
                     ApplyOps = [RegOp.SetDword(PsvKey, "TimerResolution", 1)],
                     RemoveOps = [RegOp.DeleteValue(PsvKey, "TimerResolution")],
                     DetectOps = [RegOp.CheckDword(PsvKey, "TimerResolution", 1)],
@@ -5665,30 +5682,11 @@ internal static class PolicyNetwork
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "Requires ECN-capable routers in the network path. On networks without ECN support, the ECN bits are ignored; TCP behavior is unchanged.",
-                    ApplyOps =
-                        [
-                            RegOp.SetDword(
-                                @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters",
-                                "ECNCapability",
-                                1
-                            ),
-                        ],
-                    RemoveOps =
-                        [
-                            RegOp.DeleteValue(
-                                @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters",
-                                "ECNCapability"
-                            ),
-                        ],
-                    DetectOps =
-                        [
-                            RegOp.CheckDword(
-                                @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters",
-                                "ECNCapability",
-                                1
-                            ),
-                        ],
+                    ImpactNote =
+                        "Requires ECN-capable routers in the network path. On networks without ECN support, the ECN bits are ignored; TCP behavior is unchanged.",
+                    ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters", "ECNCapability", 1)],
+                    RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters", "ECNCapability")],
+                    DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters", "ECNCapability", 1)],
                 },
                 new TweakDef
                 {
@@ -5702,7 +5700,8 @@ internal static class PolicyNetwork
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "Background traffic is rate-limited to 80% of nominal bandwidth. Priority streams use the reserved 20%. Has no effect on QoS-compliant network applications.",
+                    ImpactNote =
+                        "Background traffic is rate-limited to 80% of nominal bandwidth. Priority streams use the reserved 20%. Has no effect on QoS-compliant network applications.",
                     ApplyOps = [RegOp.SetDword(QosKey, "MaxOutstandingRequests", 80)],
                     RemoveOps = [RegOp.DeleteValue(QosKey, "MaxOutstandingRequests")],
                     DetectOps = [RegOp.CheckDword(QosKey, "MaxOutstandingRequests", 80)],
@@ -5719,7 +5718,8 @@ internal static class PolicyNetwork
                     CorpSafe = true,
                     ImpactScore = 4,
                     SafetyRating = 5,
-                    ImpactNote = "Requires WMM-capable Wi-Fi access points (all modern enterprise APs support WMM by default). Negligible impact on older WMM-unaware APs.",
+                    ImpactNote =
+                        "Requires WMM-capable Wi-Fi access points (all modern enterprise APs support WMM by default). Negligible impact on older WMM-unaware APs.",
                     ApplyOps = [RegOp.SetDword(PsvKey, "WmmEnabled", 1)],
                     RemoveOps = [RegOp.DeleteValue(PsvKey, "WmmEnabled")],
                     DetectOps = [RegOp.CheckDword(PsvKey, "WmmEnabled", 1)],
@@ -5736,7 +5736,8 @@ internal static class PolicyNetwork
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "Marks SIP signaling packets with DSCP CS3. Requires DSCP-honoring network infrastructure for downstream enforcement.",
+                    ImpactNote =
+                        "Marks SIP signaling packets with DSCP CS3. Requires DSCP-honoring network infrastructure for downstream enforcement.",
                     ApplyOps = [RegOp.SetDword(QosKey, "SipDscpValue", 24)],
                     RemoveOps = [RegOp.DeleteValue(QosKey, "SipDscpValue")],
                     DetectOps = [RegOp.CheckDword(QosKey, "SipDscpValue", 24)],
@@ -5753,7 +5754,8 @@ internal static class PolicyNetwork
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "Prevents NIC drivers from overwriting DSCP. May interact with NIC vendor QoS capabilities (e.g., Intel Smart QoS). Test on representative hardware.",
+                    ImpactNote =
+                        "Prevents NIC drivers from overwriting DSCP. May interact with NIC vendor QoS capabilities (e.g., Intel Smart QoS). Test on representative hardware.",
                     ApplyOps = [RegOp.SetDword(QosKey, "DoNotUseNla", 0)],
                     RemoveOps = [RegOp.DeleteValue(QosKey, "DoNotUseNla")],
                     DetectOps = [RegOp.CheckDword(QosKey, "DoNotUseNla", 0)],
@@ -5770,7 +5772,8 @@ internal static class PolicyNetwork
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "RSVP requires RSVP-capable routers in the network path. Legacy enterprise routers support RSVP; modern MPLS networks use DiffServ instead.",
+                    ImpactNote =
+                        "RSVP requires RSVP-capable routers in the network path. Legacy enterprise routers support RSVP; modern MPLS networks use DiffServ instead.",
                     ApplyOps = [RegOp.SetDword(PsvKey, "AdmissionControl", 1)],
                     RemoveOps = [RegOp.DeleteValue(PsvKey, "AdmissionControl")],
                     DetectOps = [RegOp.CheckDword(PsvKey, "AdmissionControl", 1)],
@@ -5787,26 +5790,23 @@ internal static class PolicyNetwork
                     CorpSafe = true,
                     ImpactScore = 4,
                     SafetyRating = 5,
-                    ImpactNote = "Prioritizes system/AD traffic over general user traffic. On saturated uplinks, user application bandwidth may be slightly reduced.",
+                    ImpactNote =
+                        "Prioritizes system/AD traffic over general user traffic. On saturated uplinks, user application bandwidth may be slightly reduced.",
                     ApplyOps = [RegOp.SetDword(QosKey, "SystemTrafficPriority", 1)],
                     RemoveOps = [RegOp.DeleteValue(QosKey, "SystemTrafficPriority")],
                     DetectOps = [RegOp.CheckDword(QosKey, "SystemTrafficPriority", 1)],
                 },
             ];
-
     }
 
     // ── DirectAccessConnectPolicy ──
     private static class _DirectAccessConnectPolicy
     {
-        private const string NcsiKey =
-            @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\NetworkConnectivityStatusIndicator";
+        private const string NcsiKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\NetworkConnectivityStatusIndicator";
 
-        private const string DaKey =
-            @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DirectAccess\DaClientUsedToConnect";
+        private const string DaKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DirectAccess\DaClientUsedToConnect";
 
-        private const string NrptKey =
-            @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\DNSClient";
+        private const string NrptKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\DNSClient";
 
         public static IReadOnlyList<TweakDef> Data =>
             [
@@ -5839,7 +5839,8 @@ internal static class PolicyNetwork
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "Requires a corporate NCSI probe server (typically an internal IIS/nginx responding with NCSIProbeContent.txt). No impact if the probe server is not configured.",
+                    ImpactNote =
+                        "Requires a corporate NCSI probe server (typically an internal IIS/nginx responding with NCSIProbeContent.txt). No impact if the probe server is not configured.",
                     ApplyOps = [RegOp.SetDword(NcsiKey, "UseGlobalDNS", 1)],
                     RemoveOps = [RegOp.DeleteValue(NcsiKey, "UseGlobalDNS")],
                     DetectOps = [RegOp.CheckDword(NcsiKey, "UseGlobalDNS", 1)],
@@ -5856,7 +5857,8 @@ internal static class PolicyNetwork
                     CorpSafe = true,
                     ImpactScore = 4,
                     SafetyRating = 4,
-                    ImpactNote = "All internet traffic is routed through the corporate network. This increases corporate internet egress costs and may significantly slow browsing from locations far from the corporate datacenter.",
+                    ImpactNote =
+                        "All internet traffic is routed through the corporate network. This increases corporate internet egress costs and may significantly slow browsing from locations far from the corporate datacenter.",
                     ApplyOps = [RegOp.SetDword(DaKey, "ForceTunneling", 1)],
                     RemoveOps = [RegOp.DeleteValue(DaKey, "ForceTunneling")],
                     DetectOps = [RegOp.CheckDword(DaKey, "ForceTunneling", 1)],
@@ -5873,7 +5875,8 @@ internal static class PolicyNetwork
                     CorpSafe = true,
                     ImpactScore = 4,
                     SafetyRating = 5,
-                    ImpactNote = "Requires DNS server to serve DNSSEC-signed zones. DNS resolution fails for domains without valid DNSSEC signatures if strict mode is configured.",
+                    ImpactNote =
+                        "Requires DNS server to serve DNSSEC-signed zones. DNS resolution fails for domains without valid DNSSEC signatures if strict mode is configured.",
                     ApplyOps = [RegOp.SetDword(NrptKey, "dnssec_logging_enabled", 1)],
                     RemoveOps = [RegOp.DeleteValue(NrptKey, "dnssec_logging_enabled")],
                     DetectOps = [RegOp.CheckDword(NrptKey, "dnssec_logging_enabled", 1)],
@@ -5890,10 +5893,14 @@ internal static class PolicyNetwork
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 4,
-                    ImpactNote = "Disables IPv6 transition tunneling. Breaks DirectAccess on networks requiring Teredo. Only apply if your DA deployment uses IP-HTTPS or native IPv6.",
+                    ImpactNote =
+                        "Disables IPv6 transition tunneling. Breaks DirectAccess on networks requiring Teredo. Only apply if your DA deployment uses IP-HTTPS or native IPv6.",
                     ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip6\Parameters", "DisabledComponents", 255)],
                     RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip6\Parameters", "DisabledComponents")],
-                    DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip6\Parameters", "DisabledComponents", 255)],
+                    DetectOps =
+                    [
+                        RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip6\Parameters", "DisabledComponents", 255),
+                    ],
                 },
                 new TweakDef
                 {
@@ -5907,7 +5914,8 @@ internal static class PolicyNetwork
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "Requires corporate NCSI probe infrastructure. NCSI gateway connections to Microsoft's probe servers are replaced with corporate probes.",
+                    ImpactNote =
+                        "Requires corporate NCSI probe infrastructure. NCSI gateway connections to Microsoft's probe servers are replaced with corporate probes.",
                     ApplyOps = [RegOp.SetDword(NcsiKey, "CorporateConnectivity", 1)],
                     RemoveOps = [RegOp.DeleteValue(NcsiKey, "CorporateConnectivity")],
                     DetectOps = [RegOp.CheckDword(NcsiKey, "CorporateConnectivity", 1)],
@@ -5924,7 +5932,8 @@ internal static class PolicyNetwork
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "IP-HTTPS is slightly slower than Teredo (TLS overhead of ~15–20 Mbps for a NIC doing AES-NI). On HTTPS paths it passes all firewalls reliably.",
+                    ImpactNote =
+                        "IP-HTTPS is slightly slower than Teredo (TLS overhead of ~15–20 Mbps for a NIC doing AES-NI). On HTTPS paths it passes all firewalls reliably.",
                     ApplyOps = [RegOp.SetDword(DaKey, "IpHttpsEnabled", 1)],
                     RemoveOps = [RegOp.DeleteValue(DaKey, "IpHttpsEnabled")],
                     DetectOps = [RegOp.CheckDword(DaKey, "IpHttpsEnabled", 1)],
@@ -5941,7 +5950,8 @@ internal static class PolicyNetwork
                     CorpSafe = true,
                     ImpactScore = 4,
                     SafetyRating = 4,
-                    ImpactNote = "Requires all DA clients to have valid machine certificates from the enterprise CA. Clients without valid certs cannot connect via DA.",
+                    ImpactNote =
+                        "Requires all DA clients to have valid machine certificates from the enterprise CA. Clients without valid certs cannot connect via DA.",
                     ApplyOps = [RegOp.SetDword(DaKey, "NtlmAllowed", 0)],
                     RemoveOps = [RegOp.DeleteValue(DaKey, "NtlmAllowed")],
                     DetectOps = [RegOp.CheckDword(DaKey, "NtlmAllowed", 0)],
@@ -5958,7 +5968,8 @@ internal static class PolicyNetwork
                     CorpSafe = true,
                     ImpactScore = 2,
                     SafetyRating = 5,
-                    ImpactNote = "Adds DirectAccess NCA icon to system tray. Minor cosmetic addition; provides valuable connectivity feedback to users.",
+                    ImpactNote =
+                        "Adds DirectAccess NCA icon to system tray. Minor cosmetic addition; provides valuable connectivity feedback to users.",
                     ApplyOps = [RegOp.SetDword(DaKey, "ShowUI", 1)],
                     RemoveOps = [RegOp.DeleteValue(DaKey, "ShowUI")],
                     DetectOps = [RegOp.CheckDword(DaKey, "ShowUI", 1)],
@@ -5975,13 +5986,13 @@ internal static class PolicyNetwork
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 4,
-                    ImpactNote = "DA tunnel is always active, even on the corporate LAN. This adds slight latency to LAN traffic but ensures consistent policy enforcement.",
+                    ImpactNote =
+                        "DA tunnel is always active, even on the corporate LAN. This adds slight latency to LAN traffic but ensures consistent policy enforcement.",
                     ApplyOps = [RegOp.SetDword(DaKey, "BypassInSiteEnabled", 0)],
                     RemoveOps = [RegOp.DeleteValue(DaKey, "BypassInSiteEnabled")],
                     DetectOps = [RegOp.CheckDword(DaKey, "BypassInSiteEnabled", 0)],
                 },
             ];
-
     }
 
     // ── DnsClientRegistrationPolicy ──
@@ -5996,143 +6007,152 @@ internal static class PolicyNetwork
                 Id = "dnscgpo-disable-dynamic-registration",
                 Label = "Disable DNS Dynamic Registration",
                 Category = "Network",
-                Description = "Disables dynamic DNS registration for all network adapters on this machine. Prevents the client from automatically publishing its IP addresses in DNS. Reduces DNS footprint in privacy-sensitive environments. Default: 1 (enabled). Recommended: 0.",
+                Description =
+                    "Disables dynamic DNS registration for all network adapters on this machine. Prevents the client from automatically publishing its IP addresses in DNS. Reduces DNS footprint in privacy-sensitive environments. Default: 1 (enabled). Recommended: 0.",
                 Tags = ["dns", "dynamic-registration", "privacy", "network"],
                 NeedsAdmin = true,
                 CorpSafe = false,
                 RegistryKeys = [DnsCl],
-                ApplyOps   = [RegOp.SetDword(DnsCl, "RegistrationEnabled", 0)],
-                RemoveOps  = [RegOp.DeleteValue(DnsCl, "RegistrationEnabled")],
-                DetectOps  = [RegOp.CheckDword(DnsCl, "RegistrationEnabled", 0)],
+                ApplyOps = [RegOp.SetDword(DnsCl, "RegistrationEnabled", 0)],
+                RemoveOps = [RegOp.DeleteValue(DnsCl, "RegistrationEnabled")],
+                DetectOps = [RegOp.CheckDword(DnsCl, "RegistrationEnabled", 0)],
             },
             new TweakDef
             {
                 Id = "dnscgpo-disable-adapter-name-registration",
                 Label = "Disable DNS Registration of Adapter Names",
                 Category = "Network",
-                Description = "Prevents DNS registration of network adapter names (hostname-adapterX records). Only the primary hostname is registered, reducing DNS clutter and information exposure. Default: 0 (adapter names not registered by default). Recommended: 0.",
+                Description =
+                    "Prevents DNS registration of network adapter names (hostname-adapterX records). Only the primary hostname is registered, reducing DNS clutter and information exposure. Default: 0 (adapter names not registered by default). Recommended: 0.",
                 Tags = ["dns", "registration", "adapter", "privacy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
                 RegistryKeys = [DnsCl],
-                ApplyOps   = [RegOp.SetDword(DnsCl, "RegisterAdapterName", 0)],
-                RemoveOps  = [RegOp.DeleteValue(DnsCl, "RegisterAdapterName")],
-                DetectOps  = [RegOp.CheckDword(DnsCl, "RegisterAdapterName", 0)],
+                ApplyOps = [RegOp.SetDword(DnsCl, "RegisterAdapterName", 0)],
+                RemoveOps = [RegOp.DeleteValue(DnsCl, "RegisterAdapterName")],
+                DetectOps = [RegOp.CheckDword(DnsCl, "RegisterAdapterName", 0)],
             },
             new TweakDef
             {
                 Id = "dnscgpo-disable-reverse-lookup-registration",
                 Label = "Disable DNS Reverse-Lookup (PTR) Registration",
                 Category = "Network",
-                Description = "Prevents automatic DNS PTR record registration for this machine's IP addresses. Reduces network exposure by not publishing reverse-lookup mappings. Default: 1. Recommended: 0 for privacy-focused deployments.",
+                Description =
+                    "Prevents automatic DNS PTR record registration for this machine's IP addresses. Reduces network exposure by not publishing reverse-lookup mappings. Default: 1. Recommended: 0 for privacy-focused deployments.",
                 Tags = ["dns", "ptr", "reverse-lookup", "registration", "privacy"],
                 NeedsAdmin = true,
                 CorpSafe = false,
                 RegistryKeys = [DnsCl],
-                ApplyOps   = [RegOp.SetDword(DnsCl, "RegisterReverseLookup", 0)],
-                RemoveOps  = [RegOp.DeleteValue(DnsCl, "RegisterReverseLookup")],
-                DetectOps  = [RegOp.CheckDword(DnsCl, "RegisterReverseLookup", 0)],
+                ApplyOps = [RegOp.SetDword(DnsCl, "RegisterReverseLookup", 0)],
+                RemoveOps = [RegOp.DeleteValue(DnsCl, "RegisterReverseLookup")],
+                DetectOps = [RegOp.CheckDword(DnsCl, "RegisterReverseLookup", 0)],
             },
             new TweakDef
             {
                 Id = "dnscgpo-disable-multicast-fqdn",
                 Label = "Disable DNS Multicast FQDN Resolution",
                 Category = "Network",
-                Description = "Disables use of multicast DNS (mDNS/LLMNR) for FQDN resolution. Reduces broadcast-based name-resolution that can leak hostname information on the local network. Default: 0 (not restricted). Recommended: 1.",
+                Description =
+                    "Disables use of multicast DNS (mDNS/LLMNR) for FQDN resolution. Reduces broadcast-based name-resolution that can leak hostname information on the local network. Default: 0 (not restricted). Recommended: 1.",
                 Tags = ["dns", "multicast", "mdns", "llmnr", "privacy", "network"],
                 NeedsAdmin = true,
                 CorpSafe = true,
                 RegistryKeys = [DnsCl],
-                ApplyOps   = [RegOp.SetDword(DnsCl, "AllowMulticastFQDNDiscovery", 0)],
-                RemoveOps  = [RegOp.DeleteValue(DnsCl, "AllowMulticastFQDNDiscovery")],
-                DetectOps  = [RegOp.CheckDword(DnsCl, "AllowMulticastFQDNDiscovery", 0)],
+                ApplyOps = [RegOp.SetDword(DnsCl, "AllowMulticastFQDNDiscovery", 0)],
+                RemoveOps = [RegOp.DeleteValue(DnsCl, "AllowMulticastFQDNDiscovery")],
+                DetectOps = [RegOp.CheckDword(DnsCl, "AllowMulticastFQDNDiscovery", 0)],
             },
             new TweakDef
             {
                 Id = "dnscgpo-disable-domain-name-devolution",
                 Label = "Disable DNS Domain-Name Devolution",
                 Category = "Network",
-                Description = "Disables DNS domain-name devolution (shortening multi-label names to try parent domain suffixes). Prevents unintended name resolution via parent domains when a query fails at the primary domain. Default: 1. Recommended: 0.",
+                Description =
+                    "Disables DNS domain-name devolution (shortening multi-label names to try parent domain suffixes). Prevents unintended name resolution via parent domains when a query fails at the primary domain. Default: 1. Recommended: 0.",
                 Tags = ["dns", "devolution", "name-resolution", "security"],
                 NeedsAdmin = true,
                 CorpSafe = true,
                 RegistryKeys = [DnsCl],
-                ApplyOps   = [RegOp.SetDword(DnsCl, "UseDomainNameDevolution", 0)],
-                RemoveOps  = [RegOp.DeleteValue(DnsCl, "UseDomainNameDevolution")],
-                DetectOps  = [RegOp.CheckDword(DnsCl, "UseDomainNameDevolution", 0)],
+                ApplyOps = [RegOp.SetDword(DnsCl, "UseDomainNameDevolution", 0)],
+                RemoveOps = [RegOp.DeleteValue(DnsCl, "UseDomainNameDevolution")],
+                DetectOps = [RegOp.CheckDword(DnsCl, "UseDomainNameDevolution", 0)],
             },
             new TweakDef
             {
                 Id = "dnscgpo-disable-append-primary-suffixes",
                 Label = "Disable DNS Primary Suffix Appending",
                 Category = "Network",
-                Description = "Disables automatic appending of the primary DNS suffix and parent suffixes when resolving single-label names. Reduces name-leakage and resolves-to-wrong-server scenarios in multi-domain environments. Default: 1. Recommended: 0.",
+                Description =
+                    "Disables automatic appending of the primary DNS suffix and parent suffixes when resolving single-label names. Reduces name-leakage and resolves-to-wrong-server scenarios in multi-domain environments. Default: 1. Recommended: 0.",
                 Tags = ["dns", "suffix", "name-resolution", "security"],
                 NeedsAdmin = true,
                 CorpSafe = false,
                 RegistryKeys = [DnsCl],
-                ApplyOps   = [RegOp.SetDword(DnsCl, "AppendPrimarySuffixes", 0)],
-                RemoveOps  = [RegOp.DeleteValue(DnsCl, "AppendPrimarySuffixes")],
-                DetectOps  = [RegOp.CheckDword(DnsCl, "AppendPrimarySuffixes", 0)],
+                ApplyOps = [RegOp.SetDword(DnsCl, "AppendPrimarySuffixes", 0)],
+                RemoveOps = [RegOp.DeleteValue(DnsCl, "AppendPrimarySuffixes")],
+                DetectOps = [RegOp.CheckDword(DnsCl, "AppendPrimarySuffixes", 0)],
             },
             new TweakDef
             {
                 Id = "dnscgpo-disable-unicode-dns",
                 Label = "Disable Unicode (IDN) DNS Name Resolution",
                 Category = "Network",
-                Description = "Disables Internationalized Domain Name (IDN) / Unicode DNS resolution. Prevents IDN homograph attacks by refusing Unicode domain name lookups. Default: 1. Recommended: 0 in high-security environments.",
+                Description =
+                    "Disables Internationalized Domain Name (IDN) / Unicode DNS resolution. Prevents IDN homograph attacks by refusing Unicode domain name lookups. Default: 1. Recommended: 0 in high-security environments.",
                 Tags = ["dns", "idn", "unicode", "security", "homograph"],
                 NeedsAdmin = true,
                 CorpSafe = true,
                 RegistryKeys = [DnsCl],
-                ApplyOps   = [RegOp.SetDword(DnsCl, "AllowUnicodeDNSName", 0)],
-                RemoveOps  = [RegOp.DeleteValue(DnsCl, "AllowUnicodeDNSName")],
-                DetectOps  = [RegOp.CheckDword(DnsCl, "AllowUnicodeDNSName", 0)],
+                ApplyOps = [RegOp.SetDword(DnsCl, "AllowUnicodeDNSName", 0)],
+                RemoveOps = [RegOp.DeleteValue(DnsCl, "AllowUnicodeDNSName")],
+                DetectOps = [RegOp.CheckDword(DnsCl, "AllowUnicodeDNSName", 0)],
             },
             new TweakDef
             {
                 Id = "dnscgpo-set-refresh-interval",
                 Label = "Set DNS Registration Refresh Interval to 24h",
                 Category = "Network",
-                Description = "Sets the DNS registration refresh interval to 86 400 seconds (24 hours). The default is every 24 hours but can be overridden by DHCP lease frequency. Explicit policy ensures stable refresh timing. Default: 86400. Recommended: 86400.",
+                Description =
+                    "Sets the DNS registration refresh interval to 86 400 seconds (24 hours). The default is every 24 hours but can be overridden by DHCP lease frequency. Explicit policy ensures stable refresh timing. Default: 86400. Recommended: 86400.",
                 Tags = ["dns", "registration", "interval", "refresh"],
                 NeedsAdmin = true,
                 CorpSafe = true,
                 RegistryKeys = [DnsCl],
-                ApplyOps   = [RegOp.SetDword(DnsCl, "RegistrationRefreshInterval", 86400)],
-                RemoveOps  = [RegOp.DeleteValue(DnsCl, "RegistrationRefreshInterval")],
-                DetectOps  = [RegOp.CheckDword(DnsCl, "RegistrationRefreshInterval", 86400)],
+                ApplyOps = [RegOp.SetDword(DnsCl, "RegistrationRefreshInterval", 86400)],
+                RemoveOps = [RegOp.DeleteValue(DnsCl, "RegistrationRefreshInterval")],
+                DetectOps = [RegOp.CheckDword(DnsCl, "RegistrationRefreshInterval", 86400)],
             },
             new TweakDef
             {
                 Id = "dnscgpo-disable-smart-name-resolution",
                 Label = "Disable DNS Smart Multi-Homed Name Resolution",
                 Category = "Network",
-                Description = "Disables DNS smart multi-homed name resolution, which forwards queries to all DNS servers on all adapters in parallel. Prevents DNS response spoofing via a rogue adapter on multi-homed machines. Default: not set. Recommended: 1.",
+                Description =
+                    "Disables DNS smart multi-homed name resolution, which forwards queries to all DNS servers on all adapters in parallel. Prevents DNS response spoofing via a rogue adapter on multi-homed machines. Default: not set. Recommended: 1.",
                 Tags = ["dns", "multi-home", "smart", "name-resolution", "security"],
                 NeedsAdmin = true,
                 CorpSafe = true,
                 RegistryKeys = [DnsCl],
-                ApplyOps   = [RegOp.SetDword(DnsCl, "DisableSmartNameResolution", 1)],
-                RemoveOps  = [RegOp.DeleteValue(DnsCl, "DisableSmartNameResolution")],
-                DetectOps  = [RegOp.CheckDword(DnsCl, "DisableSmartNameResolution", 1)],
+                ApplyOps = [RegOp.SetDword(DnsCl, "DisableSmartNameResolution", 1)],
+                RemoveOps = [RegOp.DeleteValue(DnsCl, "DisableSmartNameResolution")],
+                DetectOps = [RegOp.CheckDword(DnsCl, "DisableSmartNameResolution", 1)],
             },
             new TweakDef
             {
                 Id = "dnscgpo-ttl-limit",
                 Label = "Cap DNS Negative Cache TTL to 5 Seconds",
                 Category = "Network",
-                Description = "Sets the maximum DNS negative cache TTL to 5 seconds. Short negative TTL reduces the window where a failed DNS lookup is cached, improving resilience during DNS failover events. Default: 900. Recommended: 5.",
+                Description =
+                    "Sets the maximum DNS negative cache TTL to 5 seconds. Short negative TTL reduces the window where a failed DNS lookup is cached, improving resilience during DNS failover events. Default: 900. Recommended: 5.",
                 Tags = ["dns", "ttl", "cache", "negative-cache"],
                 NeedsAdmin = true,
                 CorpSafe = true,
                 RegistryKeys = [DnsCl],
-                ApplyOps   = [RegOp.SetDword(DnsCl, "NegativeCacheTime", 5)],
-                RemoveOps  = [RegOp.DeleteValue(DnsCl, "NegativeCacheTime")],
-                DetectOps  = [RegOp.CheckDword(DnsCl, "NegativeCacheTime", 5)],
+                ApplyOps = [RegOp.SetDword(DnsCl, "NegativeCacheTime", 5)],
+                RemoveOps = [RegOp.DeleteValue(DnsCl, "NegativeCacheTime")],
+                DetectOps = [RegOp.CheckDword(DnsCl, "NegativeCacheTime", 5)],
             },
         ];
-
     }
 
     // ── DnsSecurePolicy ──
@@ -6313,7 +6333,6 @@ internal static class PolicyNetwork
                 DetectOps = [RegOp.CheckDword(Key, "RegistrationEnabled", 0)],
             },
         ];
-
     }
 
     // ── DohEnforcementPolicy ──
@@ -6494,7 +6513,6 @@ internal static class PolicyNetwork
                     DetectOps = [RegOp.CheckDword(Key, "DisableDoHCache", 1)],
                 },
             ];
-
     }
 
     // ── DynamicDataExchangePolicy ──
@@ -6675,18 +6693,14 @@ internal static class PolicyNetwork
                 DetectOps = [RegOp.CheckDword(Key, "DisableClipboardDDE", 1)],
             },
         ];
-
     }
 
     // ── EapNetworkPolicy ──
     private static class _EapNetworkPolicy
     {
-        private const string Key =
-            @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\EAP";
-        private const string PeapKey =
-            @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\EAP\PEAP";
-        private const string ClientKey =
-            @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\EAP\Client";
+        private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\EAP";
+        private const string PeapKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\EAP\PEAP";
+        private const string ClientKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\EAP\Client";
 
         public static IReadOnlyList<TweakDef> Data =>
             [
@@ -6702,7 +6716,8 @@ internal static class PolicyNetwork
                     CorpSafe = true,
                     ImpactScore = 5,
                     SafetyRating = 5,
-                    ImpactNote = "EAP refuses to complete authentication if the RADIUS server certificate fails validation; rogue AP attacks are blocked.",
+                    ImpactNote =
+                        "EAP refuses to complete authentication if the RADIUS server certificate fails validation; rogue AP attacks are blocked.",
                     ApplyOps = [RegOp.SetDword(PeapKey, "RequireServerCertValidation", 1)],
                     RemoveOps = [RegOp.DeleteValue(PeapKey, "RequireServerCertValidation")],
                     DetectOps = [RegOp.CheckDword(PeapKey, "RequireServerCertValidation", 1)],
@@ -6719,7 +6734,8 @@ internal static class PolicyNetwork
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "Certificate selection is not automatic; users/supplicants must explicitly select the correct certificate for EAP-TLS.",
+                    ImpactNote =
+                        "Certificate selection is not automatic; users/supplicants must explicitly select the correct certificate for EAP-TLS.",
                     ApplyOps = [RegOp.SetDword(ClientKey, "DisableSimpleCertSelection", 1)],
                     RemoveOps = [RegOp.DeleteValue(ClientKey, "DisableSimpleCertSelection")],
                     DetectOps = [RegOp.CheckDword(ClientKey, "DisableSimpleCertSelection", 1)],
@@ -6821,7 +6837,8 @@ internal static class PolicyNetwork
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "After 3 consecutive authentication failures the supplicant stops retrying; manual intervention is needed to reconnect.",
+                    ImpactNote =
+                        "After 3 consecutive authentication failures the supplicant stops retrying; manual intervention is needed to reconnect.",
                     ApplyOps = [RegOp.SetDword(Key, "MaxAuthFailures", 3)],
                     RemoveOps = [RegOp.DeleteValue(Key, "MaxAuthFailures")],
                     DetectOps = [RegOp.CheckDword(Key, "MaxAuthFailures", 3)],
@@ -6861,7 +6878,6 @@ internal static class PolicyNetwork
                     DetectOps = [RegOp.CheckDword(Key, "AllowOnlyTLSBasedMethods", 1)],
                 },
             ];
-
     }
 
     // ── HomeGroupPolicy ──
@@ -6878,7 +6894,8 @@ internal static class PolicyNetwork
                 Id = "homegroup-disable-homegroup",
                 Label = "HomeGroup: Disable HomeGroup (Prevent Creation and Join)",
                 Category = "Network",
-                Description = "Prevents Windows from creating or joining HomeGroups. HomeGroup was a Windows feature (removed in Windows 10 1803) that allowed easy resource sharing over a local network. Where the underlying registry paths and services still exist (transition systems), disabling HomeGroup ensures no legacy sharing mechanism can be activated. This covers both domain-joined machines and upgraded systems that may still have HomeGroup registry entries.",
+                Description =
+                    "Prevents Windows from creating or joining HomeGroups. HomeGroup was a Windows feature (removed in Windows 10 1803) that allowed easy resource sharing over a local network. Where the underlying registry paths and services still exist (transition systems), disabling HomeGroup ensures no legacy sharing mechanism can be activated. This covers both domain-joined machines and upgraded systems that may still have HomeGroup registry entries.",
                 Tags = ["homegroup", "sharing", "network", "policy", "legacy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -6895,7 +6912,8 @@ internal static class PolicyNetwork
                 Id = "homegroup-block-sharing-wizard",
                 Label = "HomeGroup: Block Network Sharing Wizard",
                 Category = "Network",
-                Description = "Disables the Windows Network Setup and Sharing Wizard that appears when connecting to a new network, which includes prompts to share files and configure HomeGroup-style sharing. The sharing wizard can inadvertently configure broad file-sharing settings when users accept defaults without understanding the implications. Blocking it ensures network sharing is configured intentionally through a dedicated management interface.",
+                Description =
+                    "Disables the Windows Network Setup and Sharing Wizard that appears when connecting to a new network, which includes prompts to share files and configure HomeGroup-style sharing. The sharing wizard can inadvertently configure broad file-sharing settings when users accept defaults without understanding the implications. Blocking it ensures network sharing is configured intentionally through a dedicated management interface.",
                 Tags = ["homegroup", "sharing wizard", "network", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -6912,7 +6930,8 @@ internal static class PolicyNetwork
                 Id = "homegroup-block-homegroup-creation",
                 Label = "HomeGroup: Block HomeGroup Creation by Users",
                 Category = "Network",
-                Description = "Prevents standard users from creating new HomeGroups. Even on systems where HomeGroup-related features have been removed at the UI level, the underlying service (HomeGroupProvider) may still be accessible through PowerShell or legacy APIs. This policy enforces a mandatory block on new HomeGroup creation regardless of the access method used.",
+                Description =
+                    "Prevents standard users from creating new HomeGroups. Even on systems where HomeGroup-related features have been removed at the UI level, the underlying service (HomeGroupProvider) may still be accessible through PowerShell or legacy APIs. This policy enforces a mandatory block on new HomeGroup creation regardless of the access method used.",
                 Tags = ["homegroup", "creation", "restriction", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -6929,7 +6948,8 @@ internal static class PolicyNetwork
                 Id = "homegroup-block-join-existing",
                 Label = "HomeGroup: Block Joining Existing HomeGroups",
                 Category = "Network",
-                Description = "Prevents users on this machine from joining existing HomeGroups on the local network. If older machines on the same LAN still have active HomeGroups, this policy blocks the current machine from joining them and accessing their shared resources. This is particularly important in mixed-version environments where Windows 7/8.1 machines may still be using HomeGroup.",
+                Description =
+                    "Prevents users on this machine from joining existing HomeGroups on the local network. If older machines on the same LAN still have active HomeGroups, this policy blocks the current machine from joining them and accessing their shared resources. This is particularly important in mixed-version environments where Windows 7/8.1 machines may still be using HomeGroup.",
                 Tags = ["homegroup", "join", "network", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -6946,7 +6966,8 @@ internal static class PolicyNetwork
                 Id = "homegroup-disable-sharing-library-access",
                 Label = "HomeGroup: Disable Shared Library Access via HomeGroup",
                 Category = "Network",
-                Description = "Disables access to shared libraries (Music, Pictures, Videos, Documents folders) through any active HomeGroup connection. Even when HomeGroup creation is blocked, access to legacy shares may persist if the machine was previously part of a HomeGroup. This policy ensures that the library sharing mechanism cannot be used to access data through legacy share paths, regardless of prior HomeGroup membership.",
+                Description =
+                    "Disables access to shared libraries (Music, Pictures, Videos, Documents folders) through any active HomeGroup connection. Even when HomeGroup creation is blocked, access to legacy shares may persist if the machine was previously part of a HomeGroup. This policy ensures that the library sharing mechanism cannot be used to access data through legacy share paths, regardless of prior HomeGroup membership.",
                 Tags = ["homegroup", "library sharing", "pictures", "music", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -6963,7 +6984,8 @@ internal static class PolicyNetwork
                 Id = "homegroup-block-network-bridge",
                 Label = "HomeGroup: Block Network Bridge Creation",
                 Category = "Network",
-                Description = "Prevents users from creating a network bridge between multiple network adapters. A network bridge connects two otherwise isolated network segments (e.g., a wired corporate LAN and a personal Wi-Fi hotspot), creating a routing path that bypasses network access controls. This is a long-standing attack vector for data exfiltration and is blocked in any CIS Benchmark Level 1 configuration.",
+                Description =
+                    "Prevents users from creating a network bridge between multiple network adapters. A network bridge connects two otherwise isolated network segments (e.g., a wired corporate LAN and a personal Wi-Fi hotspot), creating a routing path that bypasses network access controls. This is a long-standing attack vector for data exfiltration and is blocked in any CIS Benchmark Level 1 configuration.",
                 Tags = ["homegroup", "network bridge", "network isolation", "security", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -6980,14 +7002,21 @@ internal static class PolicyNetwork
                 Id = "homegroup-block-internet-connection-sharing",
                 Label = "HomeGroup: Block ICS UI for Current User (User-Scope Policy)",
                 Category = "Network",
-                Description = "Prevents the current user from enabling Internet Connection Sharing (ICS) by hiding the sharing tab in network adapter properties at the user-policy level. This user-scope complement to the machine-scope ICS restriction ensures that even when a user navigates to the Network Connections UI on their own account, the option to configure ICS is hidden. Combined with the machine-scope block, this creates defence-in-depth against ad-hoc NAT routing.",
+                Description =
+                    "Prevents the current user from enabling Internet Connection Sharing (ICS) by hiding the sharing tab in network adapter properties at the user-policy level. This user-scope complement to the machine-scope ICS restriction ensures that even when a user navigates to the Network Connections UI on their own account, the option to configure ICS is hidden. Combined with the machine-scope block, this creates defence-in-depth against ad-hoc NAT routing.",
                 Tags = ["homegroup", "ics", "internet sharing", "user policy", "network"],
                 NeedsAdmin = false,
                 CorpSafe = true,
                 RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Policies\Microsoft\Windows\Network Connections"],
                 ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Policies\Microsoft\Windows\Network Connections", "NC_ShowSharedAccessUI", 0)],
-                RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\SOFTWARE\Policies\Microsoft\Windows\Network Connections", "NC_ShowSharedAccessUI")],
-                DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\SOFTWARE\Policies\Microsoft\Windows\Network Connections", "NC_ShowSharedAccessUI", 0)],
+                RemoveOps =
+                [
+                    RegOp.DeleteValue(@"HKEY_CURRENT_USER\SOFTWARE\Policies\Microsoft\Windows\Network Connections", "NC_ShowSharedAccessUI"),
+                ],
+                DetectOps =
+                [
+                    RegOp.CheckDword(@"HKEY_CURRENT_USER\SOFTWARE\Policies\Microsoft\Windows\Network Connections", "NC_ShowSharedAccessUI", 0),
+                ],
                 ImpactScore = 3,
                 SafetyRating = 5,
                 ImpactNote = "Removes ICS option from the user's adapter properties; user-scope complement to machine-level ICS block.",
@@ -6997,7 +7026,8 @@ internal static class PolicyNetwork
                 Id = "homegroup-block-aad-workplace-join",
                 Label = "HomeGroup: Block Azure AD Workplace Join (Unmanaged Devices)",
                 Category = "Network",
-                Description = "Prevents users from registering this device with Azure Active Directory (AAD / Entra ID) as a Workplace Join device. Workplace Join allows personal (BYOD) devices to access corporate resources like Exchange email and SharePoint through conditional access policies. In environments where only fully MDM-enrolled corporate devices are permitted, blocking Workplace Join ensures personal devices cannot gain partial access to corporate resources through the lighter-weight registration path.",
+                Description =
+                    "Prevents users from registering this device with Azure Active Directory (AAD / Entra ID) as a Workplace Join device. Workplace Join allows personal (BYOD) devices to access corporate resources like Exchange email and SharePoint through conditional access policies. In environments where only fully MDM-enrolled corporate devices are permitted, blocking Workplace Join ensures personal devices cannot gain partial access to corporate resources through the lighter-weight registration path.",
                 Tags = ["homegroup", "azure ad", "workplace join", "byod", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -7014,7 +7044,8 @@ internal static class PolicyNetwork
                 Id = "homegroup-suppress-peer-name-resolution",
                 Label = "HomeGroup: Suppress Peer Name Resolution Protocol (PNRP)",
                 Category = "Network",
-                Description = "Disables the Peer Name Resolution Protocol (PNRP) service, which HomeGroup and Windows Collaboration used for peer-to-peer device discovery on the local network. PNRP announces the machine's presence and identity to other devices on the same network segment and was a prerequisite for HomeGroup operation. On corporate networks, PNRP can result in inadvertent machine exposure and is not needed when domain-based or MDM-managed directory services are used.",
+                Description =
+                    "Disables the Peer Name Resolution Protocol (PNRP) service, which HomeGroup and Windows Collaboration used for peer-to-peer device discovery on the local network. PNRP announces the machine's presence and identity to other devices on the same network segment and was a prerequisite for HomeGroup operation. On corporate networks, PNRP can result in inadvertent machine exposure and is not needed when domain-based or MDM-managed directory services are used.",
                 Tags = ["homegroup", "pnrp", "peer to peer", "discovery", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -7031,7 +7062,8 @@ internal static class PolicyNetwork
                 Id = "homegroup-block-homegroup-listener",
                 Label = "HomeGroup: Disable HomeGroup Listener Service Policy",
                 Category = "Network",
-                Description = "Applies the Group Policy flag that prevents the HomeGroupListener service from starting. The HomeGroupListener service (on older Windows 10 builds or those upgraded from Windows 8.1) processes HomeGroup notifications and sharing requests from network peers. Disabling it via policy ensures the service is blocked even if a service configuration change or script attempts to start it during a user session.",
+                Description =
+                    "Applies the Group Policy flag that prevents the HomeGroupListener service from starting. The HomeGroupListener service (on older Windows 10 builds or those upgraded from Windows 8.1) processes HomeGroup notifications and sharing requests from network peers. Disabling it via policy ensures the service is blocked even if a service configuration change or script attempts to start it during a user session.",
                 Tags = ["homegroup", "listener", "service", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -7044,7 +7076,6 @@ internal static class PolicyNetwork
                 ImpactNote = "Blocks HomeGroup network listener; equivalent to disabling the service but enforced via policy.",
             },
         ];
-
     }
 
     // ── HotspotAuthenticationPolicy ──
@@ -7262,20 +7293,16 @@ internal static class PolicyNetwork
                 DetectOps = [RegOp.CheckDword(HsKey, "fCacheCredentials", 0)],
             },
         ];
-
     }
 
     // ── Ieee8021xPolicy ──
     private static class _Ieee8021xPolicy
     {
-        private const string WiredKey =
-            @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WiredNetwork";
+        private const string WiredKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WiredNetwork";
 
-        private const string WirelessKey =
-            @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WirelessNetwork";
+        private const string WirelessKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WirelessNetwork";
 
-        private const string EapKey =
-            @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\EapHost";
+        private const string EapKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\EapHost";
 
         public static IReadOnlyList<TweakDef> Data =>
             [
@@ -7291,7 +7318,8 @@ internal static class PolicyNetwork
                     CorpSafe = true,
                     ImpactScore = 5,
                     SafetyRating = 3,
-                    ImpactNote = "Wired 802.1x authentication is enforced. Network switches must support 802.1x and be configured with RADIUS server settings. Machines without valid credentials are denied network access — ensure machine certificates are enrolled first.",
+                    ImpactNote =
+                        "Wired 802.1x authentication is enforced. Network switches must support 802.1x and be configured with RADIUS server settings. Machines without valid credentials are denied network access — ensure machine certificates are enrolled first.",
                     ApplyOps = [RegOp.SetDword(WiredKey, "EnableAutoConfig", 1)],
                     RemoveOps = [RegOp.DeleteValue(WiredKey, "EnableAutoConfig")],
                     DetectOps = [RegOp.CheckDword(WiredKey, "EnableAutoConfig", 1)],
@@ -7308,7 +7336,8 @@ internal static class PolicyNetwork
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "EAPOL-Start timer set to 20 seconds. Only affects authentication initiation timing. Network connectivity is unchanged once authentication completes.",
+                    ImpactNote =
+                        "EAPOL-Start timer set to 20 seconds. Only affects authentication initiation timing. Network connectivity is unchanged once authentication completes.",
                     ApplyOps = [RegOp.SetDword(WiredKey, "AuthResponse", 20)],
                     RemoveOps = [RegOp.DeleteValue(WiredKey, "AuthResponse")],
                     DetectOps = [RegOp.CheckDword(WiredKey, "AuthResponse", 20)],
@@ -7325,7 +7354,8 @@ internal static class PolicyNetwork
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "EAPOL-Start retransmit limit is 5 attempts. After 5 failures, the supplicant stops trying. Most switches respond to the first EAPOL-Start; retransmits are only relevant for switches with slow RADIUS response.",
+                    ImpactNote =
+                        "EAPOL-Start retransmit limit is 5 attempts. After 5 failures, the supplicant stops trying. Most switches respond to the first EAPOL-Start; retransmits are only relevant for switches with slow RADIUS response.",
                     ApplyOps = [RegOp.SetDword(WiredKey, "MaxEapolStartAttempts", 5)],
                     RemoveOps = [RegOp.DeleteValue(WiredKey, "MaxEapolStartAttempts")],
                     DetectOps = [RegOp.CheckDword(WiredKey, "MaxEapolStartAttempts", 5)],
@@ -7342,22 +7372,11 @@ internal static class PolicyNetwork
                     CorpSafe = true,
                     ImpactScore = 4,
                     SafetyRating = 5,
-                    ImpactNote = "SSO integrates 802.1x with Windows logon. Machine authenticates before logon screen; user authenticates after. Requires both machine and user certificates to be enrolled.",
-                    ApplyOps =
-                    [
-                        RegOp.SetDword(WiredKey, "BlockPeriod", 0),
-                        RegOp.SetDword(WiredKey, "SingleSignOn", 1),
-                    ],
-                    RemoveOps =
-                    [
-                        RegOp.DeleteValue(WiredKey, "BlockPeriod"),
-                        RegOp.DeleteValue(WiredKey, "SingleSignOn"),
-                    ],
-                    DetectOps =
-                    [
-                        RegOp.CheckDword(WiredKey, "BlockPeriod", 0),
-                        RegOp.CheckDword(WiredKey, "SingleSignOn", 1),
-                    ],
+                    ImpactNote =
+                        "SSO integrates 802.1x with Windows logon. Machine authenticates before logon screen; user authenticates after. Requires both machine and user certificates to be enrolled.",
+                    ApplyOps = [RegOp.SetDword(WiredKey, "BlockPeriod", 0), RegOp.SetDword(WiredKey, "SingleSignOn", 1)],
+                    RemoveOps = [RegOp.DeleteValue(WiredKey, "BlockPeriod"), RegOp.DeleteValue(WiredKey, "SingleSignOn")],
+                    DetectOps = [RegOp.CheckDword(WiredKey, "BlockPeriod", 0), RegOp.CheckDword(WiredKey, "SingleSignOn", 1)],
                 },
                 new TweakDef
                 {
@@ -7371,7 +7390,8 @@ internal static class PolicyNetwork
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "Machine authentication is required; user-only mode is disabled. Machine certificates must be enrolled before the logon screen appears. Group Policy and SCCM scripts that run at machine startup require machine-authenticated network access.",
+                    ImpactNote =
+                        "Machine authentication is required; user-only mode is disabled. Machine certificates must be enrolled before the logon screen appears. Group Policy and SCCM scripts that run at machine startup require machine-authenticated network access.",
                     ApplyOps = [RegOp.SetDword(WiredKey, "UserOnlyMode", 0)],
                     RemoveOps = [RegOp.DeleteValue(WiredKey, "UserOnlyMode")],
                     DetectOps = [RegOp.CheckDword(WiredKey, "UserOnlyMode", 0)],
@@ -7388,7 +7408,8 @@ internal static class PolicyNetwork
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 4,
-                    ImpactNote = "Guest VLAN fallback is disabled. Failed authentication results in no network access rather than guest VLAN. Ensure there is an alternate recovery path (console access, out-of-band management) for machines with certificate failures.",
+                    ImpactNote =
+                        "Guest VLAN fallback is disabled. Failed authentication results in no network access rather than guest VLAN. Ensure there is an alternate recovery path (console access, out-of-band management) for machines with certificate failures.",
                     ApplyOps = [RegOp.SetDword(WiredKey, "AllowGuestVLAN", 0)],
                     RemoveOps = [RegOp.DeleteValue(WiredKey, "AllowGuestVLAN")],
                     DetectOps = [RegOp.CheckDword(WiredKey, "AllowGuestVLAN", 0)],
@@ -7405,7 +7426,8 @@ internal static class PolicyNetwork
                     CorpSafe = true,
                     ImpactScore = 5,
                     SafetyRating = 5,
-                    ImpactNote = "EAP-TLS requires client certificates on all machines. Machine certificates must be enrolled via enterprise CA before deployment. Strongest 802.1x authentication method — recommended for high-security environments.",
+                    ImpactNote =
+                        "EAP-TLS requires client certificates on all machines. Machine certificates must be enrolled via enterprise CA before deployment. Strongest 802.1x authentication method — recommended for high-security environments.",
                     ApplyOps = [RegOp.SetDword(WiredKey, "EAPType", 13)],
                     RemoveOps = [RegOp.DeleteValue(WiredKey, "EAPType")],
                     DetectOps = [RegOp.CheckDword(WiredKey, "EAPType", 13)],
@@ -7422,7 +7444,8 @@ internal static class PolicyNetwork
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "Anonymous identity is sent as EAP outer identity. The RADIUS server must be configured to match the anonymous realm. The real user identity is still used inside the TLS tunnel for authentication.",
+                    ImpactNote =
+                        "Anonymous identity is sent as EAP outer identity. The RADIUS server must be configured to match the anonymous realm. The real user identity is still used inside the TLS tunnel for authentication.",
                     ApplyOps = [RegOp.SetDword(EapKey, "EnableAnonymousIdentity", 1)],
                     RemoveOps = [RegOp.DeleteValue(EapKey, "EnableAnonymousIdentity")],
                     DetectOps = [RegOp.CheckDword(EapKey, "EnableAnonymousIdentity", 1)],
@@ -7439,7 +7462,8 @@ internal static class PolicyNetwork
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 4,
-                    ImpactNote = "Wireless 802.1x credentials are not cached. Users may be re-prompted for credentials on reconnection if using PEAP-MSCHAPv2. Certificate-based EAP-TLS is unaffected.",
+                    ImpactNote =
+                        "Wireless 802.1x credentials are not cached. Users may be re-prompted for credentials on reconnection if using PEAP-MSCHAPv2. Certificate-based EAP-TLS is unaffected.",
                     ApplyOps = [RegOp.SetDword(WirelessKey, "DisableUserCredentialCaching", 1)],
                     RemoveOps = [RegOp.DeleteValue(WirelessKey, "DisableUserCredentialCaching")],
                     DetectOps = [RegOp.CheckDword(WirelessKey, "DisableUserCredentialCaching", 1)],
@@ -7456,20 +7480,21 @@ internal static class PolicyNetwork
                     CorpSafe = true,
                     ImpactScore = 5,
                     SafetyRating = 5,
-                    ImpactNote = "Mutual authentication is required for PEAP/TTLS. RADIUS/NPS servers must present a trusted certificate. Ensures both server and client authenticate — critical for preventing evil twin attacks.",
+                    ImpactNote =
+                        "Mutual authentication is required for PEAP/TTLS. RADIUS/NPS servers must present a trusted certificate. Ensures both server and client authenticate — critical for preventing evil twin attacks.",
                     ApplyOps = [RegOp.SetDword(EapKey, "RequireMutualAuth", 1)],
                     RemoveOps = [RegOp.DeleteValue(EapKey, "RequireMutualAuth")],
                     DetectOps = [RegOp.CheckDword(EapKey, "RequireMutualAuth", 1)],
                 },
             ];
-
     }
 
     // ── InternetCommunicationPolicy ──
     private static class _InternetCommunicationPolicy
     {
         private const string InetMgmtKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\InternetManagement";
-        private const string InetRestrictKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\CurrentVersion\Software Protection Platform";
+        private const string InetRestrictKey =
+            @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\CurrentVersion\Software Protection Platform";
 
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
@@ -7478,7 +7503,8 @@ internal static class PolicyNetwork
                 Id = "inetcomm-restrict-internet-communication",
                 Label = "Internet Communication: Restrict All Internet Communication Features",
                 Category = "Network",
-                Description = "Enables the master Internet Communication Management policy that restricts or disables all Windows features that communicate with the internet, including Windows Error Reporting, Windows Update, Help and Support Center online search, Microsoft Customer Experience Improvement Program (CEIP), online activation, and other phone-home features. This is the master switch that enables sub-policies defined elsewhere under the InternetManagement key.",
+                Description =
+                    "Enables the master Internet Communication Management policy that restricts or disables all Windows features that communicate with the internet, including Windows Error Reporting, Windows Update, Help and Support Center online search, Microsoft Customer Experience Improvement Program (CEIP), online activation, and other phone-home features. This is the master switch that enables sub-policies defined elsewhere under the InternetManagement key.",
                 Tags = ["internet communication", "internet restriction", "privacy", "phone home", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -7488,14 +7514,16 @@ internal static class PolicyNetwork
                 DetectOps = [RegOp.CheckDword(InetMgmtKey, "RestrictInternetCommunication", 1)],
                 ImpactScore = 5,
                 SafetyRating = 3,
-                ImpactNote = "Broad internet communication block; may affect Windows Update, activation, and online Help. Test thoroughly before deploying.",
+                ImpactNote =
+                    "Broad internet communication block; may affect Windows Update, activation, and online Help. Test thoroughly before deploying.",
             },
             new TweakDef
             {
                 Id = "inetcomm-disable-printing-over-http",
                 Label = "Internet Communication: Disable Printing Over HTTP",
                 Category = "Network",
-                Description = "Disables the ability for Windows to send print jobs over HTTP, which is used for sending documents to Internet Printing Protocol (IPP) printers outside the corporate network. HTTP printing can bypass proxy controls and DLP systems. On managed networks, all printing should be directed to IT-managed printer queues; direct-to-internet IPP printing is a potential data exfiltration vector.",
+                Description =
+                    "Disables the ability for Windows to send print jobs over HTTP, which is used for sending documents to Internet Printing Protocol (IPP) printers outside the corporate network. HTTP printing can bypass proxy controls and DLP systems. On managed networks, all printing should be directed to IT-managed printer queues; direct-to-internet IPP printing is a potential data exfiltration vector.",
                 Tags = ["internet communication", "printing", "http", "data loss prevention", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -7512,7 +7540,8 @@ internal static class PolicyNetwork
                 Id = "inetcomm-disable-windows-update-access",
                 Label = "Internet Communication: Disable Access to Windows Update (Non-WSUS)",
                 Category = "Network",
-                Description = "Blocks Windows from accessing Microsoft's Windows Update servers directly, restricting update access to corporate WSUS or Windows Update for Business (WUfB) only. Direct Windows Update connections bypass the organization's patch approval process, potentially installing untested updates or creating tracking data. This policy should be combined with a WSUS or Intune Update Ring configuration to ensure updates are still received through an approved channel.",
+                Description =
+                    "Blocks Windows from accessing Microsoft's Windows Update servers directly, restricting update access to corporate WSUS or Windows Update for Business (WUfB) only. Direct Windows Update connections bypass the organization's patch approval process, potentially installing untested updates or creating tracking data. This policy should be combined with a WSUS or Intune Update Ring configuration to ensure updates are still received through an approved channel.",
                 Tags = ["internet communication", "windows update", "wsus", "patch management", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -7529,7 +7558,8 @@ internal static class PolicyNetwork
                 Id = "inetcomm-disable-web-communities",
                 Label = "Internet Communication: Disable Windows Web Communities Feature",
                 Category = "Network",
-                Description = "Disables the Windows Web Communities feature that allowed Windows Explorer and Help Center to automatically submit queries to Microsoft-hosted community websites (forums, knowledge base, support articles). While useful in consumer scenarios, this feature sends details about the user's system context, open documents, and help searches to external Microsoft servers, which creates a data-leakage concern in regulated business environments.",
+                Description =
+                    "Disables the Windows Web Communities feature that allowed Windows Explorer and Help Center to automatically submit queries to Microsoft-hosted community websites (forums, knowledge base, support articles). While useful in consumer scenarios, this feature sends details about the user's system context, open documents, and help searches to external Microsoft servers, which creates a data-leakage concern in regulated business environments.",
                 Tags = ["internet communication", "communities", "help center", "telemetry", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -7546,7 +7576,8 @@ internal static class PolicyNetwork
                 Id = "inetcomm-disable-event-viewer-links",
                 Label = "Internet Communication: Disable Event Viewer Online Links",
                 Category = "Network",
-                Description = "Prevents Event Viewer from displaying the 'More Information' link that opens a Microsoft online support page when viewing event log entries. Clicking these links sends event detail data (Event ID, source, parameters) to Microsoft's online event log lookup service. In sensitive environments, event log data may contain internal application identifiers, username fragments, or file path details that should not be transmitted outside the network.",
+                Description =
+                    "Prevents Event Viewer from displaying the 'More Information' link that opens a Microsoft online support page when viewing event log entries. Clicking these links sends event detail data (Event ID, source, parameters) to Microsoft's online event log lookup service. In sensitive environments, event log data may contain internal application identifiers, username fragments, or file path details that should not be transmitted outside the network.",
                 Tags = ["internet communication", "event viewer", "online links", "privacy", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -7563,7 +7594,8 @@ internal static class PolicyNetwork
                 Id = "inetcomm-disable-registration-wizard",
                 Label = "Internet Communication: Disable Windows Registration Wizard",
                 Category = "Network",
-                Description = "Disables the Windows Product Registration Wizard that appears after OS installation and prompts users to register the Windows license with Microsoft. The registration process transmits hardware information (CPU, RAM, disk size), Windows edition, and product key metadata to Microsoft's registration servers. On volume-licensed enterprise deployments, this registration is handled by Microsoft's volume activation infrastructure and the wizard is unnecessary.",
+                Description =
+                    "Disables the Windows Product Registration Wizard that appears after OS installation and prompts users to register the Windows license with Microsoft. The registration process transmits hardware information (CPU, RAM, disk size), Windows edition, and product key metadata to Microsoft's registration servers. On volume-licensed enterprise deployments, this registration is handled by Microsoft's volume activation infrastructure and the wizard is unnecessary.",
                 Tags = ["internet communication", "registration", "product key", "privacy", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -7580,7 +7612,8 @@ internal static class PolicyNetwork
                 Id = "inetcomm-disable-windows-activation-online",
                 Label = "Internet Communication: Disable Windows Online Activation",
                 Category = "Network",
-                Description = "Prevents Windows from attempting online activation via Microsoft's activation servers. In enterprise environments using KMS (Key Management Service) or MAK (Multiple Activation Key) volume licensing, Windows activates against the internal KMS server. Attempting simultaneous online activation can cause interference and may expose the KMS key or activation state to Microsoft's telemetry infrastructure.",
+                Description =
+                    "Prevents Windows from attempting online activation via Microsoft's activation servers. In enterprise environments using KMS (Key Management Service) or MAK (Multiple Activation Key) volume licensing, Windows activates against the internal KMS server. Attempting simultaneous online activation can cause interference and may expose the KMS key or activation state to Microsoft's telemetry infrastructure.",
                 Tags = ["internet communication", "activation", "kms", "volume license", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -7597,7 +7630,8 @@ internal static class PolicyNetwork
                 Id = "inetcomm-disable-task-scheduler-download",
                 Label = "Internet Communication: Disable Task Scheduler Internet Download",
                 Category = "Network",
-                Description = "Prevents Windows Task Scheduler from downloading programs, scripts, or task definitions from internet URIs. Task Scheduler tasks can be configured with action items that fetch content from HTTP/HTTPS URLs. Blocking internet downloads from Task Scheduler prevents lateral movement via scheduled tasks that pull malware from C2 servers and prevents administrative tasks from overriding proxy policies by downloading directly.",
+                Description =
+                    "Prevents Windows Task Scheduler from downloading programs, scripts, or task definitions from internet URIs. Task Scheduler tasks can be configured with action items that fetch content from HTTP/HTTPS URLs. Blocking internet downloads from Task Scheduler prevents lateral movement via scheduled tasks that pull malware from C2 servers and prevents administrative tasks from overriding proxy policies by downloading directly.",
                 Tags = ["internet communication", "task scheduler", "download", "security", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -7614,7 +7648,8 @@ internal static class PolicyNetwork
                 Id = "inetcomm-disable-online-search-help",
                 Label = "Internet Communication: Disable Windows Online Search in Help",
                 Category = "Network",
-                Description = "Prevents the Windows Help and Support Center from augmenting local help content with online Microsoft documentation and search results. The online search feature sends the user's help query terms and partial system context to Microsoft's servers. In environments where query terms may contain project names, application names, or technical details classified as business-sensitive, disabling online help search prevents inadvertent disclosure.",
+                Description =
+                    "Prevents the Windows Help and Support Center from augmenting local help content with online Microsoft documentation and search results. The online search feature sends the user's help query terms and partial system context to Microsoft's servers. In environments where query terms may contain project names, application names, or technical details classified as business-sensitive, disabling online help search prevents inadvertent disclosure.",
                 Tags = ["internet communication", "help center", "online search", "privacy", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -7631,7 +7666,8 @@ internal static class PolicyNetwork
                 Id = "inetcomm-disable-driver-update-internet",
                 Label = "Internet Communication: Disable Driver Download from Windows Update",
                 Category = "Network",
-                Description = "Prevents Windows from automatically downloading device driver updates directly from Windows Update when a new device is plugged in. Driver updates fetched directly from Windows Update bypass the organization's driver qualification and testing process. In managed environments, all driver updates should go through SCCM, Intune, or another MDM platform that can test and stage driver deployments before production rollout.",
+                Description =
+                    "Prevents Windows from automatically downloading device driver updates directly from Windows Update when a new device is plugged in. Driver updates fetched directly from Windows Update bypass the organization's driver qualification and testing process. In managed environments, all driver updates should go through SCCM, Intune, or another MDM platform that can test and stage driver deployments before production rollout.",
                 Tags = ["internet communication", "driver update", "windows update", "device management", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -7641,10 +7677,10 @@ internal static class PolicyNetwork
                 DetectOps = [RegOp.CheckDword(InetMgmtKey, "DisableDriverUpdate", 1)],
                 ImpactScore = 4,
                 SafetyRating = 4,
-                ImpactNote = "Stops Windows from fetching driver updates via Windows Update; driver management must be handled via MDM or manual deployment.",
+                ImpactNote =
+                    "Stops Windows from fetching driver updates via Windows Update; driver management must be handled via MDM or manual deployment.",
             },
         ];
-
     }
 
     // ── IpsecRulePolicy ──
@@ -7824,7 +7860,6 @@ internal static class PolicyNetwork
                     DetectOps = [RegOp.CheckDword(Key2, "NegotiationPollInterval", 300)],
                 },
             ];
-
     }
 
     // ── Ipv6Policy ──
@@ -8005,7 +8040,6 @@ internal static class PolicyNetwork
                 DetectOps = [RegOp.CheckDword(Key, "DisableTransitionTechnologies", 1)],
             },
         ];
-
     }
 
     // ── LanmanServerPolicy ──
@@ -8014,169 +8048,168 @@ internal static class PolicyNetwork
         private const string SrvKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\LanmanServer";
 
         public static IReadOnlyList<TweakDef> Data =>
-        [
-            new TweakDef
-            {
-                Id = "lansrv-disable-auto-share-wks",
-                Label = "Disable Automatic Admin Shares (Workstation)",
-                Category = "Network",
-                Description = "Prevents Windows from automatically creating administrative shares (C$, D$) on workstations.",
-                Tags = ["smb", "shares", "lanman", "security", "admin-shares"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 3,
-                ImpactNote = "Removes hidden admin shares used for remote administration; may break management tools.",
-                ApplyOps = [RegOp.SetDword(SrvKey, "AutoShareWks", 0)],
-                RemoveOps = [RegOp.DeleteValue(SrvKey, "AutoShareWks")],
-                DetectOps = [RegOp.CheckDword(SrvKey, "AutoShareWks", 0)],
-            },
-            new TweakDef
-            {
-                Id = "lansrv-disable-auto-share-server",
-                Label = "Disable Automatic Admin Shares (Server)",
-                Category = "Network",
-                Description = "Prevents Windows from automatically creating server-side default network shares (ADMIN$).",
-                Tags = ["smb", "shares", "lanman", "security", "admin-shares"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 3,
-                ImpactNote = "Removes server-side default shares; may impact domain management and remote admin tools.",
-                ApplyOps = [RegOp.SetDword(SrvKey, "AutoShareServer", 0)],
-                RemoveOps = [RegOp.DeleteValue(SrvKey, "AutoShareServer")],
-                DetectOps = [RegOp.CheckDword(SrvKey, "AutoShareServer", 0)],
-            },
-            new TweakDef
-            {
-                Id = "lansrv-disable-plain-text-password",
-                Label = "Disable Plain-Text Password Authentication (Server)",
-                Category = "Network",
-                Description = "Prevents the SMB server from accepting unencrypted password authentication over the network.",
-                Tags = ["smb", "authentication", "lanman", "security", "password"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 5,
-                SafetyRating = 5,
-                ImpactNote = "Blocks legacy clear-text SMB authentication; no impact on modern NTLMv2 or Kerberos clients.",
-                ApplyOps = [RegOp.SetDword(SrvKey, "EnablePlainTextPassword", 0)],
-                RemoveOps = [RegOp.DeleteValue(SrvKey, "EnablePlainTextPassword")],
-                DetectOps = [RegOp.CheckDword(SrvKey, "EnablePlainTextPassword", 0)],
-            },
-            new TweakDef
-            {
-                Id = "lansrv-enable-security-signature",
-                Label = "Enable SMB Server Security Signatures",
-                Category = "Network",
-                Description = "Enables cryptographic packet signing for SMB server connections to detect in-transit tampering.",
-                Tags = ["smb", "signing", "lanman", "security", "integrity"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                ImpactNote = "Enables SMB signing; small CPU overhead; highly recommended for all environments.",
-                ApplyOps = [RegOp.SetDword(SrvKey, "EnableSecuritySignature", 1)],
-                RemoveOps = [RegOp.DeleteValue(SrvKey, "EnableSecuritySignature")],
-                DetectOps = [RegOp.CheckDword(SrvKey, "EnableSecuritySignature", 1)],
-            },
-            new TweakDef
-            {
-                Id = "lansrv-require-security-signature",
-                Label = "Require SMB Server Security Signature",
-                Category = "Network",
-                Description = "Mandates that all SMB connections to this server use packet signing; unsigned clients are rejected.",
-                Tags = ["smb", "signing", "lanman", "security", "integrity", "enforce"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 5,
-                SafetyRating = 4,
-                ImpactNote = "Enforces SMB signing; may break very old clients (Windows XP era) that do not support signing.",
-                ApplyOps = [RegOp.SetDword(SrvKey, "RequireSecuritySignature", 1)],
-                RemoveOps = [RegOp.DeleteValue(SrvKey, "RequireSecuritySignature")],
-                DetectOps = [RegOp.CheckDword(SrvKey, "RequireSecuritySignature", 1)],
-            },
-            new TweakDef
-            {
-                Id = "lansrv-enable-spn-validation",
-                Label = "Enable SMB Server SPN Validation",
-                Category = "Network",
-                Description = "Requires clients to provide a valid Service Principal Name when connecting, preventing relay attacks.",
-                Tags = ["smb", "spn", "kerberos", "lanman", "security", "relay"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 4,
-                ImpactNote = "Hardens against NTLM relay attacks; minimal impact in domain-joined environments.",
-                ApplyOps = [RegOp.SetDword(SrvKey, "SmbServerNameHardeningLevel", 1)],
-                RemoveOps = [RegOp.DeleteValue(SrvKey, "SmbServerNameHardeningLevel")],
-                DetectOps = [RegOp.CheckDword(SrvKey, "SmbServerNameHardeningLevel", 1)],
-            },
-            new TweakDef
-            {
-                Id = "lansrv-restrict-null-session",
-                Label = "Restrict Null Session Access",
-                Category = "Network",
-                Description = "Blocks anonymous null-session connections from enumerating shares, users, and other resources.",
-                Tags = ["smb", "null-session", "anonymous", "lanman", "security"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                ImpactNote = "Prevents anonymous enumeration; safe for domain environments that use authenticated access.",
-                ApplyOps = [RegOp.SetDword(SrvKey, "RestrictNullSessAccess", 1)],
-                RemoveOps = [RegOp.DeleteValue(SrvKey, "RestrictNullSessAccess")],
-                DetectOps = [RegOp.CheckDword(SrvKey, "RestrictNullSessAccess", 1)],
-            },
-            new TweakDef
-            {
-                Id = "lansrv-auto-disconnect-idle",
-                Label = "Auto-Disconnect Idle SMB Sessions",
-                Category = "Network",
-                Description = "Automatically disconnects idle SMB client sessions after 15 minutes to reduce resource exposure.",
-                Tags = ["smb", "session", "idle", "lanman", "resource"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Idle sessions disconnected after 15 minutes; transparent reconnect on next file access.",
-                ApplyOps = [RegOp.SetDword(SrvKey, "AutoDisconnect", 15)],
-                RemoveOps = [RegOp.DeleteValue(SrvKey, "AutoDisconnect")],
-                DetectOps = [RegOp.CheckDword(SrvKey, "AutoDisconnect", 15)],
-            },
-            new TweakDef
-            {
-                Id = "lansrv-disable-multicast",
-                Label = "Disable SMB WSD Multicast Discovery",
-                Category = "Network",
-                Description = "Disables WS-Discovery multicast traffic used by SMB to advertise network shares on the local subnet.",
-                Tags = ["smb", "multicast", "discovery", "lanman", "network"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 4,
-                ImpactNote = "Stops SMB multicast probes; reduces network chatter; shares remain accessible via UNC path.",
-                ApplyOps = [RegOp.SetDword(SrvKey, "EnableMulticast", 0)],
-                RemoveOps = [RegOp.DeleteValue(SrvKey, "EnableMulticast")],
-                DetectOps = [RegOp.CheckDword(SrvKey, "EnableMulticast", 0)],
-            },
-            new TweakDef
-            {
-                Id = "lansrv-audit-insecure-guest-logon",
-                Label = "Audit Insecure SMB Guest Logon Attempts",
-                Category = "Network",
-                Description = "Logs an event whenever a client attempts an anonymous or guest SMB logon that would be rejected.",
-                Tags = ["smb", "audit", "guest", "lanman", "security", "logging"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Enables security auditing for rejected guest logins; adds entries to the Security event log.",
-                ApplyOps = [RegOp.SetDword(SrvKey, "AuditInsecureGuestLogon", 1)],
-                RemoveOps = [RegOp.DeleteValue(SrvKey, "AuditInsecureGuestLogon")],
-                DetectOps = [RegOp.CheckDword(SrvKey, "AuditInsecureGuestLogon", 1)],
-            },
-        ];
-
+            [
+                new TweakDef
+                {
+                    Id = "lansrv-disable-auto-share-wks",
+                    Label = "Disable Automatic Admin Shares (Workstation)",
+                    Category = "Network",
+                    Description = "Prevents Windows from automatically creating administrative shares (C$, D$) on workstations.",
+                    Tags = ["smb", "shares", "lanman", "security", "admin-shares"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 3,
+                    ImpactNote = "Removes hidden admin shares used for remote administration; may break management tools.",
+                    ApplyOps = [RegOp.SetDword(SrvKey, "AutoShareWks", 0)],
+                    RemoveOps = [RegOp.DeleteValue(SrvKey, "AutoShareWks")],
+                    DetectOps = [RegOp.CheckDword(SrvKey, "AutoShareWks", 0)],
+                },
+                new TweakDef
+                {
+                    Id = "lansrv-disable-auto-share-server",
+                    Label = "Disable Automatic Admin Shares (Server)",
+                    Category = "Network",
+                    Description = "Prevents Windows from automatically creating server-side default network shares (ADMIN$).",
+                    Tags = ["smb", "shares", "lanman", "security", "admin-shares"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 3,
+                    ImpactNote = "Removes server-side default shares; may impact domain management and remote admin tools.",
+                    ApplyOps = [RegOp.SetDword(SrvKey, "AutoShareServer", 0)],
+                    RemoveOps = [RegOp.DeleteValue(SrvKey, "AutoShareServer")],
+                    DetectOps = [RegOp.CheckDword(SrvKey, "AutoShareServer", 0)],
+                },
+                new TweakDef
+                {
+                    Id = "lansrv-disable-plain-text-password",
+                    Label = "Disable Plain-Text Password Authentication (Server)",
+                    Category = "Network",
+                    Description = "Prevents the SMB server from accepting unencrypted password authentication over the network.",
+                    Tags = ["smb", "authentication", "lanman", "security", "password"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 5,
+                    SafetyRating = 5,
+                    ImpactNote = "Blocks legacy clear-text SMB authentication; no impact on modern NTLMv2 or Kerberos clients.",
+                    ApplyOps = [RegOp.SetDword(SrvKey, "EnablePlainTextPassword", 0)],
+                    RemoveOps = [RegOp.DeleteValue(SrvKey, "EnablePlainTextPassword")],
+                    DetectOps = [RegOp.CheckDword(SrvKey, "EnablePlainTextPassword", 0)],
+                },
+                new TweakDef
+                {
+                    Id = "lansrv-enable-security-signature",
+                    Label = "Enable SMB Server Security Signatures",
+                    Category = "Network",
+                    Description = "Enables cryptographic packet signing for SMB server connections to detect in-transit tampering.",
+                    Tags = ["smb", "signing", "lanman", "security", "integrity"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "Enables SMB signing; small CPU overhead; highly recommended for all environments.",
+                    ApplyOps = [RegOp.SetDword(SrvKey, "EnableSecuritySignature", 1)],
+                    RemoveOps = [RegOp.DeleteValue(SrvKey, "EnableSecuritySignature")],
+                    DetectOps = [RegOp.CheckDword(SrvKey, "EnableSecuritySignature", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "lansrv-require-security-signature",
+                    Label = "Require SMB Server Security Signature",
+                    Category = "Network",
+                    Description = "Mandates that all SMB connections to this server use packet signing; unsigned clients are rejected.",
+                    Tags = ["smb", "signing", "lanman", "security", "integrity", "enforce"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 5,
+                    SafetyRating = 4,
+                    ImpactNote = "Enforces SMB signing; may break very old clients (Windows XP era) that do not support signing.",
+                    ApplyOps = [RegOp.SetDword(SrvKey, "RequireSecuritySignature", 1)],
+                    RemoveOps = [RegOp.DeleteValue(SrvKey, "RequireSecuritySignature")],
+                    DetectOps = [RegOp.CheckDword(SrvKey, "RequireSecuritySignature", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "lansrv-enable-spn-validation",
+                    Label = "Enable SMB Server SPN Validation",
+                    Category = "Network",
+                    Description = "Requires clients to provide a valid Service Principal Name when connecting, preventing relay attacks.",
+                    Tags = ["smb", "spn", "kerberos", "lanman", "security", "relay"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 4,
+                    ImpactNote = "Hardens against NTLM relay attacks; minimal impact in domain-joined environments.",
+                    ApplyOps = [RegOp.SetDword(SrvKey, "SmbServerNameHardeningLevel", 1)],
+                    RemoveOps = [RegOp.DeleteValue(SrvKey, "SmbServerNameHardeningLevel")],
+                    DetectOps = [RegOp.CheckDword(SrvKey, "SmbServerNameHardeningLevel", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "lansrv-restrict-null-session",
+                    Label = "Restrict Null Session Access",
+                    Category = "Network",
+                    Description = "Blocks anonymous null-session connections from enumerating shares, users, and other resources.",
+                    Tags = ["smb", "null-session", "anonymous", "lanman", "security"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "Prevents anonymous enumeration; safe for domain environments that use authenticated access.",
+                    ApplyOps = [RegOp.SetDword(SrvKey, "RestrictNullSessAccess", 1)],
+                    RemoveOps = [RegOp.DeleteValue(SrvKey, "RestrictNullSessAccess")],
+                    DetectOps = [RegOp.CheckDword(SrvKey, "RestrictNullSessAccess", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "lansrv-auto-disconnect-idle",
+                    Label = "Auto-Disconnect Idle SMB Sessions",
+                    Category = "Network",
+                    Description = "Automatically disconnects idle SMB client sessions after 15 minutes to reduce resource exposure.",
+                    Tags = ["smb", "session", "idle", "lanman", "resource"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "Idle sessions disconnected after 15 minutes; transparent reconnect on next file access.",
+                    ApplyOps = [RegOp.SetDword(SrvKey, "AutoDisconnect", 15)],
+                    RemoveOps = [RegOp.DeleteValue(SrvKey, "AutoDisconnect")],
+                    DetectOps = [RegOp.CheckDword(SrvKey, "AutoDisconnect", 15)],
+                },
+                new TweakDef
+                {
+                    Id = "lansrv-disable-multicast",
+                    Label = "Disable SMB WSD Multicast Discovery",
+                    Category = "Network",
+                    Description = "Disables WS-Discovery multicast traffic used by SMB to advertise network shares on the local subnet.",
+                    Tags = ["smb", "multicast", "discovery", "lanman", "network"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 4,
+                    ImpactNote = "Stops SMB multicast probes; reduces network chatter; shares remain accessible via UNC path.",
+                    ApplyOps = [RegOp.SetDword(SrvKey, "EnableMulticast", 0)],
+                    RemoveOps = [RegOp.DeleteValue(SrvKey, "EnableMulticast")],
+                    DetectOps = [RegOp.CheckDword(SrvKey, "EnableMulticast", 0)],
+                },
+                new TweakDef
+                {
+                    Id = "lansrv-audit-insecure-guest-logon",
+                    Label = "Audit Insecure SMB Guest Logon Attempts",
+                    Category = "Network",
+                    Description = "Logs an event whenever a client attempts an anonymous or guest SMB logon that would be rejected.",
+                    Tags = ["smb", "audit", "guest", "lanman", "security", "logging"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "Enables security auditing for rejected guest logins; adds entries to the Security event log.",
+                    ApplyOps = [RegOp.SetDword(SrvKey, "AuditInsecureGuestLogon", 1)],
+                    RemoveOps = [RegOp.DeleteValue(SrvKey, "AuditInsecureGuestLogon")],
+                    DetectOps = [RegOp.CheckDword(SrvKey, "AuditInsecureGuestLogon", 1)],
+                },
+            ];
     }
 
     // ── LanmanWorkstationPolicy ──
@@ -8185,169 +8218,168 @@ internal static class PolicyNetwork
         private const string WksKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\LanmanWorkstation";
 
         public static IReadOnlyList<TweakDef> Data =>
-        [
-            new TweakDef
-            {
-                Id = "lanwks-block-insecure-guest-auth",
-                Label = "Block Insecure Guest Authentication",
-                Category = "Network",
-                Description = "Prevents the SMB client from falling back to insecure guest authentication when a server rejects credentials.",
-                Tags = ["smb", "guest", "authentication", "lanman", "security"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 5,
-                SafetyRating = 5,
-                ImpactNote = "Blocks unauthenticated SMB guest connections; may prevent access to old NAS using anonymous shares.",
-                ApplyOps = [RegOp.SetDword(WksKey, "AllowInsecureGuestAuth", 0)],
-                RemoveOps = [RegOp.DeleteValue(WksKey, "AllowInsecureGuestAuth")],
-                DetectOps = [RegOp.CheckDword(WksKey, "AllowInsecureGuestAuth", 0)],
-            },
-            new TweakDef
-            {
-                Id = "lanwks-disable-plain-text-password",
-                Label = "Disable Plain-Text Password Authentication (Client)",
-                Category = "Network",
-                Description = "Stops the SMB workstation client from sending unencrypted passwords to network servers.",
-                Tags = ["smb", "authentication", "plaintext", "password", "security"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 5,
-                SafetyRating = 5,
-                ImpactNote = "Blocks clear-text SMB auth on the client side; no impact on NTLMv2 or Kerberos connections.",
-                ApplyOps = [RegOp.SetDword(WksKey, "EnablePlainTextPassword", 0)],
-                RemoveOps = [RegOp.DeleteValue(WksKey, "EnablePlainTextPassword")],
-                DetectOps = [RegOp.CheckDword(WksKey, "EnablePlainTextPassword", 0)],
-            },
-            new TweakDef
-            {
-                Id = "lanwks-enable-security-signature",
-                Label = "Enable SMB Client Security Signatures",
-                Category = "Network",
-                Description = "Enables cryptographic SMB packet signing on the client for outbound connections when the server supports it.",
-                Tags = ["smb", "signing", "client", "lanman", "security"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                ImpactNote = "Adds packet integrity verification; slight CPU overhead; compatible with all modern servers.",
-                ApplyOps = [RegOp.SetDword(WksKey, "EnableSecuritySignature", 1)],
-                RemoveOps = [RegOp.DeleteValue(WksKey, "EnableSecuritySignature")],
-                DetectOps = [RegOp.CheckDword(WksKey, "EnableSecuritySignature", 1)],
-            },
-            new TweakDef
-            {
-                Id = "lanwks-require-security-signature",
-                Label = "Require SMB Client Security Signature",
-                Category = "Network",
-                Description = "Mandates that the SMB client use packet signing for all connections; unsigned servers are rejected.",
-                Tags = ["smb", "signing", "client", "lanman", "security", "enforce"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 4,
-                ImpactNote = "Enforces signing on all SMB connections; breaks access to servers that do not support signing.",
-                ApplyOps = [RegOp.SetDword(WksKey, "RequireSecuritySignature", 1)],
-                RemoveOps = [RegOp.DeleteValue(WksKey, "RequireSecuritySignature")],
-                DetectOps = [RegOp.CheckDword(WksKey, "RequireSecuritySignature", 1)],
-            },
-            new TweakDef
-            {
-                Id = "lanwks-enable-smb-encryption",
-                Label = "Enable SMB Client Encryption",
-                Category = "Network",
-                Description = "Requests encrypted SMB connections wherever the server supports SMB 3.x encryption.",
-                Tags = ["smb", "encryption", "client", "lanman", "security"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                ImpactNote = "End-to-end encryption for SMB traffic; requires SMB 3.x on both sides; silently ignored by older servers.",
-                ApplyOps = [RegOp.SetDword(WksKey, "EnableSMBEncryption", 1)],
-                RemoveOps = [RegOp.DeleteValue(WksKey, "EnableSMBEncryption")],
-                DetectOps = [RegOp.CheckDword(WksKey, "EnableSMBEncryption", 1)],
-            },
-            new TweakDef
-            {
-                Id = "lanwks-disable-smb1",
-                Label = "Disable SMBv1 Client Protocol",
-                Category = "Network",
-                Description = "Disables the legacy SMBv1 dialect on the workstation client to prevent WannaCry-class exploits.",
-                Tags = ["smb", "smb1", "client", "lanman", "security", "legacy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 5,
-                SafetyRating = 4,
-                ImpactNote = "Eliminates SMBv1 support; may break access to Windows XP/2003 or old NAS that only support SMBv1.",
-                ApplyOps = [RegOp.SetDword(WksKey, "DisableSMB1", 1)],
-                RemoveOps = [RegOp.DeleteValue(WksKey, "DisableSMB1")],
-                DetectOps = [RegOp.CheckDword(WksKey, "DisableSMB1", 1)],
-            },
-            new TweakDef
-            {
-                Id = "lanwks-require-ntlmv2",
-                Label = "Require NTLMv2 Authentication (Client)",
-                Category = "Network",
-                Description = "Prevents the SMB workstation client from using the weak NTLMv1 authentication protocol.",
-                Tags = ["smb", "ntlm", "ntlmv1", "client", "authentication", "security"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 4,
-                ImpactNote = "Forces NTLMv2 or Kerberos; may affect connections to very old servers that only support NTLMv1.",
-                ApplyOps = [RegOp.SetDword(WksKey, "RequireNTLMv2", 1)],
-                RemoveOps = [RegOp.DeleteValue(WksKey, "RequireNTLMv2")],
-                DetectOps = [RegOp.CheckDword(WksKey, "RequireNTLMv2", 1)],
-            },
-            new TweakDef
-            {
-                Id = "lanwks-enable-logon-audit",
-                Label = "Enable SMB Workstation Logon Audit",
-                Category = "Network",
-                Description = "Records authentication events for SMB workstation connections in the Security event log.",
-                Tags = ["smb", "audit", "logon", "client", "lanman", "logging"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Adds logon audit entries to the event log; useful for detecting lateral movement attempts.",
-                ApplyOps = [RegOp.SetDword(WksKey, "EnableLogonAuditing", 1)],
-                RemoveOps = [RegOp.DeleteValue(WksKey, "EnableLogonAuditing")],
-                DetectOps = [RegOp.CheckDword(WksKey, "EnableLogonAuditing", 1)],
-            },
-            new TweakDef
-            {
-                Id = "lanwks-disable-no-inplace-sharing",
-                Label = "Disable In-Place Sharing on Removable Media",
-                Category = "Network",
-                Description = "Prevents in-place file sharing on removable storage media accessed through SMB workstation connections.",
-                Tags = ["smb", "removable", "sharing", "client", "lanman"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Blocks in-place sharing from removable drives; users must copy files to a local path first.",
-                ApplyOps = [RegOp.SetDword(WksKey, "NoInplaceSharingOnRemovableMedia", 1)],
-                RemoveOps = [RegOp.DeleteValue(WksKey, "NoInplaceSharingOnRemovableMedia")],
-                DetectOps = [RegOp.CheckDword(WksKey, "NoInplaceSharingOnRemovableMedia", 1)],
-            },
-            new TweakDef
-            {
-                Id = "lanwks-disable-multicast-name-resolution",
-                Label = "Disable SMB Multicast Name Resolution",
-                Category = "Network",
-                Description = "Stops the SMB client from using LLMNR and NetBIOS multicast name resolution, reducing lateral movement risk.",
-                Tags = ["smb", "llmnr", "netbios", "multicast", "client", "security"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 4,
-                ImpactNote = "Blocks LLMNR/NetBIOS name poisoning attacks; may slow discovery of shares without DNS entries.",
-                ApplyOps = [RegOp.SetDword(WksKey, "DisableMulticastNameResolution", 1)],
-                RemoveOps = [RegOp.DeleteValue(WksKey, "DisableMulticastNameResolution")],
-                DetectOps = [RegOp.CheckDword(WksKey, "DisableMulticastNameResolution", 1)],
-            },
-        ];
-
+            [
+                new TweakDef
+                {
+                    Id = "lanwks-block-insecure-guest-auth",
+                    Label = "Block Insecure Guest Authentication",
+                    Category = "Network",
+                    Description = "Prevents the SMB client from falling back to insecure guest authentication when a server rejects credentials.",
+                    Tags = ["smb", "guest", "authentication", "lanman", "security"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 5,
+                    SafetyRating = 5,
+                    ImpactNote = "Blocks unauthenticated SMB guest connections; may prevent access to old NAS using anonymous shares.",
+                    ApplyOps = [RegOp.SetDword(WksKey, "AllowInsecureGuestAuth", 0)],
+                    RemoveOps = [RegOp.DeleteValue(WksKey, "AllowInsecureGuestAuth")],
+                    DetectOps = [RegOp.CheckDword(WksKey, "AllowInsecureGuestAuth", 0)],
+                },
+                new TweakDef
+                {
+                    Id = "lanwks-disable-plain-text-password",
+                    Label = "Disable Plain-Text Password Authentication (Client)",
+                    Category = "Network",
+                    Description = "Stops the SMB workstation client from sending unencrypted passwords to network servers.",
+                    Tags = ["smb", "authentication", "plaintext", "password", "security"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 5,
+                    SafetyRating = 5,
+                    ImpactNote = "Blocks clear-text SMB auth on the client side; no impact on NTLMv2 or Kerberos connections.",
+                    ApplyOps = [RegOp.SetDword(WksKey, "EnablePlainTextPassword", 0)],
+                    RemoveOps = [RegOp.DeleteValue(WksKey, "EnablePlainTextPassword")],
+                    DetectOps = [RegOp.CheckDword(WksKey, "EnablePlainTextPassword", 0)],
+                },
+                new TweakDef
+                {
+                    Id = "lanwks-enable-security-signature",
+                    Label = "Enable SMB Client Security Signatures",
+                    Category = "Network",
+                    Description = "Enables cryptographic SMB packet signing on the client for outbound connections when the server supports it.",
+                    Tags = ["smb", "signing", "client", "lanman", "security"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "Adds packet integrity verification; slight CPU overhead; compatible with all modern servers.",
+                    ApplyOps = [RegOp.SetDword(WksKey, "EnableSecuritySignature", 1)],
+                    RemoveOps = [RegOp.DeleteValue(WksKey, "EnableSecuritySignature")],
+                    DetectOps = [RegOp.CheckDword(WksKey, "EnableSecuritySignature", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "lanwks-require-security-signature",
+                    Label = "Require SMB Client Security Signature",
+                    Category = "Network",
+                    Description = "Mandates that the SMB client use packet signing for all connections; unsigned servers are rejected.",
+                    Tags = ["smb", "signing", "client", "lanman", "security", "enforce"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 4,
+                    ImpactNote = "Enforces signing on all SMB connections; breaks access to servers that do not support signing.",
+                    ApplyOps = [RegOp.SetDword(WksKey, "RequireSecuritySignature", 1)],
+                    RemoveOps = [RegOp.DeleteValue(WksKey, "RequireSecuritySignature")],
+                    DetectOps = [RegOp.CheckDword(WksKey, "RequireSecuritySignature", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "lanwks-enable-smb-encryption",
+                    Label = "Enable SMB Client Encryption",
+                    Category = "Network",
+                    Description = "Requests encrypted SMB connections wherever the server supports SMB 3.x encryption.",
+                    Tags = ["smb", "encryption", "client", "lanman", "security"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "End-to-end encryption for SMB traffic; requires SMB 3.x on both sides; silently ignored by older servers.",
+                    ApplyOps = [RegOp.SetDword(WksKey, "EnableSMBEncryption", 1)],
+                    RemoveOps = [RegOp.DeleteValue(WksKey, "EnableSMBEncryption")],
+                    DetectOps = [RegOp.CheckDword(WksKey, "EnableSMBEncryption", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "lanwks-disable-smb1",
+                    Label = "Disable SMBv1 Client Protocol",
+                    Category = "Network",
+                    Description = "Disables the legacy SMBv1 dialect on the workstation client to prevent WannaCry-class exploits.",
+                    Tags = ["smb", "smb1", "client", "lanman", "security", "legacy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 5,
+                    SafetyRating = 4,
+                    ImpactNote = "Eliminates SMBv1 support; may break access to Windows XP/2003 or old NAS that only support SMBv1.",
+                    ApplyOps = [RegOp.SetDword(WksKey, "DisableSMB1", 1)],
+                    RemoveOps = [RegOp.DeleteValue(WksKey, "DisableSMB1")],
+                    DetectOps = [RegOp.CheckDword(WksKey, "DisableSMB1", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "lanwks-require-ntlmv2",
+                    Label = "Require NTLMv2 Authentication (Client)",
+                    Category = "Network",
+                    Description = "Prevents the SMB workstation client from using the weak NTLMv1 authentication protocol.",
+                    Tags = ["smb", "ntlm", "ntlmv1", "client", "authentication", "security"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 4,
+                    ImpactNote = "Forces NTLMv2 or Kerberos; may affect connections to very old servers that only support NTLMv1.",
+                    ApplyOps = [RegOp.SetDword(WksKey, "RequireNTLMv2", 1)],
+                    RemoveOps = [RegOp.DeleteValue(WksKey, "RequireNTLMv2")],
+                    DetectOps = [RegOp.CheckDword(WksKey, "RequireNTLMv2", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "lanwks-enable-logon-audit",
+                    Label = "Enable SMB Workstation Logon Audit",
+                    Category = "Network",
+                    Description = "Records authentication events for SMB workstation connections in the Security event log.",
+                    Tags = ["smb", "audit", "logon", "client", "lanman", "logging"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "Adds logon audit entries to the event log; useful for detecting lateral movement attempts.",
+                    ApplyOps = [RegOp.SetDword(WksKey, "EnableLogonAuditing", 1)],
+                    RemoveOps = [RegOp.DeleteValue(WksKey, "EnableLogonAuditing")],
+                    DetectOps = [RegOp.CheckDword(WksKey, "EnableLogonAuditing", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "lanwks-disable-no-inplace-sharing",
+                    Label = "Disable In-Place Sharing on Removable Media",
+                    Category = "Network",
+                    Description = "Prevents in-place file sharing on removable storage media accessed through SMB workstation connections.",
+                    Tags = ["smb", "removable", "sharing", "client", "lanman"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "Blocks in-place sharing from removable drives; users must copy files to a local path first.",
+                    ApplyOps = [RegOp.SetDword(WksKey, "NoInplaceSharingOnRemovableMedia", 1)],
+                    RemoveOps = [RegOp.DeleteValue(WksKey, "NoInplaceSharingOnRemovableMedia")],
+                    DetectOps = [RegOp.CheckDword(WksKey, "NoInplaceSharingOnRemovableMedia", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "lanwks-disable-multicast-name-resolution",
+                    Label = "Disable SMB Multicast Name Resolution",
+                    Category = "Network",
+                    Description = "Stops the SMB client from using LLMNR and NetBIOS multicast name resolution, reducing lateral movement risk.",
+                    Tags = ["smb", "llmnr", "netbios", "multicast", "client", "security"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 4,
+                    ImpactNote = "Blocks LLMNR/NetBIOS name poisoning attacks; may slow discovery of shares without DNS entries.",
+                    ApplyOps = [RegOp.SetDword(WksKey, "DisableMulticastNameResolution", 1)],
+                    RemoveOps = [RegOp.DeleteValue(WksKey, "DisableMulticastNameResolution")],
+                    DetectOps = [RegOp.CheckDword(WksKey, "DisableMulticastNameResolution", 1)],
+                },
+            ];
     }
 
     // ── LdapClientPolicy ──
@@ -8540,7 +8572,6 @@ internal static class PolicyNetwork
                     DetectOps = [RegOp.CheckDword(LdapPolicyKey, "MaxPageSize", 1000)],
                 },
             ];
-
     }
 
     // ── LdapSigningPolicy ──
@@ -8551,169 +8582,178 @@ internal static class PolicyNetwork
         private const string DcKey = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\NTDS\Parameters";
 
         public static IReadOnlyList<TweakDef> Data =>
-        [
-            new TweakDef
-            {
-                Id           = "ldapsec-require-client-signing",
-                Label        = "Require LDAP Client Signing for All Directory Connections",
-                Category = "Network",
-                Description  = "Configures the LDAP client to always request LDAP signing (integrity protection), preventing man-in-the-middle attacks against LDAP sessions that could be used to modify query results or inject forged LDAP responses.",
-                Tags         = ["ldap", "signing", "integrity", "mitm", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 5,
-                SafetyRating = 5,
-                ImpactNote   = "LDAP client signing required; LDAP MITM response injection attacks mitigated.",
-                ApplyOps     = [RegOp.SetDword(Key, "LDAPClientIntegrity", 2)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "LDAPClientIntegrity")],
-                DetectOps    = [RegOp.CheckDword(Key, "LDAPClientIntegrity", 2)],
-            },
-            new TweakDef
-            {
-                Id           = "ldapsec-require-channel-binding",
-                Label        = "Require LDAP Channel Binding Tokens (CBT Hardening)",
-                Category = "Network",
-                Description  = "Configures the LDAP client to include EPA Channel Binding Tokens in all LDAP over TLS sessions, preventing NTLM relay attacks that forward LDAP authentication to a different TLS channel.",
-                Tags         = ["ldap", "channel-binding", "cbt", "ntlm-relay", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 5,
-                SafetyRating = 5,
-                ImpactNote   = "LDAP channel binding required; NTLM relay attacks forwarding LDAP auth to different TLS channel blocked.",
-                ApplyOps     = [RegOp.SetDword(PolKey, "LdapClientChannelBinding", 2)],
-                RemoveOps    = [RegOp.DeleteValue(PolKey, "LdapClientChannelBinding")],
-                DetectOps    = [RegOp.CheckDword(PolKey, "LdapClientChannelBinding", 2)],
-            },
-            new TweakDef
-            {
-                Id           = "ldapsec-disable-simple-bind",
-                Label        = "Disable LDAP Simple Bind Authentication",
-                Category = "Network",
-                Description  = "Prevents the use of LDAP Simple Bind authentication which sends credentials as plaintext Base64 without integrity protection. NTLM or Kerberos SASL must be used for all LDAP authentication.",
-                Tags         = ["ldap", "simple-bind", "plaintext-auth", "sasl", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 5,
-                SafetyRating = 5,
-                ImpactNote   = "LDAP Simple Bind disabled; plaintext credential authentication to LDAP blocked. SASL required.",
-                ApplyOps     = [RegOp.SetDword(PolKey, "DisableSimpleBind", 1)],
-                RemoveOps    = [RegOp.DeleteValue(PolKey, "DisableSimpleBind")],
-                DetectOps    = [RegOp.CheckDword(PolKey, "DisableSimpleBind", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "ldapsec-require-ldaps-port636",
-                Label        = "Require LDAP over SSL/TLS (LDAPS, Port 636) for All AD Connections",
-                Category = "Network",
-                Description  = "Configures the LDAP client to use LDAPS (LDAP over TLS on port 636) for all Active Directory connections, ensuring the entire LDAP session including SASL auth handshake is TLS-encrypted.",
-                Tags         = ["ldap", "ldaps", "tls", "port-636", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 5,
-                SafetyRating = 5,
-                ImpactNote   = "LDAPS required; all AD directory queries and authentications use TLS encryption on port 636.",
-                ApplyOps     = [RegOp.SetDword(PolKey, "RequireLDAPS", 1)],
-                RemoveOps    = [RegOp.DeleteValue(PolKey, "RequireLDAPS")],
-                DetectOps    = [RegOp.CheckDword(PolKey, "RequireLDAPS", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "ldapsec-set-max-query-result-size",
-                Label        = "Set Maximum LDAP Query Result Set to 1000 Entries",
-                Category = "Network",
-                Description  = "Limits LDAP query result sets to 1000 entries, preventing oversized LDAP result enumeration attacks that could be used to enumerate all AD objects in a single query exceeding normal LDAP paged result limits.",
-                Tags         = ["ldap", "result-size", "enumeration-prevention", "security", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 3,
-                SafetyRating = 5,
-                ImpactNote   = "LDAP result set limited to 1000 entries; full AD object enumeration in single query prevented.",
-                ApplyOps     = [RegOp.SetDword(DcKey, "MaxPageSize", 1000)],
-                RemoveOps    = [RegOp.DeleteValue(DcKey, "MaxPageSize")],
-                DetectOps    = [RegOp.CheckDword(DcKey, "MaxPageSize", 1000)],
-            },
-            new TweakDef
-            {
-                Id           = "ldapsec-set-query-timeout-30s",
-                Label        = "Set LDAP Query Timeout to 30 Seconds to Prevent Slow Queries",
-                Category = "Network",
-                Description  = "Sets the LDAP client query timeout to 30 seconds, ensuring that slow/hanging LDAP queries do not block authentication processes and preventing DoS via crafted slow LDAP response attacks.",
-                Tags         = ["ldap", "query-timeout", "dos-prevention", "authentication", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 2,
-                SafetyRating = 5,
-                ImpactNote   = "LDAP query timeout set to 30 seconds; hanging LDAP queries do not block auth. Slow-response DoS mitigated.",
-                ApplyOps     = [RegOp.SetDword(Key, "TimeLimit", 30)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "TimeLimit")],
-                DetectOps    = [RegOp.CheckDword(Key, "TimeLimit", 30)],
-            },
-            new TweakDef
-            {
-                Id           = "ldapsec-disable-ldap-null-base-queries",
-                Label        = "Disable Unauthenticated LDAP Null-Base DNS Queries",
-                Category = "Network",
-                Description  = "Prevents anonymous LDAP queries with a null base (empty search base DN) that enable unauthenticated discovery of AD domain information, domain naming context, and supported SASL mechanisms.",
-                Tags         = ["ldap", "null-base", "anonymous", "enumeration", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 4,
-                SafetyRating = 5,
-                ImpactNote   = "LDAP anonymous null-base queries blocked; unauthenticated AD domain enumeration prevented.",
-                ApplyOps     = [RegOp.SetDword(DcKey, "DisableNullBaseQuery", 1)],
-                RemoveOps    = [RegOp.DeleteValue(DcKey, "DisableNullBaseQuery")],
-                DetectOps    = [RegOp.CheckDword(DcKey, "DisableNullBaseQuery", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "ldapsec-log-signing-failures",
-                Label        = "Log LDAP Signing and Channel Binding Failure Events",
-                Category = "Network",
-                Description  = "Enables Security audit log entries for LDAP sessions that fail signing or channel binding requirements, providing visibility into tools and applications sending unsigned LDAP queries.",
-                Tags         = ["ldap", "signing-failure", "event-log", "audit", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 3,
-                SafetyRating = 5,
-                ImpactNote   = "LDAP signing/channel-binding failures logged; applications sending unsigned LDAP visible for remediation.",
-                ApplyOps     = [RegOp.SetDword(PolKey, "LogSigningFailures", 1)],
-                RemoveOps    = [RegOp.DeleteValue(PolKey, "LogSigningFailures")],
-                DetectOps    = [RegOp.CheckDword(PolKey, "LogSigningFailures", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "ldapsec-disable-ldap-telemetry",
-                Label        = "Disable LDAP Client Telemetry to Microsoft",
-                Category = "Network",
-                Description  = "Prevents the Windows LDAP client from sending signing negotiation stats, connection failure rates, and cipher suite telemetry to Microsoft.",
-                Tags         = ["ldap", "telemetry", "privacy", "microsoft", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 2,
-                SafetyRating = 5,
-                ImpactNote   = "LDAP telemetry to Microsoft disabled; connection stats and cipher negotiation data not sent to cloud.",
-                ApplyOps     = [RegOp.SetDword(PolKey, "DisableTelemetry", 1)],
-                RemoveOps    = [RegOp.DeleteValue(PolKey, "DisableTelemetry")],
-                DetectOps    = [RegOp.CheckDword(PolKey, "DisableTelemetry", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "ldapsec-enable-integrity-check-on-reconnect",
-                Label        = "Re-Verify LDAP Integrity on Session Reconnection",
-                Category = "Network",
-                Description  = "Forces the LDAP client to re-negotiate and verify signing integrity tokens when an LDAP session is reconnected after a network interruption, preventing session hijacking via injection into a reconnected unsigned LDAP stream.",
-                Tags         = ["ldap", "reconnect", "integrity", "session-hijacking", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 4,
-                SafetyRating = 5,
-                ImpactNote   = "LDAP integrity re-verified on reconnect; injecting bytes into reconnected sessions blocked.",
-                ApplyOps     = [RegOp.SetDword(Key, "VerifyServerCertificate", 1)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "VerifyServerCertificate")],
-                DetectOps    = [RegOp.CheckDword(Key, "VerifyServerCertificate", 1)],
-            },
-        ];
-
+            [
+                new TweakDef
+                {
+                    Id = "ldapsec-require-client-signing",
+                    Label = "Require LDAP Client Signing for All Directory Connections",
+                    Category = "Network",
+                    Description =
+                        "Configures the LDAP client to always request LDAP signing (integrity protection), preventing man-in-the-middle attacks against LDAP sessions that could be used to modify query results or inject forged LDAP responses.",
+                    Tags = ["ldap", "signing", "integrity", "mitm", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 5,
+                    SafetyRating = 5,
+                    ImpactNote = "LDAP client signing required; LDAP MITM response injection attacks mitigated.",
+                    ApplyOps = [RegOp.SetDword(Key, "LDAPClientIntegrity", 2)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "LDAPClientIntegrity")],
+                    DetectOps = [RegOp.CheckDword(Key, "LDAPClientIntegrity", 2)],
+                },
+                new TweakDef
+                {
+                    Id = "ldapsec-require-channel-binding",
+                    Label = "Require LDAP Channel Binding Tokens (CBT Hardening)",
+                    Category = "Network",
+                    Description =
+                        "Configures the LDAP client to include EPA Channel Binding Tokens in all LDAP over TLS sessions, preventing NTLM relay attacks that forward LDAP authentication to a different TLS channel.",
+                    Tags = ["ldap", "channel-binding", "cbt", "ntlm-relay", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 5,
+                    SafetyRating = 5,
+                    ImpactNote = "LDAP channel binding required; NTLM relay attacks forwarding LDAP auth to different TLS channel blocked.",
+                    ApplyOps = [RegOp.SetDword(PolKey, "LdapClientChannelBinding", 2)],
+                    RemoveOps = [RegOp.DeleteValue(PolKey, "LdapClientChannelBinding")],
+                    DetectOps = [RegOp.CheckDword(PolKey, "LdapClientChannelBinding", 2)],
+                },
+                new TweakDef
+                {
+                    Id = "ldapsec-disable-simple-bind",
+                    Label = "Disable LDAP Simple Bind Authentication",
+                    Category = "Network",
+                    Description =
+                        "Prevents the use of LDAP Simple Bind authentication which sends credentials as plaintext Base64 without integrity protection. NTLM or Kerberos SASL must be used for all LDAP authentication.",
+                    Tags = ["ldap", "simple-bind", "plaintext-auth", "sasl", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 5,
+                    SafetyRating = 5,
+                    ImpactNote = "LDAP Simple Bind disabled; plaintext credential authentication to LDAP blocked. SASL required.",
+                    ApplyOps = [RegOp.SetDword(PolKey, "DisableSimpleBind", 1)],
+                    RemoveOps = [RegOp.DeleteValue(PolKey, "DisableSimpleBind")],
+                    DetectOps = [RegOp.CheckDword(PolKey, "DisableSimpleBind", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "ldapsec-require-ldaps-port636",
+                    Label = "Require LDAP over SSL/TLS (LDAPS, Port 636) for All AD Connections",
+                    Category = "Network",
+                    Description =
+                        "Configures the LDAP client to use LDAPS (LDAP over TLS on port 636) for all Active Directory connections, ensuring the entire LDAP session including SASL auth handshake is TLS-encrypted.",
+                    Tags = ["ldap", "ldaps", "tls", "port-636", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 5,
+                    SafetyRating = 5,
+                    ImpactNote = "LDAPS required; all AD directory queries and authentications use TLS encryption on port 636.",
+                    ApplyOps = [RegOp.SetDword(PolKey, "RequireLDAPS", 1)],
+                    RemoveOps = [RegOp.DeleteValue(PolKey, "RequireLDAPS")],
+                    DetectOps = [RegOp.CheckDword(PolKey, "RequireLDAPS", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "ldapsec-set-max-query-result-size",
+                    Label = "Set Maximum LDAP Query Result Set to 1000 Entries",
+                    Category = "Network",
+                    Description =
+                        "Limits LDAP query result sets to 1000 entries, preventing oversized LDAP result enumeration attacks that could be used to enumerate all AD objects in a single query exceeding normal LDAP paged result limits.",
+                    Tags = ["ldap", "result-size", "enumeration-prevention", "security", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "LDAP result set limited to 1000 entries; full AD object enumeration in single query prevented.",
+                    ApplyOps = [RegOp.SetDword(DcKey, "MaxPageSize", 1000)],
+                    RemoveOps = [RegOp.DeleteValue(DcKey, "MaxPageSize")],
+                    DetectOps = [RegOp.CheckDword(DcKey, "MaxPageSize", 1000)],
+                },
+                new TweakDef
+                {
+                    Id = "ldapsec-set-query-timeout-30s",
+                    Label = "Set LDAP Query Timeout to 30 Seconds to Prevent Slow Queries",
+                    Category = "Network",
+                    Description =
+                        "Sets the LDAP client query timeout to 30 seconds, ensuring that slow/hanging LDAP queries do not block authentication processes and preventing DoS via crafted slow LDAP response attacks.",
+                    Tags = ["ldap", "query-timeout", "dos-prevention", "authentication", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 2,
+                    SafetyRating = 5,
+                    ImpactNote = "LDAP query timeout set to 30 seconds; hanging LDAP queries do not block auth. Slow-response DoS mitigated.",
+                    ApplyOps = [RegOp.SetDword(Key, "TimeLimit", 30)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "TimeLimit")],
+                    DetectOps = [RegOp.CheckDword(Key, "TimeLimit", 30)],
+                },
+                new TweakDef
+                {
+                    Id = "ldapsec-disable-ldap-null-base-queries",
+                    Label = "Disable Unauthenticated LDAP Null-Base DNS Queries",
+                    Category = "Network",
+                    Description =
+                        "Prevents anonymous LDAP queries with a null base (empty search base DN) that enable unauthenticated discovery of AD domain information, domain naming context, and supported SASL mechanisms.",
+                    Tags = ["ldap", "null-base", "anonymous", "enumeration", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "LDAP anonymous null-base queries blocked; unauthenticated AD domain enumeration prevented.",
+                    ApplyOps = [RegOp.SetDword(DcKey, "DisableNullBaseQuery", 1)],
+                    RemoveOps = [RegOp.DeleteValue(DcKey, "DisableNullBaseQuery")],
+                    DetectOps = [RegOp.CheckDword(DcKey, "DisableNullBaseQuery", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "ldapsec-log-signing-failures",
+                    Label = "Log LDAP Signing and Channel Binding Failure Events",
+                    Category = "Network",
+                    Description =
+                        "Enables Security audit log entries for LDAP sessions that fail signing or channel binding requirements, providing visibility into tools and applications sending unsigned LDAP queries.",
+                    Tags = ["ldap", "signing-failure", "event-log", "audit", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "LDAP signing/channel-binding failures logged; applications sending unsigned LDAP visible for remediation.",
+                    ApplyOps = [RegOp.SetDword(PolKey, "LogSigningFailures", 1)],
+                    RemoveOps = [RegOp.DeleteValue(PolKey, "LogSigningFailures")],
+                    DetectOps = [RegOp.CheckDword(PolKey, "LogSigningFailures", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "ldapsec-disable-ldap-telemetry",
+                    Label = "Disable LDAP Client Telemetry to Microsoft",
+                    Category = "Network",
+                    Description =
+                        "Prevents the Windows LDAP client from sending signing negotiation stats, connection failure rates, and cipher suite telemetry to Microsoft.",
+                    Tags = ["ldap", "telemetry", "privacy", "microsoft", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 2,
+                    SafetyRating = 5,
+                    ImpactNote = "LDAP telemetry to Microsoft disabled; connection stats and cipher negotiation data not sent to cloud.",
+                    ApplyOps = [RegOp.SetDword(PolKey, "DisableTelemetry", 1)],
+                    RemoveOps = [RegOp.DeleteValue(PolKey, "DisableTelemetry")],
+                    DetectOps = [RegOp.CheckDword(PolKey, "DisableTelemetry", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "ldapsec-enable-integrity-check-on-reconnect",
+                    Label = "Re-Verify LDAP Integrity on Session Reconnection",
+                    Category = "Network",
+                    Description =
+                        "Forces the LDAP client to re-negotiate and verify signing integrity tokens when an LDAP session is reconnected after a network interruption, preventing session hijacking via injection into a reconnected unsigned LDAP stream.",
+                    Tags = ["ldap", "reconnect", "integrity", "session-hijacking", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "LDAP integrity re-verified on reconnect; injecting bytes into reconnected sessions blocked.",
+                    ApplyOps = [RegOp.SetDword(Key, "VerifyServerCertificate", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "VerifyServerCertificate")],
+                    DetectOps = [RegOp.CheckDword(Key, "VerifyServerCertificate", 1)],
+                },
+            ];
     }
 
     // ── LegacyProtocols ──
@@ -8927,7 +8967,6 @@ internal static class PolicyNetwork
                 DetectOps = [RegOp.CheckDword(DnsClientSvc, "QueryAdapterName", 0)],
             },
         ];
-
     }
 
     // ── LltdProtocolPolicy ──
@@ -9108,14 +9147,12 @@ internal static class PolicyNetwork
                     DetectOps = [RegOp.CheckDword(Key, "DisableLLTDMulticast", 1)],
                 },
             ];
-
     }
 
     // ── MapsBrowserPolicy ──
     private static class _MapsBrowserPolicy
     {
-        private const string Key =
-            @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\MapsBrowser";
+        private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\MapsBrowser";
 
         public static IReadOnlyList<TweakDef> Data =>
             [
@@ -9290,7 +9327,6 @@ internal static class PolicyNetwork
                     DetectOps = [RegOp.CheckDword(Key, "Disable3DMaps", 1)],
                 },
             ];
-
     }
 
     // ── MobilityPolicy ──
@@ -9440,7 +9476,8 @@ internal static class PolicyNetwork
                 DetectOps = [RegOp.CheckDword(Key, "DisableCarrierProvisioning", 1)],
                 ImpactScore = 3,
                 SafetyRating = 3,
-                ImpactNote = "Blocks OTA carrier provisioning; prevents carriers from overriding IT network settings. May break initial cellular setup.",
+                ImpactNote =
+                    "Blocks OTA carrier provisioning; prevents carriers from overriding IT network settings. May break initial cellular setup.",
             },
             new TweakDef
             {
@@ -9503,7 +9540,6 @@ internal static class PolicyNetwork
                 ImpactNote = "Hides WWAN settings UI; prevents users from manually reconfiguring managed cellular connections.",
             },
         ];
-
     }
 
     // ── NearbySharingPolicy ──
@@ -9684,7 +9720,6 @@ internal static class PolicyNetwork
                     DetectOps = [RegOp.CheckDword(NearbyKey, "AllowCrossDeviceClipboard", 0)],
                 },
             ];
-
     }
 
     // ── NetBiosPolicy ──
@@ -9865,7 +9900,6 @@ internal static class PolicyNetwork
                 DetectOps = [RegOp.CheckDword(Key, "DisableMulticastDNS", 1)],
             },
         ];
-
     }
 
     // ── NetCfgPolicy ──
@@ -10046,20 +10080,16 @@ internal static class PolicyNetwork
                 DetectOps = [RegOp.CheckDword(Key, "EnforceSecureDnsConfiguration", 1)],
             },
         ];
-
     }
 
     // ── NetIoOffloadPolicy ──
     private static class _NetIoOffloadPolicy
     {
-        private const string TcpKey =
-            @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters";
+        private const string TcpKey = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters";
 
-        private const string TcpifKey =
-            @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip6\Parameters";
+        private const string TcpifKey = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip6\Parameters";
 
-        private const string AfDKey =
-            @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\AFD\Parameters";
+        private const string AfDKey = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\AFD\Parameters";
 
         public static IReadOnlyList<TweakDef> Data =>
             [
@@ -10075,7 +10105,8 @@ internal static class PolicyNetwork
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "Enables TCP timestamps. On some very old firewalls, TCP timestamps cause packets to be dropped. Modern enterprise firewalls handle timestamps correctly.",
+                    ImpactNote =
+                        "Enables TCP timestamps. On some very old firewalls, TCP timestamps cause packets to be dropped. Modern enterprise firewalls handle timestamps correctly.",
                     ApplyOps = [RegOp.SetDword(TcpKey, "Tcp1323Opts", 1)],
                     RemoveOps = [RegOp.DeleteValue(TcpKey, "Tcp1323Opts")],
                     DetectOps = [RegOp.CheckDword(TcpKey, "Tcp1323Opts", 1)],
@@ -10092,7 +10123,8 @@ internal static class PolicyNetwork
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "Offloads TCP checksum to NIC hardware. Requires checksum offload-capable NIC (all modern enterprise NICs support this). Some virtualization hypervisors may intercept and verify checksums.",
+                    ImpactNote =
+                        "Offloads TCP checksum to NIC hardware. Requires checksum offload-capable NIC (all modern enterprise NICs support this). Some virtualization hypervisors may intercept and verify checksums.",
                     ApplyOps = [RegOp.SetDword(TcpKey, "EnableTCPChimneyOffload", 1)],
                     RemoveOps = [RegOp.DeleteValue(TcpKey, "EnableTCPChimneyOffload")],
                     DetectOps = [RegOp.CheckDword(TcpKey, "EnableTCPChimneyOffload", 1)],
@@ -10109,7 +10141,8 @@ internal static class PolicyNetwork
                     CorpSafe = true,
                     ImpactScore = 2,
                     SafetyRating = 4,
-                    ImpactNote = "Conservative TCP window scaling may reduce throughput on high-bandwidth low-latency links. Only recommended for networks with frequent packet loss (satellite, LTE backhaul).",
+                    ImpactNote =
+                        "Conservative TCP window scaling may reduce throughput on high-bandwidth low-latency links. Only recommended for networks with frequent packet loss (satellite, LTE backhaul).",
                     ApplyOps = [RegOp.SetDword(TcpKey, "TcpAutoTuningLevel", 4)],
                     RemoveOps = [RegOp.DeleteValue(TcpKey, "TcpAutoTuningLevel")],
                     DetectOps = [RegOp.CheckDword(TcpKey, "TcpAutoTuningLevel", 4)],
@@ -10126,30 +10159,11 @@ internal static class PolicyNetwork
                     CorpSafe = true,
                     ImpactScore = 4,
                     SafetyRating = 5,
-                    ImpactNote = "Requires RSS-capable NIC (all server-class NICs support RSS). RSS distributes interrupts across CPUs which may change CPU affinity behavior of network-intensive processes.",
-                    ApplyOps =
-                        [
-                            RegOp.SetDword(
-                                @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\QoS",
-                                "EnableRSS",
-                                1
-                            ),
-                        ],
-                    RemoveOps =
-                        [
-                            RegOp.DeleteValue(
-                                @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\QoS",
-                                "EnableRSS"
-                            ),
-                        ],
-                    DetectOps =
-                        [
-                            RegOp.CheckDword(
-                                @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\QoS",
-                                "EnableRSS",
-                                1
-                            ),
-                        ],
+                    ImpactNote =
+                        "Requires RSS-capable NIC (all server-class NICs support RSS). RSS distributes interrupts across CPUs which may change CPU affinity behavior of network-intensive processes.",
+                    ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\QoS", "EnableRSS", 1)],
+                    RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\QoS", "EnableRSS")],
+                    DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\QoS", "EnableRSS", 1)],
                 },
                 new TweakDef
                 {
@@ -10163,7 +10177,8 @@ internal static class PolicyNetwork
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "Fast path bypasses some buffer validation for small UDP datagrams. Testing recommended for high-PPS DNS server workloads before production deployment.",
+                    ImpactNote =
+                        "Fast path bypasses some buffer validation for small UDP datagrams. Testing recommended for high-PPS DNS server workloads before production deployment.",
                     ApplyOps = [RegOp.SetDword(AfDKey, "FastSendDatagramThreshold", 1024)],
                     RemoveOps = [RegOp.DeleteValue(AfDKey, "FastSendDatagramThreshold")],
                     DetectOps = [RegOp.CheckDword(AfDKey, "FastSendDatagramThreshold", 1024)],
@@ -10180,21 +10195,11 @@ internal static class PolicyNetwork
                     CorpSafe = true,
                     ImpactScore = 4,
                     SafetyRating = 4,
-                    ImpactNote = "Shorter TIME_WAIT increases port reuse risk. On high-traffic servers handling TCP connections to external parties, shorter TIME_WAIT may cause connection confusion with duplicate TCP segment detection disabled.",
-                    ApplyOps =
-                        [
-                            RegOp.SetDword(TcpKey, "MaxUserPort", 65534),
-                            RegOp.SetDword(TcpKey, "TcpTimedWaitDelay", 30),
-                        ],
-                    RemoveOps =
-                        [
-                            RegOp.DeleteValue(TcpKey, "MaxUserPort"),
-                            RegOp.DeleteValue(TcpKey, "TcpTimedWaitDelay"),
-                        ],
-                    DetectOps =
-                        [
-                            RegOp.CheckDword(TcpKey, "MaxUserPort", 65534),
-                        ],
+                    ImpactNote =
+                        "Shorter TIME_WAIT increases port reuse risk. On high-traffic servers handling TCP connections to external parties, shorter TIME_WAIT may cause connection confusion with duplicate TCP segment detection disabled.",
+                    ApplyOps = [RegOp.SetDword(TcpKey, "MaxUserPort", 65534), RegOp.SetDword(TcpKey, "TcpTimedWaitDelay", 30)],
+                    RemoveOps = [RegOp.DeleteValue(TcpKey, "MaxUserPort"), RegOp.DeleteValue(TcpKey, "TcpTimedWaitDelay")],
+                    DetectOps = [RegOp.CheckDword(TcpKey, "MaxUserPort", 65534)],
                 },
                 new TweakDef
                 {
@@ -10208,21 +10213,11 @@ internal static class PolicyNetwork
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "Keep-alive probes are sent after 2 hours of TCP idle time. Some applications (Oracle DB, older LDAP pools) have their own keep-alive settings that should be aligned.",
-                    ApplyOps =
-                        [
-                            RegOp.SetDword(TcpKey, "KeepAliveTime", 7200000),
-                            RegOp.SetDword(TcpKey, "KeepAliveInterval", 1000),
-                        ],
-                    RemoveOps =
-                        [
-                            RegOp.DeleteValue(TcpKey, "KeepAliveTime"),
-                            RegOp.DeleteValue(TcpKey, "KeepAliveInterval"),
-                        ],
-                    DetectOps =
-                        [
-                            RegOp.CheckDword(TcpKey, "KeepAliveTime", 7200000),
-                        ],
+                    ImpactNote =
+                        "Keep-alive probes are sent after 2 hours of TCP idle time. Some applications (Oracle DB, older LDAP pools) have their own keep-alive settings that should be aligned.",
+                    ApplyOps = [RegOp.SetDword(TcpKey, "KeepAliveTime", 7200000), RegOp.SetDword(TcpKey, "KeepAliveInterval", 1000)],
+                    RemoveOps = [RegOp.DeleteValue(TcpKey, "KeepAliveTime"), RegOp.DeleteValue(TcpKey, "KeepAliveInterval")],
+                    DetectOps = [RegOp.CheckDword(TcpKey, "KeepAliveTime", 7200000)],
                 },
                 new TweakDef
                 {
@@ -10236,7 +10231,8 @@ internal static class PolicyNetwork
                     CorpSafe = true,
                     ImpactScore = 4,
                     SafetyRating = 5,
-                    ImpactNote = "Legitimate source-routed applications are extremely rare on enterprise networks. This setting has no impact on normal TCP/IP traffic.",
+                    ImpactNote =
+                        "Legitimate source-routed applications are extremely rare on enterprise networks. This setting has no impact on normal TCP/IP traffic.",
                     ApplyOps = [RegOp.SetDword(TcpKey, "DisableIPSourceRouting", 2)],
                     RemoveOps = [RegOp.DeleteValue(TcpKey, "DisableIPSourceRouting")],
                     DetectOps = [RegOp.CheckDword(TcpKey, "DisableIPSourceRouting", 2)],
@@ -10253,7 +10249,8 @@ internal static class PolicyNetwork
                     CorpSafe = true,
                     ImpactScore = 4,
                     SafetyRating = 5,
-                    ImpactNote = "No legitimate applications use IPv6 RH0 since RFC 5095 deprecation in 2007. This setting has no impact on normal network operations.",
+                    ImpactNote =
+                        "No legitimate applications use IPv6 RH0 since RFC 5095 deprecation in 2007. This setting has no impact on normal network operations.",
                     ApplyOps = [RegOp.SetDword(TcpifKey, "DisableIPv6SourceRouting", 1)],
                     RemoveOps = [RegOp.DeleteValue(TcpifKey, "DisableIPv6SourceRouting")],
                     DetectOps = [RegOp.CheckDword(TcpifKey, "DisableIPv6SourceRouting", 1)],
@@ -10270,13 +10267,13 @@ internal static class PolicyNetwork
                     CorpSafe = true,
                     ImpactScore = 5,
                     SafetyRating = 5,
-                    ImpactNote = "SYN cookies are transparent to legitimate TCP clients. On very busy servers (>50,000 new connections/second) SYN cookie computation has a small CPU overhead.",
+                    ImpactNote =
+                        "SYN cookies are transparent to legitimate TCP clients. On very busy servers (>50,000 new connections/second) SYN cookie computation has a small CPU overhead.",
                     ApplyOps = [RegOp.SetDword(TcpKey, "SynAttackProtect", 1)],
                     RemoveOps = [RegOp.DeleteValue(TcpKey, "SynAttackProtect")],
                     DetectOps = [RegOp.CheckDword(TcpKey, "SynAttackProtect", 1)],
                 },
             ];
-
     }
 
     // ── NetLocationAwarenessAdvancedPolicy ──
@@ -10458,7 +10455,6 @@ internal static class PolicyNetwork
                     DetectOps = [RegOp.CheckDword(NlmKey, "ShowProfileClassificationIcon", 1)],
                 },
             ];
-
     }
 
     // ── NetworkAccessProtectionPolicy ──
@@ -10475,7 +10471,8 @@ internal static class PolicyNetwork
                 Id = "napcomp-enable-nap-client-enforcement",
                 Label = "NAP Policy: Enable NAP Client Enforcement Mode",
                 Category = "Network",
-                Description = "Enables the Network Access Protection (NAP) client on the machine, allowing the machine to participate in NAP health validation and enforcement workflows. NAP is a policy-based network access control framework that evaluates the health state of a machine (antivirus, patch level, firewall status) before granting full network access. Enabling enforcement mode ensures that a machine reporting an unhealthy health state is placed in a restricted network segment until it is remediated.",
+                Description =
+                    "Enables the Network Access Protection (NAP) client on the machine, allowing the machine to participate in NAP health validation and enforcement workflows. NAP is a policy-based network access control framework that evaluates the health state of a machine (antivirus, patch level, firewall status) before granting full network access. Enabling enforcement mode ensures that a machine reporting an unhealthy health state is placed in a restricted network segment until it is remediated.",
                 Tags = ["nap", "network access protection", "compliance", "health validation", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -10485,14 +10482,16 @@ internal static class PolicyNetwork
                 DetectOps = [RegOp.CheckDword(NapKey, "EnableNAPClient", 1)],
                 ImpactScore = 4,
                 SafetyRating = 3,
-                ImpactNote = "Enables NAP health enforcement; machines that fail health checks may lose full network access — ensure NHPs and remediation servers are configured.",
+                ImpactNote =
+                    "Enables NAP health enforcement; machines that fail health checks may lose full network access — ensure NHPs and remediation servers are configured.",
             },
             new TweakDef
             {
                 Id = "napcomp-require-health-validation",
                 Label = "NAP Policy: Require Health Certificate for Network Access",
                 Category = "Network",
-                Description = "Configures the NAP client to require a valid System Health Certificate (SHC) before being granted unrestricted network access. Without a health certificate, the machine is placed in the quarantine network. Health certificates are issued by the Health Registration Authority (HRA) after the NPS Health Policy Server verifies that all system health validators (SHVs) report a compliant state. This policy forms the core of the 802.1X-based NAP enforcement chain.",
+                Description =
+                    "Configures the NAP client to require a valid System Health Certificate (SHC) before being granted unrestricted network access. Without a health certificate, the machine is placed in the quarantine network. Health certificates are issued by the Health Registration Authority (HRA) after the NPS Health Policy Server verifies that all system health validators (SHVs) report a compliant state. This policy forms the core of the 802.1X-based NAP enforcement chain.",
                 Tags = ["nap", "health certificate", "802.1x", "hps", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -10502,14 +10501,16 @@ internal static class PolicyNetwork
                 DetectOps = [RegOp.CheckDword(NapKey, "RequireHealthCertificate", 1)],
                 ImpactScore = 4,
                 SafetyRating = 3,
-                ImpactNote = "Requires health certificate for full network access; misconfigured NAP infrastructure will quarantine all machines including healthy ones.",
+                ImpactNote =
+                    "Requires health certificate for full network access; misconfigured NAP infrastructure will quarantine all machines including healthy ones.",
             },
             new TweakDef
             {
                 Id = "napcomp-enforce-vpn-shv",
                 Label = "NAP Policy: Enable System Health Validation for VPN Connections",
                 Category = "Network",
-                Description = "Activates System Health Validator (SHV) evaluation for VPN-based NAP enforcement, ensuring that remote machines connecting via VPN are subject to the same health compliance checks as internally-connected machines. Without VPN-SHV enforcement, remote workers can connect to the corporate network with out-of-date antivirus signatures or missing security patches while bypassing the health gating that on-premises machines face.",
+                Description =
+                    "Activates System Health Validator (SHV) evaluation for VPN-based NAP enforcement, ensuring that remote machines connecting via VPN are subject to the same health compliance checks as internally-connected machines. Without VPN-SHV enforcement, remote workers can connect to the corporate network with out-of-date antivirus signatures or missing security patches while bypassing the health gating that on-premises machines face.",
                 Tags = ["nap", "vpn", "system health validator", "remote access", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -10519,14 +10520,16 @@ internal static class PolicyNetwork
                 DetectOps = [RegOp.CheckDword(NapKey, "EnableVPNSHV", 1)],
                 ImpactScore = 4,
                 SafetyRating = 3,
-                ImpactNote = "Extends NAP health checks to VPN connections; requires a configured NAP Network Policy Server and VPN server with NAP support.",
+                ImpactNote =
+                    "Extends NAP health checks to VPN connections; requires a configured NAP Network Policy Server and VPN server with NAP support.",
             },
             new TweakDef
             {
                 Id = "napcomp-disable-auto-remediation",
                 Label = "NAP Policy: Disable Automatic Health Remediation",
                 Category = "Network",
-                Description = "Prevents the NAP client from automatically remediating detected health deficiencies by making software changes (e.g., enabling Windows Firewall, triggering Windows Update). Automatic remediation can make unexpected changes to a system without user awareness and may conflict with endpoint management tools (such as Intune or SCCM) that manage those settings centrally. Disabling auto-remediation forces the user or help desk to perform explicit remediation steps.",
+                Description =
+                    "Prevents the NAP client from automatically remediating detected health deficiencies by making software changes (e.g., enabling Windows Firewall, triggering Windows Update). Automatic remediation can make unexpected changes to a system without user awareness and may conflict with endpoint management tools (such as Intune or SCCM) that manage those settings centrally. Disabling auto-remediation forces the user or help desk to perform explicit remediation steps.",
                 Tags = ["nap", "auto remediation", "endpoint management", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -10536,14 +10539,16 @@ internal static class PolicyNetwork
                 DetectOps = [RegOp.CheckDword(NapKey, "DisableAutoRemediation", 1)],
                 ImpactScore = 3,
                 SafetyRating = 4,
-                ImpactNote = "Disables auto-remediation; unhealthy machines stay quarantined until manual intervention — ensure help desk procedures are documented.",
+                ImpactNote =
+                    "Disables auto-remediation; unhealthy machines stay quarantined until manual intervention — ensure help desk procedures are documented.",
             },
             new TweakDef
             {
                 Id = "napcomp-enforce-quarantine-timeout",
                 Label = "NAP Policy: Set Quarantine Timeout Period for Unhealthy Machines",
                 Category = "Network",
-                Description = "Configures how long (in minutes) a machine can remain in the quarantine network before its health is re-evaluated and upgraded to full access or flagged for intervention. A timeout of 480 minutes (8 hours) reflects a typical business-day remediation window. Without a timeout, a machine placed in quarantine due to a transient health failure stays restricted indefinitely unless an administrator intervenes or the NAP client is restarted.",
+                Description =
+                    "Configures how long (in minutes) a machine can remain in the quarantine network before its health is re-evaluated and upgraded to full access or flagged for intervention. A timeout of 480 minutes (8 hours) reflects a typical business-day remediation window. Without a timeout, a machine placed in quarantine due to a transient health failure stays restricted indefinitely unless an administrator intervenes or the NAP client is restarted.",
                 Tags = ["nap", "quarantine", "timeout", "health policy", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -10560,7 +10565,8 @@ internal static class PolicyNetwork
                 Id = "napcomp-enable-quarantine-state-pki",
                 Label = "NAP Policy: Enable PKI-Based Quarantine State Machine",
                 Category = "Network",
-                Description = "Activates the PKI-based state machine within the NAP client that uses X.509 certificates to encode the machine's health attestation state. The PKI state machine is required for the IPSEC enforcement method, which uses health certificates to gate machine-to-machine communication at the network layer. Without this, only 802.1X or DHCP-based NAP enforcement methods are available, which are less granular than IPSEC health-gated policies.",
+                Description =
+                    "Activates the PKI-based state machine within the NAP client that uses X.509 certificates to encode the machine's health attestation state. The PKI state machine is required for the IPSEC enforcement method, which uses health certificates to gate machine-to-machine communication at the network layer. Without this, only 802.1X or DHCP-based NAP enforcement methods are available, which are less granular than IPSEC health-gated policies.",
                 Tags = ["nap", "pki", "ipsec", "health attestation", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -10577,7 +10583,8 @@ internal static class PolicyNetwork
                 Id = "napcomp-enable-dhcp-enforcement",
                 Label = "NAP Policy: Enable DHCP-Based NAP Enforcement",
                 Category = "Network",
-                Description = "Enables the DHCP enforcement client for NAP, allowing the machine to participate in DHCP quarantine workflows. In DHCP enforcement mode, the DHCP server issues different IP address leases (quarantine vs. full-access scope) based on the client's health certificate. This is the simplest NAP enforcement method to deploy and requires no changes to network switches, making it suitable for organisations with legacy switching infrastructure.",
+                Description =
+                    "Enables the DHCP enforcement client for NAP, allowing the machine to participate in DHCP quarantine workflows. In DHCP enforcement mode, the DHCP server issues different IP address leases (quarantine vs. full-access scope) based on the client's health certificate. This is the simplest NAP enforcement method to deploy and requires no changes to network switches, making it suitable for organisations with legacy switching infrastructure.",
                 Tags = ["nap", "dhcp enforcement", "quarantine", "network access", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -10594,7 +10601,8 @@ internal static class PolicyNetwork
                 Id = "napcomp-enable-wired-8021x-enforcement",
                 Label = "NAP Policy: Enable Wired 802.1X NAP Enforcement",
                 Category = "Network",
-                Description = "Activates the 802.1X enforcement client for wired network connections, enabling switch-level NAP quarantine for machines that fail health evaluations. 802.1X enforcement is the strongest NAP mechanism because it operates at the switch port level — a machine placed in quarantine cannot communicate on the network at all without passing through the enforcement switch, regardless of IP configuration. This method requires 802.1X-capable managed switches.",
+                Description =
+                    "Activates the 802.1X enforcement client for wired network connections, enabling switch-level NAP quarantine for machines that fail health evaluations. 802.1X enforcement is the strongest NAP mechanism because it operates at the switch port level — a machine placed in quarantine cannot communicate on the network at all without passing through the enforcement switch, regardless of IP configuration. This method requires 802.1X-capable managed switches.",
                 Tags = ["nap", "802.1x", "wired enforcement", "switch", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -10604,14 +10612,16 @@ internal static class PolicyNetwork
                 DetectOps = [RegOp.CheckDword(NapAgentKey, "EnableWired8021xEnforcement", 1)],
                 ImpactScore = 5,
                 SafetyRating = 3,
-                ImpactNote = "Activates 802.1X NAP; requires managed 802.1X switches and NPS RADIUS configuration — test in lab before broad deployment.",
+                ImpactNote =
+                    "Activates 802.1X NAP; requires managed 802.1X switches and NPS RADIUS configuration — test in lab before broad deployment.",
             },
             new TweakDef
             {
                 Id = "napcomp-enable-ts-gateway-enforcement",
                 Label = "NAP Policy: Enable Terminal Services Gateway NAP Enforcement",
                 Category = "Network",
-                Description = "Enables the Terminal Services (Remote Desktop) Gateway NAP enforcement client. When active, the TS Gateway evaluates the client machine's NAP health certificate before establishing an RDP tunnel, ensuring that remote desktop sessions from unhealthy endpoints are blocked at the gateway. This is particularly important for privileged access workstations (PAWs) connecting to administrative systems — an infected admin workstation should not be allowed to initiate RDP sessions.",
+                Description =
+                    "Enables the Terminal Services (Remote Desktop) Gateway NAP enforcement client. When active, the TS Gateway evaluates the client machine's NAP health certificate before establishing an RDP tunnel, ensuring that remote desktop sessions from unhealthy endpoints are blocked at the gateway. This is particularly important for privileged access workstations (PAWs) connecting to administrative systems — an infected admin workstation should not be allowed to initiate RDP sessions.",
                 Tags = ["nap", "terminal services", "remote desktop", "gateway", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -10628,7 +10638,8 @@ internal static class PolicyNetwork
                 Id = "napcomp-enable-ipsec-enforcement",
                 Label = "NAP Policy: Enable IPsec-Based NAP Enforcement",
                 Category = "Network",
-                Description = "Activates the IPsec enforcement client for NAP, which uses short-lived health certificates to enforce IPsec policies between machines on the same network. IPsec NAP enforcement ensures that only machines with current, valid health certificates can communicate over authenticated IPsec channels. This is the most granular NAP enforcement method and enables zero-trust-style east-west traffic control within a corporate network segment.",
+                Description =
+                    "Activates the IPsec enforcement client for NAP, which uses short-lived health certificates to enforce IPsec policies between machines on the same network. IPsec NAP enforcement ensures that only machines with current, valid health certificates can communicate over authenticated IPsec channels. This is the most granular NAP enforcement method and enables zero-trust-style east-west traffic control within a corporate network segment.",
                 Tags = ["nap", "ipsec", "zero trust", "east-west", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -10638,10 +10649,10 @@ internal static class PolicyNetwork
                 DetectOps = [RegOp.CheckDword(NapAgentKey, "EnableIPsecEnforcement", 1)],
                 ImpactScore = 5,
                 SafetyRating = 2,
-                ImpactNote = "Activates IPsec NAP; requires HRA, NPS, and IPsec policy infrastructure — extremely disruptive if misconfigured. Production testing mandatory.",
+                ImpactNote =
+                    "Activates IPsec NAP; requires HRA, NPS, and IPsec policy infrastructure — extremely disruptive if misconfigured. Production testing mandatory.",
             },
         ];
-
     }
 
     // ── NetworkAccessProtPolicy ──
@@ -10822,7 +10833,6 @@ internal static class PolicyNetwork
                     DetectOps = [RegOp.CheckDword(NapKey, "DisablePolicyAutoUpdate", 1)],
                 },
             ];
-
     }
 
     // ── NetworkAdapterPolicy ──
@@ -11003,7 +11013,6 @@ internal static class PolicyNetwork
                 DetectOps = [RegOp.CheckDword(Key, "DisableBridging", 1)],
             },
         ];
-
     }
 
     // ── NetworkBridgePolicy ──
@@ -11184,7 +11193,6 @@ internal static class PolicyNetwork
                     DetectOps = [RegOp.CheckDword(Key, "NC_AllowTopologyDiscovery", 0)],
                 },
             ];
-
     }
 
     // ── NetworkConnectionsPolicy ──
@@ -11355,7 +11363,6 @@ internal static class PolicyNetwork
                 DetectOps = [RegOp.CheckDword(Pol, "NC_RenameConnection", 0)],
             },
         ];
-
     }
 
     // ── NetworkConnectStatusPolicy ──
@@ -11537,7 +11544,6 @@ internal static class PolicyNetwork
                     DetectOps = [RegOp.CheckDword(Key, "EnableProbeFailureLogging", 1)],
                 },
             ];
-
     }
 
     // ── NetworkDiagnosticsPolicy ──
@@ -11749,7 +11755,6 @@ internal static class PolicyNetwork
                 DetectOps = [RegOp.CheckDword(WdiNetConn, "EnabledScenarioExecutionLevel", 1)],
             },
         ];
-
     }
 
     // ── NetworkDiscovery ──
@@ -11938,7 +11943,6 @@ internal static class PolicyNetwork
                 DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\FDResPub", "Start", 4)],
             },
         ];
-
     }
 
     // ── NetworkHardenedPaths ──
@@ -12120,7 +12124,6 @@ internal static class PolicyNetwork
                 DetectOps = [RegOp.CheckDword(WebClient, "ReceiveTimeout", 60000)],
             },
         ];
-
     }
 
     // ── NetworkInterface ──
@@ -12317,7 +12320,6 @@ internal static class PolicyNetwork
                 DetectOps = [RegOp.CheckDword(TcpIp, "MaxUserPort", 65534)],
             },
         ];
-
     }
 
     // ── NetworkListPolicy ──
@@ -12498,7 +12500,6 @@ internal static class PolicyNetwork
                 DetectOps = [RegOp.CheckDword(Key, "DisableNetworkCategoryChange", 1)],
             },
         ];
-
     }
 
     // ── NetworkLltdPolicy ──
@@ -12661,7 +12662,6 @@ internal static class PolicyNetwork
                 DetectOps = [RegOp.CheckDword(PeerToPeer, "Disabled", 1)],
             },
         ];
-
     }
 
     // ── NetworkLocationAwarenessPolicy ──
@@ -12842,20 +12842,16 @@ internal static class PolicyNetwork
                     DetectOps = [RegOp.CheckDword(Key, "DisablePassivePolling", 1)],
                 },
             ];
-
     }
 
     // ── NetworkMonitoringPolicy ──
     private static class _NetworkMonitoringPolicy
     {
-        private const string NdfKey =
-            @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\NetworkDiagnostics";
+        private const string NdfKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\NetworkDiagnostics";
 
-        private const string DiagKey =
-            @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Diagnostics";
+        private const string DiagKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Diagnostics";
 
-        private const string WdiKey =
-            @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Diagnostics\Networking";
+        private const string WdiKey = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Diagnostics\Networking";
 
         public static IReadOnlyList<TweakDef> Data =>
             [
@@ -12871,7 +12867,8 @@ internal static class PolicyNetwork
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "NDF uses only local diagnostic helpers (no online repair retrieval). Administrators should ensure local NDF helpers are kept up-to-date via Windows Update.",
+                    ImpactNote =
+                        "NDF uses only local diagnostic helpers (no online repair retrieval). Administrators should ensure local NDF helpers are kept up-to-date via Windows Update.",
                     ApplyOps = [RegOp.SetDword(NdfKey, "DontDisplayNetworkSelectionUI", 1)],
                     RemoveOps = [RegOp.DeleteValue(NdfKey, "DontDisplayNetworkSelectionUI")],
                     DetectOps = [RegOp.CheckDword(NdfKey, "DontDisplayNetworkSelectionUI", 1)],
@@ -12888,7 +12885,8 @@ internal static class PolicyNetwork
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "Generates additional network event log entries. Ensure event log sizing is sufficient. Events are forwarded via WEF/WEC to SIEM for enterprise monitoring.",
+                    ImpactNote =
+                        "Generates additional network event log entries. Ensure event log sizing is sufficient. Events are forwarded via WEF/WEC to SIEM for enterprise monitoring.",
                     ApplyOps = [RegOp.SetDword(NdfKey, "NetworkEventLogging", 1)],
                     RemoveOps = [RegOp.DeleteValue(NdfKey, "NetworkEventLogging")],
                     DetectOps = [RegOp.CheckDword(NdfKey, "NetworkEventLogging", 1)],
@@ -12905,7 +12903,8 @@ internal static class PolicyNetwork
                     CorpSafe = true,
                     ImpactScore = 2,
                     SafetyRating = 5,
-                    ImpactNote = "NDIS trace logging is lightweight (ring buffer). Trace data is only written to disk when a diagnostic scan is triggered. No continuous disk I/O from this setting.",
+                    ImpactNote =
+                        "NDIS trace logging is lightweight (ring buffer). Trace data is only written to disk when a diagnostic scan is triggered. No continuous disk I/O from this setting.",
                     ApplyOps = [RegOp.SetDword(DiagKey, "EnableNdisTrace", 1)],
                     RemoveOps = [RegOp.DeleteValue(DiagKey, "EnableNdisTrace")],
                     DetectOps = [RegOp.CheckDword(DiagKey, "EnableNdisTrace", 1)],
@@ -12923,29 +12922,12 @@ internal static class PolicyNetwork
                     ImpactScore = 4,
                     SafetyRating = 5,
                     ImpactNote = "AutoPlay behavior on USB and optical discs is controlled separately. This policy only affects network shares.",
-                    ApplyOps =
-                        [
-                            RegOp.SetDword(
-                                @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Explorer",
-                                "NoAutoPlayOnNetworkShares",
-                                1
-                            ),
-                        ],
-                    RemoveOps =
-                        [
-                            RegOp.DeleteValue(
-                                @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Explorer",
-                                "NoAutoPlayOnNetworkShares"
-                            ),
-                        ],
+                    ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Explorer", "NoAutoPlayOnNetworkShares", 1)],
+                    RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Explorer", "NoAutoPlayOnNetworkShares")],
                     DetectOps =
-                        [
-                            RegOp.CheckDword(
-                                @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Explorer",
-                                "NoAutoPlayOnNetworkShares",
-                                1
-                            ),
-                        ],
+                    [
+                        RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Explorer", "NoAutoPlayOnNetworkShares", 1),
+                    ],
                 },
                 new TweakDef
                 {
@@ -12959,7 +12941,8 @@ internal static class PolicyNetwork
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "Requires a corporate NCSI probe server to be configured (typically an internal web server). Generates HTTP probes every 30 seconds per adapter.",
+                    ImpactNote =
+                        "Requires a corporate NCSI probe server to be configured (typically an internal web server). Generates HTTP probes every 30 seconds per adapter.",
                     ApplyOps = [RegOp.SetDword(NdfKey, "EnableConnectivityProbing", 1)],
                     RemoveOps = [RegOp.DeleteValue(NdfKey, "EnableConnectivityProbing")],
                     DetectOps = [RegOp.CheckDword(NdfKey, "EnableConnectivityProbing", 1)],
@@ -12976,7 +12959,8 @@ internal static class PolicyNetwork
                     CorpSafe = true,
                     ImpactScore = 2,
                     SafetyRating = 5,
-                    ImpactNote = "Enables pktmon diagnostic capture access. No continuous packet capture occurs; captures are initiated manually or by diagnostic scripts.",
+                    ImpactNote =
+                        "Enables pktmon diagnostic capture access. No continuous packet capture occurs; captures are initiated manually or by diagnostic scripts.",
                     ApplyOps = [RegOp.SetDword(DiagKey, "PktMonEnabled", 1)],
                     RemoveOps = [RegOp.DeleteValue(DiagKey, "PktMonEnabled")],
                     DetectOps = [RegOp.CheckDword(DiagKey, "PktMonEnabled", 1)],
@@ -12993,30 +12977,20 @@ internal static class PolicyNetwork
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "Network classification prompt is suppressed. Domain-joined machines auto-detect domain networks. Non-domain-joined VMs should have network location set via script.",
+                    ImpactNote =
+                        "Network classification prompt is suppressed. Domain-joined machines auto-detect domain networks. Non-domain-joined VMs should have network location set via script.",
                     ApplyOps =
-                        [
-                            RegOp.SetDword(
-                                @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Network Connections",
-                                "NC_ShowSharedAccessUI",
-                                0
-                            ),
-                        ],
+                    [
+                        RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Network Connections", "NC_ShowSharedAccessUI", 0),
+                    ],
                     RemoveOps =
-                        [
-                            RegOp.DeleteValue(
-                                @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Network Connections",
-                                "NC_ShowSharedAccessUI"
-                            ),
-                        ],
+                    [
+                        RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Network Connections", "NC_ShowSharedAccessUI"),
+                    ],
                     DetectOps =
-                        [
-                            RegOp.CheckDword(
-                                @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Network Connections",
-                                "NC_ShowSharedAccessUI",
-                                0
-                            ),
-                        ],
+                    [
+                        RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Network Connections", "NC_ShowSharedAccessUI", 0),
+                    ],
                 },
                 new TweakDef
                 {
@@ -13030,7 +13004,8 @@ internal static class PolicyNetwork
                     CorpSafe = true,
                     ImpactScore = 2,
                     SafetyRating = 5,
-                    ImpactNote = "WDI diagnostics collect lightweight ambient traces. Trace collection is triggered by degradation events, not continuously. Trace files are local and require helpdesk access to collect.",
+                    ImpactNote =
+                        "WDI diagnostics collect lightweight ambient traces. Trace collection is triggered by degradation events, not continuously. Trace files are local and require helpdesk access to collect.",
                     ApplyOps = [RegOp.SetDword(WdiKey, "WdiNetDiagEnabled", 1)],
                     RemoveOps = [RegOp.DeleteValue(WdiKey, "WdiNetDiagEnabled")],
                     DetectOps = [RegOp.CheckDword(WdiKey, "WdiNetDiagEnabled", 1)],
@@ -13047,7 +13022,8 @@ internal static class PolicyNetwork
                     CorpSafe = true,
                     ImpactScore = 4,
                     SafetyRating = 5,
-                    ImpactNote = "SMB access audit generates Security event log entries for every file share connection. Ensure event log capacity and SIEM egress are sized for the additional volume on file servers.",
+                    ImpactNote =
+                        "SMB access audit generates Security event log entries for every file share connection. Ensure event log capacity and SIEM egress are sized for the additional volume on file servers.",
                     ApplyOps = [RegOp.SetDword(NdfKey, "AuditSmb", 1)],
                     RemoveOps = [RegOp.DeleteValue(NdfKey, "AuditSmb")],
                     DetectOps = [RegOp.CheckDword(NdfKey, "AuditSmb", 1)],
@@ -13064,33 +13040,33 @@ internal static class PolicyNetwork
                     CorpSafe = true,
                     ImpactScore = 2,
                     SafetyRating = 5,
-                    ImpactNote = "Simultaneous connections per destination are capped at 10. High-volume download agents (BITS, WSUS) use their own connection limits and may be unaffected.",
+                    ImpactNote =
+                        "Simultaneous connections per destination are capped at 10. High-volume download agents (BITS, WSUS) use their own connection limits and may be unaffected.",
                     ApplyOps =
-                        [
-                            RegOp.SetDword(
-                                @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Internet Settings",
-                                "MaxConnectionsPerServer",
-                                10
-                            ),
-                        ],
+                    [
+                        RegOp.SetDword(
+                            @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Internet Settings",
+                            "MaxConnectionsPerServer",
+                            10
+                        ),
+                    ],
                     RemoveOps =
-                        [
-                            RegOp.DeleteValue(
-                                @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Internet Settings",
-                                "MaxConnectionsPerServer"
-                            ),
-                        ],
+                    [
+                        RegOp.DeleteValue(
+                            @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Internet Settings",
+                            "MaxConnectionsPerServer"
+                        ),
+                    ],
                     DetectOps =
-                        [
-                            RegOp.CheckDword(
-                                @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Internet Settings",
-                                "MaxConnectionsPerServer",
-                                10
-                            ),
-                        ],
+                    [
+                        RegOp.CheckDword(
+                            @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Internet Settings",
+                            "MaxConnectionsPerServer",
+                            10
+                        ),
+                    ],
                 },
             ];
-
     }
 
     // ── NetworkProfilePolicy ──
@@ -13271,7 +13247,6 @@ internal static class PolicyNetwork
                 DetectOps = [RegOp.CheckDword(Key, "SetUnidentifiedNetworksToPublic", 1)],
             },
         ];
-
     }
 
     // ── NetworkProjectionPolicy ──
@@ -13288,7 +13263,8 @@ internal static class PolicyNetwork
                 Id = "netproj-disable-network-projector",
                 Label = "Disable Legacy Network Projector Connection",
                 Category = "Network",
-                Description = "Sets NoNetworkProjector=1 in the NetworkProjector policy key. "
+                Description =
+                    "Sets NoNetworkProjector=1 in the NetworkProjector policy key. "
                     + "Prevents users from connecting this machine to a legacy network projector via "
                     + "the 'Connect to a Network Projector' wizard (Windows 7/8 era feature). "
                     + "Network projectors exposed over LAN can be a lateral movement vector if reachable "
@@ -13300,7 +13276,7 @@ internal static class PolicyNetwork
                 ImpactScore = 2,
                 SafetyRating = 5,
                 ImpactNote = "Legacy 'Connect to a Network Projector' wizard disabled.",
-                ApplyOps  = [RegOp.SetDword(ProjKey, "NoNetworkProjector", 1)],
+                ApplyOps = [RegOp.SetDword(ProjKey, "NoNetworkProjector", 1)],
                 RemoveOps = [RegOp.DeleteValue(ProjKey, "NoNetworkProjector")],
                 DetectOps = [RegOp.CheckDword(ProjKey, "NoNetworkProjector", 1)],
             },
@@ -13309,7 +13285,8 @@ internal static class PolicyNetwork
                 Id = "netproj-disable-project-to-this-pc",
                 Label = "Disable 'Project to This PC' (Miracast Receiver)",
                 Category = "Network",
-                Description = "Sets AllowProjectionToPC=0 in the Connect policy key. "
+                Description =
+                    "Sets AllowProjectionToPC=0 in the Connect policy key. "
                     + "Prevents this machine from acting as a Miracast receiver ('Project to This PC'). "
                     + "When enabled, the PC accepts incoming wireless display connections from phones, "
                     + "tablets, and other PCs on the same Wi-Fi network. Disabling this removes the "
@@ -13321,7 +13298,7 @@ internal static class PolicyNetwork
                 ImpactScore = 2,
                 SafetyRating = 5,
                 ImpactNote = "Miracast 'Project to This PC' receiver mode disabled; no incoming wireless display connections.",
-                ApplyOps  = [RegOp.SetDword(ConnKey, "AllowProjectionToPC", 0)],
+                ApplyOps = [RegOp.SetDword(ConnKey, "AllowProjectionToPC", 0)],
                 RemoveOps = [RegOp.DeleteValue(ConnKey, "AllowProjectionToPC")],
                 DetectOps = [RegOp.CheckDword(ConnKey, "AllowProjectionToPC", 0)],
             },
@@ -13330,7 +13307,8 @@ internal static class PolicyNetwork
                 Id = "netproj-require-pin-for-projection",
                 Label = "Require PIN for 'Project to This PC'",
                 Category = "Network",
-                Description = "Sets RequirePinForPairing=2 in the Connect policy key (2=always require PIN). "
+                Description =
+                    "Sets RequirePinForPairing=2 in the Connect policy key (2=always require PIN). "
                     + "Requires a unique pairing PIN to be entered on the projecting device before it can "
                     + "establish a wireless display connection to this PC. Without a PIN requirement, "
                     + "any device on the same Wi-Fi can connect instantly without user consent. "
@@ -13342,7 +13320,7 @@ internal static class PolicyNetwork
                 ImpactScore = 3,
                 SafetyRating = 5,
                 ImpactNote = "PIN required every time before a device can project wirelessly to this PC.",
-                ApplyOps  = [RegOp.SetDword(ConnKey, "RequirePinForPairing", 2)],
+                ApplyOps = [RegOp.SetDword(ConnKey, "RequirePinForPairing", 2)],
                 RemoveOps = [RegOp.DeleteValue(ConnKey, "RequirePinForPairing")],
                 DetectOps = [RegOp.CheckDword(ConnKey, "RequirePinForPairing", 2)],
             },
@@ -13351,7 +13329,8 @@ internal static class PolicyNetwork
                 Id = "netproj-restrict-projection-to-secured-networks",
                 Label = "Restrict Projection to Secured (Non-Open) Wi-Fi Networks",
                 Category = "Network",
-                Description = "Sets AllowProjectionToSecuredPCOnly=1 in the Connect policy key. "
+                Description =
+                    "Sets AllowProjectionToSecuredPCOnly=1 in the Connect policy key. "
                     + "Limits 'Project to This PC' to accept incoming Miracast connections only when the "
                     + "machine is connected to a password-protected (WPA/WPA2/WPA3) Wi-Fi network. "
                     + "Prevents accidental projection exposure when the machine is on an open conference "
@@ -13363,7 +13342,7 @@ internal static class PolicyNetwork
                 ImpactScore = 2,
                 SafetyRating = 5,
                 ImpactNote = "Wireless projection only accepted when on a password-protected Wi-Fi network.",
-                ApplyOps  = [RegOp.SetDword(ConnKey, "AllowProjectionToSecuredPCOnly", 1)],
+                ApplyOps = [RegOp.SetDword(ConnKey, "AllowProjectionToSecuredPCOnly", 1)],
                 RemoveOps = [RegOp.DeleteValue(ConnKey, "AllowProjectionToSecuredPCOnly")],
                 DetectOps = [RegOp.CheckDword(ConnKey, "AllowProjectionToSecuredPCOnly", 1)],
             },
@@ -13372,7 +13351,8 @@ internal static class PolicyNetwork
                 Id = "netproj-block-source-projection",
                 Label = "Block This PC From Projecting to Other Devices",
                 Category = "Network",
-                Description = "Sets AllowProjectionFromPC=0 in the Connect policy key. "
+                Description =
+                    "Sets AllowProjectionFromPC=0 in the Connect policy key. "
                     + "Prevents the user from using 'Connect' or the Project button to send this PC's "
                     + "display to a Miracast dongle, smart TV, or wireless display adapter. "
                     + "While the risk is lower than the receive path, projecting to untrusted displays "
@@ -13384,7 +13364,7 @@ internal static class PolicyNetwork
                 ImpactScore = 2,
                 SafetyRating = 5,
                 ImpactNote = "This PC cannot project its display to other wireless display devices.",
-                ApplyOps  = [RegOp.SetDword(ConnKey, "AllowProjectionFromPC", 0)],
+                ApplyOps = [RegOp.SetDword(ConnKey, "AllowProjectionFromPC", 0)],
                 RemoveOps = [RegOp.DeleteValue(ConnKey, "AllowProjectionFromPC")],
                 DetectOps = [RegOp.CheckDword(ConnKey, "AllowProjectionFromPC", 0)],
             },
@@ -13393,7 +13373,8 @@ internal static class PolicyNetwork
                 Id = "netproj-disable-wireless-display-infrastructure",
                 Label = "Disable Wireless Display Infrastructure Mode",
                 Category = "Network",
-                Description = "Sets AllowWirelessDisplayInfrastructure=0 in the WirelessDisplay policy key. "
+                Description =
+                    "Sets AllowWirelessDisplayInfrastructure=0 in the WirelessDisplay policy key. "
                     + "Disables the infrastructure-mode Miracast projection that routes wireless display "
                     + "traffic over a Wi-Fi router rather than a direct Wi-Fi Direct peer-to-peer link. "
                     + "Infrastructure-mode Miracast uses the corporate Wi-Fi, potentially traversing "
@@ -13405,7 +13386,7 @@ internal static class PolicyNetwork
                 ImpactScore = 2,
                 SafetyRating = 5,
                 ImpactNote = "Infrastructure-mode Miracast disabled; only Wi-Fi Direct peer-to-peer projection allowed.",
-                ApplyOps  = [RegOp.SetDword(WdisKey, "AllowWirelessDisplayInfrastructure", 0)],
+                ApplyOps = [RegOp.SetDword(WdisKey, "AllowWirelessDisplayInfrastructure", 0)],
                 RemoveOps = [RegOp.DeleteValue(WdisKey, "AllowWirelessDisplayInfrastructure")],
                 DetectOps = [RegOp.CheckDword(WdisKey, "AllowWirelessDisplayInfrastructure", 0)],
             },
@@ -13414,7 +13395,8 @@ internal static class PolicyNetwork
                 Id = "netproj-disable-miracast-discovery-mcast",
                 Label = "Disable Miracast Multicast Discovery Broadcast",
                 Category = "Network",
-                Description = "Sets DisableDeviceDiscovery=1 in the WirelessDisplay policy key. "
+                Description =
+                    "Sets DisableDeviceDiscovery=1 in the WirelessDisplay policy key. "
                     + "Prevents this machine from continuously broadcasting Miracast advertisement "
                     + "packets that announce its 'Project to This PC' capability on the local network. "
                     + "Passive Miracast discovery broadcasting can reveal machine presence and name "
@@ -13426,7 +13408,7 @@ internal static class PolicyNetwork
                 ImpactScore = 2,
                 SafetyRating = 5,
                 ImpactNote = "Miracast device presence broadcasts stopped; machine not discoverable via wireless display scanning.",
-                ApplyOps  = [RegOp.SetDword(WdisKey, "DisableDeviceDiscovery", 1)],
+                ApplyOps = [RegOp.SetDword(WdisKey, "DisableDeviceDiscovery", 1)],
                 RemoveOps = [RegOp.DeleteValue(WdisKey, "DisableDeviceDiscovery")],
                 DetectOps = [RegOp.CheckDword(WdisKey, "DisableDeviceDiscovery", 1)],
             },
@@ -13435,7 +13417,8 @@ internal static class PolicyNetwork
                 Id = "netproj-enforce-hdcp-for-wireless-display",
                 Label = "Enforce HDCP Content Protection on Wireless Display",
                 Category = "Network",
-                Description = "Sets AllowProjectionToHDCP=1 in the WirelessDisplay policy key. "
+                Description =
+                    "Sets AllowProjectionToHDCP=1 in the WirelessDisplay policy key. "
                     + "Requires that the receiving wireless display device supports HDCP (High-bandwidth "
                     + "Digital Content Protection) before the PC will project to it. "
                     + "Prevents DRM-protected content (streaming video, presentations with ERM) from "
@@ -13448,7 +13431,7 @@ internal static class PolicyNetwork
                 ImpactScore = 2,
                 SafetyRating = 5,
                 ImpactNote = "Wireless projection only to HDCP-capable receivers; non-compliant displays rejected.",
-                ApplyOps  = [RegOp.SetDword(WdisKey, "AllowProjectionToHDCP", 1)],
+                ApplyOps = [RegOp.SetDword(WdisKey, "AllowProjectionToHDCP", 1)],
                 RemoveOps = [RegOp.DeleteValue(WdisKey, "AllowProjectionToHDCP")],
                 DetectOps = [RegOp.CheckDword(WdisKey, "AllowProjectionToHDCP", 1)],
             },
@@ -13457,7 +13440,8 @@ internal static class PolicyNetwork
                 Id = "netproj-disable-projector-peer-trust",
                 Label = "Disable Auto-Trust for Previously Projected Displays",
                 Category = "Network",
-                Description = "Sets AllowPreviouslyPairedDevice=0 in the Connect policy key. "
+                Description =
+                    "Sets AllowPreviouslyPairedDevice=0 in the Connect policy key. "
                     + "Prevents Windows from automatically accepting wireless display connections from "
                     + "devices that have previously been paired (trusted) with this PC. "
                     + "Previously paired devices can reconnect without PIN re-entry, which reduces friction "
@@ -13470,7 +13454,7 @@ internal static class PolicyNetwork
                 ImpactScore = 2,
                 SafetyRating = 5,
                 ImpactNote = "Previously paired Miracast devices not auto-trusted; PIN required every connection.",
-                ApplyOps  = [RegOp.SetDword(ConnKey, "AllowPreviouslyPairedDevice", 0)],
+                ApplyOps = [RegOp.SetDword(ConnKey, "AllowPreviouslyPairedDevice", 0)],
                 RemoveOps = [RegOp.DeleteValue(ConnKey, "AllowPreviouslyPairedDevice")],
                 DetectOps = [RegOp.CheckDword(ConnKey, "AllowPreviouslyPairedDevice", 0)],
             },
@@ -13479,7 +13463,8 @@ internal static class PolicyNetwork
                 Id = "netproj-set-projection-screenlock-timeout",
                 Label = "Set Wireless Display Auto-Lock Screen After Idle",
                 Category = "Network",
-                Description = "Sets ProjectionIdleTimeout=5 in the Connect policy key. "
+                Description =
+                    "Sets ProjectionIdleTimeout=5 in the Connect policy key. "
                     + "Sets the number of minutes of idle time on a 'Project to This PC' session before "
                     + "the received display is automatically locked or disconnected. Without a timeout, "
                     + "a projecting device's session persists indefinitely even after the user walks away, "
@@ -13492,12 +13477,11 @@ internal static class PolicyNetwork
                 ImpactScore = 2,
                 SafetyRating = 5,
                 ImpactNote = "Wireless display session locks after 5 minutes of idle; unattended projection disconnected.",
-                ApplyOps  = [RegOp.SetDword(ConnKey, "ProjectionIdleTimeout", 5)],
+                ApplyOps = [RegOp.SetDword(ConnKey, "ProjectionIdleTimeout", 5)],
                 RemoveOps = [RegOp.DeleteValue(ConnKey, "ProjectionIdleTimeout")],
                 DetectOps = [RegOp.CheckDword(ConnKey, "ProjectionIdleTimeout", 5)],
             },
         ];
-
     }
 
     // ── NetworkQosPolicy ──
@@ -13678,7 +13662,6 @@ internal static class PolicyNetwork
                 DetectOps = [RegOp.CheckDword(Key, "DisableFlowInspection", 1)],
             },
         ];
-
     }
 
     // ── NfcPolicy ──
@@ -13859,7 +13842,6 @@ internal static class PolicyNetwork
                     DetectOps = [RegOp.CheckDword(Key, "BlockUserNFCToggle", 1)],
                 },
             ];
-
     }
 
     // ── NicTeamingPolicy ──
@@ -14040,7 +14022,6 @@ internal static class PolicyNetwork
                     DetectOps = [RegOp.CheckDword(Key, "DisableNICTeamingTelemetry", 1)],
                 },
             ];
-
     }
 
     // ── NtpGpoPolicy ──
@@ -14057,7 +14038,8 @@ internal static class PolicyNetwork
                 Id = "ntpgpo-enable-ntp-client",
                 Label = "NTP Policy: Enable Windows NTP Client via Group Policy",
                 Category = "Network",
-                Description = "Configures the Windows Time service (W32Time) client to retrieve time from an NTP server by enabling the NTP client via the Policies registry path. This policy controls the Windows Time service behaviour at the machine level. Accurate time synchronisation is a prerequisite for Kerberos authentication, SSL/TLS certificate validation, log correlation, and compliance auditing. Forcing the NTP client on ensures time sync cannot be accidentally disabled by local administrators.",
+                Description =
+                    "Configures the Windows Time service (W32Time) client to retrieve time from an NTP server by enabling the NTP client via the Policies registry path. This policy controls the Windows Time service behaviour at the machine level. Accurate time synchronisation is a prerequisite for Kerberos authentication, SSL/TLS certificate validation, log correlation, and compliance auditing. Forcing the NTP client on ensures time sync cannot be accidentally disabled by local administrators.",
                 Tags = ["ntp", "time sync", "w32time", "kerberos", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -14067,14 +14049,16 @@ internal static class PolicyNetwork
                 DetectOps = [RegOp.CheckDword(NtpClientKey, "Enabled", 1)],
                 ImpactScore = 4,
                 SafetyRating = 5,
-                ImpactNote = "Ensures Windows NTP client is active; required for domain Kerberos auth, certificate validation, and audit log consistency.",
+                ImpactNote =
+                    "Ensures Windows NTP client is active; required for domain Kerberos auth, certificate validation, and audit log consistency.",
             },
             new TweakDef
             {
                 Id = "ntpgpo-enforce-ntp-type",
                 Label = "NTP Policy: Enforce NTP Synchronisation Type",
                 Category = "Network",
-                Description = "Sets the Windows Time service synchronisation type to NTP, ensuring that the machine always uses an external NTP server rather than relying solely on the domain hierarchy (NT5DS) or free-running internal clock (NoSync). On machines that are occasionally disconnected from the domain, pure NT5DS mode means no time sync occurs when the DC is unreachable. Setting type to NTP with a fallback ensures time accuracy even during DC outages.",
+                Description =
+                    "Sets the Windows Time service synchronisation type to NTP, ensuring that the machine always uses an external NTP server rather than relying solely on the domain hierarchy (NT5DS) or free-running internal clock (NoSync). On machines that are occasionally disconnected from the domain, pure NT5DS mode means no time sync occurs when the DC is unreachable. Setting type to NTP with a fallback ensures time accuracy even during DC outages.",
                 Tags = ["ntp", "time sync", "w32time", "domain", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -14091,7 +14075,8 @@ internal static class PolicyNetwork
                 Id = "ntpgpo-set-cross-site-sync-flags",
                 Label = "NTP Policy: Set NTP Cross-Site Synchronisation Flags",
                 Category = "Network",
-                Description = "Sets the CrossSiteSyncFlags value in the W32Time Client policy to 2, allowing the Windows Time service to synchronise from NTP time sources across AD sites. By default, Windows Time prefers NTP sources within the same AD site. Setting this flag allows cross-site sync as a fallback when no local NTP source is available, preventing time drift in remote sites with poor DC connectivity.",
+                Description =
+                    "Sets the CrossSiteSyncFlags value in the W32Time Client policy to 2, allowing the Windows Time service to synchronise from NTP time sources across AD sites. By default, Windows Time prefers NTP sources within the same AD site. Setting this flag allows cross-site sync as a fallback when no local NTP source is available, preventing time drift in remote sites with poor DC connectivity.",
                 Tags = ["ntp", "time sync", "active directory", "cross site", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -14108,7 +14093,8 @@ internal static class PolicyNetwork
                 Id = "ntpgpo-set-special-poll-interval",
                 Label = "NTP Policy: Set Special Poll Interval for NTP Synchronisation",
                 Category = "Network",
-                Description = "Configures a specific NTP poll interval (in seconds) for the Windows Time service client operating in SpecialInterval mode. The default Windows Time poll interval can be too infrequent for high-security environments where clock drift is measured in seconds. A 900-second (15-minute) interval ensures that machines re-synchronise frequently enough to stay within the 5-minute Kerberos clock skew limit and to provide accurate timestamps for security event logs.",
+                Description =
+                    "Configures a specific NTP poll interval (in seconds) for the Windows Time service client operating in SpecialInterval mode. The default Windows Time poll interval can be too infrequent for high-security environments where clock drift is measured in seconds. A 900-second (15-minute) interval ensures that machines re-synchronise frequently enough to stay within the 5-minute Kerberos clock skew limit and to provide accurate timestamps for security event logs.",
                 Tags = ["ntp", "time sync", "poll interval", "kerberos", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -14125,7 +14111,8 @@ internal static class PolicyNetwork
                 Id = "ntpgpo-set-event-log-flags",
                 Label = "NTP Policy: Set W32Time Event Log Verbosity Flags",
                 Category = "Network",
-                Description = "Sets the EventLogFlags value to 3 in the W32Time Config policy, enabling W32Time to log both time-source change events and significant time adjustments to the System event log. These events allow security analysts to detect unusual time manipulation attempts (a precursor to log tampering or Kerberos replay attacks). Without verbose logging, time sync anomalies are invisible in standard Windows monitoring pipelines.",
+                Description =
+                    "Sets the EventLogFlags value to 3 in the W32Time Config policy, enabling W32Time to log both time-source change events and significant time adjustments to the System event log. These events allow security analysts to detect unusual time manipulation attempts (a precursor to log tampering or Kerberos replay attacks). Without verbose logging, time sync anomalies are invisible in standard Windows monitoring pipelines.",
                 Tags = ["ntp", "time sync", "event log", "security monitoring", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -14142,7 +14129,8 @@ internal static class PolicyNetwork
                 Id = "ntpgpo-set-max-pos-phase-correction",
                 Label = "NTP Policy: Set Maximum Positive Phase Correction for NTP",
                 Category = "Network",
-                Description = "Configures the MaxPosPhaseCorrection value (in seconds) to limit how far forward the Windows Time service will jump the local clock in a single correction. By default, Windows Time accepts any positive time correction from an NTP source, which means an adversary-controlled or misconfigured NTP server could jump the clock forward many hours in one step, invalidating all certificate-based authentication and causing log gaps. A 3600-second cap (1 hour) provides a reasonable safety limit.",
+                Description =
+                    "Configures the MaxPosPhaseCorrection value (in seconds) to limit how far forward the Windows Time service will jump the local clock in a single correction. By default, Windows Time accepts any positive time correction from an NTP source, which means an adversary-controlled or misconfigured NTP server could jump the clock forward many hours in one step, invalidating all certificate-based authentication and causing log gaps. A 3600-second cap (1 hour) provides a reasonable safety limit.",
                 Tags = ["ntp", "time sync", "phase correction", "security", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -14159,7 +14147,8 @@ internal static class PolicyNetwork
                 Id = "ntpgpo-set-max-neg-phase-correction",
                 Label = "NTP Policy: Set Maximum Negative Phase Correction for NTP",
                 Category = "Network",
-                Description = "Configures the MaxNegPhaseCorrection value (in seconds) to limit how far backward the Windows Time service will roll back the local clock in a single correction. Unbounded backward time corrections can cause Kerberos ticket replay windows to expand unexpectedly, allow log entries to appear to pre-date their corresponding events, and trigger false positives in time-based security controls. A 3600-second limit (1 hour) is the recommended security baseline.",
+                Description =
+                    "Configures the MaxNegPhaseCorrection value (in seconds) to limit how far backward the Windows Time service will roll back the local clock in a single correction. Unbounded backward time corrections can cause Kerberos ticket replay windows to expand unexpectedly, allow log entries to appear to pre-date their corresponding events, and trigger false positives in time-based security controls. A 3600-second limit (1 hour) is the recommended security baseline.",
                 Tags = ["ntp", "time sync", "phase correction", "kerberos", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -14176,7 +14165,8 @@ internal static class PolicyNetwork
                 Id = "ntpgpo-set-resolve-peer-backoff-min",
                 Label = "NTP Policy: Set Minimum Peer Resolution Backoff Interval",
                 Category = "Network",
-                Description = "Sets the ResolvePeerBackOffMinutes value (in minutes) to 15, controlling the minimum time the Windows Time client waits before retrying a failed NTP peer resolution attempt. Short backoff intervals cause the W32Time service to hammer DNS and the NTP server with rapid retries after network outages. A 15-minute minimum backoff reduces NTP server load and prevents false-positive flapping alerts in network monitoring systems.",
+                Description =
+                    "Sets the ResolvePeerBackOffMinutes value (in minutes) to 15, controlling the minimum time the Windows Time client waits before retrying a failed NTP peer resolution attempt. Short backoff intervals cause the W32Time service to hammer DNS and the NTP server with rapid retries after network outages. A 15-minute minimum backoff reduces NTP server load and prevents false-positive flapping alerts in network monitoring systems.",
                 Tags = ["ntp", "time sync", "backoff", "network load", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -14193,7 +14183,8 @@ internal static class PolicyNetwork
                 Id = "ntpgpo-set-resolve-peer-backoff-max",
                 Label = "NTP Policy: Set Maximum Peer Resolution Backoff Retry Count",
                 Category = "Network",
-                Description = "Sets the ResolvePeerBackOffMaxTimes value to 7, controlling the maximum number of exponential backoff retry doublings before the Windows Time client gives up and stops attempting to resolve an NTP peer. Without a cap, the exponential backoff can grow indefinitely, resulting in machines that stop trying to sync hours after a network issue clears. Limiting to 7 doublings (max backoff of 15 min × 2^7 ≈ 32 hours) balances persistence with eventual giving-up.",
+                Description =
+                    "Sets the ResolvePeerBackOffMaxTimes value to 7, controlling the maximum number of exponential backoff retry doublings before the Windows Time client gives up and stops attempting to resolve an NTP peer. Without a cap, the exponential backoff can grow indefinitely, resulting in machines that stop trying to sync hours after a network issue clears. Limiting to 7 doublings (max backoff of 15 min × 2^7 ≈ 32 hours) balances persistence with eventual giving-up.",
                 Tags = ["ntp", "time sync", "backoff retry", "network resilience", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -14203,14 +14194,16 @@ internal static class PolicyNetwork
                 DetectOps = [RegOp.CheckDword(NtpClientKey, "ResolvePeerBackOffMaxTimes", 7)],
                 ImpactScore = 2,
                 SafetyRating = 5,
-                ImpactNote = "Limits NTP peer retry doublings to 7; after ~32 hours without an NTP response, the service stops retrying until restarted.",
+                ImpactNote =
+                    "Limits NTP peer retry doublings to 7; after ~32 hours without an NTP response, the service stops retrying until restarted.",
             },
             new TweakDef
             {
                 Id = "ntpgpo-set-announce-flags",
                 Label = "NTP Policy: Configure W32Time Announce Flags for Domain Hierarchy",
                 Category = "Network",
-                Description = "Sets the AnnounceFlags value to 10 in W32Time Config, configuring the time service to announce itself as a reliable time source when acting as a DC-level NTP server for domain clients. A value of 10 (0x0A) enables both 'always reliable' and 'auto-reliable' flags. This prevents workstations from querying internet NTP sources instead of the authoritative domain hierarchy, and ensures PDC emulators are correctly identified as the time authority by child DCs.",
+                Description =
+                    "Sets the AnnounceFlags value to 10 in W32Time Config, configuring the time service to announce itself as a reliable time source when acting as a DC-level NTP server for domain clients. A value of 10 (0x0A) enables both 'always reliable' and 'auto-reliable' flags. This prevents workstations from querying internet NTP sources instead of the authoritative domain hierarchy, and ensures PDC emulators are correctly identified as the time authority by child DCs.",
                 Tags = ["ntp", "time sync", "announce flags", "domain controller", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -14220,10 +14213,10 @@ internal static class PolicyNetwork
                 DetectOps = [RegOp.CheckDword(NtpConfigKey, "AnnounceFlags", 10)],
                 ImpactScore = 3,
                 SafetyRating = 4,
-                ImpactNote = "Configures W32Time announce flags; primarily relevant on domain controllers — apply cautiously on standalone workstations.",
+                ImpactNote =
+                    "Configures W32Time announce flags; primarily relevant on domain controllers — apply cautiously on standalone workstations.",
             },
         ];
-
     }
 
     // ── ProxyBypassPolicy ──
@@ -14405,17 +14398,14 @@ internal static class PolicyNetwork
                     DetectOps = [RegOp.CheckDword(Key, "DisableSplitTunnelingBypass", 1)],
                 },
             ];
-
     }
 
     // ── RadiusAuthPolicy ──
     private static class _RadiusAuthPolicy
     {
-        private const string NpsKey =
-            @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\NPS";
+        private const string NpsKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\NPS";
 
-        private const string NetworkAccessKey =
-            @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\NetworkAccess";
+        private const string NetworkAccessKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\NetworkAccess";
 
         public static IReadOnlyList<TweakDef> Data =>
             [
@@ -14431,7 +14421,8 @@ internal static class PolicyNetwork
                     CorpSafe = true,
                     ImpactScore = 5,
                     SafetyRating = 4,
-                    ImpactNote = "RADIUS server certificate must be trusted by client machines. Deploy NPS server certificate from an enterprise CA that clients trust. Without this setup, 802.1x authentication fails.",
+                    ImpactNote =
+                        "RADIUS server certificate must be trusted by client machines. Deploy NPS server certificate from an enterprise CA that clients trust. Without this setup, 802.1x authentication fails.",
                     ApplyOps = [RegOp.SetDword(NpsKey, "ValidateServerCert", 1)],
                     RemoveOps = [RegOp.DeleteValue(NpsKey, "ValidateServerCert")],
                     DetectOps = [RegOp.CheckDword(NpsKey, "ValidateServerCert", 1)],
@@ -14448,7 +14439,8 @@ internal static class PolicyNetwork
                     CorpSafe = true,
                     ImpactScore = 4,
                     SafetyRating = 5,
-                    ImpactNote = "EAP-MD5 clients cannot authenticate. Legacy devices that support only EAP-MD5 must be replaced or given alternative access. Most enterprise clients support EAP-TLS or PEAP.",
+                    ImpactNote =
+                        "EAP-MD5 clients cannot authenticate. Legacy devices that support only EAP-MD5 must be replaced or given alternative access. Most enterprise clients support EAP-TLS or PEAP.",
                     ApplyOps = [RegOp.SetDword(NpsKey, "DisableEapMD5", 1)],
                     RemoveOps = [RegOp.DeleteValue(NpsKey, "DisableEapMD5")],
                     DetectOps = [RegOp.CheckDword(NpsKey, "DisableEapMD5", 1)],
@@ -14465,7 +14457,8 @@ internal static class PolicyNetwork
                     CorpSafe = true,
                     ImpactScore = 4,
                     SafetyRating = 5,
-                    ImpactNote = "RADIUS accounting events are written to the Security Event Log. Ensure sufficient log size retention is configured. Windows Event Log defaults may fill quickly in large environments.",
+                    ImpactNote =
+                        "RADIUS accounting events are written to the Security Event Log. Ensure sufficient log size retention is configured. Windows Event Log defaults may fill quickly in large environments.",
                     ApplyOps = [RegOp.SetDword(NpsKey, "AccountingLogging", 1)],
                     RemoveOps = [RegOp.DeleteValue(NpsKey, "AccountingLogging")],
                     DetectOps = [RegOp.CheckDword(NpsKey, "AccountingLogging", 1)],
@@ -14482,7 +14475,8 @@ internal static class PolicyNetwork
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "After 3 failed authentication attempts the session is terminated. Users with multiple errors (e.g., wrong smart card PIN) must disconnect and reconnect. Adjust to 5 for environments with frequent PIN entry errors.",
+                    ImpactNote =
+                        "After 3 failed authentication attempts the session is terminated. Users with multiple errors (e.g., wrong smart card PIN) must disconnect and reconnect. Adjust to 5 for environments with frequent PIN entry errors.",
                     ApplyOps = [RegOp.SetDword(NetworkAccessKey, "MaxAuthRetries", 3)],
                     RemoveOps = [RegOp.DeleteValue(NetworkAccessKey, "MaxAuthRetries")],
                     DetectOps = [RegOp.CheckDword(NetworkAccessKey, "MaxAuthRetries", 3)],
@@ -14499,7 +14493,8 @@ internal static class PolicyNetwork
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "Authentication exceeding 30 seconds is terminated. Smart card logon with OCSP/CRL check offline might briefly exceed this. Increase to 60 seconds if authentication latency is observed in slower environments.",
+                    ImpactNote =
+                        "Authentication exceeding 30 seconds is terminated. Smart card logon with OCSP/CRL check offline might briefly exceed this. Increase to 60 seconds if authentication latency is observed in slower environments.",
                     ApplyOps = [RegOp.SetDword(NpsKey, "EapTimeout", 30)],
                     RemoveOps = [RegOp.DeleteValue(NpsKey, "EapTimeout")],
                     DetectOps = [RegOp.CheckDword(NpsKey, "EapTimeout", 30)],
@@ -14516,7 +14511,8 @@ internal static class PolicyNetwork
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "RADIUS success events are written to Security Event Log. Event 6272 is generated for each successful 802.1x or VPN authentication. Volume will be high in large environments — ensure SIEM can handle the ingestion rate.",
+                    ImpactNote =
+                        "RADIUS success events are written to Security Event Log. Event 6272 is generated for each successful 802.1x or VPN authentication. Volume will be high in large environments — ensure SIEM can handle the ingestion rate.",
                     ApplyOps = [RegOp.SetDword(NpsKey, "AuditSuccessAuthentications", 1)],
                     RemoveOps = [RegOp.DeleteValue(NpsKey, "AuditSuccessAuthentications")],
                     DetectOps = [RegOp.CheckDword(NpsKey, "AuditSuccessAuthentications", 1)],
@@ -14533,7 +14529,8 @@ internal static class PolicyNetwork
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "RADIUS failure events are written to Security Event Log. Event 6273 is generated for each rejected 802.1x/VPN request. Essential for network access security monitoring.",
+                    ImpactNote =
+                        "RADIUS failure events are written to Security Event Log. Event 6273 is generated for each rejected 802.1x/VPN request. Essential for network access security monitoring.",
                     ApplyOps = [RegOp.SetDword(NpsKey, "AuditFailedAuthentications", 1)],
                     RemoveOps = [RegOp.DeleteValue(NpsKey, "AuditFailedAuthentications")],
                     DetectOps = [RegOp.CheckDword(NpsKey, "AuditFailedAuthentications", 1)],
@@ -14550,7 +14547,8 @@ internal static class PolicyNetwork
                     CorpSafe = true,
                     ImpactScore = 4,
                     SafetyRating = 5,
-                    ImpactNote = "PAP authentication is disabled. Clients that support only PAP (rare legacy devices) cannot authenticate. Verify all network clients support at least CHAP or EAP.",
+                    ImpactNote =
+                        "PAP authentication is disabled. Clients that support only PAP (rare legacy devices) cannot authenticate. Verify all network clients support at least CHAP or EAP.",
                     ApplyOps = [RegOp.SetDword(NpsKey, "DisablePAP", 1)],
                     RemoveOps = [RegOp.DeleteValue(NpsKey, "DisablePAP")],
                     DetectOps = [RegOp.CheckDword(NpsKey, "DisablePAP", 1)],
@@ -14567,7 +14565,8 @@ internal static class PolicyNetwork
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "Shared secrets shorter than 22 characters are rejected at NPS configuration. Existing access points with short shared secrets must be reconfigured. Minimum change required for existing deployments.",
+                    ImpactNote =
+                        "Shared secrets shorter than 22 characters are rejected at NPS configuration. Existing access points with short shared secrets must be reconfigured. Minimum change required for existing deployments.",
                     ApplyOps = [RegOp.SetDword(NpsKey, "MinSharedSecretLength", 22)],
                     RemoveOps = [RegOp.DeleteValue(NpsKey, "MinSharedSecretLength")],
                     DetectOps = [RegOp.CheckDword(NpsKey, "MinSharedSecretLength", 22)],
@@ -14584,26 +14583,23 @@ internal static class PolicyNetwork
                     CorpSafe = true,
                     ImpactScore = 2,
                     SafetyRating = 5,
-                    ImpactNote = "Proxy-State forwarding is enabled. Only relevant in proxied RADIUS deployments. Required for correct NPS proxy chain configuration.",
+                    ImpactNote =
+                        "Proxy-State forwarding is enabled. Only relevant in proxied RADIUS deployments. Required for correct NPS proxy chain configuration.",
                     ApplyOps = [RegOp.SetDword(NpsKey, "EnableProxyState", 1)],
                     RemoveOps = [RegOp.DeleteValue(NpsKey, "EnableProxyState")],
                     DetectOps = [RegOp.CheckDword(NpsKey, "EnableProxyState", 1)],
                 },
             ];
-
     }
 
     // ── RemoteNetworkAccessPolicy ──
     private static class _RemoteNetworkAccessPolicy
     {
-        private const string RasKey =
-            @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\NetworkAccessProtection";
+        private const string RasKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\NetworkAccessProtection";
 
-        private const string RemAccKey =
-            @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Rpc";
+        private const string RemAccKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Rpc";
 
-        private const string RasMgrKey =
-            @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\RemoteAccess";
+        private const string RasMgrKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\RemoteAccess";
 
         public static IReadOnlyList<TweakDef> Data =>
             [
@@ -14619,7 +14615,8 @@ internal static class PolicyNetwork
                     CorpSafe = true,
                     ImpactScore = 2,
                     SafetyRating = 5,
-                    ImpactNote = "Disables legacy NAP client. No impact on modern network access enforcement (Intune Compliance, Azure AD Conditional Access, NPS). Only affects deprecated Windows Server 2008-era NAP infrastructure.",
+                    ImpactNote =
+                        "Disables legacy NAP client. No impact on modern network access enforcement (Intune Compliance, Azure AD Conditional Access, NPS). Only affects deprecated Windows Server 2008-era NAP infrastructure.",
                     ApplyOps = [RegOp.SetDword(RasKey, "EnableNap", 0)],
                     RemoveOps = [RegOp.DeleteValue(RasKey, "EnableNap")],
                     DetectOps = [RegOp.CheckDword(RasKey, "EnableNap", 0)],
@@ -14636,7 +14633,8 @@ internal static class PolicyNetwork
                     CorpSafe = true,
                     ImpactScore = 5,
                     SafetyRating = 4,
-                    ImpactNote = "Blocks unauthenticated RPC from remote machines. May break legacy applications using anonymous DCOM or RPC on the local network.",
+                    ImpactNote =
+                        "Blocks unauthenticated RPC from remote machines. May break legacy applications using anonymous DCOM or RPC on the local network.",
                     ApplyOps = [RegOp.SetDword(RemAccKey, "RestrictRemoteClients", 1)],
                     RemoveOps = [RegOp.DeleteValue(RemAccKey, "RestrictRemoteClients")],
                     DetectOps = [RegOp.CheckDword(RemAccKey, "RestrictRemoteClients", 1)],
@@ -14653,7 +14651,8 @@ internal static class PolicyNetwork
                     CorpSafe = true,
                     ImpactScore = 4,
                     SafetyRating = 5,
-                    ImpactNote = "Generates VPN connection/disconnection audit events in the Security log. Ensure log capacity and SIEM forwarding are configured to handle the additional log volume.",
+                    ImpactNote =
+                        "Generates VPN connection/disconnection audit events in the Security log. Ensure log capacity and SIEM forwarding are configured to handle the additional log volume.",
                     ApplyOps = [RegOp.SetDword(RasMgrKey, "EnableRemoteAccessAudit", 1)],
                     RemoveOps = [RegOp.DeleteValue(RasMgrKey, "EnableRemoteAccessAudit")],
                     DetectOps = [RegOp.CheckDword(RasMgrKey, "EnableRemoteAccessAudit", 1)],
@@ -14670,7 +14669,8 @@ internal static class PolicyNetwork
                     CorpSafe = true,
                     ImpactScore = 4,
                     SafetyRating = 5,
-                    ImpactNote = "Breaks VPN clients using PAP authentication. All modern VPN clients use MSCHAPv2 or EAP; PAP is only used by very old Cisco/legacy clients.",
+                    ImpactNote =
+                        "Breaks VPN clients using PAP authentication. All modern VPN clients use MSCHAPv2 or EAP; PAP is only used by very old Cisco/legacy clients.",
                     ApplyOps = [RegOp.SetDword(RasMgrKey, "AllowPap", 0)],
                     RemoveOps = [RegOp.DeleteValue(RasMgrKey, "AllowPap")],
                     DetectOps = [RegOp.CheckDword(RasMgrKey, "AllowPap", 0)],
@@ -14687,7 +14687,8 @@ internal static class PolicyNetwork
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "VPN sessions are terminated after 20 minutes of idle traffic. AOVPN clients reconnect automatically; manual VPN users must reconnect.",
+                    ImpactNote =
+                        "VPN sessions are terminated after 20 minutes of idle traffic. AOVPN clients reconnect automatically; manual VPN users must reconnect.",
                     ApplyOps = [RegOp.SetDword(RasMgrKey, "IdleTimeoutMinutes", 20)],
                     RemoveOps = [RegOp.DeleteValue(RasMgrKey, "IdleTimeoutMinutes")],
                     DetectOps = [RegOp.CheckDword(RasMgrKey, "IdleTimeoutMinutes", 20)],
@@ -14704,7 +14705,8 @@ internal static class PolicyNetwork
                     CorpSafe = true,
                     ImpactScore = 4,
                     SafetyRating = 5,
-                    ImpactNote = "Breaks PPTP VPN connections. Very old client operating systems (Windows XP, early Android) using PPTP will not connect. IKEv2/SSL clients are unaffected.",
+                    ImpactNote =
+                        "Breaks PPTP VPN connections. Very old client operating systems (Windows XP, early Android) using PPTP will not connect. IKEv2/SSL clients are unaffected.",
                     ApplyOps = [RegOp.SetDword(RasMgrKey, "AllowPptp", 0)],
                     RemoveOps = [RegOp.DeleteValue(RasMgrKey, "AllowPptp")],
                     DetectOps = [RegOp.CheckDword(RasMgrKey, "AllowPptp", 0)],
@@ -14721,7 +14723,8 @@ internal static class PolicyNetwork
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "Enables IKEv2 MOBIKE for seamless network transitions. Requires VPN server support for MOBIKE (Windows Server 2016+ RRAS does support it).",
+                    ImpactNote =
+                        "Enables IKEv2 MOBIKE for seamless network transitions. Requires VPN server support for MOBIKE (Windows Server 2016+ RRAS does support it).",
                     ApplyOps = [RegOp.SetDword(RasMgrKey, "EnableIkev2Mobility", 1)],
                     RemoveOps = [RegOp.DeleteValue(RasMgrKey, "EnableIkev2Mobility")],
                     DetectOps = [RegOp.CheckDword(RasMgrKey, "EnableIkev2Mobility", 1)],
@@ -14738,7 +14741,8 @@ internal static class PolicyNetwork
                     CorpSafe = true,
                     ImpactScore = 4,
                     SafetyRating = 5,
-                    ImpactNote = "Users must enter VPN credentials at each connection. Does not affect certificate-based or SSO (SAML/OIDC) VPN authentication where no password is stored.",
+                    ImpactNote =
+                        "Users must enter VPN credentials at each connection. Does not affect certificate-based or SSO (SAML/OIDC) VPN authentication where no password is stored.",
                     ApplyOps = [RegOp.SetDword(RasMgrKey, "DisablePasswordCaching", 1)],
                     RemoveOps = [RegOp.DeleteValue(RasMgrKey, "DisablePasswordCaching")],
                     DetectOps = [RegOp.CheckDword(RasMgrKey, "DisablePasswordCaching", 1)],
@@ -14755,7 +14759,8 @@ internal static class PolicyNetwork
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "Requires a RADIUS server configured in Windows RRAS. If no RADIUS server is configured, this setting has no effect.",
+                    ImpactNote =
+                        "Requires a RADIUS server configured in Windows RRAS. If no RADIUS server is configured, this setting has no effect.",
                     ApplyOps = [RegOp.SetDword(RasMgrKey, "EnableAccounting", 1)],
                     RemoveOps = [RegOp.DeleteValue(RasMgrKey, "EnableAccounting")],
                     DetectOps = [RegOp.CheckDword(RasMgrKey, "EnableAccounting", 1)],
@@ -14772,13 +14777,13 @@ internal static class PolicyNetwork
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 4,
-                    ImpactNote = "VPN connections above the configured limit are rejected. Adjust value based on server CPU/RAM capacity and expected peak concurrent user count.",
+                    ImpactNote =
+                        "VPN connections above the configured limit are rejected. Adjust value based on server CPU/RAM capacity and expected peak concurrent user count.",
                     ApplyOps = [RegOp.SetDword(RasMgrKey, "MaxConcurrentConnections", 100)],
                     RemoveOps = [RegOp.DeleteValue(RasMgrKey, "MaxConcurrentConnections")],
                     DetectOps = [RegOp.CheckDword(RasMgrKey, "MaxConcurrentConnections", 100)],
                 },
             ];
-
     }
 
     // ── SharedFoldersSmbPolicy ──
@@ -14900,7 +14905,8 @@ internal static class PolicyNetwork
                 Id = "smbshare-disable-admin-shares",
                 Label = "Disable Default Administrative SMB Shares",
                 Category = "Network",
-                Description = "Disables automatic creation of administrative shares (C$, ADMIN$, IPC$), reducing remote administrative access surface.",
+                Description =
+                    "Disables automatic creation of administrative shares (C$, ADMIN$, IPC$), reducing remote administrative access surface.",
                 Tags = ["smb", "network", "security", "hardening"],
                 NeedsAdmin = true,
                 CorpSafe = false,
@@ -14913,7 +14919,8 @@ internal static class PolicyNetwork
                 Id = "smbshare-set-smb-max-connections",
                 Label = "Set Maximum Concurrent SMB Connections",
                 Category = "Network",
-                Description = "Limits the number of concurrent SMB connections to 16,777,216 (MaxMpxCt), preventing resource exhaustion from SMB floods.",
+                Description =
+                    "Limits the number of concurrent SMB connections to 16,777,216 (MaxMpxCt), preventing resource exhaustion from SMB floods.",
                 Tags = ["smb", "network", "performance", "security"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -14922,7 +14929,6 @@ internal static class PolicyNetwork
                 DetectOps = [RegOp.CheckDword(LanSrv, "MaxMpxCt", 16777216)],
             },
         ];
-
     }
 
     // ── SmbEncryptionPolicy ──
@@ -15103,7 +15109,6 @@ internal static class PolicyNetwork
                 DetectOps = [RegOp.CheckDword(Key, "AuditSMBConnections", 1)],
             },
         ];
-
     }
 
     // ── SmbNetworking ──
@@ -15293,7 +15298,6 @@ internal static class PolicyNetwork
                 DetectOps = [RegOp.CheckDword(LmWks, "MaxCollectionCount", 32)],
             },
         ];
-
     }
 
     // ── SmbServerHardeningPolicy ──
@@ -15304,169 +15308,179 @@ internal static class PolicyNetwork
         private const string PolKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\LanmanServer";
 
         public static IReadOnlyList<TweakDef> Data =>
-        [
-            new TweakDef
-            {
-                Id           = "smbsvr-require-server-signing",
-                Label        = "Require SMB Server Packet Signing on All Connections",
-                Category = "Network",
-                Description  = "Configures the SMB server to require packet signing on all incoming connections, preventing NTLM relay attacks and connection hijacking by clients that do not sign their SMB traffic.",
-                Tags         = ["smb", "signing", "server", "ntlm-relay", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 5,
-                SafetyRating = 5,
-                ImpactNote   = "SMB server signing required; unsigned connections rejected. NTLM relay and session hijacking mitigated.",
-                ApplyOps     = [RegOp.SetDword(Key, "RequireSecuritySignature", 1)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "RequireSecuritySignature")],
-                DetectOps    = [RegOp.CheckDword(Key, "RequireSecuritySignature", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "smbsvr-require-client-signing",
-                Label        = "Require SMB Client Packet Signing for All Outbound Connections",
-                Category = "Network",
-                Description  = "Configures the SMB client (LanmanWorkstation) to require packet signing on all outbound SMB connections, ensuring this machine never sends unsigned SMB traffic to remote servers.",
-                Tags         = ["smb", "signing", "client", "outbound", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 5,
-                SafetyRating = 5,
-                ImpactNote   = "SMB client signing required for outbound connections; session tampering against network shares blocked.",
-                ApplyOps     = [RegOp.SetDword(SrvKey, "RequireSecuritySignature", 1)],
-                RemoveOps    = [RegOp.DeleteValue(SrvKey, "RequireSecuritySignature")],
-                DetectOps    = [RegOp.CheckDword(SrvKey, "RequireSecuritySignature", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "smbsvr-disable-smb1-server",
-                Label        = "Disable SMBv1 Protocol on Server (Remove EternalBlue Attack Surface)",
-                Category = "Network",
-                Description  = "Completely disables the SMBv1 server protocol, removing the attack surface exploited by EternalBlue (MS17-010), WannaCry, and NotPetya. SMBv2 and SMBv3 are fully supported by all versions of Windows since Vista.",
-                Tags         = ["smb", "smb1", "eternalblue", "wannacry", "security", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 5,
-                SafetyRating = 5,
-                ImpactNote   = "SMBv1 server disabled; EternalBlue/WannaCry/NotPetya attack surface eliminated.",
-                ApplyOps     = [RegOp.SetDword(Key, "SMB1", 0)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "SMB1")],
-                DetectOps    = [RegOp.CheckDword(Key, "SMB1", 0)],
-            },
-            new TweakDef
-            {
-                Id           = "smbsvr-disable-smb-compression",
-                Label        = "Disable SMBv3 Compression to Prevent SMBleed Attacks",
-                Category = "Network",
-                Description  = "Disables SMB compression on the server, mitigating SMBleed (CVE-2020-1206) and similar compression-path vulnerabilities that can allow unauthenticated reading of uninitialized kernel memory through SMB3 compressed data.",
-                Tags         = ["smb", "compression", "smbleed", "cve-2020-1206", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 4,
-                SafetyRating = 5,
-                ImpactNote   = "SMBv3 compression disabled; SMBleed class vulnerabilities mitigated. Minor performance impact on compressed transfers.",
-                ApplyOps     = [RegOp.SetDword(Key, "DisableCompression", 1)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "DisableCompression")],
-                DetectOps    = [RegOp.CheckDword(Key, "DisableCompression", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "smbsvr-enable-smb-encryption",
-                Label        = "Enable SMBv3 Encryption for All Shares (Enforce in Transit)",
-                Category = "Network",
-                Description  = "Enables SMBv3 end-to-end encryption for all SMB connections to this server, ensuring file transfer content is AES-encrypted in transit and cannot be captured in plaintext on the network.",
-                Tags         = ["smb", "encryption", "aes", "in-transit", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 5,
-                SafetyRating = 5,
-                ImpactNote   = "SMBv3 encryption enforced; file data is AES-encrypted in transit. Requires Windows 8/2012 or later clients.",
-                ApplyOps     = [RegOp.SetDword(Key, "EncryptData", 1)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "EncryptData")],
-                DetectOps    = [RegOp.CheckDword(Key, "EncryptData", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "smbsvr-disable-guest-fallback",
-                Label        = "Disable SMB Guest Authentication Fallback",
-                Category = "Network",
-                Description  = "Prevents the SMB client from automatically falling back to anonymous guest authentication when the provided credentials are rejected, stopping silent elevation-of-failure-to-anonymous-access on misconfigured shares.",
-                Tags         = ["smb", "guest", "anonymous", "fallback", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 4,
-                SafetyRating = 5,
-                ImpactNote   = "SMB guest auth fallback disabled; authentication failures are hard failures, not silent anonymous access.",
-                ApplyOps     = [RegOp.SetDword(SrvKey, "EnableInsecureGuestLogons", 0)],
-                RemoveOps    = [RegOp.DeleteValue(SrvKey, "EnableInsecureGuestLogons")],
-                DetectOps    = [RegOp.CheckDword(SrvKey, "EnableInsecureGuestLogons", 0)],
-            },
-            new TweakDef
-            {
-                Id           = "smbsvr-set-max-connections-512",
-                Label        = "Set SMB Server Maximum Concurrent Connections to 512",
-                Category = "Network",
-                Description  = "Sets the SMB server maximum concurrent user sessions to 512, limiting resource exhaustion from session flooding attacks that open thousands of SMB connections without completing authentication.",
-                Tags         = ["smb", "max-connections", "dos-prevention", "resource-limit", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 3,
-                SafetyRating = 5,
-                ImpactNote   = "SMB concurrent sessions limited to 512; connection flooding resource exhaustion mitigated.",
-                ApplyOps     = [RegOp.SetDword(Key, "MaxMpxCt", 512)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "MaxMpxCt")],
-                DetectOps    = [RegOp.CheckDword(Key, "MaxMpxCt", 512)],
-            },
-            new TweakDef
-            {
-                Id           = "smbsvr-log-auth-failures",
-                Label        = "Log SMB Authentication Failure Events in Security Log",
-                Category = "Network",
-                Description  = "Enables Security event log audit entries for failed SMB authentication attempts, providing visibility into brute-force attacks and pass-the-hash attempts against network shares.",
-                Tags         = ["smb", "auth-failure", "event-log", "audit", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 4,
-                SafetyRating = 5,
-                ImpactNote   = "SMB auth failure events logged in Security log; brute-force and pass-the-hash attempts visible.",
-                ApplyOps     = [RegOp.SetDword(PolKey, "LogAuthFailures", 1)],
-                RemoveOps    = [RegOp.DeleteValue(PolKey, "LogAuthFailures")],
-                DetectOps    = [RegOp.CheckDword(PolKey, "LogAuthFailures", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "smbsvr-disable-admin-shares",
-                Label        = "Disable Automatic Hidden Administrative Shares (C$, D$, ADMIN$)",
-                Category = "Network",
-                Description  = "Prevents the LanmanServer service from automatically creating hidden administrative shares (C$, D$, ADMIN$) at startup, reducing the attack surface for lateral movement via default administrative share enumeration.",
-                Tags         = ["smb", "admin-shares", "lateral-movement", "enumeration", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 4,
-                SafetyRating = 5,
-                ImpactNote   = "Hidden admin shares (C$, ADMIN$) disabled; automatic lateral movement share targets removed.",
-                ApplyOps     = [RegOp.SetDword(Key, "AutoShareServer", 0)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "AutoShareServer")],
-                DetectOps    = [RegOp.CheckDword(Key, "AutoShareServer", 0)],
-            },
-            new TweakDef
-            {
-                Id           = "smbsvr-disable-smb-telemetry",
-                Label        = "Disable SMB Server Telemetry Reporting to Microsoft",
-                Category = "Network",
-                Description  = "Prevents the SMB server from sending connection statistics, negotiated cipher suites, session rates, and protocol version telemetry to Microsoft.",
-                Tags         = ["smb", "telemetry", "privacy", "microsoft", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 2,
-                SafetyRating = 5,
-                ImpactNote   = "SMB telemetry to Microsoft disabled; session rates and cipher negotiation data not sent to cloud.",
-                ApplyOps     = [RegOp.SetDword(PolKey, "DisableSMBTelemetry", 1)],
-                RemoveOps    = [RegOp.DeleteValue(PolKey, "DisableSMBTelemetry")],
-                DetectOps    = [RegOp.CheckDword(PolKey, "DisableSMBTelemetry", 1)],
-            },
-        ];
-
+            [
+                new TweakDef
+                {
+                    Id = "smbsvr-require-server-signing",
+                    Label = "Require SMB Server Packet Signing on All Connections",
+                    Category = "Network",
+                    Description =
+                        "Configures the SMB server to require packet signing on all incoming connections, preventing NTLM relay attacks and connection hijacking by clients that do not sign their SMB traffic.",
+                    Tags = ["smb", "signing", "server", "ntlm-relay", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 5,
+                    SafetyRating = 5,
+                    ImpactNote = "SMB server signing required; unsigned connections rejected. NTLM relay and session hijacking mitigated.",
+                    ApplyOps = [RegOp.SetDword(Key, "RequireSecuritySignature", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "RequireSecuritySignature")],
+                    DetectOps = [RegOp.CheckDword(Key, "RequireSecuritySignature", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "smbsvr-require-client-signing",
+                    Label = "Require SMB Client Packet Signing for All Outbound Connections",
+                    Category = "Network",
+                    Description =
+                        "Configures the SMB client (LanmanWorkstation) to require packet signing on all outbound SMB connections, ensuring this machine never sends unsigned SMB traffic to remote servers.",
+                    Tags = ["smb", "signing", "client", "outbound", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 5,
+                    SafetyRating = 5,
+                    ImpactNote = "SMB client signing required for outbound connections; session tampering against network shares blocked.",
+                    ApplyOps = [RegOp.SetDword(SrvKey, "RequireSecuritySignature", 1)],
+                    RemoveOps = [RegOp.DeleteValue(SrvKey, "RequireSecuritySignature")],
+                    DetectOps = [RegOp.CheckDword(SrvKey, "RequireSecuritySignature", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "smbsvr-disable-smb1-server",
+                    Label = "Disable SMBv1 Protocol on Server (Remove EternalBlue Attack Surface)",
+                    Category = "Network",
+                    Description =
+                        "Completely disables the SMBv1 server protocol, removing the attack surface exploited by EternalBlue (MS17-010), WannaCry, and NotPetya. SMBv2 and SMBv3 are fully supported by all versions of Windows since Vista.",
+                    Tags = ["smb", "smb1", "eternalblue", "wannacry", "security", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 5,
+                    SafetyRating = 5,
+                    ImpactNote = "SMBv1 server disabled; EternalBlue/WannaCry/NotPetya attack surface eliminated.",
+                    ApplyOps = [RegOp.SetDword(Key, "SMB1", 0)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "SMB1")],
+                    DetectOps = [RegOp.CheckDword(Key, "SMB1", 0)],
+                },
+                new TweakDef
+                {
+                    Id = "smbsvr-disable-smb-compression",
+                    Label = "Disable SMBv3 Compression to Prevent SMBleed Attacks",
+                    Category = "Network",
+                    Description =
+                        "Disables SMB compression on the server, mitigating SMBleed (CVE-2020-1206) and similar compression-path vulnerabilities that can allow unauthenticated reading of uninitialized kernel memory through SMB3 compressed data.",
+                    Tags = ["smb", "compression", "smbleed", "cve-2020-1206", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote =
+                        "SMBv3 compression disabled; SMBleed class vulnerabilities mitigated. Minor performance impact on compressed transfers.",
+                    ApplyOps = [RegOp.SetDword(Key, "DisableCompression", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "DisableCompression")],
+                    DetectOps = [RegOp.CheckDword(Key, "DisableCompression", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "smbsvr-enable-smb-encryption",
+                    Label = "Enable SMBv3 Encryption for All Shares (Enforce in Transit)",
+                    Category = "Network",
+                    Description =
+                        "Enables SMBv3 end-to-end encryption for all SMB connections to this server, ensuring file transfer content is AES-encrypted in transit and cannot be captured in plaintext on the network.",
+                    Tags = ["smb", "encryption", "aes", "in-transit", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 5,
+                    SafetyRating = 5,
+                    ImpactNote = "SMBv3 encryption enforced; file data is AES-encrypted in transit. Requires Windows 8/2012 or later clients.",
+                    ApplyOps = [RegOp.SetDword(Key, "EncryptData", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "EncryptData")],
+                    DetectOps = [RegOp.CheckDword(Key, "EncryptData", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "smbsvr-disable-guest-fallback",
+                    Label = "Disable SMB Guest Authentication Fallback",
+                    Category = "Network",
+                    Description =
+                        "Prevents the SMB client from automatically falling back to anonymous guest authentication when the provided credentials are rejected, stopping silent elevation-of-failure-to-anonymous-access on misconfigured shares.",
+                    Tags = ["smb", "guest", "anonymous", "fallback", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "SMB guest auth fallback disabled; authentication failures are hard failures, not silent anonymous access.",
+                    ApplyOps = [RegOp.SetDword(SrvKey, "EnableInsecureGuestLogons", 0)],
+                    RemoveOps = [RegOp.DeleteValue(SrvKey, "EnableInsecureGuestLogons")],
+                    DetectOps = [RegOp.CheckDword(SrvKey, "EnableInsecureGuestLogons", 0)],
+                },
+                new TweakDef
+                {
+                    Id = "smbsvr-set-max-connections-512",
+                    Label = "Set SMB Server Maximum Concurrent Connections to 512",
+                    Category = "Network",
+                    Description =
+                        "Sets the SMB server maximum concurrent user sessions to 512, limiting resource exhaustion from session flooding attacks that open thousands of SMB connections without completing authentication.",
+                    Tags = ["smb", "max-connections", "dos-prevention", "resource-limit", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "SMB concurrent sessions limited to 512; connection flooding resource exhaustion mitigated.",
+                    ApplyOps = [RegOp.SetDword(Key, "MaxMpxCt", 512)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "MaxMpxCt")],
+                    DetectOps = [RegOp.CheckDword(Key, "MaxMpxCt", 512)],
+                },
+                new TweakDef
+                {
+                    Id = "smbsvr-log-auth-failures",
+                    Label = "Log SMB Authentication Failure Events in Security Log",
+                    Category = "Network",
+                    Description =
+                        "Enables Security event log audit entries for failed SMB authentication attempts, providing visibility into brute-force attacks and pass-the-hash attempts against network shares.",
+                    Tags = ["smb", "auth-failure", "event-log", "audit", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "SMB auth failure events logged in Security log; brute-force and pass-the-hash attempts visible.",
+                    ApplyOps = [RegOp.SetDword(PolKey, "LogAuthFailures", 1)],
+                    RemoveOps = [RegOp.DeleteValue(PolKey, "LogAuthFailures")],
+                    DetectOps = [RegOp.CheckDword(PolKey, "LogAuthFailures", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "smbsvr-disable-admin-shares",
+                    Label = "Disable Automatic Hidden Administrative Shares (C$, D$, ADMIN$)",
+                    Category = "Network",
+                    Description =
+                        "Prevents the LanmanServer service from automatically creating hidden administrative shares (C$, D$, ADMIN$) at startup, reducing the attack surface for lateral movement via default administrative share enumeration.",
+                    Tags = ["smb", "admin-shares", "lateral-movement", "enumeration", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "Hidden admin shares (C$, ADMIN$) disabled; automatic lateral movement share targets removed.",
+                    ApplyOps = [RegOp.SetDword(Key, "AutoShareServer", 0)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "AutoShareServer")],
+                    DetectOps = [RegOp.CheckDword(Key, "AutoShareServer", 0)],
+                },
+                new TweakDef
+                {
+                    Id = "smbsvr-disable-smb-telemetry",
+                    Label = "Disable SMB Server Telemetry Reporting to Microsoft",
+                    Category = "Network",
+                    Description =
+                        "Prevents the SMB server from sending connection statistics, negotiated cipher suites, session rates, and protocol version telemetry to Microsoft.",
+                    Tags = ["smb", "telemetry", "privacy", "microsoft", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 2,
+                    SafetyRating = 5,
+                    ImpactNote = "SMB telemetry to Microsoft disabled; session rates and cipher negotiation data not sent to cloud.",
+                    ApplyOps = [RegOp.SetDword(PolKey, "DisableSMBTelemetry", 1)],
+                    RemoveOps = [RegOp.DeleteValue(PolKey, "DisableSMBTelemetry")],
+                    DetectOps = [RegOp.CheckDword(PolKey, "DisableSMBTelemetry", 1)],
+                },
+            ];
     }
 
     // ── SmbServerPolicy ──
@@ -15617,7 +15631,6 @@ internal static class PolicyNetwork
                 DetectOps = [RegOp.CheckDword(SmbSrv, "DiskSpaceThreshold", 10)],
             },
         ];
-
     }
 
     // ── SnmpPolicy ──
@@ -15810,7 +15823,6 @@ internal static class PolicyNetwork
                 DetectOps = [RegOp.CheckDword(SnmpKey, "RestrictTrapReceivers", 1)],
             },
         ];
-
     }
 
     // ── SshHardening ──
@@ -16080,7 +16092,6 @@ internal static class PolicyNetwork
                 DetectAction = () => DetectSshdDirective("MACs", "hmac-sha2-512,hmac-sha2-256"),
             },
         ];
-
     }
 
     // ── VoipQualityPolicy ──
@@ -16089,181 +16100,190 @@ internal static class PolicyNetwork
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Teams";
 
         public static IReadOnlyList<TweakDef> Data =>
-        [
-            new TweakDef
-            {
-                Id = "voipqos-set-teams-audio-dscp-value",
-                Label = "VoIP QoS: Mark Teams Audio RTP with DSCP EF (46)",
-                Category = "Network",
-                Description = "Sets AudioDscpValue=46 in Teams QoS policy. Instructs Teams to mark all real-time audio RTP packets with DSCP EF (Expedited Forwarding = 46, the highest priority class). " +
-                    "On enterprise networks with QoS-aware switches and routers, EF-marked packets receive the smallest queuing delay and lowest drop probability, which directly reduces jitter and one-way latency in Teams calls. " +
-                    "This setting is distinct from the generic Windows QoS multimedia scheduling rate and applies specifically to the Teams media engine RTP streams.",
-                Tags = ["teams", "voip", "qos", "dscp", "audio", "rtp"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                ImpactNote = "Marks Teams audio RTP with EF DSCP 46; critical for low-latency voice on congested enterprise networks.",
-                ApplyOps = [RegOp.SetDword(Key, "AudioDscpValue", 46)],
-                RemoveOps = [RegOp.DeleteValue(Key, "AudioDscpValue")],
-                DetectOps = [RegOp.CheckDword(Key, "AudioDscpValue", 46)],
-            },
-            new TweakDef
-            {
-                Id = "voipqos-set-teams-video-dscp-value",
-                Label = "VoIP QoS: Mark Teams Video RTP with DSCP AF41 (34)",
-                Category = "Network",
-                Description = "Sets VideoDscpValue=34 in Teams QoS policy. Marks Teams video RTP packets with DSCP AF41 (Assured Forwarding 41 = 34). " +
-                    "AF41 is the IETF recommendation for interactive video conferencing traffic. It receives higher priority than best-effort but is de-prioritised below EF (audio). " +
-                    "Separating audio (EF) and video (AF41) ensures audio is never starved by high-bitrate video bursts during congestion.",
-                Tags = ["teams", "voip", "qos", "dscp", "video", "rtp"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                ImpactNote = "Marks Teams video with AF41 DSCP 34; prevents video bursts from starving audio on saturated links.",
-                ApplyOps = [RegOp.SetDword(Key, "VideoDscpValue", 34)],
-                RemoveOps = [RegOp.DeleteValue(Key, "VideoDscpValue")],
-                DetectOps = [RegOp.CheckDword(Key, "VideoDscpValue", 34)],
-            },
-            new TweakDef
-            {
-                Id = "voipqos-set-teams-appshar-dscp-value",
-                Label = "VoIP QoS: Mark Teams App-Sharing with DSCP AF21 (18)",
-                Category = "Network",
-                Description = "Sets AppShareDscpValue=18 in Teams QoS policy. Marks Teams application-sharing and desktop-sharing RTP streams with DSCP AF21 (Assured Forwarding 21 = 18). " +
-                    "Screen share generates large and bursty traffic which should be deprioritised relative to live audio and video to prevent real-time media degredation during presentations.",
-                Tags = ["teams", "voip", "qos", "dscp", "screenshare", "rtp"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Marks app-sharing with AF21 DSCP 18; prevents screen share bursts from degrading audio/video quality.",
-                ApplyOps = [RegOp.SetDword(Key, "AppShareDscpValue", 18)],
-                RemoveOps = [RegOp.DeleteValue(Key, "AppShareDscpValue")],
-                DetectOps = [RegOp.CheckDword(Key, "AppShareDscpValue", 18)],
-            },
-            new TweakDef
-            {
-                Id = "voipqos-enable-teams-audio-port-range",
-                Label = "VoIP QoS: Enable Teams-Specific Audio UDP Port Range",
-                Category = "Network",
-                Description = "Sets AudioPortsEnabled=1 in Teams QoS policy. Enables the use of a dedicated UDP port range for Teams audio media. " +
-                    "Port-based QoS rules on network switches and firewalls can then classify and prioritise Teams audio traffic from these specific ports rather than relying solely on DSCP markings, which are sometimes stripped by ISPs.",
-                Tags = ["teams", "voip", "qos", "ports", "udp", "audio"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Enables fixed port range for Teams audio; allows port-based QoS classification in addition to DSCP.",
-                ApplyOps = [RegOp.SetDword(Key, "AudioPortsEnabled", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "AudioPortsEnabled")],
-                DetectOps = [RegOp.CheckDword(Key, "AudioPortsEnabled", 1)],
-            },
-            new TweakDef
-            {
-                Id = "voipqos-set-teams-audio-port-start-50000",
-                Label = "VoIP QoS: Set Teams Audio Port Range Start to 50000",
-                Category = "Network",
-                Description = "Sets AudioPortStart=50000 in Teams QoS policy. Configures the start of the UDP port range used by Teams audio media to port 50000. " +
-                    "This port base aligns with the Microsoft-recommended range for Teams voice and allows network administrators to create firewall ACLs and QoS policies targeting the well-known 50000–50019 range.",
-                Tags = ["teams", "voip", "qos", "ports", "audio", "udp"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Sets audio port range start to 50000 per Microsoft recommendation; enables precise firewall and QoS rules.",
-                ApplyOps = [RegOp.SetDword(Key, "AudioPortStart", 50000)],
-                RemoveOps = [RegOp.DeleteValue(Key, "AudioPortStart")],
-                DetectOps = [RegOp.CheckDword(Key, "AudioPortStart", 50000)],
-            },
-            new TweakDef
-            {
-                Id = "voipqos-set-teams-audio-port-count-20",
-                Label = "VoIP QoS: Set Teams Audio Port Count to 20",
-                Category = "Network",
-                Description = "Sets AudioPortCount=20 in Teams QoS policy. Allocates 20 consecutive UDP ports for Teams audio media starting from AudioPortStart. " +
-                    "A count of 20 provides enough ports for simultaneous call sessions on a single machine while keeping the range narrow enough for precise firewall and QoS ACL rules.",
-                Tags = ["teams", "voip", "qos", "ports", "audio", "udp"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                ImpactNote = "Allocates 20 UDP ports for Teams audio; balances multi-session capacity with narrow QoS rule precision.",
-                ApplyOps = [RegOp.SetDword(Key, "AudioPortCount", 20)],
-                RemoveOps = [RegOp.DeleteValue(Key, "AudioPortCount")],
-                DetectOps = [RegOp.CheckDword(Key, "AudioPortCount", 20)],
-            },
-            new TweakDef
-            {
-                Id = "voipqos-enable-teams-video-port-range",
-                Label = "VoIP QoS: Enable Teams-Specific Video UDP Port Range",
-                Category = "Network",
-                Description = "Sets VideoPortsEnabled=1 in Teams QoS policy. Enables the use of a dedicated UDP port range for Teams video media streams. " +
-                    "Separating video on its own port range allows network equipment to apply different QoS policies to audio and video independently, which is important when network bandwidth needs to preferentially protect audio quality over video.",
-                Tags = ["teams", "voip", "qos", "ports", "video", "udp"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Enables dedicated video port range; allows separate QoS treatment of audio versus video streams.",
-                ApplyOps = [RegOp.SetDword(Key, "VideoPortsEnabled", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "VideoPortsEnabled")],
-                DetectOps = [RegOp.CheckDword(Key, "VideoPortsEnabled", 1)],
-            },
-            new TweakDef
-            {
-                Id = "voipqos-set-teams-video-port-start-50020",
-                Label = "VoIP QoS: Set Teams Video Port Range Start to 50020",
-                Category = "Network",
-                Description = "Sets VideoPortStart=50020 in Teams QoS policy. Sets the starting UDP port for Teams video media to 50020, immediately following the audio port range (50000–50019). " +
-                    "This layout allows a single contiguous firewall rule (50000–50039) to cover both audio and video, while still allowing separate DSCP markings to be applied per-range.",
-                Tags = ["teams", "voip", "qos", "ports", "video", "udp"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                ImpactNote = "Sets video port start to 50020; aligns with audio range for manageable firewall rule design.",
-                ApplyOps = [RegOp.SetDword(Key, "VideoPortStart", 50020)],
-                RemoveOps = [RegOp.DeleteValue(Key, "VideoPortStart")],
-                DetectOps = [RegOp.CheckDword(Key, "VideoPortStart", 50020)],
-            },
-            new TweakDef
-            {
-                Id = "voipqos-set-teams-video-port-count-20",
-                Label = "VoIP QoS: Set Teams Video Port Count to 20",
-                Category = "Network",
-                Description = "Sets VideoPortCount=20 in Teams QoS policy. Allocates 20 UDP ports for Teams video media starting at VideoPortStart. " +
-                    "20 ports accommodates multiple simultaneous video sessions and gallery view scenarios without creating an overly broad firewall footprint.",
-                Tags = ["teams", "voip", "qos", "ports", "video", "udp"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                ImpactNote = "Allocates 20 UDP ports for Teams video; supports gallery view with a narrow, manageable port range.",
-                ApplyOps = [RegOp.SetDword(Key, "VideoPortCount", 20)],
-                RemoveOps = [RegOp.DeleteValue(Key, "VideoPortCount")],
-                DetectOps = [RegOp.CheckDword(Key, "VideoPortCount", 20)],
-            },
-            new TweakDef
-            {
-                Id = "voipqos-enable-teams-appshar-port-range",
-                Label = "VoIP QoS: Enable Teams App-Sharing UDP Port Range",
-                Category = "Network",
-                Description = "Sets AppSharePortsEnabled=1 in Teams QoS policy. Enables a dedicated UDP port range for Teams application-sharing and desktop-sharing media streams. " +
-                    "Isolating app-sharing on its own port range allows network QoS policies to apply lower priority scheduling to screen share traffic while still guaranteeing audio and video delivery during congestion.",
-                Tags = ["teams", "voip", "qos", "ports", "screenshare", "udp"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Enables dedicated app-sharing port range; decouple screen share QoS from audio/video port policies.",
-                ApplyOps = [RegOp.SetDword(Key, "AppSharePortsEnabled", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "AppSharePortsEnabled")],
-                DetectOps = [RegOp.CheckDword(Key, "AppSharePortsEnabled", 1)],
-            },
-        ];
-
+            [
+                new TweakDef
+                {
+                    Id = "voipqos-set-teams-audio-dscp-value",
+                    Label = "VoIP QoS: Mark Teams Audio RTP with DSCP EF (46)",
+                    Category = "Network",
+                    Description =
+                        "Sets AudioDscpValue=46 in Teams QoS policy. Instructs Teams to mark all real-time audio RTP packets with DSCP EF (Expedited Forwarding = 46, the highest priority class). "
+                        + "On enterprise networks with QoS-aware switches and routers, EF-marked packets receive the smallest queuing delay and lowest drop probability, which directly reduces jitter and one-way latency in Teams calls. "
+                        + "This setting is distinct from the generic Windows QoS multimedia scheduling rate and applies specifically to the Teams media engine RTP streams.",
+                    Tags = ["teams", "voip", "qos", "dscp", "audio", "rtp"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "Marks Teams audio RTP with EF DSCP 46; critical for low-latency voice on congested enterprise networks.",
+                    ApplyOps = [RegOp.SetDword(Key, "AudioDscpValue", 46)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "AudioDscpValue")],
+                    DetectOps = [RegOp.CheckDword(Key, "AudioDscpValue", 46)],
+                },
+                new TweakDef
+                {
+                    Id = "voipqos-set-teams-video-dscp-value",
+                    Label = "VoIP QoS: Mark Teams Video RTP with DSCP AF41 (34)",
+                    Category = "Network",
+                    Description =
+                        "Sets VideoDscpValue=34 in Teams QoS policy. Marks Teams video RTP packets with DSCP AF41 (Assured Forwarding 41 = 34). "
+                        + "AF41 is the IETF recommendation for interactive video conferencing traffic. It receives higher priority than best-effort but is de-prioritised below EF (audio). "
+                        + "Separating audio (EF) and video (AF41) ensures audio is never starved by high-bitrate video bursts during congestion.",
+                    Tags = ["teams", "voip", "qos", "dscp", "video", "rtp"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "Marks Teams video with AF41 DSCP 34; prevents video bursts from starving audio on saturated links.",
+                    ApplyOps = [RegOp.SetDword(Key, "VideoDscpValue", 34)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "VideoDscpValue")],
+                    DetectOps = [RegOp.CheckDword(Key, "VideoDscpValue", 34)],
+                },
+                new TweakDef
+                {
+                    Id = "voipqos-set-teams-appshar-dscp-value",
+                    Label = "VoIP QoS: Mark Teams App-Sharing with DSCP AF21 (18)",
+                    Category = "Network",
+                    Description =
+                        "Sets AppShareDscpValue=18 in Teams QoS policy. Marks Teams application-sharing and desktop-sharing RTP streams with DSCP AF21 (Assured Forwarding 21 = 18). "
+                        + "Screen share generates large and bursty traffic which should be deprioritised relative to live audio and video to prevent real-time media degredation during presentations.",
+                    Tags = ["teams", "voip", "qos", "dscp", "screenshare", "rtp"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "Marks app-sharing with AF21 DSCP 18; prevents screen share bursts from degrading audio/video quality.",
+                    ApplyOps = [RegOp.SetDword(Key, "AppShareDscpValue", 18)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "AppShareDscpValue")],
+                    DetectOps = [RegOp.CheckDword(Key, "AppShareDscpValue", 18)],
+                },
+                new TweakDef
+                {
+                    Id = "voipqos-enable-teams-audio-port-range",
+                    Label = "VoIP QoS: Enable Teams-Specific Audio UDP Port Range",
+                    Category = "Network",
+                    Description =
+                        "Sets AudioPortsEnabled=1 in Teams QoS policy. Enables the use of a dedicated UDP port range for Teams audio media. "
+                        + "Port-based QoS rules on network switches and firewalls can then classify and prioritise Teams audio traffic from these specific ports rather than relying solely on DSCP markings, which are sometimes stripped by ISPs.",
+                    Tags = ["teams", "voip", "qos", "ports", "udp", "audio"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "Enables fixed port range for Teams audio; allows port-based QoS classification in addition to DSCP.",
+                    ApplyOps = [RegOp.SetDword(Key, "AudioPortsEnabled", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "AudioPortsEnabled")],
+                    DetectOps = [RegOp.CheckDword(Key, "AudioPortsEnabled", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "voipqos-set-teams-audio-port-start-50000",
+                    Label = "VoIP QoS: Set Teams Audio Port Range Start to 50000",
+                    Category = "Network",
+                    Description =
+                        "Sets AudioPortStart=50000 in Teams QoS policy. Configures the start of the UDP port range used by Teams audio media to port 50000. "
+                        + "This port base aligns with the Microsoft-recommended range for Teams voice and allows network administrators to create firewall ACLs and QoS policies targeting the well-known 50000–50019 range.",
+                    Tags = ["teams", "voip", "qos", "ports", "audio", "udp"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "Sets audio port range start to 50000 per Microsoft recommendation; enables precise firewall and QoS rules.",
+                    ApplyOps = [RegOp.SetDword(Key, "AudioPortStart", 50000)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "AudioPortStart")],
+                    DetectOps = [RegOp.CheckDword(Key, "AudioPortStart", 50000)],
+                },
+                new TweakDef
+                {
+                    Id = "voipqos-set-teams-audio-port-count-20",
+                    Label = "VoIP QoS: Set Teams Audio Port Count to 20",
+                    Category = "Network",
+                    Description =
+                        "Sets AudioPortCount=20 in Teams QoS policy. Allocates 20 consecutive UDP ports for Teams audio media starting from AudioPortStart. "
+                        + "A count of 20 provides enough ports for simultaneous call sessions on a single machine while keeping the range narrow enough for precise firewall and QoS ACL rules.",
+                    Tags = ["teams", "voip", "qos", "ports", "audio", "udp"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 2,
+                    SafetyRating = 5,
+                    ImpactNote = "Allocates 20 UDP ports for Teams audio; balances multi-session capacity with narrow QoS rule precision.",
+                    ApplyOps = [RegOp.SetDword(Key, "AudioPortCount", 20)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "AudioPortCount")],
+                    DetectOps = [RegOp.CheckDword(Key, "AudioPortCount", 20)],
+                },
+                new TweakDef
+                {
+                    Id = "voipqos-enable-teams-video-port-range",
+                    Label = "VoIP QoS: Enable Teams-Specific Video UDP Port Range",
+                    Category = "Network",
+                    Description =
+                        "Sets VideoPortsEnabled=1 in Teams QoS policy. Enables the use of a dedicated UDP port range for Teams video media streams. "
+                        + "Separating video on its own port range allows network equipment to apply different QoS policies to audio and video independently, which is important when network bandwidth needs to preferentially protect audio quality over video.",
+                    Tags = ["teams", "voip", "qos", "ports", "video", "udp"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "Enables dedicated video port range; allows separate QoS treatment of audio versus video streams.",
+                    ApplyOps = [RegOp.SetDword(Key, "VideoPortsEnabled", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "VideoPortsEnabled")],
+                    DetectOps = [RegOp.CheckDword(Key, "VideoPortsEnabled", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "voipqos-set-teams-video-port-start-50020",
+                    Label = "VoIP QoS: Set Teams Video Port Range Start to 50020",
+                    Category = "Network",
+                    Description =
+                        "Sets VideoPortStart=50020 in Teams QoS policy. Sets the starting UDP port for Teams video media to 50020, immediately following the audio port range (50000–50019). "
+                        + "This layout allows a single contiguous firewall rule (50000–50039) to cover both audio and video, while still allowing separate DSCP markings to be applied per-range.",
+                    Tags = ["teams", "voip", "qos", "ports", "video", "udp"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 2,
+                    SafetyRating = 5,
+                    ImpactNote = "Sets video port start to 50020; aligns with audio range for manageable firewall rule design.",
+                    ApplyOps = [RegOp.SetDword(Key, "VideoPortStart", 50020)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "VideoPortStart")],
+                    DetectOps = [RegOp.CheckDword(Key, "VideoPortStart", 50020)],
+                },
+                new TweakDef
+                {
+                    Id = "voipqos-set-teams-video-port-count-20",
+                    Label = "VoIP QoS: Set Teams Video Port Count to 20",
+                    Category = "Network",
+                    Description =
+                        "Sets VideoPortCount=20 in Teams QoS policy. Allocates 20 UDP ports for Teams video media starting at VideoPortStart. "
+                        + "20 ports accommodates multiple simultaneous video sessions and gallery view scenarios without creating an overly broad firewall footprint.",
+                    Tags = ["teams", "voip", "qos", "ports", "video", "udp"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 2,
+                    SafetyRating = 5,
+                    ImpactNote = "Allocates 20 UDP ports for Teams video; supports gallery view with a narrow, manageable port range.",
+                    ApplyOps = [RegOp.SetDword(Key, "VideoPortCount", 20)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "VideoPortCount")],
+                    DetectOps = [RegOp.CheckDword(Key, "VideoPortCount", 20)],
+                },
+                new TweakDef
+                {
+                    Id = "voipqos-enable-teams-appshar-port-range",
+                    Label = "VoIP QoS: Enable Teams App-Sharing UDP Port Range",
+                    Category = "Network",
+                    Description =
+                        "Sets AppSharePortsEnabled=1 in Teams QoS policy. Enables a dedicated UDP port range for Teams application-sharing and desktop-sharing media streams. "
+                        + "Isolating app-sharing on its own port range allows network QoS policies to apply lower priority scheduling to screen share traffic while still guaranteeing audio and video delivery during congestion.",
+                    Tags = ["teams", "voip", "qos", "ports", "screenshare", "udp"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "Enables dedicated app-sharing port range; decouple screen share QoS from audio/video port policies.",
+                    ApplyOps = [RegOp.SetDword(Key, "AppSharePortsEnabled", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "AppSharePortsEnabled")],
+                    DetectOps = [RegOp.CheckDword(Key, "AppSharePortsEnabled", 1)],
+                },
+            ];
     }
 
     // ── VpnRemoteAccessPolicy ──
@@ -16274,169 +16294,178 @@ internal static class PolicyNetwork
         private const string ConnKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\RemoteAccess\Config";
 
         public static IReadOnlyList<TweakDef> Data =>
-        [
-            new TweakDef
-            {
-                Id           = "vpnras-require-strong-encryption",
-                Label        = "Require Strong Encryption for VPN Connections",
-                Category = "Network",
-                Description  = "Enforces maximum-strength encryption (MPPE 128-bit or AES-256) for all RRAS VPN connections. Rejects connections that negotiate weaker ciphers. Default: optional encryption.",
-                Tags         = ["vpn", "encryption", "rras", "security", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 5,
-                SafetyRating = 4,
-                ImpactNote   = "VPN connections must use strong encryption; clients with weak cipher support will fail to connect.",
-                ApplyOps     = [RegOp.SetDword(RasKey, "RequireStrongEncryption", 1)],
-                RemoveOps    = [RegOp.DeleteValue(RasKey, "RequireStrongEncryption")],
-                DetectOps    = [RegOp.CheckDword(RasKey, "RequireStrongEncryption", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "vpnras-disable-pptp-protocol",
-                Label        = "Disable PPTP VPN Protocol",
-                Category = "Network",
-                Description  = "Disables the insecure PPTP (Point-to-Point Tunneling Protocol) for VPN connections. PPTP is considered cryptographically broken. Default: enabled.",
-                Tags         = ["vpn", "pptp", "security", "deprecated", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 5,
-                SafetyRating = 3,
-                ImpactNote   = "PPTP connections blocked; legacy clients relying on PPTP must migrate to IKEv2/L2TP.",
-                ApplyOps     = [RegOp.SetDword(RasKey, "DisablePPTP", 1)],
-                RemoveOps    = [RegOp.DeleteValue(RasKey, "DisablePPTP")],
-                DetectOps    = [RegOp.CheckDword(RasKey, "DisablePPTP", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "vpnras-enable-ikev2-preferred",
-                Label        = "Set IKEv2 as Preferred VPN Protocol",
-                Category = "Network",
-                Description  = "Configures RRAS to prefer IKEv2 (Internet Key Exchange v2) for VPN tunnel negotiation. IKEv2 supports MOBIKE for seamless roaming. Default: automatic protocol selection.",
-                Tags         = ["vpn", "ikev2", "protocol", "security", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 4,
-                SafetyRating = 4,
-                ImpactNote   = "IKEv2 preferred for new connections; fallback to L2TP/SSTP if IKEv2 unavailable.",
-                ApplyOps     = [RegOp.SetDword(IkeKey, "PreferIKEv2", 1)],
-                RemoveOps    = [RegOp.DeleteValue(IkeKey, "PreferIKEv2")],
-                DetectOps    = [RegOp.CheckDword(IkeKey, "PreferIKEv2", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "vpnras-set-idle-timeout",
-                Label        = "Set VPN Idle Disconnect Timeout to 30 Minutes",
-                Category = "Network",
-                Description  = "Automatically disconnects inactive VPN sessions after 30 minutes of idle time. Frees up VPN server resources. Default: no idle timeout.",
-                Tags         = ["vpn", "idle", "timeout", "rras", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 3,
-                SafetyRating = 4,
-                ImpactNote   = "Idle VPN sessions dropped after 30 minutes; users reconnect on next activity.",
-                ApplyOps     = [RegOp.SetDword(ConnKey, "IdleDisconnectTimeout", 30)],
-                RemoveOps    = [RegOp.DeleteValue(ConnKey, "IdleDisconnectTimeout")],
-                DetectOps    = [RegOp.CheckDword(ConnKey, "IdleDisconnectTimeout", 30)],
-            },
-            new TweakDef
-            {
-                Id           = "vpnras-set-max-sessions",
-                Label        = "Set Maximum Concurrent VPN Sessions to 100",
-                Category = "Network",
-                Description  = "Limits the maximum number of concurrent VPN connections to the RRAS server to 100. Prevents resource exhaustion from excessive connections. Default: unlimited.",
-                Tags         = ["vpn", "sessions", "limit", "rras", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 3,
-                SafetyRating = 3,
-                ImpactNote   = "Connection limit prevents server overload; users beyond 100 are queued or rejected.",
-                ApplyOps     = [RegOp.SetDword(ConnKey, "MaxSessions", 100)],
-                RemoveOps    = [RegOp.DeleteValue(ConnKey, "MaxSessions")],
-                DetectOps    = [RegOp.CheckDword(ConnKey, "MaxSessions", 100)],
-            },
-            new TweakDef
-            {
-                Id           = "vpnras-enable-connection-logging",
-                Label        = "Enable VPN Connection Audit Logging",
-                Category = "Network",
-                Description  = "Enables audit logging for all VPN connection attempts (successful and failed). Logs are written to the Windows Security event log. Default: disabled.",
-                Tags         = ["vpn", "logging", "audit", "security", "rras", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 4,
-                SafetyRating = 5,
-                ImpactNote   = "All VPN connection events logged for audit; slight increase in event log volume.",
-                ApplyOps     = [RegOp.SetDword(RasKey, "EnableConnectionLogging", 1)],
-                RemoveOps    = [RegOp.DeleteValue(RasKey, "EnableConnectionLogging")],
-                DetectOps    = [RegOp.CheckDword(RasKey, "EnableConnectionLogging", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "vpnras-disable-split-tunneling",
-                Label        = "Disable VPN Split Tunneling",
-                Category = "Network",
-                Description  = "Forces all client traffic through the VPN tunnel (full-tunnel mode). Prevents clients from accessing the internet directly while connected. Default: split tunneling allowed.",
-                Tags         = ["vpn", "split-tunnel", "security", "rras", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 5,
-                SafetyRating = 3,
-                ImpactNote   = "All traffic routed through VPN; increases VPN server bandwidth but eliminates bypass risk.",
-                ApplyOps     = [RegOp.SetDword(RasKey, "DisableSplitTunnel", 1)],
-                RemoveOps    = [RegOp.DeleteValue(RasKey, "DisableSplitTunnel")],
-                DetectOps    = [RegOp.CheckDword(RasKey, "DisableSplitTunnel", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "vpnras-set-sa-lifetime",
-                Label        = "Set IKEv2 SA Lifetime to 8 Hours",
-                Category = "Network",
-                Description  = "Sets the IKEv2 security association (SA) lifetime to 8 hours (480 minutes). After expiry, the tunnel renegotiates keys. Default: 8 hours (may vary).",
-                Tags         = ["vpn", "ikev2", "sa-lifetime", "security", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 3,
-                SafetyRating = 5,
-                ImpactNote   = "VPN tunnel renegotiates keys every 8 hours; brief reconnection on rekey.",
-                ApplyOps     = [RegOp.SetDword(IkeKey, "SALifeTimeMinutes", 480)],
-                RemoveOps    = [RegOp.DeleteValue(IkeKey, "SALifeTimeMinutes")],
-                DetectOps    = [RegOp.CheckDword(IkeKey, "SALifeTimeMinutes", 480)],
-            },
-            new TweakDef
-            {
-                Id           = "vpnras-enable-nap-enforcement",
-                Label        = "Enable Network Access Protection for VPN",
-                Category = "Network",
-                Description  = "Enables NAP (Network Access Protection) health checks for VPN clients. Clients must meet health requirements (AV, firewall, updates) before being granted full access. Default: no NAP enforcement.",
-                Tags         = ["vpn", "nap", "health-check", "security", "compliance", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 4,
-                SafetyRating = 3,
-                ImpactNote   = "VPN clients undergo health validation; non-compliant devices get restricted access.",
-                ApplyOps     = [RegOp.SetDword(RasKey, "EnableNAP", 1)],
-                RemoveOps    = [RegOp.DeleteValue(RasKey, "EnableNAP")],
-                DetectOps    = [RegOp.CheckDword(RasKey, "EnableNAP", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "vpnras-disable-saved-credentials",
-                Label        = "Prevent Saving VPN Credentials",
-                Category = "Network",
-                Description  = "Prevents users from saving VPN connection credentials. Users must enter credentials each time they connect. Reduces credential theft risk. Default: saving allowed.",
-                Tags         = ["vpn", "credentials", "security", "credential-theft", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 3,
-                SafetyRating = 4,
-                ImpactNote   = "Users re-enter VPN credentials each session; reduces risk of stored credential theft.",
-                ApplyOps     = [RegOp.SetDword(RasKey, "DisableSavedCredentials", 1)],
-                RemoveOps    = [RegOp.DeleteValue(RasKey, "DisableSavedCredentials")],
-                DetectOps    = [RegOp.CheckDword(RasKey, "DisableSavedCredentials", 1)],
-            },
-        ];
-
+            [
+                new TweakDef
+                {
+                    Id = "vpnras-require-strong-encryption",
+                    Label = "Require Strong Encryption for VPN Connections",
+                    Category = "Network",
+                    Description =
+                        "Enforces maximum-strength encryption (MPPE 128-bit or AES-256) for all RRAS VPN connections. Rejects connections that negotiate weaker ciphers. Default: optional encryption.",
+                    Tags = ["vpn", "encryption", "rras", "security", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 5,
+                    SafetyRating = 4,
+                    ImpactNote = "VPN connections must use strong encryption; clients with weak cipher support will fail to connect.",
+                    ApplyOps = [RegOp.SetDword(RasKey, "RequireStrongEncryption", 1)],
+                    RemoveOps = [RegOp.DeleteValue(RasKey, "RequireStrongEncryption")],
+                    DetectOps = [RegOp.CheckDword(RasKey, "RequireStrongEncryption", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "vpnras-disable-pptp-protocol",
+                    Label = "Disable PPTP VPN Protocol",
+                    Category = "Network",
+                    Description =
+                        "Disables the insecure PPTP (Point-to-Point Tunneling Protocol) for VPN connections. PPTP is considered cryptographically broken. Default: enabled.",
+                    Tags = ["vpn", "pptp", "security", "deprecated", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 5,
+                    SafetyRating = 3,
+                    ImpactNote = "PPTP connections blocked; legacy clients relying on PPTP must migrate to IKEv2/L2TP.",
+                    ApplyOps = [RegOp.SetDword(RasKey, "DisablePPTP", 1)],
+                    RemoveOps = [RegOp.DeleteValue(RasKey, "DisablePPTP")],
+                    DetectOps = [RegOp.CheckDword(RasKey, "DisablePPTP", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "vpnras-enable-ikev2-preferred",
+                    Label = "Set IKEv2 as Preferred VPN Protocol",
+                    Category = "Network",
+                    Description =
+                        "Configures RRAS to prefer IKEv2 (Internet Key Exchange v2) for VPN tunnel negotiation. IKEv2 supports MOBIKE for seamless roaming. Default: automatic protocol selection.",
+                    Tags = ["vpn", "ikev2", "protocol", "security", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 4,
+                    ImpactNote = "IKEv2 preferred for new connections; fallback to L2TP/SSTP if IKEv2 unavailable.",
+                    ApplyOps = [RegOp.SetDword(IkeKey, "PreferIKEv2", 1)],
+                    RemoveOps = [RegOp.DeleteValue(IkeKey, "PreferIKEv2")],
+                    DetectOps = [RegOp.CheckDword(IkeKey, "PreferIKEv2", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "vpnras-set-idle-timeout",
+                    Label = "Set VPN Idle Disconnect Timeout to 30 Minutes",
+                    Category = "Network",
+                    Description =
+                        "Automatically disconnects inactive VPN sessions after 30 minutes of idle time. Frees up VPN server resources. Default: no idle timeout.",
+                    Tags = ["vpn", "idle", "timeout", "rras", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 4,
+                    ImpactNote = "Idle VPN sessions dropped after 30 minutes; users reconnect on next activity.",
+                    ApplyOps = [RegOp.SetDword(ConnKey, "IdleDisconnectTimeout", 30)],
+                    RemoveOps = [RegOp.DeleteValue(ConnKey, "IdleDisconnectTimeout")],
+                    DetectOps = [RegOp.CheckDword(ConnKey, "IdleDisconnectTimeout", 30)],
+                },
+                new TweakDef
+                {
+                    Id = "vpnras-set-max-sessions",
+                    Label = "Set Maximum Concurrent VPN Sessions to 100",
+                    Category = "Network",
+                    Description =
+                        "Limits the maximum number of concurrent VPN connections to the RRAS server to 100. Prevents resource exhaustion from excessive connections. Default: unlimited.",
+                    Tags = ["vpn", "sessions", "limit", "rras", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 3,
+                    ImpactNote = "Connection limit prevents server overload; users beyond 100 are queued or rejected.",
+                    ApplyOps = [RegOp.SetDword(ConnKey, "MaxSessions", 100)],
+                    RemoveOps = [RegOp.DeleteValue(ConnKey, "MaxSessions")],
+                    DetectOps = [RegOp.CheckDword(ConnKey, "MaxSessions", 100)],
+                },
+                new TweakDef
+                {
+                    Id = "vpnras-enable-connection-logging",
+                    Label = "Enable VPN Connection Audit Logging",
+                    Category = "Network",
+                    Description =
+                        "Enables audit logging for all VPN connection attempts (successful and failed). Logs are written to the Windows Security event log. Default: disabled.",
+                    Tags = ["vpn", "logging", "audit", "security", "rras", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "All VPN connection events logged for audit; slight increase in event log volume.",
+                    ApplyOps = [RegOp.SetDword(RasKey, "EnableConnectionLogging", 1)],
+                    RemoveOps = [RegOp.DeleteValue(RasKey, "EnableConnectionLogging")],
+                    DetectOps = [RegOp.CheckDword(RasKey, "EnableConnectionLogging", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "vpnras-disable-split-tunneling",
+                    Label = "Disable VPN Split Tunneling",
+                    Category = "Network",
+                    Description =
+                        "Forces all client traffic through the VPN tunnel (full-tunnel mode). Prevents clients from accessing the internet directly while connected. Default: split tunneling allowed.",
+                    Tags = ["vpn", "split-tunnel", "security", "rras", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 5,
+                    SafetyRating = 3,
+                    ImpactNote = "All traffic routed through VPN; increases VPN server bandwidth but eliminates bypass risk.",
+                    ApplyOps = [RegOp.SetDword(RasKey, "DisableSplitTunnel", 1)],
+                    RemoveOps = [RegOp.DeleteValue(RasKey, "DisableSplitTunnel")],
+                    DetectOps = [RegOp.CheckDword(RasKey, "DisableSplitTunnel", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "vpnras-set-sa-lifetime",
+                    Label = "Set IKEv2 SA Lifetime to 8 Hours",
+                    Category = "Network",
+                    Description =
+                        "Sets the IKEv2 security association (SA) lifetime to 8 hours (480 minutes). After expiry, the tunnel renegotiates keys. Default: 8 hours (may vary).",
+                    Tags = ["vpn", "ikev2", "sa-lifetime", "security", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "VPN tunnel renegotiates keys every 8 hours; brief reconnection on rekey.",
+                    ApplyOps = [RegOp.SetDword(IkeKey, "SALifeTimeMinutes", 480)],
+                    RemoveOps = [RegOp.DeleteValue(IkeKey, "SALifeTimeMinutes")],
+                    DetectOps = [RegOp.CheckDword(IkeKey, "SALifeTimeMinutes", 480)],
+                },
+                new TweakDef
+                {
+                    Id = "vpnras-enable-nap-enforcement",
+                    Label = "Enable Network Access Protection for VPN",
+                    Category = "Network",
+                    Description =
+                        "Enables NAP (Network Access Protection) health checks for VPN clients. Clients must meet health requirements (AV, firewall, updates) before being granted full access. Default: no NAP enforcement.",
+                    Tags = ["vpn", "nap", "health-check", "security", "compliance", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 3,
+                    ImpactNote = "VPN clients undergo health validation; non-compliant devices get restricted access.",
+                    ApplyOps = [RegOp.SetDword(RasKey, "EnableNAP", 1)],
+                    RemoveOps = [RegOp.DeleteValue(RasKey, "EnableNAP")],
+                    DetectOps = [RegOp.CheckDword(RasKey, "EnableNAP", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "vpnras-disable-saved-credentials",
+                    Label = "Prevent Saving VPN Credentials",
+                    Category = "Network",
+                    Description =
+                        "Prevents users from saving VPN connection credentials. Users must enter credentials each time they connect. Reduces credential theft risk. Default: saving allowed.",
+                    Tags = ["vpn", "credentials", "security", "credential-theft", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 4,
+                    ImpactNote = "Users re-enter VPN credentials each session; reduces risk of stored credential theft.",
+                    ApplyOps = [RegOp.SetDword(RasKey, "DisableSavedCredentials", 1)],
+                    RemoveOps = [RegOp.DeleteValue(RasKey, "DisableSavedCredentials")],
+                    DetectOps = [RegOp.CheckDword(RasKey, "DisableSavedCredentials", 1)],
+                },
+            ];
     }
 
     // ── WcmConnectionPolicy ──
@@ -16451,150 +16480,158 @@ internal static class PolicyNetwork
                 Id = "wcmpol-disable-auto-connect",
                 Label = "Disable WCM Auto-Connect to Non-Internet Networks",
                 Category = "Network",
-                Description = "Disables Windows Connection Manager automatic connection to networks when already connected to internet. Prevents unexpected Wi-Fi/mobile broadband connections that could create dual-homed exposure. Default: 0. Recommended: 1.",
+                Description =
+                    "Disables Windows Connection Manager automatic connection to networks when already connected to internet. Prevents unexpected Wi-Fi/mobile broadband connections that could create dual-homed exposure. Default: 0. Recommended: 1.",
                 Tags = ["connection-manager", "network", "auto-connect", "security"],
                 NeedsAdmin = true,
                 CorpSafe = true,
                 RegistryKeys = [Wcm],
-                ApplyOps   = [RegOp.SetDword(Wcm, "fDisableAutoConnect", 1)],
-                RemoveOps  = [RegOp.DeleteValue(Wcm, "fDisableAutoConnect")],
-                DetectOps  = [RegOp.CheckDword(Wcm, "fDisableAutoConnect", 1)],
+                ApplyOps = [RegOp.SetDword(Wcm, "fDisableAutoConnect", 1)],
+                RemoveOps = [RegOp.DeleteValue(Wcm, "fDisableAutoConnect")],
+                DetectOps = [RegOp.CheckDword(Wcm, "fDisableAutoConnect", 1)],
             },
             new TweakDef
             {
                 Id = "wcmpol-minimize-connections",
                 Label = "Minimize Simultaneous WCM Connections",
                 Category = "Network",
-                Description = "Instructs Windows Connection Manager to minimize the number of simultaneous connections to the internet, a domain, or a network. Prevents multi-homing unless required. Default: 0. Recommended: 3 (minimize, but allow manual overrides).",
+                Description =
+                    "Instructs Windows Connection Manager to minimize the number of simultaneous connections to the internet, a domain, or a network. Prevents multi-homing unless required. Default: 0. Recommended: 3 (minimize, but allow manual overrides).",
                 Tags = ["connection-manager", "network", "multi-home"],
                 NeedsAdmin = true,
                 CorpSafe = true,
                 RegistryKeys = [Wcm],
-                ApplyOps   = [RegOp.SetDword(Wcm, "fMinimizeConnections", 3)],
-                RemoveOps  = [RegOp.DeleteValue(Wcm, "fMinimizeConnections")],
-                DetectOps  = [RegOp.CheckDword(Wcm, "fMinimizeConnections", 3)],
+                ApplyOps = [RegOp.SetDword(Wcm, "fMinimizeConnections", 3)],
+                RemoveOps = [RegOp.DeleteValue(Wcm, "fMinimizeConnections")],
+                DetectOps = [RegOp.CheckDword(Wcm, "fMinimizeConnections", 3)],
             },
             new TweakDef
             {
                 Id = "wcmpol-block-non-domain",
                 Label = "Block WCM Connections to Non-Domain Networks",
                 Category = "Network",
-                Description = "Blocks Windows Connection Manager from connecting to non-domain networks when the machine is domain-joined and internet is available via domain network. Reduces attack surface from untrusted Wi-Fi. Default: 0. Recommended: 1 for corporate.",
+                Description =
+                    "Blocks Windows Connection Manager from connecting to non-domain networks when the machine is domain-joined and internet is available via domain network. Reduces attack surface from untrusted Wi-Fi. Default: 0. Recommended: 1 for corporate.",
                 Tags = ["connection-manager", "network", "domain", "security"],
                 NeedsAdmin = true,
                 CorpSafe = true,
                 RegistryKeys = [Wcm],
-                ApplyOps   = [RegOp.SetDword(Wcm, "fBlockNonDomain", 1)],
-                RemoveOps  = [RegOp.DeleteValue(Wcm, "fBlockNonDomain")],
-                DetectOps  = [RegOp.CheckDword(Wcm, "fBlockNonDomain", 1)],
+                ApplyOps = [RegOp.SetDword(Wcm, "fBlockNonDomain", 1)],
+                RemoveOps = [RegOp.DeleteValue(Wcm, "fBlockNonDomain")],
+                DetectOps = [RegOp.CheckDword(Wcm, "fBlockNonDomain", 1)],
             },
             new TweakDef
             {
                 Id = "wcmpol-prefer-wired-network",
                 Label = "Prefer Wired over Wireless in WCM",
                 Category = "Network",
-                Description = "Instructs Windows Connection Manager to prefer wired Ethernet connections over Wi-Fi when both are available. Improves stability and throughput without forcing disconnect from Wi-Fi. Default: 0. Recommended: 1.",
+                Description =
+                    "Instructs Windows Connection Manager to prefer wired Ethernet connections over Wi-Fi when both are available. Improves stability and throughput without forcing disconnect from Wi-Fi. Default: 0. Recommended: 1.",
                 Tags = ["connection-manager", "network", "wired", "wifi"],
                 NeedsAdmin = true,
                 CorpSafe = true,
                 RegistryKeys = [Wcm],
-                ApplyOps   = [RegOp.SetDword(Wcm, "fPreferWiredNetwork", 1)],
-                RemoveOps  = [RegOp.DeleteValue(Wcm, "fPreferWiredNetwork")],
-                DetectOps  = [RegOp.CheckDword(Wcm, "fPreferWiredNetwork", 1)],
+                ApplyOps = [RegOp.SetDword(Wcm, "fPreferWiredNetwork", 1)],
+                RemoveOps = [RegOp.DeleteValue(Wcm, "fPreferWiredNetwork")],
+                DetectOps = [RegOp.CheckDword(Wcm, "fPreferWiredNetwork", 1)],
             },
             new TweakDef
             {
                 Id = "wcmpol-soft-disconnect",
                 Label = "Enable WCM Soft Disconnect on Wireless",
                 Category = "Network",
-                Description = "Enables soft-disconnect behavior in WCM: instead of immediately dropping a wireless connection, the system waits for applications to switch before disconnecting. Reduces connection-drop disruptions. Default: 0. Recommended: 1.",
+                Description =
+                    "Enables soft-disconnect behavior in WCM: instead of immediately dropping a wireless connection, the system waits for applications to switch before disconnecting. Reduces connection-drop disruptions. Default: 0. Recommended: 1.",
                 Tags = ["connection-manager", "network", "wifi", "disconnect"],
                 NeedsAdmin = true,
                 CorpSafe = true,
                 RegistryKeys = [Wcm],
-                ApplyOps   = [RegOp.SetDword(Wcm, "fSoftDisconnectConnections", 1)],
-                RemoveOps  = [RegOp.DeleteValue(Wcm, "fSoftDisconnectConnections")],
-                DetectOps  = [RegOp.CheckDword(Wcm, "fSoftDisconnectConnections", 1)],
+                ApplyOps = [RegOp.SetDword(Wcm, "fSoftDisconnectConnections", 1)],
+                RemoveOps = [RegOp.DeleteValue(Wcm, "fSoftDisconnectConnections")],
+                DetectOps = [RegOp.CheckDword(Wcm, "fSoftDisconnectConnections", 1)],
             },
             new TweakDef
             {
                 Id = "wcmpol-disable-wlan-connectivity",
                 Label = "Disable WLAN Connectivity via WCM Policy",
                 Category = "Network",
-                Description = "Disables WLAN (Wi-Fi) connections through the Windows Connection Manager policy. For wired-only or air-gapped workstations where wireless should be locked out at policy level. Default: 0. Recommended: 1 for restricted machines.",
+                Description =
+                    "Disables WLAN (Wi-Fi) connections through the Windows Connection Manager policy. For wired-only or air-gapped workstations where wireless should be locked out at policy level. Default: 0. Recommended: 1 for restricted machines.",
                 Tags = ["connection-manager", "wifi", "disable", "security", "wlan"],
                 NeedsAdmin = true,
                 CorpSafe = true,
                 RegistryKeys = [Wcm],
-                ApplyOps   = [RegOp.SetDword(Wcm, "fDisableWlanConnectivity", 1)],
-                RemoveOps  = [RegOp.DeleteValue(Wcm, "fDisableWlanConnectivity")],
-                DetectOps  = [RegOp.CheckDword(Wcm, "fDisableWlanConnectivity", 1)],
+                ApplyOps = [RegOp.SetDword(Wcm, "fDisableWlanConnectivity", 1)],
+                RemoveOps = [RegOp.DeleteValue(Wcm, "fDisableWlanConnectivity")],
+                DetectOps = [RegOp.CheckDword(Wcm, "fDisableWlanConnectivity", 1)],
             },
             new TweakDef
             {
                 Id = "wcmpol-disable-wwan-connectivity",
                 Label = "Disable WWAN/Mobile Broadband via WCM Policy",
                 Category = "Network",
-                Description = "Disables WWAN (mobile broadband/cellular) connections through the Windows Connection Manager policy. Prevents unexpected cellular data charges on enterprise devices. Default: 0. Recommended: 1 for non-mobile workstations.",
+                Description =
+                    "Disables WWAN (mobile broadband/cellular) connections through the Windows Connection Manager policy. Prevents unexpected cellular data charges on enterprise devices. Default: 0. Recommended: 1 for non-mobile workstations.",
                 Tags = ["connection-manager", "wwan", "mobile", "disable", "security"],
                 NeedsAdmin = true,
                 CorpSafe = true,
                 RegistryKeys = [Wcm],
-                ApplyOps   = [RegOp.SetDword(Wcm, "fDisableWwanConnectivity", 1)],
-                RemoveOps  = [RegOp.DeleteValue(Wcm, "fDisableWwanConnectivity")],
-                DetectOps  = [RegOp.CheckDword(Wcm, "fDisableWwanConnectivity", 1)],
+                ApplyOps = [RegOp.SetDword(Wcm, "fDisableWwanConnectivity", 1)],
+                RemoveOps = [RegOp.DeleteValue(Wcm, "fDisableWwanConnectivity")],
+                DetectOps = [RegOp.CheckDword(Wcm, "fDisableWwanConnectivity", 1)],
             },
             new TweakDef
             {
                 Id = "wcmpol-access-restrictions-on-reconnect",
                 Label = "Apply WCM Access Restrictions on Reconnect",
                 Category = "Network",
-                Description = "Re-applies WCM connection-policy access restrictions when a managed network reconnects after being temporarily unavailable. Ensures policy enforcement is not bypassed by reconnection events. Default: 0. Recommended: 1.",
+                Description =
+                    "Re-applies WCM connection-policy access restrictions when a managed network reconnects after being temporarily unavailable. Ensures policy enforcement is not bypassed by reconnection events. Default: 0. Recommended: 1.",
                 Tags = ["connection-manager", "network", "policy", "reconnect"],
                 NeedsAdmin = true,
                 CorpSafe = true,
                 RegistryKeys = [Wcm],
-                ApplyOps   = [RegOp.SetDword(Wcm, "fApplyAccessRestrictionsOnReconnect", 1)],
-                RemoveOps  = [RegOp.DeleteValue(Wcm, "fApplyAccessRestrictionsOnReconnect")],
-                DetectOps  = [RegOp.CheckDword(Wcm, "fApplyAccessRestrictionsOnReconnect", 1)],
+                ApplyOps = [RegOp.SetDword(Wcm, "fApplyAccessRestrictionsOnReconnect", 1)],
+                RemoveOps = [RegOp.DeleteValue(Wcm, "fApplyAccessRestrictionsOnReconnect")],
+                DetectOps = [RegOp.CheckDword(Wcm, "fApplyAccessRestrictionsOnReconnect", 1)],
             },
             new TweakDef
             {
                 Id = "wcmpol-block-wifi-when-ethernet",
                 Label = "Block Wi-Fi When Ethernet Connected via WCM",
                 Category = "Network",
-                Description = "Prevents Windows from maintaining active Wi-Fi connections when a wired Ethernet connection is available. Reduces dual-homed exposure and possible split-tunnel routing issues. Default: not set. Recommended: 1.",
+                Description =
+                    "Prevents Windows from maintaining active Wi-Fi connections when a wired Ethernet connection is available. Reduces dual-homed exposure and possible split-tunnel routing issues. Default: not set. Recommended: 1.",
                 Tags = ["connection-manager", "wifi", "ethernet", "network", "security"],
                 NeedsAdmin = true,
                 CorpSafe = true,
                 RegistryKeys = [Wcm],
-                ApplyOps   = [RegOp.SetDword(Wcm, "fDisableConnectivityForEthernet", 1)],
-                RemoveOps  = [RegOp.DeleteValue(Wcm, "fDisableConnectivityForEthernet")],
-                DetectOps  = [RegOp.CheckDword(Wcm, "fDisableConnectivityForEthernet", 1)],
+                ApplyOps = [RegOp.SetDword(Wcm, "fDisableConnectivityForEthernet", 1)],
+                RemoveOps = [RegOp.DeleteValue(Wcm, "fDisableConnectivityForEthernet")],
+                DetectOps = [RegOp.CheckDword(Wcm, "fDisableConnectivityForEthernet", 1)],
             },
             new TweakDef
             {
                 Id = "wcmpol-no-local-policy-merge",
                 Label = "Prevent Local WCM Policy Merge",
                 Category = "Network",
-                Description = "Prevents local administrator-configured WCM policies from being merged with domain Group Policy settings for WCM. Ensures only domain policy governs connection management. Default: 0. Recommended: 1 for managed environments.",
+                Description =
+                    "Prevents local administrator-configured WCM policies from being merged with domain Group Policy settings for WCM. Ensures only domain policy governs connection management. Default: 0. Recommended: 1 for managed environments.",
                 Tags = ["connection-manager", "network", "group-policy", "management"],
                 NeedsAdmin = true,
                 CorpSafe = true,
                 RegistryKeys = [Wcm],
-                ApplyOps   = [RegOp.SetDword(Wcm, "fBlockLocalPolicyMerge", 1)],
-                RemoveOps  = [RegOp.DeleteValue(Wcm, "fBlockLocalPolicyMerge")],
-                DetectOps  = [RegOp.CheckDword(Wcm, "fBlockLocalPolicyMerge", 1)],
+                ApplyOps = [RegOp.SetDword(Wcm, "fBlockLocalPolicyMerge", 1)],
+                RemoveOps = [RegOp.DeleteValue(Wcm, "fBlockLocalPolicyMerge")],
+                DetectOps = [RegOp.CheckDword(Wcm, "fBlockLocalPolicyMerge", 1)],
             },
         ];
-
     }
 
     // ── WcmWifiPolicy ──
     private static class _WcmWifiPolicy
     {
-        private const string Key =
-            @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WCM";
+        private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WCM";
 
         public static IReadOnlyList<TweakDef> Data =>
             [
@@ -16712,7 +16749,8 @@ internal static class PolicyNetwork
                     CorpSafe = true,
                     ImpactScore = 5,
                     SafetyRating = 5,
-                    ImpactNote = "Domain-joined machines cannot join public/home Wi-Fi while on the corporate network; strong defence against bridging attacks.",
+                    ImpactNote =
+                        "Domain-joined machines cannot join public/home Wi-Fi while on the corporate network; strong defence against bridging attacks.",
                     ApplyOps = [RegOp.SetDword(Key, "BlockNonDomainNetworks", 1)],
                     RemoveOps = [RegOp.DeleteValue(Key, "BlockNonDomainNetworks")],
                     DetectOps = [RegOp.CheckDword(Key, "BlockNonDomainNetworks", 1)],
@@ -16729,7 +16767,8 @@ internal static class PolicyNetwork
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 4,
-                    ImpactNote = "Network profile is not auto-assigned; reduces risk of corporate network being set to Public with open file sharing.",
+                    ImpactNote =
+                        "Network profile is not auto-assigned; reduces risk of corporate network being set to Public with open file sharing.",
                     ApplyOps = [RegOp.SetDword(Key, "DisableAutoNetworkProfileSelection", 1)],
                     RemoveOps = [RegOp.DeleteValue(Key, "DisableAutoNetworkProfileSelection")],
                     DetectOps = [RegOp.CheckDword(Key, "DisableAutoNetworkProfileSelection", 1)],
@@ -16746,7 +16785,8 @@ internal static class PolicyNetwork
                     CorpSafe = true,
                     ImpactScore = 2,
                     SafetyRating = 5,
-                    ImpactNote = "WCM polls every 60s instead of ~5s; reduces wakeups and battery drain; reconnect after network switch takes up to 60s.",
+                    ImpactNote =
+                        "WCM polls every 60s instead of ~5s; reduces wakeups and battery drain; reconnect after network switch takes up to 60s.",
                     ApplyOps = [RegOp.SetDword(Key, "ConnectionPollingIntervalSec", 60)],
                     RemoveOps = [RegOp.DeleteValue(Key, "ConnectionPollingIntervalSec")],
                     DetectOps = [RegOp.CheckDword(Key, "ConnectionPollingIntervalSec", 60)],
@@ -16769,17 +16809,14 @@ internal static class PolicyNetwork
                     DetectOps = [RegOp.CheckDword(Key, "DisableManagedWifiOffload", 1)],
                 },
             ];
-
     }
 
     // ── WebProxyAutoDiscoveryPolicy ──
     private static class _WebProxyAutoDiscoveryPolicy
     {
-        private const string InetKey =
-            @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CurrentVersion\Internet Settings";
+        private const string InetKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CurrentVersion\Internet Settings";
 
-        private const string WpadKey =
-            @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CurrentVersion\Internet Settings\Wpad";
+        private const string WpadKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CurrentVersion\Internet Settings\Wpad";
 
         public static IReadOnlyList<TweakDef> Data =>
             [
@@ -16795,7 +16832,8 @@ internal static class PolicyNetwork
                     CorpSafe = true,
                     ImpactScore = 4,
                     SafetyRating = 5,
-                    ImpactNote = "Disables WPAD. Proxy configuration must be supplied via PAC file URL, manual proxy settings, or Group Policy. Breaks environments relying on WPAD for zero-config proxy discovery.",
+                    ImpactNote =
+                        "Disables WPAD. Proxy configuration must be supplied via PAC file URL, manual proxy settings, or Group Policy. Breaks environments relying on WPAD for zero-config proxy discovery.",
                     ApplyOps = [RegOp.SetDword(WpadKey, "WpadOverride", 1)],
                     RemoveOps = [RegOp.DeleteValue(WpadKey, "WpadOverride")],
                     DetectOps = [RegOp.CheckDword(WpadKey, "WpadOverride", 1)],
@@ -16812,7 +16850,8 @@ internal static class PolicyNetwork
                     CorpSafe = true,
                     ImpactScore = 4,
                     SafetyRating = 5,
-                    ImpactNote = "Prevents DNS-based WPAD auto-detection. Explicit PAC file URL or manual proxy setting required for proxy-dependent environments.",
+                    ImpactNote =
+                        "Prevents DNS-based WPAD auto-detection. Explicit PAC file URL or manual proxy setting required for proxy-dependent environments.",
                     ApplyOps = [RegOp.SetDword(InetKey, "DisableWpad", 1)],
                     RemoveOps = [RegOp.DeleteValue(InetKey, "DisableWpad")],
                     DetectOps = [RegOp.CheckDword(InetKey, "DisableWpad", 1)],
@@ -16829,7 +16868,8 @@ internal static class PolicyNetwork
                     CorpSafe = true,
                     ImpactScore = 4,
                     SafetyRating = 5,
-                    ImpactNote = "Enhanced Protected Mode restricts PAC script context. Malformed or complex PAC scripts may behave differently under EPM. Test PAC files in EPM before deployment.",
+                    ImpactNote =
+                        "Enhanced Protected Mode restricts PAC script context. Malformed or complex PAC scripts may behave differently under EPM. Test PAC files in EPM before deployment.",
                     ApplyOps = [RegOp.SetDword(InetKey, "EnableEnhancedProtectedMode", 1)],
                     RemoveOps = [RegOp.DeleteValue(InetKey, "EnableEnhancedProtectedMode")],
                     DetectOps = [RegOp.CheckDword(InetKey, "EnableEnhancedProtectedMode", 1)],
@@ -16846,7 +16886,8 @@ internal static class PolicyNetwork
                     CorpSafe = true,
                     ImpactScore = 2,
                     SafetyRating = 5,
-                    ImpactNote = "PAC file is downloaded silently. Security benefit of the prompt is marginal since PAC URL comes from Group Policy in managed environments.",
+                    ImpactNote =
+                        "PAC file is downloaded silently. Security benefit of the prompt is marginal since PAC URL comes from Group Policy in managed environments.",
                     ApplyOps = [RegOp.SetDword(InetKey, "DisableProxyAutoConfigUrlRequest", 0)],
                     RemoveOps = [RegOp.DeleteValue(InetKey, "DisableProxyAutoConfigUrlRequest")],
                     DetectOps = [RegOp.CheckDword(InetKey, "DisableProxyAutoConfigUrlRequest", 0)],
@@ -16863,7 +16904,8 @@ internal static class PolicyNetwork
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "Enables PAC file enforcement. The PAC URL must be separately configured via the Proxy GPO. This setting only enables the PAC mechanism, not a specific URL.",
+                    ImpactNote =
+                        "Enables PAC file enforcement. The PAC URL must be separately configured via the Proxy GPO. This setting only enables the PAC mechanism, not a specific URL.",
                     ApplyOps = [RegOp.SetDword(InetKey, "AutoConfigUrl", 1)],
                     RemoveOps = [RegOp.DeleteValue(InetKey, "AutoConfigUrl")],
                     DetectOps = [RegOp.CheckDword(InetKey, "AutoConfigUrl", 1)],
@@ -16880,7 +16922,8 @@ internal static class PolicyNetwork
                     CorpSafe = true,
                     ImpactScore = 4,
                     SafetyRating = 5,
-                    ImpactNote = "Proxy settings are machine-wide and non-modifiable by standard users. Power users who need proxy exceptions must request IT intervention.",
+                    ImpactNote =
+                        "Proxy settings are machine-wide and non-modifiable by standard users. Power users who need proxy exceptions must request IT intervention.",
                     ApplyOps = [RegOp.SetDword(InetKey, "ProxySettingsPerUser", 0)],
                     RemoveOps = [RegOp.DeleteValue(InetKey, "ProxySettingsPerUser")],
                     DetectOps = [RegOp.CheckDword(InetKey, "ProxySettingsPerUser", 0)],
@@ -16897,7 +16940,8 @@ internal static class PolicyNetwork
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "WinHTTP services will use the corporate proxy. Applications with hardcoded direct access (e.g., Windows Update might bypass proxy) are unaffected.",
+                    ImpactNote =
+                        "WinHTTP services will use the corporate proxy. Applications with hardcoded direct access (e.g., Windows Update might bypass proxy) are unaffected.",
                     ApplyOps = [RegOp.SetDword(InetKey, "EnableLegacyAutoProxyFeatures", 1)],
                     RemoveOps = [RegOp.DeleteValue(InetKey, "EnableLegacyAutoProxyFeatures")],
                     DetectOps = [RegOp.CheckDword(InetKey, "EnableLegacyAutoProxyFeatures", 1)],
@@ -16914,7 +16958,8 @@ internal static class PolicyNetwork
                     CorpSafe = true,
                     ImpactScore = 4,
                     SafetyRating = 5,
-                    ImpactNote = "Users cannot add trusted sites or local sites to bypass proxy. All zone changes must go through Group Policy. May inconvenience power users adding internal intranet sites.",
+                    ImpactNote =
+                        "Users cannot add trusted sites or local sites to bypass proxy. All zone changes must go through Group Policy. May inconvenience power users adding internal intranet sites.",
                     ApplyOps = [RegOp.SetDword(InetKey, "Security_HKLM_only", 1)],
                     RemoveOps = [RegOp.DeleteValue(InetKey, "Security_HKLM_only")],
                     DetectOps = [RegOp.CheckDword(InetKey, "Security_HKLM_only", 1)],
@@ -16931,7 +16976,8 @@ internal static class PolicyNetwork
                     CorpSafe = true,
                     ImpactScore = 2,
                     SafetyRating = 5,
-                    ImpactNote = "Proxy timeout is reduced to 10 seconds. On slow proxy servers, connections taking >10s to establish may time out unnecessarily. Adjust based on proxy infrastructure latency.",
+                    ImpactNote =
+                        "Proxy timeout is reduced to 10 seconds. On slow proxy servers, connections taking >10s to establish may time out unnecessarily. Adjust based on proxy infrastructure latency.",
                     ApplyOps = [RegOp.SetDword(InetKey, "ConnectRetries", 3)],
                     RemoveOps = [RegOp.DeleteValue(InetKey, "ConnectRetries")],
                     DetectOps = [RegOp.CheckDword(InetKey, "ConnectRetries", 3)],
@@ -16948,13 +16994,13 @@ internal static class PolicyNetwork
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "FTP proxy is disabled. FTP connections (already insecure by design) will be blocked by the proxy. Users needing FTP for legacy transfer should use SFTP instead.",
+                    ImpactNote =
+                        "FTP proxy is disabled. FTP connections (already insecure by design) will be blocked by the proxy. Users needing FTP for legacy transfer should use SFTP instead.",
                     ApplyOps = [RegOp.SetDword(InetKey, "FtpProxyEnable", 0)],
                     RemoveOps = [RegOp.DeleteValue(InetKey, "FtpProxyEnable")],
                     DetectOps = [RegOp.CheckDword(InetKey, "FtpProxyEnable", 0)],
                 },
             ];
-
     }
 
     // ── WifiConnectionPolicy ──
@@ -17135,7 +17181,6 @@ internal static class PolicyNetwork
                     DetectOps = [RegOp.CheckDword(Key, "EnableWifiConnectionEventLogging", 1)],
                 },
             ];
-
     }
 
     // ── WifiNetworking ──
@@ -17335,7 +17380,6 @@ internal static class PolicyNetwork
                 DetectOps = [RegOp.CheckDword(WifiPolicy, "fAllowAutoConnectToWiFiSenseHotspots", 0)],
             },
         ];
-
     }
 
     // ── WinHttpProxyPolicy ──
@@ -17516,7 +17560,6 @@ internal static class PolicyNetwork
                     DetectOps = [RegOp.CheckDword(WhKey, "DisableWpadLookup", 1)],
                 },
             ];
-
     }
 
     // ── WinInetPolicy ──
@@ -17697,17 +17740,14 @@ internal static class PolicyNetwork
                 DetectOps = [RegOp.CheckDword(Key, "DisableZoneModification", 1)],
             },
         ];
-
     }
 
     // ── WinsNameResolutionPolicy ──
     private static class _WinsNameResolutionPolicy
     {
-        private const string DnsKey =
-            @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\DNSClient";
+        private const string DnsKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\DNSClient";
 
-        private const string NetbtKey =
-            @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\NetBT\Parameters";
+        private const string NetbtKey = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\NetBT\Parameters";
 
         public static IReadOnlyList<TweakDef> Data =>
             [
@@ -17723,7 +17763,8 @@ internal static class PolicyNetwork
                     CorpSafe = true,
                     ImpactScore = 4,
                     SafetyRating = 4,
-                    ImpactNote = "Disables NetBIOS name resolution. Legacy applications, network printers, and file shares discovered via NetBIOS broadcast (e.g., accessing \\\\COMPUTERNAME without DNS entry) will break.",
+                    ImpactNote =
+                        "Disables NetBIOS name resolution. Legacy applications, network printers, and file shares discovered via NetBIOS broadcast (e.g., accessing \\\\COMPUTERNAME without DNS entry) will break.",
                     ApplyOps = [RegOp.SetDword(NetbtKey, "NetbiosOptions", 2)],
                     RemoveOps = [RegOp.DeleteValue(NetbtKey, "NetbiosOptions")],
                     DetectOps = [RegOp.CheckDword(NetbtKey, "NetbiosOptions", 2)],
@@ -17740,7 +17781,8 @@ internal static class PolicyNetwork
                     CorpSafe = true,
                     ImpactScore = 2,
                     SafetyRating = 5,
-                    ImpactNote = "Sets H-Node for NetBIOS. If WINS servers are not configured, resolution falls back to broadcast (which already happens with default B-Node). No functional change for most modern environments.",
+                    ImpactNote =
+                        "Sets H-Node for NetBIOS. If WINS servers are not configured, resolution falls back to broadcast (which already happens with default B-Node). No functional change for most modern environments.",
                     ApplyOps = [RegOp.SetDword(NetbtKey, "NodeType", 8)],
                     RemoveOps = [RegOp.DeleteValue(NetbtKey, "NodeType")],
                     DetectOps = [RegOp.CheckDword(NetbtKey, "NodeType", 8)],
@@ -17757,7 +17799,8 @@ internal static class PolicyNetwork
                     CorpSafe = true,
                     ImpactScore = 2,
                     SafetyRating = 5,
-                    ImpactNote = "Enables DNS suffix devolution. On machines joined to deeply nested AD sub-domains, devolution can result in unexpected name resolution collisions. Test in complex multi-domain forests.",
+                    ImpactNote =
+                        "Enables DNS suffix devolution. On machines joined to deeply nested AD sub-domains, devolution can result in unexpected name resolution collisions. Test in complex multi-domain forests.",
                     ApplyOps = [RegOp.SetDword(DnsKey, "UseDomainNameDevolution", 1)],
                     RemoveOps = [RegOp.DeleteValue(DnsKey, "UseDomainNameDevolution")],
                     DetectOps = [RegOp.CheckDword(DnsKey, "UseDomainNameDevolution", 1)],
@@ -17774,7 +17817,8 @@ internal static class PolicyNetwork
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 4,
-                    ImpactNote = "Disables mDNS resolution. Applications using .local resolution (Bonjour printers, Apple devices, Chromecasts) depend on mDNS. Only disable on managed enterprise machines where DNS handles all name resolution.",
+                    ImpactNote =
+                        "Disables mDNS resolution. Applications using .local resolution (Bonjour printers, Apple devices, Chromecasts) depend on mDNS. Only disable on managed enterprise machines where DNS handles all name resolution.",
                     ApplyOps = [RegOp.SetDword(DnsKey, "EnableMulticast", 0)],
                     RemoveOps = [RegOp.DeleteValue(DnsKey, "EnableMulticast")],
                     DetectOps = [RegOp.CheckDword(DnsKey, "EnableMulticast", 0)],
@@ -17791,7 +17835,8 @@ internal static class PolicyNetwork
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "Shorter negative TTL increases DNS query load slightly as failed lookups are re-tried sooner. Benefit is faster recovery from transient DNS unavailability.",
+                    ImpactNote =
+                        "Shorter negative TTL increases DNS query load slightly as failed lookups are re-tried sooner. Benefit is faster recovery from transient DNS unavailability.",
                     ApplyOps = [RegOp.SetDword(DnsKey, "NegativeCacheTime", 5)],
                     RemoveOps = [RegOp.DeleteValue(DnsKey, "NegativeCacheTime")],
                     DetectOps = [RegOp.CheckDword(DnsKey, "NegativeCacheTime", 5)],
@@ -17808,30 +17853,11 @@ internal static class PolicyNetwork
                     CorpSafe = true,
                     ImpactScore = 5,
                     SafetyRating = 5,
-                    ImpactNote = "Breaking change if any application depends on LLMNR for name resolution. On properly configured networks with working DNS, LLMNR is never used.",
-                    ApplyOps =
-                        [
-                            RegOp.SetDword(
-                                @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\DNSClient",
-                                "EnableMulticast",
-                                0
-                            ),
-                        ],
-                    RemoveOps =
-                        [
-                            RegOp.DeleteValue(
-                                @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\DNSClient",
-                                "EnableMulticast"
-                            ),
-                        ],
-                    DetectOps =
-                        [
-                            RegOp.CheckDword(
-                                @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\DNSClient",
-                                "EnableMulticast",
-                                0
-                            ),
-                        ],
+                    ImpactNote =
+                        "Breaking change if any application depends on LLMNR for name resolution. On properly configured networks with working DNS, LLMNR is never used.",
+                    ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\DNSClient", "EnableMulticast", 0)],
+                    RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\DNSClient", "EnableMulticast")],
+                    DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\DNSClient", "EnableMulticast", 0)],
                 },
                 new TweakDef
                 {
@@ -17845,7 +17871,8 @@ internal static class PolicyNetwork
                     CorpSafe = true,
                     ImpactScore = 2,
                     SafetyRating = 5,
-                    ImpactNote = "DNS records are re-resolved after at most 1 hour. This slightly increases DNS query load for long-TTL records but ensures nearly real-time failover detection for DNS-based HA.",
+                    ImpactNote =
+                        "DNS records are re-resolved after at most 1 hour. This slightly increases DNS query load for long-TTL records but ensures nearly real-time failover detection for DNS-based HA.",
                     ApplyOps = [RegOp.SetDword(DnsKey, "MaxCacheTtl", 3600)],
                     RemoveOps = [RegOp.DeleteValue(DnsKey, "MaxCacheTtl")],
                     DetectOps = [RegOp.CheckDword(DnsKey, "MaxCacheTtl", 3600)],
@@ -17862,7 +17889,8 @@ internal static class PolicyNetwork
                     CorpSafe = true,
                     ImpactScore = 2,
                     SafetyRating = 5,
-                    ImpactNote = "All adapter IPs are registered in DNS. This may create multiple A records for a single hostname if multiple adapters have network connectivity. Configure DNS scavenging appropriately.",
+                    ImpactNote =
+                        "All adapter IPs are registered in DNS. This may create multiple A records for a single hostname if multiple adapters have network connectivity. Configure DNS scavenging appropriately.",
                     ApplyOps = [RegOp.SetDword(DnsKey, "RegisterAdapterName", 1)],
                     RemoveOps = [RegOp.DeleteValue(DnsKey, "RegisterAdapterName")],
                     DetectOps = [RegOp.CheckDword(DnsKey, "RegisterAdapterName", 1)],
@@ -17879,7 +17907,8 @@ internal static class PolicyNetwork
                     CorpSafe = true,
                     ImpactScore = 1,
                     SafetyRating = 5,
-                    ImpactNote = "DNS queries are sent uncompressed (slightly larger packets). Only use as a diagnostic setting for troubleshooting specific DNS appliance compatibility issues.",
+                    ImpactNote =
+                        "DNS queries are sent uncompressed (slightly larger packets). Only use as a diagnostic setting for troubleshooting specific DNS appliance compatibility issues.",
                     ApplyOps = [RegOp.SetDword(DnsKey, "DisableCompression", 1)],
                     RemoveOps = [RegOp.DeleteValue(DnsKey, "DisableCompression")],
                     DetectOps = [RegOp.CheckDword(DnsKey, "DisableCompression", 1)],
@@ -17896,13 +17925,13 @@ internal static class PolicyNetwork
                     CorpSafe = true,
                     ImpactScore = 2,
                     SafetyRating = 5,
-                    ImpactNote = "Only the primary/best-route adapter IP is registered in DNS. Non-primary adapter IPs (VPN adapters, secondary NICs) are not registered when this is enabled.",
+                    ImpactNote =
+                        "Only the primary/best-route adapter IP is registered in DNS. Non-primary adapter IPs (VPN adapters, secondary NICs) are not registered when this is enabled.",
                     ApplyOps = [RegOp.SetDword(DnsKey, "EnableAutoConfig", 1)],
                     RemoveOps = [RegOp.DeleteValue(DnsKey, "EnableAutoConfig")],
                     DetectOps = [RegOp.CheckDword(DnsKey, "EnableAutoConfig", 1)],
                 },
             ];
-
     }
 
     // ── WirelessDisplayPolicy ──
@@ -18083,7 +18112,6 @@ internal static class PolicyNetwork
                     DetectOps = [RegOp.CheckDword(Key, "AllowMDMInputFromWirelessDisplayReceiver", 0)],
                 },
             ];
-
     }
 
     // ── WlanPolicy ──
@@ -18264,7 +18292,6 @@ internal static class PolicyNetwork
                 DetectOps = [RegOp.CheckDword(Key, "RestrictToApprovedSSIDs", 1)],
             },
         ];
-
     }
 
     // ── WsdPrintDiscoveryPolicy ──
@@ -18445,7 +18472,5 @@ internal static class PolicyNetwork
                     DetectOps = [RegOp.CheckDword(Key, "AuditWSDPrinterConnections", 1)],
                 },
             ];
-
     }
-
 }

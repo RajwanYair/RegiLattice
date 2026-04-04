@@ -20,7 +20,6 @@ internal static class Performance
             RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows Search", "SetupCompletedSuccessfully", 1)],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows Search", "SetupCompletedSuccessfully", 0)],
         },
-
         new TweakDef
         {
             Id = "perf-optimize-processor-scheduling",
@@ -688,7 +687,6 @@ internal static class Performance
                 RegOp.CheckDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer", "NoLowDiskSpaceChecks", 1),
             ],
         },
-
         new TweakDef
         {
             Id = "perf-disable-explorer-search-history",
@@ -1219,7 +1217,6 @@ internal static class SystemOptimization
             RemoveOps = [RegOp.SetDword(WinLogon, "AutoRestartShell", 0)],
             DetectOps = [RegOp.CheckDword(WinLogon, "AutoRestartShell", 1)],
         },
-
         // ── Security & LSA ───────────────────────────────────────────────
 
         new TweakDef
@@ -1268,9 +1265,7 @@ internal static class SystemOptimization
         },
         // ── Visual Effects Minimal ───────────────────────────────────────
 
-
         // ── Misc Performance ─────────────────────────────────────────────
-
 
         new TweakDef
         {
@@ -1452,7 +1447,6 @@ internal static class SystemTweaks
                 RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\kernel", "GlobalTimerResolutionRequests", 1),
             ],
         },
-
         new TweakDef
         {
             Id = "sys-disable-activity-history",
@@ -1588,7 +1582,6 @@ internal static class SystemTweaks
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\SystemRestore", "RPSessionInterval")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\SystemRestore", "RPSessionInterval", 0)],
         },
-
         new TweakDef
         {
             Id = "sys-enable-utc-hardware-clock",
@@ -1604,7 +1597,6 @@ internal static class SystemTweaks
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\TimeZoneInformation", "RealTimeIsUniversal")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\TimeZoneInformation", "RealTimeIsUniversal", 1)],
         },
-
         new TweakDef
         {
             Id = "sys-disable-error-reporting-queue",
@@ -1620,7 +1612,6 @@ internal static class SystemTweaks
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Windows Error Reporting", "DisableQueue")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Windows Error Reporting", "DisableQueue", 1)],
         },
-
         new TweakDef
         {
             Id = "sys-pagefile-encrypt-off",
@@ -2394,8 +2385,6 @@ internal static class MemoryOptimization
                 ),
             ],
         },
-
-
         new TweakDef
         {
             Id = "mem-set-dirty-page-threshold",
@@ -2708,7 +2697,6 @@ internal static class MemoryOptimization
             ],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers", "HwFlipQueueLength", 2)],
         },
-
         new TweakDef
         {
             Id = "gpu-increase-tdr-delay",
@@ -3257,7 +3245,6 @@ internal static class MemoryOptimization
         },
     ];
 }
-
 
 // ── merged from Startup.cs ──
 internal static class Startup
@@ -4145,8 +4132,6 @@ internal static class Boot
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "DisplayParameters")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "DisplayParameters", 1)],
         },
-
-
         new TweakDef
         {
             Id = "boot-clear-pagefile",
@@ -4966,7 +4951,6 @@ internal static class Boot
             RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\BootStatus", "DisplayStatusMessages", 1)],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\BootStatus", "DisplayStatusMessages", 0)],
         },
-
         // ── merged from: Services.cs ──────────────────────────────────────────────────
         new TweakDef
         {
@@ -4994,7 +4978,6 @@ internal static class Boot
             ],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\DiagTrack", "Start", 4)],
         },
-
         new TweakDef
         {
             Id = "svc-disable-wer",
@@ -5119,7 +5102,6 @@ internal static class Boot
             RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\AJRouter", "Start", 3)],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\AJRouter", "Start", 4)],
         },
-
         new TweakDef
         {
             Id = "svc-disable-sysmain",
@@ -5588,7 +5570,6 @@ internal static class Boot
     ];
 }
 
-
 // ── merged from PolicyEnterprise.cs ──
 // RegiLattice.Core — Tweaks/PolicyEnterprise.cs
 // Azure AD, ADFS, Intune/MDM, Autopilot, deployment, flighting, insider builds, enterprise GPO, and managed environment policies
@@ -5645,166 +5626,175 @@ internal static class PolicyEnterprise
             [
                 new TweakDef
                 {
-                    Id          = "adfspol-enable-extranet-lockout",
-                    Label       = "Enable ADFS Extranet Smart Lockout",
+                    Id = "adfspol-enable-extranet-lockout",
+                    Label = "Enable ADFS Extranet Smart Lockout",
                     Category = "System",
-                    Description = "Sets EnableExtranetLockout=1 in the ADFS policy. Activates ADFS Extranet Smart Lockout (ESL) which tracks authentication attempts from extranet (external) IP addresses separately from intranet ones. Extranet lockout prevents password spray and brute-force attacks from the internet from locking out Active Directory accounts while still allowing internal users to authenticate normally.",
-                    Tags        = ["adfs", "extranet", "lockout", "brute-force", "hardening"],
-                    NeedsAdmin  = true,
-                    CorpSafe    = true,
+                    Description =
+                        "Sets EnableExtranetLockout=1 in the ADFS policy. Activates ADFS Extranet Smart Lockout (ESL) which tracks authentication attempts from extranet (external) IP addresses separately from intranet ones. Extranet lockout prevents password spray and brute-force attacks from the internet from locking out Active Directory accounts while still allowing internal users to authenticate normally.",
+                    Tags = ["adfs", "extranet", "lockout", "brute-force", "hardening"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
                     ImpactScore = 5,
                     SafetyRating = 5,
-                    ImpactNote  = "Activates smart lockout for extranet auth; requires ADFS to be deployed with WAPProxy for effect.",
-                    ApplyOps    = [RegOp.SetDword(AdfsKey, "EnableExtranetLockout", 1)],
-                    RemoveOps   = [RegOp.DeleteValue(AdfsKey, "EnableExtranetLockout")],
-                    DetectOps   = [RegOp.CheckDword(AdfsKey, "EnableExtranetLockout", 1)],
+                    ImpactNote = "Activates smart lockout for extranet auth; requires ADFS to be deployed with WAPProxy for effect.",
+                    ApplyOps = [RegOp.SetDword(AdfsKey, "EnableExtranetLockout", 1)],
+                    RemoveOps = [RegOp.DeleteValue(AdfsKey, "EnableExtranetLockout")],
+                    DetectOps = [RegOp.CheckDword(AdfsKey, "EnableExtranetLockout", 1)],
                 },
                 new TweakDef
                 {
-                    Id          = "adfspol-set-extranet-lockout-threshold",
-                    Label       = "Set ADFS Extranet Lockout Threshold (5 attempts)",
+                    Id = "adfspol-set-extranet-lockout-threshold",
+                    Label = "Set ADFS Extranet Lockout Threshold (5 attempts)",
                     Category = "System",
-                    Description = "Sets ExtranetLockoutThreshold=5 in the ADFS policy. Defines the number of failed authentication attempts from an extranet IP address before ADFS blocks further attempts from that IP. Five failed attempts is the CIS recommendation that balances security against accidental account lockout from mistyped passwords on shared IP networks (NAT, VPN exit nodes).",
-                    Tags        = ["adfs", "extranet", "lockout", "threshold", "hardening"],
-                    NeedsAdmin  = true,
-                    CorpSafe    = true,
+                    Description =
+                        "Sets ExtranetLockoutThreshold=5 in the ADFS policy. Defines the number of failed authentication attempts from an extranet IP address before ADFS blocks further attempts from that IP. Five failed attempts is the CIS recommendation that balances security against accidental account lockout from mistyped passwords on shared IP networks (NAT, VPN exit nodes).",
+                    Tags = ["adfs", "extranet", "lockout", "threshold", "hardening"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
                     ImpactScore = 4,
                     SafetyRating = 5,
-                    ImpactNote  = "Blocks extranet IPs after 5 failures; corporate NAT exit nodes may need threshold adjustment.",
-                    ApplyOps    = [RegOp.SetDword(AdfsKey, "ExtranetLockoutThreshold", 5)],
-                    RemoveOps   = [RegOp.DeleteValue(AdfsKey, "ExtranetLockoutThreshold")],
-                    DetectOps   = [RegOp.CheckDword(AdfsKey, "ExtranetLockoutThreshold", 5)],
+                    ImpactNote = "Blocks extranet IPs after 5 failures; corporate NAT exit nodes may need threshold adjustment.",
+                    ApplyOps = [RegOp.SetDword(AdfsKey, "ExtranetLockoutThreshold", 5)],
+                    RemoveOps = [RegOp.DeleteValue(AdfsKey, "ExtranetLockoutThreshold")],
+                    DetectOps = [RegOp.CheckDword(AdfsKey, "ExtranetLockoutThreshold", 5)],
                 },
                 new TweakDef
                 {
-                    Id          = "adfspol-disable-endpoint-wia-fallback",
-                    Label       = "Disable ADFS Windows Integrated Auth Fallback",
+                    Id = "adfspol-disable-endpoint-wia-fallback",
+                    Label = "Disable ADFS Windows Integrated Auth Fallback",
                     Category = "System",
-                    Description = "Sets DisableWIAFallback=1 in the ADFS policy. Prevents ADFS from falling back to Windows Integrated Authentication (Kerberos/NTLM from browser) when the primary authentication method fails. WIA fallback can expose NTLM credentials when users authenticate from non-domain-joined browsers, potentially enabling NTLM relay attacks. Disabling fallback forces explicit form-based or certificate authentication.",
-                    Tags        = ["adfs", "wia", "fallback", "ntlm", "hardening"],
-                    NeedsAdmin  = true,
-                    CorpSafe    = true,
+                    Description =
+                        "Sets DisableWIAFallback=1 in the ADFS policy. Prevents ADFS from falling back to Windows Integrated Authentication (Kerberos/NTLM from browser) when the primary authentication method fails. WIA fallback can expose NTLM credentials when users authenticate from non-domain-joined browsers, potentially enabling NTLM relay attacks. Disabling fallback forces explicit form-based or certificate authentication.",
+                    Tags = ["adfs", "wia", "fallback", "ntlm", "hardening"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 4,
-                    ImpactNote  = "Prevents WIA fallback; Intranet users who previously used WIA from non-domain browsers must use forms instead.",
-                    ApplyOps    = [RegOp.SetDword(AdfsKey, "DisableWIAFallback", 1)],
-                    RemoveOps   = [RegOp.DeleteValue(AdfsKey, "DisableWIAFallback")],
-                    DetectOps   = [RegOp.CheckDword(AdfsKey, "DisableWIAFallback", 1)],
+                    ImpactNote = "Prevents WIA fallback; Intranet users who previously used WIA from non-domain browsers must use forms instead.",
+                    ApplyOps = [RegOp.SetDword(AdfsKey, "DisableWIAFallback", 1)],
+                    RemoveOps = [RegOp.DeleteValue(AdfsKey, "DisableWIAFallback")],
+                    DetectOps = [RegOp.CheckDword(AdfsKey, "DisableWIAFallback", 1)],
                 },
                 new TweakDef
                 {
-                    Id          = "adfspol-require-ssl-certificate-auth",
-                    Label       = "Require TLS Certificate Authentication for ADFS Service",
+                    Id = "adfspol-require-ssl-certificate-auth",
+                    Label = "Require TLS Certificate Authentication for ADFS Service",
                     Category = "System",
-                    Description = "Sets RequireCertificateAuthentication=1 in the ADFS service Parameters key. Enforces mutual TLS certificate authentication for ADFS service account communication. When mutual TLS is required the ADFS service will reject connections from components (proxy servers, relying party trusts) that do not present a valid certificate, preventing impersonation of trusted federation endpoints.",
-                    Tags        = ["adfs", "tls", "certificate", "mutual-auth", "hardening"],
-                    NeedsAdmin  = true,
-                    CorpSafe    = true,
+                    Description =
+                        "Sets RequireCertificateAuthentication=1 in the ADFS service Parameters key. Enforces mutual TLS certificate authentication for ADFS service account communication. When mutual TLS is required the ADFS service will reject connections from components (proxy servers, relying party trusts) that do not present a valid certificate, preventing impersonation of trusted federation endpoints.",
+                    Tags = ["adfs", "tls", "certificate", "mutual-auth", "hardening"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
                     ImpactScore = 4,
                     SafetyRating = 4,
-                    ImpactNote  = "Requires mutual TLS from all ADFS-connecting components; ensure proxies and RPs have valid certificates.",
-                    ApplyOps    = [RegOp.SetDword(SvcKey, "RequireCertificateAuthentication", 1)],
-                    RemoveOps   = [RegOp.DeleteValue(SvcKey, "RequireCertificateAuthentication")],
-                    DetectOps   = [RegOp.CheckDword(SvcKey, "RequireCertificateAuthentication", 1)],
+                    ImpactNote = "Requires mutual TLS from all ADFS-connecting components; ensure proxies and RPs have valid certificates.",
+                    ApplyOps = [RegOp.SetDword(SvcKey, "RequireCertificateAuthentication", 1)],
+                    RemoveOps = [RegOp.DeleteValue(SvcKey, "RequireCertificateAuthentication")],
+                    DetectOps = [RegOp.CheckDword(SvcKey, "RequireCertificateAuthentication", 1)],
                 },
                 new TweakDef
                 {
-                    Id          = "adfspol-enable-oauth-pkce",
-                    Label       = "Require PKCE for ADFS OAuth2 Authorization Code Flow",
+                    Id = "adfspol-enable-oauth-pkce",
+                    Label = "Require PKCE for ADFS OAuth2 Authorization Code Flow",
                     Category = "System",
-                    Description = "Sets RequirePKCEForOAuth=1 in the ADFS policy. Enforces Proof Key for Code Exchange (PKCE, RFC 7636) for all OAuth 2.0 authorization code flow requests to ADFS. PKCE prevents authorization code interception attacks where an attacker intercepts the authorization code redirect and exchanges it for tokens. Required by RFC 9700 (OAuth 2.0 Security Best Current Practice) for all public and confidential clients.",
-                    Tags        = ["adfs", "oauth", "pkce", "authorization-code", "hardening"],
-                    NeedsAdmin  = true,
-                    CorpSafe    = true,
+                    Description =
+                        "Sets RequirePKCEForOAuth=1 in the ADFS policy. Enforces Proof Key for Code Exchange (PKCE, RFC 7636) for all OAuth 2.0 authorization code flow requests to ADFS. PKCE prevents authorization code interception attacks where an attacker intercepts the authorization code redirect and exchanges it for tokens. Required by RFC 9700 (OAuth 2.0 Security Best Current Practice) for all public and confidential clients.",
+                    Tags = ["adfs", "oauth", "pkce", "authorization-code", "hardening"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
                     ImpactScore = 5,
                     SafetyRating = 4,
-                    ImpactNote  = "Requires PKCE; legacy OAuth clients that do not send a code_challenge will be rejected.",
-                    ApplyOps    = [RegOp.SetDword(AdfsKey, "RequirePKCEForOAuth", 1)],
-                    RemoveOps   = [RegOp.DeleteValue(AdfsKey, "RequirePKCEForOAuth")],
-                    DetectOps   = [RegOp.CheckDword(AdfsKey, "RequirePKCEForOAuth", 1)],
+                    ImpactNote = "Requires PKCE; legacy OAuth clients that do not send a code_challenge will be rejected.",
+                    ApplyOps = [RegOp.SetDword(AdfsKey, "RequirePKCEForOAuth", 1)],
+                    RemoveOps = [RegOp.DeleteValue(AdfsKey, "RequirePKCEForOAuth")],
+                    DetectOps = [RegOp.CheckDword(AdfsKey, "RequirePKCEForOAuth", 1)],
                 },
                 new TweakDef
                 {
-                    Id          = "adfspol-disable-device-auth-bypass",
-                    Label       = "Disable ADFS Device Authentication Bypass",
+                    Id = "adfspol-disable-device-auth-bypass",
+                    Label = "Disable ADFS Device Authentication Bypass",
                     Category = "System",
-                    Description = "Sets DisableDeviceAuthenticationBypass=1 in the ADFS policy. Prevents ADFS from bypassing multi-factor authentication requirements based solely on device registration status. When disabled, a registered device alone is not sufficient to skip MFA — users must still satisfy the full authentication policy. This closes a gap where attackers who enroll a stolen device could bypass step-up authentication.",
-                    Tags        = ["adfs", "device-auth", "mfa", "bypass", "hardening"],
-                    NeedsAdmin  = true,
-                    CorpSafe    = true,
+                    Description =
+                        "Sets DisableDeviceAuthenticationBypass=1 in the ADFS policy. Prevents ADFS from bypassing multi-factor authentication requirements based solely on device registration status. When disabled, a registered device alone is not sufficient to skip MFA — users must still satisfy the full authentication policy. This closes a gap where attackers who enroll a stolen device could bypass step-up authentication.",
+                    Tags = ["adfs", "device-auth", "mfa", "bypass", "hardening"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
                     ImpactScore = 4,
                     SafetyRating = 5,
-                    ImpactNote  = "Device registration no longer bypasses MFA; compliant device policies may need adjustment for Conditional Access.",
-                    ApplyOps    = [RegOp.SetDword(AdfsKey, "DisableDeviceAuthenticationBypass", 1)],
-                    RemoveOps   = [RegOp.DeleteValue(AdfsKey, "DisableDeviceAuthenticationBypass")],
-                    DetectOps   = [RegOp.CheckDword(AdfsKey, "DisableDeviceAuthenticationBypass", 1)],
+                    ImpactNote = "Device registration no longer bypasses MFA; compliant device policies may need adjustment for Conditional Access.",
+                    ApplyOps = [RegOp.SetDword(AdfsKey, "DisableDeviceAuthenticationBypass", 1)],
+                    RemoveOps = [RegOp.DeleteValue(AdfsKey, "DisableDeviceAuthenticationBypass")],
+                    DetectOps = [RegOp.CheckDword(AdfsKey, "DisableDeviceAuthenticationBypass", 1)],
                 },
                 new TweakDef
                 {
-                    Id          = "adfspol-set-token-replay-detection",
-                    Label       = "Enable ADFS Token Replay Detection",
+                    Id = "adfspol-set-token-replay-detection",
+                    Label = "Enable ADFS Token Replay Detection",
                     Category = "System",
-                    Description = "Sets EnableTokenReplayDetection=1 in the ADFS policy. Activates the ADFS token replay detection cache which records recently used security tokens and rejects any attempt to present the same token a second time. Token replay attacks occur when an attacker intercepts a SAML assertion or JWT and submits it to gain access. Detection is critical for federated SSO scenarios where tokens flow through multiple network intermediaries.",
-                    Tags        = ["adfs", "token-replay", "detection", "saml", "hardening"],
-                    NeedsAdmin  = true,
-                    CorpSafe    = true,
+                    Description =
+                        "Sets EnableTokenReplayDetection=1 in the ADFS policy. Activates the ADFS token replay detection cache which records recently used security tokens and rejects any attempt to present the same token a second time. Token replay attacks occur when an attacker intercepts a SAML assertion or JWT and submits it to gain access. Detection is critical for federated SSO scenarios where tokens flow through multiple network intermediaries.",
+                    Tags = ["adfs", "token-replay", "detection", "saml", "hardening"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
                     ImpactScore = 5,
                     SafetyRating = 5,
-                    ImpactNote  = "Enables token replay cache; negligible performance impact on ADFS server under normal SSO load.",
-                    ApplyOps    = [RegOp.SetDword(AdfsKey, "EnableTokenReplayDetection", 1)],
-                    RemoveOps   = [RegOp.DeleteValue(AdfsKey, "EnableTokenReplayDetection")],
-                    DetectOps   = [RegOp.CheckDword(AdfsKey, "EnableTokenReplayDetection", 1)],
+                    ImpactNote = "Enables token replay cache; negligible performance impact on ADFS server under normal SSO load.",
+                    ApplyOps = [RegOp.SetDword(AdfsKey, "EnableTokenReplayDetection", 1)],
+                    RemoveOps = [RegOp.DeleteValue(AdfsKey, "EnableTokenReplayDetection")],
+                    DetectOps = [RegOp.CheckDword(AdfsKey, "EnableTokenReplayDetection", 1)],
                 },
                 new TweakDef
                 {
-                    Id          = "adfspol-require-extended-protection",
-                    Label       = "Require Extended Protection for ADFS Authentication",
+                    Id = "adfspol-require-extended-protection",
+                    Label = "Require Extended Protection for ADFS Authentication",
                     Category = "System",
-                    Description = "Sets EnableExtendedProtection=1 in the ADFS authentication policy. Enables Extended Protection for Authentication (EPA) which binds the Windows authentication handshake to the TLS channel. EPA prevents NTLM relay attacks where an attacker forwards authentication attempts to the ADFS endpoint from a man-in-the-middle position. Supported in all Windows versions since Windows 7 SP1.",
-                    Tags        = ["adfs", "extended-protection", "ntlm-relay", "authentication", "hardening"],
-                    NeedsAdmin  = true,
-                    CorpSafe    = true,
+                    Description =
+                        "Sets EnableExtendedProtection=1 in the ADFS authentication policy. Enables Extended Protection for Authentication (EPA) which binds the Windows authentication handshake to the TLS channel. EPA prevents NTLM relay attacks where an attacker forwards authentication attempts to the ADFS endpoint from a man-in-the-middle position. Supported in all Windows versions since Windows 7 SP1.",
+                    Tags = ["adfs", "extended-protection", "ntlm-relay", "authentication", "hardening"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
                     ImpactScore = 4,
                     SafetyRating = 5,
-                    ImpactNote  = "Requires EPA TLS channel binding; clients that do not support EPA (pre-Vista) will fail WIA authentication.",
-                    ApplyOps    = [RegOp.SetDword(AuthKey, "EnableExtendedProtection", 1)],
-                    RemoveOps   = [RegOp.DeleteValue(AuthKey, "EnableExtendedProtection")],
-                    DetectOps   = [RegOp.CheckDword(AuthKey, "EnableExtendedProtection", 1)],
+                    ImpactNote = "Requires EPA TLS channel binding; clients that do not support EPA (pre-Vista) will fail WIA authentication.",
+                    ApplyOps = [RegOp.SetDword(AuthKey, "EnableExtendedProtection", 1)],
+                    RemoveOps = [RegOp.DeleteValue(AuthKey, "EnableExtendedProtection")],
+                    DetectOps = [RegOp.CheckDword(AuthKey, "EnableExtendedProtection", 1)],
                 },
                 new TweakDef
                 {
-                    Id          = "adfspol-disable-prompt-login",
-                    Label       = "Disable ADFS Prompt=Login Re-Authentication Bypass",
+                    Id = "adfspol-disable-prompt-login",
+                    Label = "Disable ADFS Prompt=Login Re-Authentication Bypass",
                     Category = "System",
-                    Description = "Sets DisablePromptLoginHandling=1 in the ADFS policy. Prevents ADFS from honouring the OAuth/OIDC prompt=login parameter which forces a fresh login regardless of existing SSO session. While useful for applications needing fresh credentials, this parameter can be abused by attackers to force users into repeated phishing-susceptible login flows. Disabling allows ADFS to enforce its own session management instead.",
-                    Tags        = ["adfs", "oauth", "prompt-login", "session", "hardening"],
-                    NeedsAdmin  = true,
-                    CorpSafe    = true,
+                    Description =
+                        "Sets DisablePromptLoginHandling=1 in the ADFS policy. Prevents ADFS from honouring the OAuth/OIDC prompt=login parameter which forces a fresh login regardless of existing SSO session. While useful for applications needing fresh credentials, this parameter can be abused by attackers to force users into repeated phishing-susceptible login flows. Disabling allows ADFS to enforce its own session management instead.",
+                    Tags = ["adfs", "oauth", "prompt-login", "session", "hardening"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 4,
-                    ImpactNote  = "Ignores prompt=login; applications that need forced re-auth must use access token expiry instead.",
-                    ApplyOps    = [RegOp.SetDword(AdfsKey, "DisablePromptLoginHandling", 1)],
-                    RemoveOps   = [RegOp.DeleteValue(AdfsKey, "DisablePromptLoginHandling")],
-                    DetectOps   = [RegOp.CheckDword(AdfsKey, "DisablePromptLoginHandling", 1)],
+                    ImpactNote = "Ignores prompt=login; applications that need forced re-auth must use access token expiry instead.",
+                    ApplyOps = [RegOp.SetDword(AdfsKey, "DisablePromptLoginHandling", 1)],
+                    RemoveOps = [RegOp.DeleteValue(AdfsKey, "DisablePromptLoginHandling")],
+                    DetectOps = [RegOp.CheckDword(AdfsKey, "DisablePromptLoginHandling", 1)],
                 },
                 new TweakDef
                 {
-                    Id          = "adfspol-enable-audit-events",
-                    Label       = "Enable ADFS Security Audit Events",
+                    Id = "adfspol-enable-audit-events",
+                    Label = "Enable ADFS Security Audit Events",
                     Category = "System",
-                    Description = "Sets AuditFlags=1 in the ADFS policy. Instructs ADFS to write security audit events to the Windows Security event log for all federation authentication requests, token issuances, and extranet lockout events. ADFS audit events (Event IDs 1200, 1201, 411, 412) are essential for detecting password spray attacks, compromised account usage, and abnormal token issuance patterns in a federated identity environment.",
-                    Tags        = ["adfs", "audit", "events", "security-log", "compliance"],
-                    NeedsAdmin  = true,
-                    CorpSafe    = true,
+                    Description =
+                        "Sets AuditFlags=1 in the ADFS policy. Instructs ADFS to write security audit events to the Windows Security event log for all federation authentication requests, token issuances, and extranet lockout events. ADFS audit events (Event IDs 1200, 1201, 411, 412) are essential for detecting password spray attacks, compromised account usage, and abnormal token issuance patterns in a federated identity environment.",
+                    Tags = ["adfs", "audit", "events", "security-log", "compliance"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
                     ImpactScore = 4,
                     SafetyRating = 5,
-                    ImpactNote  = "Enables ADFS audit events in the Security log; increases log volume proportional to federation traffic.",
-                    ApplyOps    = [RegOp.SetDword(AdfsKey, "AuditFlags", 1)],
-                    RemoveOps   = [RegOp.DeleteValue(AdfsKey, "AuditFlags")],
-                    DetectOps   = [RegOp.CheckDword(AdfsKey, "AuditFlags", 1)],
+                    ImpactNote = "Enables ADFS audit events in the Security log; increases log volume proportional to federation traffic.",
+                    ApplyOps = [RegOp.SetDword(AdfsKey, "AuditFlags", 1)],
+                    RemoveOps = [RegOp.DeleteValue(AdfsKey, "AuditFlags")],
+                    DetectOps = [RegOp.CheckDword(AdfsKey, "AuditFlags", 1)],
                 },
             ];
-
     }
 
     // ── ActiveDirectoryServicesPolicy ──
@@ -5961,7 +5951,6 @@ internal static class PolicyEnterprise
                     DetectOps = [RegOp.CheckDword(NetlogonKey, "ForceRediscoveryInterval", 600)],
                 },
             ];
-
     }
 
     // ── AdReplicationPolicy ──
@@ -6154,7 +6143,6 @@ internal static class PolicyEnterprise
                     DetectOps = [RegOp.CheckDword(NtdsPolicyKey, "AuditRidAllocation", 1)],
                 },
             ];
-
     }
 
     // ── AzureVirtualDesktopPolicy ──
@@ -6266,7 +6254,8 @@ internal static class PolicyEnterprise
                     CorpSafe = true,
                     ImpactScore = 4,
                     SafetyRating = 5,
-                    ImpactNote = "Restricts all peripheral redirection. Not suitable for productivity use-cases requiring local file access or printing.",
+                    ImpactNote =
+                        "Restricts all peripheral redirection. Not suitable for productivity use-cases requiring local file access or printing.",
                     ApplyOps = [RegOp.SetDword(TsKey, "EnablePrivateMode", 1)],
                     RemoveOps = [RegOp.DeleteValue(TsKey, "EnablePrivateMode")],
                     DetectOps = [RegOp.CheckDword(TsKey, "EnablePrivateMode", 1)],
@@ -6283,7 +6272,8 @@ internal static class PolicyEnterprise
                     CorpSafe = true,
                     ImpactScore = 4,
                     SafetyRating = 5,
-                    ImpactNote = "Requires TLS; breaks connections from very old RDP clients that cannot negotiate TLS. All modern clients support TLS.",
+                    ImpactNote =
+                        "Requires TLS; breaks connections from very old RDP clients that cannot negotiate TLS. All modern clients support TLS.",
                     ApplyOps = [RegOp.SetDword(TsKey, "SecurityLayer", 2)],
                     RemoveOps = [RegOp.DeleteValue(TsKey, "SecurityLayer")],
                     DetectOps = [RegOp.CheckDword(TsKey, "SecurityLayer", 2)],
@@ -6340,17 +6330,14 @@ internal static class PolicyEnterprise
                     DetectOps = [RegOp.CheckDword(TsKey, "fClientShortPathEndpointEnabled", 1)],
                 },
             ];
-
     }
 
     // ── CloudPcWindows365Policy ──
     private static class _CloudPcWindows365Policy
     {
-        private const string CloudPcKey =
-            @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\CloudPC";
+        private const string CloudPcKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\CloudPC";
 
-        private const string TsKey =
-            @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services";
+        private const string TsKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services";
 
         public static IReadOnlyList<TweakDef> Data =>
             [
@@ -6383,11 +6370,9 @@ internal static class PolicyEnterprise
                     CorpSafe = true,
                     ImpactScore = 5,
                     SafetyRating = 5,
-                    ImpactNote = "Requires Teams client v1.4+ and Windows App/MSTSC v1.2.3004+. Older clients fall back to server-side processing without error.",
-                    ApplyOps =
-                        [
-                            RegOp.SetDword(TsKey, "fEnableTeamsHdxVideoOptimization", 1),
-                        ],
+                    ImpactNote =
+                        "Requires Teams client v1.4+ and Windows App/MSTSC v1.2.3004+. Older clients fall back to server-side processing without error.",
+                    ApplyOps = [RegOp.SetDword(TsKey, "fEnableTeamsHdxVideoOptimization", 1)],
                     RemoveOps = [RegOp.DeleteValue(TsKey, "fEnableTeamsHdxVideoOptimization")],
                     DetectOps = [RegOp.CheckDword(TsKey, "fEnableTeamsHdxVideoOptimization", 1)],
                 },
@@ -6454,7 +6439,8 @@ internal static class PolicyEnterprise
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "Requires MFA re-authentication on every reconnect. Slightly increases session resume time for Teams and app continuity.",
+                    ImpactNote =
+                        "Requires MFA re-authentication on every reconnect. Slightly increases session resume time for Teams and app continuity.",
                     ApplyOps = [RegOp.SetDword(TsKey, "fPromptForPassword", 1)],
                     RemoveOps = [RegOp.DeleteValue(TsKey, "fPromptForPassword")],
                     DetectOps = [RegOp.CheckDword(TsKey, "fPromptForPassword", 1)],
@@ -6471,7 +6457,8 @@ internal static class PolicyEnterprise
                     CorpSafe = true,
                     ImpactScore = 2,
                     SafetyRating = 5,
-                    ImpactNote = "Users are gracefully disconnected after 8 hours. Unsaved work may be lost if auto-save is not configured. Windows gives a warning before disconnect.",
+                    ImpactNote =
+                        "Users are gracefully disconnected after 8 hours. Unsaved work may be lost if auto-save is not configured. Windows gives a warning before disconnect.",
                     ApplyOps = [RegOp.SetDword(TsKey, "MaxConnectionTime", 28800000)],
                     RemoveOps = [RegOp.DeleteValue(TsKey, "MaxConnectionTime")],
                     DetectOps = [RegOp.CheckDword(TsKey, "MaxConnectionTime", 28800000)],
@@ -6488,7 +6475,8 @@ internal static class PolicyEnterprise
                     CorpSafe = true,
                     ImpactScore = 2,
                     SafetyRating = 5,
-                    ImpactNote = "Blocks in-session microphone access. Users using Teams AV Optimization are unaffected as audio is processed locally.",
+                    ImpactNote =
+                        "Blocks in-session microphone access. Users using Teams AV Optimization are unaffected as audio is processed locally.",
                     ApplyOps = [RegOp.SetDword(TsKey, "fDisableAudioCapture", 1)],
                     RemoveOps = [RegOp.DeleteValue(TsKey, "fDisableAudioCapture")],
                     DetectOps = [RegOp.CheckDword(TsKey, "fDisableAudioCapture", 1)],
@@ -6505,7 +6493,8 @@ internal static class PolicyEnterprise
                     CorpSafe = true,
                     ImpactScore = 2,
                     SafetyRating = 5,
-                    ImpactNote = "Higher baseline quality uses more bandwidth (~5–10 Mbps sustained). Not recommended for Cloud PCs accessed over mobile/4G connections.",
+                    ImpactNote =
+                        "Higher baseline quality uses more bandwidth (~5–10 Mbps sustained). Not recommended for Cloud PCs accessed over mobile/4G connections.",
                     ApplyOps = [RegOp.SetDword(TsKey, "VisualQuality", 3)],
                     RemoveOps = [RegOp.DeleteValue(TsKey, "VisualQuality")],
                     DetectOps = [RegOp.CheckDword(TsKey, "VisualQuality", 3)],
@@ -6522,13 +6511,13 @@ internal static class PolicyEnterprise
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "USB/PnP devices are not available inside Cloud PC sessions. Smart card readers for local authentication are unaffected if using NLA.",
+                    ImpactNote =
+                        "USB/PnP devices are not available inside Cloud PC sessions. Smart card readers for local authentication are unaffected if using NLA.",
                     ApplyOps = [RegOp.SetDword(TsKey, "fDisablePNPRedir", 1)],
                     RemoveOps = [RegOp.DeleteValue(TsKey, "fDisablePNPRedir")],
                     DetectOps = [RegOp.CheckDword(TsKey, "fDisablePNPRedir", 1)],
                 },
             ];
-
     }
 
     // ── ConfigurationManagerPolicy ──
@@ -6537,179 +6526,195 @@ internal static class PolicyEnterprise
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\ConfigurationManager";
 
         public static IReadOnlyList<TweakDef> Data =>
-        [
-            new TweakDef
-            {
-                Id = "confmgr-require-code-signing-for-scripts",
-                Label = "ConfigMgr: Require Script Code Signing for All Client-Side Script Execution",
-                Category = "System",
-                Description = "Sets RequireScriptCodeSigning=1 in ConfigurationManager policy. Requires that any script (PowerShell, VBScript, JScript) deployed through the Configuration Manager client for task sequences or application deployment must be digitally signed by a certificate trusted by the client's root store before execution. " +
-                    "Configuration Manager script execution is a primary lateral movement vector in enterprise environments. A compromised management server or a rogue admin with deployment rights can push arbitrary scripts to all managed clients. Without code signing enforcement, any script pushed through ConfigMgr is executed verbatim. Requiring script code signing ensures only scripts signed by the enterprise PKI certificate authority are executed.",
-                Tags = ["configmgr", "sccm", "scripts", "code-signing", "security"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 4,
-                ImpactNote = "Unsigned ConfigMgr scripts blocked; all deployment scripts must be signed by enterprise PKI before execution.",
-                ApplyOps = [RegOp.SetDword(Key, "RequireScriptCodeSigning", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "RequireScriptCodeSigning")],
-                DetectOps = [RegOp.CheckDword(Key, "RequireScriptCodeSigning", 1)],
-            },
-            new TweakDef
-            {
-                Id = "confmgr-enable-client-audit-logging",
-                Label = "ConfigMgr: Enable Comprehensive Audit Logging for Client Agent Operations",
-                Category = "System",
-                Description = "Sets EnableClientAuditLogging=1 in ConfigurationManager policy. Enables detailed audit logging in the Configuration Manager client agent, causing all deployment operations (software installs, uninstalls, state machine transitions, inventory collection, policy downloads) to be recorded in the Security event log in addition to the standard ccmsetup.log files. " +
-                    "The default ConfigMgr client logging writes verbose detail to log files under C:\\Windows\\CCM\\Logs\\ but does not generate Security event log entries auditable by a SIEM. With audit logging enabled, Security events are generated for every ConfigMgr operation, enabling correlation with Active Directory logon events, PowerShell execution events, and process creation events during incident investigations. This enables detection of ConfigMgr-based lateral movement.",
-                Tags = ["configmgr", "sccm", "audit-log", "security", "siem"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                ImpactNote = "ConfigMgr operations generate Security event log entries; SIEM can correlate ConfigMgr deployments with suspicious activities.",
-                ApplyOps = [RegOp.SetDword(Key, "EnableClientAuditLogging", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "EnableClientAuditLogging")],
-                DetectOps = [RegOp.CheckDword(Key, "EnableClientAuditLogging", 1)],
-            },
-            new TweakDef
-            {
-                Id = "confmgr-require-ssl-for-management-point",
-                Label = "ConfigMgr: Require HTTPS/PKI for All Client-to–Management Point Communication",
-                Category = "System",
-                Description = "Sets RequireSSLForManagementPoint=1 in ConfigurationManager policy. Enforces that the ConfigMgr client uses HTTPS with PKI client certificates for all communication with the Management Point, Distribution Point, and other site roles, blocking fallback to HTTP. " +
-                    "Configuration Manager in HTTP mode transmits deployment data, credentials used for network access accounts, and package download URLs in plaintext. A network attacker on the same segment as a ConfigMgr client can intercept policy downloads and inject malicious package locations. Enforcing HTTPS-only communication requires PKI infrastructure but prevents man-in-the-middle interception of ConfigMgr policy and deployment content.",
-                Tags = ["configmgr", "sccm", "https", "pki", "ssl", "management-point"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 5,
-                SafetyRating = 3,
-                ImpactNote = "ConfigMgr client requires HTTPS; HTTP communication with management point blocked. Requires PKI client certificates to be enrolled.",
-                ApplyOps = [RegOp.SetDword(Key, "RequireSSLForManagementPoint", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "RequireSSLForManagementPoint")],
-                DetectOps = [RegOp.CheckDword(Key, "RequireSSLForManagementPoint", 1)],
-            },
-            new TweakDef
-            {
-                Id = "confmgr-disable-software-center-user-portal",
-                Label = "ConfigMgr: Disable Software Center User-Initiated Install Portal",
-                Category = "System",
-                Description = "Sets DisableSoftwareCenterPortal=1 in ConfigurationManager policy. Disables the Software Center user-facing portal through which end users can browse 'Available' software and initiate their own optional application installs. Only 'Required' deployments that are pushed and mandatory remain active; the Software Center self-service catalog is removed from the user's Start menu. " +
-                    "The Software Center self-service portal is appropriate for general enterprise endpoints where end users should be able to install productivity tools. In high-security or locked-down environments (healthcare workstations, kiosk terminals, PCI-scope machines), allowing users to install any software from the catalog — even admin-approved software — introduces unnecessary attack surface expansion. Application installs should be exclusively IT-admin-driven deployments.",
-                Tags = ["configmgr", "sccm", "software-center", "lockdown", "user-install"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Software Center self-service portal disabled; only mandatory/required ConfigMgr deployments are presented to users.",
-                ApplyOps = [RegOp.SetDword(Key, "DisableSoftwareCenterPortal", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "DisableSoftwareCenterPortal")],
-                DetectOps = [RegOp.CheckDword(Key, "DisableSoftwareCenterPortal", 1)],
-            },
-            new TweakDef
-            {
-                Id = "confmgr-disable-client-auto-upgrade",
-                Label = "ConfigMgr: Disable Automatic ConfigMgr Client Agent Auto-Upgrade",
-                Category = "System",
-                Description = "Sets DisableAutoUpgrade=1 in ConfigurationManager policy. Prevents the ConfigMgr client agent from automatically upgrading itself when the site server is running a newer version of the ConfigMgr client, requiring IT to explicitly push client upgrades through a managed deployment. " +
-                    "The ConfigMgr client auto-upgrade mechanism upgrades the client agent on all managed endpoints automatically when the Primary Site server is upgraded. While convenient, this means that upgrading the site server triggers an automatic, uncontrolled rollout to thousands of endpoints simultaneously, with no staging, no pilot group, and no rollback capability. A buggy client version pushed by auto-upgrade to all endpoints can simultaneously disrupt the management channel for the entire estate.",
-                Tags = ["configmgr", "sccm", "client-upgrade", "rollout", "change-control"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "ConfigMgr client auto-upgrade disabled; client upgrades require explicit IT-managed deployment packages.",
-                ApplyOps = [RegOp.SetDword(Key, "DisableAutoUpgrade", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "DisableAutoUpgrade")],
-                DetectOps = [RegOp.CheckDword(Key, "DisableAutoUpgrade", 1)],
-            },
-            new TweakDef
-            {
-                Id = "confmgr-require-admin-for-user-policy-execution",
-                Label = "ConfigMgr: Require Administrative Approval Before User-Targeted Policy Execution",
-                Category = "System",
-                Description = "Sets RequireAdminApprovalForUserPolicy=1 in ConfigurationManager policy. Requires that user-targeted configuration baseline deployments (policies applied to users, not computers) receive explicit IT admin approval in the ConfigMgr console before the client agent executes them on the endpoint. " +
-                    "In some ConfigMgr configurations, user-targeted configuration baselines can be deployed to security groups by less-privileged admins (Help Desk, Application Deployment staff) without requiring full ConfigMgr infrastructure admin privileges. If those baselines include scripts or registry modifications, a Help Desk operator with deployment rights could push policy changes to all users in their management scope. Requiring admin approval creates a second-factor approval gate for user-targeted policy execution.",
-                Tags = ["configmgr", "sccm", "user-policy", "admin-approval", "separation-of-duties"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "User-targeted ConfigMgr configuration baselines require admin approval before execution; prevents unauthorised user-policy deployment.",
-                ApplyOps = [RegOp.SetDword(Key, "RequireAdminApprovalForUserPolicy", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "RequireAdminApprovalForUserPolicy")],
-                DetectOps = [RegOp.CheckDword(Key, "RequireAdminApprovalForUserPolicy", 1)],
-            },
-            new TweakDef
-            {
-                Id = "confmgr-cap-content-cache-size-5gb",
-                Label = "ConfigMgr: Cap Client Content Cache Size at 5 GB",
-                Category = "System",
-                Description = "Sets MaxContentCacheSizeGB=5 in ConfigurationManager policy. Limits the ConfigMgr client content cache (the local disk cache where the client pre-downloads content from Distribution Points before installation) to a maximum of 5 GB, preventing the cache from consuming disk space beyond this limit. " +
-                    "By default, the ConfigMgr client content cache can grow to 10% of total disk size. On large-disk endpoints (1 TB drives), this allows a 100 GB cache. In environments with thin-provisioned storage (VDI, laptop SSDs) or low-disk-space scenarios, an unbounded cache can fill available disk space, causing operating system failures or application performance issues. A 5 GB cap is sufficient for most enterprise software deployments while protecting disk space.",
-                Tags = ["configmgr", "sccm", "cache", "disk-space", "storage"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                ImpactNote = "ConfigMgr client content cache capped at 5 GB; disk consumption controlled for thin-provisioned storage environments.",
-                ApplyOps = [RegOp.SetDword(Key, "MaxContentCacheSizeGB", 5)],
-                RemoveOps = [RegOp.DeleteValue(Key, "MaxContentCacheSizeGB")],
-                DetectOps = [RegOp.CheckDword(Key, "MaxContentCacheSizeGB", 5)],
-            },
-            new TweakDef
-            {
-                Id = "confmgr-disable-client-notification-feature",
-                Label = "ConfigMgr: Disable ConfigMgr Client Notification Channel",
-                Category = "System",
-                Description = "Sets DisableClientNotification=1 in ConfigurationManager policy. Disables the ConfigMgr client notification channel — a push mechanism that allows the site server to send fast-path notifications to clients to immediately trigger a policy evaluation or initiate re-inventory without waiting for the standard polling interval. " +
-                    "The client notification channel uses a persistent TCP connection from the ConfigMgr client to the Management Point. While this enables near-real-time policy deployment, it also means a compromised Management Point has an active connection to every managed client and can trigger immediate policy execution on all clients simultaneously. In environments where the threat model includes Management Point compromise, disabling the notification channel forces deployments to use the standard polling schedule which is easier to audit and rate-limit.",
-                Tags = ["configmgr", "sccm", "client-notification", "tcp", "management-point"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 4,
-                ImpactNote = "ConfigMgr push notifications disabled; policy deployment uses scheduled polling intervals instead of near-real-time push.",
-                ApplyOps = [RegOp.SetDword(Key, "DisableClientNotification", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "DisableClientNotification")],
-                DetectOps = [RegOp.CheckDword(Key, "DisableClientNotification", 1)],
-            },
-            new TweakDef
-            {
-                Id = "confmgr-enable-tamper-protection",
-                Label = "ConfigMgr: Enable Tamper Protection for ConfigMgr Client Agent",
-                Category = "System",
-                Description = "Sets EnableClientTamperProtection=1 in ConfigurationManager policy. Enables the ConfigMgr client tamper protection mechanism, which prevents standard users and non-admin processes from stopping or disabling the CCMExec service, deleting the CCM client registry keys, or uninstalling the ConfigMgr client agent. " +
-                    "Attackers that gain code execution on an endpoint as a standard user or as a low-privilege process will attempt to disable security tools and management agents before proceeding with lateral movement or data exfiltration. The ConfigMgr client agent is a high-value target for disablement because it delivers security baselines, patches, and malware detection policies. Tamper protection prevents the CCMExec service from being stopped by non-admin processes.",
-                Tags = ["configmgr", "sccm", "tamper-protection", "service-protection", "ccmexec"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                ImpactNote = "ConfigMgr client tamper protection active; CCMExec service cannot be stopped by non-admin processes or scripts.",
-                ApplyOps = [RegOp.SetDword(Key, "EnableClientTamperProtection", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "EnableClientTamperProtection")],
-                DetectOps = [RegOp.CheckDword(Key, "EnableClientTamperProtection", 1)],
-            },
-            new TweakDef
-            {
-                Id = "confmgr-block-network-access-account-caching",
-                Label = "ConfigMgr: Block Caching of Network Access Account Credentials on Client Disk",
-                Category = "System",
-                Description = "Sets DisableNAACredentialCaching=1 in ConfigurationManager policy. Prevents the ConfigMgr client from caching the Network Access Account (NAA) credentials — the service account used to authenticate with Distribution Points — in the local DPAPI credential store on the client disk. " +
-                    "The ConfigMgr Network Access Account is a domain service account whose credentials are distributed to all ConfigMgr-managed clients to allow content download from Distribution Points. By default, these credentials are cached on disk using DPAPI. On a compromised endpoint, an attacker can extract the NAA credentials using tools that decrypt DPAPI-protected data (accessible to SYSTEM-level processes) and then use those credentials to authenticate to internal servers as the NAA service account, often a domain user with broad read access.",
-                Tags = ["configmgr", "sccm", "naa", "credentials", "dpapi", "credential-theft"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 5,
-                SafetyRating = 4,
-                ImpactNote = "NAA credential caching disabled; ConfigMgr service account credentials are not stored on client disk after each policy download.",
-                ApplyOps = [RegOp.SetDword(Key, "DisableNAACredentialCaching", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "DisableNAACredentialCaching")],
-                DetectOps = [RegOp.CheckDword(Key, "DisableNAACredentialCaching", 1)],
-            },
-        ];
-
+            [
+                new TweakDef
+                {
+                    Id = "confmgr-require-code-signing-for-scripts",
+                    Label = "ConfigMgr: Require Script Code Signing for All Client-Side Script Execution",
+                    Category = "System",
+                    Description =
+                        "Sets RequireScriptCodeSigning=1 in ConfigurationManager policy. Requires that any script (PowerShell, VBScript, JScript) deployed through the Configuration Manager client for task sequences or application deployment must be digitally signed by a certificate trusted by the client's root store before execution. "
+                        + "Configuration Manager script execution is a primary lateral movement vector in enterprise environments. A compromised management server or a rogue admin with deployment rights can push arbitrary scripts to all managed clients. Without code signing enforcement, any script pushed through ConfigMgr is executed verbatim. Requiring script code signing ensures only scripts signed by the enterprise PKI certificate authority are executed.",
+                    Tags = ["configmgr", "sccm", "scripts", "code-signing", "security"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 4,
+                    ImpactNote = "Unsigned ConfigMgr scripts blocked; all deployment scripts must be signed by enterprise PKI before execution.",
+                    ApplyOps = [RegOp.SetDword(Key, "RequireScriptCodeSigning", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "RequireScriptCodeSigning")],
+                    DetectOps = [RegOp.CheckDword(Key, "RequireScriptCodeSigning", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "confmgr-enable-client-audit-logging",
+                    Label = "ConfigMgr: Enable Comprehensive Audit Logging for Client Agent Operations",
+                    Category = "System",
+                    Description =
+                        "Sets EnableClientAuditLogging=1 in ConfigurationManager policy. Enables detailed audit logging in the Configuration Manager client agent, causing all deployment operations (software installs, uninstalls, state machine transitions, inventory collection, policy downloads) to be recorded in the Security event log in addition to the standard ccmsetup.log files. "
+                        + "The default ConfigMgr client logging writes verbose detail to log files under C:\\Windows\\CCM\\Logs\\ but does not generate Security event log entries auditable by a SIEM. With audit logging enabled, Security events are generated for every ConfigMgr operation, enabling correlation with Active Directory logon events, PowerShell execution events, and process creation events during incident investigations. This enables detection of ConfigMgr-based lateral movement.",
+                    Tags = ["configmgr", "sccm", "audit-log", "security", "siem"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote =
+                        "ConfigMgr operations generate Security event log entries; SIEM can correlate ConfigMgr deployments with suspicious activities.",
+                    ApplyOps = [RegOp.SetDword(Key, "EnableClientAuditLogging", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "EnableClientAuditLogging")],
+                    DetectOps = [RegOp.CheckDword(Key, "EnableClientAuditLogging", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "confmgr-require-ssl-for-management-point",
+                    Label = "ConfigMgr: Require HTTPS/PKI for All Client-to–Management Point Communication",
+                    Category = "System",
+                    Description =
+                        "Sets RequireSSLForManagementPoint=1 in ConfigurationManager policy. Enforces that the ConfigMgr client uses HTTPS with PKI client certificates for all communication with the Management Point, Distribution Point, and other site roles, blocking fallback to HTTP. "
+                        + "Configuration Manager in HTTP mode transmits deployment data, credentials used for network access accounts, and package download URLs in plaintext. A network attacker on the same segment as a ConfigMgr client can intercept policy downloads and inject malicious package locations. Enforcing HTTPS-only communication requires PKI infrastructure but prevents man-in-the-middle interception of ConfigMgr policy and deployment content.",
+                    Tags = ["configmgr", "sccm", "https", "pki", "ssl", "management-point"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 5,
+                    SafetyRating = 3,
+                    ImpactNote =
+                        "ConfigMgr client requires HTTPS; HTTP communication with management point blocked. Requires PKI client certificates to be enrolled.",
+                    ApplyOps = [RegOp.SetDword(Key, "RequireSSLForManagementPoint", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "RequireSSLForManagementPoint")],
+                    DetectOps = [RegOp.CheckDword(Key, "RequireSSLForManagementPoint", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "confmgr-disable-software-center-user-portal",
+                    Label = "ConfigMgr: Disable Software Center User-Initiated Install Portal",
+                    Category = "System",
+                    Description =
+                        "Sets DisableSoftwareCenterPortal=1 in ConfigurationManager policy. Disables the Software Center user-facing portal through which end users can browse 'Available' software and initiate their own optional application installs. Only 'Required' deployments that are pushed and mandatory remain active; the Software Center self-service catalog is removed from the user's Start menu. "
+                        + "The Software Center self-service portal is appropriate for general enterprise endpoints where end users should be able to install productivity tools. In high-security or locked-down environments (healthcare workstations, kiosk terminals, PCI-scope machines), allowing users to install any software from the catalog — even admin-approved software — introduces unnecessary attack surface expansion. Application installs should be exclusively IT-admin-driven deployments.",
+                    Tags = ["configmgr", "sccm", "software-center", "lockdown", "user-install"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote =
+                        "Software Center self-service portal disabled; only mandatory/required ConfigMgr deployments are presented to users.",
+                    ApplyOps = [RegOp.SetDword(Key, "DisableSoftwareCenterPortal", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "DisableSoftwareCenterPortal")],
+                    DetectOps = [RegOp.CheckDword(Key, "DisableSoftwareCenterPortal", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "confmgr-disable-client-auto-upgrade",
+                    Label = "ConfigMgr: Disable Automatic ConfigMgr Client Agent Auto-Upgrade",
+                    Category = "System",
+                    Description =
+                        "Sets DisableAutoUpgrade=1 in ConfigurationManager policy. Prevents the ConfigMgr client agent from automatically upgrading itself when the site server is running a newer version of the ConfigMgr client, requiring IT to explicitly push client upgrades through a managed deployment. "
+                        + "The ConfigMgr client auto-upgrade mechanism upgrades the client agent on all managed endpoints automatically when the Primary Site server is upgraded. While convenient, this means that upgrading the site server triggers an automatic, uncontrolled rollout to thousands of endpoints simultaneously, with no staging, no pilot group, and no rollback capability. A buggy client version pushed by auto-upgrade to all endpoints can simultaneously disrupt the management channel for the entire estate.",
+                    Tags = ["configmgr", "sccm", "client-upgrade", "rollout", "change-control"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "ConfigMgr client auto-upgrade disabled; client upgrades require explicit IT-managed deployment packages.",
+                    ApplyOps = [RegOp.SetDword(Key, "DisableAutoUpgrade", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "DisableAutoUpgrade")],
+                    DetectOps = [RegOp.CheckDword(Key, "DisableAutoUpgrade", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "confmgr-require-admin-for-user-policy-execution",
+                    Label = "ConfigMgr: Require Administrative Approval Before User-Targeted Policy Execution",
+                    Category = "System",
+                    Description =
+                        "Sets RequireAdminApprovalForUserPolicy=1 in ConfigurationManager policy. Requires that user-targeted configuration baseline deployments (policies applied to users, not computers) receive explicit IT admin approval in the ConfigMgr console before the client agent executes them on the endpoint. "
+                        + "In some ConfigMgr configurations, user-targeted configuration baselines can be deployed to security groups by less-privileged admins (Help Desk, Application Deployment staff) without requiring full ConfigMgr infrastructure admin privileges. If those baselines include scripts or registry modifications, a Help Desk operator with deployment rights could push policy changes to all users in their management scope. Requiring admin approval creates a second-factor approval gate for user-targeted policy execution.",
+                    Tags = ["configmgr", "sccm", "user-policy", "admin-approval", "separation-of-duties"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote =
+                        "User-targeted ConfigMgr configuration baselines require admin approval before execution; prevents unauthorised user-policy deployment.",
+                    ApplyOps = [RegOp.SetDword(Key, "RequireAdminApprovalForUserPolicy", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "RequireAdminApprovalForUserPolicy")],
+                    DetectOps = [RegOp.CheckDword(Key, "RequireAdminApprovalForUserPolicy", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "confmgr-cap-content-cache-size-5gb",
+                    Label = "ConfigMgr: Cap Client Content Cache Size at 5 GB",
+                    Category = "System",
+                    Description =
+                        "Sets MaxContentCacheSizeGB=5 in ConfigurationManager policy. Limits the ConfigMgr client content cache (the local disk cache where the client pre-downloads content from Distribution Points before installation) to a maximum of 5 GB, preventing the cache from consuming disk space beyond this limit. "
+                        + "By default, the ConfigMgr client content cache can grow to 10% of total disk size. On large-disk endpoints (1 TB drives), this allows a 100 GB cache. In environments with thin-provisioned storage (VDI, laptop SSDs) or low-disk-space scenarios, an unbounded cache can fill available disk space, causing operating system failures or application performance issues. A 5 GB cap is sufficient for most enterprise software deployments while protecting disk space.",
+                    Tags = ["configmgr", "sccm", "cache", "disk-space", "storage"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 2,
+                    SafetyRating = 5,
+                    ImpactNote =
+                        "ConfigMgr client content cache capped at 5 GB; disk consumption controlled for thin-provisioned storage environments.",
+                    ApplyOps = [RegOp.SetDword(Key, "MaxContentCacheSizeGB", 5)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "MaxContentCacheSizeGB")],
+                    DetectOps = [RegOp.CheckDword(Key, "MaxContentCacheSizeGB", 5)],
+                },
+                new TweakDef
+                {
+                    Id = "confmgr-disable-client-notification-feature",
+                    Label = "ConfigMgr: Disable ConfigMgr Client Notification Channel",
+                    Category = "System",
+                    Description =
+                        "Sets DisableClientNotification=1 in ConfigurationManager policy. Disables the ConfigMgr client notification channel — a push mechanism that allows the site server to send fast-path notifications to clients to immediately trigger a policy evaluation or initiate re-inventory without waiting for the standard polling interval. "
+                        + "The client notification channel uses a persistent TCP connection from the ConfigMgr client to the Management Point. While this enables near-real-time policy deployment, it also means a compromised Management Point has an active connection to every managed client and can trigger immediate policy execution on all clients simultaneously. In environments where the threat model includes Management Point compromise, disabling the notification channel forces deployments to use the standard polling schedule which is easier to audit and rate-limit.",
+                    Tags = ["configmgr", "sccm", "client-notification", "tcp", "management-point"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 2,
+                    SafetyRating = 4,
+                    ImpactNote =
+                        "ConfigMgr push notifications disabled; policy deployment uses scheduled polling intervals instead of near-real-time push.",
+                    ApplyOps = [RegOp.SetDword(Key, "DisableClientNotification", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "DisableClientNotification")],
+                    DetectOps = [RegOp.CheckDword(Key, "DisableClientNotification", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "confmgr-enable-tamper-protection",
+                    Label = "ConfigMgr: Enable Tamper Protection for ConfigMgr Client Agent",
+                    Category = "System",
+                    Description =
+                        "Sets EnableClientTamperProtection=1 in ConfigurationManager policy. Enables the ConfigMgr client tamper protection mechanism, which prevents standard users and non-admin processes from stopping or disabling the CCMExec service, deleting the CCM client registry keys, or uninstalling the ConfigMgr client agent. "
+                        + "Attackers that gain code execution on an endpoint as a standard user or as a low-privilege process will attempt to disable security tools and management agents before proceeding with lateral movement or data exfiltration. The ConfigMgr client agent is a high-value target for disablement because it delivers security baselines, patches, and malware detection policies. Tamper protection prevents the CCMExec service from being stopped by non-admin processes.",
+                    Tags = ["configmgr", "sccm", "tamper-protection", "service-protection", "ccmexec"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "ConfigMgr client tamper protection active; CCMExec service cannot be stopped by non-admin processes or scripts.",
+                    ApplyOps = [RegOp.SetDword(Key, "EnableClientTamperProtection", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "EnableClientTamperProtection")],
+                    DetectOps = [RegOp.CheckDword(Key, "EnableClientTamperProtection", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "confmgr-block-network-access-account-caching",
+                    Label = "ConfigMgr: Block Caching of Network Access Account Credentials on Client Disk",
+                    Category = "System",
+                    Description =
+                        "Sets DisableNAACredentialCaching=1 in ConfigurationManager policy. Prevents the ConfigMgr client from caching the Network Access Account (NAA) credentials — the service account used to authenticate with Distribution Points — in the local DPAPI credential store on the client disk. "
+                        + "The ConfigMgr Network Access Account is a domain service account whose credentials are distributed to all ConfigMgr-managed clients to allow content download from Distribution Points. By default, these credentials are cached on disk using DPAPI. On a compromised endpoint, an attacker can extract the NAA credentials using tools that decrypt DPAPI-protected data (accessible to SYSTEM-level processes) and then use those credentials to authenticate to internal servers as the NAA service account, often a domain user with broad read access.",
+                    Tags = ["configmgr", "sccm", "naa", "credentials", "dpapi", "credential-theft"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 5,
+                    SafetyRating = 4,
+                    ImpactNote =
+                        "NAA credential caching disabled; ConfigMgr service account credentials are not stored on client disk after each policy download.",
+                    ApplyOps = [RegOp.SetDword(Key, "DisableNAACredentialCaching", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "DisableNAACredentialCaching")],
+                    DetectOps = [RegOp.CheckDword(Key, "DisableNAACredentialCaching", 1)],
+                },
+            ];
     }
 
     // ── DeploymentServicesPolicy ──
@@ -6890,7 +6895,6 @@ internal static class PolicyEnterprise
                 DetectOps = [RegOp.CheckDword(Key, "LimitServerAccessibility", 1)],
             },
         ];
-
     }
 
     // ── DomainControllerHardeningPolicy ──
@@ -6901,169 +6905,179 @@ internal static class PolicyEnterprise
         private const string LsaKey = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa\MSV1_0";
 
         public static IReadOnlyList<TweakDef> Data =>
-        [
-            new TweakDef
-            {
-                Id           = "dchrdn-require-secure-channel-signing",
-                Label        = "Require Signing on All Netlogon Secure Channel Connections",
-                Category = "System",
-                Description  = "Configures Netlogon to require cryptographic signing on all secure channel connections from this machine to its domain controller, protecting against Zerologon (CVE-2020-1472) and secure channel downgrade attacks.",
-                Tags         = ["netlogon", "secure-channel", "zerologon", "cve-2020-1472", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 5,
-                SafetyRating = 5,
-                ImpactNote   = "Netlogon secure channel signing required; Zerologon class attacks against this machine's DC connection blocked.",
-                ApplyOps     = [RegOp.SetDword(Key, "RequireSignOrSeal", 1)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "RequireSignOrSeal")],
-                DetectOps    = [RegOp.CheckDword(Key, "RequireSignOrSeal", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "dchrdn-require-secure-channel-sealing",
-                Label        = "Require Sealing (Encryption) on Netlogon Secure Channel",
-                Category = "System",
-                Description  = "Configures the Netlogon secure channel to use full encryption (sealing) in addition to signing, ensuring the contents of secure channel messages cannot be intercepted and read by network observers.",
-                Tags         = ["netlogon", "sealing", "encryption", "secure-channel", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 5,
-                SafetyRating = 5,
-                ImpactNote   = "Netlogon secure channel sealing enabled; DC communication encrypted end-to-end, not just signed.",
-                ApplyOps     = [RegOp.SetDword(Key, "SealSecureChannel", 1)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "SealSecureChannel")],
-                DetectOps    = [RegOp.CheckDword(Key, "SealSecureChannel", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "dchrdn-sign-secure-channel",
-                Label        = "Enable Netlogon Secure Channel Cryptographic Signatures",
-                Category = "System",
-                Description  = "Enables Netlogon secure channel signing at the Windows Security Support Provider level, ensuring all Netlogon RPC traffic includes a HMAC-based message authentication code protecting against modification.",
-                Tags         = ["netlogon", "signing", "hmac", "rpc", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 5,
-                SafetyRating = 5,
-                ImpactNote   = "Netlogon RPC channel signing enabled; HMAC integrity protection active on all DC communication.",
-                ApplyOps     = [RegOp.SetDword(Key, "SignSecureChannel", 1)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "SignSecureChannel")],
-                DetectOps    = [RegOp.CheckDword(Key, "SignSecureChannel", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "dchrdn-set-max-machine-account-age-30d",
-                Label        = "Set Machine Account Password Maximum Age to 30 Days",
-                Category = "System",
-                Description  = "Sets the maximum age of the machine account Kerberos trust password to 30 days, ensuring machine account credentials are regularly rotated and limiting the window during which a stolen machine account password can be misused.",
-                Tags         = ["netlogon", "machine-account", "password-age", "rotation", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 3,
-                SafetyRating = 5,
-                ImpactNote   = "Machine account password rotation cycle set to 30 days; stolen machine credentials expire in 30 days maximum.",
-                ApplyOps     = [RegOp.SetDword(Key, "MaximumPasswordAge", 30)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "MaximumPasswordAge")],
-                DetectOps    = [RegOp.CheckDword(Key, "MaximumPasswordAge", 30)],
-            },
-            new TweakDef
-            {
-                Id           = "dchrdn-disable-machine-account-pwd-change",
-                Label        = "Enable Machine Account Password Rotation (Prevent Disabling)",
-                Category = "System",
-                Description  = "Ensures the machine account password rotation feature is not disabled, counteracting malware or misconfiguration that sets DisablePasswordChange=1 to prevent the machine account from rotating its domain password.",
-                Tags         = ["netlogon", "machine-account", "password-change", "security", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 4,
-                SafetyRating = 5,
-                ImpactNote   = "Machine account password change enabled (DisablePasswordChange=0); regular DC trust rotations enforced.",
-                ApplyOps     = [RegOp.SetDword(Key, "DisablePasswordChange", 0)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "DisablePasswordChange")],
-                DetectOps    = [RegOp.CheckDword(Key, "DisablePasswordChange", 0)],
-            },
-            new TweakDef
-            {
-                Id           = "dchrdn-enable-strong-key",
-                Label        = "Enable Strong Session Key for Netlogon Secure Channel",
-                Category = "System",
-                Description  = "Forces the use of AES-256 strong session keys for Netlogon secure channel encryption rather than the legacy DES-based 64-bit session keys, significantly increasing the strength of DC trust channel encryption.",
-                Tags         = ["netlogon", "strong-key", "aes", "session-key", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 5,
-                SafetyRating = 5,
-                ImpactNote   = "Netlogon AES-256 strong session keys required; legacy 64-bit DES session keys rejected for DC channel.",
-                ApplyOps     = [RegOp.SetDword(Key, "RequireStrongKey", 1)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "RequireStrongKey")],
-                DetectOps    = [RegOp.CheckDword(Key, "RequireStrongKey", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "dchrdn-restrict-null-session-pipes",
-                Label        = "Restrict Null Session Named Pipe Access to Empty List",
-                Category = "System",
-                Description  = "Removes all entries from the NullSessionPipes registry value, ensuring no named pipes can be accessed via anonymous null session connections on this machine, closing a legacy attack vector for anonymous RPC enumeration.",
-                Tags         = ["netlogon", "null-session", "named-pipes", "anonymous", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 4,
-                SafetyRating = 5,
-                ImpactNote   = "Null session named pipe list cleared; anonymous RPC pipe access completely blocked.",
-                ApplyOps     = [RegOp.SetString(SecKey, "NullSessionPipes", "")],
-                RemoveOps    = [RegOp.DeleteValue(SecKey, "NullSessionPipes")],
-                DetectOps    = [RegOp.CheckString(SecKey, "NullSessionPipes", "")],
-            },
-            new TweakDef
-            {
-                Id           = "dchrdn-log-netlogon-failures",
-                Label        = "Log Netlogon Secure Channel Failure Events",
-                Category = "System",
-                Description  = "Enables detailed event log entries for Netlogon secure channel establishment failures, authentication denials, and secure channel seal/sign rejections, providing visibility into DC trust channel attacks.",
-                Tags         = ["netlogon", "event-log", "audit", "secure-channel-failure", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 4,
-                SafetyRating = 5,
-                ImpactNote   = "Netlogon secure channel failure events logged; DC authentication and Zerologon attack attempts visible.",
-                ApplyOps     = [RegOp.SetDword(Key, "DbFlag", 0x2080FFFF)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "DbFlag")],
-                DetectOps    = [RegOp.CheckDword(Key, "DbFlag", 0x2080FFFF)],
-            },
-            new TweakDef
-            {
-                Id           = "dchrdn-restrict-ntlm-in-domain",
-                Label        = "Restrict Incoming NTLM Authentication in Domain Context",
-                Category = "System",
-                Description  = "Configures this domain member to block incoming NTLM authentication from domain accounts, requiring Kerberos for all intra-domain service authentication and preventing NTLM relay and pass-the-hash attacks between domain members.",
-                Tags         = ["netlogon", "ntlm", "domain", "relay-attack", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 5,
-                SafetyRating = 5,
-                ImpactNote   = "Incoming NTLM from domain accounts blocked; intra-domain Kerberos required. NTLM relay via domain accounts mitigated.",
-                ApplyOps     = [RegOp.SetDword(LsaKey, "RestrictReceivingNTLMTrafficInDomain", 2)],
-                RemoveOps    = [RegOp.DeleteValue(LsaKey, "RestrictReceivingNTLMTrafficInDomain")],
-                DetectOps    = [RegOp.CheckDword(LsaKey, "RestrictReceivingNTLMTrafficInDomain", 2)],
-            },
-            new TweakDef
-            {
-                Id           = "dchrdn-disable-netlogon-telemetry",
-                Label        = "Disable Netlogon and Domain Services Telemetry to Microsoft",
-                Category = "System",
-                Description  = "Prevents the Netlogon service and domain authentication components from sending DC trust channel statistics, authentication success rates, and secure channel negotiation telemetry to Microsoft.",
-                Tags         = ["netlogon", "telemetry", "privacy", "microsoft", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 2,
-                SafetyRating = 5,
-                ImpactNote   = "Netlogon telemetry to Microsoft disabled; DC channel stats and domain auth data not sent to cloud.",
-                ApplyOps     = [RegOp.SetDword(Key, "DisableNetlogonTelemetry", 1)],
-                RemoveOps    = [RegOp.DeleteValue(Key, "DisableNetlogonTelemetry")],
-                DetectOps    = [RegOp.CheckDword(Key, "DisableNetlogonTelemetry", 1)],
-            },
-        ];
-
+            [
+                new TweakDef
+                {
+                    Id = "dchrdn-require-secure-channel-signing",
+                    Label = "Require Signing on All Netlogon Secure Channel Connections",
+                    Category = "System",
+                    Description =
+                        "Configures Netlogon to require cryptographic signing on all secure channel connections from this machine to its domain controller, protecting against Zerologon (CVE-2020-1472) and secure channel downgrade attacks.",
+                    Tags = ["netlogon", "secure-channel", "zerologon", "cve-2020-1472", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 5,
+                    SafetyRating = 5,
+                    ImpactNote = "Netlogon secure channel signing required; Zerologon class attacks against this machine's DC connection blocked.",
+                    ApplyOps = [RegOp.SetDword(Key, "RequireSignOrSeal", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "RequireSignOrSeal")],
+                    DetectOps = [RegOp.CheckDword(Key, "RequireSignOrSeal", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "dchrdn-require-secure-channel-sealing",
+                    Label = "Require Sealing (Encryption) on Netlogon Secure Channel",
+                    Category = "System",
+                    Description =
+                        "Configures the Netlogon secure channel to use full encryption (sealing) in addition to signing, ensuring the contents of secure channel messages cannot be intercepted and read by network observers.",
+                    Tags = ["netlogon", "sealing", "encryption", "secure-channel", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 5,
+                    SafetyRating = 5,
+                    ImpactNote = "Netlogon secure channel sealing enabled; DC communication encrypted end-to-end, not just signed.",
+                    ApplyOps = [RegOp.SetDword(Key, "SealSecureChannel", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "SealSecureChannel")],
+                    DetectOps = [RegOp.CheckDword(Key, "SealSecureChannel", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "dchrdn-sign-secure-channel",
+                    Label = "Enable Netlogon Secure Channel Cryptographic Signatures",
+                    Category = "System",
+                    Description =
+                        "Enables Netlogon secure channel signing at the Windows Security Support Provider level, ensuring all Netlogon RPC traffic includes a HMAC-based message authentication code protecting against modification.",
+                    Tags = ["netlogon", "signing", "hmac", "rpc", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 5,
+                    SafetyRating = 5,
+                    ImpactNote = "Netlogon RPC channel signing enabled; HMAC integrity protection active on all DC communication.",
+                    ApplyOps = [RegOp.SetDword(Key, "SignSecureChannel", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "SignSecureChannel")],
+                    DetectOps = [RegOp.CheckDword(Key, "SignSecureChannel", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "dchrdn-set-max-machine-account-age-30d",
+                    Label = "Set Machine Account Password Maximum Age to 30 Days",
+                    Category = "System",
+                    Description =
+                        "Sets the maximum age of the machine account Kerberos trust password to 30 days, ensuring machine account credentials are regularly rotated and limiting the window during which a stolen machine account password can be misused.",
+                    Tags = ["netlogon", "machine-account", "password-age", "rotation", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "Machine account password rotation cycle set to 30 days; stolen machine credentials expire in 30 days maximum.",
+                    ApplyOps = [RegOp.SetDword(Key, "MaximumPasswordAge", 30)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "MaximumPasswordAge")],
+                    DetectOps = [RegOp.CheckDword(Key, "MaximumPasswordAge", 30)],
+                },
+                new TweakDef
+                {
+                    Id = "dchrdn-disable-machine-account-pwd-change",
+                    Label = "Enable Machine Account Password Rotation (Prevent Disabling)",
+                    Category = "System",
+                    Description =
+                        "Ensures the machine account password rotation feature is not disabled, counteracting malware or misconfiguration that sets DisablePasswordChange=1 to prevent the machine account from rotating its domain password.",
+                    Tags = ["netlogon", "machine-account", "password-change", "security", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "Machine account password change enabled (DisablePasswordChange=0); regular DC trust rotations enforced.",
+                    ApplyOps = [RegOp.SetDword(Key, "DisablePasswordChange", 0)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "DisablePasswordChange")],
+                    DetectOps = [RegOp.CheckDword(Key, "DisablePasswordChange", 0)],
+                },
+                new TweakDef
+                {
+                    Id = "dchrdn-enable-strong-key",
+                    Label = "Enable Strong Session Key for Netlogon Secure Channel",
+                    Category = "System",
+                    Description =
+                        "Forces the use of AES-256 strong session keys for Netlogon secure channel encryption rather than the legacy DES-based 64-bit session keys, significantly increasing the strength of DC trust channel encryption.",
+                    Tags = ["netlogon", "strong-key", "aes", "session-key", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 5,
+                    SafetyRating = 5,
+                    ImpactNote = "Netlogon AES-256 strong session keys required; legacy 64-bit DES session keys rejected for DC channel.",
+                    ApplyOps = [RegOp.SetDword(Key, "RequireStrongKey", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "RequireStrongKey")],
+                    DetectOps = [RegOp.CheckDword(Key, "RequireStrongKey", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "dchrdn-restrict-null-session-pipes",
+                    Label = "Restrict Null Session Named Pipe Access to Empty List",
+                    Category = "System",
+                    Description =
+                        "Removes all entries from the NullSessionPipes registry value, ensuring no named pipes can be accessed via anonymous null session connections on this machine, closing a legacy attack vector for anonymous RPC enumeration.",
+                    Tags = ["netlogon", "null-session", "named-pipes", "anonymous", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "Null session named pipe list cleared; anonymous RPC pipe access completely blocked.",
+                    ApplyOps = [RegOp.SetString(SecKey, "NullSessionPipes", "")],
+                    RemoveOps = [RegOp.DeleteValue(SecKey, "NullSessionPipes")],
+                    DetectOps = [RegOp.CheckString(SecKey, "NullSessionPipes", "")],
+                },
+                new TweakDef
+                {
+                    Id = "dchrdn-log-netlogon-failures",
+                    Label = "Log Netlogon Secure Channel Failure Events",
+                    Category = "System",
+                    Description =
+                        "Enables detailed event log entries for Netlogon secure channel establishment failures, authentication denials, and secure channel seal/sign rejections, providing visibility into DC trust channel attacks.",
+                    Tags = ["netlogon", "event-log", "audit", "secure-channel-failure", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "Netlogon secure channel failure events logged; DC authentication and Zerologon attack attempts visible.",
+                    ApplyOps = [RegOp.SetDword(Key, "DbFlag", 0x2080FFFF)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "DbFlag")],
+                    DetectOps = [RegOp.CheckDword(Key, "DbFlag", 0x2080FFFF)],
+                },
+                new TweakDef
+                {
+                    Id = "dchrdn-restrict-ntlm-in-domain",
+                    Label = "Restrict Incoming NTLM Authentication in Domain Context",
+                    Category = "System",
+                    Description =
+                        "Configures this domain member to block incoming NTLM authentication from domain accounts, requiring Kerberos for all intra-domain service authentication and preventing NTLM relay and pass-the-hash attacks between domain members.",
+                    Tags = ["netlogon", "ntlm", "domain", "relay-attack", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 5,
+                    SafetyRating = 5,
+                    ImpactNote =
+                        "Incoming NTLM from domain accounts blocked; intra-domain Kerberos required. NTLM relay via domain accounts mitigated.",
+                    ApplyOps = [RegOp.SetDword(LsaKey, "RestrictReceivingNTLMTrafficInDomain", 2)],
+                    RemoveOps = [RegOp.DeleteValue(LsaKey, "RestrictReceivingNTLMTrafficInDomain")],
+                    DetectOps = [RegOp.CheckDword(LsaKey, "RestrictReceivingNTLMTrafficInDomain", 2)],
+                },
+                new TweakDef
+                {
+                    Id = "dchrdn-disable-netlogon-telemetry",
+                    Label = "Disable Netlogon and Domain Services Telemetry to Microsoft",
+                    Category = "System",
+                    Description =
+                        "Prevents the Netlogon service and domain authentication components from sending DC trust channel statistics, authentication success rates, and secure channel negotiation telemetry to Microsoft.",
+                    Tags = ["netlogon", "telemetry", "privacy", "microsoft", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 2,
+                    SafetyRating = 5,
+                    ImpactNote = "Netlogon telemetry to Microsoft disabled; DC channel stats and domain auth data not sent to cloud.",
+                    ApplyOps = [RegOp.SetDword(Key, "DisableNetlogonTelemetry", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "DisableNetlogonTelemetry")],
+                    DetectOps = [RegOp.CheckDword(Key, "DisableNetlogonTelemetry", 1)],
+                },
+            ];
     }
 
     // ── DomainIsolationPolicy ──
@@ -7244,7 +7258,6 @@ internal static class PolicyEnterprise
                 DetectOps = [RegOp.CheckDword(Key, "EnableSAMonitoring", 1)],
             },
         ];
-
     }
 
     // ── DomainTrustPolicy ──
@@ -7437,7 +7450,6 @@ internal static class PolicyEnterprise
                     DetectOps = [RegOp.CheckDword(NetlogonKey, "CrossForestReferralTtl", 3600)],
                 },
             ];
-
     }
 
     // ── EasMdmPolicy ──
@@ -7658,17 +7670,14 @@ internal static class PolicyEnterprise
                 ImpactNote = "Disables Bluetooth on MDM-managed devices; reduces BlueSnarfing and proximity-based attack risk.",
             },
         ];
-
     }
 
     // ── EnterpriseDeviceManagementPolicy ──
     private static class _EnterpriseDeviceManagementPolicy
     {
-        private const string ErmKey =
-            @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\EnterpriseResourceManager";
+        private const string ErmKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\EnterpriseResourceManager";
 
-        private const string MdmKey =
-            @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CurrentVersion\MDM";
+        private const string MdmKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CurrentVersion\MDM";
 
         public static IReadOnlyList<TweakDef> Data =>
             [
@@ -7684,7 +7693,8 @@ internal static class PolicyEnterprise
                     CorpSafe = true,
                     ImpactScore = 4,
                     SafetyRating = 5,
-                    ImpactNote = "Devices are managed by both SCCM and Intune simultaneously. Workload authority (compliance, resource access, app deployment) is configurable per workload. Requires ConfigMgr 1710 or later and Intune subscription. Co-management authority conflicts are resolved by the workload slider settings in the SCCM console.",
+                    ImpactNote =
+                        "Devices are managed by both SCCM and Intune simultaneously. Workload authority (compliance, resource access, app deployment) is configurable per workload. Requires ConfigMgr 1710 or later and Intune subscription. Co-management authority conflicts are resolved by the workload slider settings in the SCCM console.",
                     ApplyOps = [RegOp.SetDword(MdmKey, "EnableCoManagement", 1)],
                     RemoveOps = [RegOp.DeleteValue(MdmKey, "EnableCoManagement")],
                     DetectOps = [RegOp.CheckDword(MdmKey, "EnableCoManagement", 1)],
@@ -7701,7 +7711,8 @@ internal static class PolicyEnterprise
                     CorpSafe = true,
                     ImpactScore = 4,
                     SafetyRating = 3,
-                    ImpactNote = "MDM authority can remotely lock a non-compliant device. The device requires the user's credentials to unlock. User may be temporarily unable to complete their work if locked during active use. Ensure a clear remediation process is communicated to users before deploying. Not the same as remote wipe — data is not affected.",
+                    ImpactNote =
+                        "MDM authority can remotely lock a non-compliant device. The device requires the user's credentials to unlock. User may be temporarily unable to complete their work if locked during active use. Ensure a clear remediation process is communicated to users before deploying. Not the same as remote wipe — data is not affected.",
                     ApplyOps = [RegOp.SetDword(ErmKey, "EnableRemoteLockOnComplianceBreach", 1)],
                     RemoveOps = [RegOp.DeleteValue(ErmKey, "EnableRemoteLockOnComplianceBreach")],
                     DetectOps = [RegOp.CheckDword(ErmKey, "EnableRemoteLockOnComplianceBreach", 1)],
@@ -7718,7 +7729,8 @@ internal static class PolicyEnterprise
                     CorpSafe = true,
                     ImpactScore = 4,
                     SafetyRating = 4,
-                    ImpactNote = "Unenrollment from MDM triggers removal of all MDM-deployed profiles, certificates, and managed app data. Personal files and apps are preserved. A corporate AAD-joined device unenrolling may lose domain join state. Not a full device wipe — ensure your users understand what is removed on unenrollment.",
+                    ImpactNote =
+                        "Unenrollment from MDM triggers removal of all MDM-deployed profiles, certificates, and managed app data. Personal files and apps are preserved. A corporate AAD-joined device unenrolling may lose domain join state. Not a full device wipe — ensure your users understand what is removed on unenrollment.",
                     ApplyOps = [RegOp.SetDword(ErmKey, "EnableSelectiveWipeOnUnenroll", 1)],
                     RemoveOps = [RegOp.DeleteValue(ErmKey, "EnableSelectiveWipeOnUnenroll")],
                     DetectOps = [RegOp.CheckDword(ErmKey, "EnableSelectiveWipeOnUnenroll", 1)],
@@ -7735,7 +7747,8 @@ internal static class PolicyEnterprise
                     CorpSafe = true,
                     ImpactScore = 4,
                     SafetyRating = 3,
-                    ImpactNote = "Only MDM-approved apps can be installed by users. Non-approved app installation attempts are blocked. Requires maintaining an approved app catalog in the MDM console. Users who need new apps must request IT approval. May disrupt productivity if the approval catalog is not kept up to date.",
+                    ImpactNote =
+                        "Only MDM-approved apps can be installed by users. Non-approved app installation attempts are blocked. Requires maintaining an approved app catalog in the MDM console. Users who need new apps must request IT approval. May disrupt productivity if the approval catalog is not kept up to date.",
                     ApplyOps = [RegOp.SetDword(ErmKey, "RequireApprovedAppsOnly", 1)],
                     RemoveOps = [RegOp.DeleteValue(ErmKey, "RequireApprovedAppsOnly")],
                     DetectOps = [RegOp.CheckDword(ErmKey, "RequireApprovedAppsOnly", 1)],
@@ -7752,7 +7765,8 @@ internal static class PolicyEnterprise
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "Device inventory is uploaded to the MDM authority every 4 hours. Inventory includes installed apps, hardware, and OS state. Slightly increased MDM check-in frequency and bandwidth. Inventory sync data is typically 5–50 KB per cycle.",
+                    ImpactNote =
+                        "Device inventory is uploaded to the MDM authority every 4 hours. Inventory includes installed apps, hardware, and OS state. Slightly increased MDM check-in frequency and bandwidth. Inventory sync data is typically 5–50 KB per cycle.",
                     ApplyOps = [RegOp.SetDword(ErmKey, "InventorySyncIntervalHours", 4)],
                     RemoveOps = [RegOp.DeleteValue(ErmKey, "InventorySyncIntervalHours")],
                     DetectOps = [RegOp.CheckDword(ErmKey, "InventorySyncIntervalHours", 4)],
@@ -7769,7 +7783,8 @@ internal static class PolicyEnterprise
                     CorpSafe = true,
                     ImpactScore = 4,
                     SafetyRating = 4,
-                    ImpactNote = "Standard users cannot initiate factory reset. Local administrators can still reset via elevated permission flows. IT-initiated remote wipe from MDM console is not affected. Users who genuinely need to re-provision their device must contact IT.",
+                    ImpactNote =
+                        "Standard users cannot initiate factory reset. Local administrators can still reset via elevated permission flows. IT-initiated remote wipe from MDM console is not affected. Users who genuinely need to re-provision their device must contact IT.",
                     ApplyOps = [RegOp.SetDword(ErmKey, "BlockUserInitiatedFactoryReset", 1)],
                     RemoveOps = [RegOp.DeleteValue(ErmKey, "BlockUserInitiatedFactoryReset")],
                     DetectOps = [RegOp.CheckDword(ErmKey, "BlockUserInitiatedFactoryReset", 1)],
@@ -7786,7 +7801,8 @@ internal static class PolicyEnterprise
                     CorpSafe = true,
                     ImpactScore = 4,
                     SafetyRating = 5,
-                    ImpactNote = "MDM enrollment certificates are renewed automatically before expiry. Renewal occurs in the background without user interaction. Prevents devices from silently dropping off MDM management due to certificate expiry. Certificate validity periods are typically 1–2 years — renewal triggers at 80% of the validity period.",
+                    ImpactNote =
+                        "MDM enrollment certificates are renewed automatically before expiry. Renewal occurs in the background without user interaction. Prevents devices from silently dropping off MDM management due to certificate expiry. Certificate validity periods are typically 1–2 years — renewal triggers at 80% of the validity period.",
                     ApplyOps = [RegOp.SetDword(MdmKey, "EnableMdmCertificateRenewal", 1)],
                     RemoveOps = [RegOp.DeleteValue(MdmKey, "EnableMdmCertificateRenewal")],
                     DetectOps = [RegOp.CheckDword(MdmKey, "EnableMdmCertificateRenewal", 1)],
@@ -7803,7 +7819,8 @@ internal static class PolicyEnterprise
                     CorpSafe = true,
                     ImpactScore = 4,
                     SafetyRating = 4,
-                    ImpactNote = "MDM-delivered device restrictions are enforced by the OS. Without this, restrictions are delivered but silently not applied. Restrictions that take effect depend on which CSP payloads the MDM administrator has configured — this policy enables the enforcement mechanism, not specific restrictions.",
+                    ImpactNote =
+                        "MDM-delivered device restrictions are enforced by the OS. Without this, restrictions are delivered but silently not applied. Restrictions that take effect depend on which CSP payloads the MDM administrator has configured — this policy enables the enforcement mechanism, not specific restrictions.",
                     ApplyOps = [RegOp.SetDword(ErmKey, "EnableManagedDeviceRestrictions", 1)],
                     RemoveOps = [RegOp.DeleteValue(ErmKey, "EnableManagedDeviceRestrictions")],
                     DetectOps = [RegOp.CheckDword(ErmKey, "EnableManagedDeviceRestrictions", 1)],
@@ -7820,7 +7837,8 @@ internal static class PolicyEnterprise
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "All MDM policy application events are logged with CSP path, values, and origin. Events written to DeviceManagement-Enterprise-Diagnostics-Provider channel. Slightly higher log volume on devices with frequent policy changes (Intune check-in + policy delta). Enables SIEM alerting on unexpected MDM policy modifications.",
+                    ImpactNote =
+                        "All MDM policy application events are logged with CSP path, values, and origin. Events written to DeviceManagement-Enterprise-Diagnostics-Provider channel. Slightly higher log volume on devices with frequent policy changes (Intune check-in + policy delta). Enables SIEM alerting on unexpected MDM policy modifications.",
                     ApplyOps = [RegOp.SetDword(MdmKey, "AuditMdmPolicyChanges", 1)],
                     RemoveOps = [RegOp.DeleteValue(MdmKey, "AuditMdmPolicyChanges")],
                     DetectOps = [RegOp.CheckDword(MdmKey, "AuditMdmPolicyChanges", 1)],
@@ -7837,13 +7855,13 @@ internal static class PolicyEnterprise
                     CorpSafe = true,
                     ImpactScore = 4,
                     SafetyRating = 5,
-                    ImpactNote = "MDM communication is restricted to TLS 1.2 or higher. MDM servers that only support TLS 1.0 or 1.1 will be unable to communicate with the client. All modern MDM services (Intune, SCCM cloud attachment) use TLS 1.2+. On-premises MDM servers must be updated if they are still on legacy TLS.",
+                    ImpactNote =
+                        "MDM communication is restricted to TLS 1.2 or higher. MDM servers that only support TLS 1.0 or 1.1 will be unable to communicate with the client. All modern MDM services (Intune, SCCM cloud attachment) use TLS 1.2+. On-premises MDM servers must be updated if they are still on legacy TLS.",
                     ApplyOps = [RegOp.SetDword(MdmKey, "RequireEncryptedMdmChannel", 1)],
                     RemoveOps = [RegOp.DeleteValue(MdmKey, "RequireEncryptedMdmChannel")],
                     DetectOps = [RegOp.CheckDword(MdmKey, "RequireEncryptedMdmChannel", 1)],
                 },
             ];
-
     }
 
     // ── EnterpriseResourceDeployPolicy ──
@@ -7852,179 +7870,189 @@ internal static class PolicyEnterprise
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\EnterpriseResourceManager";
 
         public static IReadOnlyList<TweakDef> Data =>
-        [
-            new TweakDef
-            {
-                Id = "erdeploy-set-default-deploy-ring-broad",
-                Label = "Enterprise Deploy: Set Default Application Deployment Ring to 'Broad' Stable Channel",
-                Category = "System",
-                Description = "Sets DefaultDeployRing=2 in EnterpriseResourceManager policy. Configures the default application deployment ring for this endpoint to the 'Broad' (stable) deployment ring, ensuring the device receives application updates only after full release validation has been completed across the Pilot and Early Majority rings. " +
-                    "Enterprise application deployments using modern ring-based rollout (Intune or ConfigMgr ring filtering) gate updates through sequenced rings before broad deployment. Endpoints that are miscategorised as 'Pilot' receive updates intended for testing and may encounter pre-release application bugs. Explicitly setting the deployment ring to 'Broad' (ring 2) prevents endpoints from accidentally receiving early-ring deployments due to misconfigured ring assignment logic.",
-                Tags = ["enterprise-deploy", "deployment-ring", "app-update", "staging", "rollout"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Endpoint assigned to Broad (stable) deployment ring; receives application updates only after full validation.",
-                ApplyOps = [RegOp.SetDword(Key, "DefaultDeployRing", 2)],
-                RemoveOps = [RegOp.DeleteValue(Key, "DefaultDeployRing")],
-                DetectOps = [RegOp.CheckDword(Key, "DefaultDeployRing", 2)],
-            },
-            new TweakDef
-            {
-                Id = "erdeploy-require-admin-for-app-removal",
-                Label = "Enterprise Deploy: Require Administrator Approval to Remove Managed Applications",
-                Category = "System",
-                Description = "Sets RequireAdminForAppRemoval=1 in EnterpriseResourceManager policy. Blocks standard users from uninstalling applications that were deployed by the enterprise (via Intune, ConfigMgr, or Group Policy Software Installation), requiring administrative credentials for removal even though the application was installed in user context. " +
-                    "Required enterprise applications (endpoint detection and response agents, certificate management tools, identity protection software) must remain installed once deployed. A standard user who can uninstall enterprise-managed apps can remove security tooling from their device, creating a gap in protection that may persist until the next compliance check triggers a remediation deployment. Blocking user-initiated uninstall of managed apps prevents intentional or accidental removal of critical security tools.",
-                Tags = ["enterprise-deploy", "app-removal", "security-tools", "admin-required", "lockdown"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                ImpactNote = "Managed application removal requires admin approval; users cannot uninstall security tools deployed by IT.",
-                ApplyOps = [RegOp.SetDword(Key, "RequireAdminForAppRemoval", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "RequireAdminForAppRemoval")],
-                DetectOps = [RegOp.CheckDword(Key, "RequireAdminForAppRemoval", 1)],
-            },
-            new TweakDef
-            {
-                Id = "erdeploy-block-user-initiated-install",
-                Label = "Enterprise Deploy: Block User-Initiated Application Installation Outside of Managed Channels",
-                Category = "System",
-                Description = "Sets BlockUserInitiatedInstall=1 in EnterpriseResourceManager policy. Prevents users from initiating the installation of new applications through any mechanism other than IT-managed deployment channels (Intune, ConfigMgr, Software Center) — blocking double-click installer execution, Windows Installer (MSI) invocation, and MSIX/APPX package sideloading by standard users. " +
-                    "The majority of enterprise malware infections arrive as LOB-disguised executables or malicious MSI packages that a user is socially engineered into running. If users can execute arbitrary installers, the application allowlist maintained by IT is bypassed — even if the endpoint has Microsoft Defender WDAC policy configured, a sufficiently permissive WDAC policy allows signed MSI files from any vendor. Blocking user-initiated installation removes the primary vector for user-driven software installation.",
-                Tags = ["enterprise-deploy", "user-install", "msi", "lockdown", "wdac", "applocker"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 4,
-                ImpactNote = "User-initiated application installs blocked; all software installations require IT-managed deployment channel.",
-                ApplyOps = [RegOp.SetDword(Key, "BlockUserInitiatedInstall", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "BlockUserInitiatedInstall")],
-                DetectOps = [RegOp.CheckDword(Key, "BlockUserInitiatedInstall", 1)],
-            },
-            new TweakDef
-            {
-                Id = "erdeploy-enforce-maintenance-window",
-                Label = "Enterprise Deploy: Enforce Deployment Maintenance Window Compliance",
-                Category = "System",
-                Description = "Sets EnforceMaintenanceWindow=1 in EnterpriseResourceManager policy. Restricts deployment execution by the enterprise resource manager to within the configured maintenance window schedule, preventing deployments from triggering application installs, updates, or reboots during business hours and confining disruptive deployments to the approved maintenance period. " +
-                    "Without maintenance window enforcement, a deployment configured as 'Available as soon as possible' may start an application install or triggered reboot at any time, including during an end-user presentation or in the middle of a running workflow. Maintenance windows define agreed low-impact periods (after hours, weekends) for deployments. Enforcing the maintenance window prevents IT from accidentally or intentionally bypassing the agreed change window, which is often an ITIL or change management process requirement.",
-                Tags = ["enterprise-deploy", "maintenance-window", "deployment-schedule", "change-management", "itil"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Deployments confined to maintenance window; no installs or reboots triggered outside approved maintenance period.",
-                ApplyOps = [RegOp.SetDword(Key, "EnforceMaintenanceWindow", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "EnforceMaintenanceWindow")],
-                DetectOps = [RegOp.CheckDword(Key, "EnforceMaintenanceWindow", 1)],
-            },
-            new TweakDef
-            {
-                Id = "erdeploy-cap-max-install-retries-3",
-                Label = "Enterprise Deploy: Cap Application Installation Retry Attempts at 3",
-                Category = "System",
-                Description = "Sets MaxInstallRetries=3 in EnterpriseResourceManager policy. Limits the number of times the enterprise resource manager retries a failed application installation to 3 attempts before marking the deployment as failed and triggering an alert, rather than retrying indefinitely. " +
-                    "A deployment that retries an application installation indefinitely will continually consume CPU, disk I/O, and network bandwidth on the endpoint for days or weeks. On endpoints with transient installation failures (antivirus blocking the installer, required service temporarily unavailable), unlimited retries create ongoing performance degradation. Capping retries at 3 ensures failed deployments are surfaced as failures in the management console rather than silently retrying without ever succeeding.",
-                Tags = ["enterprise-deploy", "install-retry", "deployment-failure", "performance", "alert"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                ImpactNote = "Deployment install retries capped at 3; repeat failures surface as deployment failures rather than silent perpetual retry.",
-                ApplyOps = [RegOp.SetDword(Key, "MaxInstallRetries", 3)],
-                RemoveOps = [RegOp.DeleteValue(Key, "MaxInstallRetries")],
-                DetectOps = [RegOp.CheckDword(Key, "MaxInstallRetries", 3)],
-            },
-            new TweakDef
-            {
-                Id = "erdeploy-enable-deployment-audit-log",
-                Label = "Enterprise Deploy: Enable Security Audit Log for All Deployment Operations",
-                Category = "System",
-                Description = "Sets EnableDeploymentAuditLog=1 in EnterpriseResourceManager policy. Causes each application installation, update, and removal operation completed by the enterprise resource manager to generate a Security event log entry, recording the application name, version, deployment source, requesting authority, and outcome code. " +
-                    "Application deployment audit logs are required in PCI-DSS, HIPAA, and SOC2 regulated environments where all software changes on in-scope endpoints must be tracked in a tamper-evident audit log. Without deployment audit logging, an attacker who compromises the management channel and installs a malicious application through the enterprise deployment infrastructure would have no on-device trace of the install (as the standard registry Uninstall key is easily manipulated). Security event log entries are tamper-resistant to local manipulation.",
-                Tags = ["enterprise-deploy", "audit-log", "deployment", "pci", "hipaa", "soc2"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                ImpactNote = "All enterprise deployment operations generate Security event entries; compliance audit trail for software changes.",
-                ApplyOps = [RegOp.SetDword(Key, "EnableDeploymentAuditLog", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "EnableDeploymentAuditLog")],
-                DetectOps = [RegOp.CheckDword(Key, "EnableDeploymentAuditLog", 1)],
-            },
-            new TweakDef
-            {
-                Id = "erdeploy-disable-sideloaded-appx-packages",
-                Label = "Enterprise Deploy: Disable Sideloading of APPX Packages from Unmanaged Sources",
-                Category = "System",
-                Description = "Sets DisableSideloadedApps=1 in EnterpriseResourceManager policy. Prevents installation of APPX/MSIX application packages from unsigned or unmanaged sources (USB drives, SharePoint file shares, developer sideloading) and restricts APPX installation to managed channels only (Microsoft Store for Business, Intune managed app, or enterprise signed MSIX bundles). " +
-                    "MSIX sideloading is the primary vector for distributing trojanised or repackaged application packages disguised as legitimate enterprise tools. An attacker who sends a malicious MSIX package via email or file share (and the user's developer mode is enabled) can have arbitrary code run in a package context with the package's declared capabilities. Disabling sideloading from unmanaged sources blocks this vector without affecting Store and Intune-delivered MSIX packages.",
-                Tags = ["enterprise-deploy", "sideloading", "appx", "msix", "developer-mode", "trojan"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                ImpactNote = "APPX/MSIX sideloading from unmanaged sources blocked; only Store and IT-signed packages install.",
-                ApplyOps = [RegOp.SetDword(Key, "DisableSideloadedApps", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "DisableSideloadedApps")],
-                DetectOps = [RegOp.CheckDword(Key, "DisableSideloadedApps", 1)],
-            },
-            new TweakDef
-            {
-                Id = "erdeploy-require-signed-deployment-packages",
-                Label = "Enterprise Deploy: Require Cryptographic Signing for All Deployment Packages",
-                Category = "System",
-                Description = "Sets RequireSignedPackages=1 in EnterpriseResourceManager policy. Requires that every application package deployed through the enterprise resource manager is digitally signed by a certificate in the enterprise trusted publisher store before the installation is allowed to proceed, blocking unsigned or improperly signed packages from executing. " +
-                    "Unsigned deployment packages can be tampered with between the time they are created and the time they are deployed. An attacker who compromises a Distribution Point or content staging server can replace a legitimate installer package with a trojanised version. Without package signing verification, the deployment infrastructure distributes the malicious version to all targeted endpoints without any integrity check. Requiring signed packages ensures only packages that passed code signing (and therefore were authenticated at signing time) are installed.",
-                Tags = ["enterprise-deploy", "package-signing", "integrity", "distribution-point", "code-signing"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 5,
-                SafetyRating = 4,
-                ImpactNote = "Unsigned deployment packages blocked; content integrity verified via code signing before installation.",
-                ApplyOps = [RegOp.SetDword(Key, "RequireSignedPackages", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "RequireSignedPackages")],
-                DetectOps = [RegOp.CheckDword(Key, "RequireSignedPackages", 1)],
-            },
-            new TweakDef
-            {
-                Id = "erdeploy-block-store-install-during-maintenance",
-                Label = "Enterprise Deploy: Block Microsoft Store Application Updates During Active Deployment Window",
-                Category = "System",
-                Description = "Sets BlockStoreInstallDuringDeployment=1 in EnterpriseResourceManager policy. Suspends automatic Microsoft Store application updates from downloading and installing during active enterprise deployment windows, preventing Store-initiated background installs from competing with enterprise deployment bandwidth and CPU allocations. " +
-                    "Large enterprise deployments (OS feature updates, security patches for hundreds of applications) consume significant bandwidth from Distribution Points. If the Microsoft Store simultaneously triggers background app updates across the same endpoints during the deployment window, both processes compete for disk I/O, network bandwidth, and Windows Installer service locking. This can cause enterprise deployments to fail with 'service busy' errors or time out due to resource contention. Blocking Store updates during scheduled deployment windows eliminates this interference.",
-                Tags = ["enterprise-deploy", "store", "bandwidth", "contention", "deployment-window"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Store app updates paused during enterprise deployment windows; no resource contention with managed deployments.",
-                ApplyOps = [RegOp.SetDword(Key, "BlockStoreInstallDuringDeployment", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "BlockStoreInstallDuringDeployment")],
-                DetectOps = [RegOp.CheckDword(Key, "BlockStoreInstallDuringDeployment", 1)],
-            },
-            new TweakDef
-            {
-                Id = "erdeploy-enable-prerequisite-check-enforcement",
-                Label = "Enterprise Deploy: Enforce Prerequisite Dependency Checks Before Application Deployment",
-                Category = "System",
-                Description = "Sets EnforcePrerequisiteChecks=1 in EnterpriseResourceManager policy. Enforces that the installation of a dependent application is verified as successfully installed and functional before the enterprise resource manager proceeds with a higher-level application deployment that requires it as a prerequisite, rather than attempting the deployment and failing at runtime. " +
-                    "Enterprise application deployments often have prerequisite chains: a LOB application may require a specific .NET runtime version, a specific redistributable, and a specific licence management service to be installed before it will work. Without prerequisite enforcement, all packages attempt installation in parallel, and the LOB application may fail (or partially install) because its prerequisites aren't available yet. Enforcing prerequisite checks runs the dependency chain in the correct order and stops the deployment if any prerequisite fails.",
-                Tags = ["enterprise-deploy", "prerequisites", "dependency", "deployment-order", "reliability"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Prerequisite dependency verification enforced; deployment packages install in correct dependency order.",
-                ApplyOps = [RegOp.SetDword(Key, "EnforcePrerequisiteChecks", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "EnforcePrerequisiteChecks")],
-                DetectOps = [RegOp.CheckDword(Key, "EnforcePrerequisiteChecks", 1)],
-            },
-        ];
-
+            [
+                new TweakDef
+                {
+                    Id = "erdeploy-set-default-deploy-ring-broad",
+                    Label = "Enterprise Deploy: Set Default Application Deployment Ring to 'Broad' Stable Channel",
+                    Category = "System",
+                    Description =
+                        "Sets DefaultDeployRing=2 in EnterpriseResourceManager policy. Configures the default application deployment ring for this endpoint to the 'Broad' (stable) deployment ring, ensuring the device receives application updates only after full release validation has been completed across the Pilot and Early Majority rings. "
+                        + "Enterprise application deployments using modern ring-based rollout (Intune or ConfigMgr ring filtering) gate updates through sequenced rings before broad deployment. Endpoints that are miscategorised as 'Pilot' receive updates intended for testing and may encounter pre-release application bugs. Explicitly setting the deployment ring to 'Broad' (ring 2) prevents endpoints from accidentally receiving early-ring deployments due to misconfigured ring assignment logic.",
+                    Tags = ["enterprise-deploy", "deployment-ring", "app-update", "staging", "rollout"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "Endpoint assigned to Broad (stable) deployment ring; receives application updates only after full validation.",
+                    ApplyOps = [RegOp.SetDword(Key, "DefaultDeployRing", 2)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "DefaultDeployRing")],
+                    DetectOps = [RegOp.CheckDword(Key, "DefaultDeployRing", 2)],
+                },
+                new TweakDef
+                {
+                    Id = "erdeploy-require-admin-for-app-removal",
+                    Label = "Enterprise Deploy: Require Administrator Approval to Remove Managed Applications",
+                    Category = "System",
+                    Description =
+                        "Sets RequireAdminForAppRemoval=1 in EnterpriseResourceManager policy. Blocks standard users from uninstalling applications that were deployed by the enterprise (via Intune, ConfigMgr, or Group Policy Software Installation), requiring administrative credentials for removal even though the application was installed in user context. "
+                        + "Required enterprise applications (endpoint detection and response agents, certificate management tools, identity protection software) must remain installed once deployed. A standard user who can uninstall enterprise-managed apps can remove security tooling from their device, creating a gap in protection that may persist until the next compliance check triggers a remediation deployment. Blocking user-initiated uninstall of managed apps prevents intentional or accidental removal of critical security tools.",
+                    Tags = ["enterprise-deploy", "app-removal", "security-tools", "admin-required", "lockdown"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "Managed application removal requires admin approval; users cannot uninstall security tools deployed by IT.",
+                    ApplyOps = [RegOp.SetDword(Key, "RequireAdminForAppRemoval", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "RequireAdminForAppRemoval")],
+                    DetectOps = [RegOp.CheckDword(Key, "RequireAdminForAppRemoval", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "erdeploy-block-user-initiated-install",
+                    Label = "Enterprise Deploy: Block User-Initiated Application Installation Outside of Managed Channels",
+                    Category = "System",
+                    Description =
+                        "Sets BlockUserInitiatedInstall=1 in EnterpriseResourceManager policy. Prevents users from initiating the installation of new applications through any mechanism other than IT-managed deployment channels (Intune, ConfigMgr, Software Center) — blocking double-click installer execution, Windows Installer (MSI) invocation, and MSIX/APPX package sideloading by standard users. "
+                        + "The majority of enterprise malware infections arrive as LOB-disguised executables or malicious MSI packages that a user is socially engineered into running. If users can execute arbitrary installers, the application allowlist maintained by IT is bypassed — even if the endpoint has Microsoft Defender WDAC policy configured, a sufficiently permissive WDAC policy allows signed MSI files from any vendor. Blocking user-initiated installation removes the primary vector for user-driven software installation.",
+                    Tags = ["enterprise-deploy", "user-install", "msi", "lockdown", "wdac", "applocker"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 4,
+                    ImpactNote = "User-initiated application installs blocked; all software installations require IT-managed deployment channel.",
+                    ApplyOps = [RegOp.SetDword(Key, "BlockUserInitiatedInstall", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "BlockUserInitiatedInstall")],
+                    DetectOps = [RegOp.CheckDword(Key, "BlockUserInitiatedInstall", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "erdeploy-enforce-maintenance-window",
+                    Label = "Enterprise Deploy: Enforce Deployment Maintenance Window Compliance",
+                    Category = "System",
+                    Description =
+                        "Sets EnforceMaintenanceWindow=1 in EnterpriseResourceManager policy. Restricts deployment execution by the enterprise resource manager to within the configured maintenance window schedule, preventing deployments from triggering application installs, updates, or reboots during business hours and confining disruptive deployments to the approved maintenance period. "
+                        + "Without maintenance window enforcement, a deployment configured as 'Available as soon as possible' may start an application install or triggered reboot at any time, including during an end-user presentation or in the middle of a running workflow. Maintenance windows define agreed low-impact periods (after hours, weekends) for deployments. Enforcing the maintenance window prevents IT from accidentally or intentionally bypassing the agreed change window, which is often an ITIL or change management process requirement.",
+                    Tags = ["enterprise-deploy", "maintenance-window", "deployment-schedule", "change-management", "itil"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "Deployments confined to maintenance window; no installs or reboots triggered outside approved maintenance period.",
+                    ApplyOps = [RegOp.SetDword(Key, "EnforceMaintenanceWindow", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "EnforceMaintenanceWindow")],
+                    DetectOps = [RegOp.CheckDword(Key, "EnforceMaintenanceWindow", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "erdeploy-cap-max-install-retries-3",
+                    Label = "Enterprise Deploy: Cap Application Installation Retry Attempts at 3",
+                    Category = "System",
+                    Description =
+                        "Sets MaxInstallRetries=3 in EnterpriseResourceManager policy. Limits the number of times the enterprise resource manager retries a failed application installation to 3 attempts before marking the deployment as failed and triggering an alert, rather than retrying indefinitely. "
+                        + "A deployment that retries an application installation indefinitely will continually consume CPU, disk I/O, and network bandwidth on the endpoint for days or weeks. On endpoints with transient installation failures (antivirus blocking the installer, required service temporarily unavailable), unlimited retries create ongoing performance degradation. Capping retries at 3 ensures failed deployments are surfaced as failures in the management console rather than silently retrying without ever succeeding.",
+                    Tags = ["enterprise-deploy", "install-retry", "deployment-failure", "performance", "alert"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 2,
+                    SafetyRating = 5,
+                    ImpactNote =
+                        "Deployment install retries capped at 3; repeat failures surface as deployment failures rather than silent perpetual retry.",
+                    ApplyOps = [RegOp.SetDword(Key, "MaxInstallRetries", 3)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "MaxInstallRetries")],
+                    DetectOps = [RegOp.CheckDword(Key, "MaxInstallRetries", 3)],
+                },
+                new TweakDef
+                {
+                    Id = "erdeploy-enable-deployment-audit-log",
+                    Label = "Enterprise Deploy: Enable Security Audit Log for All Deployment Operations",
+                    Category = "System",
+                    Description =
+                        "Sets EnableDeploymentAuditLog=1 in EnterpriseResourceManager policy. Causes each application installation, update, and removal operation completed by the enterprise resource manager to generate a Security event log entry, recording the application name, version, deployment source, requesting authority, and outcome code. "
+                        + "Application deployment audit logs are required in PCI-DSS, HIPAA, and SOC2 regulated environments where all software changes on in-scope endpoints must be tracked in a tamper-evident audit log. Without deployment audit logging, an attacker who compromises the management channel and installs a malicious application through the enterprise deployment infrastructure would have no on-device trace of the install (as the standard registry Uninstall key is easily manipulated). Security event log entries are tamper-resistant to local manipulation.",
+                    Tags = ["enterprise-deploy", "audit-log", "deployment", "pci", "hipaa", "soc2"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "All enterprise deployment operations generate Security event entries; compliance audit trail for software changes.",
+                    ApplyOps = [RegOp.SetDword(Key, "EnableDeploymentAuditLog", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "EnableDeploymentAuditLog")],
+                    DetectOps = [RegOp.CheckDword(Key, "EnableDeploymentAuditLog", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "erdeploy-disable-sideloaded-appx-packages",
+                    Label = "Enterprise Deploy: Disable Sideloading of APPX Packages from Unmanaged Sources",
+                    Category = "System",
+                    Description =
+                        "Sets DisableSideloadedApps=1 in EnterpriseResourceManager policy. Prevents installation of APPX/MSIX application packages from unsigned or unmanaged sources (USB drives, SharePoint file shares, developer sideloading) and restricts APPX installation to managed channels only (Microsoft Store for Business, Intune managed app, or enterprise signed MSIX bundles). "
+                        + "MSIX sideloading is the primary vector for distributing trojanised or repackaged application packages disguised as legitimate enterprise tools. An attacker who sends a malicious MSIX package via email or file share (and the user's developer mode is enabled) can have arbitrary code run in a package context with the package's declared capabilities. Disabling sideloading from unmanaged sources blocks this vector without affecting Store and Intune-delivered MSIX packages.",
+                    Tags = ["enterprise-deploy", "sideloading", "appx", "msix", "developer-mode", "trojan"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "APPX/MSIX sideloading from unmanaged sources blocked; only Store and IT-signed packages install.",
+                    ApplyOps = [RegOp.SetDword(Key, "DisableSideloadedApps", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "DisableSideloadedApps")],
+                    DetectOps = [RegOp.CheckDword(Key, "DisableSideloadedApps", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "erdeploy-require-signed-deployment-packages",
+                    Label = "Enterprise Deploy: Require Cryptographic Signing for All Deployment Packages",
+                    Category = "System",
+                    Description =
+                        "Sets RequireSignedPackages=1 in EnterpriseResourceManager policy. Requires that every application package deployed through the enterprise resource manager is digitally signed by a certificate in the enterprise trusted publisher store before the installation is allowed to proceed, blocking unsigned or improperly signed packages from executing. "
+                        + "Unsigned deployment packages can be tampered with between the time they are created and the time they are deployed. An attacker who compromises a Distribution Point or content staging server can replace a legitimate installer package with a trojanised version. Without package signing verification, the deployment infrastructure distributes the malicious version to all targeted endpoints without any integrity check. Requiring signed packages ensures only packages that passed code signing (and therefore were authenticated at signing time) are installed.",
+                    Tags = ["enterprise-deploy", "package-signing", "integrity", "distribution-point", "code-signing"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 5,
+                    SafetyRating = 4,
+                    ImpactNote = "Unsigned deployment packages blocked; content integrity verified via code signing before installation.",
+                    ApplyOps = [RegOp.SetDword(Key, "RequireSignedPackages", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "RequireSignedPackages")],
+                    DetectOps = [RegOp.CheckDword(Key, "RequireSignedPackages", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "erdeploy-block-store-install-during-maintenance",
+                    Label = "Enterprise Deploy: Block Microsoft Store Application Updates During Active Deployment Window",
+                    Category = "System",
+                    Description =
+                        "Sets BlockStoreInstallDuringDeployment=1 in EnterpriseResourceManager policy. Suspends automatic Microsoft Store application updates from downloading and installing during active enterprise deployment windows, preventing Store-initiated background installs from competing with enterprise deployment bandwidth and CPU allocations. "
+                        + "Large enterprise deployments (OS feature updates, security patches for hundreds of applications) consume significant bandwidth from Distribution Points. If the Microsoft Store simultaneously triggers background app updates across the same endpoints during the deployment window, both processes compete for disk I/O, network bandwidth, and Windows Installer service locking. This can cause enterprise deployments to fail with 'service busy' errors or time out due to resource contention. Blocking Store updates during scheduled deployment windows eliminates this interference.",
+                    Tags = ["enterprise-deploy", "store", "bandwidth", "contention", "deployment-window"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "Store app updates paused during enterprise deployment windows; no resource contention with managed deployments.",
+                    ApplyOps = [RegOp.SetDword(Key, "BlockStoreInstallDuringDeployment", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "BlockStoreInstallDuringDeployment")],
+                    DetectOps = [RegOp.CheckDword(Key, "BlockStoreInstallDuringDeployment", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "erdeploy-enable-prerequisite-check-enforcement",
+                    Label = "Enterprise Deploy: Enforce Prerequisite Dependency Checks Before Application Deployment",
+                    Category = "System",
+                    Description =
+                        "Sets EnforcePrerequisiteChecks=1 in EnterpriseResourceManager policy. Enforces that the installation of a dependent application is verified as successfully installed and functional before the enterprise resource manager proceeds with a higher-level application deployment that requires it as a prerequisite, rather than attempting the deployment and failing at runtime. "
+                        + "Enterprise application deployments often have prerequisite chains: a LOB application may require a specific .NET runtime version, a specific redistributable, and a specific licence management service to be installed before it will work. Without prerequisite enforcement, all packages attempt installation in parallel, and the LOB application may fail (or partially install) because its prerequisites aren't available yet. Enforcing prerequisite checks runs the dependency chain in the correct order and stops the deployment if any prerequisite fails.",
+                    Tags = ["enterprise-deploy", "prerequisites", "dependency", "deployment-order", "reliability"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "Prerequisite dependency verification enforced; deployment packages install in correct dependency order.",
+                    ApplyOps = [RegOp.SetDword(Key, "EnforcePrerequisiteChecks", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "EnforcePrerequisiteChecks")],
+                    DetectOps = [RegOp.CheckDword(Key, "EnforcePrerequisiteChecks", 1)],
+                },
+            ];
     }
 
     // ── EnterpriseResourcePolicy ──
@@ -8205,7 +8233,6 @@ internal static class PolicyEnterprise
                 DetectOps = [RegOp.CheckDword(Key, "EnforceResourceNamingStandards", 1)],
             },
         ];
-
     }
 
     // ── EnterpriseStateRoamingPolicy ──
@@ -8220,7 +8247,8 @@ internal static class PolicyEnterprise
                 Id = "esroam-disable-app-setting-sync",
                 Label = "Enterprise State Roaming: Disable Application Settings Sync",
                 Category = "System",
-                Description = "Prevents Windows from syncing application settings (e.g., browser preferences, UWP app configuration) to Azure AD / Microsoft account cloud storage via Enterprise State Roaming. Application settings often contain business-critical customizations; roaming them to cloud storage creates data residency concerns and can cause settings to propagate to personal devices using the same account.",
+                Description =
+                    "Prevents Windows from syncing application settings (e.g., browser preferences, UWP app configuration) to Azure AD / Microsoft account cloud storage via Enterprise State Roaming. Application settings often contain business-critical customizations; roaming them to cloud storage creates data residency concerns and can cause settings to propagate to personal devices using the same account.",
                 Tags = ["state roaming", "sync", "app settings", "azure ad", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -8237,7 +8265,8 @@ internal static class PolicyEnterprise
                 Id = "esroam-disable-start-layout-sync",
                 Label = "Enterprise State Roaming: Disable Start Menu Layout Sync",
                 Category = "System",
-                Description = "Disables synchronization of the Windows Start layout (Start screen tile arrangement, pinned apps, size configuration) across devices enrolled in Enterprise State Roaming. In managed environments where Start menus are deployed via Group Policy or provisioning packages, cloud roaming of Start layout can overwrite the IT-managed layout, creating inconsistency across machines.",
+                Description =
+                    "Disables synchronization of the Windows Start layout (Start screen tile arrangement, pinned apps, size configuration) across devices enrolled in Enterprise State Roaming. In managed environments where Start menus are deployed via Group Policy or provisioning packages, cloud roaming of Start layout can overwrite the IT-managed layout, creating inconsistency across machines.",
                 Tags = ["state roaming", "sync", "start menu", "layout", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -8254,7 +8283,8 @@ internal static class PolicyEnterprise
                 Id = "esroam-disable-desktop-theme-sync",
                 Label = "Enterprise State Roaming: Disable Desktop Theme Sync",
                 Category = "System",
-                Description = "Prevents Windows desktop themes (wallpaper, accent color, visual effects, window transparency) from synchronizing across devices. While cosmetic, theme sync can override corporate branding standards (desktop wallpapers, accent colors mandated by IT) when the same account logs in on different managed computers or when personal account themes overwrite work account settings.",
+                Description =
+                    "Prevents Windows desktop themes (wallpaper, accent color, visual effects, window transparency) from synchronizing across devices. While cosmetic, theme sync can override corporate branding standards (desktop wallpapers, accent colors mandated by IT) when the same account logs in on different managed computers or when personal account themes overwrite work account settings.",
                 Tags = ["state roaming", "sync", "theme", "desktop", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -8271,7 +8301,8 @@ internal static class PolicyEnterprise
                 Id = "esroam-disable-browser-setting-sync",
                 Label = "Enterprise State Roaming: Disable Web Browser Settings Sync",
                 Category = "System",
-                Description = "Stops the Windows Settings Sync provider from roaming browser-related settings (favorites, history sync pointers) through the ESR (Enterprise State Roaming) channel. Note: this controls the Windows-level sync channel, not the browser's own sync channel. Browser favorites should be managed via browser-specific policies (see Edge/Chrome policy modules).",
+                Description =
+                    "Stops the Windows Settings Sync provider from roaming browser-related settings (favorites, history sync pointers) through the ESR (Enterprise State Roaming) channel. Note: this controls the Windows-level sync channel, not the browser's own sync channel. Browser favorites should be managed via browser-specific policies (see Edge/Chrome policy modules).",
                 Tags = ["state roaming", "sync", "browser", "favorites", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -8288,7 +8319,8 @@ internal static class PolicyEnterprise
                 Id = "esroam-disable-password-sync",
                 Label = "Enterprise State Roaming: Disable Password Settings Sync",
                 Category = "System",
-                Description = "Prevents Windows credential and password hashes from being synchronized through the Enterprise State Roaming channel to Azure AD cloud storage. Password roaming via ESR is distinct from Azure AD seamless SSO and may involve credential material being persisted in a cloud-accessible store. In high-security environments, all credential handling must be on-premises only.",
+                Description =
+                    "Prevents Windows credential and password hashes from being synchronized through the Enterprise State Roaming channel to Azure AD cloud storage. Password roaming via ESR is distinct from Azure AD seamless SSO and may involve credential material being persisted in a cloud-accessible store. In high-security environments, all credential handling must be on-premises only.",
                 Tags = ["state roaming", "sync", "password", "credentials", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -8305,7 +8337,8 @@ internal static class PolicyEnterprise
                 Id = "esroam-disable-app-sync-setting",
                 Label = "Enterprise State Roaming: Disable App Sync via ESR Channel",
                 Category = "System",
-                Description = "Disables the specific ESR sync provider for application data packages (UWP AppX app state, configuration blobs stored in the cloud). App sync allows UWP apps to restore their last-used state—including user-typed data—when the same account signs in on another device. For apps that handle sensitive data (forms, documents), roaming this state creates residual data in Azure.",
+                Description =
+                    "Disables the specific ESR sync provider for application data packages (UWP AppX app state, configuration blobs stored in the cloud). App sync allows UWP apps to restore their last-used state—including user-typed data—when the same account signs in on another device. For apps that handle sensitive data (forms, documents), roaming this state creates residual data in Azure.",
                 Tags = ["state roaming", "sync", "app data", "uwp", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -8322,7 +8355,8 @@ internal static class PolicyEnterprise
                 Id = "esroam-block-user-override-setting-sync",
                 Label = "Enterprise State Roaming: Block User Override of Settings Sync Policy",
                 Category = "System",
-                Description = "Prevents users from re-enabling settings synchronization that has been disabled by Group Policy. Without this policy, a standard user can navigate to Windows Settings → Accounts → Sync your settings and re-enable options that the admin has turned off. This policy ensures sync restrictions are permanent and cannot be overridden by end users.",
+                Description =
+                    "Prevents users from re-enabling settings synchronization that has been disabled by Group Policy. Without this policy, a standard user can navigate to Windows Settings → Accounts → Sync your settings and re-enable options that the admin has turned off. This policy ensures sync restrictions are permanent and cannot be overridden by end users.",
                 Tags = ["state roaming", "sync", "user override", "restriction", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -8339,7 +8373,8 @@ internal static class PolicyEnterprise
                 Id = "esroam-block-user-override-app-sync",
                 Label = "Enterprise State Roaming: Block User Override of App Settings Sync Policy",
                 Category = "System",
-                Description = "Prevents users from overriding the Group Policy that disables application settings synchronization. The Windows sync settings UI allows users to individually toggle sync categories; this policy forces DisableApplicationSettingSync to be admin-enforced and uneditable, ensuring corporate devices cannot roam application configuration data regardless of user preference.",
+                Description =
+                    "Prevents users from overriding the Group Policy that disables application settings synchronization. The Windows sync settings UI allows users to individually toggle sync categories; this policy forces DisableApplicationSettingSync to be admin-enforced and uneditable, ensuring corporate devices cannot roam application configuration data regardless of user preference.",
                 Tags = ["state roaming", "sync", "app settings", "user override", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -8356,7 +8391,8 @@ internal static class PolicyEnterprise
                 Id = "esroam-block-user-override-start-layout",
                 Label = "Enterprise State Roaming: Block User Override of Start Layout Sync Policy",
                 Category = "System",
-                Description = "Prevents users from re-enabling Start menu layout synchronization after it has been disabled by Group Policy. In environments with GPO-deployed Start menus, users should not be able to revert to a cloud-synced layout that was potentially configured on a personal device or a different organizational unit, as this undermines the standardized desktop configuration management.",
+                Description =
+                    "Prevents users from re-enabling Start menu layout synchronization after it has been disabled by Group Policy. In environments with GPO-deployed Start menus, users should not be able to revert to a cloud-synced layout that was potentially configured on a personal device or a different organizational unit, as this undermines the standardized desktop configuration management.",
                 Tags = ["state roaming", "sync", "start menu", "user override", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -8373,7 +8409,8 @@ internal static class PolicyEnterprise
                 Id = "esroam-disable-device-account-sync",
                 Label = "Enterprise State Roaming: Disable Device Account Settings Sync",
                 Category = "System",
-                Description = "Disables synchronization of device account settings (Microsoft account email app state, mail account configuration, calendar sync settings) through Enterprise State Roaming. On managed corporate devices where mail clients are configured centrally via MDM profiles or Exchange Autodiscover, preventing cloud-roaming of account settings avoids conflicts between centrally-pushed and user-synced configurations.",
+                Description =
+                    "Disables synchronization of device account settings (Microsoft account email app state, mail account configuration, calendar sync settings) through Enterprise State Roaming. On managed corporate devices where mail clients are configured centrally via MDM profiles or Exchange Autodiscover, preventing cloud-roaming of account settings avoids conflicts between centrally-pushed and user-synced configurations.",
                 Tags = ["state roaming", "sync", "device account", "email", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -8386,7 +8423,6 @@ internal static class PolicyEnterprise
                 ImpactNote = "Stops device account (email/calendar config) from syncing; MDM-managed profiles are unaffected.",
             },
         ];
-
     }
 
     // ── GpoFolderRedirPolicy ──
@@ -8402,7 +8438,8 @@ internal static class PolicyEnterprise
                 Id = "folderredir-enable-cache-rename",
                 Label = "GPO Folder Redirection: Enable Cache Rename on Redirect",
                 Category = "System",
-                Description = "Enables cache renaming when a redirected folder path changes. When a folder redirection target is updated via Group Policy (e.g., moving a redirected My Documents share from an old file server to a new one), Windows can seamlessly rename the local offline-files cache entry to match the new UNC path. Without this setting, the client cache may retain stale entries pointing to the old server, causing offline file sync conflicts.",
+                Description =
+                    "Enables cache renaming when a redirected folder path changes. When a folder redirection target is updated via Group Policy (e.g., moving a redirected My Documents share from an old file server to a new one), Windows can seamlessly rename the local offline-files cache entry to match the new UNC path. Without this setting, the client cache may retain stale entries pointing to the old server, causing offline file sync conflicts.",
                 Tags = ["folder redirection", "offline files", "gpo", "cache", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -8419,7 +8456,8 @@ internal static class PolicyEnterprise
                 Id = "folderredir-disable-user-profile-roaming",
                 Label = "GPO Folder Redirection: Disable User Profile Roaming Download",
                 Category = "System",
-                Description = "Prevents Windows from downloading a roaming user profile from the network during logon when the user profile server is unavailable. Without this policy, Windows waits for the roaming profile to download (up to the profile server timeout) before allowing login. Blocking this fallback download prevents slow logons when profile servers are down while ensuring that local cached profiles are used immediately.",
+                Description =
+                    "Prevents Windows from downloading a roaming user profile from the network during logon when the user profile server is unavailable. Without this policy, Windows waits for the roaming profile to download (up to the profile server timeout) before allowing login. Blocking this fallback download prevents slow logons when profile servers are down while ensuring that local cached profiles are used immediately.",
                 Tags = ["folder redirection", "roaming profile", "logon", "performance", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -8436,7 +8474,8 @@ internal static class PolicyEnterprise
                 Id = "folderredir-disable-roaming-profile-quota-notification",
                 Label = "GPO Folder Redirection: Disable Roaming Profile Quota Warning Notification",
                 Category = "System",
-                Description = "Suppresses the roaming profile quota warning balloon notification that appears in the notification area when a user's roaming profile approaches its storage quota. In enterprise environments where profile size is managed through other mechanisms (e.g., folder redirection, profile monitoring tools), these notifications create user confusion and help desk calls without providing actionable guidance for end users.",
+                Description =
+                    "Suppresses the roaming profile quota warning balloon notification that appears in the notification area when a user's roaming profile approaches its storage quota. In enterprise environments where profile size is managed through other mechanisms (e.g., folder redirection, profile monitoring tools), these notifications create user confusion and help desk calls without providing actionable guidance for end users.",
                 Tags = ["folder redirection", "roaming profile", "quota", "notification", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -8453,7 +8492,8 @@ internal static class PolicyEnterprise
                 Id = "folderredir-wait-for-policy-at-logon",
                 Label = "GPO Folder Redirection: Wait for Group Policy at Logon (Background Sync Block)",
                 Category = "System",
-                Description = "Forces Windows to perform a synchronous (blocking) Group Policy application at logon rather than applying folder redirection policies in the background after the user is already logged in. Without this setting, users may briefly see their unredirected local Desktop and Documents folders before the redirection takes effect, resulting in files being saved to the wrong location. Synchronous policy application eliminates this window.",
+                Description =
+                    "Forces Windows to perform a synchronous (blocking) Group Policy application at logon rather than applying folder redirection policies in the background after the user is already logged in. Without this setting, users may briefly see their unredirected local Desktop and Documents folders before the redirection takes effect, resulting in files being saved to the wrong location. Synchronous policy application eliminates this window.",
                 Tags = ["folder redirection", "group policy", "logon", "synchronous", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -8470,7 +8510,8 @@ internal static class PolicyEnterprise
                 Id = "folderredir-redirect-local-profile-to-network",
                 Label = "GPO Folder Redirection: Grant User Exclusive Rights to Redirected Folder",
                 Category = "System",
-                Description = "Grants the user exclusive NTFS permissions on their redirected folder target when the folder redirection policy first creates it on the file server. Without this setting, the Administrators group retains access to all redirected folders, enabling administrators to read user-redirected documents. Granting exclusive user rights is a privacy and security best practice that ensures sensitive user data in redirected folders is only accessible to the owning account.",
+                Description =
+                    "Grants the user exclusive NTFS permissions on their redirected folder target when the folder redirection policy first creates it on the file server. Without this setting, the Administrators group retains access to all redirected folders, enabling administrators to read user-redirected documents. Granting exclusive user rights is a privacy and security best practice that ensures sensitive user data in redirected folders is only accessible to the owning account.",
                 Tags = ["folder redirection", "permissions", "ntfs", "privacy", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -8487,7 +8528,8 @@ internal static class PolicyEnterprise
                 Id = "folderredir-use-localized-subfolder-names",
                 Label = "GPO Folder Redirection: Use Localized Subfolder Names",
                 Category = "System",
-                Description = "Configures folder redirection to use the localized (OS language-specific) names for redirected subfolders on the file server rather than English names. In multi-language organizations where different users log on with different Windows UI languages, the names of redirected subfolder paths (e.g., Documents vs. Documenti vs. Dokumente) can vary unless this policy standardizes them to the localized folder names per user.",
+                Description =
+                    "Configures folder redirection to use the localized (OS language-specific) names for redirected subfolders on the file server rather than English names. In multi-language organizations where different users log on with different Windows UI languages, the names of redirected subfolder paths (e.g., Documents vs. Documenti vs. Dokumente) can vary unless this policy standardizes them to the localized folder names per user.",
                 Tags = ["folder redirection", "localization", "subfolder names", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -8504,7 +8546,8 @@ internal static class PolicyEnterprise
                 Id = "folderredir-move-contents-on-redirect",
                 Label = "GPO Folder Redirection: Move Contents to Redirected Path",
                 Category = "System",
-                Description = "Instructs Windows to automatically move the contents of a folder from its original local location to the new UNC redirect target when folder redirection is first applied. Without this policy, existing local files stay in place and only new files go to the redirect target, leaving users with data split across two locations. Enabling content migration ensures a complete transition to the managed file server path.",
+                Description =
+                    "Instructs Windows to automatically move the contents of a folder from its original local location to the new UNC redirect target when folder redirection is first applied. Without this policy, existing local files stay in place and only new files go to the redirect target, leaving users with data split across two locations. Enabling content migration ensures a complete transition to the managed file server path.",
                 Tags = ["folder redirection", "content migration", "data move", "gpo", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -8514,14 +8557,16 @@ internal static class PolicyEnterprise
                 DetectOps = [RegOp.CheckDword(SystemKey, "MoveContentsExistingFolders", 1)],
                 ImpactScore = 4,
                 SafetyRating = 3,
-                ImpactNote = "Moves existing local files to the redirect target on first policy application; ensure the target share has sufficient space.",
+                ImpactNote =
+                    "Moves existing local files to the redirect target on first policy application; ensure the target share has sufficient space.",
             },
             new TweakDef
             {
                 Id = "folderredir-disable-unc-path-hardening-bypass",
                 Label = "GPO Folder Redirection: Block UNC Hardening Bypass for Redirected Paths",
                 Category = "System",
-                Description = "Prevents applications from bypassing UNC path hardening (SMB signing requirements) for redirected folder UNC targets. Windows allows some UNC access to bypass signing requirements for specific paths. This policy ensures that even though folder redirection targets are trusted by Windows, they are still subject to SMB signing requirements to prevent man-in-the-middle attacks on the file server connection carrying redirected folder traffic.",
+                Description =
+                    "Prevents applications from bypassing UNC path hardening (SMB signing requirements) for redirected folder UNC targets. Windows allows some UNC access to bypass signing requirements for specific paths. This policy ensures that even though folder redirection targets are trusted by Windows, they are still subject to SMB signing requirements to prevent man-in-the-middle attacks on the file server connection carrying redirected folder traffic.",
                 Tags = ["folder redirection", "unc hardening", "smb signing", "security", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -8538,7 +8583,8 @@ internal static class PolicyEnterprise
                 Id = "folderredir-configure-profile-slow-link-detection",
                 Label = "GPO Folder Redirection: Configure Slow-Link Detection Threshold",
                 Category = "System",
-                Description = "Configures the network bandwidth threshold below which Windows considers the connection to the roaming profile server as a 'slow link', triggering use of the local cached profile instead of downloading the full remote profile. Setting this to the Microsoft-recommended value of 500 kbps ensures that even on moderate WAN links, users get fast logons while good connections still get the full roaming/redirected experience.",
+                Description =
+                    "Configures the network bandwidth threshold below which Windows considers the connection to the roaming profile server as a 'slow link', triggering use of the local cached profile instead of downloading the full remote profile. Setting this to the Microsoft-recommended value of 500 kbps ensures that even on moderate WAN links, users get fast logons while good connections still get the full roaming/redirected experience.",
                 Tags = ["folder redirection", "slow link", "profile", "bandwidth", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -8555,7 +8601,8 @@ internal static class PolicyEnterprise
                 Id = "folderredir-enable-profile-migration-on-domain-join",
                 Label = "GPO Folder Redirection: Enable Local Profile Migration on Domain Join",
                 Category = "System",
-                Description = "Permits migration of the local user profile to the roaming profile path when a user first logs in after a machine is joined to a domain. Without this policy, domain logons create a new empty profile and the user's existing local profile data (desktop files, AppData settings) is left behind in the local profile. Enabling migration ensures the first domain logon seamlessly carries over all existing local user data.",
+                Description =
+                    "Permits migration of the local user profile to the roaming profile path when a user first logs in after a machine is joined to a domain. Without this policy, domain logons create a new empty profile and the user's existing local profile data (desktop files, AppData settings) is left behind in the local profile. Enabling migration ensures the first domain logon seamlessly carries over all existing local user data.",
                 Tags = ["folder redirection", "profile migration", "domain join", "logon", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -8568,7 +8615,6 @@ internal static class PolicyEnterprise
                 ImpactNote = "Sets a 30-second wait period for profile load before falling back to local cache on domain join.",
             },
         ];
-
     }
 
     // ── GpoScriptsPolicy ──
@@ -8583,7 +8629,8 @@ internal static class PolicyEnterprise
                 Id = "gposcripts-run-logon-script-sync",
                 Label = "GPO Scripts: Run Logon Scripts Synchronously",
                 Category = "System",
-                Description = "Configures Windows to run all Group Policy logon scripts synchronously and display the desktop only after all logon scripts have completed. By default, Windows may display the desktop before all logon scripts finish, which can result in users opening applications before drive mappings, printer connections, or environment variables are established by logon scripts. Synchronous execution ensures scripts complete before the user session is accessible.",
+                Description =
+                    "Configures Windows to run all Group Policy logon scripts synchronously and display the desktop only after all logon scripts have completed. By default, Windows may display the desktop before all logon scripts finish, which can result in users opening applications before drive mappings, printer connections, or environment variables are established by logon scripts. Synchronous execution ensures scripts complete before the user session is accessible.",
                 Tags = ["gpo scripts", "logon scripts", "synchronous", "startup", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -8600,7 +8647,8 @@ internal static class PolicyEnterprise
                 Id = "gposcripts-run-startup-script-sync",
                 Label = "GPO Scripts: Run Startup Scripts Synchronously",
                 Category = "System",
-                Description = "Configures Windows to run all Computer Configuration startup scripts one at a time and sequentially before the logon prompt appears. Without this setting, startup scripts may run asynchronously in the background, meaning critical system initialization scripts (e.g., disk encryption unlock, certificate enrollment, MDM check-in) may not complete before a user logs in, potentially resulting in incomplete system state at logon.",
+                Description =
+                    "Configures Windows to run all Computer Configuration startup scripts one at a time and sequentially before the logon prompt appears. Without this setting, startup scripts may run asynchronously in the background, meaning critical system initialization scripts (e.g., disk encryption unlock, certificate enrollment, MDM check-in) may not complete before a user logs in, potentially resulting in incomplete system state at logon.",
                 Tags = ["gpo scripts", "startup scripts", "synchronous", "boot", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -8610,14 +8658,16 @@ internal static class PolicyEnterprise
                 DetectOps = [RegOp.CheckDword(SystemKey, "RunStartupScriptSync", 1)],
                 ImpactScore = 3,
                 SafetyRating = 4,
-                ImpactNote = "Ensures each startup script finishes before the next begins and before the logon screen appears; adds boot time equal to total startup script duration.",
+                ImpactNote =
+                    "Ensures each startup script finishes before the next begins and before the logon screen appears; adds boot time equal to total startup script duration.",
             },
             new TweakDef
             {
                 Id = "gposcripts-run-legacy-logon-hidden",
                 Label = "GPO Scripts: Run Legacy Logon Scripts Visible but Silent",
                 Category = "System",
-                Description = "Forces legacy logon scripts (those defined in the user profile properties of Active Directory) to run visible to the user but without a separate CMD window. By default, legacy logon scripts (as distinct from Group Policy logon scripts) may flash console windows briefly. This policy suppresses the command prompt window while still allowing the script to run, providing a cleaner logon experience without confusing users with flashing black windows.",
+                Description =
+                    "Forces legacy logon scripts (those defined in the user profile properties of Active Directory) to run visible to the user but without a separate CMD window. By default, legacy logon scripts (as distinct from Group Policy logon scripts) may flash console windows briefly. This policy suppresses the command prompt window while still allowing the script to run, providing a cleaner logon experience without confusing users with flashing black windows.",
                 Tags = ["gpo scripts", "logon scripts", "legacy", "hidden window", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -8634,7 +8684,8 @@ internal static class PolicyEnterprise
                 Id = "gposcripts-set-max-script-wait-time",
                 Label = "GPO Scripts: Set Maximum Script Runtime Timeout (10 minutes)",
                 Category = "System",
-                Description = "Sets the maximum time Windows will wait for a Group Policy script (startup, logon, logoff, or shutdown) to complete before forcibly terminating it. The default is 600 seconds (10 minutes). Scripts that exceed this timeout are terminated without completing. Setting this explicitly prevents runaway scripts from hanging the logon/logoff sequence indefinitely, which can leave the machine in an unresponsive state.",
+                Description =
+                    "Sets the maximum time Windows will wait for a Group Policy script (startup, logon, logoff, or shutdown) to complete before forcibly terminating it. The default is 600 seconds (10 minutes). Scripts that exceed this timeout are terminated without completing. Setting this explicitly prevents runaway scripts from hanging the logon/logoff sequence indefinitely, which can leave the machine in an unresponsive state.",
                 Tags = ["gpo scripts", "timeout", "max wait", "startup shutdown", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -8651,7 +8702,8 @@ internal static class PolicyEnterprise
                 Id = "gposcripts-hide-startup-scripts",
                 Label = "GPO Scripts: Hide Startup Scripts (No Status Message)",
                 Category = "System",
-                Description = "Suppresses the 'Running startup scripts...' status message and progress screen that Windows displays during boot when Group Policy startup scripts are executing. In environments where startup scripts handle sensitive operations (certificate enrollment, TPM initialization commands, encrypted volume mounting), displaying the script status messages onscreen may expose the types of security operations to anyone observing the boot screen.",
+                Description =
+                    "Suppresses the 'Running startup scripts...' status message and progress screen that Windows displays during boot when Group Policy startup scripts are executing. In environments where startup scripts handle sensitive operations (certificate enrollment, TPM initialization commands, encrypted volume mounting), displaying the script status messages onscreen may expose the types of security operations to anyone observing the boot screen.",
                 Tags = ["gpo scripts", "startup scripts", "hidden", "status message", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -8668,7 +8720,8 @@ internal static class PolicyEnterprise
                 Id = "gposcripts-hide-logon-scripts",
                 Label = "GPO Scripts: Hide Logon Scripts (No Progress Window)",
                 Category = "System",
-                Description = "Hides the 'Applying your personal settings...' and similar logon script progress messages that appear during user logon in verbose mode. While informative for administrators, these messages reveal that Group Policy logon scripts are running, potentially exposing script categories to end users. In secure environments, the logon process should be opaque — completing silently and presenting the desktop only when ready.",
+                Description =
+                    "Hides the 'Applying your personal settings...' and similar logon script progress messages that appear during user logon in verbose mode. While informative for administrators, these messages reveal that Group Policy logon scripts are running, potentially exposing script categories to end users. In secure environments, the logon process should be opaque — completing silently and presenting the desktop only when ready.",
                 Tags = ["gpo scripts", "logon scripts", "hidden", "progress window", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -8685,7 +8738,8 @@ internal static class PolicyEnterprise
                 Id = "gposcripts-hide-logoff-scripts",
                 Label = "GPO Scripts: Hide Logoff Scripts (No Logoff Window)",
                 Category = "System",
-                Description = "Suppresses the window that appears when Group Policy logoff scripts are executing at user sign-out. When logoff scripts clean up user sessions (removing temp credentials, wiping browser profiles, revoking certificates), showing the progress window to the user is unnecessary and can lead users to terminate the logoff early by pressing the power button, potentially leaving cleanup scripts incomplete.",
+                Description =
+                    "Suppresses the window that appears when Group Policy logoff scripts are executing at user sign-out. When logoff scripts clean up user sessions (removing temp credentials, wiping browser profiles, revoking certificates), showing the progress window to the user is unnecessary and can lead users to terminate the logoff early by pressing the power button, potentially leaving cleanup scripts incomplete.",
                 Tags = ["gpo scripts", "logoff scripts", "hidden", "sign-out", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -8702,7 +8756,8 @@ internal static class PolicyEnterprise
                 Id = "gposcripts-hide-shutdown-scripts",
                 Label = "GPO Scripts: Hide Shutdown Scripts (Silent System Shutdown)",
                 Category = "System",
-                Description = "Suppresses the shutdown script progress window that shows when Group Policy Computer Configuration shutdown scripts run during system power-down. Shutdown scripts commonly perform operations such as disk encryption key cleanup, network session teardown, and compliance logging. Hiding the progress window provides a cleaner shutdown experience and prevents disclosure of the shutdown script sequence to onlookers.",
+                Description =
+                    "Suppresses the shutdown script progress window that shows when Group Policy Computer Configuration shutdown scripts run during system power-down. Shutdown scripts commonly perform operations such as disk encryption key cleanup, network session teardown, and compliance logging. Hiding the progress window provides a cleaner shutdown experience and prevents disclosure of the shutdown script sequence to onlookers.",
                 Tags = ["gpo scripts", "shutdown scripts", "hidden", "system shutdown", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -8719,7 +8774,8 @@ internal static class PolicyEnterprise
                 Id = "gposcripts-run-scripts-first-at-user-logon",
                 Label = "GPO Scripts: Run User Logon Scripts Before Group Policy Logon Scripts",
                 Category = "System",
-                Description = "Forces user-level logon scripts (defined in profile properties) to run before the Group Policy client completes processing Computer and User Configuration logon scripts. In some deployment scenarios, user-specific scripts (which map personal drives or configure user-specific settings) must run before broader GPO changes are applied. This ordering ensures user context is established before group-level policies modify the environment.",
+                Description =
+                    "Forces user-level logon scripts (defined in profile properties) to run before the Group Policy client completes processing Computer and User Configuration logon scripts. In some deployment scenarios, user-specific scripts (which map personal drives or configure user-specific settings) must run before broader GPO changes are applied. This ordering ensures user context is established before group-level policies modify the environment.",
                 Tags = ["gpo scripts", "logon scripts", "run order", "user scripts", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -8729,14 +8785,16 @@ internal static class PolicyEnterprise
                 DetectOps = [RegOp.CheckDword(SystemKey, "RunScriptsFirstAtUserLogon", 1)],
                 ImpactScore = 2,
                 SafetyRating = 4,
-                ImpactNote = "Reorders script execution — user profile scripts run before GPO logon scripts; may expose environment to user scripts before GPO lockdown is applied.",
+                ImpactNote =
+                    "Reorders script execution — user profile scripts run before GPO logon scripts; may expose environment to user scripts before GPO lockdown is applied.",
             },
             new TweakDef
             {
                 Id = "gposcripts-set-max-noninteractive-runtime",
                 Label = "GPO Scripts: Set Maximum Non-Interactive Script Runtime (5 minutes)",
                 Category = "System",
-                Description = "Sets the maximum time a non-interactive Group Policy script (startup, shutdown, logon, logoff scripts running in non-interactive mode) is allowed to run. Setting this to 300 seconds (5 minutes) provides a tighter timeout than the default 600 seconds. For background scripts that should complete quickly, this reduces the window during which a script error or infinite loop delays the logon or shutdown sequence.",
+                Description =
+                    "Sets the maximum time a non-interactive Group Policy script (startup, shutdown, logon, logoff scripts running in non-interactive mode) is allowed to run. Setting this to 300 seconds (5 minutes) provides a tighter timeout than the default 600 seconds. For background scripts that should complete quickly, this reduces the window during which a script error or infinite loop delays the logon or shutdown sequence.",
                 Tags = ["gpo scripts", "timeout", "non-interactive", "runtime limit", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -8749,14 +8807,12 @@ internal static class PolicyEnterprise
                 ImpactNote = "Sets a 5-minute (300s) cap on non-interactive scripts; scripts that need more time must run interactively.",
             },
         ];
-
     }
 
     // ── GroupPolicySettingsPolicy ──
     private static class _GroupPolicySettingsPolicy
     {
-        private const string Key =
-            @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\GroupPolicy";
+        private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\GroupPolicy";
 
         // Well-known Group Policy Object GUID for User Configuration CSE
         private const string UserCseKey =
@@ -8813,7 +8869,8 @@ internal static class PolicyEnterprise
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "All policy settings are re-applied at every background refresh cycle; local configuration drift is corrected automatically.",
+                    ImpactNote =
+                        "All policy settings are re-applied at every background refresh cycle; local configuration drift is corrected automatically.",
                     ApplyOps =
                     [
                         RegOp.SetDword(
@@ -8975,7 +9032,6 @@ internal static class PolicyEnterprise
                     DetectOps = [RegOp.CheckDword(Key, "RequireSecureChannel", 1)],
                 },
             ];
-
     }
 
     // ── HotpatchUpdatePolicy ──
@@ -8985,189 +9041,208 @@ internal static class PolicyEnterprise
         private const string WuKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate";
 
         public static IReadOnlyList<TweakDef> Data =>
-        [
-            new TweakDef
-            {
-                Id = "hotpatch-enable-hotpatch-updates",
-                Label = "Enable Windows Hotpatch (Live Kernel Patching)",
-                Category = "System",
-                Description = "Enables Windows Hotpatch, which installs security patches directly into running kernel and system process memory without requiring a reboot. Dramatically reduces downtime for critical servers and VMs while keeping them current.",
-                Tags = ["hotpatch", "live-patching", "kernel", "windows-update", "reboot-less"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                MinBuild = 26100,
-                ImpactScore = 5,
-                SafetyRating = 4,
-                ImpactNote = "Enables in-memory patching for monthly quality updates without reboots. Requires Windows 11 24H2+ or Azure Edition VMs. Baseline updates still require occasional reboots quarterly.",
-                RegistryKeys = [HotpatchKey],
-                ApplyOps  = [RegOp.SetDword(HotpatchKey, "EnableHotPatch", 1)],
-                RemoveOps = [RegOp.DeleteValue(HotpatchKey, "EnableHotPatch")],
-                DetectOps = [RegOp.CheckDword(HotpatchKey, "EnableHotPatch", 1)],
-            },
-            new TweakDef
-            {
-                Id = "hotpatch-disable-hotpatch-updates",
-                Label = "Disable Windows Hotpatch Updates",
-                Category = "System",
-                Description = "Administratively disables the Hotpatch update channel, reverting the device to the traditional monthly Update Tuesday update cycle that installs patches via a reboot. Suitable for environments that require deterministic full-restart update cycles.",
-                Tags = ["hotpatch", "disable", "windows-update", "patching", "control"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                MinBuild = 26100,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Reverts to standard reboot-required patching; ensures full restart cycle occurs each month. No security risk from disabling Hotpatch as long as devices are patched via regular WU channel.",
-                RegistryKeys = [HotpatchKey],
-                ApplyOps  = [RegOp.SetDword(HotpatchKey, "EnableHotPatch", 0)],
-                RemoveOps = [RegOp.DeleteValue(HotpatchKey, "EnableHotPatch")],
-                DetectOps = [RegOp.CheckDword(HotpatchKey, "EnableHotPatch", 0)],
-            },
-            new TweakDef
-            {
-                Id = "hotpatch-require-code-integrity",
-                Label = "Require Code Integrity Validation for Hotpatch Modules",
-                Category = "System",
-                Description = "Enforces Authenticode signature verification for every Hotpatch module before it is loaded into kernel memory. Prevents unsigned or tampered patches from being applied even if a threat actor gains WU delivery access.",
-                Tags = ["hotpatch", "code-integrity", "signature", "authenticode", "security"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                MinBuild = 26100,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                ImpactNote = "Strong defence-in-depth: only Microsoft-signed hotpatch binaries can be applied. Has no impact on legitimate Microsoft patches; all Microsoft hotpatches are signed.",
-                RegistryKeys = [HotpatchKey],
-                ApplyOps  = [RegOp.SetDword(HotpatchKey, "RequireCodeIntegrity", 1)],
-                RemoveOps = [RegOp.DeleteValue(HotpatchKey, "RequireCodeIntegrity")],
-                DetectOps = [RegOp.CheckDword(HotpatchKey, "RequireCodeIntegrity", 1)],
-            },
-            new TweakDef
-            {
-                Id = "hotpatch-block-rollback",
-                Label = "Block Hotpatch Rollback to Unpatched State",
-                Category = "System",
-                Description = "Prevents administrators and automated tools from rolling back applied hotpatch modules to a pre-patched kernel state. Ensures regulatory compliance environments maintain a continuous patched state.",
-                Tags = ["hotpatch", "rollback", "compliance", "integrity", "security"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                MinBuild = 26100,
-                ImpactScore = 4,
-                SafetyRating = 4,
-                ImpactNote = "Blocking rollback ensures continuous kernel-level protection but may complicate incident response if a hotpatch introduces a regression. Test thoroughly before enforcing.",
-                RegistryKeys = [HotpatchKey],
-                ApplyOps  = [RegOp.SetDword(HotpatchKey, "BlockHotpatchRollback", 1)],
-                RemoveOps = [RegOp.DeleteValue(HotpatchKey, "BlockHotpatchRollback")],
-                DetectOps = [RegOp.CheckDword(HotpatchKey, "BlockHotpatchRollback", 1)],
-            },
-            new TweakDef
-            {
-                Id = "hotpatch-audit-patch-events",
-                Label = "Enable Hotpatch Apply and Fail Event Auditing",
-                Category = "System",
-                Description = "Enables detailed event logging for every Hotpatch application attempt, whether successful or failed. Events include the patch identifier, timestamp, module hash, and failure reason code for SIEM ingestion.",
-                Tags = ["hotpatch", "audit", "event-log", "siem", "monitoring"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                MinBuild = 26100,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Non-disruptive; only adds event log entries. Essential for organisations with change-management and patch-tracking compliance requirements.",
-                RegistryKeys = [HotpatchKey],
-                ApplyOps  = [RegOp.SetDword(HotpatchKey, "EnableHotpatchAudit", 1)],
-                RemoveOps = [RegOp.DeleteValue(HotpatchKey, "EnableHotpatchAudit")],
-                DetectOps = [RegOp.CheckDword(HotpatchKey, "EnableHotpatchAudit", 1)],
-            },
-            new TweakDef
-            {
-                Id = "hotpatch-limit-max-deferred-reboots",
-                Label = "Limit Maximum Reboots Deferred by Hotpatch to 2 Baseline Periods",
-                Category = "System",
-                Description = "Caps the number of consecutive Update Tuesday cycles that Hotpatch can defer a baseline (reboot-required) update. After the configured number of hotpatch-only cycles, a baseline restart is mandated to consolidate all patches.",
-                Tags = ["hotpatch", "baseline-reboot", "deferred-restart", "patch-cycle", "control"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                MinBuild = 26100,
-                ImpactScore = 3,
-                SafetyRating = 4,
-                ImpactNote = "Prevents indefinite deferral of reboot-required baselines. Allows 2 hotpatch months before a mandatory restart, balancing uptime and update discipline.",
-                RegistryKeys = [HotpatchKey],
-                ApplyOps  = [RegOp.SetDword(HotpatchKey, "MaxDeferredBaselineRestarts", 2)],
-                RemoveOps = [RegOp.DeleteValue(HotpatchKey, "MaxDeferredBaselineRestarts")],
-                DetectOps = [RegOp.CheckDword(HotpatchKey, "MaxDeferredBaselineRestarts", 2)],
-            },
-            new TweakDef
-            {
-                Id = "hotpatch-schedule-baseline-restart",
-                Label = "Schedule Mandatory Baseline Restart Outside Business Hours",
-                Category = "System",
-                Description = "Configures hotpatch baseline restarts to occur outside defined active hours (default: 2:00 AM), avoiding interruption of user sessions. When a baseline reboot is required, it is deferred to the next maintenance window.",
-                Tags = ["hotpatch", "baseline-reboot", "active-hours", "maintenance-window", "scheduling"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                MinBuild = 26100,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Configures restart timing to 2 AM UTC; pairs with the WU active hours policy to keep machines updated without disrupting users.",
-                RegistryKeys = [HotpatchKey],
-                ApplyOps  = [RegOp.SetDword(HotpatchKey, "ScheduleBaselineRestartHour", 2)],
-                RemoveOps = [RegOp.DeleteValue(HotpatchKey, "ScheduleBaselineRestartHour")],
-                DetectOps = [RegOp.CheckDword(HotpatchKey, "ScheduleBaselineRestartHour", 2)],
-            },
-            new TweakDef
-            {
-                Id = "hotpatch-disable-telemetry-upload",
-                Label = "Disable Hotpatch Telemetry Upload to Microsoft",
-                Category = "System",
-                Description = "Prevents the Hotpatch subsystem from uploading patch application telemetry, timing data, and failure diagnostics to Microsoft. Retains telemetry locally in the event log only for internal analysis.",
-                Tags = ["hotpatch", "telemetry", "privacy", "diagnostic-data", "cloud"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                MinBuild = 26100,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                ImpactNote = "Reduces data shared with Microsoft about kernel patching events. Does not affect hotpatch functionality or reliability; purely a data outflow control.",
-                RegistryKeys = [HotpatchKey],
-                ApplyOps  = [RegOp.SetDword(HotpatchKey, "DisableHotpatchTelemetry", 1)],
-                RemoveOps = [RegOp.DeleteValue(HotpatchKey, "DisableHotpatchTelemetry")],
-                DetectOps = [RegOp.CheckDword(HotpatchKey, "DisableHotpatchTelemetry", 1)],
-            },
-            new TweakDef
-            {
-                Id = "hotpatch-exclude-driver-updates",
-                Label = "Exclude Driver Updates from Hotpatch Delivery Channel",
-                Category = "System",
-                Description = "Restricts the Hotpatch delivery channel to security patches only, excluding optional and driver updates. Driver changes often require a full reboot for hardware initialisation; delivering them via Hotpatch risks incomplete initialisation.",
-                Tags = ["hotpatch", "driver-updates", "exclusion", "windows-update", "stability"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                MinBuild = 26100,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Prevents unexpected driver-level changes during a hotpatch cycle; driver updates fall through to the next reboot-requiring WU pass.",
-                RegistryKeys = [HotpatchKey],
-                ApplyOps  = [RegOp.SetDword(HotpatchKey, "ExcludeDriversFromHotpatch", 1)],
-                RemoveOps = [RegOp.DeleteValue(HotpatchKey, "ExcludeDriversFromHotpatch")],
-                DetectOps = [RegOp.CheckDword(HotpatchKey, "ExcludeDriversFromHotpatch", 1)],
-            },
-            new TweakDef
-            {
-                Id = "hotpatch-require-managed-device-enrollment",
-                Label = "Require Managed Device Enrollment for Hotpatch Activation",
-                Category = "System",
-                Description = "Permits Hotpatch activation only on devices enrolled in a compatible MDM solution (Intune, MEM). Unmanaged devices fall back to the standard WU reboot channel. Ensures compliance-tracking for reboot-free patch deployments.",
-                Tags = ["hotpatch", "mdm", "intune", "device-enrollment", "compliance"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                MinBuild = 26100,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Ties Hotpatch enrollment to MDM compliance posture; non-enrolled devices are not eligible. Useful for enterprise environments tracking update compliance via Intune.",
-                RegistryKeys = [WuKey],
-                ApplyOps  = [RegOp.SetDword(WuKey, "RequireManagedDeviceForHotpatch", 1)],
-                RemoveOps = [RegOp.DeleteValue(WuKey, "RequireManagedDeviceForHotpatch")],
-                DetectOps = [RegOp.CheckDword(WuKey, "RequireManagedDeviceForHotpatch", 1)],
-            },
-        ];
-
+            [
+                new TweakDef
+                {
+                    Id = "hotpatch-enable-hotpatch-updates",
+                    Label = "Enable Windows Hotpatch (Live Kernel Patching)",
+                    Category = "System",
+                    Description =
+                        "Enables Windows Hotpatch, which installs security patches directly into running kernel and system process memory without requiring a reboot. Dramatically reduces downtime for critical servers and VMs while keeping them current.",
+                    Tags = ["hotpatch", "live-patching", "kernel", "windows-update", "reboot-less"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    MinBuild = 26100,
+                    ImpactScore = 5,
+                    SafetyRating = 4,
+                    ImpactNote =
+                        "Enables in-memory patching for monthly quality updates without reboots. Requires Windows 11 24H2+ or Azure Edition VMs. Baseline updates still require occasional reboots quarterly.",
+                    RegistryKeys = [HotpatchKey],
+                    ApplyOps = [RegOp.SetDword(HotpatchKey, "EnableHotPatch", 1)],
+                    RemoveOps = [RegOp.DeleteValue(HotpatchKey, "EnableHotPatch")],
+                    DetectOps = [RegOp.CheckDword(HotpatchKey, "EnableHotPatch", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "hotpatch-disable-hotpatch-updates",
+                    Label = "Disable Windows Hotpatch Updates",
+                    Category = "System",
+                    Description =
+                        "Administratively disables the Hotpatch update channel, reverting the device to the traditional monthly Update Tuesday update cycle that installs patches via a reboot. Suitable for environments that require deterministic full-restart update cycles.",
+                    Tags = ["hotpatch", "disable", "windows-update", "patching", "control"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    MinBuild = 26100,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote =
+                        "Reverts to standard reboot-required patching; ensures full restart cycle occurs each month. No security risk from disabling Hotpatch as long as devices are patched via regular WU channel.",
+                    RegistryKeys = [HotpatchKey],
+                    ApplyOps = [RegOp.SetDword(HotpatchKey, "EnableHotPatch", 0)],
+                    RemoveOps = [RegOp.DeleteValue(HotpatchKey, "EnableHotPatch")],
+                    DetectOps = [RegOp.CheckDword(HotpatchKey, "EnableHotPatch", 0)],
+                },
+                new TweakDef
+                {
+                    Id = "hotpatch-require-code-integrity",
+                    Label = "Require Code Integrity Validation for Hotpatch Modules",
+                    Category = "System",
+                    Description =
+                        "Enforces Authenticode signature verification for every Hotpatch module before it is loaded into kernel memory. Prevents unsigned or tampered patches from being applied even if a threat actor gains WU delivery access.",
+                    Tags = ["hotpatch", "code-integrity", "signature", "authenticode", "security"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    MinBuild = 26100,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote =
+                        "Strong defence-in-depth: only Microsoft-signed hotpatch binaries can be applied. Has no impact on legitimate Microsoft patches; all Microsoft hotpatches are signed.",
+                    RegistryKeys = [HotpatchKey],
+                    ApplyOps = [RegOp.SetDword(HotpatchKey, "RequireCodeIntegrity", 1)],
+                    RemoveOps = [RegOp.DeleteValue(HotpatchKey, "RequireCodeIntegrity")],
+                    DetectOps = [RegOp.CheckDword(HotpatchKey, "RequireCodeIntegrity", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "hotpatch-block-rollback",
+                    Label = "Block Hotpatch Rollback to Unpatched State",
+                    Category = "System",
+                    Description =
+                        "Prevents administrators and automated tools from rolling back applied hotpatch modules to a pre-patched kernel state. Ensures regulatory compliance environments maintain a continuous patched state.",
+                    Tags = ["hotpatch", "rollback", "compliance", "integrity", "security"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    MinBuild = 26100,
+                    ImpactScore = 4,
+                    SafetyRating = 4,
+                    ImpactNote =
+                        "Blocking rollback ensures continuous kernel-level protection but may complicate incident response if a hotpatch introduces a regression. Test thoroughly before enforcing.",
+                    RegistryKeys = [HotpatchKey],
+                    ApplyOps = [RegOp.SetDword(HotpatchKey, "BlockHotpatchRollback", 1)],
+                    RemoveOps = [RegOp.DeleteValue(HotpatchKey, "BlockHotpatchRollback")],
+                    DetectOps = [RegOp.CheckDword(HotpatchKey, "BlockHotpatchRollback", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "hotpatch-audit-patch-events",
+                    Label = "Enable Hotpatch Apply and Fail Event Auditing",
+                    Category = "System",
+                    Description =
+                        "Enables detailed event logging for every Hotpatch application attempt, whether successful or failed. Events include the patch identifier, timestamp, module hash, and failure reason code for SIEM ingestion.",
+                    Tags = ["hotpatch", "audit", "event-log", "siem", "monitoring"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    MinBuild = 26100,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote =
+                        "Non-disruptive; only adds event log entries. Essential for organisations with change-management and patch-tracking compliance requirements.",
+                    RegistryKeys = [HotpatchKey],
+                    ApplyOps = [RegOp.SetDword(HotpatchKey, "EnableHotpatchAudit", 1)],
+                    RemoveOps = [RegOp.DeleteValue(HotpatchKey, "EnableHotpatchAudit")],
+                    DetectOps = [RegOp.CheckDword(HotpatchKey, "EnableHotpatchAudit", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "hotpatch-limit-max-deferred-reboots",
+                    Label = "Limit Maximum Reboots Deferred by Hotpatch to 2 Baseline Periods",
+                    Category = "System",
+                    Description =
+                        "Caps the number of consecutive Update Tuesday cycles that Hotpatch can defer a baseline (reboot-required) update. After the configured number of hotpatch-only cycles, a baseline restart is mandated to consolidate all patches.",
+                    Tags = ["hotpatch", "baseline-reboot", "deferred-restart", "patch-cycle", "control"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    MinBuild = 26100,
+                    ImpactScore = 3,
+                    SafetyRating = 4,
+                    ImpactNote =
+                        "Prevents indefinite deferral of reboot-required baselines. Allows 2 hotpatch months before a mandatory restart, balancing uptime and update discipline.",
+                    RegistryKeys = [HotpatchKey],
+                    ApplyOps = [RegOp.SetDword(HotpatchKey, "MaxDeferredBaselineRestarts", 2)],
+                    RemoveOps = [RegOp.DeleteValue(HotpatchKey, "MaxDeferredBaselineRestarts")],
+                    DetectOps = [RegOp.CheckDword(HotpatchKey, "MaxDeferredBaselineRestarts", 2)],
+                },
+                new TweakDef
+                {
+                    Id = "hotpatch-schedule-baseline-restart",
+                    Label = "Schedule Mandatory Baseline Restart Outside Business Hours",
+                    Category = "System",
+                    Description =
+                        "Configures hotpatch baseline restarts to occur outside defined active hours (default: 2:00 AM), avoiding interruption of user sessions. When a baseline reboot is required, it is deferred to the next maintenance window.",
+                    Tags = ["hotpatch", "baseline-reboot", "active-hours", "maintenance-window", "scheduling"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    MinBuild = 26100,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote =
+                        "Configures restart timing to 2 AM UTC; pairs with the WU active hours policy to keep machines updated without disrupting users.",
+                    RegistryKeys = [HotpatchKey],
+                    ApplyOps = [RegOp.SetDword(HotpatchKey, "ScheduleBaselineRestartHour", 2)],
+                    RemoveOps = [RegOp.DeleteValue(HotpatchKey, "ScheduleBaselineRestartHour")],
+                    DetectOps = [RegOp.CheckDword(HotpatchKey, "ScheduleBaselineRestartHour", 2)],
+                },
+                new TweakDef
+                {
+                    Id = "hotpatch-disable-telemetry-upload",
+                    Label = "Disable Hotpatch Telemetry Upload to Microsoft",
+                    Category = "System",
+                    Description =
+                        "Prevents the Hotpatch subsystem from uploading patch application telemetry, timing data, and failure diagnostics to Microsoft. Retains telemetry locally in the event log only for internal analysis.",
+                    Tags = ["hotpatch", "telemetry", "privacy", "diagnostic-data", "cloud"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    MinBuild = 26100,
+                    ImpactScore = 2,
+                    SafetyRating = 5,
+                    ImpactNote =
+                        "Reduces data shared with Microsoft about kernel patching events. Does not affect hotpatch functionality or reliability; purely a data outflow control.",
+                    RegistryKeys = [HotpatchKey],
+                    ApplyOps = [RegOp.SetDword(HotpatchKey, "DisableHotpatchTelemetry", 1)],
+                    RemoveOps = [RegOp.DeleteValue(HotpatchKey, "DisableHotpatchTelemetry")],
+                    DetectOps = [RegOp.CheckDword(HotpatchKey, "DisableHotpatchTelemetry", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "hotpatch-exclude-driver-updates",
+                    Label = "Exclude Driver Updates from Hotpatch Delivery Channel",
+                    Category = "System",
+                    Description =
+                        "Restricts the Hotpatch delivery channel to security patches only, excluding optional and driver updates. Driver changes often require a full reboot for hardware initialisation; delivering them via Hotpatch risks incomplete initialisation.",
+                    Tags = ["hotpatch", "driver-updates", "exclusion", "windows-update", "stability"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    MinBuild = 26100,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote =
+                        "Prevents unexpected driver-level changes during a hotpatch cycle; driver updates fall through to the next reboot-requiring WU pass.",
+                    RegistryKeys = [HotpatchKey],
+                    ApplyOps = [RegOp.SetDword(HotpatchKey, "ExcludeDriversFromHotpatch", 1)],
+                    RemoveOps = [RegOp.DeleteValue(HotpatchKey, "ExcludeDriversFromHotpatch")],
+                    DetectOps = [RegOp.CheckDword(HotpatchKey, "ExcludeDriversFromHotpatch", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "hotpatch-require-managed-device-enrollment",
+                    Label = "Require Managed Device Enrollment for Hotpatch Activation",
+                    Category = "System",
+                    Description =
+                        "Permits Hotpatch activation only on devices enrolled in a compatible MDM solution (Intune, MEM). Unmanaged devices fall back to the standard WU reboot channel. Ensures compliance-tracking for reboot-free patch deployments.",
+                    Tags = ["hotpatch", "mdm", "intune", "device-enrollment", "compliance"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    MinBuild = 26100,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote =
+                        "Ties Hotpatch enrollment to MDM compliance posture; non-enrolled devices are not eligible. Useful for enterprise environments tracking update compliance via Intune.",
+                    RegistryKeys = [WuKey],
+                    ApplyOps = [RegOp.SetDword(WuKey, "RequireManagedDeviceForHotpatch", 1)],
+                    RemoveOps = [RegOp.DeleteValue(WuKey, "RequireManagedDeviceForHotpatch")],
+                    DetectOps = [RegOp.CheckDword(WuKey, "RequireManagedDeviceForHotpatch", 1)],
+                },
+            ];
     }
 
     // ── HybridJoinDnsPolicy ──
@@ -9349,7 +9424,6 @@ internal static class PolicyEnterprise
                     DetectOps = [RegOp.CheckDword(Key2, "EnableHybridJoinAuditLogging", 1)],
                 },
             ];
-
     }
 
     // ── IntuneDeviceEventPolicy ──
@@ -9358,179 +9432,192 @@ internal static class PolicyEnterprise
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DataCollection\MDM";
 
         public static IReadOnlyList<TweakDef> Data =>
-        [
-            new TweakDef
-            {
-                Id = "intuneev-enable-device-health-reporting",
-                Label = "Intune: Enable Intune Device Health Reporting for Compliance Assessment",
-                Category = "System",
-                Description = "Sets EnableDeviceHealthReporting=1 in the MDM data collection policy. Enables the Intune client health reporting service which sends device health attestation data — TPM status, Secure Boot state, BitLocker encryption status, ELAM driver state, UEFI firmware version — to the Intune service for compliance policy evaluation. " +
-                    "Intune's device compliance policies can gate conditional access (blocking Microsoft 365, SharePoint, or other Entra ID protected resources) based on device health. For health-based conditional access to function, the device must send health attestation reports. Disabling health reporting (or leaving it unconfigured) causes compliance status to show as 'Unknown', which depending on conditional access policy settings may either block all access or allow access by default for unknown-state devices.",
-                Tags = ["intune", "mdm", "health-reporting", "compliance", "tpm", "conditional-access"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                ImpactNote = "Intune device health reports sent to service; compliance-based conditional access evaluates correct device health state.",
-                ApplyOps = [RegOp.SetDword(Key, "EnableDeviceHealthReporting", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "EnableDeviceHealthReporting")],
-                DetectOps = [RegOp.CheckDword(Key, "EnableDeviceHealthReporting", 1)],
-            },
-            new TweakDef
-            {
-                Id = "intuneev-disable-mdm-diagnostic-telemetry-upload",
-                Label = "Intune: Disable Voluntary MDM Diagnostic Data Upload to Microsoft",
-                Category = "System",
-                Description = "Sets DisableMDMDiagnosticsTelemetry=1 in the MDM data collection policy. Stops the Intune MDM client from uploading optional diagnostic data about MDM client performance, error rates, and command processing latency to Microsoft's MDM service telemetry pipeline, separate from Windows diagnostic data. " +
-                    "The MDM client telemetry pipeline transmits information about policy processing durations, enrollment command error codes, and sync performance metrics. While this data is used by Microsoft for service improvement and does not contain policy payload content, it reveals information about the organisation's governance structure: how many MDM commands are failing, which policy types are erroring, and whether device compliance is degrading. Disabling this prevents that metadata from leaving the organisation.",
-                Tags = ["intune", "mdm", "telemetry", "diagnostic-data", "privacy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "MDM client performance telemetry upload stopped; MDM client metadata stays within the organisation.",
-                ApplyOps = [RegOp.SetDword(Key, "DisableMDMDiagnosticsTelemetry", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "DisableMDMDiagnosticsTelemetry")],
-                DetectOps = [RegOp.CheckDword(Key, "DisableMDMDiagnosticsTelemetry", 1)],
-            },
-            new TweakDef
-            {
-                Id = "intuneev-require-enrollment-certificate",
-                Label = "Intune: Require PKI Certificate for MDM Enrollment Authentication",
-                Category = "System",
-                Description = "Sets RequireMDMEnrollmentCertificate=1 in the MDM data collection policy. Configures the MDM client to use a PKI client certificate issued by the internal CA for Intune enrollment authentication, rather than Microsoft Entra ID token-only authentication, providing a hardware-bound credential (certificate stored in TPM) alongside the Entra token. " +
-                    "Token-based MDM enrollment (Entra ID access token only) is subject to token theft attacks — an attacker who steals an Entra ID access token from a device could initiate MDM enrollment of a hostile device. PKI certificate-based enrollment requires the certificate private key (ideally TPM-bound) in addition to the Entra token, making stolen tokens insufficient to enrol a new device because the certificate is non-exportable from the TPM.",
-                Tags = ["intune", "mdm", "enrollment", "certificate", "pki", "tpm"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 4,
-                ImpactNote = "PKI certificate required for MDM enrollment; token theft alone insufficient to enrol a hostile device.",
-                ApplyOps = [RegOp.SetDword(Key, "RequireMDMEnrollmentCertificate", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "RequireMDMEnrollmentCertificate")],
-                DetectOps = [RegOp.CheckDword(Key, "RequireMDMEnrollmentCertificate", 1)],
-            },
-            new TweakDef
-            {
-                Id = "intuneev-enable-mdm-event-audit-log",
-                Label = "Intune: Enable MDM Client Audit Logging for Every Policy Command",
-                Category = "System",
-                Description = "Sets EnableMDMEventAuditLog=1 in the MDM data collection policy. Enables detailed audit logging in the Windows MDM stack, causing every OMA-DM command received from the Intune service (CSP write, CSP delete, configuration profile apply, compliance check result) to generate an audit event in the Security event log. " +
-                    "MDM policy delivery happens silently in the background. Without audit logging, there is no on-device record of which policies were applied, when they were applied, which settings were changed, and who authorised the change. This creates a gap in the device's audit trail — changes made via MDM bypass the traditional registry audit trail. With MDM audit logging enabled, all MDM-delivered policy changes generate Security events auditable by SIEM alongside other registry change events.",
-                Tags = ["intune", "mdm", "audit-log", "oma-dm", "csp", "siem"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                ImpactNote = "Every MDM OMA-DM policy command generates a Security event; MDM changes included in SIEM correlation.",
-                ApplyOps = [RegOp.SetDword(Key, "EnableMDMEventAuditLog", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "EnableMDMEventAuditLog")],
-                DetectOps = [RegOp.CheckDword(Key, "EnableMDMEventAuditLog", 1)],
-            },
-            new TweakDef
-            {
-                Id = "intuneev-block-mdm-unenrollment",
-                Label = "Intune: Block User-Initiated MDM Unenrollment from Settings",
-                Category = "System",
-                Description = "Sets BlockMDMUnenrollment=1 in the MDM data collection policy. Prevents users from manually removing the MDM enrollment from Settings > Accounts > Access work or school, blocking self-service unenrollment that would remove all MDM-delivered policies, compliance baselines, and enterprise configuration from the device. " +
-                    "A user who unenrols their device from MDM removes all Intune-delivered policies, certificates, and compliance configurations in a single action. This gives users the ability to escape enterprise security enforcement by removing device management. The device continues to function normally but is no longer managed, no longer receives security patches via Intune, no longer reports compliance, and potentially still has access to enterprise resources if conditional access doesn't immediately detect the unenrollment.",
-                Tags = ["intune", "mdm", "unenrollment", "lockout", "compliance"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                ImpactNote = "User-initiated MDM unenrollment blocked; enterprise management cannot be removed from Settings without admin action.",
-                ApplyOps = [RegOp.SetDword(Key, "BlockMDMUnenrollment", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "BlockMDMUnenrollment")],
-                DetectOps = [RegOp.CheckDword(Key, "BlockMDMUnenrollment", 1)],
-            },
-            new TweakDef
-            {
-                Id = "intuneev-enforce-compliance-check-daily",
-                Label = "Intune: Enforce Daily MDM Compliance Check-In Regardless of Network",
-                Category = "System",
-                Description = "Sets EnforceComplianceCheckCadenceHours=24 in the MDM data collection policy. Forces the Intune MDM client to attempt a compliance status check-in to the Intune service at least once every 24 hours, even if the last successful sync was within the standard 8-hour interval, ensuring compliance policy is always evaluated at least daily. " +
-                    "MDM sync frequency is typically driven by the Intune service push schedule. Devices that are frequently off the corporate network (remote workers using cellular connections) may go days between Intune syncs if they are not on Wi-Fi and data usage policies are aggressive. A device not syncing for multiple days may have outdated compliance status, allowing it to retain conditional access even after a compliance change (e.g., BitLocker requirement added) that it cannot meet.",
-                Tags = ["intune", "mdm", "compliance", "check-in", "cadence", "remote"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "MDM compliance check-in enforced at least daily; compliance status reflects current policy even for remote workers.",
-                ApplyOps = [RegOp.SetDword(Key, "EnforceComplianceCheckCadenceHours", 24)],
-                RemoveOps = [RegOp.DeleteValue(Key, "EnforceComplianceCheckCadenceHours")],
-                DetectOps = [RegOp.CheckDword(Key, "EnforceComplianceCheckCadenceHours", 24)],
-            },
-            new TweakDef
-            {
-                Id = "intuneev-require-signed-mdm-commands",
-                Label = "Intune: Require Cryptographic Signing of All OMA-DM Commands",
-                Category = "System",
-                Description = "Sets RequireSignedMDMCommands=1 in the MDM data collection policy. Requires that all OMA-DM commands received from the MDM server are cryptographically signed with the Intune service certificate, and rejects unsigned or incorrectly signed OMA-DM payloads, protecting against rogue MDM server injection. " +
-                    "OMA-DM is the protocol that carries MDM policy commands from the Intune service to the client. Without command signing enforcement, an attacker who achieves a man-in-the-middle position between the endpoint and the Intune service endpoint could inject arbitrary OMA-DM commands (which translate to registry writes, file downloads, and application installs). Requiring signed commands ensures only the authentic Intune service can deliver policy changes.",
-                Tags = ["intune", "mdm", "oma-dm", "signing", "mitm", "command-integrity"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                ImpactNote = "Unsigned OMA-DM commands rejected; MDM policy injection via man-in-the-middle blocked.",
-                ApplyOps = [RegOp.SetDword(Key, "RequireSignedMDMCommands", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "RequireSignedMDMCommands")],
-                DetectOps = [RegOp.CheckDword(Key, "RequireSignedMDMCommands", 1)],
-            },
-            new TweakDef
-            {
-                Id = "intuneev-enable-mdm-config-lockdown",
-                Label = "Intune: Enable MDM Config Lock to Re-Enforce Settings Changed Out-of-Band",
-                Category = "System",
-                Description = "Sets EnableMDMConfigLockdown=1 in the MDM data collection policy. Enables the MDM config lock feature, which continuously monitors settings delivered by Intune compliance or configuration profiles and automatically reverts any changes made to those settings through other means (GPO that conflicts with MDM, manual registry edits, third-party tools). " +
-                    "MDM config lock prevents MDM-delivered settings from being overridden by competing configuration mechanisms. Without config lock, other Group Policy settings delivered via domain join, local GPOs applied by elevated users, or malicious registry edits can override MDM-delivered security baselines. Config lock creates a continuous enforcement loop that re-applies MDM settings whenever they deviate from the expected values, functioning as a security posture self-healing mechanism.",
-                Tags = ["intune", "mdm", "config-lock", "drift", "enforcement", "security-baseline"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 4,
-                ImpactNote = "MDM config lockdown active; out-of-band registry/GPO changes that conflict with Intune profiles are automatically reverted.",
-                ApplyOps = [RegOp.SetDword(Key, "EnableMDMConfigLockdown", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "EnableMDMConfigLockdown")],
-                DetectOps = [RegOp.CheckDword(Key, "EnableMDMConfigLockdown", 1)],
-            },
-            new TweakDef
-            {
-                Id = "intuneev-disable-mdm-agent-auto-update-from-store",
-                Label = "Intune: Block MDM Agent Auto-Update from Microsoft Store",
-                Category = "System",
-                Description = "Sets DisableMDMAgentAutoUpdate=1 in the MDM data collection policy. Prevents the Intune Company Portal and MDM management agent components from auto-updating from the Microsoft Store, requiring IT to control agent updates through managed deployment paths (MDM app profiles, SCCM, or Intune Win32 app) rather than consumer Store delivery. " +
-                    "MDM agent updates delivered through the Microsoft Store follow the Store's release schedule independently of IT's testing and validation calendar. A Store-delivered agent update may change MDM enrollment flow, compliance evaluation behaviour, or Company Portal UI in ways that weren't tested by IT's change management process. Blocking auto-update from Store and using managed deployment paths ensures IT controls when MDM agent updates reach production endpoints.",
-                Tags = ["intune", "mdm", "company-portal", "auto-update", "store", "change-control"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "MDM agent Store updates blocked; Intune Company Portal and agent updates require IT-managed deployment.",
-                ApplyOps = [RegOp.SetDword(Key, "DisableMDMAgentAutoUpdate", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "DisableMDMAgentAutoUpdate")],
-                DetectOps = [RegOp.CheckDword(Key, "DisableMDMAgentAutoUpdate", 1)],
-            },
-            new TweakDef
-            {
-                Id = "intuneev-enable-remote-wipe-audit-log",
-                Label = "Intune: Enable Audit Logging for Remote Wipe Commands Received from MDM Server",
-                Category = "System",
-                Description = "Sets EnableRemoteWipeAuditLog=1 in the MDM data collection policy. Generates a Security event log entry (and application event log warning) the moment the Intune service delivers a remote wipe command to the client, recording the timestamp and wipe type (quick wipe vs full wipe) before the wipe execution begins. " +
-                    "Remote wipe is the nuclear security action available through MDM — it erases all device data. Without an audit log entry before execution, there is no on-device evidence that a wipe was initiated via MDM (distinguishable from a local factory reset). In scenarios where a remote wipe was accidental (wrong device targeted in the Intune console) or unauthorised (admin credential compromise), forensic investigation of what happened requires an event record. A pre-wipe audit log event can be captured by a SIEM before the device is erased.",
-                Tags = ["intune", "mdm", "remote-wipe", "audit-log", "forensics", "siem"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Security event written when remote wipe command received; SIEM captures wipe initiation before erasure completes.",
-                ApplyOps = [RegOp.SetDword(Key, "EnableRemoteWipeAuditLog", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "EnableRemoteWipeAuditLog")],
-                DetectOps = [RegOp.CheckDword(Key, "EnableRemoteWipeAuditLog", 1)],
-            },
-        ];
-
+            [
+                new TweakDef
+                {
+                    Id = "intuneev-enable-device-health-reporting",
+                    Label = "Intune: Enable Intune Device Health Reporting for Compliance Assessment",
+                    Category = "System",
+                    Description =
+                        "Sets EnableDeviceHealthReporting=1 in the MDM data collection policy. Enables the Intune client health reporting service which sends device health attestation data — TPM status, Secure Boot state, BitLocker encryption status, ELAM driver state, UEFI firmware version — to the Intune service for compliance policy evaluation. "
+                        + "Intune's device compliance policies can gate conditional access (blocking Microsoft 365, SharePoint, or other Entra ID protected resources) based on device health. For health-based conditional access to function, the device must send health attestation reports. Disabling health reporting (or leaving it unconfigured) causes compliance status to show as 'Unknown', which depending on conditional access policy settings may either block all access or allow access by default for unknown-state devices.",
+                    Tags = ["intune", "mdm", "health-reporting", "compliance", "tpm", "conditional-access"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote =
+                        "Intune device health reports sent to service; compliance-based conditional access evaluates correct device health state.",
+                    ApplyOps = [RegOp.SetDword(Key, "EnableDeviceHealthReporting", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "EnableDeviceHealthReporting")],
+                    DetectOps = [RegOp.CheckDword(Key, "EnableDeviceHealthReporting", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "intuneev-disable-mdm-diagnostic-telemetry-upload",
+                    Label = "Intune: Disable Voluntary MDM Diagnostic Data Upload to Microsoft",
+                    Category = "System",
+                    Description =
+                        "Sets DisableMDMDiagnosticsTelemetry=1 in the MDM data collection policy. Stops the Intune MDM client from uploading optional diagnostic data about MDM client performance, error rates, and command processing latency to Microsoft's MDM service telemetry pipeline, separate from Windows diagnostic data. "
+                        + "The MDM client telemetry pipeline transmits information about policy processing durations, enrollment command error codes, and sync performance metrics. While this data is used by Microsoft for service improvement and does not contain policy payload content, it reveals information about the organisation's governance structure: how many MDM commands are failing, which policy types are erroring, and whether device compliance is degrading. Disabling this prevents that metadata from leaving the organisation.",
+                    Tags = ["intune", "mdm", "telemetry", "diagnostic-data", "privacy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "MDM client performance telemetry upload stopped; MDM client metadata stays within the organisation.",
+                    ApplyOps = [RegOp.SetDword(Key, "DisableMDMDiagnosticsTelemetry", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "DisableMDMDiagnosticsTelemetry")],
+                    DetectOps = [RegOp.CheckDword(Key, "DisableMDMDiagnosticsTelemetry", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "intuneev-require-enrollment-certificate",
+                    Label = "Intune: Require PKI Certificate for MDM Enrollment Authentication",
+                    Category = "System",
+                    Description =
+                        "Sets RequireMDMEnrollmentCertificate=1 in the MDM data collection policy. Configures the MDM client to use a PKI client certificate issued by the internal CA for Intune enrollment authentication, rather than Microsoft Entra ID token-only authentication, providing a hardware-bound credential (certificate stored in TPM) alongside the Entra token. "
+                        + "Token-based MDM enrollment (Entra ID access token only) is subject to token theft attacks — an attacker who steals an Entra ID access token from a device could initiate MDM enrollment of a hostile device. PKI certificate-based enrollment requires the certificate private key (ideally TPM-bound) in addition to the Entra token, making stolen tokens insufficient to enrol a new device because the certificate is non-exportable from the TPM.",
+                    Tags = ["intune", "mdm", "enrollment", "certificate", "pki", "tpm"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 4,
+                    ImpactNote = "PKI certificate required for MDM enrollment; token theft alone insufficient to enrol a hostile device.",
+                    ApplyOps = [RegOp.SetDword(Key, "RequireMDMEnrollmentCertificate", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "RequireMDMEnrollmentCertificate")],
+                    DetectOps = [RegOp.CheckDword(Key, "RequireMDMEnrollmentCertificate", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "intuneev-enable-mdm-event-audit-log",
+                    Label = "Intune: Enable MDM Client Audit Logging for Every Policy Command",
+                    Category = "System",
+                    Description =
+                        "Sets EnableMDMEventAuditLog=1 in the MDM data collection policy. Enables detailed audit logging in the Windows MDM stack, causing every OMA-DM command received from the Intune service (CSP write, CSP delete, configuration profile apply, compliance check result) to generate an audit event in the Security event log. "
+                        + "MDM policy delivery happens silently in the background. Without audit logging, there is no on-device record of which policies were applied, when they were applied, which settings were changed, and who authorised the change. This creates a gap in the device's audit trail — changes made via MDM bypass the traditional registry audit trail. With MDM audit logging enabled, all MDM-delivered policy changes generate Security events auditable by SIEM alongside other registry change events.",
+                    Tags = ["intune", "mdm", "audit-log", "oma-dm", "csp", "siem"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "Every MDM OMA-DM policy command generates a Security event; MDM changes included in SIEM correlation.",
+                    ApplyOps = [RegOp.SetDword(Key, "EnableMDMEventAuditLog", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "EnableMDMEventAuditLog")],
+                    DetectOps = [RegOp.CheckDword(Key, "EnableMDMEventAuditLog", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "intuneev-block-mdm-unenrollment",
+                    Label = "Intune: Block User-Initiated MDM Unenrollment from Settings",
+                    Category = "System",
+                    Description =
+                        "Sets BlockMDMUnenrollment=1 in the MDM data collection policy. Prevents users from manually removing the MDM enrollment from Settings > Accounts > Access work or school, blocking self-service unenrollment that would remove all MDM-delivered policies, compliance baselines, and enterprise configuration from the device. "
+                        + "A user who unenrols their device from MDM removes all Intune-delivered policies, certificates, and compliance configurations in a single action. This gives users the ability to escape enterprise security enforcement by removing device management. The device continues to function normally but is no longer managed, no longer receives security patches via Intune, no longer reports compliance, and potentially still has access to enterprise resources if conditional access doesn't immediately detect the unenrollment.",
+                    Tags = ["intune", "mdm", "unenrollment", "lockout", "compliance"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote =
+                        "User-initiated MDM unenrollment blocked; enterprise management cannot be removed from Settings without admin action.",
+                    ApplyOps = [RegOp.SetDword(Key, "BlockMDMUnenrollment", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "BlockMDMUnenrollment")],
+                    DetectOps = [RegOp.CheckDword(Key, "BlockMDMUnenrollment", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "intuneev-enforce-compliance-check-daily",
+                    Label = "Intune: Enforce Daily MDM Compliance Check-In Regardless of Network",
+                    Category = "System",
+                    Description =
+                        "Sets EnforceComplianceCheckCadenceHours=24 in the MDM data collection policy. Forces the Intune MDM client to attempt a compliance status check-in to the Intune service at least once every 24 hours, even if the last successful sync was within the standard 8-hour interval, ensuring compliance policy is always evaluated at least daily. "
+                        + "MDM sync frequency is typically driven by the Intune service push schedule. Devices that are frequently off the corporate network (remote workers using cellular connections) may go days between Intune syncs if they are not on Wi-Fi and data usage policies are aggressive. A device not syncing for multiple days may have outdated compliance status, allowing it to retain conditional access even after a compliance change (e.g., BitLocker requirement added) that it cannot meet.",
+                    Tags = ["intune", "mdm", "compliance", "check-in", "cadence", "remote"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote =
+                        "MDM compliance check-in enforced at least daily; compliance status reflects current policy even for remote workers.",
+                    ApplyOps = [RegOp.SetDword(Key, "EnforceComplianceCheckCadenceHours", 24)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "EnforceComplianceCheckCadenceHours")],
+                    DetectOps = [RegOp.CheckDword(Key, "EnforceComplianceCheckCadenceHours", 24)],
+                },
+                new TweakDef
+                {
+                    Id = "intuneev-require-signed-mdm-commands",
+                    Label = "Intune: Require Cryptographic Signing of All OMA-DM Commands",
+                    Category = "System",
+                    Description =
+                        "Sets RequireSignedMDMCommands=1 in the MDM data collection policy. Requires that all OMA-DM commands received from the MDM server are cryptographically signed with the Intune service certificate, and rejects unsigned or incorrectly signed OMA-DM payloads, protecting against rogue MDM server injection. "
+                        + "OMA-DM is the protocol that carries MDM policy commands from the Intune service to the client. Without command signing enforcement, an attacker who achieves a man-in-the-middle position between the endpoint and the Intune service endpoint could inject arbitrary OMA-DM commands (which translate to registry writes, file downloads, and application installs). Requiring signed commands ensures only the authentic Intune service can deliver policy changes.",
+                    Tags = ["intune", "mdm", "oma-dm", "signing", "mitm", "command-integrity"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "Unsigned OMA-DM commands rejected; MDM policy injection via man-in-the-middle blocked.",
+                    ApplyOps = [RegOp.SetDword(Key, "RequireSignedMDMCommands", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "RequireSignedMDMCommands")],
+                    DetectOps = [RegOp.CheckDword(Key, "RequireSignedMDMCommands", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "intuneev-enable-mdm-config-lockdown",
+                    Label = "Intune: Enable MDM Config Lock to Re-Enforce Settings Changed Out-of-Band",
+                    Category = "System",
+                    Description =
+                        "Sets EnableMDMConfigLockdown=1 in the MDM data collection policy. Enables the MDM config lock feature, which continuously monitors settings delivered by Intune compliance or configuration profiles and automatically reverts any changes made to those settings through other means (GPO that conflicts with MDM, manual registry edits, third-party tools). "
+                        + "MDM config lock prevents MDM-delivered settings from being overridden by competing configuration mechanisms. Without config lock, other Group Policy settings delivered via domain join, local GPOs applied by elevated users, or malicious registry edits can override MDM-delivered security baselines. Config lock creates a continuous enforcement loop that re-applies MDM settings whenever they deviate from the expected values, functioning as a security posture self-healing mechanism.",
+                    Tags = ["intune", "mdm", "config-lock", "drift", "enforcement", "security-baseline"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 4,
+                    ImpactNote =
+                        "MDM config lockdown active; out-of-band registry/GPO changes that conflict with Intune profiles are automatically reverted.",
+                    ApplyOps = [RegOp.SetDword(Key, "EnableMDMConfigLockdown", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "EnableMDMConfigLockdown")],
+                    DetectOps = [RegOp.CheckDword(Key, "EnableMDMConfigLockdown", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "intuneev-disable-mdm-agent-auto-update-from-store",
+                    Label = "Intune: Block MDM Agent Auto-Update from Microsoft Store",
+                    Category = "System",
+                    Description =
+                        "Sets DisableMDMAgentAutoUpdate=1 in the MDM data collection policy. Prevents the Intune Company Portal and MDM management agent components from auto-updating from the Microsoft Store, requiring IT to control agent updates through managed deployment paths (MDM app profiles, SCCM, or Intune Win32 app) rather than consumer Store delivery. "
+                        + "MDM agent updates delivered through the Microsoft Store follow the Store's release schedule independently of IT's testing and validation calendar. A Store-delivered agent update may change MDM enrollment flow, compliance evaluation behaviour, or Company Portal UI in ways that weren't tested by IT's change management process. Blocking auto-update from Store and using managed deployment paths ensures IT controls when MDM agent updates reach production endpoints.",
+                    Tags = ["intune", "mdm", "company-portal", "auto-update", "store", "change-control"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "MDM agent Store updates blocked; Intune Company Portal and agent updates require IT-managed deployment.",
+                    ApplyOps = [RegOp.SetDword(Key, "DisableMDMAgentAutoUpdate", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "DisableMDMAgentAutoUpdate")],
+                    DetectOps = [RegOp.CheckDword(Key, "DisableMDMAgentAutoUpdate", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "intuneev-enable-remote-wipe-audit-log",
+                    Label = "Intune: Enable Audit Logging for Remote Wipe Commands Received from MDM Server",
+                    Category = "System",
+                    Description =
+                        "Sets EnableRemoteWipeAuditLog=1 in the MDM data collection policy. Generates a Security event log entry (and application event log warning) the moment the Intune service delivers a remote wipe command to the client, recording the timestamp and wipe type (quick wipe vs full wipe) before the wipe execution begins. "
+                        + "Remote wipe is the nuclear security action available through MDM — it erases all device data. Without an audit log entry before execution, there is no on-device evidence that a wipe was initiated via MDM (distinguishable from a local factory reset). In scenarios where a remote wipe was accidental (wrong device targeted in the Intune console) or unauthorised (admin credential compromise), forensic investigation of what happened requires an event record. A pre-wipe audit log event can be captured by a SIEM before the device is erased.",
+                    Tags = ["intune", "mdm", "remote-wipe", "audit-log", "forensics", "siem"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "Security event written when remote wipe command received; SIEM captures wipe initiation before erasure completes.",
+                    ApplyOps = [RegOp.SetDword(Key, "EnableRemoteWipeAuditLog", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "EnableRemoteWipeAuditLog")],
+                    DetectOps = [RegOp.CheckDword(Key, "EnableRemoteWipeAuditLog", 1)],
+                },
+            ];
     }
 
     // ── MdmEnrollmentPolicy ──
@@ -9723,17 +9810,14 @@ internal static class PolicyEnterprise
                 DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DynamicLock", "AllowDynamicLock", 0)],
             },
         ];
-
     }
 
     // ── MdmRegistrationPolicy ──
     private static class _MdmRegistrationPolicy
     {
-        private const string MdmKey =
-            @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CurrentVersion\MDM";
+        private const string MdmKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CurrentVersion\MDM";
 
-        private const string EnrollKey =
-            @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CurrentVersion\MDMEnrollment";
+        private const string EnrollKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CurrentVersion\MDMEnrollment";
 
         public static IReadOnlyList<TweakDef> Data =>
             [
@@ -9749,7 +9833,8 @@ internal static class PolicyEnterprise
                     CorpSafe = true,
                     ImpactScore = 5,
                     SafetyRating = 5,
-                    ImpactNote = "AAD-joined devices automatically enroll in MDM upon sign-in. The MDM authority URL and scope are read from the tenant's MDM discovery service. Requires an Intune license (or other MDM) assigned to the user. Devices already AAD-joined will not retroactively enroll — only newly joining devices are affected.",
+                    ImpactNote =
+                        "AAD-joined devices automatically enroll in MDM upon sign-in. The MDM authority URL and scope are read from the tenant's MDM discovery service. Requires an Intune license (or other MDM) assigned to the user. Devices already AAD-joined will not retroactively enroll — only newly joining devices are affected.",
                     ApplyOps = [RegOp.SetDword(MdmKey, "AutoEnrollMDM", 1)],
                     RemoveOps = [RegOp.DeleteValue(MdmKey, "AutoEnrollMDM")],
                     DetectOps = [RegOp.CheckDword(MdmKey, "AutoEnrollMDM", 1)],
@@ -9766,7 +9851,8 @@ internal static class PolicyEnterprise
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "Device renaming triggers MDM re-enrollment. Re-enrollment is transparent — it occurs in the background without disrupting the user session. Useful in environments where device names are used as identifiers in network access rules or SIEM queries.",
+                    ImpactNote =
+                        "Device renaming triggers MDM re-enrollment. Re-enrollment is transparent — it occurs in the background without disrupting the user session. Useful in environments where device names are used as identifiers in network access rules or SIEM queries.",
                     ApplyOps = [RegOp.SetDword(MdmKey, "RequireReenrollmentOnRename", 1)],
                     RemoveOps = [RegOp.DeleteValue(MdmKey, "RequireReenrollmentOnRename")],
                     DetectOps = [RegOp.CheckDword(MdmKey, "RequireReenrollmentOnRename", 1)],
@@ -9783,7 +9869,8 @@ internal static class PolicyEnterprise
                     CorpSafe = true,
                     ImpactScore = 4,
                     SafetyRating = 5,
-                    ImpactNote = "Standard users cannot disconnect the device from MDM using Settings. Local administrators and MDM push-initiated unenrollment still work. The Settings UI option to disconnect is grayed out or removed for non-admins.",
+                    ImpactNote =
+                        "Standard users cannot disconnect the device from MDM using Settings. Local administrators and MDM push-initiated unenrollment still work. The Settings UI option to disconnect is grayed out or removed for non-admins.",
                     ApplyOps = [RegOp.SetDword(MdmKey, "DisallowUserMdmUnenrollment", 1)],
                     RemoveOps = [RegOp.DeleteValue(MdmKey, "DisallowUserMdmUnenrollment")],
                     DetectOps = [RegOp.CheckDword(MdmKey, "DisallowUserMdmUnenrollment", 1)],
@@ -9800,7 +9887,8 @@ internal static class PolicyEnterprise
                     CorpSafe = true,
                     ImpactScore = 4,
                     SafetyRating = 5,
-                    ImpactNote = "Only the corporate MDM authority (set by Group Policy or Windows AutoPilot) can enroll the device. Personal Microsoft account MDM enrollment is rejected. Prevents accidental dual-enrollment or policy conflicts from personal MDM tenants.",
+                    ImpactNote =
+                        "Only the corporate MDM authority (set by Group Policy or Windows AutoPilot) can enroll the device. Personal Microsoft account MDM enrollment is rejected. Prevents accidental dual-enrollment or policy conflicts from personal MDM tenants.",
                     ApplyOps = [RegOp.SetDword(MdmKey, "EnterpriseEnrollmentOnly", 1)],
                     RemoveOps = [RegOp.DeleteValue(MdmKey, "EnterpriseEnrollmentOnly")],
                     DetectOps = [RegOp.CheckDword(MdmKey, "EnterpriseEnrollmentOnly", 1)],
@@ -9817,7 +9905,8 @@ internal static class PolicyEnterprise
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "MDM diagnostic logs are uploaded to the MDM server on remote request. Logs include MDM client logs, Event Log snapshots, and enrollment logs. Only the MDM server can initiate collection — users cannot trigger it. Small bandwidth overhead during collection.",
+                    ImpactNote =
+                        "MDM diagnostic logs are uploaded to the MDM server on remote request. Logs include MDM client logs, Event Log snapshots, and enrollment logs. Only the MDM server can initiate collection — users cannot trigger it. Small bandwidth overhead during collection.",
                     ApplyOps = [RegOp.SetDword(MdmKey, "EnableDiagnosticUpload", 1)],
                     RemoveOps = [RegOp.DeleteValue(MdmKey, "EnableDiagnosticUpload")],
                     DetectOps = [RegOp.CheckDword(MdmKey, "EnableDiagnosticUpload", 1)],
@@ -9834,7 +9923,8 @@ internal static class PolicyEnterprise
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "MDM client checks in with the MDM server every 4 hours. Reduces policy propagation lag from 8h to 4h. Slightly higher MDM service traffic — negligible for typical enterprise deployments.",
+                    ImpactNote =
+                        "MDM client checks in with the MDM server every 4 hours. Reduces policy propagation lag from 8h to 4h. Slightly higher MDM service traffic — negligible for typical enterprise deployments.",
                     ApplyOps = [RegOp.SetDword(MdmKey, "EnrollmentCheckInIntervalHours", 4)],
                     RemoveOps = [RegOp.DeleteValue(MdmKey, "EnrollmentCheckInIntervalHours")],
                     DetectOps = [RegOp.CheckDword(MdmKey, "EnrollmentCheckInIntervalHours", 4)],
@@ -9851,7 +9941,8 @@ internal static class PolicyEnterprise
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "Enrollment state changes trigger an immediate push notification to AAD conditional access. Reduces the delay between compliance remediation and access restoration. Requires AAD and Intune integration — has no effect on on-premises MDM without AAD integration.",
+                    ImpactNote =
+                        "Enrollment state changes trigger an immediate push notification to AAD conditional access. Reduces the delay between compliance remediation and access restoration. Requires AAD and Intune integration — has no effect on on-premises MDM without AAD integration.",
                     ApplyOps = [RegOp.SetDword(MdmKey, "NotifyConditionalAccessOnEnrollment", 1)],
                     RemoveOps = [RegOp.DeleteValue(MdmKey, "NotifyConditionalAccessOnEnrollment")],
                     DetectOps = [RegOp.CheckDword(MdmKey, "NotifyConditionalAccessOnEnrollment", 1)],
@@ -9868,7 +9959,8 @@ internal static class PolicyEnterprise
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "Guest accounts cannot initiate or complete MDM enrollment. Prevents orphaned MDM device records from Guest-triggered enrollment flows. No impact on standard user or administrator enrollment processes.",
+                    ImpactNote =
+                        "Guest accounts cannot initiate or complete MDM enrollment. Prevents orphaned MDM device records from Guest-triggered enrollment flows. No impact on standard user or administrator enrollment processes.",
                     ApplyOps = [RegOp.SetDword(MdmKey, "BlockGuestAccountEnrollment", 1)],
                     RemoveOps = [RegOp.DeleteValue(MdmKey, "BlockGuestAccountEnrollment")],
                     DetectOps = [RegOp.CheckDword(MdmKey, "BlockGuestAccountEnrollment", 1)],
@@ -9885,7 +9977,8 @@ internal static class PolicyEnterprise
                     CorpSafe = true,
                     ImpactScore = 3,
                     SafetyRating = 5,
-                    ImpactNote = "MDM enrollment completes without user-visible dialogs or prompts. Used in Autopilot and bulk enrollment scenarios. Best combined with Enrollment Status Page (ESP) for user transparency during provisioning.",
+                    ImpactNote =
+                        "MDM enrollment completes without user-visible dialogs or prompts. Used in Autopilot and bulk enrollment scenarios. Best combined with Enrollment Status Page (ESP) for user transparency during provisioning.",
                     ApplyOps = [RegOp.SetDword(MdmKey, "EnableSilentEnrollment", 1)],
                     RemoveOps = [RegOp.DeleteValue(MdmKey, "EnableSilentEnrollment")],
                     DetectOps = [RegOp.CheckDword(MdmKey, "EnableSilentEnrollment", 1)],
@@ -9902,13 +9995,13 @@ internal static class PolicyEnterprise
                     CorpSafe = true,
                     ImpactScore = 4,
                     SafetyRating = 5,
-                    ImpactNote = "Failed MDM enrollment attempts are automatically retried with exponential backoff. Significantly reduces Autopilot and bulk-enrollment failures due to transient connectivity or service errors. Retry schedule is governed by the MDM client's built-in backoff policy.",
+                    ImpactNote =
+                        "Failed MDM enrollment attempts are automatically retried with exponential backoff. Significantly reduces Autopilot and bulk-enrollment failures due to transient connectivity or service errors. Retry schedule is governed by the MDM client's built-in backoff policy.",
                     ApplyOps = [RegOp.SetDword(EnrollKey, "EnableEnrollmentRetryOnFailure", 1)],
                     RemoveOps = [RegOp.DeleteValue(EnrollKey, "EnableEnrollmentRetryOnFailure")],
                     DetectOps = [RegOp.CheckDword(EnrollKey, "EnableEnrollmentRetryOnFailure", 1)],
                 },
             ];
-
     }
 
     // ── OobePolicy ──
@@ -10122,7 +10215,6 @@ internal static class PolicyEnterprise
                 DetectOps = [RegOp.CheckDword(SetupKey, "DisableUXFirstRunAnimation", 1)],
             },
         ];
-
     }
 
     // ── RetailDemoPolicy ──
@@ -10345,7 +10437,6 @@ internal static class PolicyEnterprise
                 DetectOps = [RegOp.CheckDword(Key, "NoRetailTelemetry", 1)],
             },
         ];
-
     }
 
     // ── SharedPCPolicy ──
@@ -10526,7 +10617,6 @@ internal static class PolicyEnterprise
                 DetectOps = [RegOp.CheckDword(Key, "SignInOnResume", 1)],
             },
         ];
-
     }
 
     // ── WindowsAutopilotPolicy ──
@@ -10535,179 +10625,191 @@ internal static class PolicyEnterprise
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Autopilot";
 
         public static IReadOnlyList<TweakDef> Data =>
-        [
-            new TweakDef
-            {
-                Id = "wpautopilot-block-oobe-cortana",
-                Label = "Autopilot: Suppress Cortana Voice Assistant During OOBE Provisioning",
-                Category = "System",
-                Description = "Sets DisableCortanaInOOBE=1 in Autopilot policy. Prevents Cortana's voice-guided OOBE assistant from launching during the Windows Out-Of-Box Experience on Autopilot-provisioned devices, eliminating unexpected voice output and microphone access during unattended provisioning. " +
-                    "During self-deploying Autopilot provisioning, the device may go through OOBE phases unattended. Cortana's voice interface launching during an unattended provisioning session can trigger unexpected audio output (speakers active) and request microphone access, which is unnecessary and potentially alarming in secure staging environments. Suppressing Cortana during OOBE ensures silent, predictable provisioning.",
-                Tags = ["autopilot", "oobe", "cortana", "provisioning", "silent"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Cortana suppressed during OOBE; Autopilot provisioning completes silently without voice prompts.",
-                ApplyOps = [RegOp.SetDword(Key, "DisableCortanaInOOBE", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "DisableCortanaInOOBE")],
-                DetectOps = [RegOp.CheckDword(Key, "DisableCortanaInOOBE", 1)],
-            },
-            new TweakDef
-            {
-                Id = "wpautopilot-require-tpm-attestation",
-                Label = "Autopilot: Require TPM Attestation Before Autopilot Pre-Provisioning Completes",
-                Category = "System",
-                Description = "Sets RequireTPMAttestation=1 in Autopilot policy. Requires that the device's TPM chip successfully completes attestation with the Microsoft Attestation Service before Autopilot White Glove pre-provisioning is allowed to complete, ensuring only machines with healthy TPM chips receive the provisioning credential blob. " +
-                    "Autopilot White Glove pre-provisioning downloads and installs applications and policies during the Technician Phase. If TPM attestation is not required, a device with a non-functional or tampered TPM can still be fully provisioned and shipped to an end user with an enterprise credential blob. Requiring TPM attestation ensures only hardware with a verified, healthy TPM is provisioned, supporting BitLocker and Windows Hello for Business.",
-                Tags = ["autopilot", "tpm", "attestation", "white-glove", "hardware-security"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                ImpactNote = "TPM attestation required; Autopilot White Glove fails for devices with non-functional or tampered TPM.",
-                ApplyOps = [RegOp.SetDword(Key, "RequireTPMAttestation", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "RequireTPMAttestation")],
-                DetectOps = [RegOp.CheckDword(Key, "RequireTPMAttestation", 1)],
-            },
-            new TweakDef
-            {
-                Id = "wpautopilot-block-language-selection-in-oobe",
-                Label = "Autopilot: Skip Language and Region Selection in OOBE (Silent Provisioning)",
-                Category = "System",
-                Description = "Sets SkipLanguageAndRegion=1 in Autopilot policy. Skips the language selection, keyboard layout, and region selection screens during OOBE, using the locale settings pre-configured in the Autopilot deployment profile instead of prompting the user or technician during provisioning. " +
-                    "Self-deploying Autopilot profiles target unattended provisioning. Any OOBE screen that blocks at a user input prompt (language, region) halts the provisioning workflow until answered. In staging environments where devices are provisioned in bulk on racks, unexpected OOBE prompts that require per-device interaction break the automation, requiring manual intervention on each device.",
-                Tags = ["autopilot", "oobe", "language", "silent", "unattended"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Language/region OOBE screens skipped; Autopilot provisioning uses profile locale settings without prompt.",
-                ApplyOps = [RegOp.SetDword(Key, "SkipLanguageAndRegion", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "SkipLanguageAndRegion")],
-                DetectOps = [RegOp.CheckDword(Key, "SkipLanguageAndRegion", 1)],
-            },
-            new TweakDef
-            {
-                Id = "wpautopilot-disable-privacy-settings-screen",
-                Label = "Autopilot: Skip Privacy Settings Screen in OOBE",
-                Category = "System",
-                Description = "Sets DisablePrivacySettingsInOOBE=1 in Autopilot policy. Suppresses the privacy settings configuration screen that appears during OOBE, where Windows presents toggles for diagnostic data, location, speech recognition, and ink/typing personalisation, using enterprise policy defaults instead. " +
-                    "The OOBE privacy settings screen presents users and technicians with a series of toggle choices that may override enterprise Group Policy settings if the user makes incorrect selections during provisioning. By skipping this screen and applying privacy settings via Group Policy or Intune configuration profiles, the enterprise ensures the device always meets its defined privacy configuration baseline from first boot.",
-                Tags = ["autopilot", "oobe", "privacy", "provisioning", "baseline"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "OOBE privacy settings screen skipped; enterprise policy controls privacy toggles rather than OOBE user selection.",
-                ApplyOps = [RegOp.SetDword(Key, "DisablePrivacySettingsInOOBE", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "DisablePrivacySettingsInOOBE")],
-                DetectOps = [RegOp.CheckDword(Key, "DisablePrivacySettingsInOOBE", 1)],
-            },
-            new TweakDef
-            {
-                Id = "wpautopilot-enable-secure-diagnostics-upload",
-                Label = "Autopilot: Enable Secure Diagnostic Log Upload on Provisioning Failure",
-                Category = "System",
-                Description = "Sets EnableDiagnosticsUploadOnFailure=1 in Autopilot policy. Enables automatic upload of diagnostic logs to the Microsoft Intune service when Autopilot provisioning fails, allowing IT admins to review failure details in the Intune admin center without physical access to the device. " +
-                    "Autopilot provisioning failures in the field (enrolled device failing to complete provisioning at an employee's desk) are difficult to diagnose without the detailed log files stored on the device. Without automatic log upload, IT must either collect logs manually (requiring physical access or remote PowerShell) or rely on the user to capture and submit logs. Enabling automatic upload on failure provides actionable failure diagnostics in the admin portal.",
-                Tags = ["autopilot", "diagnostics", "failure", "logging", "intune"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Autopilot failure logs uploaded automatically to Intune; no physical access needed for provisioning failure diagnostics.",
-                ApplyOps = [RegOp.SetDword(Key, "EnableDiagnosticsUploadOnFailure", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "EnableDiagnosticsUploadOnFailure")],
-                DetectOps = [RegOp.CheckDword(Key, "EnableDiagnosticsUploadOnFailure", 1)],
-            },
-            new TweakDef
-            {
-                Id = "wpautopilot-block-manual-hardware-hash-upload",
-                Label = "Autopilot: Block Manual Hardware Hash Upload by Non-Administrators",
-                Category = "System",
-                Description = "Sets DisableManualHardwareHashUpload=1 in Autopilot policy. Prevents standard users from manually running scripts or PowerShell commands that collect the device's hardware hash and upload it to the Autopilot service, restricting hardware hash registration to OEM upload and IT admin-initiated processes. " +
-                    "Hardware hash registration is the authoritative step that associates a physical device with an Autopilot deployment profile. If standard users can run scripts to upload hardware hashes of arbitrary devices (including virtual machines running on personal hardware), they may register personal devices into the enterprise Autopilot service, bootstrapping them with enterprise policies, certificates, and credentials.",
-                Tags = ["autopilot", "hardware-hash", "registration", "unauthorised", "admin"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Manual hardware hash upload blocked for standard users; only OEM/IT admin can register devices.",
-                ApplyOps = [RegOp.SetDword(Key, "DisableManualHardwareHashUpload", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "DisableManualHardwareHashUpload")],
-                DetectOps = [RegOp.CheckDword(Key, "DisableManualHardwareHashUpload", 1)],
-            },
-            new TweakDef
-            {
-                Id = "wpautopilot-enable-provisioning-audit-log",
-                Label = "Autopilot: Enable Security Audit Log for Autopilot Provisioning Events",
-                Category = "System",
-                Description = "Sets EnableProvisioningAuditLog=1 in Autopilot policy. Causes a Security event log entry to be written at each stage of the Autopilot provisioning workflow (device registration, Entra ID join, MDM enrollment, application installation) including the result and any error codes. " +
-                    "Without provisioning audit logging, there is no on-device Security event record of what happened during Autopilot provisioning — only the results visible in the Intune admin portal. Having on-device event log entries for each provisioning stage enables post-incident forensics if a device's provisioning state is questioned (e.g., whether a specific application or configuration was applied correctly during the initial setup).",
-                Tags = ["autopilot", "audit", "provisioning", "event-log", "forensics"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Security event log entries written at each Autopilot provisioning stage; on-device provisioning history available.",
-                ApplyOps = [RegOp.SetDword(Key, "EnableProvisioningAuditLog", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "EnableProvisioningAuditLog")],
-                DetectOps = [RegOp.CheckDword(Key, "EnableProvisioningAuditLog", 1)],
-            },
-            new TweakDef
-            {
-                Id = "wpautopilot-require-enrolled-device-for-provisioning",
-                Label = "Autopilot: Require Device Pre-Registration Before OOBE Autopilot Profile Download",
-                Category = "System",
-                Description = "Sets RequirePreRegistration=1 in Autopilot policy. Enforces that the device must be pre-registered in the Autopilot service (via hardware hash) before the OOBE Autopilot profile download proceeds, blocking provisioning of devices that have not been explicitly registered by IT. " +
-                    "Without pre-registration enforcement, an unregistered device going through OOBE on the same network as a registered device might accidentally receive an Autopilot profile due to subnet-based profile assignment misconfiguration. Requiring explicit pre-registration ensures that Autopilot profiles are only applied to known, IT-registered hardware and not to devices that are accidentally discoverable.",
-                Tags = ["autopilot", "pre-registration", "oobe", "hardware", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Autopilot provisioning blocked for non-registered hardware; only pre-enrolled devices receive provisioning profiles.",
-                ApplyOps = [RegOp.SetDword(Key, "RequirePreRegistration", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "RequirePreRegistration")],
-                DetectOps = [RegOp.CheckDword(Key, "RequirePreRegistration", 1)],
-            },
-            new TweakDef
-            {
-                Id = "wpautopilot-block-oobe-skip-button",
-                Label = "Autopilot: Remove OOBE Skip/Cancel Button to Prevent Provisioning Abandonment",
-                Category = "System",
-                Description = "Sets DisableSkipButtonInOOBE=1 in Autopilot policy. Removes the 'Skip' and 'Cancel' buttons from Autopilot OOBE screens that would allow a user or technician to abort the provisioning workflow before it completes, ensuring devices are always fully provisioned before being usable. " +
-                    "OOBE Skip buttons allow a technician or user to abandon Autopilot provisioning mid-way through, leaving the device in a partially configured state with some apps installed and others not, MDM enrollment incomplete, and security baselines potentially unapplied. A partially provisioned device may appear to work normally while critical security configurations are absent.",
-                Tags = ["autopilot", "oobe", "skip", "provisioning", "incomplete"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "OOBE skip/cancel buttons removed; Autopilot provisioning must complete before device becomes usable.",
-                ApplyOps = [RegOp.SetDword(Key, "DisableSkipButtonInOOBE", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "DisableSkipButtonInOOBE")],
-                DetectOps = [RegOp.CheckDword(Key, "DisableSkipButtonInOOBE", 1)],
-            },
-            new TweakDef
-            {
-                Id = "wpautopilot-set-provisioning-timeout-90min",
-                Label = "Autopilot: Set Autopilot Enrollment Status Page Timeout to 90 Minutes",
-                Category = "System",
-                Description = "Sets EnrollmentStatusPageTimeout=90 in Autopilot policy. Sets the Autopilot Enrollment Status Page (ESP) timeout — the maximum time the ESP will wait for app and policy installation to complete before triggering an error — to 90 minutes. " +
-                    "The default ESP timeout is 60 minutes. In enterprise environments with large required application sets or slow network segments (branch office with limited bandwidth), the app installation phase can exceed 60 minutes especially for large apps delivered via Intune Win32 app deployment (LOB apps with 500 MB+ installers). An ESP timeout before provisioning completes leaves the device in an error state, triggering a factory reset. A 90-minute timeout accommodates larger app sets.",
-                Tags = ["autopilot", "esp", "timeout", "provisioning", "apps"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                ImpactNote = "ESP timeout extended to 90 minutes; large application packages have more time to complete installation during provisioning.",
-                ApplyOps = [RegOp.SetDword(Key, "EnrollmentStatusPageTimeout", 90)],
-                RemoveOps = [RegOp.DeleteValue(Key, "EnrollmentStatusPageTimeout")],
-                DetectOps = [RegOp.CheckDword(Key, "EnrollmentStatusPageTimeout", 90)],
-            },
-        ];
-
+            [
+                new TweakDef
+                {
+                    Id = "wpautopilot-block-oobe-cortana",
+                    Label = "Autopilot: Suppress Cortana Voice Assistant During OOBE Provisioning",
+                    Category = "System",
+                    Description =
+                        "Sets DisableCortanaInOOBE=1 in Autopilot policy. Prevents Cortana's voice-guided OOBE assistant from launching during the Windows Out-Of-Box Experience on Autopilot-provisioned devices, eliminating unexpected voice output and microphone access during unattended provisioning. "
+                        + "During self-deploying Autopilot provisioning, the device may go through OOBE phases unattended. Cortana's voice interface launching during an unattended provisioning session can trigger unexpected audio output (speakers active) and request microphone access, which is unnecessary and potentially alarming in secure staging environments. Suppressing Cortana during OOBE ensures silent, predictable provisioning.",
+                    Tags = ["autopilot", "oobe", "cortana", "provisioning", "silent"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "Cortana suppressed during OOBE; Autopilot provisioning completes silently without voice prompts.",
+                    ApplyOps = [RegOp.SetDword(Key, "DisableCortanaInOOBE", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "DisableCortanaInOOBE")],
+                    DetectOps = [RegOp.CheckDword(Key, "DisableCortanaInOOBE", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "wpautopilot-require-tpm-attestation",
+                    Label = "Autopilot: Require TPM Attestation Before Autopilot Pre-Provisioning Completes",
+                    Category = "System",
+                    Description =
+                        "Sets RequireTPMAttestation=1 in Autopilot policy. Requires that the device's TPM chip successfully completes attestation with the Microsoft Attestation Service before Autopilot White Glove pre-provisioning is allowed to complete, ensuring only machines with healthy TPM chips receive the provisioning credential blob. "
+                        + "Autopilot White Glove pre-provisioning downloads and installs applications and policies during the Technician Phase. If TPM attestation is not required, a device with a non-functional or tampered TPM can still be fully provisioned and shipped to an end user with an enterprise credential blob. Requiring TPM attestation ensures only hardware with a verified, healthy TPM is provisioned, supporting BitLocker and Windows Hello for Business.",
+                    Tags = ["autopilot", "tpm", "attestation", "white-glove", "hardware-security"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "TPM attestation required; Autopilot White Glove fails for devices with non-functional or tampered TPM.",
+                    ApplyOps = [RegOp.SetDword(Key, "RequireTPMAttestation", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "RequireTPMAttestation")],
+                    DetectOps = [RegOp.CheckDword(Key, "RequireTPMAttestation", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "wpautopilot-block-language-selection-in-oobe",
+                    Label = "Autopilot: Skip Language and Region Selection in OOBE (Silent Provisioning)",
+                    Category = "System",
+                    Description =
+                        "Sets SkipLanguageAndRegion=1 in Autopilot policy. Skips the language selection, keyboard layout, and region selection screens during OOBE, using the locale settings pre-configured in the Autopilot deployment profile instead of prompting the user or technician during provisioning. "
+                        + "Self-deploying Autopilot profiles target unattended provisioning. Any OOBE screen that blocks at a user input prompt (language, region) halts the provisioning workflow until answered. In staging environments where devices are provisioned in bulk on racks, unexpected OOBE prompts that require per-device interaction break the automation, requiring manual intervention on each device.",
+                    Tags = ["autopilot", "oobe", "language", "silent", "unattended"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "Language/region OOBE screens skipped; Autopilot provisioning uses profile locale settings without prompt.",
+                    ApplyOps = [RegOp.SetDword(Key, "SkipLanguageAndRegion", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "SkipLanguageAndRegion")],
+                    DetectOps = [RegOp.CheckDword(Key, "SkipLanguageAndRegion", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "wpautopilot-disable-privacy-settings-screen",
+                    Label = "Autopilot: Skip Privacy Settings Screen in OOBE",
+                    Category = "System",
+                    Description =
+                        "Sets DisablePrivacySettingsInOOBE=1 in Autopilot policy. Suppresses the privacy settings configuration screen that appears during OOBE, where Windows presents toggles for diagnostic data, location, speech recognition, and ink/typing personalisation, using enterprise policy defaults instead. "
+                        + "The OOBE privacy settings screen presents users and technicians with a series of toggle choices that may override enterprise Group Policy settings if the user makes incorrect selections during provisioning. By skipping this screen and applying privacy settings via Group Policy or Intune configuration profiles, the enterprise ensures the device always meets its defined privacy configuration baseline from first boot.",
+                    Tags = ["autopilot", "oobe", "privacy", "provisioning", "baseline"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "OOBE privacy settings screen skipped; enterprise policy controls privacy toggles rather than OOBE user selection.",
+                    ApplyOps = [RegOp.SetDword(Key, "DisablePrivacySettingsInOOBE", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "DisablePrivacySettingsInOOBE")],
+                    DetectOps = [RegOp.CheckDword(Key, "DisablePrivacySettingsInOOBE", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "wpautopilot-enable-secure-diagnostics-upload",
+                    Label = "Autopilot: Enable Secure Diagnostic Log Upload on Provisioning Failure",
+                    Category = "System",
+                    Description =
+                        "Sets EnableDiagnosticsUploadOnFailure=1 in Autopilot policy. Enables automatic upload of diagnostic logs to the Microsoft Intune service when Autopilot provisioning fails, allowing IT admins to review failure details in the Intune admin center without physical access to the device. "
+                        + "Autopilot provisioning failures in the field (enrolled device failing to complete provisioning at an employee's desk) are difficult to diagnose without the detailed log files stored on the device. Without automatic log upload, IT must either collect logs manually (requiring physical access or remote PowerShell) or rely on the user to capture and submit logs. Enabling automatic upload on failure provides actionable failure diagnostics in the admin portal.",
+                    Tags = ["autopilot", "diagnostics", "failure", "logging", "intune"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote =
+                        "Autopilot failure logs uploaded automatically to Intune; no physical access needed for provisioning failure diagnostics.",
+                    ApplyOps = [RegOp.SetDword(Key, "EnableDiagnosticsUploadOnFailure", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "EnableDiagnosticsUploadOnFailure")],
+                    DetectOps = [RegOp.CheckDword(Key, "EnableDiagnosticsUploadOnFailure", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "wpautopilot-block-manual-hardware-hash-upload",
+                    Label = "Autopilot: Block Manual Hardware Hash Upload by Non-Administrators",
+                    Category = "System",
+                    Description =
+                        "Sets DisableManualHardwareHashUpload=1 in Autopilot policy. Prevents standard users from manually running scripts or PowerShell commands that collect the device's hardware hash and upload it to the Autopilot service, restricting hardware hash registration to OEM upload and IT admin-initiated processes. "
+                        + "Hardware hash registration is the authoritative step that associates a physical device with an Autopilot deployment profile. If standard users can run scripts to upload hardware hashes of arbitrary devices (including virtual machines running on personal hardware), they may register personal devices into the enterprise Autopilot service, bootstrapping them with enterprise policies, certificates, and credentials.",
+                    Tags = ["autopilot", "hardware-hash", "registration", "unauthorised", "admin"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "Manual hardware hash upload blocked for standard users; only OEM/IT admin can register devices.",
+                    ApplyOps = [RegOp.SetDword(Key, "DisableManualHardwareHashUpload", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "DisableManualHardwareHashUpload")],
+                    DetectOps = [RegOp.CheckDword(Key, "DisableManualHardwareHashUpload", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "wpautopilot-enable-provisioning-audit-log",
+                    Label = "Autopilot: Enable Security Audit Log for Autopilot Provisioning Events",
+                    Category = "System",
+                    Description =
+                        "Sets EnableProvisioningAuditLog=1 in Autopilot policy. Causes a Security event log entry to be written at each stage of the Autopilot provisioning workflow (device registration, Entra ID join, MDM enrollment, application installation) including the result and any error codes. "
+                        + "Without provisioning audit logging, there is no on-device Security event record of what happened during Autopilot provisioning — only the results visible in the Intune admin portal. Having on-device event log entries for each provisioning stage enables post-incident forensics if a device's provisioning state is questioned (e.g., whether a specific application or configuration was applied correctly during the initial setup).",
+                    Tags = ["autopilot", "audit", "provisioning", "event-log", "forensics"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "Security event log entries written at each Autopilot provisioning stage; on-device provisioning history available.",
+                    ApplyOps = [RegOp.SetDword(Key, "EnableProvisioningAuditLog", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "EnableProvisioningAuditLog")],
+                    DetectOps = [RegOp.CheckDword(Key, "EnableProvisioningAuditLog", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "wpautopilot-require-enrolled-device-for-provisioning",
+                    Label = "Autopilot: Require Device Pre-Registration Before OOBE Autopilot Profile Download",
+                    Category = "System",
+                    Description =
+                        "Sets RequirePreRegistration=1 in Autopilot policy. Enforces that the device must be pre-registered in the Autopilot service (via hardware hash) before the OOBE Autopilot profile download proceeds, blocking provisioning of devices that have not been explicitly registered by IT. "
+                        + "Without pre-registration enforcement, an unregistered device going through OOBE on the same network as a registered device might accidentally receive an Autopilot profile due to subnet-based profile assignment misconfiguration. Requiring explicit pre-registration ensures that Autopilot profiles are only applied to known, IT-registered hardware and not to devices that are accidentally discoverable.",
+                    Tags = ["autopilot", "pre-registration", "oobe", "hardware", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote =
+                        "Autopilot provisioning blocked for non-registered hardware; only pre-enrolled devices receive provisioning profiles.",
+                    ApplyOps = [RegOp.SetDword(Key, "RequirePreRegistration", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "RequirePreRegistration")],
+                    DetectOps = [RegOp.CheckDword(Key, "RequirePreRegistration", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "wpautopilot-block-oobe-skip-button",
+                    Label = "Autopilot: Remove OOBE Skip/Cancel Button to Prevent Provisioning Abandonment",
+                    Category = "System",
+                    Description =
+                        "Sets DisableSkipButtonInOOBE=1 in Autopilot policy. Removes the 'Skip' and 'Cancel' buttons from Autopilot OOBE screens that would allow a user or technician to abort the provisioning workflow before it completes, ensuring devices are always fully provisioned before being usable. "
+                        + "OOBE Skip buttons allow a technician or user to abandon Autopilot provisioning mid-way through, leaving the device in a partially configured state with some apps installed and others not, MDM enrollment incomplete, and security baselines potentially unapplied. A partially provisioned device may appear to work normally while critical security configurations are absent.",
+                    Tags = ["autopilot", "oobe", "skip", "provisioning", "incomplete"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "OOBE skip/cancel buttons removed; Autopilot provisioning must complete before device becomes usable.",
+                    ApplyOps = [RegOp.SetDword(Key, "DisableSkipButtonInOOBE", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "DisableSkipButtonInOOBE")],
+                    DetectOps = [RegOp.CheckDword(Key, "DisableSkipButtonInOOBE", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "wpautopilot-set-provisioning-timeout-90min",
+                    Label = "Autopilot: Set Autopilot Enrollment Status Page Timeout to 90 Minutes",
+                    Category = "System",
+                    Description =
+                        "Sets EnrollmentStatusPageTimeout=90 in Autopilot policy. Sets the Autopilot Enrollment Status Page (ESP) timeout — the maximum time the ESP will wait for app and policy installation to complete before triggering an error — to 90 minutes. "
+                        + "The default ESP timeout is 60 minutes. In enterprise environments with large required application sets or slow network segments (branch office with limited bandwidth), the app installation phase can exceed 60 minutes especially for large apps delivered via Intune Win32 app deployment (LOB apps with 500 MB+ installers). An ESP timeout before provisioning completes leaves the device in an error state, triggering a factory reset. A 90-minute timeout accommodates larger app sets.",
+                    Tags = ["autopilot", "esp", "timeout", "provisioning", "apps"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 2,
+                    SafetyRating = 5,
+                    ImpactNote =
+                        "ESP timeout extended to 90 minutes; large application packages have more time to complete installation during provisioning.",
+                    ApplyOps = [RegOp.SetDword(Key, "EnrollmentStatusPageTimeout", 90)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "EnrollmentStatusPageTimeout")],
+                    DetectOps = [RegOp.CheckDword(Key, "EnrollmentStatusPageTimeout", 90)],
+                },
+            ];
     }
 
     // ── WindowsDeploymentServicesPolicy ──
@@ -10718,169 +10820,178 @@ internal static class PolicyEnterprise
         private const string TransKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WDS\Transport";
 
         public static IReadOnlyList<TweakDef> Data =>
-        [
-            new TweakDef
-            {
-                Id           = "wds-require-admin-approval",
-                Label        = "Require Admin Approval for PXE Boot Clients",
-                Category = "System",
-                Description  = "Requires administrator approval before unknown PXE clients can boot from WDS. Prevents unauthorised devices from imaging. Default: auto-approve.",
-                Tags         = ["wds", "pxe", "security", "approval", "deployment", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 4,
-                SafetyRating = 4,
-                ImpactNote   = "Unknown PXE clients are held pending admin approval; known-device imaging unaffected.",
-                ApplyOps     = [RegOp.SetDword(PxeKey, "RequireAdminApproval", 1)],
-                RemoveOps    = [RegOp.DeleteValue(PxeKey, "RequireAdminApproval")],
-                DetectOps    = [RegOp.CheckDword(PxeKey, "RequireAdminApproval", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "wds-disable-unknown-pxe",
-                Label        = "Block Unknown Clients from PXE Boot",
-                Category = "System",
-                Description  = "Prevents unknown (non-pre-staged) computers from performing PXE boot via WDS. Only pre-staged/known devices can image. Default: allow all.",
-                Tags         = ["wds", "pxe", "security", "unknown-clients", "deployment", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 5,
-                SafetyRating = 3,
-                ImpactNote   = "Only pre-staged devices can PXE boot; new devices must be pre-staged in AD first.",
-                ApplyOps     = [RegOp.SetDword(PxeKey, "AllowUnknownClients", 0)],
-                RemoveOps    = [RegOp.DeleteValue(PxeKey, "AllowUnknownClients")],
-                DetectOps    = [RegOp.CheckDword(PxeKey, "AllowUnknownClients", 0)],
-            },
-            new TweakDef
-            {
-                Id           = "wds-enable-pxe-prompt",
-                Label        = "Enable PXE Boot Key Press Prompt",
-                Category = "System",
-                Description  = "Requires the user to press a key (e.g., F12) to initiate PXE boot. Prevents automatic network boot on every startup. Default: may auto-boot.",
-                Tags         = ["wds", "pxe", "prompt", "boot", "deployment", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 3,
-                SafetyRating = 5,
-                ImpactNote   = "Users must press a key to PXE boot; prevents accidental reimaging.",
-                ApplyOps     = [RegOp.SetDword(PxeKey, "PxePromptPolicy", 1)],
-                RemoveOps    = [RegOp.DeleteValue(PxeKey, "PxePromptPolicy")],
-                DetectOps    = [RegOp.CheckDword(PxeKey, "PxePromptPolicy", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "wds-set-pxe-timeout",
-                Label        = "Set PXE Prompt Timeout to 10 Seconds",
-                Category = "System",
-                Description  = "Sets the PXE boot key-press prompt timeout to 10 seconds. After timeout, the device continues to local disk boot. Default: varies by BIOS.",
-                Tags         = ["wds", "pxe", "timeout", "boot", "deployment", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 2,
-                SafetyRating = 5,
-                ImpactNote   = "10-second window for PXE boot; device falls through to local boot on timeout.",
-                ApplyOps     = [RegOp.SetDword(PxeKey, "PxePromptTimeout", 10)],
-                RemoveOps    = [RegOp.DeleteValue(PxeKey, "PxePromptTimeout")],
-                DetectOps    = [RegOp.CheckDword(PxeKey, "PxePromptTimeout", 10)],
-            },
-            new TweakDef
-            {
-                Id           = "wds-enable-logging",
-                Label        = "Enable WDS Deployment Event Logging",
-                Category = "System",
-                Description  = "Enables detailed event logging for WDS deployment operations. Provides audit trail of which devices were imaged and when. Default: minimal logging.",
-                Tags         = ["wds", "logging", "audit", "deployment", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 3,
-                SafetyRating = 5,
-                ImpactNote   = "Detailed WDS deployment events written to event log; slight disk overhead.",
-                ApplyOps     = [RegOp.SetDword(SvcKey, "EnableLogging", 1)],
-                RemoveOps    = [RegOp.DeleteValue(SvcKey, "EnableLogging")],
-                DetectOps    = [RegOp.CheckDword(SvcKey, "EnableLogging", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "wds-set-multicast-transfer-mode",
-                Label        = "Set WDS Multicast Transfer to Auto Mode",
-                Category = "System",
-                Description  = "Configures multicast image transfers to auto-select between multicast and unicast based on network conditions. Default: multicast only.",
-                Tags         = ["wds", "multicast", "network", "deployment", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 3,
-                SafetyRating = 4,
-                ImpactNote   = "WDS auto-selects best transfer mode; improves reliability on networks without multicast support.",
-                ApplyOps     = [RegOp.SetDword(TransKey, "TransferMode", 1)],
-                RemoveOps    = [RegOp.DeleteValue(TransKey, "TransferMode")],
-                DetectOps    = [RegOp.CheckDword(TransKey, "TransferMode", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "wds-set-multicast-session-threshold",
-                Label        = "Set Multicast Session Client Threshold to 10",
-                Category = "System",
-                Description  = "Sets the minimum number of clients before a multicast session starts. Prevents starting a multicast session for only 1–2 clients. Default: 1.",
-                Tags         = ["wds", "multicast", "threshold", "deployment", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 2,
-                SafetyRating = 5,
-                ImpactNote   = "Multicast waits for 10 clients before starting; single clients use unicast fallback.",
-                ApplyOps     = [RegOp.SetDword(TransKey, "MulticastSessionThreshold", 10)],
-                RemoveOps    = [RegOp.DeleteValue(TransKey, "MulticastSessionThreshold")],
-                DetectOps    = [RegOp.CheckDword(TransKey, "MulticastSessionThreshold", 10)],
-            },
-            new TweakDef
-            {
-                Id           = "wds-enable-tftp-window-size",
-                Label        = "Set WDS TFTP Block Size to 16384",
-                Category = "System",
-                Description  = "Increases the TFTP block size used by WDS PXE boot to 16384 bytes. Improves image download speed on modern networks. Default: 1456 (standard TFTP block).",
-                Tags         = ["wds", "tftp", "performance", "pxe", "deployment", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 3,
-                SafetyRating = 4,
-                ImpactNote   = "Faster PXE image downloads; may fail on networks with low MTU or NAT.",
-                ApplyOps     = [RegOp.SetDword(TransKey, "TftpBlockSize", 16384)],
-                RemoveOps    = [RegOp.DeleteValue(TransKey, "TftpBlockSize")],
-                DetectOps    = [RegOp.CheckDword(TransKey, "TftpBlockSize", 16384)],
-            },
-            new TweakDef
-            {
-                Id           = "wds-disable-dhcp-option-60",
-                Label        = "Disable DHCP Option 60 (PXEClient Class ID)",
-                Category = "System",
-                Description  = "Prevents WDS from adding DHCP Option 60 (PXEClient class identifier) to DHCP responses. Use when WDS is co-located with DHCP to avoid conflicts. Default: enabled.",
-                Tags         = ["wds", "dhcp", "pxe", "network", "deployment", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 3,
-                SafetyRating = 3,
-                ImpactNote   = "Prevents DHCP conflict when WDS and DHCP share the same server; PXE may need DHCP Option 66/67 instead.",
-                ApplyOps     = [RegOp.SetDword(PxeKey, "UseDhcpPorts", 0)],
-                RemoveOps    = [RegOp.DeleteValue(PxeKey, "UseDhcpPorts")],
-                DetectOps    = [RegOp.CheckDword(PxeKey, "UseDhcpPorts", 0)],
-            },
-            new TweakDef
-            {
-                Id           = "wds-restrict-naming-policy",
-                Label        = "Enforce WDS Computer Naming Policy",
-                Category = "System",
-                Description  = "Enforces a server-defined computer naming policy for imaged devices. Prevents users from choosing arbitrary computer names during imaging. Default: user-chosen.",
-                Tags         = ["wds", "naming", "policy", "deployment", "standardisation"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 3,
-                SafetyRating = 5,
-                ImpactNote   = "Imaged computers get server-defined names; ensures naming convention compliance.",
-                ApplyOps     = [RegOp.SetDword(SvcKey, "NamingPolicy", 1)],
-                RemoveOps    = [RegOp.DeleteValue(SvcKey, "NamingPolicy")],
-                DetectOps    = [RegOp.CheckDword(SvcKey, "NamingPolicy", 1)],
-            },
-        ];
-
+            [
+                new TweakDef
+                {
+                    Id = "wds-require-admin-approval",
+                    Label = "Require Admin Approval for PXE Boot Clients",
+                    Category = "System",
+                    Description =
+                        "Requires administrator approval before unknown PXE clients can boot from WDS. Prevents unauthorised devices from imaging. Default: auto-approve.",
+                    Tags = ["wds", "pxe", "security", "approval", "deployment", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 4,
+                    ImpactNote = "Unknown PXE clients are held pending admin approval; known-device imaging unaffected.",
+                    ApplyOps = [RegOp.SetDword(PxeKey, "RequireAdminApproval", 1)],
+                    RemoveOps = [RegOp.DeleteValue(PxeKey, "RequireAdminApproval")],
+                    DetectOps = [RegOp.CheckDword(PxeKey, "RequireAdminApproval", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "wds-disable-unknown-pxe",
+                    Label = "Block Unknown Clients from PXE Boot",
+                    Category = "System",
+                    Description =
+                        "Prevents unknown (non-pre-staged) computers from performing PXE boot via WDS. Only pre-staged/known devices can image. Default: allow all.",
+                    Tags = ["wds", "pxe", "security", "unknown-clients", "deployment", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 5,
+                    SafetyRating = 3,
+                    ImpactNote = "Only pre-staged devices can PXE boot; new devices must be pre-staged in AD first.",
+                    ApplyOps = [RegOp.SetDword(PxeKey, "AllowUnknownClients", 0)],
+                    RemoveOps = [RegOp.DeleteValue(PxeKey, "AllowUnknownClients")],
+                    DetectOps = [RegOp.CheckDword(PxeKey, "AllowUnknownClients", 0)],
+                },
+                new TweakDef
+                {
+                    Id = "wds-enable-pxe-prompt",
+                    Label = "Enable PXE Boot Key Press Prompt",
+                    Category = "System",
+                    Description =
+                        "Requires the user to press a key (e.g., F12) to initiate PXE boot. Prevents automatic network boot on every startup. Default: may auto-boot.",
+                    Tags = ["wds", "pxe", "prompt", "boot", "deployment", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "Users must press a key to PXE boot; prevents accidental reimaging.",
+                    ApplyOps = [RegOp.SetDword(PxeKey, "PxePromptPolicy", 1)],
+                    RemoveOps = [RegOp.DeleteValue(PxeKey, "PxePromptPolicy")],
+                    DetectOps = [RegOp.CheckDword(PxeKey, "PxePromptPolicy", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "wds-set-pxe-timeout",
+                    Label = "Set PXE Prompt Timeout to 10 Seconds",
+                    Category = "System",
+                    Description =
+                        "Sets the PXE boot key-press prompt timeout to 10 seconds. After timeout, the device continues to local disk boot. Default: varies by BIOS.",
+                    Tags = ["wds", "pxe", "timeout", "boot", "deployment", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 2,
+                    SafetyRating = 5,
+                    ImpactNote = "10-second window for PXE boot; device falls through to local boot on timeout.",
+                    ApplyOps = [RegOp.SetDword(PxeKey, "PxePromptTimeout", 10)],
+                    RemoveOps = [RegOp.DeleteValue(PxeKey, "PxePromptTimeout")],
+                    DetectOps = [RegOp.CheckDword(PxeKey, "PxePromptTimeout", 10)],
+                },
+                new TweakDef
+                {
+                    Id = "wds-enable-logging",
+                    Label = "Enable WDS Deployment Event Logging",
+                    Category = "System",
+                    Description =
+                        "Enables detailed event logging for WDS deployment operations. Provides audit trail of which devices were imaged and when. Default: minimal logging.",
+                    Tags = ["wds", "logging", "audit", "deployment", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "Detailed WDS deployment events written to event log; slight disk overhead.",
+                    ApplyOps = [RegOp.SetDword(SvcKey, "EnableLogging", 1)],
+                    RemoveOps = [RegOp.DeleteValue(SvcKey, "EnableLogging")],
+                    DetectOps = [RegOp.CheckDword(SvcKey, "EnableLogging", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "wds-set-multicast-transfer-mode",
+                    Label = "Set WDS Multicast Transfer to Auto Mode",
+                    Category = "System",
+                    Description =
+                        "Configures multicast image transfers to auto-select between multicast and unicast based on network conditions. Default: multicast only.",
+                    Tags = ["wds", "multicast", "network", "deployment", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 4,
+                    ImpactNote = "WDS auto-selects best transfer mode; improves reliability on networks without multicast support.",
+                    ApplyOps = [RegOp.SetDword(TransKey, "TransferMode", 1)],
+                    RemoveOps = [RegOp.DeleteValue(TransKey, "TransferMode")],
+                    DetectOps = [RegOp.CheckDword(TransKey, "TransferMode", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "wds-set-multicast-session-threshold",
+                    Label = "Set Multicast Session Client Threshold to 10",
+                    Category = "System",
+                    Description =
+                        "Sets the minimum number of clients before a multicast session starts. Prevents starting a multicast session for only 1–2 clients. Default: 1.",
+                    Tags = ["wds", "multicast", "threshold", "deployment", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 2,
+                    SafetyRating = 5,
+                    ImpactNote = "Multicast waits for 10 clients before starting; single clients use unicast fallback.",
+                    ApplyOps = [RegOp.SetDword(TransKey, "MulticastSessionThreshold", 10)],
+                    RemoveOps = [RegOp.DeleteValue(TransKey, "MulticastSessionThreshold")],
+                    DetectOps = [RegOp.CheckDword(TransKey, "MulticastSessionThreshold", 10)],
+                },
+                new TweakDef
+                {
+                    Id = "wds-enable-tftp-window-size",
+                    Label = "Set WDS TFTP Block Size to 16384",
+                    Category = "System",
+                    Description =
+                        "Increases the TFTP block size used by WDS PXE boot to 16384 bytes. Improves image download speed on modern networks. Default: 1456 (standard TFTP block).",
+                    Tags = ["wds", "tftp", "performance", "pxe", "deployment", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 4,
+                    ImpactNote = "Faster PXE image downloads; may fail on networks with low MTU or NAT.",
+                    ApplyOps = [RegOp.SetDword(TransKey, "TftpBlockSize", 16384)],
+                    RemoveOps = [RegOp.DeleteValue(TransKey, "TftpBlockSize")],
+                    DetectOps = [RegOp.CheckDword(TransKey, "TftpBlockSize", 16384)],
+                },
+                new TweakDef
+                {
+                    Id = "wds-disable-dhcp-option-60",
+                    Label = "Disable DHCP Option 60 (PXEClient Class ID)",
+                    Category = "System",
+                    Description =
+                        "Prevents WDS from adding DHCP Option 60 (PXEClient class identifier) to DHCP responses. Use when WDS is co-located with DHCP to avoid conflicts. Default: enabled.",
+                    Tags = ["wds", "dhcp", "pxe", "network", "deployment", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 3,
+                    ImpactNote = "Prevents DHCP conflict when WDS and DHCP share the same server; PXE may need DHCP Option 66/67 instead.",
+                    ApplyOps = [RegOp.SetDword(PxeKey, "UseDhcpPorts", 0)],
+                    RemoveOps = [RegOp.DeleteValue(PxeKey, "UseDhcpPorts")],
+                    DetectOps = [RegOp.CheckDword(PxeKey, "UseDhcpPorts", 0)],
+                },
+                new TweakDef
+                {
+                    Id = "wds-restrict-naming-policy",
+                    Label = "Enforce WDS Computer Naming Policy",
+                    Category = "System",
+                    Description =
+                        "Enforces a server-defined computer naming policy for imaged devices. Prevents users from choosing arbitrary computer names during imaging. Default: user-chosen.",
+                    Tags = ["wds", "naming", "policy", "deployment", "standardisation"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "Imaged computers get server-defined names; ensures naming convention compliance.",
+                    ApplyOps = [RegOp.SetDword(SvcKey, "NamingPolicy", 1)],
+                    RemoveOps = [RegOp.DeleteValue(SvcKey, "NamingPolicy")],
+                    DetectOps = [RegOp.CheckDword(SvcKey, "NamingPolicy", 1)],
+                },
+            ];
     }
 
     // ── WindowsFlightedFeaturesPolicy ──
@@ -11101,7 +11212,6 @@ internal static class PolicyEnterprise
                 ImpactNote = "Locks device to production ring permanently; critical for compliance-controlled endpoints.",
             },
         ];
-
     }
 
     // ── WindowsFlightingPolicy ──
@@ -11282,7 +11392,6 @@ internal static class PolicyEnterprise
                 DetectOps = [RegOp.CheckDword(Key, "DisableOptionalFeatureUpdates", 1)],
             },
         ];
-
     }
 
     // ── WindowsInsider ──
@@ -11482,7 +11591,6 @@ internal static class PolicyEnterprise
                 DetectOps = [RegOp.CheckDword(DataCollection, "DisableTailoredExperiencesWithDiagnosticData", 1)],
             },
         ];
-
     }
 
     // ── WindowsServicingPolicy ──
@@ -11491,179 +11599,193 @@ internal static class PolicyEnterprise
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate";
 
         public static IReadOnlyList<TweakDef> Data =>
-        [
-            new TweakDef
-            {
-                Id = "winsvc-set-target-ga-release-channel",
-                Label = "Servicing: Set Windows Update for Business Channel to GA Release Channel",
-                Category = "System",
-                Description = "Sets TargetReleaseVersionInfo=\"GA\" in WindowsUpdate policy. Configures Windows Update for Business to target the General Availability (GA) channel, ensuring the endpoint only receives fully released Windows 11/10 builds rather than Beta channel, Release Preview builds, or Insider Preview builds, providing the most stable update experience. " +
-                    "Without an explicit channel configuration, a Windows endpoint may be enrolled in a Windows Insider Program channel from a previous administrator action and continue receiving pre-release builds. Pre-release builds are not covered by the standard Microsoft support lifecycle and may contain known stability regressions. Locking the endpoint to the GA channel ensures only fully supported, production-validated Windows builds are ever installed.",
-                Tags = ["windows-servicing", "release-channel", "ga", "insider", "update"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Windows Update locked to GA channel; pre-release Insider and beta builds cannot be installed.",
-                ApplyOps = [RegOp.SetString(Key, "TargetReleaseVersionInfo", "GA")],
-                RemoveOps = [RegOp.DeleteValue(Key, "TargetReleaseVersionInfo")],
-                DetectOps = [RegOp.CheckString(Key, "TargetReleaseVersionInfo", "GA")],
-            },
-            new TweakDef
-            {
-                Id = "winsvc-defer-feature-updates-90-days",
-                Label = "Servicing: Defer Windows Feature Updates for 90 Days from GA Release",
-                Category = "System",
-                Description = "Sets DeferFeatureUpdatesPeriodInDays=90 in WindowsUpdate policy. Delays the installation of Windows Feature Updates (major annual or semi-annual releases introducing new OS capabilities) by 90 days from the date they are first made publicly available, giving Microsoft time to issue compatibility fixes and giving IT time to complete validation and application compatibility testing. " +
-                    "New Windows Feature Updates (e.g., Windows 11 version upgrades) introduce significant changes to the OS, including driver model changes, security changes, and UI modifications. Enterprises that immediately deploy new feature updates (0-day) routinely encounter application compatibility regressions, driver failures for specialised hardware, and Group Policy setting changes that require updated ADMX templates. A 90-day deferral provides buffer for Microsoft to release hotfixes and for enterprise IT to complete testing.",
-                Tags = ["windows-servicing", "feature-update", "deferral", "compatibility", "testing"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                ImpactNote = "Feature updates deferred 90 days; Microsoft and IT have time to address compatibility issues before enterprise deployment.",
-                ApplyOps = [RegOp.SetDword(Key, "DeferFeatureUpdatesPeriodInDays", 90)],
-                RemoveOps = [RegOp.DeleteValue(Key, "DeferFeatureUpdatesPeriodInDays")],
-                DetectOps = [RegOp.CheckDword(Key, "DeferFeatureUpdatesPeriodInDays", 90)],
-            },
-            new TweakDef
-            {
-                Id = "winsvc-defer-quality-updates-7-days",
-                Label = "Servicing: Defer Windows Quality Updates for 7 Days to Allow Reliability Monitoring",
-                Category = "System",
-                Description = "Sets DeferQualityUpdatesPeriodInDays=7 in WindowsUpdate policy. Delays the installation of Windows Quality Updates (monthly Patch Tuesday cumulative updates containing security fixes, reliability improvements, and bug fixes) by 7 days from their initial release to allow time for early-adopter reports to surface critical issues before enterprise-wide deployment. " +
-                    "Monthly Patch Tuesday cumulative updates occasionally introduce regressions — caused by a security fix that changes underlying API behaviour or a reliability fix interacting unexpectedly with specific application configurations. In prior years, Patch Tuesday updates have introduced BSoDs for specific driver configurations, performance regressions in SMB file server workloads, and print spooler failures. A 7-day deferral allows Microsoft, the community, and independent testing labs to publish regression reports before the update reaches production endpoints.",
-                Tags = ["windows-servicing", "quality-update", "patch-tuesday", "deferral", "regression"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                ImpactNote = "Quality updates deferred 7 days; regression reports communicated before production deployment.",
-                ApplyOps = [RegOp.SetDword(Key, "DeferQualityUpdatesPeriodInDays", 7)],
-                RemoveOps = [RegOp.DeleteValue(Key, "DeferQualityUpdatesPeriodInDays")],
-                DetectOps = [RegOp.CheckDword(Key, "DeferQualityUpdatesPeriodInDays", 7)],
-            },
-            new TweakDef
-            {
-                Id = "winsvc-disable-dual-scan",
-                Label = "Servicing: Disable WUfB Dual-Scan (WSUS + Windows Update Cloud Simultaneously)",
-                Category = "System",
-                Description = "Sets DisableDualScan=1 in WindowsUpdate policy. Prevents Windows Update for Business from simultaneously scanning both the corporate WSUS server and the Windows Update cloud service for updates, restricting update source to the configured primary source only (typically WSUS). Without this setting, endpoints configured with both WSUS and WUfB policies may accidentally install cloud-sourced updates that haven't been approved in WSUS. " +
-                    "WSUS environments use update approval workflows to prevent unapproved patches from installing. Windows Update for Business cloud scanning bypasses WSUS approval workflows — an update that is DECLINED in WSUS may still install if the endpoint simultaneously scans and finds the update approved in the Windows Update cloud service. Dual scan effectively breaks WSUS update governance by allowing cloud updates to supersede WSUS-declined updates.",
-                Tags = ["windows-servicing", "dual-scan", "wsus", "wufb", "update-governance"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                ImpactNote = "Dual-scan disabled; updates only sourced from configured primary (WSUS/WUfB); cloud updates cannot bypass WSUS approval.",
-                ApplyOps = [RegOp.SetDword(Key, "DisableDualScan", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "DisableDualScan")],
-                DetectOps = [RegOp.CheckDword(Key, "DisableDualScan", 1)],
-            },
-            new TweakDef
-            {
-                Id = "winsvc-block-preview-builds",
-                Label = "Servicing: Block Windows Preview Builds and Insider Preview Enrollment",
-                Category = "System",
-                Description = "Sets ManagePreviewBuilds=1 in WindowsUpdate policy. Prevents Windows from accessing Insider Preview builds, blocks the Windows Insider Program from enrolling the device, and hides the 'Windows Insider Program' section from Settings > Windows Update, making it impossible for users or administrators to opt into Insider Preview channels that would replace the production OS with a pre-release build. " +
-                    "Windows Insider Program enrolment replaces the production Windows build with a pre-release build that may have known critical vulnerabilities (disclosed during the Insider period), removed security features under development, or APIs with breaking changes from the production build. On enterprise endpoints, any path that allows downgrading from a supported production build to an unsupported pre-release build bypasses the enterprise's patching SLA and software support commitments.",
-                Tags = ["windows-servicing", "insider-preview", "preview-builds", "insider-program", "lockdown"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Windows Insider Program blocked; device cannot be enrolled in preview channels or receive pre-release builds.",
-                ApplyOps = [RegOp.SetDword(Key, "ManagePreviewBuilds", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "ManagePreviewBuilds")],
-                DetectOps = [RegOp.CheckDword(Key, "ManagePreviewBuilds", 1)],
-            },
-            new TweakDef
-            {
-                Id = "winsvc-exclude-drivers-from-quality-updates",
-                Label = "Servicing: Exclude Driver Updates from Monthly Quality Update Package",
-                Category = "System",
-                Description = "Sets ExcludeWUDriversInQualityUpdate=1 in WindowsUpdate policy. Prevents Windows Update for Business from installing driver updates as part of the monthly cumulative quality update package, requiring that driver updates are sourced and approved separately through the driver management pipeline rather than being bundled into the OS quality update. " +
-                    "Driver updates bundled into Windows quality updates have been a source of hardware compatibility regressions, particularly for specialised peripherals, storage controllers, and graphics subsystems. A mandatory driver update included in a cumulative update may replace a tested, stable OEM driver with a Microsoft-provided inbox driver that behaves differently for specific hardware configurations. Excluding drivers from quality updates allows IT to validate and approve driver updates independently on a slower cadence.",
-                Tags = ["windows-servicing", "drivers", "quality-update", "regression", "driver-management"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Driver updates excluded from quality update packages; drivers validated and deployed on separate IT-controlled schedule.",
-                ApplyOps = [RegOp.SetDword(Key, "ExcludeWUDriversInQualityUpdate", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "ExcludeWUDriversInQualityUpdate")],
-                DetectOps = [RegOp.CheckDword(Key, "ExcludeWUDriversInQualityUpdate", 1)],
-            },
-            new TweakDef
-            {
-                Id = "winsvc-block-optional-content-updates",
-                Label = "Servicing: Block Optional Windows Content Updates (Media Features, Language Packs)",
-                Category = "System",
-                Description = "Sets AllowOptionalContent=0 in WindowsUpdate policy. Prevents Windows Update from automatically downloading and installing optional content updates — including optional feature updates, language experience packs, optional cumulative update components, and regional supplemental content packs — without explicit IT administrator approval for each optional package. " +
-                    "Optional content includes media feature packs, additional language support, and supplemental features that Microsoft offers but does not install by default. While largely benign, optional content can consume hundreds of MB of disk space per package and is not required for enterprise operation. In disk-constrained environments (VDI thin clients, 128 GB endpoint SSDs) or bandwidth-constrained environments (WAN-connected branch offices), automatic download of optional content packages creates unnecessary overhead without enterprise benefit.",
-                Tags = ["windows-servicing", "optional-content", "language-packs", "disk-space", "bandwidth"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                ImpactNote = "Optional Windows content updates blocked; language packs and optional features not auto-downloaded.",
-                ApplyOps = [RegOp.SetDword(Key, "AllowOptionalContent", 0)],
-                RemoveOps = [RegOp.DeleteValue(Key, "AllowOptionalContent")],
-                DetectOps = [RegOp.CheckDword(Key, "AllowOptionalContent", 0)],
-            },
-            new TweakDef
-            {
-                Id = "winsvc-set-readiness-level-general-availability",
-                Label = "Servicing: Set Branch Readiness Level to General Availability Channel",
-                Category = "System",
-                Description = "Sets BranchReadinessLevel=16 in WindowsUpdate policy. Sets the Windows Update for Business readiness level (deployment ring) to General Availability Channel (value 16), directing the endpoint to receive feature updates only after they have been on the General Availability channel for the configured deferral period, rather than from the Beta or Release Preview channels. " +
-                    "BranchReadinessLevel determines which update channel feeds feature update availability. A value of 2 selects the Release Preview channel; 16 selects General Availability. Enterprises that configure WUfB without explicitly setting the readiness level may receive updates from the Release Preview channel, which contains builds that are near-final but may still have issues resolved between Release Preview and GA. Explicit GA targeting closes this gap.",
-                Tags = ["windows-servicing", "branch-readiness", "ga-channel", "feature-update", "wufb"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "WUfB readiness level set to GA Channel (16); only fully released feature updates are eligible for deployment.",
-                ApplyOps = [RegOp.SetDword(Key, "BranchReadinessLevel", 16)],
-                RemoveOps = [RegOp.DeleteValue(Key, "BranchReadinessLevel")],
-                DetectOps = [RegOp.CheckDword(Key, "BranchReadinessLevel", 16)],
-            },
-            new TweakDef
-            {
-                Id = "winsvc-enable-safe-os-update-rollback",
-                Label = "Servicing: Enable SafeOS Update Rollback on Feature Update Failure Detection",
-                Category = "System",
-                Description = "Sets EnableSafeOSUpdateRollback=1 in WindowsUpdate policy. Enables the Windows Safe OS rollback mechanism for failed feature updates. When a feature update installation fails (BSoD during upgrade, driver incompatibility detected, boot loop), Windows automatically rolls back to the previous working build rather than leaving the endpoint in an unbootable or partially-upgraded state. " +
-                    "Feature update installation failures can leave an endpoint in a state where it has partially installed the new version but cannot boot successfully. Without SafeOS rollback enabled, the endpoint may enter a boot repair loop, requiring IT to perform manual recovery (recovery console, reimaging). With SafeOS rollback, Windows detects the boot failure and automatically recovers to the last known good state, minimising end-user downtime and IT support demand for failed feature update deployments.",
-                Tags = ["windows-servicing", "rollback", "feature-update", "safeos", "recovery"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                ImpactNote = "SafeOS rollback enabled; failed feature updates auto-revert to previous working build without manual IT intervention.",
-                ApplyOps = [RegOp.SetDword(Key, "EnableSafeOSUpdateRollback", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "EnableSafeOSUpdateRollback")],
-                DetectOps = [RegOp.CheckDword(Key, "EnableSafeOSUpdateRollback", 1)],
-            },
-            new TweakDef
-            {
-                Id = "winsvc-enable-compliance-deadline-enforcement",
-                Label = "Servicing: Enable Compliance Deadline Enforcement to Prevent Indefinite Update Deferral",
-                Category = "System",
-                Description = "Sets EnableComplianceDeadlineEnforcement=1 in WindowsUpdate policy. Enables the WUfB compliance deadline mechanism, which automatically enforces update installation (overriding user-controlled active hours and post-deadline deferral settings) when a security update has been available beyond the configured deadline period, ensuring security patches cannot be deferred indefinitely by end-users. " +
-                    "Windows Update for Business user deadline controls allow end-users to dismiss and defer reboot prompts after updates are downloaded. In environments without compliance deadline enforcement, a user who repeatedly dismisses reboot prompts can delay security patch installation for weeks or months. The compliance deadline enforcement mechanism ensures that regardless of user behaviour, a security update that has been downloaded for more than the configured deadline period (typically 3–7 days) will install on the next restart.",
-                Tags = ["windows-servicing", "compliance-deadline", "security-patch", "forced-reboot", "sla"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                ImpactNote = "Compliance deadline enforcement active; security updates cannot be deferred indefinitely by end-users; SLA enforced.",
-                ApplyOps = [RegOp.SetDword(Key, "EnableComplianceDeadlineEnforcement", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "EnableComplianceDeadlineEnforcement")],
-                DetectOps = [RegOp.CheckDword(Key, "EnableComplianceDeadlineEnforcement", 1)],
-            },
-        ];
-
+            [
+                new TweakDef
+                {
+                    Id = "winsvc-set-target-ga-release-channel",
+                    Label = "Servicing: Set Windows Update for Business Channel to GA Release Channel",
+                    Category = "System",
+                    Description =
+                        "Sets TargetReleaseVersionInfo=\"GA\" in WindowsUpdate policy. Configures Windows Update for Business to target the General Availability (GA) channel, ensuring the endpoint only receives fully released Windows 11/10 builds rather than Beta channel, Release Preview builds, or Insider Preview builds, providing the most stable update experience. "
+                        + "Without an explicit channel configuration, a Windows endpoint may be enrolled in a Windows Insider Program channel from a previous administrator action and continue receiving pre-release builds. Pre-release builds are not covered by the standard Microsoft support lifecycle and may contain known stability regressions. Locking the endpoint to the GA channel ensures only fully supported, production-validated Windows builds are ever installed.",
+                    Tags = ["windows-servicing", "release-channel", "ga", "insider", "update"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "Windows Update locked to GA channel; pre-release Insider and beta builds cannot be installed.",
+                    ApplyOps = [RegOp.SetString(Key, "TargetReleaseVersionInfo", "GA")],
+                    RemoveOps = [RegOp.DeleteValue(Key, "TargetReleaseVersionInfo")],
+                    DetectOps = [RegOp.CheckString(Key, "TargetReleaseVersionInfo", "GA")],
+                },
+                new TweakDef
+                {
+                    Id = "winsvc-defer-feature-updates-90-days",
+                    Label = "Servicing: Defer Windows Feature Updates for 90 Days from GA Release",
+                    Category = "System",
+                    Description =
+                        "Sets DeferFeatureUpdatesPeriodInDays=90 in WindowsUpdate policy. Delays the installation of Windows Feature Updates (major annual or semi-annual releases introducing new OS capabilities) by 90 days from the date they are first made publicly available, giving Microsoft time to issue compatibility fixes and giving IT time to complete validation and application compatibility testing. "
+                        + "New Windows Feature Updates (e.g., Windows 11 version upgrades) introduce significant changes to the OS, including driver model changes, security changes, and UI modifications. Enterprises that immediately deploy new feature updates (0-day) routinely encounter application compatibility regressions, driver failures for specialised hardware, and Group Policy setting changes that require updated ADMX templates. A 90-day deferral provides buffer for Microsoft to release hotfixes and for enterprise IT to complete testing.",
+                    Tags = ["windows-servicing", "feature-update", "deferral", "compatibility", "testing"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote =
+                        "Feature updates deferred 90 days; Microsoft and IT have time to address compatibility issues before enterprise deployment.",
+                    ApplyOps = [RegOp.SetDword(Key, "DeferFeatureUpdatesPeriodInDays", 90)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "DeferFeatureUpdatesPeriodInDays")],
+                    DetectOps = [RegOp.CheckDword(Key, "DeferFeatureUpdatesPeriodInDays", 90)],
+                },
+                new TweakDef
+                {
+                    Id = "winsvc-defer-quality-updates-7-days",
+                    Label = "Servicing: Defer Windows Quality Updates for 7 Days to Allow Reliability Monitoring",
+                    Category = "System",
+                    Description =
+                        "Sets DeferQualityUpdatesPeriodInDays=7 in WindowsUpdate policy. Delays the installation of Windows Quality Updates (monthly Patch Tuesday cumulative updates containing security fixes, reliability improvements, and bug fixes) by 7 days from their initial release to allow time for early-adopter reports to surface critical issues before enterprise-wide deployment. "
+                        + "Monthly Patch Tuesday cumulative updates occasionally introduce regressions — caused by a security fix that changes underlying API behaviour or a reliability fix interacting unexpectedly with specific application configurations. In prior years, Patch Tuesday updates have introduced BSoDs for specific driver configurations, performance regressions in SMB file server workloads, and print spooler failures. A 7-day deferral allows Microsoft, the community, and independent testing labs to publish regression reports before the update reaches production endpoints.",
+                    Tags = ["windows-servicing", "quality-update", "patch-tuesday", "deferral", "regression"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "Quality updates deferred 7 days; regression reports communicated before production deployment.",
+                    ApplyOps = [RegOp.SetDword(Key, "DeferQualityUpdatesPeriodInDays", 7)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "DeferQualityUpdatesPeriodInDays")],
+                    DetectOps = [RegOp.CheckDword(Key, "DeferQualityUpdatesPeriodInDays", 7)],
+                },
+                new TweakDef
+                {
+                    Id = "winsvc-disable-dual-scan",
+                    Label = "Servicing: Disable WUfB Dual-Scan (WSUS + Windows Update Cloud Simultaneously)",
+                    Category = "System",
+                    Description =
+                        "Sets DisableDualScan=1 in WindowsUpdate policy. Prevents Windows Update for Business from simultaneously scanning both the corporate WSUS server and the Windows Update cloud service for updates, restricting update source to the configured primary source only (typically WSUS). Without this setting, endpoints configured with both WSUS and WUfB policies may accidentally install cloud-sourced updates that haven't been approved in WSUS. "
+                        + "WSUS environments use update approval workflows to prevent unapproved patches from installing. Windows Update for Business cloud scanning bypasses WSUS approval workflows — an update that is DECLINED in WSUS may still install if the endpoint simultaneously scans and finds the update approved in the Windows Update cloud service. Dual scan effectively breaks WSUS update governance by allowing cloud updates to supersede WSUS-declined updates.",
+                    Tags = ["windows-servicing", "dual-scan", "wsus", "wufb", "update-governance"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote =
+                        "Dual-scan disabled; updates only sourced from configured primary (WSUS/WUfB); cloud updates cannot bypass WSUS approval.",
+                    ApplyOps = [RegOp.SetDword(Key, "DisableDualScan", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "DisableDualScan")],
+                    DetectOps = [RegOp.CheckDword(Key, "DisableDualScan", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "winsvc-block-preview-builds",
+                    Label = "Servicing: Block Windows Preview Builds and Insider Preview Enrollment",
+                    Category = "System",
+                    Description =
+                        "Sets ManagePreviewBuilds=1 in WindowsUpdate policy. Prevents Windows from accessing Insider Preview builds, blocks the Windows Insider Program from enrolling the device, and hides the 'Windows Insider Program' section from Settings > Windows Update, making it impossible for users or administrators to opt into Insider Preview channels that would replace the production OS with a pre-release build. "
+                        + "Windows Insider Program enrolment replaces the production Windows build with a pre-release build that may have known critical vulnerabilities (disclosed during the Insider period), removed security features under development, or APIs with breaking changes from the production build. On enterprise endpoints, any path that allows downgrading from a supported production build to an unsupported pre-release build bypasses the enterprise's patching SLA and software support commitments.",
+                    Tags = ["windows-servicing", "insider-preview", "preview-builds", "insider-program", "lockdown"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "Windows Insider Program blocked; device cannot be enrolled in preview channels or receive pre-release builds.",
+                    ApplyOps = [RegOp.SetDword(Key, "ManagePreviewBuilds", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "ManagePreviewBuilds")],
+                    DetectOps = [RegOp.CheckDword(Key, "ManagePreviewBuilds", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "winsvc-exclude-drivers-from-quality-updates",
+                    Label = "Servicing: Exclude Driver Updates from Monthly Quality Update Package",
+                    Category = "System",
+                    Description =
+                        "Sets ExcludeWUDriversInQualityUpdate=1 in WindowsUpdate policy. Prevents Windows Update for Business from installing driver updates as part of the monthly cumulative quality update package, requiring that driver updates are sourced and approved separately through the driver management pipeline rather than being bundled into the OS quality update. "
+                        + "Driver updates bundled into Windows quality updates have been a source of hardware compatibility regressions, particularly for specialised peripherals, storage controllers, and graphics subsystems. A mandatory driver update included in a cumulative update may replace a tested, stable OEM driver with a Microsoft-provided inbox driver that behaves differently for specific hardware configurations. Excluding drivers from quality updates allows IT to validate and approve driver updates independently on a slower cadence.",
+                    Tags = ["windows-servicing", "drivers", "quality-update", "regression", "driver-management"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote =
+                        "Driver updates excluded from quality update packages; drivers validated and deployed on separate IT-controlled schedule.",
+                    ApplyOps = [RegOp.SetDword(Key, "ExcludeWUDriversInQualityUpdate", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "ExcludeWUDriversInQualityUpdate")],
+                    DetectOps = [RegOp.CheckDword(Key, "ExcludeWUDriversInQualityUpdate", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "winsvc-block-optional-content-updates",
+                    Label = "Servicing: Block Optional Windows Content Updates (Media Features, Language Packs)",
+                    Category = "System",
+                    Description =
+                        "Sets AllowOptionalContent=0 in WindowsUpdate policy. Prevents Windows Update from automatically downloading and installing optional content updates — including optional feature updates, language experience packs, optional cumulative update components, and regional supplemental content packs — without explicit IT administrator approval for each optional package. "
+                        + "Optional content includes media feature packs, additional language support, and supplemental features that Microsoft offers but does not install by default. While largely benign, optional content can consume hundreds of MB of disk space per package and is not required for enterprise operation. In disk-constrained environments (VDI thin clients, 128 GB endpoint SSDs) or bandwidth-constrained environments (WAN-connected branch offices), automatic download of optional content packages creates unnecessary overhead without enterprise benefit.",
+                    Tags = ["windows-servicing", "optional-content", "language-packs", "disk-space", "bandwidth"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 2,
+                    SafetyRating = 5,
+                    ImpactNote = "Optional Windows content updates blocked; language packs and optional features not auto-downloaded.",
+                    ApplyOps = [RegOp.SetDword(Key, "AllowOptionalContent", 0)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "AllowOptionalContent")],
+                    DetectOps = [RegOp.CheckDword(Key, "AllowOptionalContent", 0)],
+                },
+                new TweakDef
+                {
+                    Id = "winsvc-set-readiness-level-general-availability",
+                    Label = "Servicing: Set Branch Readiness Level to General Availability Channel",
+                    Category = "System",
+                    Description =
+                        "Sets BranchReadinessLevel=16 in WindowsUpdate policy. Sets the Windows Update for Business readiness level (deployment ring) to General Availability Channel (value 16), directing the endpoint to receive feature updates only after they have been on the General Availability channel for the configured deferral period, rather than from the Beta or Release Preview channels. "
+                        + "BranchReadinessLevel determines which update channel feeds feature update availability. A value of 2 selects the Release Preview channel; 16 selects General Availability. Enterprises that configure WUfB without explicitly setting the readiness level may receive updates from the Release Preview channel, which contains builds that are near-final but may still have issues resolved between Release Preview and GA. Explicit GA targeting closes this gap.",
+                    Tags = ["windows-servicing", "branch-readiness", "ga-channel", "feature-update", "wufb"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "WUfB readiness level set to GA Channel (16); only fully released feature updates are eligible for deployment.",
+                    ApplyOps = [RegOp.SetDword(Key, "BranchReadinessLevel", 16)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "BranchReadinessLevel")],
+                    DetectOps = [RegOp.CheckDword(Key, "BranchReadinessLevel", 16)],
+                },
+                new TweakDef
+                {
+                    Id = "winsvc-enable-safe-os-update-rollback",
+                    Label = "Servicing: Enable SafeOS Update Rollback on Feature Update Failure Detection",
+                    Category = "System",
+                    Description =
+                        "Sets EnableSafeOSUpdateRollback=1 in WindowsUpdate policy. Enables the Windows Safe OS rollback mechanism for failed feature updates. When a feature update installation fails (BSoD during upgrade, driver incompatibility detected, boot loop), Windows automatically rolls back to the previous working build rather than leaving the endpoint in an unbootable or partially-upgraded state. "
+                        + "Feature update installation failures can leave an endpoint in a state where it has partially installed the new version but cannot boot successfully. Without SafeOS rollback enabled, the endpoint may enter a boot repair loop, requiring IT to perform manual recovery (recovery console, reimaging). With SafeOS rollback, Windows detects the boot failure and automatically recovers to the last known good state, minimising end-user downtime and IT support demand for failed feature update deployments.",
+                    Tags = ["windows-servicing", "rollback", "feature-update", "safeos", "recovery"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote =
+                        "SafeOS rollback enabled; failed feature updates auto-revert to previous working build without manual IT intervention.",
+                    ApplyOps = [RegOp.SetDword(Key, "EnableSafeOSUpdateRollback", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "EnableSafeOSUpdateRollback")],
+                    DetectOps = [RegOp.CheckDword(Key, "EnableSafeOSUpdateRollback", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "winsvc-enable-compliance-deadline-enforcement",
+                    Label = "Servicing: Enable Compliance Deadline Enforcement to Prevent Indefinite Update Deferral",
+                    Category = "System",
+                    Description =
+                        "Sets EnableComplianceDeadlineEnforcement=1 in WindowsUpdate policy. Enables the WUfB compliance deadline mechanism, which automatically enforces update installation (overriding user-controlled active hours and post-deadline deferral settings) when a security update has been available beyond the configured deadline period, ensuring security patches cannot be deferred indefinitely by end-users. "
+                        + "Windows Update for Business user deadline controls allow end-users to dismiss and defer reboot prompts after updates are downloaded. In environments without compliance deadline enforcement, a user who repeatedly dismisses reboot prompts can delay security patch installation for weeks or months. The compliance deadline enforcement mechanism ensures that regardless of user behaviour, a security update that has been downloaded for more than the configured deadline period (typically 3–7 days) will install on the next restart.",
+                    Tags = ["windows-servicing", "compliance-deadline", "security-patch", "forced-reboot", "sla"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote =
+                        "Compliance deadline enforcement active; security updates cannot be deferred indefinitely by end-users; SLA enforced.",
+                    ApplyOps = [RegOp.SetDword(Key, "EnableComplianceDeadlineEnforcement", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "EnableComplianceDeadlineEnforcement")],
+                    DetectOps = [RegOp.CheckDword(Key, "EnableComplianceDeadlineEnforcement", 1)],
+                },
+            ];
     }
 
     // ── WindowsToGoPolicy ──
@@ -11678,7 +11800,8 @@ internal static class PolicyEnterprise
                 Id = "wtg-disable-sleep",
                 Label = "Disable Sleep States for Windows To Go",
                 Category = "System",
-                Description = "Sets EnableSleep=0 in the PortableOperatingSystem policy key. "
+                Description =
+                    "Sets EnableSleep=0 in the PortableOperatingSystem policy key. "
                     + "Prevents Windows To Go workspaces from entering S1-S3 sleep states while running "
                     + "from a USB drive. Sleep states on WTG disks can corrupt the workspace if the USB "
                     + "connection is interrupted during wake-up. Applying this ensures the system either "
@@ -11690,7 +11813,7 @@ internal static class PolicyEnterprise
                 ImpactScore = 2,
                 SafetyRating = 5,
                 ImpactNote = "Sleep states disabled for WTG workspaces; prevents USB-to-sleep corruption scenarios.",
-                ApplyOps  = [RegOp.SetDword(WtgKey, "EnableSleep", 0)],
+                ApplyOps = [RegOp.SetDword(WtgKey, "EnableSleep", 0)],
                 RemoveOps = [RegOp.DeleteValue(WtgKey, "EnableSleep")],
                 DetectOps = [RegOp.CheckDword(WtgKey, "EnableSleep", 0)],
             },
@@ -11699,7 +11822,8 @@ internal static class PolicyEnterprise
                 Id = "wtg-disable-hibernation",
                 Label = "Disable Hibernation for Windows To Go",
                 Category = "System",
-                Description = "Sets EnableHibernation=0 in the PortableOperatingSystem policy key. "
+                Description =
+                    "Sets EnableHibernation=0 in the PortableOperatingSystem policy key. "
                     + "Prevents Windows To Go workspaces from using the hibernate (S4) power state. "
                     + "Hibernation on a WTG USB workspace saves RAM to the hiberfil.sys on the USB disk, "
                     + "but wake-up can fail if the USB drive is moved or the system firmware changes. "
@@ -11711,7 +11835,7 @@ internal static class PolicyEnterprise
                 ImpactScore = 2,
                 SafetyRating = 5,
                 ImpactNote = "Hibernation disabled for WTG workspaces; prevents hiberfil corruption on USB devices.",
-                ApplyOps  = [RegOp.SetDword(WtgKey, "EnableHibernation", 0)],
+                ApplyOps = [RegOp.SetDword(WtgKey, "EnableHibernation", 0)],
                 RemoveOps = [RegOp.DeleteValue(WtgKey, "EnableHibernation")],
                 DetectOps = [RegOp.CheckDword(WtgKey, "EnableHibernation", 0)],
             },
@@ -11720,7 +11844,8 @@ internal static class PolicyEnterprise
                 Id = "wtg-block-workspace-creation",
                 Label = "Block Windows To Go Workspace Creation",
                 Category = "System",
-                Description = "Sets NoWorkspaceCreation=1 in the PortableOperatingSystem policy key. "
+                Description =
+                    "Sets NoWorkspaceCreation=1 in the PortableOperatingSystem policy key. "
                     + "Prevents users from using the Windows To Go Workspace Creator wizard to create "
                     + "new WTG workspaces from this machine. Ensures WTG environments are only created "
                     + "by IT administrators and not by standard users who may inadvertently copy "
@@ -11732,7 +11857,7 @@ internal static class PolicyEnterprise
                 ImpactScore = 2,
                 SafetyRating = 5,
                 ImpactNote = "WTG workspace creation wizard blocked; only IT-created workspaces can be used.",
-                ApplyOps  = [RegOp.SetDword(WtgKey, "NoWorkspaceCreation", 1)],
+                ApplyOps = [RegOp.SetDword(WtgKey, "NoWorkspaceCreation", 1)],
                 RemoveOps = [RegOp.DeleteValue(WtgKey, "NoWorkspaceCreation")],
                 DetectOps = [RegOp.CheckDword(WtgKey, "NoWorkspaceCreation", 1)],
             },
@@ -11741,7 +11866,8 @@ internal static class PolicyEnterprise
                 Id = "wtg-block-boot-from-external",
                 Label = "Block Booting From External WTG Media",
                 Category = "System",
-                Description = "Sets BlockBootFromExternalMedia=1 in the PortableOperatingSystem policy key. "
+                Description =
+                    "Sets BlockBootFromExternalMedia=1 in the PortableOperatingSystem policy key. "
                     + "Prevents this machine from booting a Windows To Go workspace from external USB media. "
                     + "Ensures the machine always boots its internal Windows installation and cannot be "
                     + "redirected by an inserted WTG USB drive. Protects against using WTG to bypass local "
@@ -11753,7 +11879,7 @@ internal static class PolicyEnterprise
                 ImpactScore = 2,
                 SafetyRating = 5,
                 ImpactNote = "WTG boot from external USB media blocked; internal Windows always boots instead.",
-                ApplyOps  = [RegOp.SetDword(WtgKey, "BlockBootFromExternalMedia", 1)],
+                ApplyOps = [RegOp.SetDword(WtgKey, "BlockBootFromExternalMedia", 1)],
                 RemoveOps = [RegOp.DeleteValue(WtgKey, "BlockBootFromExternalMedia")],
                 DetectOps = [RegOp.CheckDword(WtgKey, "BlockBootFromExternalMedia", 1)],
             },
@@ -11762,7 +11888,8 @@ internal static class PolicyEnterprise
                 Id = "wtg-disable-host-offline-folders",
                 Label = "Disable Host Offline Folders in Windows To Go",
                 Category = "System",
-                Description = "Sets NoOfflineFolders=1 in the PortableOperatingSystem policy key. "
+                Description =
+                    "Sets NoOfflineFolders=1 in the PortableOperatingSystem policy key. "
                     + "Prevents the WTG workspace from accessing the host machine's Offline Files cache. "
                     + "Ensures that when a user boots into a WTG workspace, they cannot read or write "
                     + "the Offline Files data of the host machine, preventing data leakage from the "
@@ -11774,7 +11901,7 @@ internal static class PolicyEnterprise
                 ImpactScore = 2,
                 SafetyRating = 5,
                 ImpactNote = "Offline Folders cache on host not accessible from WTG workspace.",
-                ApplyOps  = [RegOp.SetDword(WtgKey, "NoOfflineFolders", 1)],
+                ApplyOps = [RegOp.SetDword(WtgKey, "NoOfflineFolders", 1)],
                 RemoveOps = [RegOp.DeleteValue(WtgKey, "NoOfflineFolders")],
                 DetectOps = [RegOp.CheckDword(WtgKey, "NoOfflineFolders", 1)],
             },
@@ -11783,7 +11910,8 @@ internal static class PolicyEnterprise
                 Id = "wtg-disable-retail-demo",
                 Label = "Disable Retail Demo Mode for Windows To Go",
                 Category = "System",
-                Description = "Sets DisableRetailDemo=1 in the PortableOperatingSystem policy key. "
+                Description =
+                    "Sets DisableRetailDemo=1 in the PortableOperatingSystem policy key. "
                     + "Suppresses the Retail Demo Experience (RDX) from being shown or launched when "
                     + "a WTG workspace boots on a retail display or demo machine. Prevents WTG workspaces "
                     + "from being used as a kiosk demo mode and ensures productive enterprise use only. "
@@ -11794,7 +11922,7 @@ internal static class PolicyEnterprise
                 ImpactScore = 1,
                 SafetyRating = 5,
                 ImpactNote = "Retail demo mode suppressed in WTG workspaces.",
-                ApplyOps  = [RegOp.SetDword(WtgKey, "DisableRetailDemo", 1)],
+                ApplyOps = [RegOp.SetDword(WtgKey, "DisableRetailDemo", 1)],
                 RemoveOps = [RegOp.DeleteValue(WtgKey, "DisableRetailDemo")],
                 DetectOps = [RegOp.CheckDword(WtgKey, "DisableRetailDemo", 1)],
             },
@@ -11803,7 +11931,8 @@ internal static class PolicyEnterprise
                 Id = "wtg-disable-sync-on-metered",
                 Label = "Disable Sync Provider on Metered Connection for WTG",
                 Category = "System",
-                Description = "Sets DisableSyncProviderOnMetered=1 in the PortableOperatingSystem policy key. "
+                Description =
+                    "Sets DisableSyncProviderOnMetered=1 in the PortableOperatingSystem policy key. "
                     + "Prevents the WTG workspace from contacting cloud sync providers (OneDrive, Dropbox, etc.) "
                     + "when the device is on a metered network connection. Reduces data usage costs for WTG "
                     + "workspaces roaming over mobile broadband or tethered hotspots. "
@@ -11814,7 +11943,7 @@ internal static class PolicyEnterprise
                 ImpactScore = 2,
                 SafetyRating = 5,
                 ImpactNote = "Cloud sync providers blocked on metered connections in WTG workspaces.",
-                ApplyOps  = [RegOp.SetDword(WtgKey, "DisableSyncProviderOnMetered", 1)],
+                ApplyOps = [RegOp.SetDword(WtgKey, "DisableSyncProviderOnMetered", 1)],
                 RemoveOps = [RegOp.DeleteValue(WtgKey, "DisableSyncProviderOnMetered")],
                 DetectOps = [RegOp.CheckDword(WtgKey, "DisableSyncProviderOnMetered", 1)],
             },
@@ -11823,7 +11952,8 @@ internal static class PolicyEnterprise
                 Id = "wtg-block-cross-hardware-deploy",
                 Label = "Block Cross-Hardware WTG Deployment",
                 Category = "System",
-                Description = "Sets NoCrossHardwareDeploy=1 in the PortableOperatingSystem policy key. "
+                Description =
+                    "Sets NoCrossHardwareDeploy=1 in the PortableOperatingSystem policy key. "
                     + "Prevents the WTG workspace from being moved to a different hardware platform once it "
                     + "has been provisioned. Cross-hardware WTG deployment can cause driver conflicts, "
                     + "DHCP/MAC-address confusion, or break hardware-specific licensing tied to the original "
@@ -11835,7 +11965,7 @@ internal static class PolicyEnterprise
                 ImpactScore = 2,
                 SafetyRating = 4,
                 ImpactNote = "WTG workspace cannot be re-provisioned on different hardware.",
-                ApplyOps  = [RegOp.SetDword(WtgKey, "NoCrossHardwareDeploy", 1)],
+                ApplyOps = [RegOp.SetDword(WtgKey, "NoCrossHardwareDeploy", 1)],
                 RemoveOps = [RegOp.DeleteValue(WtgKey, "NoCrossHardwareDeploy")],
                 DetectOps = [RegOp.CheckDword(WtgKey, "NoCrossHardwareDeploy", 1)],
             },
@@ -11844,7 +11974,8 @@ internal static class PolicyEnterprise
                 Id = "wtg-enforce-secure-boot",
                 Label = "Enforce Secure Boot for Windows To Go Workspaces",
                 Category = "System",
-                Description = "Sets RequireSecureBoot=1 in the PortableOperatingSystem policy key. "
+                Description =
+                    "Sets RequireSecureBoot=1 in the PortableOperatingSystem policy key. "
                     + "Requires that the host machine's Secure Boot setting be enabled before a WTG "
                     + "workspace will boot. Prevents WTG from being used as an attack vector on machines "
                     + "where Secure Boot has been disabled, ensuring the WTG kernel and boot files are "
@@ -11856,7 +11987,7 @@ internal static class PolicyEnterprise
                 ImpactScore = 3,
                 SafetyRating = 4,
                 ImpactNote = "WTG workspace only boots on machines with Secure Boot enabled.",
-                ApplyOps  = [RegOp.SetDword(WtgKey, "RequireSecureBoot", 1)],
+                ApplyOps = [RegOp.SetDword(WtgKey, "RequireSecureBoot", 1)],
                 RemoveOps = [RegOp.DeleteValue(WtgKey, "RequireSecureBoot")],
                 DetectOps = [RegOp.CheckDword(WtgKey, "RequireSecureBoot", 1)],
             },
@@ -11865,7 +11996,8 @@ internal static class PolicyEnterprise
                 Id = "wtg-disable-automatic-update",
                 Label = "Disable Automatic Windows Update in WTG Workspace",
                 Category = "System",
-                Description = "Sets NoAutoUpdate=1 in the PortableOperatingSystem policy key. "
+                Description =
+                    "Sets NoAutoUpdate=1 in the PortableOperatingSystem policy key. "
                     + "Prevents the WTG workspace from automatically downloading and installing Windows updates "
                     + "while running on the road. Updates in a WTG workspace use the host machine's internet "
                     + "connection and can run out of USB drive space or interrupt productivity. "
@@ -11877,16 +12009,13 @@ internal static class PolicyEnterprise
                 ImpactScore = 2,
                 SafetyRating = 4,
                 ImpactNote = "Automatic Windows Update disabled in WTG workspaces; updates must be pushed manually.",
-                ApplyOps  = [RegOp.SetDword(WtgKey, "NoAutoUpdate", 1)],
+                ApplyOps = [RegOp.SetDword(WtgKey, "NoAutoUpdate", 1)],
                 RemoveOps = [RegOp.DeleteValue(WtgKey, "NoAutoUpdate")],
                 DetectOps = [RegOp.CheckDword(WtgKey, "NoAutoUpdate", 1)],
             },
         ];
-
     }
-
 }
-
 
 // ── merged from PolicyMisc.cs ──
 // RegiLattice.Core — Tweaks/PolicyMisc.cs
@@ -12107,7 +12236,6 @@ internal static class PolicyMisc
                 DetectOps = [RegOp.CheckDword(Key, "EnforceUserIsolation", 1)],
             },
         ];
-
     }
 
     // ── ActiveXInstallerServicePolicy ──
@@ -12327,7 +12455,6 @@ internal static class PolicyMisc
                 DetectOps = [RegOp.CheckDword(AxKey, "BlockOcxDownload", 1)],
             },
         ];
-
     }
 
     // ── ClipboardHistoryAdvancedPolicy ──
@@ -12506,7 +12633,6 @@ internal static class PolicyMisc
                     DetectOps = [RegOp.CheckDword(Key, "DisableLockScreenClipboard", 1)],
                 },
             ];
-
     }
 
     // ── ClipboardHistoryPolicy ──
@@ -12521,7 +12647,10 @@ internal static class PolicyMisc
                 Id = "clphist-disable-clipboard-history",
                 Label = "Disable Clipboard History",
                 Category = "System",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 3, SafetyRating = 5,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 3,
+                SafetyRating = 5,
                 Description =
                     "Sets DisableClipboardHistory=1 in the ClipboardHistory policy key. Prevents "
                     + "Windows from storing a multi-item clipboard history accessible via Win+V. "
@@ -12540,7 +12669,10 @@ internal static class PolicyMisc
                 Id = "clphist-disable-cloud-sync",
                 Label = "Disable Clipboard Cloud Sync",
                 Category = "System",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 4, SafetyRating = 5,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 4,
+                SafetyRating = 5,
                 Description =
                     "Sets DisableClipboardSync=1 in the ClipboardHistory policy key. Stops "
                     + "clipboard content from being synchronised to Microsoft's cloud and "
@@ -12558,7 +12690,10 @@ internal static class PolicyMisc
                 Id = "clphist-clear-on-logoff",
                 Label = "Clear Clipboard History on Logoff",
                 Category = "System",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 3, SafetyRating = 5,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 3,
+                SafetyRating = 5,
                 Description =
                     "Sets ClearClipboardOnLogoff=1 in the ClipboardHistory policy key. Purges "
                     + "the entire stored clipboard history when the user logs off. Without this "
@@ -12576,7 +12711,10 @@ internal static class PolicyMisc
                 Id = "clphist-disable-enterprise-sync",
                 Label = "Disable Clipboard Enterprise Roaming",
                 Category = "System",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 3, SafetyRating = 5,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 3,
+                SafetyRating = 5,
                 Description =
                     "Sets DisableEnterpriseSync=1 in the ClipboardHistory policy key. Prevents "
                     + "clipboard history from roaming across enterprise devices enrolled in the "
@@ -12595,7 +12733,10 @@ internal static class PolicyMisc
                 Id = "clphist-disable-pin-items",
                 Label = "Disable Clipboard Pin Persistent Items",
                 Category = "System",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 2, SafetyRating = 5,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 2,
+                SafetyRating = 5,
                 Description =
                     "Sets DisablePinItems=1 in the ClipboardHistory policy key. Prevents users "
                     + "from pinning clipboard items, blocking indefinite retention of specific "
@@ -12613,7 +12754,10 @@ internal static class PolicyMisc
                 Id = "clphist-disable-image-data",
                 Label = "Disable Clipboard Image Data Retention",
                 Category = "System",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 2, SafetyRating = 5,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 2,
+                SafetyRating = 5,
                 Description =
                     "Sets DisableImageData=1 in the ClipboardHistory policy key. Prevents "
                     + "Windows from storing bitmap and image data in the clipboard history. "
@@ -12631,7 +12775,10 @@ internal static class PolicyMisc
                 Id = "clphist-disable-html-data",
                 Label = "Disable Clipboard HTML Fragment Retention",
                 Category = "System",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 2, SafetyRating = 5,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 2,
+                SafetyRating = 5,
                 Description =
                     "Sets DisableHtmlData=1 in the ClipboardHistory policy key. Prevents the "
                     + "history from storing HTML-format clipboard entries produced by browsers "
@@ -12649,7 +12796,10 @@ internal static class PolicyMisc
                 Id = "clphist-disable-thumbnail-preview",
                 Label = "Disable Clipboard History Thumbnail Preview",
                 Category = "System",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 1, SafetyRating = 5,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 1,
+                SafetyRating = 5,
                 Description =
                     "Sets DisableThumbnailPreview=1 in the ClipboardHistory policy key. Removes "
                     + "the visual thumbnail preview shown in the Win+V clipboard picker. Thumbnail "
@@ -12667,7 +12817,10 @@ internal static class PolicyMisc
                 Id = "clphist-limit-history-size",
                 Label = "Limit Clipboard History Size",
                 Category = "System",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 2, SafetyRating = 5,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 2,
+                SafetyRating = 5,
                 Description =
                     "Sets MaxHistorySize=10 in the ClipboardHistory policy key. Caps the number "
                     + "of items retained in clipboard history to 10 entries (default system "
@@ -12685,7 +12838,10 @@ internal static class PolicyMisc
                 Id = "clphist-disable-telemetry",
                 Label = "Disable Clipboard History Telemetry",
                 Category = "System",
-                NeedsAdmin = true, CorpSafe = true, ImpactScore = 2, SafetyRating = 5,
+                NeedsAdmin = true,
+                CorpSafe = true,
+                ImpactScore = 2,
+                SafetyRating = 5,
                 Description =
                     "Sets DisableClipboardTelemetry=1 in the ClipboardHistory policy key. "
                     + "Prevents Windows from reporting clipboard history usage analytics "
@@ -12700,7 +12856,6 @@ internal static class PolicyMisc
                 DetectOps = [RegOp.CheckDword(Key, "DisableClipboardTelemetry", 1)],
             },
         ];
-
     }
 
     // ── ClipboardSensitivityPolicy ──
@@ -12882,7 +13037,6 @@ internal static class PolicyMisc
                     DetectOps = [RegOp.CheckDword(Key2, "DisableClipboardEncryptionBypass", 1)],
                 },
             ];
-
     }
 
     // ── CrashDumpPolicy ──
@@ -13063,7 +13217,6 @@ internal static class PolicyMisc
                     DetectOps = [RegOp.CheckDword(CcKey, "DisableDedicatedDumpFile", 1)],
                 },
             ];
-
     }
 
     // ── CrashDumpsPolicy ──
@@ -13244,7 +13397,6 @@ internal static class PolicyMisc
                 DetectOps = [RegOp.CheckDword(Key, "DumpRetentionDays", 30)],
             },
         ];
-
     }
 
     // ── DotNetFrameworkPolicy ──
@@ -13260,7 +13412,8 @@ internal static class PolicyMisc
                 Id = "dotnet-disable-authenticode-publisher-prompt",
                 Label = ".NET Framework Policy: Disable Authenticode Publisher Trust Prompt",
                 Category = "System",
-                Description = "Prevents the Authenticode publisher trust dialog from appearing when running .NET applications that are not signed by a trusted publisher. The dialog asks users whether to trust the publisher; allowing untrained users to click through this prompt grants blanket trust to potentially malicious assemblies signed by unknown or compromised certificates.",
+                Description =
+                    "Prevents the Authenticode publisher trust dialog from appearing when running .NET applications that are not signed by a trusted publisher. The dialog asks users whether to trust the publisher; allowing untrained users to click through this prompt grants blanket trust to potentially malicious assemblies signed by unknown or compromised certificates.",
                 Tags = [".net", "authenticode", "trust", "publisher", "security", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -13277,7 +13430,8 @@ internal static class PolicyMisc
                 Id = "dotnet-disable-clickonce-publisher-prompt",
                 Label = ".NET Framework Policy: Disable ClickOnce Untrusted Publisher Prompt",
                 Category = "System",
-                Description = "Prevents ClickOnce deployment applications from showing a trust elevation prompt when the publisher is not in the Trusted Publishers certificate store. ClickOnce is a .NET deployment technology used for updating business apps; if an attacker substitutes a malicious manifest, the user would be prompted to trust the new publisher. Disabling the prompt blocks this attack vector.",
+                Description =
+                    "Prevents ClickOnce deployment applications from showing a trust elevation prompt when the publisher is not in the Trusted Publishers certificate store. ClickOnce is a .NET deployment technology used for updating business apps; if an attacker substitutes a malicious manifest, the user would be prompted to trust the new publisher. Disabling the prompt blocks this attack vector.",
                 Tags = [".net", "clickonce", "trust", "publisher", "deployment", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -13294,7 +13448,8 @@ internal static class PolicyMisc
                 Id = "dotnet-enable-strong-name-bypass-disable",
                 Label = ".NET Framework Policy: Disable Strong Name Verification Bypass",
                 Category = "System",
-                Description = "Prevents the .NET CLR from skipping strong-name signature verification for fully-trusted assemblies. The strong-name bypass feature was introduced in .NET 3.5 to improve startup performance but it allows assemblies loaded from the GAC or fully-trusted zones to run without their digital signatures being verified. Disabling the bypass restores cryptographic integrity checking.",
+                Description =
+                    "Prevents the .NET CLR from skipping strong-name signature verification for fully-trusted assemblies. The strong-name bypass feature was introduced in .NET 3.5 to improve startup performance but it allows assemblies loaded from the GAC or fully-trusted zones to run without their digital signatures being verified. Disabling the bypass restores cryptographic integrity checking.",
                 Tags = [".net", "strong name", "signature", "verification", "security", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -13311,7 +13466,8 @@ internal static class PolicyMisc
                 Id = "dotnet-disable-legacysecuritypolicy",
                 Label = ".NET Framework Policy: Disable Legacy CAS Security Policy",
                 Category = "System",
-                Description = "Disables the legacy .NET Framework Code Access Security (CAS) policy engine used by .NET 2.0–3.5 applications. The legacy CAS policy is deprecated, has known bypasses, and is incompatible with modern .NET security models. Disabling it enforces the modern host-based security model and prevents legacy policy rules from creating permission exceptions.",
+                Description =
+                    "Disables the legacy .NET Framework Code Access Security (CAS) policy engine used by .NET 2.0–3.5 applications. The legacy CAS policy is deprecated, has known bypasses, and is incompatible with modern .NET security models. Disabling it enforces the modern host-based security model and prevents legacy policy rules from creating permission exceptions.",
                 Tags = [".net", "cas", "code access security", "legacy", "security", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -13328,7 +13484,8 @@ internal static class PolicyMisc
                 Id = "dotnet-disable-jit-debugger-prompt",
                 Label = ".NET Framework Policy: Disable JIT Debugger Attachment Prompt",
                 Category = "System",
-                Description = "Prevents the automatic JIT (Just-in-Time) debugger attachment dialog from appearing when a .NET application crashes. The JIT debugger prompt asks whether to attach a debugger to the crashed process, which in production workstations serves no legitimate purpose. Malicious code can trigger an application exception to cause this dialog to appear, providing a hook for attaching debuggers.",
+                Description =
+                    "Prevents the automatic JIT (Just-in-Time) debugger attachment dialog from appearing when a .NET application crashes. The JIT debugger prompt asks whether to attach a debugger to the crashed process, which in production workstations serves no legitimate purpose. Malicious code can trigger an application exception to cause this dialog to appear, providing a hook for attaching debuggers.",
                 Tags = [".net", "jit debugger", "crash", "dialog", "security", "policy"],
                 NeedsAdmin = false,
                 CorpSafe = true,
@@ -13345,7 +13502,8 @@ internal static class PolicyMisc
                 Id = "dotnet-disable-application-feedback-prompt",
                 Label = ".NET Framework Policy: Disable .NET Application Feedback/Telemetry Prompt",
                 Category = "System",
-                Description = "Prevents .NET runtime applications from showing feedback and crash reporting dialogs that offer to send diagnostics to Microsoft. Legacy .NET framework applications may trigger the Windows Error Reporting dialog for unhandled exceptions, which includes options to send debug dumps and crash details to Microsoft servers.",
+                Description =
+                    "Prevents .NET runtime applications from showing feedback and crash reporting dialogs that offer to send diagnostics to Microsoft. Legacy .NET framework applications may trigger the Windows Error Reporting dialog for unhandled exceptions, which includes options to send debug dumps and crash details to Microsoft servers.",
                 Tags = [".net", "feedback", "telemetry", "crash", "reporting", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -13362,7 +13520,8 @@ internal static class PolicyMisc
                 Id = "dotnet-require-aslr-for-net-apps",
                 Label = ".NET Framework Policy: Require ASLR for .NET Application Loading",
                 Category = "System",
-                Description = "Enforces Address Space Layout Randomization (ASLR) for .NET CLR assemblies, ensuring that the CLR heap, stack, and PE image bases are randomized on each load. Without ASLR enforcement, predictable memory layouts make ROP (Return-Oriented Programming) and heap spray attacks easier. Modern .NET runtimes support ASLR natively but older framework versions may not opt-in by default.",
+                Description =
+                    "Enforces Address Space Layout Randomization (ASLR) for .NET CLR assemblies, ensuring that the CLR heap, stack, and PE image bases are randomized on each load. Without ASLR enforcement, predictable memory layouts make ROP (Return-Oriented Programming) and heap spray attacks easier. Modern .NET runtimes support ASLR natively but older framework versions may not opt-in by default.",
                 Tags = [".net", "aslr", "memory", "security", "exploit mitigation", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -13379,7 +13538,8 @@ internal static class PolicyMisc
                 Id = "dotnet-disable-publisher-evidence",
                 Label = ".NET Framework Policy: Disable XML Publisher Evidence Collection",
                 Category = "System",
-                Description = "Disables the collection of XML serialized publisher evidence during .NET assembly loading. Publisher evidence includes X.509 certificate chain information from the assembly's Authenticode signature; when serialized, it can be used by CAS zone policy. Disabling collection speeds up cold-start assembly loading for heavily-signed enterprise packages.",
+                Description =
+                    "Disables the collection of XML serialized publisher evidence during .NET assembly loading. Publisher evidence includes X.509 certificate chain information from the assembly's Authenticode signature; when serialized, it can be used by CAS zone policy. Disabling collection speeds up cold-start assembly loading for heavily-signed enterprise packages.",
                 Tags = [".net", "publisher evidence", "performance", "security", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -13396,7 +13556,8 @@ internal static class PolicyMisc
                 Id = "dotnet-disable-uselegacyv2runtimeactivationpolicy",
                 Label = ".NET Framework Policy: Disable Legacy .NET 2.0 Runtime Activation Policy",
                 Category = "System",
-                Description = "Disables the useLegacyV2RuntimeActivationPolicy compatibility shim that allows .NET 4.x host processes to load in-process .NET 2.0/3.5 CLR components. This shim was provided as a migration aid for mixed-version COM interop scenarios. Modern applications should use the unified CLR loading mechanism; keeping this policy disabled prevents accidental dual-CLR-version instancing.",
+                Description =
+                    "Disables the useLegacyV2RuntimeActivationPolicy compatibility shim that allows .NET 4.x host processes to load in-process .NET 2.0/3.5 CLR components. This shim was provided as a migration aid for mixed-version COM interop scenarios. Modern applications should use the unified CLR loading mechanism; keeping this policy disabled prevents accidental dual-CLR-version instancing.",
                 Tags = [".net", "legacy", "clr", "activation", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -13413,7 +13574,8 @@ internal static class PolicyMisc
                 Id = "dotnet-disable-ie-hosted-webbrowser",
                 Label = ".NET Framework Policy: Disable .NET in IE-Hosted WebBrowser Control",
                 Category = "System",
-                Description = "Prevents the .NET Framework from activating in the legacy Internet Explorer WebBrowser ActiveX control hosted inside WinForms or WPF applications. The DHTML scripting bridge between IE's Trident engine and .NET has historically been a code execution attack vector. Modern apps should use Edge WebView2 instead of the legacy IE-hosted WebBrowser control.",
+                Description =
+                    "Prevents the .NET Framework from activating in the legacy Internet Explorer WebBrowser ActiveX control hosted inside WinForms or WPF applications. The DHTML scripting bridge between IE's Trident engine and .NET has historically been a code execution attack vector. Modern apps should use Edge WebView2 instead of the legacy IE-hosted WebBrowser control.",
                 Tags = [".net", "ie", "webbrowser", "activex", "security", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -13426,7 +13588,6 @@ internal static class PolicyMisc
                 ImpactNote = "Disables .NET hosting in the IE WebBrowser control; WinForms apps using WebBrowser control will break.",
             },
         ];
-
     }
 
     // ── LicensingPolicy ──
@@ -13607,14 +13768,12 @@ internal static class PolicyMisc
                 DetectOps = [RegOp.CheckDword(Key, "DisableGracePeriodNotifications", 1)],
             },
         ];
-
     }
 
     // ── MediaFoundationPolicy ──
     private static class _MediaFoundationPolicy
     {
-        private const string Key =
-            @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\MediaFoundation";
+        private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\MediaFoundation";
 
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
@@ -13838,7 +13997,6 @@ internal static class PolicyMisc
                 DetectOps = [RegOp.CheckDword(Key, "EnableMFTelemetry", 0)],
             },
         ];
-
     }
 
     // ── MediaPlayerAdvPolicy ──
@@ -13847,179 +14005,197 @@ internal static class PolicyMisc
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsMediaPlayer";
 
         public static IReadOnlyList<TweakDef> Data =>
-        [
-            new TweakDef
-            {
-                Id = "wmpol-prevent-codec-download",
-                Label = "WMP: Prevent Automatic Codec Download from the Internet",
-                Category = "System",
-                Description = "Sets PreventCodecDownload=1 in Windows Media Player policy. Prevents Windows Media Player from automatically downloading codecs from the internet to play media files that use unknown or missing codecs. Automatic codec download has historically been a malware delivery vector: specially crafted media files embedded codec 'requirements' that redirected to malicious codec installer EXEs from attacker-controlled servers rather than legitimate codec repositories. " +
-                    "The drive-by codec attack vector was prevalent in the Windows XP/Vista era: opening a video file triggers WMP's codec detection, which displays a dialog offering to download from a URL embedded in the media file's codec detection field — which can point to any server. Modern enterprise security policies require that all software (including codecs) be installed through approved channels (SCCM, Intune). Blocking automatic codec download ensures users cannot inadvertently install unapproved software via a malicious media file.",
-                Tags = ["wmpol", "windows-media-player", "codec", "download", "malware", "drive-by"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "WMP cannot auto-download codecs. Users will see 'codec missing' error for unsupported formats. Enterprise codec deployments via SCCM/Intune unaffected.",
-                ApplyOps = [RegOp.SetDword(Key, "PreventCodecDownload", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "PreventCodecDownload")],
-                DetectOps = [RegOp.CheckDword(Key, "PreventCodecDownload", 1)],
-            },
-            new TweakDef
-            {
-                Id = "wmpol-disable-auto-update",
-                Label = "WMP: Disable Windows Media Player Automatic Online Update Check",
-                Category = "System",
-                Description = "Sets DisableAutoUpdate=1 in Windows Media Player policy. Prevents Windows Media Player from automatically checking for updates and new functionality online. WMP update checks contact Microsoft servers on every WMP launch, contributing to outbound telemetry traffic and potentially introducing version changes to a controlled software baseline. " +
-                    "On enterprise-managed systems where application updates are managed by WSUS or SCCM, unsolicited update checks by individual applications create unpredictable patching timelines. WMP updates have in the past introduced new codec support, UI changes, and DRM policy updates that required revalidation by enterprise compatibility teams. Disabling auto-update ensures WMP version state is controlled exclusively by IT-managed patching processes.",
-                Tags = ["wmpol", "windows-media-player", "auto-update", "baseline", "wsus"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                ImpactNote = "WMP update checks disabled. Updates delivered via WSUS/Windows Update instead of direct WMP check. No functional impact on media playback.",
-                ApplyOps = [RegOp.SetDword(Key, "DisableAutoUpdate", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "DisableAutoUpdate")],
-                DetectOps = [RegOp.CheckDword(Key, "DisableAutoUpdate", 1)],
-            },
-            new TweakDef
-            {
-                Id = "wmpol-disable-network-settings",
-                Label = "WMP: Prevent User Modification of Network Streaming Settings",
-                Category = "System",
-                Description = "Sets DisableNetworkSettings=1 in Windows Media Player policy. Prevents users from modifying Windows Media Player network settings (streaming protocol selection, proxy configuration, bandwidth usage). On corporate networks, streaming settings should be configured by IT to ensure WMP uses approved proxy settings and consumption limits, preventing users from configuring direct internet streaming paths that bypass proxy inspection. " +
-                    "WMP network settings include the ability to configure RTSP and HTTP streaming protocol preferences and proxy exclusion lists. A user who configures WMP to bypass the corporate proxy for streaming sources creates an uninspected traffic path for internet-sourced audio/video streams. Corporate DLP and web filtering policies rely on all internet traffic flowing through the approved proxy for content inspection. Locking WMP network settings prevents direct-to-internet streaming paths.",
-                Tags = ["wmpol", "windows-media-player", "network-settings", "proxy", "streaming", "dlp"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                ImpactNote = "WMP network settings page locked. Streaming uses system proxy settings configured by IT. Users cannot configure alternative streaming protocol paths.",
-                ApplyOps = [RegOp.SetDword(Key, "DisableNetworkSettings", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "DisableNetworkSettings")],
-                DetectOps = [RegOp.CheckDword(Key, "DisableNetworkSettings", 1)],
-            },
-            new TweakDef
-            {
-                Id = "wmpol-disable-privacy-tab",
-                Label = "WMP: Hide Privacy Settings Tab to Lock in Policy-Configured Privacy Options",
-                Category = "System",
-                Description = "Sets DisablePrivacyTab=1 in Windows Media Player policy. Hides the Privacy tab in Windows Media Player preferences, preventing users from changing privacy settings (DRM licence acquisition, licence backup, Windows Media metafile security, internet radio station access). Hiding the tab ensures IT-configured privacy settings remain in effect and cannot be reversed by end users. " +
-                    "The WMP Privacy tab controls whether WMP sends usage data to Microsoft (Enhanced Playback Experience / CEIP), whether it acquires media player licences automatically, and whether it shows WMP in the Media Guide. In corp environments where these settings are locked by policy, displaying the Privacy tab presents options the user cannot actually save — leading to confusion and support desk calls. Hiding the tab presents a cleaner, policy-consistent experience.",
-                Tags = ["wmpol", "windows-media-player", "privacy-tab", "policy-lock", "drm"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 1,
-                SafetyRating = 5,
-                ImpactNote = "WMP Privacy settings tab hidden. Privacy policy settings enforced by Group Policy regardless of this setting.",
-                ApplyOps = [RegOp.SetDword(Key, "DisablePrivacyTab", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "DisablePrivacyTab")],
-                DetectOps = [RegOp.CheckDword(Key, "DisablePrivacyTab", 1)],
-            },
-            new TweakDef
-            {
-                Id = "wmpol-disable-media-sharing",
-                Label = "WMP: Disable Windows Media Player Media Sharing Service",
-                Category = "System",
-                Description = "Sets DisableMedia​Sharing=1 in Windows Media Player policy (RegSZ). Wait — this should be SetDword. Disabling media sharing prevents the Windows Media Sharing UPnP service from advertising the local media library to other devices on the network. WMP's media sharing exposes a UPnP media server that broadcasts the local music, video, and picture library to all devices on the same subnet. " +
-                    "UPnP-based media sharing is a network discovery and information disclosure risk: the WMP UPnP server exposes a list of all media files in the user's library to any device on the same network (including guest Wi-Fi segments if inter-VLAN routing allows). File names, album metadata, and media thumbnails may contain sensitive information or personal data. On corporate networks, the UPnP media broadcasting also generates multicast traffic that consumes bandwidth and may trigger IDS rules configured to alert on UPnP device announcements from endpoints.",
-                Tags = ["wmpol", "windows-media-player", "media-sharing", "upnp", "network-discovery"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "WMP media sharing (UPnP DLNA) disabled. Media library not advertised on network. Home users who stream to smart TVs will need to re-enable this setting.",
-                ApplyOps = [RegOp.SetDword(Key, "DisableMediaSharingTab", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "DisableMediaSharingTab")],
-                DetectOps = [RegOp.CheckDword(Key, "DisableMediaSharingTab", 1)],
-            },
-            new TweakDef
-            {
-                Id = "wmpol-prevent-drm-internet-access",
-                Label = "WMP: Block DRM Internet Connections for Licence Acquisition",
-                Category = "System",
-                Description = "Sets PolicyDontAllow=1 in Windows Media Player DRM policy (actually PreventDRMUpdate=1 in the main key). Prevents Windows Media Player from connecting to internet-hosted DRM (Digital Rights Management) licence servers to acquire, update, or backup media playback licences. DRM licence acquisition involves contacting Microsoft PlayReady servers and potentially third-party vendor licence servers based on the media file's licence URL embedded in the WRM header. " +
-                    "DRM internet connections are an outbound channel that operates based on media file content: a specially crafted WMA/WMV file with a malicious licence acquisition URL will cause WMP to reach out to an attacker-controlled server for licence validation — generating an outbound HTTP request to an external host triggered by opening a media file. This is a data exfiltration vector for leaking internal host information (IP address, Windows Media identifier, user details) to external servers via the licence request header.",
-                Tags = ["wmpol", "windows-media-player", "drm", "licence-acquisition", "outbound-dns", "data-exfiltration"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "WMP DRM licence internet acquisition blocked. DRM-protected media files that require new licence download will not play. Locally cached licences still usable.",
-                ApplyOps = [RegOp.SetDword(Key, "PreventDRMUpdate", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "PreventDRMUpdate")],
-                DetectOps = [RegOp.CheckDword(Key, "PreventDRMUpdate", 1)],
-            },
-            new TweakDef
-            {
-                Id = "wmpol-prevent-media-information-retrieval",
-                Label = "WMP: Prevent Automatic Online Media Information Retrieval",
-                Category = "System",
-                Description = "Sets PreventMediaRetrieval=1 in Windows Media Player policy. Prevents Windows Media Player from automatically sending the names of media files being played to Microsoft's online content service to retrieve album art, track information, lyrics, and related metadata. This retrieval exposes media file names and playing history to Microsoft's servers. " +
-                    "Automatic media information retrieval sends the track title, artist name, and album to Microsoft's media content service (previously WindowsMedia.com, now Microsoft's CDN) for every media file opened in WMP. In healthcare or legal environments, media files may have confidential file names (patient ID numbers, case numbers, attorney names in video deposition recordings). Transmitting these file names to external servers violates data minimisation principles under GDPR and HIPAA. Disabling retrieval ensures locally held media metadata is not transmitted externally.",
-                Tags = ["wmpol", "windows-media-player", "media-metadata", "privacy", "album-art", "gdpr"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                ImpactNote = "WMP does not retrieve online metadata. Album art, track info, and lyrics not downloaded from Microsoft servers. Locally embedded metadata still displayed.",
-                ApplyOps = [RegOp.SetDword(Key, "PreventMediaRetrieval", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "PreventMediaRetrieval")],
-                DetectOps = [RegOp.CheckDword(Key, "PreventMediaRetrieval", 1)],
-            },
-            new TweakDef
-            {
-                Id = "wmpol-hide-music-library-tab",
-                Label = "WMP: Hide Music Library Tab to Prevent Windows Media Player Library Exposure",
-                Category = "System",
-                Description = "Sets DisableMusicLibraryTab=1 in Windows Media Player policy. Hides the Music library tab in the WMP Library view, preventing the Windows Media Player library from being browsed by other applications or users via the WMP COM API or shell integration. The WMP library database (containing all indexed media file paths) is accessible via COM to any application with the user's privilege level. " +
-                    "Windows Media Player maintains an indexed library database of all media files accessible on the system, stored in %LocalAppData%\\Microsoft\\Media Player\\. The library database contains full file paths, playback statistics, and metadata for all media files the user has played. Malware running under the user context can query the WMP COM interface to enumerate all media files, obtaining a list of all file paths in the user's media collection — a comprehensive directory traversal without requiring file system access. Hiding the Music Library tab also removes the WMP library sharing surface area.",
-                Tags = ["wmpol", "windows-media-player", "library", "com-api", "privacy", "data-enumeration"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                ImpactNote = "WMP Music Library tab hidden. Does not prevent WMP COM API access but removes the browsable surface. Full library protection requires disabling WMP entirely.",
-                ApplyOps = [RegOp.SetDword(Key, "DisableMusicLibraryTab", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "DisableMusicLibraryTab")],
-                DetectOps = [RegOp.CheckDword(Key, "DisableMusicLibraryTab", 1)],
-            },
-            new TweakDef
-            {
-                Id = "wmpol-prevent-desktop-shortcut",
-                Label = "WMP: Suppress Windows Media Player Desktop Shortcut Creation",
-                Category = "System",
-                Description = "Sets PreventDesktopShortcutCreation=1 in Windows Media Player policy. Prevents Windows Media Player from creating or re-creating a desktop shortcut after updates or new user profile setup. On managed enterprise desktops, the shortcut layout is controlled by IT policy and unexpected shortcuts (including WMP shortcuts re-created after each feature update) violate the managed desktop configuration. " +
-                    "Like the SkyDrive desktop shortcut policy, Windows Media Player has a history of re-creating its desktop shortcut after major Windows Updates, particularly after Media Pack installations in Windows N/KN editions where Media Player is added. Suppressing creation via policy ensures the shortcut stays absent without requiring GPO shortcut deletion scripts.",
-                Tags = ["wmpol", "windows-media-player", "desktop-shortcut", "managed-desktop", "enterprise"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 1,
-                SafetyRating = 5,
-                ImpactNote = "WMP desktop shortcut creation suppressed. WMP still accessible via Start menu and as default media handler. No functional impact.",
-                ApplyOps = [RegOp.SetDword(Key, "PreventDesktopShortcutCreation", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "PreventDesktopShortcutCreation")],
-                DetectOps = [RegOp.CheckDword(Key, "PreventDesktopShortcutCreation", 1)],
-            },
-            new TweakDef
-            {
-                Id = "wmpol-prevent-radio-access",
-                Label = "WMP: Disable Internet Radio Access in Windows Media Player",
-                Category = "System",
-                Description = "Sets DisableRadioBar=1 in Windows Media Player policy. Disables the Windows Media Player internet radio feature and radio bar UI, preventing users from streaming internet radio stations through WMP. Internet radio streaming creates a persistent outbound streaming connection on a potentially high-bandwidth audio stream that bypasses content filtering proxies that only filter HTTP web traffic. " +
-                    "Internet radio streaming in WMP uses RTSP and HTTP streaming protocols directly to external radio station servers. These connections are not inspected by web content filtering proxies that focus on HTTP page content. A persistent audio stream connection to an external server also creates a long-lived outbound connection that some SIEM rules identify as potential C2 beacon traffic — generating false positive alerts that consume SOC analyst time. Disabling internet radio access eliminates this uninspected outbound streaming channel.",
-                Tags = ["wmpol", "windows-media-player", "internet-radio", "streaming", "rtsp", "c2-detection"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                ImpactNote = "WMP internet radio feature disabled. Users cannot stream internet radio via WMP. No impact on local media file playback.",
-                ApplyOps = [RegOp.SetDword(Key, "DisableRadioBar", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "DisableRadioBar")],
-                DetectOps = [RegOp.CheckDword(Key, "DisableRadioBar", 1)],
-            },
-        ];
-
+            [
+                new TweakDef
+                {
+                    Id = "wmpol-prevent-codec-download",
+                    Label = "WMP: Prevent Automatic Codec Download from the Internet",
+                    Category = "System",
+                    Description =
+                        "Sets PreventCodecDownload=1 in Windows Media Player policy. Prevents Windows Media Player from automatically downloading codecs from the internet to play media files that use unknown or missing codecs. Automatic codec download has historically been a malware delivery vector: specially crafted media files embedded codec 'requirements' that redirected to malicious codec installer EXEs from attacker-controlled servers rather than legitimate codec repositories. "
+                        + "The drive-by codec attack vector was prevalent in the Windows XP/Vista era: opening a video file triggers WMP's codec detection, which displays a dialog offering to download from a URL embedded in the media file's codec detection field — which can point to any server. Modern enterprise security policies require that all software (including codecs) be installed through approved channels (SCCM, Intune). Blocking automatic codec download ensures users cannot inadvertently install unapproved software via a malicious media file.",
+                    Tags = ["wmpol", "windows-media-player", "codec", "download", "malware", "drive-by"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote =
+                        "WMP cannot auto-download codecs. Users will see 'codec missing' error for unsupported formats. Enterprise codec deployments via SCCM/Intune unaffected.",
+                    ApplyOps = [RegOp.SetDword(Key, "PreventCodecDownload", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "PreventCodecDownload")],
+                    DetectOps = [RegOp.CheckDword(Key, "PreventCodecDownload", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "wmpol-disable-auto-update",
+                    Label = "WMP: Disable Windows Media Player Automatic Online Update Check",
+                    Category = "System",
+                    Description =
+                        "Sets DisableAutoUpdate=1 in Windows Media Player policy. Prevents Windows Media Player from automatically checking for updates and new functionality online. WMP update checks contact Microsoft servers on every WMP launch, contributing to outbound telemetry traffic and potentially introducing version changes to a controlled software baseline. "
+                        + "On enterprise-managed systems where application updates are managed by WSUS or SCCM, unsolicited update checks by individual applications create unpredictable patching timelines. WMP updates have in the past introduced new codec support, UI changes, and DRM policy updates that required revalidation by enterprise compatibility teams. Disabling auto-update ensures WMP version state is controlled exclusively by IT-managed patching processes.",
+                    Tags = ["wmpol", "windows-media-player", "auto-update", "baseline", "wsus"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 2,
+                    SafetyRating = 5,
+                    ImpactNote =
+                        "WMP update checks disabled. Updates delivered via WSUS/Windows Update instead of direct WMP check. No functional impact on media playback.",
+                    ApplyOps = [RegOp.SetDword(Key, "DisableAutoUpdate", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "DisableAutoUpdate")],
+                    DetectOps = [RegOp.CheckDword(Key, "DisableAutoUpdate", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "wmpol-disable-network-settings",
+                    Label = "WMP: Prevent User Modification of Network Streaming Settings",
+                    Category = "System",
+                    Description =
+                        "Sets DisableNetworkSettings=1 in Windows Media Player policy. Prevents users from modifying Windows Media Player network settings (streaming protocol selection, proxy configuration, bandwidth usage). On corporate networks, streaming settings should be configured by IT to ensure WMP uses approved proxy settings and consumption limits, preventing users from configuring direct internet streaming paths that bypass proxy inspection. "
+                        + "WMP network settings include the ability to configure RTSP and HTTP streaming protocol preferences and proxy exclusion lists. A user who configures WMP to bypass the corporate proxy for streaming sources creates an uninspected traffic path for internet-sourced audio/video streams. Corporate DLP and web filtering policies rely on all internet traffic flowing through the approved proxy for content inspection. Locking WMP network settings prevents direct-to-internet streaming paths.",
+                    Tags = ["wmpol", "windows-media-player", "network-settings", "proxy", "streaming", "dlp"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 2,
+                    SafetyRating = 5,
+                    ImpactNote =
+                        "WMP network settings page locked. Streaming uses system proxy settings configured by IT. Users cannot configure alternative streaming protocol paths.",
+                    ApplyOps = [RegOp.SetDword(Key, "DisableNetworkSettings", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "DisableNetworkSettings")],
+                    DetectOps = [RegOp.CheckDword(Key, "DisableNetworkSettings", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "wmpol-disable-privacy-tab",
+                    Label = "WMP: Hide Privacy Settings Tab to Lock in Policy-Configured Privacy Options",
+                    Category = "System",
+                    Description =
+                        "Sets DisablePrivacyTab=1 in Windows Media Player policy. Hides the Privacy tab in Windows Media Player preferences, preventing users from changing privacy settings (DRM licence acquisition, licence backup, Windows Media metafile security, internet radio station access). Hiding the tab ensures IT-configured privacy settings remain in effect and cannot be reversed by end users. "
+                        + "The WMP Privacy tab controls whether WMP sends usage data to Microsoft (Enhanced Playback Experience / CEIP), whether it acquires media player licences automatically, and whether it shows WMP in the Media Guide. In corp environments where these settings are locked by policy, displaying the Privacy tab presents options the user cannot actually save — leading to confusion and support desk calls. Hiding the tab presents a cleaner, policy-consistent experience.",
+                    Tags = ["wmpol", "windows-media-player", "privacy-tab", "policy-lock", "drm"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 1,
+                    SafetyRating = 5,
+                    ImpactNote = "WMP Privacy settings tab hidden. Privacy policy settings enforced by Group Policy regardless of this setting.",
+                    ApplyOps = [RegOp.SetDword(Key, "DisablePrivacyTab", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "DisablePrivacyTab")],
+                    DetectOps = [RegOp.CheckDword(Key, "DisablePrivacyTab", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "wmpol-disable-media-sharing",
+                    Label = "WMP: Disable Windows Media Player Media Sharing Service",
+                    Category = "System",
+                    Description =
+                        "Sets DisableMedia​Sharing=1 in Windows Media Player policy (RegSZ). Wait — this should be SetDword. Disabling media sharing prevents the Windows Media Sharing UPnP service from advertising the local media library to other devices on the network. WMP's media sharing exposes a UPnP media server that broadcasts the local music, video, and picture library to all devices on the same subnet. "
+                        + "UPnP-based media sharing is a network discovery and information disclosure risk: the WMP UPnP server exposes a list of all media files in the user's library to any device on the same network (including guest Wi-Fi segments if inter-VLAN routing allows). File names, album metadata, and media thumbnails may contain sensitive information or personal data. On corporate networks, the UPnP media broadcasting also generates multicast traffic that consumes bandwidth and may trigger IDS rules configured to alert on UPnP device announcements from endpoints.",
+                    Tags = ["wmpol", "windows-media-player", "media-sharing", "upnp", "network-discovery"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote =
+                        "WMP media sharing (UPnP DLNA) disabled. Media library not advertised on network. Home users who stream to smart TVs will need to re-enable this setting.",
+                    ApplyOps = [RegOp.SetDword(Key, "DisableMediaSharingTab", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "DisableMediaSharingTab")],
+                    DetectOps = [RegOp.CheckDword(Key, "DisableMediaSharingTab", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "wmpol-prevent-drm-internet-access",
+                    Label = "WMP: Block DRM Internet Connections for Licence Acquisition",
+                    Category = "System",
+                    Description =
+                        "Sets PolicyDontAllow=1 in Windows Media Player DRM policy (actually PreventDRMUpdate=1 in the main key). Prevents Windows Media Player from connecting to internet-hosted DRM (Digital Rights Management) licence servers to acquire, update, or backup media playback licences. DRM licence acquisition involves contacting Microsoft PlayReady servers and potentially third-party vendor licence servers based on the media file's licence URL embedded in the WRM header. "
+                        + "DRM internet connections are an outbound channel that operates based on media file content: a specially crafted WMA/WMV file with a malicious licence acquisition URL will cause WMP to reach out to an attacker-controlled server for licence validation — generating an outbound HTTP request to an external host triggered by opening a media file. This is a data exfiltration vector for leaking internal host information (IP address, Windows Media identifier, user details) to external servers via the licence request header.",
+                    Tags = ["wmpol", "windows-media-player", "drm", "licence-acquisition", "outbound-dns", "data-exfiltration"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote =
+                        "WMP DRM licence internet acquisition blocked. DRM-protected media files that require new licence download will not play. Locally cached licences still usable.",
+                    ApplyOps = [RegOp.SetDword(Key, "PreventDRMUpdate", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "PreventDRMUpdate")],
+                    DetectOps = [RegOp.CheckDword(Key, "PreventDRMUpdate", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "wmpol-prevent-media-information-retrieval",
+                    Label = "WMP: Prevent Automatic Online Media Information Retrieval",
+                    Category = "System",
+                    Description =
+                        "Sets PreventMediaRetrieval=1 in Windows Media Player policy. Prevents Windows Media Player from automatically sending the names of media files being played to Microsoft's online content service to retrieve album art, track information, lyrics, and related metadata. This retrieval exposes media file names and playing history to Microsoft's servers. "
+                        + "Automatic media information retrieval sends the track title, artist name, and album to Microsoft's media content service (previously WindowsMedia.com, now Microsoft's CDN) for every media file opened in WMP. In healthcare or legal environments, media files may have confidential file names (patient ID numbers, case numbers, attorney names in video deposition recordings). Transmitting these file names to external servers violates data minimisation principles under GDPR and HIPAA. Disabling retrieval ensures locally held media metadata is not transmitted externally.",
+                    Tags = ["wmpol", "windows-media-player", "media-metadata", "privacy", "album-art", "gdpr"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 2,
+                    SafetyRating = 5,
+                    ImpactNote =
+                        "WMP does not retrieve online metadata. Album art, track info, and lyrics not downloaded from Microsoft servers. Locally embedded metadata still displayed.",
+                    ApplyOps = [RegOp.SetDword(Key, "PreventMediaRetrieval", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "PreventMediaRetrieval")],
+                    DetectOps = [RegOp.CheckDword(Key, "PreventMediaRetrieval", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "wmpol-hide-music-library-tab",
+                    Label = "WMP: Hide Music Library Tab to Prevent Windows Media Player Library Exposure",
+                    Category = "System",
+                    Description =
+                        "Sets DisableMusicLibraryTab=1 in Windows Media Player policy. Hides the Music library tab in the WMP Library view, preventing the Windows Media Player library from being browsed by other applications or users via the WMP COM API or shell integration. The WMP library database (containing all indexed media file paths) is accessible via COM to any application with the user's privilege level. "
+                        + "Windows Media Player maintains an indexed library database of all media files accessible on the system, stored in %LocalAppData%\\Microsoft\\Media Player\\. The library database contains full file paths, playback statistics, and metadata for all media files the user has played. Malware running under the user context can query the WMP COM interface to enumerate all media files, obtaining a list of all file paths in the user's media collection — a comprehensive directory traversal without requiring file system access. Hiding the Music Library tab also removes the WMP library sharing surface area.",
+                    Tags = ["wmpol", "windows-media-player", "library", "com-api", "privacy", "data-enumeration"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 2,
+                    SafetyRating = 5,
+                    ImpactNote =
+                        "WMP Music Library tab hidden. Does not prevent WMP COM API access but removes the browsable surface. Full library protection requires disabling WMP entirely.",
+                    ApplyOps = [RegOp.SetDword(Key, "DisableMusicLibraryTab", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "DisableMusicLibraryTab")],
+                    DetectOps = [RegOp.CheckDword(Key, "DisableMusicLibraryTab", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "wmpol-prevent-desktop-shortcut",
+                    Label = "WMP: Suppress Windows Media Player Desktop Shortcut Creation",
+                    Category = "System",
+                    Description =
+                        "Sets PreventDesktopShortcutCreation=1 in Windows Media Player policy. Prevents Windows Media Player from creating or re-creating a desktop shortcut after updates or new user profile setup. On managed enterprise desktops, the shortcut layout is controlled by IT policy and unexpected shortcuts (including WMP shortcuts re-created after each feature update) violate the managed desktop configuration. "
+                        + "Like the SkyDrive desktop shortcut policy, Windows Media Player has a history of re-creating its desktop shortcut after major Windows Updates, particularly after Media Pack installations in Windows N/KN editions where Media Player is added. Suppressing creation via policy ensures the shortcut stays absent without requiring GPO shortcut deletion scripts.",
+                    Tags = ["wmpol", "windows-media-player", "desktop-shortcut", "managed-desktop", "enterprise"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 1,
+                    SafetyRating = 5,
+                    ImpactNote =
+                        "WMP desktop shortcut creation suppressed. WMP still accessible via Start menu and as default media handler. No functional impact.",
+                    ApplyOps = [RegOp.SetDword(Key, "PreventDesktopShortcutCreation", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "PreventDesktopShortcutCreation")],
+                    DetectOps = [RegOp.CheckDword(Key, "PreventDesktopShortcutCreation", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "wmpol-prevent-radio-access",
+                    Label = "WMP: Disable Internet Radio Access in Windows Media Player",
+                    Category = "System",
+                    Description =
+                        "Sets DisableRadioBar=1 in Windows Media Player policy. Disables the Windows Media Player internet radio feature and radio bar UI, preventing users from streaming internet radio stations through WMP. Internet radio streaming creates a persistent outbound streaming connection on a potentially high-bandwidth audio stream that bypasses content filtering proxies that only filter HTTP web traffic. "
+                        + "Internet radio streaming in WMP uses RTSP and HTTP streaming protocols directly to external radio station servers. These connections are not inspected by web content filtering proxies that focus on HTTP page content. A persistent audio stream connection to an external server also creates a long-lived outbound connection that some SIEM rules identify as potential C2 beacon traffic — generating false positive alerts that consume SOC analyst time. Disabling internet radio access eliminates this uninspected outbound streaming channel.",
+                    Tags = ["wmpol", "windows-media-player", "internet-radio", "streaming", "rtsp", "c2-detection"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 2,
+                    SafetyRating = 5,
+                    ImpactNote =
+                        "WMP internet radio feature disabled. Users cannot stream internet radio via WMP. No impact on local media file playback.",
+                    ApplyOps = [RegOp.SetDword(Key, "DisableRadioBar", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "DisableRadioBar")],
+                    DetectOps = [RegOp.CheckDword(Key, "DisableRadioBar", 1)],
+                },
+            ];
     }
 
     // ── MsdtcPolicy ──
@@ -14238,7 +14414,6 @@ internal static class PolicyMisc
                 DetectOps = [RegOp.CheckDword(MsDtcSec, "LuTransactions", 0)],
             },
         ];
-
     }
 
     // ── RestartManagerPolicy ──
@@ -14419,7 +14594,6 @@ internal static class PolicyMisc
                 DetectOps = [RegOp.CheckDword(Key, "DisableGracefulShutdown", 0)],
             },
         ];
-
     }
 
     // ── SystemRecoveryOptionsPolicy ──
@@ -14600,7 +14774,6 @@ internal static class PolicyMisc
                     DetectOps = [RegOp.CheckDword(RecKey, "DisableMemoryDiagnostics", 1)],
                 },
             ];
-
     }
 
     // ── SystemRestoreGpoPolicy ──
@@ -14763,7 +14936,6 @@ internal static class PolicyMisc
                 DetectOps = [RegOp.CheckDword(SrSettings, "PreventIncrementalRestorations", 1)],
             },
         ];
-
     }
 
     // ── TimeSyncAdvPolicy ──
@@ -14945,7 +15117,6 @@ internal static class PolicyMisc
                     DetectOps = [RegOp.CheckDword(CfgKey, "EventLogFlags", 3)],
                 },
             ];
-
     }
 
     // ── TimeServicePolicy ──
@@ -14956,176 +15127,184 @@ internal static class PolicyMisc
         private const string CfgKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\W32Time\Config";
 
         public static IReadOnlyList<TweakDef> Data =>
-        [
-            new TweakDef
-            {
-                Id           = "timepol-require-secure-time-provider",
-                Label        = "Require Authenticated NTP Time Source for W32Time",
-                Category = "System",
-                Description  = "Configures Windows Time Service to use only authenticated NTP time sources (symmetric key mode or MS-SNTP), preventing time set via unauthenticated NTP which could be used to replay expired Kerberos tickets or HSTS bypass.",
-                Tags         = ["w32time", "ntp", "authenticated", "kerberos", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 4,
-                SafetyRating = 5,
-                ImpactNote   = "Authenticated NTP required; unauthenticated time sources rejected. Prevents Kerberos ticket replay via time skew.",
-                ApplyOps     = [RegOp.SetString(Key, "Type", "NT5DS")],
-                RemoveOps    = [RegOp.DeleteValue(Key, "Type")],
-                DetectOps    = [RegOp.CheckString(Key, "Type", "NT5DS")],
-            },
-            new TweakDef
-            {
-                Id           = "timepol-set-ntp-server-domain",
-                Label        = "Set NTP Server to Domain Hierarchy (Domain Synchronisation)",
-                Category = "System",
-                Description  = "Configures Windows Time Service to synchronise time from the Active Directory domain hierarchy (PDC emulator chain), ensuring all domain-joined machines use a consistent, domain-controlled time source.",
-                Tags         = ["w32time", "ntp", "domain", "active-directory", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 3,
-                SafetyRating = 5,
-                ImpactNote   = "Time synchronisation set to domain hierarchy; all machines use PDC emulator chain as time source.",
-                ApplyOps     = [RegOp.SetString(PrvKey, "NtpServer", "")],
-                RemoveOps    = [RegOp.DeleteValue(PrvKey, "NtpServer")],
-                DetectOps    = [RegOp.CheckString(PrvKey, "NtpServer", "")],
-            },
-            new TweakDef
-            {
-                Id           = "timepol-set-max-pos-phase-correction",
-                Label        = "Set Maximum Positive Time Correction to 3600 Seconds",
-                Category = "System",
-                Description  = "Limits the maximum positive time jump that W32TM will accept in a single synchronisation to 3600 seconds (1 hour), preventing an attacker from jumping the system clock forward to expire Kerberos tickets or bypass time-based security checks.",
-                Tags         = ["w32time", "time-correction", "max-jump", "security", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 3,
-                SafetyRating = 5,
-                ImpactNote   = "Maximum positive NTP clock adjustment limited to 1 hour; large forward time jumps blocked.",
-                ApplyOps     = [RegOp.SetDword(CfgKey, "MaxPosPhaseCorrection", 3600)],
-                RemoveOps    = [RegOp.DeleteValue(CfgKey, "MaxPosPhaseCorrection")],
-                DetectOps    = [RegOp.CheckDword(CfgKey, "MaxPosPhaseCorrection", 3600)],
-            },
-            new TweakDef
-            {
-                Id           = "timepol-set-max-neg-phase-correction",
-                Label        = "Set Maximum Negative Time Correction to 3600 Seconds",
-                Category = "System",
-                Description  = "Limits the maximum negative time jump (clock backward adjustment) to 3600 seconds (1 hour), preventing attacks that move the clock backward to re-validate already-expired certificates or Kerberos tickets.",
-                Tags         = ["w32time", "time-correction", "max-jump-backward", "security", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 3,
-                SafetyRating = 5,
-                ImpactNote   = "Maximum negative NTP clock adjustment limited to 1 hour; backward time jumps to replay tickets blocked.",
-                ApplyOps     = [RegOp.SetDword(CfgKey, "MaxNegPhaseCorrection", 3600)],
-                RemoveOps    = [RegOp.DeleteValue(CfgKey, "MaxNegPhaseCorrection")],
-                DetectOps    = [RegOp.CheckDword(CfgKey, "MaxNegPhaseCorrection", 3600)],
-            },
-            new TweakDef
-            {
-                Id           = "timepol-log-time-jumps",
-                Label        = "Log Large Time Synchronisation Jumps in System Log",
-                Category = "System",
-                Description  = "Enables System event log entries (EventID 35 — W32TM) when the clock is adjusted by more than 2 minutes due to a time synchronisation event, providing visibility into significant time changes for security auditing.",
-                Tags         = ["w32time", "event-log", "audit", "time-jump", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 3,
-                SafetyRating = 5,
-                ImpactNote   = "Large time jump events logged in System log; significant NTP-driven clock changes visible for auditing.",
-                ApplyOps     = [RegOp.SetDword(CfgKey, "LogJumpEvents", 1)],
-                RemoveOps    = [RegOp.DeleteValue(CfgKey, "LogJumpEvents")],
-                DetectOps    = [RegOp.CheckDword(CfgKey, "LogJumpEvents", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "timepol-set-poll-interval",
-                Label        = "Set NTP Poll Interval to 3600 Seconds for Time Accuracy",
-                Category = "System",
-                Description  = "Sets the Windows Time Service NTP client poll interval to 3600 seconds (1 hour), balancing clock accuracy with network traffic, replacing the default variable 17-bit interval that can allow clocks to drift for many hours.",
-                Tags         = ["w32time", "ntp", "poll-interval", "clock-accuracy", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 2,
-                SafetyRating = 5,
-                ImpactNote   = "NTP poll interval fixed at 1 hour; clock drift limited to less than 1 hour between synchronisations.",
-                ApplyOps     = [RegOp.SetDword(PrvKey, "SpecialPollInterval", 3600)],
-                RemoveOps    = [RegOp.DeleteValue(PrvKey, "SpecialPollInterval")],
-                DetectOps    = [RegOp.CheckDword(PrvKey, "SpecialPollInterval", 3600)],
-            },
-            new TweakDef
-            {
-                Id           = "timepol-disable-w32time-telemetry",
-                Label        = "Disable Windows Time Service Telemetry to Microsoft",
-                Category = "System",
-                Description  = "Prevents the Windows Time Service from sending time synchronisation success/failure rates, configured time source, and clock offset telemetry to Microsoft.",
-                Tags         = ["w32time", "telemetry", "privacy", "microsoft", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 2,
-                SafetyRating = 5,
-                ImpactNote   = "W32TM telemetry to Microsoft disabled; time sync stats and configured source not sent to cloud.",
-                ApplyOps     = [RegOp.SetDword(CfgKey, "DisableTelemetry", 1)],
-                RemoveOps    = [RegOp.DeleteValue(CfgKey, "DisableTelemetry")],
-                DetectOps    = [RegOp.CheckDword(CfgKey, "DisableTelemetry", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "timepol-block-time-provider-change",
-                Label        = "Block Standard Users from Changing Time Synchronisation Provider",
-                Category = "System",
-                Description  = "Prevents standard users from changing the Windows Time Service provider configuration, ensuring time source and authentication settings can only be changed by administrators.",
-                Tags         = ["w32time", "provider", "standard-user", "admin", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 3,
-                SafetyRating = 5,
-                ImpactNote   = "Time provider change blocked for standard users; NTP source and auth settings admin-only.",
-                ApplyOps     = [RegOp.SetDword(CfgKey, "BlockUserTimeProviderChange", 1)],
-                RemoveOps    = [RegOp.DeleteValue(CfgKey, "BlockUserTimeProviderChange")],
-                DetectOps    = [RegOp.CheckDword(CfgKey, "BlockUserTimeProviderChange", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "timepol-enable-hyperv-time-correction",
-                Label        = "Enable Hyper-V Time Synchronisation Guest Correction",
-                Category = "System",
-                Description  = "Ensures that VMs running in Hyper-V synchronise their clocks from the Hyper-V host's time source rather than from an NTP server, preventing VM clock drift from causing Kerberos authentication failures in guest environments.",
-                Tags         = ["w32time", "hyper-v", "time-sync", "vm", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 3,
-                SafetyRating = 5,
-                ImpactNote   = "Hyper-V VM time synchronisation from host enabled; VM clock maintained via VMBus, not NTP.",
-                ApplyOps     = [RegOp.SetDword(PrvKey, "Enabled", 1)],
-                RemoveOps    = [RegOp.DeleteValue(PrvKey, "Enabled")],
-                DetectOps    = [RegOp.CheckDword(PrvKey, "Enabled", 1)],
-            },
-            new TweakDef
-            {
-                Id           = "timepol-harden-stratum-1-sources",
-                Label        = "Restrict Windows Time to Stratum-1 or Stratum-2 Sources Only",
-                Category = "System",
-                Description  = "Configures Windows Time Service to reject time sources below Stratum 2 quality, preventing synchronisation with inaccurate or potentially manipulated Stratum-8 or worse NTP sources.",
-                Tags         = ["w32time", "ntp", "stratum", "accuracy", "policy"],
-                NeedsAdmin   = true,
-                CorpSafe     = true,
-                ImpactScore  = 3,
-                SafetyRating = 5,
-                ImpactNote   = "NTP sources limited to Stratum 1-2; inaccurate high-stratum sources rejected for time synchronisation.",
-                ApplyOps     = [RegOp.SetDword(CfgKey, "MaxAllowedPhaseOffset", 300)],
-                RemoveOps    = [RegOp.DeleteValue(CfgKey, "MaxAllowedPhaseOffset")],
-                DetectOps    = [RegOp.CheckDword(CfgKey, "MaxAllowedPhaseOffset", 300)],
-            },
-        ];
-
+            [
+                new TweakDef
+                {
+                    Id = "timepol-require-secure-time-provider",
+                    Label = "Require Authenticated NTP Time Source for W32Time",
+                    Category = "System",
+                    Description =
+                        "Configures Windows Time Service to use only authenticated NTP time sources (symmetric key mode or MS-SNTP), preventing time set via unauthenticated NTP which could be used to replay expired Kerberos tickets or HSTS bypass.",
+                    Tags = ["w32time", "ntp", "authenticated", "kerberos", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "Authenticated NTP required; unauthenticated time sources rejected. Prevents Kerberos ticket replay via time skew.",
+                    ApplyOps = [RegOp.SetString(Key, "Type", "NT5DS")],
+                    RemoveOps = [RegOp.DeleteValue(Key, "Type")],
+                    DetectOps = [RegOp.CheckString(Key, "Type", "NT5DS")],
+                },
+                new TweakDef
+                {
+                    Id = "timepol-set-ntp-server-domain",
+                    Label = "Set NTP Server to Domain Hierarchy (Domain Synchronisation)",
+                    Category = "System",
+                    Description =
+                        "Configures Windows Time Service to synchronise time from the Active Directory domain hierarchy (PDC emulator chain), ensuring all domain-joined machines use a consistent, domain-controlled time source.",
+                    Tags = ["w32time", "ntp", "domain", "active-directory", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "Time synchronisation set to domain hierarchy; all machines use PDC emulator chain as time source.",
+                    ApplyOps = [RegOp.SetString(PrvKey, "NtpServer", "")],
+                    RemoveOps = [RegOp.DeleteValue(PrvKey, "NtpServer")],
+                    DetectOps = [RegOp.CheckString(PrvKey, "NtpServer", "")],
+                },
+                new TweakDef
+                {
+                    Id = "timepol-set-max-pos-phase-correction",
+                    Label = "Set Maximum Positive Time Correction to 3600 Seconds",
+                    Category = "System",
+                    Description =
+                        "Limits the maximum positive time jump that W32TM will accept in a single synchronisation to 3600 seconds (1 hour), preventing an attacker from jumping the system clock forward to expire Kerberos tickets or bypass time-based security checks.",
+                    Tags = ["w32time", "time-correction", "max-jump", "security", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "Maximum positive NTP clock adjustment limited to 1 hour; large forward time jumps blocked.",
+                    ApplyOps = [RegOp.SetDword(CfgKey, "MaxPosPhaseCorrection", 3600)],
+                    RemoveOps = [RegOp.DeleteValue(CfgKey, "MaxPosPhaseCorrection")],
+                    DetectOps = [RegOp.CheckDword(CfgKey, "MaxPosPhaseCorrection", 3600)],
+                },
+                new TweakDef
+                {
+                    Id = "timepol-set-max-neg-phase-correction",
+                    Label = "Set Maximum Negative Time Correction to 3600 Seconds",
+                    Category = "System",
+                    Description =
+                        "Limits the maximum negative time jump (clock backward adjustment) to 3600 seconds (1 hour), preventing attacks that move the clock backward to re-validate already-expired certificates or Kerberos tickets.",
+                    Tags = ["w32time", "time-correction", "max-jump-backward", "security", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "Maximum negative NTP clock adjustment limited to 1 hour; backward time jumps to replay tickets blocked.",
+                    ApplyOps = [RegOp.SetDword(CfgKey, "MaxNegPhaseCorrection", 3600)],
+                    RemoveOps = [RegOp.DeleteValue(CfgKey, "MaxNegPhaseCorrection")],
+                    DetectOps = [RegOp.CheckDword(CfgKey, "MaxNegPhaseCorrection", 3600)],
+                },
+                new TweakDef
+                {
+                    Id = "timepol-log-time-jumps",
+                    Label = "Log Large Time Synchronisation Jumps in System Log",
+                    Category = "System",
+                    Description =
+                        "Enables System event log entries (EventID 35 — W32TM) when the clock is adjusted by more than 2 minutes due to a time synchronisation event, providing visibility into significant time changes for security auditing.",
+                    Tags = ["w32time", "event-log", "audit", "time-jump", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "Large time jump events logged in System log; significant NTP-driven clock changes visible for auditing.",
+                    ApplyOps = [RegOp.SetDword(CfgKey, "LogJumpEvents", 1)],
+                    RemoveOps = [RegOp.DeleteValue(CfgKey, "LogJumpEvents")],
+                    DetectOps = [RegOp.CheckDword(CfgKey, "LogJumpEvents", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "timepol-set-poll-interval",
+                    Label = "Set NTP Poll Interval to 3600 Seconds for Time Accuracy",
+                    Category = "System",
+                    Description =
+                        "Sets the Windows Time Service NTP client poll interval to 3600 seconds (1 hour), balancing clock accuracy with network traffic, replacing the default variable 17-bit interval that can allow clocks to drift for many hours.",
+                    Tags = ["w32time", "ntp", "poll-interval", "clock-accuracy", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 2,
+                    SafetyRating = 5,
+                    ImpactNote = "NTP poll interval fixed at 1 hour; clock drift limited to less than 1 hour between synchronisations.",
+                    ApplyOps = [RegOp.SetDword(PrvKey, "SpecialPollInterval", 3600)],
+                    RemoveOps = [RegOp.DeleteValue(PrvKey, "SpecialPollInterval")],
+                    DetectOps = [RegOp.CheckDword(PrvKey, "SpecialPollInterval", 3600)],
+                },
+                new TweakDef
+                {
+                    Id = "timepol-disable-w32time-telemetry",
+                    Label = "Disable Windows Time Service Telemetry to Microsoft",
+                    Category = "System",
+                    Description =
+                        "Prevents the Windows Time Service from sending time synchronisation success/failure rates, configured time source, and clock offset telemetry to Microsoft.",
+                    Tags = ["w32time", "telemetry", "privacy", "microsoft", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 2,
+                    SafetyRating = 5,
+                    ImpactNote = "W32TM telemetry to Microsoft disabled; time sync stats and configured source not sent to cloud.",
+                    ApplyOps = [RegOp.SetDword(CfgKey, "DisableTelemetry", 1)],
+                    RemoveOps = [RegOp.DeleteValue(CfgKey, "DisableTelemetry")],
+                    DetectOps = [RegOp.CheckDword(CfgKey, "DisableTelemetry", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "timepol-block-time-provider-change",
+                    Label = "Block Standard Users from Changing Time Synchronisation Provider",
+                    Category = "System",
+                    Description =
+                        "Prevents standard users from changing the Windows Time Service provider configuration, ensuring time source and authentication settings can only be changed by administrators.",
+                    Tags = ["w32time", "provider", "standard-user", "admin", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "Time provider change blocked for standard users; NTP source and auth settings admin-only.",
+                    ApplyOps = [RegOp.SetDword(CfgKey, "BlockUserTimeProviderChange", 1)],
+                    RemoveOps = [RegOp.DeleteValue(CfgKey, "BlockUserTimeProviderChange")],
+                    DetectOps = [RegOp.CheckDword(CfgKey, "BlockUserTimeProviderChange", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "timepol-enable-hyperv-time-correction",
+                    Label = "Enable Hyper-V Time Synchronisation Guest Correction",
+                    Category = "System",
+                    Description =
+                        "Ensures that VMs running in Hyper-V synchronise their clocks from the Hyper-V host's time source rather than from an NTP server, preventing VM clock drift from causing Kerberos authentication failures in guest environments.",
+                    Tags = ["w32time", "hyper-v", "time-sync", "vm", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "Hyper-V VM time synchronisation from host enabled; VM clock maintained via VMBus, not NTP.",
+                    ApplyOps = [RegOp.SetDword(PrvKey, "Enabled", 1)],
+                    RemoveOps = [RegOp.DeleteValue(PrvKey, "Enabled")],
+                    DetectOps = [RegOp.CheckDword(PrvKey, "Enabled", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "timepol-harden-stratum-1-sources",
+                    Label = "Restrict Windows Time to Stratum-1 or Stratum-2 Sources Only",
+                    Category = "System",
+                    Description =
+                        "Configures Windows Time Service to reject time sources below Stratum 2 quality, preventing synchronisation with inaccurate or potentially manipulated Stratum-8 or worse NTP sources.",
+                    Tags = ["w32time", "ntp", "stratum", "accuracy", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "NTP sources limited to Stratum 1-2; inaccurate high-stratum sources rejected for time synchronisation.",
+                    ApplyOps = [RegOp.SetDword(CfgKey, "MaxAllowedPhaseOffset", 300)],
+                    RemoveOps = [RegOp.DeleteValue(CfgKey, "MaxAllowedPhaseOffset")],
+                    DetectOps = [RegOp.CheckDword(CfgKey, "MaxAllowedPhaseOffset", 300)],
+                },
+            ];
     }
 
     // ── WindowsAnytimeUpgradePolicy ──
     private static class _WindowsAnytimeUpgradePolicy
     {
-        private const string Key =
-            @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsAnytimeUpgrade";
+        private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsAnytimeUpgrade";
 
         public static IReadOnlyList<TweakDef> Data =>
             [
@@ -15300,7 +15479,6 @@ internal static class PolicyMisc
                     DetectOps = [RegOp.CheckDword(Key, "DisableTrialConversion", 1)],
                 },
             ];
-
     }
 
     // ── WindowsBackupPolicy ──
@@ -15310,169 +15488,168 @@ internal static class PolicyMisc
         private const string ClientKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Backup\Client";
 
         public static IReadOnlyList<TweakDef> Data =>
-        [
-            new TweakDef
-            {
-                Id = "backup-disable-backup",
-                Label = "Disable Windows Backup",
-                Category = "System",
-                Description = "Disables the Windows Backup feature and prevents users from initiating backups through the control panel.",
-                Tags = ["backup", "windows-backup", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 4,
-                ImpactNote = "Windows Backup is disabled; use third-party or enterprise backup solutions instead.",
-                ApplyOps = [RegOp.SetDword(BackupKey, "DisableBackup", 1)],
-                RemoveOps = [RegOp.DeleteValue(BackupKey, "DisableBackup")],
-                DetectOps = [RegOp.CheckDword(BackupKey, "DisableBackup", 1)],
-            },
-            new TweakDef
-            {
-                Id = "backup-disable-restore",
-                Label = "Disable Windows Backup Restore",
-                Category = "System",
-                Description = "Prevents users from using the Windows Backup restore feature to recover files or system state.",
-                Tags = ["backup", "restore", "windows-backup", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 4,
-                ImpactNote = "Restore via Windows Backup UI is blocked; enterprise recovery tools still function.",
-                ApplyOps = [RegOp.SetDword(BackupKey, "DisableRestore", 1)],
-                RemoveOps = [RegOp.DeleteValue(BackupKey, "DisableRestore")],
-                DetectOps = [RegOp.CheckDword(BackupKey, "DisableRestore", 1)],
-            },
-            new TweakDef
-            {
-                Id = "backup-disable-catalog-viewer",
-                Label = "Disable Windows Backup Catalog Viewer",
-                Category = "System",
-                Description = "Removes access to the Windows Backup catalog viewer preventing browsing of historical backup sets.",
-                Tags = ["backup", "catalog", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                ImpactNote = "Catalog browser is hidden from users; backup files on disk are unaffected.",
-                ApplyOps = [RegOp.SetDword(BackupKey, "DisableCatalogViewer", 1)],
-                RemoveOps = [RegOp.DeleteValue(BackupKey, "DisableCatalogViewer")],
-                DetectOps = [RegOp.CheckDword(BackupKey, "DisableCatalogViewer", 1)],
-            },
-            new TweakDef
-            {
-                Id = "backup-disable-system-backup",
-                Label = "Disable Windows System Backup",
-                Category = "System",
-                Description = "Prevents users from creating system image or system files backups through the Windows Backup UI.",
-                Tags = ["backup", "system-backup", "image", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 4,
-                ImpactNote = "System image creation is blocked; critical for environments using enterprise imaging solutions.",
-                ApplyOps = [RegOp.SetDword(ClientKey, "NoBackupSysFiles", 1)],
-                RemoveOps = [RegOp.DeleteValue(ClientKey, "NoBackupSysFiles")],
-                DetectOps = [RegOp.CheckDword(ClientKey, "NoBackupSysFiles", 1)],
-            },
-            new TweakDef
-            {
-                Id = "backup-suppress-backup-progress-ui",
-                Label = "Suppress Windows Backup Progress Dialog",
-                Category = "System",
-                Description = "Hides the backup progress window and toast notifications that appear during Windows Backup operations.",
-                Tags = ["backup", "ui", "progress", "notifications", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                ImpactNote = "Silent backup mode; no visible progress indicator; check event logs to verify backup completion.",
-                ApplyOps = [RegOp.SetDword(ClientKey, "NoProgressUI", 1)],
-                RemoveOps = [RegOp.DeleteValue(ClientKey, "NoProgressUI")],
-                DetectOps = [RegOp.CheckDword(ClientKey, "NoProgressUI", 1)],
-            },
-            new TweakDef
-            {
-                Id = "backup-disable-online-backup",
-                Label = "Disable Online Backup Services Integration",
-                Category = "System",
-                Description = "Removes the online backup provider options from the Windows Backup configuration wizard.",
-                Tags = ["backup", "online", "cloud", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                ImpactNote = "Cloud backup provider options are removed from the UI; local backup to drives still available.",
-                ApplyOps = [RegOp.SetDword(ClientKey, "NoOnlineBackup", 1)],
-                RemoveOps = [RegOp.DeleteValue(ClientKey, "NoOnlineBackup")],
-                DetectOps = [RegOp.CheckDword(ClientKey, "NoOnlineBackup", 1)],
-            },
-            new TweakDef
-            {
-                Id = "backup-disable-network-backup",
-                Label = "Disable Backup to Network Locations",
-                Category = "System",
-                Description = "Blocks Windows Backup from saving backup sets to network shares or mapped drives.",
-                Tags = ["backup", "network", "share", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 4,
-                ImpactNote = "Prevents backup data exfiltration to network shares; local drives only for Windows Backup.",
-                ApplyOps = [RegOp.SetDword(ClientKey, "NoNetworkBackup", 1)],
-                RemoveOps = [RegOp.DeleteValue(ClientKey, "NoNetworkBackup")],
-                DetectOps = [RegOp.CheckDword(ClientKey, "NoNetworkBackup", 1)],
-            },
-            new TweakDef
-            {
-                Id = "backup-disable-backup-over-metered",
-                Label = "Disable Windows Backup on Metered Connections",
-                Category = "System",
-                Description = "Prevents Windows Backup from running over metered (pay-per-use) network connections.",
-                Tags = ["backup", "metered", "network", "data-usage", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                ImpactNote = "Backup paused on metered connections; resumes automatically on unmetered networks.",
-                ApplyOps = [RegOp.SetDword(ClientKey, "DisableBackupOnMeteredConnections", 1)],
-                RemoveOps = [RegOp.DeleteValue(ClientKey, "DisableBackupOnMeteredConnections")],
-                DetectOps = [RegOp.CheckDword(ClientKey, "DisableBackupOnMeteredConnections", 1)],
-            },
-            new TweakDef
-            {
-                Id = "backup-disable-scheduled-backup",
-                Label = "Disable Scheduled Windows Backup",
-                Category = "System",
-                Description = "Prevents Windows from running scheduled background backups automatically on a configured schedule.",
-                Tags = ["backup", "scheduled", "task", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 4,
-                ImpactNote = "Automatic scheduled backups are disabled; manual backup invocation still works unless DisableBackup is also set.",
-                ApplyOps = [RegOp.SetDword(ClientKey, "NoScheduledBackup", 1)],
-                RemoveOps = [RegOp.DeleteValue(ClientKey, "NoScheduledBackup")],
-                DetectOps = [RegOp.CheckDword(ClientKey, "NoScheduledBackup", 1)],
-            },
-            new TweakDef
-            {
-                Id = "backup-hide-control-panel-link",
-                Label = "Hide Windows Backup Control Panel Link",
-                Category = "System",
-                Description = "Removes the Windows Backup entry from the Control Panel and System & Security settings page.",
-                Tags = ["backup", "control-panel", "ui", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                ImpactNote = "Backup settings UI is hidden; the underlying feature may still be invoked by command line or scripts.",
-                ApplyOps = [RegOp.SetDword(ClientKey, "HideControlPanelLink", 1)],
-                RemoveOps = [RegOp.DeleteValue(ClientKey, "HideControlPanelLink")],
-                DetectOps = [RegOp.CheckDword(ClientKey, "HideControlPanelLink", 1)],
-            },
-        ];
-
+            [
+                new TweakDef
+                {
+                    Id = "backup-disable-backup",
+                    Label = "Disable Windows Backup",
+                    Category = "System",
+                    Description = "Disables the Windows Backup feature and prevents users from initiating backups through the control panel.",
+                    Tags = ["backup", "windows-backup", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 4,
+                    ImpactNote = "Windows Backup is disabled; use third-party or enterprise backup solutions instead.",
+                    ApplyOps = [RegOp.SetDword(BackupKey, "DisableBackup", 1)],
+                    RemoveOps = [RegOp.DeleteValue(BackupKey, "DisableBackup")],
+                    DetectOps = [RegOp.CheckDword(BackupKey, "DisableBackup", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "backup-disable-restore",
+                    Label = "Disable Windows Backup Restore",
+                    Category = "System",
+                    Description = "Prevents users from using the Windows Backup restore feature to recover files or system state.",
+                    Tags = ["backup", "restore", "windows-backup", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 4,
+                    ImpactNote = "Restore via Windows Backup UI is blocked; enterprise recovery tools still function.",
+                    ApplyOps = [RegOp.SetDword(BackupKey, "DisableRestore", 1)],
+                    RemoveOps = [RegOp.DeleteValue(BackupKey, "DisableRestore")],
+                    DetectOps = [RegOp.CheckDword(BackupKey, "DisableRestore", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "backup-disable-catalog-viewer",
+                    Label = "Disable Windows Backup Catalog Viewer",
+                    Category = "System",
+                    Description = "Removes access to the Windows Backup catalog viewer preventing browsing of historical backup sets.",
+                    Tags = ["backup", "catalog", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 2,
+                    SafetyRating = 5,
+                    ImpactNote = "Catalog browser is hidden from users; backup files on disk are unaffected.",
+                    ApplyOps = [RegOp.SetDword(BackupKey, "DisableCatalogViewer", 1)],
+                    RemoveOps = [RegOp.DeleteValue(BackupKey, "DisableCatalogViewer")],
+                    DetectOps = [RegOp.CheckDword(BackupKey, "DisableCatalogViewer", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "backup-disable-system-backup",
+                    Label = "Disable Windows System Backup",
+                    Category = "System",
+                    Description = "Prevents users from creating system image or system files backups through the Windows Backup UI.",
+                    Tags = ["backup", "system-backup", "image", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 4,
+                    ImpactNote = "System image creation is blocked; critical for environments using enterprise imaging solutions.",
+                    ApplyOps = [RegOp.SetDword(ClientKey, "NoBackupSysFiles", 1)],
+                    RemoveOps = [RegOp.DeleteValue(ClientKey, "NoBackupSysFiles")],
+                    DetectOps = [RegOp.CheckDword(ClientKey, "NoBackupSysFiles", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "backup-suppress-backup-progress-ui",
+                    Label = "Suppress Windows Backup Progress Dialog",
+                    Category = "System",
+                    Description = "Hides the backup progress window and toast notifications that appear during Windows Backup operations.",
+                    Tags = ["backup", "ui", "progress", "notifications", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 2,
+                    SafetyRating = 5,
+                    ImpactNote = "Silent backup mode; no visible progress indicator; check event logs to verify backup completion.",
+                    ApplyOps = [RegOp.SetDword(ClientKey, "NoProgressUI", 1)],
+                    RemoveOps = [RegOp.DeleteValue(ClientKey, "NoProgressUI")],
+                    DetectOps = [RegOp.CheckDword(ClientKey, "NoProgressUI", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "backup-disable-online-backup",
+                    Label = "Disable Online Backup Services Integration",
+                    Category = "System",
+                    Description = "Removes the online backup provider options from the Windows Backup configuration wizard.",
+                    Tags = ["backup", "online", "cloud", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 2,
+                    SafetyRating = 5,
+                    ImpactNote = "Cloud backup provider options are removed from the UI; local backup to drives still available.",
+                    ApplyOps = [RegOp.SetDword(ClientKey, "NoOnlineBackup", 1)],
+                    RemoveOps = [RegOp.DeleteValue(ClientKey, "NoOnlineBackup")],
+                    DetectOps = [RegOp.CheckDword(ClientKey, "NoOnlineBackup", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "backup-disable-network-backup",
+                    Label = "Disable Backup to Network Locations",
+                    Category = "System",
+                    Description = "Blocks Windows Backup from saving backup sets to network shares or mapped drives.",
+                    Tags = ["backup", "network", "share", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 4,
+                    ImpactNote = "Prevents backup data exfiltration to network shares; local drives only for Windows Backup.",
+                    ApplyOps = [RegOp.SetDword(ClientKey, "NoNetworkBackup", 1)],
+                    RemoveOps = [RegOp.DeleteValue(ClientKey, "NoNetworkBackup")],
+                    DetectOps = [RegOp.CheckDword(ClientKey, "NoNetworkBackup", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "backup-disable-backup-over-metered",
+                    Label = "Disable Windows Backup on Metered Connections",
+                    Category = "System",
+                    Description = "Prevents Windows Backup from running over metered (pay-per-use) network connections.",
+                    Tags = ["backup", "metered", "network", "data-usage", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 2,
+                    SafetyRating = 5,
+                    ImpactNote = "Backup paused on metered connections; resumes automatically on unmetered networks.",
+                    ApplyOps = [RegOp.SetDword(ClientKey, "DisableBackupOnMeteredConnections", 1)],
+                    RemoveOps = [RegOp.DeleteValue(ClientKey, "DisableBackupOnMeteredConnections")],
+                    DetectOps = [RegOp.CheckDword(ClientKey, "DisableBackupOnMeteredConnections", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "backup-disable-scheduled-backup",
+                    Label = "Disable Scheduled Windows Backup",
+                    Category = "System",
+                    Description = "Prevents Windows from running scheduled background backups automatically on a configured schedule.",
+                    Tags = ["backup", "scheduled", "task", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 4,
+                    ImpactNote = "Automatic scheduled backups are disabled; manual backup invocation still works unless DisableBackup is also set.",
+                    ApplyOps = [RegOp.SetDword(ClientKey, "NoScheduledBackup", 1)],
+                    RemoveOps = [RegOp.DeleteValue(ClientKey, "NoScheduledBackup")],
+                    DetectOps = [RegOp.CheckDword(ClientKey, "NoScheduledBackup", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "backup-hide-control-panel-link",
+                    Label = "Hide Windows Backup Control Panel Link",
+                    Category = "System",
+                    Description = "Removes the Windows Backup entry from the Control Panel and System & Security settings page.",
+                    Tags = ["backup", "control-panel", "ui", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 2,
+                    SafetyRating = 5,
+                    ImpactNote = "Backup settings UI is hidden; the underlying feature may still be invoked by command line or scripts.",
+                    ApplyOps = [RegOp.SetDword(ClientKey, "HideControlPanelLink", 1)],
+                    RemoveOps = [RegOp.DeleteValue(ClientKey, "HideControlPanelLink")],
+                    DetectOps = [RegOp.CheckDword(ClientKey, "HideControlPanelLink", 1)],
+                },
+            ];
     }
 
     // ── WindowsConnectNowPolicy ──
@@ -15665,7 +15842,6 @@ internal static class PolicyMisc
                 DetectOps = [RegOp.CheckDword(WcnKey, "DisablePushButtonConnect", 1)],
             },
         ];
-
     }
 
     // ── WindowsLogonOptionsPolicy ──
@@ -15901,7 +16077,6 @@ internal static class PolicyMisc
                 ImpactNote = "Locks workstation on smart card removal; prevents unattended session access.",
             },
         ];
-
     }
 
     // ── WindowsMailPolicy ──
@@ -16092,7 +16267,6 @@ internal static class PolicyMisc
                 ImpactNote = "Prevents calendar data from syncing to unmanaged Microsoft Account stores.",
             },
         ];
-
     }
 
     // ── WindowsMediaPlayerPolicy ──
@@ -16313,7 +16487,6 @@ internal static class PolicyMisc
                 ImpactNote = "Hides WMP Privacy tab; prevents users from modifying centrally managed privacy settings.",
             },
         ];
-
     }
 
     // ── WindowsMediaPolicyAdv ──
@@ -16475,7 +16648,6 @@ internal static class PolicyMisc
                 DetectOps = [RegOp.CheckDword(WmpCu, "PreventRadioPresetsRetrieval", 1)],
             },
         ];
-
     }
 
     // ── WindowsPerformancePolicy ──
@@ -16656,7 +16828,6 @@ internal static class PolicyMisc
                 DetectOps = [RegOp.CheckDword(Key, "EnablePerformanceAuditLogging", 1)],
             },
         ];
-
     }
 
     // ── WindowsReliabilityPolicy ──
@@ -16848,7 +17019,6 @@ internal static class PolicyMisc
                 DetectOps = [RegOp.CheckDword(WerKey, "DisableKernelFaultLogging", 1)],
             },
         ];
-
     }
 
     // ── WindowsTimeGpoPolicy ──
@@ -16892,7 +17062,10 @@ internal static class PolicyMisc
                 Tags = ["time", "ntp", "pool", "servers", "policy"],
                 ApplyOps = [RegOp.SetString(W32Params, "NtpServer", "0.pool.ntp.org,0x9 1.pool.ntp.org,0x9 2.pool.ntp.org,0x9 3.pool.ntp.org,0x9")],
                 RemoveOps = [RegOp.DeleteValue(W32Params, "NtpServer")],
-                DetectOps = [RegOp.CheckString(W32Params, "NtpServer", "0.pool.ntp.org,0x9 1.pool.ntp.org,0x9 2.pool.ntp.org,0x9 3.pool.ntp.org,0x9")],
+                DetectOps =
+                [
+                    RegOp.CheckString(W32Params, "NtpServer", "0.pool.ntp.org,0x9 1.pool.ntp.org,0x9 2.pool.ntp.org,0x9 3.pool.ntp.org,0x9"),
+                ],
             },
             new TweakDef
             {
@@ -17015,7 +17188,6 @@ internal static class PolicyMisc
                 DetectOps = [RegOp.CheckDword(W32Config, "PhaseCorrectRate", 7)],
             },
         ];
-
     }
 
     // ── WindowsTimePolicy ──
@@ -17235,7 +17407,6 @@ internal static class PolicyMisc
                 DetectOps = [RegOp.CheckDword(CfgKey, "SpikeWatchPeriod", 900)],
             },
         ];
-
     }
 
     // ── WinlogonPolicy ──
@@ -17244,169 +17415,168 @@ internal static class PolicyMisc
         private const string WlKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Winlogon";
 
         public static IReadOnlyList<TweakDef> Data =>
-        [
-            new TweakDef
-            {
-                Id = "wlpol-require-ctrl-alt-del",
-                Label = "Require Ctrl+Alt+Delete at Login",
-                Category = "System",
-                Description = "Enforces the secure attention sequence (Ctrl+Alt+Delete) before the Windows logon screen appears.",
-                Tags = ["winlogon", "ctrl-alt-del", "logon", "security"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                ImpactNote = "Prevents login spoofing by requiring the hardware-intercepted SAS (Secure Attention Sequence).",
-                ApplyOps = [RegOp.SetDword(WlKey, "DisableCAD", 0)],
-                RemoveOps = [RegOp.DeleteValue(WlKey, "DisableCAD")],
-                DetectOps = [RegOp.CheckDword(WlKey, "DisableCAD", 0)],
-            },
-            new TweakDef
-            {
-                Id = "wlpol-disable-autologon",
-                Label = "Disable Automatic Administrator Logon",
-                Category = "System",
-                Description = "Prevents Windows from automatically logging in with a saved administrator account and password at startup.",
-                Tags = ["winlogon", "autologon", "logon", "security"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 5,
-                SafetyRating = 5,
-                ImpactNote = "Disabling AutoAdminLogon forces manual login; critical for devices in shared or public environments.",
-                ApplyOps = [RegOp.SetDword(WlKey, "AutoAdminLogon", 0)],
-                RemoveOps = [RegOp.DeleteValue(WlKey, "AutoAdminLogon")],
-                DetectOps = [RegOp.CheckDword(WlKey, "AutoAdminLogon", 0)],
-            },
-            new TweakDef
-            {
-                Id = "wlpol-lock-on-smartcard-removal",
-                Label = "Lock Workstation on Smart Card Removal",
-                Category = "System",
-                Description = "Automatically locks the workstation screen when the user removes their smart card from the reader.",
-                Tags = ["winlogon", "smart-card", "lock", "security", "mfa"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                ImpactNote = "Value 1 = lock workstation; users must re-authenticate after removing their card.",
-                ApplyOps = [RegOp.SetDword(WlKey, "ScRemoveOption", 1)],
-                RemoveOps = [RegOp.DeleteValue(WlKey, "ScRemoveOption")],
-                DetectOps = [RegOp.CheckDword(WlKey, "ScRemoveOption", 1)],
-            },
-            new TweakDef
-            {
-                Id = "wlpol-no-grace-period-after-screensaver",
-                Label = "No Grace Period After Screen Saver for Unlock",
-                Category = "System",
-                Description = "Requires immediate credential entry after the screen saver activates, with no grace period delay.",
-                Tags = ["winlogon", "screen-saver", "lock", "grace-period", "security"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Zero-second grace period; users must enter password immediately after screen saver starts.",
-                ApplyOps = [RegOp.SetDword(WlKey, "ScreenSaverGracePeriod", 0)],
-                RemoveOps = [RegOp.DeleteValue(WlKey, "ScreenSaverGracePeriod")],
-                DetectOps = [RegOp.CheckDword(WlKey, "ScreenSaverGracePeriod", 0)],
-            },
-            new TweakDef
-            {
-                Id = "wlpol-enable-force-unlock-logon",
-                Label = "Force Credential Re-Entry on Workstation Unlock",
-                Category = "System",
-                Description = "Requires full credential re-entry when unlocking a workstation, even if the same user locked it.",
-                Tags = ["winlogon", "unlock", "credentials", "security"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                ImpactNote = "Prevents pass-through unlock with cached session; full authentication required on every unlock.",
-                ApplyOps = [RegOp.SetDword(WlKey, "ForceUnlockLogon", 1)],
-                RemoveOps = [RegOp.DeleteValue(WlKey, "ForceUnlockLogon")],
-                DetectOps = [RegOp.CheckDword(WlKey, "ForceUnlockLogon", 1)],
-            },
-            new TweakDef
-            {
-                Id = "wlpol-block-software-sas",
-                Label = "Block Software-Generated Secure Attention Sequence",
-                Category = "System",
-                Description = "Prevents applications and services from programmatically generating the Ctrl+Alt+Delete SAS.",
-                Tags = ["winlogon", "sas", "security", "ctrl-alt-del"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 4,
-                ImpactNote = "Value 0 = only hardware can generate SAS; prevents malware from simulating the logon screen.",
-                ApplyOps = [RegOp.SetDword(WlKey, "SoftwareSASGeneration", 0)],
-                RemoveOps = [RegOp.DeleteValue(WlKey, "SoftwareSASGeneration")],
-                DetectOps = [RegOp.CheckDword(WlKey, "SoftwareSASGeneration", 0)],
-            },
-            new TweakDef
-            {
-                Id = "wlpol-run-logon-scripts-sync",
-                Label = "Run Logon Scripts Synchronously",
-                Category = "System",
-                Description = "Waits for all logon scripts to complete before presenting the user desktop.",
-                Tags = ["winlogon", "logon-scripts", "gpo", "synchronous"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Desktop shown only after all scripts finish; may increase logon time on complex environments.",
-                ApplyOps = [RegOp.SetDword(WlKey, "RunLogonScriptSync", 1)],
-                RemoveOps = [RegOp.DeleteValue(WlKey, "RunLogonScriptSync")],
-                DetectOps = [RegOp.CheckDword(WlKey, "RunLogonScriptSync", 1)],
-            },
-            new TweakDef
-            {
-                Id = "wlpol-disable-boot-animation",
-                Label = "Disable Windows Boot Animation",
-                Category = "System",
-                Description = "Skips the animated Windows splash screen during boot to reduce boot time and remove branding.",
-                Tags = ["winlogon", "boot", "animation", "performance"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                ImpactNote = "Removes the spinning dots animation during Windows startup; marginal boot time improvement.",
-                ApplyOps = [RegOp.SetDword(WlKey, "EnableBootStatusPolicy", 0)],
-                RemoveOps = [RegOp.DeleteValue(WlKey, "EnableBootStatusPolicy")],
-                DetectOps = [RegOp.CheckDword(WlKey, "EnableBootStatusPolicy", 0)],
-            },
-            new TweakDef
-            {
-                Id = "wlpol-hide-last-logon-user",
-                Label = "Hide Last Logged-On Username at Logon Screen",
-                Category = "System",
-                Description = "Clears the username field at the Windows logon screen so it does not display the last signed-in account.",
-                Tags = ["winlogon", "last-user", "privacy", "logon", "security"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Users must type their full username at each login; prevents username enumeration at the logon screen.",
-                ApplyOps = [RegOp.SetDword(WlKey, "DontDisplayLastUserName", 1)],
-                RemoveOps = [RegOp.DeleteValue(WlKey, "DontDisplayLastUserName")],
-                DetectOps = [RegOp.CheckDword(WlKey, "DontDisplayLastUserName", 1)],
-            },
-            new TweakDef
-            {
-                Id = "wlpol-limit-cached-logons",
-                Label = "Limit Cached Domain Logon Credentials",
-                Category = "System",
-                Description = "Restricts how many domain credentials Windows caches locally for offline logon situations.",
-                Tags = ["winlogon", "cached-logon", "credentials", "domain", "security"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 4,
-                ImpactNote = "Caches only 2 domain accounts locally; reduces credential exposure if disk is compromised. Set to 0 to disable caching entirely.",
-                ApplyOps = [RegOp.SetDword(WlKey, "CachedLogonsCount", 2)],
-                RemoveOps = [RegOp.DeleteValue(WlKey, "CachedLogonsCount")],
-                DetectOps = [RegOp.CheckDword(WlKey, "CachedLogonsCount", 2)],
-            },
-        ];
-
+            [
+                new TweakDef
+                {
+                    Id = "wlpol-require-ctrl-alt-del",
+                    Label = "Require Ctrl+Alt+Delete at Login",
+                    Category = "System",
+                    Description = "Enforces the secure attention sequence (Ctrl+Alt+Delete) before the Windows logon screen appears.",
+                    Tags = ["winlogon", "ctrl-alt-del", "logon", "security"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "Prevents login spoofing by requiring the hardware-intercepted SAS (Secure Attention Sequence).",
+                    ApplyOps = [RegOp.SetDword(WlKey, "DisableCAD", 0)],
+                    RemoveOps = [RegOp.DeleteValue(WlKey, "DisableCAD")],
+                    DetectOps = [RegOp.CheckDword(WlKey, "DisableCAD", 0)],
+                },
+                new TweakDef
+                {
+                    Id = "wlpol-disable-autologon",
+                    Label = "Disable Automatic Administrator Logon",
+                    Category = "System",
+                    Description = "Prevents Windows from automatically logging in with a saved administrator account and password at startup.",
+                    Tags = ["winlogon", "autologon", "logon", "security"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 5,
+                    SafetyRating = 5,
+                    ImpactNote = "Disabling AutoAdminLogon forces manual login; critical for devices in shared or public environments.",
+                    ApplyOps = [RegOp.SetDword(WlKey, "AutoAdminLogon", 0)],
+                    RemoveOps = [RegOp.DeleteValue(WlKey, "AutoAdminLogon")],
+                    DetectOps = [RegOp.CheckDword(WlKey, "AutoAdminLogon", 0)],
+                },
+                new TweakDef
+                {
+                    Id = "wlpol-lock-on-smartcard-removal",
+                    Label = "Lock Workstation on Smart Card Removal",
+                    Category = "System",
+                    Description = "Automatically locks the workstation screen when the user removes their smart card from the reader.",
+                    Tags = ["winlogon", "smart-card", "lock", "security", "mfa"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "Value 1 = lock workstation; users must re-authenticate after removing their card.",
+                    ApplyOps = [RegOp.SetDword(WlKey, "ScRemoveOption", 1)],
+                    RemoveOps = [RegOp.DeleteValue(WlKey, "ScRemoveOption")],
+                    DetectOps = [RegOp.CheckDword(WlKey, "ScRemoveOption", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "wlpol-no-grace-period-after-screensaver",
+                    Label = "No Grace Period After Screen Saver for Unlock",
+                    Category = "System",
+                    Description = "Requires immediate credential entry after the screen saver activates, with no grace period delay.",
+                    Tags = ["winlogon", "screen-saver", "lock", "grace-period", "security"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "Zero-second grace period; users must enter password immediately after screen saver starts.",
+                    ApplyOps = [RegOp.SetDword(WlKey, "ScreenSaverGracePeriod", 0)],
+                    RemoveOps = [RegOp.DeleteValue(WlKey, "ScreenSaverGracePeriod")],
+                    DetectOps = [RegOp.CheckDword(WlKey, "ScreenSaverGracePeriod", 0)],
+                },
+                new TweakDef
+                {
+                    Id = "wlpol-enable-force-unlock-logon",
+                    Label = "Force Credential Re-Entry on Workstation Unlock",
+                    Category = "System",
+                    Description = "Requires full credential re-entry when unlocking a workstation, even if the same user locked it.",
+                    Tags = ["winlogon", "unlock", "credentials", "security"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "Prevents pass-through unlock with cached session; full authentication required on every unlock.",
+                    ApplyOps = [RegOp.SetDword(WlKey, "ForceUnlockLogon", 1)],
+                    RemoveOps = [RegOp.DeleteValue(WlKey, "ForceUnlockLogon")],
+                    DetectOps = [RegOp.CheckDword(WlKey, "ForceUnlockLogon", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "wlpol-block-software-sas",
+                    Label = "Block Software-Generated Secure Attention Sequence",
+                    Category = "System",
+                    Description = "Prevents applications and services from programmatically generating the Ctrl+Alt+Delete SAS.",
+                    Tags = ["winlogon", "sas", "security", "ctrl-alt-del"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 4,
+                    ImpactNote = "Value 0 = only hardware can generate SAS; prevents malware from simulating the logon screen.",
+                    ApplyOps = [RegOp.SetDword(WlKey, "SoftwareSASGeneration", 0)],
+                    RemoveOps = [RegOp.DeleteValue(WlKey, "SoftwareSASGeneration")],
+                    DetectOps = [RegOp.CheckDword(WlKey, "SoftwareSASGeneration", 0)],
+                },
+                new TweakDef
+                {
+                    Id = "wlpol-run-logon-scripts-sync",
+                    Label = "Run Logon Scripts Synchronously",
+                    Category = "System",
+                    Description = "Waits for all logon scripts to complete before presenting the user desktop.",
+                    Tags = ["winlogon", "logon-scripts", "gpo", "synchronous"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "Desktop shown only after all scripts finish; may increase logon time on complex environments.",
+                    ApplyOps = [RegOp.SetDword(WlKey, "RunLogonScriptSync", 1)],
+                    RemoveOps = [RegOp.DeleteValue(WlKey, "RunLogonScriptSync")],
+                    DetectOps = [RegOp.CheckDword(WlKey, "RunLogonScriptSync", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "wlpol-disable-boot-animation",
+                    Label = "Disable Windows Boot Animation",
+                    Category = "System",
+                    Description = "Skips the animated Windows splash screen during boot to reduce boot time and remove branding.",
+                    Tags = ["winlogon", "boot", "animation", "performance"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 2,
+                    SafetyRating = 5,
+                    ImpactNote = "Removes the spinning dots animation during Windows startup; marginal boot time improvement.",
+                    ApplyOps = [RegOp.SetDword(WlKey, "EnableBootStatusPolicy", 0)],
+                    RemoveOps = [RegOp.DeleteValue(WlKey, "EnableBootStatusPolicy")],
+                    DetectOps = [RegOp.CheckDword(WlKey, "EnableBootStatusPolicy", 0)],
+                },
+                new TweakDef
+                {
+                    Id = "wlpol-hide-last-logon-user",
+                    Label = "Hide Last Logged-On Username at Logon Screen",
+                    Category = "System",
+                    Description = "Clears the username field at the Windows logon screen so it does not display the last signed-in account.",
+                    Tags = ["winlogon", "last-user", "privacy", "logon", "security"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "Users must type their full username at each login; prevents username enumeration at the logon screen.",
+                    ApplyOps = [RegOp.SetDword(WlKey, "DontDisplayLastUserName", 1)],
+                    RemoveOps = [RegOp.DeleteValue(WlKey, "DontDisplayLastUserName")],
+                    DetectOps = [RegOp.CheckDword(WlKey, "DontDisplayLastUserName", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "wlpol-limit-cached-logons",
+                    Label = "Limit Cached Domain Logon Credentials",
+                    Category = "System",
+                    Description = "Restricts how many domain credentials Windows caches locally for offline logon situations.",
+                    Tags = ["winlogon", "cached-logon", "credentials", "domain", "security"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 4,
+                    ImpactNote =
+                        "Caches only 2 domain accounts locally; reduces credential exposure if disk is compromised. Set to 0 to disable caching entirely.",
+                    ApplyOps = [RegOp.SetDword(WlKey, "CachedLogonsCount", 2)],
+                    RemoveOps = [RegOp.DeleteValue(WlKey, "CachedLogonsCount")],
+                    DetectOps = [RegOp.CheckDword(WlKey, "CachedLogonsCount", 2)],
+                },
+            ];
     }
-
 }

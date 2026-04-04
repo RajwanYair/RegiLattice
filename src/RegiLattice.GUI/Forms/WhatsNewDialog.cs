@@ -136,7 +136,7 @@ internal sealed class WhatsNewDialog : Form
         // NOTE: Do NOT create a TweakEngine + RegisterBuiltins() here.
         // That call takes 2+ seconds on the UI thread, freezing the dialog while it opens.
         // Stats are derived from the assembly's embedded count constants instead.
-        const int TweakCount    = 9_240;
+        const int TweakCount = 9_240;
         const int CategoryCount = 101;
 
         var sb = new System.Text.StringBuilder();

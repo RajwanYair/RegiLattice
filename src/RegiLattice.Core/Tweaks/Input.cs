@@ -576,7 +576,6 @@ internal static class Input
 
 // === Merged from: TouchPen.cs ===
 
-
 internal static class TouchPen
 {
     internal static IReadOnlyList<TweakDef> Tweaks { get; } =

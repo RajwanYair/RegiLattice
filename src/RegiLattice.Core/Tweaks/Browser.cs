@@ -812,7 +812,6 @@ internal static class Browser
     ];
 }
 
-
 // ── merged from Chrome.cs ──
 internal static class Chrome
 {
@@ -1475,7 +1474,6 @@ internal static class Chrome
         },
     ];
 }
-
 
 // ── merged from Firefox.cs ──
 internal static class Firefox
@@ -2207,7 +2205,6 @@ internal static class Firefox
     ];
 }
 
-
 // ── merged from Edge.cs ──
 internal static class Edge
 {
@@ -2913,7 +2910,6 @@ internal static class Edge
     ];
 }
 
-
 // ── merged from PolicyBrowser.cs ──
 // RegiLattice.Core — Tweaks/PolicyBrowser.cs
 // Microsoft Edge, Internet Explorer compatibility, and web browser enterprise policies
@@ -2968,7 +2964,8 @@ internal static class PolicyBrowser
                 Id = "defbrowser-prevent-default-browser-message",
                 Label = "Default Browser Policy: Suppress Edge Default Browser Nag",
                 Category = "Browser",
-                Description = "Prevents Microsoft Edge from displaying the 'Set Edge as default browser' prompt and notification banner. Edge aggressively promotes itself as the default browser (especially after Windows updates), interrupting user workflows with unsolicited nag dialogs.",
+                Description =
+                    "Prevents Microsoft Edge from displaying the 'Set Edge as default browser' prompt and notification banner. Edge aggressively promotes itself as the default browser (especially after Windows updates), interrupting user workflows with unsolicited nag dialogs.",
                 Tags = ["browser", "default", "edge", "nag", "prompt", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -2985,7 +2982,8 @@ internal static class PolicyBrowser
                 Id = "defbrowser-disable-ie-first-run-prompt",
                 Label = "Default Browser Policy: Disable Internet Explorer First Run Browser Choice",
                 Category = "Browser",
-                Description = "Prevents Internet Explorer and legacy Edge from showing the first-run browser choice screen that prompts users to select a default browser. This prompt appears on fresh installations or after browser resets and, if dismissed, may revert to Edge/IE as the default without the user understanding the implication.",
+                Description =
+                    "Prevents Internet Explorer and legacy Edge from showing the first-run browser choice screen that prompts users to select a default browser. This prompt appears on fresh installations or after browser resets and, if dismissed, may revert to Edge/IE as the default without the user understanding the implication.",
                 Tags = ["browser", "default", "ie", "first run", "choice", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -3002,7 +3000,8 @@ internal static class PolicyBrowser
                 Id = "defbrowser-block-edge-html-protocol-takeover",
                 Label = "Default Browser Policy: Block Edge WebView2 Protocol Handler Registration",
                 Category = "Browser",
-                Description = "Prevents Microsoft Edge from silently registering itself as the handler for HTTP and HTTPS protocols via Edge WebView2 background updates. Edge periodically re-registers protocol handlers without user consent, effectively hijacking the default browser setting.",
+                Description =
+                    "Prevents Microsoft Edge from silently registering itself as the handler for HTTP and HTTPS protocols via Edge WebView2 background updates. Edge periodically re-registers protocol handlers without user consent, effectively hijacking the default browser setting.",
                 Tags = ["browser", "default", "edge", "protocol", "webview2", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -3019,7 +3018,8 @@ internal static class PolicyBrowser
                 Id = "defbrowser-lock-default-browser-users",
                 Label = "Default Browser Policy: Lock Default Browser Setting for All Users",
                 Category = "Browser",
-                Description = "Locks the default browser setting so that it cannot be changed by standard users, only by administrators. On managed workstations where a specific browser is required for intranet compatibility or corporate extensions, preventing users from changing the default browser ensures consistent access patterns.",
+                Description =
+                    "Locks the default browser setting so that it cannot be changed by standard users, only by administrators. On managed workstations where a specific browser is required for intranet compatibility or corporate extensions, preventing users from changing the default browser ensures consistent access patterns.",
                 Tags = ["browser", "default", "lock", "users", "restriction", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -3036,7 +3036,8 @@ internal static class PolicyBrowser
                 Id = "defbrowser-suppress-edge-startup-browser-prompt",
                 Label = "Default Browser Policy: Suppress Edge Startup Browser Default Suggestion",
                 Category = "Browser",
-                Description = "Prevents Microsoft Edge from opening to the browser default suggestion page on startup (a page that directly prompts the user to set Edge as the default browser). This page appears after Windows feature updates or Edge major version updates and bypasses the system-level default browser setting.",
+                Description =
+                    "Prevents Microsoft Edge from opening to the browser default suggestion page on startup (a page that directly prompts the user to set Edge as the default browser). This page appears after Windows feature updates or Edge major version updates and bypasses the system-level default browser setting.",
                 Tags = ["browser", "default", "edge", "startup", "suggestion", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -3053,7 +3054,8 @@ internal static class PolicyBrowser
                 Id = "defbrowser-disable-edge-auto-set-default-browser",
                 Label = "Default Browser Policy: Disable Edge Auto-Setting Itself as Default After Updates",
                 Category = "Browser",
-                Description = "Prevents Microsoft Edge from automatically setting itself as the default browser after operating system updates or feature releases. Windows Update periodically resets the default browser associations to Edge, overriding the user's explicit choice. This policy disables that automatic override.",
+                Description =
+                    "Prevents Microsoft Edge from automatically setting itself as the default browser after operating system updates or feature releases. Windows Update periodically resets the default browser associations to Edge, overriding the user's explicit choice. This policy disables that automatic override.",
                 Tags = ["browser", "default", "edge", "auto-set", "update", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -3070,7 +3072,8 @@ internal static class PolicyBrowser
                 Id = "defbrowser-disable-edge-intent-picker-redirect",
                 Label = "Default Browser Policy: Disable Edge Intent Picker Browser Redirect",
                 Category = "Browser",
-                Description = "Prevents the Windows Intent Picker (the dialog that appears when clicking a link in a non-browser app) from always proposing Edge as the handler. When another browser is set as default, the Intent Picker should respect that choice without surfacing Edge as an alternative every time a URL is opened.",
+                Description =
+                    "Prevents the Windows Intent Picker (the dialog that appears when clicking a link in a non-browser app) from always proposing Edge as the handler. When another browser is set as default, the Intent Picker should respect that choice without surfacing Edge as an alternative every time a URL is opened.",
                 Tags = ["browser", "default", "edge", "intent picker", "redirect", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -3087,7 +3090,8 @@ internal static class PolicyBrowser
                 Id = "defbrowser-disable-file-protocol-edge-takeover",
                 Label = "Default Browser Policy: Prevent Edge from Handling Local File (file://) URLs",
                 Category = "Browser",
-                Description = "Prevents Microsoft Edge from claiming file:// protocol handler registration on top of the configured default browser. When a local HTML file is opened from Windows Explorer, Edge intercepts it even if another browser is set as default. This policy shifts local file handling back to the default browser.",
+                Description =
+                    "Prevents Microsoft Edge from claiming file:// protocol handler registration on top of the configured default browser. When a local HTML file is opened from Windows Explorer, Edge intercepts it even if another browser is set as default. This policy shifts local file handling back to the default browser.",
                 Tags = ["browser", "default", "edge", "file protocol", "html", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -3104,7 +3108,8 @@ internal static class PolicyBrowser
                 Id = "defbrowser-suppress-os-feature-update-browser-reset",
                 Label = "Default Browser Policy: Preserve Default Browser Across Feature Updates",
                 Category = "Browser",
-                Description = "Ensures that the default browser association is preserved across Windows feature updates. Major Windows releases (e.g., 22H2 -> 23H2) frequently reset per-user file and protocol associations to their default (Edge) values. This policy marker ensures the default browser is locked and not reset by the OS upgrade process.",
+                Description =
+                    "Ensures that the default browser association is preserved across Windows feature updates. Major Windows releases (e.g., 22H2 -> 23H2) frequently reset per-user file and protocol associations to their default (Edge) values. This policy marker ensures the default browser is locked and not reset by the OS upgrade process.",
                 Tags = ["browser", "default", "update", "preserve", "association", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -3121,7 +3126,8 @@ internal static class PolicyBrowser
                 Id = "defbrowser-disable-edge-side-panel-web",
                 Label = "Default Browser Policy: Disable Edge Side Panel Web Content",
                 Category = "Browser",
-                Description = "Prevents the Microsoft Edge side panel (Bing Chat, Shopping, etc.) from loading web content in Explorer and third-party applications. The Edge side panel can activate and pull in browser content within non-browser windows when Edge is installed even if it is not the default browser.",
+                Description =
+                    "Prevents the Microsoft Edge side panel (Bing Chat, Shopping, etc.) from loading web content in Explorer and third-party applications. The Edge side panel can activate and pull in browser content within non-browser windows when Edge is installed even if it is not the default browser.",
                 Tags = ["browser", "edge", "side panel", "web content", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -3134,7 +3140,6 @@ internal static class PolicyBrowser
                 ImpactNote = "Disables Edge side panel (Bing Chat, Shopping, Tools) from appearing in any context.",
             },
         ];
-
     }
 
     // ── EdgeAppGuardPolicy ──
@@ -3315,7 +3320,6 @@ internal static class PolicyBrowser
                     DetectOps = [RegOp.CheckDword(Key, "BlockNonEnterpriseContent", 1)],
                 },
             ];
-
     }
 
     // ── EdgeAutoFillPolicy ──
@@ -3324,179 +3328,188 @@ internal static class PolicyBrowser
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge";
 
         public static IReadOnlyList<TweakDef> Data =>
-        [
-            new TweakDef
-            {
-                Id = "edgeaf-disable-address-autofill",
-                Label = "Edge AutoFill: Disable AutoFill for Address and Contact Information",
-                Category = "Browser",
-                Description = "Sets AutofillAddressEnabled=0 in Edge policy. Prevents Edge from storing, suggesting, or filling home/work addresses, phone numbers, and contact details in web forms using the browser's autofill profile database. " +
-                    "Autofill address data is stored in the Edge browser profile directory, which is located within the user's Windows profile. Any process running as the current user can read the profile's 'Web Data' SQLite database and extract all stored addresses and phone numbers in cleartext. Disabling address autofill eliminates this persisted PII from the browser profile, reducing the blast radius of a browser profile data theft.",
-                Tags = ["edge", "autofill", "address", "pii", "profile"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Edge address autofill disabled; no home/work addresses or phone numbers stored in browser profile.",
-                ApplyOps = [RegOp.SetDword(Key, "AutofillAddressEnabled", 0)],
-                RemoveOps = [RegOp.DeleteValue(Key, "AutofillAddressEnabled")],
-                DetectOps = [RegOp.CheckDword(Key, "AutofillAddressEnabled", 0)],
-            },
-            new TweakDef
-            {
-                Id = "edgeaf-disable-credit-card-autofill",
-                Label = "Edge AutoFill: Disable AutoFill for Payment / Credit Card Information",
-                Category = "Browser",
-                Description = "Sets AutofillCreditCardEnabled=0 in Edge policy. Prevents Edge from storing, offering to save, or automatically filling credit card numbers, expiry dates, and CVV codes in payment forms using the browser's payment autofill database. " +
-                    "Credit card numbers stored in the Edge autofill database persist in the browser profile's 'Web Data' file. The file is encrypted at rest using Windows DPAPI, but DPAPI decryption requires only the user's active session context — no additional PIN or authentication. Any script or process running as the user can request DPAPI decryption of the autofill database and recover stored card numbers. Enterprise browsers should never store payment card data.",
-                Tags = ["edge", "autofill", "credit-card", "payment", "pci"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 5,
-                SafetyRating = 5,
-                ImpactNote = "Edge credit card autofill disabled; no card numbers stored in browser profile database.",
-                ApplyOps = [RegOp.SetDword(Key, "AutofillCreditCardEnabled", 0)],
-                RemoveOps = [RegOp.DeleteValue(Key, "AutofillCreditCardEnabled")],
-                DetectOps = [RegOp.CheckDword(Key, "AutofillCreditCardEnabled", 0)],
-            },
-            new TweakDef
-            {
-                Id = "edgeaf-disable-form-data-saving",
-                Label = "Edge AutoFill: Disable Saving and Remembering of Typed Form Data",
-                Category = "Browser",
-                Description = "Sets FormFillEnabled=0 in Edge policy. Prevents Edge from recording typed text in non-password form fields (names, addresses, search terms, custom input fields) and suggesting previously-entered values as autocomplete options in future form fills. " +
-                    "Edge's form fill history accumulates text entries from all web forms — including internal expense report form fields, project code inputs, internal tool form submissions, and system prompts asking for passphrases or access codes. This history is stored in the profile database and can reveal sensitive operational information to other processes or when the profile is roamed. Disabling form fill prevents this implicit data capture.",
-                Tags = ["edge", "autofill", "form-data", "history", "pii"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Edge form fill history disabled; typed text in web forms not stored or suggested in future sessions.",
-                ApplyOps = [RegOp.SetDword(Key, "FormFillEnabled", 0)],
-                RemoveOps = [RegOp.DeleteValue(Key, "FormFillEnabled")],
-                DetectOps = [RegOp.CheckDword(Key, "FormFillEnabled", 0)],
-            },
-            new TweakDef
-            {
-                Id = "edgeaf-disable-payment-request-api",
-                Label = "Edge AutoFill: Disable Web Payment Request API Access",
-                Category = "Browser",
-                Description = "Sets PaymentMethodQueryEnabled=0 in Edge policy. Disables the Payment Request API in Edge, preventing web pages from programmatically querying whether the user has saved payment methods in Edge and from triggering the Payment Request UX when initiated by JavaScript. " +
-                    "The Payment Request API allows a web page to enumerate available payment methods and trigger a native payment UI sheet. Malicious or compromised retail web pages can abuse this API to detect whether a user has credit card data stored in Edge, serving this information as a targeting signal for subsequent social engineering attacks. Disabling the API prevents this enumeration and blocks web-initiated payment flows entirely.",
-                Tags = ["edge", "payment-request-api", "payment", "enumeration", "web-api"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                ImpactNote = "Payment Request API disabled; web pages cannot query payment methods or trigger native payment UX in Edge.",
-                ApplyOps = [RegOp.SetDword(Key, "PaymentMethodQueryEnabled", 0)],
-                RemoveOps = [RegOp.DeleteValue(Key, "PaymentMethodQueryEnabled")],
-                DetectOps = [RegOp.CheckDword(Key, "PaymentMethodQueryEnabled", 0)],
-            },
-            new TweakDef
-            {
-                Id = "edgeaf-disable-browser-sign-in-for-autofill",
-                Label = "Edge AutoFill: Disable Cross-Device AutoFill Sync via Browser Sign-In",
-                Category = "Browser",
-                Description = "Sets BrowserSignin=0 in Edge policy. Prevents Edge from syncing saved autofill data (addresses, form data, payment methods) to other devices via the user's Microsoft account, keeping browser autofill data isolated to the current managed device. " +
-                    "Edge browser sync transfers autofill data — including typed form history and saved addresses — to Microsoft's sync service and then to all other devices where the user is signed into Edge with the same Microsoft account. Personal devices may not have DLP, antivirus, or endpoint protection policies. Synced autofill data that originates from work browsing (containing internal site form inputs) may leak to a personal device with weaker security controls.",
-                Tags = ["edge", "sync", "autofill", "cross-device", "data-residency"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Edge autofill sync disabled; form data and addresses stay on the local managed device only.",
-                ApplyOps = [RegOp.SetDword(Key, "BrowserSignin", 0)],
-                RemoveOps = [RegOp.DeleteValue(Key, "BrowserSignin")],
-                DetectOps = [RegOp.CheckDword(Key, "BrowserSignin", 0)],
-            },
-            new TweakDef
-            {
-                Id = "edgeaf-block-third-party-autofill-tools",
-                Label = "Edge AutoFill: Block Third-Party AutoFill Extensions from Injecting into Sensitive Forms",
-                Category = "Browser",
-                Description = "Sets AutofillDropdownEnabled=0 in Edge policy. Disables Edge's autofill dropdown overlay that appears above form fields during third-party browser extension autofill interactions, preventing extensions from hijacking the autofill UI rendering layer in sensitive input fields. " +
-                    "Browser extensions that implement autofill (third-party password managers, form filler tools) render their autofill dropdown UI by injecting DOM elements onto the page. A malicious extension that mimics a legitimate autofill tool can render a convincing autofill dropdown with credentials from a different site, performing a form-autofill phishing attack where the user believes they are filling stored credentials but is actually submitting attacker-controlled values.",
-                Tags = ["edge", "autofill", "extension", "ui-injection", "phishing"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Edge native autofill dropdown disabled; third-party extension autofill UI injection layer prevented.",
-                ApplyOps = [RegOp.SetDword(Key, "AutofillDropdownEnabled", 0)],
-                RemoveOps = [RegOp.DeleteValue(Key, "AutofillDropdownEnabled")],
-                DetectOps = [RegOp.CheckDword(Key, "AutofillDropdownEnabled", 0)],
-            },
-            new TweakDef
-            {
-                Id = "edgeaf-disable-personal-profile-autofill",
-                Label = "Edge AutoFill: Disable AutoFill in Non-Work Profile Contexts",
-                Category = "Browser",
-                Description = "Sets RestrictedSitesListEnabled=0 in Edge policy (using profiles autofill channel). Disables autofill functionality specifically when Edge is operating outside the managed work profile context, ensuring that any personal browsing done in a separate profile does not populate the work profile's autofill store with personal data. " +
-                    "When users sign into personal accounts within Edge alongside their work profile, form fill data from personal browsing (personal address, personal email, personal shopping sites) can end up in the same autofill database as work browsing data. This mixing creates a data classification problem where personal PII is co-mingled with work data in the managed browser profile store.",
-                Tags = ["edge", "autofill", "personal-profile", "data-classification"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                ImpactNote = "Autofill scoped to work profile only; personal browsing data not mixed into work autofill database.",
-                ApplyOps = [RegOp.SetDword(Key, "RestrictedSitesListEnabled", 0)],
-                RemoveOps = [RegOp.DeleteValue(Key, "RestrictedSitesListEnabled")],
-                DetectOps = [RegOp.CheckDword(Key, "RestrictedSitesListEnabled", 0)],
-            },
-            new TweakDef
-            {
-                Id = "edgeaf-enable-autofill-data-clear-on-exit",
-                Label = "Edge AutoFill: Clear AutoFill Data on Every Browser Close",
-                Category = "Browser",
-                Description = "Sets ClearBrowsingDataOnExit=1 in Edge policy. Configures Edge to clear all autofill form history, cached addresses, and saved form data from the browser profile database each time the user closes the browser, ensuring autofill data does not accumulate across sessions. " +
-                    "On shared workstations or devices with multiple users accessing the same domain-joined Windows account (e.g., shift work, shared kiosk, hotdesking), autofill data accumulated during one user's session may be offered as autofill suggestions to the next user who opens the browser. Clearing autofill data on browser exit ensures each browser session is independent from a data persistence perspective.",
-                Tags = ["edge", "autofill", "clear-on-exit", "shared-workstation", "session"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "AutoFill data cleared on Edge close; each browser session starts with empty form history.",
-                ApplyOps = [RegOp.SetDword(Key, "ClearBrowsingDataOnExit", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "ClearBrowsingDataOnExit")],
-                DetectOps = [RegOp.CheckDword(Key, "ClearBrowsingDataOnExit", 1)],
-            },
-            new TweakDef
-            {
-                Id = "edgeaf-disable-bing-autofill-suggestions",
-                Label = "Edge AutoFill: Disable Bing-Powered Search Bar AutoFill Suggestions",
-                Category = "Browser",
-                Description = "Sets AddressBarEditingEnabled=0 in Edge policy. Prevents Edge from displaying Bing-powered autocomplete suggestions in the address bar that are derived from the user's past typed entries, Bing search history, and previous navigation history. " +
-                    "Bing autocomplete suggestions in the Edge address bar are populated from multiple sources including cloud-synchronised search history and local browsing history. As the user types in the address bar, keystrokes are sent to Bing's suggestion API — even partial internal URLs or IP addresses typed for network administration may be transmitted as suggestion queries. Disabling address bar suggestions prevents this pre-submission keystroke telemetry from leaving the device.",
-                Tags = ["edge", "address-bar", "bing", "suggestions", "keystroke-telemetry"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                ImpactNote = "Edge address bar Bing suggestions disabled; keystrokes not sent to Bing until URL is submitted.",
-                ApplyOps = [RegOp.SetDword(Key, "AddressBarEditingEnabled", 0)],
-                RemoveOps = [RegOp.DeleteValue(Key, "AddressBarEditingEnabled")],
-                DetectOps = [RegOp.CheckDword(Key, "AddressBarEditingEnabled", 0)],
-            },
-            new TweakDef
-            {
-                Id = "edgeaf-disable-coupon-and-shopping-autofill",
-                Label = "Edge AutoFill: Disable Shopping / Coupon AutoFill and Price Comparison",
-                Category = "Browser",
-                Description = "Sets EdgeShoppingAssistantEnabled=0 in Edge policy. Disables Edge's built-in shopping assistant that automatically detects product pages, suggests coupons, compares prices, and activates cashback offers, preventing these features from transmitting purchase intent signals and retail browsing patterns to Microsoft's shopping backend. " +
-                    "The Edge shopping assistant monitors every page visit and performs URL classification to detect retail product pages in real time. This classification sends a request to Microsoft's shopping API containing the page URL and product context for every retail page visited. In regulated industries (healthcare, finance), browsing on retail product pages that may correlate with personal spending habits constitutes PII data that should not be transmitted to external advertising-adjacent services.",
-                Tags = ["edge", "shopping", "coupon", "price-comparison", "telemetry"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                ImpactNote = "Edge shopping assistant and price comparison disabled; retail page visits not reported to Microsoft shopping API.",
-                ApplyOps = [RegOp.SetDword(Key, "EdgeShoppingAssistantEnabled", 0)],
-                RemoveOps = [RegOp.DeleteValue(Key, "EdgeShoppingAssistantEnabled")],
-                DetectOps = [RegOp.CheckDword(Key, "EdgeShoppingAssistantEnabled", 0)],
-            },
-        ];
-
+            [
+                new TweakDef
+                {
+                    Id = "edgeaf-disable-address-autofill",
+                    Label = "Edge AutoFill: Disable AutoFill for Address and Contact Information",
+                    Category = "Browser",
+                    Description =
+                        "Sets AutofillAddressEnabled=0 in Edge policy. Prevents Edge from storing, suggesting, or filling home/work addresses, phone numbers, and contact details in web forms using the browser's autofill profile database. "
+                        + "Autofill address data is stored in the Edge browser profile directory, which is located within the user's Windows profile. Any process running as the current user can read the profile's 'Web Data' SQLite database and extract all stored addresses and phone numbers in cleartext. Disabling address autofill eliminates this persisted PII from the browser profile, reducing the blast radius of a browser profile data theft.",
+                    Tags = ["edge", "autofill", "address", "pii", "profile"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "Edge address autofill disabled; no home/work addresses or phone numbers stored in browser profile.",
+                    ApplyOps = [RegOp.SetDword(Key, "AutofillAddressEnabled", 0)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "AutofillAddressEnabled")],
+                    DetectOps = [RegOp.CheckDword(Key, "AutofillAddressEnabled", 0)],
+                },
+                new TweakDef
+                {
+                    Id = "edgeaf-disable-credit-card-autofill",
+                    Label = "Edge AutoFill: Disable AutoFill for Payment / Credit Card Information",
+                    Category = "Browser",
+                    Description =
+                        "Sets AutofillCreditCardEnabled=0 in Edge policy. Prevents Edge from storing, offering to save, or automatically filling credit card numbers, expiry dates, and CVV codes in payment forms using the browser's payment autofill database. "
+                        + "Credit card numbers stored in the Edge autofill database persist in the browser profile's 'Web Data' file. The file is encrypted at rest using Windows DPAPI, but DPAPI decryption requires only the user's active session context — no additional PIN or authentication. Any script or process running as the user can request DPAPI decryption of the autofill database and recover stored card numbers. Enterprise browsers should never store payment card data.",
+                    Tags = ["edge", "autofill", "credit-card", "payment", "pci"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 5,
+                    SafetyRating = 5,
+                    ImpactNote = "Edge credit card autofill disabled; no card numbers stored in browser profile database.",
+                    ApplyOps = [RegOp.SetDword(Key, "AutofillCreditCardEnabled", 0)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "AutofillCreditCardEnabled")],
+                    DetectOps = [RegOp.CheckDword(Key, "AutofillCreditCardEnabled", 0)],
+                },
+                new TweakDef
+                {
+                    Id = "edgeaf-disable-form-data-saving",
+                    Label = "Edge AutoFill: Disable Saving and Remembering of Typed Form Data",
+                    Category = "Browser",
+                    Description =
+                        "Sets FormFillEnabled=0 in Edge policy. Prevents Edge from recording typed text in non-password form fields (names, addresses, search terms, custom input fields) and suggesting previously-entered values as autocomplete options in future form fills. "
+                        + "Edge's form fill history accumulates text entries from all web forms — including internal expense report form fields, project code inputs, internal tool form submissions, and system prompts asking for passphrases or access codes. This history is stored in the profile database and can reveal sensitive operational information to other processes or when the profile is roamed. Disabling form fill prevents this implicit data capture.",
+                    Tags = ["edge", "autofill", "form-data", "history", "pii"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "Edge form fill history disabled; typed text in web forms not stored or suggested in future sessions.",
+                    ApplyOps = [RegOp.SetDword(Key, "FormFillEnabled", 0)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "FormFillEnabled")],
+                    DetectOps = [RegOp.CheckDword(Key, "FormFillEnabled", 0)],
+                },
+                new TweakDef
+                {
+                    Id = "edgeaf-disable-payment-request-api",
+                    Label = "Edge AutoFill: Disable Web Payment Request API Access",
+                    Category = "Browser",
+                    Description =
+                        "Sets PaymentMethodQueryEnabled=0 in Edge policy. Disables the Payment Request API in Edge, preventing web pages from programmatically querying whether the user has saved payment methods in Edge and from triggering the Payment Request UX when initiated by JavaScript. "
+                        + "The Payment Request API allows a web page to enumerate available payment methods and trigger a native payment UI sheet. Malicious or compromised retail web pages can abuse this API to detect whether a user has credit card data stored in Edge, serving this information as a targeting signal for subsequent social engineering attacks. Disabling the API prevents this enumeration and blocks web-initiated payment flows entirely.",
+                    Tags = ["edge", "payment-request-api", "payment", "enumeration", "web-api"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "Payment Request API disabled; web pages cannot query payment methods or trigger native payment UX in Edge.",
+                    ApplyOps = [RegOp.SetDword(Key, "PaymentMethodQueryEnabled", 0)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "PaymentMethodQueryEnabled")],
+                    DetectOps = [RegOp.CheckDword(Key, "PaymentMethodQueryEnabled", 0)],
+                },
+                new TweakDef
+                {
+                    Id = "edgeaf-disable-browser-sign-in-for-autofill",
+                    Label = "Edge AutoFill: Disable Cross-Device AutoFill Sync via Browser Sign-In",
+                    Category = "Browser",
+                    Description =
+                        "Sets BrowserSignin=0 in Edge policy. Prevents Edge from syncing saved autofill data (addresses, form data, payment methods) to other devices via the user's Microsoft account, keeping browser autofill data isolated to the current managed device. "
+                        + "Edge browser sync transfers autofill data — including typed form history and saved addresses — to Microsoft's sync service and then to all other devices where the user is signed into Edge with the same Microsoft account. Personal devices may not have DLP, antivirus, or endpoint protection policies. Synced autofill data that originates from work browsing (containing internal site form inputs) may leak to a personal device with weaker security controls.",
+                    Tags = ["edge", "sync", "autofill", "cross-device", "data-residency"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "Edge autofill sync disabled; form data and addresses stay on the local managed device only.",
+                    ApplyOps = [RegOp.SetDword(Key, "BrowserSignin", 0)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "BrowserSignin")],
+                    DetectOps = [RegOp.CheckDword(Key, "BrowserSignin", 0)],
+                },
+                new TweakDef
+                {
+                    Id = "edgeaf-block-third-party-autofill-tools",
+                    Label = "Edge AutoFill: Block Third-Party AutoFill Extensions from Injecting into Sensitive Forms",
+                    Category = "Browser",
+                    Description =
+                        "Sets AutofillDropdownEnabled=0 in Edge policy. Disables Edge's autofill dropdown overlay that appears above form fields during third-party browser extension autofill interactions, preventing extensions from hijacking the autofill UI rendering layer in sensitive input fields. "
+                        + "Browser extensions that implement autofill (third-party password managers, form filler tools) render their autofill dropdown UI by injecting DOM elements onto the page. A malicious extension that mimics a legitimate autofill tool can render a convincing autofill dropdown with credentials from a different site, performing a form-autofill phishing attack where the user believes they are filling stored credentials but is actually submitting attacker-controlled values.",
+                    Tags = ["edge", "autofill", "extension", "ui-injection", "phishing"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "Edge native autofill dropdown disabled; third-party extension autofill UI injection layer prevented.",
+                    ApplyOps = [RegOp.SetDword(Key, "AutofillDropdownEnabled", 0)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "AutofillDropdownEnabled")],
+                    DetectOps = [RegOp.CheckDword(Key, "AutofillDropdownEnabled", 0)],
+                },
+                new TweakDef
+                {
+                    Id = "edgeaf-disable-personal-profile-autofill",
+                    Label = "Edge AutoFill: Disable AutoFill in Non-Work Profile Contexts",
+                    Category = "Browser",
+                    Description =
+                        "Sets RestrictedSitesListEnabled=0 in Edge policy (using profiles autofill channel). Disables autofill functionality specifically when Edge is operating outside the managed work profile context, ensuring that any personal browsing done in a separate profile does not populate the work profile's autofill store with personal data. "
+                        + "When users sign into personal accounts within Edge alongside their work profile, form fill data from personal browsing (personal address, personal email, personal shopping sites) can end up in the same autofill database as work browsing data. This mixing creates a data classification problem where personal PII is co-mingled with work data in the managed browser profile store.",
+                    Tags = ["edge", "autofill", "personal-profile", "data-classification"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 2,
+                    SafetyRating = 5,
+                    ImpactNote = "Autofill scoped to work profile only; personal browsing data not mixed into work autofill database.",
+                    ApplyOps = [RegOp.SetDword(Key, "RestrictedSitesListEnabled", 0)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "RestrictedSitesListEnabled")],
+                    DetectOps = [RegOp.CheckDword(Key, "RestrictedSitesListEnabled", 0)],
+                },
+                new TweakDef
+                {
+                    Id = "edgeaf-enable-autofill-data-clear-on-exit",
+                    Label = "Edge AutoFill: Clear AutoFill Data on Every Browser Close",
+                    Category = "Browser",
+                    Description =
+                        "Sets ClearBrowsingDataOnExit=1 in Edge policy. Configures Edge to clear all autofill form history, cached addresses, and saved form data from the browser profile database each time the user closes the browser, ensuring autofill data does not accumulate across sessions. "
+                        + "On shared workstations or devices with multiple users accessing the same domain-joined Windows account (e.g., shift work, shared kiosk, hotdesking), autofill data accumulated during one user's session may be offered as autofill suggestions to the next user who opens the browser. Clearing autofill data on browser exit ensures each browser session is independent from a data persistence perspective.",
+                    Tags = ["edge", "autofill", "clear-on-exit", "shared-workstation", "session"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "AutoFill data cleared on Edge close; each browser session starts with empty form history.",
+                    ApplyOps = [RegOp.SetDword(Key, "ClearBrowsingDataOnExit", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "ClearBrowsingDataOnExit")],
+                    DetectOps = [RegOp.CheckDword(Key, "ClearBrowsingDataOnExit", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "edgeaf-disable-bing-autofill-suggestions",
+                    Label = "Edge AutoFill: Disable Bing-Powered Search Bar AutoFill Suggestions",
+                    Category = "Browser",
+                    Description =
+                        "Sets AddressBarEditingEnabled=0 in Edge policy. Prevents Edge from displaying Bing-powered autocomplete suggestions in the address bar that are derived from the user's past typed entries, Bing search history, and previous navigation history. "
+                        + "Bing autocomplete suggestions in the Edge address bar are populated from multiple sources including cloud-synchronised search history and local browsing history. As the user types in the address bar, keystrokes are sent to Bing's suggestion API — even partial internal URLs or IP addresses typed for network administration may be transmitted as suggestion queries. Disabling address bar suggestions prevents this pre-submission keystroke telemetry from leaving the device.",
+                    Tags = ["edge", "address-bar", "bing", "suggestions", "keystroke-telemetry"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 2,
+                    SafetyRating = 5,
+                    ImpactNote = "Edge address bar Bing suggestions disabled; keystrokes not sent to Bing until URL is submitted.",
+                    ApplyOps = [RegOp.SetDword(Key, "AddressBarEditingEnabled", 0)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "AddressBarEditingEnabled")],
+                    DetectOps = [RegOp.CheckDword(Key, "AddressBarEditingEnabled", 0)],
+                },
+                new TweakDef
+                {
+                    Id = "edgeaf-disable-coupon-and-shopping-autofill",
+                    Label = "Edge AutoFill: Disable Shopping / Coupon AutoFill and Price Comparison",
+                    Category = "Browser",
+                    Description =
+                        "Sets EdgeShoppingAssistantEnabled=0 in Edge policy. Disables Edge's built-in shopping assistant that automatically detects product pages, suggests coupons, compares prices, and activates cashback offers, preventing these features from transmitting purchase intent signals and retail browsing patterns to Microsoft's shopping backend. "
+                        + "The Edge shopping assistant monitors every page visit and performs URL classification to detect retail product pages in real time. This classification sends a request to Microsoft's shopping API containing the page URL and product context for every retail page visited. In regulated industries (healthcare, finance), browsing on retail product pages that may correlate with personal spending habits constitutes PII data that should not be transmitted to external advertising-adjacent services.",
+                    Tags = ["edge", "shopping", "coupon", "price-comparison", "telemetry"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 2,
+                    SafetyRating = 5,
+                    ImpactNote = "Edge shopping assistant and price comparison disabled; retail page visits not reported to Microsoft shopping API.",
+                    ApplyOps = [RegOp.SetDword(Key, "EdgeShoppingAssistantEnabled", 0)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "EdgeShoppingAssistantEnabled")],
+                    DetectOps = [RegOp.CheckDword(Key, "EdgeShoppingAssistantEnabled", 0)],
+                },
+            ];
     }
 
     // ── EdgeCertTransparencyPolicy ──
@@ -3505,179 +3518,188 @@ internal static class PolicyBrowser
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge";
 
         public static IReadOnlyList<TweakDef> Data =>
-        [
-            new TweakDef
-            {
-                Id = "edgect-require-certificate-transparency",
-                Label = "Edge Cert Transparency: Enforce Certificate Transparency Log Requirement",
-                Category = "Browser",
-                Description = "Sets CertificateTransparencyEnforcementDisabledForUrls=0 (enforcement enabled) in Edge policy. Requires that all TLS certificates presented to Edge are logged in a public Certificate Transparency (CT) log, and rejects connections to HTTPS sites whose certificates are not included in a trusted CT log. " +
-                    "Certificate Transparency logs provide a publicly auditable record of all certificates issued by trusted CAs. Without CT enforcement, a CA that has been compromised or coerced (e.g., by a nation-state issuing a fraudulent wildcard certificate for *.company.com) can issue certificates that Edge trusts without any detection mechanism. CT enforcement means that any certificate not logged in a trusted public log will cause Edge to display a certificate error.",
-                Tags = ["edge", "certificate-transparency", "tls", "ca", "pki"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                ImpactNote = "CT enforcement enabled; HTTPS connections with non-CT-logged certificates blocked.",
-                ApplyOps = [RegOp.SetDword(Key, "CertificateTransparencyEnforcementEnabled", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "CertificateTransparencyEnforcementEnabled")],
-                DetectOps = [RegOp.CheckDword(Key, "CertificateTransparencyEnforcementEnabled", 1)],
-            },
-            new TweakDef
-            {
-                Id = "edgect-disable-obsolete-tls-versions",
-                Label = "Edge Cert Transparency: Block Connections Using TLS 1.0 and 1.1",
-                Category = "Browser",
-                Description = "Sets SSLVersionMin=\"tls1.2\" in Edge policy. Sets the minimum TLS protocol version that Edge will accept for HTTPS connections to TLS 1.2, causing connections to servers that only support TLS 1.0 or 1.1 to fail with a connection error. " +
-                    "TLS 1.0 and TLS 1.1 contain known protocol weaknesses: BEAST (TLS 1.0), POODLE (TLS 1.0/1.1 can be forced cross-protocol), and SLOTH. The cipher suite negotiation for TLS 1.0/1.1 includes RC4 and CBC-mode AES ciphers that are vulnerable to practical attacks. PCI DSS, NIST SP 800-52 Rev 2, and HIPAA technical safeguards all require TLS 1.2 or higher. Disabling legacy TLS prevents protocol downgrade attacks.",
-                Tags = ["edge", "tls", "ssl-version", "protocol-downgrade", "pci-dss"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                ImpactNote = "TLS 1.0 and 1.1 blocked in Edge; connections require TLS 1.2 minimum.",
-                ApplyOps = [RegOp.SetString(Key, "SSLVersionMin", "tls1.2")],
-                RemoveOps = [RegOp.DeleteValue(Key, "SSLVersionMin")],
-                DetectOps = [RegOp.CheckString(Key, "SSLVersionMin", "tls1.2")],
-            },
-            new TweakDef
-            {
-                Id = "edgect-enable-revocation-checking",
-                Label = "Edge Cert Transparency: Enable OCSP/CRL Certificate Revocation Checking",
-                Category = "Browser",
-                Description = "Sets OnlineRevocationChecksEnabled=1 in Edge policy. Enables Edge to perform online certificate revocation checks via OCSP (Online Certificate Status Protocol) and CRL (Certificate Revocation List) for every TLS certificate it encounters, blocking connections to sites whose certificates have been revoked. " +
-                    "Certificate revocation exists to allow CAs to invalidate certificates when the corresponding private key is compromised. Without revocation checking, Edge accepts revoked certificates as valid — meaning that if a private key for a trusted certificate is stolen and the CA issues a revocation, Edge will still accept connections authenticated by the stolen key until the site renews its certificate. OCSP checking provides near-real-time revocation status.",
-                Tags = ["edge", "ocsp", "crl", "revocation", "certificate"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                ImpactNote = "OCSP/CRL revocation checked for all edge TLS connections; revoked certificates cause connection failure.",
-                ApplyOps = [RegOp.SetDword(Key, "OnlineRevocationChecksEnabled", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "OnlineRevocationChecksEnabled")],
-                DetectOps = [RegOp.CheckDword(Key, "OnlineRevocationChecksEnabled", 1)],
-            },
-            new TweakDef
-            {
-                Id = "edgect-block-sha1-signed-certificates",
-                Label = "Edge Cert Transparency: Block Sites with SHA-1 Signed TLS Certificates",
-                Category = "Browser",
-                Description = "Sets SHA1CertificateEnabled=0 in Edge policy. Causes Edge to refuse TLS connections to sites whose certificates are signed using the SHA-1 hash algorithm, requiring all accepted certificates to use SHA-256 or stronger. " +
-                    "SHA-1 was deprecated as a certificate signing hash algorithm in 2017 following the demonstration of practical chosen-prefix collision attacks. A SHA-1 collision allows an attacker to create two different certificates with the same signature — enabling fraudulent certificate creation if a CA still issues SHA-1 certificates. Any SHA-1 certificate remaining in production is non-compliant with modern PKI standards and suggests poor certificate lifecycle management.",
-                Tags = ["edge", "sha1", "certificate", "hash", "deprecation"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "SHA-1 signed TLS certificates refused by Edge; sites must present SHA-256 or stronger certificates.",
-                ApplyOps = [RegOp.SetDword(Key, "SHA1CertificateEnabled", 0)],
-                RemoveOps = [RegOp.DeleteValue(Key, "SHA1CertificateEnabled")],
-                DetectOps = [RegOp.CheckDword(Key, "SHA1CertificateEnabled", 0)],
-            },
-            new TweakDef
-            {
-                Id = "edgect-require-ct-for-local-anchored-certs",
-                Label = "Edge Cert Transparency: Require CT Even for Locally-Anchored Enterprise Certificates",
-                Category = "Browser",
-                Description = "Sets RequireCTForLocallyAnchoredCerts=1 in Edge policy. Extends Certificate Transparency enforcement to certificates anchored at locally-installed enterprise root CAs (not just public CAs), requiring that internal HTTPS sites served by the enterprise PKI include a Signed Certificate Timestamp (SCT) or be logged in a compatible CT log. " +
-                    "Enterprise internal CAs can issue certificates for any domain, including external domains. An enterprise CA that has been compromised can issue a certificate for google.com or company-partner.com that Edge would normally trust (since it's anchored at the enterprise root). Requiring CT for locally-anchored certificates means Enterprise CA-issued certificates for unexpected domains will fail CT validation, detecting CA misuse.",
-                Tags = ["edge", "certificate-transparency", "enterprise-ca", "internal-pki", "misuse"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 4,
-                ImpactNote = "CT required for enterprise PKI certificates; internal CA misuse (issuing certs for external domains) detected.",
-                ApplyOps = [RegOp.SetDword(Key, "RequireCTForLocallyAnchoredCerts", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "RequireCTForLocallyAnchoredCerts")],
-                DetectOps = [RegOp.CheckDword(Key, "RequireCTForLocallyAnchoredCerts", 1)],
-            },
-            new TweakDef
-            {
-                Id = "edgect-block-invalid-certificate-warning-bypass",
-                Label = "Edge Cert Transparency: Block User Override of Certificate Error Pages",
-                Category = "Browser",
-                Description = "Sets SSLErrorOverrideAllowed=0 in Edge policy. Removes the 'Proceed anyway' / 'Advanced → Proceed to site' bypass button from Edge certificate error pages, preventing users from overriding TLS certificate errors by clicking through the warning. " +
-                    "The 'Proceed anyway' button on certificate error pages is a well-known social engineering vector. Phishing and adversary-in-the-middle toolkits intentionally generate self-signed certificates for lookalike domains, then display the certificate error page and add persuasive text (in custom '404' page content) asking the user to click through. Removing the bypass button eliminates this click-through vector and forces users to contact IT when they encounter legitimate certificate misconfigurations.",
-                Tags = ["edge", "certificate-error", "bypass", "phishing", "mitm"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                ImpactNote = "Certificate error bypass button removed; users cannot click through TLS certificate warnings.",
-                ApplyOps = [RegOp.SetDword(Key, "SSLErrorOverrideAllowed", 0)],
-                RemoveOps = [RegOp.DeleteValue(Key, "SSLErrorOverrideAllowed")],
-                DetectOps = [RegOp.CheckDword(Key, "SSLErrorOverrideAllowed", 0)],
-            },
-            new TweakDef
-            {
-                Id = "edgect-enable-safe-browsing-phishing-protection",
-                Label = "Edge Cert Transparency: Enable Safe Browsing Phishing URL Protection",
-                Category = "Browser",
-                Description = "Sets SafeBrowsingEnabled=1 in Edge policy. Enables Microsoft Defender SmartScreen URL reputation checking for every navigation in Edge that verifies the destination URL against Microsoft's known-phishing, known-malware, and URL threat intelligence database before the page loads. " +
-                    "SmartScreen URL checking is Edge's first-line defence against phishing and malware distribution sites. When disabled (e.g., by a user who finds the warning pages annoying), navigations to known phishing sites proceed without warning. In enterprise environments where employees receive targeted spear-phishing emails with malicious links, SmartScreen provides automated blocking of known-bad URLs that supplements user security awareness training.",
-                Tags = ["edge", "safe-browsing", "smartscreen", "phishing", "url-protection"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 5,
-                SafetyRating = 5,
-                ImpactNote = "SmartScreen URL checking enforced in Edge; known-phishing and malware URLs blocked before page load.",
-                ApplyOps = [RegOp.SetDword(Key, "SafeBrowsingEnabled", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "SafeBrowsingEnabled")],
-                DetectOps = [RegOp.CheckDword(Key, "SafeBrowsingEnabled", 1)],
-            },
-            new TweakDef
-            {
-                Id = "edgect-enable-enhanced-safe-browsing",
-                Label = "Edge Cert Transparency: Enable Enhanced Safe Browsing Deep URL Analysis",
-                Category = "Browser",
-                Description = "Sets SafeBrowsingProtectionLevel=2 in Edge policy (value 2 = Enhanced Protection). Enables Edge's Enhanced Safe Browsing mode, which performs deeper URL and download analysis including file hash lookups, URL structure analysis, and real-time page content evaluation to detect novel phishing pages that have not yet been classified in the known-bad URL database. " +
-                    "Standard SmartScreen uses a hash-compare against a known-bad URL blocklist. Enhanced Protection adds real-time analysis that can detect zero-day phishing pages within minutes of their creation by analysing page structure, visual similarity to known login pages, and URL entropy. This dramatically reduces the window between phishing site creation and first-user protection.",
-                Tags = ["edge", "safe-browsing", "enhanced", "real-time", "zero-day"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                ImpactNote = "Enhanced SafeBrowsing enabled; real-time zero-day phishing detection augments standard blocklist.",
-                ApplyOps = [RegOp.SetDword(Key, "SafeBrowsingProtectionLevel", 2)],
-                RemoveOps = [RegOp.DeleteValue(Key, "SafeBrowsingProtectionLevel")],
-                DetectOps = [RegOp.CheckDword(Key, "SafeBrowsingProtectionLevel", 2)],
-            },
-            new TweakDef
-            {
-                Id = "edgect-block-mixed-content-display",
-                Label = "Edge Cert Transparency: Block Passive Mixed Content (HTTP Resources on HTTPS Pages)",
-                Category = "Browser",
-                Description = "Sets BlockThirdPartyCookies=0 is not the right key; sets MixedContentEnabled=0 in Edge policy. Blocks Edge from loading passive HTTP resources (images, CSS, fonts) on HTTPS pages, preventing mixed content that allows passive network observers to correlate browsing behaviour by monitoring the unencrypted resource requests. " +
-                    "A device on a network where traffic is monitored (public Wi-Fi, hotel network, corporate proxy with DLP) that visits an HTTPS page with HTTP subresources reveals which specific content elements were loaded via the unencrypted sub-requests. An adversary can build a browser fingerprint and activity log from passive HTTP resource patterns even without breaking the HTTPS connection itself. Blocking all mixed content enforces full HTTPS for the entire page.",
-                Tags = ["edge", "mixed-content", "passive-sniffing", "https", "tls"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "HTTP resources on HTTPS pages blocked (mixed content); full page encryption enforced for all navigations.",
-                ApplyOps = [RegOp.SetDword(Key, "MixedContentEnabled", 0)],
-                RemoveOps = [RegOp.DeleteValue(Key, "MixedContentEnabled")],
-                DetectOps = [RegOp.CheckDword(Key, "MixedContentEnabled", 0)],
-            },
-            new TweakDef
-            {
-                Id = "edgect-require-hsts-preload-for-intranet",
-                Label = "Edge Cert Transparency: Enforce HTTPS-Only Mode for All Navigation",
-                Category = "Browser",
-                Description = "Sets HttpsOnlyMode=1 in Edge policy (value 1 = Enabled). Enables Edge's HTTPS-Only mode globally, causing Edge to attempt to upgrade all HTTP navigations to HTTPS automatically, and displaying an interstitial warning if the upgrade fails (i.e., the site only supports HTTP). " +
-                    "HTTP navigation exposes session cookies, form data, content, and the URL path to passive interception on any network segment between the browser and the server. SSL stripping attacks (BEAST, sslstrip) intercept HTTP requests and prevent HTTPS upgrades transparently. HTTPS-Only mode forces the HTTPS upgrade before any HTTP request is ever sent, making all browser sessions resistant to trivial passive eavesdropping and SSL strip attacks.",
-                Tags = ["edge", "https-only", "ssl-stripping", "hsts", "encryption"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 4,
-                ImpactNote = "HTTPS-Only mode enforced in Edge; HTTP sites cause a warning interstitial before proceeding.",
-                ApplyOps = [RegOp.SetDword(Key, "HttpsOnlyMode", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "HttpsOnlyMode")],
-                DetectOps = [RegOp.CheckDword(Key, "HttpsOnlyMode", 1)],
-            },
-        ];
-
+            [
+                new TweakDef
+                {
+                    Id = "edgect-require-certificate-transparency",
+                    Label = "Edge Cert Transparency: Enforce Certificate Transparency Log Requirement",
+                    Category = "Browser",
+                    Description =
+                        "Sets CertificateTransparencyEnforcementDisabledForUrls=0 (enforcement enabled) in Edge policy. Requires that all TLS certificates presented to Edge are logged in a public Certificate Transparency (CT) log, and rejects connections to HTTPS sites whose certificates are not included in a trusted CT log. "
+                        + "Certificate Transparency logs provide a publicly auditable record of all certificates issued by trusted CAs. Without CT enforcement, a CA that has been compromised or coerced (e.g., by a nation-state issuing a fraudulent wildcard certificate for *.company.com) can issue certificates that Edge trusts without any detection mechanism. CT enforcement means that any certificate not logged in a trusted public log will cause Edge to display a certificate error.",
+                    Tags = ["edge", "certificate-transparency", "tls", "ca", "pki"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "CT enforcement enabled; HTTPS connections with non-CT-logged certificates blocked.",
+                    ApplyOps = [RegOp.SetDword(Key, "CertificateTransparencyEnforcementEnabled", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "CertificateTransparencyEnforcementEnabled")],
+                    DetectOps = [RegOp.CheckDword(Key, "CertificateTransparencyEnforcementEnabled", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "edgect-disable-obsolete-tls-versions",
+                    Label = "Edge Cert Transparency: Block Connections Using TLS 1.0 and 1.1",
+                    Category = "Browser",
+                    Description =
+                        "Sets SSLVersionMin=\"tls1.2\" in Edge policy. Sets the minimum TLS protocol version that Edge will accept for HTTPS connections to TLS 1.2, causing connections to servers that only support TLS 1.0 or 1.1 to fail with a connection error. "
+                        + "TLS 1.0 and TLS 1.1 contain known protocol weaknesses: BEAST (TLS 1.0), POODLE (TLS 1.0/1.1 can be forced cross-protocol), and SLOTH. The cipher suite negotiation for TLS 1.0/1.1 includes RC4 and CBC-mode AES ciphers that are vulnerable to practical attacks. PCI DSS, NIST SP 800-52 Rev 2, and HIPAA technical safeguards all require TLS 1.2 or higher. Disabling legacy TLS prevents protocol downgrade attacks.",
+                    Tags = ["edge", "tls", "ssl-version", "protocol-downgrade", "pci-dss"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "TLS 1.0 and 1.1 blocked in Edge; connections require TLS 1.2 minimum.",
+                    ApplyOps = [RegOp.SetString(Key, "SSLVersionMin", "tls1.2")],
+                    RemoveOps = [RegOp.DeleteValue(Key, "SSLVersionMin")],
+                    DetectOps = [RegOp.CheckString(Key, "SSLVersionMin", "tls1.2")],
+                },
+                new TweakDef
+                {
+                    Id = "edgect-enable-revocation-checking",
+                    Label = "Edge Cert Transparency: Enable OCSP/CRL Certificate Revocation Checking",
+                    Category = "Browser",
+                    Description =
+                        "Sets OnlineRevocationChecksEnabled=1 in Edge policy. Enables Edge to perform online certificate revocation checks via OCSP (Online Certificate Status Protocol) and CRL (Certificate Revocation List) for every TLS certificate it encounters, blocking connections to sites whose certificates have been revoked. "
+                        + "Certificate revocation exists to allow CAs to invalidate certificates when the corresponding private key is compromised. Without revocation checking, Edge accepts revoked certificates as valid — meaning that if a private key for a trusted certificate is stolen and the CA issues a revocation, Edge will still accept connections authenticated by the stolen key until the site renews its certificate. OCSP checking provides near-real-time revocation status.",
+                    Tags = ["edge", "ocsp", "crl", "revocation", "certificate"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "OCSP/CRL revocation checked for all edge TLS connections; revoked certificates cause connection failure.",
+                    ApplyOps = [RegOp.SetDword(Key, "OnlineRevocationChecksEnabled", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "OnlineRevocationChecksEnabled")],
+                    DetectOps = [RegOp.CheckDword(Key, "OnlineRevocationChecksEnabled", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "edgect-block-sha1-signed-certificates",
+                    Label = "Edge Cert Transparency: Block Sites with SHA-1 Signed TLS Certificates",
+                    Category = "Browser",
+                    Description =
+                        "Sets SHA1CertificateEnabled=0 in Edge policy. Causes Edge to refuse TLS connections to sites whose certificates are signed using the SHA-1 hash algorithm, requiring all accepted certificates to use SHA-256 or stronger. "
+                        + "SHA-1 was deprecated as a certificate signing hash algorithm in 2017 following the demonstration of practical chosen-prefix collision attacks. A SHA-1 collision allows an attacker to create two different certificates with the same signature — enabling fraudulent certificate creation if a CA still issues SHA-1 certificates. Any SHA-1 certificate remaining in production is non-compliant with modern PKI standards and suggests poor certificate lifecycle management.",
+                    Tags = ["edge", "sha1", "certificate", "hash", "deprecation"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "SHA-1 signed TLS certificates refused by Edge; sites must present SHA-256 or stronger certificates.",
+                    ApplyOps = [RegOp.SetDword(Key, "SHA1CertificateEnabled", 0)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "SHA1CertificateEnabled")],
+                    DetectOps = [RegOp.CheckDword(Key, "SHA1CertificateEnabled", 0)],
+                },
+                new TweakDef
+                {
+                    Id = "edgect-require-ct-for-local-anchored-certs",
+                    Label = "Edge Cert Transparency: Require CT Even for Locally-Anchored Enterprise Certificates",
+                    Category = "Browser",
+                    Description =
+                        "Sets RequireCTForLocallyAnchoredCerts=1 in Edge policy. Extends Certificate Transparency enforcement to certificates anchored at locally-installed enterprise root CAs (not just public CAs), requiring that internal HTTPS sites served by the enterprise PKI include a Signed Certificate Timestamp (SCT) or be logged in a compatible CT log. "
+                        + "Enterprise internal CAs can issue certificates for any domain, including external domains. An enterprise CA that has been compromised can issue a certificate for google.com or company-partner.com that Edge would normally trust (since it's anchored at the enterprise root). Requiring CT for locally-anchored certificates means Enterprise CA-issued certificates for unexpected domains will fail CT validation, detecting CA misuse.",
+                    Tags = ["edge", "certificate-transparency", "enterprise-ca", "internal-pki", "misuse"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 4,
+                    ImpactNote = "CT required for enterprise PKI certificates; internal CA misuse (issuing certs for external domains) detected.",
+                    ApplyOps = [RegOp.SetDword(Key, "RequireCTForLocallyAnchoredCerts", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "RequireCTForLocallyAnchoredCerts")],
+                    DetectOps = [RegOp.CheckDword(Key, "RequireCTForLocallyAnchoredCerts", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "edgect-block-invalid-certificate-warning-bypass",
+                    Label = "Edge Cert Transparency: Block User Override of Certificate Error Pages",
+                    Category = "Browser",
+                    Description =
+                        "Sets SSLErrorOverrideAllowed=0 in Edge policy. Removes the 'Proceed anyway' / 'Advanced → Proceed to site' bypass button from Edge certificate error pages, preventing users from overriding TLS certificate errors by clicking through the warning. "
+                        + "The 'Proceed anyway' button on certificate error pages is a well-known social engineering vector. Phishing and adversary-in-the-middle toolkits intentionally generate self-signed certificates for lookalike domains, then display the certificate error page and add persuasive text (in custom '404' page content) asking the user to click through. Removing the bypass button eliminates this click-through vector and forces users to contact IT when they encounter legitimate certificate misconfigurations.",
+                    Tags = ["edge", "certificate-error", "bypass", "phishing", "mitm"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "Certificate error bypass button removed; users cannot click through TLS certificate warnings.",
+                    ApplyOps = [RegOp.SetDword(Key, "SSLErrorOverrideAllowed", 0)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "SSLErrorOverrideAllowed")],
+                    DetectOps = [RegOp.CheckDword(Key, "SSLErrorOverrideAllowed", 0)],
+                },
+                new TweakDef
+                {
+                    Id = "edgect-enable-safe-browsing-phishing-protection",
+                    Label = "Edge Cert Transparency: Enable Safe Browsing Phishing URL Protection",
+                    Category = "Browser",
+                    Description =
+                        "Sets SafeBrowsingEnabled=1 in Edge policy. Enables Microsoft Defender SmartScreen URL reputation checking for every navigation in Edge that verifies the destination URL against Microsoft's known-phishing, known-malware, and URL threat intelligence database before the page loads. "
+                        + "SmartScreen URL checking is Edge's first-line defence against phishing and malware distribution sites. When disabled (e.g., by a user who finds the warning pages annoying), navigations to known phishing sites proceed without warning. In enterprise environments where employees receive targeted spear-phishing emails with malicious links, SmartScreen provides automated blocking of known-bad URLs that supplements user security awareness training.",
+                    Tags = ["edge", "safe-browsing", "smartscreen", "phishing", "url-protection"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 5,
+                    SafetyRating = 5,
+                    ImpactNote = "SmartScreen URL checking enforced in Edge; known-phishing and malware URLs blocked before page load.",
+                    ApplyOps = [RegOp.SetDword(Key, "SafeBrowsingEnabled", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "SafeBrowsingEnabled")],
+                    DetectOps = [RegOp.CheckDword(Key, "SafeBrowsingEnabled", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "edgect-enable-enhanced-safe-browsing",
+                    Label = "Edge Cert Transparency: Enable Enhanced Safe Browsing Deep URL Analysis",
+                    Category = "Browser",
+                    Description =
+                        "Sets SafeBrowsingProtectionLevel=2 in Edge policy (value 2 = Enhanced Protection). Enables Edge's Enhanced Safe Browsing mode, which performs deeper URL and download analysis including file hash lookups, URL structure analysis, and real-time page content evaluation to detect novel phishing pages that have not yet been classified in the known-bad URL database. "
+                        + "Standard SmartScreen uses a hash-compare against a known-bad URL blocklist. Enhanced Protection adds real-time analysis that can detect zero-day phishing pages within minutes of their creation by analysing page structure, visual similarity to known login pages, and URL entropy. This dramatically reduces the window between phishing site creation and first-user protection.",
+                    Tags = ["edge", "safe-browsing", "enhanced", "real-time", "zero-day"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "Enhanced SafeBrowsing enabled; real-time zero-day phishing detection augments standard blocklist.",
+                    ApplyOps = [RegOp.SetDword(Key, "SafeBrowsingProtectionLevel", 2)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "SafeBrowsingProtectionLevel")],
+                    DetectOps = [RegOp.CheckDword(Key, "SafeBrowsingProtectionLevel", 2)],
+                },
+                new TweakDef
+                {
+                    Id = "edgect-block-mixed-content-display",
+                    Label = "Edge Cert Transparency: Block Passive Mixed Content (HTTP Resources on HTTPS Pages)",
+                    Category = "Browser",
+                    Description =
+                        "Sets BlockThirdPartyCookies=0 is not the right key; sets MixedContentEnabled=0 in Edge policy. Blocks Edge from loading passive HTTP resources (images, CSS, fonts) on HTTPS pages, preventing mixed content that allows passive network observers to correlate browsing behaviour by monitoring the unencrypted resource requests. "
+                        + "A device on a network where traffic is monitored (public Wi-Fi, hotel network, corporate proxy with DLP) that visits an HTTPS page with HTTP subresources reveals which specific content elements were loaded via the unencrypted sub-requests. An adversary can build a browser fingerprint and activity log from passive HTTP resource patterns even without breaking the HTTPS connection itself. Blocking all mixed content enforces full HTTPS for the entire page.",
+                    Tags = ["edge", "mixed-content", "passive-sniffing", "https", "tls"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "HTTP resources on HTTPS pages blocked (mixed content); full page encryption enforced for all navigations.",
+                    ApplyOps = [RegOp.SetDword(Key, "MixedContentEnabled", 0)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "MixedContentEnabled")],
+                    DetectOps = [RegOp.CheckDword(Key, "MixedContentEnabled", 0)],
+                },
+                new TweakDef
+                {
+                    Id = "edgect-require-hsts-preload-for-intranet",
+                    Label = "Edge Cert Transparency: Enforce HTTPS-Only Mode for All Navigation",
+                    Category = "Browser",
+                    Description =
+                        "Sets HttpsOnlyMode=1 in Edge policy (value 1 = Enabled). Enables Edge's HTTPS-Only mode globally, causing Edge to attempt to upgrade all HTTP navigations to HTTPS automatically, and displaying an interstitial warning if the upgrade fails (i.e., the site only supports HTTP). "
+                        + "HTTP navigation exposes session cookies, form data, content, and the URL path to passive interception on any network segment between the browser and the server. SSL stripping attacks (BEAST, sslstrip) intercept HTTP requests and prevent HTTPS upgrades transparently. HTTPS-Only mode forces the HTTPS upgrade before any HTTP request is ever sent, making all browser sessions resistant to trivial passive eavesdropping and SSL strip attacks.",
+                    Tags = ["edge", "https-only", "ssl-stripping", "hsts", "encryption"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 4,
+                    ImpactNote = "HTTPS-Only mode enforced in Edge; HTTP sites cause a warning interstitial before proceeding.",
+                    ApplyOps = [RegOp.SetDword(Key, "HttpsOnlyMode", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "HttpsOnlyMode")],
+                    DetectOps = [RegOp.CheckDword(Key, "HttpsOnlyMode", 1)],
+                },
+            ];
     }
 
     // ── EdgeDownloadHistoryPolicy ──
@@ -3868,7 +3890,6 @@ internal static class PolicyBrowser
                 ImpactNote = "OS-unsupported banner is hidden; Edge continues to run on the OS but without updates if not supported.",
             },
         ];
-
     }
 
     // ── EdgeEarlyHintsPolicy ──
@@ -4049,7 +4070,6 @@ internal static class PolicyBrowser
                     DetectOps = [RegOp.CheckDword(Key, "EdgeDisableExplicitMicrosoftServicesIntegration", 1)],
                 },
             ];
-
     }
 
     // ── EdgeExtensionPolicy ──
@@ -4064,7 +4084,8 @@ internal static class PolicyBrowser
                 Id = "edgeext-block-external-extensions",
                 Label = "Edge Extension Policy: Block External (Third-Party Store) Extensions",
                 Category = "Browser",
-                Description = "Prevents Microsoft Edge from installing extensions from stores other than the Microsoft Edge Add-ons store (e.g., the Chrome Web Store or direct-install CRX files). Third-party extension stores do not go through Microsoft's security review process; malicious extensions installed from off-store sources are a common delivery mechanism for browser-based malware and data exfiltration.",
+                Description =
+                    "Prevents Microsoft Edge from installing extensions from stores other than the Microsoft Edge Add-ons store (e.g., the Chrome Web Store or direct-install CRX files). Third-party extension stores do not go through Microsoft's security review process; malicious extensions installed from off-store sources are a common delivery mechanism for browser-based malware and data exfiltration.",
                 Tags = ["edge", "extensions", "third-party", "store", "security", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -4081,7 +4102,8 @@ internal static class PolicyBrowser
                 Id = "edgeext-disable-developer-tools",
                 Label = "Edge Extension Policy: Disable Developer Tools",
                 Category = "Browser",
-                Description = "Disables the Edge DevTools (F12 Developer Tools) for all users. DevTools allows inspection of DOM, JavaScript execution, network traffic, and source-level debugging. On locked-down workstations, kiosk terminals, and POS devices, DevTools exposure is a security risk because it can be used to bypass Content Security Policies, extract credentials from page memory, or execute arbitrary JavaScript.",
+                Description =
+                    "Disables the Edge DevTools (F12 Developer Tools) for all users. DevTools allows inspection of DOM, JavaScript execution, network traffic, and source-level debugging. On locked-down workstations, kiosk terminals, and POS devices, DevTools exposure is a security risk because it can be used to bypass Content Security Policies, extract credentials from page memory, or execute arbitrary JavaScript.",
                 Tags = ["edge", "devtools", "developer tools", "security", "kiosk", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -4098,7 +4120,8 @@ internal static class PolicyBrowser
                 Id = "edgeext-disable-component-updates",
                 Label = "Edge Extension Policy: Disable Edge Component Updates",
                 Category = "Browser",
-                Description = "Prevents the Edge update service from automatically downloading and installing component updates — small modules bundled with Edge that can be updated independently of the main browser (e.g., PDFium, Safe Browsing DB, WebRTC codecs). In air-gapped or update-managed environments, automatic component fetches break network policy and introduce unapproved code.",
+                Description =
+                    "Prevents the Edge update service from automatically downloading and installing component updates — small modules bundled with Edge that can be updated independently of the main browser (e.g., PDFium, Safe Browsing DB, WebRTC codecs). In air-gapped or update-managed environments, automatic component fetches break network policy and introduce unapproved code.",
                 Tags = ["edge", "updates", "components", "offline", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -4115,7 +4138,8 @@ internal static class PolicyBrowser
                 Id = "edgeext-disable-insecure-extension-updates",
                 Label = "Edge Extension Policy: Block Insecure (HTTP) Extension Update URLs",
                 Category = "Browser",
-                Description = "Prevents Microsoft Edge from downloading extension updates from HTTP (non-secure) update manifest URLs. Extensions that use HTTP update endpoints are vulnerable to man-in-the-middle attacks where a network attacker can substitute a malicious version of the extension. All extension update communications should occur over HTTPS with certificate validation.",
+                Description =
+                    "Prevents Microsoft Edge from downloading extension updates from HTTP (non-secure) update manifest URLs. Extensions that use HTTP update endpoints are vulnerable to man-in-the-middle attacks where a network attacker can substitute a malicious version of the extension. All extension update communications should occur over HTTPS with certificate validation.",
                 Tags = ["edge", "extensions", "updates", "http", "security", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -4132,7 +4156,8 @@ internal static class PolicyBrowser
                 Id = "edgeext-disable-native-messaging",
                 Label = "Edge Extension Policy: Disable Native Messaging Host Access",
                 Category = "Browser",
-                Description = "Prevents Edge extensions from using the Native Messaging API to communicate with native Win32 applications installed on the workstation. Native messaging allows browser extensions to call out to arbitrary executables on the system, which can be abused to exfiltrate data from isolated browser contexts or escalate from browser to OS level. In locked-down environments, no extension should have native host access.",
+                Description =
+                    "Prevents Edge extensions from using the Native Messaging API to communicate with native Win32 applications installed on the workstation. Native messaging allows browser extensions to call out to arbitrary executables on the system, which can be abused to exfiltrate data from isolated browser contexts or escalate from browser to OS level. In locked-down environments, no extension should have native host access.",
                 Tags = ["edge", "extensions", "native messaging", "security", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -4149,7 +4174,8 @@ internal static class PolicyBrowser
                 Id = "edgeext-disable-extensions-toolbar",
                 Label = "Edge Extension Policy: Hide Extensions Toolbar Button",
                 Category = "Browser",
-                Description = "Hides the Extensions button in the Edge toolbar that shows installed extensions and their permissions. On kiosk and locked-down devices where extensions are push-installed by policy, hiding the extensions UI prevents users from seeing, disabling, or uninstalling required extensions. It also prevents users from discovering which extensions are monitoring their browsing.",
+                Description =
+                    "Hides the Extensions button in the Edge toolbar that shows installed extensions and their permissions. On kiosk and locked-down devices where extensions are push-installed by policy, hiding the extensions UI prevents users from seeing, disabling, or uninstalling required extensions. It also prevents users from discovering which extensions are monitoring their browsing.",
                 Tags = ["edge", "extensions", "toolbar", "ui", "kiosk", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -4166,7 +4192,8 @@ internal static class PolicyBrowser
                 Id = "edgeext-disable-edge-shopping-assistant",
                 Label = "Edge Extension Policy: Disable Edge Shopping and Price Comparison Assistant",
                 Category = "Browser",
-                Description = "Disables the Microsoft Edge built-in shopping assistant that automatically activates on e-commerce websites to show price comparisons, coupons, and cashback offers from partner retailers. The shopping assistant shares product browsing data with Microsoft partner networks. Many organizations prohibit this data sharing on corporate devices, especially in financial and healthcare sectors.",
+                Description =
+                    "Disables the Microsoft Edge built-in shopping assistant that automatically activates on e-commerce websites to show price comparisons, coupons, and cashback offers from partner retailers. The shopping assistant shares product browsing data with Microsoft partner networks. Many organizations prohibit this data sharing on corporate devices, especially in financial and healthcare sectors.",
                 Tags = ["edge", "shopping", "coupons", "privacy", "assistant", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -4183,7 +4210,8 @@ internal static class PolicyBrowser
                 Id = "edgeext-disable-edge-wallet",
                 Label = "Edge Extension Policy: Disable Edge Wallet (Autofill / Payment Cards)",
                 Category = "Browser",
-                Description = "Disables Microsoft Edge Wallet, the built-in digital wallet that stores payment card data, loyalty cards, and Microsoft credentials for autofill on checkout pages. On corporate devices, employees should not be storing personal payment information in the browser. The Wallet syncs data to Microsoft accounts, creating data residency concerns on managed devices.",
+                Description =
+                    "Disables Microsoft Edge Wallet, the built-in digital wallet that stores payment card data, loyalty cards, and Microsoft credentials for autofill on checkout pages. On corporate devices, employees should not be storing personal payment information in the browser. The Wallet syncs data to Microsoft accounts, creating data residency concerns on managed devices.",
                 Tags = ["edge", "wallet", "payment", "autofill", "privacy", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -4200,7 +4228,8 @@ internal static class PolicyBrowser
                 Id = "edgeext-disable-smart-screen-apps",
                 Label = "Edge Extension Policy: Disable SmartScreen for Downloaded Apps",
                 Category = "Browser",
-                Description = "Disables the Microsoft Defender SmartScreen check applied to applications downloaded from the web via Edge. This setting is for environments where a dedicated AV/EDR solution handles download scanning and the SmartScreen cloud lookup would generate unnecessary telemetry. Only disable if a supported replacement scanning mechanism is in place.",
+                Description =
+                    "Disables the Microsoft Defender SmartScreen check applied to applications downloaded from the web via Edge. This setting is for environments where a dedicated AV/EDR solution handles download scanning and the SmartScreen cloud lookup would generate unnecessary telemetry. Only disable if a supported replacement scanning mechanism is in place.",
                 Tags = ["edge", "smartscreen", "downloads", "security", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -4217,7 +4246,8 @@ internal static class PolicyBrowser
                 Id = "edgeext-enable-enhance-security-mode",
                 Label = "Edge Extension Policy: Enable Enhanced Security Mode (Strict)",
                 Category = "Browser",
-                Description = "Enables Microsoft Edge's Enhanced Security Mode (also called Super Duper Secure Mode) in strict mode for all sites. This mode disables JIT compilation in the V8 JavaScript engine, reducing the JavaScript execution attack surface significantly. JIT bugs are the most common class of browser exploitation vector; disabling JIT eliminates this class of vulnerability at the cost of some script performance.",
+                Description =
+                    "Enables Microsoft Edge's Enhanced Security Mode (also called Super Duper Secure Mode) in strict mode for all sites. This mode disables JIT compilation in the V8 JavaScript engine, reducing the JavaScript execution attack surface significantly. JIT bugs are the most common class of browser exploitation vector; disabling JIT eliminates this class of vulnerability at the cost of some script performance.",
                 Tags = ["edge", "security mode", "jit", "javascript", "mitigation", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -4230,7 +4260,6 @@ internal static class PolicyBrowser
                 ImpactNote = "Strict Enhanced Security Mode disables JIT on all sites; may slow complex web apps by 10–20%.",
             },
         ];
-
     }
 
     // ── EdgeImportPrivacyPolicy ──
@@ -4421,7 +4450,6 @@ internal static class PolicyBrowser
                     DetectOps = [RegOp.CheckDword(Key, "SendSiteInfoToImproveServices", 0)],
                 },
             ];
-
     }
 
     // ── EdgeInternetExplorerModePolicy ──
@@ -4436,7 +4464,8 @@ internal static class PolicyBrowser
                 Id = "iemode-disable-ie-integration",
                 Label = "Edge IE Mode Policy: Disable Internet Explorer Integration Mode",
                 Category = "Browser",
-                Description = "Configures Microsoft Edge to disable Internet Explorer integration mode entirely. Setting InternetExplorerIntegrationLevel to 0 means Edge will not render any pages in the Internet Explorer rendering engine (Trident/MSHTML), even if those pages match an Enterprise Mode Site List. IE mode is a legacy compatibility shunt that activates the deprecated IE11 engine inside Edge. Disabling it forces all web content through the modern Chromium renderer and eliminates the IE11 attack surface.",
+                Description =
+                    "Configures Microsoft Edge to disable Internet Explorer integration mode entirely. Setting InternetExplorerIntegrationLevel to 0 means Edge will not render any pages in the Internet Explorer rendering engine (Trident/MSHTML), even if those pages match an Enterprise Mode Site List. IE mode is a legacy compatibility shunt that activates the deprecated IE11 engine inside Edge. Disabling it forces all web content through the modern Chromium renderer and eliminates the IE11 attack surface.",
                 Tags = ["edge", "internet explorer", "ie mode", "legacy", "security", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -4453,7 +4482,8 @@ internal static class PolicyBrowser
                 Id = "iemode-block-reload-in-ie",
                 Label = "Edge IE Mode Policy: Block User Reload in IE Mode for Standard Pages",
                 Category = "Browser",
-                Description = "Prevents users from manually reloading non-IE-mode pages in Internet Explorer mode via the Edge context menu or address bar action. Without this policy, users can force any arbitrary web page into the IE rendering engine by right-clicking and selecting 'Reload tab in Internet Explorer mode'. This bypasses IT-controlled site lists and allows uncontrolled Trident-rendered browsing, which may expose older, less patched code paths to malicious content.",
+                Description =
+                    "Prevents users from manually reloading non-IE-mode pages in Internet Explorer mode via the Edge context menu or address bar action. Without this policy, users can force any arbitrary web page into the IE rendering engine by right-clicking and selecting 'Reload tab in Internet Explorer mode'. This bypasses IT-controlled site lists and allows uncontrolled Trident-rendered browsing, which may expose older, less patched code paths to malicious content.",
                 Tags = ["edge", "internet explorer", "ie mode", "reload", "security", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -4463,14 +4493,16 @@ internal static class PolicyBrowser
                 DetectOps = [RegOp.CheckDword(EdgeKey, "InternetExplorerIntegrationReloadInIEModeAllowed", 0)],
                 ImpactScore = 3,
                 SafetyRating = 5,
-                ImpactNote = "Users cannot force arbitrary pages into IE mode via context menu; only IT-configured site list entries render in IE mode.",
+                ImpactNote =
+                    "Users cannot force arbitrary pages into IE mode via context menu; only IT-configured site list entries render in IE mode.",
             },
             new TweakDef
             {
                 Id = "iemode-block-ie-mode-tab-in-edge",
                 Label = "Edge IE Mode Policy: Block IE Mode Tabs from Returning to Edge Mode",
                 Category = "Browser",
-                Description = "Prevents Internet Explorer mode tabs from navigating back to Microsoft Edge mode (Chromium rendering) for pages that are not in the Enterprise Mode Site List. When a user navigates from an IE mode tab to a page not on the site list, the default behavior opens the new page in a separate Edge tab. Blocking this prevents session mixing between Trident and Chromium rendering contexts, which is important for maintaining consistent security isolation.",
+                Description =
+                    "Prevents Internet Explorer mode tabs from navigating back to Microsoft Edge mode (Chromium rendering) for pages that are not in the Enterprise Mode Site List. When a user navigates from an IE mode tab to a page not on the site list, the default behavior opens the new page in a separate Edge tab. Blocking this prevents session mixing between Trident and Chromium rendering contexts, which is important for maintaining consistent security isolation.",
                 Tags = ["edge", "internet explorer", "ie mode", "tab", "isolation", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -4487,7 +4519,8 @@ internal static class PolicyBrowser
                 Id = "iemode-block-local-file-in-ie",
                 Label = "Edge IE Mode Policy: Block Local Files from Opening in IE Mode",
                 Category = "Browser",
-                Description = "Prevents local file:// protocol pages from being loaded in Internet Explorer mode within Edge. Without this restriction, local HTML files and intranet file shares accessed via UNC paths can be forced into IE mode, where ActiveX controls, VBScript, and other legacy technologies are available. Local files rendered in the IE engine can access the local file system with fewer restrictions than Chromium-hosted content.",
+                Description =
+                    "Prevents local file:// protocol pages from being loaded in Internet Explorer mode within Edge. Without this restriction, local HTML files and intranet file shares accessed via UNC paths can be forced into IE mode, where ActiveX controls, VBScript, and other legacy technologies are available. Local files rendered in the IE engine can access the local file system with fewer restrictions than Chromium-hosted content.",
                 Tags = ["edge", "internet explorer", "ie mode", "local files", "security", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -4504,7 +4537,8 @@ internal static class PolicyBrowser
                 Id = "iemode-block-local-page-in-ie",
                 Label = "Edge IE Mode Policy: Block Local Pages from Being Loaded in IE Mode",
                 Category = "Browser",
-                Description = "Prevents local intranet pages (those resolved via the Local intranet zone in Internet Explorer, including short hostnames and *.local domains) from being automatically elevated into Internet Explorer mode within Edge. Without this control, legacy intranet pages that IE mode site lists or automatic zone detection would route to Trident can activate legacy ActiveX controls and scripts that are unavailable in Chromium.",
+                Description =
+                    "Prevents local intranet pages (those resolved via the Local intranet zone in Internet Explorer, including short hostnames and *.local domains) from being automatically elevated into Internet Explorer mode within Edge. Without this control, legacy intranet pages that IE mode site lists or automatic zone detection would route to Trident can activate legacy ActiveX controls and scripts that are unavailable in Chromium.",
                 Tags = ["edge", "internet explorer", "ie mode", "intranet", "local page", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -4521,7 +4555,8 @@ internal static class PolicyBrowser
                 Id = "iemode-dont-send-intranet-to-ie",
                 Label = "Edge IE Mode Policy: Disable Automatic Redirect of Intranet to Internet Explorer Mode",
                 Category = "Browser",
-                Description = "Prevents Microsoft Edge from automatically redirecting intranet zone URLs to Internet Explorer mode or the standalone Internet Explorer process. In default configurations, Edge may auto-detect intranet sites via the IE Intranet zone heuristic and silently open them in IE. Setting SendIntranetToInternetExplorer to 0 disables this behavior, ensuring intranet content is always rendered in the Chromium engine unless explicitly listed in an Enterprise Mode Site List.",
+                Description =
+                    "Prevents Microsoft Edge from automatically redirecting intranet zone URLs to Internet Explorer mode or the standalone Internet Explorer process. In default configurations, Edge may auto-detect intranet sites via the IE Intranet zone heuristic and silently open them in IE. Setting SendIntranetToInternetExplorer to 0 disables this behavior, ensuring intranet content is always rendered in the Chromium engine unless explicitly listed in an Enterprise Mode Site List.",
                 Tags = ["edge", "internet explorer", "intranet", "auto-redirect", "ie mode", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -4538,7 +4573,8 @@ internal static class PolicyBrowser
                 Id = "iemode-enhanced-hang-detection",
                 Label = "Edge IE Mode Policy: Enable Enhanced Hang Detection for IE Mode Tabs",
                 Category = "Browser",
-                Description = "Enables enhanced hang detection for Internet Explorer mode tabs within Microsoft Edge. When InternetExplorerIntegrationEnhancedHangDetection is set to 1, Edge applies a shorter hang timeout to IE mode tabs and surfaces a 'This page is not responding' dialog more quickly when an IE mode tab stops responding. In managed environments where IE mode is used for legacy line-of-business apps, enhanced hang detection prevents a single frozen IE component from blocking the entire Edge process.",
+                Description =
+                    "Enables enhanced hang detection for Internet Explorer mode tabs within Microsoft Edge. When InternetExplorerIntegrationEnhancedHangDetection is set to 1, Edge applies a shorter hang timeout to IE mode tabs and surfaces a 'This page is not responding' dialog more quickly when an IE mode tab stops responding. In managed environments where IE mode is used for legacy line-of-business apps, enhanced hang detection prevents a single frozen IE component from blocking the entire Edge process.",
                 Tags = ["edge", "internet explorer", "ie mode", "hang detection", "reliability", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -4555,7 +4591,8 @@ internal static class PolicyBrowser
                 Id = "iemode-block-zone-id-mht-files",
                 Label = "Edge IE Mode Policy: Block Zone-Identifier MHT Files from IE Mode",
                 Category = "Browser",
-                Description = "Prevents MHTML (.mht, .mhtml) files that carry a Zone.Identifier Alternate Data Stream (Mark of the Web) from being opened in Internet Explorer mode. MHT files downloaded from the internet carry a Zone.Identifier ADS marking them as untrusted. Without this policy, Edge may open such files in IE mode where legacy MSHTML parsing applies. Blocking zone-marked MHT files from IE mode forces them to open in the Chromium renderer with modern sandboxing.",
+                Description =
+                    "Prevents MHTML (.mht, .mhtml) files that carry a Zone.Identifier Alternate Data Stream (Mark of the Web) from being opened in Internet Explorer mode. MHT files downloaded from the internet carry a Zone.Identifier ADS marking them as untrusted. Without this policy, Edge may open such files in IE mode where legacy MSHTML parsing applies. Blocking zone-marked MHT files from IE mode forces them to open in the Chromium renderer with modern sandboxing.",
                 Tags = ["edge", "internet explorer", "ie mode", "mht", "zone identifier", "security", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -4572,7 +4609,8 @@ internal static class PolicyBrowser
                 Id = "iemode-set-window-open-threshold",
                 Label = "Edge IE Mode Policy: Set window.open Navigation Threshold for IE Mode Tabs",
                 Category = "Browser",
-                Description = "Controls the pixel-width threshold above which new windows opened via window.open() from IE mode tabs are rendered in Edge mode rather than IE mode. When InternetExplorerIntegrationWindowOpenWidthThreshold is set to 0, all new windows opened by IE mode tabs will open in Edge (Chromium) mode regardless of their dimensions. This prevents IE mode tabs from spawning new windows that also use the Trident rendering engine, containing the legacy engine to only specifically configured tabs.",
+                Description =
+                    "Controls the pixel-width threshold above which new windows opened via window.open() from IE mode tabs are rendered in Edge mode rather than IE mode. When InternetExplorerIntegrationWindowOpenWidthThreshold is set to 0, all new windows opened by IE mode tabs will open in Edge (Chromium) mode regardless of their dimensions. This prevents IE mode tabs from spawning new windows that also use the Trident rendering engine, containing the legacy engine to only specifically configured tabs.",
                 Tags = ["edge", "internet explorer", "ie mode", "window.open", "rendering", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -4589,7 +4627,8 @@ internal static class PolicyBrowser
                 Id = "iemode-disable-cloud-site-list-management",
                 Label = "Edge IE Mode Policy: Disable Cloud-Managed IE Mode Site List",
                 Category = "Browser",
-                Description = "Disables the Cloud Site List Management feature in Microsoft Edge, which allows IT administrators to publish and update the Enterprise Mode Site List via Microsoft 365 Admin Center (Microsoft Entra ID / Intune cloud) without requiring on-premises GPO or file share deployment. When CloudSiteListManagementEnabled is set to 0, Edge only reads the site list from the locally configured URL or GPO path. This maintains site list control within the organization's on-premises infrastructure and prevents cloud-based overrides.",
+                Description =
+                    "Disables the Cloud Site List Management feature in Microsoft Edge, which allows IT administrators to publish and update the Enterprise Mode Site List via Microsoft 365 Admin Center (Microsoft Entra ID / Intune cloud) without requiring on-premises GPO or file share deployment. When CloudSiteListManagementEnabled is set to 0, Edge only reads the site list from the locally configured URL or GPO path. This maintains site list control within the organization's on-premises infrastructure and prevents cloud-based overrides.",
                 Tags = ["edge", "internet explorer", "ie mode", "site list", "cloud", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -4602,7 +4641,6 @@ internal static class PolicyBrowser
                 ImpactNote = "Cloud-based IE mode site list management disabled; site list is sourced from on-premises GPO or file share only.",
             },
         ];
-
     }
 
     // ── EdgeMediaCapturePolicy ──
@@ -4617,7 +4655,8 @@ internal static class PolicyBrowser
                 Id = "edgemedia-block-camera",
                 Label = "Edge Media Capture Policy: Block Camera Access from Browser",
                 Category = "Browser",
-                Description = "Blocks all camera and video capture access from within Microsoft Edge for all sites by default. When VideoCaptureAllowed is set to 0, no website may request or use the system camera through the browser, regardless of site permissions previously granted. This is appropriate for locked-down workstations, reception terminals, kiosk deployments, and any environment where webcam access from a browser constitutes a privacy or security risk.",
+                Description =
+                    "Blocks all camera and video capture access from within Microsoft Edge for all sites by default. When VideoCaptureAllowed is set to 0, no website may request or use the system camera through the browser, regardless of site permissions previously granted. This is appropriate for locked-down workstations, reception terminals, kiosk deployments, and any environment where webcam access from a browser constitutes a privacy or security risk.",
                 Tags = ["edge", "camera", "video capture", "privacy", "kiosk", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -4634,7 +4673,8 @@ internal static class PolicyBrowser
                 Id = "edgemedia-block-microphone",
                 Label = "Edge Media Capture Policy: Block Microphone Access from Browser",
                 Category = "Browser",
-                Description = "Blocks all microphone and audio capture access from within Microsoft Edge for all sites by default. Setting AudioCaptureAllowed to 0 prevents any website from recording audio through the system microphone, regardless of previously granted browser permissions. Use in call-center environments where only approved communication apps may use the microphone, or in high-security areas where audio capture from a browser session is prohibited.",
+                Description =
+                    "Blocks all microphone and audio capture access from within Microsoft Edge for all sites by default. Setting AudioCaptureAllowed to 0 prevents any website from recording audio through the system microphone, regardless of previously granted browser permissions. Use in call-center environments where only approved communication apps may use the microphone, or in high-security areas where audio capture from a browser session is prohibited.",
                 Tags = ["edge", "microphone", "audio capture", "privacy", "security", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -4651,7 +4691,8 @@ internal static class PolicyBrowser
                 Id = "edgemedia-block-screen-capture",
                 Label = "Edge Media Capture Policy: Block Screen Capture from Browser",
                 Category = "Browser",
-                Description = "Blocks screen capture and screen recording APIs within Microsoft Edge by default for all sites. Setting ScreenCaptureAllowed to 0 prevents websites from calling getDisplayMedia() to share or record the screen, individual application windows, or browser tabs. This is critical in environments where DLP (Data Loss Prevention) policy prohibits screen recording by web applications, or where sensitive information displayed on screen must not be programmatically captured.",
+                Description =
+                    "Blocks screen capture and screen recording APIs within Microsoft Edge by default for all sites. Setting ScreenCaptureAllowed to 0 prevents websites from calling getDisplayMedia() to share or record the screen, individual application windows, or browser tabs. This is critical in environments where DLP (Data Loss Prevention) policy prohibits screen recording by web applications, or where sensitive information displayed on screen must not be programmatically captured.",
                 Tags = ["edge", "screen capture", "recording", "dlp", "security", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -4668,7 +4709,8 @@ internal static class PolicyBrowser
                 Id = "edgemedia-disable-cast",
                 Label = "Edge Media Capture Policy: Disable Google Cast Media Streaming",
                 Category = "Browser",
-                Description = "Disables the Google Cast feature integrated into Microsoft Edge, which allows casting browser tab content or entire screen to Chromecast-compatible devices on the local network. Cast operates by scanning the local network for cast-compatible receivers and establishing a peer-to-peer media stream. In corporate environments, Cast may expose browser content to unauthorized receivers or allow users to bypass screen-mirroring controls.",
+                Description =
+                    "Disables the Google Cast feature integrated into Microsoft Edge, which allows casting browser tab content or entire screen to Chromecast-compatible devices on the local network. Cast operates by scanning the local network for cast-compatible receivers and establishing a peer-to-peer media stream. In corporate environments, Cast may expose browser content to unauthorized receivers or allow users to bypass screen-mirroring controls.",
                 Tags = ["edge", "cast", "chromecast", "streaming", "network", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -4685,7 +4727,8 @@ internal static class PolicyBrowser
                 Id = "edgemedia-block-web-bluetooth",
                 Label = "Edge Media Capture Policy: Block Web Bluetooth API",
                 Category = "Browser",
-                Description = "Blocks the Web Bluetooth API in Microsoft Edge, preventing websites from discovering, pairing with, or communicating with Bluetooth devices. The Web Bluetooth specification exposes device capabilities including model, manufacturer, and sensor data to websites. In corporate environments with Bluetooth-enabled medical devices, payment terminals, or security tokens, browser-level Bluetooth access creates an unauthorized channel for device enumeration and data exfiltration.",
+                Description =
+                    "Blocks the Web Bluetooth API in Microsoft Edge, preventing websites from discovering, pairing with, or communicating with Bluetooth devices. The Web Bluetooth specification exposes device capabilities including model, manufacturer, and sensor data to websites. In corporate environments with Bluetooth-enabled medical devices, payment terminals, or security tokens, browser-level Bluetooth access creates an unauthorized channel for device enumeration and data exfiltration.",
                 Tags = ["edge", "bluetooth", "web bluetooth", "api", "security", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -4702,7 +4745,8 @@ internal static class PolicyBrowser
                 Id = "edgemedia-block-web-hid",
                 Label = "Edge Media Capture Policy: Block WebHID API Access",
                 Category = "Browser",
-                Description = "Blocks the WebHID (Human Interface Device) API in Microsoft Edge, preventing websites from accessing HID devices such as gamepads, custom input devices, and specialty hardware directly through the browser. WebHID allows arbitrary device I/O from a web page. On corporate workstations connected to HID-based security tokens, smart card readers, or biometric devices, browser HID access provides an unapproved communication channel to sensitive hardware.",
+                Description =
+                    "Blocks the WebHID (Human Interface Device) API in Microsoft Edge, preventing websites from accessing HID devices such as gamepads, custom input devices, and specialty hardware directly through the browser. WebHID allows arbitrary device I/O from a web page. On corporate workstations connected to HID-based security tokens, smart card readers, or biometric devices, browser HID access provides an unapproved communication channel to sensitive hardware.",
                 Tags = ["edge", "hid", "webhid", "api", "hardware", "security", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -4719,7 +4763,8 @@ internal static class PolicyBrowser
                 Id = "edgemedia-block-web-usb",
                 Label = "Edge Media Capture Policy: Block WebUSB API Access",
                 Category = "Browser",
-                Description = "Blocks the WebUSB API in Microsoft Edge, preventing websites from accessing USB devices connected to the system directly through the browser. WebUSB allows websites to communicate with any USB device — including USB drives, hardware security tokens, programmers, and devices with proprietary protocols. This creates a browser-level bypass of OS-enforced USB device policies and DLP controls.",
+                Description =
+                    "Blocks the WebUSB API in Microsoft Edge, preventing websites from accessing USB devices connected to the system directly through the browser. WebUSB allows websites to communicate with any USB device — including USB drives, hardware security tokens, programmers, and devices with proprietary protocols. This creates a browser-level bypass of OS-enforced USB device policies and DLP controls.",
                 Tags = ["edge", "usb", "webusb", "api", "hardware", "security", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -4736,7 +4781,8 @@ internal static class PolicyBrowser
                 Id = "edgemedia-block-serial-api",
                 Label = "Edge Media Capture Policy: Block Serial Port API Access",
                 Category = "Browser",
-                Description = "Blocks the Web Serial API in Microsoft Edge, preventing websites from communicating with serial port devices (RS-232, COM port, USB-to-serial adapters). The Serial API gives a web page direct read/write access to any serial device without requiring a native application. On industrial control PCs, medical workstations, and environments with serial-connected PLCs or measurement instruments, this browser API provides unauthorized low-level hardware access.",
+                Description =
+                    "Blocks the Web Serial API in Microsoft Edge, preventing websites from communicating with serial port devices (RS-232, COM port, USB-to-serial adapters). The Serial API gives a web page direct read/write access to any serial device without requiring a native application. On industrial control PCs, medical workstations, and environments with serial-connected PLCs or measurement instruments, this browser API provides unauthorized low-level hardware access.",
                 Tags = ["edge", "serial api", "com port", "hardware", "security", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -4753,7 +4799,8 @@ internal static class PolicyBrowser
                 Id = "edgemedia-disable-gamepad-api",
                 Label = "Edge Media Capture Policy: Disable Gamepad API in Browser",
                 Category = "Browser",
-                Description = "Disables the Gamepad API in Microsoft Edge, preventing websites from reading input state from gamepads, joysticks, and other game controllers connected to the system. The Gamepad API exposes button and axis state from all connected controllers to any web page. On corporate workstations, this API is unnecessary and can be used to fingerprint users (identifying specific controller hardware) or read input from controllers repurposed as input devices.",
+                Description =
+                    "Disables the Gamepad API in Microsoft Edge, preventing websites from reading input state from gamepads, joysticks, and other game controllers connected to the system. The Gamepad API exposes button and axis state from all connected controllers to any web page. On corporate workstations, this API is unnecessary and can be used to fingerprint users (identifying specific controller hardware) or read input from controllers repurposed as input devices.",
                 Tags = ["edge", "gamepad", "gamepad api", "input", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -4770,7 +4817,8 @@ internal static class PolicyBrowser
                 Id = "edgemedia-disable-math-solver",
                 Label = "Edge Media Capture Policy: Disable AI Math Solver in Edge",
                 Category = "Browser",
-                Description = "Disables the Edge Math Solver feature, which adds a Math Solver button to the Edge toolbar and context menu. When activated, the feature captures the selected math expression or equation from the page and submits it to a Microsoft AI cloud service that returns step-by-step solution guidance. In academic and testing environments where students use controlled browser sessions for exams, the Math Solver creates an unauthorized AI assistance channel.",
+                Description =
+                    "Disables the Edge Math Solver feature, which adds a Math Solver button to the Edge toolbar and context menu. When activated, the feature captures the selected math expression or equation from the page and submits it to a Microsoft AI cloud service that returns step-by-step solution guidance. In academic and testing environments where students use controlled browser sessions for exams, the Math Solver creates an unauthorized AI assistance channel.",
                 Tags = ["edge", "math solver", "ai", "academic", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -4783,7 +4831,6 @@ internal static class PolicyBrowser
                 ImpactNote = "Math Solver button removed from Edge; AI math assistance feature disabled on all pages.",
             },
         ];
-
     }
 
     // ── EdgeNewTabPagePolicy ──
@@ -4792,179 +4839,188 @@ internal static class PolicyBrowser
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge";
 
         public static IReadOnlyList<TweakDef> Data =>
-        [
-            new TweakDef
-            {
-                Id = "edgentp-disable-news-feed-on-new-tab",
-                Label = "Edge New Tab Page: Disable Microsoft News Feed and Sponsored Content",
-                Category = "Browser",
-                Description = "Sets NewTabPageContentEnabled=0 in Edge policy. Removes the news feed, sponsored content tiles, and 'Microsoft Start' MSN content from the Edge New Tab Page, leaving only the search bar and customisable quick-access shortcuts. " +
-                    "The Microsoft News feed on the Edge New Tab Page makes network requests to news CDN endpoints on every new tab open, sending the user's browsing context and telemetry to the MSN/Microsoft Start advertising network. Every new tab opened invites a network round-trip that may be captured by enterprise proxy logs as an apparent outbound data transfer. Removing the feed eliminates this unwanted telemetry and reduces browser startup time.",
-                Tags = ["edge", "new-tab", "news-feed", "telemetry", "msn"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Edge New Tab news feed disabled; no MSN/Microsoft Start content requests on new tab open.",
-                ApplyOps = [RegOp.SetDword(Key, "NewTabPageContentEnabled", 0)],
-                RemoveOps = [RegOp.DeleteValue(Key, "NewTabPageContentEnabled")],
-                DetectOps = [RegOp.CheckDword(Key, "NewTabPageContentEnabled", 0)],
-            },
-            new TweakDef
-            {
-                Id = "edgentp-set-new-tab-layout-focused-mode",
-                Label = "Edge New Tab Page: Set New Tab Page to Focused Layout (Search Only)",
-                Category = "Browser",
-                Description = "Sets NewTabPageLayout=2 in Edge policy (value 2 = Focused). Configures the Edge New Tab Page to display in 'Focused' layout, which shows only the search bar and removes the news grid, quick-access tiles, and Microsoft promoted content from the default new tab experience. " +
-                    "Focused layout reduces the cognitive load introduced by the news grid on the New Tab Page, provides a distraction-free default browser state, and prevents accidental clicks on promoted content that may navigate to external news sites during a work browsing session. It also reduces the amount of outbound advertising telemetry generated by the default 'Inspirational' or 'Informational' layouts.",
-                Tags = ["edge", "new-tab", "focused", "distraction", "layout"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                ImpactNote = "Edge New Tab Page shows focused layout (search bar only); no news grid or promotional tiles.",
-                ApplyOps = [RegOp.SetDword(Key, "NewTabPageLayout", 2)],
-                RemoveOps = [RegOp.DeleteValue(Key, "NewTabPageLayout")],
-                DetectOps = [RegOp.CheckDword(Key, "NewTabPageLayout", 2)],
-            },
-            new TweakDef
-            {
-                Id = "edgentp-disable-quick-search-bar",
-                Label = "Edge New Tab Page: Disable Bing Quick Search Suggestions on New Tab",
-                Category = "Browser",
-                Description = "Sets NewTabPageSearchBoxEnabled=0 in Edge policy. Disables the Bing-powered search suggestions that appear as the user types in the New Tab Page search bar, preventing keystroke telemetry from being sent to Bing suggestion endpoints before the user submits a search. " +
-                    "Typeahead search suggestions on the New Tab Page send partial keystrokes to Bing's autocomplete API as the user types, even for searches that may include sensitive internal terms, IP addresses, or hostnames. In high-security environments where employees should not be inadvertently leaking internal hostname patterns to external search engines, disabling typeahead prevents pre-submission data transmission.",
-                Tags = ["edge", "new-tab", "search-suggestions", "typeahead", "telemetry"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                ImpactNote = "Bing typeahead suggestions disabled on NTP search bar; keystrokes not sent to Bing until search is submitted.",
-                ApplyOps = [RegOp.SetDword(Key, "NewTabPageSearchBoxEnabled", 0)],
-                RemoveOps = [RegOp.DeleteValue(Key, "NewTabPageSearchBoxEnabled")],
-                DetectOps = [RegOp.CheckDword(Key, "NewTabPageSearchBoxEnabled", 0)],
-            },
-            new TweakDef
-            {
-                Id = "edgentp-disable-context-personalization",
-                Label = "Edge New Tab Page: Disable Personalised Content Based on Browsing Context",
-                Category = "Browser",
-                Description = "Sets NewTabPagePersonalizedContentEnabled=0 in Edge policy. Prevents Edge from using the user's browsing history, saved sites, and M365 activity signals to personalise the content displayed on the New Tab Page with customised news topics, trending articles, and personalised ad tiles. " +
-                    "Personalised New Tab content is built from browsing telemetry that is uploaded to and processed by Microsoft's Personalisation service. This telemetry includes categories of pages visited, search terms, and time-on-page signals derived from the user's on-device browsing data. In privacy-conscious organisations, this upstream browsing telemetry transmission may conflict with internal data handling policies or employee monitoring regulations.",
-                Tags = ["edge", "new-tab", "personalisation", "telemetry", "privacy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                ImpactNote = "NTP personalisation disabled; no browsing telemetry used to customise Edge New Tab contents.",
-                ApplyOps = [RegOp.SetDword(Key, "NewTabPagePersonalizedContentEnabled", 0)],
-                RemoveOps = [RegOp.DeleteValue(Key, "NewTabPagePersonalizedContentEnabled")],
-                DetectOps = [RegOp.CheckDword(Key, "NewTabPagePersonalizedContentEnabled", 0)],
-            },
-            new TweakDef
-            {
-                Id = "edgentp-disable-background-image-download",
-                Label = "Edge New Tab Page: Disable Daily Background Image Download (Bing Wallpaper)",
-                Category = "Browser",
-                Description = "Sets NewTabPageBingChatDefaultEnabled=0 in Edge policy. Prevents Edge from downloading the daily Bing Image of the Day wallpaper for the New Tab Page background, eliminating an outbound network request to Bing's image CDN that occurs on every new browser session or when the browser starts cold. " +
-                    "The Bing Image of the Day download sends a request to Bing's CDN infrastructure that includes the user's locale, Edge client ID, and a timestamp. This request is made unconditionally on every new tab open (when local cache is expired), creating a persistent outbound C&C-style beacon pattern in enterprise proxy logs that security monitoring may flag. Disabling the background image download eliminates this regular network telemetry.",
-                Tags = ["edge", "new-tab", "background-image", "bing", "network-beacon"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                ImpactNote = "Daily Bing wallpaper download disabled for NTP; no periodic Bing CDN image request on new tab open.",
-                ApplyOps = [RegOp.SetDword(Key, "NewTabPageBingChatDefaultEnabled", 0)],
-                RemoveOps = [RegOp.DeleteValue(Key, "NewTabPageBingChatDefaultEnabled")],
-                DetectOps = [RegOp.CheckDword(Key, "NewTabPageBingChatDefaultEnabled", 0)],
-            },
-            new TweakDef
-            {
-                Id = "edgentp-block-quick-links-modification",
-                Label = "Edge New Tab Page: Lock Quick Links and Prevent User Modification",
-                Category = "Browser",
-                Description = "Sets NewTabPageQuickLinksEnabled=1 in Edge policy. Enables Quick Links on the New Tab Page but combined with enterprise link configuration policies, locks the quick links to IT-defined shortcuts for internal portals and blocks users from adding, removing, or reordering quick link tiles. " +
-                    "Quick links on the Edge NTP serve as one-click navigation to frequently used sites. Without enterprise control, users populate these with personal shortcuts including personal social media, webmail, and personal banking portals. By locking quick links to enterprise-defined values (helpdesk portal, internal SharePoint, timesheet system), the NTP becomes a managed productivity tool instead of a consumer browsing shortcut bar.",
-                Tags = ["edge", "new-tab", "quick-links", "enterprise", "managed"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                ImpactNote = "NTP quick links locked to enterprise configuration; users cannot add or remove personal shortcuts.",
-                ApplyOps = [RegOp.SetDword(Key, "NewTabPageQuickLinksEnabled", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "NewTabPageQuickLinksEnabled")],
-                DetectOps = [RegOp.CheckDword(Key, "NewTabPageQuickLinksEnabled", 1)],
-            },
-            new TweakDef
-            {
-                Id = "edgentp-disable-weather-widget",
-                Label = "Edge New Tab Page: Disable Weather Widget on New Tab Page",
-                Category = "Browser",
-                Description = "Sets NewTabPageWeatherEnabled=0 in Edge policy. Removes the weather information widget from the Edge New Tab Page, preventing the weather service from sending a geolocation lookup request or IP-based location inference request to the MSN weather API each time a new tab is opened. " +
-                    "The Edge NTP weather widget resolves user location by sending a location signal (either GPS coordinates if location permission is granted, or IP-based geolocation as a fallback) to the MSN weather API. This is a low-bandwidth but persistent telemetry channel that transmits the user's approximate location to Microsoft's advertising backend. On devices used in sensitive facility locations, this geolocation signal may disclose site location to external services.",
-                Tags = ["edge", "new-tab", "weather", "geolocation", "telemetry"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                ImpactNote = "Weather widget removed from Edge NTP; no IP-based geolocation request sent to MSN weather API.",
-                ApplyOps = [RegOp.SetDword(Key, "NewTabPageWeatherEnabled", 0)],
-                RemoveOps = [RegOp.DeleteValue(Key, "NewTabPageWeatherEnabled")],
-                DetectOps = [RegOp.CheckDword(Key, "NewTabPageWeatherEnabled", 0)],
-            },
-            new TweakDef
-            {
-                Id = "edgentp-disable-microsoft-365-feed",
-                Label = "Edge New Tab Page: Disable M365 Office Feed on New Tab Page",
-                Category = "Browser",
-                Description = "Sets NewTabPageAppLauncherEnabled=0 in Edge policy. Removes the Microsoft 365 app launcher grid and recent Office documents feed from the Edge New Tab Page, which would otherwise display the user's recently modified SharePoint, OneDrive, and Teams files in a list visible to anyone viewing the screen while a new tab is open. " +
-                    "The recent Office documents displayed in the Edge M365 feed are loaded from the Microsoft Graph API using the user's current access token on every new tab open. The document titles and URLs visible in the feed constitute a real-time disclosure of what the user is working on. In screen-sharing sessions or when colleagues can see the screen background, this information can be inadvertently disclosed.",
-                Tags = ["edge", "new-tab", "m365", "office-feed", "document-titles"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "M365 recent documents feed removed from Edge NTP; recent file titles not displayed on new tab open.",
-                ApplyOps = [RegOp.SetDword(Key, "NewTabPageAppLauncherEnabled", 0)],
-                RemoveOps = [RegOp.DeleteValue(Key, "NewTabPageAppLauncherEnabled")],
-                DetectOps = [RegOp.CheckDword(Key, "NewTabPageAppLauncherEnabled", 0)],
-            },
-            new TweakDef
-            {
-                Id = "edgentp-disable-trending-topics-on-new-tab",
-                Label = "Edge New Tab Page: Disable Trending / Trending News on New Tab Page",
-                Category = "Browser",
-                Description = "Sets NewTabPageManagedNewTabMicrosoftNews=0 in Edge policy. Removes the trending news stories and 'Trending' section from the Edge New Tab Page, preventing distraction from trending social media and news content during working hours. " +
-                    "Trending news on the Edge NTP is curated by MSN's editorial and algorithmic pipeline and includes entertainment news, viral social media topics, and politically engaging content. Exposure to trending topics during work hours contributes to context switching and reduced focus. Enterprise productivity studies have associated news feed interruptions on browser tabs with significant attention cost per-interruption. Removing trending content from the NTP reduces this distraction vector.",
-                Tags = ["edge", "new-tab", "trending", "distraction", "productivity"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                ImpactNote = "Trending news section removed from Edge NTP; no viral/entertainment content on new tab opens.",
-                ApplyOps = [RegOp.SetDword(Key, "NewTabPageManagedNewTabMicrosoftNews", 0)],
-                RemoveOps = [RegOp.DeleteValue(Key, "NewTabPageManagedNewTabMicrosoftNews")],
-                DetectOps = [RegOp.CheckDword(Key, "NewTabPageManagedNewTabMicrosoftNews", 0)],
-            },
-            new TweakDef
-            {
-                Id = "edgentp-hide-new-tab-logo",
-                Label = "Edge New Tab Page: Hide Microsoft and Bing Branding from New Tab Page",
-                Category = "Browser",
-                Description = "Sets NewTabPageHideDefaultTopSites=1 in Edge policy. Hides the default Microsoft/Bing promotional top sites tiles that appear on a fresh Edge installation's New Tab Page before the user has browsed enough to populate personal top sites, replacing them with blank slots. " +
-                    "On managed enterprise deployments where Edge is pre-configured, Bing promotional top site tiles (Bing homepage, Bing Shopping, MSN) appear as prominent quick-access shortcuts that direct traffic to Microsoft's advertising properties. These pre-seeded sites serve no legitimate enterprise workflow purpose and consume quick link slot positions that could be used for IT-defined enterprise shortcuts.",
-                Tags = ["edge", "new-tab", "top-sites", "bing", "branding"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 1,
-                SafetyRating = 5,
-                ImpactNote = "Default Bing/Microsoft promoted top site tiles hidden from Edge NTP; slots replaced with blank positions.",
-                ApplyOps = [RegOp.SetDword(Key, "NewTabPageHideDefaultTopSites", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "NewTabPageHideDefaultTopSites")],
-                DetectOps = [RegOp.CheckDword(Key, "NewTabPageHideDefaultTopSites", 1)],
-            },
-        ];
-
+            [
+                new TweakDef
+                {
+                    Id = "edgentp-disable-news-feed-on-new-tab",
+                    Label = "Edge New Tab Page: Disable Microsoft News Feed and Sponsored Content",
+                    Category = "Browser",
+                    Description =
+                        "Sets NewTabPageContentEnabled=0 in Edge policy. Removes the news feed, sponsored content tiles, and 'Microsoft Start' MSN content from the Edge New Tab Page, leaving only the search bar and customisable quick-access shortcuts. "
+                        + "The Microsoft News feed on the Edge New Tab Page makes network requests to news CDN endpoints on every new tab open, sending the user's browsing context and telemetry to the MSN/Microsoft Start advertising network. Every new tab opened invites a network round-trip that may be captured by enterprise proxy logs as an apparent outbound data transfer. Removing the feed eliminates this unwanted telemetry and reduces browser startup time.",
+                    Tags = ["edge", "new-tab", "news-feed", "telemetry", "msn"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "Edge New Tab news feed disabled; no MSN/Microsoft Start content requests on new tab open.",
+                    ApplyOps = [RegOp.SetDword(Key, "NewTabPageContentEnabled", 0)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "NewTabPageContentEnabled")],
+                    DetectOps = [RegOp.CheckDword(Key, "NewTabPageContentEnabled", 0)],
+                },
+                new TweakDef
+                {
+                    Id = "edgentp-set-new-tab-layout-focused-mode",
+                    Label = "Edge New Tab Page: Set New Tab Page to Focused Layout (Search Only)",
+                    Category = "Browser",
+                    Description =
+                        "Sets NewTabPageLayout=2 in Edge policy (value 2 = Focused). Configures the Edge New Tab Page to display in 'Focused' layout, which shows only the search bar and removes the news grid, quick-access tiles, and Microsoft promoted content from the default new tab experience. "
+                        + "Focused layout reduces the cognitive load introduced by the news grid on the New Tab Page, provides a distraction-free default browser state, and prevents accidental clicks on promoted content that may navigate to external news sites during a work browsing session. It also reduces the amount of outbound advertising telemetry generated by the default 'Inspirational' or 'Informational' layouts.",
+                    Tags = ["edge", "new-tab", "focused", "distraction", "layout"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 2,
+                    SafetyRating = 5,
+                    ImpactNote = "Edge New Tab Page shows focused layout (search bar only); no news grid or promotional tiles.",
+                    ApplyOps = [RegOp.SetDword(Key, "NewTabPageLayout", 2)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "NewTabPageLayout")],
+                    DetectOps = [RegOp.CheckDword(Key, "NewTabPageLayout", 2)],
+                },
+                new TweakDef
+                {
+                    Id = "edgentp-disable-quick-search-bar",
+                    Label = "Edge New Tab Page: Disable Bing Quick Search Suggestions on New Tab",
+                    Category = "Browser",
+                    Description =
+                        "Sets NewTabPageSearchBoxEnabled=0 in Edge policy. Disables the Bing-powered search suggestions that appear as the user types in the New Tab Page search bar, preventing keystroke telemetry from being sent to Bing suggestion endpoints before the user submits a search. "
+                        + "Typeahead search suggestions on the New Tab Page send partial keystrokes to Bing's autocomplete API as the user types, even for searches that may include sensitive internal terms, IP addresses, or hostnames. In high-security environments where employees should not be inadvertently leaking internal hostname patterns to external search engines, disabling typeahead prevents pre-submission data transmission.",
+                    Tags = ["edge", "new-tab", "search-suggestions", "typeahead", "telemetry"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 2,
+                    SafetyRating = 5,
+                    ImpactNote = "Bing typeahead suggestions disabled on NTP search bar; keystrokes not sent to Bing until search is submitted.",
+                    ApplyOps = [RegOp.SetDword(Key, "NewTabPageSearchBoxEnabled", 0)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "NewTabPageSearchBoxEnabled")],
+                    DetectOps = [RegOp.CheckDword(Key, "NewTabPageSearchBoxEnabled", 0)],
+                },
+                new TweakDef
+                {
+                    Id = "edgentp-disable-context-personalization",
+                    Label = "Edge New Tab Page: Disable Personalised Content Based on Browsing Context",
+                    Category = "Browser",
+                    Description =
+                        "Sets NewTabPagePersonalizedContentEnabled=0 in Edge policy. Prevents Edge from using the user's browsing history, saved sites, and M365 activity signals to personalise the content displayed on the New Tab Page with customised news topics, trending articles, and personalised ad tiles. "
+                        + "Personalised New Tab content is built from browsing telemetry that is uploaded to and processed by Microsoft's Personalisation service. This telemetry includes categories of pages visited, search terms, and time-on-page signals derived from the user's on-device browsing data. In privacy-conscious organisations, this upstream browsing telemetry transmission may conflict with internal data handling policies or employee monitoring regulations.",
+                    Tags = ["edge", "new-tab", "personalisation", "telemetry", "privacy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 2,
+                    SafetyRating = 5,
+                    ImpactNote = "NTP personalisation disabled; no browsing telemetry used to customise Edge New Tab contents.",
+                    ApplyOps = [RegOp.SetDword(Key, "NewTabPagePersonalizedContentEnabled", 0)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "NewTabPagePersonalizedContentEnabled")],
+                    DetectOps = [RegOp.CheckDword(Key, "NewTabPagePersonalizedContentEnabled", 0)],
+                },
+                new TweakDef
+                {
+                    Id = "edgentp-disable-background-image-download",
+                    Label = "Edge New Tab Page: Disable Daily Background Image Download (Bing Wallpaper)",
+                    Category = "Browser",
+                    Description =
+                        "Sets NewTabPageBingChatDefaultEnabled=0 in Edge policy. Prevents Edge from downloading the daily Bing Image of the Day wallpaper for the New Tab Page background, eliminating an outbound network request to Bing's image CDN that occurs on every new browser session or when the browser starts cold. "
+                        + "The Bing Image of the Day download sends a request to Bing's CDN infrastructure that includes the user's locale, Edge client ID, and a timestamp. This request is made unconditionally on every new tab open (when local cache is expired), creating a persistent outbound C&C-style beacon pattern in enterprise proxy logs that security monitoring may flag. Disabling the background image download eliminates this regular network telemetry.",
+                    Tags = ["edge", "new-tab", "background-image", "bing", "network-beacon"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 2,
+                    SafetyRating = 5,
+                    ImpactNote = "Daily Bing wallpaper download disabled for NTP; no periodic Bing CDN image request on new tab open.",
+                    ApplyOps = [RegOp.SetDword(Key, "NewTabPageBingChatDefaultEnabled", 0)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "NewTabPageBingChatDefaultEnabled")],
+                    DetectOps = [RegOp.CheckDword(Key, "NewTabPageBingChatDefaultEnabled", 0)],
+                },
+                new TweakDef
+                {
+                    Id = "edgentp-block-quick-links-modification",
+                    Label = "Edge New Tab Page: Lock Quick Links and Prevent User Modification",
+                    Category = "Browser",
+                    Description =
+                        "Sets NewTabPageQuickLinksEnabled=1 in Edge policy. Enables Quick Links on the New Tab Page but combined with enterprise link configuration policies, locks the quick links to IT-defined shortcuts for internal portals and blocks users from adding, removing, or reordering quick link tiles. "
+                        + "Quick links on the Edge NTP serve as one-click navigation to frequently used sites. Without enterprise control, users populate these with personal shortcuts including personal social media, webmail, and personal banking portals. By locking quick links to enterprise-defined values (helpdesk portal, internal SharePoint, timesheet system), the NTP becomes a managed productivity tool instead of a consumer browsing shortcut bar.",
+                    Tags = ["edge", "new-tab", "quick-links", "enterprise", "managed"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 2,
+                    SafetyRating = 5,
+                    ImpactNote = "NTP quick links locked to enterprise configuration; users cannot add or remove personal shortcuts.",
+                    ApplyOps = [RegOp.SetDword(Key, "NewTabPageQuickLinksEnabled", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "NewTabPageQuickLinksEnabled")],
+                    DetectOps = [RegOp.CheckDword(Key, "NewTabPageQuickLinksEnabled", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "edgentp-disable-weather-widget",
+                    Label = "Edge New Tab Page: Disable Weather Widget on New Tab Page",
+                    Category = "Browser",
+                    Description =
+                        "Sets NewTabPageWeatherEnabled=0 in Edge policy. Removes the weather information widget from the Edge New Tab Page, preventing the weather service from sending a geolocation lookup request or IP-based location inference request to the MSN weather API each time a new tab is opened. "
+                        + "The Edge NTP weather widget resolves user location by sending a location signal (either GPS coordinates if location permission is granted, or IP-based geolocation as a fallback) to the MSN weather API. This is a low-bandwidth but persistent telemetry channel that transmits the user's approximate location to Microsoft's advertising backend. On devices used in sensitive facility locations, this geolocation signal may disclose site location to external services.",
+                    Tags = ["edge", "new-tab", "weather", "geolocation", "telemetry"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 2,
+                    SafetyRating = 5,
+                    ImpactNote = "Weather widget removed from Edge NTP; no IP-based geolocation request sent to MSN weather API.",
+                    ApplyOps = [RegOp.SetDword(Key, "NewTabPageWeatherEnabled", 0)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "NewTabPageWeatherEnabled")],
+                    DetectOps = [RegOp.CheckDword(Key, "NewTabPageWeatherEnabled", 0)],
+                },
+                new TweakDef
+                {
+                    Id = "edgentp-disable-microsoft-365-feed",
+                    Label = "Edge New Tab Page: Disable M365 Office Feed on New Tab Page",
+                    Category = "Browser",
+                    Description =
+                        "Sets NewTabPageAppLauncherEnabled=0 in Edge policy. Removes the Microsoft 365 app launcher grid and recent Office documents feed from the Edge New Tab Page, which would otherwise display the user's recently modified SharePoint, OneDrive, and Teams files in a list visible to anyone viewing the screen while a new tab is open. "
+                        + "The recent Office documents displayed in the Edge M365 feed are loaded from the Microsoft Graph API using the user's current access token on every new tab open. The document titles and URLs visible in the feed constitute a real-time disclosure of what the user is working on. In screen-sharing sessions or when colleagues can see the screen background, this information can be inadvertently disclosed.",
+                    Tags = ["edge", "new-tab", "m365", "office-feed", "document-titles"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "M365 recent documents feed removed from Edge NTP; recent file titles not displayed on new tab open.",
+                    ApplyOps = [RegOp.SetDword(Key, "NewTabPageAppLauncherEnabled", 0)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "NewTabPageAppLauncherEnabled")],
+                    DetectOps = [RegOp.CheckDword(Key, "NewTabPageAppLauncherEnabled", 0)],
+                },
+                new TweakDef
+                {
+                    Id = "edgentp-disable-trending-topics-on-new-tab",
+                    Label = "Edge New Tab Page: Disable Trending / Trending News on New Tab Page",
+                    Category = "Browser",
+                    Description =
+                        "Sets NewTabPageManagedNewTabMicrosoftNews=0 in Edge policy. Removes the trending news stories and 'Trending' section from the Edge New Tab Page, preventing distraction from trending social media and news content during working hours. "
+                        + "Trending news on the Edge NTP is curated by MSN's editorial and algorithmic pipeline and includes entertainment news, viral social media topics, and politically engaging content. Exposure to trending topics during work hours contributes to context switching and reduced focus. Enterprise productivity studies have associated news feed interruptions on browser tabs with significant attention cost per-interruption. Removing trending content from the NTP reduces this distraction vector.",
+                    Tags = ["edge", "new-tab", "trending", "distraction", "productivity"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 2,
+                    SafetyRating = 5,
+                    ImpactNote = "Trending news section removed from Edge NTP; no viral/entertainment content on new tab opens.",
+                    ApplyOps = [RegOp.SetDword(Key, "NewTabPageManagedNewTabMicrosoftNews", 0)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "NewTabPageManagedNewTabMicrosoftNews")],
+                    DetectOps = [RegOp.CheckDword(Key, "NewTabPageManagedNewTabMicrosoftNews", 0)],
+                },
+                new TweakDef
+                {
+                    Id = "edgentp-hide-new-tab-logo",
+                    Label = "Edge New Tab Page: Hide Microsoft and Bing Branding from New Tab Page",
+                    Category = "Browser",
+                    Description =
+                        "Sets NewTabPageHideDefaultTopSites=1 in Edge policy. Hides the default Microsoft/Bing promotional top sites tiles that appear on a fresh Edge installation's New Tab Page before the user has browsed enough to populate personal top sites, replacing them with blank slots. "
+                        + "On managed enterprise deployments where Edge is pre-configured, Bing promotional top site tiles (Bing homepage, Bing Shopping, MSN) appear as prominent quick-access shortcuts that direct traffic to Microsoft's advertising properties. These pre-seeded sites serve no legitimate enterprise workflow purpose and consume quick link slot positions that could be used for IT-defined enterprise shortcuts.",
+                    Tags = ["edge", "new-tab", "top-sites", "bing", "branding"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 1,
+                    SafetyRating = 5,
+                    ImpactNote = "Default Bing/Microsoft promoted top site tiles hidden from Edge NTP; slots replaced with blank positions.",
+                    ApplyOps = [RegOp.SetDword(Key, "NewTabPageHideDefaultTopSites", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "NewTabPageHideDefaultTopSites")],
+                    DetectOps = [RegOp.CheckDword(Key, "NewTabPageHideDefaultTopSites", 1)],
+                },
+            ];
     }
 
     // ── EdgeNotificationsAndPopupPolicy ──
@@ -5155,7 +5211,6 @@ internal static class PolicyBrowser
                 ImpactNote = "Websites cannot enter fullscreen mode; video players and presentation sites will not be able to go fullscreen.",
             },
         ];
-
     }
 
     // ── EdgePasswordManagerPolicy ──
@@ -5164,179 +5219,189 @@ internal static class PolicyBrowser
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge";
 
         public static IReadOnlyList<TweakDef> Data =>
-        [
-            new TweakDef
-            {
-                Id = "edgepwm-disable-built-in-password-manager",
-                Label = "Edge Password Manager: Disable Edge's Built-In Password Save Prompts",
-                Category = "Browser",
-                Description = "Sets PasswordManagerEnabled=0 in Edge policy. Disables the Edge built-in password manager's offer to save new credentials, preventing Edge from storing work account passwords in the browser's local credential store. " +
-                    "The Edge password manager stores credentials in a file encrypted with the Windows DPAPI (Data Protection API) encryption key, which is bound to the user's Windows login credentials. If an unprivileged process on the same machine gains access to the browser's LocalState file (e.g., via a malicious script running as the same user), it can request DPAPI decryption of the stored passwords without any additional authentication, recovering plaintext credentials for all saved sites.",
-                Tags = ["edge", "password-manager", "credential-storage", "dpapi"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                ImpactNote = "Edge will not offer to save passwords; users must use an approved enterprise password manager instead.",
-                ApplyOps = [RegOp.SetDword(Key, "PasswordManagerEnabled", 0)],
-                RemoveOps = [RegOp.DeleteValue(Key, "PasswordManagerEnabled")],
-                DetectOps = [RegOp.CheckDword(Key, "PasswordManagerEnabled", 0)],
-            },
-            new TweakDef
-            {
-                Id = "edgepwm-disable-password-reveal-button",
-                Label = "Edge Password Manager: Disable Show-Password Reveal Button in Input Fields",
-                Category = "Browser",
-                Description = "Sets PasswordRevealEnabled=0 in Edge policy. Removes the 'eye' icon reveal button that appears in password input fields in Edge, preventing users from visually revealing the entered password text in a password field. " +
-                    "The password reveal button, while intended for usability, is a security risk in shared workspace environments: a screen-sharing session (Teams, Zoom, remote support) that shows the browser window while a user is entering a password could inadvertently reveal the masked password text if the user or a collaborator clicks the reveal button. Disabling the reveal button removes this inadvertent exposure channel.",
-                Tags = ["edge", "password", "reveal", "screen-sharing", "shoulder-surfing"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                ImpactNote = "Password reveal button removed from Edge password fields; entered passwords cannot be un-masked by button click.",
-                ApplyOps = [RegOp.SetDword(Key, "PasswordRevealEnabled", 0)],
-                RemoveOps = [RegOp.DeleteValue(Key, "PasswordRevealEnabled")],
-                DetectOps = [RegOp.CheckDword(Key, "PasswordRevealEnabled", 0)],
-            },
-            new TweakDef
-            {
-                Id = "edgepwm-disable-primary-password-bypass",
-                Label = "Edge Password Manager: Require Primary Password (Master Password) Protection",
-                Category = "Browser",
-                Description = "Sets PrimaryPasswordSetting=2 in Edge policy (value 2 = Required). Requires users to set and enter a primary password (master password) to decrypt and view any credential saved in the Edge password manager, adding an additional authentication factor before stored passwords are revealed. " +
-                    "Without a primary password, any process running as the current user — including malware, malicious scripts, and other browser extensions — can access the Edge password manager's stored credentials via the Edge DevTools protocol or the profile's Cookies/Login Data files without additional authentication. A primary password means the DPAPI-encrypted store has a second layer of protection beyond just the Windows session key.",
-                Tags = ["edge", "password-manager", "primary-password", "master-password", "mfa"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                ImpactNote = "Primary password required to view saved Edge credentials; extra authentication layer beyond Windows session.",
-                ApplyOps = [RegOp.SetDword(Key, "PrimaryPasswordSetting", 2)],
-                RemoveOps = [RegOp.DeleteValue(Key, "PrimaryPasswordSetting")],
-                DetectOps = [RegOp.CheckDword(Key, "PrimaryPasswordSetting", 2)],
-            },
-            new TweakDef
-            {
-                Id = "edgepwm-disable-password-autocomplete-on-login-forms",
-                Label = "Edge Password Manager: Disable AutoComplete on Bank and Sensitive Login Forms",
-                Category = "Browser",
-                Description = "Sets AutofillEnabledOnSecureForms=0 in Edge policy. Disables Edge's autofill feature specifically on forms that have autocomplete='off' or that are classified as high-security by Edge's form classifier (banking portals, credential re-authentication forms). " +
-                    "Bank and financial institution login forms explicitly set autocomplete='off' as a security directive. Edge's autocomplete override bypasses this signal and fills stored credentials anyway. On kiosk-style machines where sessions may not be fully cleared between users, prefilled credential forms can expose credentials from previous sessions.",
-                Tags = ["edge", "autofill", "autocomplete", "banking", "sensitive-forms"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Edge autofill disabled on autocomplete=off and high-security forms; users must type credentials manually.",
-                ApplyOps = [RegOp.SetDword(Key, "AutofillEnabledOnSecureForms", 0)],
-                RemoveOps = [RegOp.DeleteValue(Key, "AutofillEnabledOnSecureForms")],
-                DetectOps = [RegOp.CheckDword(Key, "AutofillEnabledOnSecureForms", 0)],
-            },
-            new TweakDef
-            {
-                Id = "edgepwm-enable-password-strength-monitor",
-                Label = "Edge Password Manager: Enable Weak Password Detection and Warning",
-                Category = "Browser",
-                Description = "Sets PasswordMonitorAllowed=1 in Edge policy. Enables Edge's password strength monitor to warn users when a saved password is detected to be weak (short, common, dictionary word) or has been found in public credential breach databases via the Microsoft breach database API. " +
-                    "Employees who reuse simple passwords across work and personal accounts are a primary initial access vector for credential-stuffing attacks. Edge's breach monitor checks saved passwords against a k-anonymity hash database of compromised credentials and surfaces warnings without transmitting the full password hash to Microsoft. Enabling this monitor provides passive security hygiene enforcement without requiring additional tooling.",
-                Tags = ["edge", "password", "breach", "weak-password", "hibp"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Edge warns when saved passwords are weak or found in breach databases; passive credential hygiene enforcement.",
-                ApplyOps = [RegOp.SetDword(Key, "PasswordMonitorAllowed", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "PasswordMonitorAllowed")],
-                DetectOps = [RegOp.CheckDword(Key, "PasswordMonitorAllowed", 1)],
-            },
-            new TweakDef
-            {
-                Id = "edgepwm-disable-web-credential-import",
-                Label = "Edge Password Manager: Block Importing Passwords from Other Browsers or Files",
-                Category = "Browser",
-                Description = "Sets ImportSavedPasswordsAllowed=0 in Edge policy. Disables the Edge feature that allows users to import saved passwords from other browsers (Chrome, Firefox, IE) or from CSV password export files into the Edge password manager. " +
-                    "Password imports are a common initial vector for credential disclosure: a social engineering attack can cause a user to import a maliciously-modified password CSV that establishes fake entries for internal site URLs, enabling future credential phishing. Additionally, mass-importing passwords from a less-secure browser or a cleartext CSV file into Edge aggregates credentials into a single easily-targetable store.",
-                Tags = ["edge", "password", "import", "social-engineering", "credential"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Password imports blocked in Edge; existing credentials must be added individually, not bulk-imported.",
-                ApplyOps = [RegOp.SetDword(Key, "ImportSavedPasswordsAllowed", 0)],
-                RemoveOps = [RegOp.DeleteValue(Key, "ImportSavedPasswordsAllowed")],
-                DetectOps = [RegOp.CheckDword(Key, "ImportSavedPasswordsAllowed", 0)],
-            },
-            new TweakDef
-            {
-                Id = "edgepwm-disable-password-sharing-between-devices",
-                Label = "Edge Password Manager: Block Password Sync to Other Devices via Edge",
-                Category = "Browser",
-                Description = "Sets PasswordExportAllowed=0 in Edge policy. Disables Edge's password export function that allows users to download all their saved Edge passwords to a cleartext CSV file for transfer to another device or password manager. " +
-                    "The Edge 'Export passwords' feature creates a comma-separated file with site URL, username, and cleartext password for every saved credential. This file, once exported to the Downloads folder, is not protected — it can be exfiltrated via email, USB, or cloud storage by any process with filesystem access. A single click exports the entire Edge credential store to a cleartext file with no additional authentication required.",
-                Tags = ["edge", "password", "export", "cleartext", "exfiltration"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                ImpactNote = "Password CSV export disabled in Edge; entire credential store cannot be dumped to a cleartext file.",
-                ApplyOps = [RegOp.SetDword(Key, "PasswordExportAllowed", 0)],
-                RemoveOps = [RegOp.DeleteValue(Key, "PasswordExportAllowed")],
-                DetectOps = [RegOp.CheckDword(Key, "PasswordExportAllowed", 0)],
-            },
-            new TweakDef
-            {
-                Id = "edgepwm-block-third-party-password-manager-override",
-                Label = "Edge Password Manager: Prevent Third-Party Extensions Overriding Password Fields",
-                Category = "Browser",
-                Description = "Sets AllowPasswordGenerationEnabled=0 in Edge policy. Disables Edge's own password generation feature and prevents third-party password manager browser extensions from having elevated API access to password input field values in Edge. " +
-                    "Malicious browser extensions that present themselves as password managers request the 'all_urls' and 'tabs' permissions, which allows them to read the contents of every form field (including password fields) on every page. Limiting password field API access reduces the exposure that a compromised or malicious password manager extension has to credentials being typed into pages.",
-                Tags = ["edge", "extension", "password-field", "api-access", "malicious-extension"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Edge password generation disabled; extension-level password field access controlled via policy.",
-                ApplyOps = [RegOp.SetDword(Key, "AllowPasswordGenerationEnabled", 0)],
-                RemoveOps = [RegOp.DeleteValue(Key, "AllowPasswordGenerationEnabled")],
-                DetectOps = [RegOp.CheckDword(Key, "AllowPasswordGenerationEnabled", 0)],
-            },
-            new TweakDef
-            {
-                Id = "edgepwm-disable-filled-credentials-auto-sign-in",
-                Label = "Edge Password Manager: Disable Auto Sign-In with Saved Credentials",
-                Category = "Browser",
-                Description = "Sets AutoSignInEnabled=0 in Edge policy. Prevents Edge from automatically submitting the login form without user interaction when it detects a single saved credential for a visited site, requiring the user to actively click 'Sign in' even when credentials are pre-filled. " +
-                    "Automatic sign-in means that visiting a work sign-in page immediately authenticates the user and establishes an authenticated session — without the user actively choosing to authenticate. If the user's Windows session has been taken over (e.g., via a remote desktop hijack or accessibility API automation), auto sign-in enables an attacker to silently authenticate to all internal web apps without the user's knowledge just by navigating to login pages.",
-                Tags = ["edge", "auto-sign-in", "credential", "session-hijack"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Edge auto-sign-in disabled; user must actively submit sign-in form even when credentials are pre-filled.",
-                ApplyOps = [RegOp.SetDword(Key, "AutoSignInEnabled", 0)],
-                RemoveOps = [RegOp.DeleteValue(Key, "AutoSignInEnabled")],
-                DetectOps = [RegOp.CheckDword(Key, "AutoSignInEnabled", 0)],
-            },
-            new TweakDef
-            {
-                Id = "edgepwm-block-password-change-via-browser",
-                Label = "Edge Password Manager: Block In-Browser Password Change Flow",
-                Category = "Browser",
-                Description = "Sets PasswordChangeThroughBrowserEnabled=0 in Edge policy. Disables Edge's 'Change password' recommendation flow that offers to navigate users directly to a site's password change page when a breached or weak credential is detected, preventing the browser from accessing password management URLs on behalf of the user. " +
-                    "While the 'Change password' flow is a usability feature, it involves Edge automatically navigating to account settings URLs and interacting with credential change forms using the user's currently authenticated session. In enterprise environments where password changes must go through an identity governance workflow (PAM, helpdesk ticket), browser-automated password changes bypass these controls.",
-                Tags = ["edge", "password-change", "identity-governance", "pam"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                ImpactNote = "Edge in-browser password change flow disabled; password changes must go through the approved identity governance process.",
-                ApplyOps = [RegOp.SetDword(Key, "PasswordChangeThroughBrowserEnabled", 0)],
-                RemoveOps = [RegOp.DeleteValue(Key, "PasswordChangeThroughBrowserEnabled")],
-                DetectOps = [RegOp.CheckDword(Key, "PasswordChangeThroughBrowserEnabled", 0)],
-            },
-        ];
-
+            [
+                new TweakDef
+                {
+                    Id = "edgepwm-disable-built-in-password-manager",
+                    Label = "Edge Password Manager: Disable Edge's Built-In Password Save Prompts",
+                    Category = "Browser",
+                    Description =
+                        "Sets PasswordManagerEnabled=0 in Edge policy. Disables the Edge built-in password manager's offer to save new credentials, preventing Edge from storing work account passwords in the browser's local credential store. "
+                        + "The Edge password manager stores credentials in a file encrypted with the Windows DPAPI (Data Protection API) encryption key, which is bound to the user's Windows login credentials. If an unprivileged process on the same machine gains access to the browser's LocalState file (e.g., via a malicious script running as the same user), it can request DPAPI decryption of the stored passwords without any additional authentication, recovering plaintext credentials for all saved sites.",
+                    Tags = ["edge", "password-manager", "credential-storage", "dpapi"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "Edge will not offer to save passwords; users must use an approved enterprise password manager instead.",
+                    ApplyOps = [RegOp.SetDword(Key, "PasswordManagerEnabled", 0)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "PasswordManagerEnabled")],
+                    DetectOps = [RegOp.CheckDword(Key, "PasswordManagerEnabled", 0)],
+                },
+                new TweakDef
+                {
+                    Id = "edgepwm-disable-password-reveal-button",
+                    Label = "Edge Password Manager: Disable Show-Password Reveal Button in Input Fields",
+                    Category = "Browser",
+                    Description =
+                        "Sets PasswordRevealEnabled=0 in Edge policy. Removes the 'eye' icon reveal button that appears in password input fields in Edge, preventing users from visually revealing the entered password text in a password field. "
+                        + "The password reveal button, while intended for usability, is a security risk in shared workspace environments: a screen-sharing session (Teams, Zoom, remote support) that shows the browser window while a user is entering a password could inadvertently reveal the masked password text if the user or a collaborator clicks the reveal button. Disabling the reveal button removes this inadvertent exposure channel.",
+                    Tags = ["edge", "password", "reveal", "screen-sharing", "shoulder-surfing"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 2,
+                    SafetyRating = 5,
+                    ImpactNote = "Password reveal button removed from Edge password fields; entered passwords cannot be un-masked by button click.",
+                    ApplyOps = [RegOp.SetDword(Key, "PasswordRevealEnabled", 0)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "PasswordRevealEnabled")],
+                    DetectOps = [RegOp.CheckDword(Key, "PasswordRevealEnabled", 0)],
+                },
+                new TweakDef
+                {
+                    Id = "edgepwm-disable-primary-password-bypass",
+                    Label = "Edge Password Manager: Require Primary Password (Master Password) Protection",
+                    Category = "Browser",
+                    Description =
+                        "Sets PrimaryPasswordSetting=2 in Edge policy (value 2 = Required). Requires users to set and enter a primary password (master password) to decrypt and view any credential saved in the Edge password manager, adding an additional authentication factor before stored passwords are revealed. "
+                        + "Without a primary password, any process running as the current user — including malware, malicious scripts, and other browser extensions — can access the Edge password manager's stored credentials via the Edge DevTools protocol or the profile's Cookies/Login Data files without additional authentication. A primary password means the DPAPI-encrypted store has a second layer of protection beyond just the Windows session key.",
+                    Tags = ["edge", "password-manager", "primary-password", "master-password", "mfa"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "Primary password required to view saved Edge credentials; extra authentication layer beyond Windows session.",
+                    ApplyOps = [RegOp.SetDword(Key, "PrimaryPasswordSetting", 2)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "PrimaryPasswordSetting")],
+                    DetectOps = [RegOp.CheckDword(Key, "PrimaryPasswordSetting", 2)],
+                },
+                new TweakDef
+                {
+                    Id = "edgepwm-disable-password-autocomplete-on-login-forms",
+                    Label = "Edge Password Manager: Disable AutoComplete on Bank and Sensitive Login Forms",
+                    Category = "Browser",
+                    Description =
+                        "Sets AutofillEnabledOnSecureForms=0 in Edge policy. Disables Edge's autofill feature specifically on forms that have autocomplete='off' or that are classified as high-security by Edge's form classifier (banking portals, credential re-authentication forms). "
+                        + "Bank and financial institution login forms explicitly set autocomplete='off' as a security directive. Edge's autocomplete override bypasses this signal and fills stored credentials anyway. On kiosk-style machines where sessions may not be fully cleared between users, prefilled credential forms can expose credentials from previous sessions.",
+                    Tags = ["edge", "autofill", "autocomplete", "banking", "sensitive-forms"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "Edge autofill disabled on autocomplete=off and high-security forms; users must type credentials manually.",
+                    ApplyOps = [RegOp.SetDword(Key, "AutofillEnabledOnSecureForms", 0)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "AutofillEnabledOnSecureForms")],
+                    DetectOps = [RegOp.CheckDword(Key, "AutofillEnabledOnSecureForms", 0)],
+                },
+                new TweakDef
+                {
+                    Id = "edgepwm-enable-password-strength-monitor",
+                    Label = "Edge Password Manager: Enable Weak Password Detection and Warning",
+                    Category = "Browser",
+                    Description =
+                        "Sets PasswordMonitorAllowed=1 in Edge policy. Enables Edge's password strength monitor to warn users when a saved password is detected to be weak (short, common, dictionary word) or has been found in public credential breach databases via the Microsoft breach database API. "
+                        + "Employees who reuse simple passwords across work and personal accounts are a primary initial access vector for credential-stuffing attacks. Edge's breach monitor checks saved passwords against a k-anonymity hash database of compromised credentials and surfaces warnings without transmitting the full password hash to Microsoft. Enabling this monitor provides passive security hygiene enforcement without requiring additional tooling.",
+                    Tags = ["edge", "password", "breach", "weak-password", "hibp"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "Edge warns when saved passwords are weak or found in breach databases; passive credential hygiene enforcement.",
+                    ApplyOps = [RegOp.SetDword(Key, "PasswordMonitorAllowed", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "PasswordMonitorAllowed")],
+                    DetectOps = [RegOp.CheckDword(Key, "PasswordMonitorAllowed", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "edgepwm-disable-web-credential-import",
+                    Label = "Edge Password Manager: Block Importing Passwords from Other Browsers or Files",
+                    Category = "Browser",
+                    Description =
+                        "Sets ImportSavedPasswordsAllowed=0 in Edge policy. Disables the Edge feature that allows users to import saved passwords from other browsers (Chrome, Firefox, IE) or from CSV password export files into the Edge password manager. "
+                        + "Password imports are a common initial vector for credential disclosure: a social engineering attack can cause a user to import a maliciously-modified password CSV that establishes fake entries for internal site URLs, enabling future credential phishing. Additionally, mass-importing passwords from a less-secure browser or a cleartext CSV file into Edge aggregates credentials into a single easily-targetable store.",
+                    Tags = ["edge", "password", "import", "social-engineering", "credential"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "Password imports blocked in Edge; existing credentials must be added individually, not bulk-imported.",
+                    ApplyOps = [RegOp.SetDword(Key, "ImportSavedPasswordsAllowed", 0)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "ImportSavedPasswordsAllowed")],
+                    DetectOps = [RegOp.CheckDword(Key, "ImportSavedPasswordsAllowed", 0)],
+                },
+                new TweakDef
+                {
+                    Id = "edgepwm-disable-password-sharing-between-devices",
+                    Label = "Edge Password Manager: Block Password Sync to Other Devices via Edge",
+                    Category = "Browser",
+                    Description =
+                        "Sets PasswordExportAllowed=0 in Edge policy. Disables Edge's password export function that allows users to download all their saved Edge passwords to a cleartext CSV file for transfer to another device or password manager. "
+                        + "The Edge 'Export passwords' feature creates a comma-separated file with site URL, username, and cleartext password for every saved credential. This file, once exported to the Downloads folder, is not protected — it can be exfiltrated via email, USB, or cloud storage by any process with filesystem access. A single click exports the entire Edge credential store to a cleartext file with no additional authentication required.",
+                    Tags = ["edge", "password", "export", "cleartext", "exfiltration"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "Password CSV export disabled in Edge; entire credential store cannot be dumped to a cleartext file.",
+                    ApplyOps = [RegOp.SetDword(Key, "PasswordExportAllowed", 0)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "PasswordExportAllowed")],
+                    DetectOps = [RegOp.CheckDword(Key, "PasswordExportAllowed", 0)],
+                },
+                new TweakDef
+                {
+                    Id = "edgepwm-block-third-party-password-manager-override",
+                    Label = "Edge Password Manager: Prevent Third-Party Extensions Overriding Password Fields",
+                    Category = "Browser",
+                    Description =
+                        "Sets AllowPasswordGenerationEnabled=0 in Edge policy. Disables Edge's own password generation feature and prevents third-party password manager browser extensions from having elevated API access to password input field values in Edge. "
+                        + "Malicious browser extensions that present themselves as password managers request the 'all_urls' and 'tabs' permissions, which allows them to read the contents of every form field (including password fields) on every page. Limiting password field API access reduces the exposure that a compromised or malicious password manager extension has to credentials being typed into pages.",
+                    Tags = ["edge", "extension", "password-field", "api-access", "malicious-extension"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "Edge password generation disabled; extension-level password field access controlled via policy.",
+                    ApplyOps = [RegOp.SetDword(Key, "AllowPasswordGenerationEnabled", 0)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "AllowPasswordGenerationEnabled")],
+                    DetectOps = [RegOp.CheckDword(Key, "AllowPasswordGenerationEnabled", 0)],
+                },
+                new TweakDef
+                {
+                    Id = "edgepwm-disable-filled-credentials-auto-sign-in",
+                    Label = "Edge Password Manager: Disable Auto Sign-In with Saved Credentials",
+                    Category = "Browser",
+                    Description =
+                        "Sets AutoSignInEnabled=0 in Edge policy. Prevents Edge from automatically submitting the login form without user interaction when it detects a single saved credential for a visited site, requiring the user to actively click 'Sign in' even when credentials are pre-filled. "
+                        + "Automatic sign-in means that visiting a work sign-in page immediately authenticates the user and establishes an authenticated session — without the user actively choosing to authenticate. If the user's Windows session has been taken over (e.g., via a remote desktop hijack or accessibility API automation), auto sign-in enables an attacker to silently authenticate to all internal web apps without the user's knowledge just by navigating to login pages.",
+                    Tags = ["edge", "auto-sign-in", "credential", "session-hijack"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "Edge auto-sign-in disabled; user must actively submit sign-in form even when credentials are pre-filled.",
+                    ApplyOps = [RegOp.SetDword(Key, "AutoSignInEnabled", 0)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "AutoSignInEnabled")],
+                    DetectOps = [RegOp.CheckDword(Key, "AutoSignInEnabled", 0)],
+                },
+                new TweakDef
+                {
+                    Id = "edgepwm-block-password-change-via-browser",
+                    Label = "Edge Password Manager: Block In-Browser Password Change Flow",
+                    Category = "Browser",
+                    Description =
+                        "Sets PasswordChangeThroughBrowserEnabled=0 in Edge policy. Disables Edge's 'Change password' recommendation flow that offers to navigate users directly to a site's password change page when a breached or weak credential is detected, preventing the browser from accessing password management URLs on behalf of the user. "
+                        + "While the 'Change password' flow is a usability feature, it involves Edge automatically navigating to account settings URLs and interacting with credential change forms using the user's currently authenticated session. In enterprise environments where password changes must go through an identity governance workflow (PAM, helpdesk ticket), browser-automated password changes bypass these controls.",
+                    Tags = ["edge", "password-change", "identity-governance", "pam"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 2,
+                    SafetyRating = 5,
+                    ImpactNote =
+                        "Edge in-browser password change flow disabled; password changes must go through the approved identity governance process.",
+                    ApplyOps = [RegOp.SetDword(Key, "PasswordChangeThroughBrowserEnabled", 0)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "PasswordChangeThroughBrowserEnabled")],
+                    DetectOps = [RegOp.CheckDword(Key, "PasswordChangeThroughBrowserEnabled", 0)],
+                },
+            ];
     }
 
     // ── EdgePrintAndPdfPolicy ──
@@ -5351,7 +5416,8 @@ internal static class PolicyBrowser
                 Id = "edgepdp-disable-printing",
                 Label = "Edge Print & PDF Policy: Disable Printing from Edge",
                 Category = "Browser",
-                Description = "Disables all printing from within Microsoft Edge via enterprise policy. When PrintingEnabled is set to 0, the Print option, Ctrl+P hotkey, and right-click Print are all suppressed. Use in environments where printed output from the browser must be controlled or logged through dedicated print servers, or in kiosk/terminal deployments where printing is prohibited.",
+                Description =
+                    "Disables all printing from within Microsoft Edge via enterprise policy. When PrintingEnabled is set to 0, the Print option, Ctrl+P hotkey, and right-click Print are all suppressed. Use in environments where printed output from the browser must be controlled or logged through dedicated print servers, or in kiosk/terminal deployments where printing is prohibited.",
                 Tags = ["edge", "printing", "kiosk", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -5368,7 +5434,8 @@ internal static class PolicyBrowser
                 Id = "edgepdp-disable-print-header-footer",
                 Label = "Edge Print & PDF Policy: Remove Headers and Footers from Print Output",
                 Category = "Browser",
-                Description = "Configures Microsoft Edge to omit headers and footers from all print output via Group Policy. Normally Edge includes the page title, URL, date, and page numbers in printing headers and footers. This is useful in environments where printed documents should not expose internal URLs or timestamps, or where clean output without browser-added metadata is required for official documents.",
+                Description =
+                    "Configures Microsoft Edge to omit headers and footers from all print output via Group Policy. Normally Edge includes the page title, URL, date, and page numbers in printing headers and footers. This is useful in environments where printed documents should not expose internal URLs or timestamps, or where clean output without browser-added metadata is required for official documents.",
                 Tags = ["edge", "printing", "header", "footer", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -5385,7 +5452,8 @@ internal static class PolicyBrowser
                 Id = "edgepdp-use-system-default-printer",
                 Label = "Edge Print & PDF Policy: Default to System Default Printer in Print Dialog",
                 Category = "Browser",
-                Description = "Configures the Edge print preview to preselect the system default printer instead of the last printer used in Edge. In managed environments, the system default printer is set by IT policy. This prevents users from accidentally printing to the last used printer (which may be a home or personal printer on a previous session) and ensures all output defaults to the approved enterprise printer.",
+                Description =
+                    "Configures the Edge print preview to preselect the system default printer instead of the last printer used in Edge. In managed environments, the system default printer is set by IT policy. This prevents users from accidentally printing to the last used printer (which may be a home or personal printer on a previous session) and ensures all output defaults to the approved enterprise printer.",
                 Tags = ["edge", "printing", "printer", "default", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -5402,7 +5470,8 @@ internal static class PolicyBrowser
                 Id = "edgepdp-disable-cloud-print",
                 Label = "Edge Print & PDF Policy: Disable Google Cloud Print Submission",
                 Category = "Browser",
-                Description = "Prevents Microsoft Edge from submitting print jobs via Google Cloud Print. Cloud Print routes documents through external cloud infrastructure, which may violate data-residency requirements or introduce uncontrolled data egress in corporate environments. Disabling this forces all print jobs to use local or network printers managed by IT.",
+                Description =
+                    "Prevents Microsoft Edge from submitting print jobs via Google Cloud Print. Cloud Print routes documents through external cloud infrastructure, which may violate data-residency requirements or introduce uncontrolled data egress in corporate environments. Disabling this forces all print jobs to use local or network printers managed by IT.",
                 Tags = ["edge", "printing", "cloud print", "policy", "data-loss"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -5419,7 +5488,8 @@ internal static class PolicyBrowser
                 Id = "edgepdp-block-legacy-printer-drivers",
                 Label = "Edge Print & PDF Policy: Block Legacy Printer Drivers from Edge Printing",
                 Category = "Browser",
-                Description = "Prevents Microsoft Edge from sending print jobs through legacy (non-IPP) printer drivers. Legacy printer drivers were removed from the Windows print subsystem as part of PrintNightmare remediation. When this policy is set to 0, Edge's printing stack will only use modern IPP print drivers and will refuse to enumerate or use legacy kernel-mode printer drivers, reducing attack surface.",
+                Description =
+                    "Prevents Microsoft Edge from sending print jobs through legacy (non-IPP) printer drivers. Legacy printer drivers were removed from the Windows print subsystem as part of PrintNightmare remediation. When this policy is set to 0, Edge's printing stack will only use modern IPP print drivers and will refuse to enumerate or use legacy kernel-mode printer drivers, reducing attack surface.",
                 Tags = ["edge", "printing", "drivers", "security", "printnightmare", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -5436,7 +5506,8 @@ internal static class PolicyBrowser
                 Id = "edgepdp-open-pdf-externally",
                 Label = "Edge Print & PDF Policy: Open PDF Files with External Application",
                 Category = "Browser",
-                Description = "Forces Microsoft Edge to open PDF files using the operating system's default PDF application (e.g., Adobe Acrobat Reader, Foxit) instead of the built-in Edge PDF viewer. This is useful in environments where the standard PDF tool provides additional features such as digital signature validation, form filling, or DRM support that the browser's viewer does not provide.",
+                Description =
+                    "Forces Microsoft Edge to open PDF files using the operating system's default PDF application (e.g., Adobe Acrobat Reader, Foxit) instead of the built-in Edge PDF viewer. This is useful in environments where the standard PDF tool provides additional features such as digital signature validation, form filling, or DRM support that the browser's viewer does not provide.",
                 Tags = ["edge", "pdf", "viewer", "external", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -5453,7 +5524,8 @@ internal static class PolicyBrowser
                 Id = "edgepdp-disable-pdf-annotations",
                 Label = "Edge Print & PDF Policy: Disable PDF Annotation Tools in Edge Viewer",
                 Category = "Browser",
-                Description = "Disables annotation tools in the Microsoft Edge built-in PDF viewer. Annotations allow users to add highlights, underlines, and free-form text comments to PDFs and save the annotated file. In environments where PDFs are read-only compliance documents, legal filings, or audit reports, preventing browser-level annotation preserves document integrity and prevents accidental modification.",
+                Description =
+                    "Disables annotation tools in the Microsoft Edge built-in PDF viewer. Annotations allow users to add highlights, underlines, and free-form text comments to PDFs and save the annotated file. In environments where PDFs are read-only compliance documents, legal filings, or audit reports, preventing browser-level annotation preserves document integrity and prevents accidental modification.",
                 Tags = ["edge", "pdf", "annotations", "viewer", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -5470,7 +5542,8 @@ internal static class PolicyBrowser
                 Id = "edgepdp-disable-pdf-xfa-forms",
                 Label = "Edge Print & PDF Policy: Disable XFA Form Support in Edge PDF Viewer",
                 Category = "Browser",
-                Description = "Disables XFA (XML Forms Architecture) form support in the Microsoft Edge PDF viewer. XFA is a legacy Adobe-proprietary format for dynamic PDF forms. Modern PDFs use AcroForm instead. XFA forms require a JavaScript engine running inside the PDF reader, which significantly expands the attack surface. Disabling XFA prevents this JavaScript engine from activating for PDFs with embedded XFA content.",
+                Description =
+                    "Disables XFA (XML Forms Architecture) form support in the Microsoft Edge PDF viewer. XFA is a legacy Adobe-proprietary format for dynamic PDF forms. Modern PDFs use AcroForm instead. XFA forms require a JavaScript engine running inside the PDF reader, which significantly expands the attack surface. Disabling XFA prevents this JavaScript engine from activating for PDFs with embedded XFA content.",
                 Tags = ["edge", "pdf", "xfa", "forms", "security", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -5487,7 +5560,8 @@ internal static class PolicyBrowser
                 Id = "edgepdp-set-pdf-rasterize-dpi",
                 Label = "Edge Print & PDF Policy: Enable PDF Rasterization for Printing at 150 DPI",
                 Category = "Browser",
-                Description = "Configures Microsoft Edge to rasterize PDF documents at 150 DPI when printing them. Rasterization converts vector and text content in the PDF to a bitmap image before sending to the printer driver. This avoids font-rendering issues with PostScript printers, resolves transparency layer conflicts with some corporate printer drivers, and produces consistent output on printers that have limited PDF pass-through support.",
+                Description =
+                    "Configures Microsoft Edge to rasterize PDF documents at 150 DPI when printing them. Rasterization converts vector and text content in the PDF to a bitmap image before sending to the printer driver. This avoids font-rendering issues with PostScript printers, resolves transparency layer conflicts with some corporate printer drivers, and produces consistent output on printers that have limited PDF pass-through support.",
                 Tags = ["edge", "pdf", "printing", "rasterize", "dpi", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -5504,7 +5578,8 @@ internal static class PolicyBrowser
                 Id = "edgepdp-disable-pdf-default-recommendation",
                 Label = "Edge Print & PDF Policy: Suppress Recommendation to Set Edge as Default PDF Viewer",
                 Category = "Browser",
-                Description = "Prevents Microsoft Edge from showing recommendations or prompts asking the user to set Edge as the default PDF application. In environments where a specific PDF tool (Adobe Acrobat, Foxit, Nitro) is the approved standard for PDF handling, Edge's persistent recommendation to override the default association creates user confusion and non-compliance with the approved software stack.",
+                Description =
+                    "Prevents Microsoft Edge from showing recommendations or prompts asking the user to set Edge as the default PDF application. In environments where a specific PDF tool (Adobe Acrobat, Foxit, Nitro) is the approved standard for PDF handling, Edge's persistent recommendation to override the default association creates user confusion and non-compliance with the approved software stack.",
                 Tags = ["edge", "pdf", "default app", "recommendation", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -5517,7 +5592,6 @@ internal static class PolicyBrowser
                 ImpactNote = "Suppresses Edge prompt to become default PDF viewer; OS default PDF handler remains unchanged.",
             },
         ];
-
     }
 
     // ── EdgeProfileSignInPolicy ──
@@ -5708,7 +5782,6 @@ internal static class PolicyBrowser
                 ImpactNote = "InPrivate windows cannot be opened; all Edge sessions are in the managed profile and subject to audit.",
             },
         ];
-
     }
 
     // ── EdgeSearchAddressBarPolicy ──
@@ -5723,7 +5796,8 @@ internal static class PolicyBrowser
                 Id = "edgesrch-disable-search-suggest",
                 Label = "Edge Search & Address Bar Policy: Disable Address Bar Search Suggestions",
                 Category = "Browser",
-                Description = "Prevents Microsoft Edge from displaying predictive search suggestions in the address bar as the user types. Search suggestions are sent keystroke-by-keystroke to the configured search provider (typically Bing). Disabling this eliminates real-time data leakage of partially typed URLs and search queries to Microsoft or third-party search engines over the network.",
+                Description =
+                    "Prevents Microsoft Edge from displaying predictive search suggestions in the address bar as the user types. Search suggestions are sent keystroke-by-keystroke to the configured search provider (typically Bing). Disabling this eliminates real-time data leakage of partially typed URLs and search queries to Microsoft or third-party search engines over the network.",
                 Tags = ["edge", "search", "suggestions", "address bar", "privacy", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -5740,7 +5814,8 @@ internal static class PolicyBrowser
                 Id = "edgesrch-disable-bing-address-bar-provider",
                 Label = "Edge Search & Address Bar Policy: Remove Microsoft Search in Bing from Address Bar",
                 Category = "Browser",
-                Description = "Removes the Microsoft Search in Bing suggestion provider from the Microsoft Edge address bar. When enabled, this provider queries the Microsoft Search enterprise index and Bing whenever the user types in the address bar, even for single words or partial terms. In environments where all internet search is routed through an approved proxy or where Bing query telemetry is unwanted, removing this provider reduces unsolicited outbound traffic.",
+                Description =
+                    "Removes the Microsoft Search in Bing suggestion provider from the Microsoft Edge address bar. When enabled, this provider queries the Microsoft Search enterprise index and Bing whenever the user types in the address bar, even for single words or partial terms. In environments where all internet search is routed through an approved proxy or where Bing query telemetry is unwanted, removing this provider reduces unsolicited outbound traffic.",
                 Tags = ["edge", "search", "bing", "address bar", "microsoft search", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -5757,7 +5832,8 @@ internal static class PolicyBrowser
                 Id = "edgesrch-disable-local-providers",
                 Label = "Edge Search & Address Bar Policy: Disable Local and Intranet Search Suggestions",
                 Category = "Browser",
-                Description = "Disables local suggestion providers in the Microsoft Edge address bar, including previously visited intranet URLs, bookmarks from the managed profile, and file:// path completions. On shared workstations, browser kiosk sessions, and temporary accounts, address bar history exposure (even of intranet URLs) could reveal which internal systems and resources the previous user visited.",
+                Description =
+                    "Disables local suggestion providers in the Microsoft Edge address bar, including previously visited intranet URLs, bookmarks from the managed profile, and file:// path completions. On shared workstations, browser kiosk sessions, and temporary accounts, address bar history exposure (even of intranet URLs) could reveal which internal systems and resources the previous user visited.",
                 Tags = ["edge", "search", "local providers", "intranet", "privacy", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -5774,7 +5850,8 @@ internal static class PolicyBrowser
                 Id = "edgesrch-disable-network-prediction",
                 Label = "Edge Search & Address Bar Policy: Disable Network Prediction and Prefetch",
                 Category = "Browser",
-                Description = "Disables all network prediction and DNS prefetching in Microsoft Edge. With prediction enabled (the default), Edge pre-resolves DNS and pre-connects to the likely destinations of links visible on the page and the current address bar entry, even before the user clicks. This pre-warming creates network connections to destinations the user has never explicitly visited, which violates strict outbound traffic controls and generates noise in network monitoring.",
+                Description =
+                    "Disables all network prediction and DNS prefetching in Microsoft Edge. With prediction enabled (the default), Edge pre-resolves DNS and pre-connects to the likely destinations of links visible on the page and the current address bar entry, even before the user clicks. This pre-warming creates network connections to destinations the user has never explicitly visited, which violates strict outbound traffic controls and generates noise in network monitoring.",
                 Tags = ["edge", "network prediction", "prefetch", "dns", "performance", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -5791,7 +5868,8 @@ internal static class PolicyBrowser
                 Id = "edgesrch-disable-dns-interception-check",
                 Label = "Edge Search & Address Bar Policy: Disable DNS Interception Detection",
                 Category = "Browser",
-                Description = "Disables the DNS interception detection feature in Microsoft Edge. When enabled, Edge periodically sends probe DNS requests to non-existent hostnames and checks whether the DNS resolver returns NXDOMAIN (expected) or a real IP address (indicating intercepting DNS). In enterprise environments with transparent DNS proxies, split-horizon DNS, or captive portal infrastructure, this probe generates false positives and triggers browser warnings that confuse users.",
+                Description =
+                    "Disables the DNS interception detection feature in Microsoft Edge. When enabled, Edge periodically sends probe DNS requests to non-existent hostnames and checks whether the DNS resolver returns NXDOMAIN (expected) or a real IP address (indicating intercepting DNS). In enterprise environments with transparent DNS proxies, split-horizon DNS, or captive portal infrastructure, this probe generates false positives and triggers browser warnings that confuse users.",
                 Tags = ["edge", "dns", "interception", "detection", "network", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -5808,7 +5886,8 @@ internal static class PolicyBrowser
                 Id = "edgesrch-disable-error-page-web-service",
                 Label = "Edge Search & Address Bar Policy: Disable Web Service for Navigation Error Pages",
                 Category = "Browser",
-                Description = "Prevents Microsoft Edge from using a Microsoft-hosted web service to generate alternative navigation error pages when a site is unreachable. When this policy is enabled, Edge sends the unreachable URL to Microsoft's servers to retrieve a custom error page with suggestions. Disabling it keeps Edge using its built-in static error page and prevents the URL of failed navigation attempts from being submitted to Microsoft.",
+                Description =
+                    "Prevents Microsoft Edge from using a Microsoft-hosted web service to generate alternative navigation error pages when a site is unreachable. When this policy is enabled, Edge sends the unreachable URL to Microsoft's servers to retrieve a custom error page with suggestions. Disabling it keeps Edge using its built-in static error page and prevents the URL of failed navigation attempts from being submitted to Microsoft.",
                 Tags = ["edge", "error page", "navigation", "web service", "privacy", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -5825,7 +5904,8 @@ internal static class PolicyBrowser
                 Id = "edgesrch-disable-alternate-error-pages",
                 Label = "Edge Search & Address Bar Policy: Disable Alternate Error Page Web Service",
                 Category = "Browser",
-                Description = "Disables the alternate error page feature in Microsoft Edge, which contacts a Microsoft web service to display rich error pages with suggestions, links, and diagnostics for unreachable URLs. The alternate error page service sends the unreachable hostname to Microsoft even if the hostname is a private intranet address. Disabling it keeps failed navigations private and uses only Edge's built-in static error content.",
+                Description =
+                    "Disables the alternate error page feature in Microsoft Edge, which contacts a Microsoft web service to display rich error pages with suggestions, links, and diagnostics for unreachable URLs. The alternate error page service sends the unreachable hostname to Microsoft even if the hostname is a private intranet address. Disabling it keeps failed navigations private and uses only Edge's built-in static error content.",
                 Tags = ["edge", "error page", "alternate", "web service", "privacy", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -5842,7 +5922,8 @@ internal static class PolicyBrowser
                 Id = "edgesrch-disable-cloud-related-matches",
                 Label = "Edge Search & Address Bar Policy: Disable Cloud-Based Related Matches in Address Bar",
                 Category = "Browser",
-                Description = "Disables the cloud-based Related Matches provider in the Microsoft Edge address bar. Related Matches is a Microsoft service that offers AI-enhanced cross-domain URL completions based on browsing behavior, intent signals, and trending content signals from the Bing cloud index. Unlike local completions, Related Matches sends real-time query data to Microsoft cloud even for partial input.",
+                Description =
+                    "Disables the cloud-based Related Matches provider in the Microsoft Edge address bar. Related Matches is a Microsoft service that offers AI-enhanced cross-domain URL completions based on browsing behavior, intent signals, and trending content signals from the Bing cloud index. Unlike local completions, Related Matches sends real-time query data to Microsoft cloud even for partial input.",
                 Tags = ["edge", "search", "cloud", "related matches", "ai", "privacy", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -5859,7 +5940,8 @@ internal static class PolicyBrowser
                 Id = "edgesrch-disable-sidebar-search",
                 Label = "Edge Search & Address Bar Policy: Disable Search in Sidebar Panel",
                 Category = "Browser",
-                Description = "Disables the Edge Search in Sidebar feature, which opens a search panel on the right side of the browser when the user right-clicks and selects 'Search using web side panel', or when the user selects text and triggers a sidebar search action. This feature creates a split-screen search experience that shares the selected text with Microsoft's search service.",
+                Description =
+                    "Disables the Edge Search in Sidebar feature, which opens a search panel on the right side of the browser when the user right-clicks and selects 'Search using web side panel', or when the user selects text and triggers a sidebar search action. This feature creates a split-screen search experience that shares the selected text with Microsoft's search service.",
                 Tags = ["edge", "sidebar", "search", "side panel", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -5876,7 +5958,8 @@ internal static class PolicyBrowser
                 Id = "edgesrch-disable-typosquatting-checker",
                 Label = "Edge Search & Address Bar Policy: Disable URL Typosquatting Checker",
                 Category = "Browser",
-                Description = "Disables the Edge typosquatting checker that compares navigated URLs against a list of commonly mistyped domain names to warn the user when they may have typed a typosquatting site. While the checker improves user safety, it performs cloud lookups for URLs navigated via the address bar and sends the navigated hostname to Microsoft for comparison, creating outbound communication for every navigation.",
+                Description =
+                    "Disables the Edge typosquatting checker that compares navigated URLs against a list of commonly mistyped domain names to warn the user when they may have typed a typosquatting site. While the checker improves user safety, it performs cloud lookups for URLs navigated via the address bar and sends the navigated hostname to Microsoft for comparison, creating outbound communication for every navigation.",
                 Tags = ["edge", "typosquatting", "url", "safety", "network", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -5889,7 +5972,6 @@ internal static class PolicyBrowser
                 ImpactNote = "Typosquatting URL warnings disabled; users will not be warned about similar-looking domains.",
             },
         ];
-
     }
 
     // ── EdgeSecureBrowsingPolicy ──
@@ -6080,7 +6162,6 @@ internal static class PolicyBrowser
                 ImpactNote = "SHA-1 signed enterprise certificates are rejected; PKI must use SHA-256+ signing algorithms.",
             },
         ];
-
     }
 
     // ── EdgeSiteIsolationPolicy ──
@@ -6261,7 +6342,6 @@ internal static class PolicyBrowser
                     DetectOps = [RegOp.CheckDword(Key, "WebRtcIPHandling", 2)],
                 },
             ];
-
     }
 
     // ── EdgeSleepingTabsPolicy ──
@@ -6442,7 +6522,6 @@ internal static class PolicyBrowser
                     DetectOps = [RegOp.CheckDword(Key, "ReaderModeEnabled", 0)],
                 },
             ];
-
     }
 
     // ── EdgeSmartScreenAndSiteIsolationPolicy ──
@@ -6634,7 +6713,6 @@ internal static class PolicyBrowser
                     "ADFS automatic sign-in integration disabled in Edge; federated authentication to ADFS relying parties requires explicit user action.",
             },
         ];
-
     }
 
     // ── EdgeStartupPolicy ──
@@ -6649,7 +6727,8 @@ internal static class PolicyBrowser
                 Id = "edgestart-set-startup-to-new-tab",
                 Label = "Edge Startup Policy: Set Startup Action to Open New Tab Page",
                 Category = "Browser",
-                Description = "Configures Microsoft Edge to always open the New Tab Page on startup, discarding any previously open tabs and ignoring the 'Continue where you left off' option. This ensures a clean browser state on every launch, which is important for shared workstations, kiosk deployments, and compliance environments where session continuity between logins must not occur.",
+                Description =
+                    "Configures Microsoft Edge to always open the New Tab Page on startup, discarding any previously open tabs and ignoring the 'Continue where you left off' option. This ensures a clean browser state on every launch, which is important for shared workstations, kiosk deployments, and compliance environments where session continuity between logins must not occur.",
                 Tags = ["edge", "startup", "new tab", "session", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -6666,7 +6745,8 @@ internal static class PolicyBrowser
                 Id = "edgestart-disable-preload-home-page",
                 Label = "Edge Startup Policy: Disable Preloading of Home Page on Startup",
                 Category = "Browser",
-                Description = "Prevents Microsoft Edge from preloading the home page or startup pages in the background during Windows startup or user logon. Edge aggressively preloads its startup page to shorten the perceived time-to-interactive, but this consumes RAM and CPU on logon, delays desktop readiness, and causes unnecessary network activity even when the user does not intend to open Edge.",
+                Description =
+                    "Prevents Microsoft Edge from preloading the home page or startup pages in the background during Windows startup or user logon. Edge aggressively preloads its startup page to shorten the perceived time-to-interactive, but this consumes RAM and CPU on logon, delays desktop readiness, and causes unnecessary network activity even when the user does not intend to open Edge.",
                 Tags = ["edge", "startup", "preload", "performance", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -6683,7 +6763,8 @@ internal static class PolicyBrowser
                 Id = "edgestart-disable-sleeping-tabs",
                 Label = "Edge Startup Policy: Disable Sleeping Tabs Background CPU Throttle",
                 Category = "Browser",
-                Description = "Disables the Edge Sleeping Tabs feature that automatically sends unused background tabs into a low-power throttled state after a period of inactivity. While intended to reduce CPU and memory usage, the Sleeping Tabs feature sometimes causes web applications (dashboards, real-time monitoring tools, auto-paging enterprise apps) to lose their session state unexpectedly.",
+                Description =
+                    "Disables the Edge Sleeping Tabs feature that automatically sends unused background tabs into a low-power throttled state after a period of inactivity. While intended to reduce CPU and memory usage, the Sleeping Tabs feature sometimes causes web applications (dashboards, real-time monitoring tools, auto-paging enterprise apps) to lose their session state unexpectedly.",
                 Tags = ["edge", "sleeping tabs", "performance", "tabs", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -6700,7 +6781,8 @@ internal static class PolicyBrowser
                 Id = "edgestart-disable-performance-detector",
                 Label = "Edge Startup Policy: Disable Edge Performance Detector",
                 Category = "Browser",
-                Description = "Disables the Edge Performance Detector, which monitors browser and system performance to advise users about slow extensions, resource-heavy tabs, and memory pressure. While informational, the Performance Detector runs a background profiling service and generates telemetry reports sent to Microsoft. In managed environments where performance baselines are set by IT, this unsolicited advisor is unnecessary.",
+                Description =
+                    "Disables the Edge Performance Detector, which monitors browser and system performance to advise users about slow extensions, resource-heavy tabs, and memory pressure. While informational, the Performance Detector runs a background profiling service and generates telemetry reports sent to Microsoft. In managed environments where performance baselines are set by IT, this unsolicited advisor is unnecessary.",
                 Tags = ["edge", "performance detector", "telemetry", "profiling", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -6717,7 +6799,8 @@ internal static class PolicyBrowser
                 Id = "edgestart-disable-new-tab-prerender",
                 Label = "Edge Startup Policy: Disable New Tab Page Prerendering",
                 Category = "Browser",
-                Description = "Prevents Edge from pre-rendering the New Tab Page (NTP) before the user explicitly opens a new tab. The NTP prerender fetches background images, news feed content, and Bing search suggestions in advance. Disabling prerendering reduces background network activity, decreases memory usage, and prevents prefetch requests from appearing in corporate network monitoring tools.",
+                Description =
+                    "Prevents Edge from pre-rendering the New Tab Page (NTP) before the user explicitly opens a new tab. The NTP prerender fetches background images, news feed content, and Bing search suggestions in advance. Disabling prerendering reduces background network activity, decreases memory usage, and prevents prefetch requests from appearing in corporate network monitoring tools.",
                 Tags = ["edge", "new tab", "prerender", "performance", "network", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -6734,7 +6817,8 @@ internal static class PolicyBrowser
                 Id = "edgestart-force-bing-search-on-ntp",
                 Label = "Edge Startup Policy: Lock New Tab Page Search Box to Bing (Prevent Override)",
                 Category = "Browser",
-                Description = "Configures the New Tab Page search box type to Bing and prevents users from changing it to a third-party or intranet search engine. In enterprise deployments where Bing is the approved search provider (or where the Enterprise New Tab Page is set to a corporate portal), this prevents inconsistency in the search experience and avoids accidental data submission to unapproved search services.",
+                Description =
+                    "Configures the New Tab Page search box type to Bing and prevents users from changing it to a third-party or intranet search engine. In enterprise deployments where Bing is the approved search provider (or where the Enterprise New Tab Page is set to a corporate portal), this prevents inconsistency in the search experience and avoids accidental data submission to unapproved search services.",
                 Tags = ["edge", "new tab", "search box", "bing", "search engine", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -6751,7 +6835,8 @@ internal static class PolicyBrowser
                 Id = "edgestart-set-homepage-to-new-tab",
                 Label = "Edge Startup Policy: Set Home Page to New Tab Page",
                 Category = "Browser",
-                Description = "Configures the Edge home page button to navigate to the New Tab Page rather than a custom URL. This ensures the home button is functional and consistent on all managed devices. When combined with the startup action policy, the home button and startup both go to the NTP, providing a consistent entry point across all managed Edge profiles.",
+                Description =
+                    "Configures the Edge home page button to navigate to the New Tab Page rather than a custom URL. This ensures the home button is functional and consistent on all managed devices. When combined with the startup action policy, the home button and startup both go to the NTP, providing a consistent entry point across all managed Edge profiles.",
                 Tags = ["edge", "homepage", "new tab", "startup", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -6768,7 +6853,8 @@ internal static class PolicyBrowser
                 Id = "edgestart-disable-experimentation-service",
                 Label = "Edge Startup Policy: Disable Edge Experimentation and A/B Testing Service",
                 Category = "Browser",
-                Description = "Prevents Microsoft Edge from contacting the Experimentation and Configuration Service (ECS) that enrolls the browser in A/B feature experiments and delivers remote feature flag overrides. ECS can silently enable or disable browser features without a version update. In enterprise environments, uncontrolled feature experiments can change behaviour, break web app compatibility, or activate preview features not approved by IT.",
+                Description =
+                    "Prevents Microsoft Edge from contacting the Experimentation and Configuration Service (ECS) that enrolls the browser in A/B feature experiments and delivers remote feature flag overrides. ECS can silently enable or disable browser features without a version update. In enterprise environments, uncontrolled feature experiments can change behaviour, break web app compatibility, or activate preview features not approved by IT.",
                 Tags = ["edge", "experimentation", "ab testing", "feature flags", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -6785,7 +6871,8 @@ internal static class PolicyBrowser
                 Id = "edgestart-disable-tab-groups",
                 Label = "Edge Startup Policy: Disable Edge Tab Groups",
                 Category = "Browser",
-                Description = "Disables the Edge Tab Groups feature that lets users organize browser tabs into named, colored groups. On kiosk and locked-down devices where the number of open tabs is restricted by policy, and where session restoration of tab groups between logins would create persistent state, disabling tab groups simplifies the browser UX and prevents group state from persisting across logons.",
+                Description =
+                    "Disables the Edge Tab Groups feature that lets users organize browser tabs into named, colored groups. On kiosk and locked-down devices where the number of open tabs is restricted by policy, and where session restoration of tab groups between logins would create persistent state, disabling tab groups simplifies the browser UX and prevents group state from persisting across logons.",
                 Tags = ["edge", "tab groups", "kiosk", "simplification", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -6802,7 +6889,8 @@ internal static class PolicyBrowser
                 Id = "edgestart-disable-edge-workspaces",
                 Label = "Edge Startup Policy: Disable Edge Workspaces",
                 Category = "Browser",
-                Description = "Disables Microsoft Edge Workspaces, the collaborative tab-sharing feature that allows users to share a live set of browser tabs with colleagues via a shared link. Workspaces sync tab lists to Microsoft cloud services and allow external parties to view or join an active workspace. In corporate environments with data-classification or DLP requirements, this feature could inadvertently expose internal URLs to unauthorized users.",
+                Description =
+                    "Disables Microsoft Edge Workspaces, the collaborative tab-sharing feature that allows users to share a live set of browser tabs with colleagues via a shared link. Workspaces sync tab lists to Microsoft cloud services and allow external parties to view or join an active workspace. In corporate environments with data-classification or DLP requirements, this feature could inadvertently expose internal URLs to unauthorized users.",
                 Tags = ["edge", "workspaces", "sharing", "collaboration", "privacy", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -6815,7 +6903,6 @@ internal static class PolicyBrowser
                 ImpactNote = "Disables Edge Workspaces tab sharing; prevents internal URLs from being shared via workspace links.",
             },
         ];
-
     }
 
     // ── EdgeTrackingProtectionPolicy ──
@@ -6830,7 +6917,8 @@ internal static class PolicyBrowser
                 Id = "edgetrack-strict-tracking-prevention",
                 Label = "Edge Tracking Protection Policy: Enforce Strict Tracking Prevention",
                 Category = "Browser",
-                Description = "Forces Microsoft Edge to use Strict tracking prevention mode, which blocks all known trackers regardless of whether they are from sites the user has previously visited. Strict mode blocks trackers that cause compatibility issues and prevents tracking from any source — including cross-site embedded trackers, fingerprinting scripts, and crypto mining scripts. In privacy-focused corporate environments, strict mode reduces enterprise data leakage to advertising networks.",
+                Description =
+                    "Forces Microsoft Edge to use Strict tracking prevention mode, which blocks all known trackers regardless of whether they are from sites the user has previously visited. Strict mode blocks trackers that cause compatibility issues and prevents tracking from any source — including cross-site embedded trackers, fingerprinting scripts, and crypto mining scripts. In privacy-focused corporate environments, strict mode reduces enterprise data leakage to advertising networks.",
                 Tags = ["edge", "tracking prevention", "strict", "privacy", "telemetry", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -6840,14 +6928,16 @@ internal static class PolicyBrowser
                 DetectOps = [RegOp.CheckDword(EdgeKey, "TrackingPrevention", 3)],
                 ImpactScore = 4,
                 SafetyRating = 4,
-                ImpactNote = "Strict tracking prevention (value 3) blocks all known trackers; some web apps with third-party embedded content may break.",
+                ImpactNote =
+                    "Strict tracking prevention (value 3) blocks all known trackers; some web apps with third-party embedded content may break.",
             },
             new TweakDef
             {
                 Id = "edgetrack-clear-cache-on-exit",
                 Label = "Edge Tracking Protection Policy: Clear Cached Images and Files on Exit",
                 Category = "Browser",
-                Description = "Configures Microsoft Edge to automatically delete all cached images and files from the browser cache when the browser closes. The disk cache is a persistent storage mechanism that survives browser restarts and can be used as a covert channel for tracking users across sessions (cache timing attacks, ETag tracking, and cache element counting). Clearing the cache on exit prevents this class of cross-session tracking.",
+                Description =
+                    "Configures Microsoft Edge to automatically delete all cached images and files from the browser cache when the browser closes. The disk cache is a persistent storage mechanism that survives browser restarts and can be used as a covert channel for tracking users across sessions (cache timing attacks, ETag tracking, and cache element counting). Clearing the cache on exit prevents this class of cross-session tracking.",
                 Tags = ["edge", "cache", "privacy", "exit", "tracking", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -6864,7 +6954,8 @@ internal static class PolicyBrowser
                 Id = "edgetrack-disable-user-feedback",
                 Label = "Edge Tracking Protection Policy: Disable User Feedback and Error Reporting",
                 Category = "Browser",
-                Description = "Blocks the built-in Edge user feedback mechanism and telemetric crash/error reporting. When UserFeedbackAllowed is set to 0, the Help > Send Feedback option is removed and Edge will not submit user-generated feedback reports or automatic crash diagnostics to Microsoft. Crash reports may contain browser session state, visited URL data, and clipboard content captured at the time of the crash.",
+                Description =
+                    "Blocks the built-in Edge user feedback mechanism and telemetric crash/error reporting. When UserFeedbackAllowed is set to 0, the Help > Send Feedback option is removed and Edge will not submit user-generated feedback reports or automatic crash diagnostics to Microsoft. Crash reports may contain browser session state, visited URL data, and clipboard content captured at the time of the crash.",
                 Tags = ["edge", "feedback", "telemetry", "crash reporting", "privacy", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -6881,7 +6972,8 @@ internal static class PolicyBrowser
                 Id = "edgetrack-disable-signed-http-exchange",
                 Label = "Edge Tracking Protection Policy: Disable Signed HTTP Exchange Support",
                 Category = "Browser",
-                Description = "Disables Signed HTTP Exchange (SXG) support in Microsoft Edge. SXG is a web packaging format that allows content to be pre-signed by the original publisher and served from a CDN or cache while appearing to originate from the publisher's domain. While this improves performance for AMP and pre-fetched content, it can break referrer-origin alignment, complicate certificate revocation for distributed content, and interfere with corporate content inspection proxies.",
+                Description =
+                    "Disables Signed HTTP Exchange (SXG) support in Microsoft Edge. SXG is a web packaging format that allows content to be pre-signed by the original publisher and served from a CDN or cache while appearing to originate from the publisher's domain. While this improves performance for AMP and pre-fetched content, it can break referrer-origin alignment, complicate certificate revocation for distributed content, and interfere with corporate content inspection proxies.",
                 Tags = ["edge", "signed http exchange", "sxg", "security", "proxy", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -6898,7 +6990,8 @@ internal static class PolicyBrowser
                 Id = "edgetrack-disable-shared-array-buffer-unrestricted",
                 Label = "Edge Tracking Protection Policy: Enforce Cross-Origin Isolation for SharedArrayBuffer",
                 Category = "Browser",
-                Description = "Prevents websites from using the SharedArrayBuffer (SAB) API without proper cross-origin isolation headers (COOP/COEP). SharedArrayBuffer enables high-resolution timer attacks and Spectre-class side-channel exploits when used from pages that are not properly isolated. Disabling unrestricted SAB access forces all websites that require SharedArrayBuffer to declare cross-origin isolation, which significantly reduces Spectre exploitation potential.",
+                Description =
+                    "Prevents websites from using the SharedArrayBuffer (SAB) API without proper cross-origin isolation headers (COOP/COEP). SharedArrayBuffer enables high-resolution timer attacks and Spectre-class side-channel exploits when used from pages that are not properly isolated. Disabling unrestricted SAB access forces all websites that require SharedArrayBuffer to declare cross-origin isolation, which significantly reduces Spectre exploitation potential.",
                 Tags = ["edge", "sharedarraybuffer", "spectre", "security", "cross-origin", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -6915,7 +7008,8 @@ internal static class PolicyBrowser
                 Id = "edgetrack-disable-surf-game",
                 Label = "Edge Tracking Protection Policy: Disable Surf Easter Egg Game on Error Pages",
                 Category = "Browser",
-                Description = "Disables the Surf easter egg game that appears on Edge error pages (similar to Chrome's T-Rex game). When AllowSurfGame is set to 0, the game cannot be activated on the no-internet or ERR_CONNECTION_REFUSED error page. In managed enterprise environments and kiosk deployments, the hidden game represents an uncontrolled interactive application running within the browser, which may distract users or enable unintended browser activity on locked-down systems.",
+                Description =
+                    "Disables the Surf easter egg game that appears on Edge error pages (similar to Chrome's T-Rex game). When AllowSurfGame is set to 0, the game cannot be activated on the no-internet or ERR_CONNECTION_REFUSED error page. In managed enterprise environments and kiosk deployments, the hidden game represents an uncontrolled interactive application running within the browser, which may distract users or enable unintended browser activity on locked-down systems.",
                 Tags = ["edge", "surf game", "easter egg", "error page", "kiosk", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -6932,7 +7026,8 @@ internal static class PolicyBrowser
                 Id = "edgetrack-disable-immersive-reader-grammar",
                 Label = "Edge Tracking Protection Policy: Disable Immersive Reader Grammar Tools",
                 Category = "Browser",
-                Description = "Disables the Grammar Tools option within the Edge Immersive Reader panel. When Immersive Reader is opened, Grammar Tools provides syllable highlighting, part-of-speech color-coding, and text analysis powered by Microsoft language services. The grammar analysis requires sending page text content to Microsoft cloud language endpoints. Disabling this feature prevents reading-mode content from being transmitted to external language processing services.",
+                Description =
+                    "Disables the Grammar Tools option within the Edge Immersive Reader panel. When Immersive Reader is opened, Grammar Tools provides syllable highlighting, part-of-speech color-coding, and text analysis powered by Microsoft language services. The grammar analysis requires sending page text content to Microsoft cloud language endpoints. Disabling this feature prevents reading-mode content from being transmitted to external language processing services.",
                 Tags = ["edge", "immersive reader", "grammar tools", "privacy", "cloud", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -6949,7 +7044,8 @@ internal static class PolicyBrowser
                 Id = "edgetrack-block-intrusive-ads",
                 Label = "Edge Tracking Protection Policy: Block Ads on Sites with Intrusive Ad Experiences",
                 Category = "Browser",
-                Description = "Configures Microsoft Edge to block all ads on websites that have been flagged by the Better Ads Standards initiative for running intrusive ad experiences (auto-playing video with sound, countdown interstitials, prestitial ads with countdown). Setting AdsSettingForIntrusiveAdsSites to 2 activates the integrated ad-blocking on flagged domains. This reduces the number of ad trackers loaded, improves page load performance, and removes disruptive content on violating sites.",
+                Description =
+                    "Configures Microsoft Edge to block all ads on websites that have been flagged by the Better Ads Standards initiative for running intrusive ad experiences (auto-playing video with sound, countdown interstitials, prestitial ads with countdown). Setting AdsSettingForIntrusiveAdsSites to 2 activates the integrated ad-blocking on flagged domains. This reduces the number of ad trackers loaded, improves page load performance, and removes disruptive content on violating sites.",
                 Tags = ["edge", "ads", "intrusive ads", "better ads", "tracking", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -6966,7 +7062,8 @@ internal static class PolicyBrowser
                 Id = "edgetrack-disable-builtin-dns-client",
                 Label = "Edge Tracking Protection Policy: Disable Edge Built-In DNS Client (Use OS DNS)",
                 Category = "Browser",
-                Description = "Disables the built-in DNS client in Microsoft Edge and forces the browser to use the operating system's DNS resolver for all name resolution. Edge's built-in DNS client can use different DNS servers, timeout settings, and resolution strategies than the OS-configured DNS — potentially bypassing corporate DNS policies, split-horizon DNS configurations, and DNS-based filtering. Using the OS DNS ensures Edge resolution goes through the same monitored and filtered DNS path as all other applications.",
+                Description =
+                    "Disables the built-in DNS client in Microsoft Edge and forces the browser to use the operating system's DNS resolver for all name resolution. Edge's built-in DNS client can use different DNS servers, timeout settings, and resolution strategies than the OS-configured DNS — potentially bypassing corporate DNS policies, split-horizon DNS configurations, and DNS-based filtering. Using the OS DNS ensures Edge resolution goes through the same monitored and filtered DNS path as all other applications.",
                 Tags = ["edge", "dns", "built-in dns", "network", "corporate", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -6983,7 +7080,8 @@ internal static class PolicyBrowser
                 Id = "edgetrack-disable-lens-search",
                 Label = "Edge Tracking Protection Policy: Disable Image Lens Region Search",
                 Category = "Browser",
-                Description = "Disables the Lens Region Search feature in Microsoft Edge, which adds a camera/Bing icon to the browser toolbar and context menu allowing users to select a region of any web page and submit it as an image search query to Bing. Lens Region Search uploads a screenshot of the selected page region to Microsoft Bing's image search service. This creates an implicit image-based data exfiltration path for sensitive content displayed on internal corporate web pages or classified documents.",
+                Description =
+                    "Disables the Lens Region Search feature in Microsoft Edge, which adds a camera/Bing icon to the browser toolbar and context menu allowing users to select a region of any web page and submit it as an image search query to Bing. Lens Region Search uploads a screenshot of the selected page region to Microsoft Bing's image search service. This creates an implicit image-based data exfiltration path for sensitive content displayed on internal corporate web pages or classified documents.",
                 Tags = ["edge", "lens search", "bing", "image search", "privacy", "policy"],
                 NeedsAdmin = true,
                 CorpSafe = true,
@@ -6996,7 +7094,6 @@ internal static class PolicyBrowser
                 ImpactNote = "Lens/image region search removed from Edge context menu; no page screenshots sent to Bing image search.",
             },
         ];
-
     }
 
     // ── EdgeWebView2Policy ──
@@ -7178,7 +7275,6 @@ internal static class PolicyBrowser
                     DetectOps = [RegOp.CheckDword(Key, "RegisteredProtocolHandlers", 0)],
                 },
             ];
-
     }
 
     // ── EdgeWorkProfilePolicy ──
@@ -7187,179 +7283,189 @@ internal static class PolicyBrowser
         private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge";
 
         public static IReadOnlyList<TweakDef> Data =>
-        [
-            new TweakDef
-            {
-                Id = "edgewp-force-work-profile-sign-in",
-                Label = "Edge Work Profile: Force Sign-In with Work or School Account",
-                Category = "Browser",
-                Description = "Sets ForceSyncTypes=1 in Edge policy. Forces Edge to require the user to sign in with a work or school account (Entra ID / Microsoft 365) before browsing can begin, ensuring the browser session is always associated with a managed identity and data protection policies are applied. " +
-                    "Unauthenticated Edge browsing sessions (guest mode, personal profile, no-sign-in mode) do not inherit the user's Conditional Access, DLP, or browser policy configurations. A user who bypasses the sign-in prompt has a browser session without enterprise policies applied, including without SSL inspection, information barrier enforcement, or Purview data classification labels. Forcing sign-in ensures all browser activity is attributable to a managed identity.",
-                Tags = ["edge", "profile", "sign-in", "work-account", "identity"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                ImpactNote = "Edge requires work account sign-in before browsing; unauthenticated sessions not permitted.",
-                ApplyOps = [RegOp.SetDword(Key, "ForceSyncTypes", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "ForceSyncTypes")],
-                DetectOps = [RegOp.CheckDword(Key, "ForceSyncTypes", 1)],
-            },
-            new TweakDef
-            {
-                Id = "edgewp-disable-personal-browsing-in-work-profile",
-                Label = "Edge Work Profile: Disable Switching to Personal Browse Session in Work Profile",
-                Category = "Browser",
-                Description = "Sets PersonalBrowsingAllowed=0 in Edge policy. Prevents users from switching from the managed work profile to an unmanaged personal browsing context within the same Edge browser window, keeping all browsing within the enforceable work profile context. " +
-                    "Edge's 'Browse without your data' and 'Personal profile' features allow users to open an unmanaged browser context without enterprise DLP, SSL inspection, and proxy policies. These personal contexts, despite running in the same process, do not inherit the work profile's Conditional Access tokens or data protection rules. A user can copy sensitive data from a managed tab to an unmanaged personal tab, then upload it to a personal cloud service.",
-                Tags = ["edge", "profile", "personal", "dlp", "data-protection"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                ImpactNote = "Personal browsing contexts disabled in Edge; all sessions remain in the managed work profile.",
-                ApplyOps = [RegOp.SetDword(Key, "PersonalBrowsingAllowed", 0)],
-                RemoveOps = [RegOp.DeleteValue(Key, "PersonalBrowsingAllowed")],
-                DetectOps = [RegOp.CheckDword(Key, "PersonalBrowsingAllowed", 0)],
-            },
-            new TweakDef
-            {
-                Id = "edgewp-disable-work-profile-data-sync",
-                Label = "Edge Work Profile: Disable Work Profile Data Sync to Microsoft Account",
-                Category = "Browser",
-                Description = "Sets SyncDisabled=1 in Edge policy. Prevents the Edge work profile from syncing browsing history, saved passwords, extensions, and settings to the user's Microsoft cloud account (personal or enterprise), keeping work profile data resident on the managed device only. " +
-                    "Edge sync uploads work browsing history, internal URL patterns, saved credentials for internal web apps, and installed extension lists to Microsoft's cloud sync service. In high-sensitivity environments, the browsing history itself may constitute proprietary information. Disabling sync ensures that work profile data stays on the managed device and any downstream device the user signs into using the same account cannot access the work browser data.",
-                Tags = ["edge", "sync", "cloud", "data-residency", "profile"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Edge work profile data not synced to Microsoft cloud; browsing history and credentials remain local.",
-                ApplyOps = [RegOp.SetDword(Key, "SyncDisabled", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "SyncDisabled")],
-                DetectOps = [RegOp.CheckDword(Key, "SyncDisabled", 1)],
-            },
-            new TweakDef
-            {
-                Id = "edgewp-block-non-work-account-sign-in",
-                Label = "Edge Work Profile: Block Signing In with Non-Work / Personal Accounts",
-                Category = "Browser",
-                Description = "Sets RestrictSigninToPattern=1 in Edge policy. Restricts the Edge browser sign-in to accounts that match the organisation's verified domain pattern only, preventing users from signing into Edge with personal Microsoft accounts, Google accounts (via linking), or third-party identity providers. " +
-                    "Allowing personal account sign-in into Edge bypasses Conditional Access evaluation because the personal account token does not flow through the organisation's IdP. A user signed in with a personal account in a work browser context can install unvetted extensions, sync personal bookmarks containing personal cloud credentials, and access personal services without DLP policy enforcement.",
-                Tags = ["edge", "profile", "account-restriction", "conditional-access", "idp"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                ImpactNote = "Edge sign-in restricted to work domain accounts; personal Microsoft accounts blocked.",
-                ApplyOps = [RegOp.SetDword(Key, "RestrictSigninToPattern", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "RestrictSigninToPattern")],
-                DetectOps = [RegOp.CheckDword(Key, "RestrictSigninToPattern", 1)],
-            },
-            new TweakDef
-            {
-                Id = "edgewp-enable-mandatory-workplace-access",
-                Label = "Edge Work Profile: Enable Mandatory Workplace (MAM) Access Enforcement in Edge",
-                Category = "Browser",
-                Description = "Sets MandatoryBrowserWorkplaceAccess=1 in Edge policy. Enables Microsoft Edge's Mobile Application Management (MAM)-style policy enforcement when the user is authenticated with a work account, automatically applying Intune app protection policies to the Edge browser session. " +
-                    "Without MAM/workplace access enforcement, a user on a non-compliant device (e.g., a personal device not enrolled in Intune) can sign into Edge with a work account and access M365 resources without device compliance checks, DLP policies applying to copy/paste, or data transfer restrictions. Workplace access enforcement applies app-level protection policies to the browser session independent of device enrollment state.",
-                Tags = ["edge", "mam", "intune", "app-protection", "conditional-access"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                ImpactNote = "Intune MAM app protection policies applied to Edge; data transfer restrictions active even on non-enrolled devices.",
-                ApplyOps = [RegOp.SetDword(Key, "MandatoryBrowserWorkplaceAccess", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "MandatoryBrowserWorkplaceAccess")],
-                DetectOps = [RegOp.CheckDword(Key, "MandatoryBrowserWorkplaceAccess", 1)],
-            },
-            new TweakDef
-            {
-                Id = "edgewp-disable-guest-mode-browsing",
-                Label = "Edge Work Profile: Disable Guest Mode Browsing",
-                Category = "Browser",
-                Description = "Sets GuestModeEnabled=0 in Edge policy. Disables the Edge 'Guest' profile mode, which launches an ephemeral browser context with no policies, no identity, no browsing history persistence, and no enterprise configuration applied. " +
-                    "Guest mode is commonly used to access the browser without any profile's policies applying. On a managed enterprise device, a user opening Edge in guest mode bypasses every configured Edge Group Policy — with no managed account bound to the session. SSL inspection, extension allow-listing, DLP policies, and URL filtering policies all become ineffective in a guest mode session.",
-                Tags = ["edge", "guest-mode", "policy-bypass", "managed-browser"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                ImpactNote = "Edge Guest mode disabled; no ephemeral unmanaged browser sessions available.",
-                ApplyOps = [RegOp.SetDword(Key, "GuestModeEnabled", 0)],
-                RemoveOps = [RegOp.DeleteValue(Key, "GuestModeEnabled")],
-                DetectOps = [RegOp.CheckDword(Key, "GuestModeEnabled", 0)],
-            },
-            new TweakDef
-            {
-                Id = "edgewp-disable-inprivate-browsing",
-                Label = "Edge Work Profile: Disable InPrivate Browsing Mode",
-                Category = "Browser",
-                Description = "Sets InPrivateModeAvailability=1 in Edge policy. Disables InPrivate browsing mode (value 1 = Disabled) in Edge, preventing users from opening sessions where browsing history and cookies are not retained. " +
-                    "InPrivate mode, while legitimate for privacy, prevents the browsing session from being recorded in Edge history and from being subject to certain telemetry and audit policies that depend on session context. In regulated industries where all web access must be logged for compliance, InPrivate sessions create unlogged access points. Additionally, some DLP inspection products are not applied to InPrivate sessions by default.",
-                Tags = ["edge", "inprivate", "logging", "compliance", "audit"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "InPrivate mode disabled; all Edge sessions are history-tracked and compliance-logged.",
-                ApplyOps = [RegOp.SetDword(Key, "InPrivateModeAvailability", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "InPrivateModeAvailability")],
-                DetectOps = [RegOp.CheckDword(Key, "InPrivateModeAvailability", 1)],
-            },
-            new TweakDef
-            {
-                Id = "edgewp-block-edge-profile-discovery",
-                Label = "Edge Work Profile: Block Automatic Discovery and Sign-In of New Work Profiles",
-                Category = "Browser",
-                Description = "Sets EdgeWorkspacesEnabled=0 in Edge policy. Disables the Edge profile discovery feature that automatically prompts users to create new work profiles when it detects a new Microsoft Entra ID sign-in event, preventing uncontrolled proliferation of managed profiles on shared or shared-use devices. " +
-                    "On devices shared among multiple users (shift workers, kiosk-style workstations), automatic profile creation means each user who signs into a Microsoft service triggers Edge to create a new managed profile bound to their work account. On machines not managed for roaming profiles, these additional profiles accumulate with cached policy configurations, create additional disk usage, and cause confusing multi-profile scenarios.",
-                Tags = ["edge", "profile-discovery", "shared-device", "profile-management"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                ImpactNote = "Auto-profile discovery disabled; Edge does not offer to create new work profiles on detected sign-in.",
-                ApplyOps = [RegOp.SetDword(Key, "EdgeWorkspacesEnabled", 0)],
-                RemoveOps = [RegOp.DeleteValue(Key, "EdgeWorkspacesEnabled")],
-                DetectOps = [RegOp.CheckDword(Key, "EdgeWorkspacesEnabled", 0)],
-            },
-            new TweakDef
-            {
-                Id = "edgewp-enforce-managed-profile-on-startup",
-                Label = "Edge Work Profile: Enforce Managed Work Profile at Browser Startup",
-                Category = "Browser",
-                Description = "Sets ManagedBrowserStartEnabled=1 in Edge policy. Ensures that Edge always opens to the managed work profile on startup, rather than offering a profile picker or defaulting to the most recently used (possibly personal) profile. " +
-                    "On multi-profile Edge installations, the browser may start in a personal or unmanaged profile if that was the last one used. Users habitually working in a personal profile while corporate data is accessible in internal apps may inadvertently paste or upload work data from a personal-profile session where DLP is not enforced. Ensuring startup always opens the managed work profile makes the default context the compliant one.",
-                Tags = ["edge", "startup", "managed-profile", "default", "compliance"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Edge always opens managed work profile on startup; personal profile not the default context.",
-                ApplyOps = [RegOp.SetDword(Key, "ManagedBrowserStartEnabled", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "ManagedBrowserStartEnabled")],
-                DetectOps = [RegOp.CheckDword(Key, "ManagedBrowserStartEnabled", 1)],
-            },
-            new TweakDef
-            {
-                Id = "edgewp-disable-profile-sharing-across-windows",
-                Label = "Edge Work Profile: Disable Profile Data Sharing Across Edge Windows",
-                Category = "Browser",
-                Description = "Sets ShareSessionCookiesWithExternalApps=0 in Edge policy. Prevents Edge from sharing session state, cookies, and profile context with Edge WebView2-embedded browser controls in third-party applications, ensuring the managed work profile's authentication tokens are isolated to the Edge browser process. " +
-                    "Edge WebView2-based applications (such as Teams, Office web views, and third-party Electron apps) can access the Edge user profile's cookie jar and session tokens if profile sharing is enabled. A compromised Electron application running with Edge WebView2 can silently extract the authenticated session tokens for SharePoint, Exchange, and other M365 services from the shared Edge profile, enabling token theft without the user's knowledge.",
-                Tags = ["edge", "webview2", "session-sharing", "token-theft", "cookie"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                ImpactNote = "Edge profile session cookies not shared with WebView2 apps; M365 tokens isolated to Edge browser process.",
-                ApplyOps = [RegOp.SetDword(Key, "ShareSessionCookiesWithExternalApps", 0)],
-                RemoveOps = [RegOp.DeleteValue(Key, "ShareSessionCookiesWithExternalApps")],
-                DetectOps = [RegOp.CheckDword(Key, "ShareSessionCookiesWithExternalApps", 0)],
-            },
-        ];
-
+            [
+                new TweakDef
+                {
+                    Id = "edgewp-force-work-profile-sign-in",
+                    Label = "Edge Work Profile: Force Sign-In with Work or School Account",
+                    Category = "Browser",
+                    Description =
+                        "Sets ForceSyncTypes=1 in Edge policy. Forces Edge to require the user to sign in with a work or school account (Entra ID / Microsoft 365) before browsing can begin, ensuring the browser session is always associated with a managed identity and data protection policies are applied. "
+                        + "Unauthenticated Edge browsing sessions (guest mode, personal profile, no-sign-in mode) do not inherit the user's Conditional Access, DLP, or browser policy configurations. A user who bypasses the sign-in prompt has a browser session without enterprise policies applied, including without SSL inspection, information barrier enforcement, or Purview data classification labels. Forcing sign-in ensures all browser activity is attributable to a managed identity.",
+                    Tags = ["edge", "profile", "sign-in", "work-account", "identity"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "Edge requires work account sign-in before browsing; unauthenticated sessions not permitted.",
+                    ApplyOps = [RegOp.SetDword(Key, "ForceSyncTypes", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "ForceSyncTypes")],
+                    DetectOps = [RegOp.CheckDword(Key, "ForceSyncTypes", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "edgewp-disable-personal-browsing-in-work-profile",
+                    Label = "Edge Work Profile: Disable Switching to Personal Browse Session in Work Profile",
+                    Category = "Browser",
+                    Description =
+                        "Sets PersonalBrowsingAllowed=0 in Edge policy. Prevents users from switching from the managed work profile to an unmanaged personal browsing context within the same Edge browser window, keeping all browsing within the enforceable work profile context. "
+                        + "Edge's 'Browse without your data' and 'Personal profile' features allow users to open an unmanaged browser context without enterprise DLP, SSL inspection, and proxy policies. These personal contexts, despite running in the same process, do not inherit the work profile's Conditional Access tokens or data protection rules. A user can copy sensitive data from a managed tab to an unmanaged personal tab, then upload it to a personal cloud service.",
+                    Tags = ["edge", "profile", "personal", "dlp", "data-protection"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "Personal browsing contexts disabled in Edge; all sessions remain in the managed work profile.",
+                    ApplyOps = [RegOp.SetDword(Key, "PersonalBrowsingAllowed", 0)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "PersonalBrowsingAllowed")],
+                    DetectOps = [RegOp.CheckDword(Key, "PersonalBrowsingAllowed", 0)],
+                },
+                new TweakDef
+                {
+                    Id = "edgewp-disable-work-profile-data-sync",
+                    Label = "Edge Work Profile: Disable Work Profile Data Sync to Microsoft Account",
+                    Category = "Browser",
+                    Description =
+                        "Sets SyncDisabled=1 in Edge policy. Prevents the Edge work profile from syncing browsing history, saved passwords, extensions, and settings to the user's Microsoft cloud account (personal or enterprise), keeping work profile data resident on the managed device only. "
+                        + "Edge sync uploads work browsing history, internal URL patterns, saved credentials for internal web apps, and installed extension lists to Microsoft's cloud sync service. In high-sensitivity environments, the browsing history itself may constitute proprietary information. Disabling sync ensures that work profile data stays on the managed device and any downstream device the user signs into using the same account cannot access the work browser data.",
+                    Tags = ["edge", "sync", "cloud", "data-residency", "profile"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "Edge work profile data not synced to Microsoft cloud; browsing history and credentials remain local.",
+                    ApplyOps = [RegOp.SetDword(Key, "SyncDisabled", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "SyncDisabled")],
+                    DetectOps = [RegOp.CheckDword(Key, "SyncDisabled", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "edgewp-block-non-work-account-sign-in",
+                    Label = "Edge Work Profile: Block Signing In with Non-Work / Personal Accounts",
+                    Category = "Browser",
+                    Description =
+                        "Sets RestrictSigninToPattern=1 in Edge policy. Restricts the Edge browser sign-in to accounts that match the organisation's verified domain pattern only, preventing users from signing into Edge with personal Microsoft accounts, Google accounts (via linking), or third-party identity providers. "
+                        + "Allowing personal account sign-in into Edge bypasses Conditional Access evaluation because the personal account token does not flow through the organisation's IdP. A user signed in with a personal account in a work browser context can install unvetted extensions, sync personal bookmarks containing personal cloud credentials, and access personal services without DLP policy enforcement.",
+                    Tags = ["edge", "profile", "account-restriction", "conditional-access", "idp"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "Edge sign-in restricted to work domain accounts; personal Microsoft accounts blocked.",
+                    ApplyOps = [RegOp.SetDword(Key, "RestrictSigninToPattern", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "RestrictSigninToPattern")],
+                    DetectOps = [RegOp.CheckDword(Key, "RestrictSigninToPattern", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "edgewp-enable-mandatory-workplace-access",
+                    Label = "Edge Work Profile: Enable Mandatory Workplace (MAM) Access Enforcement in Edge",
+                    Category = "Browser",
+                    Description =
+                        "Sets MandatoryBrowserWorkplaceAccess=1 in Edge policy. Enables Microsoft Edge's Mobile Application Management (MAM)-style policy enforcement when the user is authenticated with a work account, automatically applying Intune app protection policies to the Edge browser session. "
+                        + "Without MAM/workplace access enforcement, a user on a non-compliant device (e.g., a personal device not enrolled in Intune) can sign into Edge with a work account and access M365 resources without device compliance checks, DLP policies applying to copy/paste, or data transfer restrictions. Workplace access enforcement applies app-level protection policies to the browser session independent of device enrollment state.",
+                    Tags = ["edge", "mam", "intune", "app-protection", "conditional-access"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote =
+                        "Intune MAM app protection policies applied to Edge; data transfer restrictions active even on non-enrolled devices.",
+                    ApplyOps = [RegOp.SetDword(Key, "MandatoryBrowserWorkplaceAccess", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "MandatoryBrowserWorkplaceAccess")],
+                    DetectOps = [RegOp.CheckDword(Key, "MandatoryBrowserWorkplaceAccess", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "edgewp-disable-guest-mode-browsing",
+                    Label = "Edge Work Profile: Disable Guest Mode Browsing",
+                    Category = "Browser",
+                    Description =
+                        "Sets GuestModeEnabled=0 in Edge policy. Disables the Edge 'Guest' profile mode, which launches an ephemeral browser context with no policies, no identity, no browsing history persistence, and no enterprise configuration applied. "
+                        + "Guest mode is commonly used to access the browser without any profile's policies applying. On a managed enterprise device, a user opening Edge in guest mode bypasses every configured Edge Group Policy — with no managed account bound to the session. SSL inspection, extension allow-listing, DLP policies, and URL filtering policies all become ineffective in a guest mode session.",
+                    Tags = ["edge", "guest-mode", "policy-bypass", "managed-browser"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "Edge Guest mode disabled; no ephemeral unmanaged browser sessions available.",
+                    ApplyOps = [RegOp.SetDword(Key, "GuestModeEnabled", 0)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "GuestModeEnabled")],
+                    DetectOps = [RegOp.CheckDword(Key, "GuestModeEnabled", 0)],
+                },
+                new TweakDef
+                {
+                    Id = "edgewp-disable-inprivate-browsing",
+                    Label = "Edge Work Profile: Disable InPrivate Browsing Mode",
+                    Category = "Browser",
+                    Description =
+                        "Sets InPrivateModeAvailability=1 in Edge policy. Disables InPrivate browsing mode (value 1 = Disabled) in Edge, preventing users from opening sessions where browsing history and cookies are not retained. "
+                        + "InPrivate mode, while legitimate for privacy, prevents the browsing session from being recorded in Edge history and from being subject to certain telemetry and audit policies that depend on session context. In regulated industries where all web access must be logged for compliance, InPrivate sessions create unlogged access points. Additionally, some DLP inspection products are not applied to InPrivate sessions by default.",
+                    Tags = ["edge", "inprivate", "logging", "compliance", "audit"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "InPrivate mode disabled; all Edge sessions are history-tracked and compliance-logged.",
+                    ApplyOps = [RegOp.SetDword(Key, "InPrivateModeAvailability", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "InPrivateModeAvailability")],
+                    DetectOps = [RegOp.CheckDword(Key, "InPrivateModeAvailability", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "edgewp-block-edge-profile-discovery",
+                    Label = "Edge Work Profile: Block Automatic Discovery and Sign-In of New Work Profiles",
+                    Category = "Browser",
+                    Description =
+                        "Sets EdgeWorkspacesEnabled=0 in Edge policy. Disables the Edge profile discovery feature that automatically prompts users to create new work profiles when it detects a new Microsoft Entra ID sign-in event, preventing uncontrolled proliferation of managed profiles on shared or shared-use devices. "
+                        + "On devices shared among multiple users (shift workers, kiosk-style workstations), automatic profile creation means each user who signs into a Microsoft service triggers Edge to create a new managed profile bound to their work account. On machines not managed for roaming profiles, these additional profiles accumulate with cached policy configurations, create additional disk usage, and cause confusing multi-profile scenarios.",
+                    Tags = ["edge", "profile-discovery", "shared-device", "profile-management"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 2,
+                    SafetyRating = 5,
+                    ImpactNote = "Auto-profile discovery disabled; Edge does not offer to create new work profiles on detected sign-in.",
+                    ApplyOps = [RegOp.SetDword(Key, "EdgeWorkspacesEnabled", 0)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "EdgeWorkspacesEnabled")],
+                    DetectOps = [RegOp.CheckDword(Key, "EdgeWorkspacesEnabled", 0)],
+                },
+                new TweakDef
+                {
+                    Id = "edgewp-enforce-managed-profile-on-startup",
+                    Label = "Edge Work Profile: Enforce Managed Work Profile at Browser Startup",
+                    Category = "Browser",
+                    Description =
+                        "Sets ManagedBrowserStartEnabled=1 in Edge policy. Ensures that Edge always opens to the managed work profile on startup, rather than offering a profile picker or defaulting to the most recently used (possibly personal) profile. "
+                        + "On multi-profile Edge installations, the browser may start in a personal or unmanaged profile if that was the last one used. Users habitually working in a personal profile while corporate data is accessible in internal apps may inadvertently paste or upload work data from a personal-profile session where DLP is not enforced. Ensuring startup always opens the managed work profile makes the default context the compliant one.",
+                    Tags = ["edge", "startup", "managed-profile", "default", "compliance"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ImpactNote = "Edge always opens managed work profile on startup; personal profile not the default context.",
+                    ApplyOps = [RegOp.SetDword(Key, "ManagedBrowserStartEnabled", 1)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "ManagedBrowserStartEnabled")],
+                    DetectOps = [RegOp.CheckDword(Key, "ManagedBrowserStartEnabled", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "edgewp-disable-profile-sharing-across-windows",
+                    Label = "Edge Work Profile: Disable Profile Data Sharing Across Edge Windows",
+                    Category = "Browser",
+                    Description =
+                        "Sets ShareSessionCookiesWithExternalApps=0 in Edge policy. Prevents Edge from sharing session state, cookies, and profile context with Edge WebView2-embedded browser controls in third-party applications, ensuring the managed work profile's authentication tokens are isolated to the Edge browser process. "
+                        + "Edge WebView2-based applications (such as Teams, Office web views, and third-party Electron apps) can access the Edge user profile's cookie jar and session tokens if profile sharing is enabled. A compromised Electron application running with Edge WebView2 can silently extract the authenticated session tokens for SharePoint, Exchange, and other M365 services from the shared Edge profile, enabling token theft without the user's knowledge.",
+                    Tags = ["edge", "webview2", "session-sharing", "token-theft", "cookie"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 5,
+                    ImpactNote = "Edge profile session cookies not shared with WebView2 apps; M365 tokens isolated to Edge browser process.",
+                    ApplyOps = [RegOp.SetDword(Key, "ShareSessionCookiesWithExternalApps", 0)],
+                    RemoveOps = [RegOp.DeleteValue(Key, "ShareSessionCookiesWithExternalApps")],
+                    DetectOps = [RegOp.CheckDword(Key, "ShareSessionCookiesWithExternalApps", 0)],
+                },
+            ];
     }
 
     // ── IECompatPolicy ──
@@ -7545,7 +7651,6 @@ internal static class PolicyBrowser
                 DetectOps = [RegOp.CheckDword(EdgeMain, "PasswordManagerEnabled", 0)],
             },
         ];
-
     }
 
     // ── InternetExplorerRestrictionsPolicy ──
@@ -7746,7 +7851,6 @@ internal static class PolicyBrowser
                     DetectOps = [RegOp.CheckDword(Key, "NoBrowserClose", 1)],
                 },
             ];
-
     }
 
     // ── InternetZonePolicy ──
@@ -7925,7 +8029,6 @@ internal static class PolicyBrowser
                 DetectOps = [RegOp.CheckDword(Zone3, "1406", 3)],
             },
         ];
-
     }
 
     // ── LegacyEdgePolicy ──
@@ -8122,7 +8225,5 @@ internal static class PolicyBrowser
                     DetectOps = [RegOp.CheckDword(MainKey, "HomeButtonEnabled", 0)],
                 },
             ];
-
     }
-
 }

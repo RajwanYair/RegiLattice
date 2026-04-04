@@ -51,8 +51,8 @@ internal sealed class WinGetManagerDialog : BasePackageManagerDialog
         foreach (var entry in list)
         {
             var item = new ListViewItem(entry) { Tag = entry };
-            item.SubItems.Add("");             // Version
-            item.SubItems.Add("—");            // Size
+            item.SubItems.Add(""); // Version
+            item.SubItems.Add("—"); // Size
             item.SubItems.Add("\u2714 Up to date"); // Status
             item.ForeColor = AppTheme.Fg;
             _lstInstalled.Items.Add(item);
@@ -82,9 +82,7 @@ internal sealed class WinGetManagerDialog : BasePackageManagerDialog
             {
                 if (item.Tag is string pkgName && _outdatedNames.Contains(pkgName))
                 {
-                    item.SubItems[3].Text = versionMap.TryGetValue(pkgName, out string? vLabel)
-                        ? $"\u26A0 {vLabel}"
-                        : "\u26A0 Update available";
+                    item.SubItems[3].Text = versionMap.TryGetValue(pkgName, out string? vLabel) ? $"\u26A0 {vLabel}" : "\u26A0 Update available";
                     item.SubItems[3].ForeColor = AppTheme.Yellow;
                 }
             }
@@ -113,8 +111,8 @@ internal sealed class WinGetManagerDialog : BasePackageManagerDialog
             foreach (var entry in list)
             {
                 var item = new ListViewItem(entry) { Tag = entry };
-                item.SubItems.Add("");        // Version
-                item.SubItems.Add("—");       // Size
+                item.SubItems.Add(""); // Version
+                item.SubItems.Add("—"); // Size
                 item.SubItems.Add(_installedNames.Contains(entry) ? "\u2714 Installed" : ""); // Status
                 item.ForeColor = AppTheme.Fg;
                 _lstInstalled.Items.Add(item);

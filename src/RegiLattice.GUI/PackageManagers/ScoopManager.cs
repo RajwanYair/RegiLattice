@@ -209,18 +209,11 @@ internal static class ScoopManager
     /// Returns estimated install sizes per package by measuring each package's directory under
     /// <c>~\scoop\apps\&lt;name&gt;</c>. Runs on the thread pool to avoid blocking the UI.
     /// </summary>
-    internal static Task<Dictionary<string, string>> GetInstalledSizesAsync(
-        HashSet<string> installedNames,
-        CancellationToken ct = default
-    ) =>
+    internal static Task<Dictionary<string, string>> GetInstalledSizesAsync(HashSet<string> installedNames, CancellationToken ct = default) =>
         Task.Run(
             () =>
             {
-                string scoopApps = Path.Combine(
-                    Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
-                    "scoop",
-                    "apps"
-                );
+                string scoopApps = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "scoop", "apps");
                 var result = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
                 foreach (string name in installedNames)
                 {
@@ -245,10 +238,14 @@ internal static class ScoopManager
                 {
                     size += new FileInfo(file).Length;
                 }
-                catch { /* skip locked or inaccessible files */ }
+                catch
+                { /* skip locked or inaccessible files */
+                }
             }
         }
-        catch { /* skip inaccessible root directory */ }
+        catch
+        { /* skip inaccessible root directory */
+        }
         return size;
     }
 

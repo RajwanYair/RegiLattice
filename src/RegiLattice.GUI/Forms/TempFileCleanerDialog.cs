@@ -34,40 +34,70 @@ internal sealed class TempFileCleanerDialog : BaseDialog
             () => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), @"SoftwareDistribution\Download")
         ),
         ("Recycle Bin", () => @"C:\$Recycle.Bin"),
-        ("Windows Error Reporting", () => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), @"Microsoft\Windows\WER\ReportQueue")),
+        (
+            "Windows Error Reporting",
+            () => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), @"Microsoft\Windows\WER\ReportQueue")
+        ),
         ("User Downloads", () => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Downloads")),
-        ("Windows Thumbnails Cache", () => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), @"Microsoft\Windows\Explorer")),
-        ("Windows Diagnostic Logs", () => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), @"Microsoft\Windows\DiagnosticData")),
-        ("BITS Transfer Cache", () => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), @"Microsoft\Network\Downloader")),
+        (
+            "Windows Thumbnails Cache",
+            () => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), @"Microsoft\Windows\Explorer")
+        ),
+        (
+            "Windows Diagnostic Logs",
+            () => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), @"Microsoft\Windows\DiagnosticData")
+        ),
+        (
+            "BITS Transfer Cache",
+            () => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), @"Microsoft\Network\Downloader")
+        ),
         // ── Browsers ──────────────────────────────────────────────────────────
-        ("Edge Cache", () => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), @"Microsoft\Edge\User Data\Default\Cache\Cache_Data")),
-        ("Chrome Cache", () => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), @"Google\Chrome\User Data\Default\Cache\Cache_Data")),
+        (
+            "Edge Cache",
+            () =>
+                Path.Combine(
+                    Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+                    @"Microsoft\Edge\User Data\Default\Cache\Cache_Data"
+                )
+        ),
+        (
+            "Chrome Cache",
+            () =>
+                Path.Combine(
+                    Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+                    @"Google\Chrome\User Data\Default\Cache\Cache_Data"
+                )
+        ),
         ("Firefox Cache", () => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), @"Mozilla\Firefox\Profiles")),
-        ("Chrome Code Cache", () => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), @"Google\Chrome\User Data\Default\Code Cache")),
-        ("Edge Code Cache", () => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), @"Microsoft\Edge\User Data\Default\Code Cache")),
+        (
+            "Chrome Code Cache",
+            () =>
+                Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), @"Google\Chrome\User Data\Default\Code Cache")
+        ),
+        (
+            "Edge Code Cache",
+            () =>
+                Path.Combine(
+                    Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+                    @"Microsoft\Edge\User Data\Default\Code Cache"
+                )
+        ),
         // ── Development tools ─────────────────────────────────────────────────
         (
             "NuGet Cache",
-            () => Environment.GetEnvironmentVariable("NUGET_PACKAGES")
+            () =>
+                Environment.GetEnvironmentVariable("NUGET_PACKAGES")
                 ?? Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), @".nuget\packages")
         ),
         (
             "npm Cache",
-            () => Environment.GetEnvironmentVariable("NPM_CONFIG_CACHE")
+            () =>
+                Environment.GetEnvironmentVariable("NPM_CONFIG_CACHE")
                 ?? Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"npm-cache")
         ),
-        (
-            "pip Cache",
-            () => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), @"pip\Cache")
-        ),
-        (
-            "Maven Local Repository",
-            () => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), @".m2\repository")
-        ),
-        (
-            "Gradle Cache",
-            () => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), @".gradle\caches")
-        ),
+        ("pip Cache", () => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), @"pip\Cache")),
+        ("Maven Local Repository", () => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), @".m2\repository")),
+        ("Gradle Cache", () => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), @".gradle\caches")),
     ];
 
     // ── Model ─────────────────────────────────────────────────────────────────

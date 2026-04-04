@@ -482,7 +482,6 @@ internal static class WindowsTerminal
 
 // === Merged from: PowerShellTweaks.cs ===
 
-
 /// <summary>
 /// Tweaks executed via PowerShell cmdlets (Set-Service, Get-Service, Enable-WindowsOptionalFeature, etc.).
 /// These use ApplyAction/RemoveAction/DetectAction delegates via ShellRunner.RunPowerShell.
@@ -605,7 +604,6 @@ internal static class PowerShellTweaks
                 return int.TryParse(stdout.Trim(), out var count) && count < 10;
             },
         },
-
         new TweakDef
         {
             Id = "ps-enable-dev-mode",
@@ -1577,7 +1575,6 @@ internal static class CommandLineTweaks
             },
             DetectAction = () => false,
         },
-
         new TweakDef
         {
             Id = "cmd-enable-ntp-high-freq",
@@ -1638,7 +1635,6 @@ internal static class CommandLineTweaks
         },
     ];
 }
-
 
 // ── merged from PolicyPowerShell.cs ──
 // RegiLattice.Core — Tweaks/PolicyPowerShell.cs
@@ -1837,7 +1833,6 @@ internal static class PolicyPowerShell
                     DetectOps = [RegOp.CheckDword(Key, "ForceNetworkRestrictedSessions", 1)],
                 },
             ];
-
     }
 
     // ── PowerShellPolicy ──
@@ -2042,7 +2037,6 @@ internal static class PolicyPowerShell
                 DetectOps = [RegOp.CheckString(PsRoot, "ExecutionPolicy", "AllSigned")],
             },
         ];
-
     }
 
     // ── Ps7ExecutionModePolicy ──
@@ -2224,7 +2218,6 @@ internal static class PolicyPowerShell
                     DetectOps = [RegOp.CheckDword(Key, "DisableUpdateNotifications", 1)],
                 },
             ];
-
     }
 
     // ── ScriptBlockLoggingAdvancedPolicy ──
@@ -2371,7 +2364,10 @@ internal static class PolicyPowerShell
                     [
                         RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\EventLog\PowerShellOperational", "MaxSize", 524288),
                     ],
-                    RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\EventLog\PowerShellOperational", "MaxSize")],
+                    RemoveOps =
+                    [
+                        RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\EventLog\PowerShellOperational", "MaxSize"),
+                    ],
                     DetectOps =
                     [
                         RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\EventLog\PowerShellOperational", "MaxSize", 524288),
@@ -2390,7 +2386,10 @@ internal static class PolicyPowerShell
                     ImpactScore = 3,
                     SafetyRating = 5,
                     ImpactNote = "PS log archived to .evtx file before clearing; no historical data lost.",
-                    ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\EventLog\PowerShellOperational", "Retention", 0)],
+                    ApplyOps =
+                    [
+                        RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\EventLog\PowerShellOperational", "Retention", 0),
+                    ],
                     RemoveOps =
                     [
                         RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\EventLog\PowerShellOperational", "Retention"),
@@ -2413,12 +2412,20 @@ internal static class PolicyPowerShell
                     ImpactScore = 4,
                     SafetyRating = 5,
                     ImpactNote = "Only admins can clear event logs; standard users get access denied.",
-                    ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\EventLog\Security", "RestrictGuestAccess", 1)],
-                    RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\EventLog\Security", "RestrictGuestAccess")],
-                    DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\EventLog\Security", "RestrictGuestAccess", 1)],
+                    ApplyOps =
+                    [
+                        RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\EventLog\Security", "RestrictGuestAccess", 1),
+                    ],
+                    RemoveOps =
+                    [
+                        RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\EventLog\Security", "RestrictGuestAccess"),
+                    ],
+                    DetectOps =
+                    [
+                        RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\EventLog\Security", "RestrictGuestAccess", 1),
+                    ],
                 },
             ];
-
     }
 
     // ── ScriptedDiagnosticsPolicy ──
@@ -2638,7 +2645,6 @@ internal static class PolicyPowerShell
                 DetectOps = [RegOp.CheckDword(SdKey, "DisableTroubleshootingHistory", 1)],
             },
         ];
-
     }
 
     // ── WindowsTerminalAdvancedPolicy ──
@@ -2820,7 +2826,5 @@ internal static class PolicyPowerShell
                     DetectOps = [RegOp.CheckDword(Key2, "BlockManualUpdates", 1)],
                 },
             ];
-
     }
-
 }
