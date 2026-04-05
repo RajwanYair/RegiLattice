@@ -4,6 +4,24 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [6.8.0] — 2026-05-03
+
+### Changed
+
+- **Major consolidation** — reduced project footprint significantly:
+  - Tweak modules: **45 → 30 files** (15 files merged into parent modules)
+  - Categories: **47 → 26** (20 micro-categories renamed to canonical parents)
+  - Tweaks: **9,490 → 8,847** (643 duplicate registry operations removed)
+  - Merges: PolicyMisc2+PolicyMisc3+PolicyEnterprise → PolicyMisc; PolicyUser → Privacy; PolicyConfig → Security; PolicyWindowsUpdate → Maintenance; PolicyPowerShell+DeveloperTools → Developer; Identity+PolicyAuth → UserAccount; PolicyCloud → BackupAndCloud; PolicyPrint → UsbPeripherals; Win11Features → Win11; PolicyStorage → Storage; PolicyBrowser → Browser
+
+### Fixed
+
+- GUI test threshold updated to `>8000` tweaks (post-consolidation)
+
+### Stats
+
+- Tweaks: **8,847** (-643) | Categories: **26** (-21) | Modules: **30** (-15) | Tests: **3,051** (0 failures)
+
 ## [6.7.0] — 2026-05-03
 
 ### Added
