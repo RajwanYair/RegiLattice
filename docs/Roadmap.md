@@ -1205,3 +1205,186 @@ The workflow:
 | R8 | Locale expansion produces poor translations | Bad UX for non-English users | Machine translation + community review; flag as "beta" locale |
 | R9 | Pack marketplace zero adoption | Wasted infrastructure | Seed with 5 official packs; promote on GitHub readme |
 | R10 | Watch mode (`--watch`) consumes excessive CPU | Battery drain on laptops | Default interval is 300s; minimum interval enforced at 60s |
+
+---
+
+## Sprint Execution Prompt — 20-Task Consolidation & Release
+
+> **This section is a standing execution plan.** It is meant to be picked up as-is by
+> the repo maintainer or an AI agent for a single focused sprint that produces 20
+> committed tasks, each with a version-bumped release to GitHub.
+
+### Role
+
+You are the repo maintainer and release engineer. Operate only within this repository.
+Follow best practices, but prioritise the requirements below. Do not hand-wave: every
+change must be implemented as code/config/docs changes and validated by build/tests.
+
+### Primary Objective
+
+Continue the roadmap by executing the next 20 tasks as one sprint. For each revision bump:
+
+1. Create/track GitHub Issues for non-trivial work.
+2. Implement via a Pull Request (or direct commit on `main` per single-dev workflow).
+3. Ensure clean build with **0 errors and 0 warnings** (no suppression).
+4. Update docs + graphics to match the actual state.
+5. Publish a GitHub Release with compiled artifacts attached (do NOT commit binaries
+   into the repo unless the repo already does so; prefer Actions artifacts/release assets).
+6. Tag the revision and update CHANGELOG.
+
+### Scope Lock (MANDATORY)
+
+- **Windows-only** support.
+- Feature scope reduced to **Windows Explorer thumbnail support only**.
+- Deliverables must be:
+  - **A)** One single Manager EXE (for install/register/unregister/diagnostics).
+  - **B)** One thumbnail provider DLL (COM in-proc server) registered for Explorer
+    thumbnail generation.
+  - **C)** Any additional DLLs only if strictly necessary; minimise footprint.
+- Remove all non-related files and implementations, including any Python code/methods/
+  scripts and any cross-platform scaffolding.
+- Consolidate and deduplicate aggressively: configs, code paths, duplicated utilities,
+  docs.
+- Goal: **dramatically smaller project footprint**.
+
+### Quality Gates (MANDATORY)
+
+- 0 build errors, 0 build warnings, 0 analyser warnings.
+- **No warning suppressions** (no pragma disables, no `/wd`, no "ignore warnings").
+  Fix root causes.
+- Ensure VS Code extension diagnostics are clean (configure recommended extensions +
+  settings; fix issues they flag where reasonable).
+- Ensure CI passes (add/adjust GitHub Actions workflows accordingly).
+- Run clean builds for all supported configs (at minimum Release x64; include Debug x64
+  if the repo supports it).
+- Add/adjust tests or minimal verification harness for the thumbnail provider if possible.
+
+### Execution Plan
+
+#### Step 0 — Baseline Verification
+
+- Identify current latest release/tag and current version number in repo.
+- Run the build/tests locally (or via CI config) to confirm whether last release is
+  truly passing.
+- If failures/warnings exist: create Issues and fix first until clean.
+
+#### Step 1 — Sprint Backlog: Implement the Next 20 Tasks
+
+Create a Sprint section in this file (or a dedicated `SPRINT.md` if preferred) listing
+these 20 tasks with checkboxes and links to Issues/PRs.
+
+Implement tasks in logical PR-sized chunks. Each PR must include:
+
+- Summary.
+- Build/test evidence.
+- Checklist confirming 0 warnings and scope lock.
+
+#### The 20 Tasks
+
+| # | Task | Scope |
+|---|------|-------|
+| 1 | Inventory & delete non-Windows code paths; remove cross-platform build options; update docs accordingly. | Code cleanup |
+| 2 | Remove all Python scripts/methods and any pipeline references to Python; ensure replacements exist in PowerShell/MSBuild/CMake as needed. | Code cleanup |
+| 3 | Define the minimal architecture: Manager EXE + Thumbnail DLL; document it in `ARCHITECTURE.md`. | Architecture |
+| 4 | Implement/confirm COM in-proc thumbnail provider DLL using `IThumbnailProvider` (or existing repo approach) and ensure correct registry entries. | Feature |
+| 5 | Ensure Manager EXE supports: install/register, uninstall/unregister, status/diagnostics, and logging path selection. | Feature |
+| 6 | Consolidate project structure: `src/` (manager, shell_ext), `include/`, `tests/`, `docs/`; remove unused directories. | Structure |
+| 7 | Deduplicate utilities (logging, error handling, COM helpers); enforce a single implementation. | Code quality |
+| 8 | Enforce "warnings as errors" across toolchains (MSVC `/W4 /WX` or equivalent; C# `TreatWarningsAsErrors`; clang-cl if used). | Build |
+| 9 | Fix all warnings (compiler, static analysis, style), without suppressions. | Build |
+| 10 | Add GitHub Actions CI: build + test + package artifacts; ensure clean logs with zero warnings. | CI/CD |
+| 11 | Add GitHub Actions Release workflow: on tag, build artifacts and attach Manager EXE + DLL + checksums to GitHub Release. | CI/CD |
+| 12 | Add `.vscode`: `settings.json`, `extensions.json`, `tasks.json` to standardise builds, formatting, and diagnostics. | Dev experience |
+| 13 | Add `.github`: issue templates (bug/feature), PR template, `CODEOWNERS`, `CONTRIBUTING.md`, `SECURITY.md`. | Governance |
+| 14 | Add Dependabot (if dependencies exist) and minimal policy docs. | Governance |
+| 15 | Update README to Windows-only + thumbnail scope; include install/uninstall instructions and troubleshooting. | Docs |
+| 16 | Update `CHANGELOG.md` for this sprint; adopt SemVer and document version bump rules. | Docs |
+| 17 | Update or generate diagrams/graphics with correct current data (prefer Mermaid in Markdown; any images must match current architecture). | Docs |
+| 18 | Remove/merge redundant config files (multiple formatters, linters, build configs); keep a single source of truth. | Cleanup |
+| 19 | Consolidate documentation: eliminate duplicates, ensure links are correct, and docs match code behaviour. | Docs |
+| 20 | Final consolidation pass: reduce footprint (delete unused assets, samples, legacy docs, dead code); verify size reduction and report what changed. | Cleanup |
+
+#### Step 2 — Release Discipline
+
+For each revision bump:
+
+1. Update version in a single canonical location (`Directory.Build.props`).
+2. Update CHANGELOG.
+3. Open PR (or commit on `main`), pass CI, merge.
+4. Create a Git tag (`vX.Y.Z`).
+5. Publish a GitHub Release with artifacts (EXE + DLL + checksums).
+6. Keep binaries out of git history; publish through Releases unless the repository
+   policy requires otherwise.
+
+### Required Outputs (per sprint completion)
+
+When the sprint is complete, the final report must include:
+
+- [ ] Checklist of all 20 tasks with links to Issues/PRs/commits.
+- [ ] Confirmation of last release status + evidence (CI links/logs references).
+- [ ] Build commands used and configs tested.
+- [ ] Where the artifacts are published (Release link) and what files are attached.
+- [ ] Footprint reduction summary (what was removed, size reduction estimate if available).
+- [ ] Updated diagrams/graphics references and where they live in the repo.
+
+### Metadata Synchronisation Rule (STANDING)
+
+> **On every version bump or count change, ALL files listed below must be updated
+> to match the ground-truth counts from the compiled assembly and test suite.**
+
+Ground-truth sources:
+
+| Metric | Source of truth |
+|--------|----------------|
+| Tweaks | `TweakEngine.RegisterBuiltins()` → `AllTweaks().Count` |
+| Categories | `TweakEngine.RegisterBuiltins()` → `Categories().Count` |
+| Module files | `Get-ChildItem src/RegiLattice.Core/Tweaks/*.cs | Measure-Object` |
+| Tests | `dotnet test` summary per project (Core + CLI + GUI) |
+| Themes | `Theme.cs` dictionary entry count |
+| Profiles | `ProfileDefinitions.cs` `new ProfileDef` count |
+| Version | `Directory.Build.props` `<Version>` |
+
+Files that must be kept in sync:
+
+| # | File | Fields |
+|---|------|--------|
+| 1 | `Directory.Build.props` | `<Version>`, `<AssemblyVersion>`, `<FileVersion>`, `<InformationalVersion>` |
+| 2 | `installer/Package.wxs` | `Version="X.Y.Z"` |
+| 3 | `README.md` | Badge, download link, description line, features bullet, diagram counts, test count, module count |
+| 4 | `.github/copilot-instructions.md` | Header line, version table row, tweaks/categories/modules/tests row |
+| 5 | `.github/instructions/workspace.instructions.md` | Tweaks/module class count in `Tweaks/` directory comment |
+| 6 | `docs/CHANGELOG.md` | Prepend new `## [X.Y.Z]` section with Stats line |
+| 7 | `docs/assets/stats.svg` | Tweaks count + categories count (space-separated thousands) |
+| 8 | `docs/assets/banner.svg` | Tweaks count, categories count, tests count, themes count, profiles count |
+| 9 | `docs/assets/architecture.svg` | Tweaks count in TweakDef Modules box, module class count |
+| 10 | `docs/assets/how-it-works.svg` | Tweaks count in Browse step |
+| 11 | `docs/assets/features.svg` | Per-category tweak count badges |
+| 12 | `chocolatey/regilattice.nuspec` | `<version>`, `<summary>`, description counts |
+| 13 | `scoop/regilattice.json` | `version`, `url`, description |
+| 14 | `winget/RegiLattice.RegiLattice.yaml` | `PackageVersion` |
+| 15 | `winget/RegiLattice.RegiLattice.installer.yaml` | `PackageVersion`, `InstallerUrl` |
+| 16 | `winget/RegiLattice.RegiLattice.locale.en-US.yaml` | `PackageVersion`, `ShortDescription`, `Description` counts |
+
+**Verification command** (run after every bump):
+
+```powershell
+# Ground-truth from compiled assembly
+$dll = "$env:TEMP\RegiLattice-build\RegiLattice.Core\bin\Debug\net10.0-windows\RegiLattice.Core.dll"
+Add-Type -Path $dll
+$e = [RegiLattice.Core.TweakEngine]::new(); $e.RegisterBuiltins()
+$tweaks = $e.AllTweaks().Count
+$cats   = $e.Categories().Count
+$mods   = (Get-ChildItem src/RegiLattice.Core/Tweaks/*.cs).Count
+Write-Host "Tweaks: $tweaks | Categories: $cats | Modules: $mods"
+
+# Cross-check against files
+$files = @(
+    'README.md', '.github/copilot-instructions.md',
+    'docs/assets/stats.svg', 'docs/assets/banner.svg'
+)
+foreach ($f in $files) {
+    $hits = Select-String -Path $f -Pattern "$tweaks|$cats" -SimpleMatch
+    if ($hits) { Write-Host "  ✅ $f — contains correct counts" }
+    else       { Write-Host "  ❌ $f — STALE counts detected" }
+}
+```
