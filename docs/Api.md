@@ -108,23 +108,9 @@ Central tweak manager. All methods are on the `TweakEngine` class.
 
 ### Tweak Lifecycle
 
-```mermaid
-flowchart LR
-    DEF["① Define TweakDef\n(ApplyOps · RemoveOps · DetectOps)"]
-    REG["② TweakEngine.Register"]
-    DET{"③ DetectStatus"}
-    APL["④a Apply"]
-    RMV["④b Remove"]
-    RES(["TweakResult"])
-
-    DEF --> REG
-    REG --> DET
-    DET -- "NotApplied" --> APL
-    DET -- "Applied" --> RMV
-    DET -- "SkippedCorp /\nBuild / Hw" --> RES
-    APL --> RES
-    RMV --> RES
-```
+<p align="center">
+  <img src="assets/tweak-lifecycle.svg" alt="Tweak Lifecycle — Define, Register, DetectStatus, Apply/Remove" width="100%"/>
+</p>
 
 ### Registration
 

@@ -1,0 +1,212 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="520" viewBox="0 0 1100 520">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1e1e2e"/>
+      <stop offset="100%" style="stop-color:#181825"/>
+    </linearGradient>
+    <filter id="shadow">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#11111b" flood-opacity="0.5"/>
+    </filter>
+    <marker id="arrowBlue" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#89b4fa"/>
+    </marker>
+    <marker id="arrowGreen" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#a6e3a1"/>
+    </marker>
+    <marker id="arrowPink" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#f38ba8"/>
+    </marker>
+  </defs>
+
+  <rect width="1100" height="520" fill="url(#bgGrad)" rx="16"/>
+  <text x="550" y="34" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-weight="700" font-size="18" fill="#cdd6f4">CI/CD Pipeline</text>
+
+  <!-- ===== CI.YML (top half) ===== -->
+  <text x="50" y="64" font-family="'Segoe UI', Arial, sans-serif" font-weight="600" font-size="12" fill="#585b70">ci.yml &#x2014; on: push / PR</text>
+
+  <!-- Trigger: git push -->
+  <g filter="url(#shadow)">
+    <rect x="30" y="76" width="110" height="42" rx="20" fill="#45475a" stroke="#89b4fa" stroke-width="1.5"/>
+    <text x="85" y="102" text-anchor="middle" font-family="'Cascadia Code', monospace" font-size="11" fill="#89b4fa">git push</text>
+  </g>
+
+  <!-- Arrow -->
+  <line x1="140" y1="97" x2="168" y2="97" stroke="#89b4fa" stroke-width="1.5" marker-end="url(#arrowBlue)"/>
+
+  <!-- CI steps -->
+  <g filter="url(#shadow)">
+    <rect x="172" y="76" width="100" height="42" rx="8" fill="#313244" stroke="#a6e3a1" stroke-width="1.2"/>
+    <text x="222" y="102" text-anchor="middle" font-family="'Cascadia Code', monospace" font-size="10" fill="#a6e3a1">Restore</text>
+  </g>
+  <line x1="272" y1="97" x2="290" y2="97" stroke="#a6e3a1" stroke-width="1" marker-end="url(#arrowGreen)"/>
+
+  <g filter="url(#shadow)">
+    <rect x="294" y="76" width="100" height="42" rx="8" fill="#313244" stroke="#a6e3a1" stroke-width="1.2"/>
+    <text x="344" y="102" text-anchor="middle" font-family="'Cascadia Code', monospace" font-size="10" fill="#a6e3a1">Build</text>
+  </g>
+  <line x1="394" y1="97" x2="412" y2="97" stroke="#a6e3a1" stroke-width="1" marker-end="url(#arrowGreen)"/>
+
+  <g filter="url(#shadow)">
+    <rect x="416" y="76" width="100" height="42" rx="8" fill="#313244" stroke="#89b4fa" stroke-width="1.2"/>
+    <text x="466" y="96" text-anchor="middle" font-family="'Cascadia Code', monospace" font-size="10" fill="#89b4fa">Test Core</text>
+  </g>
+  <line x1="516" y1="97" x2="534" y2="97" stroke="#89b4fa" stroke-width="1" marker-end="url(#arrowBlue)"/>
+
+  <g filter="url(#shadow)">
+    <rect x="538" y="76" width="100" height="42" rx="8" fill="#313244" stroke="#89b4fa" stroke-width="1.2"/>
+    <text x="588" y="96" text-anchor="middle" font-family="'Cascadia Code', monospace" font-size="10" fill="#89b4fa">Test CLI</text>
+  </g>
+  <line x1="638" y1="97" x2="656" y2="97" stroke="#89b4fa" stroke-width="1" marker-end="url(#arrowBlue)"/>
+
+  <g filter="url(#shadow)">
+    <rect x="660" y="76" width="100" height="42" rx="8" fill="#313244" stroke="#89b4fa" stroke-width="1.2"/>
+    <text x="710" y="96" text-anchor="middle" font-family="'Cascadia Code', monospace" font-size="10" fill="#89b4fa">Test GUI</text>
+  </g>
+  <line x1="760" y1="97" x2="778" y2="97" stroke="#89b4fa" stroke-width="1" marker-end="url(#arrowBlue)"/>
+
+  <g filter="url(#shadow)">
+    <rect x="782" y="76" width="100" height="42" rx="8" fill="#313244" stroke="#f9e2af" stroke-width="1.2"/>
+    <text x="832" y="96" text-anchor="middle" font-family="'Cascadia Code', monospace" font-size="10" fill="#f9e2af">Coverage</text>
+  </g>
+  <line x1="882" y1="97" x2="900" y2="97" stroke="#f9e2af" stroke-width="1" marker-end="url(#arrowBlue)"/>
+
+  <g filter="url(#shadow)">
+    <rect x="904" y="76" width="100" height="42" rx="8" fill="#313244" stroke="#b4befe" stroke-width="1.2"/>
+    <text x="954" y="96" text-anchor="middle" font-family="'Cascadia Code', monospace" font-size="10" fill="#b4befe">Validate</text>
+  </g>
+
+  <!-- Mutation (optional branch) -->
+  <line x1="1004" y1="97" x2="1019" y2="97" stroke="#b4befe" stroke-width="1" marker-end="url(#arrowBlue)"/>
+  <g filter="url(#shadow)">
+    <rect x="1023" y="76" width="60" height="42" rx="8" fill="#313244" stroke="#cba6f7" stroke-width="1.2"/>
+    <text x="1053" y="96" text-anchor="middle" font-family="'Cascadia Code', monospace" font-size="9" fill="#cba6f7">Stryker</text>
+  </g>
+
+  <!-- ===== RELEASE.YML (bottom half) ===== -->
+  <text x="50" y="170" font-family="'Segoe UI', Arial, sans-serif" font-weight="600" font-size="12" fill="#585b70">release.yml &#x2014; on: tag v*</text>
+
+  <!-- Trigger: git push --tags -->
+  <g filter="url(#shadow)">
+    <rect x="30" y="186" width="130" height="42" rx="20" fill="#45475a" stroke="#f38ba8" stroke-width="1.5"/>
+    <text x="95" y="206" text-anchor="middle" font-family="'Cascadia Code', monospace" font-size="10" fill="#f38ba8">push --tags</text>
+    <text x="95" y="220" text-anchor="middle" font-family="'Cascadia Code', monospace" font-size="9" fill="#585b70">vX.Y.Z</text>
+  </g>
+  <line x1="160" y1="207" x2="178" y2="207" stroke="#f38ba8" stroke-width="1.5" marker-end="url(#arrowPink)"/>
+
+  <!-- Release steps row 1 -->
+  <g filter="url(#shadow)">
+    <rect x="182" y="186" width="90" height="42" rx="8" fill="#313244" stroke="#a6e3a1" stroke-width="1.2"/>
+    <text x="227" y="212" text-anchor="middle" font-family="'Cascadia Code', monospace" font-size="10" fill="#a6e3a1">Restore</text>
+  </g>
+  <line x1="272" y1="207" x2="286" y2="207" stroke="#a6e3a1" stroke-width="1" marker-end="url(#arrowGreen)"/>
+
+  <g filter="url(#shadow)">
+    <rect x="290" y="186" width="90" height="42" rx="8" fill="#313244" stroke="#a6e3a1" stroke-width="1.2"/>
+    <text x="335" y="212" text-anchor="middle" font-family="'Cascadia Code', monospace" font-size="10" fill="#a6e3a1">Build</text>
+  </g>
+  <line x1="380" y1="207" x2="394" y2="207" stroke="#a6e3a1" stroke-width="1" marker-end="url(#arrowGreen)"/>
+
+  <g filter="url(#shadow)">
+    <rect x="398" y="186" width="90" height="42" rx="8" fill="#313244" stroke="#89b4fa" stroke-width="1.2"/>
+    <text x="443" y="206" text-anchor="middle" font-family="'Cascadia Code', monospace" font-size="10" fill="#89b4fa">Test</text>
+    <text x="443" y="220" text-anchor="middle" font-family="'Cascadia Code', monospace" font-size="9" fill="#585b70">all 3</text>
+  </g>
+  <line x1="488" y1="207" x2="502" y2="207" stroke="#89b4fa" stroke-width="1" marker-end="url(#arrowBlue)"/>
+
+  <g filter="url(#shadow)">
+    <rect x="506" y="186" width="105" height="42" rx="8" fill="#313244" stroke="#f9e2af" stroke-width="1.2"/>
+    <text x="558" y="206" text-anchor="middle" font-family="'Cascadia Code', monospace" font-size="10" fill="#f9e2af">Publish</text>
+    <text x="558" y="220" text-anchor="middle" font-family="'Cascadia Code', monospace" font-size="9" fill="#585b70">GUI + CLI EXEs</text>
+  </g>
+  <line x1="611" y1="207" x2="625" y2="207" stroke="#f9e2af" stroke-width="1" marker-end="url(#arrowBlue)"/>
+
+  <g filter="url(#shadow)">
+    <rect x="629" y="186" width="90" height="42" rx="8" fill="#313244" stroke="#fab387" stroke-width="1.2"/>
+    <text x="674" y="206" text-anchor="middle" font-family="'Cascadia Code', monospace" font-size="10" fill="#fab387">MSI</text>
+    <text x="674" y="220" text-anchor="middle" font-family="'Cascadia Code', monospace" font-size="9" fill="#585b70">WiX build</text>
+  </g>
+  <line x1="719" y1="207" x2="733" y2="207" stroke="#fab387" stroke-width="1" marker-end="url(#arrowBlue)"/>
+
+  <g filter="url(#shadow)">
+    <rect x="737" y="186" width="90" height="42" rx="8" fill="#313244" stroke="#94e2d5" stroke-width="1.2"/>
+    <text x="782" y="206" text-anchor="middle" font-family="'Cascadia Code', monospace" font-size="10" fill="#94e2d5">SHA256</text>
+    <text x="782" y="220" text-anchor="middle" font-family="'Cascadia Code', monospace" font-size="9" fill="#585b70">checksums</text>
+  </g>
+  <line x1="827" y1="207" x2="841" y2="207" stroke="#94e2d5" stroke-width="1" marker-end="url(#arrowBlue)"/>
+
+  <g filter="url(#shadow)">
+    <rect x="845" y="186" width="90" height="42" rx="8" fill="#313244" stroke="#cba6f7" stroke-width="1.2"/>
+    <text x="890" y="206" text-anchor="middle" font-family="'Cascadia Code', monospace" font-size="10" fill="#cba6f7">Choco</text>
+    <text x="890" y="220" text-anchor="middle" font-family="'Cascadia Code', monospace" font-size="9" fill="#585b70">package</text>
+  </g>
+  <line x1="935" y1="207" x2="949" y2="207" stroke="#cba6f7" stroke-width="1" marker-end="url(#arrowBlue)"/>
+
+  <!-- GitHub Release (final destination) -->
+  <g filter="url(#shadow)">
+    <rect x="953" y="176" width="120" height="62" rx="10" fill="#45475a" stroke="#a6e3a1" stroke-width="2"/>
+    <text x="1013" y="204" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-weight="700" font-size="13" fill="#a6e3a1">GitHub</text>
+    <text x="1013" y="222" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-weight="700" font-size="13" fill="#a6e3a1">Release</text>
+  </g>
+
+  <!-- Verify step -->
+  <line x1="1013" y1="238" x2="1013" y2="258" stroke="#a6e3a1" stroke-width="1" marker-end="url(#arrowGreen)"/>
+  <g filter="url(#shadow)">
+    <rect x="958" y="262" width="110" height="36" rx="8" fill="#313244" stroke="#a6e3a1" stroke-width="1"/>
+    <text x="1013" y="286" text-anchor="middle" font-family="'Cascadia Code', monospace" font-size="10" fill="#a6e3a1">Verify &#x2705;</text>
+  </g>
+
+  <!-- Failure notification (dashed) -->
+  <line x1="1013" y1="207" x2="1013" y2="330" stroke="#f38ba8" stroke-width="1" stroke-dasharray="4 3" opacity="0.0"/>
+  <line x1="953" y1="225" x2="830" y2="280" stroke="#f38ba8" stroke-width="1" stroke-dasharray="5 3" opacity="0.5"/>
+  <g filter="url(#shadow)">
+    <rect x="710" y="270" width="130" height="42" rx="8" fill="#313244" stroke="#f38ba8" stroke-width="1.2" stroke-dasharray="5 3"/>
+    <text x="775" y="290" text-anchor="middle" font-family="'Cascadia Code', monospace" font-size="10" fill="#f38ba8">Notify Failure</text>
+    <text x="775" y="304" text-anchor="middle" font-family="'Cascadia Code', monospace" font-size="9" fill="#585b70">GH Issue</text>
+  </g>
+
+  <!-- ===== RELEASE ARTIFACTS ===== -->
+  <text x="50" y="350" font-family="'Segoe UI', Arial, sans-serif" font-weight="600" font-size="12" fill="#585b70">RELEASE ARTIFACTS</text>
+
+  <g filter="url(#shadow)">
+    <rect x="30" y="364" width="200" height="56" rx="10" fill="#313244" stroke="#a6e3a1" stroke-width="1.2"/>
+    <text x="50" y="388" font-family="'Segoe UI', Arial, sans-serif" font-size="16">&#x1F5A5;&#xFE0F;</text>
+    <text x="72" y="388" font-family="'Segoe UI', Arial, sans-serif" font-weight="600" font-size="12" fill="#a6e3a1">RegiLattice.GUI.exe</text>
+    <text x="130" y="410" text-anchor="middle" font-family="'Cascadia Code', monospace" font-size="9" fill="#585b70">win-x64 &#x2022; self-contained &#x2022; single file</text>
+  </g>
+
+  <g filter="url(#shadow)">
+    <rect x="250" y="364" width="200" height="56" rx="10" fill="#313244" stroke="#89b4fa" stroke-width="1.2"/>
+    <text x="270" y="388" font-family="'Segoe UI', Arial, sans-serif" font-size="16">&#x2328;&#xFE0F;</text>
+    <text x="292" y="388" font-family="'Segoe UI', Arial, sans-serif" font-weight="600" font-size="12" fill="#89b4fa">RegiLatticeCLI.exe</text>
+    <text x="350" y="410" text-anchor="middle" font-family="'Cascadia Code', monospace" font-size="9" fill="#585b70">win-x64 &#x2022; self-contained &#x2022; single file</text>
+  </g>
+
+  <g filter="url(#shadow)">
+    <rect x="470" y="364" width="200" height="56" rx="10" fill="#313244" stroke="#f9e2af" stroke-width="1.2"/>
+    <text x="490" y="388" font-family="'Segoe UI', Arial, sans-serif" font-size="16">&#x1F4E6;</text>
+    <text x="512" y="388" font-family="'Segoe UI', Arial, sans-serif" font-weight="600" font-size="12" fill="#f9e2af">RegiLattice.msi</text>
+    <text x="570" y="410" text-anchor="middle" font-family="'Cascadia Code', monospace" font-size="9" fill="#585b70">WiX MSI installer</text>
+  </g>
+
+  <g filter="url(#shadow)">
+    <rect x="690" y="364" width="180" height="56" rx="10" fill="#313244" stroke="#94e2d5" stroke-width="1.2"/>
+    <text x="710" y="388" font-family="'Segoe UI', Arial, sans-serif" font-size="16">&#x1F4CB;</text>
+    <text x="732" y="388" font-family="'Segoe UI', Arial, sans-serif" font-weight="600" font-size="12" fill="#94e2d5">SHA256SUMS.txt</text>
+    <text x="780" y="410" text-anchor="middle" font-family="'Cascadia Code', monospace" font-size="9" fill="#585b70">integrity checksums</text>
+  </g>
+
+  <g filter="url(#shadow)">
+    <rect x="890" y="364" width="180" height="56" rx="10" fill="#313244" stroke="#cba6f7" stroke-width="1.2"/>
+    <text x="910" y="388" font-family="'Segoe UI', Arial, sans-serif" font-size="16">&#x1F36B;</text>
+    <text x="932" y="388" font-family="'Segoe UI', Arial, sans-serif" font-weight="600" font-size="12" fill="#cba6f7">Chocolatey .nupkg</text>
+    <text x="980" y="410" text-anchor="middle" font-family="'Cascadia Code', monospace" font-size="9" fill="#585b70">Choco community feed</text>
+  </g>
+
+  <!-- Footer -->
+  <rect x="30" y="436" width="1040" height="28" rx="6" fill="#313244" stroke="#585b70" stroke-width="0.5"/>
+  <text x="550" y="456" text-anchor="middle" font-family="'Cascadia Code', monospace" font-size="11" fill="#cdd6f4">&#x26A0; Every version bump MUST push tags immediately &#x2014; triggers release.yml &#x2192; EXE + MSI + Choco published to GitHub Releases</text>
+
+  <!-- Footer note -->
+  <rect x="30" y="470" width="1040" height="24" rx="6" fill="#1e1e2e"/>
+  <text x="550" y="488" text-anchor="middle" font-family="'Cascadia Code', monospace" font-size="10" fill="#585b70">windows-latest &#x2022; .NET 10 SDK &#x2022; NuGet cache &#x2022; Codecov &#x2022; Stryker mutation testing</text>
+</svg>

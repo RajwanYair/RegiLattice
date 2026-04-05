@@ -1,0 +1,101 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="260" viewBox="0 0 900 260">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1e1e2e"/>
+      <stop offset="100%" style="stop-color:#181825"/>
+    </linearGradient>
+    <filter id="shadow">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#11111b" flood-opacity="0.5"/>
+    </filter>
+    <marker id="arrowBlue" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#89b4fa"/>
+    </marker>
+    <marker id="arrowGreen" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#a6e3a1"/>
+    </marker>
+  </defs>
+
+  <rect width="900" height="260" fill="url(#bgGrad)" rx="16"/>
+  <text x="450" y="34" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-weight="700" font-size="18" fill="#cdd6f4">Tweak Lifecycle</text>
+
+  <!-- Step 1: Define -->
+  <g filter="url(#shadow)">
+    <rect x="30" y="70" width="140" height="90" rx="10" fill="#313244" stroke="#89b4fa" stroke-width="2"/>
+    <circle cx="55" cy="90" r="12" fill="#89b4fa" opacity="0.2"/>
+    <text x="55" y="95" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-weight="800" font-size="14" fill="#89b4fa">1</text>
+    <text x="75" y="95" font-family="'Segoe UI', Arial, sans-serif" font-weight="700" font-size="13" fill="#89b4fa">Define</text>
+    <text x="50" y="118" font-family="'Cascadia Code', monospace" font-size="9" fill="#a6adc8">new TweakDef {</text>
+    <text x="50" y="132" font-family="'Cascadia Code', monospace" font-size="9" fill="#a6adc8">  Id, Label,</text>
+    <text x="50" y="146" font-family="'Cascadia Code', monospace" font-size="9" fill="#a6adc8">  ApplyOps ... }</text>
+  </g>
+
+  <line x1="170" y1="115" x2="200" y2="115" stroke="#89b4fa" stroke-width="1.5" marker-end="url(#arrowBlue)"/>
+
+  <!-- Step 2: Register -->
+  <g filter="url(#shadow)">
+    <rect x="208" y="70" width="140" height="90" rx="10" fill="#313244" stroke="#a6e3a1" stroke-width="2"/>
+    <circle cx="233" cy="90" r="12" fill="#a6e3a1" opacity="0.2"/>
+    <text x="233" y="95" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-weight="800" font-size="14" fill="#a6e3a1">2</text>
+    <text x="255" y="95" font-family="'Segoe UI', Arial, sans-serif" font-weight="700" font-size="13" fill="#a6e3a1">Register</text>
+    <text x="228" y="118" font-family="'Cascadia Code', monospace" font-size="9" fill="#a6adc8">engine.Register(td)</text>
+    <text x="228" y="134" font-family="'Cascadia Code', monospace" font-size="9" fill="#585b70">&#x2022; ID uniqueness check</text>
+    <text x="228" y="148" font-family="'Cascadia Code', monospace" font-size="9" fill="#585b70">&#x2022; Category indexing</text>
+  </g>
+
+  <line x1="348" y1="115" x2="378" y2="115" stroke="#a6e3a1" stroke-width="1.5" marker-end="url(#arrowGreen)"/>
+
+  <!-- Step 3: DetectStatus -->
+  <g filter="url(#shadow)">
+    <rect x="386" y="70" width="150" height="90" rx="10" fill="#313244" stroke="#f9e2af" stroke-width="2"/>
+    <circle cx="411" cy="90" r="12" fill="#f9e2af" opacity="0.2"/>
+    <text x="411" y="95" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-weight="800" font-size="14" fill="#1e1e2e">3</text>
+    <text x="435" y="95" font-family="'Segoe UI', Arial, sans-serif" font-weight="700" font-size="13" fill="#f9e2af">DetectStatus</text>
+    <text x="406" y="118" font-family="'Cascadia Code', monospace" font-size="9" fill="#a6adc8">DetectStatus(td)</text>
+    <text x="406" y="134" font-family="'Cascadia Code', monospace" font-size="9" fill="#585b70">&#x2022; Evaluate DetectOps</text>
+    <text x="406" y="148" font-family="'Cascadia Code', monospace" font-size="9" fill="#585b70">&#x2022; Applied / NotApplied</text>
+  </g>
+
+  <!-- Branch to Apply -->
+  <line x1="536" y1="96" x2="580" y2="80" stroke="#a6e3a1" stroke-width="1.5" marker-end="url(#arrowGreen)"/>
+  <text x="558" y="76" text-anchor="middle" font-family="'Cascadia Code', monospace" font-size="8" fill="#585b70">not applied</text>
+
+  <!-- Branch to Remove -->
+  <line x1="536" y1="135" x2="580" y2="155" stroke="#f38ba8" stroke-width="1.5"/>
+  <text x="558" y="155" text-anchor="middle" font-family="'Cascadia Code', monospace" font-size="8" fill="#585b70">applied</text>
+
+  <!-- Step 4a: Apply -->
+  <g filter="url(#shadow)">
+    <rect x="588" y="56" width="120" height="50" rx="10" fill="#313244" stroke="#a6e3a1" stroke-width="2"/>
+    <circle cx="613" cy="76" r="10" fill="#a6e3a1" opacity="0.2"/>
+    <text x="613" y="80" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-weight="800" font-size="12" fill="#a6e3a1">4a</text>
+    <text x="640" y="80" font-family="'Segoe UI', Arial, sans-serif" font-weight="700" font-size="13" fill="#a6e3a1">Apply</text>
+    <text x="608" y="98" font-family="'Cascadia Code', monospace" font-size="9" fill="#a6adc8">Execute(ApplyOps)</text>
+  </g>
+
+  <!-- Step 4b: Remove -->
+  <g filter="url(#shadow)">
+    <rect x="588" y="132" width="140" height="50" rx="10" fill="#313244" stroke="#f38ba8" stroke-width="2"/>
+    <circle cx="613" cy="152" r="10" fill="#f38ba8" opacity="0.2"/>
+    <text x="613" y="156" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-weight="800" font-size="12" fill="#1e1e2e">4b</text>
+    <text x="645" y="156" font-family="'Segoe UI', Arial, sans-serif" font-weight="700" font-size="13" fill="#f38ba8">Remove</text>
+    <text x="608" y="174" font-family="'Cascadia Code', monospace" font-size="9" fill="#a6adc8">Execute(RemoveOps)</text>
+  </g>
+
+  <!-- Arrows to TweakResult -->
+  <line x1="708" y1="81" x2="760" y2="115" stroke="#a6e3a1" stroke-width="1.5" marker-end="url(#arrowGreen)"/>
+  <line x1="728" y1="157" x2="760" y2="125" stroke="#f38ba8" stroke-width="1.5"/>
+
+  <!-- Step 5: TweakResult -->
+  <g filter="url(#shadow)">
+    <rect x="768" y="80" width="110" height="80" rx="10" fill="#45475a" stroke="#b4befe" stroke-width="2"/>
+    <text x="823" y="104" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-weight="700" font-size="13" fill="#b4befe">TweakResult</text>
+    <rect x="783" y="112" width="60" height="18" rx="3" fill="#a6e3a1" opacity="0.2"/>
+    <text x="813" y="126" text-anchor="middle" font-family="'Cascadia Code', monospace" font-size="9" fill="#a6e3a1">Applied</text>
+    <rect x="783" y="134" width="80" height="18" rx="3" fill="#f38ba8" opacity="0.2"/>
+    <text x="823" y="148" text-anchor="middle" font-family="'Cascadia Code', monospace" font-size="9" fill="#f38ba8">NotApplied</text>
+  </g>
+
+  <!-- Footer -->
+  <rect x="30" y="210" width="840" height="28" rx="6" fill="#313244" stroke="#585b70" stroke-width="0.5"/>
+  <text x="450" y="230" text-anchor="middle" font-family="'Cascadia Code', monospace" font-size="10" fill="#cdd6f4">Define &#x2192; Register &#x2192; DetectStatus &#x2192; Apply / Remove &#x2192; TweakResult</text>
+</svg>

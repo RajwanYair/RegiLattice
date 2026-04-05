@@ -324,27 +324,9 @@ change. For safety-rated 1–2 tweaks, this is especially concerning.
 **Deliverable**: Before applying any tweak with `SafetyRating ≤ 3` or `RiskFlags` that
 include `DeletesKey | RequiresReboot | AffectsSecurity`, show a confirmation dialog:
 
-```
-┌─────────────────────────────────────────────┐
-│          ⚠ Confirm Tweak Application        │
-├─────────────────────────────────────────────┤
-│ Tweak: Disable Windows Error Reporting      │
-│ Risk:  🟡 ModifiesHKLM · AffectsService    │
-│                                             │
-│ Registry Changes:                           │
-│ ┌─────────────────────────────────────────┐ │
-│ │ HKLM\SOFTWARE\...\WER\Disabled          │ │
-│ │   Before: 0 (enabled)                   │ │
-│ │   After:  1 (disabled)                  │ │
-│ │                                         │ │
-│ │ HKLM\SOFTWARE\...\WER\DontSendAdditio… │ │
-│ │   Before: (not set)                     │ │
-│ │   After:  1                             │ │
-│ └─────────────────────────────────────────┘ │
-│                                             │
-│         [ Cancel ]  [ Apply Anyway ]        │
-└─────────────────────────────────────────────┘
-```
+<p align="center">
+  <img src="assets/confirm-dialog-mockup.svg" alt="Confirmation Dialog Mockup — Catppuccin Mocha themed" width="600"/>
+</p>
 
 **Implementation**: Uses `RegistrySession.ExecuteWithDiff()` (Phase 1.4) in DryRun mode
 to preview the diff without writing. The dialog is themed and shows risk flag badges.

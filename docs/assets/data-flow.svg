@@ -1,0 +1,101 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="420" viewBox="0 0 1100 420">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1e1e2e"/>
+      <stop offset="100%" style="stop-color:#181825"/>
+    </linearGradient>
+    <filter id="shadow">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#11111b" flood-opacity="0.5"/>
+    </filter>
+    <marker id="arrowR" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#89b4fa"/>
+    </marker>
+    <marker id="arrowL" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
+      <polygon points="10 0, 0 3.5, 10 7" fill="#a6e3a1"/>
+    </marker>
+  </defs>
+
+  <rect width="1100" height="420" fill="url(#bgGrad)" rx="16"/>
+  <text x="550" y="34" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-weight="700" font-size="18" fill="#cdd6f4">Core Data Flow &#x2014; Apply a Tweak</text>
+
+  <!-- Participants -->
+  <!-- User -->
+  <g filter="url(#shadow)">
+    <rect x="40" y="60" width="100" height="40" rx="8" fill="#313244" stroke="#f9e2af" stroke-width="1.5"/>
+    <text x="90" y="86" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-weight="700" font-size="13" fill="#f9e2af">User</text>
+  </g>
+  <!-- CLI/GUI -->
+  <g filter="url(#shadow)">
+    <rect x="210" y="60" width="120" height="40" rx="8" fill="#313244" stroke="#89b4fa" stroke-width="1.5"/>
+    <text x="270" y="86" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-weight="700" font-size="13" fill="#89b4fa">CLI / GUI</text>
+  </g>
+  <!-- TweakEngine -->
+  <g filter="url(#shadow)">
+    <rect x="410" y="60" width="140" height="40" rx="8" fill="#45475a" stroke="#89b4fa" stroke-width="2"/>
+    <text x="480" y="86" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-weight="700" font-size="13" fill="#cdd6f4">TweakEngine</text>
+  </g>
+  <!-- TweakDef -->
+  <g filter="url(#shadow)">
+    <rect x="620" y="60" width="120" height="40" rx="8" fill="#313244" stroke="#f38ba8" stroke-width="1.5"/>
+    <text x="680" y="86" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-weight="700" font-size="13" fill="#f38ba8">TweakDef</text>
+  </g>
+  <!-- RegistrySession -->
+  <g filter="url(#shadow)">
+    <rect x="810" y="60" width="150" height="40" rx="8" fill="#313244" stroke="#fab387" stroke-width="1.5"/>
+    <text x="885" y="86" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-weight="700" font-size="13" fill="#fab387">RegistrySession</text>
+  </g>
+  <!-- Windows Registry -->
+  <g filter="url(#shadow)">
+    <rect x="1010" y="60" width="70" height="40" rx="8" fill="#313244" stroke="#a6e3a1" stroke-width="1.5"/>
+    <text x="1045" y="82" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-weight="700" font-size="10" fill="#a6e3a1">Windows</text>
+    <text x="1045" y="94" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-weight="700" font-size="10" fill="#a6e3a1">Registry</text>
+  </g>
+
+  <!-- Lifelines -->
+  <line x1="90" y1="100" x2="90" y2="400" stroke="#585b70" stroke-width="1" stroke-dasharray="4 3" opacity="0.4"/>
+  <line x1="270" y1="100" x2="270" y2="400" stroke="#585b70" stroke-width="1" stroke-dasharray="4 3" opacity="0.4"/>
+  <line x1="480" y1="100" x2="480" y2="400" stroke="#585b70" stroke-width="1" stroke-dasharray="4 3" opacity="0.4"/>
+  <line x1="680" y1="100" x2="680" y2="400" stroke="#585b70" stroke-width="1" stroke-dasharray="4 3" opacity="0.4"/>
+  <line x1="885" y1="100" x2="885" y2="400" stroke="#585b70" stroke-width="1" stroke-dasharray="4 3" opacity="0.4"/>
+  <line x1="1045" y1="100" x2="1045" y2="400" stroke="#585b70" stroke-width="1" stroke-dasharray="4 3" opacity="0.4"/>
+
+  <!-- Step 1: User → CLI/GUI -->
+  <line x1="92" y1="130" x2="266" y2="130" stroke="#89b4fa" stroke-width="1.5" marker-end="url(#arrowR)"/>
+  <text x="178" y="124" text-anchor="middle" font-family="'Cascadia Code', monospace" font-size="10" fill="#89b4fa">apply "priv-disable-telemetry"</text>
+
+  <!-- Step 2: CLI/GUI → TweakEngine -->
+  <line x1="272" y1="165" x2="476" y2="165" stroke="#89b4fa" stroke-width="1.5" marker-end="url(#arrowR)"/>
+  <text x="374" y="159" text-anchor="middle" font-family="'Cascadia Code', monospace" font-size="10" fill="#89b4fa">Apply(id)</text>
+
+  <!-- Step 3: TweakEngine → TweakDef -->
+  <line x1="482" y1="200" x2="676" y2="200" stroke="#89b4fa" stroke-width="1.5" marker-end="url(#arrowR)"/>
+  <text x="580" y="194" text-anchor="middle" font-family="'Cascadia Code', monospace" font-size="10" fill="#89b4fa">GetTweak(id)</text>
+
+  <!-- Step 4: TweakDef → TweakEngine (return) -->
+  <line x1="676" y1="230" x2="482" y2="230" stroke="#a6e3a1" stroke-width="1.5" stroke-dasharray="5 3" marker-end="url(#arrowL)"/>
+  <text x="580" y="224" text-anchor="middle" font-family="'Cascadia Code', monospace" font-size="10" fill="#a6e3a1">TweakDef { ApplyOps }</text>
+
+  <!-- Step 5: TweakEngine → RegistrySession -->
+  <line x1="482" y1="265" x2="881" y2="265" stroke="#89b4fa" stroke-width="1.5" marker-end="url(#arrowR)"/>
+  <text x="682" y="259" text-anchor="middle" font-family="'Cascadia Code', monospace" font-size="10" fill="#89b4fa">Execute(ApplyOps)</text>
+
+  <!-- Step 6: RegistrySession → Windows Registry -->
+  <line x1="887" y1="295" x2="1041" y2="295" stroke="#89b4fa" stroke-width="1.5" marker-end="url(#arrowR)"/>
+  <text x="964" y="289" text-anchor="middle" font-family="'Cascadia Code', monospace" font-size="9" fill="#89b4fa">SetDword(..., 0)</text>
+
+  <!-- Step 7: Windows Registry → RegistrySession (return) -->
+  <line x1="1041" y1="320" x2="887" y2="320" stroke="#a6e3a1" stroke-width="1.5" stroke-dasharray="5 3" marker-end="url(#arrowL)"/>
+  <text x="964" y="314" text-anchor="middle" font-family="'Cascadia Code', monospace" font-size="9" fill="#a6e3a1">OK</text>
+
+  <!-- Step 8: RegistrySession → TweakEngine (return) -->
+  <line x1="881" y1="345" x2="482" y2="345" stroke="#a6e3a1" stroke-width="1.5" stroke-dasharray="5 3" marker-end="url(#arrowL)"/>
+  <text x="682" y="339" text-anchor="middle" font-family="'Cascadia Code', monospace" font-size="10" fill="#a6e3a1">TweakResult.Applied</text>
+
+  <!-- Step 9: TweakEngine → CLI/GUI (return) -->
+  <line x1="476" y1="370" x2="272" y2="370" stroke="#a6e3a1" stroke-width="1.5" stroke-dasharray="5 3" marker-end="url(#arrowL)"/>
+  <text x="374" y="364" text-anchor="middle" font-family="'Cascadia Code', monospace" font-size="10" fill="#a6e3a1">TweakResult.Applied</text>
+
+  <!-- Step 10: CLI/GUI → User (return) -->
+  <line x1="266" y1="392" x2="92" y2="392" stroke="#a6e3a1" stroke-width="1.5" stroke-dasharray="5 3" marker-end="url(#arrowL)"/>
+  <text x="178" y="386" text-anchor="middle" font-family="'Cascadia Code', monospace" font-size="10" fill="#a6e3a1">&#x2705; Applied</text>
+</svg>

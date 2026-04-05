@@ -1,0 +1,92 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="700" height="500" viewBox="0 0 700 500">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1e1e2e"/>
+      <stop offset="100%" style="stop-color:#181825"/>
+    </linearGradient>
+    <filter id="shadow">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#11111b" flood-opacity="0.5"/>
+    </filter>
+  </defs>
+
+  <rect width="700" height="500" fill="url(#bgGrad)" rx="16"/>
+  <text x="350" y="34" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-weight="700" font-size="18" fill="#cdd6f4">Built-in Profiles</text>
+
+  <!-- Axis labels -->
+  <text x="350" y="64" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="11" fill="#585b70">Category Coverage vs. Aggressiveness</text>
+
+  <!-- Grid area -->
+  <rect x="100" y="80" width="500" height="360" rx="8" fill="#313244" stroke="#45475a" stroke-width="0.5"/>
+
+  <!-- Grid lines (horizontal) -->
+  <line x1="100" y1="170" x2="600" y2="170" stroke="#45475a" stroke-width="0.5" stroke-dasharray="3 3"/>
+  <line x1="100" y1="260" x2="600" y2="260" stroke="#45475a" stroke-width="0.5" stroke-dasharray="3 3"/>
+  <line x1="100" y1="350" x2="600" y2="350" stroke="#45475a" stroke-width="0.5" stroke-dasharray="3 3"/>
+
+  <!-- Grid lines (vertical) -->
+  <line x1="225" y1="80" x2="225" y2="440" stroke="#45475a" stroke-width="0.5" stroke-dasharray="3 3"/>
+  <line x1="350" y1="80" x2="350" y2="440" stroke="#45475a" stroke-width="0.5" stroke-dasharray="3 3"/>
+  <line x1="475" y1="80" x2="475" y2="440" stroke="#45475a" stroke-width="0.5" stroke-dasharray="3 3"/>
+
+  <!-- Quadrant labels (subtle) -->
+  <text x="168" y="102" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="10" fill="#585b70" opacity="0.5">Conservative &amp; Few</text>
+  <text x="530" y="102" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="10" fill="#585b70" opacity="0.5">Conservative &amp; Many</text>
+  <text x="168" y="430" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="10" fill="#585b70" opacity="0.5">Aggressive &amp; Few</text>
+  <text x="530" y="430" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="10" fill="#585b70" opacity="0.5">Aggressive &amp; Many</text>
+
+  <!-- X-axis label -->
+  <text x="350" y="468" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-weight="600" font-size="12" fill="#a6adc8">Categories Covered &#x2192;</text>
+  <text x="110" y="468" text-anchor="start" font-family="'Segoe UI', Arial, sans-serif" font-size="10" fill="#585b70">Few (22)</text>
+  <text x="590" y="468" text-anchor="end" font-family="'Segoe UI', Arial, sans-serif" font-size="10" fill="#585b70">Many (39)</text>
+
+  <!-- Y-axis label -->
+  <text x="80" y="260" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-weight="600" font-size="12" fill="#a6adc8" transform="rotate(-90 80 260)">Aggressiveness &#x2192;</text>
+  <text x="88" y="95" text-anchor="end" font-family="'Segoe UI', Arial, sans-serif" font-size="10" fill="#585b70">Low</text>
+  <text x="88" y="435" text-anchor="end" font-family="'Segoe UI', Arial, sans-serif" font-size="10" fill="#585b70">High</text>
+
+  <!-- Profile dots -->
+  <!-- minimal: 22 cats → x=0.30 → 100+150=250, conservative → y=0.35 → 80+126=206 -->
+  <g filter="url(#shadow)">
+    <circle cx="250" cy="206" r="28" fill="#a6e3a1" opacity="0.2"/>
+    <circle cx="250" cy="206" r="14" fill="#a6e3a1"/>
+    <text x="250" y="210" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-weight="800" font-size="10" fill="#1e1e2e">22</text>
+    <text x="250" y="245" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-weight="700" font-size="13" fill="#a6e3a1">minimal</text>
+    <text x="250" y="260" text-anchor="middle" font-family="'Cascadia Code', monospace" font-size="9" fill="#585b70">Fast &amp; clean</text>
+  </g>
+
+  <!-- business: 39 cats → x=0.65 → 100+325=425, moderate → y=0.45 → 80+162=242 -->
+  <g filter="url(#shadow)">
+    <circle cx="425" cy="242" r="32" fill="#89b4fa" opacity="0.2"/>
+    <circle cx="425" cy="242" r="16" fill="#89b4fa"/>
+    <text x="425" y="247" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-weight="800" font-size="11" fill="#1e1e2e">39</text>
+    <text x="425" y="279" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-weight="700" font-size="13" fill="#89b4fa">business</text>
+    <text x="425" y="294" text-anchor="middle" font-family="'Cascadia Code', monospace" font-size="9" fill="#585b70">Productivity &amp; security</text>
+  </g>
+
+  <!-- server: 28 cats → x=0.47 → 100+235=335, mid → y=0.55 → 80+198=278 -->
+  <g filter="url(#shadow)">
+    <circle cx="335" cy="278" r="28" fill="#f9e2af" opacity="0.2"/>
+    <circle cx="335" cy="278" r="14" fill="#f9e2af"/>
+    <text x="335" y="282" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-weight="800" font-size="10" fill="#1e1e2e">28</text>
+    <text x="335" y="315" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-weight="700" font-size="13" fill="#f9e2af">server</text>
+    <text x="335" y="330" text-anchor="middle" font-family="'Cascadia Code', monospace" font-size="9" fill="#585b70">Hardened &amp; headless</text>
+  </g>
+
+  <!-- privacy: 31 cats → x=0.50 → 100+250=350, aggr → y=0.65 → 80+234=314 -->
+  <g filter="url(#shadow)">
+    <circle cx="200" cy="340" r="30" fill="#b4befe" opacity="0.2"/>
+    <circle cx="200" cy="340" r="15" fill="#b4befe"/>
+    <text x="200" y="344" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-weight="800" font-size="10" fill="#1e1e2e">31</text>
+    <text x="200" y="378" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-weight="700" font-size="13" fill="#b4befe">privacy</text>
+    <text x="200" y="393" text-anchor="middle" font-family="'Cascadia Code', monospace" font-size="9" fill="#585b70">Telemetry &amp; tracking</text>
+  </g>
+
+  <!-- gaming: 31 cats → x=0.55 → 100+275=375, most aggr → y=0.75 → 80+270=350 -->
+  <g filter="url(#shadow)">
+    <circle cx="475" cy="370" r="30" fill="#f38ba8" opacity="0.2"/>
+    <circle cx="475" cy="370" r="15" fill="#f38ba8"/>
+    <text x="475" y="374" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-weight="800" font-size="10" fill="#1e1e2e">31</text>
+    <text x="475" y="408" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-weight="700" font-size="13" fill="#f38ba8">gaming</text>
+    <text x="475" y="423" text-anchor="middle" font-family="'Cascadia Code', monospace" font-size="9" fill="#585b70">Low-latency &amp; GPU</text>
+  </g>
+</svg>

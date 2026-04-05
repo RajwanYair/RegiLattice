@@ -1,0 +1,95 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="480" viewBox="0 0 1000 480">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1e1e2e"/>
+      <stop offset="100%" style="stop-color:#181825"/>
+    </linearGradient>
+    <filter id="shadow">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#11111b" flood-opacity="0.5"/>
+    </filter>
+  </defs>
+
+  <rect width="1000" height="480" fill="url(#bgGrad)" rx="16"/>
+  <text x="500" y="34" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-weight="700" font-size="18" fill="#cdd6f4">TweakEngine Public API</text>
+
+  <!-- Central node -->
+  <g filter="url(#shadow)">
+    <circle cx="500" cy="240" r="60" fill="#45475a" stroke="#89b4fa" stroke-width="2.5"/>
+    <text x="500" y="236" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-weight="800" font-size="14" fill="#cdd6f4">Tweak</text>
+    <text x="500" y="254" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-weight="800" font-size="14" fill="#cdd6f4">Engine</text>
+  </g>
+
+  <!-- Branch 1: Core (top-left) -->
+  <line x1="455" y1="195" x2="160" y2="80" stroke="#a6e3a1" stroke-width="1.5" opacity="0.6"/>
+  <g filter="url(#shadow)">
+    <rect x="40" y="55" width="220" height="120" rx="10" fill="#313244" stroke="#a6e3a1" stroke-width="1.5"/>
+    <text x="150" y="80" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-weight="700" font-size="14" fill="#a6e3a1">Core</text>
+    <text x="60" y="102" font-family="'Cascadia Code', monospace" font-size="10" fill="#a6adc8">Register()</text>
+    <text x="60" y="118" font-family="'Cascadia Code', monospace" font-size="10" fill="#a6adc8">RegisterBuiltins()</text>
+    <text x="60" y="134" font-family="'Cascadia Code', monospace" font-size="10" fill="#a6adc8">AllTweaks() &#x2022; GetTweak()</text>
+    <text x="60" y="150" font-family="'Cascadia Code', monospace" font-size="10" fill="#a6adc8">Categories() &#x2022; TweaksByCategory()</text>
+    <text x="60" y="166" font-family="'Cascadia Code', monospace" font-size="10" fill="#a6adc8">TweaksByTag() &#x2022; TweaksByScope()</text>
+  </g>
+
+  <!-- Branch 2: Search & Filter (top-right) -->
+  <line x1="545" y1="195" x2="780" y2="80" stroke="#89b4fa" stroke-width="1.5" opacity="0.6"/>
+  <g filter="url(#shadow)">
+    <rect x="710" y="55" width="250" height="80" rx="10" fill="#313244" stroke="#89b4fa" stroke-width="1.5"/>
+    <text x="835" y="80" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-weight="700" font-size="14" fill="#89b4fa">Search &amp; Filter</text>
+    <text x="730" y="102" font-family="'Cascadia Code', monospace" font-size="10" fill="#a6adc8">Search(query)</text>
+    <text x="730" y="118" font-family="'Cascadia Code', monospace" font-size="10" fill="#a6adc8">Filter(corpSafe?, scope?, ...)</text>
+  </g>
+
+  <!-- Branch 3: Status (right) -->
+  <line x1="560" y1="240" x2="720" y2="196" stroke="#f9e2af" stroke-width="1.5" opacity="0.6"/>
+  <g filter="url(#shadow)">
+    <rect x="710" y="160" width="250" height="70" rx="10" fill="#313244" stroke="#f9e2af" stroke-width="1.5"/>
+    <text x="835" y="185" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-weight="700" font-size="14" fill="#f9e2af">Status</text>
+    <text x="730" y="207" font-family="'Cascadia Code', monospace" font-size="10" fill="#a6adc8">DetectStatus(td)</text>
+    <text x="730" y="223" font-family="'Cascadia Code', monospace" font-size="10" fill="#a6adc8">StatusMap(parallel, ids?)</text>
+  </g>
+
+  <!-- Branch 4: Apply/Remove (bottom-right) -->
+  <line x1="545" y1="285" x2="780" y2="310" stroke="#f38ba8" stroke-width="1.5" opacity="0.6"/>
+  <g filter="url(#shadow)">
+    <rect x="710" y="256" width="250" height="90" rx="10" fill="#313244" stroke="#f38ba8" stroke-width="1.5"/>
+    <text x="835" y="282" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-weight="700" font-size="14" fill="#f38ba8">Apply / Remove</text>
+    <text x="730" y="304" font-family="'Cascadia Code', monospace" font-size="10" fill="#a6adc8">Apply() &#x2022; Remove()</text>
+    <text x="730" y="320" font-family="'Cascadia Code', monospace" font-size="10" fill="#a6adc8">ApplyBatch() &#x2022; RemoveBatch()</text>
+    <text x="730" y="336" font-family="'Cascadia Code', monospace" font-size="10" fill="#a6adc8">+ progress callback overloads</text>
+  </g>
+
+  <!-- Branch 5: Profiles (bottom-left) -->
+  <line x1="455" y1="285" x2="200" y2="320" stroke="#b4befe" stroke-width="1.5" opacity="0.6"/>
+  <g filter="url(#shadow)">
+    <rect x="40" y="300" width="220" height="76" rx="10" fill="#313244" stroke="#b4befe" stroke-width="1.5"/>
+    <text x="150" y="325" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-weight="700" font-size="14" fill="#b4befe">Profiles</text>
+    <text x="60" y="347" font-family="'Cascadia Code', monospace" font-size="10" fill="#a6adc8">GetProfile() &#x2022; TweaksForProfile()</text>
+    <text x="60" y="363" font-family="'Cascadia Code', monospace" font-size="10" fill="#a6adc8">ApplyProfile()</text>
+  </g>
+
+  <!-- Branch 6: Snapshots (left) -->
+  <line x1="440" y1="240" x2="260" y2="240" stroke="#fab387" stroke-width="1.5" opacity="0.6"/>
+  <g filter="url(#shadow)">
+    <rect x="40" y="210" width="220" height="76" rx="10" fill="#313244" stroke="#fab387" stroke-width="1.5"/>
+    <text x="150" y="235" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-weight="700" font-size="14" fill="#fab387">Snapshots</text>
+    <text x="60" y="257" font-family="'Cascadia Code', monospace" font-size="10" fill="#a6adc8">SaveSnapshot() &#x2022; LoadSnapshot()</text>
+    <text x="60" y="273" font-family="'Cascadia Code', monospace" font-size="10" fill="#a6adc8">RestoreSnapshot()</text>
+  </g>
+
+  <!-- Branch 7: Validation (bottom-center-left) -->
+  <line x1="475" y1="300" x2="320" y2="420" stroke="#94e2d5" stroke-width="1.5" opacity="0.6"/>
+  <g filter="url(#shadow)">
+    <rect x="200" y="400" width="220" height="56" rx="10" fill="#313244" stroke="#94e2d5" stroke-width="1.5"/>
+    <text x="310" y="425" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-weight="700" font-size="14" fill="#94e2d5">Validation</text>
+    <text x="220" y="447" font-family="'Cascadia Code', monospace" font-size="10" fill="#a6adc8">ValidateTweaks()</text>
+  </g>
+
+  <!-- Branch 8: Dependencies (bottom-center-right) -->
+  <line x1="525" y1="300" x2="620" y2="420" stroke="#cba6f7" stroke-width="1.5" opacity="0.6"/>
+  <g filter="url(#shadow)">
+    <rect x="520" y="400" width="260" height="56" rx="10" fill="#313244" stroke="#cba6f7" stroke-width="1.5"/>
+    <text x="650" y="425" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-weight="700" font-size="14" fill="#cba6f7">Dependencies</text>
+    <text x="540" y="447" font-family="'Cascadia Code', monospace" font-size="10" fill="#a6adc8">ResolveDependencies() &#x2022; Dependents()</text>
+  </g>
+</svg>

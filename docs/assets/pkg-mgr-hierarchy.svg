@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="420" viewBox="0 0 900 420">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1e1e2e"/>
+      <stop offset="100%" style="stop-color:#181825"/>
+    </linearGradient>
+    <filter id="shadow">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#11111b" flood-opacity="0.5"/>
+    </filter>
+  </defs>
+
+  <rect width="900" height="420" fill="url(#bgGrad)" rx="16"/>
+  <text x="450" y="34" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-weight="700" font-size="18" fill="#cdd6f4">Package Manager Dialog Hierarchy</text>
+
+  <!-- BasePackageManagerDialog (abstract) -->
+  <g filter="url(#shadow)">
+    <rect x="250" y="55" width="400" height="170" rx="10" fill="#45475a" stroke="#89b4fa" stroke-width="2"/>
+    <rect x="250" y="55" width="400" height="36" rx="10" fill="#313244"/>
+    <rect x="250" y="78" width="400" height="13" fill="#313244"/>
+    <text x="270" y="72" font-family="'Cascadia Code', monospace" font-size="9" fill="#585b70">&#xAB;abstract&#xBB;</text>
+    <text x="450" y="78" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-weight="800" font-size="15" fill="#89b4fa">BasePackageManagerDialog</text>
+
+    <text x="270" y="110" font-family="'Cascadia Code', monospace" font-size="10" fill="#a6adc8"># SplitContainer splitContainer</text>
+    <text x="270" y="126" font-family="'Cascadia Code', monospace" font-size="10" fill="#a6adc8"># ListView packageListView</text>
+    <text x="270" y="142" font-family="'Cascadia Code', monospace" font-size="10" fill="#a6adc8"># RichTextBox logBox</text>
+    <line x1="260" y1="150" x2="640" y2="150" stroke="#585b70" stroke-width="0.5"/>
+    <text x="270" y="168" font-family="'Cascadia Code', monospace" font-size="10" fill="#f9e2af">+ ManagerName()* &#x2022; RefreshAsync()*</text>
+    <text x="270" y="184" font-family="'Cascadia Code', monospace" font-size="10" fill="#f9e2af">+ InstallAsync()* &#x2022; RemoveAsync()*</text>
+    <text x="270" y="200" font-family="'Cascadia Code', monospace" font-size="10" fill="#f9e2af">+ UpgradeAsync()* &#x2022; AppendLog()</text>
+    <text x="270" y="216" font-family="'Cascadia Code', monospace" font-size="10" fill="#f9e2af">+ SetBusy() &#x2022; SetStatus()</text>
+  </g>
+
+  <!-- Inheritance lines -->
+  <line x1="110" y1="290" x2="350" y2="225" stroke="#89b4fa" stroke-width="1.5" opacity="0.5"/>
+  <line x1="290" y1="290" x2="400" y2="225" stroke="#89b4fa" stroke-width="1.5" opacity="0.5"/>
+  <line x1="450" y1="290" x2="450" y2="225" stroke="#89b4fa" stroke-width="1.5" opacity="0.5"/>
+  <line x1="610" y1="290" x2="500" y2="225" stroke="#89b4fa" stroke-width="1.5" opacity="0.5"/>
+  <line x1="790" y1="290" x2="550" y2="225" stroke="#89b4fa" stroke-width="1.5" opacity="0.5"/>
+
+  <!-- Inheritance triangles -->
+  <polygon points="350,225 344,232 356,232" fill="#89b4fa"/>
+  <polygon points="400,225 394,232 406,232" fill="#89b4fa"/>
+  <polygon points="450,225 444,232 456,232" fill="#89b4fa"/>
+  <polygon points="500,225 494,232 506,232" fill="#89b4fa"/>
+  <polygon points="550,225 544,232 556,232" fill="#89b4fa"/>
+
+  <!-- ChocolateyManagerDialog -->
+  <g filter="url(#shadow)">
+    <rect x="30" y="290" width="160" height="46" rx="8" fill="#313244" stroke="#a6e3a1" stroke-width="1.5"/>
+    <text x="110" y="318" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-weight="600" font-size="11" fill="#a6e3a1">Chocolatey</text>
+  </g>
+
+  <!-- ScoopManagerDialog -->
+  <g filter="url(#shadow)">
+    <rect x="210" y="290" width="160" height="46" rx="8" fill="#313244" stroke="#f9e2af" stroke-width="1.5"/>
+    <text x="290" y="318" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-weight="600" font-size="11" fill="#f9e2af">Scoop</text>
+  </g>
+
+  <!-- PipManagerDialog -->
+  <g filter="url(#shadow)">
+    <rect x="390" y="290" width="120" height="76" rx="8" fill="#313244" stroke="#f38ba8" stroke-width="1.5"/>
+    <text x="450" y="314" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-weight="600" font-size="11" fill="#f38ba8">Pip</text>
+    <text x="450" y="334" text-anchor="middle" font-family="'Cascadia Code', monospace" font-size="9" fill="#585b70">+BuildScopePanel()</text>
+    <text x="450" y="350" text-anchor="middle" font-family="'Cascadia Code', monospace" font-size="9" fill="#585b70">--user / --system</text>
+  </g>
+
+  <!-- WinGetManagerDialog -->
+  <g filter="url(#shadow)">
+    <rect x="530" y="290" width="160" height="76" rx="8" fill="#313244" stroke="#b4befe" stroke-width="1.5"/>
+    <text x="610" y="314" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-weight="600" font-size="11" fill="#b4befe">WinGet</text>
+    <text x="610" y="334" text-anchor="middle" font-family="'Cascadia Code', monospace" font-size="9" fill="#585b70">+AddExtraButtons()</text>
+    <text x="610" y="350" text-anchor="middle" font-family="'Cascadia Code', monospace" font-size="9" fill="#585b70">Search button</text>
+  </g>
+
+  <!-- PSModuleManagerDialog -->
+  <g filter="url(#shadow)">
+    <rect x="710" y="290" width="160" height="76" rx="8" fill="#313244" stroke="#94e2d5" stroke-width="1.5"/>
+    <text x="790" y="314" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-weight="600" font-size="11" fill="#94e2d5">PSModule</text>
+    <text x="790" y="334" text-anchor="middle" font-family="'Cascadia Code', monospace" font-size="9" fill="#585b70">+BuildScopePanel()</text>
+    <text x="790" y="350" text-anchor="middle" font-family="'Cascadia Code', monospace" font-size="9" fill="#585b70">UpgradeText="Update"</text>
+  </g>
+
+  <!-- Footer -->
+  <rect x="30" y="390" width="840" height="24" rx="6" fill="#313244" stroke="#585b70" stroke-width="0.5"/>
+  <text x="450" y="408" text-anchor="middle" font-family="'Cascadia Code', monospace" font-size="10" fill="#cdd6f4">Template Method pattern &#x2022; SplitContainer (ListView + RichTextBox log) &#x2022; Prereq banner &#x2022; Async install flow</text>
+</svg>

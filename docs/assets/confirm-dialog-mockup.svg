@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="440" viewBox="0 0 600 440">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1e1e2e"/>
+      <stop offset="100%" style="stop-color:#181825"/>
+    </linearGradient>
+    <filter id="shadow">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#11111b" flood-opacity="0.5"/>
+    </filter>
+  </defs>
+
+  <rect width="600" height="440" fill="url(#bgGrad)" rx="16"/>
+
+  <!-- Title bar -->
+  <g filter="url(#shadow)">
+    <rect x="60" y="20" width="480" height="410" rx="12" fill="#313244" stroke="#89b4fa" stroke-width="2"/>
+    <!-- Window title bar -->
+    <rect x="60" y="20" width="480" height="36" rx="12" fill="#45475a"/>
+    <rect x="60" y="44" width="480" height="12" fill="#45475a"/>
+    <!-- Window buttons -->
+    <circle cx="84" cy="38" r="6" fill="#f38ba8"/>
+    <circle cx="104" cy="38" r="6" fill="#f9e2af"/>
+    <circle cx="124" cy="38" r="6" fill="#a6e3a1"/>
+    <text x="300" y="43" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-weight="700" font-size="13" fill="#cdd6f4">Confirm Tweak Application</text>
+  </g>
+
+  <!-- Warning icon + title -->
+  <text x="90" y="84" font-family="'Segoe UI', Arial, sans-serif" font-size="22">&#x26A0;&#xFE0F;</text>
+  <text x="120" y="86" font-family="'Segoe UI', Arial, sans-serif" font-weight="700" font-size="14" fill="#f9e2af">You are about to apply the following tweak:</text>
+
+  <!-- Tweak info box -->
+  <g filter="url(#shadow)">
+    <rect x="80" y="100" width="440" height="80" rx="8" fill="#1e1e2e" stroke="#45475a" stroke-width="1"/>
+    <text x="100" y="122" font-family="'Segoe UI', Arial, sans-serif" font-weight="600" font-size="12" fill="#a6adc8">Tweak:</text>
+    <text x="150" y="122" font-family="'Segoe UI', Arial, sans-serif" font-weight="700" font-size="12" fill="#cdd6f4">Disable Telemetry</text>
+    <text x="100" y="144" font-family="'Segoe UI', Arial, sans-serif" font-weight="600" font-size="12" fill="#a6adc8">Category:</text>
+    <text x="170" y="144" font-family="'Cascadia Code', monospace" font-size="11" fill="#89b4fa">Privacy</text>
+    <text x="100" y="166" font-family="'Segoe UI', Arial, sans-serif" font-weight="600" font-size="12" fill="#a6adc8">Scope:</text>
+    <rect x="150" y="153" width="64" height="18" rx="4" fill="#89b4fa" opacity="0.2"/>
+    <text x="182" y="166" text-anchor="middle" font-family="'Cascadia Code', monospace" font-size="10" fill="#89b4fa">MACHINE</text>
+    <text x="230" y="166" font-family="'Segoe UI', Arial, sans-serif" font-weight="600" font-size="12" fill="#a6adc8">Admin:</text>
+    <rect x="276" y="153" width="38" height="18" rx="4" fill="#f38ba8" opacity="0.2"/>
+    <text x="295" y="166" text-anchor="middle" font-family="'Cascadia Code', monospace" font-size="10" fill="#f38ba8">YES</text>
+  </g>
+
+  <!-- Risk badges -->
+  <text x="100" y="210" font-family="'Segoe UI', Arial, sans-serif" font-weight="600" font-size="12" fill="#a6adc8">Risk Assessment:</text>
+  <rect x="215" y="197" width="90" height="20" rx="4" fill="#a6e3a1" opacity="0.2"/>
+  <text x="260" y="212" text-anchor="middle" font-family="'Cascadia Code', monospace" font-size="10" fill="#a6e3a1">Safety: 5/5</text>
+  <rect x="315" y="197" width="90" height="20" rx="4" fill="#f9e2af" opacity="0.2"/>
+  <text x="360" y="212" text-anchor="middle" font-family="'Cascadia Code', monospace" font-size="10" fill="#f9e2af">Impact: 4/5</text>
+
+  <!-- Registry changes section -->
+  <text x="100" y="246" font-family="'Segoe UI', Arial, sans-serif" font-weight="600" font-size="12" fill="#a6adc8">Registry Changes:</text>
+
+  <g filter="url(#shadow)">
+    <rect x="80" y="256" width="440" height="100" rx="8" fill="#1e1e2e" stroke="#45475a" stroke-width="1"/>
+    <!-- Before -->
+    <text x="100" y="278" font-family="'Cascadia Code', monospace" font-size="10" fill="#f38ba8">-  HKLM\SOFTWARE\...\AllowTelemetry</text>
+    <text x="100" y="294" font-family="'Cascadia Code', monospace" font-size="10" fill="#f38ba8">-  (current: 3 — Full)</text>
+    <!-- After -->
+    <text x="100" y="318" font-family="'Cascadia Code', monospace" font-size="10" fill="#a6e3a1">+  HKLM\SOFTWARE\...\AllowTelemetry</text>
+    <text x="100" y="334" font-family="'Cascadia Code', monospace" font-size="10" fill="#a6e3a1">+  (new: 0 — Disabled)</text>
+  </g>
+
+  <!-- Buttons -->
+  <g filter="url(#shadow)">
+    <rect x="230" y="380" width="100" height="34" rx="6" fill="#a6e3a1" stroke="none"/>
+    <text x="280" y="402" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-weight="700" font-size="13" fill="#1e1e2e">Apply</text>
+  </g>
+  <g filter="url(#shadow)">
+    <rect x="350" y="380" width="100" height="34" rx="6" fill="#45475a" stroke="#585b70" stroke-width="1"/>
+    <text x="400" y="402" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-weight="700" font-size="13" fill="#a6adc8">Cancel</text>
+  </g>
+  <g filter="url(#shadow)">
+    <rect x="470" y="380" width="40" height="34" rx="6" fill="#45475a" stroke="#585b70" stroke-width="1"/>
+    <text x="490" y="402" text-anchor="middle" font-family="'Cascadia Code', monospace" font-size="11" fill="#585b70">?</text>
+  </g>
+</svg>
