@@ -161,6 +161,31 @@ public sealed class GuiStartupTests
     }
 
     [Fact]
+    public void TweakCardRow_Construction_DoesNotThrow()
+    {
+        // Regression: v6.13.0 crash — TweakCardRow constructor set Height = CardHeight
+        // BEFORE creating child controls. Setting Height triggered OnResize → LayoutControls
+        // which accessed _lblName (still null) → NullReferenceException.
+        // Fix: Height is now set AFTER Controls.AddRange + null guard in LayoutControls.
+        using var card = new Controls.TweakCardRow();
+        Assert.NotNull(card);
+        Assert.Equal(64, card.Height);
+    }
+
+    [Fact]
+    public void TweakBrowserPanel_SetEngine_DoesNotThrow()
+    {
+        // Regression: v6.13.0 first-run crash at InitialiseEngineAsync step "SetEngine".
+        // TweakBrowserPanel.SetEngine → PopulateCategoryTree → RebuildCards → new TweakCardRow
+        // → NRE in LayoutControls during constructor.
+        using var panel = new Controls.TweakBrowserPanel();
+        var engine = new TweakEngine();
+        engine.RegisterBuiltins();
+        var emptyCache = new Dictionary<string, RegiLattice.Core.Models.TweakResult>();
+        panel.SetEngine(engine, emptyCache);
+    }
+
+    [Fact]
     public void ToolsHubPanel_Construction_DoesNotThrow()
     {
         // Created in InitializeComponent() as: _toolsPanel = new Controls.ToolsHubPanel()
