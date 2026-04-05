@@ -7,7 +7,7 @@ applyTo: "**/*.cs,**/tests/**,**/*Tests/**"
 > Accumulated hard-won insights from the Python → C# migration, test coverage sprints,
 > and the 453-tweak restoration campaign.
 > These rules are **as important as the coding standards** — they prevent recurring mistakes.
-> Last updated: 2026-04-02 (v6.1.0, C# 13 / .NET 10.0-windows, ~9190 tweaks, 101 categories, 3035 tests)
+> Last updated: 2026-04-05 (v6.6.0, C# 13 / .NET 10.0-windows, ~9440 tweaks, 116 categories, 3376 tests)
 
 ---
 
@@ -1411,8 +1411,9 @@ Version history:
 | v6.3.0 | 5 | 50 | 642–646 (SystemPolicy.cs: PolicyBitLocker/WindowsInk/LocationSensors/CloudClipboard/NetworkIsolation) |
 | v6.4.0 | 5 | 50 | 647–651 (PolicyConfig.cs: PolicyFirewallProfiles/NetLogon/ReliabilityMonitor/DNSSecurity/SmartScreenWin) |
 | v6.5.0 | 5 | 50 | 652–656 (PolicyUser.cs: PolicyWindowsSearch/AppPrivacy/UserExperience/EventLogAudit/SyncSettings) |
+| v6.6.0 | 5 | 50 | 657–661 (PolicyMisc2.cs: WindowsFeeds/CompressedFolders/WindowsChat/TextInputExt/SpeechInput) |
 
-**Current version**: v6.5.0 — 9,390 tweaks, 111 categories, 150 modules. Run full gap analysis on all three phases before creating any new module.
+**Current version**: v6.6.0 — 9,440 tweaks, 116 categories, 155 modules. Run full gap analysis on all three phases before creating any new module.
 
 ---
 
