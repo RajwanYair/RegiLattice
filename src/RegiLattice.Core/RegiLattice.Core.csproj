@@ -4,7 +4,14 @@
     <RootNamespace>RegiLattice.Core</RootNamespace>
     <AssemblyName>RegiLattice.Core</AssemblyName>
     <Authors>YairRajwan</Authors>
-    <Description>RegiLattice Core — Native Windows registry tweak engine.</Description>
+    <Description>RegiLattice Core — Native Windows registry tweak engine. Provides TweakEngine, RegistrySession, and 7,189 curated tweaks across 23 categories for Windows 10/11.</Description>
+    <PackageId>RegiLattice.Core</PackageId>
+    <PackageTags>windows;registry;tweaks;performance;privacy;security;debloat;dotnet</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/RajwanYair/RegiLattice</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/RajwanYair/RegiLattice</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
   </PropertyGroup>
 
