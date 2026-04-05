@@ -52,7 +52,9 @@ A comprehensive Windows registry tuning toolkit featuring **7,189 expert-curated
 - Administrator privileges required for `HKLM` tweaks (UAC elevation prompt shown automatically)
 - The GUI can also be launched without admin rights for preview/browsing only
 - `regilattice --dry-run` performs a safe preview of any command
-    ]]></description>
+### Disclaimer
+
+RegiLattice is an independent open-source project. All product names and trademarks mentioned (including Windows, .NET, and third-party colour-palette names) are the property of their respective owners. This project is not affiliated with or endorsed by Microsoft Corporation or any other company.    ]]></description>
     <releaseNotes>https://github.com/RajwanYair/RegiLattice/blob/main/docs/CHANGELOG.md</releaseNotes>
     <dependencies />
   </metadata>
