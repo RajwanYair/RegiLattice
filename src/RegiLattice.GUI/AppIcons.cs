@@ -4,14 +4,21 @@ using RegiLattice.Core.Models;
 
 /// <summary>
 /// Generates themed icons programmatically for the main application and each package manager dialog.
-/// Icons are 32×32 bitmaps drawn with theme-aware colours.
+/// <para>
+/// <see cref="AppIcon"/> produces a multi-size ICO (16, 32, 48, 64, 128, 256 px) so Windows 11
+/// can pick the appropriate size for the taskbar, Alt+Tab switcher, and File Explorer.
+/// All other icons remain 32×32 (sufficient for dialog title bars and system tray).
+/// </para>
 /// </summary>
 internal static class AppIcons
 {
     private static readonly Dictionary<string, Icon> _cache = new(StringComparer.OrdinalIgnoreCase);
 
-    /// <summary>Registry key icon for the main application.</summary>
-    internal static Icon AppIcon => GetOrCreate("app", DrawRegistryIcon);
+    /// <summary>
+    /// Multi-size application icon (16 / 32 / 48 / 64 / 128 / 256 px, 32bpp RGBA).
+    /// Windows 11 uses the 256px frame for the taskbar button, Alt+Tab, and File Explorer.
+    /// </summary>
+    internal static Icon AppIcon => GetOrCreateMultiSize("app-multi", DrawRegistryIcon);
 
     /// <summary>Scoop bucket icon.</summary>
     internal static Icon ScoopIcon => GetOrCreate("scoop", DrawScoopIcon);
@@ -92,6 +99,70 @@ internal static class AppIcons
             icon.Dispose();
         _cache.Clear();
         _bmpCache.Clear();
+    }
+
+    /// <summary>
+    /// Creates a multi-size ICO (16, 32, 48, 64, 128, 256 px) so Windows 11 can choose the
+    /// best frame for the taskbar button, Alt+Tab switcher, and File Explorer thumbnails.
+    /// Each frame is a 32bpp RGBA PNG stored using the Vista+ PNG-in-ICO format.
+    /// </summary>
+    private static Icon GetOrCreateMultiSize(string key, Action<Graphics, int> draw)
+    {
+        if (_cache.TryGetValue(key, out var cached))
+            return cached;
+
+        int[] sizes = [16, 32, 48, 64, 128, 256];
+
+        // Render each size to a PNG byte array.
+        byte[][] pngs = sizes.Select(sz =>
+        {
+            using var bmp = new Bitmap(sz, sz, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+            using var g = Graphics.FromImage(bmp);
+            g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+            g.CompositingQuality = System.Drawing.Drawing2D.CompositingQuality.HighQuality;
+            g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
+            g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
+            g.Clear(Color.Transparent);
+            draw(g, sz);
+            using var ms = new System.IO.MemoryStream();
+            bmp.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
+            return ms.ToArray();
+        }).ToArray();
+
+        // Pack PNG frames into an ICO binary stream (RFC-compatible PNG-in-ICO, Vista+).
+        using var ico = new System.IO.MemoryStream();
+        using var bw = new System.IO.BinaryWriter(ico);
+
+        // ICO file header
+        bw.Write((short)0);               // Reserved
+        bw.Write((short)1);               // Type: 1 = ICO
+        bw.Write((short)sizes.Length);    // Image count
+
+        // Directory entries (16 bytes each)
+        int offset = 6 + sizes.Length * 16;
+        for (int i = 0; i < sizes.Length; i++)
+        {
+            int sz = sizes[i];
+            bw.Write((byte)(sz >= 256 ? 0 : sz));  // Width  (0 encodes 256)
+            bw.Write((byte)(sz >= 256 ? 0 : sz));  // Height (0 encodes 256)
+            bw.Write((byte)0);                     // Color count (0 = TrueColor)
+            bw.Write((byte)0);                     // Reserved
+            bw.Write((short)1);                    // Planes
+            bw.Write((short)32);                   // Bit depth
+            bw.Write((int)pngs[i].Length);         // Data size in bytes
+            bw.Write((int)offset);                 // Offset from start of file
+            offset += pngs[i].Length;
+        }
+
+        // PNG frame data
+        foreach (byte[] png in pngs)
+            bw.Write(png);
+
+        bw.Flush();
+        ico.Position = 0;
+        var icon = new Icon(ico);
+        _cache[key] = icon;
+        return icon;
     }
 
     private static Icon GetOrCreate(string key, Action<Graphics, int> draw)
