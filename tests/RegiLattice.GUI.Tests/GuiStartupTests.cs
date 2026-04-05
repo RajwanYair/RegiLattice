@@ -186,6 +186,58 @@ public sealed class GuiStartupTests
     }
 
     [Fact]
+    public void TweakBrowserPanel_SetEngine_WithInapplicableIds_DoesNotThrow()
+    {
+        // Regression: mirrors the real MainForm.InitialiseEngineAsync flow where
+        // _inapplicableIds is populated after hardware applicability checks.
+        using var panel = new Controls.TweakBrowserPanel();
+        var engine = new TweakEngine();
+        engine.RegisterBuiltins();
+
+        var statusCache = new Dictionary<string, RegiLattice.Core.Models.TweakResult>();
+        var inapplicableIds = new HashSet<string>(StringComparer.Ordinal);
+
+        // Mark first 50 tweaks as inapplicable — exercises the badge/toggle path.
+        int count = 0;
+        foreach (var td in engine.AllTweaks())
+        {
+            if (count++ >= 50)
+                break;
+            inapplicableIds.Add(td.Id);
+            statusCache[td.Id] = RegiLattice.Core.Models.TweakResult.SkippedHw;
+        }
+
+        panel.SetEngine(engine, statusCache, inapplicableIds);
+    }
+
+    [Fact]
+    public void DashboardPanel_SetData_DoesNotThrow()
+    {
+        // Verifies InitialiseEngineAsync step "SetData" — the step immediately after "SetEngine".
+        // If SetEngine succeeds but SetData NREs, the crash log would say step: SetData.
+        using var panel = new Controls.DashboardPanel();
+        var engine = new TweakEngine();
+        engine.RegisterBuiltins();
+        var statusCache = new Dictionary<string, RegiLattice.Core.Models.TweakResult>();
+        panel.SetData(engine, statusCache, Array.Empty<string>());
+    }
+
+    [Fact]
+    public void DashboardPanel_SetData_WithPopulatedCache_DoesNotThrow()
+    {
+        // Exercises BuildCategoryStats with a populated status cache.
+        using var panel = new Controls.DashboardPanel();
+        var engine = new TweakEngine();
+        engine.RegisterBuiltins();
+
+        var statusCache = new Dictionary<string, RegiLattice.Core.Models.TweakResult>();
+        foreach (var td in engine.AllTweaks().Take(100))
+            statusCache[td.Id] = RegiLattice.Core.Models.TweakResult.Applied;
+
+        panel.SetData(engine, statusCache, statusCache.Keys.Take(8));
+    }
+
+    [Fact]
     public void ToolsHubPanel_Construction_DoesNotThrow()
     {
         // Created in InitializeComponent() as: _toolsPanel = new Controls.ToolsHubPanel()
