@@ -4,6 +4,31 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [6.13.0] — 2026-04-05
+
+### Changed
+
+- **Large tweak file splitting — 31 merged files → 146 individual files**:
+  19 multi-class merged files were extracted into 101 separate class files using
+  `Split-MultiClass.ps1`. 12 remaining single-class files > 3000 lines were split
+  into `Filename.cs` + `Filename.Part2.cs` partial classes using `Split-Partials.ps1`.
+  Max file size reduced from 7,758 lines to 4,072 lines.
+  No tweak count change — purely structural refactoring.
+
+- **`.github` documentation**: Updated `lessons-learned.instructions.md` with 6 new entries
+  covering multi-class extraction, brace counting pitfalls, partial class patterns,
+  outer-class const visibility, `--no-build` GUI.Tests failure, and naming conflicts on extraction.
+  Updated `copilot-instructions.md` and `workspace.instructions.md` with new file counts.
+
+### Stats
+
+- Tweaks: **7,189** (unchanged)
+- Categories: **122** (was 23 — categories were split to max 77 each in a prior session)
+- Modules: **146 files** (was 31; split into individual class files)
+- Tests: **3,052** (0 failures)
+
+---
+
 ## [6.12.0] — 2026-04-05
 
 ### Changed

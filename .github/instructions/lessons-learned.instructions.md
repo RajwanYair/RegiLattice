@@ -5,9 +5,9 @@ applyTo: "**/*.cs,**/tests/**,**/*Tests/**"
 # Lessons Learned — RegiLattice Development
 
 > Accumulated hard-won insights from the Python → C# migration, test coverage sprints,
-> and the 453-tweak restoration campaign.
+> the 453-tweak restoration campaign, and the large-file splitting campaign.
 > These rules are **as important as the coding standards** — they prevent recurring mistakes.
-> Last updated: 2026-04-05 (v6.12.0, C# 13 / .NET 10.0-windows, ~7,189 tweaks, 122 categories, 3,052 tests)
+> Last updated: 2026-04-05 (v6.13.0, C# 13 / .NET 10.0-windows, ~7,189 tweaks, 122 categories, 3,052 tests)
 
 ---
 
@@ -1418,7 +1418,8 @@ Version history:
 | v6.10.0 | 0 | -44 | — (Phase C: removed 44 scoop tool-install tweaks from Developer.cs; 8,847→8,803 tweaks) |
 | v6.11.0 | 5 | +50 | 667–671 (PolicyLocation/PolicyDataCollection/PolicyWinRM/PolicyCredentialUI/PolicyMediaPlayer) |
 | v6.12.0 | 0 | -1,664 | — (mass dedup: removed 1,756 duplicate TweakDef blocks, kept alphabetically-first module; 8,853→7,189 tweaks; 26→23 categories; 35→31 modules) |
-**Current version**: v6.12.0 — 7,189 tweaks, 122 categories, 31 modules. Run full gap analysis on all three phases before creating any new module.
+| v6.13.0 | 0 | 0 | — (file split: 31 merged tweak files → 146 individual files via multi-class extraction + partial class splits; no tweak count change) |
+**Current version**: v6.13.0 — 7,189 tweaks, 122 categories, 146 files (31 original + 115 extracted/split). Run full gap analysis on all three phases before creating any new module.
 
 ---
 
@@ -1688,3 +1689,162 @@ Assert.True(version.Major >= 5, $"Major version {version.Major} unexpectedly low
 **Rule**: Never hardcode version numbers in tests. Read the expected version dynamically
 from the loaded assembly or `Directory.Build.props`. This applies to any test that
 validates PE metadata, assembly version, or file version info.
+
+---
+
+## Tweak Files Were Merged From Multiple Original Files — Not One Large Class
+
+The large files in `src/RegiLattice.Core/Tweaks/` (e.g., `Browser.cs 6410L`,
+`Maintenance.cs 7758L`, `Storage.cs 6007L`) appeared to be one large class with many
+inner classes. They were actually **multiple independent top-level `internal static class`
+declarations merged into one file** during a prior consolidation sprint.
+
+**Symptom that revealed this**: `Storage.cs` had a `Tweaks` property at lines 7, 380,
+801, 5122, 5451, 5638 — each in a different top-level class (Storage, FileSystem,
+SsdOptimization, etc.).
+
+**Why a line-level partial class split fails on merged files**: If you split at line N
+and mark both halves as `partial class Storage`, but the original file's line N+1 starts
+a completely different top-level class declaration (`internal static class FileSystem`),
+the compiler sees a nested partial that doesn't exist — cascading CS0103 errors on every
+inner-class name that the outer `Storage` class doesn't know about.
+
+**Correct approach**: Find all top-level `internal static class` declarations, extract
+each into its own file. Leave the first class in the original file; write subsequent classes
+to new files with the same namespace and using directives.
+
+**Detection command** — run before deciding how to split a large file:
+```powershell
+# How many top-level classes does this file have?
+Select-String -Path SomeFile.cs -Pattern '^internal static (partial )?class \w+'
+```
+
+If count > 1 → multi-class extraction (see `Split-MultiClass.ps1` in `.tmp/`).
+If count = 1 → partial class split (see `Split-Partials.ps1` in `.tmp/`).
+
+---
+
+## Brace Counting for C# Class Boundary Detection Is Unreliable
+
+Counting `{` and `}` characters to find class end-boundaries in C# source fails because:
+1. Registry path string literals contain `{GUID}` patterns counted as opening braces
+2. Verbatim string literals `@"..."` may span multiple lines with braces
+3. String interpolation `$"...{expr}..."` adds unbalanced braces inside strings
+
+**Symptom**: A brace-counting script extracted an "inner class" that ended 200 lines
+before the real closing brace, leaving constants and helper methods stranded.
+
+**Correct approaches for boundary detection**:
+- **Top-level class**: Match `^internal static (partial )?class \w+` (starts at column 0)
+- **Inner class**: Match `^\s{4}private static class _\w+` (exactly 4-space indent)
+- **End of top-level class**: The LAST `^}` (no indent) in the file = outer class close
+- **Split near midpoint**: Find the inner class start closest to `lineCount / 2`
+
+**Never use brace counting** unless you have a full C# parser available.
+
+---
+
+## Partial Class Splitting Requires the `partial` Keyword in Both Files
+
+When splitting a single-class file into `Filename.cs` + `Filename.Part2.cs`, both
+files must declare the class as `partial`. Missing the `partial` keyword on either file
+causes `CS0260: Missing partial modifier` or silently creates two independent classes.
+
+```csharp
+// ✅ File A: Filename.cs
+internal static partial class PolicyDesktop { ... }
+
+// ✅ File B: Filename.Part2.cs
+internal static partial class PolicyDesktop { ... }
+
+// ❌ WRONG — without partial, File B is a duplicate class declaration → CS0101
+internal static class PolicyDesktop { ... }
+```
+
+**Script rule**: When writing the main (trimmed) file, replace `internal static class`
+with `internal static partial class`. When writing the Part2 file header, also use
+`internal static partial class`. Use a regex replace that won't double-add `partial`:
+```powershell
+$line = $line -replace 'internal static class', 'internal static partial class'
+$line = $line -replace 'internal static partial partial', 'internal static partial'
+```
+
+---
+
+## Outer-Class Constants Are Visible in Both Partial Files — No Need to Duplicate
+
+In C# partial classes, `const`, `static readonly`, and other top-level-class members
+declared in **either** part are visible in **all** parts. This means:
+
+- `Part2.cs` can freely refer to constants declared in `Filename.cs`
+- No header-sharing or `#include`-like mechanism is needed
+- The split line can be at ANY inner-class boundary without copying constants
+
+**Why this matters**: Earlier failed split attempts tried to copy outer-class `const`
+definitions into the Part2 file "to make them available." This caused `CS0102: The
+type already contains a definition for '...'` because partial classes merge all
+members at compile time.
+
+**Rule**: When splitting: copy ONLY the `namespace`, `using` statements, and the
+`internal static partial class ClassName {` header into Part2. Never copy any
+constant, field, or method — they are automatically shared.
+
+---
+
+## `--no-build` for GUI.Tests Fails After Cross-Project File Changes
+
+`dotnet test tests/RegiLattice.GUI.Tests/... --no-build` fails with:
+```
+An assembly specified in the application dependencies manifest was not found:
+  package: 'runtimepack.Microsoft.Windows.SDK.NET.Ref', version: '10.0.19041.57'
+  path: 'Microsoft.Windows.SDK.NET.dll'
+```
+
+This happens because `RegiLattice.GUI.Tests` targets `net10.0-windows10.0.19041.0`
+and relies on Windows SDK runtime packs being copied into the build output during the
+build phase. When `--no-build` skips the build, those runtime pack DLLs are absent.
+
+**Root cause**: The Windows desktop SDK `runtimepack` is not a static NuGet package;
+it is resolved and copied only during `dotnet build`. `--no-build` bypasses this copy.
+
+**Rule**: Never use `--no-build` for `RegiLattice.GUI.Tests`. It must be built before
+testing. In CI, either:
+- Use a single `dotnet test` without `--no-build` (builds + tests in one step), or
+- Ensure the Build step is `dotnet build RegiLattice.sln -c Release` (not just Core)
+  before adding `--no-build` to the GUI test step.
+
+```powershell
+# ✅ CORRECT — allows build to copy Windows SDK runtime packs
+dotnet test tests/RegiLattice.GUI.Tests/RegiLattice.GUI.Tests.csproj --settings tests/.runsettings
+
+# ❌ BROKEN — skips runtime pack copy; test host crashes before a single test runs
+dotnet test tests/RegiLattice.GUI.Tests/RegiLattice.GUI.Tests.csproj --no-build --settings tests/.runsettings
+```
+
+---
+
+## Multi-Class Tweak Files — Naming Conflicts on Extraction
+
+When extracting top-level classes from merged tweak files, a newly extracted class name
+may conflict with an existing `.cs` file in the `Tweaks/` directory.
+
+**Examples found during v6.13.0 extraction**:
+- Class `Input` extracted from `Peripherals.cs` → `Input.cs` already exists → write as `Peripherals_Input.cs`
+- Class `Performance` extracted from `System.cs` → `Performance.cs` exists → write as `System_Performance.cs`
+
+**Rule**: Before writing an extracted class to `<ClassName>.cs`, check if that file
+already exists. If it does, prefix with the source file's base name: `<SourceBase>_<ClassName>.cs`.
+The C# namespace is unchanged — only the filename is adjusted.
+
+```powershell
+# Conflict-check pattern used in Split-MultiClass.ps1:
+$destName = if (Test-Path (Join-Path $TweaksDir "$className.cs")) {
+    "$($file.BaseName)_$className.cs"
+} else {
+    "$className.cs"
+}
+```
+
+**Important**: The class name in the file must remain exactly `internal static class Input`
+(not renamed). Only the filename gets the prefix. TweakEngine discovers classes by
+reflection on the namespace, not by filename, so filenames are arbitrary.
