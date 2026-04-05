@@ -1417,7 +1417,8 @@ Version history:
 | v6.9.0 | 0 | 0 | — (doc consolidation: Architecture.md/Development.md/README.md stale counts fixed; git-workflow updated with SVG update mandate) |
 | v6.10.0 | 0 | -44 | — (Phase C: removed 44 scoop tool-install tweaks from Developer.cs; 8,847→8,803 tweaks) |
 | v6.11.0 | 5 | +50 | 667–671 (PolicyLocation/PolicyDataCollection/PolicyWinRM/PolicyCredentialUI/PolicyMediaPlayer) |
-**Current version**: v6.11.0 — 8,853 tweaks, 26 categories, 35 modules. Run full gap analysis on all three phases before creating any new module.
+| v6.12.0 | 0 | -1,664 | — (mass dedup: removed 1,756 duplicate TweakDef blocks, kept alphabetically-first module; 8,853→7,189 tweaks; 26→23 categories; 35→31 modules) |
+**Current version**: v6.12.0 — 7,189 tweaks, 23 categories, 31 modules. Run full gap analysis on all three phases before creating any new module.
 
 ---
 
