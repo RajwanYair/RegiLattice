@@ -3,6 +3,7 @@
     <OutputType>Exe</OutputType>
     <RootNamespace>RegiLattice.CLI</RootNamespace>
     <AssemblyName>RegiLattice</AssemblyName>
+    <ApplicationIcon>app.ico</ApplicationIcon>
     <Authors>YairRajwan</Authors>
     <Description>RegiLattice CLI — Command-line interface for the native registry tweak engine.</Description>
   </PropertyGroup>
