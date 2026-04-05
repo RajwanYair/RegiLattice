@@ -85,44 +85,9 @@ Download `RegiLattice.GUI.exe` or `RegiLattice.exe` directly from the [Releases 
   <img src="docs/assets/architecture.svg" alt="RegiLattice Architecture — Core, GUI, CLI, Tweaks, Registry" width="100%"/>
 </p>
 
-```mermaid
-graph LR
-    subgraph Interfaces
-        CLI[RegiLattice.CLI<br/>25+ commands]
-        GUI[RegiLattice.GUI<br/>11 themes · WinForms]
-    end
-
-    subgraph Core["RegiLattice.Core (library)"]
-        TE[TweakEngine<br/>Register · Apply · Search · Filter]
-        RS[RegistrySession<br/>Read · Write · Backup · DryRun]
-        SM[SnapshotManager]
-        TV[TweakValidator]
-        DR[DependencyResolver]
-        CG[CorporateGuard]
-        SV[Services]
-        PM[Plugins / Packs]
-    end
-
-    subgraph Tweaks["122 Categories · 7,189 tweaks"]
-        T1[Performance]
-        T2[Privacy]
-        T3[Security]
-        T4[Gaming]
-        TN[... 22 more]
-    end
-
-    CLI --> TE
-    GUI --> TE
-    TE --> RS
-    TE --> SM
-    TE --> TV
-    TE --> DR
-    TE --> CG
-    TE --> SV
-    TE --> PM
-    T1 & T2 & T3 & T4 & TN --> TE
-    RS -->|Microsoft.Win32.Registry| WR[(Windows Registry)]
-```
+<p align="center">
+  <img src="docs/assets/readme-architecture.svg" alt="RegiLattice Architecture — CLI, GUI, Core Engine, 122 Categories, Registry" width="100%"/>
+</p>
 
 ## How It Works
 
@@ -252,32 +217,9 @@ Override with `--force` (CLI) or the "Force" checkbox (GUI) at your own risk.
 
 ## Project Structure
 
-```mermaid
-graph TD
-    subgraph SRC["📁 src/"]
-        CORE["📦 RegiLattice.Core<br/>TweakEngine · SnapshotManager · TweakValidator<br/>DependencyResolver · RegistrySession · CorporateGuard<br/>14 Services · Plugins<br/>146 Module Files · 7,189 tweaks · 122 categories"]
-        GUI["🖥️ RegiLattice.GUI<br/>WinForms · 11 Themes<br/>MainForm · 9 Dialogs · 5 Package Managers"]
-        CLI["⌨️ RegiLattice.CLI<br/>25+ CLI Commands · CliArgs · ConsoleColorizer"]
-    end
-
-    subgraph TST["🧪 tests/  ·  3,052 xUnit tests"]
-        CT["Core.Tests<br/>2,317 tests · 12 files"]
-        CLT["CLI.Tests<br/>379 tests · 1 file"]
-        GT["GUI.Tests<br/>339 tests · 3 files"]
-    end
-
-    subgraph INFRA["🔧 Infrastructure & Docs"]
-        INST["📦 installer/ — WiX · MSI"]
-        DOCS["📄 docs/ — Api · Changelog · Security"]
-        GH["⚙️ .github/ — CI · Release · Skills"]
-    end
-
-    CLI -->|project ref| CORE
-    GUI -->|project ref| CORE
-    CT -.->|tests| CORE
-    CLT -.->|tests| CLI
-    GT -.->|tests| GUI
-```
+<p align="center">
+  <img src="docs/assets/project-structure.svg" alt="RegiLattice Project Structure — src, tests, infrastructure" width="100%"/>
+</p>
 
 ## Adding a Custom Tweak
 

@@ -1,0 +1,111 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="480" viewBox="0 0 1100 480">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1e1e2e"/>
+      <stop offset="100%" style="stop-color:#181825"/>
+    </linearGradient>
+    <filter id="shadow">
+      <feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="#11111b" flood-opacity="0.6"/>
+    </filter>
+  </defs>
+
+  <rect width="1100" height="480" fill="url(#bgGrad)" rx="16"/>
+
+  <!-- Title -->
+  <text x="550" y="38" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-weight="700" font-size="20" fill="#cdd6f4">Project Structure</text>
+
+  <!-- ===== SRC Column ===== -->
+  <text x="60" y="74" font-family="'Segoe UI', Arial, sans-serif" font-weight="600" font-size="12" fill="#585b70">&#x1F4C1; src/</text>
+
+  <!-- Core -->
+  <g filter="url(#shadow)">
+    <rect x="40" y="86" width="310" height="140" rx="10" fill="#313244" stroke="#89b4fa" stroke-width="1.5"/>
+    <text x="60" y="112" font-family="'Segoe UI', Arial, sans-serif" font-size="18">&#x1F4E6;</text>
+    <text x="82" y="112" font-family="'Segoe UI', Arial, sans-serif" font-weight="700" font-size="15" fill="#89b4fa">RegiLattice.Core</text>
+    <text x="60" y="136" font-family="'Cascadia Code', monospace" font-size="10" fill="#a6adc8">TweakEngine &#x2022; SnapshotManager</text>
+    <text x="60" y="152" font-family="'Cascadia Code', monospace" font-size="10" fill="#a6adc8">TweakValidator &#x2022; DependencyResolver</text>
+    <text x="60" y="168" font-family="'Cascadia Code', monospace" font-size="10" fill="#a6adc8">RegistrySession &#x2022; CorporateGuard</text>
+    <text x="60" y="184" font-family="'Cascadia Code', monospace" font-size="10" fill="#a6adc8">14 Services &#x2022; Plugins</text>
+    <rect x="60" y="196" width="270" height="22" rx="4" fill="#45475a"/>
+    <text x="195" y="212" text-anchor="middle" font-family="'Cascadia Code', monospace" font-weight="700" font-size="11" fill="#a6e3a1">146 Files &#x2022; 7 189 Tweaks &#x2022; 122 Categories</text>
+  </g>
+
+  <!-- GUI -->
+  <g filter="url(#shadow)">
+    <rect x="40" y="240" width="310" height="88" rx="10" fill="#313244" stroke="#a6e3a1" stroke-width="1.5"/>
+    <text x="60" y="268" font-family="'Segoe UI', Arial, sans-serif" font-size="18">&#x1F5A5;&#xFE0F;</text>
+    <text x="82" y="268" font-family="'Segoe UI', Arial, sans-serif" font-weight="700" font-size="15" fill="#a6e3a1">RegiLattice.GUI</text>
+    <text x="60" y="292" font-family="'Cascadia Code', monospace" font-size="10" fill="#a6adc8">WinForms &#x2022; 11 Themes</text>
+    <text x="60" y="308" font-family="'Cascadia Code', monospace" font-size="10" fill="#a6adc8">MainForm &#x2022; 9 Dialogs &#x2022; 5 Pkg Managers</text>
+  </g>
+
+  <!-- CLI -->
+  <g filter="url(#shadow)">
+    <rect x="40" y="342" width="310" height="82" rx="10" fill="#313244" stroke="#f9e2af" stroke-width="1.5"/>
+    <text x="60" y="370" font-family="'Segoe UI', Arial, sans-serif" font-size="18">&#x2328;&#xFE0F;</text>
+    <text x="82" y="370" font-family="'Segoe UI', Arial, sans-serif" font-weight="700" font-size="15" fill="#f9e2af">RegiLattice.CLI</text>
+    <text x="60" y="394" font-family="'Cascadia Code', monospace" font-size="10" fill="#a6adc8">25+ Commands &#x2022; CliArgs &#x2022; ConsoleColorizer</text>
+  </g>
+
+  <!-- ===== TESTS Column ===== -->
+  <text x="420" y="74" font-family="'Segoe UI', Arial, sans-serif" font-weight="600" font-size="12" fill="#585b70">&#x1F9EA; tests/ &#x2014; 3 052 xUnit tests</text>
+
+  <!-- Core.Tests -->
+  <g filter="url(#shadow)">
+    <rect x="400" y="86" width="280" height="70" rx="10" fill="#313244" stroke="#89b4fa" stroke-width="1.2"/>
+    <text x="420" y="114" font-family="'Segoe UI', Arial, sans-serif" font-weight="600" font-size="14" fill="#89b4fa">Core.Tests</text>
+    <text x="420" y="136" font-family="'Cascadia Code', monospace" font-size="11" fill="#a6adc8">2 317 tests &#x2022; 12 files</text>
+  </g>
+  <!-- CLI.Tests -->
+  <g filter="url(#shadow)">
+    <rect x="400" y="170" width="280" height="70" rx="10" fill="#313244" stroke="#a6e3a1" stroke-width="1.2"/>
+    <text x="420" y="198" font-family="'Segoe UI', Arial, sans-serif" font-weight="600" font-size="14" fill="#a6e3a1">CLI.Tests</text>
+    <text x="420" y="220" font-family="'Cascadia Code', monospace" font-size="11" fill="#a6adc8">379 tests &#x2022; 2 files</text>
+  </g>
+  <!-- GUI.Tests -->
+  <g filter="url(#shadow)">
+    <rect x="400" y="254" width="280" height="70" rx="10" fill="#313244" stroke="#f9e2af" stroke-width="1.2"/>
+    <text x="420" y="282" font-family="'Segoe UI', Arial, sans-serif" font-weight="600" font-size="14" fill="#f9e2af">GUI.Tests</text>
+    <text x="420" y="304" font-family="'Cascadia Code', monospace" font-size="11" fill="#a6adc8">339 tests &#x2022; 3 files</text>
+  </g>
+
+  <!-- Test arrows (dashed) -->
+  <line x1="398" y1="121" x2="352" y2="156" stroke="#89b4fa" stroke-width="1.2" stroke-dasharray="5 3" opacity="0.5"/>
+  <line x1="398" y1="205" x2="352" y2="383" stroke="#a6e3a1" stroke-width="1.2" stroke-dasharray="5 3" opacity="0.5"/>
+  <line x1="398" y1="289" x2="352" y2="284" stroke="#f9e2af" stroke-width="1.2" stroke-dasharray="5 3" opacity="0.5"/>
+  <text x="370" y="174" font-family="'Cascadia Code', monospace" font-size="8" fill="#585b70" transform="rotate(-40 370 174)">tests</text>
+
+  <!-- ===== INFRA Column ===== -->
+  <text x="750" y="74" font-family="'Segoe UI', Arial, sans-serif" font-weight="600" font-size="12" fill="#585b70">&#x1F527; Infrastructure &amp; Docs</text>
+
+  <g filter="url(#shadow)">
+    <rect x="730" y="86" width="330" height="50" rx="10" fill="#313244" stroke="#f38ba8" stroke-width="1.2"/>
+    <text x="750" y="116" font-family="'Segoe UI', Arial, sans-serif" font-size="16">&#x1F4E6;</text>
+    <text x="774" y="116" font-family="'Segoe UI', Arial, sans-serif" font-weight="600" font-size="13" fill="#f38ba8">installer/ &#x2014; WiX &#x2022; MSI &#x2022; MSIX</text>
+  </g>
+  <g filter="url(#shadow)">
+    <rect x="730" y="150" width="330" height="50" rx="10" fill="#313244" stroke="#94e2d5" stroke-width="1.2"/>
+    <text x="750" y="180" font-family="'Segoe UI', Arial, sans-serif" font-size="16">&#x1F4C4;</text>
+    <text x="774" y="180" font-family="'Segoe UI', Arial, sans-serif" font-weight="600" font-size="13" fill="#94e2d5">docs/ &#x2014; Api &#x2022; Architecture &#x2022; Changelog</text>
+  </g>
+  <g filter="url(#shadow)">
+    <rect x="730" y="214" width="330" height="50" rx="10" fill="#313244" stroke="#b4befe" stroke-width="1.2"/>
+    <text x="750" y="244" font-family="'Segoe UI', Arial, sans-serif" font-size="16">&#x2699;&#xFE0F;</text>
+    <text x="774" y="244" font-family="'Segoe UI', Arial, sans-serif" font-weight="600" font-size="13" fill="#b4befe">.github/ &#x2014; CI &#x2022; Release &#x2022; Skills</text>
+  </g>
+  <g filter="url(#shadow)">
+    <rect x="730" y="278" width="330" height="50" rx="10" fill="#313244" stroke="#fab387" stroke-width="1.2"/>
+    <text x="750" y="308" font-family="'Segoe UI', Arial, sans-serif" font-size="16">&#x1F4E6;</text>
+    <text x="774" y="308" font-family="'Segoe UI', Arial, sans-serif" font-weight="600" font-size="13" fill="#fab387">Package Registries &#x2014; Scoop &#x2022; WinGet &#x2022; Choco &#x2022; npm</text>
+  </g>
+
+  <!-- Ref arrows: GUI/CLI → Core -->
+  <line x1="195" y1="240" x2="195" y2="228" stroke="#a6e3a1" stroke-width="1.6" marker-end="url(#arrowBlue)" opacity="0.5"/>
+  <text x="207" y="238" font-family="'Cascadia Code', monospace" font-size="8" fill="#585b70">project ref</text>
+  <line x1="195" y1="342" x2="195" y2="330" stroke="#f9e2af" stroke-width="1.6" opacity="0.5"/>
+  <text x="207" y="340" font-family="'Cascadia Code', monospace" font-size="8" fill="#585b70">project ref</text>
+
+  <!-- Footer -->
+  <rect x="40" y="440" width="1020" height="28" rx="6" fill="#313244" stroke="#585b70" stroke-width="0.5"/>
+  <text x="550" y="460" text-anchor="middle" font-family="'Cascadia Code', monospace" font-size="11" fill="#cdd6f4">RegiLattice.sln &#x2022; C# 13 &#x2022; .NET 10.0-windows &#x2022; x64 &#x2022; Open Source (MIT)</text>
+</svg>
