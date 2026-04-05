@@ -10,7 +10,7 @@ internal static class Input
         {
             Id = "input-disable-touchpad-tap",
             Label = "Disable Touchpad Tap-to-Click (Perf)",
-            Category = "Input",
+            Category = "Peripherals",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -25,7 +25,7 @@ internal static class Input
         {
             Id = "input-filter-keys",
             Label = "Disable Filter Keys",
-            Category = "Input",
+            Category = "Peripherals",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Disables Filter Keys accessibility shortcut that can interfere with gaming.",
@@ -39,7 +39,7 @@ internal static class Input
         {
             Id = "input-mouse-scroll-lines",
             Label = "Set Mouse Scroll to 5 Lines",
-            Category = "Input",
+            Category = "Peripherals",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Sets mouse wheel scroll amount to 5 lines (default 3).",
@@ -53,7 +53,7 @@ internal static class Input
         {
             Id = "input-disable-spell-check",
             Label = "Disable Spell Checking",
-            Category = "Input",
+            Category = "Peripherals",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -68,7 +68,7 @@ internal static class Input
         {
             Id = "input-disable-text-suggestions",
             Label = "Disable Text Suggestions",
-            Category = "Input",
+            Category = "Peripherals",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -83,7 +83,7 @@ internal static class Input
         {
             Id = "input-set-cursor-blink-rate",
             Label = "Set Fast Cursor Blink Rate",
-            Category = "Input",
+            Category = "Peripherals",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -98,7 +98,7 @@ internal static class Input
         {
             Id = "input-increase-double-click-speed",
             Label = "Increase Double-Click Speed",
-            Category = "Input",
+            Category = "Peripherals",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -113,7 +113,7 @@ internal static class Input
         {
             Id = "input-disable-mouse-accel",
             Label = "Disable Mouse Acceleration",
-            Category = "Input",
+            Category = "Peripherals",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -137,23 +137,9 @@ internal static class Input
         // ── Sprint 19 additions ────────────────────────────────────────────
         new TweakDef
         {
-            Id = "input-disable-feedback-hub",
-            Label = "Disable Feedback Hub Prompts",
-            Category = "Input",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Stops Windows from periodically asking for feedback via the Feedback Hub app. Default: enabled.",
-            Tags = ["input", "feedback", "hub", "disable"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Siuf\Rules"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Siuf\Rules", "NumberOfSIUFInPeriod", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Siuf\Rules", "NumberOfSIUFInPeriod")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Siuf\Rules", "NumberOfSIUFInPeriod", 0)],
-        },
-        new TweakDef
-        {
             Id = "input-disable-pen-workspace",
             Label = "Disable Pen Workspace",
-            Category = "Input",
+            Category = "Peripherals",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables the Pen Workspace (Screen Sketch, Sticky Notes shortcut). Useful on non-pen devices. Default: enabled.",
@@ -176,7 +162,7 @@ internal static class Input
         {
             Id = "input-disable-handwriting-panel",
             Label = "Disable Handwriting Panel",
-            Category = "Input",
+            Category = "Peripherals",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Disables the handwriting input panel from appearing on touch/pen input. Default: enabled on pen devices.",
@@ -190,7 +176,7 @@ internal static class Input
         {
             Id = "input-set-mouse-hover-width",
             Label = "Increase Mouse Hover Detection Area",
-            Category = "Input",
+            Category = "Peripherals",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Widens the mouse hover detection rectangle from 4 to 10 pixels. Reduces accidental tooltip triggering. Default: 4.",
@@ -204,7 +190,7 @@ internal static class Input
         {
             Id = "input-disable-writing-insights",
             Label = "Disable Writing Insights",
-            Category = "Input",
+            Category = "Peripherals",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Disables Windows Writing Insights that analyse text input for suggestions. Improves privacy. Default: enabled.",
@@ -218,7 +204,7 @@ internal static class Input
         {
             Id = "input-disable-mouse-sonar",
             Label = "Disable Mouse Sonar (Show Pointer on Ctrl Press)",
-            Category = "Input",
+            Category = "Peripherals",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -233,7 +219,7 @@ internal static class Input
         {
             Id = "input-disable-mouse-vanish",
             Label = "Disable Mouse Vanish (Hide Pointer While Typing)",
-            Category = "Input",
+            Category = "Peripherals",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -248,7 +234,7 @@ internal static class Input
         {
             Id = "input-set-caret-width-2",
             Label = "Set Text Cursor (Caret) Width to 2 px",
-            Category = "Input",
+            Category = "Peripherals",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -263,7 +249,7 @@ internal static class Input
         {
             Id = "input-disable-lang-switch-hotkey",
             Label = "Disable Keyboard Language Switch Hotkey (Alt+Shift)",
-            Category = "Input",
+            Category = "Peripherals",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -278,7 +264,7 @@ internal static class Input
         {
             Id = "input-disable-touchpad-two-finger-tap",
             Label = "Disable Precision Touchpad Two-Finger Tap (Right-Click)",
-            Category = "Input",
+            Category = "Peripherals",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -296,7 +282,7 @@ internal static class Input
         {
             Id = "input-disable-touchpad-edge-swipe",
             Label = "Disable Precision Touchpad Edge Swipe Gestures",
-            Category = "Input",
+            Category = "Peripherals",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -311,7 +297,7 @@ internal static class Input
         {
             Id = "input-disable-touchpad-three-finger-tap",
             Label = "Disable Precision Touchpad Three-Finger Tap",
-            Category = "Input",
+            Category = "Peripherals",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -332,7 +318,7 @@ internal static class Input
         {
             Id = "input-disable-touchpad-four-finger-tap",
             Label = "Disable Precision Touchpad Four-Finger Tap",
-            Category = "Input",
+            Category = "Peripherals",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -350,7 +336,7 @@ internal static class Input
         {
             Id = "input-disable-touchpad-right-zone",
             Label = "Disable Precision Touchpad Right-Click Corner Zone",
-            Category = "Input",
+            Category = "Peripherals",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -371,7 +357,7 @@ internal static class Input
         {
             Id = "input-disable-touchpad-swipe-nav",
             Label = "Disable Precision Touchpad Swipe Navigation (Back/Forward)",
-            Category = "Input",
+            Category = "Peripherals",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -395,7 +381,7 @@ internal static class Input
         {
             Id = "input-disable-touchpad-pinch-zoom",
             Label = "Disable Precision Touchpad Pinch-to-Zoom",
-            Category = "Input",
+            Category = "Peripherals",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -417,36 +403,9 @@ internal static class TouchPen
     [
         new TweakDef
         {
-            Id = "touch-disable-pen-button",
-            Label = "Hide Pen Workspace Taskbar Button",
-            Category = "Input",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Hides the Windows Ink Workspace button from the taskbar. Pen still works; only the shortcut button is hidden.",
-            Tags = ["touch", "pen", "taskbar", "button"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PenWorkspace"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PenWorkspace", "PenWorkspaceButtonDesiredVisibility", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PenWorkspace", "PenWorkspaceButtonDesiredVisibility", 1),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(
-                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PenWorkspace",
-                    "PenWorkspaceButtonDesiredVisibility",
-                    0
-                ),
-            ],
-        },
-        new TweakDef
-        {
             Id = "touch-pen-screenshot",
             Label = "Pen Double-Click: Screen Sketch",
-            Category = "Input",
+            Category = "Peripherals",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Maps pen button double-click to Screen Sketch (screenshot annotation). Default: Nothing.",
@@ -460,7 +419,7 @@ internal static class TouchPen
         {
             Id = "touch-pen-longpress",
             Label = "Pen Long-Press: Ink Workspace",
-            Category = "Input",
+            Category = "Peripherals",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Maps pen button long-press to open the Ink Workspace. Default: Nothing.",
@@ -472,38 +431,9 @@ internal static class TouchPen
         },
         new TweakDef
         {
-            Id = "touch-disable-tablet-auto",
-            Label = "Disable Tablet Mode Auto-Switch",
-            Category = "Input",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Prevents Windows from switching to tablet mode when a keyboard is detached or folded.",
-            Tags = ["touch", "tablet", "mode", "convertible"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ImmersiveShell"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ImmersiveShell", "SignInMode", 1),
-                RegOp.SetDword(
-                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ImmersiveShell",
-                    "ConvertibleSlateModePromptPreference",
-                    0
-                ),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ImmersiveShell", "SignInMode"),
-                RegOp.DeleteValue(
-                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ImmersiveShell",
-                    "ConvertibleSlateModePromptPreference"
-                ),
-            ],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ImmersiveShell", "SignInMode", 1)],
-        },
-        new TweakDef
-        {
             Id = "touch-disable-edge-swipe",
             Label = "Disable Edge Swipe Gesture (Policy)",
-            Category = "Input",
+            Category = "Peripherals",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables the screen-edge swipe gesture that opens Action Centre / notification pane. Prevents accidental triggers.",
@@ -517,7 +447,7 @@ internal static class TouchPen
         {
             Id = "touch-disable-flicks",
             Label = "Disable Pen Flick Gestures",
-            Category = "Input",
+            Category = "Peripherals",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Disables pen flick gestures (quick strokes for scroll, back, forward). Prevents accidental navigation.",
@@ -529,23 +459,9 @@ internal static class TouchPen
         },
         new TweakDef
         {
-            Id = "touch-disable-pinch-zoom",
-            Label = "Disable Touchpad Pinch-to-Zoom",
-            Category = "Input",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Disables the two-finger pinch-to-zoom gesture on precision touchpads. Prevents accidental zoom changes. Default: Enabled.",
-            Tags = ["touch", "touchpad", "pinch", "zoom", "gesture"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad", "ZoomEnabled", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad", "ZoomEnabled", 1)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad", "ZoomEnabled", 0)],
-        },
-        new TweakDef
-        {
             Id = "touch-reverse-scroll",
             Label = "Enable Reverse (Natural) Scrolling",
-            Category = "Input",
+            Category = "Peripherals",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -560,7 +476,7 @@ internal static class TouchPen
         {
             Id = "touch-sensitivity-high",
             Label = "Set Touchpad Sensitivity to High",
-            Category = "Input",
+            Category = "Peripherals",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -575,7 +491,7 @@ internal static class TouchPen
         {
             Id = "touch-disable-palm-rejection",
             Label = "Disable Touchpad Palm Rejection",
-            Category = "Input",
+            Category = "Peripherals",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -590,7 +506,7 @@ internal static class TouchPen
         {
             Id = "touch-disable-touch-feedback",
             Label = "Disable Touch Visual Feedback",
-            Category = "Input",
+            Category = "Peripherals",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Disables the visual ripple effect when touching the screen. Default: enabled.",
@@ -604,7 +520,7 @@ internal static class TouchPen
         {
             Id = "touch-disable-gesture-feedback",
             Label = "Disable Touch Gesture Visual Feedback",
-            Category = "Input",
+            Category = "Peripherals",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Disables the visual feedback for multi-finger gestures (pinch, swipe). Default: enabled.",
@@ -618,7 +534,7 @@ internal static class TouchPen
         {
             Id = "touch-disable-touch-screen",
             Label = "Disable Touch Screen Input (HID)",
-            Category = "Input",
+            Category = "Peripherals",
             NeedsAdmin = true,
             CorpSafe = false,
             Description = "Disables the HID-compliant touch screen. Touch will not work until re-enabled. Default: enabled.",
@@ -632,7 +548,7 @@ internal static class TouchPen
         {
             Id = "touch-disable-pen-handwriting-panel",
             Label = "Disable Pen Handwriting Panel Auto-Invoke",
-            Category = "Input",
+            Category = "Peripherals",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Prevents the handwriting panel from auto-appearing when using a pen in text fields. Default: auto.",
@@ -646,7 +562,7 @@ internal static class TouchPen
         {
             Id = "touch-disable-flicks-policy",
             Label = "Disable Pen Flicks via Group Policy",
-            Category = "Input",
+            Category = "Peripherals",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables pen flicks (gesture shortcuts) system-wide via Group Policy. Default: pen flicks enabled.",
@@ -660,7 +576,7 @@ internal static class TouchPen
         {
             Id = "touch-disable-ink-workspace-app-suggestions",
             Label = "Disable Ink Workspace App Suggestions",
-            Category = "Input",
+            Category = "Peripherals",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Disables suggested app recommendations inside the Windows Ink Workspace. Default: enabled.",
@@ -683,7 +599,7 @@ internal static class TouchPen
         {
             Id = "touch-disable-touch-keyboard-suggestions",
             Label = "Disable Touch Keyboard Autocomplete Suggestions",
-            Category = "Input",
+            Category = "Peripherals",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -698,7 +614,7 @@ internal static class TouchPen
         {
             Id = "touch-set-double-tap-speed",
             Label = "Reduce Pen Double-Tap Detection Speed",
-            Category = "Input",
+            Category = "Peripherals",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Reduces the time window for pen double-tap detection. Makes double-tap feel snappier. Default: 500ms window.",
@@ -712,7 +628,7 @@ internal static class TouchPen
         {
             Id = "touch-disable-tablet-pc-input-service",
             Label = "Disable Tablet PC Input Service",
-            Category = "Input",
+            Category = "Peripherals",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -727,7 +643,7 @@ internal static class TouchPen
         {
             Id = "touch-disable-pen-flick-sound",
             Label = "Disable Pen Flick Sound",
-            Category = "Input",
+            Category = "Peripherals",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Disables the sound effect played when performing pen flick gestures. Default: sound enabled.",
@@ -741,7 +657,7 @@ internal static class TouchPen
         {
             Id = "touch-disable-touch-prediction",
             Label = "Disable Touch Input Prediction",
-            Category = "Input",
+            Category = "Peripherals",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Disables predictive touch movement smoothing. Reduces latency for precise stylus work. Default: prediction enabled.",
@@ -764,7 +680,7 @@ internal static class TouchPen
         {
             Id = "touch-disable-autocorrect",
             Label = "Disable Touch Keyboard Auto-Correct",
-            Category = "Input",
+            Category = "Peripherals",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -777,27 +693,9 @@ internal static class TouchPen
         },
         new TweakDef
         {
-            Id = "touch-restrict-handwriting-personalization",
-            Label = "Restrict Handwriting Personalization via Policy",
-            Category = "Input",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description =
-                "Prevents Windows from learning your handwriting style. Disables handwriting personalization data collection. Default: personalization enabled.",
-            Tags = ["touch", "pen", "handwriting", "privacy", "policy"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\TabletPC"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\TabletPC", "PreventHandwritingPersonalization", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\TabletPC", "PreventHandwritingPersonalization")],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\TabletPC", "PreventHandwritingPersonalization", 1),
-            ],
-        },
-        new TweakDef
-        {
             Id = "touch-disable-tablet-mode-auto-switch",
             Label = "Disable Automatic Tablet Mode Switching",
-            Category = "Input",
+            Category = "Peripherals",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -812,7 +710,7 @@ internal static class TouchPen
         {
             Id = "touch-disable-auto-keyboard-invoke",
             Label = "Disable Automatic Touch Keyboard Pop-Up",
-            Category = "Input",
+            Category = "Peripherals",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -825,24 +723,9 @@ internal static class TouchPen
         },
         new TweakDef
         {
-            Id = "touch-disable-input-personalization",
-            Label = "Disable Text Input Personalisation Data Collection",
-            Category = "Input",
-            NeedsAdmin = false,
-            CorpSafe = false,
-            Description =
-                "Stops Windows from collecting text input samples to improve touch/keyboard recognition. Removes implicit text data upload. Default: collection enabled.",
-            Tags = ["touch", "keyboard", "privacy", "personalization"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\InputPersonalization"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\InputPersonalization", "RestrictImplicitTextCollection", 1)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\InputPersonalization", "RestrictImplicitTextCollection", 0)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\InputPersonalization", "RestrictImplicitTextCollection", 1)],
-        },
-        new TweakDef
-        {
             Id = "touch-disable-edge-gesture",
             Label = "Disable Touch Edge Gesture Swipe",
-            Category = "Input",
+            Category = "Peripherals",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -876,60 +759,9 @@ internal static class WindowsInk
     [
         new TweakDef
         {
-            Id = "ink-disable-workspace",
-            Label = "Disable Windows Ink Workspace",
-            Category = "Input",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            ImpactScore = 2,
-            SafetyRating = 5,
-            Tags = ["ink", "workspace", "pen", "stylus", "disable"],
-            Description =
-                "Disables the Windows Ink Workspace button in the system tray and the "
-                + "entire Ink Workspace feature. AllowWindowsInkWorkspace=0. "
-                + "Useful on non-pen devices where it just adds clutter.",
-            ApplyOps = [RegOp.SetDword(InkWorkspace, "AllowWindowsInkWorkspace", 0)],
-            RemoveOps = [RegOp.DeleteValue(InkWorkspace, "AllowWindowsInkWorkspace")],
-            DetectOps = [RegOp.CheckDword(InkWorkspace, "AllowWindowsInkWorkspace", 0)],
-        },
-        new TweakDef
-        {
-            Id = "ink-disable-workspace-above-lock",
-            Label = "Disable Windows Ink Workspace Access Above Lock Screen",
-            Category = "Input",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            ImpactScore = 3,
-            SafetyRating = 5,
-            Tags = ["ink", "workspace", "lock screen", "security"],
-            Description =
-                "Prevents the Windows Ink Workspace from being opened from the lock screen "
-                + "(AllowWindowsInkWorkspace=1, accessible above lock=no). "
-                + "Enforces that ink features require a signed-in session.",
-            ApplyOps = [RegOp.SetDword(InkWorkspace, "AllowWindowsInkWorkspace", 1)],
-            RemoveOps = [RegOp.DeleteValue(InkWorkspace, "AllowWindowsInkWorkspace")],
-            DetectOps = [RegOp.CheckDword(InkWorkspace, "AllowWindowsInkWorkspace", 1)],
-        },
-        new TweakDef
-        {
-            Id = "ink-disable-pen-workspace-button",
-            Label = "Disable Pen and Ink Workspace Taskbar Button",
-            Category = "Input",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            ImpactScore = 1,
-            SafetyRating = 5,
-            Tags = ["ink", "taskbar", "pen button", "ui"],
-            Description = "Hides the Pen Workspace button from the Windows taskbar notification area. " + "PenWorkspaceButtonDesiredVisibility=0.",
-            ApplyOps = [RegOp.SetDword(InkUser, "PenWorkspaceButtonDesiredVisibility", 0)],
-            RemoveOps = [RegOp.SetDword(InkUser, "PenWorkspaceButtonDesiredVisibility", 1)],
-            DetectOps = [RegOp.CheckDword(InkUser, "PenWorkspaceButtonDesiredVisibility", 0)],
-        },
-        new TweakDef
-        {
             Id = "ink-disable-handwriting-panel",
             Label = "Disable Touch Keyboard / Handwriting Panel Auto-Show",
-            Category = "Input",
+            Category = "Peripherals",
             NeedsAdmin = true,
             CorpSafe = true,
             ImpactScore = 2,
@@ -945,27 +777,9 @@ internal static class WindowsInk
         },
         new TweakDef
         {
-            Id = "ink-disable-ink-personalization",
-            Label = "Disable Ink Personalization Data Collection",
-            Category = "Input",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            ImpactScore = 2,
-            SafetyRating = 5,
-            Tags = ["ink", "personalization", "privacy", "telemetry"],
-            Description =
-                "Prevents Windows from collecting handwriting and ink input samples "
-                + "for improving the recognition engine. "
-                + "RestrictImplicitInkCollection=1.",
-            ApplyOps = [RegOp.SetDword(SuggestionPolicy, "RestrictImplicitInkCollection", 1)],
-            RemoveOps = [RegOp.DeleteValue(SuggestionPolicy, "RestrictImplicitInkCollection")],
-            DetectOps = [RegOp.CheckDword(SuggestionPolicy, "RestrictImplicitInkCollection", 1)],
-        },
-        new TweakDef
-        {
             Id = "ink-disable-text-prediction",
             Label = "Disable Ink Text Prediction and Recommendations",
-            Category = "Input",
+            Category = "Peripherals",
             NeedsAdmin = false,
             CorpSafe = true,
             ImpactScore = 1,
@@ -983,7 +797,7 @@ internal static class WindowsInk
         {
             Id = "ink-disable-flicks",
             Label = "Disable Pen Flicks (Swipe Gestures)",
-            Category = "Input",
+            Category = "Peripherals",
             NeedsAdmin = false,
             CorpSafe = true,
             ImpactScore = 1,
@@ -1001,7 +815,7 @@ internal static class WindowsInk
         {
             Id = "ink-disable-press-and-hold",
             Label = "Disable Pen Press-and-Hold for Right-Click",
-            Category = "Input",
+            Category = "Peripherals",
             NeedsAdmin = false,
             CorpSafe = true,
             ImpactScore = 1,
@@ -1017,26 +831,9 @@ internal static class WindowsInk
         },
         new TweakDef
         {
-            Id = "ink-disable-typing-data-collection",
-            Label = "Disable Typing and Text Input Data Collection",
-            Category = "Input",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            ImpactScore = 2,
-            SafetyRating = 5,
-            Tags = ["ink", "typing data", "privacy", "text input", "collection"],
-            Description =
-                "Prevents Windows from collecting typing and text input data to improve "
-                + "personalised features. RestrictImplicitTextCollection=1 via policy.",
-            ApplyOps = [RegOp.SetDword(SuggestionPolicy, "RestrictImplicitTextCollection", 1)],
-            RemoveOps = [RegOp.DeleteValue(SuggestionPolicy, "RestrictImplicitTextCollection")],
-            DetectOps = [RegOp.CheckDword(SuggestionPolicy, "RestrictImplicitTextCollection", 1)],
-        },
-        new TweakDef
-        {
             Id = "ink-disable-learn-from-this-device",
             Label = "Disable 'Learn from This Device' for Input Personalization",
-            Category = "Input",
+            Category = "Peripherals",
             NeedsAdmin = false,
             CorpSafe = false,
             ImpactScore = 2,
@@ -1052,23 +849,9 @@ internal static class WindowsInk
         },
         new TweakDef
         {
-            Id = "ink-disable-touch-visual-feedback",
-            Label = "Disable Touch Visual Feedback",
-            Category = "Input",
-            Description =
-                "Removes the contact-point circle animations shown when touching the screen. "
-                + "Reduces visual noise and slightly improves rendering performance on touch-enabled displays.",
-            Tags = ["touch", "pen", "visual", "performance"],
-            NeedsAdmin = false,
-            ApplyOps = [RegOp.SetDword(CursorFeedback, "ContactVisualization", 0)],
-            RemoveOps = [RegOp.SetDword(CursorFeedback, "ContactVisualization", 1)],
-            DetectOps = [RegOp.CheckDword(CursorFeedback, "ContactVisualization", 0)],
-        },
-        new TweakDef
-        {
             Id = "ink-disable-pen-visual-feedback",
             Label = "Disable Pen Visual Feedback",
-            Category = "Input",
+            Category = "Peripherals",
             Description =
                 "Removes the cursor/halo effects shown when using a stylus. "
                 + "Useful on high-DPI tablets where the glow overlay obscures fine linework.",
@@ -1080,23 +863,9 @@ internal static class WindowsInk
         },
         new TweakDef
         {
-            Id = "ink-disable-pen-workspace-startup",
-            Label = "Hide Pen Workspace Button on Startup",
-            Category = "Input",
-            Description =
-                "Prevents the Pen Workspace button from appearing in the taskbar notification area. "
-                + "Equivalent to unchecking 'Show the pen workspace button' in Pen & Windows Ink settings.",
-            Tags = ["pen", "workspace", "taskbar", "tablet"],
-            NeedsAdmin = false,
-            ApplyOps = [RegOp.SetDword(InkUser, "PenWorkspaceButtonDesiredVisibility", 0)],
-            RemoveOps = [RegOp.SetDword(InkUser, "PenWorkspaceButtonDesiredVisibility", 1)],
-            DetectOps = [RegOp.CheckDword(InkUser, "PenWorkspaceButtonDesiredVisibility", 0)],
-        },
-        new TweakDef
-        {
             Id = "ink-disable-pen-workspace-app-launch",
             Label = "Block App Launches from Pen Workspace",
-            Category = "Input",
+            Category = "Peripherals",
             Description =
                 "Disables the ability to launch apps from the Pen Workspace panel. "
                 + "Reduces attack surface on shared devices where pen-launched apps should be restricted.",
@@ -1111,7 +880,7 @@ internal static class WindowsInk
         {
             Id = "ink-disable-pen-right-click-hold",
             Label = "Disable Pen Press-and-Hold for Right-Click",
-            Category = "Input",
+            Category = "Peripherals",
             Description =
                 "Disables the 'press and hold' pen gesture that simulates a right-click. "
                 + "Prevents accidental context menus when resting the pen on the screen.",
@@ -1125,7 +894,7 @@ internal static class WindowsInk
         {
             Id = "ink-disable-tablet-ink-policy",
             Label = "Disable Ink Programs via Group Policy",
-            Category = "Input",
+            Category = "Peripherals",
             Description =
                 "Applies the TabletPC policy to disable InkBall and other built-in ink-based games/apps. "
                 + "Recommended for corporate tablets to prevent access to entertainment apps.",
@@ -1138,37 +907,9 @@ internal static class WindowsInk
         },
         new TweakDef
         {
-            Id = "ink-disable-handwriting-error-reports",
-            Label = "Disable Handwriting Error Reporting",
-            Category = "Input",
-            Description =
-                "Blocks implicit collection of ink samples (strokes) used to improve handwriting recognition. "
-                + "Prevents ink input data from being sent to Microsoft for model training.",
-            Tags = ["pen", "handwriting", "privacy", "telemetry"],
-            NeedsAdmin = true,
-            ApplyOps = [RegOp.SetDword(SuggestionPolicy, "RestrictImplicitInkCollection", 1)],
-            RemoveOps = [RegOp.DeleteValue(SuggestionPolicy, "RestrictImplicitInkCollection")],
-            DetectOps = [RegOp.CheckDword(SuggestionPolicy, "RestrictImplicitInkCollection", 1)],
-        },
-        new TweakDef
-        {
-            Id = "ink-disable-handwriting-text-collection",
-            Label = "Disable Handwriting Text Data Collection",
-            Category = "Input",
-            Description =
-                "Blocks implicit collection of handwritten text samples used to improve recognition accuracy. "
-                + "Complements 'ink-disable-handwriting-error-reports' for full input-data privacy.",
-            Tags = ["pen", "handwriting", "privacy", "text"],
-            NeedsAdmin = true,
-            ApplyOps = [RegOp.SetDword(SuggestionPolicy, "RestrictImplicitTextCollection", 1)],
-            RemoveOps = [RegOp.DeleteValue(SuggestionPolicy, "RestrictImplicitTextCollection")],
-            DetectOps = [RegOp.CheckDword(SuggestionPolicy, "RestrictImplicitTextCollection", 1)],
-        },
-        new TweakDef
-        {
             Id = "ink-set-pen-double-tap-speed",
             Label = "Set Pen Double-Tap Speed to 400 ms",
-            Category = "Input",
+            Category = "Peripherals",
             Description =
                 "Increases the pen double-tap recognition window to 400 ms (default 200 ms). "
                 + "Helps users with motor impairment or those using thick-nib styluses to register double-taps reliably.",
@@ -1182,7 +923,7 @@ internal static class WindowsInk
         {
             Id = "ink-disable-pen-customization-page",
             Label = "Disable Pen Customization Settings Page",
-            Category = "Input",
+            Category = "Peripherals",
             Description =
                 "Hides the Pen Customization settings page from the Settings app via Group Policy. "
                 + "Prevents users from rebinding pen buttons on managed/shared devices.",

@@ -60,24 +60,6 @@ internal static class PolicySecurityHardening
         [
             new TweakDef
             {
-                Id = "acctlkout-disable-locked-account-message",
-                Label = "Account Lockout Policy: Do Not Display Locked Account Message",
-                Category = "Security",
-                Description =
-                    "Suppresses the message informing a user that their account is locked out. Showing a lockout message leaks information to an attacker performing a password-spray attack — confirming correct usernames. Hiding the message converts an unlocking error into a generic access denied.",
-                Tags = ["logon", "lockout", "message", "privacy", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                RegistryKeys = [LsaKey],
-                ApplyOps = [RegOp.SetDword(LsaKey, "DontDisplayLockedUserId", 3)],
-                RemoveOps = [RegOp.DeleteValue(LsaKey, "DontDisplayLockedUserId")],
-                DetectOps = [RegOp.CheckDword(LsaKey, "DontDisplayLockedUserId", 3)],
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Hides lockout confirmation from attackers doing password-spray attacks.",
-            },
-            new TweakDef
-            {
                 Id = "acctlkout-disable-automatic-admin-logon",
                 Label = "Account Lockout Policy: Disable Automatic Administrator Logon",
                 Category = "Security",
@@ -150,24 +132,6 @@ internal static class PolicySecurityHardening
             },
             new TweakDef
             {
-                Id = "acctlkout-disable-network-unlock-message",
-                Label = "Account Lockout Policy: Hide Network Logon Username",
-                Category = "Security",
-                Description =
-                    "Prevents Windows from pre-populating the username field on network authentication dialogs with the currently signed-in user account name. Pre-populated usernames expose account credentials to shoulder-surfing and reduce the security of multi-user environments.",
-                Tags = ["logon", "network", "username", "privacy", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                RegistryKeys = [LsaKey],
-                ApplyOps = [RegOp.SetDword(LsaKey, "DontDisplayNetworkSelectionUI", 1)],
-                RemoveOps = [RegOp.DeleteValue(LsaKey, "DontDisplayNetworkSelectionUI")],
-                DetectOps = [RegOp.CheckDword(LsaKey, "DontDisplayNetworkSelectionUI", 1)],
-                ImpactScore = 2,
-                SafetyRating = 5,
-                ImpactNote = "Hides username in network auth dialogs; reduces shoulder-surfing risk.",
-            },
-            new TweakDef
-            {
                 Id = "acctlkout-enable-inactive-account-shutdown",
                 Label = "Account Lockout Policy: Require Password After Screen Saver Activation",
                 Category = "Security",
@@ -211,83 +175,6 @@ internal static class PolicySecurityHardening
         [
             new TweakDef
             {
-                Id = "acctprot-disable-wdigest-plaintext",
-                Label = "Disable WDigest Plaintext Password Storage in LSASS",
-                Category = "Security",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 5,
-                SafetyRating = 5,
-                ImpactNote = "Blocks Mimikatz-style credential harvesting from LSASS memory.",
-                Tags = ["wdigest", "lsass", "credentials", "password", "mimikatz", "security"],
-                Description =
-                    "Prevents Windows from storing plaintext passwords in LSASS memory via the "
-                    + "WDigest authentication provider. UseLogonCredential=0 is the critical "
-                    + "counter-measure against Mimikatz-style credential harvesting attacks. "
-                    + "Effective on Windows 8.1+.",
-                ApplyOps = [RegOp.SetDword(WDigestKey, "UseLogonCredential", 0)],
-                RemoveOps = [RegOp.DeleteValue(WDigestKey, "UseLogonCredential")],
-                DetectOps = [RegOp.CheckDword(WDigestKey, "UseLogonCredential", 0)],
-            },
-            new TweakDef
-            {
-                Id = "acctprot-enable-lsa-protected-mode",
-                Label = "Enable LSA Protected Process Light (PPL)",
-                Category = "Security",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 5,
-                SafetyRating = 4,
-                ImpactNote = "Prevents LSASS injection attacks; strongly recommended for all Windows 10/11 systems.",
-                Tags = ["lsa", "ppl", "protected process", "mimikatz", "credentials", "hardening"],
-                Description =
-                    "Enables LSASS.exe to run as a Protected Process Light (PPL). RunAsPPL=1 "
-                    + "prevents even admin-level processes from injecting into LSASS, blocking "
-                    + "Mimikatz and similar credential-dumping tools. Requires Secure Boot. "
-                    + "A reboot is required for this change to take effect.",
-                ApplyOps = [RegOp.SetDword(LsaKey, "RunAsPPL", 1)],
-                RemoveOps = [RegOp.DeleteValue(LsaKey, "RunAsPPL")],
-                DetectOps = [RegOp.CheckDword(LsaKey, "RunAsPPL", 1)],
-            },
-            new TweakDef
-            {
-                Id = "acctprot-limit-credential-cache",
-                Label = "Limit Cached Domain Credentials to 2 Entries",
-                Category = "Security",
-                NeedsAdmin = true,
-                CorpSafe = false,
-                ImpactScore = 3,
-                SafetyRating = 4,
-                Tags = ["credentials", "domain", "cached logon", "offline", "security"],
-                Description =
-                    "Limits the number of domain credentials cached locally to 2. "
-                    + "CachedLogonsCount=2 (default is 10). Fewer cached credentials = fewer "
-                    + "targets for offline hash-cracking attacks on stolen devices. "
-                    + "WARNING: if the domain is unreachable, cached accounts beyond 2 cannot log in.",
-                ApplyOps = [RegOp.SetString(WinlogonKey, "CachedLogonsCount", "2")],
-                RemoveOps = [RegOp.DeleteValue(WinlogonKey, "CachedLogonsCount")],
-                DetectOps = [RegOp.CheckString(WinlogonKey, "CachedLogonsCount", "2")],
-            },
-            new TweakDef
-            {
-                Id = "acctprot-disable-domain-creds-storage",
-                Label = "Prevent Domain Credentials from Being Stored in Credential Manager",
-                Category = "Security",
-                NeedsAdmin = true,
-                CorpSafe = false,
-                ImpactScore = 3,
-                SafetyRating = 4,
-                Tags = ["credentials", "credential manager", "domain", "dipaka", "security"],
-                Description =
-                    "Prevents Windows from storing network/domain credentials in Credential Manager "
-                    + "(Control Panel). DisableDomainCreds=1. Reduces the risk of attackers "
-                    + "extracting saved domain credentials from the Credential Manager store.",
-                ApplyOps = [RegOp.SetDword(LsaKey, "DisableDomainCreds", 1)],
-                RemoveOps = [RegOp.DeleteValue(LsaKey, "DisableDomainCreds")],
-                DetectOps = [RegOp.CheckDword(LsaKey, "DisableDomainCreds", 1)],
-            },
-            new TweakDef
-            {
                 Id = "acctprot-display-last-logon-info",
                 Label = "Show Last Logon Info at Login (Compliance Visibility)",
                 Category = "Security",
@@ -304,42 +191,6 @@ internal static class PolicySecurityHardening
                 RemoveOps = [RegOp.DeleteValue(SystemPolicy, "DisplayLastLogonInfo")],
                 DetectOps = [RegOp.CheckDword(SystemPolicy, "DisplayLastLogonInfo", 1)],
             },
-            new TweakDef
-            {
-                Id = "acctprot-block-remote-uac-bypass",
-                Label = "Block Remote Admin UAC Token Filter Bypass",
-                Category = "Security",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                Tags = ["uac", "remote", "token filter", "admin", "lateral movement"],
-                Description =
-                    "Ensures that remote administrator accounts are filtered to standard user tokens "
-                    + "over the network (LocalAccountTokenFilterPolicy=0). Prevents pass-the-hash "
-                    + "lateral movement using local admin credentials over remote shares/WMI/WinRM.",
-                ApplyOps = [RegOp.SetDword(LsaKey, "LocalAccountTokenFilterPolicy", 0)],
-                RemoveOps = [RegOp.DeleteValue(LsaKey, "LocalAccountTokenFilterPolicy")],
-                DetectOps = [RegOp.CheckDword(LsaKey, "LocalAccountTokenFilterPolicy", 0)],
-            },
-            new TweakDef
-            {
-                Id = "acctprot-audit-lsa-anonymous",
-                Label = "Enable LSA Audit for Anonymous Access Attempts",
-                Category = "Security",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                Tags = ["lsa", "audit", "anonymous", "logging", "security"],
-                Description =
-                    "Enables audit logging for anonymous access attempts to the Local Security "
-                    + "Authority. auditbaseobjects=1 + auditbasedirectories=1 ensures all "
-                    + "sensitive LSA object accesses are captured in the Security event log.",
-                ApplyOps = [RegOp.SetDword(LsaKey, "auditbaseobjects", 1), RegOp.SetDword(LsaKey, "auditbasedirectories", 1)],
-                RemoveOps = [RegOp.DeleteValue(LsaKey, "auditbaseobjects"), RegOp.DeleteValue(LsaKey, "auditbasedirectories")],
-                DetectOps = [RegOp.CheckDword(LsaKey, "auditbaseobjects", 1)],
-            },
         ];
     }
 
@@ -352,42 +203,6 @@ internal static class PolicySecurityHardening
 
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
-            new TweakDef
-            {
-                Id = "biadmin-disable-guest-account-elevate",
-                Label = "Built-in Admin Policy: Disable Guest Account Network Access",
-                Category = "Security",
-                Description =
-                    "Restricts the local Guest account from being used for network resource access. The Guest account has no password by default and, if network access is not blocked, can be used to access shares and remote services anonymously. This setting forces Guest logon attempts to fail at the network level.",
-                Tags = ["guest", "network", "access", "builtin", "admin", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                RegistryKeys = [LsaKey],
-                ApplyOps = [RegOp.SetDword(LsaKey, "RestrictAnonymous", 1)],
-                RemoveOps = [RegOp.DeleteValue(LsaKey, "RestrictAnonymous")],
-                DetectOps = [RegOp.CheckDword(LsaKey, "RestrictAnonymous", 1)],
-                ImpactScore = 4,
-                SafetyRating = 4,
-                ImpactNote = "Blocks anonymous/Guest network access; SMB share enumeration will fail for unauthenticated users.",
-            },
-            new TweakDef
-            {
-                Id = "biadmin-disable-anonymous-sam-enumeration",
-                Label = "Built-in Admin Policy: Prevent Anonymous SAM Account Enumeration",
-                Category = "Security",
-                Description =
-                    "Prevents anonymous users from enumerating SAM account names and shares. Without this restriction, attackers on the local network can list all local user accounts and share names via null-session connections — a classic pre-XP recon technique still exploitable in default configurations.",
-                Tags = ["sam", "anonymous", "enumeration", "builtin", "admin", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                RegistryKeys = [LsaKey],
-                ApplyOps = [RegOp.SetDword(LsaKey, "RestrictAnonymousSAM", 1)],
-                RemoveOps = [RegOp.DeleteValue(LsaKey, "RestrictAnonymousSAM")],
-                DetectOps = [RegOp.CheckDword(LsaKey, "RestrictAnonymousSAM", 1)],
-                ImpactScore = 4,
-                SafetyRating = 5,
-                ImpactNote = "Prevents null-session SAM enumeration; attackers cannot list local accounts anonymously.",
-            },
             new TweakDef
             {
                 Id = "biadmin-enable-admin-approval-mode",
@@ -414,24 +229,6 @@ internal static class PolicySecurityHardening
                 ImpactScore = 4,
                 SafetyRating = 4,
                 ImpactNote = "Forces built-in Administrator through UAC elevation prompts like any other admin account.",
-            },
-            new TweakDef
-            {
-                Id = "biadmin-disable-local-system-blank-password",
-                Label = "Built-in Admin Policy: Restrict System Logon to Local Accounts with Blank Passwords",
-                Category = "Security",
-                Description =
-                    "Prevents local accounts that have blank passwords from being used for interactive or remote logon via services, scheduled tasks, or batch jobs. This closes a privilege escalation vector where an unattended service running as a blank-password local admin could be exploited.",
-                Tags = ["blank password", "local account", "system service", "builtin", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                RegistryKeys = [LsaKey],
-                ApplyOps = [RegOp.SetDword(LsaKey, "LimitBlankPasswordUse", 1)],
-                RemoveOps = [RegOp.DeleteValue(LsaKey, "LimitBlankPasswordUse")],
-                DetectOps = [RegOp.CheckDword(LsaKey, "LimitBlankPasswordUse", 1)],
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Prevents blank-password local accounts from being used in service or scheduled task contexts.",
             },
             new TweakDef
             {
@@ -536,24 +333,6 @@ internal static class PolicySecurityHardening
         [
             new TweakDef
             {
-                Id = "camprivacy-block-all-apps-camera",
-                Label = "Camera Privacy Policy: Block All Store Apps from Accessing Camera",
-                Category = "Security",
-                Description =
-                    "Denies all Windows Store (UWP) application access to the camera device at the Group Policy level. Individual per-app camera permissions are irrelevant when this policy is set to Force Deny — no UWP app can activate the camera sensor regardless of user settings.",
-                Tags = ["camera", "privacy", "app", "uwp", "store", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                RegistryKeys = [Key],
-                ApplyOps = [RegOp.SetDword(Key, "LetAppsAccessCamera", 2)],
-                RemoveOps = [RegOp.DeleteValue(Key, "LetAppsAccessCamera")],
-                DetectOps = [RegOp.CheckDword(Key, "LetAppsAccessCamera", 2)],
-                ImpactScore = 4,
-                SafetyRating = 4,
-                ImpactNote = "All UWP apps are denied camera; built-in Camera app will also stop working.",
-            },
-            new TweakDef
-            {
                 Id = "camprivacy-block-background-camera",
                 Label = "Camera Privacy Policy: Prevent Camera Access from Background Apps",
                 Category = "Security",
@@ -587,24 +366,6 @@ internal static class PolicySecurityHardening
                 ImpactScore = 3,
                 SafetyRating = 5,
                 ImpactNote = "Keeps camera policy baseline enabled; prevents unintended camera disable at system level.",
-            },
-            new TweakDef
-            {
-                Id = "camprivacy-disable-camera-for-lockscreen",
-                Label = "Camera Privacy Policy: Disable Camera Access on Lock Screen",
-                Category = "Security",
-                Description =
-                    "Prevents the camera from being activated while the device is at the lock screen. Allowing camera access on the lock screen means anyone who picks up a device can activate it to take photos without unlocking — bypassing the user authentication barrier entirely.",
-                Tags = ["camera", "lock screen", "privacy", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Personalization"],
-                ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Personalization", "NoLockScreenCamera", 1)],
-                RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Personalization", "NoLockScreenCamera")],
-                DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Personalization", "NoLockScreenCamera", 1)],
-                ImpactScore = 4,
-                SafetyRating = 5,
-                ImpactNote = "Disables camera quick-launch from lock screen; camera requires unlocking first.",
             },
             new TweakDef
             {
@@ -686,62 +447,6 @@ internal static class PolicySecurityHardening
                 SafetyRating = 3,
                 ImpactNote = "Blocks all Win32 apps from camera; Teams, Zoom, OBS and other desktop apps will be denied.",
             },
-            new TweakDef
-            {
-                Id = "camprivacy-disable-face-analysis-services",
-                Label = "Camera Privacy Policy: Restrict Facial Analysis Services Access to Camera",
-                Category = "Security",
-                Description =
-                    "Prevents facial recognition and biometric analysis services (such as Windows Hello Face and third-party face unlock SDKs) from accessing the camera in the background while a user session is active. Restricts ambient face scanning outside of explicit user-initiated authentication flows.",
-                Tags = ["camera", "facial recognition", "biometric", "background", "privacy", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Biometrics"],
-                ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Biometrics", "Enabled", 1)],
-                RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Biometrics", "Enabled")],
-                DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Biometrics", "Enabled", 1)],
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Keeps biometrics policy baseline enabled; set to 0 to fully disable Windows Hello Face.",
-            },
-            new TweakDef
-            {
-                Id = "camprivacy-require-user-consent-camera",
-                Label = "Camera Privacy Policy: Default Camera Consent to User-Controlled",
-                Category = "Security",
-                Description =
-                    "Resets the system-wide camera consent store to require per-user approval rather than allowing blanket access. This ensures that newly installed applications must explicitly request and receive user consent before the camera sensor can be activated, enforcing a privacy-by-default camera access model.",
-                Tags = ["camera", "consent", "user control", "privacy", "policy"],
-                NeedsAdmin = false,
-                CorpSafe = true,
-                RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\webcam"],
-                ApplyOps =
-                [
-                    RegOp.SetString(
-                        @"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\webcam",
-                        "Value",
-                        "Allow"
-                    ),
-                ],
-                RemoveOps =
-                [
-                    RegOp.DeleteValue(
-                        @"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\webcam",
-                        "Value"
-                    ),
-                ],
-                DetectOps =
-                [
-                    RegOp.CheckString(
-                        @"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\webcam",
-                        "Value",
-                        "Allow"
-                    ),
-                ],
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Sets camera consent store to Allow (user-controlled); per-app decisions remain active.",
-            },
         ];
     }
 
@@ -752,176 +457,6 @@ internal static class PolicySecurityHardening
 
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
-            new TweakDef
-            {
-                Id = "capacs-deny-microphone-access",
-                Label = "Force Deny App Microphone Access",
-                Category = "Security",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 4,
-                Description =
-                    "Apps on Windows can request permission to access the system microphone for voice recording and audio input capabilities. Force denying microphone access prevents all apps from using the microphone regardless of individual app permission settings. Unauthorized microphone access by applications can result in recording of confidential business conversations in sensitive locations. Enterprise endpoints in secure facilities such as sensitive compartmented information facilities must prevent all application audio capture. Microphone policy denial does not affect legacy desktop applications running outside the UWP permission model. High-security environments should combine this policy with physical hardware controls for complete assurance.",
-                Tags = ["privacy", "microphone", "capability", "policy"],
-                RegistryKeys = [Key],
-                ApplyOps = [RegOp.SetDword(Key, "LetAppsAccessMicrophone", 2)],
-                RemoveOps = [RegOp.DeleteValue(Key, "LetAppsAccessMicrophone")],
-                DetectOps = [RegOp.CheckDword(Key, "LetAppsAccessMicrophone", 2)],
-            },
-            new TweakDef
-            {
-                Id = "capacs-deny-camera-access",
-                Label = "Force Deny App Camera Access",
-                Category = "Security",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 4,
-                Description =
-                    "Camera access permissions control whether apps are authorized to capture images and video using the device camera hardware. Force denying camera access prevents applications from accessing camera hardware for image capture and video recording. Unauthorized camera use by applications can result in visual surveillance of personnel and facilities through infected or rogue applications. Enterprise endpoints in secure environments should restrict camera usage to approved applications with specific operational justification. This policy prevents unauthorized video recording even when users may have accepted prompts for camera permission in specific applications. Camera policy controls should be combined with physical camera covers for complete protection in high-security environments.",
-                Tags = ["privacy", "camera", "capability", "policy"],
-                RegistryKeys = [Key],
-                ApplyOps = [RegOp.SetDword(Key, "LetAppsAccessCamera", 2)],
-                RemoveOps = [RegOp.DeleteValue(Key, "LetAppsAccessCamera")],
-                DetectOps = [RegOp.CheckDword(Key, "LetAppsAccessCamera", 2)],
-            },
-            new TweakDef
-            {
-                Id = "capacs-deny-location-access",
-                Label = "Force Deny App Location Access",
-                Category = "Security",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                Description =
-                    "Location services allow applications to determine the physical location of the device using GPS, Wi-Fi triangulation, and cell tower data. Force denying location access prevents applications from determining the physical location of enterprise endpoints. Location data reveals employee movement patterns, facility layouts, and physical security perimeter information. Enterprise employees in sensitive roles or handling classified information should not have location accessible to applications. Location telemetry from enterprise endpoints can build a detailed picture of organizational activities and physical security arrangements. Denying location access also reduces battery consumption on laptop and tablet devices by preventing continuous location polling.",
-                Tags = ["privacy", "location", "capability", "policy"],
-                RegistryKeys = [Key],
-                ApplyOps = [RegOp.SetDword(Key, "LetAppsAccessLocation", 2)],
-                RemoveOps = [RegOp.DeleteValue(Key, "LetAppsAccessLocation")],
-                DetectOps = [RegOp.CheckDword(Key, "LetAppsAccessLocation", 2)],
-            },
-            new TweakDef
-            {
-                Id = "capacs-deny-contacts-access",
-                Label = "Force Deny App Contacts Access",
-                Category = "Security",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                Description =
-                    "Contacts access permissions allow applications to read the user's contact list from the Windows People repository or connected account contact stores. Force denying contacts access prevents applications from reading business contacts, organizational directory information, and personal contact data. Contacts often contain email addresses, phone numbers, and organizational affiliation data representing sensitive corporate intelligence. Applications with contacts access can exfiltrate the entire corporate contact database to external endpoints. Contact data exfiltration enables targeted phishing campaigns using authentic-looking sender addresses from harvested contacts. Denying contacts access prevents application-level access regardless of user permissions granted to individual applications.",
-                Tags = ["privacy", "contacts", "capability", "policy"],
-                RegistryKeys = [Key],
-                ApplyOps = [RegOp.SetDword(Key, "LetAppsAccessContacts", 2)],
-                RemoveOps = [RegOp.DeleteValue(Key, "LetAppsAccessContacts")],
-                DetectOps = [RegOp.CheckDword(Key, "LetAppsAccessContacts", 2)],
-            },
-            new TweakDef
-            {
-                Id = "capacs-deny-calendar-access",
-                Label = "Force Deny App Calendar Access",
-                Category = "Security",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                Description =
-                    "Calendar access permissions allow applications to read, write, and monitor calendar events from connected calendar accounts. Force denying calendar access prevents applications from accessing meeting schedules, attendee information, and event descriptions. Calendar data provides detailed intelligence about organizational activities, business relationships, and sensitive scheduled events. Meeting titles and attendee lists can reveal confidential projects, customer relationships, and strategic plans. Calendar harvesting through malicious applications has been used in targeted corporate espionage operations. Denying calendar access removes a significant source of organizational intelligence accessible through the permission system.",
-                Tags = ["privacy", "calendar", "capability", "policy"],
-                RegistryKeys = [Key],
-                ApplyOps = [RegOp.SetDword(Key, "LetAppsAccessCalendar", 2)],
-                RemoveOps = [RegOp.DeleteValue(Key, "LetAppsAccessCalendar")],
-                DetectOps = [RegOp.CheckDword(Key, "LetAppsAccessCalendar", 2)],
-            },
-            new TweakDef
-            {
-                Id = "capacs-deny-messaging-access",
-                Label = "Force Deny App Messaging Access",
-                Category = "Security",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                Description =
-                    "Messaging access permissions allow applications to read and send SMS messages through mobile broadband device interfaces on Windows. Force denying messaging access prevents applications from accessing SMS messages or sending messages through local cellular radio hardware. SMS messages can contain two-factor authentication codes, sensitive communications, and password reset information. Applications with messaging access can harvest authentication codes in real time to defeat SMS-based multi-factor authentication. Access to messaging interfaces also enables premium SMS fraud through unauthorized message sending. Denying messaging access removes this attack vector on endpoints with cellular connectivity.",
-                Tags = ["privacy", "messaging", "capability", "policy"],
-                RegistryKeys = [Key],
-                ApplyOps = [RegOp.SetDword(Key, "LetAppsAccessMessaging", 2)],
-                RemoveOps = [RegOp.DeleteValue(Key, "LetAppsAccessMessaging")],
-                DetectOps = [RegOp.CheckDword(Key, "LetAppsAccessMessaging", 2)],
-            },
-            new TweakDef
-            {
-                Id = "capacs-deny-radios-access",
-                Label = "Force Deny App Radio Access",
-                Category = "Security",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 4,
-                Description =
-                    "Radio access permissions allow applications to control wireless radio hardware including Bluetooth, cellular, and Wi-Fi interface management. Force denying radio access prevents applications from managing wireless radio hardware including enabling or disabling radios. Applications with radio control can enable disabled interfaces, create unauthorized ad-hoc connections, or manipulate radio hardware. Unauthorized radio management can bypass network access controls that depend on specific radio hardware states. Security controls that disable Bluetooth or other radios on corporate endpoints could be undermined by applications with radio access. Denying radio access ensures that wireless interface management remains under IT control through Group Policy and MDM rather than individual application permissions.",
-                Tags = ["privacy", "radios", "capability", "policy"],
-                RegistryKeys = [Key],
-                ApplyOps = [RegOp.SetDword(Key, "LetAppsAccessRadios", 2)],
-                RemoveOps = [RegOp.DeleteValue(Key, "LetAppsAccessRadios")],
-                DetectOps = [RegOp.CheckDword(Key, "LetAppsAccessRadios", 2)],
-            },
-            new TweakDef
-            {
-                Id = "capacs-deny-calls-access",
-                Label = "Force Deny App Phone Call Access",
-                Category = "Security",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 4,
-                Description =
-                    "Phone call access permissions allow applications to access call history and initiate phone calls through mobile broadband interfaces on Windows. Force denying call access prevents applications from accessing call logs or making unauthorized phone calls through device cellular hardware. Call logs contain sensitive metadata including business contact numbers, call frequency, and call timing information. Applications with call access on devices with cellular capability can initiate unauthorized calls and access call history. Call metadata represents sensitive corporate intelligence that could reveal business relationships and communication patterns. Denying call access eliminates this data exposure risk on cellular-capable enterprise endpoints.",
-                Tags = ["privacy", "calls", "capability", "policy"],
-                RegistryKeys = [Key],
-                ApplyOps = [RegOp.SetDword(Key, "LetAppsAccessPhone", 2)],
-                RemoveOps = [RegOp.DeleteValue(Key, "LetAppsAccessPhone")],
-                DetectOps = [RegOp.CheckDword(Key, "LetAppsAccessPhone", 2)],
-            },
-            new TweakDef
-            {
-                Id = "capacs-deny-account-info-access",
-                Label = "Force Deny App Account Information Access",
-                Category = "Security",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                Description =
-                    "Account information access permissions allow applications to access Windows account information including user name, display picture, and account tier. Force denying account information access prevents applications from accessing user account data from the Windows account store. Account information combined with organizational affiliation enables targeted social engineering and identity theft attacks. Applications that collect account information can build profiles of enterprise users for malicious exploitation. User identity data harvested through account access permissions can be used for credential stuffing and account takeover attacks. Denying account information access protects user identity data from application-level harvesting through permission grants.",
-                Tags = ["privacy", "account", "capability", "policy"],
-                RegistryKeys = [Key],
-                ApplyOps = [RegOp.SetDword(Key, "LetAppsAccessAccountInfo", 2)],
-                RemoveOps = [RegOp.DeleteValue(Key, "LetAppsAccessAccountInfo")],
-                DetectOps = [RegOp.CheckDword(Key, "LetAppsAccessAccountInfo", 2)],
-            },
-            new TweakDef
-            {
-                Id = "capacs-deny-diagnostics-access",
-                Label = "Force Deny App Diagnostic Information Access",
-                Category = "Security",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 4,
-                Description =
-                    "App diagnostic access permissions allow applications to access running process information, application data, and diagnostic information from other apps. Force denying diagnostic access prevents applications from reading information about other running applications and their data. Cross-application diagnostic access can be used to enumerate running processes, read application state, and identify sensitive applications. Security software and enterprise applications running on the endpoint could be identified and targeted by malicious apps with diagnostic access. Application inventory information gathered through diagnostic access can aid malware in selecting appropriate payloads and evasion techniques. Denying diagnostic access enforces application isolation and prevents cross-app intelligence gathering.",
-                Tags = ["privacy", "diagnostics", "capability", "policy"],
-                RegistryKeys = [Key],
-                ApplyOps = [RegOp.SetDword(Key, "LetAppsGetDiagnosticInfo", 2)],
-                RemoveOps = [RegOp.DeleteValue(Key, "LetAppsGetDiagnosticInfo")],
-                DetectOps = [RegOp.CheckDword(Key, "LetAppsGetDiagnosticInfo", 2)],
-            },
         ];
     }
 
@@ -1919,86 +1454,6 @@ internal static class PolicySecurityHardening
             },
             new TweakDef
             {
-                Id = "ntlma-sign-netlogon-channel",
-                Label = "NTLM: Require Digital Signing for Netlogon Secure Channel",
-                Category = "Security",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 4,
-                Tags = ["ntlm", "netlogon", "signing", "domain", "secure-channel"],
-                Description =
-                    "Sets SignSecureChannel=1 in the Netlogon Parameters key. "
-                    + "Requires the Netlogon secure channel (between domain member and domain controller) to be "
-                    + "digitally signed. Prevents man-in-the-middle attacks against the Netlogon protocol. "
-                    + "Related to CVE-2020-1472 (Zerologon) mitigations — enables signing as a baseline.",
-                ApplyOps = [RegOp.SetDword(Netlogon, "SignSecureChannel", 1)],
-                RemoveOps = [RegOp.DeleteValue(Netlogon, "SignSecureChannel")],
-                DetectOps = [RegOp.CheckDword(Netlogon, "SignSecureChannel", 1)],
-            },
-            new TweakDef
-            {
-                Id = "ntlma-seal-netlogon-channel",
-                Label = "NTLM: Require Encryption (Seal) for Netlogon Secure Channel",
-                Category = "Security",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 4,
-                Tags = ["ntlm", "netlogon", "encryption", "domain", "secure-channel"],
-                Description =
-                    "Sets SealSecureChannel=1 in the Netlogon Parameters key. "
-                    + "Requires the Netlogon secure channel to be both signed and encrypted. "
-                    + "Sealing (encryption) is stronger than signing alone and prevents interception of "
-                    + "authentication traffic between this domain member and its domain controller.",
-                ApplyOps = [RegOp.SetDword(Netlogon, "SealSecureChannel", 1)],
-                RemoveOps = [RegOp.DeleteValue(Netlogon, "SealSecureChannel")],
-                DetectOps = [RegOp.CheckDword(Netlogon, "SealSecureChannel", 1)],
-            },
-            new TweakDef
-            {
-                Id = "ntlma-deny-all-outgoing-ntlm",
-                Label = "NTLM: Deny All Outgoing NTLM Authentication Requests",
-                Category = "Security",
-                NeedsAdmin = true,
-                CorpSafe = false,
-                ImpactScore = 5,
-                SafetyRating = 2,
-                Tags = ["ntlm", "restriction", "outgoing", "block", "lateral-movement"],
-                SideEffects =
-                    "Blocks all outgoing NTLM authentication. Services using NTLM for remote connections will fail. Enable only where Kerberos is exclusively available.",
-                Description =
-                    "Sets RestrictSendingNTLMTraffic=2 in the LSA key. "
-                    + "Completely blocks all outgoing NTLM authentication from this machine. "
-                    + "Values: 0=allow all, 1=audit and allow, 2=deny all. "
-                    + "Eliminates NTLM relay attack exposure entirely. Requires that all services use "
-                    + "Kerberos for authentication; not suitable for standalone or workgroup machines.",
-                ApplyOps = [RegOp.SetDword(Lsa, "RestrictSendingNTLMTraffic", 2)],
-                RemoveOps = [RegOp.DeleteValue(Lsa, "RestrictSendingNTLMTraffic")],
-                DetectOps = [RegOp.CheckDword(Lsa, "RestrictSendingNTLMTraffic", 2)],
-            },
-            new TweakDef
-            {
-                Id = "ntlma-audit-all-domain-ntlm",
-                Label = "NTLM: Audit All NTLM Authentication in Active Directory Domain",
-                Category = "Security",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                Tags = ["ntlm", "audit", "domain", "logging", "monitoring"],
-                Description =
-                    "Sets AuditNTLMInDomain=7 in the LSA key. "
-                    + "Enables comprehensive auditing of all inbound NTLM authentication requests processed "
-                    + "by a domain controller. Value 7 audits all NTLM (pass-through, domain accounts, and "
-                    + "non-domain accounts). Generates Event ID 4776 entries in the Security log. "
-                    + "Critical for identifying legacy systems still using NTLM before enforcing NTLM blocks.",
-                ApplyOps = [RegOp.SetDword(Lsa, "AuditNTLMInDomain", 7)],
-                RemoveOps = [RegOp.DeleteValue(Lsa, "AuditNTLMInDomain")],
-                DetectOps = [RegOp.CheckDword(Lsa, "AuditNTLMInDomain", 7)],
-            },
-            new TweakDef
-            {
                 Id = "ntlma-restrict-ntlm-in-domain",
                 Label = "NTLM: Restrict NTLM In-Domain Authentication to Specific Servers",
                 Category = "Security",
@@ -2055,26 +1510,6 @@ internal static class PolicySecurityHardening
                 ApplyOps = [RegOp.SetDword(Msv10, "allownullsessionfallback", 0)],
                 RemoveOps = [RegOp.DeleteValue(Msv10, "allownullsessionfallback")],
                 DetectOps = [RegOp.CheckDword(Msv10, "allownullsessionfallback", 0)],
-            },
-            new TweakDef
-            {
-                Id = "ntlma-require-ntlmv2-msv",
-                Label = "NTLM: Require NTLMv2 Session Security at MSV1_0 Level",
-                Category = "Security",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 4,
-                Tags = ["ntlm", "ntlmv2", "session-security", "msv10", "hardening"],
-                Description =
-                    "Sets NtlmMinClientSec=536870912 (0x20000000) in the MSV1_0 subkey. "
-                    + "Requires NTLMv2 session security at the MSV1_0 (local authentication) level. "
-                    + "The flag 0x20000000 (NTLMSSP_NEGOTIATE_128) forces 128-bit session key negotiation "
-                    + "in all local NTLM authentication handled by the MSV1_0 package, "
-                    + "complementing NTLMMinClientSec set at the top-level LSA key.",
-                ApplyOps = [RegOp.SetDword(Msv10, "NtlmMinClientSec", 536870912)],
-                RemoveOps = [RegOp.DeleteValue(Msv10, "NtlmMinClientSec")],
-                DetectOps = [RegOp.CheckDword(Msv10, "NtlmMinClientSec", 536870912)],
             },
         ];
     }
@@ -2291,38 +1726,6 @@ internal static class PolicySecurityHardening
         [
             new TweakDef
             {
-                Id = "ntlm-deny-ntlmv1-outbound",
-                Label = "Deny NTLMv1 Outbound Authentication",
-                Category = "Security",
-                Description = "Restricts outbound NTLM to NTLMv2 only; NTLMv1 responses are refused.",
-                Tags = ["ntlm", "authentication", "hardening", "security"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 5,
-                SafetyRating = 3,
-                ImpactNote = "NTLMv1 is broken; this prevents credential theft via NTLM relay attacks. Test for legacy app compat.",
-                ApplyOps = [RegOp.SetDword(LsaKey, "LmCompatibilityLevel", 5)],
-                RemoveOps = [RegOp.DeleteValue(LsaKey, "LmCompatibilityLevel")],
-                DetectOps = [RegOp.CheckDword(LsaKey, "LmCompatibilityLevel", 5)],
-            },
-            new TweakDef
-            {
-                Id = "ntlm-disable-lmhash-storage",
-                Label = "Disable LM Hash Storage",
-                Category = "Security",
-                Description = "Prevents Windows from storing LAN Manager password hashes in the SAM database.",
-                Tags = ["ntlm", "lm-hash", "sam", "security"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 5,
-                SafetyRating = 4,
-                ImpactNote = "LM hashes are trivially cracked. Removing them from SAM prevents offline password attacks.",
-                ApplyOps = [RegOp.SetDword(LsaKey, "NoLMHash", 1)],
-                RemoveOps = [RegOp.DeleteValue(LsaKey, "NoLMHash")],
-                DetectOps = [RegOp.CheckDword(LsaKey, "NoLMHash", 1)],
-            },
-            new TweakDef
-            {
                 Id = "ntlm-require-ntlmv2-session-security-128",
                 Label = "Require 128-bit NTLMv2 Session Security",
                 Category = "Security",
@@ -2417,38 +1820,6 @@ internal static class PolicySecurityHardening
                 RemoveOps = [RegOp.DeleteValue(LsaKey, "AuditNTLMInDomain")],
                 DetectOps = [RegOp.CheckDword(LsaKey, "AuditNTLMInDomain", 7)],
             },
-            new TweakDef
-            {
-                Id = "ntlm-disable-null-sessions",
-                Label = "Disable NTLM Null Session Access",
-                Category = "Security",
-                Description = "Prevents anonymous (null session) NTLM connections that can enumerate shares and users.",
-                Tags = ["ntlm", "null-session", "anonymous", "hardening"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 4,
-                ImpactNote = "Blocks null-session enumeration. Some legacy utilities rely on null sessions; test first.",
-                ApplyOps = [RegOp.SetDword(LsaKey, "RestrictAnonymous", 1)],
-                RemoveOps = [RegOp.DeleteValue(LsaKey, "RestrictAnonymous")],
-                DetectOps = [RegOp.CheckDword(LsaKey, "RestrictAnonymous", 1)],
-            },
-            new TweakDef
-            {
-                Id = "ntlm-require-secure-channel-ntlmv2",
-                Label = "Require NTLMv2 on Secure Channel",
-                Category = "Security",
-                Description = "Forces domain secure channel authentication to use NTLMv2; prevents downgrade to NTLMv1 in machine authentication.",
-                Tags = ["ntlm", "secure-channel", "domain", "hardening"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 4,
-                ImpactNote = "Ensures machine-to-DC communications use NTLMv2. Transparent in modern domains.",
-                ApplyOps = [RegOp.SetDword(NetlogonKey, "RequireStrongKey", 1)],
-                RemoveOps = [RegOp.DeleteValue(NetlogonKey, "RequireStrongKey")],
-                DetectOps = [RegOp.CheckDword(NetlogonKey, "RequireStrongKey", 1)],
-            },
         ];
     }
 
@@ -2461,40 +1832,6 @@ internal static class PolicySecurityHardening
 
         public static IReadOnlyList<TweakDef> Data =>
             [
-                new TweakDef
-                {
-                    Id = "ntlmadv-block-ntlmv1",
-                    Label = "Block NTLMv1 Authentication (Allow NTLMv2 Only)",
-                    Category = "Security",
-                    Description =
-                        "Configures LAN Manager authentication level to disallow NTLMv1 and LM authentication, accepting only NTLMv2 challenge-response and Kerberos, protecting against pass-the-hash from weak NTLMv1 hashes.",
-                    Tags = ["ntlm", "ntlmv1", "ntlmv2", "pass-the-hash", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 5,
-                    SafetyRating = 5,
-                    ImpactNote = "NTLMv1 and LM responses blocked; only NTLMv2 accepted. Prevents weak hash capture attacks.",
-                    ApplyOps = [RegOp.SetDword(LsaKey, "LmCompatibilityLevel", 5)],
-                    RemoveOps = [RegOp.DeleteValue(LsaKey, "LmCompatibilityLevel")],
-                    DetectOps = [RegOp.CheckDword(LsaKey, "LmCompatibilityLevel", 5)],
-                },
-                new TweakDef
-                {
-                    Id = "ntlmadv-require-ntlmv2-session-security",
-                    Label = "Require NTLMv2 Session Security with 128-Bit Encryption",
-                    Category = "Security",
-                    Description =
-                        "Configures NTLM session security to require NTLMv2 session security and 128-bit encryption for all NTLM sessions, preventing NTLM session reduction attacks that downgrade to weaker LM session security.",
-                    Tags = ["ntlm", "session-security", "128-bit", "ntlmv2", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 5,
-                    SafetyRating = 5,
-                    ImpactNote = "NTLM sessions require NTLMv2 + 128-bit encryption; session downgrade attacks blocked.",
-                    ApplyOps = [RegOp.SetDword(Key, "NTLMMinClientSec", 537395200)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "NTLMMinClientSec")],
-                    DetectOps = [RegOp.CheckDword(Key, "NTLMMinClientSec", 537395200)],
-                },
                 new TweakDef
                 {
                     Id = "ntlmadv-enable-extended-protection",
@@ -2531,23 +1868,6 @@ internal static class PolicySecurityHardening
                 },
                 new TweakDef
                 {
-                    Id = "ntlmadv-restrict-outbound-ntlm-to-negotiate",
-                    Label = "Restrict Outbound NTLM Authentication to Negotiate Only",
-                    Category = "Security",
-                    Description =
-                        "Configures the system to only use NTLM via the Negotiate (SPNEGO) mechanism for outbound authentication, preventing direct NTLM usage that bypasses Kerberos preference and could expose NTLM hashes to non-domain servers.",
-                    Tags = ["ntlm", "outbound", "negotiate", "spnego", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 4,
-                    SafetyRating = 5,
-                    ImpactNote = "Outbound NTLM restricted to Negotiate/SPNEGO; direct NTLM to non-domain servers blocked.",
-                    ApplyOps = [RegOp.SetDword(Key, "RestrictSendingNTLMTraffic", 2)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "RestrictSendingNTLMTraffic")],
-                    DetectOps = [RegOp.CheckDword(Key, "RestrictSendingNTLMTraffic", 2)],
-                },
-                new TweakDef
-                {
                     Id = "ntlmadv-restrict-incoming-ntlm",
                     Label = "Restrict Incoming NTLM Authentication to Domain Accounts Only",
                     Category = "Security",
@@ -2562,23 +1882,6 @@ internal static class PolicySecurityHardening
                     ApplyOps = [RegOp.SetDword(Key, "RestrictReceivingNTLMTraffic", 2)],
                     RemoveOps = [RegOp.DeleteValue(Key, "RestrictReceivingNTLMTraffic")],
                     DetectOps = [RegOp.CheckDword(Key, "RestrictReceivingNTLMTraffic", 2)],
-                },
-                new TweakDef
-                {
-                    Id = "ntlmadv-enable-ntlm-audit-mode",
-                    Label = "Enable NTLM Authentication Audit Logging",
-                    Category = "Security",
-                    Description =
-                        "Enables system audit logging for all NTLM authentication attempts, recording both successful and failed NTLM sessions in the Security event log to support detection of lateral movement and pass-the-hash activity.",
-                    Tags = ["ntlm", "audit", "event-log", "lateral-movement", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 4,
-                    SafetyRating = 5,
-                    ImpactNote = "NTLM authentication audit logging enabled; all NTLM sessions recorded for lateral movement detection.",
-                    ApplyOps = [RegOp.SetDword(Key, "AuditReceivingNTLMTraffic", 2)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "AuditReceivingNTLMTraffic")],
-                    DetectOps = [RegOp.CheckDword(Key, "AuditReceivingNTLMTraffic", 2)],
                 },
                 new TweakDef
                 {
@@ -2751,23 +2054,6 @@ internal static class PolicySecurityHardening
             },
             new TweakDef
             {
-                Id = "prctmtg-protect-lsa-as-ppl",
-                Label = "Process Mitigation: Enable LSA Protection (RunAsPPL)",
-                Category = "Security",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                RegistryKeys = [LsaMain],
-                Tags = ["lsa", "ppl", "credential-guard", "security", "hardening", "policy"],
-                Description =
-                    "Sets RunAsPPL=1 in LSA. Runs LSASS (Local Security Authority Subsystem) as a "
-                    + "Protected Process Light. Prevents credential extraction tools (Mimikatz pattern) "
-                    + "from reading LSASS memory. Default: 0. Strongly recommended on all managed machines.",
-                ApplyOps = [RegOp.SetDword(LsaMain, "RunAsPPL", 1)],
-                RemoveOps = [RegOp.DeleteValue(LsaMain, "RunAsPPL")],
-                DetectOps = [RegOp.CheckDword(LsaMain, "RunAsPPL", 1)],
-            },
-            new TweakDef
-            {
                 Id = "prctmtg-protect-svc-with-emet",
                 Label = "Process Mitigation: Enable Kernel Patch Protection (KPP) Enforcement",
                 Category = "Security",
@@ -2782,24 +2068,6 @@ internal static class PolicySecurityHardening
                 ApplyOps = [RegOp.SetDword(KernelCtl, "BpbEnabled", 1)],
                 RemoveOps = [RegOp.DeleteValue(KernelCtl, "BpbEnabled")],
                 DetectOps = [RegOp.CheckDword(KernelCtl, "BpbEnabled", 1)],
-            },
-            new TweakDef
-            {
-                Id = "prctmtg-disable-page-file-on-shutdown",
-                Label = "Process Mitigation: Clear Page File at System Shutdown",
-                Category = "Security",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                RegistryKeys = [MemMgmt],
-                Tags = ["pagefile", "clearance", "shutdown", "privacy", "security", "forensics"],
-                Description =
-                    "Sets ClearPageFileAtShutdown=1 in Memory Management. Overwrites the system page "
-                    + "file with zeros during the shutdown sequence. Prevents recovery of sensitive data "
-                    + "from a swapped-out memory region. Default: 0. "
-                    + "Note: extends shutdown time proportional to page file size.",
-                ApplyOps = [RegOp.SetDword(MemMgmt, "ClearPageFileAtShutdown", 1)],
-                RemoveOps = [RegOp.SetDword(MemMgmt, "ClearPageFileAtShutdown", 0)],
-                DetectOps = [RegOp.CheckDword(MemMgmt, "ClearPageFileAtShutdown", 1)],
             },
         ];
     }
@@ -4531,23 +3799,6 @@ internal static class PolicySecurityHardening
         [
             new TweakDef
             {
-                Id = "tpmadv-enable-tpm-auto-provisioning",
-                Label = "Enable Automatic TPM Provisioning and Activation",
-                Category = "Security",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                Description =
-                    "TPM automatic provisioning prepares the TPM for use by Windows security features by taking ownership and generating the platform hierarchy keys without requiring manual administrator intervention. Enabling automatic TPM provisioning ensures that all systems with available TPMs are properly configured for BitLocker Windows Hello and other TPM-dependent security features. Systems with unconfigured TPMs cannot use BitLocker with TPM-only protection Windows Hello for Business with TPM-bound credentials or Credential Guard. Automatic provisioning triggers on systems where the TPM is present but has not been taken ownership of by Windows reducing deployment complexity. Organizations deploying new hardware should rely on automatic TPM provisioning as part of the standard Windows deployment process managed through Autopilot or Configuration Manager. TPM provisioning failure events should be monitored to identify hardware issues or BIOS configuration problems that prevent proper TPM initialization.",
-                Tags = ["tpm", "provisioning", "auto-setup", "security", "policy"],
-                RegistryKeys = [Key],
-                ApplyOps = [RegOp.SetDword(Key, "OSManagedAuthLevel", 4)],
-                RemoveOps = [RegOp.DeleteValue(Key, "OSManagedAuthLevel")],
-                DetectOps = [RegOp.CheckDword(Key, "OSManagedAuthLevel", 4)],
-            },
-            new TweakDef
-            {
                 Id = "tpmadv-configure-tpm-lockout-duration",
                 Label = "Configure TPM Lockout Duration for Failed Authorization Attempts",
                 Category = "Security",
@@ -4711,23 +3962,6 @@ internal static class PolicySecurityHardening
 
         public static IReadOnlyList<TweakDef> Data =>
             [
-                new TweakDef
-                {
-                    Id = "tpmpol-require-tpm-for-bitlocker",
-                    Label = "Require TPM for All BitLocker Encrypted Volumes",
-                    Category = "Security",
-                    Description =
-                        "Requires that all BitLocker encrypted volumes use a TPM protector, preventing BitLocker in password-only mode which does not provide pre-boot hardware attestation or protection against direct memory access attacks.",
-                    Tags = ["tpm", "bitlocker", "hardware-security", "attestation", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 5,
-                    SafetyRating = 5,
-                    ImpactNote = "TPM required for BitLocker; password-only mode blocked. DMA attacks against BitLocker volumes prevented.",
-                    ApplyOps = [RegOp.SetDword(Key, "RequireTPMForBitLocker", 1)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "RequireTPMForBitLocker")],
-                    DetectOps = [RegOp.CheckDword(Key, "RequireTPMForBitLocker", 1)],
-                },
                 new TweakDef
                 {
                     Id = "tpmpol-enable-device-health-attestation",
@@ -4913,24 +4147,6 @@ internal static class PolicySecurityHardening
                 },
                 new TweakDef
                 {
-                    Id = "tpmrec-require-tpm-backup-before-enable",
-                    Label = "TPM Recovery: Block TPM Enablement Unless AD Backup Succeeds",
-                    Category = "Security",
-                    Description =
-                        "Sets RequireActiveDirectoryBackup=1 in the TPM policy hive. Prevents the BitLocker Drive Encryption setup wizard from enabling BitLocker on a drive if the TPM owner information backup to Active Directory fails. Without this requirement, BitLocker can be enabled on a device even if the TPM backup fails — resulting in deployed BitLocker with no enterprise-recoverable TPM owner info. By requiring backup success before BitLocker activation, this ensures that every BitLocker-protected device in the enterprise has its TPM recovery data in AD.",
-                    Tags = ["tpm", "backup-required", "bitlocker", "recovery", "active-directory"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 4,
-                    SafetyRating = 4,
-                    ImpactNote =
-                        "BitLocker enablement blocked if TPM AD backup fails. BitLocker setup will report an error and not complete until the TPM backup succeeds. Systems that cannot reach AD (offline devices, newly provisioned devices before domain join) cannot enable BitLocker. Ensure devices are domain-joined before attempting BitLocker activation.",
-                    ApplyOps = [RegOp.SetDword(TpmKey, "RequireActiveDirectoryBackup", 1)],
-                    RemoveOps = [RegOp.DeleteValue(TpmKey, "RequireActiveDirectoryBackup")],
-                    DetectOps = [RegOp.CheckDword(TpmKey, "RequireActiveDirectoryBackup", 1)],
-                },
-                new TweakDef
-                {
                     Id = "tpmrec-block-tpm-clear-by-non-admin",
                     Label = "TPM Recovery: Block TPM Clear Operation by Non-Administrator Users",
                     Category = "Security",
@@ -5064,24 +4280,6 @@ internal static class PolicySecurityHardening
                     RemoveOps = [RegOp.DeleteValue(BitLockerKey, "UseEnhancedPin")],
                     DetectOps = [RegOp.CheckDword(BitLockerKey, "UseEnhancedPin", 1)],
                 },
-                new TweakDef
-                {
-                    Id = "tpmrec-enable-tpm-attestation-azure",
-                    Label = "TPM Recovery: Enable TPM Attestation for Intune/Azure Conditional Access",
-                    Category = "Security",
-                    Description =
-                        "Sets EnableTPMAttestation=1 in the TPM policy hive. Enables TPM-based device attestation for Microsoft Intune and Azure Conditional Access compliance checks. TPM attestation allows Intune to verify that a device's TPM is genuine (not emulated), the device has not been tampered with since last boot, Secure Boot is active, and the early launch anti-malware driver passed. Devices that fail attestation can be blocked from accessing corporate resources via Conditional Access policies. This prevents attackers from using counterfeit or compromised device identities to gain cloud resource access.",
-                    Tags = ["tpm", "attestation", "intune", "azure", "conditional-access"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 5,
-                    SafetyRating = 5,
-                    ImpactNote =
-                        "TPM attestation enabled for Intune compliance. Requires Microsoft Intune licence and devices enrolled in Intune. Devices with emulated TPMs (VMware vTPM, Hyper-V vTPM without physical backing) may fail attestation. Configure Intune compliance policies to use attestation status as a compliance condition.",
-                    ApplyOps = [RegOp.SetDword(TpmKey, "EnableTPMAttestation", 1)],
-                    RemoveOps = [RegOp.DeleteValue(TpmKey, "EnableTPMAttestation")],
-                    DetectOps = [RegOp.CheckDword(TpmKey, "EnableTPMAttestation", 1)],
-                },
             ];
     }
 
@@ -5122,21 +4320,6 @@ internal static class PolicySecurityHardening
                 ApplyOps = [RegOp.SetDword(Tpm, "ActiveDirectoryBackup", 1)],
                 RemoveOps = [RegOp.DeleteValue(Tpm, "ActiveDirectoryBackup")],
                 DetectOps = [RegOp.CheckDword(Tpm, "ActiveDirectoryBackup", 1)],
-            },
-            new TweakDef
-            {
-                Id = "tpmgpo-os-managed-auth-level",
-                Label = "Set TPM OS-Managed Auth Level to Full Delegation",
-                Category = "Security",
-                Description =
-                    "Sets OS-managed TPM auth level to 4 (full delegation). This determines how much of the TPM authorization is delegated to the OS vs retained by the hardware. Level 4 allows OS full control needed for BitLocker and Device Guard. Default: 4. Recommended: 4.",
-                Tags = ["tpm", "auth", "delegation", "bitlocker"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                RegistryKeys = [Tpm],
-                ApplyOps = [RegOp.SetDword(Tpm, "OSManagedAuthLevel", 4)],
-                RemoveOps = [RegOp.DeleteValue(Tpm, "OSManagedAuthLevel")],
-                DetectOps = [RegOp.CheckDword(Tpm, "OSManagedAuthLevel", 4)],
             },
             new TweakDef
             {
@@ -5182,66 +4365,6 @@ internal static class PolicySecurityHardening
                 ApplyOps = [RegOp.SetDword(Tpm, "StandardUserAuthorizationFailureIndividualThreshold", 4)],
                 RemoveOps = [RegOp.DeleteValue(Tpm, "StandardUserAuthorizationFailureIndividualThreshold")],
                 DetectOps = [RegOp.CheckDword(Tpm, "StandardUserAuthorizationFailureIndividualThreshold", 4)],
-            },
-            new TweakDef
-            {
-                Id = "tpmgpo-enable-credential-guard",
-                Label = "Enable Credential Guard via Device Guard Policy",
-                Category = "Security",
-                Description =
-                    "Enables Windows Defender Credential Guard through Group Policy. Credential Guard uses VBS to isolate LSA credential storage, protecting NTLM hashes and Kerberos tickets from pass-the-hash attacks. Default: 0. Recommended: 1.",
-                Tags = ["tpm", "credential-guard", "vbs", "security", "lsa"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                RegistryKeys = [TpmDg],
-                ApplyOps = [RegOp.SetDword(TpmDg, "LsaCfgFlags", 1)],
-                RemoveOps = [RegOp.DeleteValue(TpmDg, "LsaCfgFlags")],
-                DetectOps = [RegOp.CheckDword(TpmDg, "LsaCfgFlags", 1)],
-            },
-            new TweakDef
-            {
-                Id = "tpmgpo-enable-hvci",
-                Label = "Enable Hypervisor-Protected Code Integrity (HVCI)",
-                Category = "Security",
-                Description =
-                    "Enables Hypervisor-Protected Code Integrity (HVCI / Memory Integrity) via Device Guard GPO policy. HVCI uses VBS to ensure only code signed by trusted authorities runs in kernel mode, blocking unsigned driver exploits. Default: 0. Recommended: 1.",
-                Tags = ["tpm", "hvci", "memory-integrity", "vbs", "kernel", "security"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                RegistryKeys = [TpmDg],
-                ApplyOps = [RegOp.SetDword(TpmDg, "HypervisorEnforcedCodeIntegrity", 1)],
-                RemoveOps = [RegOp.DeleteValue(TpmDg, "HypervisorEnforcedCodeIntegrity")],
-                DetectOps = [RegOp.CheckDword(TpmDg, "HypervisorEnforcedCodeIntegrity", 1)],
-            },
-            new TweakDef
-            {
-                Id = "tpmgpo-enable-secure-launch",
-                Label = "Enable Secure Launch (DRTM) via Device Guard",
-                Category = "Security",
-                Description =
-                    "Enables Secure Launch (Dynamic Root of Trust for Measurement / DRTM) through Device Guard GPO. DRTM provides a hardware-attested boot chain using Intel TXT or AMD Skinit, protecting firmware from being modified. Default: 0. Recommended: 1 on supported hardware.",
-                Tags = ["tpm", "secure-launch", "drtm", "firmware", "security"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                RegistryKeys = [TpmDg],
-                ApplyOps = [RegOp.SetDword(TpmDg, "ConfigureSystemGuardLaunch", 1)],
-                RemoveOps = [RegOp.DeleteValue(TpmDg, "ConfigureSystemGuardLaunch")],
-                DetectOps = [RegOp.CheckDword(TpmDg, "ConfigureSystemGuardLaunch", 1)],
-            },
-            new TweakDef
-            {
-                Id = "tpmgpo-enable-vbs",
-                Label = "Enable Virtualization-Based Security (VBS)",
-                Category = "Security",
-                Description =
-                    "Enables Virtualization-Based Security (VBS) through Device Guard GPO. VBS uses the hypervisor to create an isolated memory region for security code — prerequisite for Credential Guard and HVCI. Default: 0. Recommended: 1.",
-                Tags = ["tpm", "vbs", "virtualization", "security", "hypervisor"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                RegistryKeys = [TpmDg],
-                ApplyOps = [RegOp.SetDword(TpmDg, "EnableVirtualizationBasedSecurity", 1)],
-                RemoveOps = [RegOp.DeleteValue(TpmDg, "EnableVirtualizationBasedSecurity")],
-                DetectOps = [RegOp.CheckDword(TpmDg, "EnableVirtualizationBasedSecurity", 1)],
             },
         ];
     }
@@ -5483,21 +4606,6 @@ internal static class PolicySecurityHardening
             },
             new TweakDef
             {
-                Id = "uacadv-hide-locked-user-id",
-                Label = "Logon: Hide user identity information on the lock screen",
-                Category = "Security",
-                Description =
-                    "Sets DontDisplayLockedUserId=3 in Policies\\System. Value 3 hides both user name and "
-                    + "email from the lock screen, preventing information disclosure of signed-in users.",
-                Tags = ["uac", "logon", "lock-screen", "privacy", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ApplyOps = [RegOp.SetDword(UacAdv, "DontDisplayLockedUserId", 3)],
-                RemoveOps = [RegOp.DeleteValue(UacAdv, "DontDisplayLockedUserId")],
-                DetectOps = [RegOp.CheckDword(UacAdv, "DontDisplayLockedUserId", 3)],
-            },
-            new TweakDef
-            {
                 Id = "uacadv-require-msa-optional",
                 Label = "Logon: Make Microsoft Account sign-in optional (allow local accounts)",
                 Category = "Security",
@@ -5510,21 +4618,6 @@ internal static class PolicySecurityHardening
                 ApplyOps = [RegOp.SetDword(UacAdv, "MSAOptional", 1)],
                 RemoveOps = [RegOp.DeleteValue(UacAdv, "MSAOptional")],
                 DetectOps = [RegOp.CheckDword(UacAdv, "MSAOptional", 1)],
-            },
-            new TweakDef
-            {
-                Id = "uacadv-disable-shutdown-without-logon",
-                Label = "Logon: Prevent shutdown from the lock screen (require logon)",
-                Category = "Security",
-                Description =
-                    "Sets ShutdownWithoutLogon=0 in Policies\\System. Removes the 'Shut down' button from "
-                    + "the Windows lock screen, requiring users to authenticate before powering off.",
-                Tags = ["uac", "logon", "shutdown", "security", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ApplyOps = [RegOp.SetDword(UacAdv, "ShutdownWithoutLogon", 0)],
-                RemoveOps = [RegOp.DeleteValue(UacAdv, "ShutdownWithoutLogon")],
-                DetectOps = [RegOp.CheckDword(UacAdv, "ShutdownWithoutLogon", 0)],
             },
             new TweakDef
             {
@@ -5556,36 +4649,6 @@ internal static class PolicySecurityHardening
                 RemoveOps = [RegOp.DeleteValue(UacAdv, "DisableChangePassword")],
                 DetectOps = [RegOp.CheckDword(UacAdv, "DisableChangePassword", 1)],
             },
-            new TweakDef
-            {
-                Id = "uacadv-legal-notice-caption",
-                Label = "Logon: Set a legal notice caption on the sign-in screen",
-                Category = "Security",
-                Description =
-                    "Sets LegalNoticeCaption to 'Authorized Access Only' in Policies\\System. Displays a "
-                    + "custom caption banner on the Windows logon screen — common in corporate environments.",
-                Tags = ["uac", "logon", "legal-notice", "corporate", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ApplyOps = [RegOp.SetString(UacAdv, "LegalNoticeCaption", "Authorized Access Only")],
-                RemoveOps = [RegOp.DeleteValue(UacAdv, "LegalNoticeCaption")],
-                DetectOps = [RegOp.CheckString(UacAdv, "LegalNoticeCaption", "Authorized Access Only")],
-            },
-            new TweakDef
-            {
-                Id = "uacadv-disable-task-manager",
-                Label = "Logon: Disable Task Manager for non-admin users",
-                Category = "Security",
-                Description =
-                    "Sets DisableTaskMgr=1 in Policies\\System. Prevents standard user accounts from "
-                    + "opening Task Manager (Ctrl+Shift+Esc / Ctrl+Alt+Del). Admin accounts are unaffected.",
-                Tags = ["uac", "task-manager", "standard-user", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ApplyOps = [RegOp.SetDword(UacAdv, "DisableTaskMgr", 1)],
-                RemoveOps = [RegOp.DeleteValue(UacAdv, "DisableTaskMgr")],
-                DetectOps = [RegOp.CheckDword(UacAdv, "DisableTaskMgr", 1)],
-            },
         ];
     }
 
@@ -5596,22 +4659,6 @@ internal static class PolicySecurityHardening
 
         public static IReadOnlyList<TweakDef> Data =>
             [
-                new TweakDef
-                {
-                    Id = "upprof-enable-smartscreen-apps",
-                    Label = "Enable SmartScreen for Apps and Files",
-                    Category = "Security",
-                    Description = "Activates Windows SmartScreen to check apps and files downloaded from the Internet before execution.",
-                    Tags = ["smartscreen", "security", "malware", "downloads", "system"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 5,
-                    SafetyRating = 5,
-                    ImpactNote = "SmartScreen value 1 = enabled; blocks unrecognized downloaded apps and shows a warning prompt.",
-                    ApplyOps = [RegOp.SetDword(SysKey, "EnableSmartScreen", 1)],
-                    RemoveOps = [RegOp.DeleteValue(SysKey, "EnableSmartScreen")],
-                    DetectOps = [RegOp.CheckDword(SysKey, "EnableSmartScreen", 1)],
-                },
                 new TweakDef
                 {
                     Id = "upprof-restrict-cmd-for-users",
@@ -5627,39 +4674,6 @@ internal static class PolicySecurityHardening
                     ApplyOps = [RegOp.SetDword(SysKey, "DisableCMD", 2)],
                     RemoveOps = [RegOp.DeleteValue(SysKey, "DisableCMD")],
                     DetectOps = [RegOp.CheckDword(SysKey, "DisableCMD", 2)],
-                },
-                new TweakDef
-                {
-                    Id = "upprof-run-logon-scripts-sync",
-                    Label = "Run Logon and Startup Scripts Synchronously",
-                    Category = "Security",
-                    Description = "Runs all Group Policy logon and startup scripts synchronously before presenting the user desktop.",
-                    Tags = ["logon-scripts", "startup-scripts", "gpo", "synchronous", "user-profile"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 3,
-                    SafetyRating = 5,
-                    ImpactNote =
-                        "Desktop shown only after all scripts complete; ensures drive mappings and profile settings are applied before login.",
-                    ApplyOps = [RegOp.SetDword(SysKey, "RunLogonScriptSync", 1)],
-                    RemoveOps = [RegOp.DeleteValue(SysKey, "RunLogonScriptSync")],
-                    DetectOps = [RegOp.CheckDword(SysKey, "RunLogonScriptSync", 1)],
-                },
-                new TweakDef
-                {
-                    Id = "upprof-max-gpo-script-wait",
-                    Label = "Set Maximum Wait Time for Group Policy Scripts",
-                    Category = "Security",
-                    Description = "Configures the maximum time (in seconds) Windows waits for Group Policy startup and shutdown scripts to complete.",
-                    Tags = ["gpo-scripts", "timeout", "logon", "user-profile"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 2,
-                    SafetyRating = 5,
-                    ImpactNote = "Default is 600 seconds; prevents scripts from hanging system shutdown or logon indefinitely.",
-                    ApplyOps = [RegOp.SetDword(SysKey, "MaxGPOScriptWait", 600)],
-                    RemoveOps = [RegOp.DeleteValue(SysKey, "MaxGPOScriptWait")],
-                    DetectOps = [RegOp.CheckDword(SysKey, "MaxGPOScriptWait", 600)],
                 },
                 new TweakDef
                 {
@@ -5768,27 +4782,6 @@ internal static class PolicySecurityHardening
 
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
-            new TweakDef
-            {
-                Id = "uprof-disable-roaming-profiles",
-                Label = "Disable Roaming User Profiles",
-                Category = "Security",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 4,
-                Description =
-                    "Sets LocalProfile=1 in the System policy key. Forces all domain users on this "
-                    + "machine to use local profiles rather than roaming profiles synced from a "
-                    + "network share. Reduces logon time and prevents stale roaming profile issues. "
-                    + "Default: roaming profiles enabled when configured by AD. Recommended: 1 for "
-                    + "machines that should always use local state.",
-                Tags = ["user-profiles", "roaming", "domain", "policy"],
-                RegistryKeys = [Key],
-                ApplyOps = [RegOp.SetDword(Key, "LocalProfile", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "LocalProfile")],
-                DetectOps = [RegOp.CheckDword(Key, "LocalProfile", 1)],
-            },
             new TweakDef
             {
                 Id = "uprof-disable-slow-link-detection",
@@ -6357,69 +5350,6 @@ internal static class PolicySecurityHardening
         [
             new TweakDef
             {
-                Id = "evtacc-set-security-log-size-100mb",
-                Label = "Event Log Access: Set Security Log Maximum Size to 100 MB",
-                Category = "Security",
-                Description =
-                    "Sets the maximum size of the Windows Security event log to 100 MB (102,400 KB). "
-                    + "Security logs capture authentication, privilege use, object access, and policy changes. "
-                    + "A 100 MB log retains significantly more history than the default 20 MB, reducing the risk of log overwrite during high-event periods. "
-                    + "Removing this policy reverts the security log size to its configured or default value.",
-                Tags = ["event-log", "security-log", "log-size", "audit", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                RegistryKeys = [SecLog],
-                ApplyOps = [RegOp.SetDword(SecLog, "MaxSize", 102400)],
-                RemoveOps = [RegOp.DeleteValue(SecLog, "MaxSize")],
-                DetectOps = [RegOp.CheckDword(SecLog, "MaxSize", 102400)],
-                ImpactScore = 4,
-                SafetyRating = 5,
-                ImpactNote = "Expands security log to 100 MB; retains more audit history before log overwrite.",
-            },
-            new TweakDef
-            {
-                Id = "evtacc-set-system-log-size-50mb",
-                Label = "Event Log Access: Set System Log Maximum Size to 50 MB",
-                Category = "Security",
-                Description =
-                    "Sets the maximum size of the Windows System event log to 50 MB (51,200 KB). "
-                    + "System logs record OS-level events including driver failures, service status changes, and hardware errors. "
-                    + "Increasing the log size from the default 20 MB ensures system events are retained longer for post-incident analysis. "
-                    + "Removing this policy reverts the system log to its configured or default maximum size.",
-                Tags = ["event-log", "system-log", "log-size", "audit", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                RegistryKeys = [SysLog],
-                ApplyOps = [RegOp.SetDword(SysLog, "MaxSize", 51200)],
-                RemoveOps = [RegOp.DeleteValue(SysLog, "MaxSize")],
-                DetectOps = [RegOp.CheckDword(SysLog, "MaxSize", 51200)],
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Expands system log to 50 MB; preserves more OS event history for diagnostics.",
-            },
-            new TweakDef
-            {
-                Id = "evtacc-set-application-log-size-50mb",
-                Label = "Event Log Access: Set Application Log Maximum Size to 50 MB",
-                Category = "Security",
-                Description =
-                    "Sets the maximum size of the Windows Application event log to 50 MB (51,200 KB). "
-                    + "Application logs capture events from user-mode applications, COM+ components, and .NET runtime. "
-                    + "A larger log buffer ensures application errors are not overwritten before they can be captured by monitoring agents. "
-                    + "Removing this policy reverts the application log to its configured or default maximum size.",
-                Tags = ["event-log", "application-log", "log-size", "audit", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                RegistryKeys = [AppLog],
-                ApplyOps = [RegOp.SetDword(AppLog, "MaxSize", 51200)],
-                RemoveOps = [RegOp.DeleteValue(AppLog, "MaxSize")],
-                DetectOps = [RegOp.CheckDword(AppLog, "MaxSize", 51200)],
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Expands application log to 50 MB; reduces risk of losing application error events.",
-            },
-            new TweakDef
-            {
                 Id = "evtacc-set-powershell-log-size-50mb",
                 Label = "Event Log Access: Set PowerShell Log Maximum Size to 50 MB",
                 Category = "Security",
@@ -6438,111 +5368,6 @@ internal static class PolicySecurityHardening
                 ImpactScore = 4,
                 SafetyRating = 5,
                 ImpactNote = "Expands PowerShell log to 50 MB; retains more script event history for threat detection.",
-            },
-            new TweakDef
-            {
-                Id = "evtacc-security-log-retain-7days",
-                Label = "Event Log Access: Retain Security Log for 7 Days Before Overwriting",
-                Category = "Security",
-                Description =
-                    "Configures the security event log retention policy to retain events for a minimum of 7 days before overwriting. "
-                    + "This ensures that security events are available for forensic analysis for at least one week after they occur. "
-                    + "The retention policy value of 7 days is the CIS Benchmark recommendation for workstation security logging. "
-                    + "Removing this policy reverts the security log retention to its default (overwrite as needed).",
-                Tags = ["event-log", "security-log", "retention", "forensics", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                RegistryKeys = [SecLog],
-                ApplyOps = [RegOp.SetDword(SecLog, "Retention", 604800)],
-                RemoveOps = [RegOp.DeleteValue(SecLog, "Retention")],
-                DetectOps = [RegOp.CheckDword(SecLog, "Retention", 604800)],
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Retains security events for 7 days; supports forensic analysis windows for incidents.",
-            },
-            new TweakDef
-            {
-                Id = "evtacc-security-log-autobackup",
-                Label = "Event Log Access: Auto-Backup Security Log When Full",
-                Category = "Security",
-                Description =
-                    "Enables automatic backup archiving of the security event log when it reaches capacity. "
-                    + "When enabled, Windows saves a timestamped archive copy of the full log before creating space for new events. "
-                    + "Auto-backup prevents indefinite log overwrite and creates an audit trail archive without requiring a SIEM agent. "
-                    + "Removing this policy disables automatic backup of the security log on overflow.",
-                Tags = ["event-log", "security-log", "backup", "archive", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                RegistryKeys = [SecLog],
-                ApplyOps = [RegOp.SetDword(SecLog, "AutoBackupLogFiles", 1)],
-                RemoveOps = [RegOp.DeleteValue(SecLog, "AutoBackupLogFiles")],
-                DetectOps = [RegOp.CheckDword(SecLog, "AutoBackupLogFiles", 1)],
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Archives security log on overflow; prevents event loss without a SIEM agent.",
-            },
-            new TweakDef
-            {
-                Id = "evtacc-restrict-guest-access-security-log",
-                Label = "Event Log Access: Restrict Guest Access to Security Log",
-                Category = "Security",
-                Description =
-                    "Prevents guest accounts from reading the security event log. "
-                    + "The security log contains sensitive information about authentication attempts and privilege usage that should not be accessible to unauthenticated or guest-level users. "
-                    + "This policy denies the 'Guests' group read access to the security log channel. "
-                    + "Removing this policy allows guest accounts to read security log contents.",
-                Tags = ["event-log", "security-log", "access-control", "guest", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                RegistryKeys = [SecLog],
-                ApplyOps = [RegOp.SetDword(SecLog, "RestrictGuestAccess", 1)],
-                RemoveOps = [RegOp.DeleteValue(SecLog, "RestrictGuestAccess")],
-                DetectOps = [RegOp.CheckDword(SecLog, "RestrictGuestAccess", 1)],
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Denies guest account access to security log; prevents log content leakage.",
-            },
-            new TweakDef
-            {
-                Id = "evtacc-restrict-guest-access-system-log",
-                Label = "Event Log Access: Restrict Guest Access to System Log",
-                Category = "Security",
-                Description =
-                    "Prevents guest accounts from reading the system event log. "
-                    + "System logs contain details about driver loads, service failures, and hardware events that can aid an attacker in reconnaissance. "
-                    + "Restricting guest access limits information available to unauthenticated users who gain temporary access to the machine. "
-                    + "Removing this policy allows guest accounts to read system log contents.",
-                Tags = ["event-log", "system-log", "access-control", "guest", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                RegistryKeys = [SysLog],
-                ApplyOps = [RegOp.SetDword(SysLog, "RestrictGuestAccess", 1)],
-                RemoveOps = [RegOp.DeleteValue(SysLog, "RestrictGuestAccess")],
-                DetectOps = [RegOp.CheckDword(SysLog, "RestrictGuestAccess", 1)],
-                ImpactScore = 2,
-                SafetyRating = 5,
-                ImpactNote = "Denies guest account access to system log; limits reconnaissance information.",
-            },
-            new TweakDef
-            {
-                Id = "evtacc-restrict-guest-access-application-log",
-                Label = "Event Log Access: Restrict Guest Access to Application Log",
-                Category = "Security",
-                Description =
-                    "Prevents guest accounts from reading the application event log. "
-                    + "Application log events can expose internal application behavior, error messages, and stack traces useful to an attacker. "
-                    + "Restricting guest access follows the principle of least privilege for event log visibility. "
-                    + "Removing this policy allows guest accounts to read application log contents.",
-                Tags = ["event-log", "application-log", "access-control", "guest", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                RegistryKeys = [AppLog],
-                ApplyOps = [RegOp.SetDword(AppLog, "RestrictGuestAccess", 1)],
-                RemoveOps = [RegOp.DeleteValue(AppLog, "RestrictGuestAccess")],
-                DetectOps = [RegOp.CheckDword(AppLog, "RestrictGuestAccess", 1)],
-                ImpactScore = 2,
-                SafetyRating = 5,
-                ImpactNote = "Denies guest access to application log; limits application information exposure.",
             },
             new TweakDef
             {

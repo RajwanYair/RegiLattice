@@ -451,40 +451,6 @@ internal static class PolicyMisc
             [
                 new TweakDef
                 {
-                    Id = "clipadv-disable-clipboard-history",
-                    Label = "Disable Clipboard History Feature",
-                    Category = "System",
-                    Description =
-                        "Sets AllowClipboardHistory=0 to disable the Windows clipboard history feature (Win+V), preventing clipboard contents from being stored in history.",
-                    Tags = ["clipboard", "history", "privacy", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 4,
-                    SafetyRating = 5,
-                    ImpactNote = "Disables clipboard history; Win+V no longer shows recent clipboard items.",
-                    ApplyOps = [RegOp.SetDword(Key, "AllowClipboardHistory", 0)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "AllowClipboardHistory")],
-                    DetectOps = [RegOp.CheckDword(Key, "AllowClipboardHistory", 0)],
-                },
-                new TweakDef
-                {
-                    Id = "clipadv-disable-cross-device-sync",
-                    Label = "Disable Cross-Device Clipboard Sync",
-                    Category = "System",
-                    Description =
-                        "Sets AllowCrossDeviceClipboard=0 to prevent clipboard content from syncing between devices linked to the same Microsoft account via the cloud.",
-                    Tags = ["clipboard", "sync", "cloud", "privacy", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 4,
-                    SafetyRating = 5,
-                    ImpactNote = "Clipboard contents stay on-device; no cross-device sync via Microsoft account.",
-                    ApplyOps = [RegOp.SetDword(Key, "AllowCrossDeviceClipboard", 0)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "AllowCrossDeviceClipboard")],
-                    DetectOps = [RegOp.CheckDword(Key, "AllowCrossDeviceClipboard", 0)],
-                },
-                new TweakDef
-                {
                     Id = "clipadv-disable-history-across-sessions",
                     Label = "Disable Clipboard History Across Sessions",
                     Category = "System",
@@ -1033,74 +999,6 @@ internal static class PolicyMisc
             [
                 new TweakDef
                 {
-                    Id = "cdump-disable-crash-dump",
-                    Label = "Disable Crash Dump Generation",
-                    Category = "System",
-                    Description =
-                        "Sets CrashDumpEnabled=0 to disable creation of any memory dump file when Windows encounters a stop error (BSOD). Frees disk space on constrained devices and prevents large dump files from accumulating. Default: 7 (auto).",
-                    Tags = ["crash dump", "bsod", "memory", "storage", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = false,
-                    ImpactScore = 3,
-                    SafetyRating = 2,
-                    ImpactNote = "Disables all crash dumps; BSODs produce no diagnostic artifacts. Reduces disk use but hampers debugging.",
-                    ApplyOps = [RegOp.SetDword(CcKey, "CrashDumpEnabled", 0)],
-                    RemoveOps = [RegOp.DeleteValue(CcKey, "CrashDumpEnabled")],
-                    DetectOps = [RegOp.CheckDword(CcKey, "CrashDumpEnabled", 0)],
-                },
-                new TweakDef
-                {
-                    Id = "cdump-set-mini-dump",
-                    Label = "Set Crash Dump to Minidump Only",
-                    Category = "System",
-                    Description =
-                        "Sets CrashDumpEnabled=3 to configure Windows to write only a small minidump (~256 KB) on stop errors instead of a full or kernel memory dump. Balances debuggability with disk usage. Default: 7 (auto).",
-                    Tags = ["crash dump", "minidump", "bsod", "storage", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 3,
-                    SafetyRating = 4,
-                    ImpactNote = "256 KB minidump on BSOD; sufficient for driver crash analysis with low disk overhead.",
-                    ApplyOps = [RegOp.SetDword(CcKey, "CrashDumpEnabled", 3)],
-                    RemoveOps = [RegOp.DeleteValue(CcKey, "CrashDumpEnabled")],
-                    DetectOps = [RegOp.CheckDword(CcKey, "CrashDumpEnabled", 3)],
-                },
-                new TweakDef
-                {
-                    Id = "cdump-disable-auto-reboot",
-                    Label = "Disable Automatic Reboot on BSOD",
-                    Category = "System",
-                    Description =
-                        "Sets AutoReboot=0 to prevent Windows from automatically restarting immediately after a stop error. The system halts at the blue screen allowing the error code to be read. Useful for physical machines and servers.",
-                    Tags = ["crash dump", "auto reboot", "bsod", "server", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 4,
-                    SafetyRating = 5,
-                    ImpactNote = "System stays at BSOD screen until manually rebooted; stop code visible for diagnosis.",
-                    ApplyOps = [RegOp.SetDword(CcKey, "AutoReboot", 0)],
-                    RemoveOps = [RegOp.DeleteValue(CcKey, "AutoReboot")],
-                    DetectOps = [RegOp.CheckDword(CcKey, "AutoReboot", 0)],
-                },
-                new TweakDef
-                {
-                    Id = "cdump-disable-log-event",
-                    Label = "Disable BSOD Event Log Entry",
-                    Category = "System",
-                    Description =
-                        "Sets LogEvent=0 to prevent Windows from writing an event log entry to the System log when a stop error occurs. Default: 1 (log enabled). Reduces event log verbosity on systems with frequent crash-recovery cycles.",
-                    Tags = ["crash dump", "event log", "bsod", "logging", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = false,
-                    ImpactScore = 2,
-                    SafetyRating = 3,
-                    ImpactNote = "No event log entry on BSOD; reduces auditability of stop errors.",
-                    ApplyOps = [RegOp.SetDword(CcKey, "LogEvent", 0)],
-                    RemoveOps = [RegOp.DeleteValue(CcKey, "LogEvent")],
-                    DetectOps = [RegOp.CheckDword(CcKey, "LogEvent", 0)],
-                },
-                new TweakDef
-                {
                     Id = "cdump-disable-send-alert",
                     Label = "Disable BSOD Admin Alert",
                     Category = "System",
@@ -1149,40 +1047,6 @@ internal static class PolicyMisc
                     ApplyOps = [RegOp.SetDword(CcKey, "EnableLogFile", 0)],
                     RemoveOps = [RegOp.DeleteValue(CcKey, "EnableLogFile")],
                     DetectOps = [RegOp.CheckDword(CcKey, "EnableLogFile", 0)],
-                },
-                new TweakDef
-                {
-                    Id = "cdump-overwrite-existing-dump",
-                    Label = "Overwrite Existing Crash Dump",
-                    Category = "System",
-                    Description =
-                        "Sets Overwrite=1 so that each new crash dump overwrites the previous dump file rather than keeping multiple copies. Prevents disk space exhaustion on managed devices that experience occasional stop errors.",
-                    Tags = ["crash dump", "overwrite", "disk", "storage", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 3,
-                    SafetyRating = 5,
-                    ImpactNote = "New BSOD dump replaces old one; only most recent crash is retained on disk.",
-                    ApplyOps = [RegOp.SetDword(CcKey, "Overwrite", 1)],
-                    RemoveOps = [RegOp.DeleteValue(CcKey, "Overwrite")],
-                    DetectOps = [RegOp.CheckDword(CcKey, "Overwrite", 1)],
-                },
-                new TweakDef
-                {
-                    Id = "cdump-disable-filter-pages",
-                    Label = "Disable Crash Dump Page Filtering",
-                    Category = "System",
-                    Description =
-                        "Sets FilterPages=0 to disable the Windows crash dump page-filtering feature that removes unnecessary memory pages before writing the dump file. Produces more complete dumps at the cost of larger file size. Default: 1.",
-                    Tags = ["crash dump", "filter", "memory", "debugging", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 2,
-                    SafetyRating = 4,
-                    ImpactNote = "Full unfiltered memory dumps; larger files but more useful for deep kernel analysis.",
-                    ApplyOps = [RegOp.SetDword(CcKey, "FilterPages", 0)],
-                    RemoveOps = [RegOp.DeleteValue(CcKey, "FilterPages")],
-                    DetectOps = [RegOp.CheckDword(CcKey, "FilterPages", 0)],
                 },
                 new TweakDef
                 {
@@ -1993,63 +1857,6 @@ internal static class PolicyMisc
             [
                 new TweakDef
                 {
-                    Id = "wmpol-prevent-codec-download",
-                    Label = "WMP: Prevent Automatic Codec Download from the Internet",
-                    Category = "System",
-                    Description =
-                        "Sets PreventCodecDownload=1 in Windows Media Player policy. Prevents Windows Media Player from automatically downloading codecs from the internet to play media files that use unknown or missing codecs. Automatic codec download has historically been a malware delivery vector: specially crafted media files embedded codec 'requirements' that redirected to malicious codec installer EXEs from attacker-controlled servers rather than legitimate codec repositories. "
-                        + "The drive-by codec attack vector was prevalent in the Windows XP/Vista era: opening a video file triggers WMP's codec detection, which displays a dialog offering to download from a URL embedded in the media file's codec detection field — which can point to any server. Modern enterprise security policies require that all software (including codecs) be installed through approved channels (SCCM, Intune). Blocking automatic codec download ensures users cannot inadvertently install unapproved software via a malicious media file.",
-                    Tags = ["wmpol", "windows-media-player", "codec", "download", "malware", "drive-by"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 3,
-                    SafetyRating = 5,
-                    ImpactNote =
-                        "WMP cannot auto-download codecs. Users will see 'codec missing' error for unsupported formats. Enterprise codec deployments via SCCM/Intune unaffected.",
-                    ApplyOps = [RegOp.SetDword(Key, "PreventCodecDownload", 1)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "PreventCodecDownload")],
-                    DetectOps = [RegOp.CheckDword(Key, "PreventCodecDownload", 1)],
-                },
-                new TweakDef
-                {
-                    Id = "wmpol-disable-auto-update",
-                    Label = "WMP: Disable Windows Media Player Automatic Online Update Check",
-                    Category = "System",
-                    Description =
-                        "Sets DisableAutoUpdate=1 in Windows Media Player policy. Prevents Windows Media Player from automatically checking for updates and new functionality online. WMP update checks contact Microsoft servers on every WMP launch, contributing to outbound telemetry traffic and potentially introducing version changes to a controlled software baseline. "
-                        + "On enterprise-managed systems where application updates are managed by WSUS or SCCM, unsolicited update checks by individual applications create unpredictable patching timelines. WMP updates have in the past introduced new codec support, UI changes, and DRM policy updates that required revalidation by enterprise compatibility teams. Disabling auto-update ensures WMP version state is controlled exclusively by IT-managed patching processes.",
-                    Tags = ["wmpol", "windows-media-player", "auto-update", "baseline", "wsus"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 2,
-                    SafetyRating = 5,
-                    ImpactNote =
-                        "WMP update checks disabled. Updates delivered via WSUS/Windows Update instead of direct WMP check. No functional impact on media playback.",
-                    ApplyOps = [RegOp.SetDword(Key, "DisableAutoUpdate", 1)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "DisableAutoUpdate")],
-                    DetectOps = [RegOp.CheckDword(Key, "DisableAutoUpdate", 1)],
-                },
-                new TweakDef
-                {
-                    Id = "wmpol-disable-network-settings",
-                    Label = "WMP: Prevent User Modification of Network Streaming Settings",
-                    Category = "System",
-                    Description =
-                        "Sets DisableNetworkSettings=1 in Windows Media Player policy. Prevents users from modifying Windows Media Player network settings (streaming protocol selection, proxy configuration, bandwidth usage). On corporate networks, streaming settings should be configured by IT to ensure WMP uses approved proxy settings and consumption limits, preventing users from configuring direct internet streaming paths that bypass proxy inspection. "
-                        + "WMP network settings include the ability to configure RTSP and HTTP streaming protocol preferences and proxy exclusion lists. A user who configures WMP to bypass the corporate proxy for streaming sources creates an uninspected traffic path for internet-sourced audio/video streams. Corporate DLP and web filtering policies rely on all internet traffic flowing through the approved proxy for content inspection. Locking WMP network settings prevents direct-to-internet streaming paths.",
-                    Tags = ["wmpol", "windows-media-player", "network-settings", "proxy", "streaming", "dlp"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 2,
-                    SafetyRating = 5,
-                    ImpactNote =
-                        "WMP network settings page locked. Streaming uses system proxy settings configured by IT. Users cannot configure alternative streaming protocol paths.",
-                    ApplyOps = [RegOp.SetDword(Key, "DisableNetworkSettings", 1)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "DisableNetworkSettings")],
-                    DetectOps = [RegOp.CheckDword(Key, "DisableNetworkSettings", 1)],
-                },
-                new TweakDef
-                {
                     Id = "wmpol-disable-privacy-tab",
                     Label = "WMP: Hide Privacy Settings Tab to Lock in Policy-Configured Privacy Options",
                     Category = "System",
@@ -2772,36 +2579,6 @@ internal static class PolicyMisc
         [
             new TweakDef
             {
-                Id = "srgpo-disable-sr-policy",
-                Label = "System Restore: Disable System Restore via Group Policy",
-                Category = "System",
-                Description =
-                    "Sets DisableSR=1 in the SystemRestore policy key. Turns off System Restore for all "
-                    + "drives and prevents automatic restore point creation. Frees disk space used by VSC.",
-                Tags = ["system-restore", "vss", "rollback", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ApplyOps = [RegOp.SetDword(SrPol, "DisableSR", 1)],
-                RemoveOps = [RegOp.DeleteValue(SrPol, "DisableSR")],
-                DetectOps = [RegOp.CheckDword(SrPol, "DisableSR", 1)],
-            },
-            new TweakDef
-            {
-                Id = "srgpo-disable-config-policy",
-                Label = "System Restore: Lock out System Restore configuration UI",
-                Category = "System",
-                Description =
-                    "Sets DisableConfig=1 in the SystemRestore policy key. Hides the 'Configure' button "
-                    + "on the System Protection tab, preventing users from enabling or adjusting SR settings.",
-                Tags = ["system-restore", "lockout", "ui", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ApplyOps = [RegOp.SetDword(SrPol, "DisableConfig", 1)],
-                RemoveOps = [RegOp.DeleteValue(SrPol, "DisableConfig")],
-                DetectOps = [RegOp.CheckDword(SrPol, "DisableConfig", 1)],
-            },
-            new TweakDef
-            {
                 Id = "srgpo-set-rp-session-interval",
                 Label = "System Restore: Set restore-point creation interval to 1 day",
                 Category = "System",
@@ -2829,21 +2606,6 @@ internal static class PolicyMisc
                 ApplyOps = [RegOp.SetDword(SrSettings, "RPGlobalInterval", 1440)],
                 RemoveOps = [RegOp.DeleteValue(SrSettings, "RPGlobalInterval")],
                 DetectOps = [RegOp.CheckDword(SrSettings, "RPGlobalInterval", 1440)],
-            },
-            new TweakDef
-            {
-                Id = "srgpo-set-max-disk-usage",
-                Label = "System Restore: Cap restore-point disk usage at 5 %",
-                Category = "System",
-                Description =
-                    "Sets DiskPercent=5 in SystemRestore settings. Limits the maximum disk space that "
-                    + "System Restore shadow copies may consume to 5 % of the system drive.",
-                Tags = ["system-restore", "disk-space", "storage", "optimization"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ApplyOps = [RegOp.SetDword(SrSettings, "DiskPercent", 5)],
-                RemoveOps = [RegOp.DeleteValue(SrSettings, "DiskPercent")],
-                DetectOps = [RegOp.CheckDword(SrSettings, "DiskPercent", 5)],
             },
             new TweakDef
             {
@@ -2933,40 +2695,6 @@ internal static class PolicyMisc
             [
                 new TweakDef
                 {
-                    Id = "tsap-set-ntp-type",
-                    Label = "Set W32tm Sync Type to NTP",
-                    Category = "System",
-                    Description =
-                        "Sets the W32tm Type value to 'NTP' via policy, instructing the Windows Time service to use NTP time sources only (not domain hierarchy NT5DS). Required on stand-alone machines or workgroup environments.",
-                    Tags = ["time sync", "ntp", "w32tm", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = false,
-                    ImpactScore = 3,
-                    SafetyRating = 4,
-                    ImpactNote = "W32tm uses NTP sources; bypasses domain hierarchy sync which may cause skew in AD.",
-                    ApplyOps = [RegOp.SetString(ParamKey, "Type", "NTP")],
-                    RemoveOps = [RegOp.DeleteValue(ParamKey, "Type")],
-                    DetectOps = [RegOp.CheckString(ParamKey, "Type", "NTP")],
-                },
-                new TweakDef
-                {
-                    Id = "tsap-set-ntp-server",
-                    Label = "Set NTP Server to pool.ntp.org",
-                    Category = "System",
-                    Description =
-                        "Sets NtpServer='pool.ntp.org,0x9' as the time source for the Windows Time service via Group Policy. Use '0x9' flags (poll + step). Replaces time.windows.com for environments that prefer public NTP pools.",
-                    Tags = ["time sync", "ntp", "ntp server", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = false,
-                    ImpactScore = 3,
-                    SafetyRating = 5,
-                    ImpactNote = "System syncs to pool.ntp.org; suitable for non-domain SOHO and development machines.",
-                    ApplyOps = [RegOp.SetString(ParamKey, "NtpServer", "pool.ntp.org,0x9")],
-                    RemoveOps = [RegOp.DeleteValue(ParamKey, "NtpServer")],
-                    DetectOps = [RegOp.CheckString(ParamKey, "NtpServer", "pool.ntp.org,0x9")],
-                },
-                new TweakDef
-                {
                     Id = "tsap-disable-nosync",
                     Label = "Prevent W32tm NoSync Mode",
                     Category = "System",
@@ -3015,40 +2743,6 @@ internal static class PolicyMisc
                     ApplyOps = [RegOp.SetDword(CfgKey, "MinPollInterval", 6)],
                     RemoveOps = [RegOp.DeleteValue(CfgKey, "MinPollInterval")],
                     DetectOps = [RegOp.CheckDword(CfgKey, "MinPollInterval", 6)],
-                },
-                new TweakDef
-                {
-                    Id = "tsap-set-max-pos-phase-correction",
-                    Label = "Limit Max Positive Phase Correction (1 h)",
-                    Category = "System",
-                    Description =
-                        "Sets MaxPosPhaseCorrection=3600 (seconds) to cap how far forward the system clock can be stepped in a single sync. Default: 0x7FFFFFFF (unlimited). Prevents accidental large forward clock jumps on domain or NTP misconfiguration.",
-                    Tags = ["time sync", "phase correction", "clock jump", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 3,
-                    SafetyRating = 5,
-                    ImpactNote = "Clock cannot jump forward more than 1 hour in one step; protects certificate/Kerberos validity.",
-                    ApplyOps = [RegOp.SetDword(CfgKey, "MaxPosPhaseCorrection", 3600)],
-                    RemoveOps = [RegOp.DeleteValue(CfgKey, "MaxPosPhaseCorrection")],
-                    DetectOps = [RegOp.CheckDword(CfgKey, "MaxPosPhaseCorrection", 3600)],
-                },
-                new TweakDef
-                {
-                    Id = "tsap-set-max-neg-phase-correction",
-                    Label = "Limit Max Negative Phase Correction (1 h)",
-                    Category = "System",
-                    Description =
-                        "Sets MaxNegPhaseCorrection=3600 (seconds) to cap how far backward the system clock can be stepped. Default: 0x7FFFFFFF (unlimited). Prevents Kerberos ticket invalidation and certificate errors caused by large backward clock jumps.",
-                    Tags = ["time sync", "phase correction", "clock", "kerberos", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 3,
-                    SafetyRating = 5,
-                    ImpactNote = "Clock cannot jump back more than 1 hour; protects authentication tokens.",
-                    ApplyOps = [RegOp.SetDword(CfgKey, "MaxNegPhaseCorrection", 3600)],
-                    RemoveOps = [RegOp.DeleteValue(CfgKey, "MaxNegPhaseCorrection")],
-                    DetectOps = [RegOp.CheckDword(CfgKey, "MaxNegPhaseCorrection", 3600)],
                 },
                 new TweakDef
                 {
@@ -3146,40 +2840,6 @@ internal static class PolicyMisc
                     ApplyOps = [RegOp.SetString(PrvKey, "NtpServer", "")],
                     RemoveOps = [RegOp.DeleteValue(PrvKey, "NtpServer")],
                     DetectOps = [RegOp.CheckString(PrvKey, "NtpServer", "")],
-                },
-                new TweakDef
-                {
-                    Id = "timepol-set-max-pos-phase-correction",
-                    Label = "Set Maximum Positive Time Correction to 3600 Seconds",
-                    Category = "System",
-                    Description =
-                        "Limits the maximum positive time jump that W32TM will accept in a single synchronisation to 3600 seconds (1 hour), preventing an attacker from jumping the system clock forward to expire Kerberos tickets or bypass time-based security checks.",
-                    Tags = ["w32time", "time-correction", "max-jump", "security", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 3,
-                    SafetyRating = 5,
-                    ImpactNote = "Maximum positive NTP clock adjustment limited to 1 hour; large forward time jumps blocked.",
-                    ApplyOps = [RegOp.SetDword(CfgKey, "MaxPosPhaseCorrection", 3600)],
-                    RemoveOps = [RegOp.DeleteValue(CfgKey, "MaxPosPhaseCorrection")],
-                    DetectOps = [RegOp.CheckDword(CfgKey, "MaxPosPhaseCorrection", 3600)],
-                },
-                new TweakDef
-                {
-                    Id = "timepol-set-max-neg-phase-correction",
-                    Label = "Set Maximum Negative Time Correction to 3600 Seconds",
-                    Category = "System",
-                    Description =
-                        "Limits the maximum negative time jump (clock backward adjustment) to 3600 seconds (1 hour), preventing attacks that move the clock backward to re-validate already-expired certificates or Kerberos tickets.",
-                    Tags = ["w32time", "time-correction", "max-jump-backward", "security", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 3,
-                    SafetyRating = 5,
-                    ImpactNote = "Maximum negative NTP clock adjustment limited to 1 hour; backward time jumps to replay tickets blocked.",
-                    ApplyOps = [RegOp.SetDword(CfgKey, "MaxNegPhaseCorrection", 3600)],
-                    RemoveOps = [RegOp.DeleteValue(CfgKey, "MaxNegPhaseCorrection")],
-                    DetectOps = [RegOp.CheckDword(CfgKey, "MaxNegPhaseCorrection", 3600)],
                 },
                 new TweakDef
                 {
@@ -3648,24 +3308,6 @@ internal static class PolicyMisc
         [
             new TweakDef
             {
-                Id = "wcnpol-disable-registrars",
-                Label = "WCN Policy: Disable WCN Registrars",
-                Category = "System",
-                Description =
-                    "Disables all Windows Connect Now (WCN) registrar functionality via Group Policy. WCN allows wireless device configuration over the network — a potential attack vector on corporate Wi-Fi.",
-                Tags = ["wcn", "wireless", "wifi", "registrar", "policy", "hardening"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                ImpactNote = "Disables all WCN registrar functionality; closes wireless config attack vector.",
-                RegistryKeys = [RegKey],
-                ApplyOps = [RegOp.SetDword(RegKey, "EnableRegistrars", 0)],
-                RemoveOps = [RegOp.DeleteValue(RegKey, "EnableRegistrars")],
-                DetectOps = [RegOp.CheckDword(RegKey, "EnableRegistrars", 0)],
-            },
-            new TweakDef
-            {
                 Id = "wcnpol-disable-execution-service",
                 Label = "WCN Policy: Disable WCN Execution Service",
                 Category = "System",
@@ -3979,27 +3621,6 @@ internal static class PolicyMisc
             },
             new TweakDef
             {
-                Id = "wlogon-disable-fast-user-switching",
-                Label = "Windows Logon Options: Disable Fast User Switching",
-                Category = "System",
-                Description =
-                    "Prevents multiple user sessions from being simultaneously active via fast user switching. "
-                    + "Fast user switching allows a second user to log on without the first user logging off, leaving their session unlocked in memory. "
-                    + "This increases attack surface and can violate compliance policies requiring single-session workstations. "
-                    + "Removing this policy re-enables fast user switching.",
-                Tags = ["logon", "fast-user-switching", "session", "compliance", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                RegistryKeys = [SysKey],
-                ApplyOps = [RegOp.SetDword(SysKey, "HideFastUserSwitching", 1)],
-                RemoveOps = [RegOp.DeleteValue(SysKey, "HideFastUserSwitching")],
-                DetectOps = [RegOp.CheckDword(SysKey, "HideFastUserSwitching", 1)],
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Disables fast user switching; enforces single-user session workstation compliance.",
-            },
-            new TweakDef
-            {
                 Id = "wlogon-disable-unlocking-from-non-domain-context",
                 Label = "Windows Logon Options: Require Domain Logon to Unlock Machine",
                 Category = "System",
@@ -4284,27 +3905,6 @@ internal static class PolicyMisc
             },
             new TweakDef
             {
-                Id = "wmplay-disable-network-settings-change",
-                Label = "Windows Media Player: Disable Network Settings Changes",
-                Category = "System",
-                Description =
-                    "Prevents WMP users from modifying network configuration in the Windows Media Player settings dialog. "
-                    + "Network settings in WMP include proxy configuration, streaming protocol selection, and bandwidth limits. "
-                    + "On managed endpoints these settings should be centrally controlled to ensure network traffic complies with organizational policies. "
-                    + "Removing this policy re-enables user ability to change WMP network settings.",
-                Tags = ["media-player", "network", "settings", "lockdown", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                RegistryKeys = [Key],
-                ApplyOps = [RegOp.SetDword(Key, "DisableNetworkSettings", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "DisableNetworkSettings")],
-                DetectOps = [RegOp.CheckDword(Key, "DisableNetworkSettings", 1)],
-                ImpactScore = 2,
-                SafetyRating = 5,
-                ImpactNote = "Prevents WMP network config changes; keeps media streaming under organizational control.",
-            },
-            new TweakDef
-            {
                 Id = "wmplay-disable-auto-update-check",
                 Label = "Windows Media Player: Disable Automatic Update Checking",
                 Category = "System",
@@ -4368,27 +3968,6 @@ internal static class PolicyMisc
             },
             new TweakDef
             {
-                Id = "wmplay-disable-library-sharing",
-                Label = "Windows Media Player: Disable Media Library Sharing",
-                Category = "System",
-                Description =
-                    "Prevents Windows Media Player from sharing its media library on the local network through the Windows Media Network Sharing service. "
-                    + "WMP library sharing exposes media file metadata and content over the network, which may include corporate training materials, meeting recordings, or other sensitive files. "
-                    + "Disabling library sharing reduces lateral movement attack surface from media sharing protocols. "
-                    + "Removing this policy allows WMP library sharing to be enabled by users.",
-                Tags = ["media-player", "library", "sharing", "network", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                RegistryKeys = [Key],
-                ApplyOps = [RegOp.SetDword(Key, "PreventLibrarySharing", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "PreventLibrarySharing")],
-                DetectOps = [RegOp.CheckDword(Key, "PreventLibrarySharing", 1)],
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Blocks WMP library sharing; reduces network attack surface from media sharing protocols.",
-            },
-            new TweakDef
-            {
                 Id = "wmplay-disable-media-information-online",
                 Label = "Windows Media Player: Disable Online Media Information Retrieval",
                 Category = "System",
@@ -4410,27 +3989,6 @@ internal static class PolicyMisc
             },
             new TweakDef
             {
-                Id = "wmplay-disable-usage-reporting",
-                Label = "Windows Media Player: Disable Usage Reporting",
-                Category = "System",
-                Description =
-                    "Prevents Windows Media Player from sending usage reports and playback data to Microsoft. "
-                    + "WMP usage reporting transmits data about media formats played, codecs used, and playback errors. "
-                    + "On enterprise endpoints, this constitutes unnecessary telemetry that should be disabled in line with data minimization policies. "
-                    + "Removing this policy re-enables WMP usage reporting to Microsoft.",
-                Tags = ["media-player", "telemetry", "usage-reporting", "privacy", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                RegistryKeys = [Key],
-                ApplyOps = [RegOp.SetDword(Key, "PreventCDDVDMetadataRetrieval", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "PreventCDDVDMetadataRetrieval")],
-                DetectOps = [RegOp.CheckDword(Key, "PreventCDDVDMetadataRetrieval", 1)],
-                ImpactScore = 2,
-                SafetyRating = 5,
-                ImpactNote = "Disables WMP telemetry and CD/DVD metadata requests; reduces media usage reporting.",
-            },
-            new TweakDef
-            {
                 Id = "wmplay-disable-remote-skin-download",
                 Label = "Windows Media Player: Disable Remote Skin and Visualizer Download",
                 Category = "System",
@@ -4449,27 +4007,6 @@ internal static class PolicyMisc
                 ImpactScore = 2,
                 SafetyRating = 5,
                 ImpactNote = "Blocks WMP remote content downloads; prevents unofficial plugins and skins from executing.",
-            },
-            new TweakDef
-            {
-                Id = "wmplay-hide-privacy-tab",
-                Label = "Windows Media Player: Hide Privacy Tab in Options",
-                Category = "System",
-                Description =
-                    "Removes the Privacy tab from the Windows Media Player Options dialog. "
-                    + "The Privacy tab allows users to modify privacy settings including DRM, usage reporting, and online content lookups. "
-                    + "When privacy settings are centrally locked via GPO, hiding the tab prevents users from attempting to change managed settings. "
-                    + "Removing this policy restores the Privacy tab in WMP Options.",
-                Tags = ["media-player", "privacy", "options-tab", "lockdown", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                RegistryKeys = [Key],
-                ApplyOps = [RegOp.SetDword(Key, "HidePrivacyTab", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "HidePrivacyTab")],
-                DetectOps = [RegOp.CheckDword(Key, "HidePrivacyTab", 1)],
-                ImpactScore = 2,
-                SafetyRating = 5,
-                ImpactNote = "Hides WMP Privacy tab; prevents users from modifying centrally managed privacy settings.",
             },
         ];
     }
@@ -4496,81 +4033,6 @@ internal static class PolicyMisc
                 ApplyOps = [RegOp.SetDword(WmpLm, "AllowScreenSaver", 0)],
                 RemoveOps = [RegOp.DeleteValue(WmpLm, "AllowScreenSaver")],
                 DetectOps = [RegOp.CheckDword(WmpLm, "AllowScreenSaver", 0)],
-            },
-            new TweakDef
-            {
-                Id = "wmply-no-cd-metadata",
-                Label = "WMP: Prevent CD/DVD metadata retrieval from the internet",
-                Category = "System",
-                Description =
-                    "Sets PreventCDDVDMetadataRetrieval=1. Stops Windows Media Player from contacting "
-                    + "online databases to retrieve CD/DVD album art, track names, and other metadata.",
-                Tags = ["media", "wmp", "metadata", "privacy", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ApplyOps = [RegOp.SetDword(WmpLm, "PreventCDDVDMetadataRetrieval", 1)],
-                RemoveOps = [RegOp.DeleteValue(WmpLm, "PreventCDDVDMetadataRetrieval")],
-                DetectOps = [RegOp.CheckDword(WmpLm, "PreventCDDVDMetadataRetrieval", 1)],
-            },
-            new TweakDef
-            {
-                Id = "wmply-no-music-metadata",
-                Label = "WMP: Prevent music file metadata retrieval from the internet",
-                Category = "System",
-                Description =
-                    "Sets PreventMusicFileMetadataRetrieval=1. Blocks WMP from downloading online "
-                    + "metadata for music files such as album art, artist info, and lyrics.",
-                Tags = ["media", "wmp", "metadata", "privacy", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ApplyOps = [RegOp.SetDword(WmpLm, "PreventMusicFileMetadataRetrieval", 1)],
-                RemoveOps = [RegOp.DeleteValue(WmpLm, "PreventMusicFileMetadataRetrieval")],
-                DetectOps = [RegOp.CheckDword(WmpLm, "PreventMusicFileMetadataRetrieval", 1)],
-            },
-            new TweakDef
-            {
-                Id = "wmply-no-radio-presets",
-                Label = "WMP: Prevent internet radio preset retrieval",
-                Category = "System",
-                Description =
-                    "Sets PreventRadioPresetsRetrieval=1. Prevents Windows Media Player from downloading "
-                    + "internet radio station presets from online services.",
-                Tags = ["media", "wmp", "radio", "privacy", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ApplyOps = [RegOp.SetDword(WmpLm, "PreventRadioPresetsRetrieval", 1)],
-                RemoveOps = [RegOp.DeleteValue(WmpLm, "PreventRadioPresetsRetrieval")],
-                DetectOps = [RegOp.CheckDword(WmpLm, "PreventRadioPresetsRetrieval", 1)],
-            },
-            new TweakDef
-            {
-                Id = "wmply-no-auto-update",
-                Label = "WMP: Disable automatic Windows Media Player updates",
-                Category = "System",
-                Description =
-                    "Sets DisableAutoUpdate=1. Prevents Windows Media Player from automatically checking "
-                    + "for and downloading software updates in the background.",
-                Tags = ["media", "wmp", "update", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ApplyOps = [RegOp.SetDword(WmpLm, "DisableAutoUpdate", 1)],
-                RemoveOps = [RegOp.DeleteValue(WmpLm, "DisableAutoUpdate")],
-                DetectOps = [RegOp.CheckDword(WmpLm, "DisableAutoUpdate", 1)],
-            },
-            new TweakDef
-            {
-                Id = "wmply-no-codec-download",
-                Label = "WMP: Prevent automatic codec download",
-                Category = "System",
-                Description =
-                    "Sets PreventCodecDownload=1. Stops Windows Media Player from automatically "
-                    + "downloading codecs needed to play unsupported media formats.",
-                Tags = ["media", "wmp", "codec", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ApplyOps = [RegOp.SetDword(WmpLm, "PreventCodecDownload", 1)],
-                RemoveOps = [RegOp.DeleteValue(WmpLm, "PreventCodecDownload")],
-                DetectOps = [RegOp.CheckDword(WmpLm, "PreventCodecDownload", 1)],
             },
             new TweakDef
             {
@@ -4933,24 +4395,6 @@ internal static class PolicyMisc
             },
             new TweakDef
             {
-                Id = "relpol-block-wer-auto-upload",
-                Label = "Reliability Policy: Block WER Auto-Upload of Crash Dumps",
-                Category = "System",
-                Description =
-                    "Prevents Windows Error Reporting from automatically uploading minidumps and full memory dumps to Microsoft. Crash dumps can contain sensitive application data, PII, or credentials from process memory.",
-                Tags = ["reliability", "wer", "crash-dump", "upload", "privacy", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                ImpactNote = "Prevents automatic upload of crash dumps; protects PII and credentials in memory.",
-                RegistryKeys = [WerKey],
-                ApplyOps = [RegOp.SetDword(WerKey, "LoggingDisabled", 1)],
-                RemoveOps = [RegOp.DeleteValue(WerKey, "LoggingDisabled")],
-                DetectOps = [RegOp.CheckDword(WerKey, "LoggingDisabled", 1)],
-            },
-            new TweakDef
-            {
                 Id = "relpol-disable-wer-ui-prompt",
                 Label = "Reliability Policy: Disable WER User Prompt Dialog",
                 Category = "System",
@@ -4966,24 +4410,6 @@ internal static class PolicyMisc
                 ApplyOps = [RegOp.SetDword(WerKey, "DisableUI", 1)],
                 RemoveOps = [RegOp.DeleteValue(WerKey, "DisableUI")],
                 DetectOps = [RegOp.CheckDword(WerKey, "DisableUI", 1)],
-            },
-            new TweakDef
-            {
-                Id = "relpol-limit-wer-queue-count",
-                Label = "Reliability Policy: Limit WER Report Queue Size",
-                Category = "System",
-                Description =
-                    "Limits the maximum number of error reports held in the WER queue to a small number. On heavily-used endpoints, an unbounded WER queue can consume significant disk space.",
-                Tags = ["reliability", "wer", "queue", "limit", "disk-space", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                ImpactNote = "Caps the WER queue to prevent unbounded disk usage on busy endpoints.",
-                RegistryKeys = [WerKey],
-                ApplyOps = [RegOp.SetDword(WerKey, "MaxQueueCount", 5)],
-                RemoveOps = [RegOp.DeleteValue(WerKey, "MaxQueueCount")],
-                DetectOps = [RegOp.CheckDword(WerKey, "MaxQueueCount", 5)],
             },
             new TweakDef
             {
@@ -5019,21 +4445,6 @@ internal static class PolicyMisc
 
         public static IReadOnlyList<TweakDef> Data { get; } =
         [
-            new TweakDef
-            {
-                Id = "timepol-type-ntp",
-                Label = "Enforce W32Time sync type NTP (policy)",
-                Category = "System",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                Description =
-                    "Configures W32Time to use NTP as the synchronisation source via Group Policy. "
-                    + "Type=NTP. Standalone workstations default to NT5DS on domain or NTP when standalone.",
-                Tags = ["time", "ntp", "w32time", "policy"],
-                ApplyOps = [RegOp.SetString(W32Params, "Type", "NTP")],
-                RemoveOps = [RegOp.DeleteValue(W32Params, "Type")],
-                DetectOps = [RegOp.CheckString(W32Params, "Type", "NTP")],
-            },
             new TweakDef
             {
                 Id = "timepol-ntp-server-pool",
@@ -5187,149 +4598,6 @@ internal static class PolicyMisc
         [
             new TweakDef
             {
-                Id = "wtime-set-ntp-server",
-                Label = "Configure NTP Server to time.windows.com",
-                Category = "System",
-                Description =
-                    "Sets the NtpServer value in the W32time Parameters policy key to 'time.windows.com,0x9'. "
-                    + "Configures Windows Time Service to sync from Microsoft's public NTP server using the NT5DS+NTP type. "
-                    + "Type=NTP is required for non-domain workstations; domain-joined machines default to NT5DS hierarchy. "
-                    + "Default: 'time.windows.com,0x9' (NTP). Recommended: enforce via policy to prevent drift.",
-                Tags = ["ntp", "time", "sync", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                ImpactNote = "Forces NTP sync from time.windows.com; system clock stays accurate on non-domain machines.",
-                ApplyOps = [RegOp.SetString(ParamKey, "NtpServer", "time.windows.com,0x9")],
-                RemoveOps = [RegOp.DeleteValue(ParamKey, "NtpServer")],
-                DetectOps = [RegOp.CheckString(ParamKey, "NtpServer", "time.windows.com,0x9")],
-            },
-            new TweakDef
-            {
-                Id = "wtime-force-ntp-type",
-                Label = "Force Time Sync Type to NTP",
-                Category = "System",
-                Description =
-                    "Sets Type=NTP in the W32time Parameters policy key. "
-                    + "Forces the Windows Time Service to use NTP (Network Time Protocol) as the sync source "
-                    + "rather than the domain hierarchy (NT5DS) or no sync (NoSync). "
-                    + "Essential for workgroup machines to maintain accurate time against external NTP servers. "
-                    + "Default: NT5DS on domain, NTP on standalone. Recommended: NTP for all non-domain machines.",
-                Tags = ["ntp", "time", "type", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                ImpactNote = "Time service uses NTP for synchronisation; do not set on domain machines (breaks DC hierarchy).",
-                ApplyOps = [RegOp.SetString(ParamKey, "Type", "NTP")],
-                RemoveOps = [RegOp.DeleteValue(ParamKey, "Type")],
-                DetectOps = [RegOp.CheckString(ParamKey, "Type", "NTP")],
-            },
-            new TweakDef
-            {
-                Id = "wtime-enable-ntp-client",
-                Label = "Enable NTP Client Provider",
-                Category = "System",
-                Description =
-                    "Sets Enabled=1 in the W32time NtpClient TimeProvider policy key. "
-                    + "Ensures the built-in NTP client provider is active and allowed to gather time samples "
-                    + "from configured NTP servers. Without this, the W32tm service cannot get NTP time. "
-                    + "Default: absent (enabled by default). Recommended: 1 to explicitly enforce via policy.",
-                Tags = ["ntp", "client", "time", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                ImpactNote = "NTP client provider explicitly enabled by policy; system will actively sync from NTP servers.",
-                ApplyOps = [RegOp.SetDword(NtpClient, "Enabled", 1)],
-                RemoveOps = [RegOp.DeleteValue(NtpClient, "Enabled")],
-                DetectOps = [RegOp.CheckDword(NtpClient, "Enabled", 1)],
-            },
-            new TweakDef
-            {
-                Id = "wtime-disable-ntp-server",
-                Label = "Disable NTP Server Provider",
-                Category = "System",
-                Description =
-                    "Sets Enabled=0 in the W32time NtpServer TimeProvider policy key. "
-                    + "Disables this machine from acting as an NTP server for other clients on the network. "
-                    + "Workstations should never serve NTP time to peers; only dedicated time servers or DCs should. "
-                    + "Default: absent (NTP server role disabled on non-DC machines). Recommended: 0 on workstations.",
-                Tags = ["ntp", "server", "time", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                ImpactNote = "This machine will not serve NTP time to other clients; inbound NTP queries are ignored.",
-                ApplyOps = [RegOp.SetDword(NtpServer, "Enabled", 0)],
-                RemoveOps = [RegOp.DeleteValue(NtpServer, "Enabled")],
-                DetectOps = [RegOp.CheckDword(NtpServer, "Enabled", 0)],
-            },
-            new TweakDef
-            {
-                Id = "wtime-set-poll-interval-6",
-                Label = "Set NTP Poll Interval to 64 Seconds (Accurate)",
-                Category = "System",
-                Description =
-                    "Sets SpecialPollInterval=64 in the W32time NtpClient policy key. "
-                    + "Configures the NTP client to query the time server every 64 seconds (2^6), "
-                    + "providing fast correction for machines where tight time accuracy is required "
-                    + "(e.g., Kerberos authentication, certificate validity checks). "
-                    + "Default: absent (OS default 604800 = 1 week for workstations). "
-                    + "Recommended: 64 on highly accurate or compliance-sensitive deployments.",
-                Tags = ["ntp", "poll-interval", "accuracy", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 4,
-                ImpactNote = "NTP polled every 64 seconds; increases NTP traffic but keeps clock within ±1 second.",
-                ApplyOps = [RegOp.SetDword(NtpClient, "SpecialPollInterval", 64)],
-                RemoveOps = [RegOp.DeleteValue(NtpClient, "SpecialPollInterval")],
-                DetectOps = [RegOp.CheckDword(NtpClient, "SpecialPollInterval", 64)],
-            },
-            new TweakDef
-            {
-                Id = "wtime-set-max-pos-phase-correction",
-                Label = "Set Maximum Positive Phase Correction to 3600s",
-                Category = "System",
-                Description =
-                    "Sets MaxPosPhaseCorrection=3600 in the W32time Config policy key. "
-                    + "Limits how far the clock can jump forward in a single correction to 3600 seconds (1 hour). "
-                    + "Prevents time-jump attacks where an attacker injects a far-future timestamp. "
-                    + "Default: absent (OS default 48 hours). Recommended: 3600 for security-hardened environments.",
-                Tags = ["ntp", "time", "security", "phase-correction", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 4,
-                ImpactNote = "Clock cannot jump forward more than 1 hour in a single NTP correction; protects against time injection attacks.",
-                ApplyOps = [RegOp.SetDword(CfgKey, "MaxPosPhaseCorrection", 3600)],
-                RemoveOps = [RegOp.DeleteValue(CfgKey, "MaxPosPhaseCorrection")],
-                DetectOps = [RegOp.CheckDword(CfgKey, "MaxPosPhaseCorrection", 3600)],
-            },
-            new TweakDef
-            {
-                Id = "wtime-set-max-neg-phase-correction",
-                Label = "Set Maximum Negative Phase Correction to 3600s",
-                Category = "System",
-                Description =
-                    "Sets MaxNegPhaseCorrection=3600 in the W32time Config policy key. "
-                    + "Limits how far the clock can jump backward in a single correction to 3600 seconds (1 hour). "
-                    + "Prevents time-rollback attacks that could revalidate expired certificates or bypass time-based access controls. "
-                    + "Default: absent (OS default 48 hours). Recommended: 3600 for certificate-sensitive environments.",
-                Tags = ["ntp", "time", "security", "phase-correction", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 4,
-                ImpactNote = "Clock cannot jump backward more than 1 hour in a single NTP correction; protects against rollback attacks.",
-                ApplyOps = [RegOp.SetDword(CfgKey, "MaxNegPhaseCorrection", 3600)],
-                RemoveOps = [RegOp.DeleteValue(CfgKey, "MaxNegPhaseCorrection")],
-                DetectOps = [RegOp.CheckDword(CfgKey, "MaxNegPhaseCorrection", 3600)],
-            },
-            new TweakDef
-            {
                 Id = "wtime-set-update-interval",
                 Label = "Set Clock Update Interval to 30000 (30 Seconds)",
                 Category = "System",
@@ -5348,48 +4616,6 @@ internal static class PolicyMisc
                 ApplyOps = [RegOp.SetDword(CfgKey, "UpdateInterval", 30000)],
                 RemoveOps = [RegOp.DeleteValue(CfgKey, "UpdateInterval")],
                 DetectOps = [RegOp.CheckDword(CfgKey, "UpdateInterval", 30000)],
-            },
-            new TweakDef
-            {
-                Id = "wtime-set-phase-correction-rate",
-                Label = "Set NTP Phase Correction Rate to 1 (Fast)",
-                Category = "System",
-                Description =
-                    "Sets FrequencyCorrectRate=4 in the W32time Config policy key. "
-                    + "Controls how aggressively W32tm corrects the local oscillator frequency to match the NTP reference. "
-                    + "Value 4 (the OS default) represents a balanced correction rate suitable for most workstations. "
-                    + "Setting explicitly via policy prevents drift caused by third-party tools resetting this to slower values. "
-                    + "Default: absent. Recommended: 4.",
-                Tags = ["ntp", "time", "frequency", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 1,
-                SafetyRating = 5,
-                ImpactNote = "Frequency correction rate pinned to 4 (OS default); prevents third-party tools from changing it.",
-                ApplyOps = [RegOp.SetDword(CfgKey, "FrequencyCorrectRate", 4)],
-                RemoveOps = [RegOp.DeleteValue(CfgKey, "FrequencyCorrectRate")],
-                DetectOps = [RegOp.CheckDword(CfgKey, "FrequencyCorrectRate", 4)],
-            },
-            new TweakDef
-            {
-                Id = "wtime-set-spike-watchdog",
-                Label = "Enable NTP Spike Watchdog Protection",
-                Category = "System",
-                Description =
-                    "Sets SpikeWatchPeriod=900 in the W32time Config policy key (900 seconds = 15 minutes). "
-                    + "Sets the window during which W32tm detects and ignores suspicious time spike samples "
-                    + "from NTP servers — large, sudden deviations that may indicate NTP spoofing or misconfigured servers. "
-                    + "Default: absent (W32tm uses a shorter default window). "
-                    + "Recommended: 900 to extend spike detection for high-value machines.",
-                Tags = ["ntp", "time", "security", "spike", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Suspicious NTP spikes are ignored for 15 minutes before re-evaluating; hardens against NTP injection.",
-                ApplyOps = [RegOp.SetDword(CfgKey, "SpikeWatchPeriod", 900)],
-                RemoveOps = [RegOp.DeleteValue(CfgKey, "SpikeWatchPeriod")],
-                DetectOps = [RegOp.CheckDword(CfgKey, "SpikeWatchPeriod", 900)],
             },
         ];
     }
@@ -6634,26 +5860,6 @@ internal static class PolicyAutoRun
     [
         new TweakDef
         {
-            Id = "autoplay-policy-disable-autoplay",
-            Label = "Disable AutoPlay via Policy",
-            Category = "Security",
-            Description =
-                "Sets NoAutoplayfornonVolume=1 under the Windows\\Explorer Group Policy key. "
-                + "Prevents AutoPlay from running when non-volume devices such as cameras, phones, "
-                + "or audio players are connected. "
-                + "Removes the risk of malicious autorun payloads executing on connection.",
-            Tags = ["autoplay", "usb", "policy", "security", "removable"],
-            NeedsAdmin = true,
-            CorpSafe = true,
-            ImpactScore = 4,
-            SafetyRating = 5,
-            ImpactNote = "AutoPlay disabled for non-volume devices; prevents accidental execution from USB accessories.",
-            ApplyOps = [RegOp.SetDword(ExplorerPol, "NoAutoplayfornonVolume", 1)],
-            RemoveOps = [RegOp.DeleteValue(ExplorerPol, "NoAutoplayfornonVolume")],
-            DetectOps = [RegOp.CheckDword(ExplorerPol, "NoAutoplayfornonVolume", 1)],
-        },
-        new TweakDef
-        {
             Id = "autoplay-policy-disable-autorun",
             Label = "Disable AutoRun via Policy (All Drives)",
             Category = "Security",
@@ -6671,45 +5877,6 @@ internal static class PolicyAutoRun
             ApplyOps = [RegOp.SetDword(ExplorerCur, "NoDriveTypeAutoRun", 0xFF)],
             RemoveOps = [RegOp.DeleteValue(ExplorerCur, "NoDriveTypeAutoRun")],
             DetectOps = [RegOp.CheckDword(ExplorerCur, "NoDriveTypeAutoRun", 0xFF)],
-        },
-        new TweakDef
-        {
-            Id = "autoplay-policy-disable-removable",
-            Label = "Disable AutoRun for Removable Drives",
-            Category = "Security",
-            Description =
-                "Sets NoDriveTypeAutoRun=0x04 under the Policies\\Explorer key. "
-                + "Specifically targets drive type 4 (removable/USB flash drives) for AutoRun suppression. "
-                + "The most common vector for USB-delivered malware; removing autorun.inf execution eliminates drive-by infections.",
-            Tags = ["autorun", "usb", "removable", "policy", "security"],
-            NeedsAdmin = true,
-            CorpSafe = true,
-            ImpactScore = 4,
-            SafetyRating = 5,
-            ImpactNote = "Removable-drive AutoRun blocked; USB flash drives will not auto-execute any payload.",
-            ApplyOps = [RegOp.SetDword(ExplorerCur, "NoDriveTypeAutoRun", 4)],
-            RemoveOps = [RegOp.DeleteValue(ExplorerCur, "NoDriveTypeAutoRun")],
-            DetectOps = [RegOp.CheckDword(ExplorerCur, "NoDriveTypeAutoRun", 4)],
-        },
-        new TweakDef
-        {
-            Id = "autoplay-policy-default-no-action",
-            Label = "Set AutoPlay Default Action to No Action",
-            Category = "Security",
-            Description =
-                "Sets NoAutorun=1 under the Policies\\Explorer key. "
-                + "Forces the AutoPlay handler to take no action by default when media or devices are inserted, "
-                + "requiring explicit user choice instead of automatic program launch. "
-                + "Prevents silent background execution of AutoPlay handlers.",
-            Tags = ["autoplay", "default", "policy", "security"],
-            NeedsAdmin = true,
-            CorpSafe = true,
-            ImpactScore = 3,
-            SafetyRating = 5,
-            ImpactNote = "AutoPlay shows a prompt instead of executing; users must explicitly choose an action.",
-            ApplyOps = [RegOp.SetDword(ExplorerCur, "NoAutorun", 1)],
-            RemoveOps = [RegOp.DeleteValue(ExplorerCur, "NoAutorun")],
-            DetectOps = [RegOp.CheckDword(ExplorerCur, "NoAutorun", 1)],
         },
         new TweakDef
         {
@@ -6733,25 +5900,6 @@ internal static class PolicyAutoRun
         },
         new TweakDef
         {
-            Id = "autoplay-policy-disable-cd-autoplay",
-            Label = "Disable AutoPlay for CD/DVD Drives",
-            Category = "Security",
-            Description =
-                "Sets NoDriveTypeAutoRun with bit 0x20 (0x20 = optical drives) under Policies\\Explorer. "
-                + "Disables AutoRun specifically for CD-ROM and DVD drives without affecting other drive types. "
-                + "Prevents the classic optical-media autorun.inf attack vector while keeping USB handling configurable.",
-            Tags = ["autoplay", "cd", "dvd", "optical", "policy"],
-            NeedsAdmin = true,
-            CorpSafe = true,
-            ImpactScore = 3,
-            SafetyRating = 5,
-            ImpactNote = "CD and DVD autorun suppressed; physical media will not auto-execute on insert.",
-            ApplyOps = [RegOp.SetDword(ExplorerCur, "NoDriveTypeAutoRun", 0x20)],
-            RemoveOps = [RegOp.DeleteValue(ExplorerCur, "NoDriveTypeAutoRun")],
-            DetectOps = [RegOp.CheckDword(ExplorerCur, "NoDriveTypeAutoRun", 0x20)],
-        },
-        new TweakDef
-        {
             Id = "autoplay-policy-block-set-default",
             Label = "Block Users from Changing AutoPlay Default",
             Category = "Security",
@@ -6768,25 +5916,6 @@ internal static class PolicyAutoRun
             ApplyOps = [RegOp.SetDword(ExplorerPol, "NoAutoplayBackpropagation", 1)],
             RemoveOps = [RegOp.DeleteValue(ExplorerPol, "NoAutoplayBackpropagation")],
             DetectOps = [RegOp.CheckDword(ExplorerPol, "NoAutoplayBackpropagation", 1)],
-        },
-        new TweakDef
-        {
-            Id = "autoplay-policy-disable-network-autoplay",
-            Label = "Disable AutoPlay for Network Drives",
-            Category = "Security",
-            Description =
-                "Sets NoDriveTypeAutoRun with bit 0x40 (0x40 = network drives) under Policies\\Explorer. "
-                + "Disables AutoRun for mapped network drives. "
-                + "Prevents rogue network shares from triggering AutoPlay handlers when browsed by Explorer.",
-            Tags = ["autoplay", "network", "share", "policy", "security"],
-            NeedsAdmin = true,
-            CorpSafe = true,
-            ImpactScore = 3,
-            SafetyRating = 5,
-            ImpactNote = "Network drive AutoPlay suppressed; mapped shares cannot trigger auto-execution.",
-            ApplyOps = [RegOp.SetDword(ExplorerCur, "NoDriveTypeAutoRun", 0x40)],
-            RemoveOps = [RegOp.DeleteValue(ExplorerCur, "NoDriveTypeAutoRun")],
-            DetectOps = [RegOp.CheckDword(ExplorerCur, "NoDriveTypeAutoRun", 0x40)],
         },
         new TweakDef
         {
@@ -6843,102 +5972,6 @@ internal static class PolicyWindowsStore
 
     public static IReadOnlyList<TweakDef> Tweaks { get; } =
     [
-        new TweakDef
-        {
-            Id = "storepl-policy-disable-store",
-            Label = "Disable Windows Store App via Policy",
-            Category = "System",
-            Description =
-                "Sets DisableStoreApps=1 under the WindowsStore Group Policy key. "
-                + "Prevents users from launching the Microsoft Store application. "
-                + "Useful in enterprise environments where app distribution is controlled via SCCM, Intune, or WSUS.",
-            Tags = ["store", "msstore", "policy", "enterprise", "disable"],
-            NeedsAdmin = true,
-            CorpSafe = true,
-            ImpactScore = 4,
-            SafetyRating = 4,
-            ImpactNote = "Microsoft Store UI blocked; app installation via Store prevented for all users.",
-            ApplyOps = [RegOp.SetDword(StoreKey, "DisableStoreApps", 1)],
-            RemoveOps = [RegOp.DeleteValue(StoreKey, "DisableStoreApps")],
-            DetectOps = [RegOp.CheckDword(StoreKey, "DisableStoreApps", 1)],
-        },
-        new TweakDef
-        {
-            Id = "storepl-policy-remove-store",
-            Label = "Remove Windows Store from Settings",
-            Category = "System",
-            Description =
-                "Sets RemoveWindowsStore=1 under the WindowsStore Group Policy key. "
-                + "Removes the Microsoft Store entry from Settings and any related UI surfaces. "
-                + "More aggressive than DisableStoreApps — hides the Store completely rather than just blocking launch.",
-            Tags = ["store", "remove", "policy", "enterprise"],
-            NeedsAdmin = true,
-            CorpSafe = true,
-            ImpactScore = 4,
-            SafetyRating = 4,
-            ImpactNote = "Store entry removed from Settings UI; users cannot navigate to or launch the Store.",
-            ApplyOps = [RegOp.SetDword(StoreKey, "RemoveWindowsStore", 1)],
-            RemoveOps = [RegOp.DeleteValue(StoreKey, "RemoveWindowsStore")],
-            DetectOps = [RegOp.CheckDword(StoreKey, "RemoveWindowsStore", 1)],
-        },
-        new TweakDef
-        {
-            Id = "storepl-policy-require-private-store",
-            Label = "Require Private Store Only",
-            Category = "System",
-            Description =
-                "Sets RequirePrivateStoreOnly=1 under the WindowsStore Group Policy key. "
-                + "Restricts the Store application to show only apps from the organisation's private Store catalogue, "
-                + "blocking access to the public Microsoft Store inventory. "
-                + "Standard enterprise governance control for app deployment.",
-            Tags = ["store", "private", "enterprise", "policy"],
-            NeedsAdmin = true,
-            CorpSafe = true,
-            ImpactScore = 3,
-            SafetyRating = 5,
-            ImpactNote = "Store displays private catalogue only; public app listings not visible to users.",
-            ApplyOps = [RegOp.SetDword(StoreKey, "RequirePrivateStoreOnly", 1)],
-            RemoveOps = [RegOp.DeleteValue(StoreKey, "RequirePrivateStoreOnly")],
-            DetectOps = [RegOp.CheckDword(StoreKey, "RequirePrivateStoreOnly", 1)],
-        },
-        new TweakDef
-        {
-            Id = "storepl-policy-disable-auto-download",
-            Label = "Disable Automatic App Download in Store",
-            Category = "System",
-            Description =
-                "Sets AutoDownload=2 (disabled) under the WindowsStore Group Policy key. "
-                + "Prevents the Store from automatically downloading app updates in the background. "
-                + "Useful when bandwidth or storage consumption must be controlled centrally.",
-            Tags = ["store", "download", "auto-update", "policy", "bandwidth"],
-            NeedsAdmin = true,
-            CorpSafe = true,
-            ImpactScore = 3,
-            SafetyRating = 5,
-            ImpactNote = "Store app updates no longer download automatically; manual update required.",
-            ApplyOps = [RegOp.SetDword(StoreKey, "AutoDownload", 2)],
-            RemoveOps = [RegOp.DeleteValue(StoreKey, "AutoDownload")],
-            DetectOps = [RegOp.CheckDword(StoreKey, "AutoDownload", 2)],
-        },
-        new TweakDef
-        {
-            Id = "storepl-policy-disable-offer-to-update",
-            Label = "Disable Store Update Offers to Users",
-            Category = "System",
-            Description =
-                "Sets DisableOSUpgrade=1 under the WindowsStore Group Policy key. "
-                + "Prevents the Microsoft Store from showing upgrade or update offers to users. "
-                + "Stops OS-level upgrade promotions delivered through the Store channel.",
-            Tags = ["store", "upgrade", "update", "policy"],
-            NeedsAdmin = true,
-            CorpSafe = true,
-            ImpactScore = 2,
-            SafetyRating = 5,
-            ImpactNote = "Store-delivered OS upgrade and update offers will not be shown to users.",
-            ApplyOps = [RegOp.SetDword(StoreKey, "DisableOSUpgrade", 1)],
-            RemoveOps = [RegOp.DeleteValue(StoreKey, "DisableOSUpgrade")],
-            DetectOps = [RegOp.CheckDword(StoreKey, "DisableOSUpgrade", 1)],
-        },
         new TweakDef
         {
             Id = "storepl-policy-turn-off-store-notifications",
@@ -7051,44 +6084,6 @@ internal static class PolicyLockScreen
 
     public static IReadOnlyList<TweakDef> Tweaks { get; } =
     [
-        new TweakDef
-        {
-            Id = "lockpol-policy-no-lock-screen",
-            Label = "Disable Lock Screen via Policy",
-            Category = "Security",
-            Description =
-                "Sets NoLockScreen=1 under the Personalization Group Policy key. "
-                + "Removes the lock screen entirely, proceeding directly to the sign-in screen when the computer wakes. "
-                + "Reduces the number of clicks required to authenticate on shared or kiosk workstations.",
-            Tags = ["lockscreen", "policy", "kiosk", "signin"],
-            NeedsAdmin = true,
-            CorpSafe = true,
-            ImpactScore = 3,
-            SafetyRating = 5,
-            ImpactNote = "Lock screen bypassed; system jumps directly to sign-in prompt on wake.",
-            ApplyOps = [RegOp.SetDword(PersonalKey, "NoLockScreen", 1)],
-            RemoveOps = [RegOp.DeleteValue(PersonalKey, "NoLockScreen")],
-            DetectOps = [RegOp.CheckDword(PersonalKey, "NoLockScreen", 1)],
-        },
-        new TweakDef
-        {
-            Id = "lockpol-policy-no-changing-lock-screen",
-            Label = "Prevent Users from Changing Lock Screen Image",
-            Category = "Security",
-            Description =
-                "Sets NoChangingLockScreen=1 under the Personalization Group Policy key. "
-                + "Prevents users from changing the lock screen background image. "
-                + "Useful for enforcing a corporate-branded lock screen image across all workstations.",
-            Tags = ["lockscreen", "image", "policy", "branding", "enterprise"],
-            NeedsAdmin = true,
-            CorpSafe = true,
-            ImpactScore = 2,
-            SafetyRating = 5,
-            ImpactNote = "Lock screen image cannot be modified by users; centralised branding enforced.",
-            ApplyOps = [RegOp.SetDword(PersonalKey, "NoChangingLockScreen", 1)],
-            RemoveOps = [RegOp.DeleteValue(PersonalKey, "NoChangingLockScreen")],
-            DetectOps = [RegOp.CheckDword(PersonalKey, "NoChangingLockScreen", 1)],
-        },
         new TweakDef
         {
             Id = "lockpol-policy-no-spotlight",
@@ -7262,25 +6257,6 @@ internal static class PolicyRemoteAssistance
     [
         new TweakDef
         {
-            Id = "remassist-policy-disable-remote-assistance",
-            Label = "Disable Remote Assistance Completely",
-            Category = "Remote Desktop",
-            Description =
-                "Sets fAllowToGetHelp=0 under the Terminal Services Group Policy key. "
-                + "Prevents users from requesting or receiving Remote Assistance connections. "
-                + "Closes the Remote Assistance channel entirely, which is distinct from Remote Desktop (RDP).",
-            Tags = ["remote-assistance", "ra", "policy", "security", "disable"],
-            NeedsAdmin = true,
-            CorpSafe = true,
-            ImpactScore = 4,
-            SafetyRating = 5,
-            ImpactNote = "Remote Assistance (msra.exe) blocked; no helper can connect via the RA channel.",
-            ApplyOps = [RegOp.SetDword(RemAssist, "fAllowToGetHelp", 0)],
-            RemoveOps = [RegOp.DeleteValue(RemAssist, "fAllowToGetHelp")],
-            DetectOps = [RegOp.CheckDword(RemAssist, "fAllowToGetHelp", 0)],
-        },
-        new TweakDef
-        {
             Id = "remassist-policy-disable-offer-ra",
             Label = "Disable Offer Remote Assistance",
             Category = "Remote Desktop",
@@ -7428,25 +6404,6 @@ internal static class PolicyRemoteAssistance
         },
         new TweakDef
         {
-            Id = "remassist-policy-disable-clipboard-transfer",
-            Label = "Disable Clipboard Transfer During RA Sessions",
-            Category = "Remote Desktop",
-            Description =
-                "Sets fDisableClip=1 under the Terminal Services Group Policy key. "
-                + "Prevents clipboard content from being shared between the local and remote machines during a Remote Assistance session. "
-                + "Blocks data exfiltration via clipboard paste during support sessions.",
-            Tags = ["remote-assistance", "clipboard", "exfiltration", "policy", "security"],
-            NeedsAdmin = true,
-            CorpSafe = true,
-            ImpactScore = 3,
-            SafetyRating = 5,
-            ImpactNote = "Clipboard disabled during RA sessions; copy-paste between machines not allowed.",
-            ApplyOps = [RegOp.SetDword(RemAssist, "fDisableClip", 1)],
-            RemoveOps = [RegOp.DeleteValue(RemAssist, "fDisableClip")],
-            DetectOps = [RegOp.CheckDword(RemAssist, "fDisableClip", 1)],
-        },
-        new TweakDef
-        {
             Id = "remassist-policy-disable-file-transfer",
             Label = "Disable File Transfer During RA Sessions",
             Category = "Remote Desktop",
@@ -7482,45 +6439,6 @@ internal static class PolicySmartCard
 
     public static IReadOnlyList<TweakDef> Tweaks { get; } =
     [
-        new TweakDef
-        {
-            Id = "smartcard-policy-require-smart-card",
-            Label = "Require Smart Card for Interactive Logon",
-            Category = "Security",
-            Description =
-                "Sets scforceoption=1 under the SmartCardCredentialProvider Group Policy key. "
-                + "Forces all interactive logons to use a Smart Card credential. "
-                + "Password-only logon is blocked; users must present a physical token or virtual smart card.",
-            Tags = ["smartcard", "logon", "policy", "security", "mfa"],
-            NeedsAdmin = true,
-            CorpSafe = true,
-            ImpactScore = 5,
-            SafetyRating = 3,
-            ImpactNote = "Smart card mandatory for logon; password-only authentication blocked system-wide.",
-            ApplyOps = [RegOp.SetDword(ScCredProv, "scforceoption", 1)],
-            RemoveOps = [RegOp.DeleteValue(ScCredProv, "scforceoption")],
-            DetectOps = [RegOp.CheckDword(ScCredProv, "scforceoption", 1)],
-        },
-        new TweakDef
-        {
-            Id = "smartcard-policy-remove-on-removal",
-            Label = "Lock Workstation on Smart Card Removal",
-            Category = "Security",
-            Description =
-                "Sets scremoveoption=1 under the SmartCardCredentialProvider Group Policy key. "
-                + "Automatically locks the workstation when the smart card is removed from the reader. "
-                + "Enforces physical token presence as a continuous authentication requirement; "
-                + "the session is inaccessible the moment the card is removed.",
-            Tags = ["smartcard", "lock", "removal", "policy", "security"],
-            NeedsAdmin = true,
-            CorpSafe = true,
-            ImpactScore = 5,
-            SafetyRating = 5,
-            ImpactNote = "Workstation locks instantly on card removal; no credential required to trigger the lock.",
-            ApplyOps = [RegOp.SetDword(ScCredProv, "scremoveoption", 1)],
-            RemoveOps = [RegOp.DeleteValue(ScCredProv, "scremoveoption")],
-            DetectOps = [RegOp.CheckDword(ScCredProv, "scremoveoption", 1)],
-        },
         new TweakDef
         {
             Id = "smartcard-policy-force-logoff-on-removal",
@@ -7577,25 +6495,6 @@ internal static class PolicySmartCard
             ApplyOps = [RegOp.SetDword(ScCredProv, "AllowDomainPINLogon", 1)],
             RemoveOps = [RegOp.DeleteValue(ScCredProv, "AllowDomainPINLogon")],
             DetectOps = [RegOp.CheckDword(ScCredProv, "AllowDomainPINLogon", 1)],
-        },
-        new TweakDef
-        {
-            Id = "smartcard-policy-disable-credential-caching",
-            Label = "Disable Smart Card Credential Caching",
-            Category = "Security",
-            Description =
-                "Sets DisallowPlaintextPin=1 under the SmartCardCredentialProvider Group Policy key. "
-                + "Prevents the credential provider from caching smart card credentials in memory as plaintext PIN. "
-                + "Reduces the risk of credential harvesting by memory-resident malware.",
-            Tags = ["smartcard", "cache", "pin", "policy", "security"],
-            NeedsAdmin = true,
-            CorpSafe = true,
-            ImpactScore = 4,
-            SafetyRating = 5,
-            ImpactNote = "Smart card plaintext PIN caching disabled; protected credential store used instead.",
-            ApplyOps = [RegOp.SetDword(ScCredProv, "DisallowPlaintextPin", 1)],
-            RemoveOps = [RegOp.DeleteValue(ScCredProv, "DisallowPlaintextPin")],
-            DetectOps = [RegOp.CheckDword(ScCredProv, "DisallowPlaintextPin", 1)],
         },
         new TweakDef
         {
@@ -7911,78 +6810,6 @@ internal static class PolicyEnterprise
             [
                 new TweakDef
                 {
-                    Id = "addsvc-require-strong-dc-channel",
-                    Label = "AD Services: Require Sign-and-Seal (Strong) Secure Channel to DC",
-                    Category = "System",
-                    Description =
-                        "Sets RequireSignOrSeal=1 in Netlogon\\Parameters. Requires all Netlogon secure channel traffic between this workstation and domain controllers to be both signed and sealed (encrypted). The Netlogon secure channel carries authentication traffic, machine account password changes, and group policy downloads. If unsigned and unencrypted, the secure channel is susceptible to the Zerologon vulnerability (CVE-2020-1472) and earlier Netlogon protocol attacks that allow privilege escalation to Domain Admin. Requiring sign-and-seal ensures all Netlogon traffic is integrity-protected and encrypted.",
-                    Tags = ["netlogon", "secure-channel", "zerologon", "cve-2020-1472", "sign-seal"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 5,
-                    SafetyRating = 5,
-                    ImpactNote =
-                        "Netlogon secure channel requires sign-and-seal. Mitigates Zerologon and Netlogon protocol downgrade attacks. No user-visible impact — all modern Windows DCs support sign-and-seal. May block authentication if older (pre-Windows 2000) DCs exist in the domain.",
-                    ApplyOps = [RegOp.SetDword(NetlogonKey, "RequireSignOrSeal", 1)],
-                    RemoveOps = [RegOp.DeleteValue(NetlogonKey, "RequireSignOrSeal")],
-                    DetectOps = [RegOp.CheckDword(NetlogonKey, "RequireSignOrSeal", 1)],
-                },
-                new TweakDef
-                {
-                    Id = "addsvc-enable-secure-channel-sealing",
-                    Label = "AD Services: Enable Netlogon Secure Channel Encryption (Seal)",
-                    Category = "System",
-                    Description =
-                        "Sets SealSecureChannel=1 in Netlogon\\Parameters. Enables encryption (sealing) of the Netlogon secure channel in addition to signing. While RequireSignOrSeal=1 ensures integrity, this setting specifically ensures confidentiality — the channel content is encrypted and cannot be captured by network eavesdropping. Together, signing and sealing provide authenticated-and-encrypted communication between clients and domain controllers for all Netlogon protocol messages, including machine account password refresh operations.",
-                    Tags = ["netlogon", "seal", "encryption", "secure-channel", "confidentiality"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 4,
-                    SafetyRating = 5,
-                    ImpactNote =
-                        "Netlogon channel encryption enabled. Works in conjunction with signing (RequireSignOrSeal). No visible impact to users or applications — encryption is handled transparently by the Netlogon service. Requires DCs to support secure channel encryption, which all Windows Server 2000+ DCs support.",
-                    ApplyOps = [RegOp.SetDword(NetlogonKey, "SealSecureChannel", 1)],
-                    RemoveOps = [RegOp.DeleteValue(NetlogonKey, "SealSecureChannel")],
-                    DetectOps = [RegOp.CheckDword(NetlogonKey, "SealSecureChannel", 1)],
-                },
-                new TweakDef
-                {
-                    Id = "addsvc-set-machine-password-age-30days",
-                    Label = "AD Services: Set Machine Account Password Rotation Interval to 30 Days",
-                    Category = "System",
-                    Description =
-                        "Sets MaximumPasswordAge=30 in Netlogon\\Parameters (units: days). Sets the maximum age of the machine account password to 30 days, after which Netlogon automatically requests a new password from the DC. Machine account passwords authenticate the workstation to the domain (used in Netlogon secure channel setup and Kerberos S4U2Proxy). An attacker who compromises a machine account password can perform Pass-the-Hash or Silver Ticket attacks using the machine account's Kerberos hash. Frequent rotation limits the attacker's window of opportunity. Default is 30 days; explicitly setting this prevents GPO drift to longer values.",
-                    Tags = ["machine-account", "password-rotation", "netlogon", "silver-ticket", "s4u"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 4,
-                    SafetyRating = 5,
-                    ImpactNote =
-                        "Machine account password rotated every 30 days automatically by Netlogon. This is the default behaviour; explicitly setting it prevents accidental policy drift. No user-visible impact. Machine account password changes are transparent. Disable rotation only for specific reasons (domain join cloning scenarios) via DisablePasswordChange.",
-                    ApplyOps = [RegOp.SetDword(NetlogonKey, "MaximumPasswordAge", 30)],
-                    RemoveOps = [RegOp.DeleteValue(NetlogonKey, "MaximumPasswordAge")],
-                    DetectOps = [RegOp.CheckDword(NetlogonKey, "MaximumPasswordAge", 30)],
-                },
-                new TweakDef
-                {
-                    Id = "addsvc-enable-machine-account-password-change",
-                    Label = "AD Services: Enable Automatic Machine Account Password Rotation",
-                    Category = "System",
-                    Description =
-                        "Sets DisablePasswordChange=0 in Netlogon\\Parameters. Explicitly enables automatic machine account password changes (sets the DisablePasswordChange flag to 0 = do NOT disable). Automatic machine account password rotation is a security feature — some organisations disable it to prevent 'secure channel' credential staleness in certain edge cases (e.g., VDI golden image re-deployment). Disabling rotation means the machine's Active Directory password stays static indefinitely, making it a persistent credential that is more valuable to attackers and never expires. Explicitly enabling rotation is a defence-in-depth measure.",
-                    Tags = ["machine-account", "password-rotation", "disable-prevention", "netlogon"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 4,
-                    SafetyRating = 5,
-                    ImpactNote =
-                        "Machine account automatic password change enabled (DisablePasswordChange=0). This is the default Windows behaviour. If your environment uses VDI clones or domain-joined VM templates, ensure the VDI solution handles machine account conflicts via SysPrep or equivalent before enforcing.",
-                    ApplyOps = [RegOp.SetDword(NetlogonKey, "DisablePasswordChange", 0)],
-                    RemoveOps = [RegOp.DeleteValue(NetlogonKey, "DisablePasswordChange")],
-                    DetectOps = [RegOp.CheckDword(NetlogonKey, "DisablePasswordChange", 0)],
-                },
-                new TweakDef
-                {
                     Id = "addsvc-restrict-ntlm-outbound-to-trusted-servers",
                     Label = "AD Services: Restrict Outbound NTLM to Domain-Trusted Servers Only",
                     Category = "System",
@@ -8274,24 +7101,6 @@ internal static class PolicyEnterprise
                     ApplyOps = [RegOp.SetDword(TsKey, "EnableWatermarking", 1)],
                     RemoveOps = [RegOp.DeleteValue(TsKey, "EnableWatermarking")],
                     DetectOps = [RegOp.CheckDword(TsKey, "EnableWatermarking", 1)],
-                },
-                new TweakDef
-                {
-                    Id = "avd-disable-clipboard-redirect",
-                    Label = "AVD: Disable Clipboard Redirection in Sessions",
-                    Category = "System",
-                    Description =
-                        "Sets fDisableClip=1. Blocks bidirectional clipboard redirection between the AVD session and the client device. Clipboard is a primary data exfiltration vector in VDI environments: users copy sensitive data from the session and paste it outside the controlled environment. Disabling clipboard redirection is a key DLP control for finance, healthcare, and legal VDI deployments. Some AVD workflows may require clipboard for productivity; evaluate per use-case.",
-                    Tags = ["avd", "clipboard", "dlp", "data-exfiltration", "enterprise"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 4,
-                    SafetyRating = 5,
-                    ImpactNote =
-                        "Prevents copy/paste between session and client. Significant productivity impact for workflows requiring copy of data from session.",
-                    ApplyOps = [RegOp.SetDword(TsKey, "fDisableClip", 1)],
-                    RemoveOps = [RegOp.DeleteValue(TsKey, "fDisableClip")],
-                    DetectOps = [RegOp.CheckDword(TsKey, "fDisableClip", 1)],
                 },
                 new TweakDef
                 {
@@ -9011,108 +7820,6 @@ internal static class PolicyEnterprise
             [
                 new TweakDef
                 {
-                    Id = "dchrdn-require-secure-channel-signing",
-                    Label = "Require Signing on All Netlogon Secure Channel Connections",
-                    Category = "System",
-                    Description =
-                        "Configures Netlogon to require cryptographic signing on all secure channel connections from this machine to its domain controller, protecting against Zerologon (CVE-2020-1472) and secure channel downgrade attacks.",
-                    Tags = ["netlogon", "secure-channel", "zerologon", "cve-2020-1472", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 5,
-                    SafetyRating = 5,
-                    ImpactNote = "Netlogon secure channel signing required; Zerologon class attacks against this machine's DC connection blocked.",
-                    ApplyOps = [RegOp.SetDword(Key, "RequireSignOrSeal", 1)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "RequireSignOrSeal")],
-                    DetectOps = [RegOp.CheckDword(Key, "RequireSignOrSeal", 1)],
-                },
-                new TweakDef
-                {
-                    Id = "dchrdn-require-secure-channel-sealing",
-                    Label = "Require Sealing (Encryption) on Netlogon Secure Channel",
-                    Category = "System",
-                    Description =
-                        "Configures the Netlogon secure channel to use full encryption (sealing) in addition to signing, ensuring the contents of secure channel messages cannot be intercepted and read by network observers.",
-                    Tags = ["netlogon", "sealing", "encryption", "secure-channel", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 5,
-                    SafetyRating = 5,
-                    ImpactNote = "Netlogon secure channel sealing enabled; DC communication encrypted end-to-end, not just signed.",
-                    ApplyOps = [RegOp.SetDword(Key, "SealSecureChannel", 1)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "SealSecureChannel")],
-                    DetectOps = [RegOp.CheckDword(Key, "SealSecureChannel", 1)],
-                },
-                new TweakDef
-                {
-                    Id = "dchrdn-sign-secure-channel",
-                    Label = "Enable Netlogon Secure Channel Cryptographic Signatures",
-                    Category = "System",
-                    Description =
-                        "Enables Netlogon secure channel signing at the Windows Security Support Provider level, ensuring all Netlogon RPC traffic includes a HMAC-based message authentication code protecting against modification.",
-                    Tags = ["netlogon", "signing", "hmac", "rpc", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 5,
-                    SafetyRating = 5,
-                    ImpactNote = "Netlogon RPC channel signing enabled; HMAC integrity protection active on all DC communication.",
-                    ApplyOps = [RegOp.SetDword(Key, "SignSecureChannel", 1)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "SignSecureChannel")],
-                    DetectOps = [RegOp.CheckDword(Key, "SignSecureChannel", 1)],
-                },
-                new TweakDef
-                {
-                    Id = "dchrdn-set-max-machine-account-age-30d",
-                    Label = "Set Machine Account Password Maximum Age to 30 Days",
-                    Category = "System",
-                    Description =
-                        "Sets the maximum age of the machine account Kerberos trust password to 30 days, ensuring machine account credentials are regularly rotated and limiting the window during which a stolen machine account password can be misused.",
-                    Tags = ["netlogon", "machine-account", "password-age", "rotation", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 3,
-                    SafetyRating = 5,
-                    ImpactNote = "Machine account password rotation cycle set to 30 days; stolen machine credentials expire in 30 days maximum.",
-                    ApplyOps = [RegOp.SetDword(Key, "MaximumPasswordAge", 30)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "MaximumPasswordAge")],
-                    DetectOps = [RegOp.CheckDword(Key, "MaximumPasswordAge", 30)],
-                },
-                new TweakDef
-                {
-                    Id = "dchrdn-disable-machine-account-pwd-change",
-                    Label = "Enable Machine Account Password Rotation (Prevent Disabling)",
-                    Category = "System",
-                    Description =
-                        "Ensures the machine account password rotation feature is not disabled, counteracting malware or misconfiguration that sets DisablePasswordChange=1 to prevent the machine account from rotating its domain password.",
-                    Tags = ["netlogon", "machine-account", "password-change", "security", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 4,
-                    SafetyRating = 5,
-                    ImpactNote = "Machine account password change enabled (DisablePasswordChange=0); regular DC trust rotations enforced.",
-                    ApplyOps = [RegOp.SetDword(Key, "DisablePasswordChange", 0)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "DisablePasswordChange")],
-                    DetectOps = [RegOp.CheckDword(Key, "DisablePasswordChange", 0)],
-                },
-                new TweakDef
-                {
-                    Id = "dchrdn-enable-strong-key",
-                    Label = "Enable Strong Session Key for Netlogon Secure Channel",
-                    Category = "System",
-                    Description =
-                        "Forces the use of AES-256 strong session keys for Netlogon secure channel encryption rather than the legacy DES-based 64-bit session keys, significantly increasing the strength of DC trust channel encryption.",
-                    Tags = ["netlogon", "strong-key", "aes", "session-key", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 5,
-                    SafetyRating = 5,
-                    ImpactNote = "Netlogon AES-256 strong session keys required; legacy 64-bit DES session keys rejected for DC channel.",
-                    ApplyOps = [RegOp.SetDword(Key, "RequireStrongKey", 1)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "RequireStrongKey")],
-                    DetectOps = [RegOp.CheckDword(Key, "RequireStrongKey", 1)],
-                },
-                new TweakDef
-                {
                     Id = "dchrdn-restrict-null-session-pipes",
                     Label = "Restrict Null Session Named Pipe Access to Empty List",
                     Category = "System",
@@ -9392,24 +8099,6 @@ internal static class PolicyEnterprise
                 },
                 new TweakDef
                 {
-                    Id = "domtrust-require-strong-key-trust",
-                    Label = "Domain Trust: Require Strong Encryption Keys for Trust Authentication",
-                    Category = "System",
-                    Description =
-                        "Sets RequireStrongKey=1 in Netlogon\\Parameters. Requires that the inter-domain trust uses strong encryption keys (128-bit RC4 or AES keys) for the trust authentication. If RequireStrongKey is 0, the Netlogon secure channel for trust relationships can negotiate down to weak DES encryption. Trust relationships using weak keys are vulnerable to offline brute-force attacks against captured Netlogon challenge-response traffic. RequireStrongKey=1 prevents this downgrade and ensures all trust traffic uses at minimum 128-bit RC4, and preferably AES (when both sides support it via SupportedEncryptionTypes setting in the trust object).",
-                    Tags = ["domain-trust", "strong-key", "encryption", "downgrade-prevention", "netlogon"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 4,
-                    SafetyRating = 4,
-                    ImpactNote =
-                        "Trust authentication requires strong key. Trusts negotiated with old DCs that only support DES trust keys will fail. All Windows Server 2003+ DCs support strong trust keys. Only a concern in very old mixed-mode domain environments.",
-                    ApplyOps = [RegOp.SetDword(NetlogonKey, "RequireStrongKey", 1)],
-                    RemoveOps = [RegOp.DeleteValue(NetlogonKey, "RequireStrongKey")],
-                    DetectOps = [RegOp.CheckDword(NetlogonKey, "RequireStrongKey", 1)],
-                },
-                new TweakDef
-                {
                     Id = "domtrust-disable-anonymous-trust-dc-discovery",
                     Label = "Domain Trust: Disable Anonymous Trust DC Discovery Across Forest",
                     Category = "System",
@@ -9515,24 +8204,6 @@ internal static class PolicyEnterprise
                     ApplyOps = [RegOp.SetDword(NetlogonKey, "AuditTrustAuthFailures", 1)],
                     RemoveOps = [RegOp.DeleteValue(NetlogonKey, "AuditTrustAuthFailures")],
                     DetectOps = [RegOp.CheckDword(NetlogonKey, "AuditTrustAuthFailures", 1)],
-                },
-                new TweakDef
-                {
-                    Id = "domtrust-disable-trust-downgrade-to-cleartext",
-                    Label = "Domain Trust: Prevent Trust Negotiation Downgrade to Clear-Text Password",
-                    Category = "System",
-                    Description =
-                        "Sets AllowNT4Crypto=0 in Netlogon\\Parameters. Prevents Netlogon from allowing legacy NT4-era clear-text trust password negotiation. Old NT4-style inter-domain trusts used clear-text password exchange in the trust setup phase, which is vulnerable to eavesdropping. Even in modern Windows domains, Netlogon will accept NT4-style authentication if a legacy DC requests it. Setting AllowNT4Crypto=0 prevents this downgrade, ensuring trust negotiation always uses modern cryptographic protocols.",
-                    Tags = ["domain-trust", "nt4", "clear-text", "downgrade", "netlogon"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 4,
-                    SafetyRating = 5,
-                    ImpactNote =
-                        "NT4-era clear-text trust crypto disabled. If the environment has trust relationships with actual NT4 domain controllers (extremely rare — NT4 reached end-of-life in 2004), those trusts will break. In all modern Windows Server environments this setting has no operational impact.",
-                    ApplyOps = [RegOp.SetDword(NetlogonKey, "AllowNT4Crypto", 0)],
-                    RemoveOps = [RegOp.DeleteValue(NetlogonKey, "AllowNT4Crypto")],
-                    DetectOps = [RegOp.CheckDword(NetlogonKey, "AllowNT4Crypto", 0)],
                 },
                 new TweakDef
                 {
@@ -10347,78 +9018,6 @@ internal static class PolicyEnterprise
         [
             new TweakDef
             {
-                Id = "esroam-disable-app-setting-sync",
-                Label = "Enterprise State Roaming: Disable Application Settings Sync",
-                Category = "System",
-                Description =
-                    "Prevents Windows from syncing application settings (e.g., browser preferences, UWP app configuration) to Azure AD / Microsoft account cloud storage via Enterprise State Roaming. Application settings often contain business-critical customizations; roaming them to cloud storage creates data residency concerns and can cause settings to propagate to personal devices using the same account.",
-                Tags = ["state roaming", "sync", "app settings", "azure ad", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                RegistryKeys = [SyncKey],
-                ApplyOps = [RegOp.SetDword(SyncKey, "DisableApplicationSettingSync", 2)],
-                RemoveOps = [RegOp.DeleteValue(SyncKey, "DisableApplicationSettingSync")],
-                DetectOps = [RegOp.CheckDword(SyncKey, "DisableApplicationSettingSync", 2)],
-                ImpactScore = 3,
-                SafetyRating = 4,
-                ImpactNote = "Disables app settings sync to cloud; settings remain device-local only.",
-            },
-            new TweakDef
-            {
-                Id = "esroam-disable-start-layout-sync",
-                Label = "Enterprise State Roaming: Disable Start Menu Layout Sync",
-                Category = "System",
-                Description =
-                    "Disables synchronization of the Windows Start layout (Start screen tile arrangement, pinned apps, size configuration) across devices enrolled in Enterprise State Roaming. In managed environments where Start menus are deployed via Group Policy or provisioning packages, cloud roaming of Start layout can overwrite the IT-managed layout, creating inconsistency across machines.",
-                Tags = ["state roaming", "sync", "start menu", "layout", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                RegistryKeys = [SyncKey],
-                ApplyOps = [RegOp.SetDword(SyncKey, "DisableStartLayoutSettingSync", 2)],
-                RemoveOps = [RegOp.DeleteValue(SyncKey, "DisableStartLayoutSettingSync")],
-                DetectOps = [RegOp.CheckDword(SyncKey, "DisableStartLayoutSettingSync", 2)],
-                ImpactScore = 2,
-                SafetyRating = 4,
-                ImpactNote = "Stops Start menu layout from roaming; each device keeps its own IT-deployed or user-configured layout.",
-            },
-            new TweakDef
-            {
-                Id = "esroam-disable-desktop-theme-sync",
-                Label = "Enterprise State Roaming: Disable Desktop Theme Sync",
-                Category = "System",
-                Description =
-                    "Prevents Windows desktop themes (wallpaper, accent color, visual effects, window transparency) from synchronizing across devices. While cosmetic, theme sync can override corporate branding standards (desktop wallpapers, accent colors mandated by IT) when the same account logs in on different managed computers or when personal account themes overwrite work account settings.",
-                Tags = ["state roaming", "sync", "theme", "desktop", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                RegistryKeys = [SyncKey],
-                ApplyOps = [RegOp.SetDword(SyncKey, "DisableDesktopThemeSettingSync", 2)],
-                RemoveOps = [RegOp.DeleteValue(SyncKey, "DisableDesktopThemeSettingSync")],
-                DetectOps = [RegOp.CheckDword(SyncKey, "DisableDesktopThemeSettingSync", 2)],
-                ImpactScore = 2,
-                SafetyRating = 5,
-                ImpactNote = "Prevents theme roaming; no functional impact — wallpaper and accent color stay per-device.",
-            },
-            new TweakDef
-            {
-                Id = "esroam-disable-browser-setting-sync",
-                Label = "Enterprise State Roaming: Disable Web Browser Settings Sync",
-                Category = "System",
-                Description =
-                    "Stops the Windows Settings Sync provider from roaming browser-related settings (favorites, history sync pointers) through the ESR (Enterprise State Roaming) channel. Note: this controls the Windows-level sync channel, not the browser's own sync channel. Browser favorites should be managed via browser-specific policies (see Edge/Chrome policy modules).",
-                Tags = ["state roaming", "sync", "browser", "favorites", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                RegistryKeys = [SyncKey],
-                ApplyOps = [RegOp.SetDword(SyncKey, "DisableWebBrowserSettingSync", 2)],
-                RemoveOps = [RegOp.DeleteValue(SyncKey, "DisableWebBrowserSettingSync")],
-                DetectOps = [RegOp.CheckDword(SyncKey, "DisableWebBrowserSettingSync", 2)],
-                ImpactScore = 2,
-                SafetyRating = 5,
-                ImpactNote = "Blocks ESR-level browser sync; browser-native sync (Edge profile sync) requires a separate policy.",
-            },
-            new TweakDef
-            {
                 Id = "esroam-disable-password-sync",
                 Label = "Enterprise State Roaming: Disable Password Settings Sync",
                 Category = "System",
@@ -10452,24 +9051,6 @@ internal static class PolicyEnterprise
                 ImpactScore = 3,
                 SafetyRating = 5,
                 ImpactNote = "Stops UWP app state from syncing across devices; each device retains independent app state.",
-            },
-            new TweakDef
-            {
-                Id = "esroam-block-user-override-setting-sync",
-                Label = "Enterprise State Roaming: Block User Override of Settings Sync Policy",
-                Category = "System",
-                Description =
-                    "Prevents users from re-enabling settings synchronization that has been disabled by Group Policy. Without this policy, a standard user can navigate to Windows Settings → Accounts → Sync your settings and re-enable options that the admin has turned off. This policy ensures sync restrictions are permanent and cannot be overridden by end users.",
-                Tags = ["state roaming", "sync", "user override", "restriction", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                RegistryKeys = [SyncKey],
-                ApplyOps = [RegOp.SetDword(SyncKey, "DisableSettingSyncUserOverride", 1)],
-                RemoveOps = [RegOp.DeleteValue(SyncKey, "DisableSettingSyncUserOverride")],
-                DetectOps = [RegOp.CheckDword(SyncKey, "DisableSettingSyncUserOverride", 1)],
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Locks the sync policy; users cannot re-enable disabled sync categories from Settings.",
             },
             new TweakDef
             {
@@ -11147,26 +9728,6 @@ internal static class PolicyEnterprise
             [
                 new TweakDef
                 {
-                    Id = "hotpatch-enable-hotpatch-updates",
-                    Label = "Enable Windows Hotpatch (Live Kernel Patching)",
-                    Category = "System",
-                    Description =
-                        "Enables Windows Hotpatch, which installs security patches directly into running kernel and system process memory without requiring a reboot. Dramatically reduces downtime for critical servers and VMs while keeping them current.",
-                    Tags = ["hotpatch", "live-patching", "kernel", "windows-update", "reboot-less"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    MinBuild = 26100,
-                    ImpactScore = 5,
-                    SafetyRating = 4,
-                    ImpactNote =
-                        "Enables in-memory patching for monthly quality updates without reboots. Requires Windows 11 24H2+ or Azure Edition VMs. Baseline updates still require occasional reboots quarterly.",
-                    RegistryKeys = [HotpatchKey],
-                    ApplyOps = [RegOp.SetDword(HotpatchKey, "EnableHotPatch", 1)],
-                    RemoveOps = [RegOp.DeleteValue(HotpatchKey, "EnableHotPatch")],
-                    DetectOps = [RegOp.CheckDword(HotpatchKey, "EnableHotPatch", 1)],
-                },
-                new TweakDef
-                {
                     Id = "hotpatch-disable-hotpatch-updates",
                     Label = "Disable Windows Hotpatch Updates",
                     Category = "System",
@@ -11770,78 +10331,6 @@ internal static class PolicyEnterprise
             },
             new TweakDef
             {
-                Id = "mdmpol-block-aad-workplace-join",
-                Label = "Block Azure AD Workplace Join",
-                Category = "System",
-                Description =
-                    "Prevents the device from being registered with Azure Active Directory as a workplace-joined device. Blocks self-service Azure AD registration from Settings.",
-                Tags = ["azure-ad", "workplace-join", "mdm", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 3,
-                ImpactNote = "Prevents self-service Azure AD registration; may impact BYOD scenarios.",
-                RegistryKeys = [WpjKey],
-                ApplyOps = [RegOp.SetDword(WpjKey, "BlockAADWorkplaceJoin", 1)],
-                RemoveOps = [RegOp.DeleteValue(WpjKey, "BlockAADWorkplaceJoin")],
-                DetectOps = [RegOp.CheckDword(WpjKey, "BlockAADWorkplaceJoin", 1)],
-            },
-            new TweakDef
-            {
-                Id = "mdmpol-disable-auto-workplace-join",
-                Label = "Disable Automatic Workplace Registration",
-                Category = "System",
-                Description =
-                    "Prevents the device from automatically registering with a workplace (Azure AD/Entra ID) during user sign-in. Requires explicit admin-driven join workflow.",
-                Tags = ["azure-ad", "workplace-join", "privacy", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 4,
-                ImpactNote = "Prevents automatic Azure AD/Entra ID device registration during sign-in.",
-                RegistryKeys = [WpjKey],
-                ApplyOps = [RegOp.SetDword(WpjKey, "autoWorkplaceJoin", 0)],
-                RemoveOps = [RegOp.DeleteValue(WpjKey, "autoWorkplaceJoin")],
-                DetectOps = [RegOp.CheckDword(WpjKey, "autoWorkplaceJoin", 0)],
-            },
-            new TweakDef
-            {
-                Id = "mdmpol-disable-hello-for-business",
-                Label = "Disable Windows Hello for Business",
-                Category = "System",
-                Description =
-                    "Disables Windows Hello for Business (WHFB) enterprise credential provisioning. Users cannot set up WHFB biometrics or PIN backed by PKI infrastructure.",
-                Tags = ["windows-hello", "hello-for-business", "credential", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 3,
-                ImpactNote = "Disables enterprise WHfB provisioning; users cannot set up PKI-backed credentials.",
-                RegistryKeys = [HelloKey],
-                ApplyOps = [RegOp.SetDword(HelloKey, "Enabled", 0)],
-                RemoveOps = [RegOp.DeleteValue(HelloKey, "Enabled")],
-                DetectOps = [RegOp.CheckDword(HelloKey, "Enabled", 0)],
-            },
-            new TweakDef
-            {
-                Id = "mdmpol-require-hello-tpm",
-                Label = "Require TPM for Windows Hello for Business",
-                Category = "System",
-                Description =
-                    "Requires a Trusted Platform Module (TPM) chip for Windows Hello for Business provisioning. Prevents software-only (less secure) TPM emulation from being used.",
-                Tags = ["windows-hello", "tpm", "security", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                ImpactNote = "Ensures WHfB credentials are TPM-protected, not software-emulated.",
-                RegistryKeys = [HelloKey],
-                ApplyOps = [RegOp.SetDword(HelloKey, "RequireSecurityDevice", 1)],
-                RemoveOps = [RegOp.DeleteValue(HelloKey, "RequireSecurityDevice")],
-                DetectOps = [RegOp.CheckDword(HelloKey, "RequireSecurityDevice", 1)],
-            },
-            new TweakDef
-            {
                 Id = "mdmpol-disable-hello-pin-recovery",
                 Label = "Disable Windows Hello PIN Recovery Service",
                 Category = "System",
@@ -11857,24 +10346,6 @@ internal static class PolicyEnterprise
                 ApplyOps = [RegOp.SetDword(HelloKey, "EnablePinRecovery", 0)],
                 RemoveOps = [RegOp.DeleteValue(HelloKey, "EnablePinRecovery")],
                 DetectOps = [RegOp.CheckDword(HelloKey, "EnablePinRecovery", 0)],
-            },
-            new TweakDef
-            {
-                Id = "mdmpol-disable-hello-remote",
-                Label = "Disable Remote Windows Hello (Phone Sign-In)",
-                Category = "System",
-                Description =
-                    "Disables the Remote Windows Hello feature that allows using a phone or paired device as a sign-in credential for the PC. Available since Windows 10 1607.",
-                Tags = ["windows-hello", "remote", "phone", "credential", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                ImpactNote = "Disables using a paired phone as a PC sign-in credential.",
-                RegistryKeys = [$@"{HelloKey}\Remote"],
-                ApplyOps = [RegOp.SetDword($@"{HelloKey}\Remote", "Enabled", 0)],
-                RemoveOps = [RegOp.DeleteValue($@"{HelloKey}\Remote", "Enabled")],
-                DetectOps = [RegOp.CheckDword($@"{HelloKey}\Remote", "Enabled", 0)],
             },
             new TweakDef
             {
@@ -11924,24 +10395,6 @@ internal static class PolicyEnterprise
 
         public static IReadOnlyList<TweakDef> Data =>
             [
-                new TweakDef
-                {
-                    Id = "mdmreg-enable-aad-auto-enrollment",
-                    Label = "MDM Registration: Enable Auto-Enrollment for Azure AD Joined Devices",
-                    Category = "System",
-                    Description =
-                        "Sets AutoEnrollMDM=1 in MDM policy. Enables automatic MDM enrollment for devices that join Azure AD (Azure AD Join or Azure AD Hybrid Join). When a device joins Azure AD, the enrollment process automatically provisions the device with an MDM enrolment token and registers it with the configured MDM authority (typically Microsoft Intune). Without this policy, AAD Joined devices are registered in Azure AD but not MDM-managed — group policy, compliance checks, and app deployments via Intune will not work. Auto-enrollment is the standard corporate device onboarding mechanism.",
-                    Tags = ["mdm", "auto-enrollment", "azure-ad", "intune", "device-management"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 5,
-                    SafetyRating = 5,
-                    ImpactNote =
-                        "AAD-joined devices automatically enroll in MDM upon sign-in. The MDM authority URL and scope are read from the tenant's MDM discovery service. Requires an Intune license (or other MDM) assigned to the user. Devices already AAD-joined will not retroactively enroll — only newly joining devices are affected.",
-                    ApplyOps = [RegOp.SetDword(MdmKey, "AutoEnrollMDM", 1)],
-                    RemoveOps = [RegOp.DeleteValue(MdmKey, "AutoEnrollMDM")],
-                    DetectOps = [RegOp.CheckDword(MdmKey, "AutoEnrollMDM", 1)],
-                },
                 new TweakDef
                 {
                     Id = "mdmreg-require-reenrollment-on-rename",
@@ -12119,66 +10572,6 @@ internal static class PolicyEnterprise
 
         public static IReadOnlyList<TweakDef> Data { get; } =
         [
-            new TweakDef
-            {
-                Id = "oobe-disable-privacy-experience",
-                Label = "Disable OOBE Privacy Experience",
-                Category = "System",
-                Description =
-                    "Sets DisablePrivacyExperience=1 in the Windows OOBE policy key. "
-                    + "Prevents the full-screen privacy settings wizard from appearing on first sign-in for new user accounts "
-                    + "(covers Diagnostic Data, Inking, Location, and related consent screens). "
-                    + "Default: absent (privacy wizard shown). Recommended: 1 on domain-joined or company-provisioned devices.",
-                Tags = ["oobe", "privacy", "first-run", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Skips the OOBE privacy consent wizard on first sign-in; privacy settings remain at system defaults.",
-                ApplyOps = [RegOp.SetDword(OobeKey, "DisablePrivacyExperience", 1)],
-                RemoveOps = [RegOp.DeleteValue(OobeKey, "DisablePrivacyExperience")],
-                DetectOps = [RegOp.CheckDword(OobeKey, "DisablePrivacyExperience", 1)],
-            },
-            new TweakDef
-            {
-                Id = "oobe-skip-user-oobe",
-                Label = "Skip User OOBE Page",
-                Category = "System",
-                Description =
-                    "Sets SkipUserOOBE=1 in the Windows OOBE policy key. "
-                    + "Suppresses the user portion of the Out-of-Box Experience wizard, skipping personalization and "
-                    + "account setup prompts at first logon for new local users. "
-                    + "Default: absent (user OOBE shown). Recommended: 1 on pre-provisioned enterprise desktops.",
-                Tags = ["oobe", "first-run", "setup", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                ImpactNote = "Skips user-facing OOBE setup prompts; account is still created with system defaults.",
-                ApplyOps = [RegOp.SetDword(OobeKey, "SkipUserOOBE", 1)],
-                RemoveOps = [RegOp.DeleteValue(OobeKey, "SkipUserOOBE")],
-                DetectOps = [RegOp.CheckDword(OobeKey, "SkipUserOOBE", 1)],
-            },
-            new TweakDef
-            {
-                Id = "oobe-skip-machine-oobe",
-                Label = "Skip Machine OOBE Page",
-                Category = "System",
-                Description =
-                    "Sets SkipMachineOOBE=1 in the Windows OOBE policy key. "
-                    + "Suppresses the machine-level portion of the OOBE wizard during initial Windows setup, "
-                    + "skipping device configuration prompts such as region and language when a response answer file is in use. "
-                    + "Default: absent (machine OOBE shown). Recommended: 1 in MDT/WDS/Autopilot deployments.",
-                Tags = ["oobe", "setup", "provisioning", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                ImpactNote = "Skips machine-level OOBE prompts during Windows setup; used mainly in imaging/provisioning scenarios.",
-                ApplyOps = [RegOp.SetDword(OobeKey, "SkipMachineOOBE", 1)],
-                RemoveOps = [RegOp.DeleteValue(OobeKey, "SkipMachineOOBE")],
-                DetectOps = [RegOp.CheckDword(OobeKey, "SkipMachineOOBE", 1)],
-            },
             new TweakDef
             {
                 Id = "oobe-no-network-connections-wizard",
@@ -13514,42 +11907,6 @@ internal static class PolicyEnterprise
         [
             new TweakDef
             {
-                Id = "insider-block-preview-builds",
-                Label = "Block Windows Insider Preview Build Enrollment (GPO)",
-                Category = "System",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                Tags = ["insider", "preview", "flighting", "windows update", "policy"],
-                Description =
-                    "Prevents users from enrolling this device in the Windows Insider Program "
-                    + "via Group Policy. AllowBuildPreview=0. The 'Windows Insider Program' page "
-                    + "in Settings is greyed out and the device receives only stable Windows builds.",
-                ApplyOps = [RegOp.SetDword(PreviewBuildsPolicy, "AllowBuildPreview", 0)],
-                RemoveOps = [RegOp.DeleteValue(PreviewBuildsPolicy, "AllowBuildPreview")],
-                DetectOps = [RegOp.CheckDword(PreviewBuildsPolicy, "AllowBuildPreview", 0)],
-            },
-            new TweakDef
-            {
-                Id = "insider-disable-config-flighting",
-                Label = "Disable Configuration Flighting (A/B Feature Tests)",
-                Category = "System",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                Tags = ["insider", "flighting", "a/b testing", "telemetry", "privacy"],
-                Description =
-                    "Disables Windows configuration flighting — the mechanism Microsoft uses to "
-                    + "remotely enable or disable features on specific devices as part of A/B tests. "
-                    + "EnableConfigFlighting=0 prevents undocumented feature changes pushed by Microsoft.",
-                ApplyOps = [RegOp.SetDword(PreviewBuildsPolicy, "EnableConfigFlighting", 0)],
-                RemoveOps = [RegOp.DeleteValue(PreviewBuildsPolicy, "EnableConfigFlighting")],
-                DetectOps = [RegOp.CheckDword(PreviewBuildsPolicy, "EnableConfigFlighting", 0)],
-            },
-            new TweakDef
-            {
                 Id = "insider-disable-experimentation",
                 Label = "Disable Windows Experimentation (A/B Feature Trials)",
                 Category = "System",
@@ -13568,24 +11925,6 @@ internal static class PolicyEnterprise
             },
             new TweakDef
             {
-                Id = "insider-disable-feedback-notifications",
-                Label = "Disable Windows Feedback Notification Popups",
-                Category = "System",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                Tags = ["insider", "feedback", "notification", "privacy"],
-                Description =
-                    "Suppresses the periodic 'How is Windows working for you?' feedback popups. "
-                    + "DoNotShowFeedbackNotifications=1. These prompts collect usage data and "
-                    + "interrupt the user — disabling them keeps the UI clean.",
-                ApplyOps = [RegOp.SetDword(DataCollection, "DoNotShowFeedbackNotifications", 1)],
-                RemoveOps = [RegOp.DeleteValue(DataCollection, "DoNotShowFeedbackNotifications")],
-                DetectOps = [RegOp.CheckDword(DataCollection, "DoNotShowFeedbackNotifications", 1)],
-            },
-            new TweakDef
-            {
                 Id = "insider-set-retail-ring",
                 Label = "Set Device to Retail (Non-Insider) Ring",
                 Category = "System",
@@ -13601,78 +11940,6 @@ internal static class PolicyEnterprise
                 ApplyOps = [RegOp.SetDword(SelfHostApplicability, "EnablePreviewBuilds", 0)],
                 RemoveOps = [RegOp.DeleteValue(SelfHostApplicability, "EnablePreviewBuilds")],
                 DetectOps = [RegOp.CheckDword(SelfHostApplicability, "EnablePreviewBuilds", 0)],
-            },
-            new TweakDef
-            {
-                Id = "insider-disable-feedback-frequency",
-                Label = "Stop Windows Feedback Frequency Prompts",
-                Category = "System",
-                NeedsAdmin = false,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                Tags = ["insider", "feedback", "siuf", "privacy"],
-                Description =
-                    "Sets the Windows SIUF (System-Initiated User Feedback) period count to 0, "
-                    + "silencing all Windows 'Rate your experience' prompts. "
-                    + "NumberOfSIUFInPeriod=0 in the user feedback rules key.",
-                ApplyOps = [RegOp.SetDword(FeedbackRules, "NumberOfSIUFInPeriod", 0)],
-                RemoveOps = [RegOp.DeleteValue(FeedbackRules, "NumberOfSIUFInPeriod")],
-                DetectOps = [RegOp.CheckDword(FeedbackRules, "NumberOfSIUFInPeriod", 0)],
-            },
-            new TweakDef
-            {
-                Id = "insider-disable-consumer-features",
-                Label = "Disable Windows Consumer (Non-Enterprise) Features",
-                Category = "System",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                Tags = ["insider", "consumer features", "cloud content", "privacy"],
-                Description =
-                    "Disables Windows consumer-only experiences: auto pre-install of promoted apps, "
-                    + "Spotlight suggestions on the Start menu, and per-user app recommendations. "
-                    + "DisableWindowsConsumerFeatures=1 in Cloud Content policy.",
-                ApplyOps = [RegOp.SetDword(CloudContent, "DisableWindowsConsumerFeatures", 1)],
-                RemoveOps = [RegOp.DeleteValue(CloudContent, "DisableWindowsConsumerFeatures")],
-                DetectOps = [RegOp.CheckDword(CloudContent, "DisableWindowsConsumerFeatures", 1)],
-            },
-            new TweakDef
-            {
-                Id = "insider-disable-soft-landing",
-                Label = "Disable Soft Landing Tips (New Feature Suggestions)",
-                Category = "System",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                Tags = ["insider", "soft landing", "cloud content", "tips", "privacy"],
-                Description =
-                    "Blocks 'soft landing' — the mechanism Windows uses to show first-run tips, "
-                    + "feature highlight cards, and What's New overlays after major updates. "
-                    + "DisableSoftLanding=1. Keeps post-update UI identical to pre-update.",
-                ApplyOps = [RegOp.SetDword(CloudContent, "DisableSoftLanding", 1)],
-                RemoveOps = [RegOp.DeleteValue(CloudContent, "DisableSoftLanding")],
-                DetectOps = [RegOp.CheckDword(CloudContent, "DisableSoftLanding", 1)],
-            },
-            new TweakDef
-            {
-                Id = "insider-disable-cloud-optimized-content",
-                Label = "Disable Cloud-Optimized Content Delivery",
-                Category = "System",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                Tags = ["insider", "cloud content", "content delivery", "privacy"],
-                Description =
-                    "Disables cloud-optimized content that Microsoft delivers to the lock screen, "
-                    + "Start menu, and desktop (e.g., personalized ads, app promotions). "
-                    + "DisableCloudOptimizedContent=1 in Cloud Content policy.",
-                ApplyOps = [RegOp.SetDword(CloudContent, "DisableCloudOptimizedContent", 1)],
-                RemoveOps = [RegOp.DeleteValue(CloudContent, "DisableCloudOptimizedContent")],
-                DetectOps = [RegOp.CheckDword(CloudContent, "DisableCloudOptimizedContent", 1)],
             },
             new TweakDef
             {

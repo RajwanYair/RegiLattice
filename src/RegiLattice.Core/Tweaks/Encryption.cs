@@ -8,70 +8,6 @@ internal static class Encryption
     [
         new TweakDef
         {
-            Id = "enc-bitlocker-require-startup-pin",
-            Label = "BitLocker: Require Startup PIN",
-            Category = "Encryption",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Requires a PIN at boot for BitLocker-encrypted OS drives. Adds pre-boot authentication layer. Default: not required.",
-            Tags = ["bitlocker", "encryption", "pin", "security", "boot"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\FVE"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\FVE", "UseAdvancedStartup", 1),
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\FVE", "EnableBDEWithNoTPM", 0),
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\FVE", "UseTPMPIN", 1),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\FVE", "UseAdvancedStartup"),
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\FVE", "EnableBDEWithNoTPM"),
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\FVE", "UseTPMPIN"),
-            ],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\FVE", "UseAdvancedStartup", 1)],
-        },
-        new TweakDef
-        {
-            Id = "enc-bitlocker-aes256",
-            Label = "BitLocker: Force AES-256 Encryption",
-            Category = "Encryption",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Forces BitLocker to use AES-256 (XTS mode) for OS drives instead of default AES-128. Stronger encryption at minimal cost. Default: AES-128.",
-            Tags = ["bitlocker", "encryption", "aes256", "security"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\FVE"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\FVE", "EncryptionMethodWithXtsOs", 7),
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\FVE", "EncryptionMethodWithXtsFdv", 7),
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\FVE", "EncryptionMethodWithXtsRdv", 4),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\FVE", "EncryptionMethodWithXtsOs"),
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\FVE", "EncryptionMethodWithXtsFdv"),
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\FVE", "EncryptionMethodWithXtsRdv"),
-            ],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\FVE", "EncryptionMethodWithXtsOs", 7)],
-        },
-        new TweakDef
-        {
-            Id = "enc-bitlocker-full-disk",
-            Label = "BitLocker: Encrypt Entire Drive",
-            Category = "Encryption",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Forces BitLocker to encrypt the entire drive (not just used space). More secure for drives with previously deleted data. Default: used space only.",
-            Tags = ["bitlocker", "encryption", "full-disk", "security"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\FVE"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\FVE", "OSEncryptionType", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\FVE", "OSEncryptionType")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\FVE", "OSEncryptionType", 1)],
-        },
-        new TweakDef
-        {
             Id = "enc-disable-efs",
             Label = "Disable Encrypting File System (EFS)",
             Category = "Encryption",
@@ -99,94 +35,6 @@ internal static class Encryption
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\FVE", "DisableStandbyUnlock", 1)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\FVE", "DisableStandbyUnlock")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\FVE", "DisableStandbyUnlock", 1)],
-        },
-        new TweakDef
-        {
-            Id = "enc-bitlocker-backup-to-ad",
-            Label = "BitLocker: Backup Recovery Key to AD",
-            Category = "Encryption",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Requires BitLocker recovery keys to be backed up to Active Directory before encryption. Ensures key recovery in enterprise. Default: not required.",
-            Tags = ["bitlocker", "encryption", "recovery", "active-directory", "enterprise"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\FVE"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\FVE", "RequireActiveDirectoryBackup", 1),
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\FVE", "ActiveDirectoryBackup", 1),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\FVE", "RequireActiveDirectoryBackup"),
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\FVE", "ActiveDirectoryBackup"),
-            ],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\FVE", "RequireActiveDirectoryBackup", 1)],
-        },
-        new TweakDef
-        {
-            Id = "enc-tls12-only",
-            Label = "Enforce TLS 1.2 Minimum",
-            Category = "Encryption",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables TLS 1.0 and TLS 1.1, enforcing TLS 1.2 as minimum. Strengthens transport encryption. Default: TLS 1.0+ allowed.",
-            Tags = ["tls", "encryption", "security", "protocol", "network"],
-            RegistryKeys =
-            [
-                @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.0\Client",
-                @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.1\Client",
-            ],
-            ApplyOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.0\Client",
-                    "Enabled",
-                    0
-                ),
-                RegOp.SetDword(
-                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.0\Client",
-                    "DisabledByDefault",
-                    1
-                ),
-                RegOp.SetDword(
-                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.1\Client",
-                    "Enabled",
-                    0
-                ),
-                RegOp.SetDword(
-                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.1\Client",
-                    "DisabledByDefault",
-                    1
-                ),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(
-                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.0\Client",
-                    "Enabled"
-                ),
-                RegOp.DeleteValue(
-                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.0\Client",
-                    "DisabledByDefault"
-                ),
-                RegOp.DeleteValue(
-                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.1\Client",
-                    "Enabled"
-                ),
-                RegOp.DeleteValue(
-                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.1\Client",
-                    "DisabledByDefault"
-                ),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(
-                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.0\Client",
-                    "Enabled",
-                    0
-                ),
-            ],
         },
         new TweakDef
         {
@@ -729,41 +577,6 @@ internal static class Encryption
         },
         new TweakDef
         {
-            Id = "enc-disable-triple-des-cipher",
-            Label = "Disable Triple DES (3DES) Cipher Suite",
-            Category = "Encryption",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Disables the 3DES/Triple DES cipher suite. 3DES is vulnerable to SWEET32 birthday attacks. Default: enabled for compatibility.",
-            Tags = ["encryption", "3des", "cipher", "sweet32", "weak"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers\Triple DES 168"],
-            ApplyOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers\Triple DES 168",
-                    "Enabled",
-                    0
-                ),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(
-                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers\Triple DES 168",
-                    "Enabled"
-                ),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(
-                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers\Triple DES 168",
-                    "Enabled",
-                    0
-                ),
-            ],
-        },
-        new TweakDef
-        {
             Id = "enc-disable-tls10-client",
             Label = "Disable TLS 1.0 for clients (SCHANNEL)",
             Category = "Encryption",
@@ -1258,21 +1071,6 @@ internal static class BitLockerAdvanced
     [
         new TweakDef
         {
-            Id = "bitlocker-require-preboot-pin",
-            Label = "Require BitLocker Pre-Boot PIN",
-            Category = "Encryption",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Tags = ["bitlocker", "security", "encryption", "preboot", "tpm"],
-            Description =
-                "Configures BitLocker to require a PIN at pre-boot in addition to the TPM chip. "
-                + "This 'TPM+PIN' mode prevents cold-boot and DMA attacks that can bypass TPM-only protection.",
-            ApplyOps = [RegOp.SetDword(FvePol, "UseAdvancedStartup", 1), RegOp.SetDword(FvePol, "UseTPMPIN", 1)],
-            RemoveOps = [RegOp.DeleteValue(FvePol, "UseAdvancedStartup"), RegOp.DeleteValue(FvePol, "UseTPMPIN")],
-            DetectOps = [RegOp.CheckDword(FvePol, "UseTPMPIN", 1)],
-        },
-        new TweakDef
-        {
             Id = "bitlocker-require-preboot-key",
             Label = "Require BitLocker Pre-Boot USB Key",
             Category = "Encryption",
@@ -1570,44 +1368,6 @@ internal static class TrustedLaunchPolicy
             },
             new TweakDef
             {
-                Id = "trlnch-enable-memory-integrity-hvci",
-                Label = "Trusted Launch: Enable Memory Integrity (Hypervisor-Protected Code Integrity)",
-                Category = "Encryption",
-                Description =
-                    "Sets HypervisorEnforcedCodeIntegrity=1 in the DeviceGuard key. Enables Memory Integrity (HVCI — Hypervisor-Protected Code Integrity), which uses VBS to run Kernel Mode Code Integrity (KMCI) checks inside the hypervisor. HVCI prevents unsigned or malicious kernel drivers from loading — even kernel exploits that normally allow unsigned kernel code injection are blocked because the kernel memory is managed from inside the hypervisor and cannot be directly written by the kernel itself. HVCI is one of the strongest kernel-level attack mitigations in Windows.",
-                Tags = ["hvci", "memory-integrity", "kernel-protection", "unsigned-driver", "vbs"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 5,
-                SafetyRating = 4,
-                ImpactNote =
-                    "HVCI (Memory Integrity) enabled. Unsigned or improperly signed kernel drivers cannot load. Some older third-party drivers (hardware vendor utilities, older antivirus kernel drivers, certain network drivers) are not HVCI-compatible and will prevent this from enabling. Use Device Manager and Windows Security Center to identify incompatible drivers before enabling. Incompatible drivers must be updated or removed.",
-                ApplyOps =
-                [
-                    RegOp.SetDword(
-                        @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\DeviceGuard\Scenarios\HypervisorEnforcedCodeIntegrity",
-                        "Enabled",
-                        1
-                    ),
-                ],
-                RemoveOps =
-                [
-                    RegOp.DeleteValue(
-                        @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\DeviceGuard\Scenarios\HypervisorEnforcedCodeIntegrity",
-                        "Enabled"
-                    ),
-                ],
-                DetectOps =
-                [
-                    RegOp.CheckDword(
-                        @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\DeviceGuard\Scenarios\HypervisorEnforcedCodeIntegrity",
-                        "Enabled",
-                        1
-                    ),
-                ],
-            },
-            new TweakDef
-            {
                 Id = "trlnch-enable-system-guard-secure-launch",
                 Label = "Trusted Launch: Enable System Guard Secure Launch (Runtime Firmware Protection)",
                 Category = "Encryption",
@@ -1738,42 +1498,6 @@ internal static class PolicyEncryption
                     ApplyOps = [RegOp.SetDword(FveKey, "FDVRequireEncryption", 1)],
                     RemoveOps = [RegOp.DeleteValue(FveKey, "FDVRequireEncryption")],
                     DetectOps = [RegOp.CheckDword(FveKey, "FDVRequireEncryption", 1)],
-                },
-                new TweakDef
-                {
-                    Id = "bkpenc-require-bitlocker-removable-drives",
-                    Label = "Backup Encryption: Require BitLocker On Removable Drives Before Writing (BitLocker To Go)",
-                    Category = "Encryption",
-                    Description =
-                        "Sets RDVDenyWriteAccess=1 combined with RDVRequireEncryption=1 in the FVE policy key. Prevents writing to removable drives (USB sticks, USB HDDs, SD cards) that are not encrypted with BitLocker To Go. Any removable drive used as a backup destination, or for data transfer, must first be encrypted with BitLocker To Go. Unencrypted USB sticks containing backup exports, data exports, or file transfers are frequently lost or stolen — with no encryption protection. This policy blocks writes to unencrypted removable media at the OS level.",
-                    Tags = ["bitlocker", "removable-drive", "bitlocker-to-go", "usb", "data-loss"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 4,
-                    SafetyRating = 5,
-                    ImpactNote =
-                        "Cannot write to unencrypted removable drives. Users who attempt to copy files to an unencrypted USB drive see 'Access Denied'. They must first encrypt the drive with BitLocker To Go (right-click → Turn On BitLocker). Read access to unencrypted drives is retained. This generates user friction — provide BitLocker To Go setup instructions in the helpdesk knowledge base.",
-                    ApplyOps = [RegOp.SetDword(FveKey, "RDVRequireEncryption", 1), RegOp.SetDword(FveKey, "RDVDenyWriteAccess", 1)],
-                    RemoveOps = [RegOp.DeleteValue(FveKey, "RDVRequireEncryption"), RegOp.DeleteValue(FveKey, "RDVDenyWriteAccess")],
-                    DetectOps = [RegOp.CheckDword(FveKey, "RDVRequireEncryption", 1), RegOp.CheckDword(FveKey, "RDVDenyWriteAccess", 1)],
-                },
-                new TweakDef
-                {
-                    Id = "bkpenc-set-bitlocker-encryption-method-xts-aes-256",
-                    Label = "Backup Encryption: Set BitLocker Encryption Method to XTS-AES 256-bit",
-                    Category = "Encryption",
-                    Description =
-                        "Sets EncryptionMethodWithXtsOs=7 (XTS-AES 256) and EncryptionMethodWithXtsFdv=7 in the FVE policy key. Configures BitLocker to use XTS-AES 256-bit encryption for all OS and fixed data drives. XTS-AES 256 is the strongest available encryption mode in BitLocker — XTS (XEX-based tweaked codebook mode with ciphertext stealing) provides better sector-level diffusion than CBC mode, making it resistant to certain cryptanalytic attacks against disk encryption. AES-256 provides twice the key length of AES-128. This is the NSA and NIST recommended configuration for protecting classified information up to TOP SECRET.",
-                    Tags = ["bitlocker", "xts-aes-256", "encryption-method", "nist", "aes"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 3,
-                    SafetyRating = 5,
-                    ImpactNote =
-                        "New BitLocker volumes use XTS-AES 256. Existing volumes encrypted with a different method (AES-128 or XTS-AES 128) are not automatically re-encrypted — decrypt and re-enable BitLocker to upgrade. XTS-AES 256 has negligible performance difference from XTS-AES 128 on hardware with AES-NI acceleration (all modern CPUs).",
-                    ApplyOps = [RegOp.SetDword(FveKey, "EncryptionMethodWithXtsOs", 7), RegOp.SetDword(FveKey, "EncryptionMethodWithXtsFdv", 7)],
-                    RemoveOps = [RegOp.DeleteValue(FveKey, "EncryptionMethodWithXtsOs"), RegOp.DeleteValue(FveKey, "EncryptionMethodWithXtsFdv")],
-                    DetectOps = [RegOp.CheckDword(FveKey, "EncryptionMethodWithXtsOs", 7), RegOp.CheckDword(FveKey, "EncryptionMethodWithXtsFdv", 7)],
                 },
                 new TweakDef
                 {
@@ -1947,28 +1671,6 @@ internal static class PolicyEncryption
                 ApplyOps = [RegOp.SetDword(FveKey, "OSRequireTPM", 1)],
                 RemoveOps = [RegOp.DeleteValue(FveKey, "OSRequireTPM")],
                 DetectOps = [RegOp.CheckDword(FveKey, "OSRequireTPM", 1)],
-            },
-            new TweakDef
-            {
-                Id = "blfve-set-os-encryption-aes256",
-                Label = "Set OS Drive BitLocker Encryption to AES-256-XTS",
-                Category = "Encryption",
-                Description =
-                    "Sets OSEncryptionType=7 in the FVE policy key. "
-                    + "Forces BitLocker on the OS drive to use AES-256 with XTS mode (the strongest "
-                    + "BitLocker cipher suite available on Windows 10/11). The EncryptionMethod values: "
-                    + "3=AES-128, 4=AES-256, 6=XTS-AES-128, 7=XTS-AES-256. XTS mode provides additional "
-                    + "protection against ciphertext-manipulation attacks on disk sectors. "
-                    + "Default: absent (typically XTS-AES-128). Recommended: 7 on sensitive-data endpoints.",
-                Tags = ["bitlocker", "fve", "aes-256", "xts", "encryption-strength", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                ImpactNote = "OS drive BitLocker uses XTS-AES-256; stronger encryption for new BitLocker activations.",
-                ApplyOps = [RegOp.SetDword(FveKey, "OSEncryptionType", 7)],
-                RemoveOps = [RegOp.DeleteValue(FveKey, "OSEncryptionType")],
-                DetectOps = [RegOp.CheckDword(FveKey, "OSEncryptionType", 7)],
             },
             new TweakDef
             {
@@ -2156,40 +1858,6 @@ internal static class PolicyEncryption
                 },
                 new TweakDef
                 {
-                    Id = "blnetun-set-minimum-pin-length-8",
-                    Label = "Set Minimum BitLocker Pre-Boot PIN Length to 8 Digits",
-                    Category = "Encryption",
-                    Description =
-                        "Sets the minimum pre-boot PIN length to 8 digits, preventing trivially short 4-digit PINs that could be brute-forced even against the TPM anti-hammering lockout threshold.",
-                    Tags = ["bitlocker", "pin-length", "minimum", "brute-force", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 3,
-                    SafetyRating = 5,
-                    ImpactNote = "BitLocker pre-boot PIN minimum 8 digits; trivially short 4-digit PINs no longer accepted.",
-                    ApplyOps = [RegOp.SetDword(Key, "MinimumPIN", 8)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "MinimumPIN")],
-                    DetectOps = [RegOp.CheckDword(Key, "MinimumPIN", 8)],
-                },
-                new TweakDef
-                {
-                    Id = "blnetun-disable-recovery-to-ad-storage",
-                    Label = "Disable BitLocker Recovery Key Storage in Active Directory by Default",
-                    Category = "Encryption",
-                    Description =
-                        "Prevents BitLocker from automatically storing the 48-digit recovery key in Active Directory by default, ensuring recovery key storage is a deliberate IT action rather than an automatic operation that could be mass-enumerated.",
-                    Tags = ["bitlocker", "recovery-key", "active-directory", "key-storage", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 4,
-                    SafetyRating = 5,
-                    ImpactNote = "BitLocker auto-AD recovery key escrow disabled; deliberate admin action required to store recovery keys.",
-                    ApplyOps = [RegOp.SetDword(Key, "ActiveDirectoryBackup", 0)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "ActiveDirectoryBackup")],
-                    DetectOps = [RegOp.CheckDword(Key, "ActiveDirectoryBackup", 0)],
-                },
-                new TweakDef
-                {
                     Id = "blnetun-block-recovery-password-print",
                     Label = "Block Printing BitLocker Recovery Passwords",
                     Category = "Encryption",
@@ -2204,23 +1872,6 @@ internal static class PolicyEncryption
                     ApplyOps = [RegOp.SetDword(Key, "BlockRecoveryPasswordPrinting", 1)],
                     RemoveOps = [RegOp.DeleteValue(Key, "BlockRecoveryPasswordPrinting")],
                     DetectOps = [RegOp.CheckDword(Key, "BlockRecoveryPasswordPrinting", 1)],
-                },
-                new TweakDef
-                {
-                    Id = "blnetun-deny-write-without-bitlocker",
-                    Label = "Deny Write Access to Removable Drives Without BitLocker",
-                    Category = "Encryption",
-                    Description =
-                        "Prevents write operations to removable USB drives and portable storage that are not BitLocker-protected, ensuring sensitive data cannot be exfiltrated to unencrypted USB devices.",
-                    Tags = ["bitlocker", "removable-drive", "usb", "write-protection", "data-exfiltration", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 5,
-                    SafetyRating = 5,
-                    ImpactNote = "Unencrypted USB write access blocked; data can only be written to BitLocker-encrypted removable drives.",
-                    ApplyOps = [RegOp.SetDword(Key, "RDVDenyWriteAccess", 1)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "RDVDenyWriteAccess")],
-                    DetectOps = [RegOp.CheckDword(Key, "RDVDenyWriteAccess", 1)],
                 },
                 new TweakDef
                 {
@@ -2239,40 +1890,6 @@ internal static class PolicyEncryption
                     ApplyOps = [RegOp.SetDword(NuKey, "EnableNetworkUnlock", 1)],
                     RemoveOps = [RegOp.DeleteValue(NuKey, "EnableNetworkUnlock")],
                     DetectOps = [RegOp.CheckDword(NuKey, "EnableNetworkUnlock", 1)],
-                },
-                new TweakDef
-                {
-                    Id = "blnetun-use-aes-256-xts",
-                    Label = "Use AES-256-XTS Encryption for New BitLocker OS Volumes",
-                    Category = "Encryption",
-                    Description =
-                        "Sets the BitLocker encryption algorithm for new OS volume encryptions to AES-256 in XTS mode, which is the strongest available encryption in Windows 11, replacing the default AES-128-XTS.",
-                    Tags = ["bitlocker", "aes-256", "xts", "encryption-strength", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 4,
-                    SafetyRating = 5,
-                    ImpactNote = "New BitLocker OS volumes encrypted with AES-256-XTS; maximum available encryption strength enforced.",
-                    ApplyOps = [RegOp.SetDword(Key, "EncryptionMethodWithXtsOs", 7)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "EncryptionMethodWithXtsOs")],
-                    DetectOps = [RegOp.CheckDword(Key, "EncryptionMethodWithXtsOs", 7)],
-                },
-                new TweakDef
-                {
-                    Id = "blnetun-use-aes-256-xts-fixed",
-                    Label = "Use AES-256-XTS Encryption for New BitLocker Fixed Data Volumes",
-                    Category = "Encryption",
-                    Description =
-                        "Sets the BitLocker encryption algorithm for new fixed (internal) data drive encryptions to AES-256-XTS, ensuring the same maximum-strength encryption is applied to non-OS data drives.",
-                    Tags = ["bitlocker", "aes-256", "xts", "data-volume", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 4,
-                    SafetyRating = 5,
-                    ImpactNote = "New BitLocker fixed data volumes encrypted with AES-256-XTS; maximum encryption on internal data drives.",
-                    ApplyOps = [RegOp.SetDword(Key, "EncryptionMethodWithXtsFdv", 7)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "EncryptionMethodWithXtsFdv")],
-                    DetectOps = [RegOp.CheckDword(Key, "EncryptionMethodWithXtsFdv", 7)],
                 },
                 new TweakDef
                 {
@@ -2320,54 +1937,6 @@ internal static class PolicyEncryption
             [
                 new TweakDef
                 {
-                    Id = "bde-require-tpm",
-                    Label = "Require TPM for BitLocker Encryption",
-                    Category = "Encryption",
-                    Description = "Prevents BitLocker from being configured without a compatible Trusted Platform Module (TPM).",
-                    Tags = ["bitlocker", "tpm", "fde", "encryption", "security"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 5,
-                    SafetyRating = 4,
-                    ImpactNote = "BitLocker requires TPM; USB-key-only startup is blocked. Devices without TPM cannot enable BitLocker.",
-                    ApplyOps = [RegOp.SetDword(FveKey, "EnableBDEWithNoTPM", 0)],
-                    RemoveOps = [RegOp.DeleteValue(FveKey, "EnableBDEWithNoTPM")],
-                    DetectOps = [RegOp.CheckDword(FveKey, "EnableBDEWithNoTPM", 0)],
-                },
-                new TweakDef
-                {
-                    Id = "bde-allow-enhanced-pin",
-                    Label = "Allow Enhanced BitLocker TPM PINs",
-                    Category = "Encryption",
-                    Description = "Permits the use of enhanced PINs (letters, symbols, and spaces) instead of only digits for BitLocker TPM startup.",
-                    Tags = ["bitlocker", "tpm", "pin", "security", "encryption"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 3,
-                    SafetyRating = 5,
-                    ImpactNote = "Increases PIN entropy; compatible with all modern UEFI firmware; users must set a new enhanced PIN.",
-                    ApplyOps = [RegOp.SetDword(FveKey, "UseEnhancedPin", 1)],
-                    RemoveOps = [RegOp.DeleteValue(FveKey, "UseEnhancedPin")],
-                    DetectOps = [RegOp.CheckDword(FveKey, "UseEnhancedPin", 1)],
-                },
-                new TweakDef
-                {
-                    Id = "bde-set-minimum-pin-8",
-                    Label = "Set Minimum BitLocker TPM PIN Length to 8",
-                    Category = "Encryption",
-                    Description = "Requires the BitLocker TPM PIN to be at least 8 characters long.",
-                    Tags = ["bitlocker", "tpm", "pin", "length", "security"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 3,
-                    SafetyRating = 5,
-                    ImpactNote = "8-character minimum; longer PINs are allowed. Users must reset PINs shorter than 8 characters.",
-                    ApplyOps = [RegOp.SetDword(FveKey, "MinimumPIN", 8)],
-                    RemoveOps = [RegOp.DeleteValue(FveKey, "MinimumPIN")],
-                    DetectOps = [RegOp.CheckDword(FveKey, "MinimumPIN", 8)],
-                },
-                new TweakDef
-                {
                     Id = "bde-require-recovery-password",
                     Label = "Require BitLocker Recovery Password",
                     Category = "Encryption",
@@ -2381,38 +1950,6 @@ internal static class PolicyEncryption
                     ApplyOps = [RegOp.SetDword(FveKey, "UseRecoveryPassword", 2)],
                     RemoveOps = [RegOp.DeleteValue(FveKey, "UseRecoveryPassword")],
                     DetectOps = [RegOp.CheckDword(FveKey, "UseRecoveryPassword", 2)],
-                },
-                new TweakDef
-                {
-                    Id = "bde-backup-to-ad",
-                    Label = "Back Up BitLocker Recovery Key to Active Directory",
-                    Category = "Encryption",
-                    Description = "Automatically backs up BitLocker recovery passwords and key packages to Active Directory DS.",
-                    Tags = ["bitlocker", "recovery", "active-directory", "backup", "security"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 5,
-                    SafetyRating = 5,
-                    ImpactNote = "Recovery keys are escrowed in AD; requires domain-join and AD DS with BitLocker schema extension.",
-                    ApplyOps = [RegOp.SetDword(FveKey, "ActiveDirectoryBackup", 1)],
-                    RemoveOps = [RegOp.DeleteValue(FveKey, "ActiveDirectoryBackup")],
-                    DetectOps = [RegOp.CheckDword(FveKey, "ActiveDirectoryBackup", 1)],
-                },
-                new TweakDef
-                {
-                    Id = "bde-block-without-ad-backup",
-                    Label = "Block BitLocker if AD Recovery Backup Fails",
-                    Category = "Encryption",
-                    Description = "Prevents BitLocker from completing setup if the recovery password cannot be backed up to Active Directory.",
-                    Tags = ["bitlocker", "recovery", "active-directory", "policy", "security"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 4,
-                    SafetyRating = 5,
-                    ImpactNote = "Encryption fails if AD backup is unreachable; ensures no device is encrypted without a recovery path.",
-                    ApplyOps = [RegOp.SetDword(FveKey, "RequireActiveDirectoryBackup", 1)],
-                    RemoveOps = [RegOp.DeleteValue(FveKey, "RequireActiveDirectoryBackup")],
-                    DetectOps = [RegOp.CheckDword(FveKey, "RequireActiveDirectoryBackup", 1)],
                 },
                 new TweakDef
                 {
@@ -2432,22 +1969,6 @@ internal static class PolicyEncryption
                 },
                 new TweakDef
                 {
-                    Id = "bde-require-tpm-and-pin",
-                    Label = "Require TPM + PIN for BitLocker OS Drive Startup",
-                    Category = "Encryption",
-                    Description = "Mandates both TPM presence and a user-supplied PIN for pre-boot BitLocker authentication on the OS drive.",
-                    Tags = ["bitlocker", "tpm", "pin", "startup", "security", "mfa"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 5,
-                    SafetyRating = 3,
-                    ImpactNote = "Two-factor startup (something you have + know); PIN required at every boot; remote start requires workarounds.",
-                    ApplyOps = [RegOp.SetDword(FveKey, "UseTPMPIN", 2)],
-                    RemoveOps = [RegOp.DeleteValue(FveKey, "UseTPMPIN")],
-                    DetectOps = [RegOp.CheckDword(FveKey, "UseTPMPIN", 2)],
-                },
-                new TweakDef
-                {
                     Id = "bde-disable-recovery-usb",
                     Label = "Disable USB Recovery Key for BitLocker OS Drive",
                     Category = "Encryption",
@@ -2462,22 +1983,6 @@ internal static class PolicyEncryption
                     RemoveOps = [RegOp.DeleteValue(FveKey, "UseRecoveryDrive")],
                     DetectOps = [RegOp.CheckDword(FveKey, "UseRecoveryDrive", 0)],
                 },
-                new TweakDef
-                {
-                    Id = "bde-set-xts-aes-256",
-                    Label = "Set BitLocker Encryption to XTS-AES-256",
-                    Category = "Encryption",
-                    Description = "Configures BitLocker to use XTS-AES-256 encryption for all new volumes, providing maximum encryption strength.",
-                    Tags = ["bitlocker", "encryption", "aes-256", "xts", "security"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 4,
-                    SafetyRating = 5,
-                    ImpactNote = "Value 7 = XTS-AES-256; applies to new volumes; existing volumes retain their encryption method.",
-                    ApplyOps = [RegOp.SetDword(FveKey, "EncryptionMethodWithXtsOs", 7)],
-                    RemoveOps = [RegOp.DeleteValue(FveKey, "EncryptionMethodWithXtsOs")],
-                    DetectOps = [RegOp.CheckDword(FveKey, "EncryptionMethodWithXtsOs", 7)],
-                },
             ];
     }
 
@@ -2488,27 +1993,6 @@ internal static class PolicyEncryption
 
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
-            new TweakDef
-            {
-                Id = "btogo-deny-write-unencrypted",
-                Label = "BitLocker To Go: Deny Write Access to Unencrypted Removable Drives",
-                Category = "Encryption",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 5,
-                SafetyRating = 4,
-                Tags = ["bitlocker", "removable", "usb", "encryption", "policy"],
-                Description =
-                    "Sets RDVDenyWriteAccess=1 in the FVE policy. "
-                    + "Prevents writing any data to removable drives (USB flash drives, external HDDs, SD cards) "
-                    + "unless they are protected with BitLocker. Read access remains available. "
-                    + "Enforces data-at-rest encryption for all removable media leaving the organisation.",
-                SideEffects =
-                    "All removable drives without BitLocker become read-only. Existing un-encrypted drives must be encrypted before writing.",
-                ApplyOps = [RegOp.SetDword(Fve, "RDVDenyWriteAccess", 1)],
-                RemoveOps = [RegOp.DeleteValue(Fve, "RDVDenyWriteAccess")],
-                DetectOps = [RegOp.CheckDword(Fve, "RDVDenyWriteAccess", 1)],
-            },
             new TweakDef
             {
                 Id = "btogo-enable-rdv",
@@ -2805,24 +2289,6 @@ internal static class PolicyEncryption
                 },
                 new TweakDef
                 {
-                    Id = "cryptops-require-strong-key-protection",
-                    Label = "Cryptographic: Require Strong Key Protection UI for Private Keys",
-                    Category = "Encryption",
-                    Description =
-                        "Sets ForceKeyProtection=2 in Cryptography policy. Configures the CSP to require explicit user interaction (a password prompt) every time a private key is accessed from the Windows certificate store. With strong protection, private keys cannot be silently accessed by malware running in the user context without triggering a UI prompt that requires button click or password entry. This detects and prevents silent RSA private key use by credential-theft tools (e.g., mimikatz crypto module).",
-                    Tags = ["cryptography", "private-key", "protection", "key-guard", "security"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 4,
-                    SafetyRating = 4,
-                    ImpactNote =
-                        "Private key use prompts appear at every signature or decryption operation (email signing, VPN auth). Users with S/MIME-signed email or certificate-based auth will see frequent prompts.",
-                    ApplyOps = [RegOp.SetDword(CryptoKey, "ForceKeyProtection", 2)],
-                    RemoveOps = [RegOp.DeleteValue(CryptoKey, "ForceKeyProtection")],
-                    DetectOps = [RegOp.CheckDword(CryptoKey, "ForceKeyProtection", 2)],
-                },
-                new TweakDef
-                {
                     Id = "cryptops-disable-sha1-server-auth",
                     Label = "Cryptographic: Disable SHA-1 for Server Authentication Certificates",
                     Category = "Encryption",
@@ -3049,24 +2515,6 @@ internal static class PolicyEncryption
         [
             new TweakDef
             {
-                Id = "fips-enable-fips-algorithm-policy",
-                Label = "FIPS Compliance: Enable FIPS 140-2 Compliant Algorithms",
-                Category = "Encryption",
-                Description =
-                    "Enables the FIPS 140-2 compliant algorithm policy (FipsAlgorithmPolicy\\Enabled=1), which forces Windows security subsystems including TLS, Schannel, BitLocker, and Remote Desktop to use only FIPS-approved cryptographic algorithms. Required by NIST SP 800-53, FedRAMP, DoD STIGs, and PCI-DSS environments. Note: some older COM components and third-party applications may fail when this is enforced.",
-                Tags = ["fips", "cryptography", "compliance", "security", "nist"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                RegistryKeys = [FipsKey],
-                ApplyOps = [RegOp.SetDword(FipsKey, "Enabled", 1)],
-                RemoveOps = [RegOp.SetDword(FipsKey, "Enabled", 0)],
-                DetectOps = [RegOp.CheckDword(FipsKey, "Enabled", 1)],
-                ImpactScore = 5,
-                SafetyRating = 3,
-                ImpactNote = "Enforces FIPS-approved algorithms system-wide; may break non-FIPS-compliant legacy applications.",
-            },
-            new TweakDef
-            {
                 Id = "fips-disable-machine-key-caching",
                 Label = "FIPS Compliance: Disable Machine Key Caching",
                 Category = "Encryption",
@@ -3082,24 +2530,6 @@ internal static class PolicyEncryption
                 ImpactScore = 3,
                 SafetyRating = 4,
                 ImpactNote = "Removes in-memory key caching; minor performance penalty on crypto-heavy workloads.",
-            },
-            new TweakDef
-            {
-                Id = "fips-force-strong-key-protection",
-                Label = "FIPS Compliance: Force Strong Key Protection for User Keys",
-                Category = "Encryption",
-                Description =
-                    "Configures CNG to require strong key protection (ForceKeyProtection=2), which means private keys stored in the user's personal certificate store can only be accessed after the user explicitly provides their password. This prevents silent background access to private keys by automated processes, scheduled tasks, or potentially compromised processes running in the user context without the user's consent.",
-                Tags = ["fips", "cryptography", "key protection", "certificates", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                RegistryKeys = [CryptoKey],
-                ApplyOps = [RegOp.SetDword(CryptoKey, "ForceKeyProtection", 2)],
-                RemoveOps = [RegOp.DeleteValue(CryptoKey, "ForceKeyProtection")],
-                DetectOps = [RegOp.CheckDword(CryptoKey, "ForceKeyProtection", 2)],
-                ImpactScore = 4,
-                SafetyRating = 3,
-                ImpactNote = "Requires user password for each private key access; S/MIME signing and code signing may prompt more frequently.",
             },
             new TweakDef
             {
@@ -3420,91 +2850,6 @@ internal static class PolicyEncryption
 
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
-            new TweakDef
-            {
-                Id = "memintg-enable-hvci",
-                Label = "Enable Hypervisor-Protected Code Integrity (HVCI/Memory Integrity)",
-                Category = "Encryption",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 5,
-                SafetyRating = 4,
-                Description =
-                    "Hypervisor-Protected Code Integrity uses the Windows Hypervisor to isolate kernel code integrity validation from the operating system preventing kernel-mode rootkits. Enabling HVCI ensures that all kernel-mode code must pass signature validation in an environment that cannot be tampered with by usermode or kernel-mode attacks. HVCI prevents attackers from loading unsigned or modified drivers into kernel memory even when they have obtained SYSTEM-level access. Kernel-mode rootkits are one of the most persistent and difficult to detect forms of malware and HVCI provides strong protection against this attack class. HVCI may cause performance impact on systems with older processors that lack hardware optimizations for virtualization-based security. Organizations should evaluate processor compatibility and driver compatibility before enabling HVCI in production as some legacy drivers are incompatible.",
-                Tags = ["hvci", "memory-integrity", "device-guard", "security", "policy"],
-                RegistryKeys = [Key],
-                ApplyOps = [RegOp.SetDword(Key, "HypervisorEnforcedCodeIntegrity", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "HypervisorEnforcedCodeIntegrity")],
-                DetectOps = [RegOp.CheckDword(Key, "HypervisorEnforcedCodeIntegrity", 1)],
-            },
-            new TweakDef
-            {
-                Id = "memintg-enable-vbs",
-                Label = "Enable Virtualization-Based Security (VBS)",
-                Category = "Encryption",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 5,
-                SafetyRating = 4,
-                Description =
-                    "Virtualization-Based Security establishes a hypervisor-protected enclave that shields sensitive components including Credential Guard and Memory Integrity from the main OS. Enabling VBS creates the security foundation required for Credential Guard, HVCI, and other VBS-dependent security features. VBS uses hardware virtualization to create a secure world that is isolated from the normal operating system environment where malware may be operating. Security components running within VBS are protected from credential-stealing malware even if the main operating system is compromised. VBS requires compatible hardware and may not be compatible with all virtualization scenarios — nested virtualization is required for VMs. Organizations should enable VBS on physical endpoints and evaluate hypervisor-level compatibility for virtual desktop infrastructure deployments.",
-                Tags = ["vbs", "virtualization-security", "device-guard", "security", "policy"],
-                RegistryKeys = [Key],
-                ApplyOps = [RegOp.SetDword(Key, "EnableVirtualizationBasedSecurity", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "EnableVirtualizationBasedSecurity")],
-                DetectOps = [RegOp.CheckDword(Key, "EnableVirtualizationBasedSecurity", 1)],
-            },
-            new TweakDef
-            {
-                Id = "memintg-require-uefi-lock",
-                Label = "Require UEFI Lock for Device Guard Configuration",
-                Category = "Encryption",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 5,
-                SafetyRating = 3,
-                Description =
-                    "UEFI lock for Device Guard configuration embeds the security settings in UEFI non-volatile storage preventing boot-time modification of security configurations. Requiring UEFI lock ensures that Device Guard and VBS configurations cannot be disabled without physical access to UEFI settings. Without UEFI lock an attacker with administrator rights and knowledge of registry paths could disable Device Guard by modifying registry settings and rebooting. UEFI-locked Device Guard configuration is the strongest security posture as it survives operating system reinstallation. UEFI lock is irreversible without the UEFI manufacturer's direct bypass mechanism making it unsuitable for environments where Device Guard may need to be disabled. Organizations should only enable UEFI lock after thoroughly testing Device Guard compatibility and confirming it will not need to be disabled.",
-                Tags = ["uefi-lock", "device-guard", "security", "policy"],
-                RegistryKeys = [Key],
-                ApplyOps = [RegOp.SetDword(Key, "RequirePlatformSecurityFeatures", 3)],
-                RemoveOps = [RegOp.DeleteValue(Key, "RequirePlatformSecurityFeatures")],
-                DetectOps = [RegOp.CheckDword(Key, "RequirePlatformSecurityFeatures", 3)],
-            },
-            new TweakDef
-            {
-                Id = "memintg-enable-credential-guard",
-                Label = "Enable Windows Defender Credential Guard",
-                Category = "Encryption",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 5,
-                SafetyRating = 4,
-                Description =
-                    "Windows Defender Credential Guard uses VBS to store NTLM credentials, Kerberos tickets, and other credential material in an isolated secure world. Enabling Credential Guard protects against pass-the-hash and pass-the-ticket attacks that steal credentials from LSASS memory. Without Credential Guard domain credentials cached on endpoints can be extracted by Mimikatz and similar credential theft tools with local administrator access. Credential Guard makes lateral movement attacks significantly harder as captured credential material is stored in protected memory inaccessible to kernel-mode code running outside VBS. Credential Guard requires VBS and compatible hardware and may not be compatible with some smart card or federated identity scenarios. Organizations should test Credential Guard thoroughly before deployment as some authentication scenarios may require adjustments.",
-                Tags = ["credential-guard", "credentials", "device-guard", "security", "policy"],
-                RegistryKeys = [Key],
-                ApplyOps = [RegOp.SetDword(Key, "LsaCfgFlags", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "LsaCfgFlags")],
-                DetectOps = [RegOp.CheckDword(Key, "LsaCfgFlags", 1)],
-            },
-            new TweakDef
-            {
-                Id = "memintg-enable-system-guard",
-                Label = "Enable Windows Defender System Guard Runtime Monitor",
-                Category = "Encryption",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 4,
-                Description =
-                    "Windows Defender System Guard provides boot integrity attestation and runtime monitoring using hardware root of trust measured boot. Enabling System Guard allows remote attestation of device boot state ensuring that security configurations were properly applied at boot. System Guard uses TPM-measured boot to create cryptographic proof of the system's security configuration that can be verified by management systems. Runtime monitor capabilities detect changes to security-critical kernel components after boot providing ongoing integrity monitoring. System Guard attestation is particularly valuable for zero-trust access decisions where device health verification is required before granting resource access. Organizations using Intune conditional access can leverage System Guard attestation data to enforce device health compliance.",
-                Tags = ["system-guard", "attestation", "device-guard", "security", "policy"],
-                RegistryKeys = [Key],
-                ApplyOps = [RegOp.SetDword(Key, "ConfigureSystemGuardLaunch", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "ConfigureSystemGuardLaunch")],
-                DetectOps = [RegOp.CheckDword(Key, "ConfigureSystemGuardLaunch", 1)],
-            },
             new TweakDef
             {
                 Id = "memintg-block-untrusted-fonts",
@@ -3881,24 +3226,6 @@ internal static class PolicyEncryption
                 },
                 new TweakDef
                 {
-                    Id = "sbdbx-enable-vbs-device-guard",
-                    Label = "Secure Boot DBX: Enable VBS Platform Security Level 2 (Secure Boot + IOMMU)",
-                    Category = "Encryption",
-                    Description =
-                        "Sets RequirePlatformSecurityFeatures=3 in DeviceGuard (value 3 = Secure Boot AND IOMMU/DMAR required for VBS). Requires both Secure Boot and IOMMU (Input-Output Memory Management Unit, Intel VT-d or AMD-Vi) to be active before Virtualization Based Security will start. Without IOMMU, DMA attacks (Direct Memory Access via PCIe Thunderbolt, FireWire, ExpressCard) can directly read or write the hypervisor memory region, bypassing VBS isolation. Requiring IOMMU for VBS ensures that even DMA-capable physical attacks cannot access the VBS inner partition.",
-                    Tags = ["vbs", "iommu", "secure-boot", "dma-protection", "device-guard"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 5,
-                    SafetyRating = 5,
-                    ImpactNote =
-                        "VBS only starts when both Secure Boot and IOMMU are present. Devices without IOMMU support (older platforms without VT-d) will not activate VBS. Verify hardware IOMMU support before enforcing. Relevant for enterprise hardware that is less than 5 years old (Intel 6th Gen+ supports VT-d, AMD Ryzen 2000+ supports AMD-Vi formally).",
-                    ApplyOps = [RegOp.SetDword(DeviceGuardKey, "RequirePlatformSecurityFeatures", 3)],
-                    RemoveOps = [RegOp.DeleteValue(DeviceGuardKey, "RequirePlatformSecurityFeatures")],
-                    DetectOps = [RegOp.CheckDword(DeviceGuardKey, "RequirePlatformSecurityFeatures", 3)],
-                },
-                new TweakDef
-                {
                     Id = "sbdbx-enable-signed-boot-chain-policy",
                     Label = "Secure Boot DBX: Enforce Complete Signed Boot Chain Policy",
                     Category = "Encryption",
@@ -4240,127 +3567,6 @@ internal static class PolicyEncryption
         [
             new TweakDef
             {
-                Id = "tls-disable-ssl20",
-                Label = "Disable SSL 2.0 (Client + Server)",
-                Category = "Encryption",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 5,
-                SafetyRating = 5,
-                Tags = ["ssl", "ssl2", "tls", "schannel", "security", "protocol"],
-                Description =
-                    "Disables SSL 2.0 on both client and server sides. SSL 2.0 is considered "
-                    + "completely broken and has been deprecated since RFC 6176 (2011). "
-                    + "Sets Enabled=0 and DisabledByDefault=1 in SCHANNEL\\Protocols\\SSL 2.0.",
-                ApplyOps =
-                [
-                    RegOp.SetDword(Ssl20Client, "Enabled", 0),
-                    RegOp.SetDword(Ssl20Client, "DisabledByDefault", 1),
-                    RegOp.SetDword(Ssl20Server, "Enabled", 0),
-                    RegOp.SetDword(Ssl20Server, "DisabledByDefault", 1),
-                ],
-                RemoveOps =
-                [
-                    RegOp.DeleteValue(Ssl20Client, "Enabled"),
-                    RegOp.DeleteValue(Ssl20Client, "DisabledByDefault"),
-                    RegOp.DeleteValue(Ssl20Server, "Enabled"),
-                    RegOp.DeleteValue(Ssl20Server, "DisabledByDefault"),
-                ],
-                DetectOps = [RegOp.CheckDword(Ssl20Client, "Enabled", 0), RegOp.CheckDword(Ssl20Server, "Enabled", 0)],
-            },
-            new TweakDef
-            {
-                Id = "tls-disable-ssl30",
-                Label = "Disable SSL 3.0 (Client + Server)",
-                Category = "Encryption",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 5,
-                SafetyRating = 5,
-                Tags = ["ssl", "ssl3", "poodle", "tls", "schannel", "security", "protocol"],
-                Description =
-                    "Disables SSL 3.0 on both client and server sides. SSL 3.0 is vulnerable to "
-                    + "POODLE (CVE-2014-3566) and other attacks. Deprecated by RFC 7568 (2015). "
-                    + "Sets Enabled=0 and DisabledByDefault=1 in SCHANNEL\\Protocols\\SSL 3.0.",
-                ApplyOps =
-                [
-                    RegOp.SetDword(Ssl30Client, "Enabled", 0),
-                    RegOp.SetDword(Ssl30Client, "DisabledByDefault", 1),
-                    RegOp.SetDword(Ssl30Server, "Enabled", 0),
-                    RegOp.SetDword(Ssl30Server, "DisabledByDefault", 1),
-                ],
-                RemoveOps =
-                [
-                    RegOp.DeleteValue(Ssl30Client, "Enabled"),
-                    RegOp.DeleteValue(Ssl30Client, "DisabledByDefault"),
-                    RegOp.DeleteValue(Ssl30Server, "Enabled"),
-                    RegOp.DeleteValue(Ssl30Server, "DisabledByDefault"),
-                ],
-                DetectOps = [RegOp.CheckDword(Ssl30Client, "Enabled", 0), RegOp.CheckDword(Ssl30Server, "Enabled", 0)],
-            },
-            new TweakDef
-            {
-                Id = "tls-disable-tls10",
-                Label = "Disable TLS 1.0 (Client + Server)",
-                Category = "Encryption",
-                NeedsAdmin = true,
-                CorpSafe = false,
-                ImpactScore = 4,
-                SafetyRating = 4,
-                Tags = ["tls10", "tls", "schannel", "security", "protocol", "beast"],
-                Description =
-                    "Disables TLS 1.0 on both client and server sides. TLS 1.0 is vulnerable "
-                    + "to BEAST (CVE-2011-3389) and POODLE-TLS attacks. Deprecated in RFC 8996 (2021). "
-                    + "WARNING: may break legacy apps that do not support TLS 1.2+.",
-                ApplyOps =
-                [
-                    RegOp.SetDword(Tls10Client, "Enabled", 0),
-                    RegOp.SetDword(Tls10Client, "DisabledByDefault", 1),
-                    RegOp.SetDword(Tls10Server, "Enabled", 0),
-                    RegOp.SetDword(Tls10Server, "DisabledByDefault", 1),
-                ],
-                RemoveOps =
-                [
-                    RegOp.DeleteValue(Tls10Client, "Enabled"),
-                    RegOp.DeleteValue(Tls10Client, "DisabledByDefault"),
-                    RegOp.DeleteValue(Tls10Server, "Enabled"),
-                    RegOp.DeleteValue(Tls10Server, "DisabledByDefault"),
-                ],
-                DetectOps = [RegOp.CheckDword(Tls10Client, "Enabled", 0), RegOp.CheckDword(Tls10Server, "Enabled", 0)],
-            },
-            new TweakDef
-            {
-                Id = "tls-disable-tls11",
-                Label = "Disable TLS 1.1 (Client + Server)",
-                Category = "Encryption",
-                NeedsAdmin = true,
-                CorpSafe = false,
-                ImpactScore = 4,
-                SafetyRating = 4,
-                Tags = ["tls11", "tls", "schannel", "security", "protocol"],
-                Description =
-                    "Disables TLS 1.1 on both client and server sides. TLS 1.1 is deprecated "
-                    + "per RFC 8996 (2021); replaced by TLS 1.2 and TLS 1.3. "
-                    + "WARNING: may break compatibility with older servers. Apply after confirming "
-                    + "all services support TLS 1.2 or higher.",
-                ApplyOps =
-                [
-                    RegOp.SetDword(Tls11Client, "Enabled", 0),
-                    RegOp.SetDword(Tls11Client, "DisabledByDefault", 1),
-                    RegOp.SetDword(Tls11Server, "Enabled", 0),
-                    RegOp.SetDword(Tls11Server, "DisabledByDefault", 1),
-                ],
-                RemoveOps =
-                [
-                    RegOp.DeleteValue(Tls11Client, "Enabled"),
-                    RegOp.DeleteValue(Tls11Client, "DisabledByDefault"),
-                    RegOp.DeleteValue(Tls11Server, "Enabled"),
-                    RegOp.DeleteValue(Tls11Server, "DisabledByDefault"),
-                ],
-                DetectOps = [RegOp.CheckDword(Tls11Client, "Enabled", 0), RegOp.CheckDword(Tls11Server, "Enabled", 0)],
-            },
-            new TweakDef
-            {
                 Id = "tls-enable-schannel-event-logging",
                 Label = "Enable Detailed SCHANNEL Event Logging",
                 Category = "Encryption",
@@ -4377,127 +3583,6 @@ internal static class PolicyEncryption
                 RemoveOps = [RegOp.DeleteValue(SchannelRoot, "EventLogging")],
                 DetectOps = [RegOp.CheckDword(SchannelRoot, "EventLogging", 7)],
             },
-            new TweakDef
-            {
-                Id = "tls-disable-weak-rc4-cipher",
-                Label = "Disable RC4 Cipher Suite",
-                Category = "Encryption",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                Tags = ["rc4", "cipher", "tls", "schannel", "security"],
-                Description =
-                    "Disables the RC4 stream cipher in SCHANNEL. RC4 is cryptographically broken "
-                    + "(Bar-mitzvah attack, BEAST) and must not be used in any TLS negotiation. "
-                    + "Sets Enabled=0 in SCHANNEL\\Ciphers\\RC4 128/128.",
-                ApplyOps =
-                [
-                    RegOp.SetDword(SchannelRoot + @"\Ciphers\RC4 128/128", "Enabled", 0),
-                    RegOp.SetDword(SchannelRoot + @"\Ciphers\RC4 64/128", "Enabled", 0),
-                    RegOp.SetDword(SchannelRoot + @"\Ciphers\RC4 40/128", "Enabled", 0),
-                ],
-                RemoveOps =
-                [
-                    RegOp.DeleteValue(SchannelRoot + @"\Ciphers\RC4 128/128", "Enabled"),
-                    RegOp.DeleteValue(SchannelRoot + @"\Ciphers\RC4 64/128", "Enabled"),
-                    RegOp.DeleteValue(SchannelRoot + @"\Ciphers\RC4 40/128", "Enabled"),
-                ],
-                DetectOps = [RegOp.CheckDword(SchannelRoot + @"\Ciphers\RC4 128/128", "Enabled", 0)],
-            },
-            new TweakDef
-            {
-                Id = "tls-disable-des-cipher",
-                Label = "Disable DES / Triple-DES Cipher Suites",
-                Category = "Encryption",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                Tags = ["des", "3des", "cipher", "tls", "schannel", "security"],
-                Description =
-                    "Disables DES (56-bit) and Triple-DES (168-bit) cipher suites in SCHANNEL. "
-                    + "DES is trivially brute-forced; 3DES is vulnerable to SWEET32 (CVE-2016-2183). "
-                    + "Forces SCHANNEL to negotiate AES-128/256 cipher suites only.",
-                ApplyOps =
-                [
-                    RegOp.SetDword(SchannelRoot + @"\Ciphers\DES 56/56", "Enabled", 0),
-                    RegOp.SetDword(SchannelRoot + @"\Ciphers\Triple DES 168", "Enabled", 0),
-                ],
-                RemoveOps =
-                [
-                    RegOp.DeleteValue(SchannelRoot + @"\Ciphers\DES 56/56", "Enabled"),
-                    RegOp.DeleteValue(SchannelRoot + @"\Ciphers\Triple DES 168", "Enabled"),
-                ],
-                DetectOps = [RegOp.CheckDword(SchannelRoot + @"\Ciphers\DES 56/56", "Enabled", 0)],
-            },
-            new TweakDef
-            {
-                Id = "tls-disable-null-cipher",
-                Label = "Disable NULL Cipher Suite",
-                Category = "Encryption",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 5,
-                SafetyRating = 5,
-                Tags = ["null cipher", "tls", "schannel", "security", "encryption"],
-                Description =
-                    "Disables the NULL cipher suite which provides authentication with no encryption. "
-                    + "A NULL cipher connection is completely readable by any network observer. "
-                    + "Sets Enabled=0 in SCHANNEL\\Ciphers\\NULL.",
-                ApplyOps = [RegOp.SetDword(SchannelRoot + @"\Ciphers\NULL", "Enabled", 0)],
-                RemoveOps = [RegOp.DeleteValue(SchannelRoot + @"\Ciphers\NULL", "Enabled")],
-                DetectOps = [RegOp.CheckDword(SchannelRoot + @"\Ciphers\NULL", "Enabled", 0)],
-            },
-            new TweakDef
-            {
-                Id = "tls-disable-md5-hash",
-                Label = "Disable MD5 Hash Algorithm in SCHANNEL",
-                Category = "Encryption",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                Tags = ["md5", "hash", "tls", "schannel", "security"],
-                Description =
-                    "Disables MD5 as a hash algorithm for TLS MAC and certificate signatures in "
-                    + "SCHANNEL. MD5 is collision-vulnerable (Flame malware used an MD5 collision). "
-                    + "Sets Enabled=0 in SCHANNEL\\Hashes\\MD5.",
-                ApplyOps = [RegOp.SetDword(SchannelRoot + @"\Hashes\MD5", "Enabled", 0)],
-                RemoveOps = [RegOp.DeleteValue(SchannelRoot + @"\Hashes\MD5", "Enabled")],
-                DetectOps = [RegOp.CheckDword(SchannelRoot + @"\Hashes\MD5", "Enabled", 0)],
-            },
-            new TweakDef
-            {
-                Id = "tls-enable-tls12-explicitly",
-                Label = "Explicitly Enable TLS 1.2 (Client + Server)",
-                Category = "Encryption",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                Tags = ["tls12", "tls", "schannel", "security", "protocol"],
-                Description =
-                    "Explicitly enables TLS 1.2 on both client and server sides (Enabled=1, "
-                    + "DisabledByDefault=0). While TLS 1.2 is enabled by default in modern Windows, "
-                    + "this hardens against GPO or registry changes that might inadvertently disable it. "
-                    + "Apply after disabling TLS 1.0/1.1 to confirm TLS 1.2 is the minimum floor.",
-                ApplyOps =
-                [
-                    RegOp.SetDword(SchannelRoot + @"\Protocols\TLS 1.2\Client", "Enabled", 1),
-                    RegOp.SetDword(SchannelRoot + @"\Protocols\TLS 1.2\Client", "DisabledByDefault", 0),
-                    RegOp.SetDword(SchannelRoot + @"\Protocols\TLS 1.2\Server", "Enabled", 1),
-                    RegOp.SetDword(SchannelRoot + @"\Protocols\TLS 1.2\Server", "DisabledByDefault", 0),
-                ],
-                RemoveOps =
-                [
-                    RegOp.DeleteValue(SchannelRoot + @"\Protocols\TLS 1.2\Client", "Enabled"),
-                    RegOp.DeleteValue(SchannelRoot + @"\Protocols\TLS 1.2\Client", "DisabledByDefault"),
-                    RegOp.DeleteValue(SchannelRoot + @"\Protocols\TLS 1.2\Server", "Enabled"),
-                    RegOp.DeleteValue(SchannelRoot + @"\Protocols\TLS 1.2\Server", "DisabledByDefault"),
-                ],
-                DetectOps = [RegOp.CheckDword(SchannelRoot + @"\Protocols\TLS 1.2\Client", "Enabled", 1)],
-            },
         ];
     }
 
@@ -4510,24 +3595,6 @@ internal static class PolicyEncryption
 
         public static IReadOnlyList<TweakDef> Data =>
             [
-                new TweakDef
-                {
-                    Id = "uefilck-require-secure-boot-active",
-                    Label = "UEFI Lock: Require UEFI Secure Boot to Be Active (OS Enforcement Check)",
-                    Category = "Encryption",
-                    Description =
-                        "Sets RequireSecureBoot=1 in the SecureBoot State key. Records an OS-level enforcement requirement that Secure Boot must be active. Windows reads this value to determine whether Secure Boot is enforced by OS policy — if the firmware has Secure Boot disabled while this policy value is set, Windows Update and Intune compliance checks flag the device as non-compliant. This acts as an OS-side sentinel that detects when someone has disabled Secure Boot in the UEFI settings and correlates with health attestation checks. The actual Secure Boot enforcement is in the UEFI firmware — this registry value is the OS policy declaration that drives compliance reporting.",
-                    Tags = ["secure-boot", "compliance", "intune", "policy-enforcement", "health-attestation"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 4,
-                    SafetyRating = 5,
-                    ImpactNote =
-                        "Device flagged as non-compliant if Secure Boot is disabled in firmware. Intune Conditional Access can block network access to non-compliant devices. If Secure Boot is genuinely required for compliance, disable CSM and ensure UEFI firmware has Secure Boot enabled before deploying.",
-                    ApplyOps = [RegOp.SetDword(SecureBootStateKey, "UEFISecureBootEnabled", 1)],
-                    RemoveOps = [RegOp.DeleteValue(SecureBootStateKey, "UEFISecureBootEnabled")],
-                    DetectOps = [RegOp.CheckDword(SecureBootStateKey, "UEFISecureBootEnabled", 1)],
-                },
                 new TweakDef
                 {
                     Id = "uefilck-block-test-signing-mode",
@@ -4703,40 +3770,6 @@ internal static class PolicyEncryption
             [
                 new TweakDef
                 {
-                    Id = "vbsenf-enable-vbs",
-                    Label = "Enable Virtualization-Based Security (VBS)",
-                    Category = "Encryption",
-                    Description =
-                        "Enables Virtualization-Based Security, which uses hardware virtualisation to create an isolated execution environment (Secure World) that protects sensitive kernel data and code from OS-level compromises.",
-                    Tags = ["vbs", "security", "virtualization", "device-guard", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 5,
-                    SafetyRating = 4,
-                    ImpactNote = "VBS enabled; Secure World isolation active. Requires Hyper-V capable CPU; reboot required.",
-                    ApplyOps = [RegOp.SetDword(Key, "EnableVirtualizationBasedSecurity", 1)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "EnableVirtualizationBasedSecurity")],
-                    DetectOps = [RegOp.CheckDword(Key, "EnableVirtualizationBasedSecurity", 1)],
-                },
-                new TweakDef
-                {
-                    Id = "vbsenf-enable-hvci",
-                    Label = "Enable HVCI Memory Integrity via DeviceGuard",
-                    Category = "Encryption",
-                    Description =
-                        "Enables Hypervisor-Protected Code Integrity (HVCI / Memory Integrity) which uses VBS to ensure only signed code runs in kernel mode, blocking unsigned kernel drivers and rootkits.",
-                    Tags = ["hvci", "memory-integrity", "vbs", "device-guard", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 5,
-                    SafetyRating = 4,
-                    ImpactNote = "HVCI active; unsigned kernel code blocked. Minor performance impact; incompatible drivers fail to load.",
-                    ApplyOps = [RegOp.SetDword(Key2, "Enabled", 1)],
-                    RemoveOps = [RegOp.DeleteValue(Key2, "Enabled")],
-                    DetectOps = [RegOp.CheckDword(Key2, "Enabled", 1)],
-                },
-                new TweakDef
-                {
                     Id = "vbsenf-enable-hvci-audit",
                     Label = "Enable HVCI Audit Mode (Log Before Block)",
                     Category = "Encryption",
@@ -4751,23 +3784,6 @@ internal static class PolicyEncryption
                     ApplyOps = [RegOp.SetDword(Key2, "Audit", 1)],
                     RemoveOps = [RegOp.DeleteValue(Key2, "Audit")],
                     DetectOps = [RegOp.CheckDword(Key2, "Audit", 1)],
-                },
-                new TweakDef
-                {
-                    Id = "vbsenf-require-uefi-lock",
-                    Label = "Require UEFI Lock for VBS Configuration",
-                    Category = "Encryption",
-                    Description =
-                        "Locks VBS configuration via UEFI so it cannot be disabled from the OS, even by an administrator, requiring physical UEFI/BIOS access to turn off — provides boot-time tamper resistance.",
-                    Tags = ["vbs", "uefi-lock", "security", "tamper-resistance", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 5,
-                    SafetyRating = 3,
-                    ImpactNote = "VBS locked in UEFI; disabling requires physical BIOS access. Only apply on managed, tested hardware.",
-                    ApplyOps = [RegOp.SetDword(Key, "RequirePlatformSecurityFeatures", 3)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "RequirePlatformSecurityFeatures")],
-                    DetectOps = [RegOp.CheckDword(Key, "RequirePlatformSecurityFeatures", 3)],
                 },
                 new TweakDef
                 {
@@ -4921,60 +3937,6 @@ internal static class PolicyBitLocker
         },
         new TweakDef
         {
-            Id = "fve-deny-write-removable-notprotected",
-            Label = "Block Write Access to Unencrypted Removable Drives",
-            Category = "Encryption",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Denies write access to removable drives (USB flash drives, external HDDs) that are not BitLocker-protected. Prevents data exfiltration to unencrypted removable media.",
-            Tags = ["bitlocker", "removable-drive", "usb", "write-protect", "fve", "policy"],
-            RegistryKeys = [Key],
-            ImpactScore = 5,
-            SafetyRating = 4,
-            ImpactNote = "Unencrypted USB/removable drives become read-only; data exfiltration blocked.",
-            ApplyOps = [RegOp.SetDword(Key, "RDVDenyWriteAccess", 1)],
-            RemoveOps = [RegOp.DeleteValue(Key, "RDVDenyWriteAccess")],
-            DetectOps = [RegOp.CheckDword(Key, "RDVDenyWriteAccess", 1)],
-        },
-        new TweakDef
-        {
-            Id = "fve-require-startup-pin",
-            Label = "Require BitLocker Startup PIN",
-            Category = "Encryption",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Requires a user-defined PIN at startup before BitLocker releases the OS volume. Provides pre-boot authentication that blocks cold-boot attacks even if the TPM is compromised.",
-            Tags = ["bitlocker", "pin", "startup", "pre-boot", "fve", "policy", "security"],
-            RegistryKeys = [Key],
-            ImpactScore = 4,
-            SafetyRating = 5,
-            ImpactNote = "Startup PIN required; cold-boot and direct memory attacks blocked.",
-            ApplyOps = [RegOp.SetDword(Key, "UseAdvancedStartup", 1), RegOp.SetDword(Key, "UseTPMPIN", 1)],
-            RemoveOps = [RegOp.DeleteValue(Key, "UseAdvancedStartup"), RegOp.DeleteValue(Key, "UseTPMPIN")],
-            DetectOps = [RegOp.CheckDword(Key, "UseTPMPIN", 1)],
-        },
-        new TweakDef
-        {
-            Id = "fve-set-encryption-method-aes256",
-            Label = "Set BitLocker Encryption Method to AES-256",
-            Category = "Encryption",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Configures BitLocker to use AES-256 (XTS-AES 256-bit) for OS and fixed drives. Provides the highest encryption strength; value 7 = XTS-AES 256, the recommended method for modern Windows.",
-            Tags = ["bitlocker", "aes-256", "xts", "encryption-method", "fve", "policy"],
-            RegistryKeys = [Key],
-            ImpactScore = 3,
-            SafetyRating = 5,
-            ImpactNote = "XTS-AES 256-bit encryption selected; stronger than default XTS-AES 128.",
-            ApplyOps = [RegOp.SetDword(Key, "EncryptionMethodWithXtsFdv", 7), RegOp.SetDword(Key, "EncryptionMethodWithXtsOs", 7)],
-            RemoveOps = [RegOp.DeleteValue(Key, "EncryptionMethodWithXtsFdv"), RegOp.DeleteValue(Key, "EncryptionMethodWithXtsOs")],
-            DetectOps = [RegOp.CheckDword(Key, "EncryptionMethodWithXtsOs", 7)],
-        },
-        new TweakDef
-        {
             Id = "fve-disable-network-unlock",
             Label = "Disable BitLocker Network Unlock",
             Category = "Encryption",
@@ -5008,24 +3970,6 @@ internal static class PolicyBitLocker
             ApplyOps = [RegOp.SetDword(Key, "DoNotBackupToAD", 1)],
             RemoveOps = [RegOp.DeleteValue(Key, "DoNotBackupToAD")],
             DetectOps = [RegOp.CheckDword(Key, "DoNotBackupToAD", 1)],
-        },
-        new TweakDef
-        {
-            Id = "fve-set-min-pin-length",
-            Label = "Set BitLocker Minimum PIN Length (8 digits)",
-            Category = "Encryption",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Enforces a minimum of 8 digits for the BitLocker startup PIN. Default Windows minimum is 4 digits; 8+ significantly increases brute-force resistance for pre-boot authentication.",
-            Tags = ["bitlocker", "pin", "minimum-length", "fve", "policy", "security"],
-            RegistryKeys = [Key],
-            ImpactScore = 4,
-            SafetyRating = 5,
-            ImpactNote = "Minimum 8-digit PIN enforced; brute-force attacks against startup PIN made impractical.",
-            ApplyOps = [RegOp.SetDword(Key, "MinimumPIN", 8)],
-            RemoveOps = [RegOp.DeleteValue(Key, "MinimumPIN")],
-            DetectOps = [RegOp.CheckDword(Key, "MinimumPIN", 8)],
         },
         new TweakDef
         {

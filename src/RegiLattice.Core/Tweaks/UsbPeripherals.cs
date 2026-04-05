@@ -8,29 +8,6 @@ internal static class UsbPeripherals
     [
         new TweakDef
         {
-            Id = "usb-disable-autoplay",
-            Label = "Disable AutoPlay (User)",
-            Category = "Peripherals",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Disable automatic playback dialog when inserting media. Default: enabled. Recommended: disabled.",
-            Tags = ["autoplay", "media", "usb"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\AutoplayHandlers"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\AutoplayHandlers", "DisableAutoplay", 1),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\AutoplayHandlers", "DisableAutoplay", 0),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\AutoplayHandlers", "DisableAutoplay", 1),
-            ],
-        },
-        new TweakDef
-        {
             Id = "usb-deny-removable-write",
             Label = "Deny Write to Removable Drives",
             Category = "Peripherals",
@@ -186,20 +163,6 @@ internal static class UsbPeripherals
         },
         new TweakDef
         {
-            Id = "usb-disable-usb-storage-write",
-            Label = "Disable USB Storage Write Access",
-            Category = "Peripherals",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Makes all USB storage devices read-only. Prevents data from being written to USB drives. Default: read-write.",
-            Tags = ["usb", "storage", "write-protect", "security"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\StorageDevicePolicies"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\StorageDevicePolicies", "WriteProtect", 1)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\StorageDevicePolicies", "WriteProtect", 0)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\StorageDevicePolicies", "WriteProtect", 1)],
-        },
-        new TweakDef
-        {
             Id = "usb-disable-usb-storage-install",
             Label = "Block USB Storage Device Installation",
             Category = "Peripherals",
@@ -239,90 +202,6 @@ internal static class UsbPeripherals
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\bthserv", "Start", 4)],
             RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\bthserv", "Start", 3)],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\bthserv", "Start", 4)],
-        },
-        new TweakDef
-        {
-            Id = "usb-disable-hub-power-saving",
-            Label = "Disable USB Hub Power Saving",
-            Category = "Peripherals",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Disables power saving on USB hub controllers. Prevents USB devices from disconnecting due to power management. Default: enabled.",
-            Tags = ["usb", "hub", "power", "disconnect"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\USB"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\USB", "DisableSelectiveSuspend", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\USB", "DisableSelectiveSuspend")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\USB", "DisableSelectiveSuspend", 1)],
-        },
-        new TweakDef
-        {
-            Id = "usb-disable-mass-storage",
-            Label = "Disable USB Mass Storage (Policy)",
-            Category = "Peripherals",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Blocks USB mass storage devices via policy. Prevents unauthorised data transfer via USB drives. Default: allowed.",
-            Tags = ["usb", "mass-storage", "policy", "security"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\RemovableStorageDevices\{53f5630d-b6bf-11d0-94f2-00a0c91efb8b}"],
-            ApplyOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\RemovableStorageDevices\{53f5630d-b6bf-11d0-94f2-00a0c91efb8b}",
-                    "Deny_Read",
-                    1
-                ),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\RemovableStorageDevices\{53f5630d-b6bf-11d0-94f2-00a0c91efb8b}",
-                    "Deny_Read"
-                ),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\RemovableStorageDevices\{53f5630d-b6bf-11d0-94f2-00a0c91efb8b}",
-                    "Deny_Read",
-                    1
-                ),
-            ],
-        },
-        new TweakDef
-        {
-            Id = "usb-disable-removable-write",
-            Label = "Disable Removable Storage Write",
-            Category = "Peripherals",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Blocks write access to removable storage devices. Prevents data exfiltration via USB drives while allowing read access. Default: allowed.",
-            Tags = ["usb", "removable", "write", "security"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\RemovableStorageDevices\{53f5630d-b6bf-11d0-94f2-00a0c91efb8b}"],
-            ApplyOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\RemovableStorageDevices\{53f5630d-b6bf-11d0-94f2-00a0c91efb8b}",
-                    "Deny_Write",
-                    1
-                ),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\RemovableStorageDevices\{53f5630d-b6bf-11d0-94f2-00a0c91efb8b}",
-                    "Deny_Write"
-                ),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\RemovableStorageDevices\{53f5630d-b6bf-11d0-94f2-00a0c91efb8b}",
-                    "Deny_Write",
-                    1
-                ),
-            ],
         },
         new TweakDef
         {
@@ -367,22 +246,6 @@ internal static class UsbPeripherals
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\USB", "EnhancedPowerManagementEnabled", 0)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\USB", "EnhancedPowerManagementEnabled")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\USB", "EnhancedPowerManagementEnabled", 0)],
-        },
-        new TweakDef
-        {
-            Id = "usb-disable-autoplay-all-drives",
-            Label = "Disable AutoPlay for All Drives",
-            Category = "Peripherals",
-            NeedsAdmin = false,
-            Description = "Disables AutoPlay for all drive types (USB, CD/DVD, network). Default: enabled.",
-            Tags = ["usb", "autoplay", "security", "cd"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer", "NoDriveTypeAutoRun", 255)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer", "NoDriveTypeAutoRun")],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer", "NoDriveTypeAutoRun", 255),
-            ],
         },
         new TweakDef
         {
@@ -1032,21 +895,6 @@ internal static class Bluetooth
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BTHPORT\Parameters", "InquiryLength", 5)],
             RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BTHPORT\Parameters", "InquiryLength", 12)],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BTHPORT\Parameters", "InquiryLength", 5)],
-        },
-        new TweakDef
-        {
-            Id = "bt-set-page-timeout-reduced",
-            Label = "Reduce Bluetooth Page Timeout",
-            Category = "Peripherals",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Reduces the Bluetooth page timeout from the default 5000ms to 2000ms. Fails BT connection attempts faster, reducing hang time when connecting to an unavailable device. Default: 5000ms.",
-            Tags = ["bluetooth", "connection", "performance", "timeout"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BTHPORT\Parameters"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BTHPORT\Parameters", "PageTimeout", 2000)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BTHPORT\Parameters", "PageTimeout", 5000)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BTHPORT\Parameters", "PageTimeout", 2000)],
         },
         new TweakDef
         {
@@ -1858,54 +1706,6 @@ internal static class PolicyDevice
             [
                 new TweakDef
                 {
-                    Id = "devguard-enable-vbs",
-                    Label = "Enable Virtualization-Based Security (VBS)",
-                    Category = "Peripherals",
-                    Description = "Enables Virtualization-Based Security, which uses the hypervisor to isolate critical security processes.",
-                    Tags = ["vbs", "device-guard", "virtualization", "security", "hyperv"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 5,
-                    SafetyRating = 3,
-                    ImpactNote = "Requires Hyper-V, UEFI, and Secure Boot; significant performance impact on systems without HVCI-capable hardware.",
-                    ApplyOps = [RegOp.SetDword(DgKey, "EnableVirtualizationBasedSecurity", 1)],
-                    RemoveOps = [RegOp.DeleteValue(DgKey, "EnableVirtualizationBasedSecurity")],
-                    DetectOps = [RegOp.CheckDword(DgKey, "EnableVirtualizationBasedSecurity", 1)],
-                },
-                new TweakDef
-                {
-                    Id = "devguard-require-secure-boot-dma",
-                    Label = "Require Secure Boot and DMA Protection for VBS",
-                    Category = "Peripherals",
-                    Description = "Requires Secure Boot and hardware DMA protection as platform security features for VBS to run.",
-                    Tags = ["vbs", "device-guard", "secure-boot", "dma", "security"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 5,
-                    SafetyRating = 3,
-                    ImpactNote = "Value 3 = Secure Boot + DMA; requires appropriate firmware/hardware; VBS disabled without both features.",
-                    ApplyOps = [RegOp.SetDword(DgKey, "RequirePlatformSecurityFeatures", 3)],
-                    RemoveOps = [RegOp.DeleteValue(DgKey, "RequirePlatformSecurityFeatures")],
-                    DetectOps = [RegOp.CheckDword(DgKey, "RequirePlatformSecurityFeatures", 3)],
-                },
-                new TweakDef
-                {
-                    Id = "devguard-enable-hvci",
-                    Label = "Enable Hypervisor-Enforced Code Integrity (HVCI)",
-                    Category = "Peripherals",
-                    Description = "Enables Memory Integrity (HVCI) which uses the hypervisor to validate kernel code before execution.",
-                    Tags = ["hvci", "memory-integrity", "device-guard", "kernel", "security"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 5,
-                    SafetyRating = 3,
-                    ImpactNote = "Value 2 = on without UEFI lock; blocks unsigned kernel drivers; may cause incompatibilities with legacy drivers.",
-                    ApplyOps = [RegOp.SetDword(DgKey, "HypervisorEnforcedCodeIntegrity", 2)],
-                    RemoveOps = [RegOp.DeleteValue(DgKey, "HypervisorEnforcedCodeIntegrity")],
-                    DetectOps = [RegOp.CheckDword(DgKey, "HypervisorEnforcedCodeIntegrity", 2)],
-                },
-                new TweakDef
-                {
                     Id = "devguard-require-uefi-mat",
                     Label = "Require UEFI Memory Attributes Table for HVCI",
                     Category = "Peripherals",
@@ -1919,24 +1719,6 @@ internal static class PolicyDevice
                     ApplyOps = [RegOp.SetDword(DgKey, "HVCIMATRequired", 1)],
                     RemoveOps = [RegOp.DeleteValue(DgKey, "HVCIMATRequired")],
                     DetectOps = [RegOp.CheckDword(DgKey, "HVCIMATRequired", 1)],
-                },
-                new TweakDef
-                {
-                    Id = "devguard-enable-credential-guard",
-                    Label = "Enable Credential Guard",
-                    Category = "Peripherals",
-                    Description =
-                        "Isolates NTLM hashes and Kerberos tickets inside a VBS-protected virtual machine to prevent Pass-the-Hash attacks.",
-                    Tags = ["credential-guard", "device-guard", "vbs", "lsa", "security"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 5,
-                    SafetyRating = 3,
-                    ImpactNote =
-                        "Value 2 = enabled without UEFI lock (removable); requires VBS; breaks smart-card-only environments in some configs.",
-                    ApplyOps = [RegOp.SetDword(DgKey, "LsaCfgFlags", 2)],
-                    RemoveOps = [RegOp.DeleteValue(DgKey, "LsaCfgFlags")],
-                    DetectOps = [RegOp.CheckDword(DgKey, "LsaCfgFlags", 2)],
                 },
                 new TweakDef
                 {
@@ -2061,43 +1843,6 @@ internal static class PolicyDevice
             },
             new TweakDef
             {
-                Id = "vbs-enable-credential-guard",
-                Label = "Enable Windows Defender Credential Guard",
-                Category = "Peripherals",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 5,
-                SafetyRating = 4,
-                Tags = ["vbs", "credential guard", "pass the hash", "security"],
-                Description =
-                    "Enables Credential Guard, which runs the Windows NTLM and Kerberos "
-                    + "authentication subsystems in a VBS-isolated container. Prevents "
-                    + "pass-the-hash and pass-the-ticket credential theft attacks. "
-                    + "LsaIso isolation. Requires reboot.",
-                ApplyOps = [RegOp.SetDword(CredentialGuard, "LsaCfgFlags", 1)],
-                RemoveOps = [RegOp.SetDword(CredentialGuard, "LsaCfgFlags", 0)],
-                DetectOps = [RegOp.CheckDword(CredentialGuard, "LsaCfgFlags", 1)],
-            },
-            new TweakDef
-            {
-                Id = "vbs-enable-vbs-platform",
-                Label = "Enable Virtualization-Based Security Platform",
-                Category = "Peripherals",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 5,
-                SafetyRating = 4,
-                Tags = ["vbs", "virtualization", "security", "hypervisor"],
-                Description =
-                    "Enables the VBS (Virtualization-Based Security) platform in Device Guard. "
-                    + "EnableVirtualizationBasedSecurity=1. Prerequisites: Secure Boot, "
-                    + "UEFI firmware, hardware virtualization (Intel VT-x / AMD-V). Requires reboot.",
-                ApplyOps = [RegOp.SetDword(DeviceGuard, "EnableVirtualizationBasedSecurity", 1)],
-                RemoveOps = [RegOp.SetDword(DeviceGuard, "EnableVirtualizationBasedSecurity", 0)],
-                DetectOps = [RegOp.CheckDword(DeviceGuard, "EnableVirtualizationBasedSecurity", 1)],
-            },
-            new TweakDef
-            {
                 Id = "vbs-require-secure-boot-dma",
                 Label = "Require Secure Boot + DMA Protection for VBS",
                 Category = "Peripherals",
@@ -2113,24 +1858,6 @@ internal static class PolicyDevice
                 ApplyOps = [RegOp.SetDword(DeviceGuard, "RequirePlatformSecurityFeatures", 3)],
                 RemoveOps = [RegOp.SetDword(DeviceGuard, "RequirePlatformSecurityFeatures", 1)],
                 DetectOps = [RegOp.CheckDword(DeviceGuard, "RequirePlatformSecurityFeatures", 3)],
-            },
-            new TweakDef
-            {
-                Id = "vbs-enable-policy-device-guard",
-                Label = "Enable Device Guard Policy via Group Policy",
-                Category = "Peripherals",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 5,
-                SafetyRating = 4,
-                Tags = ["vbs", "device guard", "policy", "gpo"],
-                Description =
-                    "Enables Device Guard and VBS configuration via the machine-wide "
-                    + "Group Policy path. Enables both VBS and HVCI through a single "
-                    + "policy flag set. Reboot required for changes to take effect.",
-                ApplyOps = [RegOp.SetDword(DeviceGuardPolicy, "EnableVirtualizationBasedSecurity", 1)],
-                RemoveOps = [RegOp.DeleteValue(DeviceGuardPolicy, "EnableVirtualizationBasedSecurity")],
-                DetectOps = [RegOp.CheckDword(DeviceGuardPolicy, "EnableVirtualizationBasedSecurity", 1)],
             },
             new TweakDef
             {
@@ -2419,46 +2146,6 @@ internal static class PolicyDevice
         [
             new TweakDef
             {
-                Id = "dinst-deny-removable-install",
-                Label = "Device Install Policy: Deny Installation of Removable Devices",
-                Category = "Peripherals",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 3,
-                Tags = ["device-install", "removable", "policy", "security", "dlp"],
-                Description =
-                    "Sets DenyRemovableDevices=1 in the DeviceInstall Restrictions policy. "
-                    + "Prevents Windows from installing any device driver for a removable device class. "
-                    + "Blocks USB storage drives, external HDDs, SD card readers, and other removable media "
-                    + "from being added to the system as new devices.",
-                SideEffects =
-                    "Prevents installation of new USB storage and removable media devices. Existing already-installed devices continue to work.",
-                ApplyOps = [RegOp.SetDword(Restrictions, "DenyRemovableDevices", 1)],
-                RemoveOps = [RegOp.DeleteValue(Restrictions, "DenyRemovableDevices")],
-                DetectOps = [RegOp.CheckDword(Restrictions, "DenyRemovableDevices", 1)],
-            },
-            new TweakDef
-            {
-                Id = "dinst-enable-device-id-block",
-                Label = "Device Install Policy: Enable Hardware Device ID Restriction List",
-                Category = "Peripherals",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 4,
-                Tags = ["device-install", "device-id", "block-list", "policy"],
-                Description =
-                    "Sets DenyDeviceIDs=1 in the DeviceInstall Restrictions policy. "
-                    + "Activates the hardware device ID restriction list, allowing administrators to block "
-                    + "specific devices by their hardware ID strings (e.g., 'USB\\VID_XXXX&PID_XXXX'). "
-                    + "This flag enables the list; devices to block are configured separately via Group Policy.",
-                ApplyOps = [RegOp.SetDword(Restrictions, "DenyDeviceIDs", 1)],
-                RemoveOps = [RegOp.DeleteValue(Restrictions, "DenyDeviceIDs")],
-                DetectOps = [RegOp.CheckDword(Restrictions, "DenyDeviceIDs", 1)],
-            },
-            new TweakDef
-            {
                 Id = "dinst-enable-class-block",
                 Label = "Device Install Policy: Enable Setup Class GUID Restriction List",
                 Category = "Peripherals",
@@ -2475,25 +2162,6 @@ internal static class PolicyDevice
                 ApplyOps = [RegOp.SetDword(Restrictions, "DenyDeviceClasses", 1)],
                 RemoveOps = [RegOp.DeleteValue(Restrictions, "DenyDeviceClasses")],
                 DetectOps = [RegOp.CheckDword(Restrictions, "DenyDeviceClasses", 1)],
-            },
-            new TweakDef
-            {
-                Id = "dinst-admin-override-allowed",
-                Label = "Device Install Policy: Allow Administrators to Override Device Restrictions",
-                Category = "Peripherals",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 4,
-                Tags = ["device-install", "admin", "override", "policy"],
-                Description =
-                    "Sets AllowAdminInstall=1 in the DeviceInstall Restrictions policy. "
-                    + "Allows members of the local Administrators group to install any device driver, "
-                    + "bypassing the device ID and class GUID restriction lists. "
-                    + "Enables admins to add exceptions without modifying Group Policy.",
-                ApplyOps = [RegOp.SetDword(Restrictions, "AllowAdminInstall", 1)],
-                RemoveOps = [RegOp.DeleteValue(Restrictions, "AllowAdminInstall")],
-                DetectOps = [RegOp.CheckDword(Restrictions, "AllowAdminInstall", 1)],
             },
             new TweakDef
             {
@@ -2798,42 +2466,6 @@ internal static class PolicyDevice
         [
             new TweakDef
             {
-                Id = "devlockgpo-disable-windows-hello-business",
-                Label = "Device Lock GPO: Disable Windows Hello for Business Enrollment",
-                Category = "Peripherals",
-                Description =
-                    "Prevents users and devices from enrolling in Windows Hello for Business (WHfB), the enterprise PIN-based authentication system that replaces passwords with asymmetric-key credentials tied to the device TPM. In environments where smart cards or alternative MFA tokens are used instead of WHfB, disabling enrollment prevents credential proliferation.",
-                Tags = ["windows hello", "pin", "mfa", "enrollment", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                RegistryKeys = [PassportKey],
-                ApplyOps = [RegOp.SetDword(PassportKey, "Enabled", 0)],
-                RemoveOps = [RegOp.DeleteValue(PassportKey, "Enabled")],
-                DetectOps = [RegOp.CheckDword(PassportKey, "Enabled", 0)],
-                ImpactScore = 3,
-                SafetyRating = 4,
-                ImpactNote = "Disables Windows Hello for Business on the device; standard Windows Hello (local PIN) is unaffected.",
-            },
-            new TweakDef
-            {
-                Id = "devlockgpo-disable-hello-post-logon-provisioning",
-                Label = "Device Lock GPO: Disable Windows Hello Post-Logon Provisioning Prompt",
-                Category = "Peripherals",
-                Description =
-                    "Prevents Windows from launching the Windows Hello for Business provisioning wizard immediately after the first interactive logon. By default, Windows shows the WHfB setup screen right after AD/Azure AD join and logon. This policy suppresses that prompt so administrators can provision Windows Hello on a controlled schedule.",
-                Tags = ["windows hello", "pin", "provisioning", "logon", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                RegistryKeys = [PassportKey],
-                ApplyOps = [RegOp.SetDword(PassportKey, "DisablePostLogonProvisioning", 1)],
-                RemoveOps = [RegOp.DeleteValue(PassportKey, "DisablePostLogonProvisioning")],
-                DetectOps = [RegOp.CheckDword(PassportKey, "DisablePostLogonProvisioning", 1)],
-                ImpactScore = 2,
-                SafetyRating = 5,
-                ImpactNote = "Suppresses the Windows Hello provisioning screen shown after first logon on new machines.",
-            },
-            new TweakDef
-            {
                 Id = "devlockgpo-disable-hello-pin-recovery",
                 Label = "Device Lock GPO: Disable Windows Hello PIN Recovery Service",
                 Category = "Peripherals",
@@ -2852,24 +2484,6 @@ internal static class PolicyDevice
             },
             new TweakDef
             {
-                Id = "devlockgpo-require-tpm-for-hello",
-                Label = "Device Lock GPO: Require TPM Chip for Windows Hello Credential Storage",
-                Category = "Peripherals",
-                Description =
-                    "Requires that Windows Hello for Business private keys be stored in the device's Trusted Platform Module (TPM) hardware security chip, not in software-only storage. Without a TPM requirement, WHfB keys are stored in software, making them vulnerable to extraction from disk. TPM binding ensures that private keys never leave the secure chip.",
-                Tags = ["windows hello", "tpm", "security", "key storage", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                RegistryKeys = [PassportKey],
-                ApplyOps = [RegOp.SetDword(PassportKey, "RequireSecurityDevice", 1)],
-                RemoveOps = [RegOp.DeleteValue(PassportKey, "RequireSecurityDevice")],
-                DetectOps = [RegOp.CheckDword(PassportKey, "RequireSecurityDevice", 1)],
-                ImpactScore = 4,
-                SafetyRating = 4,
-                ImpactNote = "Enforces TPM-based key storage; devices without a TPM cannot use Windows Hello for Business.",
-            },
-            new TweakDef
-            {
                 Id = "devlockgpo-require-screensaver-password",
                 Label = "Device Lock GPO: Require Password When Resuming from Screen Saver",
                 Category = "Peripherals",
@@ -2885,24 +2499,6 @@ internal static class PolicyDevice
                 ImpactScore = 4,
                 SafetyRating = 5,
                 ImpactNote = "Prevents access to unattended workstations after screen saver activates.",
-            },
-            new TweakDef
-            {
-                Id = "devlockgpo-enable-screensaver",
-                Label = "Device Lock GPO: Enable Screen Saver (Enforce Lock on Idle)",
-                Category = "Peripherals",
-                Description =
-                    "Enables and enforces the screen saver policy on the workstation, ensuring that it activates after a configurable period of user inactivity. When combined with the ScreenSaverIsSecure policy, this guarantees all unattended workstations will automatically lock. Without this policy, users can disable the screen saver entirely, defeating the auto-lock mechanism.",
-                Tags = ["screen saver", "enable", "idle", "lock", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                RegistryKeys = [DesktopKey],
-                ApplyOps = [RegOp.SetString(DesktopKey, "ScreenSaveActive", "1")],
-                RemoveOps = [RegOp.DeleteValue(DesktopKey, "ScreenSaveActive")],
-                DetectOps = [RegOp.CheckString(DesktopKey, "ScreenSaveActive", "1")],
-                ImpactScore = 4,
-                SafetyRating = 5,
-                ImpactNote = "Enforces screen saver activation; prevents users from disabling the auto-lock mechanism.",
             },
             new TweakDef
             {
@@ -2958,24 +2554,6 @@ internal static class PolicyDevice
                 SafetyRating = 5,
                 ImpactNote = "Disables camera hardware access from the lock screen; Windows Hello face recognition still works at login.",
             },
-            new TweakDef
-            {
-                Id = "devlockgpo-disable-ease-access-on-lockscreen",
-                Label = "Device Lock GPO: Disable Ease of Access Menu on Lock Screen",
-                Category = "Peripherals",
-                Description =
-                    "Removes the Ease of Access (accessibility) button from the Windows lock screen. The Ease of Access menu on the lock screen provides access to Narrator, Magnifier, and On-Screen Keyboard before authentication, which has historically been exploited to gain SYSTEM-level access through sticky-key and narrator command injection techniques on older Windows versions.",
-                Tags = ["lock screen", "ease of access", "security", "accessibility", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                RegistryKeys = [SystemKey],
-                ApplyOps = [RegOp.SetDword(SystemKey, "DisableLockScreenAppNotifications", 1)],
-                RemoveOps = [RegOp.DeleteValue(SystemKey, "DisableLockScreenAppNotifications")],
-                DetectOps = [RegOp.CheckDword(SystemKey, "DisableLockScreenAppNotifications", 1)],
-                ImpactScore = 3,
-                SafetyRating = 4,
-                ImpactNote = "Removes app notifications from lock screen; does not affect standard accessibility tools at login.",
-            },
         ];
     }
 
@@ -2989,21 +2567,6 @@ internal static class PolicyDevice
 
         public static IReadOnlyList<TweakDef> Data { get; } =
         [
-            new TweakDef
-            {
-                Id = "devprov-disable-oobe-privacy",
-                Label = "OOBE: Skip the privacy experience setup page",
-                Category = "Peripherals",
-                Description =
-                    "Sets DisablePrivacyExperience=1 in the OOBE policy key. Suppresses the Windows "
-                    + "privacy settings page that appears during first sign-in after setup or a feature update.",
-                Tags = ["oobe", "privacy", "setup", "policy", "provisioning"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ApplyOps = [RegOp.SetDword(Oobe, "DisablePrivacyExperience", 1)],
-                RemoveOps = [RegOp.DeleteValue(Oobe, "DisablePrivacyExperience")],
-                DetectOps = [RegOp.CheckDword(Oobe, "DisablePrivacyExperience", 1)],
-            },
             new TweakDef
             {
                 Id = "devprov-skip-machine-oobe",
@@ -3066,21 +2629,6 @@ internal static class PolicyDevice
             },
             new TweakDef
             {
-                Id = "devprov-block-aad-workplace-join",
-                Label = "Workplace Join: Block Azure AD Workplace Join",
-                Category = "Peripherals",
-                Description =
-                    "Sets BlockAADWorkplaceJoin=1 in the WorkplaceJoin policy key. Prevents users from "
-                    + "adding a work or school account via the 'Access work or school' Settings page.",
-                Tags = ["workplace-join", "aad", "mdm", "enrollment", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = false,
-                ApplyOps = [RegOp.SetDword(WpjPol, "BlockAADWorkplaceJoin", 1)],
-                RemoveOps = [RegOp.DeleteValue(WpjPol, "BlockAADWorkplaceJoin")],
-                DetectOps = [RegOp.CheckDword(WpjPol, "BlockAADWorkplaceJoin", 1)],
-            },
-            new TweakDef
-            {
                 Id = "devprov-disable-wpj-flyout",
                 Label = "Workplace Join: Disable the 'Connect to work or school' flyout",
                 Category = "Peripherals",
@@ -3108,36 +2656,6 @@ internal static class PolicyDevice
                 ApplyOps = [RegOp.SetDword(CloudContent, "DisableFindMyDevice", 1)],
                 RemoveOps = [RegOp.DeleteValue(CloudContent, "DisableFindMyDevice")],
                 DetectOps = [RegOp.CheckDword(CloudContent, "DisableFindMyDevice", 1)],
-            },
-            new TweakDef
-            {
-                Id = "devprov-disable-windows-tips",
-                Label = "Cloud Content: Disable Windows Tips and suggestions",
-                Category = "Peripherals",
-                Description =
-                    "Sets DisableSoftLanding=1 in the CloudContent policy key. Prevents Windows from "
-                    + "showing 'tips', 'fun facts', and soft-landing welcome content to the user.",
-                Tags = ["tips", "suggestions", "cloud", "privacy", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ApplyOps = [RegOp.SetDword(CloudContent, "DisableSoftLanding", 1)],
-                RemoveOps = [RegOp.DeleteValue(CloudContent, "DisableSoftLanding")],
-                DetectOps = [RegOp.CheckDword(CloudContent, "DisableSoftLanding", 1)],
-            },
-            new TweakDef
-            {
-                Id = "devprov-disable-tailored-experiences",
-                Label = "Cloud Content: Disable tailored experiences with diagnostic data",
-                Category = "Peripherals",
-                Description =
-                    "Sets DisableTailoredExperiencesWithDiagnosticData=1. Prevents Microsoft from using "
-                    + "diagnostic and usage telemetry to personalise tips, ads, and recommendations.",
-                Tags = ["tailored-experiences", "telemetry", "privacy", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ApplyOps = [RegOp.SetDword(CloudContent, "DisableTailoredExperiencesWithDiagnosticData", 1)],
-                RemoveOps = [RegOp.DeleteValue(CloudContent, "DisableTailoredExperiencesWithDiagnosticData")],
-                DetectOps = [RegOp.CheckDword(CloudContent, "DisableTailoredExperiencesWithDiagnosticData", 1)],
             },
         ];
     }
@@ -3706,23 +3224,6 @@ internal static class PolicyDevice
             [
                 new TweakDef
                 {
-                    Id = "kdmapol-enable-dma-remapping-policy",
-                    Label = "Enable DMA Remapping Enforcement Policy",
-                    Category = "Peripherals",
-                    Description =
-                        "Enforces the Kernel DMA Protection policy requiring all PCIe devices to support DMA remapping (IOMMU/VT-d) before being granted full DMA access, blocking legacy DMA attack vectors.",
-                    Tags = ["kernel-dma", "iommu", "vtd", "pcie", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 5,
-                    SafetyRating = 4,
-                    ImpactNote = "DMA remapping enforced; legacy PCIe devices without IOMMU support denied full DMA access.",
-                    ApplyOps = [RegOp.SetDword(Key, "DeviceEnumerationPolicy", 0)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "DeviceEnumerationPolicy")],
-                    DetectOps = [RegOp.CheckDword(Key, "DeviceEnumerationPolicy", 0)],
-                },
-                new TweakDef
-                {
                     Id = "kdmapol-block-pre-boot-dma",
                     Label = "Block Pre-Boot DMA Access on Thunderbolt Ports",
                     Category = "Peripherals",
@@ -3894,114 +3395,6 @@ internal static class PolicyDevice
         [
             new TweakDef
             {
-                Id = "dump-disable-crash-dumps",
-                Label = "Disable Crash Memory Dumps (No Dump Files Written)",
-                Category = "Peripherals",
-                NeedsAdmin = true,
-                CorpSafe = false,
-                ImpactScore = 3,
-                SafetyRating = 3,
-                Tags = ["dump", "crash", "memory", "disk space"],
-                Description =
-                    "Prevents Windows from writing any memory dump file when the system "
-                    + "crashes (BSOD). Saves substantial disk space on SSDs but eliminates "
-                    + "crash debugging capability. CrashDumpEnabled=0.",
-                ApplyOps = [RegOp.SetDword(CrashControl, "CrashDumpEnabled", 0)],
-                RemoveOps = [RegOp.SetDword(CrashControl, "CrashDumpEnabled", 7)],
-                DetectOps = [RegOp.CheckDword(CrashControl, "CrashDumpEnabled", 0)],
-            },
-            new TweakDef
-            {
-                Id = "dump-set-small-minidump",
-                Label = "Set Crash Dump to Small Memory Dump (256 KB)",
-                Category = "Peripherals",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                Tags = ["dump", "crash", "minidump", "disk space"],
-                Description =
-                    "Configures Windows to write only a small memory dump (256 KB) on BSOD "
-                    + "instead of a full kernel or complete dump. Preserves basic debug info "
-                    + "(stop code, loaded drivers) with minimal disk use.",
-                ApplyOps = [RegOp.SetDword(CrashControl, "CrashDumpEnabled", 3)],
-                RemoveOps = [RegOp.SetDword(CrashControl, "CrashDumpEnabled", 7)],
-                DetectOps = [RegOp.CheckDword(CrashControl, "CrashDumpEnabled", 3)],
-            },
-            new TweakDef
-            {
-                Id = "dump-enable-auto-reboot-on-crash",
-                Label = "Enable Automatic Reboot After BSOD",
-                Category = "Peripherals",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                Tags = ["dump", "crash", "reboot", "bsod"],
-                Description =
-                    "Ensures Windows automatically restarts after a system crash (BSOD) "
-                    + "rather than staying at the blue screen indefinitely. Default behaviour "
-                    + "on most systems but restorable if previously disabled.",
-                ApplyOps = [RegOp.SetDword(CrashControl, "AutoReboot", 1)],
-                RemoveOps = [RegOp.SetDword(CrashControl, "AutoReboot", 0)],
-                DetectOps = [RegOp.CheckDword(CrashControl, "AutoReboot", 1)],
-            },
-            new TweakDef
-            {
-                Id = "dump-overwrite-existing-dump",
-                Label = "Overwrite Existing Dump File on Crash",
-                Category = "Peripherals",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                Tags = ["dump", "crash", "overwrite", "disk space"],
-                Description =
-                    "Configures Windows to overwrite the existing dump file rather than "
-                    + "keeping multiple copies. Prevents the dumps folder from consuming "
-                    + "multiple GBs after repeated crashes.",
-                ApplyOps = [RegOp.SetDword(CrashControl, "Overwrite", 1)],
-                RemoveOps = [RegOp.DeleteValue(CrashControl, "Overwrite")],
-                DetectOps = [RegOp.CheckDword(CrashControl, "Overwrite", 1)],
-            },
-            new TweakDef
-            {
-                Id = "dump-disable-wer-error-reporting",
-                Label = "Disable Windows Error Reporting (WER)",
-                Category = "Peripherals",
-                NeedsAdmin = true,
-                CorpSafe = false,
-                ImpactScore = 3,
-                SafetyRating = 4,
-                Tags = ["wer", "error reporting", "privacy", "telemetry"],
-                Description =
-                    "Disables Windows Error Reporting so application crashes are not "
-                    + "sent to Microsoft. Reduces network activity and privacy exposure "
-                    + "but prevents automatic driver/app fix recommendations.",
-                ApplyOps = [RegOp.SetDword(Wer, "Disabled", 1)],
-                RemoveOps = [RegOp.SetDword(Wer, "Disabled", 0)],
-                DetectOps = [RegOp.CheckDword(Wer, "Disabled", 1)],
-            },
-            new TweakDef
-            {
-                Id = "dump-disable-wer-reporting-policy",
-                Label = "Disable WER via Group Policy",
-                Category = "Peripherals",
-                NeedsAdmin = true,
-                CorpSafe = false,
-                ImpactScore = 3,
-                SafetyRating = 4,
-                Tags = ["wer", "policy", "privacy", "error reporting"],
-                Description =
-                    "Disables Windows Error Reporting via the machine-wide policy key. "
-                    + "This prevents users from re-enabling WER through Settings. "
-                    + "Complementary to the user-level Disabled flag.",
-                ApplyOps = [RegOp.SetDword(WerPolicy, "Disabled", 1)],
-                RemoveOps = [RegOp.DeleteValue(WerPolicy, "Disabled")],
-                DetectOps = [RegOp.CheckDword(WerPolicy, "Disabled", 1)],
-            },
-            new TweakDef
-            {
                 Id = "dump-disable-wer-queue",
                 Label = "Disable WER Queuing of Crash Reports",
                 Category = "Peripherals",
@@ -4017,60 +3410,6 @@ internal static class PolicyDevice
                 ApplyOps = [RegOp.SetDword(WerQueue, "Disable", 1)],
                 RemoveOps = [RegOp.SetDword(WerQueue, "Disable", 0)],
                 DetectOps = [RegOp.CheckDword(WerQueue, "Disable", 1)],
-            },
-            new TweakDef
-            {
-                Id = "dump-disable-silent-crash-ui",
-                Label = "Disable Silent Crash Report Dialog",
-                Category = "Peripherals",
-                NeedsAdmin = true,
-                CorpSafe = false,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                Tags = ["wer", "dialog", "crash", "ui"],
-                Description =
-                    "Suppresses the WER consent dialog that asks the user whether to send "
-                    + "a crash report. Combined with Disabled=1, fully silences WER. "
-                    + "Applied via policy (DontShowUI).",
-                ApplyOps = [RegOp.SetDword(WerPolicy, "DontShowUI", 1)],
-                RemoveOps = [RegOp.DeleteValue(WerPolicy, "DontShowUI")],
-                DetectOps = [RegOp.CheckDword(WerPolicy, "DontShowUI", 1)],
-            },
-            new TweakDef
-            {
-                Id = "dump-set-kernel-only-dump",
-                Label = "Set Crash Dump to Kernel Memory Dump",
-                Category = "Peripherals",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                Tags = ["dump", "crash", "kernel", "debug"],
-                Description =
-                    "Configures Windows to write a kernel memory dump on BSOD. Captures "
-                    + "kernel memory pages only (not user-space), providing enough data for "
-                    + "most crash analysis while being smaller than a complete dump.",
-                ApplyOps = [RegOp.SetDword(CrashControl, "CrashDumpEnabled", 2)],
-                RemoveOps = [RegOp.SetDword(CrashControl, "CrashDumpEnabled", 7)],
-                DetectOps = [RegOp.CheckDword(CrashControl, "CrashDumpEnabled", 2)],
-            },
-            new TweakDef
-            {
-                Id = "dump-enable-log-on-crash",
-                Label = "Enable Kernel Event Log Entry on Crash",
-                Category = "Peripherals",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 1,
-                SafetyRating = 5,
-                Tags = ["dump", "crash", "event log", "logging"],
-                Description =
-                    "Ensures Windows writes a 41 (Kernel-Power) or 1001 (BugCheck) event "
-                    + "log entry to the System log after a system crash and reboot. "
-                    + "LogEvent=1 (default on, restoring is useful if accidentally disabled).",
-                ApplyOps = [RegOp.SetDword(CrashControl, "LogEvent", 1)],
-                RemoveOps = [RegOp.DeleteValue(CrashControl, "LogEvent")],
-                DetectOps = [RegOp.CheckDword(CrashControl, "LogEvent", 1)],
             },
         ];
     }
@@ -4262,23 +3601,6 @@ internal static class PolicyDevice
 
         public static IReadOnlyList<TweakDef> Data =>
             [
-                new TweakDef
-                {
-                    Id = "wpd-deny-removable-devices",
-                    Label = "Deny All Removable Device Installation",
-                    Category = "Peripherals",
-                    Description =
-                        "Blocks installation of all removable storage devices (USB drives, SD cards, portable media players) by denying their device class setup, preventing data exfiltration via removable media.",
-                    Tags = ["wpd", "removable-device", "usb", "storage", "security", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 5,
-                    SafetyRating = 5,
-                    ImpactNote = "All removable storage devices blocked at installation; USB drives and SD cards cannot be used.",
-                    ApplyOps = [RegOp.SetDword(Key, "DenyRemovableDevices", 1)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "DenyRemovableDevices")],
-                    DetectOps = [RegOp.CheckDword(Key, "DenyRemovableDevices", 1)],
-                },
                 new TweakDef
                 {
                     Id = "wpd-deny-portable-devices",
@@ -6311,25 +5633,6 @@ internal static class PolicyPrint
                     RemoveOps = [RegOp.DeleteValue(DsKey, "PrePublishPrinters")],
                     DetectOps = [RegOp.CheckDword(DsKey, "PrePublishPrinters", 1)],
                 },
-                new TweakDef
-                {
-                    Id = "pdssp-set-max-pruning-retries",
-                    Label = "Set Maximum Printer Pruning Retry Count",
-                    Category = "Maintenance",
-                    Description =
-                        "Sets PruningRetries=2 to limit the number of times the pruning mechanism retries an unreachable "
-                        + "print server before removing its printer AD objects. A lower retry count speeds up cleanup of "
-                        + "permanently decommissioned print servers while reducing spurious pruning from temporary outages.",
-                    Tags = ["printing", "active-directory", "pruning", "retry", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 1,
-                    SafetyRating = 4,
-                    ImpactNote = "Limits pruning retries to 2; printers may get pruned sooner after a short server outage.",
-                    ApplyOps = [RegOp.SetDword(DsKey, "PruningRetries", 2)],
-                    RemoveOps = [RegOp.DeleteValue(DsKey, "PruningRetries")],
-                    DetectOps = [RegOp.CheckDword(DsKey, "PruningRetries", 2)],
-                },
             ];
     }
 
@@ -6522,57 +5825,6 @@ internal static class PolicyPrint
         [
             new TweakDef
             {
-                Id = "prtgpo-disable-print-spooler-sharing",
-                Label = "Disable Printer Spooler Network Sharing",
-                Category = "Maintenance",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 4,
-                Description =
-                    "The Windows print spooler provides print job management services and can expose a network interface for accepting remote print jobs. Disabling print spooler network sharing prevents the endpoint from acting as a print server accessible over the network. Exposed print spooler interfaces have been the source of critical vulnerabilities including PrintNightmare that allowed remote code execution. Limiting print spooler network exposure reduces the attack surface associated with vulnerabilities in spooler-accessible interfaces. Endpoints that do not function as print servers have no legitimate need to expose print spooler network interfaces. This setting is critical on servers and endpoints where print server functionality is not required.",
-                Tags = ["printing", "spooler", "security", "policy"],
-                RegistryKeys = [Key],
-                ApplyOps = [RegOp.SetDword(Key, "DisableWebPrinting", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "DisableWebPrinting")],
-                DetectOps = [RegOp.CheckDword(Key, "DisableWebPrinting", 1)],
-            },
-            new TweakDef
-            {
-                Id = "prtgpo-disable-internet-printing",
-                Label = "Disable Internet Printing Protocol (IPP)",
-                Category = "Maintenance",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                Description =
-                    "Internet Printing Protocol allows print jobs to be submitted to printers over HTTP and the internet through a web-based printing interface. Disabling Internet Printing prevents corporate endpoints from submitting or receiving print jobs through internet-facing printing services. Documents sent to internet printers are transmitted over HTTP and may be intercepted or stored on third-party services. Internet Printing Protocol serves as an attack vector for accessing print interfaces accessible from the internet or through browser exploitation. Enterprise printing should use approved secured print infrastructure with proper access controls and audit logging. Disabling IPP does not affect standard local and network printing functionality.",
-                Tags = ["printing", "ipp", "security", "policy"],
-                RegistryKeys = [Key],
-                ApplyOps = [RegOp.SetDword(Key, "DisableHTTPPrinting", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "DisableHTTPPrinting")],
-                DetectOps = [RegOp.CheckDword(Key, "DisableHTTPPrinting", 1)],
-            },
-            new TweakDef
-            {
-                Id = "prtgpo-block-driver-install",
-                Label = "Block Unapproved Printer Driver Installation",
-                Category = "Maintenance",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 4,
-                Description =
-                    "Printer drivers run in kernel or highly privileged host processes and have historically been vectors for privilege escalation and malware distribution. Blocking unapproved printer driver installation prevents standard users from installing driver packages that have not been vetted by IT. Restricting driver installation to administrator-approved packages reduces exposure to malicious printer drivers distributed through malvertising or social engineering. PrintNightmare and related vulnerabilities were exploited in part through the printer driver installation subsystem allowing untrusted code to load. Enterprise-approved printer drivers should be deployed through managed software distribution with appropriate testing and validation. Driver installation restrictions support defense in depth by requiring administrative approval for each driver added to the device.",
-                Tags = ["printing", "drivers", "security", "policy"],
-                RegistryKeys = [Key],
-                ApplyOps = [RegOp.SetDword(Key, "RestrictDriverInstallationToAdministrators", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "RestrictDriverInstallationToAdministrators")],
-                DetectOps = [RegOp.CheckDword(Key, "RestrictDriverInstallationToAdministrators", 1)],
-            },
-            new TweakDef
-            {
                 Id = "prtgpo-disable-pointed-print-warnings",
                 Label = "Enforce Point and Print Security Warnings",
                 Category = "Maintenance",
@@ -6621,23 +5873,6 @@ internal static class PolicyPrint
                 ApplyOps = [RegOp.SetDword(Key, "ServerList", 1)],
                 RemoveOps = [RegOp.DeleteValue(Key, "ServerList")],
                 DetectOps = [RegOp.CheckDword(Key, "ServerList", 1)],
-            },
-            new TweakDef
-            {
-                Id = "prtgpo-disable-print-discovery",
-                Label = "Disable Network Printer Discovery",
-                Category = "Maintenance",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 3,
-                Description =
-                    "Network printer discovery uses WSD and other protocols to automatically detect and display available printers on the local network. Disabling automatic network printer discovery prevents endpoints from finding and attempting to connect to arbitrary network-accessible printers. Automatic printer discovery can cause endpoints to connect to and install drivers from printers not approved for enterprise use. Malicious devices posing as printers can advertise themselves through discovery protocols and trigger driver installation on endpoints. Enterprise printers should be provisioned through Group Policy deployed printer connections rather than user-initiated discovery. Disabling discovery does not affect connectivity to printers already configured through managed Group Policy printer policies.",
-                Tags = ["printing", "discovery", "security", "policy"],
-                RegistryKeys = [Key],
-                ApplyOps = [RegOp.SetDword(Key, "DisableWebPnpDownload", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "DisableWebPnpDownload")],
-                DetectOps = [RegOp.CheckDword(Key, "DisableWebPnpDownload", 1)],
             },
             new TweakDef
             {
@@ -7284,24 +6519,6 @@ internal static class PolicyPrint
                 },
                 new TweakDef
                 {
-                    Id = "prtq-restrict-driver-installation-to-admins",
-                    Label = "Print Queue: Restrict Printer Driver Installation to Administrators",
-                    Category = "Maintenance",
-                    Description =
-                        "Sets RestrictDriverInstallationToAdministrators=1 in Printers policy. Prevents standard (non-administrator) users from installing printer drivers. The PrintNightmare vulnerability chain exploited the ability of standard users to install printer drivers via the Windows Point and Print mechanism — using driver installation as a code execution vector to escalate privileges to SYSTEM. Restricting driver installation to administrators ensures that only IT-approved, tested drivers are deployed and closes the user-mode attack path for printer driver exploitation.",
-                    Tags = ["printer-driver", "printnightmare", "privilege-escalation", "security", "point-and-print"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 5,
-                    SafetyRating = 5,
-                    ImpactNote =
-                        "Only administrators can install printer drivers. Point and Print from a remote print server requires admin rights if the server does not have a matching driver locally. IT must pre-stage approved drivers or use enterprise driver deployment tools.",
-                    ApplyOps = [RegOp.SetDword(PrtKey, "RestrictDriverInstallationToAdministrators", 1)],
-                    RemoveOps = [RegOp.DeleteValue(PrtKey, "RestrictDriverInstallationToAdministrators")],
-                    DetectOps = [RegOp.CheckDword(PrtKey, "RestrictDriverInstallationToAdministrators", 1)],
-                },
-                new TweakDef
-                {
                     Id = "prtq-require-rpc-authentication",
                     Label = "Print Queue: Require RPC Authentication for Printer Client Connections",
                     Category = "Maintenance",
@@ -7317,42 +6534,6 @@ internal static class PolicyPrint
                     ApplyOps = [RegOp.SetDword(RpcKey, "RpcUseNamedPipeProtocol", 1)],
                     RemoveOps = [RegOp.DeleteValue(RpcKey, "RpcUseNamedPipeProtocol")],
                     DetectOps = [RegOp.CheckDword(RpcKey, "RpcUseNamedPipeProtocol", 1)],
-                },
-                new TweakDef
-                {
-                    Id = "prtq-disable-internet-printing",
-                    Label = "Print Queue: Disable Internet Printing Protocol (IPP) Client",
-                    Category = "Maintenance",
-                    Description =
-                        "Sets DisableHTTPPrinting=1 in Printers policy. Disables the Internet Printing Protocol (IPP) client component that allows printing to HTTP/HTTPS-hosted print servers. IPP printing was designed for consumer environments and internet-hosted printers. In enterprise environments, all printing should go through internal print servers using SMB/named pipe transport with Kerberos authentication. IPP printing bypasses enterprise print audit controls and can send documents to external internet printers if a user knows the IPP URL. Disabling IPP ensures all print traffic is channelled through monitored, authenticated print servers.",
-                    Tags = ["ipp", "internet-printing", "http-printing", "security", "data-exfiltration"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 4,
-                    SafetyRating = 5,
-                    ImpactNote =
-                        "IPP (HTTP/HTTPS) printing is disabled. Users cannot add printers using http:// or https:// printer URLs. Direct TCP/IP printing to IP printers via the standard TCP/IP port monitor (LPR/RAW) is unaffected. AirPrint may be affected.",
-                    ApplyOps = [RegOp.SetDword(PrtKey, "DisableHTTPPrinting", 1)],
-                    RemoveOps = [RegOp.DeleteValue(PrtKey, "DisableHTTPPrinting")],
-                    DetectOps = [RegOp.CheckDword(PrtKey, "DisableHTTPPrinting", 1)],
-                },
-                new TweakDef
-                {
-                    Id = "prtq-restrict-point-and-print",
-                    Label = "Print Queue: Restrict Point and Print to Approved Print Servers",
-                    Category = "Maintenance",
-                    Description =
-                        "Sets NoWarningNoElevationOnInstall=0 and UpdatePromptSettings=0 in Printers policy. Configures Point and Print policy to warn users and require elevated privileges for both driver installation and driver updates from non-approved print servers. NoWarningNoElevationOnInstall=0 ensures that attempts to install printer drivers from unapproved servers prompt for admin credentials. UpdatePromptSettings=0 ensures driver updates from arbitrary servers also require elevation. This is the core Point and Print hardening — Microsoft's own mitigations for CVE-2021-36958.",
-                    Tags = ["point-and-print", "driver-install", "cve-2021-36958", "elevation", "security"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 5,
-                    SafetyRating = 5,
-                    ImpactNote =
-                        "Point and Print driver installs and updates from servers not in the approved list require elevation. Users attempting to add printers from unlisted servers see an elevation prompt. Approved print server names must be listed in the TrustedServers policy value.",
-                    ApplyOps = [RegOp.SetDword(PrtKey, "NoWarningNoElevationOnInstall", 0), RegOp.SetDword(PrtKey, "UpdatePromptSettings", 0)],
-                    RemoveOps = [RegOp.DeleteValue(PrtKey, "NoWarningNoElevationOnInstall"), RegOp.DeleteValue(PrtKey, "UpdatePromptSettings")],
-                    DetectOps = [RegOp.CheckDword(PrtKey, "NoWarningNoElevationOnInstall", 0), RegOp.CheckDword(PrtKey, "UpdatePromptSettings", 0)],
                 },
                 new TweakDef
                 {
@@ -7410,24 +6591,6 @@ internal static class PolicyPrint
                 },
                 new TweakDef
                 {
-                    Id = "prtq-require-package-aware-drivers",
-                    Label = "Print Queue: Require Package-Aware Printer Driver Architecture",
-                    Category = "Maintenance",
-                    Description =
-                        "Sets PackagePointAndPrintOnly=1 in Printers policy. Requires that Point and Print operations only install printer drivers that are packaged as Windows printer driver packages (not legacy kernel-mode drivers). Package-aware drivers use a sandboxed installation process that does not require kernel-mode code execution during driver install. Legacy v3 kernel-mode printer drivers run in the same trust context as the spooler (SYSTEM) — which is why PrintNightmare's kernel driver DLL injection worked. Package-aware (v4) drivers run in a lower-privilege isolated host.",
-                    Tags = ["printer-driver", "v4-driver", "package-aware", "kernel-mode", "printnightmare"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 4,
-                    SafetyRating = 4,
-                    ImpactNote =
-                        "Only v4 package-aware printer drivers are accepted via Point and Print. Legacy v3 kernel-mode printer drivers are rejected. Some older printers only have v3 drivers — they require alternative connection methods (Type 3 class driver, IPP, etc.).",
-                    ApplyOps = [RegOp.SetDword(PrtKey, "PackagePointAndPrintOnly", 1)],
-                    RemoveOps = [RegOp.DeleteValue(PrtKey, "PackagePointAndPrintOnly")],
-                    DetectOps = [RegOp.CheckDword(PrtKey, "PackagePointAndPrintOnly", 1)],
-                },
-                new TweakDef
-                {
                     Id = "prtq-enable-lpd-service-logging",
                     Label = "Print Queue: Enable Line Printer Daemon Service Audit Logging",
                     Category = "Maintenance",
@@ -7470,23 +6633,6 @@ internal static class PolicyPrint
                 ApplyOps = [RegOp.SetDword(Key, "Restricted", 1)],
                 RemoveOps = [RegOp.DeleteValue(Key, "Restricted")],
                 DetectOps = [RegOp.CheckDword(Key, "Restricted", 1)],
-            },
-            new TweakDef
-            {
-                Id = "prtspool-require-admin-for-driver-update",
-                Label = "Require Administrator Approval for Printer Driver Updates",
-                Category = "Maintenance",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 5,
-                SafetyRating = 5,
-                Description =
-                    "Printer driver updates through Point and Print can silently replace existing drivers with malicious versions without user consent if administrator approval is not enforced. Requiring administrator approval for driver updates closes the update vector of PrintNightmare-style attacks where a driver update was used to inject malicious code. Automatic driver updates from print servers allow a compromised print server to push malicious driver updates to all clients that connect to it. Administrator approval workflows for driver updates ensure that only vetted and approved printer drivers are installed on systems. Organizations with centrally managed print infrastructure should use Windows Server Update Services or System Center to manage printer driver distribution rather than Point and Print. Monitoring for printer driver installation events (Event ID 316 in the System log) provides detection capability for unauthorized driver installation attempts.",
-                Tags = ["print-spool", "driver-update", "point-and-print", "security", "policy"],
-                RegistryKeys = [Key],
-                ApplyOps = [RegOp.SetDword(Key, "UpdatePromptSettings", 2)],
-                RemoveOps = [RegOp.DeleteValue(Key, "UpdatePromptSettings")],
-                DetectOps = [RegOp.CheckDword(Key, "UpdatePromptSettings", 2)],
             },
             new TweakDef
             {
@@ -7636,40 +6782,6 @@ internal static class PolicyPrint
             [
                 new TweakDef
                 {
-                    Id = "spladv-disable-print-spooler",
-                    Label = "Disable Print Spooler Service",
-                    Category = "Maintenance",
-                    Description =
-                        "Disables the Windows Print Spooler service entirely, eliminating the PrintNightmare attack surface and all spooler-related privilege escalation vectors on systems that do not need to print.",
-                    Tags = ["spooler", "printing", "security", "printnightmare", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 5,
-                    SafetyRating = 4,
-                    ImpactNote = "Print Spooler fully disabled; printing and fax completely unavailable until re-enabled.",
-                    ApplyOps = [RegOp.SetDword(Key, "DisableSpooler", 1)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "DisableSpooler")],
-                    DetectOps = [RegOp.CheckDword(Key, "DisableSpooler", 1)],
-                },
-                new TweakDef
-                {
-                    Id = "spladv-block-remote-printer-install",
-                    Label = "Block Non-Admin Remote Printer Driver Installation",
-                    Category = "Maintenance",
-                    Description =
-                        "Prevents non-administrator users from installing printer drivers remotely via the spooler, closing the PrintNightmare (CVE-2021-34527) driver-install privilege escalation path.",
-                    Tags = ["spooler", "printing", "security", "printnightmare", "driver", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 5,
-                    SafetyRating = 5,
-                    ImpactNote = "Non-admin remote driver install blocked; closes PrintNightmare attack path.",
-                    ApplyOps = [RegOp.SetDword(Key, "RestrictDriverInstallationToAdministrators", 1)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "RestrictDriverInstallationToAdministrators")],
-                    DetectOps = [RegOp.CheckDword(Key, "RestrictDriverInstallationToAdministrators", 1)],
-                },
-                new TweakDef
-                {
                     Id = "spladv-disable-mxdc-rendering",
                     Label = "Disable MXDC Package Rendering in Print Spooler",
                     Category = "Maintenance",
@@ -7684,23 +6796,6 @@ internal static class PolicyPrint
                     ApplyOps = [RegOp.SetDword(Key, "DisableMXDCRendering", 1)],
                     RemoveOps = [RegOp.DeleteValue(Key, "DisableMXDCRendering")],
                     DetectOps = [RegOp.CheckDword(Key, "DisableMXDCRendering", 1)],
-                },
-                new TweakDef
-                {
-                    Id = "spladv-disable-internet-printing-client",
-                    Label = "Disable Internet Printing Client (IPP over HTTP)",
-                    Category = "Maintenance",
-                    Description =
-                        "Disables the Internet Printing Protocol (IPP) client in Windows, preventing print jobs from being submitted to printers over HTTP/HTTPS and closing the associated network attack surface.",
-                    Tags = ["spooler", "ipp", "internet-printing", "security", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 3,
-                    SafetyRating = 5,
-                    ImpactNote = "IPP client disabled; cannot print to networked IPP printers over HTTP. Local USB printing unaffected.",
-                    ApplyOps = [RegOp.SetDword(Key, "DisableWebPrinting", 1)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "DisableWebPrinting")],
-                    DetectOps = [RegOp.CheckDword(Key, "DisableWebPrinting", 1)],
                 },
                 new TweakDef
                 {
@@ -7817,39 +6912,6 @@ internal static class PolicyPrint
             [
                 new TweakDef
                 {
-                    Id = "prtspool-block-km-printer-drivers",
-                    Label = "Block Kernel-Mode Printer Drivers",
-                    Category = "Maintenance",
-                    Description =
-                        "Prevents kernel-mode printer drivers from loading in the Windows print spooler process (PrintNightmare mitigation).",
-                    Tags = ["print-spooler", "kernel-mode", "driver", "printnightmare", "security"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 5,
-                    SafetyRating = 4,
-                    ImpactNote = "Critical PrintNightmare fix; some legacy printer hardware may require KM drivers and stop working.",
-                    ApplyOps = [RegOp.SetDword(SpoolKey, "KMPrintersAreBlocked", 1)],
-                    RemoveOps = [RegOp.DeleteValue(SpoolKey, "KMPrintersAreBlocked")],
-                    DetectOps = [RegOp.CheckDword(SpoolKey, "KMPrintersAreBlocked", 1)],
-                },
-                new TweakDef
-                {
-                    Id = "prtspool-disable-remote-rpc",
-                    Label = "Disable Remote Print Spooler RPC Endpoint",
-                    Category = "Maintenance",
-                    Description = "Disables the remote RPC endpoint of the print spooler, preventing remote printer enumeration and exploitation.",
-                    Tags = ["print-spooler", "rpc", "remote", "printnightmare", "network", "security"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 5,
-                    SafetyRating = 3,
-                    ImpactNote = "Value 2 disables remote spooler; breaks network printer sharing from this machine but blocks remote exploitation.",
-                    ApplyOps = [RegOp.SetDword(SpoolKey, "RegisterSpoolerRemoteRpcEndPoint", 2)],
-                    RemoveOps = [RegOp.DeleteValue(SpoolKey, "RegisterSpoolerRemoteRpcEndPoint")],
-                    DetectOps = [RegOp.CheckDword(SpoolKey, "RegisterSpoolerRemoteRpcEndPoint", 2)],
-                },
-                new TweakDef
-                {
                     Id = "prtspool-require-signed-copy-files",
                     Label = "Require Signed Copy Files for PnP Printers",
                     Category = "Maintenance",
@@ -7863,55 +6925,6 @@ internal static class PolicyPrint
                     ApplyOps = [RegOp.SetDword(SpoolKey, "CopyFilesPolicy", 1)],
                     RemoveOps = [RegOp.DeleteValue(SpoolKey, "CopyFilesPolicy")],
                     DetectOps = [RegOp.CheckDword(SpoolKey, "CopyFilesPolicy", 1)],
-                },
-                new TweakDef
-                {
-                    Id = "prtspool-disable-web-pnp-download",
-                    Label = "Disable Printer Driver Download from Windows Update",
-                    Category = "Maintenance",
-                    Description =
-                        "Prevents Windows from automatically downloading printer drivers from Windows Update during PnP printer installation.",
-                    Tags = ["print-spooler", "windows-update", "pnp", "driver-download", "security"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 3,
-                    SafetyRating = 5,
-                    ImpactNote = "Removes an untrusted driver download path; IT must manually approve and supply printer drivers instead.",
-                    ApplyOps = [RegOp.SetDword(SpoolKey, "DisableWebPnPDownload", 1)],
-                    RemoveOps = [RegOp.DeleteValue(SpoolKey, "DisableWebPnPDownload")],
-                    DetectOps = [RegOp.CheckDword(SpoolKey, "DisableWebPnPDownload", 1)],
-                },
-                new TweakDef
-                {
-                    Id = "prtspool-disable-http-printing",
-                    Label = "Disable Printing over HTTP",
-                    Category = "Maintenance",
-                    Description = "Blocks the Windows print spooler from connecting to or using printers over the HTTP/IPP protocol.",
-                    Tags = ["print-spooler", "http", "ipp", "network", "security"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 3,
-                    SafetyRating = 5,
-                    ImpactNote = "Eliminates unauthenticated HTTP printing surface; affects cloud print services that use HTTP transport.",
-                    ApplyOps = [RegOp.SetDword(SpoolKey, "DisableHTTPPrinting", 1)],
-                    RemoveOps = [RegOp.DeleteValue(SpoolKey, "DisableHTTPPrinting")],
-                    DetectOps = [RegOp.CheckDword(SpoolKey, "DisableHTTPPrinting", 1)],
-                },
-                new TweakDef
-                {
-                    Id = "prtspool-pnp-restrict-to-admins",
-                    Label = "Restrict Point and Print Driver Installation to Admins",
-                    Category = "Maintenance",
-                    Description = "Requires administrator privileges to install printer drivers via Point and Print, regardless of the print server.",
-                    Tags = ["print-spooler", "point-and-print", "admin", "driver", "security"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 5,
-                    SafetyRating = 5,
-                    ImpactNote = "Key PrintNightmare mitigation; non-admin users cannot install printer drivers via PnP to any server.",
-                    ApplyOps = [RegOp.SetDword(PnPKey, "Restricted", 1)],
-                    RemoveOps = [RegOp.DeleteValue(PnPKey, "Restricted")],
-                    DetectOps = [RegOp.CheckDword(PnPKey, "Restricted", 1)],
                 },
                 new TweakDef
                 {
@@ -7944,22 +6957,6 @@ internal static class PolicyPrint
                     ApplyOps = [RegOp.SetDword(PnPKey, "InForest", 0)],
                     RemoveOps = [RegOp.DeleteValue(PnPKey, "InForest")],
                     DetectOps = [RegOp.CheckDword(PnPKey, "InForest", 0)],
-                },
-                new TweakDef
-                {
-                    Id = "prtspool-pnp-elevate-driver-update",
-                    Label = "Require Elevation When Updating Printer Drivers via PnP",
-                    Category = "Maintenance",
-                    Description = "Forces a UAC elevation prompt when an existing printer driver is updated via Point and Print.",
-                    Tags = ["print-spooler", "point-and-print", "uac", "elevation", "update", "security"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 4,
-                    SafetyRating = 5,
-                    ImpactNote = "Value 2 = always require elevation for driver updates; prevents silent malicious driver replacement.",
-                    ApplyOps = [RegOp.SetDword(PnPKey, "UpdatePromptSettings", 2)],
-                    RemoveOps = [RegOp.DeleteValue(PnPKey, "UpdatePromptSettings")],
-                    DetectOps = [RegOp.CheckDword(PnPKey, "UpdatePromptSettings", 2)],
                 },
                 new TweakDef
                 {
@@ -8029,96 +7026,6 @@ internal static class PolicyPrint
                 ApplyOps = [RegOp.SetDword(Spooler, "RegisterSpoolerRemoteRpcEndPoint", 2)],
                 RemoveOps = [RegOp.DeleteValue(Spooler, "RegisterSpoolerRemoteRpcEndPoint")],
                 DetectOps = [RegOp.CheckDword(Spooler, "RegisterSpoolerRemoteRpcEndPoint", 2)],
-            },
-            new TweakDef
-            {
-                Id = "spool-restrict-driver-install",
-                Label = "Restrict Driver Installation via Point-and-Print",
-                Category = "Maintenance",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                Tags = ["spooler", "point and print", "driver", "policy", "cve-2021-1675"],
-                Description =
-                    "Requires admin elevation when installing printer drivers via Point and "
-                    + "Print (NoWarningNoElevationOnInstall=0). Prevents non-admin users from "
-                    + "silently installing potentially malicious printer drivers.",
-                ApplyOps = [RegOp.SetDword(SpoolerPointAndPrint, "NoWarningNoElevationOnInstall", 0)],
-                RemoveOps = [RegOp.DeleteValue(SpoolerPointAndPrint, "NoWarningNoElevationOnInstall")],
-                DetectOps = [RegOp.CheckDword(SpoolerPointAndPrint, "NoWarningNoElevationOnInstall", 0)],
-            },
-            new TweakDef
-            {
-                Id = "spool-restrict-update-without-elevation",
-                Label = "Require Elevation to Update Printer Drivers",
-                Category = "Maintenance",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                Tags = ["spooler", "driver update", "elevation", "security", "point and print"],
-                Description =
-                    "Requires administrator elevation when updating an existing printer driver "
-                    + "via Point and Print. UpdatePromptSettings=0. Closes the second half "
-                    + "of the PrintNightmare driver update bypass.",
-                ApplyOps = [RegOp.SetDword(SpoolerPointAndPrint, "UpdatePromptSettings", 0)],
-                RemoveOps = [RegOp.DeleteValue(SpoolerPointAndPrint, "UpdatePromptSettings")],
-                DetectOps = [RegOp.CheckDword(SpoolerPointAndPrint, "UpdatePromptSettings", 0)],
-            },
-            new TweakDef
-            {
-                Id = "spool-restrict-point-and-print-servers",
-                Label = "Restrict Point-and-Print to Approved Servers Only",
-                Category = "Maintenance",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                Tags = ["spooler", "point and print", "servers", "restrict"],
-                Description =
-                    "Enables server restriction so Point-and-Print driver installation is "
-                    + "only permitted from an administrator-approved list of print servers. "
-                    + "Restricted=1. Prevents driver downloads from arbitrary network shares.",
-                ApplyOps = [RegOp.SetDword(SpoolerPointAndPrint, "Restricted", 1)],
-                RemoveOps = [RegOp.DeleteValue(SpoolerPointAndPrint, "Restricted")],
-                DetectOps = [RegOp.CheckDword(SpoolerPointAndPrint, "Restricted", 1)],
-            },
-            new TweakDef
-            {
-                Id = "spool-disable-http-printing",
-                Label = "Disable HTTP Printing (Internet Printing Protocol)",
-                Category = "Maintenance",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                Tags = ["spooler", "http printing", "ipp", "disable"],
-                Description =
-                    "Disables the Internet Printing Protocol (HTTP/IPP) client which allows "
-                    + "printing to URLs. DisableHTTPPrinting=1. Removes an infrequently "
-                    + "used network printing path that expands attack surface.",
-                ApplyOps = [RegOp.SetDword(SpoolerPolicy, "DisableHTTPPrinting", 1)],
-                RemoveOps = [RegOp.DeleteValue(SpoolerPolicy, "DisableHTTPPrinting")],
-                DetectOps = [RegOp.CheckDword(SpoolerPolicy, "DisableHTTPPrinting", 1)],
-            },
-            new TweakDef
-            {
-                Id = "spool-disable-web-based-printing",
-                Label = "Disable Web-Based Printer Browsing",
-                Category = "Maintenance",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                Tags = ["spooler", "web printing", "browser", "disable"],
-                Description =
-                    "Disables the Web-based printing browser interface and printer discovery "
-                    + "via HTTP. DisableWebPnPDownload=1. Stops the spooler from downloading "
-                    + "printer drivers from websites.",
-                ApplyOps = [RegOp.SetDword(SpoolerPolicy, "DisableWebPnPDownload", 1)],
-                RemoveOps = [RegOp.DeleteValue(SpoolerPolicy, "DisableWebPnPDownload")],
-                DetectOps = [RegOp.CheckDword(SpoolerPolicy, "DisableWebPnPDownload", 1)],
             },
             new TweakDef
             {

@@ -42,52 +42,6 @@ internal static class Maintenance
         },
         new TweakDef
         {
-            Id = "maint-disable-superfetch-prefetch",
-            Label = "Disable SuperFetch/SysMain Prefetch",
-            Category = "Maintenance",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Disables the SuperFetch (SysMain) and Prefetcher services via registry. Recommended for SSD-only systems to reduce writes.",
-            Tags = ["maintenance", "performance", "ssd", "prefetch"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\PrefetchParameters"],
-            ApplyOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\PrefetchParameters",
-                    "EnablePrefetcher",
-                    0
-                ),
-                RegOp.SetDword(
-                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\PrefetchParameters",
-                    "EnableSuperfetch",
-                    0
-                ),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\PrefetchParameters",
-                    "EnablePrefetcher",
-                    3
-                ),
-                RegOp.SetDword(
-                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\PrefetchParameters",
-                    "EnableSuperfetch",
-                    3
-                ),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(
-                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\PrefetchParameters",
-                    "EnablePrefetcher",
-                    0
-                ),
-            ],
-        },
-        new TweakDef
-        {
             Id = "maint-disable-cleanup-nag",
             Label = "Disable Disk Cleanup Notifications",
             Category = "Maintenance",
@@ -129,29 +83,6 @@ internal static class Maintenance
             ApplyOps = [RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Dfrg\BootOptimizeFunction", "OptimizeComplete", "Yes")],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Dfrg\BootOptimizeFunction", "OptimizeComplete")],
             DetectOps = [RegOp.CheckString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Dfrg\BootOptimizeFunction", "OptimizeComplete", "Yes")],
-        },
-        new TweakDef
-        {
-            Id = "maint-disable-auto-maintenance",
-            Label = "Disable Automatic Maintenance",
-            Category = "Maintenance",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables Windows automatic maintenance that runs daily. Prevents unexpected disk and CPU activity. Default: enabled.",
-            Tags = ["maintenance", "automatic", "scheduled", "background"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Schedule\Maintenance"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Schedule\Maintenance", "MaintenanceDisabled", 1),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Schedule\Maintenance", "MaintenanceDisabled"),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Schedule\Maintenance", "MaintenanceDisabled", 1),
-            ],
         },
         new TweakDef
         {
@@ -300,42 +231,6 @@ internal static class Maintenance
                 Elevation.RunElevated("netsh", ["int", "ip", "reset"]);
             },
             DetectAction = () => false,
-        },
-        new TweakDef
-        {
-            Id = "maint-disable-prefetch",
-            Label = "Disable Prefetch/Superfetch",
-            Category = "Maintenance",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Disables Windows Prefetch and Superfetch (SysMain). Reduces disk I/O on SSD systems where prefetch provides no benefit. Default: enabled.",
-            Tags = ["maintenance", "prefetch", "superfetch", "ssd"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\PrefetchParameters"],
-            ApplyOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\PrefetchParameters",
-                    "EnablePrefetcher",
-                    0
-                ),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\PrefetchParameters",
-                    "EnablePrefetcher",
-                    3
-                ),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(
-                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\PrefetchParameters",
-                    "EnablePrefetcher",
-                    0
-                ),
-            ],
         },
         new TweakDef
         {
@@ -555,20 +450,6 @@ internal static class CrashDiagnostics
         },
         new TweakDef
         {
-            Id = "crash-disable-pca",
-            Label = "Disable Program Compatibility Assistant",
-            Category = "Maintenance",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Disable PCA popup suggesting compatibility settings. Default: enabled. Recommended: disabled if not needed.",
-            Tags = ["pca", "compatibility", "assistant", "popup"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppCompat"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppCompat", "DisablePCA", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppCompat", "DisablePCA")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppCompat", "DisablePCA", 1)],
-        },
-        new TweakDef
-        {
             Id = "crash-disable-error-dialog",
             Label = "Disable Automatic Error Dialog Boxes",
             Category = "Maintenance",
@@ -670,20 +551,6 @@ internal static class CrashDiagnostics
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Windows Error Reporting\LocalDumps", "DumpCount")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Windows Error Reporting\LocalDumps", "DumpCount", 0)],
         },
-        new TweakDef
-        {
-            Id = "crash-disable-steps-recorder",
-            Label = "Disable Steps Recorder",
-            Category = "Maintenance",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables Windows Steps Recorder (psr.exe). Prevents screen recording for troubleshooting. Default: enabled.",
-            Tags = ["crash", "steps-recorder", "psr", "privacy"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppCompat"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppCompat", "DisableUAR", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppCompat", "DisableUAR")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppCompat", "DisableUAR", 1)],
-        },
     ];
 }
 
@@ -705,27 +572,6 @@ internal static class TimeSync
 
     internal static IReadOnlyList<TweakDef> Tweaks { get; } =
     [
-        new TweakDef
-        {
-            Id = "time-set-ntp-pool-servers",
-            Label = "Set NTP Servers to pool.ntp.org",
-            Category = "Maintenance",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            ImpactScore = 3,
-            SafetyRating = 5,
-            Tags = ["time", "ntp", "sync", "servers"],
-            Description =
-                "Sets the NTP time server to the global pool.ntp.org pool, which "
-                + "provides geographically distributed, highly available time sources. "
-                + "More reliable than the default time.windows.com.",
-            ApplyOps = [RegOp.SetString(W32TimeParams, "NtpServer", "0.pool.ntp.org,0x9 1.pool.ntp.org,0x9 2.pool.ntp.org,0x9 3.pool.ntp.org,0x9")],
-            RemoveOps = [RegOp.SetString(W32TimeParams, "NtpServer", "time.windows.com,0x9")],
-            DetectOps =
-            [
-                RegOp.CheckString(W32TimeParams, "NtpServer", "0.pool.ntp.org,0x9 1.pool.ntp.org,0x9 2.pool.ntp.org,0x9 3.pool.ntp.org,0x9"),
-            ],
-        },
         new TweakDef
         {
             Id = "time-set-cloudflare-ntp",
@@ -818,24 +664,6 @@ internal static class TimeSync
         },
         new TweakDef
         {
-            Id = "time-enable-utc-hardware-clock",
-            Label = "Store Hardware Clock in UTC (Linux Dual-Boot)",
-            Category = "Maintenance",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            ImpactScore = 3,
-            SafetyRating = 4,
-            Tags = ["time", "utc", "rtc", "dual boot", "linux"],
-            Description =
-                "Configures Windows to treat the hardware (RTC) clock as UTC rather than "
-                + "local time. Required for dual-boot systems with Linux to prevent time "
-                + "drift between OS sessions.",
-            ApplyOps = [RegOp.SetDword(TimeZoneInfo, "RealTimeIsUniversal", 1)],
-            RemoveOps = [RegOp.DeleteValue(TimeZoneInfo, "RealTimeIsUniversal")],
-            DetectOps = [RegOp.CheckDword(TimeZoneInfo, "RealTimeIsUniversal", 1)],
-        },
-        new TweakDef
-        {
             Id = "time-set-type-ntp",
             Label = "Set W32Time to Use NTP (Internet Sync)",
             Category = "Maintenance",
@@ -887,24 +715,6 @@ internal static class TimeSync
             ApplyOps = [RegOp.SetDword(W32TimeNtpClient, "CrossSiteSyncFlags", 2)],
             RemoveOps = [RegOp.DeleteValue(W32TimeNtpClient, "CrossSiteSyncFlags")],
             DetectOps = [RegOp.CheckDword(W32TimeNtpClient, "CrossSiteSyncFlags", 2)],
-        },
-        new TweakDef
-        {
-            Id = "time-set-max-pos-phase-correction",
-            Label = "Set Maximum Forward Time Correction to 1 Hour",
-            Category = "Maintenance",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            ImpactScore = 2,
-            SafetyRating = 5,
-            Tags = ["time", "ntp", "phase", "correction", "sync"],
-            Description =
-                "Sets the maximum positive phase correction (MaxPosPhaseCorrection) to "
-                + "3600 seconds (1 hour). Prevents W32Time from jumping the clock forward by "
-                + "more than one hour in a single correction, protecting against rogue NTP servers.",
-            ApplyOps = [RegOp.SetDword(W32TimeConfig, "MaxPosPhaseCorrection", 3600)],
-            RemoveOps = [RegOp.DeleteValue(W32TimeConfig, "MaxPosPhaseCorrection")],
-            DetectOps = [RegOp.CheckDword(W32TimeConfig, "MaxPosPhaseCorrection", 3600)],
         },
         new TweakDef
         {
@@ -1016,24 +826,6 @@ internal static class TimeSync
         },
         new TweakDef
         {
-            Id = "time-enable-ntp-server-provider",
-            Label = "Enable NTP Server (Share System Time via UDP/123)",
-            Category = "Maintenance",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            ImpactScore = 3,
-            SafetyRating = 4,
-            Tags = ["time", "ntp", "server", "share", "udp"],
-            Description =
-                "Enables the NtpServer time provider, allowing this machine to serve "
-                + "time via NTP on UDP port 123. Intended for machines that act as an "
-                + "internal NTP server for a local network.",
-            ApplyOps = [RegOp.SetDword(W32TimeNtpServer, "Enabled", 1)],
-            RemoveOps = [RegOp.SetDword(W32TimeNtpServer, "Enabled", 0)],
-            DetectOps = [RegOp.CheckDword(W32TimeNtpServer, "Enabled", 1)],
-        },
-        new TweakDef
-        {
             Id = "time-disable-vmictimeprovider",
             Label = "Disable Hyper-V / VM Integration Time Sync",
             Category = "Maintenance",
@@ -1049,24 +841,6 @@ internal static class TimeSync
             ApplyOps = [RegOp.SetDword(VmicTimeProv, "Enabled", 0)],
             RemoveOps = [RegOp.SetDword(VmicTimeProv, "Enabled", 1)],
             DetectOps = [RegOp.CheckDword(VmicTimeProv, "Enabled", 0)],
-        },
-        new TweakDef
-        {
-            Id = "time-set-ntp-poll-interval-1h",
-            Label = "Set NTP Client Poll Interval to 1 Hour",
-            Category = "Maintenance",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            ImpactScore = 2,
-            SafetyRating = 5,
-            Tags = ["time", "ntp", "poll", "interval", "bandwidth"],
-            Description =
-                "Sets the NTP client SpecialPollInterval to 3600 seconds (1 hour). "
-                + "Reduces NTP traffic on low-bandwidth or metered connections while "
-                + "maintaining reasonable time accuracy.",
-            ApplyOps = [RegOp.SetDword(W32TimeNtpClient, "SpecialPollInterval", 3600)],
-            RemoveOps = [RegOp.DeleteValue(W32TimeNtpClient, "SpecialPollInterval")],
-            DetectOps = [RegOp.CheckDword(W32TimeNtpClient, "SpecialPollInterval", 3600)],
         },
     ];
 }
@@ -1084,20 +858,6 @@ internal static class DiskCleanup
 
     internal static IReadOnlyList<TweakDef> Tweaks { get; } =
     [
-        new TweakDef
-        {
-            Id = "cleanup-disable-thumbnail-cache",
-            Label = "Disable Thumbnail Cache (Thumbs.db)",
-            Category = "Maintenance",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Prevents Windows from creating Thumbs.db thumbnail cache files in folders.",
-            Tags = ["cleanup", "disk", "thumbnails", "explorer"],
-            RegistryKeys = [$@"{CuKey}\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
-            ApplyOps = [RegOp.SetDword($@"{CuKey}\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "DisableThumbnailCache", 1)],
-            RemoveOps = [RegOp.DeleteValue($@"{CuKey}\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "DisableThumbnailCache")],
-            DetectOps = [RegOp.CheckDword($@"{CuKey}\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "DisableThumbnailCache", 1)],
-        },
         new TweakDef
         {
             Id = "cleanup-disable-thumbs-network",
@@ -1381,20 +1141,6 @@ internal static class DiskCleanup
         },
         new TweakDef
         {
-            Id = "cleanup-disable-recent-programs",
-            Label = "Disable Recent Programs in Start Menu",
-            Category = "Maintenance",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Hides recently-used programs section from the Start menu.",
-            Tags = ["cleanup", "privacy", "start"],
-            RegistryKeys = [$@"{CuKey}\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
-            ApplyOps = [RegOp.SetDword($@"{CuKey}\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "Start_TrackProgs", 0)],
-            RemoveOps = [RegOp.DeleteValue($@"{CuKey}\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "Start_TrackProgs")],
-            DetectOps = [RegOp.CheckDword($@"{CuKey}\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "Start_TrackProgs", 0)],
-        },
-        new TweakDef
-        {
             Id = "cleanup-disable-search-history",
             Label = "Disable Search History",
             Category = "Maintenance",
@@ -1438,21 +1184,6 @@ internal static class DiskCleanup
         },
         new TweakDef
         {
-            Id = "cleanup-disable-volume-shadow-copy",
-            Label = "Disable Volume Shadow Copy Service Writer",
-            Category = "Maintenance",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description =
-                "Disables the VSS system writer to reduce disk I/O. Affects System Restore and backup. Only for systems where backups are managed externally.",
-            Tags = ["cleanup", "disk", "backup", "performance"],
-            RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Services\VSS"],
-            ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\VSS", "Start", 4)],
-            RemoveOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\VSS", "Start", 3)],
-            DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\VSS", "Start", 4)],
-        },
-        new TweakDef
-        {
             Id = "cleanup-disable-internet-temp-auto",
             Label = "Disable Automatic Deletion of Internet Temp Files",
             Category = "Maintenance",
@@ -1464,55 +1195,6 @@ internal static class DiskCleanup
             ApplyOps = [RegOp.SetDword($@"{CuKey}\Software\Microsoft\Windows\CurrentVersion\Internet Settings\Cache", "Persistent", 0)],
             RemoveOps = [RegOp.DeleteValue($@"{CuKey}\Software\Microsoft\Windows\CurrentVersion\Internet Settings\Cache", "Persistent")],
             DetectOps = [RegOp.CheckDword($@"{CuKey}\Software\Microsoft\Windows\CurrentVersion\Internet Settings\Cache", "Persistent", 0)],
-        },
-        new TweakDef
-        {
-            Id = "cleanup-disable-wer-queue",
-            Label = "Disable Windows Error Reporting Queue",
-            Category = "Maintenance",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Prevents Windows Error Reporting from queuing crash dumps and reports to disk.",
-            Tags = ["cleanup", "crash", "wer", "disk"],
-            RegistryKeys = [$@"{LmKey}\SOFTWARE\Microsoft\Windows\Windows Error Reporting"],
-            ApplyOps = [RegOp.SetDword($@"{LmKey}\SOFTWARE\Microsoft\Windows\Windows Error Reporting", "DontSendAdditionalData", 1)],
-            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SOFTWARE\Microsoft\Windows\Windows Error Reporting", "DontSendAdditionalData")],
-            DetectOps = [RegOp.CheckDword($@"{LmKey}\SOFTWARE\Microsoft\Windows\Windows Error Reporting", "DontSendAdditionalData", 1)],
-        },
-        new TweakDef
-        {
-            Id = "cleanup-disable-superfetch-write",
-            Label = "Disable SuperFetch Disk Write Activity",
-            Category = "Maintenance",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Reduces SysMain (SuperFetch) write activity to disk by disabling pre-population of the cache.",
-            Tags = ["cleanup", "performance", "ssd", "superfetch"],
-            RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\PrefetchParameters"],
-            ApplyOps =
-            [
-                RegOp.SetDword(
-                    $@"{LmKey}\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\PrefetchParameters",
-                    "EnablePrefetcher",
-                    0
-                ),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(
-                    $@"{LmKey}\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\PrefetchParameters",
-                    "EnablePrefetcher",
-                    3
-                ),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(
-                    $@"{LmKey}\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\PrefetchParameters",
-                    "EnablePrefetcher",
-                    0
-                ),
-            ],
         },
         new TweakDef
         {
@@ -1626,21 +1308,6 @@ internal static class DiskCleanup
         },
         new TweakDef
         {
-            Id = "cleanup-disable-wer-show-ui",
-            Label = "Suppress Windows Error Reporting UI Dialogs",
-            Category = "Maintenance",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets DontShowUI=1 in Windows Error Reporting. WER operates silently in the background; no \"Check for Solution\" dialog is shown to the user. Eliminates interactive stalls after crashes.",
-            Tags = ["cleanup", "wer", "ui", "dialog"],
-            RegistryKeys = [$@"{LmKey}\SOFTWARE\Microsoft\Windows\Windows Error Reporting"],
-            ApplyOps = [RegOp.SetDword($@"{LmKey}\SOFTWARE\Microsoft\Windows\Windows Error Reporting", "DontShowUI", 1)],
-            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SOFTWARE\Microsoft\Windows\Windows Error Reporting", "DontShowUI")],
-            DetectOps = [RegOp.CheckDword($@"{LmKey}\SOFTWARE\Microsoft\Windows\Windows Error Reporting", "DontShowUI", 1)],
-        },
-        new TweakDef
-        {
             Id = "cleanup-disable-activity-history",
             Label = "Disable Windows Activity History / Timeline",
             Category = "Maintenance",
@@ -1653,21 +1320,6 @@ internal static class DiskCleanup
             ApplyOps = [RegOp.SetDword($@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows\System", "EnableActivityFeed", 0)],
             RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows\System", "EnableActivityFeed")],
             DetectOps = [RegOp.CheckDword($@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows\System", "EnableActivityFeed", 0)],
-        },
-        new TweakDef
-        {
-            Id = "cleanup-disable-clipboard-sync",
-            Label = "Disable Clipboard History (No Disk Persistence)",
-            Category = "Maintenance",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets AllowClipboardHistory=0 via System policy. Prevents Windows from recording clipboard entries to disk. Stops clipboard data from being written to the activity store and synced across devices.",
-            Tags = ["cleanup", "clipboard", "privacy", "disk-space"],
-            RegistryKeys = [$@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows\System"],
-            ApplyOps = [RegOp.SetDword($@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows\System", "AllowClipboardHistory", 0)],
-            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows\System", "AllowClipboardHistory")],
-            DetectOps = [RegOp.CheckDword($@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows\System", "AllowClipboardHistory", 0)],
         },
         new TweakDef
         {
@@ -1775,21 +1427,6 @@ internal static class Printing
     [
         new TweakDef
         {
-            Id = "printing-disable-spooler-autostart",
-            Label = "Set Print Spooler to Manual Start",
-            Category = "Maintenance",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description =
-                "Sets the Print Spooler service to Manual start. Reduces attack surface (PrintNightmare) and improves boot time if no printer is used.",
-            Tags = ["printing", "spooler", "security", "performance"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Spooler"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Spooler", "Start", 3)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Spooler", "Start", 2)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Spooler", "Start", 3)],
-        },
-        new TweakDef
-        {
             Id = "printing-driver-isolation",
             Label = "Enable Print Driver Isolation",
             Category = "Maintenance",
@@ -1809,87 +1446,6 @@ internal static class Printing
                 RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Print", "PrintDriverIsolationOverrideCompat"),
             ],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Print", "PrintDriverIsolationGroups", 1)],
-        },
-        new TweakDef
-        {
-            Id = "printing-disable-pointandprint",
-            Label = "Restrict Point-and-Print Drivers",
-            Category = "Maintenance",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Requires admin approval for Point-and-Print driver installs. Mitigates PrintNightmare and similar spooler vulnerabilities.",
-            Tags = ["printing", "security", "pointandprint", "policy"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers\PointAndPrint"],
-            ApplyOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers\PointAndPrint",
-                    "RestrictDriverInstallationToAdministrators",
-                    1
-                ),
-                RegOp.SetDword(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers\PointAndPrint",
-                    "NoWarningNoElevationOnInstall",
-                    0
-                ),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers\PointAndPrint",
-                    "RestrictDriverInstallationToAdministrators"
-                ),
-                RegOp.DeleteValue(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers\PointAndPrint",
-                    "NoWarningNoElevationOnInstall"
-                ),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers\PointAndPrint",
-                    "RestrictDriverInstallationToAdministrators",
-                    1
-                ),
-            ],
-        },
-        new TweakDef
-        {
-            Id = "printing-disable-xps-writer",
-            Label = "Disable XPS Document Writer",
-            Category = "Maintenance",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Removes the Microsoft XPS Document Writer virtual printer from the printers list. Reduces clutter if you never use XPS.",
-            Tags = ["printing", "xps", "cleanup"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers", "DisableXPSDocumentWriter", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers", "DisableXPSDocumentWriter")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers", "DisableXPSDocumentWriter", 1)],
-        },
-        new TweakDef
-        {
-            Id = "printing-disable-internet-printing",
-            Label = "Disable Internet Printing (IPP)",
-            Category = "Maintenance",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Disables Internet Printing Protocol and Web PnP driver downloads. Reduces attack surface from internet-facing print services.",
-            Tags = ["printing", "internet", "security", "ipp"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers", "DisableHTTPPrinting", 1),
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers", "DisableWebPnPDownload", 1),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers", "DisableHTTPPrinting"),
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers", "DisableWebPnPDownload"),
-            ],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers", "DisableHTTPPrinting", 1)],
         },
         new TweakDef
         {
@@ -1938,41 +1494,6 @@ internal static class Printing
         },
         new TweakDef
         {
-            Id = "printing-restrict-driver-install",
-            Label = "Restrict Printer Driver Installation",
-            Category = "Maintenance",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description =
-                "Restricts printer driver installation to administrators only. Mitigates PrintNightmare-class vulnerabilities. Default: not restricted. Recommended: restricted.",
-            Tags = ["printing", "driver", "security", "restriction"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers"],
-            ApplyOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers",
-                    "RestrictDriverInstallationToAdministrators",
-                    1
-                ),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers",
-                    "RestrictDriverInstallationToAdministrators"
-                ),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers",
-                    "RestrictDriverInstallationToAdministrators",
-                    1
-                ),
-            ],
-        },
-        new TweakDef
-        {
             Id = "printing-print-disable-legacy-mode",
             Label = "Disable Print Spooler Legacy Mode",
             Category = "Maintenance",
@@ -1985,62 +1506,6 @@ internal static class Printing
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Print", "LegacyDefaultPrinterMode", 0)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Print", "LegacyDefaultPrinterMode")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Print", "LegacyDefaultPrinterMode", 0)],
-        },
-        new TweakDef
-        {
-            Id = "printing-print-point-and-print-restrict",
-            Label = "Enable Point and Print Restrictions",
-            Category = "Maintenance",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description =
-                "Enables strict Point and Print restrictions: trusted servers only, no silent installs, UAC prompts on updates. Mitigates PrintNightmare. Default: unrestricted. Recommended: restricted.",
-            Tags = ["printing", "point-and-print", "security", "printnightmare"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers\PointAndPrint"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers\PointAndPrint", "Restricted", 1),
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers\PointAndPrint", "TrustedServers", 1),
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers\PointAndPrint", "InForest", 0),
-                RegOp.SetDword(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers\PointAndPrint",
-                    "NoWarningNoElevationOnInstall",
-                    0
-                ),
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers\PointAndPrint", "UpdatePromptSettings", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers\PointAndPrint", "Restricted"),
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers\PointAndPrint", "TrustedServers"),
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers\PointAndPrint", "InForest"),
-                RegOp.DeleteValue(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers\PointAndPrint",
-                    "NoWarningNoElevationOnInstall"
-                ),
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers\PointAndPrint", "UpdatePromptSettings"),
-            ],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers\PointAndPrint", "Restricted", 1)],
-        },
-        new TweakDef
-        {
-            Id = "printing-disable-remote-inbound",
-            Label = "Disable Remote Inbound Printing",
-            Category = "Maintenance",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables accepting inbound print jobs from remote machines. Default: enabled.",
-            Tags = ["printing", "remote", "inbound", "security"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers", "RegisterSpoolerRemoteRpcEndPoint", 2)],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers", "RegisterSpoolerRemoteRpcEndPoint"),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers", "RegisterSpoolerRemoteRpcEndPoint", 2),
-            ],
         },
         new TweakDef
         {
@@ -2108,20 +1573,6 @@ internal static class Printing
         },
         new TweakDef
         {
-            Id = "printing-disable-client-side-map",
-            Label = "Disable Client-Side Printer Mapping",
-            Category = "Maintenance",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables automatic mapping of client printers in remote sessions. Reduces RDP session overhead. Default: enabled.",
-            Tags = ["printing", "client-side", "mapping", "rdp"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services", "fDisableCpm", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services", "fDisableCpm")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services", "fDisableCpm", 1)],
-        },
-        new TweakDef
-        {
             Id = "printing-disable-default-mgmt",
             Label = "Disable Windows Manage Default Printer",
             Category = "Maintenance",
@@ -2166,41 +1617,6 @@ internal static class Printing
         },
         new TweakDef
         {
-            Id = "printing-package-point-server-list",
-            Label = "Restrict Package Point and Print Servers",
-            Category = "Maintenance",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Enables the approved Package Point and Print server list. Only servers on the approved list can install print drivers via Point and Print. Default: unrestricted.",
-            Tags = ["printing", "package", "point-and-print", "security"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers\PackagePointAndPrint"],
-            ApplyOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers\PackagePointAndPrint",
-                    "PackagePointAndPrintOnly",
-                    1
-                ),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers\PackagePointAndPrint",
-                    "PackagePointAndPrintOnly"
-                ),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers\PackagePointAndPrint",
-                    "PackagePointAndPrintOnly",
-                    1
-                ),
-            ],
-        },
-        new TweakDef
-        {
             Id = "printing-print-default-paper-a4",
             Label = "Set Default Paper Size to A4",
             Category = "Maintenance",
@@ -2212,21 +1628,6 @@ internal static class Printing
             ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Windows", "DefaultPaperSize", "A4")],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Windows", "DefaultPaperSize")],
             DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Windows", "DefaultPaperSize", "A4")],
-        },
-        new TweakDef
-        {
-            Id = "printing-disable-ipp-web-client",
-            Label = "Disable IPP Web Printing Client",
-            Category = "Maintenance",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Disables the Internet Printing Protocol (IPP) client feature. Prevents connecting to web-hosted printers. Default: enabled.",
-            Tags = ["printing", "internet", "ipp", "security"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers", "DisableWebPrinting", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers", "DisableWebPrinting")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers", "DisableWebPrinting", 1)],
         },
         new TweakDef
         {
@@ -2337,56 +1738,6 @@ internal static class Printing
         },
         new TweakDef
         {
-            Id = "printing-restrict-driver-to-admins",
-            Label = "Restrict Printer Driver Installation to Admins",
-            Category = "Maintenance",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description =
-                "Requires administrator rights to install printer drivers. Prevents standard users from installing untrusted print drivers. Default: users can install drivers.",
-            Tags = ["printing", "drivers", "security", "hardening"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers"],
-            ApplyOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers",
-                    "RestrictDriverInstallationToAdministrators",
-                    1
-                ),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers",
-                    "RestrictDriverInstallationToAdministrators"
-                ),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers",
-                    "RestrictDriverInstallationToAdministrators",
-                    1
-                ),
-            ],
-        },
-        new TweakDef
-        {
-            Id = "printing-block-kernel-mode-drivers",
-            Label = "Block Kernel-Mode Printer Drivers",
-            Category = "Maintenance",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description =
-                "Blocks kernel-mode printer drivers from running. Forces all print drivers to user mode (V4 drivers), reducing kernel attack surface. Default: kernel-mode drivers permitted.",
-            Tags = ["printing", "drivers", "security", "kernel"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers", "KMPrintersAreBlocked", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers", "KMPrintersAreBlocked")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Printers", "KMPrintersAreBlocked", 1)],
-        },
-        new TweakDef
-        {
             Id = "printing-disable-ipp-over-usb",
             Label = "Disable IPP over USB Printing",
             Category = "Maintenance",
@@ -2460,21 +1811,6 @@ internal static class PrinterAdvanced
 
     internal static IReadOnlyList<TweakDef> Tweaks { get; } =
     [
-        new TweakDef
-        {
-            Id = "prnta-disable-wsd-printer-discovery",
-            Label = "Disable WSD (Web Services on Devices) Printer Discovery",
-            Category = "Maintenance",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Tags = ["printing", "wsd", "network", "discovery", "security"],
-            Description =
-                "Disables the WSD (Web Services on Devices) port monitor, preventing Windows from auto-discovering "
-                + "network printers via SOAP/WSD. Reduces broadcast network noise and eliminates a legacy protocol attack surface.",
-            ApplyOps = [RegOp.SetDword(WsdPol, "DisableWSDPrinting", 1)],
-            RemoveOps = [RegOp.DeleteValue(WsdPol, "DisableWSDPrinting")],
-            DetectOps = [RegOp.CheckDword(WsdPol, "DisableWSDPrinting", 1)],
-        },
         new TweakDef
         {
             Id = "prnta-require-https-ipp-printing",
@@ -2633,22 +1969,6 @@ internal static class PrinterAdvanced
         },
         new TweakDef
         {
-            Id = "prnta-restrict-driver-install-admin",
-            Label = "Restrict Print Driver Installation to Administrators",
-            Category = "Maintenance",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Tags = ["printing", "driver", "admin", "security", "privilege escalation"],
-            Description =
-                "Prevents standard users from installing print drivers. "
-                + "Unvetted print drivers run in kernel space and are a documented "
-                + "privilege-escalation vector (PrintNightmare/CVE-2021-34527 family).",
-            ApplyOps = [RegOp.SetDword(PrintPol, "RestrictDriverInstallationToAdministrators", 1)],
-            RemoveOps = [RegOp.DeleteValue(PrintPol, "RestrictDriverInstallationToAdministrators")],
-            DetectOps = [RegOp.CheckDword(PrintPol, "RestrictDriverInstallationToAdministrators", 1)],
-        },
-        new TweakDef
-        {
             Id = "prnta-disable-cloud-print",
             Label = "Disable Microsoft Cloud Print (Print to Cloud)",
             Category = "Maintenance",
@@ -2678,38 +1998,6 @@ internal static class PrinterAdvanced
             ApplyOps = [RegOp.SetDword(WsdPol, "DisableDiscovery", 1)],
             RemoveOps = [RegOp.DeleteValue(WsdPol, "DisableDiscovery")],
             DetectOps = [RegOp.CheckDword(WsdPol, "DisableDiscovery", 1)],
-        },
-        new TweakDef
-        {
-            Id = "prnta-disable-win32-spool-com",
-            Label = "Disable Windows 32-Bit Spooler COM Object",
-            Category = "Maintenance",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Tags = ["printing", "spooler", "com", "security", "legacy"],
-            Description =
-                "Disables the legacy 32-bit in-process COM spooler extensions. "
-                + "These extensions can be abused to load arbitrary DLLs into the print spooler process "
-                + "under SYSTEM context — a known persistence vector.",
-            ApplyOps = [RegOp.SetDword(PrintPol, "DisableWebPnpDownload", 1)],
-            RemoveOps = [RegOp.DeleteValue(PrintPol, "DisableWebPnpDownload")],
-            DetectOps = [RegOp.CheckDword(PrintPol, "DisableWebPnpDownload", 1)],
-        },
-        new TweakDef
-        {
-            Id = "prnta-disable-rpc-over-http-spooler",
-            Label = "Disable RPC-over-HTTP for Spooler (Restrict to Named Pipes)",
-            Category = "Maintenance",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Tags = ["printing", "rpc", "http", "spooler", "network", "security"],
-            Description =
-                "Restricts inbound RPC connections to the print spooler to named "
-                + "pipes only, blocking RPC-over-HTTP transport. Reduces remote "
-                + "exploit surface for CVE-2021-1675 / PrintNightmare variants.",
-            ApplyOps = [RegOp.SetDword(PrintPol, "DisableHTTPPrinting", 1)],
-            RemoveOps = [RegOp.DeleteValue(PrintPol, "DisableHTTPPrinting")],
-            DetectOps = [RegOp.CheckDword(PrintPol, "DisableHTTPPrinting", 1)],
         },
         new TweakDef
         {
@@ -2790,20 +2078,6 @@ internal static class EventLogging
     [
         new TweakDef
         {
-            Id = "evtlog-increase-system-log-size",
-            Label = "Increase System Event Log to 64 MB",
-            Category = "Maintenance",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Increases the System event log maximum size from 20 MB to 64 MB for better diagnostic retention.",
-            Tags = ["event-log", "diagnostics", "system", "capacity"],
-            RegistryKeys = [$@"{EventLogKey}\System"],
-            ApplyOps = [RegOp.SetDword($@"{EventLogKey}\System", "MaxSize", 67108864)],
-            RemoveOps = [RegOp.SetDword($@"{EventLogKey}\System", "MaxSize", 20971520)],
-            DetectOps = [RegOp.CheckDword($@"{EventLogKey}\System", "MaxSize", 67108864)],
-        },
-        new TweakDef
-        {
             Id = "evtlog-increase-security-log-size",
             Label = "Increase Security Event Log to 128 MB",
             Category = "Maintenance",
@@ -2815,130 +2089,6 @@ internal static class EventLogging
             ApplyOps = [RegOp.SetDword($@"{EventLogKey}\Security", "MaxSize", 134217728)],
             RemoveOps = [RegOp.SetDword($@"{EventLogKey}\Security", "MaxSize", 20971520)],
             DetectOps = [RegOp.CheckDword($@"{EventLogKey}\Security", "MaxSize", 134217728)],
-        },
-        new TweakDef
-        {
-            Id = "evtlog-increase-application-log-size",
-            Label = "Increase Application Event Log to 64 MB",
-            Category = "Maintenance",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Increases the Application event log maximum size from 20 MB to 64 MB.",
-            Tags = ["event-log", "application", "capacity"],
-            RegistryKeys = [$@"{EventLogKey}\Application"],
-            ApplyOps = [RegOp.SetDword($@"{EventLogKey}\Application", "MaxSize", 67108864)],
-            RemoveOps = [RegOp.SetDword($@"{EventLogKey}\Application", "MaxSize", 20971520)],
-            DetectOps = [RegOp.CheckDword($@"{EventLogKey}\Application", "MaxSize", 67108864)],
-        },
-        new TweakDef
-        {
-            Id = "evtlog-enable-powershell-script-block-logging",
-            Label = "Enable PowerShell Script Block Logging",
-            Category = "Maintenance",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Enables detailed PowerShell script block logging. Essential for security monitoring and incident response.",
-            Tags = ["event-log", "powershell", "security", "audit", "logging"],
-            RegistryKeys = [$@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows\PowerShell\ScriptBlockLogging"],
-            ApplyOps = [RegOp.SetDword($@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows\PowerShell\ScriptBlockLogging", "EnableScriptBlockLogging", 1)],
-            RemoveOps =
-            [
-                RegOp.DeleteValue($@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows\PowerShell\ScriptBlockLogging", "EnableScriptBlockLogging"),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword($@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows\PowerShell\ScriptBlockLogging", "EnableScriptBlockLogging", 1),
-            ],
-        },
-        new TweakDef
-        {
-            Id = "evtlog-enable-powershell-module-logging",
-            Label = "Enable PowerShell Module Logging",
-            Category = "Maintenance",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Enables logging of PowerShell module invocations for security auditing.",
-            Tags = ["event-log", "powershell", "security", "audit", "module"],
-            RegistryKeys = [$@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows\PowerShell\ModuleLogging"],
-            ApplyOps = [RegOp.SetDword($@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows\PowerShell\ModuleLogging", "EnableModuleLogging", 1)],
-            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows\PowerShell\ModuleLogging", "EnableModuleLogging")],
-            DetectOps = [RegOp.CheckDword($@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows\PowerShell\ModuleLogging", "EnableModuleLogging", 1)],
-        },
-        new TweakDef
-        {
-            Id = "evtlog-enable-process-creation-audit",
-            Label = "Enable Process Creation Auditing",
-            Category = "Maintenance",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Includes command-line arguments in process creation audit events (Event ID 4688).",
-            Tags = ["event-log", "security", "audit", "process", "forensics"],
-            RegistryKeys = [$@"{LmKey}\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System\Audit"],
-            ApplyOps =
-            [
-                RegOp.SetDword(
-                    $@"{LmKey}\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System\Audit",
-                    "ProcessCreationIncludeCmdLine_Enabled",
-                    1
-                ),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(
-                    $@"{LmKey}\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System\Audit",
-                    "ProcessCreationIncludeCmdLine_Enabled"
-                ),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(
-                    $@"{LmKey}\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System\Audit",
-                    "ProcessCreationIncludeCmdLine_Enabled",
-                    1
-                ),
-            ],
-        },
-        new TweakDef
-        {
-            Id = "evtlog-set-crash-dump-mini",
-            Label = "Set Crash Dumps to Mini Dump",
-            Category = "Maintenance",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Configures Windows to create small memory dumps (mini dumps) instead of full dumps. Saves disk space.",
-            Tags = ["event-log", "crash", "dump", "disk-space", "diagnostics"],
-            RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Control\CrashControl"],
-            ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\CrashControl", "CrashDumpEnabled", 3)],
-            RemoveOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\CrashControl", "CrashDumpEnabled", 7)],
-            DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\CrashControl", "CrashDumpEnabled", 3)],
-        },
-        new TweakDef
-        {
-            Id = "evtlog-disable-auto-reboot-on-crash",
-            Label = "Disable Auto-Reboot on Blue Screen",
-            Category = "Maintenance",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Prevents automatic reboot after a BSOD so you can read the error message and stop code.",
-            Tags = ["event-log", "crash", "bsod", "diagnostics", "debug"],
-            RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Control\CrashControl"],
-            ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\CrashControl", "AutoReboot", 0)],
-            RemoveOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\CrashControl", "AutoReboot", 1)],
-            DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\CrashControl", "AutoReboot", 0)],
-        },
-        new TweakDef
-        {
-            Id = "evtlog-enable-verbose-boot-status",
-            Label = "Enable Verbose Boot Status Messages",
-            Category = "Maintenance",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Shows detailed status messages during boot/shutdown instead of generic 'Please wait'. Helps diagnose slow boot issues.",
-            Tags = ["event-log", "boot", "diagnostics", "verbose", "troubleshooting"],
-            RegistryKeys = [$@"{LmKey}\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System"],
-            ApplyOps = [RegOp.SetDword($@"{LmKey}\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "VerboseStatus", 1)],
-            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "VerboseStatus")],
-            DetectOps = [RegOp.CheckDword($@"{LmKey}\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "VerboseStatus", 1)],
         },
         new TweakDef
         {
@@ -2956,30 +2106,6 @@ internal static class EventLogging
         },
         new TweakDef
         {
-            Id = "evtlog-log-retention-overwrite",
-            Label = "Set Event Logs to Overwrite as Needed",
-            Category = "Maintenance",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Configures all event logs to overwrite old entries when full. Prevents log overflow causing service failures.",
-            Tags = ["event-log", "retention", "overwrite", "maintenance"],
-            RegistryKeys = [$@"{EventLogKey}\Application", $@"{EventLogKey}\System", $@"{EventLogKey}\Security"],
-            ApplyOps =
-            [
-                RegOp.SetDword($@"{EventLogKey}\Application", "Retention", 0),
-                RegOp.SetDword($@"{EventLogKey}\System", "Retention", 0),
-                RegOp.SetDword($@"{EventLogKey}\Security", "Retention", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue($@"{EventLogKey}\Application", "Retention"),
-                RegOp.DeleteValue($@"{EventLogKey}\System", "Retention"),
-                RegOp.DeleteValue($@"{EventLogKey}\Security", "Retention"),
-            ],
-            DetectOps = [RegOp.CheckDword($@"{EventLogKey}\Application", "Retention", 0)],
-        },
-        new TweakDef
-        {
             Id = "evtlog-disable-event-forwarding",
             Label = "Disable Windows Event Forwarding",
             Category = "Maintenance",
@@ -2994,48 +2120,6 @@ internal static class EventLogging
             [
                 RegOp.CheckDword($@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows\EventLog\EventForwarding\SubscriptionManager", "Enabled", 0),
             ],
-        },
-        new TweakDef
-        {
-            Id = "evtlog-set-app-log-32mb",
-            Label = "Set Application Event Log to 32 MB",
-            Category = "Maintenance",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Increases the Application event log maximum size to 32 MB for better diagnostic history.",
-            Tags = ["event-log", "application", "size", "diagnostics"],
-            RegistryKeys = [$@"{EventLogKey}\Application"],
-            ApplyOps = [RegOp.SetDword($@"{EventLogKey}\Application", "MaxSize", 33554432)],
-            RemoveOps = [RegOp.SetDword($@"{EventLogKey}\Application", "MaxSize", 20971520)],
-            DetectOps = [RegOp.CheckDword($@"{EventLogKey}\Application", "MaxSize", 33554432)],
-        },
-        new TweakDef
-        {
-            Id = "evtlog-set-system-log-32mb",
-            Label = "Set System Event Log to 32 MB",
-            Category = "Maintenance",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Increases the System event log maximum size to 32 MB for better diagnostic history.",
-            Tags = ["event-log", "system", "size", "diagnostics"],
-            RegistryKeys = [$@"{EventLogKey}\System"],
-            ApplyOps = [RegOp.SetDword($@"{EventLogKey}\System", "MaxSize", 33554432)],
-            RemoveOps = [RegOp.SetDword($@"{EventLogKey}\System", "MaxSize", 20971520)],
-            DetectOps = [RegOp.CheckDword($@"{EventLogKey}\System", "MaxSize", 33554432)],
-        },
-        new TweakDef
-        {
-            Id = "evtlog-set-security-log-64mb",
-            Label = "Set Security Event Log to 64 MB",
-            Category = "Maintenance",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Increases the Security event log maximum size to 64 MB. Critical for security auditing in hardened environments.",
-            Tags = ["event-log", "security", "size", "auditing", "hardening"],
-            RegistryKeys = [$@"{EventLogKey}\Security"],
-            ApplyOps = [RegOp.SetDword($@"{EventLogKey}\Security", "MaxSize", 67108864)],
-            RemoveOps = [RegOp.SetDword($@"{EventLogKey}\Security", "MaxSize", 20971520)],
-            DetectOps = [RegOp.CheckDword($@"{EventLogKey}\Security", "MaxSize", 67108864)],
         },
         new TweakDef
         {
@@ -3088,54 +2172,6 @@ internal static class EventLogging
         },
         new TweakDef
         {
-            Id = "evtlog-enable-command-line-auditing",
-            Label = "Enable Process Command-Line Auditing",
-            Category = "Maintenance",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Logs the full command line for process creation events (Event ID 4688). Critical for forensic analysis.",
-            Tags = ["event-log", "auditing", "command-line", "forensics", "security"],
-            RegistryKeys = [$@"{LmKey}\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System\Audit"],
-            ApplyOps =
-            [
-                RegOp.SetDword(
-                    $@"{LmKey}\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System\Audit",
-                    "ProcessCreationIncludeCmdLine_Enabled",
-                    1
-                ),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(
-                    $@"{LmKey}\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System\Audit",
-                    "ProcessCreationIncludeCmdLine_Enabled"
-                ),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(
-                    $@"{LmKey}\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System\Audit",
-                    "ProcessCreationIncludeCmdLine_Enabled",
-                    1
-                ),
-            ],
-        },
-        new TweakDef
-        {
-            Id = "evtlog-disable-srum",
-            Label = "Disable System Resource Usage Monitor (SRUM)",
-            Category = "Maintenance",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Disables SRUM which tracks application resource usage, network activity, and energy data.",
-            Tags = ["event-log", "srum", "tracking", "privacy", "performance"],
-            RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Services\SysMain"],
-            ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\SysMain", "Start", 4)],
-            RemoveOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\SysMain", "Start", 2)],
-            DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\SysMain", "Start", 4)],
-        },
-        new TweakDef
-        {
             Id = "evtlog-disable-application-log",
             Label = "Limit Application Event Log Size",
             Category = "Maintenance",
@@ -3158,24 +2194,6 @@ internal static class EventLogging
         },
         new TweakDef
         {
-            Id = "evtlog-disable-system-log",
-            Label = "Limit System Event Log Size",
-            Category = "Maintenance",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Sets the System event log maximum size to 1 MB and enables auto-overwrite.",
-            Tags = ["event-log", "disk", "maintenance"],
-            RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Services\EventLog\System"],
-            ApplyOps =
-            [
-                RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\EventLog\System", "MaxSize", 1048576),
-                RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\EventLog\System", "Retention", 0),
-            ],
-            RemoveOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\EventLog\System", "MaxSize", 20971520)],
-            DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\EventLog\System", "MaxSize", 1048576)],
-        },
-        new TweakDef
-        {
             Id = "evtlog-disable-security-audit-logon",
             Label = "Disable Logon Failure Audit",
             Category = "Maintenance",
@@ -3187,26 +2205,6 @@ internal static class EventLogging
             ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\Lsa", "AuditBaseObjects", 0)],
             RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SYSTEM\CurrentControlSet\Control\Lsa", "AuditBaseObjects")],
             DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\Lsa", "AuditBaseObjects", 0)],
-        },
-        new TweakDef
-        {
-            Id = "evtlog-disable-powershell-scriptblock-logging",
-            Label = "Disable PowerShell Script Block Logging",
-            Category = "Maintenance",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Disables PowerShell script block logging in the event log. Reduces privacy exposure from logged command content.",
-            Tags = ["event-log", "powershell", "privacy", "logging"],
-            RegistryKeys = [$@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows\PowerShell\ScriptBlockLogging"],
-            ApplyOps = [RegOp.SetDword($@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows\PowerShell\ScriptBlockLogging", "EnableScriptBlockLogging", 0)],
-            RemoveOps =
-            [
-                RegOp.DeleteValue($@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows\PowerShell\ScriptBlockLogging", "EnableScriptBlockLogging"),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword($@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows\PowerShell\ScriptBlockLogging", "EnableScriptBlockLogging", 0),
-            ],
         },
         new TweakDef
         {
@@ -3328,147 +2326,6 @@ internal static class ScheduledTasks
     [
         new TweakDef
         {
-            Id = "schtask-task-disable-maps-update",
-            Label = "Disable Offline Maps Auto-Update",
-            Category = "Maintenance",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Disables automatic download and update of offline maps data. Saves bandwidth and storage. Default: enabled. Recommended: 0 (disabled).",
-            Tags = ["tasks", "maps", "bandwidth", "storage"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Maps"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Maps", "AutoDownloadAndUpdateMapData", 0),
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Maps", "AllowUntriggeredNetworkTrafficOnSettingsPage", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Maps", "AutoDownloadAndUpdateMapData"),
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Maps", "AllowUntriggeredNetworkTrafficOnSettingsPage"),
-            ],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Maps", "AutoDownloadAndUpdateMapData", 0)],
-        },
-        new TweakDef
-        {
-            Id = "schtask-task-disable-disk-diagnostics",
-            Label = "Disable Disk Diagnostics Data Collection",
-            Category = "Maintenance",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables the disk diagnostic data collector scheduled task. Default: enabled. Recommended: 0 (disabled).",
-            Tags = ["tasks", "disk", "diagnostics", "telemetry"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WDI\{29689E29-2CE9-4751-B4FC-8EFF5066E3FD}"],
-            ApplyOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WDI\{29689E29-2CE9-4751-B4FC-8EFF5066E3FD}",
-                    "ScenarioExecutionEnabled",
-                    0
-                ),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WDI\{29689E29-2CE9-4751-B4FC-8EFF5066E3FD}",
-                    "ScenarioExecutionEnabled"
-                ),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WDI\{29689E29-2CE9-4751-B4FC-8EFF5066E3FD}",
-                    "ScenarioExecutionEnabled",
-                    0
-                ),
-            ],
-        },
-        new TweakDef
-        {
-            Id = "schtask-disable-ceip",
-            Label = "Disable CEIP Data Collection (Policy)",
-            Category = "Maintenance",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Disables Customer Experience Improvement Program data collection via policy. Stops CEIP telemetry scheduled tasks. Default: Enabled. Recommended: Disabled.",
-            Tags = ["tasks", "ceip", "telemetry", "policy"],
-            RegistryKeys =
-            [
-                @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\SQMClient\Windows",
-                @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\SQMClient",
-            ],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\SQMClient\Windows", "CEIPEnable", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\SQMClient\Windows", "CEIPEnable")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\SQMClient\Windows", "CEIPEnable", 0)],
-        },
-        new TweakDef
-        {
-            Id = "schtask-disable-disk-diag",
-            Label = "Disable Disk Diagnostics Data Collector",
-            Category = "Maintenance",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Disables the Disk Diagnostics data collector scheduled task. Stops disk telemetry reporting to Microsoft. Default: Enabled. Recommended: Disabled.",
-            Tags = ["tasks", "disk", "diagnostics", "telemetry"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WDI\{29689E29-2CE9-4751-B4FC-8EFF5066E3FD}"],
-            ApplyOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WDI\{29689E29-2CE9-4751-B4FC-8EFF5066E3FD}",
-                    "ScenarioExecutionEnabled",
-                    0
-                ),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WDI\{29689E29-2CE9-4751-B4FC-8EFF5066E3FD}",
-                    "ScenarioExecutionEnabled"
-                ),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WDI\{29689E29-2CE9-4751-B4FC-8EFF5066E3FD}",
-                    "ScenarioExecutionEnabled",
-                    0
-                ),
-            ],
-        },
-        new TweakDef
-        {
-            Id = "schtask-disable-mrt-update",
-            Label = "Disable MRT Automatic Update via WU",
-            Category = "Maintenance",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description =
-                "Prevents the Malicious Software Removal Tool from being offered through Windows Update Automatic Updates. Default: Offered. Recommended: Blocked for controlled environments.",
-            Tags = ["tasks", "mrt", "malware", "update", "wu"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\MRT"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\MRT", "DontOfferThroughWUAU", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\MRT", "DontOfferThroughWUAU")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\MRT", "DontOfferThroughWUAU", 1)],
-        },
-        new TweakDef
-        {
-            Id = "schtask-disable-smartscreen",
-            Label = "Disable SmartScreen Background Updates",
-            Category = "Maintenance",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description =
-                "Disables Windows SmartScreen via policy, stopping background filter data updates. Reduces network calls for reputation checking. Default: Enabled. Recommended: Disabled.",
-            Tags = ["tasks", "smartscreen", "filter", "update", "privacy"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "EnableSmartScreen", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "EnableSmartScreen")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "EnableSmartScreen", 0)],
-        },
-        new TweakDef
-        {
             Id = "schtask-disable-disk-diagnostics",
             Label = "Disable Disk Diagnostic Scheduled Task",
             Category = "Maintenance",
@@ -3556,30 +2413,6 @@ internal static class ScheduledTasks
         },
         new TweakDef
         {
-            Id = "schtask-task-disable-diagtrack-autologger",
-            Label = "Disable DiagTrack AutoLogger Task",
-            Category = "Maintenance",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Disables the DiagTrack AutoLogger ETW session that collects telemetry data in the background. Reduces CPU and I/O overhead. Default: enabled.",
-            Tags = ["scheduled-tasks", "diagtrack", "autologger", "telemetry"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\WMI\Autologger\AutoLogger-Diagtrack-Listener"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\WMI\Autologger\AutoLogger-Diagtrack-Listener", "Start", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\WMI\Autologger\AutoLogger-Diagtrack-Listener", "Start", 1),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\WMI\Autologger\AutoLogger-Diagtrack-Listener", "Start", 0),
-            ],
-        },
-        new TweakDef
-        {
             Id = "schtask-task-disable-diagtrack-service",
             Label = "Disable Connected User Experiences Service",
             Category = "Maintenance",
@@ -3592,21 +2425,6 @@ internal static class ScheduledTasks
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\DiagTrack", "Start", 4)],
             RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\DiagTrack", "Start", 2)],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\DiagTrack", "Start", 4)],
-        },
-        new TweakDef
-        {
-            Id = "schtask-task-disable-maintenance-wakeup",
-            Label = "Disable Maintenance Wake Timer",
-            Category = "Maintenance",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Prevents automatic maintenance from waking the computer from sleep. Stops surprise middle-of-night wake events. Default: enabled.",
-            Tags = ["scheduled-tasks", "maintenance", "wake", "sleep"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Schedule\Maintenance"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Schedule\Maintenance", "WakeUp", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Schedule\Maintenance", "WakeUp", 1)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Schedule\Maintenance", "WakeUp", 0)],
         },
         new TweakDef
         {
@@ -3720,21 +2538,6 @@ internal static class ScheduledTasks
         },
         new TweakDef
         {
-            Id = "schtask-disable-inventory",
-            Label = "Disable Application Compatibility Inventory Collection",
-            Category = "Maintenance",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Disables the scheduled AppCompat inventory collection task that catalogues installed applications. Reduces background CPU and disk usage from inventory scans. Default: enabled.",
-            Tags = ["scheduled-tasks", "compat", "inventory", "telemetry"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppCompat"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppCompat", "DisableInventory", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppCompat", "DisableInventory")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppCompat", "DisableInventory", 1)],
-        },
-        new TweakDef
-        {
             Id = "schtask-disable-winsat-rating",
             Label = "Block Windows Experience Index (WinSAT) Task",
             Category = "Maintenance",
@@ -3762,42 +2565,6 @@ internal static class ScheduledTasks
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AutoPlay", "DisableAutoplay", 1)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AutoPlay", "DisableAutoplay")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AutoPlay", "DisableAutoplay", 1)],
-        },
-        new TweakDef
-        {
-            Id = "schtask-disable-fault-tolerant-heap",
-            Label = "Disable Fault Tolerant Heap (FTH)",
-            Category = "Maintenance",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description =
-                "Disables the Fault Tolerant Heap (FTH) service which monitors crashing applications and silently patches their heap allocations to prevent re-crashes. Removes memory overhead and startup interference from FTH monitoring. Default: enabled.",
-            Tags = ["scheduled-tasks", "fth", "heap", "performance"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\FTH"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\FTH", "Enabled", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\FTH", "Enabled", 1)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\FTH", "Enabled", 0)],
-        },
-        new TweakDef
-        {
-            Id = "schtask-disable-spotlight-features",
-            Label = "Disable All Windows Spotlight Features (GPO)",
-            Category = "Maintenance",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Disables all Windows Spotlight features globally via Group Policy. Prevents Spotlight from running background tasks to fetch and rotate AI-curated images, tips, and ads. Default: enabled for eligible Windows editions.",
-            Tags = ["scheduled-tasks", "spotlight", "ai", "gpo", "privacy"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CloudContent"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CloudContent", "DisableWindowsSpotlightFeatures", 1)],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CloudContent", "DisableWindowsSpotlightFeatures"),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CloudContent", "DisableWindowsSpotlightFeatures", 1),
-            ],
         },
     ];
 }
@@ -4607,53 +3374,9 @@ internal static class PolicyUpdate
             // ── merged from: WindowsUpdate.cs ───────────────────────────────────────
             new TweakDef
             {
-                Id = "wu-defer-quality-updates",
-                Label = "Defer Quality Updates (30 days)",
-                Category = "Windows Update",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                Description = "Defers quality (security/bug-fix) updates by 30 days.",
-                Tags = ["update", "deferral"],
-                RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate"],
-                ApplyOps =
-                [
-                    RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate", "DeferQualityUpdates", 1),
-                    RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate", "DeferQualityUpdatesPeriodInDays", 30),
-                ],
-                RemoveOps =
-                [
-                    RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate", "DeferQualityUpdates"),
-                    RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate", "DeferQualityUpdatesPeriodInDays"),
-                ],
-                DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate", "DeferQualityUpdates", 1)],
-            },
-            new TweakDef
-            {
-                Id = "wu-defer-feature-updates",
-                Label = "Defer Feature Updates (90 days)",
-                Category = "Windows Update",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                Description = "Defers feature (major version) updates by 90 days.",
-                Tags = ["update", "deferral"],
-                RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate"],
-                ApplyOps =
-                [
-                    RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate", "DeferFeatureUpdates", 1),
-                    RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate", "DeferFeatureUpdatesPeriodInDays", 90),
-                ],
-                RemoveOps =
-                [
-                    RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate", "DeferFeatureUpdates"),
-                    RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate", "DeferFeatureUpdatesPeriodInDays"),
-                ],
-                DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate", "DeferFeatureUpdates", 1)],
-            },
-            new TweakDef
-            {
                 Id = "wu-no-auto-restart",
                 Label = "Disable Forced Auto-Restart",
-                Category = "Windows Update",
+                Category = "Maintenance",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 Description = "Prevents Windows from automatically restarting while a user is logged in after update installation.",
@@ -4674,31 +3397,9 @@ internal static class PolicyUpdate
             },
             new TweakDef
             {
-                Id = "wu-update-notify-only",
-                Label = "Notify-Only Updates (No Auto-Install)",
-                Category = "Windows Update",
-                NeedsAdmin = true,
-                CorpSafe = false,
-                Description = "Sets Windows Update to notify before downloading, giving you full control over update timing.",
-                Tags = ["update", "control"],
-                RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU"],
-                ApplyOps =
-                [
-                    RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU", "AUOptions", 2),
-                    RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU", "NoAutoUpdate", 0),
-                ],
-                RemoveOps =
-                [
-                    RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU", "AUOptions", 3),
-                    RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU", "NoAutoUpdate"),
-                ],
-                DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU", "AUOptions", 2)],
-            },
-            new TweakDef
-            {
                 Id = "wu-set-active-hours-au",
                 Label = "Set Active Hours (8 AM - 11 PM)",
-                Category = "Windows Update",
+                Category = "Maintenance",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 Description = "Sets Windows Update active hours to 8 AM - 11 PM to prevent restart during work.",
@@ -4720,72 +3421,9 @@ internal static class PolicyUpdate
             },
             new TweakDef
             {
-                Id = "wu-target-release-version",
-                Label = "Pin to Windows 11 24H2",
-                Category = "Windows Update",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                Description = "Pins the device to Windows 11 24H2 to prevent unwanted feature updates.",
-                Tags = ["update", "feature", "pin", "24H2"],
-                RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate"],
-                ApplyOps =
-                [
-                    RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate", "TargetReleaseVersion", 1),
-                    RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate", "TargetReleaseVersionInfo", "24H2"),
-                    RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate", "ProductVersion", "Windows 11"),
-                ],
-                RemoveOps =
-                [
-                    RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate", "TargetReleaseVersion"),
-                    RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate", "TargetReleaseVersionInfo"),
-                    RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate", "ProductVersion"),
-                ],
-                DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate", "TargetReleaseVersion", 1)],
-            },
-            new TweakDef
-            {
-                Id = "wu-disable-do-upload",
-                Label = "Disable Delivery Optimization Upload",
-                Category = "Windows Update",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                Description =
-                    "Disables Delivery Optimization peer-to-peer upload. Prevents your PC from serving update files to other PCs. Sets upload bandwidth to zero. Default: Unlimited. Recommended: Disabled.",
-                Tags = ["update", "delivery-optimization", "bandwidth", "performance"],
-                RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DeliveryOptimization"],
-                ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DeliveryOptimization", "DODownloadMode", 0)],
-                RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DeliveryOptimization", "DODownloadMode")],
-                DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DeliveryOptimization", "DODownloadMode", 0)],
-            },
-            new TweakDef
-            {
-                Id = "wu-disable-driver-updates",
-                Label = "Disable Driver Updates via Windows Update",
-                Category = "Windows Update",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                Description =
-                    "Excludes driver updates from Windows Update quality updates. Default: Included. Recommended: Excluded for driver stability.",
-                Tags = ["update", "driver", "exclude", "stability"],
-                RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate"],
-                ApplyOps =
-                [
-                    RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate", "ExcludeWUDriversInQualityUpdate", 1),
-                ],
-                RemoveOps =
-                [
-                    RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate", "ExcludeWUDriversInQualityUpdate"),
-                ],
-                DetectOps =
-                [
-                    RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate", "ExcludeWUDriversInQualityUpdate", 1),
-                ],
-            },
-            new TweakDef
-            {
                 Id = "wu-block-driver-search",
                 Label = "Block Driver Search via Windows Update",
-                Category = "Windows Update",
+                Category = "Maintenance",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 Description =
@@ -4803,7 +3441,7 @@ internal static class PolicyUpdate
             {
                 Id = "wu-disable-os-upgrade",
                 Label = "Disable Windows OS Upgrade via Update",
-                Category = "Windows Update",
+                Category = "Maintenance",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 Description =
@@ -4818,7 +3456,7 @@ internal static class PolicyUpdate
             {
                 Id = "wu-disable-safeguard-hold",
                 Label = "Disable Windows Update Safeguard Holds",
-                Category = "Windows Update",
+                Category = "Maintenance",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 Description =
@@ -4833,7 +3471,7 @@ internal static class PolicyUpdate
             {
                 Id = "wu-disable-optional-updates",
                 Label = "Disable Auto-Install of Optional Updates",
-                Category = "Windows Update",
+                Category = "Maintenance",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 Description =
@@ -4854,7 +3492,7 @@ internal static class PolicyUpdate
             {
                 Id = "wu-set-active-hours-8-20",
                 Label = "Set Windows Update Active Hours (8 AM – 8 PM)",
-                Category = "Windows Update",
+                Category = "Maintenance",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 Description = "Sets Windows Update active hours to 8 AM – 8 PM. No restart prompts during this window. Default: auto.",
@@ -4874,32 +3512,9 @@ internal static class PolicyUpdate
             },
             new TweakDef
             {
-                Id = "wu-defer-quality-updates-7days",
-                Label = "Defer Quality Updates by 7 Days",
-                Category = "Windows Update",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                Description = "Defers quality (security/bug fix) updates by 7 days. Gives time for known issues to surface. Default: 0 days.",
-                Tags = ["update", "defer", "quality", "days"],
-                RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate"],
-                ApplyOps =
-                [
-                    RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate", "DeferQualityUpdatesPeriodInDays", 7),
-                ],
-                RemoveOps =
-                [
-                    RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate", "DeferQualityUpdatesPeriodInDays"),
-                ],
-                DetectOps =
-                [
-                    RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate", "DeferQualityUpdatesPeriodInDays", 7),
-                ],
-            },
-            new TweakDef
-            {
                 Id = "wu-disable-seeker-updates",
                 Label = "Disable Optional Update Seeker",
-                Category = "Windows Update",
+                Category = "Maintenance",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 Description = "Prevents Windows from seeking optional quality updates. Only mandatory updates are installed. Default: seeks all.",
@@ -4913,7 +3528,7 @@ internal static class PolicyUpdate
             {
                 Id = "wu-disable-update-notifications",
                 Label = "Disable Update Notifications",
-                Category = "Windows Update",
+                Category = "Maintenance",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 Description =
@@ -4934,7 +3549,7 @@ internal static class PolicyUpdate
             {
                 Id = "wu-disable-update-orchestrator",
                 Label = "Disable Update Orchestrator Service",
-                Category = "Windows Update",
+                Category = "Maintenance",
                 NeedsAdmin = true,
                 CorpSafe = false,
                 Description =
@@ -4950,7 +3565,7 @@ internal static class PolicyUpdate
             {
                 Id = "wu-disable-wus-medic",
                 Label = "Disable Windows Update Medic Service",
-                Category = "Windows Update",
+                Category = "Maintenance",
                 NeedsAdmin = true,
                 CorpSafe = false,
                 Description =
@@ -4964,24 +3579,9 @@ internal static class PolicyUpdate
             },
             new TweakDef
             {
-                Id = "wu-disable-automatic-updates",
-                Label = "Disable Automatic Update Downloads",
-                Category = "Windows Update",
-                NeedsAdmin = true,
-                CorpSafe = false,
-                Description =
-                    "Prevents Windows Update from automatically downloading updates. Updates will still be detected but must be manually approved and installed. Default: auto-download enabled.",
-                Tags = ["windows-update", "automatic", "download", "control"],
-                RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU"],
-                ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU", "NoAutoUpdate", 1)],
-                RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU", "NoAutoUpdate")],
-                DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU", "NoAutoUpdate", 1)],
-            },
-            new TweakDef
-            {
                 Id = "wu-set-schedule-day-saturday",
                 Label = "Schedule Updates for Saturday Installation",
-                Category = "Windows Update",
+                Category = "Maintenance",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 Description =
@@ -5004,24 +3604,9 @@ internal static class PolicyUpdate
             },
             new TweakDef
             {
-                Id = "wu-disable-store-app-auto-updates",
-                Label = "Disable Microsoft Store App Auto-Updates",
-                Category = "Windows Update",
-                NeedsAdmin = true,
-                CorpSafe = false,
-                Description =
-                    "Prevents the Microsoft Store from automatically updating installed applications in the background. You retain control over when app updates are applied.",
-                Tags = ["windows-update", "store", "apps", "auto-update"],
-                RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsStore"],
-                ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsStore", "AutoDownload", 2)],
-                RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsStore", "AutoDownload")],
-                DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsStore", "AutoDownload", 2)],
-            },
-            new TweakDef
-            {
                 Id = "wu-set-update-service-manual",
                 Label = "Set Windows Update Service to Manual Start",
-                Category = "Windows Update",
+                Category = "Maintenance",
                 NeedsAdmin = true,
                 CorpSafe = false,
                 Description =
@@ -5036,7 +3621,7 @@ internal static class PolicyUpdate
             {
                 Id = "wu-require-admin-for-updates",
                 Label = "Require Admin Approval for Update Installation",
-                Category = "Windows Update",
+                Category = "Maintenance",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 Description =
@@ -5051,7 +3636,7 @@ internal static class PolicyUpdate
             {
                 Id = "wu-disable-metered-update-download",
                 Label = "Block Updates on Metered Connections",
-                Category = "Windows Update",
+                Category = "Maintenance",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 Description =
@@ -5079,7 +3664,7 @@ internal static class PolicyUpdate
             {
                 Id = "wu-disable-reboot-required-notification",
                 Label = "Disable Post-Update Reboot Notifications",
-                Category = "Windows Update",
+                Category = "Maintenance",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 Description =
@@ -5101,24 +3686,9 @@ internal static class PolicyUpdate
             },
             new TweakDef
             {
-                Id = "wu-set-feature-update-channel-general",
-                Label = "Set Windows Update Channel to General Availability",
-                Category = "Windows Update",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                Description =
-                    "Pins the Windows Update servicing channel to General Availability / Semi-Annual Channel, avoiding early feature updates that may be less stable.",
-                Tags = ["windows-update", "channel", "feature", "stable", "semi-annual"],
-                RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate"],
-                ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate", "BranchReadinessLevel", 16)],
-                RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate", "BranchReadinessLevel")],
-                DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate", "BranchReadinessLevel", 16)],
-            },
-            new TweakDef
-            {
                 Id = "wu-disable-third-party-preview",
                 Label = "Disable Third-Party Windows Update Preview Consent",
-                Category = "Windows Update",
+                Category = "Maintenance",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 Description =
@@ -5148,7 +3718,7 @@ internal static class PolicyUpdate
             {
                 Id = "cbsupd-enable-auto-repair",
                 Label = "Enable Automatic Component-Based Servicing Repair",
-                Category = "Windows Update",
+                Category = "Maintenance",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -5165,7 +3735,7 @@ internal static class PolicyUpdate
             {
                 Id = "cbsupd-enforce-component-hash-verification",
                 Label = "Enforce Cryptographic Hash Verification for CBS Components",
-                Category = "Windows Update",
+                Category = "Maintenance",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 5,
@@ -5182,7 +3752,7 @@ internal static class PolicyUpdate
             {
                 Id = "cbsupd-restrict-cbs-offline-servicing",
                 Label = "Restrict CBS Offline Servicing to Authorized Administrators",
-                Category = "Windows Update",
+                Category = "Maintenance",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -5199,7 +3769,7 @@ internal static class PolicyUpdate
             {
                 Id = "cbsupd-enable-cbs-cleanup-scheduled",
                 Label = "Enable Scheduled Cleanup of Superseded CBS Components",
-                Category = "Windows Update",
+                Category = "Maintenance",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -5216,7 +3786,7 @@ internal static class PolicyUpdate
             {
                 Id = "cbsupd-enforce-manifest-signing",
                 Label = "Enforce Digital Signature on CBS Component Manifests",
-                Category = "Windows Update",
+                Category = "Maintenance",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 5,
@@ -5233,7 +3803,7 @@ internal static class PolicyUpdate
             {
                 Id = "cbsupd-enable-cbs-verbose-logging",
                 Label = "Enable Verbose CBS Logging for Update Failure Diagnostics",
-                Category = "Windows Update",
+                Category = "Maintenance",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -5250,7 +3820,7 @@ internal static class PolicyUpdate
             {
                 Id = "cbsupd-set-cbs-store-health-check-interval",
                 Label = "Set Scheduled Interval for CBS Component Store Health Verification",
-                Category = "Windows Update",
+                Category = "Maintenance",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -5267,7 +3837,7 @@ internal static class PolicyUpdate
             {
                 Id = "cbsupd-block-unsigned-packages",
                 Label = "Block Installation of Unsigned or Untrusted CBS Packages",
-                Category = "Windows Update",
+                Category = "Maintenance",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 5,
@@ -5284,7 +3854,7 @@ internal static class PolicyUpdate
             {
                 Id = "cbsupd-restrict-cbs-to-trusted-sources",
                 Label = "Restrict CBS Package Sources to Microsoft Update and WSUS Only",
-                Category = "Windows Update",
+                Category = "Maintenance",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -5301,7 +3871,7 @@ internal static class PolicyUpdate
             {
                 Id = "cbsupd-enable-servicing-stack-updates-priority",
                 Label = "Enable Priority Installation of Servicing Stack Updates",
-                Category = "Windows Update",
+                Category = "Maintenance",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 4,
@@ -5328,7 +3898,7 @@ internal static class PolicyUpdate
                 {
                     Id = "wuarstrt-set-engaged-restart-deadline-7days",
                     Label = "WU Auto-Restart: Set Engaged Restart Deadline to 7 Days",
-                    Category = "Windows Update",
+                    Category = "Maintenance",
                     Description =
                         "Sets EngagedRestartDeadline=7 in WU policy. After a quality update is downloaded, Windows enters 'engaged restart' mode where users are repeatedly notified. "
                         + "This value sets the absolute deadline after which Windows will force a restart regardless of user activity. "
@@ -5348,7 +3918,7 @@ internal static class PolicyUpdate
                 {
                     Id = "wuarstrt-set-engaged-restart-snooze-3days",
                     Label = "WU Auto-Restart: Set Engaged Restart Snooze Interval to 3 Days",
-                    Category = "Windows Update",
+                    Category = "Maintenance",
                     Description =
                         "Sets EngagedRestartSnoozeSchedule=3 in WU policy. Controls how frequently Windows re-displays the engaged restart notification after a user dismisses it. "
                         + "Value of 3 means the reminder returns every 3 days, ensuring users don't forget a pending restart while avoiding daily interruptions that lead to notification fatigue and dismissal without action.",
@@ -5366,7 +3936,7 @@ internal static class PolicyUpdate
                 {
                     Id = "wuarstrt-set-engaged-restart-transition-2days",
                     Label = "WU Auto-Restart: Set Engaged Restart Transition Schedule to 2 Days",
-                    Category = "Windows Update",
+                    Category = "Maintenance",
                     Description =
                         "Sets EngagedRestartTransitionSchedule=2 in WU policy. Controls how many days after an update becomes ready-to-install that Windows transitions from passive notifications to the more prominent 'engaged restart' mode. "
                         + "Setting this to 2 days means the first two days show soft notifications, after which the full engaged restart UI (with deadline counter) takes over.",
@@ -5384,7 +3954,7 @@ internal static class PolicyUpdate
                 {
                     Id = "wuarstrt-set-quality-update-deadline-3days",
                     Label = "WU Auto-Restart: Set Quality Update Install Deadline to 3 Days",
-                    Category = "Windows Update",
+                    Category = "Maintenance",
                     Description =
                         "Sets ConfigureDeadlineForQualityUpdates=3 in WU policy. Establishes a hard deadline of 3 days from when a quality (security + non-security) update is offered before Windows must restart to install it. "
                         + "For security teams managing patch compliance under CIS or NIST 800-53 patch SLAs, a 3-day restart deadline for quality updates ensures critical CVE patches are active within the compliance window.",
@@ -5402,7 +3972,7 @@ internal static class PolicyUpdate
                 {
                     Id = "wuarstrt-set-feature-update-deadline-14days",
                     Label = "WU Auto-Restart: Set Feature Update Install Deadline to 14 Days",
-                    Category = "Windows Update",
+                    Category = "Maintenance",
                     Description =
                         "Sets ConfigureDeadlineForFeatureUpdates=14 in WU policy. Establishes a 14-day hard deadline from when a feature update is offered before Windows must restart to complete installation. "
                         + "Feature updates are far more disruptive than quality updates (longer restart time, possible app compatibility breaks), so a longer 14-day window gives users and IT departments time to validate and prepare.",
@@ -5420,7 +3990,7 @@ internal static class PolicyUpdate
                 {
                     Id = "wuarstrt-set-deadline-grace-period-2days",
                     Label = "WU Auto-Restart: Set Post-Deadline Grace Period to 2 Days",
-                    Category = "Windows Update",
+                    Category = "Maintenance",
                     Description =
                         "Sets ConfigureDeadlineGracePeriod=2 in WU policy. After the restart deadline passes, this grace period gives users an additional 2 days before the machine will restart outside of active hours. "
                         + "The grace period prevents the deadline enforcement from causing a disruptive forced restart mid-workday as soon as the deadline hits. The machine will restart during the next scheduled non-active hours window within the grace period.",
@@ -5438,7 +4008,7 @@ internal static class PolicyUpdate
                 {
                     Id = "wuarstrt-disable-no-auto-reboot-after-deadline",
                     Label = "WU Auto-Restart: Allow Auto-Reboot After Deadline Expires",
-                    Category = "Windows Update",
+                    Category = "Maintenance",
                     Description =
                         "Sets ConfigureDeadlineNoAutoReboot=0 in WU policy. Ensures that once the deadline and grace period pass, Windows WILL automatically restart to apply the update. "
                         + "Value=0 means no moratorium on auto-reboot after the deadline. This overrides any 'NoAutoRebootWithLoggedOnUsers' policy for machines that have exceeded their deadline, ensuring patching is never blocked indefinitely by a persistent logged-on session.",
@@ -5456,7 +4026,7 @@ internal static class PolicyUpdate
                 {
                     Id = "wuarstrt-set-restart-warning-4hours",
                     Label = "WU Auto-Restart: Set Pre-Restart Warning to 4 Hours",
-                    Category = "Windows Update",
+                    Category = "Maintenance",
                     Description =
                         "Sets ScheduleRestartWarning=4 in WU policy. When Windows schedules an automatic restart, this setting controls how many hours in advance users receive a prominent restart warning notification. "
                         + "A 4-hour advance warning gives users time to save work, close applications, and plan the restart, significantly reducing data loss from unexpected restarts.",
@@ -5474,7 +4044,7 @@ internal static class PolicyUpdate
                 {
                     Id = "wuarstrt-enable-auto-restart-required-notification",
                     Label = "WU Auto-Restart: Enable Mandatory Restart Required Notification",
-                    Category = "Windows Update",
+                    Category = "Maintenance",
                     Description =
                         "Sets SetAutoRestartRequiredNotificationDismissal=1 in WU policy. Configures Windows to show a non-dismissable restart required notification when a patch deadline is imminent. "
                         + "Without this, users can indefinitely dismiss restart prompts. With value=1, close-to-deadline notifications must be acknowledged with a concrete restart time selection rather than a simple dismiss.",
@@ -5487,25 +4057,6 @@ internal static class PolicyUpdate
                     ApplyOps = [RegOp.SetDword(Key, "SetAutoRestartRequiredNotificationDismissal", 1)],
                     RemoveOps = [RegOp.DeleteValue(Key, "SetAutoRestartRequiredNotificationDismissal")],
                     DetectOps = [RegOp.CheckDword(Key, "SetAutoRestartRequiredNotificationDismissal", 1)],
-                },
-                new TweakDef
-                {
-                    Id = "wuarstrt-enable-auto-restart-notification-config",
-                    Label = "WU Auto-Restart: Enable Automatic Restart Notification Banner",
-                    Category = "Windows Update",
-                    Description =
-                        "Sets SetAutoRestartNotificationConfig=1 in WU policy. Enables the automatic restart notification configuration, which shows a system tray and action centre banner when a pending restart is required. "
-                        + "Without this setting the notification may be suppressed in locked-down enterprise notification policies. Enabling it ensures users are always informed of pending update restarts even in notification-restricted environments.",
-                    Tags = ["windows-update", "restart", "notification", "banner", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 3,
-                    SafetyRating = 5,
-                    ImpactNote =
-                        "Enables restart notification banner in action centre; ensures user visibility of pending restarts in locked environments.",
-                    ApplyOps = [RegOp.SetDword(Key, "SetAutoRestartNotificationConfig", 1)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "SetAutoRestartNotificationConfig")],
-                    DetectOps = [RegOp.CheckDword(Key, "SetAutoRestartNotificationConfig", 1)],
                 },
             ];
     }
@@ -5520,51 +4071,9 @@ internal static class PolicyUpdate
         [
             new TweakDef
             {
-                Id = "pauseupd-defer-feature-30days",
-                Label = "Windows Update Pause: Defer Feature Updates 30 Days",
-                Category = "Windows Update",
-                Description =
-                    "Defers Windows feature updates by 30 days beyond their general availability date. "
-                    + "Deferral gives IT administrators time to test compatibility before feature updates reach production endpoints. "
-                    + "30 days is the minimum recommended deferral for enterprise deployments and allows Microsoft to identify critical regressions first. "
-                    + "Removing this policy re-enables immediate feature update availability.",
-                Tags = ["windows-update", "defer", "feature-update", "enterprise", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                RegistryKeys = [PauseKey],
-                ApplyOps = [RegOp.SetDword(PauseKey, "DeferFeatureUpdatesPeriodInDays", 30)],
-                RemoveOps = [RegOp.DeleteValue(PauseKey, "DeferFeatureUpdatesPeriodInDays")],
-                DetectOps = [RegOp.CheckDword(PauseKey, "DeferFeatureUpdatesPeriodInDays", 30)],
-                ImpactScore = 4,
-                SafetyRating = 5,
-                ImpactNote = "Delays feature updates by 30 days; reduces exposure to day-zero feature regressions.",
-            },
-            new TweakDef
-            {
-                Id = "pauseupd-defer-quality-7days",
-                Label = "Windows Update Pause: Defer Quality Updates 7 Days",
-                Category = "Windows Update",
-                Description =
-                    "Defers Windows quality (security patch) updates by 7 days, allowing time for emergency patch retraction. "
-                    + "Quality updates occasionally introduce regressions; a 7-day deferral window reduces blast radius from faulty patches. "
-                    + "7 days is short enough to maintain adequate security posture while providing a testing buffer. "
-                    + "Removing this policy makes quality updates available immediately upon release.",
-                Tags = ["windows-update", "defer", "quality-update", "patch", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                RegistryKeys = [PauseKey],
-                ApplyOps = [RegOp.SetDword(PauseKey, "DeferQualityUpdatesPeriodInDays", 7)],
-                RemoveOps = [RegOp.DeleteValue(PauseKey, "DeferQualityUpdatesPeriodInDays")],
-                DetectOps = [RegOp.CheckDword(PauseKey, "DeferQualityUpdatesPeriodInDays", 7)],
-                ImpactScore = 4,
-                SafetyRating = 4,
-                ImpactNote = "Delays security patches by 7 days; provides testing buffer without excessive security lag.",
-            },
-            new TweakDef
-            {
                 Id = "pauseupd-disable-auto-install-on-shutdown",
                 Label = "Windows Update Pause: Disable Auto-Install Updates on Shutdown",
-                Category = "Windows Update",
+                Category = "Maintenance",
                 Description =
                     "Prevents Windows Update from automatically installing updates when the user initiates a shutdown. "
                     + "Auto-install-on-shutdown can extend shutdown times and cause unexpected restarts, especially on laptops before meetings. "
@@ -5585,7 +4094,7 @@ internal static class PolicyUpdate
             {
                 Id = "pauseupd-set-active-hours-start",
                 Label = "Windows Update Pause: Set Active Hours Start (8 AM)",
-                Category = "Windows Update",
+                Category = "Maintenance",
                 Description =
                     "Configures the Windows Update active hours start time to 8 AM, preventing reboots for updates during business hours. "
                     + "Active hours protect users from unexpected reboots during the configured working hours window. "
@@ -5606,7 +4115,7 @@ internal static class PolicyUpdate
             {
                 Id = "pauseupd-set-active-hours-end",
                 Label = "Windows Update Pause: Set Active Hours End (6 PM)",
-                Category = "Windows Update",
+                Category = "Maintenance",
                 Description =
                     "Configures the Windows Update active hours end time to 6 PM (18:00), ensuring reboots cannot occur during standard business hours. "
                     + "With start fixed at 8 AM and end at 6 PM, the full working day is protected from forced reboots. "
@@ -5625,30 +4134,9 @@ internal static class PolicyUpdate
             },
             new TweakDef
             {
-                Id = "pauseupd-block-driver-updates",
-                Label = "Windows Update Pause: Block Driver Updates via Windows Update",
-                Category = "Windows Update",
-                Description =
-                    "Prevents Windows Update from automatically downloading and installing driver updates. "
-                    + "Automatic driver updates can replace validated enterprise drivers with incompatible versions, causing hardware failures or BSODs. "
-                    + "Driver management should be handled by IT through validated packages rather than Windows Update. "
-                    + "Removing this policy re-enables automatic driver updates through Windows Update.",
-                Tags = ["windows-update", "driver", "exclusion", "enterprise", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                RegistryKeys = [PauseKey],
-                ApplyOps = [RegOp.SetDword(PauseKey, "ExcludeWUDriversInQualityUpdate", 1)],
-                RemoveOps = [RegOp.DeleteValue(PauseKey, "ExcludeWUDriversInQualityUpdate")],
-                DetectOps = [RegOp.CheckDword(PauseKey, "ExcludeWUDriversInQualityUpdate", 1)],
-                ImpactScore = 4,
-                SafetyRating = 4,
-                ImpactNote = "Blocks automatic driver updates via WU; prevents validated drivers being silently replaced.",
-            },
-            new TweakDef
-            {
                 Id = "pauseupd-disable-upgrade-notifications",
                 Label = "Windows Update Pause: Disable Upgrade Notification Toasts",
-                Category = "Windows Update",
+                Category = "Maintenance",
                 Description =
                     "Suppresses the Windows Update toast notifications that prompt users to restart for pending updates. "
                     + "In a managed environment, restart timing is controlled by IT policy — user-visible prompts are redundant and disruptive. "
@@ -5669,7 +4157,7 @@ internal static class PolicyUpdate
             {
                 Id = "pauseupd-set-update-detection-frequency",
                 Label = "Windows Update Pause: Set Update Detection Frequency (22 Hours)",
-                Category = "Windows Update",
+                Category = "Maintenance",
                 Description =
                     "Sets the Windows Update service to check for updates every 22 hours instead of the default automatic random interval. "
                     + "A predictable 22-hour check interval prevents multiple machines on the same network from surging the update server simultaneously. "
@@ -5690,7 +4178,7 @@ internal static class PolicyUpdate
             {
                 Id = "pauseupd-allow-mu-updates",
                 Label = "Windows Update Pause: Allow Microsoft Update for Other Products",
-                Category = "Windows Update",
+                Category = "Maintenance",
                 Description =
                     "Configures Windows Update to also deliver updates for other Microsoft products (Office, .NET, Visual C++) alongside OS patches. "
                     + "Receiving all Microsoft product updates through a single channel simplifies patch management and reduces the attack surface. "
@@ -5711,7 +4199,7 @@ internal static class PolicyUpdate
             {
                 Id = "pauseupd-enforce-restart-deadline",
                 Label = "Windows Update Pause: Enforce 72-Hour Restart Deadline",
-                Category = "Windows Update",
+                Category = "Maintenance",
                 Description =
                     "Sets a 72-hour mandatory restart deadline after Windows Update installs updates requiring a reboot. "
                     + "Without a deadline, users can indefinitely postpone required restarts, leaving the system vulnerable to active exploits. "
@@ -5744,137 +4232,9 @@ internal static class PolicyUpdate
         [
             new TweakDef
             {
-                Id = "wuadv-exclude-driver-updates",
-                Label = "Exclude Driver Updates from Windows Update",
-                Category = "Windows Update",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 4,
-                Tags = ["windows update", "drivers", "policy", "quality update"],
-                Description =
-                    "Prevents Windows Update from automatically installing driver updates "
-                    + "alongside quality/security updates. ExcludeWUDriversInQualityUpdate=1. "
-                    + "Useful when you manage drivers manually via Device Manager or vendor tools.",
-                ApplyOps = [RegOp.SetDword(WuPolicy, "ExcludeWUDriversInQualityUpdate", 1)],
-                RemoveOps = [RegOp.DeleteValue(WuPolicy, "ExcludeWUDriversInQualityUpdate")],
-                DetectOps = [RegOp.CheckDword(WuPolicy, "ExcludeWUDriversInQualityUpdate", 1)],
-            },
-            new TweakDef
-            {
-                Id = "wuadv-defer-feature-updates-30-days",
-                Label = "Defer Feature (Major) Updates by 30 Days",
-                Category = "Windows Update",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                Tags = ["windows update", "feature update", "deferral", "stability"],
-                Description =
-                    "Delays the installation of major Windows feature updates (annual releases) "
-                    + "by 30 days. DeferFeatureUpdatesPeriodInDays=30. Gives time for early bugs "
-                    + "in new Windows versions to be patched before your machine upgrades.",
-                ApplyOps = [RegOp.SetDword(WuPolicy, "DeferFeatureUpdates", 1), RegOp.SetDword(WuPolicy, "DeferFeatureUpdatesPeriodInDays", 30)],
-                RemoveOps = [RegOp.DeleteValue(WuPolicy, "DeferFeatureUpdates"), RegOp.DeleteValue(WuPolicy, "DeferFeatureUpdatesPeriodInDays")],
-                DetectOps = [RegOp.CheckDword(WuPolicy, "DeferFeatureUpdatesPeriodInDays", 30)],
-            },
-            new TweakDef
-            {
-                Id = "wuadv-defer-quality-updates-7-days",
-                Label = "Defer Quality (Security) Updates by 7 Days",
-                Category = "Windows Update",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 4,
-                Tags = ["windows update", "quality update", "security", "deferral"],
-                Description =
-                    "Delays monthly quality (security) updates by 7 days. "
-                    + "DeferQualityUpdatesPeriodInDays=7. Allows time for faulty patches to be "
-                    + "identified and pulled before your machine installs them, "
-                    + "while keeping you close to the security patch baseline.",
-                ApplyOps = [RegOp.SetDword(WuPolicy, "DeferQualityUpdates", 1), RegOp.SetDword(WuPolicy, "DeferQualityUpdatesPeriodInDays", 7)],
-                RemoveOps = [RegOp.DeleteValue(WuPolicy, "DeferQualityUpdates"), RegOp.DeleteValue(WuPolicy, "DeferQualityUpdatesPeriodInDays")],
-                DetectOps = [RegOp.CheckDword(WuPolicy, "DeferQualityUpdatesPeriodInDays", 7)],
-            },
-            new TweakDef
-            {
-                Id = "wuadv-block-update-settings-access",
-                Label = "Block Standard Users from Accessing Windows Update Settings",
-                Category = "Windows Update",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 4,
-                Tags = ["windows update", "settings", "access control", "admin"],
-                Description =
-                    "Prevents non-administrator users from accessing Windows Update settings. "
-                    + "SetDisableUXWUAccess=1. Standard users cannot scan for, pause, or configure "
-                    + "updates. Only administrators can manage the update schedule.",
-                ApplyOps = [RegOp.SetDword(WuPolicy, "SetDisableUXWUAccess", 1)],
-                RemoveOps = [RegOp.DeleteValue(WuPolicy, "SetDisableUXWUAccess")],
-                DetectOps = [RegOp.CheckDword(WuPolicy, "SetDisableUXWUAccess", 1)],
-            },
-            new TweakDef
-            {
-                Id = "wuadv-disable-update-reboot-notification",
-                Label = "Suppress Forced Reboot Notifications After Updates",
-                Category = "Windows Update",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                Tags = ["windows update", "reboot", "notification", "restart"],
-                Description =
-                    "Prevents Windows Update from showing aggressive restart countdown notifications "
-                    + "after installing updates. SetAutoRestartNotificationConfig=1 (suppress) / "
-                    + "NoAutoRebootWithLoggedOnUsers=1. Users restart at their own pace.",
-                ApplyOps = [RegOp.SetDword(WuAu, "NoAutoRebootWithLoggedOnUsers", 1)],
-                RemoveOps = [RegOp.DeleteValue(WuAu, "NoAutoRebootWithLoggedOnUsers")],
-                DetectOps = [RegOp.CheckDword(WuAu, "NoAutoRebootWithLoggedOnUsers", 1)],
-            },
-            new TweakDef
-            {
-                Id = "wuadv-disable-delivery-optimization",
-                Label = "Disable Delivery Optimization (P2P Update Sharing)",
-                Category = "Windows Update",
-                NeedsAdmin = true,
-                CorpSafe = false,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                Tags = ["windows update", "delivery optimization", "p2p", "bandwidth"],
-                Description =
-                    "Disables Windows Delivery Optimization — the P2P update sharing feature that "
-                    + "uploads update packages to other devices on the LAN or internet. "
-                    + "DODownloadMode=0 (disabled). Eliminates upload bandwidth usage and privacy "
-                    + "concerns about sharing data with unknown peers.",
-                ApplyOps = [RegOp.SetDword(DeliveryOpt, "DODownloadMode", 0)],
-                RemoveOps = [RegOp.DeleteValue(DeliveryOpt, "DODownloadMode")],
-                DetectOps = [RegOp.CheckDword(DeliveryOpt, "DODownloadMode", 0)],
-            },
-            new TweakDef
-            {
-                Id = "wuadv-lan-only-delivery-optimization",
-                Label = "Restrict Delivery Optimization to LAN Only",
-                Category = "Windows Update",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                Tags = ["windows update", "delivery optimization", "lan", "p2p", "bandwidth"],
-                Description =
-                    "Restricts Delivery Optimization to only share update data with devices on "
-                    + "the local LAN — not with external internet peers. DODownloadMode=1 (LAN "
-                    + "only). Allows faster local updates while preventing internet upload.",
-                ApplyOps = [RegOp.SetDword(DeliveryOpt, "DODownloadMode", 1)],
-                RemoveOps = [RegOp.DeleteValue(DeliveryOpt, "DODownloadMode")],
-                DetectOps = [RegOp.CheckDword(DeliveryOpt, "DODownloadMode", 1)],
-            },
-            new TweakDef
-            {
                 Id = "wuadv-require-update-signature",
                 Label = "Require Code-Signed Updates from WSUS",
-                Category = "Windows Update",
+                Category = "Maintenance",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -5892,7 +4252,7 @@ internal static class PolicyUpdate
             {
                 Id = "wuadv-allow-mu-updates-with-wu",
                 Label = "Enable Microsoft Update (Office + Products) via Windows Update",
-                Category = "Windows Update",
+                Category = "Maintenance",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -5906,34 +4266,6 @@ internal static class PolicyUpdate
                 ApplyOps = [RegOp.SetDword(WuAu, "EnableFeaturedSoftware", 1)],
                 RemoveOps = [RegOp.DeleteValue(WuAu, "EnableFeaturedSoftware")],
                 DetectOps = [RegOp.CheckDword(WuAu, "EnableFeaturedSoftware", 1)],
-            },
-            new TweakDef
-            {
-                Id = "wuadv-set-active-hours-start",
-                Label = "Set Windows Update Active Hours (8am–8pm)",
-                Category = "Windows Update",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                Tags = ["windows update", "active hours", "restart", "schedule"],
-                Description =
-                    "Sets Windows Update active hours to 8am–8pm (hours 8–20). Windows will not "
-                    + "automatically restart to apply updates during these hours. "
-                    + "ActiveHoursStart=8, ActiveHoursEnd=20. Prevents disruptive mid-day reboots.",
-                ApplyOps =
-                [
-                    RegOp.SetDword(WuPolicy, "SetActiveHours", 1),
-                    RegOp.SetDword(WuPolicy, "ActiveHoursStart", 8),
-                    RegOp.SetDword(WuPolicy, "ActiveHoursEnd", 20),
-                ],
-                RemoveOps =
-                [
-                    RegOp.DeleteValue(WuPolicy, "SetActiveHours"),
-                    RegOp.DeleteValue(WuPolicy, "ActiveHoursStart"),
-                    RegOp.DeleteValue(WuPolicy, "ActiveHoursEnd"),
-                ],
-                DetectOps = [RegOp.CheckDword(WuPolicy, "ActiveHoursStart", 8), RegOp.CheckDword(WuPolicy, "ActiveHoursEnd", 20)],
             },
         ];
     }
@@ -5950,7 +4282,7 @@ internal static class PolicyUpdate
                 {
                     Id = "wudrv-deny-unidentified-device-installation",
                     Label = "WU Driver: Block Installation of Unidentified Device Drivers",
-                    Category = "Windows Update",
+                    Category = "Maintenance",
                     Description =
                         "Sets DenyUnidentifiedDeviceInstallation=1 in DeviceInstall\\Restrictions policy. Prevents Windows from installing drivers for hardware devices that are not in the Windows Driver Store and do not have a matching entry in Windows Update. "
                         + "Unidentified devices are a common attack vector — malicious USB devices can present as unknown hardware that auto-installs a malicious driver. This policy requires all devices to have a recognized driver before they can function.",
@@ -5968,7 +4300,7 @@ internal static class PolicyUpdate
                 {
                     Id = "wudrv-deny-removable-device-driver-install",
                     Label = "WU Driver: Block Automatic Driver Installation for Removable Devices",
-                    Category = "Windows Update",
+                    Category = "Maintenance",
                     Description =
                         "Sets DenyRemovableDeviceInstallation=1 in DeviceInstall\\Restrictions policy. Prevents Windows from automatically installing drivers for any removable device. "
                         + "Removable devices (USB storage, USB hubs, card readers, portable audio devices) are frequently connected in enterprise environments. Without this policy, each new removable device triggers an automatic driver installation from WU, bypassing IT-managed driver sets and potentially installing unsigned or vulnerable drivers.",
@@ -5986,7 +4318,7 @@ internal static class PolicyUpdate
                 {
                     Id = "wudrv-enforce-driver-signing-block-unsigned",
                     Label = "WU Driver: Block Installation of Unsigned Device Drivers",
-                    Category = "Windows Update",
+                    Category = "Maintenance",
                     Description =
                         "Sets BehaviorOnFailedVerify=2 in Driver Signing policy. Configures Windows to silently block the installation of any device driver that fails digital signature verification. "
                         + "Value 2 = Block (value 1 = Warn, value 0 = Ignore). Blocking unsigned drivers prevents rootkits and malicious kernel-mode code from loading under the guise of a hardware driver. This is a critical defence-in-depth control alongside Secure Boot and HVCI.",
@@ -6002,45 +4334,9 @@ internal static class PolicyUpdate
                 },
                 new TweakDef
                 {
-                    Id = "wudrv-prevent-device-class-installations",
-                    Label = "WU Driver: Enable Device Class Installation Restriction Policy",
-                    Category = "Windows Update",
-                    Description =
-                        "Sets DenyDeviceClasses=1 in DeviceInstall\\Restrictions policy. Activates the device class restriction feature that, when combined with a list of blocked device class GUIDs, prevents installation of entire categories of devices. "
-                        + "This policy enables the enforcement of device class blocklists (e.g., blocking all Bluetooth adapters, all wireless adapters, or all imaging devices) across the enterprise without per-device ID management.",
-                    Tags = ["driver", "device-class", "restriction", "enterprise", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 3,
-                    SafetyRating = 5,
-                    ImpactNote = "Activates device class restriction framework; prerequisite for GUID-based device category blocklists.",
-                    ApplyOps = [RegOp.SetDword(Key, "DenyDeviceClasses", 1)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "DenyDeviceClasses")],
-                    DetectOps = [RegOp.CheckDword(Key, "DenyDeviceClasses", 1)],
-                },
-                new TweakDef
-                {
-                    Id = "wudrv-enable-device-id-restriction-policy",
-                    Label = "WU Driver: Enable Device ID-Based Installation Restriction",
-                    Category = "Windows Update",
-                    Description =
-                        "Sets DenyDeviceIDs=1 in DeviceInstall\\Restrictions policy. Activates the device ID restriction feature. When enabled, Windows checks all device hardware IDs against a configured deny list. "
-                        + "Device ID restrictions are more granular than class restrictions and allow blocking specific problematic hardware models (e.g., a specific USB key brand with a known firmware vulnerability) while permitting similar hardware from other vendors.",
-                    Tags = ["driver", "device-id", "restriction", "security", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 3,
-                    SafetyRating = 5,
-                    ImpactNote = "Activates device ID restriction; enables HWID-based device blocklists for targeted hardware exclusions.",
-                    ApplyOps = [RegOp.SetDword(Key, "DenyDeviceIDs", 1)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "DenyDeviceIDs")],
-                    DetectOps = [RegOp.CheckDword(Key, "DenyDeviceIDs", 1)],
-                },
-                new TweakDef
-                {
                     Id = "wudrv-log-driver-install-restriction-events",
                     Label = "WU Driver: Enable Event Logging for Blocked Driver Installations",
-                    Category = "Windows Update",
+                    Category = "Maintenance",
                     Description =
                         "Sets WritePolicy=1 in DeviceInstall\\Restrictions policy. Enables Windows to write an event log entry whenever a device installation is blocked by Device Installation Policy. "
                         + "Without this, blocked installations fail silently, making it impossible to audit what hardware was attempted and blocked. With logging enabled, security teams can monitor for repeated installation attempts which may indicate hardware-based persistence attempts.",
@@ -6058,7 +4354,7 @@ internal static class PolicyUpdate
                 {
                     Id = "wudrv-disable-windows-error-reporting-driver",
                     Label = "WU Driver: Disable Driver Crash Data Upload to Microsoft",
-                    Category = "Windows Update",
+                    Category = "Maintenance",
                     Description =
                         "Sets DisableDriverLookup=1 in DeviceInstall\\Restrictions policy. Prevents Windows from looking up driver information and uploading crash data to the Microsoft Windows Error Reporting service when a device driver causes an error. "
                         + "In regulated environments, data sovereignty requirements may prohibit telemetry of driver crash details (device type, hardware ID, crash context) from being transmitted to Microsoft's cloud infrastructure.",
@@ -6076,7 +4372,7 @@ internal static class PolicyUpdate
                 {
                     Id = "wudrv-prevent-non-admin-driver-install",
                     Label = "WU Driver: Restrict Driver Installation to Administrators Only",
-                    Category = "Windows Update",
+                    Category = "Maintenance",
                     Description =
                         "Sets PreventInstallationOfDevicesNotDescribedByOtherPolicySettings=1 in DeviceInstall\\Restrictions policy. Sets a default-deny posture for device installation: only devices explicitly permitted by an allowlist policy are installed. All others are blocked. "
                         + "This inverts the default Windows behaviour (allow-by-default) into a deny-by-default stance that requires active IT involvement to introduce any new device type into the environment.",
@@ -6094,7 +4390,7 @@ internal static class PolicyUpdate
                 {
                     Id = "wudrv-enable-device-metadata-retrieval-block",
                     Label = "WU Driver: Block Device Metadata Retrieval from Windows Update",
-                    Category = "Windows Update",
+                    Category = "Maintenance",
                     Description =
                         "Sets PreventDeviceMetadataFromNetwork=1 in DeviceInstall policy. Prevents Windows from searching the Windows Update network service for device metadata (device icons, model pages, UWP companion apps). "
                         + "Device metadata retrieval can prompt automatic download of companion apps without explicit user action. In locked-down environments, all device metadata should be pre-staged via WSUS rather than retrieved on-demand from Microsoft servers.",
@@ -6128,25 +4424,6 @@ internal static class PolicyUpdate
                         ),
                     ],
                 },
-                new TweakDef
-                {
-                    Id = "wudrv-allow-admin-override-device-restriction",
-                    Label = "WU Driver: Allow Administrators to Override Device Installation Policy",
-                    Category = "Windows Update",
-                    Description =
-                        "Sets AllowAdminInstall=1 in DeviceInstall\\Restrictions policy. When device installation restrictions are in effect (including deny-by-default), this allows users in the local Administrators group to install any device regardless of policy restrictions. "
-                        + "This maintains an escape hatch for IT staff to provision new hardware on managed endpoints without requiring a Group Policy update cycle, while standard users remain restricted.",
-                    Tags = ["driver", "admin", "override", "device", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 3,
-                    SafetyRating = 4,
-                    ImpactNote =
-                        "Allows admins to bypass device installation restrictions; provides IT escape hatch without weakening user-level controls.",
-                    ApplyOps = [RegOp.SetDword(Key, "AllowAdminInstall", 1)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "AllowAdminInstall")],
-                    DetectOps = [RegOp.CheckDword(Key, "AllowAdminInstall", 1)],
-                },
             ];
     }
 
@@ -6161,7 +4438,7 @@ internal static class PolicyUpdate
                 {
                     Id = "wunotif-set-update-notification-level-standard",
                     Label = "WU Notification: Set Update Notification Level to Standard",
-                    Category = "Windows Update",
+                    Category = "Maintenance",
                     Description =
                         "Sets UpdateNotificationLevel=1 in WU policy. Configures the Windows Update notification level presented to users. "
                         + "Level 1 = Standard Notifications (users see action centre notifications and system tray alerts for pending updates). Level 2 = Disable all restart notifications. "
@@ -6180,7 +4457,7 @@ internal static class PolicyUpdate
                 {
                     Id = "wunotif-suppress-restart-notification-when-busy",
                     Label = "WU Notification: Suppress Auto-Restart Notifications During Active Use",
-                    Category = "Windows Update",
+                    Category = "Maintenance",
                     Description =
                         "Sets SuppressRestartNotification=1 in WU policy. Instructs Windows to suppress automatic restart notifications while the user is actively using the computer (mouse/keyboard activity detected). "
                         + "This prevents the restart prompt from appearing mid-presentation or mid-call, reducing user frustration while still allowing notifications when the device is idle.",
@@ -6198,7 +4475,7 @@ internal static class PolicyUpdate
                 {
                     Id = "wunotif-disable-update-availability-popup",
                     Label = "WU Notification: Disable Update Availability Pop-Up Toast",
-                    Category = "Windows Update",
+                    Category = "Maintenance",
                     Description =
                         "Sets SetAutoRestartNotificationExclusion=1 in WU policy. Disables the 'restart to update' toast notification pop-up that appears in the bottom-right corner of the screen. "
                         + "In enterprise SCCM/Intune-managed environments, the deployment tool provides its own notification and deadline management. The built-in WU toast in these environments creates duplicate, confusing messages that contradict the managed deployment window.",
@@ -6214,45 +4491,9 @@ internal static class PolicyUpdate
                 },
                 new TweakDef
                 {
-                    Id = "wunotif-suppress-update-reboot-during-fullscreen",
-                    Label = "WU Notification: Block Update Restart During Full-Screen Applications",
-                    Category = "Windows Update",
-                    Description =
-                        "Sets SetAutoRestartDeadline=1 in WU policy combined with full-screen detection. Prevents Windows from showing the restart notification or initiating an automatic restart while a full-screen application is active. "
-                        + "This is critical for kiosk, digital signage, and presentation machines where a mid-presentation WU restart notification would disrupt a live business event or customer-facing display.",
-                    Tags = ["windows-update", "notification", "fullscreen", "kiosk", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 3,
-                    SafetyRating = 5,
-                    ImpactNote = "Suppresses WU restarts during full-screen apps; prevents disruption of presentations and digital signage.",
-                    ApplyOps = [RegOp.SetDword(Key, "SetAutoRestartDeadline", 1)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "SetAutoRestartDeadline")],
-                    DetectOps = [RegOp.CheckDword(Key, "SetAutoRestartDeadline", 1)],
-                },
-                new TweakDef
-                {
-                    Id = "wunotif-disable-upgrade-feature-notifications",
-                    Label = "WU Notification: Disable Feature Upgrade Recommendation Notifications",
-                    Category = "Windows Update",
-                    Description =
-                        "Sets DisableWindowsUpdateUI=0 in WU policy combined with DisableWUfBSafeguards=0. Suppresses the persistent Windows 11/Windows 10 upgrade promotion banners and notifications that appear when a newer major version is available. "
-                        + "In enterprise environments managed to a specific OS release, these upgrade solicitations confuse users and generate IT support calls from users requesting to upgrade outside the approved schedule.",
-                    Tags = ["windows-update", "notification", "upgrade", "feature", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 3,
-                    SafetyRating = 5,
-                    ImpactNote = "Suppresses OS version upgrade promotions; prevents users from self-initiating unapproved major upgrades.",
-                    ApplyOps = [RegOp.SetDword(Key, "DisableWUfBSafeguards", 0)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "DisableWUfBSafeguards")],
-                    DetectOps = [RegOp.CheckDword(Key, "DisableWUfBSafeguards", 0)],
-                },
-                new TweakDef
-                {
                     Id = "wunotif-set-reboot-warning-timeout-15min",
                     Label = "WU Notification: Set Reboot Warning Timeout to 15 Minutes",
-                    Category = "Windows Update",
+                    Category = "Maintenance",
                     Description =
                         "Sets ScheduleImminentRestartWarning=15 in WU policy. Sets the duration of the imminent-restart countdown dialog to 15 minutes. "
                         + "When Windows determines a restart is imminent (e.g., deadline approaching), this countdown gives users exactly 15 minutes to save their work before the restart proceeds. This is shorter than the ScheduleRestartWarning (advance warning hours) and is the 'last chance' save reminder.",
@@ -6270,7 +4511,7 @@ internal static class PolicyUpdate
                 {
                     Id = "wunotif-enable-windows-update-log-events",
                     Label = "WU Notification: Enable Verbose Windows Update Event Logging",
-                    Category = "Windows Update",
+                    Category = "Maintenance",
                     Description =
                         "Sets EnableDetailedLogging=1 in WU policy. Enables detailed verbose logging of Windows Update events to the Windows Event Log under the WindowsUpdateClient/Operational channel. "
                         + "By default, Windows Update logs minimal information. Detailed logs capture download start/stop, error codes, and deployment decisions, enabling IT to troubleshoot why updates fail, succeed late, or trigger unexpected restarts on specific machines.",
@@ -6286,27 +4527,9 @@ internal static class PolicyUpdate
                 },
                 new TweakDef
                 {
-                    Id = "wunotif-block-user-changing-update-settings",
-                    Label = "WU Notification: Block Users from Modifying Update Settings",
-                    Category = "Windows Update",
-                    Description =
-                        "Sets SetUpdateNotificationLevel=2 in WU policy. Removes the Windows Update section from the Windows Settings app for standard users, so they cannot view or modify the pending update state, notification preferences, or restart schedules. "
-                        + "For high-security and kiosk deployments, the WU settings page should be invisible to users to prevent them from deferring updates or changing restart windows outside of IT-approved schedules.",
-                    Tags = ["windows-update", "settings", "user", "restriction", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 3,
-                    SafetyRating = 5,
-                    ImpactNote = "Hides WU settings from non-admin users; prevents unauthorised deferrals or notification preference changes.",
-                    ApplyOps = [RegOp.SetDword(Key, "SetUpdateNotificationLevel", 2)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "SetUpdateNotificationLevel")],
-                    DetectOps = [RegOp.CheckDword(Key, "SetUpdateNotificationLevel", 2)],
-                },
-                new TweakDef
-                {
                     Id = "wunotif-enable-update-health-tools-reporting",
                     Label = "WU Notification: Enable Update Health Tools Status Reporting",
-                    Category = "Windows Update",
+                    Category = "Maintenance",
                     Description =
                         "Sets EnableUpdateHealthTools=1 in WU policy. Activates the Update Compliance Health Tools which report patch status, restart compliance, and update health metrics to Azure Monitor, Microsoft Endpoint Manager, or custom OMS workspaces. "
                         + "Without health tools enabled, IT dashboards show no patch status for affected machines, making it impossible to identify non-compliant devices in the estate.",
@@ -6324,7 +4547,7 @@ internal static class PolicyUpdate
                 {
                     Id = "wunotif-disable-outdated-browser-notifications",
                     Label = "WU Notification: Disable Outdated Browser/App Update Notifications from WU",
-                    Category = "Windows Update",
+                    Category = "Maintenance",
                     Description =
                         "Sets AllowNonMicrosoftSignedUpdate=0 in WU policy. Prevents Windows Update from delivering and notifying about updates from non-Microsoft third-party publishers via the Microsoft Update service. "
                         + "Third-party update notifications through Windows Update are not needed when dedicated application management tools (SCCM, Intune, Chocolatey) are already used for non-OS software, reducing noise and preventing IT-unmanaged software updates.",
@@ -6351,25 +4574,9 @@ internal static class PolicyUpdate
             [
                 new TweakDef
                 {
-                    Id = "wupol-disable-wu-access",
-                    Label = "Disable Direct Windows Update Access",
-                    Category = "Windows Update",
-                    Description = "Blocks direct access to Windows Update servers; devices must use an internal WSUS or managed update source.",
-                    Tags = ["windows-update", "wsus", "policy", "security"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 4,
-                    SafetyRating = 4,
-                    ImpactNote = "Prevents unmanaged updates; requires a WSUS or Microsoft Endpoint Manager infrastructure to deliver updates.",
-                    ApplyOps = [RegOp.SetDword(WuKey, "DisableWindowsUpdateAccess", 1)],
-                    RemoveOps = [RegOp.DeleteValue(WuKey, "DisableWindowsUpdateAccess")],
-                    DetectOps = [RegOp.CheckDword(WuKey, "DisableWindowsUpdateAccess", 1)],
-                },
-                new TweakDef
-                {
                     Id = "wupol-block-internet-wu-locations",
                     Label = "Block Direct Connection to Windows Update Internet Locations",
-                    Category = "Windows Update",
+                    Category = "Maintenance",
                     Description =
                         "Forces all update traffic through an internal catalog; prevents the client from contacting Microsoft update servers directly.",
                     Tags = ["windows-update", "internet", "policy", "wsus"],
@@ -6381,134 +4588,6 @@ internal static class PolicyUpdate
                     ApplyOps = [RegOp.SetDword(WuKey, "DoNotConnectToWindowsUpdateInternetLocations", 1)],
                     RemoveOps = [RegOp.DeleteValue(WuKey, "DoNotConnectToWindowsUpdateInternetLocations")],
                     DetectOps = [RegOp.CheckDword(WuKey, "DoNotConnectToWindowsUpdateInternetLocations", 1)],
-                },
-                new TweakDef
-                {
-                    Id = "wupol-exclude-driver-updates",
-                    Label = "Exclude Hardware Drivers from Windows Update",
-                    Category = "Windows Update",
-                    Description = "Prevents Windows Update from automatically delivering hardware driver updates through quality update channels.",
-                    Tags = ["windows-update", "drivers", "policy", "stability"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 3,
-                    SafetyRating = 5,
-                    ImpactNote = "Driver updates must be installed manually or via WSUS driver category; prevents unstable driver push.",
-                    ApplyOps = [RegOp.SetDword(WuKey, "ExcludeWUDriversInQualityUpdate", 1)],
-                    RemoveOps = [RegOp.DeleteValue(WuKey, "ExcludeWUDriversInQualityUpdate")],
-                    DetectOps = [RegOp.CheckDword(WuKey, "ExcludeWUDriversInQualityUpdate", 1)],
-                },
-                new TweakDef
-                {
-                    Id = "wupol-disable-os-upgrade",
-                    Label = "Disable OS Upgrade Offers via Windows Update",
-                    Category = "Windows Update",
-                    Description = "Prevents Windows Update from offering or installing major operating system version upgrades.",
-                    Tags = ["windows-update", "upgrade", "feature-update", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 4,
-                    SafetyRating = 5,
-                    ImpactNote = "Stops feature upgrades (e.g., Windows 10 → 11); quality and security patches are unaffected.",
-                    ApplyOps = [RegOp.SetDword(WuKey, "DisableOSUpgrade", 1)],
-                    RemoveOps = [RegOp.DeleteValue(WuKey, "DisableOSUpgrade")],
-                    DetectOps = [RegOp.CheckDword(WuKey, "DisableOSUpgrade", 1)],
-                },
-                new TweakDef
-                {
-                    Id = "wupol-defer-quality-updates",
-                    Label = "Defer Quality Updates",
-                    Category = "Windows Update",
-                    Description = "Enables deferral of quality (non-security) updates, delaying their installation after Microsoft release.",
-                    Tags = ["windows-update", "quality-update", "deferral", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 3,
-                    SafetyRating = 5,
-                    ImpactNote = "Quality non-security updates are delayed; security patches are included in quality updates and also deferred.",
-                    ApplyOps = [RegOp.SetDword(WuKey, "DeferQualityUpdates", 1)],
-                    RemoveOps = [RegOp.DeleteValue(WuKey, "DeferQualityUpdates")],
-                    DetectOps = [RegOp.CheckDword(WuKey, "DeferQualityUpdates", 1)],
-                },
-                new TweakDef
-                {
-                    Id = "wupol-defer-quality-updates-14d",
-                    Label = "Set Quality Update Deferral to 14 Days",
-                    Category = "Windows Update",
-                    Description = "Defers quality updates by 14 days after Microsoft releases them, providing a burn-in window.",
-                    Tags = ["windows-update", "quality-update", "deferral", "days", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 3,
-                    SafetyRating = 5,
-                    ImpactNote = "14-day window to observe crash reports on early adopters before applying to managed devices.",
-                    ApplyOps = [RegOp.SetDword(WuKey, "DeferQualityUpdatesPeriodInDays", 14)],
-                    RemoveOps = [RegOp.DeleteValue(WuKey, "DeferQualityUpdatesPeriodInDays")],
-                    DetectOps = [RegOp.CheckDword(WuKey, "DeferQualityUpdatesPeriodInDays", 14)],
-                },
-                new TweakDef
-                {
-                    Id = "wupol-defer-feature-updates",
-                    Label = "Defer Feature Updates",
-                    Category = "Windows Update",
-                    Description = "Enables deferral of Windows feature updates, preventing the installation of new OS versions immediately.",
-                    Tags = ["windows-update", "feature-update", "deferral", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 4,
-                    SafetyRating = 5,
-                    ImpactNote = "Feature updates are held back until the deferral period expires; quality updates can be deferred separately.",
-                    ApplyOps = [RegOp.SetDword(WuKey, "DeferFeatureUpdates", 1)],
-                    RemoveOps = [RegOp.DeleteValue(WuKey, "DeferFeatureUpdates")],
-                    DetectOps = [RegOp.CheckDword(WuKey, "DeferFeatureUpdates", 1)],
-                },
-                new TweakDef
-                {
-                    Id = "wupol-defer-feature-updates-180d",
-                    Label = "Set Feature Update Deferral to 180 Days",
-                    Category = "Windows Update",
-                    Description = "Defers Windows feature updates by 180 days, keeping the device on the current version for 6 months.",
-                    Tags = ["windows-update", "feature-update", "deferral", "days", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 4,
-                    SafetyRating = 5,
-                    ImpactNote = "Six-month stability window before upgrading OS; balance between security and compatibility testing.",
-                    ApplyOps = [RegOp.SetDword(WuKey, "DeferFeatureUpdatesPeriodInDays", 180)],
-                    RemoveOps = [RegOp.DeleteValue(WuKey, "DeferFeatureUpdatesPeriodInDays")],
-                    DetectOps = [RegOp.CheckDword(WuKey, "DeferFeatureUpdatesPeriodInDays", 180)],
-                },
-                new TweakDef
-                {
-                    Id = "wupol-block-preview-builds",
-                    Label = "Block Windows Insider / Preview Builds",
-                    Category = "Windows Update",
-                    Description = "Prevents users from opting in to Windows Insider or preview builds on managed devices.",
-                    Tags = ["windows-update", "insider", "preview", "policy", "stability"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 3,
-                    SafetyRating = 5,
-                    ImpactNote = "Users cannot enrol in Windows Insider program; production build only on this device.",
-                    ApplyOps = [RegOp.SetDword(WuKey, "ManagePreviewBuilds", 1)],
-                    RemoveOps = [RegOp.DeleteValue(WuKey, "ManagePreviewBuilds")],
-                    DetectOps = [RegOp.CheckDword(WuKey, "ManagePreviewBuilds", 1)],
-                },
-                new TweakDef
-                {
-                    Id = "wupol-set-semi-annual-channel",
-                    Label = "Set Update Branch to Semi-Annual Channel",
-                    Category = "Windows Update",
-                    Description = "Configures Windows Update to use the Semi-Annual Channel for feature update readiness (General Availability).",
-                    Tags = ["windows-update", "branch", "semi-annual", "channel", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 3,
-                    SafetyRating = 5,
-                    ImpactNote = "Value 16 = Semi-Annual Channel; device receives GA feature updates rather than Insider or preview rings.",
-                    ApplyOps = [RegOp.SetDword(WuKey, "BranchReadinessLevel", 16)],
-                    RemoveOps = [RegOp.DeleteValue(WuKey, "BranchReadinessLevel")],
-                    DetectOps = [RegOp.CheckDword(WuKey, "BranchReadinessLevel", 16)],
                 },
             ];
     }
@@ -6525,7 +4604,7 @@ internal static class PolicyUpdate
                 {
                     Id = "wuscan-enable-wsus-server-mode",
                     Label = "WU Scan: Route Update Scanning Through WSUS Server",
-                    Category = "Windows Update",
+                    Category = "Maintenance",
                     Description =
                         "Sets UseWUServer=1 in WU AU policy. Configures the Windows Update client to scan against the WSUS server configured in WUServer, rather than the public Windows Update service. "
                         + "This is the primary switch that activates WSUS-based update management. Without this flag set to 1, WUServer and WUStatusServer URL values are present in the registry but ignored by the WU client, which continues to scan against Microsoft's cloud endpoint.",
@@ -6541,82 +4620,9 @@ internal static class PolicyUpdate
                 },
                 new TweakDef
                 {
-                    Id = "wuscan-set-wsus-scan-frequency-22hours",
-                    Label = "WU Scan: Set WSUS Detection Frequency to 22 Hours",
-                    Category = "Windows Update",
-                    Description =
-                        "Sets DetectionFrequency=22 and DetectionFrequencyEnabled=1 in WU AU policy. Configures the WU client to scan for updates every 22 hours instead of the default random interval (17-22 hours). "
-                        + "A fixed 22-hour interval ensures predictable scan timing for environments where WSUS server load must be managed. Scan frequency should be set to complement WSUS synchronisation schedule so clients scan after the server has synced from Microsoft.",
-                    Tags = ["windows-update", "wsus", "scan", "frequency", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 3,
-                    SafetyRating = 5,
-                    ImpactNote = "22-hour fixed scan interval; predictable WSUS load distribution vs. default random timing.",
-                    ApplyOps = [RegOp.SetDword(AuKey, "DetectionFrequency", 22), RegOp.SetDword(AuKey, "DetectionFrequencyEnabled", 1)],
-                    RemoveOps = [RegOp.DeleteValue(AuKey, "DetectionFrequency"), RegOp.DeleteValue(AuKey, "DetectionFrequencyEnabled")],
-                    DetectOps = [RegOp.CheckDword(AuKey, "DetectionFrequency", 22)],
-                },
-                new TweakDef
-                {
-                    Id = "wuscan-enable-automatic-update-download-and-schedule",
-                    Label = "WU Scan: Set Auto-Update Mode to Download and Schedule Install",
-                    Category = "Windows Update",
-                    Description =
-                        "Sets AUOptions=4 in WU AU policy. Configures the auto-update behaviour to automatically download approved updates and schedule their installation for a configured maintenance window. "
-                        + "AUOptions values: 2=Notify only, 3=Auto download + notify for install, 4=Auto download + schedule install, 5=Allow local admin to configure. Value 4 is standard for enterprise WSUS where deployments are scheduled to minimize business disruption.",
-                    Tags = ["windows-update", "auto-update", "download", "schedule", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 4,
-                    SafetyRating = 4,
-                    ImpactNote = "Auto-download with scheduled install; standard WSUS mode for planned maintenance window deployments.",
-                    ApplyOps = [RegOp.SetDword(AuKey, "AUOptions", 4)],
-                    RemoveOps = [RegOp.DeleteValue(AuKey, "AUOptions")],
-                    DetectOps = [RegOp.CheckDword(AuKey, "AUOptions", 4)],
-                },
-                new TweakDef
-                {
-                    Id = "wuscan-set-scheduled-install-day-0-every-day",
-                    Label = "WU Scan: Set Scheduled Install Day to Every Day",
-                    Category = "Windows Update",
-                    Description =
-                        "Sets ScheduledInstallDay=0 in WU AU policy. Configures Windows Update to install scheduled updates every day (rather than a specific day of the week). "
-                        + "Day=0 means daily; Day=1-7 means a specific day (1=Sunday through 7=Saturday). Combined with ScheduledInstallTime, daily installation ensures patches are applied within 24 hours of their scheduled maintenance window rather than waiting up to a week.",
-                    Tags = ["windows-update", "schedule", "install", "daily", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 3,
-                    SafetyRating = 4,
-                    ImpactNote = "Daily scheduled install cadence; updates applied within 24h of availability rather than weekly batch.",
-                    ApplyOps = [RegOp.SetDword(AuKey, "ScheduledInstallDay", 0)],
-                    RemoveOps = [RegOp.DeleteValue(AuKey, "ScheduledInstallDay")],
-                    DetectOps = [RegOp.CheckDword(AuKey, "ScheduledInstallDay", 0)],
-                },
-                new TweakDef
-                {
-                    Id = "wuscan-set-scheduled-install-time-2am",
-                    Label = "WU Scan: Set Scheduled Install Time to 2:00 AM",
-                    Category = "Windows Update",
-                    Description =
-                        "Sets ScheduledInstallTime=2 in WU AU policy. Schedules automatic update installations to occur at 2:00 AM local time. "
-                        + "2 AM is the classic maintenance window: after business hours, before early-morning workers arrive, outside of backup windows (typically 1–2 AM), and during a period when most machines are idle but still powered on. "
-                        + "This time balances update deployment speed with business disruption minimisation.",
-                    Tags = ["windows-update", "schedule", "install", "maintenance-window", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 3,
-                    SafetyRating = 5,
-                    ImpactNote = "2 AM scheduled installs; classic after-hours maintenance window that avoids business hours disruption.",
-                    ApplyOps = [RegOp.SetDword(AuKey, "ScheduledInstallTime", 2)],
-                    RemoveOps = [RegOp.DeleteValue(AuKey, "ScheduledInstallTime")],
-                    DetectOps = [RegOp.CheckDword(AuKey, "ScheduledInstallTime", 2)],
-                },
-                new TweakDef
-                {
                     Id = "wuscan-enable-intranet-update-service-stats",
                     Label = "WU Scan: Enable Intranet Update Statistics Reporting",
-                    Category = "Windows Update",
+                    Category = "Maintenance",
                     Description =
                         "Sets UseWUServer=1 and IntranetServerInternetOptions=3 in WU AU policy. Configures the WU client to send update scan statistics (detection results, download progress, installation outcomes) to the WSUS status server rather than Microsoft. "
                         + "This populates the WSUS server's reporting database, enabling IT administrators to view an accurate picture of update compliance across the enterprise from the WSUS console.",
@@ -6632,45 +4638,9 @@ internal static class PolicyUpdate
                 },
                 new TweakDef
                 {
-                    Id = "wuscan-enable-automatic-minor-update-install",
-                    Label = "WU Scan: Enable Automatic Installation of Minor Updates",
-                    Category = "Windows Update",
-                    Description =
-                        "Sets AutoInstallMinorUpdates=1 in WU AU policy. Allows Windows Update to automatically install minor (maintenance release) updates without user notification or interaction. "
-                        + "Minor updates are typically service definition updates, component metadata refreshes, and low-risk patches that carry essentially no regression risk. Auto-installing these keeps the system at the latest minor version baseline without requiring a scheduled maintenance window for trivial updates.",
-                    Tags = ["windows-update", "minor-updates", "auto-install", "baseline", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 3,
-                    SafetyRating = 5,
-                    ImpactNote = "Auto-installs minor updates silently; keeps system at full baseline without scheduled window for low-risk patches.",
-                    ApplyOps = [RegOp.SetDword(AuKey, "AutoInstallMinorUpdates", 1)],
-                    RemoveOps = [RegOp.DeleteValue(AuKey, "AutoInstallMinorUpdates")],
-                    DetectOps = [RegOp.CheckDword(AuKey, "AutoInstallMinorUpdates", 1)],
-                },
-                new TweakDef
-                {
-                    Id = "wuscan-enable-allow-mu-service-alongside-wu",
-                    Label = "WU Scan: Scan Microsoft Update Service Alongside Windows Update",
-                    Category = "Windows Update",
-                    Description =
-                        "Sets AllowMUUpdateService=1 in WU AU policy. Opts the machine into the Microsoft Update (MU) service in addition to the base Windows Update service. "
-                        + "Microsoft Update delivers updates for Office, Visual Studio, .NET, SQL Server, and other Microsoft products alongside OS updates. Without this setting, only Windows OS updates are delivered by WU, while Office and other products update through their own channels, which may not honour the configured maintenance window.",
-                    Tags = ["windows-update", "microsoft-update", "office", "products", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 3,
-                    SafetyRating = 5,
-                    ImpactNote = "Enrolls in Microsoft Update alongside WU; Office and other MS products update in the same maintenance window.",
-                    ApplyOps = [RegOp.SetDword(AuKey, "AllowMUUpdateService", 1)],
-                    RemoveOps = [RegOp.DeleteValue(AuKey, "AllowMUUpdateService")],
-                    DetectOps = [RegOp.CheckDword(AuKey, "AllowMUUpdateService", 1)],
-                },
-                new TweakDef
-                {
                     Id = "wuscan-set-reboot-launch-timeout-5min",
                     Label = "WU Scan: Set Post-Install Reboot Launch Timeout to 5 Minutes",
-                    Category = "Windows Update",
+                    Category = "Maintenance",
                     Description =
                         "Sets RebootLaunchTimeout=5 and RebootLaunchTimeoutEnabled=1 in WU policy. After updates are installed during a scheduled maintenance window and a restart is required, Windows waits this many minutes before initiating the restart automatically. "
                         + "5 minutes gives any background processes time to complete gracefully while keeping the restart within the maintenance window. Without a timeout, the restart may be postponed indefinitely if a user was actively logged in during the overnight window.",
@@ -6689,7 +4659,7 @@ internal static class PolicyUpdate
                 {
                     Id = "wuscan-set-reboot-warning-timeout-30min",
                     Label = "WU Scan: Set Pre-Restart Warning Timeout to 30 Minutes",
-                    Category = "Windows Update",
+                    Category = "Maintenance",
                     Description =
                         "Sets RebootWarningTimeout=30 and RebootWarningTimeoutEnabled=1 in WU policy. Configures Windows to display a countdown restart warning 30 minutes before the scheduled restart. "
                         + "30 minutes provides a comfortable window for users to save work and close applications before the restart. This setting complements ScheduleRestartWarning (hours-in-advance general notice) — the 30-minute warning is the final specific countdown before imminent restart.",
@@ -6717,7 +4687,7 @@ internal static class PolicyUpdate
                 {
                     Id = "wuuso-block-wu-downloads-metered-network",
                     Label = "WU USO: Block Windows Update Downloads on Metered Networks",
-                    Category = "Windows Update",
+                    Category = "Maintenance",
                     Description =
                         "Sets AllowAutoWindowsUpdateDownloadOverMeteredNetwork=0 in WU policy. Prevents Windows Update from automatically downloading update packages when the active network connection is marked as metered. "
                         + "On mobile devices and machines on cellular or satellite connections, unrestricted WU downloads can exhaust data allowances or incur substantial overage charges. This policy applies to both background and foreground download scenarios.",
@@ -6735,7 +4705,7 @@ internal static class PolicyUpdate
                 {
                     Id = "wuuso-block-temporary-enterprise-feature-drops",
                     Label = "WU USO: Block In-Period Temporary Enterprise Feature Drops",
-                    Category = "Windows Update",
+                    Category = "Maintenance",
                     Description =
                         "Sets AllowTemporaryEnterpriseFeatureControl=0 in WU policy. Disables the delivery of optional 'temporary enterprise feature' updates — incremental functionality enhancements that Microsoft ships between major version releases. "
                         + "These in-period feature drops are not security updates and can change application behaviour mid-support-lifecycle. Blocking them keeps the OS in a stable, enterprise-validated state between planned upgrade windows.",
@@ -6753,7 +4723,7 @@ internal static class PolicyUpdate
                 {
                     Id = "wuuso-prevent-user-pausing-updates",
                     Label = "WU USO: Prevent Users from Pausing Windows Updates",
-                    Category = "Windows Update",
+                    Category = "Maintenance",
                     Description =
                         "Sets SetDisablePauseUXAccess=1 in WU policy (AU subkey). Removes the 'Pause Updates' option from the Windows Update settings UI. "
                         + "Without this policy, standard users can pause updates for up to 5 weeks, leaving machines unpatched and out of compliance. This is a key control in corporate environments operating under patch management SLAs where user-initiated update deferrals are not permitted.",
@@ -6769,45 +4739,9 @@ internal static class PolicyUpdate
                 },
                 new TweakDef
                 {
-                    Id = "wuuso-disable-dual-scan-on-wsus",
-                    Label = "WU USO: Disable Dual-Scan When WSUS Is Configured",
-                    Category = "Windows Update",
-                    Description =
-                        "Sets DisableDualScan=1 in WU policy. When a WSUS server (WUServer) is configured, Windows 10/11 will by default simultaneously scan both the WSUS server and the public Windows Update/Microsoft Update cloud. "
-                        + "This 'dual scan' allows unapproved updates to arrive from the cloud even when WSUS approval workflows are in place. Disabling dual scan ensures all updates flow exclusively through WSUS, preserving IT update approval control.",
-                    Tags = ["windows-update", "wsus", "dual-scan", "enterprise", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 4,
-                    SafetyRating = 5,
-                    ImpactNote = "Blocks cloud WU source when WSUS is configured; enforces WSUS approval pipeline with no cloud bypass.",
-                    ApplyOps = [RegOp.SetDword(Key, "DisableDualScan", 1)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "DisableDualScan")],
-                    DetectOps = [RegOp.CheckDword(Key, "DisableDualScan", 1)],
-                },
-                new TweakDef
-                {
-                    Id = "wuuso-block-internet-wu-when-wsus-active",
-                    Label = "WU USO: Block Internet Windows Update Access When WSUS Active",
-                    Category = "Windows Update",
-                    Description =
-                        "Sets DoNotConnectToWindowsUpdateInternetLocations=1 in WU policy. When active, prevents the WU client from connecting to the public internet endpoints for update detection, metadata, or downloads. "
-                        + "This is required in air-gapped or WSUS-only environments where all internet traffic is blocked by firewall policy. Without this setting, WU may attempt internet connections that trigger firewall alerts or fail silently and produce misleading update status.",
-                    Tags = ["windows-update", "wsus", "internet", "air-gapped", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 4,
-                    SafetyRating = 5,
-                    ImpactNote = "Blocks all public WU internet connections; required for WSUS-only or air-gapped deployment scenarios.",
-                    ApplyOps = [RegOp.SetDword(Key, "DoNotConnectToWindowsUpdateInternetLocations", 1)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "DoNotConnectToWindowsUpdateInternetLocations")],
-                    DetectOps = [RegOp.CheckDword(Key, "DoNotConnectToWindowsUpdateInternetLocations", 1)],
-                },
-                new TweakDef
-                {
                     Id = "wuuso-block-recommended-updates-auto-install",
                     Label = "WU USO: Block Automatic Installation of Recommended Updates",
-                    Category = "Windows Update",
+                    Category = "Maintenance",
                     Description =
                         "Sets IncludeRecommendedUpdates=0 in WU policy. Prevents Windows Update from automatically installing 'recommended' updates which include non-security improvements, application updates, and optional Windows features. "
                         + "In enterprise environments, recommended updates should be reviewed and approved through a patch management process rather than automatically deployed, as they can change application behaviour without a security justification.",
@@ -6823,45 +4757,9 @@ internal static class PolicyUpdate
                 },
                 new TweakDef
                 {
-                    Id = "wuuso-allow-only-trusted-publisher-certs",
-                    Label = "WU USO: Accept Only Updates from Trusted Publisher Certificates",
-                    Category = "Windows Update",
-                    Description =
-                        "Sets AcceptTrustedPublisherCerts=1 in WU policy. Configures the WU client to only accept and install updates that are signed by certificates in the machine's Trusted Publishers certificate store. "
-                        + "This prevents installation of updates signed by untrusted authority chains, which is relevant in WSUS deployments where custom update packages may be published by third parties or internal teams.",
-                    Tags = ["windows-update", "trusted-publisher", "certificate", "signing", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 4,
-                    SafetyRating = 5,
-                    ImpactNote = "Only installs updates signed by trusted publisher certificates; guards against malicious WSUS packages.",
-                    ApplyOps = [RegOp.SetDword(Key, "AcceptTrustedPublisherCerts", 1)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "AcceptTrustedPublisherCerts")],
-                    DetectOps = [RegOp.CheckDword(Key, "AcceptTrustedPublisherCerts", 1)],
-                },
-                new TweakDef
-                {
-                    Id = "wuuso-block-optional-content-updates",
-                    Label = "WU USO: Block Optional Windows Content Updates",
-                    Category = "Windows Update",
-                    Description =
-                        "Sets AllowOptionalContent=0 in WU policy. Prevents Windows Update from offering and installing optional content packages — these include font packs, additional language components, accessibility features, and recreational apps. "
-                        + "Optional content updates consume storage and bandwidth and are not security-relevant. Blocking them reduces WU noise and storage footprint on tightly managed enterprise machines.",
-                    Tags = ["windows-update", "optional", "content", "storage", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 2,
-                    SafetyRating = 5,
-                    ImpactNote = "Blocks optional Windows content updates; reduces WU bandwidth and storage usage on managed devices.",
-                    ApplyOps = [RegOp.SetDword(Key, "AllowOptionalContent", 0)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "AllowOptionalContent")],
-                    DetectOps = [RegOp.CheckDword(Key, "AllowOptionalContent", 0)],
-                },
-                new TweakDef
-                {
                     Id = "wuuso-block-featured-software-via-wu",
                     Label = "WU USO: Block Automatic Installation of Featured Software",
-                    Category = "Windows Update",
+                    Category = "Maintenance",
                     Description =
                         "Sets EnableFeaturedSoftware=0 in WU policy. Stops Windows Update from offering and automatically installing 'featured software' — typically free Microsoft utilities, game trials, and promotional apps. "
                         + "Without this setting, WU silently installs marketing-tied software packages that were never requested by the user or IT administrator, increasing the installed application footprint and creating an unexpected change management event.",
@@ -6879,7 +4777,7 @@ internal static class PolicyUpdate
                 {
                     Id = "wuuso-block-policy-driven-other-update-source",
                     Label = "WU USO: Force Policy-Driven Update Source for Other Updates",
-                    Category = "Windows Update",
+                    Category = "Maintenance",
                     Description =
                         "Sets SetPolicyDrivenUpdateSourceForOtherUpdates=1 in WU policy. Ensures that non-feature, non-quality updates (such as drivers from the 'Other' category in WU) are sourced exclusively through the configured policy-driven update source (WSUS/SCCM). "
                         + "Without this setting, updates in the 'Other' category may still be retrieved directly from Microsoft Update regardless of the WSUS or DeliveryOptimization configuration.",

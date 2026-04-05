@@ -128,28 +128,6 @@ internal static class Browser
         },
         new TweakDef
         {
-            Id = "browser-disable-autofill-addresses",
-            Label = "Disable Address AutoFill (Chrome/Edge)",
-            Category = "Browser",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables address autofill across Chrome and Edge via policy. Protects personal address information.",
-            Tags = ["browser", "privacy", "security", "autofill"],
-            RegistryKeys = [$@"{LmKey}\SOFTWARE\Policies\Google\Chrome", $@"{LmKey}\SOFTWARE\Policies\Microsoft\Edge"],
-            ApplyOps =
-            [
-                RegOp.SetDword($@"{LmKey}\SOFTWARE\Policies\Google\Chrome", "AutofillAddressEnabled", 0),
-                RegOp.SetDword($@"{LmKey}\SOFTWARE\Policies\Microsoft\Edge", "AutofillAddressEnabled", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue($@"{LmKey}\SOFTWARE\Policies\Google\Chrome", "AutofillAddressEnabled"),
-                RegOp.DeleteValue($@"{LmKey}\SOFTWARE\Policies\Microsoft\Edge", "AutofillAddressEnabled"),
-            ],
-            DetectOps = [RegOp.CheckDword($@"{LmKey}\SOFTWARE\Policies\Google\Chrome", "AutofillAddressEnabled", 0)],
-        },
-        new TweakDef
-        {
             Id = "browser-disable-password-manager",
             Label = "Disable Built-in Password Manager (Chrome/Edge)",
             Category = "Browser",
@@ -367,50 +345,6 @@ internal static class Browser
                 RegOp.DeleteValue($@"{LmKey}\SOFTWARE\Policies\Microsoft\Edge", "EnableMediaRouter"),
             ],
             DetectOps = [RegOp.CheckDword($@"{LmKey}\SOFTWARE\Policies\Google\Chrome", "EnableMediaRouter", 0)],
-        },
-        new TweakDef
-        {
-            Id = "browser-disable-shopping-features",
-            Label = "Disable Shopping Assistant (Edge)",
-            Category = "Browser",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables Edge's shopping assistant, price comparison, and coupon features.",
-            Tags = ["browser", "privacy", "shopping", "edge"],
-            RegistryKeys = [$@"{LmKey}\SOFTWARE\Policies\Microsoft\Edge"],
-            ApplyOps =
-            [
-                RegOp.SetDword($@"{LmKey}\SOFTWARE\Policies\Microsoft\Edge", "EdgeShoppingAssistantEnabled", 0),
-                RegOp.SetDword($@"{LmKey}\SOFTWARE\Policies\Microsoft\Edge", "ConfigureDoNotTrack", 1),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue($@"{LmKey}\SOFTWARE\Policies\Microsoft\Edge", "EdgeShoppingAssistantEnabled"),
-                RegOp.DeleteValue($@"{LmKey}\SOFTWARE\Policies\Microsoft\Edge", "ConfigureDoNotTrack"),
-            ],
-            DetectOps = [RegOp.CheckDword($@"{LmKey}\SOFTWARE\Policies\Microsoft\Edge", "EdgeShoppingAssistantEnabled", 0)],
-        },
-        new TweakDef
-        {
-            Id = "browser-disable-preloading",
-            Label = "Disable Tab Preloading (Chrome/Edge)",
-            Category = "Browser",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables preloading of new tab and startup pages to save memory and network bandwidth.",
-            Tags = ["browser", "performance", "memory", "preload"],
-            RegistryKeys = [$@"{LmKey}\SOFTWARE\Policies\Google\Chrome", $@"{LmKey}\SOFTWARE\Policies\Microsoft\Edge"],
-            ApplyOps =
-            [
-                RegOp.SetDword($@"{LmKey}\SOFTWARE\Policies\Google\Chrome", "TabPreloadingEnabled", 0),
-                RegOp.SetDword($@"{LmKey}\SOFTWARE\Policies\Microsoft\Edge", "StartupBoostEnabled", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue($@"{LmKey}\SOFTWARE\Policies\Google\Chrome", "TabPreloadingEnabled"),
-                RegOp.DeleteValue($@"{LmKey}\SOFTWARE\Policies\Microsoft\Edge", "StartupBoostEnabled"),
-            ],
-            DetectOps = [RegOp.CheckDword($@"{LmKey}\SOFTWARE\Policies\Google\Chrome", "TabPreloadingEnabled", 0)],
         },
         new TweakDef
         {
@@ -834,77 +768,6 @@ internal static class Chrome
         },
         new TweakDef
         {
-            Id = "chrome-disable-preloading",
-            Label = "Disable Chrome Page Preloading",
-            Category = "Browser",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables Chrome from preloading pages it predicts you might visit. Saves bandwidth. Default: enabled.",
-            Tags = ["chrome", "preloading", "bandwidth", "prediction"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome", "NetworkPredictionOptions", 2)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome", "NetworkPredictionOptions")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome", "NetworkPredictionOptions", 2)],
-        },
-        new TweakDef
-        {
-            Id = "chrome-disable-autofill-addresses",
-            Label = "Disable Chrome Address Autofill",
-            Category = "Browser",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables Chrome's autofill suggestions for addresses. Prevents address data storage. Default: enabled.",
-            Tags = ["chrome", "autofill", "addresses", "privacy"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome", "AutofillAddressEnabled", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome", "AutofillAddressEnabled")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome", "AutofillAddressEnabled", 0)],
-        },
-        new TweakDef
-        {
-            Id = "chrome-disable-search-suggestions",
-            Label = "Disable Chrome Search Suggestions",
-            Category = "Browser",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Disables search and URL suggestions in the Chrome address bar. Prevents keystrokes from being sent to Google. Default: enabled.",
-            Tags = ["chrome", "search", "suggestions", "privacy"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome", "SearchSuggestEnabled", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome", "SearchSuggestEnabled")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome", "SearchSuggestEnabled", 0)],
-        },
-        new TweakDef
-        {
-            Id = "chrome-disable-background-mode",
-            Label = "Disable Chrome Background Mode",
-            Category = "Browser",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Prevents Chrome from running in background after all windows are closed. Frees system resources. Default: enabled.",
-            Tags = ["chrome", "background", "mode", "performance"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome", "BackgroundModeEnabled", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome", "BackgroundModeEnabled")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome", "BackgroundModeEnabled", 0)],
-        },
-        new TweakDef
-        {
-            Id = "chrome-disable-metrics-reporting",
-            Label = "Disable Chrome Metrics Reporting",
-            Category = "Browser",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables Chrome usage and crash-related data reporting to Google. Default: enabled.",
-            Tags = ["chrome", "metrics", "telemetry", "privacy"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome", "MetricsReportingEnabled", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome", "MetricsReportingEnabled")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome", "MetricsReportingEnabled", 0)],
-        },
-        new TweakDef
-        {
             Id = "chrome-disable-safe-browsing-extended",
             Label = "Disable Chrome Enhanced Safe Browsing",
             Category = "Browser",
@@ -917,48 +780,6 @@ internal static class Chrome
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome", "SafeBrowsingProtectionLevel", 1)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome", "SafeBrowsingProtectionLevel")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome", "SafeBrowsingProtectionLevel", 1)],
-        },
-        new TweakDef
-        {
-            Id = "chrome-disable-translate",
-            Label = "Disable Chrome Built-in Translation",
-            Category = "Browser",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables the built-in page translation prompt in Chrome. Default: enabled.",
-            Tags = ["chrome", "translate", "language", "ux"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome", "TranslateEnabled", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome", "TranslateEnabled")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome", "TranslateEnabled", 0)],
-        },
-        new TweakDef
-        {
-            Id = "chrome-disable-autofill-credit-cards",
-            Label = "Disable Chrome Credit Card Autofill",
-            Category = "Browser",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables Chrome from saving and auto-filling credit card information. Default: enabled.",
-            Tags = ["chrome", "autofill", "credit-card", "privacy", "security"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome", "AutofillCreditCardEnabled", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome", "AutofillCreditCardEnabled")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome", "AutofillCreditCardEnabled", 0)],
-        },
-        new TweakDef
-        {
-            Id = "chrome-disable-password-manager",
-            Label = "Disable Chrome Built-in Password Manager",
-            Category = "Browser",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables Chrome's built-in password manager. Use a dedicated password manager instead. Default: enabled.",
-            Tags = ["chrome", "password", "manager", "security"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome", "PasswordManagerEnabled", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome", "PasswordManagerEnabled")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome", "PasswordManagerEnabled", 0)],
         },
         new TweakDef
         {
@@ -976,20 +797,6 @@ internal static class Chrome
         },
         new TweakDef
         {
-            Id = "chrome-block-third-party-cookies",
-            Label = "Block Third-Party Cookies in Chrome",
-            Category = "Browser",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Blocks third-party cookies in Chrome to prevent cross-site tracking. Default: allowed.",
-            Tags = ["chrome", "cookies", "tracking", "privacy"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome", "BlockThirdPartyCookies", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome", "BlockThirdPartyCookies")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome", "BlockThirdPartyCookies", 1)],
-        },
-        new TweakDef
-        {
             Id = "chrome-disable-webrtc-leak",
             Label = "Restrict Chrome WebRTC IP Leaking",
             Category = "Browser",
@@ -1001,46 +808,6 @@ internal static class Chrome
             ApplyOps = [RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome", "WebRtcIPHandling", "disable_non_proxied_udp")],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome", "WebRtcIPHandling")],
             DetectOps = [RegOp.CheckString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome", "WebRtcIPHandling", "disable_non_proxied_udp")],
-        },
-        new TweakDef
-        {
-            Id = "chrome-disable-signin-promo",
-            Label = "Disable Chrome Sign-In Promotion",
-            Category = "Browser",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Suppresses Chrome sign-in prompts and promotional popups. Default: shown.",
-            Tags = ["chrome", "sign-in", "promotion", "ux"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome", "PromotionalTabsEnabled", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome", "PromotionalTabsEnabled")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome", "PromotionalTabsEnabled", 0)],
-        },
-        new TweakDef
-        {
-            Id = "chrome-force-dns-over-https",
-            Label = "Enable Chrome DNS-over-HTTPS",
-            Category = "Browser",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Enables DNS-over-HTTPS in Chrome with Cloudflare resolver. Encrypts DNS queries for privacy. Default: disabled.",
-            Tags = ["chrome", "dns", "doh", "privacy", "security"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome"],
-            ApplyOps =
-            [
-                RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome", "DnsOverHttpsMode", "automatic"),
-                RegOp.SetString(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome",
-                    "DnsOverHttpsTemplates",
-                    "https://cloudflare-dns.com/dns-query"
-                ),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome", "DnsOverHttpsMode"),
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome", "DnsOverHttpsTemplates"),
-            ],
-            DetectOps = [RegOp.CheckString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome", "DnsOverHttpsMode", "automatic")],
         },
         new TweakDef
         {
@@ -1063,20 +830,6 @@ internal static class Chrome
                 RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Update", "AutoUpdateCheckPeriodMinutes"),
             ],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Update", "UpdateDefault", 0)],
-        },
-        new TweakDef
-        {
-            Id = "chrome-disable-chrome-signin",
-            Label = "Disable Chrome Sign-In",
-            Category = "Browser",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables Chrome browser sign-in with Google account via policy.",
-            Tags = ["chrome", "browser", "signin", "privacy"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome", "BrowserSignin", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome", "BrowserSignin")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome", "BrowserSignin", 0)],
         },
         new TweakDef
         {
@@ -1105,20 +858,6 @@ internal static class Chrome
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome", "BackgroundProcessingEnabled", 0)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome", "BackgroundProcessingEnabled")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome", "BackgroundProcessingEnabled", 0)],
-        },
-        new TweakDef
-        {
-            Id = "chrome-disable-sync",
-            Label = "Disable Chrome Sync",
-            Category = "Browser",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables Chrome data synchronization across devices via policy.",
-            Tags = ["chrome", "browser", "sync", "privacy"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome", "SyncDisabled", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome", "SyncDisabled")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome", "SyncDisabled", 1)],
         },
         new TweakDef
         {
@@ -1192,44 +931,6 @@ internal static class Chrome
         },
         new TweakDef
         {
-            Id = "chrome-secure-dns",
-            Label = "Enable Chrome Secure DNS",
-            Category = "Browser",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Forces Chrome DNS-over-HTTPS in secure mode with Cloudflare as provider.",
-            Tags = ["chrome", "browser", "dns", "security"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome"],
-            ApplyOps =
-            [
-                RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome", "DnsOverHttpsMode", "secure"),
-                RegOp.SetString(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome",
-                    "DnsOverHttpsTemplates",
-                    "https://cloudflare-dns.com/dns-query"
-                ),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome", "DnsOverHttpsMode"),
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome", "DnsOverHttpsTemplates"),
-            ],
-            DetectOps = [RegOp.CheckString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome", "DnsOverHttpsMode", "secure")],
-        },
-        new TweakDef
-        {
-            Id = "chrome-notifications-block-default",
-            Label = "Block website notifications by default in Chrome",
-            Category = "Browser",
-            Tags = ["chrome", "notifications", "privacy", "policy"],
-            NeedsAdmin = true,
-            CorpSafe = true,
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome", "DefaultNotificationsSetting", 2)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome", "DefaultNotificationsSetting")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome", "DefaultNotificationsSetting", 2)],
-        },
-        new TweakDef
-        {
             Id = "chrome-media-autoplay-off",
             Label = "Disable media autoplay in Chrome",
             Category = "Browser",
@@ -1251,18 +952,6 @@ internal static class Chrome
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome", "AlwaysOpenPdfExternally", 1)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome", "AlwaysOpenPdfExternally")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome", "AlwaysOpenPdfExternally", 1)],
-        },
-        new TweakDef
-        {
-            Id = "chrome-safe-browsing-enhanced",
-            Label = "Enable Chrome Enhanced Safe Browsing",
-            Category = "Browser",
-            Tags = ["chrome", "safe-browsing", "security", "policy"],
-            NeedsAdmin = true,
-            CorpSafe = true,
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome", "SafeBrowsingProtectionLevel", 2)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome", "SafeBrowsingProtectionLevel")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome", "SafeBrowsingProtectionLevel", 2)],
         },
         new TweakDef
         {
@@ -1302,18 +991,6 @@ internal static class Chrome
         },
         new TweakDef
         {
-            Id = "chrome-cast-off",
-            Label = "Disable Chrome Cast / media router",
-            Category = "Browser",
-            Tags = ["chrome", "cast", "media-router", "policy"],
-            NeedsAdmin = true,
-            CorpSafe = true,
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome", "EnableMediaRouter", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome", "EnableMediaRouter")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome", "EnableMediaRouter", 0)],
-        },
-        new TweakDef
-        {
             Id = "chrome-disable-save-history",
             Label = "Disable Chrome browsing history saving",
             Category = "Browser",
@@ -1323,18 +1000,6 @@ internal static class Chrome
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome", "SavingBrowserHistoryDisabled", 1)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome", "SavingBrowserHistoryDisabled")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome", "SavingBrowserHistoryDisabled", 1)],
-        },
-        new TweakDef
-        {
-            Id = "chrome-block-geolocation",
-            Label = "Block geolocation access in Chrome by default",
-            Category = "Browser",
-            Tags = ["chrome", "geolocation", "location", "privacy", "policy"],
-            NeedsAdmin = true,
-            CorpSafe = true,
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome", "DefaultGeolocationSetting", 2)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome", "DefaultGeolocationSetting")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome", "DefaultGeolocationSetting", 2)],
         },
         new TweakDef
         {
@@ -1383,18 +1048,6 @@ internal static class Chrome
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome", "UserFeedbackAllowed", 0)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome", "UserFeedbackAllowed")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome", "UserFeedbackAllowed", 0)],
-        },
-        new TweakDef
-        {
-            Id = "chrome-force-safe-search",
-            Label = "Force Google SafeSearch in Chrome",
-            Category = "Browser",
-            Tags = ["chrome", "safesearch", "google", "policy"],
-            NeedsAdmin = true,
-            CorpSafe = true,
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome", "ForceGoogleSafeSearch", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome", "ForceGoogleSafeSearch")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome", "ForceGoogleSafeSearch", 1)],
         },
     ];
 }
@@ -1818,18 +1471,6 @@ internal static class Firefox
         },
         new TweakDef
         {
-            Id = "firefox-doh-off",
-            Label = "Disable DNS-over-HTTPS in Firefox",
-            Category = "Browser",
-            Tags = ["firefox", "dns", "doh", "network", "policy"],
-            NeedsAdmin = true,
-            CorpSafe = true,
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Mozilla\Firefox\DNSOverHTTPS", "Enabled", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Mozilla\Firefox\DNSOverHTTPS", "Enabled")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Mozilla\Firefox\DNSOverHTTPS", "Enabled", 0)],
-        },
-        new TweakDef
-        {
             Id = "firefox-hw-accel-on",
             Label = "Enable hardware acceleration in Firefox",
             Category = "Browser",
@@ -2048,34 +1689,6 @@ internal static class Edge
         },
         new TweakDef
         {
-            Id = "edge-disable-shopping-assistant",
-            Label = "Disable Edge Shopping Assistant",
-            Category = "Browser",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables the Edge shopping/coupon assistant that appears on retail sites. Default: enabled.",
-            Tags = ["edge", "shopping", "coupons", "disable"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "EdgeShoppingAssistantEnabled", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "EdgeShoppingAssistantEnabled")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "EdgeShoppingAssistantEnabled", 0)],
-        },
-        new TweakDef
-        {
-            Id = "edge-disable-startup-boost",
-            Label = "Disable Edge Startup Boost",
-            Category = "Browser",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables Edge Startup Boost that preloads Edge processes at Windows startup. Saves RAM. Default: enabled.",
-            Tags = ["edge", "startup", "boost", "memory"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "StartupBoostEnabled", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "StartupBoostEnabled")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "StartupBoostEnabled", 0)],
-        },
-        new TweakDef
-        {
             Id = "edge-disable-personalization",
             Label = "Disable Edge Personalization and Advertising",
             Category = "Browser",
@@ -2087,20 +1700,6 @@ internal static class Edge
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "PersonalizationReportingEnabled", 0)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "PersonalizationReportingEnabled")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "PersonalizationReportingEnabled", 0)],
-        },
-        new TweakDef
-        {
-            Id = "edge-disable-browser-sign-in",
-            Label = "Disable Automatic Browser Sign-In",
-            Category = "Browser",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Prevents Edge from automatically signing into the browser using the Windows account. Default: auto-sign-in.",
-            Tags = ["edge", "sign-in", "account", "privacy"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "BrowserSignin", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "BrowserSignin")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "BrowserSignin", 0)],
         },
         new TweakDef
         {
@@ -2118,48 +1717,6 @@ internal static class Edge
         },
         new TweakDef
         {
-            Id = "edge-disable-first-run-experience",
-            Label = "Disable Edge First Run Experience",
-            Category = "Browser",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Skips the Edge first run experience and import wizard on new profiles. Default: shown.",
-            Tags = ["edge", "first-run", "import", "ux"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "HideFirstRunExperience", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "HideFirstRunExperience")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "HideFirstRunExperience", 1)],
-        },
-        new TweakDef
-        {
-            Id = "edge-disable-password-manager",
-            Label = "Disable Edge Password Manager",
-            Category = "Browser",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables the Edge built-in password manager. Use a dedicated password manager. Default: enabled.",
-            Tags = ["edge", "password", "manager", "security"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "PasswordManagerEnabled", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "PasswordManagerEnabled")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "PasswordManagerEnabled", 0)],
-        },
-        new TweakDef
-        {
-            Id = "edge-disable-translate",
-            Label = "Disable Edge Translation",
-            Category = "Browser",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables automatic page translation prompts in Edge. Default: enabled.",
-            Tags = ["edge", "translate", "language", "ux"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "TranslateEnabled", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "TranslateEnabled")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "TranslateEnabled", 0)],
-        },
-        new TweakDef
-        {
             Id = "edge-disable-copilot-sidebar",
             Label = "Disable Edge Copilot Sidebar",
             Category = "Browser",
@@ -2174,34 +1731,6 @@ internal static class Edge
         },
         new TweakDef
         {
-            Id = "edge-disable-sync",
-            Label = "Disable Edge Sync",
-            Category = "Browser",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables Edge data synchronization across devices. Keeps browsing data local. Default: enabled.",
-            Tags = ["edge", "sync", "privacy", "cloud"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "SyncDisabled", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "SyncDisabled")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "SyncDisabled", 1)],
-        },
-        new TweakDef
-        {
-            Id = "edge-block-third-party-cookies",
-            Label = "Block Third-Party Cookies in Edge",
-            Category = "Browser",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Blocks third-party cookies in Edge to prevent cross-site tracking. Default: allowed.",
-            Tags = ["edge", "cookies", "tracking", "privacy"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "BlockThirdPartyCookies", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "BlockThirdPartyCookies")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "BlockThirdPartyCookies", 1)],
-        },
-        new TweakDef
-        {
             Id = "edge-disable-metrics",
             Label = "Disable Edge Diagnostic Data Collection",
             Category = "Browser",
@@ -2213,35 +1742,6 @@ internal static class Edge
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "DiagnosticData", 0)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "DiagnosticData")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "DiagnosticData", 0)],
-        },
-        new TweakDef
-        {
-            Id = "edge-disable-autofill-credit-cards",
-            Label = "Disable Edge Credit Card Autofill",
-            Category = "Browser",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables Edge from saving and auto-filling credit card information. Default: enabled.",
-            Tags = ["edge", "autofill", "credit-card", "privacy"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "AutofillCreditCardEnabled", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "AutofillCreditCardEnabled")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "AutofillCreditCardEnabled", 0)],
-        },
-        new TweakDef
-        {
-            Id = "edge-disable-edge-startup-boost",
-            Label = "Disable Edge Startup Boost (Background Mode)",
-            Category = "Browser",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description =
-                "Prevents Edge from pre-launching at login and running background processes, saving memory and CPU for users who don't use Edge as primary browser.",
-            Tags = ["edge", "browser", "startup", "background"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "BackgroundModeEnabled", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "BackgroundModeEnabled")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "BackgroundModeEnabled", 0)],
         },
         new TweakDef
         {
@@ -2418,30 +1918,6 @@ internal static class Edge
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "ImmersiveReaderGrammarToolsEnabled", 0)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "ImmersiveReaderGrammarToolsEnabled")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "ImmersiveReaderGrammarToolsEnabled", 0)],
-        },
-        new TweakDef
-        {
-            Id = "edge-disable-read-aloud",
-            Label = "Disable Edge Read Aloud feature",
-            Category = "Browser",
-            Tags = ["edge", "read-aloud", "policy"],
-            NeedsAdmin = true,
-            CorpSafe = true,
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "ReadAloudEnabled", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "ReadAloudEnabled")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "ReadAloudEnabled", 0)],
-        },
-        new TweakDef
-        {
-            Id = "edge-disable-cast-icon",
-            Label = "Hide Edge Cast toolbar icon (media router)",
-            Category = "Browser",
-            Tags = ["edge", "cast", "media", "policy"],
-            NeedsAdmin = true,
-            CorpSafe = true,
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "ShowCastIconInToolbar", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "ShowCastIconInToolbar")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "ShowCastIconInToolbar", 0)],
         },
         new TweakDef
         {
@@ -2706,42 +2182,6 @@ internal static class PolicyBrowser
                 SafetyRating = 4,
                 ImpactNote = "Configures Edge file sharing mode; combined with default browser policy to reduce Edge hijacking.",
             },
-            new TweakDef
-            {
-                Id = "defbrowser-suppress-os-feature-update-browser-reset",
-                Label = "Default Browser Policy: Preserve Default Browser Across Feature Updates",
-                Category = "Browser",
-                Description =
-                    "Ensures that the default browser association is preserved across Windows feature updates. Major Windows releases (e.g., 22H2 -> 23H2) frequently reset per-user file and protocol associations to their default (Edge) values. This policy marker ensures the default browser is locked and not reset by the OS upgrade process.",
-                Tags = ["browser", "default", "update", "preserve", "association", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                RegistryKeys = [AssocKey],
-                ApplyOps = [RegOp.SetDword(AssocKey, "EnableSmartScreen", 0)],
-                RemoveOps = [RegOp.DeleteValue(AssocKey, "EnableSmartScreen")],
-                DetectOps = [RegOp.CheckDword(AssocKey, "EnableSmartScreen", 0)],
-                ImpactScore = 3,
-                SafetyRating = 3,
-                ImpactNote = "Disables SmartScreen system filter; use only if SmartScreen is managed via another policy.",
-            },
-            new TweakDef
-            {
-                Id = "defbrowser-disable-edge-side-panel-web",
-                Label = "Default Browser Policy: Disable Edge Side Panel Web Content",
-                Category = "Browser",
-                Description =
-                    "Prevents the Microsoft Edge side panel (Bing Chat, Shopping, etc.) from loading web content in Explorer and third-party applications. The Edge side panel can activate and pull in browser content within non-browser windows when Edge is installed even if it is not the default browser.",
-                Tags = ["browser", "edge", "side panel", "web content", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                RegistryKeys = [EdgeKey],
-                ApplyOps = [RegOp.SetDword(EdgeKey, "HubsSidebarEnabled", 0)],
-                RemoveOps = [RegOp.DeleteValue(EdgeKey, "HubsSidebarEnabled")],
-                DetectOps = [RegOp.CheckDword(EdgeKey, "HubsSidebarEnabled", 0)],
-                ImpactScore = 2,
-                SafetyRating = 5,
-                ImpactNote = "Disables Edge side panel (Bing Chat, Shopping, Tools) from appearing in any context.",
-            },
         ];
     }
 
@@ -2752,91 +2192,6 @@ internal static class PolicyBrowser
 
         public static IReadOnlyList<TweakDef> Data =>
             [
-                new TweakDef
-                {
-                    Id = "eaguard-enable-app-guard",
-                    Label = "Enable Application Guard for Edge",
-                    Category = "Browser",
-                    Description =
-                        "Enables Microsoft Defender Application Guard for Microsoft Edge, isolating untrusted web sessions in a hardware-based Hyper-V container.",
-                    Tags = ["edge", "app-guard", "isolation", "hyper-v", "security", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 5,
-                    SafetyRating = 5,
-                    ImpactNote = "Untrusted sites opened in isolated Hyper-V containers; requires Hyper-V and Windows Pro/Enterprise.",
-                    ApplyOps = [RegOp.SetDword(Key, "AllowAppHVSI_ProviderSet", 1)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "AllowAppHVSI_ProviderSet")],
-                    DetectOps = [RegOp.CheckDword(Key, "AllowAppHVSI_ProviderSet", 1)],
-                },
-                new TweakDef
-                {
-                    Id = "eaguard-block-clipboard-host-to-container",
-                    Label = "Block Clipboard Copy Host → App Guard Container",
-                    Category = "Browser",
-                    Description =
-                        "Blocks clipboard copy operations from the host to the Application Guard container, preventing data injection into the isolated browsing session.",
-                    Tags = ["edge", "app-guard", "clipboard", "hardening", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 4,
-                    SafetyRating = 5,
-                    ImpactNote = "Cannot paste host clipboard content into App Guard session; data enters container via other means only.",
-                    ApplyOps = [RegOp.SetDword(Key, "AppHVSIClipboardSettings", 0)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "AppHVSIClipboardSettings")],
-                    DetectOps = [RegOp.CheckDword(Key, "AppHVSIClipboardSettings", 0)],
-                },
-                new TweakDef
-                {
-                    Id = "eaguard-block-printing",
-                    Label = "Block Printing from Application Guard Sessions",
-                    Category = "Browser",
-                    Description =
-                        "Prevents users from printing from within Application Guard container sessions, blocking data exfiltration via printed documents from isolated browsing sessions.",
-                    Tags = ["edge", "app-guard", "printing", "hardening", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 3,
-                    SafetyRating = 5,
-                    ImpactNote = "Printing from App Guard session blocked; all print operations must occur from trusted host context.",
-                    ApplyOps = [RegOp.SetDword(Key, "AppHVSIPrintingSettings", 0)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "AppHVSIPrintingSettings")],
-                    DetectOps = [RegOp.CheckDword(Key, "AppHVSIPrintingSettings", 0)],
-                },
-                new TweakDef
-                {
-                    Id = "eaguard-block-data-persistence",
-                    Label = "Block Data Persistence in Application Guard",
-                    Category = "Browser",
-                    Description =
-                        "Disables data persistence in Application Guard containers so all browsing data (cookies, cached files, saved passwords) is discarded when the container terminates.",
-                    Tags = ["edge", "app-guard", "persistence", "privacy", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 4,
-                    SafetyRating = 5,
-                    ImpactNote = "Container data wiped on session close; no session data survives for attackers to access.",
-                    ApplyOps = [RegOp.SetDword(Key, "AllowPersistence", 0)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "AllowPersistence")],
-                    DetectOps = [RegOp.CheckDword(Key, "AllowPersistence", 0)],
-                },
-                new TweakDef
-                {
-                    Id = "eaguard-block-camera-mic",
-                    Label = "Block Camera and Microphone in App Guard",
-                    Category = "Browser",
-                    Description =
-                        "Blocks camera and microphone access for Application Guard container sessions, preventing untrusted web content from capturing audio or video from host hardware.",
-                    Tags = ["edge", "app-guard", "camera", "microphone", "privacy", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 4,
-                    SafetyRating = 5,
-                    ImpactNote = "Camera and mic blocked in isolated sessions; media capture by untrusted sites impossible.",
-                    ApplyOps = [RegOp.SetDword(Key, "AllowCameraMicrophoneRedirection", 0)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "AllowCameraMicrophoneRedirection")],
-                    DetectOps = [RegOp.CheckDword(Key, "AllowCameraMicrophoneRedirection", 0)],
-                },
                 new TweakDef
                 {
                     Id = "eaguard-enable-enterprise-mode",
@@ -2871,57 +2226,6 @@ internal static class PolicyBrowser
                     RemoveOps = [RegOp.DeleteValue(Key, "AllowVirtualGPU")],
                     DetectOps = [RegOp.CheckDword(Key, "AllowVirtualGPU", 0)],
                 },
-                new TweakDef
-                {
-                    Id = "eaguard-block-download-host",
-                    Label = "Block Downloads from App Guard to Host",
-                    Category = "Browser",
-                    Description =
-                        "Prevents files downloaded inside the Application Guard container from being saved or transferred to the host file system, preventing malware delivery via trusted-site download.",
-                    Tags = ["edge", "app-guard", "download", "hardening", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 4,
-                    SafetyRating = 5,
-                    ImpactNote = "Container downloads stay isolated; files cannot be moved from App Guard to host.",
-                    ApplyOps = [RegOp.SetDword(Key, "SaveFilesToHost", 0)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "SaveFilesToHost")],
-                    DetectOps = [RegOp.CheckDword(Key, "SaveFilesToHost", 0)],
-                },
-                new TweakDef
-                {
-                    Id = "eaguard-enable-audit-events",
-                    Label = "Enable Application Guard Audit Events",
-                    Category = "Browser",
-                    Description =
-                        "Enables audit event logging for Application Guard operations, recording container creation, clipboard events, and policy violations to the event log.",
-                    Tags = ["edge", "app-guard", "audit", "logging", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 3,
-                    SafetyRating = 5,
-                    ImpactNote = "App Guard events logged; security monitoring and forensics improve.",
-                    ApplyOps = [RegOp.SetDword(Key, "AuditApplicationGuard", 1)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "AuditApplicationGuard")],
-                    DetectOps = [RegOp.CheckDword(Key, "AuditApplicationGuard", 1)],
-                },
-                new TweakDef
-                {
-                    Id = "eaguard-enforce-network-isolation",
-                    Label = "Enforce Network Isolation in Application Guard",
-                    Category = "Browser",
-                    Description =
-                        "Enforces strict network isolation on Application Guard containers, ensuring they can only access the internet and cannot reach internal corporate network resources.",
-                    Tags = ["edge", "app-guard", "network-isolation", "hardening", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 5,
-                    SafetyRating = 5,
-                    ImpactNote = "App Guard containers isolated from intranet; compromised sessions cannot pivot to internal resources.",
-                    ApplyOps = [RegOp.SetDword(Key, "BlockNonEnterpriseContent", 1)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "BlockNonEnterpriseContent")],
-                    DetectOps = [RegOp.CheckDword(Key, "BlockNonEnterpriseContent", 1)],
-                },
             ];
     }
 
@@ -2932,42 +2236,6 @@ internal static class PolicyBrowser
 
         public static IReadOnlyList<TweakDef> Data =>
             [
-                new TweakDef
-                {
-                    Id = "edgeaf-disable-address-autofill",
-                    Label = "Edge AutoFill: Disable AutoFill for Address and Contact Information",
-                    Category = "Browser",
-                    Description =
-                        "Sets AutofillAddressEnabled=0 in Edge policy. Prevents Edge from storing, suggesting, or filling home/work addresses, phone numbers, and contact details in web forms using the browser's autofill profile database. "
-                        + "Autofill address data is stored in the Edge browser profile directory, which is located within the user's Windows profile. Any process running as the current user can read the profile's 'Web Data' SQLite database and extract all stored addresses and phone numbers in cleartext. Disabling address autofill eliminates this persisted PII from the browser profile, reducing the blast radius of a browser profile data theft.",
-                    Tags = ["edge", "autofill", "address", "pii", "profile"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 3,
-                    SafetyRating = 5,
-                    ImpactNote = "Edge address autofill disabled; no home/work addresses or phone numbers stored in browser profile.",
-                    ApplyOps = [RegOp.SetDword(Key, "AutofillAddressEnabled", 0)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "AutofillAddressEnabled")],
-                    DetectOps = [RegOp.CheckDword(Key, "AutofillAddressEnabled", 0)],
-                },
-                new TweakDef
-                {
-                    Id = "edgeaf-disable-credit-card-autofill",
-                    Label = "Edge AutoFill: Disable AutoFill for Payment / Credit Card Information",
-                    Category = "Browser",
-                    Description =
-                        "Sets AutofillCreditCardEnabled=0 in Edge policy. Prevents Edge from storing, offering to save, or automatically filling credit card numbers, expiry dates, and CVV codes in payment forms using the browser's payment autofill database. "
-                        + "Credit card numbers stored in the Edge autofill database persist in the browser profile's 'Web Data' file. The file is encrypted at rest using Windows DPAPI, but DPAPI decryption requires only the user's active session context — no additional PIN or authentication. Any script or process running as the user can request DPAPI decryption of the autofill database and recover stored card numbers. Enterprise browsers should never store payment card data.",
-                    Tags = ["edge", "autofill", "credit-card", "payment", "pci"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 5,
-                    SafetyRating = 5,
-                    ImpactNote = "Edge credit card autofill disabled; no card numbers stored in browser profile database.",
-                    ApplyOps = [RegOp.SetDword(Key, "AutofillCreditCardEnabled", 0)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "AutofillCreditCardEnabled")],
-                    DetectOps = [RegOp.CheckDword(Key, "AutofillCreditCardEnabled", 0)],
-                },
                 new TweakDef
                 {
                     Id = "edgeaf-disable-form-data-saving",
@@ -2985,42 +2253,6 @@ internal static class PolicyBrowser
                     ApplyOps = [RegOp.SetDword(Key, "FormFillEnabled", 0)],
                     RemoveOps = [RegOp.DeleteValue(Key, "FormFillEnabled")],
                     DetectOps = [RegOp.CheckDword(Key, "FormFillEnabled", 0)],
-                },
-                new TweakDef
-                {
-                    Id = "edgeaf-disable-payment-request-api",
-                    Label = "Edge AutoFill: Disable Web Payment Request API Access",
-                    Category = "Browser",
-                    Description =
-                        "Sets PaymentMethodQueryEnabled=0 in Edge policy. Disables the Payment Request API in Edge, preventing web pages from programmatically querying whether the user has saved payment methods in Edge and from triggering the Payment Request UX when initiated by JavaScript. "
-                        + "The Payment Request API allows a web page to enumerate available payment methods and trigger a native payment UI sheet. Malicious or compromised retail web pages can abuse this API to detect whether a user has credit card data stored in Edge, serving this information as a targeting signal for subsequent social engineering attacks. Disabling the API prevents this enumeration and blocks web-initiated payment flows entirely.",
-                    Tags = ["edge", "payment-request-api", "payment", "enumeration", "web-api"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 4,
-                    SafetyRating = 5,
-                    ImpactNote = "Payment Request API disabled; web pages cannot query payment methods or trigger native payment UX in Edge.",
-                    ApplyOps = [RegOp.SetDword(Key, "PaymentMethodQueryEnabled", 0)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "PaymentMethodQueryEnabled")],
-                    DetectOps = [RegOp.CheckDword(Key, "PaymentMethodQueryEnabled", 0)],
-                },
-                new TweakDef
-                {
-                    Id = "edgeaf-disable-browser-sign-in-for-autofill",
-                    Label = "Edge AutoFill: Disable Cross-Device AutoFill Sync via Browser Sign-In",
-                    Category = "Browser",
-                    Description =
-                        "Sets BrowserSignin=0 in Edge policy. Prevents Edge from syncing saved autofill data (addresses, form data, payment methods) to other devices via the user's Microsoft account, keeping browser autofill data isolated to the current managed device. "
-                        + "Edge browser sync transfers autofill data — including typed form history and saved addresses — to Microsoft's sync service and then to all other devices where the user is signed into Edge with the same Microsoft account. Personal devices may not have DLP, antivirus, or endpoint protection policies. Synced autofill data that originates from work browsing (containing internal site form inputs) may leak to a personal device with weaker security controls.",
-                    Tags = ["edge", "sync", "autofill", "cross-device", "data-residency"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 3,
-                    SafetyRating = 5,
-                    ImpactNote = "Edge autofill sync disabled; form data and addresses stay on the local managed device only.",
-                    ApplyOps = [RegOp.SetDword(Key, "BrowserSignin", 0)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "BrowserSignin")],
-                    DetectOps = [RegOp.CheckDword(Key, "BrowserSignin", 0)],
                 },
                 new TweakDef
                 {
@@ -3093,24 +2325,6 @@ internal static class PolicyBrowser
                     ApplyOps = [RegOp.SetDword(Key, "AddressBarEditingEnabled", 0)],
                     RemoveOps = [RegOp.DeleteValue(Key, "AddressBarEditingEnabled")],
                     DetectOps = [RegOp.CheckDword(Key, "AddressBarEditingEnabled", 0)],
-                },
-                new TweakDef
-                {
-                    Id = "edgeaf-disable-coupon-and-shopping-autofill",
-                    Label = "Edge AutoFill: Disable Shopping / Coupon AutoFill and Price Comparison",
-                    Category = "Browser",
-                    Description =
-                        "Sets EdgeShoppingAssistantEnabled=0 in Edge policy. Disables Edge's built-in shopping assistant that automatically detects product pages, suggests coupons, compares prices, and activates cashback offers, preventing these features from transmitting purchase intent signals and retail browsing patterns to Microsoft's shopping backend. "
-                        + "The Edge shopping assistant monitors every page visit and performs URL classification to detect retail product pages in real time. This classification sends a request to Microsoft's shopping API containing the page URL and product context for every retail page visited. In regulated industries (healthcare, finance), browsing on retail product pages that may correlate with personal spending habits constitutes PII data that should not be transmitted to external advertising-adjacent services.",
-                    Tags = ["edge", "shopping", "coupon", "price-comparison", "telemetry"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 2,
-                    SafetyRating = 5,
-                    ImpactNote = "Edge shopping assistant and price comparison disabled; retail page visits not reported to Microsoft shopping API.",
-                    ApplyOps = [RegOp.SetDword(Key, "EdgeShoppingAssistantEnabled", 0)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "EdgeShoppingAssistantEnabled")],
-                    DetectOps = [RegOp.CheckDword(Key, "EdgeShoppingAssistantEnabled", 0)],
                 },
             ];
     }
@@ -3386,24 +2600,6 @@ internal static class PolicyBrowser
             },
             new TweakDef
             {
-                Id = "edgedl-disable-media-router",
-                Label = "Edge Download & History Policy: Disable Cast (Media Router) Feature",
-                Category = "Browser",
-                Description =
-                    "Disables the Cast/Media Router infrastructure in Microsoft Edge that discovers nearby Chromecast and Miracast display devices and allows browser tabs or media to be cast to them wirelessly. Setting EnableMediaRouter to 0 removes the Cast button from the Edge toolbar and prevents network scanning for cast targets. Cast device discovery sends mDNS probe packets to the local network, creating unsolicited network traffic and potentially leaking device identity information to local network listeners.",
-                Tags = ["edge", "cast", "media router", "chromecast", "network", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                RegistryKeys = [EdgeKey],
-                ApplyOps = [RegOp.SetDword(EdgeKey, "EnableMediaRouter", 0)],
-                RemoveOps = [RegOp.DeleteValue(EdgeKey, "EnableMediaRouter")],
-                DetectOps = [RegOp.CheckDword(EdgeKey, "EnableMediaRouter", 0)],
-                ImpactScore = 2,
-                SafetyRating = 5,
-                ImpactNote = "Cast button and media router removed from Edge; tab or video casting to display devices is unavailable.",
-            },
-            new TweakDef
-            {
                 Id = "edgedl-enable-auto-update",
                 Label = "Edge Download & History Policy: Ensure Microsoft Edge Automatic Updates are Enabled",
                 Category = "Browser",
@@ -3572,23 +2768,6 @@ internal static class PolicyBrowser
                 },
                 new TweakDef
                 {
-                    Id = "edgehint-enable-doh-secure-mode",
-                    Label = "Enable Secure DNS (DoH) in Edge",
-                    Category = "Browser",
-                    Description =
-                        "Enables DNS-over-HTTPS (Secure DNS) in Edge, protecting DNS queries from eavesdropping and manipulation by using encrypted DNS resolution.",
-                    Tags = ["edge", "doh", "dns", "privacy", "security", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 4,
-                    SafetyRating = 5,
-                    ImpactNote = "DoH active in Edge; DNS queries encrypted even if OS-level DoH is not configured.",
-                    ApplyOps = [RegOp.SetDword(Key, "DnsOverHttpsMode", 1)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "DnsOverHttpsMode")],
-                    DetectOps = [RegOp.CheckDword(Key, "DnsOverHttpsMode", 1)],
-                },
-                new TweakDef
-                {
                     Id = "edgehint-disable-early-hints-header",
                     Label = "Disable HTTP 103 Early Hints Processing in Edge",
                     Category = "Browser",
@@ -3603,57 +2782,6 @@ internal static class PolicyBrowser
                     ApplyOps = [RegOp.SetDword(Key, "EarlyHintsModeEnabled", 0)],
                     RemoveOps = [RegOp.DeleteValue(Key, "EarlyHintsModeEnabled")],
                     DetectOps = [RegOp.CheckDword(Key, "EarlyHintsModeEnabled", 0)],
-                },
-                new TweakDef
-                {
-                    Id = "edgehint-block-external-protocol-dialogs",
-                    Label = "Block External Protocol Launch Dialogs in Edge",
-                    Category = "Browser",
-                    Description =
-                        "Suppresses the permission dialog for external protocol launches (e.g., opening apps via custom URI schemes from web pages) in Edge, blocking malicious app-launch attempts.",
-                    Tags = ["edge", "protocol-launch", "security", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 3,
-                    SafetyRating = 5,
-                    ImpactNote = "External URI scheme prompts blocked; web pages cannot auto-launch installed apps without explicit allow-list.",
-                    ApplyOps = [RegOp.SetDword(Key, "ExternalProtocolDialogShowAlwaysOpenCheckbox", 0)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "ExternalProtocolDialogShowAlwaysOpenCheckbox")],
-                    DetectOps = [RegOp.CheckDword(Key, "ExternalProtocolDialogShowAlwaysOpenCheckbox", 0)],
-                },
-                new TweakDef
-                {
-                    Id = "edgehint-disable-address-bar-prediction",
-                    Label = "Disable Address Bar Search/URL Prediction in Edge",
-                    Category = "Browser",
-                    Description =
-                        "Disables the Edge address bar prediction feature that sends partially typed URLs to Microsoft search services for autocomplete suggestions.",
-                    Tags = ["edge", "address-bar", "prediction", "privacy", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 3,
-                    SafetyRating = 5,
-                    ImpactNote = "Address bar suggestions disabled; typed URLs not sent to Microsoft until Enter is pressed.",
-                    ApplyOps = [RegOp.SetDword(Key, "SearchSuggestEnabled", 0)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "SearchSuggestEnabled")],
-                    DetectOps = [RegOp.CheckDword(Key, "SearchSuggestEnabled", 0)],
-                },
-                new TweakDef
-                {
-                    Id = "edgehint-disable-browser-sign-in",
-                    Label = "Disable Browser Sign-In in Edge",
-                    Category = "Browser",
-                    Description =
-                        "Disables signing into Microsoft Edge with a personal or work Microsoft account, preventing browser sync of history, passwords, bookmarks, and browsing data.",
-                    Tags = ["edge", "sign-in", "sync", "privacy", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 4,
-                    SafetyRating = 5,
-                    ImpactNote = "Browser sign-in disabled; no sync to Microsoft account or Entra ID for personal profiles.",
-                    ApplyOps = [RegOp.SetDword(Key, "BrowserSignin", 0)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "BrowserSignin")],
-                    DetectOps = [RegOp.CheckDword(Key, "BrowserSignin", 0)],
                 },
                 new TweakDef
                 {
@@ -3789,24 +2917,6 @@ internal static class PolicyBrowser
                 ImpactScore = 2,
                 SafetyRating = 4,
                 ImpactNote = "Sets Manifest V2 extension availability to enabled only for force-installed extensions (value 2).",
-            },
-            new TweakDef
-            {
-                Id = "edgeext-disable-edge-shopping-assistant",
-                Label = "Edge Extension Policy: Disable Edge Shopping and Price Comparison Assistant",
-                Category = "Browser",
-                Description =
-                    "Disables the Microsoft Edge built-in shopping assistant that automatically activates on e-commerce websites to show price comparisons, coupons, and cashback offers from partner retailers. The shopping assistant shares product browsing data with Microsoft partner networks. Many organizations prohibit this data sharing on corporate devices, especially in financial and healthcare sectors.",
-                Tags = ["edge", "shopping", "coupons", "privacy", "assistant", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                RegistryKeys = [EdgeKey],
-                ApplyOps = [RegOp.SetDword(EdgeKey, "EdgeShoppingAssistantEnabled", 0)],
-                RemoveOps = [RegOp.DeleteValue(EdgeKey, "EdgeShoppingAssistantEnabled")],
-                DetectOps = [RegOp.CheckDword(EdgeKey, "EdgeShoppingAssistantEnabled", 0)],
-                ImpactScore = 2,
-                SafetyRating = 5,
-                ImpactNote = "Disables shopping assistant and coupons feature; browsing data is not shared with partner retailers.",
             },
             new TweakDef
             {
@@ -4018,24 +3128,6 @@ internal static class PolicyBrowser
                 },
                 new TweakDef
                 {
-                    Id = "edgeimp-prevent-ssl-bypass",
-                    Label = "Prevent Users From Bypassing SSL Certificate Errors in Edge",
-                    Category = "Browser",
-                    Description =
-                        "Disables the 'Proceed anyway' option on SSL certificate error pages in Microsoft Edge, forcing users to stop when a certificate warning fires instead of bypassing it.",
-                    Tags = ["edge", "browser", "ssl", "tls", "certificate", "security", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 4,
-                    SafetyRating = 5,
-                    ImpactNote = "Prevents MITM bypass via self-signed cert acceptance; may block access to internal sites with bad certs.",
-                    RegistryKeys = [Key],
-                    ApplyOps = [RegOp.SetDword(Key, "SSLErrorOverrideAllowed", 0)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "SSLErrorOverrideAllowed")],
-                    DetectOps = [RegOp.CheckDword(Key, "SSLErrorOverrideAllowed", 0)],
-                },
-                new TweakDef
-                {
                     Id = "edgeimp-disable-site-info-reporting",
                     Label = "Disable Sending Site Info to Microsoft for Edge Improvement",
                     Category = "Browser",
@@ -4062,24 +3154,6 @@ internal static class PolicyBrowser
 
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
-            new TweakDef
-            {
-                Id = "iemode-disable-ie-integration",
-                Label = "Edge IE Mode Policy: Disable Internet Explorer Integration Mode",
-                Category = "Browser",
-                Description =
-                    "Configures Microsoft Edge to disable Internet Explorer integration mode entirely. Setting InternetExplorerIntegrationLevel to 0 means Edge will not render any pages in the Internet Explorer rendering engine (Trident/MSHTML), even if those pages match an Enterprise Mode Site List. IE mode is a legacy compatibility shunt that activates the deprecated IE11 engine inside Edge. Disabling it forces all web content through the modern Chromium renderer and eliminates the IE11 attack surface.",
-                Tags = ["edge", "internet explorer", "ie mode", "legacy", "security", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                RegistryKeys = [EdgeKey],
-                ApplyOps = [RegOp.SetDword(EdgeKey, "InternetExplorerIntegrationLevel", 0)],
-                RemoveOps = [RegOp.DeleteValue(EdgeKey, "InternetExplorerIntegrationLevel")],
-                DetectOps = [RegOp.CheckDword(EdgeKey, "InternetExplorerIntegrationLevel", 0)],
-                ImpactScore = 4,
-                SafetyRating = 4,
-                ImpactNote = "IE mode tab rendering disabled; legacy intranet apps requiring Trident/MSHTML will no longer render in Edge.",
-            },
             new TweakDef
             {
                 Id = "iemode-block-reload-in-ie",
@@ -4445,24 +3519,6 @@ internal static class PolicyBrowser
             [
                 new TweakDef
                 {
-                    Id = "edgentp-disable-news-feed-on-new-tab",
-                    Label = "Edge New Tab Page: Disable Microsoft News Feed and Sponsored Content",
-                    Category = "Browser",
-                    Description =
-                        "Sets NewTabPageContentEnabled=0 in Edge policy. Removes the news feed, sponsored content tiles, and 'Microsoft Start' MSN content from the Edge New Tab Page, leaving only the search bar and customisable quick-access shortcuts. "
-                        + "The Microsoft News feed on the Edge New Tab Page makes network requests to news CDN endpoints on every new tab open, sending the user's browsing context and telemetry to the MSN/Microsoft Start advertising network. Every new tab opened invites a network round-trip that may be captured by enterprise proxy logs as an apparent outbound data transfer. Removing the feed eliminates this unwanted telemetry and reduces browser startup time.",
-                    Tags = ["edge", "new-tab", "news-feed", "telemetry", "msn"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 3,
-                    SafetyRating = 5,
-                    ImpactNote = "Edge New Tab news feed disabled; no MSN/Microsoft Start content requests on new tab open.",
-                    ApplyOps = [RegOp.SetDword(Key, "NewTabPageContentEnabled", 0)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "NewTabPageContentEnabled")],
-                    DetectOps = [RegOp.CheckDword(Key, "NewTabPageContentEnabled", 0)],
-                },
-                new TweakDef
-                {
                     Id = "edgentp-set-new-tab-layout-focused-mode",
                     Label = "Edge New Tab Page: Set New Tab Page to Focused Layout (Search Only)",
                     Category = "Browser",
@@ -4635,24 +3691,6 @@ internal static class PolicyBrowser
         [
             new TweakDef
             {
-                Id = "edgenotif-block-notifications",
-                Label = "Edge Notifications & Popup Policy: Block All Web Push Notifications",
-                Category = "Browser",
-                Description =
-                    "Configures Microsoft Edge to block all websites from sending push notification requests to the user. Setting DefaultNotificationsSetting to 2 means no site can prompt the user for notification permission and no notifications are delivered via the Web Notifications API. Web push notifications are a significant phishing and social engineering vector, used by malicious sites to display alarming security messages, fake prize alerts, or to maintain persistent contact with the browser even when the site tab is closed.",
-                Tags = ["edge", "notifications", "push notifications", "web push", "privacy", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                RegistryKeys = [EdgeKey],
-                ApplyOps = [RegOp.SetDword(EdgeKey, "DefaultNotificationsSetting", 2)],
-                RemoveOps = [RegOp.DeleteValue(EdgeKey, "DefaultNotificationsSetting")],
-                DetectOps = [RegOp.CheckDword(EdgeKey, "DefaultNotificationsSetting", 2)],
-                ImpactScore = 4,
-                SafetyRating = 5,
-                ImpactNote = "All websites are blocked from requesting notification permission; zero push notifications delivered by the browser.",
-            },
-            new TweakDef
-            {
                 Id = "edgenotif-block-popups",
                 Label = "Edge Notifications & Popup Policy: Block All Website Popup Windows",
                 Category = "Browser",
@@ -4686,24 +3724,6 @@ internal static class PolicyBrowser
                 ImpactScore = 3,
                 SafetyRating = 5,
                 ImpactNote = "Eye/reveal icon removed from password fields; users must rely on password manager for password visibility.",
-            },
-            new TweakDef
-            {
-                Id = "edgenotif-block-geolocation",
-                Label = "Edge Notifications & Popup Policy: Block Websites from Accessing Geolocation",
-                Category = "Browser",
-                Description =
-                    "Prevents any website from requesting or obtaining the user's physical location through the browser Geolocation API. Setting DefaultGeolocationSetting to 2 globally blocks geolocation permission so no site can query GPS/Wi-Fi/cell tower location. Geolocation can be combined with other telemetry to build precise user-movement profiles. Blocking it at the browser policy level prevents accidental or silent location sharing through map pages, check-in apps, and advertising networks.",
-                Tags = ["edge", "geolocation", "location", "privacy", "gps", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                RegistryKeys = [EdgeKey],
-                ApplyOps = [RegOp.SetDword(EdgeKey, "DefaultGeolocationSetting", 2)],
-                RemoveOps = [RegOp.DeleteValue(EdgeKey, "DefaultGeolocationSetting")],
-                DetectOps = [RegOp.CheckDword(EdgeKey, "DefaultGeolocationSetting", 2)],
-                ImpactScore = 4,
-                SafetyRating = 5,
-                ImpactNote = "All websites are denied geolocation access; map and location-based web apps may require manual site exceptions.",
             },
             new TweakDef
             {
@@ -4823,42 +3843,6 @@ internal static class PolicyBrowser
 
         public static IReadOnlyList<TweakDef> Data =>
             [
-                new TweakDef
-                {
-                    Id = "edgepwm-disable-built-in-password-manager",
-                    Label = "Edge Password Manager: Disable Edge's Built-In Password Save Prompts",
-                    Category = "Browser",
-                    Description =
-                        "Sets PasswordManagerEnabled=0 in Edge policy. Disables the Edge built-in password manager's offer to save new credentials, preventing Edge from storing work account passwords in the browser's local credential store. "
-                        + "The Edge password manager stores credentials in a file encrypted with the Windows DPAPI (Data Protection API) encryption key, which is bound to the user's Windows login credentials. If an unprivileged process on the same machine gains access to the browser's LocalState file (e.g., via a malicious script running as the same user), it can request DPAPI decryption of the stored passwords without any additional authentication, recovering plaintext credentials for all saved sites.",
-                    Tags = ["edge", "password-manager", "credential-storage", "dpapi"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 4,
-                    SafetyRating = 5,
-                    ImpactNote = "Edge will not offer to save passwords; users must use an approved enterprise password manager instead.",
-                    ApplyOps = [RegOp.SetDword(Key, "PasswordManagerEnabled", 0)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "PasswordManagerEnabled")],
-                    DetectOps = [RegOp.CheckDword(Key, "PasswordManagerEnabled", 0)],
-                },
-                new TweakDef
-                {
-                    Id = "edgepwm-disable-password-reveal-button",
-                    Label = "Edge Password Manager: Disable Show-Password Reveal Button in Input Fields",
-                    Category = "Browser",
-                    Description =
-                        "Sets PasswordRevealEnabled=0 in Edge policy. Removes the 'eye' icon reveal button that appears in password input fields in Edge, preventing users from visually revealing the entered password text in a password field. "
-                        + "The password reveal button, while intended for usability, is a security risk in shared workspace environments: a screen-sharing session (Teams, Zoom, remote support) that shows the browser window while a user is entering a password could inadvertently reveal the masked password text if the user or a collaborator clicks the reveal button. Disabling the reveal button removes this inadvertent exposure channel.",
-                    Tags = ["edge", "password", "reveal", "screen-sharing", "shoulder-surfing"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 2,
-                    SafetyRating = 5,
-                    ImpactNote = "Password reveal button removed from Edge password fields; entered passwords cannot be un-masked by button click.",
-                    ApplyOps = [RegOp.SetDword(Key, "PasswordRevealEnabled", 0)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "PasswordRevealEnabled")],
-                    DetectOps = [RegOp.CheckDword(Key, "PasswordRevealEnabled", 0)],
-                },
                 new TweakDef
                 {
                     Id = "edgepwm-disable-primary-password-bypass",
@@ -5103,24 +4087,6 @@ internal static class PolicyBrowser
                 ImpactScore = 3,
                 SafetyRating = 4,
                 ImpactNote = "Blocks legacy kernel-mode printer drivers in Edge; older printers without IPP support may be unavailable.",
-            },
-            new TweakDef
-            {
-                Id = "edgepdp-open-pdf-externally",
-                Label = "Edge Print & PDF Policy: Open PDF Files with External Application",
-                Category = "Browser",
-                Description =
-                    "Forces Microsoft Edge to open PDF files using the operating system's default PDF application (e.g., Adobe Acrobat Reader, Foxit) instead of the built-in Edge PDF viewer. This is useful in environments where the standard PDF tool provides additional features such as digital signature validation, form filling, or DRM support that the browser's viewer does not provide.",
-                Tags = ["edge", "pdf", "viewer", "external", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                RegistryKeys = [EdgeKey],
-                ApplyOps = [RegOp.SetDword(EdgeKey, "AlwaysOpenPdfExternally", 1)],
-                RemoveOps = [RegOp.DeleteValue(EdgeKey, "AlwaysOpenPdfExternally")],
-                DetectOps = [RegOp.CheckDword(EdgeKey, "AlwaysOpenPdfExternally", 1)],
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "PDF files downloaded via Edge are opened with the OS default PDF app instead of the built-in viewer.",
             },
             new TweakDef
             {
@@ -5396,24 +4362,6 @@ internal static class PolicyBrowser
         [
             new TweakDef
             {
-                Id = "edgesrch-disable-search-suggest",
-                Label = "Edge Search & Address Bar Policy: Disable Address Bar Search Suggestions",
-                Category = "Browser",
-                Description =
-                    "Prevents Microsoft Edge from displaying predictive search suggestions in the address bar as the user types. Search suggestions are sent keystroke-by-keystroke to the configured search provider (typically Bing). Disabling this eliminates real-time data leakage of partially typed URLs and search queries to Microsoft or third-party search engines over the network.",
-                Tags = ["edge", "search", "suggestions", "address bar", "privacy", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                RegistryKeys = [EdgeKey],
-                ApplyOps = [RegOp.SetDword(EdgeKey, "SearchSuggestEnabled", 0)],
-                RemoveOps = [RegOp.DeleteValue(EdgeKey, "SearchSuggestEnabled")],
-                DetectOps = [RegOp.CheckDword(EdgeKey, "SearchSuggestEnabled", 0)],
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "No search suggestions appear in the address bar; each search is only submitted when Enter is pressed.",
-            },
-            new TweakDef
-            {
                 Id = "edgesrch-disable-bing-address-bar-provider",
                 Label = "Edge Search & Address Bar Policy: Remove Microsoft Search in Bing from Address Bar",
                 Category = "Browser",
@@ -5447,24 +4395,6 @@ internal static class PolicyBrowser
                 ImpactScore = 2,
                 SafetyRating = 5,
                 ImpactNote = "Intranet URL completions and local history suggestions no longer appear in the Edge address bar.",
-            },
-            new TweakDef
-            {
-                Id = "edgesrch-disable-network-prediction",
-                Label = "Edge Search & Address Bar Policy: Disable Network Prediction and Prefetch",
-                Category = "Browser",
-                Description =
-                    "Disables all network prediction and DNS prefetching in Microsoft Edge. With prediction enabled (the default), Edge pre-resolves DNS and pre-connects to the likely destinations of links visible on the page and the current address bar entry, even before the user clicks. This pre-warming creates network connections to destinations the user has never explicitly visited, which violates strict outbound traffic controls and generates noise in network monitoring.",
-                Tags = ["edge", "network prediction", "prefetch", "dns", "performance", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                RegistryKeys = [EdgeKey],
-                ApplyOps = [RegOp.SetDword(EdgeKey, "NetworkPredictionOptions", 2)],
-                RemoveOps = [RegOp.DeleteValue(EdgeKey, "NetworkPredictionOptions")],
-                DetectOps = [RegOp.CheckDword(EdgeKey, "NetworkPredictionOptions", 2)],
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Value 2 disables DNS prefetch and TCP preconnect; may slightly increase navigation time on first-visit pages.",
             },
             new TweakDef
             {
@@ -5730,24 +4660,6 @@ internal static class PolicyBrowser
             },
             new TweakDef
             {
-                Id = "edgesec-enable-https-only-mode",
-                Label = "Edge Secure Browsing Policy: Enable HTTPS-Only Browsing Mode",
-                Category = "Browser",
-                Description =
-                    "Enables HTTPS-Only mode in Microsoft Edge, which configures the browser to require HTTPS for all navigations. When HttpsOnlyMode is set to 1, Edge will attempt to connect via HTTPS by default and will show a warning page before loading any site over plain HTTP, allowing the user to proceed or stay secure. This value 1 enables the optional mode (users can still override per-site), while value 2 would enforce it without override. Use 1 in most enterprise environments as a default-secure posture.",
-                Tags = ["edge", "https only", "tls", "secure browsing", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                RegistryKeys = [EdgeKey],
-                ApplyOps = [RegOp.SetDword(EdgeKey, "HttpsOnlyMode", 1)],
-                RemoveOps = [RegOp.DeleteValue(EdgeKey, "HttpsOnlyMode")],
-                DetectOps = [RegOp.CheckDword(EdgeKey, "HttpsOnlyMode", 1)],
-                ImpactScore = 4,
-                SafetyRating = 4,
-                ImpactNote = "HTTPS-Only mode enabled; HTTP pages show a warning before loading (user can override per-site).",
-            },
-            new TweakDef
-            {
                 Id = "edgesec-block-sha1-local-anchors",
                 Label = "Edge Secure Browsing Policy: Block SHA-1 Certificates from Locally-Trusted CAs",
                 Category = "Browser",
@@ -5774,23 +4686,6 @@ internal static class PolicyBrowser
 
         public static IReadOnlyList<TweakDef> Data =>
             [
-                new TweakDef
-                {
-                    Id = "edgiso-enable-site-isolation",
-                    Label = "Enable Full Site Isolation in Edge",
-                    Category = "Browser",
-                    Description =
-                        "Enables full Site Isolation in Microsoft Edge, running every site origin in a dedicated renderer process to mitigate Spectre/Meltdown cross-origin data leaks.",
-                    Tags = ["edge", "site-isolation", "security", "spectre", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 5,
-                    SafetyRating = 5,
-                    ImpactNote = "Each site runs in isolated renderer; memory use increases but Spectre-class leaks are effectively blocked.",
-                    ApplyOps = [RegOp.SetDword(Key, "SitePerProcess", 1)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "SitePerProcess")],
-                    DetectOps = [RegOp.CheckDword(Key, "SitePerProcess", 1)],
-                },
                 new TweakDef
                 {
                     Id = "edgiso-enable-strict-origin-isolation",
@@ -5912,23 +4807,6 @@ internal static class PolicyBrowser
                 },
                 new TweakDef
                 {
-                    Id = "edgiso-enable-enhanced-tracking-protection",
-                    Label = "Enable Strict Tracking Prevention in Edge",
-                    Category = "Browser",
-                    Description =
-                        "Configures Edge Tracking Prevention to Strict mode, blocking known trackers and fingerprinting scripts from all sites including first-party contexts.",
-                    Tags = ["edge", "tracking-prevention", "privacy", "security", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 4,
-                    SafetyRating = 5,
-                    ImpactNote = "Strict tracking prevention active; some social widgets and embedded content may fail to load.",
-                    ApplyOps = [RegOp.SetDword(Key, "TrackingPrevention", 3)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "TrackingPrevention")],
-                    DetectOps = [RegOp.CheckDword(Key, "TrackingPrevention", 3)],
-                },
-                new TweakDef
-                {
                     Id = "edgiso-disable-webrtc-leak",
                     Label = "Disable WebRTC IP Address Leak in Edge",
                     Category = "Browser",
@@ -5956,23 +4834,6 @@ internal static class PolicyBrowser
             [
                 new TweakDef
                 {
-                    Id = "edgsleep-enable-sleeping-tabs",
-                    Label = "Enable Sleeping Tabs in Edge",
-                    Category = "Browser",
-                    Description =
-                        "Enables the Sleeping Tabs feature in Microsoft Edge, which puts inactive tabs to sleep after a configurable timeout to reduce memory and CPU usage.",
-                    Tags = ["edge", "sleeping-tabs", "performance", "memory", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 4,
-                    SafetyRating = 5,
-                    ImpactNote = "Inactive tabs suspended; significant memory savings on machines with many open tabs.",
-                    ApplyOps = [RegOp.SetDword(Key, "SleepingTabsEnabled", 1)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "SleepingTabsEnabled")],
-                    DetectOps = [RegOp.CheckDword(Key, "SleepingTabsEnabled", 1)],
-                },
-                new TweakDef
-                {
                     Id = "edgsleep-set-timeout-300",
                     Label = "Set Sleeping Tabs Timeout to 5 Minutes",
                     Category = "Browser",
@@ -5990,40 +4851,6 @@ internal static class PolicyBrowser
                 },
                 new TweakDef
                 {
-                    Id = "edgsleep-disable-startup-boost",
-                    Label = "Disable Edge Startup Boost",
-                    Category = "Browser",
-                    Description =
-                        "Disables Edge Startup Boost which pre-launches Edge browser processes at Windows startup to improve launch speed at the cost of persistent background memory consumption.",
-                    Tags = ["edge", "startup-boost", "background", "performance", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 3,
-                    SafetyRating = 5,
-                    ImpactNote = "Edge no longer pre-runs in background; slightly slower first launch, reduced idle RAM.",
-                    ApplyOps = [RegOp.SetDword(Key, "StartupBoostEnabled", 0)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "StartupBoostEnabled")],
-                    DetectOps = [RegOp.CheckDword(Key, "StartupBoostEnabled", 0)],
-                },
-                new TweakDef
-                {
-                    Id = "edgsleep-disable-background-run",
-                    Label = "Disable Edge Background Running After All Windows Closed",
-                    Category = "Browser",
-                    Description =
-                        "Prevents Edge from running background processes after all browser windows are closed, fully releasing resources when the user is done browsing.",
-                    Tags = ["edge", "background", "performance", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 3,
-                    SafetyRating = 5,
-                    ImpactNote = "Edge processes terminate on last window close; push notifications and extensions stop when closed.",
-                    ApplyOps = [RegOp.SetDword(Key, "BackgroundModeEnabled", 0)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "BackgroundModeEnabled")],
-                    DetectOps = [RegOp.CheckDword(Key, "BackgroundModeEnabled", 0)],
-                },
-                new TweakDef
-                {
                     Id = "edgsleep-enable-efficiency-mode",
                     Label = "Enable Edge Efficiency Mode",
                     Category = "Browser",
@@ -6038,40 +4865,6 @@ internal static class PolicyBrowser
                     ApplyOps = [RegOp.SetDword(Key, "EfficiencyModeEnabled", 1)],
                     RemoveOps = [RegOp.DeleteValue(Key, "EfficiencyModeEnabled")],
                     DetectOps = [RegOp.CheckDword(Key, "EfficiencyModeEnabled", 1)],
-                },
-                new TweakDef
-                {
-                    Id = "edgsleep-disable-tab-preloading",
-                    Label = "Disable Edge New Tab Page Preloading",
-                    Category = "Browser",
-                    Description =
-                        "Disables new tab page preloading in Edge which pre-fetches the new tab page in the background to reduce perceived open time at the cost of memory and network usage.",
-                    Tags = ["edge", "preloading", "new-tab", "performance", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 2,
-                    SafetyRating = 5,
-                    ImpactNote = "New tab page not pre-loaded; slightly slower new tab but lower background resource use.",
-                    ApplyOps = [RegOp.SetDword(Key, "NewTabPagePrerenderEnabled", 0)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "NewTabPagePrerenderEnabled")],
-                    DetectOps = [RegOp.CheckDword(Key, "NewTabPagePrerenderEnabled", 0)],
-                },
-                new TweakDef
-                {
-                    Id = "edgsleep-disable-speculative-prerendering",
-                    Label = "Disable Speculative Prerendering in Edge",
-                    Category = "Browser",
-                    Description =
-                        "Disables speculative prerendering of links in Edge, which pre-loads pages you might navigate to. Reduces network and memory usage at the cost of navigation latency.",
-                    Tags = ["edge", "prerender", "privacy", "performance", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 2,
-                    SafetyRating = 5,
-                    ImpactNote = "Pages not pre-fetched speculatively; slightly slower navigation, less background network traffic.",
-                    ApplyOps = [RegOp.SetDword(Key, "NetworkPredictionOptions", 2)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "NetworkPredictionOptions")],
-                    DetectOps = [RegOp.CheckDword(Key, "NetworkPredictionOptions", 2)],
                 },
                 new TweakDef
                 {
@@ -6134,24 +4927,6 @@ internal static class PolicyBrowser
 
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
-            new TweakDef
-            {
-                Id = "edgessf-enable-smartscreen",
-                Label = "Edge SmartScreen & Site Isolation Policy: Enable Microsoft Defender SmartScreen",
-                Category = "Browser",
-                Description =
-                    "Enforces Microsoft Defender SmartScreen in Microsoft Edge, preventing users from disabling the feature. Setting SmartScreenEnabled to 1 ensures Edge checks URLs and downloads against Microsoft's threat-intelligence cloud and displays a warning page when a site is identified as phishing or malware-hosting. SmartScreen is a first-line browser defence that blocks a significant proportion of credential-phishing and drive-by-download attacks. Per CIS Benchmark L1, this policy must be set to Enabled on all enterprise machines.",
-                Tags = ["edge", "smartscreen", "malware", "phishing", "security", "cis", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                RegistryKeys = [EdgeKey],
-                ApplyOps = [RegOp.SetDword(EdgeKey, "SmartScreenEnabled", 1)],
-                RemoveOps = [RegOp.DeleteValue(EdgeKey, "SmartScreenEnabled")],
-                DetectOps = [RegOp.CheckDword(EdgeKey, "SmartScreenEnabled", 1)],
-                ImpactScore = 5,
-                SafetyRating = 5,
-                ImpactNote = "SmartScreen enforced via policy; visits to phishing and malware-hosting URLs are blocked with a warning page.",
-            },
             new TweakDef
             {
                 Id = "edgessf-enable-pua-detection",
@@ -6244,24 +5019,6 @@ internal static class PolicyBrowser
             },
             new TweakDef
             {
-                Id = "edgessf-block-legacy-extension-entry-points",
-                Label = "Edge SmartScreen & Site Isolation Policy: Block Legacy Browser Extension Entry Points",
-                Category = "Browser",
-                Description =
-                    "Prevents third-party software from injecting hooks, DLLs, or code into the Microsoft Edge browser process through legacy extension entry points that were used by older Internet Explorer BHOs (Browser Helper Objects) and similar plug-in infrastructure. Setting BrowserLegacyExtensionPointsBlockingEnabled to 1 closes these low-level hooks that can be exploited by malware to intercept browser traffic, inject content into HTTPS pages, or bypass Edge's sandbox. Legitimate Edge extensions use the WebExtensions (CRX) API and are unaffected by this policy.",
-                Tags = ["edge", "extension injection", "bho", "dll injection", "security", "hardening", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                RegistryKeys = [EdgeKey],
-                ApplyOps = [RegOp.SetDword(EdgeKey, "BrowserLegacyExtensionPointsBlockingEnabled", 1)],
-                RemoveOps = [RegOp.DeleteValue(EdgeKey, "BrowserLegacyExtensionPointsBlockingEnabled")],
-                DetectOps = [RegOp.CheckDword(EdgeKey, "BrowserLegacyExtensionPointsBlockingEnabled", 1)],
-                ImpactScore = 4,
-                SafetyRating = 4,
-                ImpactNote = "Legacy browser Hook entry points blocked; third-party DLL injection into Edge processes is prevented.",
-            },
-            new TweakDef
-            {
                 Id = "edgessf-disable-edge-discover",
                 Label = "Edge SmartScreen & Site Isolation Policy: Disable Edge Discover Pane",
                 Category = "Browser",
@@ -6342,24 +5099,6 @@ internal static class PolicyBrowser
                 ImpactScore = 3,
                 SafetyRating = 5,
                 ImpactNote = "RestoreOnStartup=5 opens New Tab Page; Edge discards previous session on every launch.",
-            },
-            new TweakDef
-            {
-                Id = "edgestart-disable-preload-home-page",
-                Label = "Edge Startup Policy: Disable Preloading of Home Page on Startup",
-                Category = "Browser",
-                Description =
-                    "Prevents Microsoft Edge from preloading the home page or startup pages in the background during Windows startup or user logon. Edge aggressively preloads its startup page to shorten the perceived time-to-interactive, but this consumes RAM and CPU on logon, delays desktop readiness, and causes unnecessary network activity even when the user does not intend to open Edge.",
-                Tags = ["edge", "startup", "preload", "performance", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                RegistryKeys = [EdgeKey],
-                ApplyOps = [RegOp.SetDword(EdgeKey, "StartupBoostEnabled", 0)],
-                RemoveOps = [RegOp.DeleteValue(EdgeKey, "StartupBoostEnabled")],
-                DetectOps = [RegOp.CheckDword(EdgeKey, "StartupBoostEnabled", 0)],
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Disables Edge startup boost; eliminates Edge background preloading from Windows logon sequence.",
             },
             new TweakDef
             {
@@ -6487,24 +5226,6 @@ internal static class PolicyBrowser
                 SafetyRating = 5,
                 ImpactNote = "Disables Edge tab services and tab groups; only affects tab organization UI.",
             },
-            new TweakDef
-            {
-                Id = "edgestart-disable-edge-workspaces",
-                Label = "Edge Startup Policy: Disable Edge Workspaces",
-                Category = "Browser",
-                Description =
-                    "Disables Microsoft Edge Workspaces, the collaborative tab-sharing feature that allows users to share a live set of browser tabs with colleagues via a shared link. Workspaces sync tab lists to Microsoft cloud services and allow external parties to view or join an active workspace. In corporate environments with data-classification or DLP requirements, this feature could inadvertently expose internal URLs to unauthorized users.",
-                Tags = ["edge", "workspaces", "sharing", "collaboration", "privacy", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                RegistryKeys = [EdgeKey],
-                ApplyOps = [RegOp.SetDword(EdgeKey, "EdgeWorkspacesEnabled", 0)],
-                RemoveOps = [RegOp.DeleteValue(EdgeKey, "EdgeWorkspacesEnabled")],
-                DetectOps = [RegOp.CheckDword(EdgeKey, "EdgeWorkspacesEnabled", 0)],
-                ImpactScore = 2,
-                SafetyRating = 5,
-                ImpactNote = "Disables Edge Workspaces tab sharing; prevents internal URLs from being shared via workspace links.",
-            },
         ];
     }
 
@@ -6551,24 +5272,6 @@ internal static class PolicyBrowser
                 ImpactScore = 3,
                 SafetyRating = 5,
                 ImpactNote = "All cached media cleared at browser close; subsequent page loads will re-download previously cached resources.",
-            },
-            new TweakDef
-            {
-                Id = "edgetrack-disable-user-feedback",
-                Label = "Edge Tracking Protection Policy: Disable User Feedback and Error Reporting",
-                Category = "Browser",
-                Description =
-                    "Blocks the built-in Edge user feedback mechanism and telemetric crash/error reporting. When UserFeedbackAllowed is set to 0, the Help > Send Feedback option is removed and Edge will not submit user-generated feedback reports or automatic crash diagnostics to Microsoft. Crash reports may contain browser session state, visited URL data, and clipboard content captured at the time of the crash.",
-                Tags = ["edge", "feedback", "telemetry", "crash reporting", "privacy", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                RegistryKeys = [EdgeKey],
-                ApplyOps = [RegOp.SetDword(EdgeKey, "UserFeedbackAllowed", 0)],
-                RemoveOps = [RegOp.DeleteValue(EdgeKey, "UserFeedbackAllowed")],
-                DetectOps = [RegOp.CheckDword(EdgeKey, "UserFeedbackAllowed", 0)],
-                ImpactScore = 2,
-                SafetyRating = 5,
-                ImpactNote = "Feedback menu entry removed and automatic crash reporting disabled; no browser session data sent in feedback reports.",
             },
             new TweakDef
             {
@@ -6623,24 +5326,6 @@ internal static class PolicyBrowser
                 ImpactScore = 1,
                 SafetyRating = 5,
                 ImpactNote = "Surf easter egg disabled on Edge error pages; no impact on normal browser behavior.",
-            },
-            new TweakDef
-            {
-                Id = "edgetrack-disable-immersive-reader-grammar",
-                Label = "Edge Tracking Protection Policy: Disable Immersive Reader Grammar Tools",
-                Category = "Browser",
-                Description =
-                    "Disables the Grammar Tools option within the Edge Immersive Reader panel. When Immersive Reader is opened, Grammar Tools provides syllable highlighting, part-of-speech color-coding, and text analysis powered by Microsoft language services. The grammar analysis requires sending page text content to Microsoft cloud language endpoints. Disabling this feature prevents reading-mode content from being transmitted to external language processing services.",
-                Tags = ["edge", "immersive reader", "grammar tools", "privacy", "cloud", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                RegistryKeys = [EdgeKey],
-                ApplyOps = [RegOp.SetDword(EdgeKey, "ImmersiveReaderGrammarToolsEnabled", 0)],
-                RemoveOps = [RegOp.DeleteValue(EdgeKey, "ImmersiveReaderGrammarToolsEnabled")],
-                DetectOps = [RegOp.CheckDword(EdgeKey, "ImmersiveReaderGrammarToolsEnabled", 0)],
-                ImpactScore = 1,
-                SafetyRating = 5,
-                ImpactNote = "Grammar analysis panel removed from Immersive Reader; syllable and part-of-speech highlighting unavailable.",
             },
             new TweakDef
             {
@@ -6925,24 +5610,6 @@ internal static class PolicyBrowser
                 },
                 new TweakDef
                 {
-                    Id = "edgewp-disable-work-profile-data-sync",
-                    Label = "Edge Work Profile: Disable Work Profile Data Sync to Microsoft Account",
-                    Category = "Browser",
-                    Description =
-                        "Sets SyncDisabled=1 in Edge policy. Prevents the Edge work profile from syncing browsing history, saved passwords, extensions, and settings to the user's Microsoft cloud account (personal or enterprise), keeping work profile data resident on the managed device only. "
-                        + "Edge sync uploads work browsing history, internal URL patterns, saved credentials for internal web apps, and installed extension lists to Microsoft's cloud sync service. In high-sensitivity environments, the browsing history itself may constitute proprietary information. Disabling sync ensures that work profile data stays on the managed device and any downstream device the user signs into using the same account cannot access the work browser data.",
-                    Tags = ["edge", "sync", "cloud", "data-residency", "profile"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 3,
-                    SafetyRating = 5,
-                    ImpactNote = "Edge work profile data not synced to Microsoft cloud; browsing history and credentials remain local.",
-                    ApplyOps = [RegOp.SetDword(Key, "SyncDisabled", 1)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "SyncDisabled")],
-                    DetectOps = [RegOp.CheckDword(Key, "SyncDisabled", 1)],
-                },
-                new TweakDef
-                {
                     Id = "edgewp-block-non-work-account-sign-in",
                     Label = "Edge Work Profile: Block Signing In with Non-Work / Personal Accounts",
                     Category = "Browser",
@@ -6995,42 +5662,6 @@ internal static class PolicyBrowser
                     ApplyOps = [RegOp.SetDword(Key, "GuestModeEnabled", 0)],
                     RemoveOps = [RegOp.DeleteValue(Key, "GuestModeEnabled")],
                     DetectOps = [RegOp.CheckDword(Key, "GuestModeEnabled", 0)],
-                },
-                new TweakDef
-                {
-                    Id = "edgewp-disable-inprivate-browsing",
-                    Label = "Edge Work Profile: Disable InPrivate Browsing Mode",
-                    Category = "Browser",
-                    Description =
-                        "Sets InPrivateModeAvailability=1 in Edge policy. Disables InPrivate browsing mode (value 1 = Disabled) in Edge, preventing users from opening sessions where browsing history and cookies are not retained. "
-                        + "InPrivate mode, while legitimate for privacy, prevents the browsing session from being recorded in Edge history and from being subject to certain telemetry and audit policies that depend on session context. In regulated industries where all web access must be logged for compliance, InPrivate sessions create unlogged access points. Additionally, some DLP inspection products are not applied to InPrivate sessions by default.",
-                    Tags = ["edge", "inprivate", "logging", "compliance", "audit"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 3,
-                    SafetyRating = 5,
-                    ImpactNote = "InPrivate mode disabled; all Edge sessions are history-tracked and compliance-logged.",
-                    ApplyOps = [RegOp.SetDword(Key, "InPrivateModeAvailability", 1)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "InPrivateModeAvailability")],
-                    DetectOps = [RegOp.CheckDword(Key, "InPrivateModeAvailability", 1)],
-                },
-                new TweakDef
-                {
-                    Id = "edgewp-block-edge-profile-discovery",
-                    Label = "Edge Work Profile: Block Automatic Discovery and Sign-In of New Work Profiles",
-                    Category = "Browser",
-                    Description =
-                        "Sets EdgeWorkspacesEnabled=0 in Edge policy. Disables the Edge profile discovery feature that automatically prompts users to create new work profiles when it detects a new Microsoft Entra ID sign-in event, preventing uncontrolled proliferation of managed profiles on shared or shared-use devices. "
-                        + "On devices shared among multiple users (shift workers, kiosk-style workstations), automatic profile creation means each user who signs into a Microsoft service triggers Edge to create a new managed profile bound to their work account. On machines not managed for roaming profiles, these additional profiles accumulate with cached policy configurations, create additional disk usage, and cause confusing multi-profile scenarios.",
-                    Tags = ["edge", "profile-discovery", "shared-device", "profile-management"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 2,
-                    SafetyRating = 5,
-                    ImpactNote = "Auto-profile discovery disabled; Edge does not offer to create new work profiles on detected sign-in.",
-                    ApplyOps = [RegOp.SetDword(Key, "EdgeWorkspacesEnabled", 0)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "EdgeWorkspacesEnabled")],
-                    DetectOps = [RegOp.CheckDword(Key, "EdgeWorkspacesEnabled", 0)],
                 },
                 new TweakDef
                 {
@@ -7099,23 +5730,6 @@ internal static class PolicyBrowser
                 ApplyOps = [RegOp.SetDword(IeEntMode, "Enabled", 0)],
                 RemoveOps = [RegOp.DeleteValue(IeEntMode, "Enabled")],
                 DetectOps = [RegOp.CheckDword(IeEntMode, "Enabled", 0)],
-            },
-            new TweakDef
-            {
-                Id = "iecompat-disable-ie-mode-in-edge",
-                Label = "IE Compat: Disable IE Mode in Microsoft Edge",
-                Category = "Browser",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                RegistryKeys = [EdgeMain],
-                Tags = ["ie", "ie-mode", "edge", "compatibility", "security", "policy"],
-                Description =
-                    "Sets InternetExplorerIntegrationLevel=0 in Edge policy. Disables IE mode integration "
-                    + "in Edge, preventing the legacy Trident rendering engine from loading. "
-                    + "Default: 1 (IE Mode available). Setting to 0 enforces modern rendering only.",
-                ApplyOps = [RegOp.SetDword(EdgeMain, "InternetExplorerIntegrationLevel", 0)],
-                RemoveOps = [RegOp.DeleteValue(EdgeMain, "InternetExplorerIntegrationLevel")],
-                DetectOps = [RegOp.CheckDword(EdgeMain, "InternetExplorerIntegrationLevel", 0)],
             },
             new TweakDef
             {
@@ -7235,23 +5849,6 @@ internal static class PolicyBrowser
                 ApplyOps = [RegOp.SetDword(EdgeMain, "AutomaticHttpsDefault", 2)],
                 RemoveOps = [RegOp.DeleteValue(EdgeMain, "AutomaticHttpsDefault")],
                 DetectOps = [RegOp.CheckDword(EdgeMain, "AutomaticHttpsDefault", 2)],
-            },
-            new TweakDef
-            {
-                Id = "iecompat-disable-edge-password-manager",
-                Label = "IE Compat: Disable Edge Built-In Password Manager",
-                Category = "Browser",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                RegistryKeys = [EdgeMain],
-                Tags = ["edge", "password-manager", "security", "policy", "credentials"],
-                Description =
-                    "Sets PasswordManagerEnabled=0 in Edge policy. Prevents Edge from offering to save "
-                    + "or filling saved passwords. Intended for environments using enterprise password vaults. "
-                    + "Default: 1 (enabled). Disabling forces use of dedicated PAM/credential vault solutions.",
-                ApplyOps = [RegOp.SetDword(EdgeMain, "PasswordManagerEnabled", 0)],
-                RemoveOps = [RegOp.DeleteValue(EdgeMain, "PasswordManagerEnabled")],
-                DetectOps = [RegOp.CheckDword(EdgeMain, "PasswordManagerEnabled", 0)],
             },
         ];
     }
@@ -7700,24 +6297,6 @@ internal static class PolicyBrowser
                     ApplyOps = [RegOp.SetDword(TabKey, "PreventTabPreloading", 1)],
                     RemoveOps = [RegOp.DeleteValue(TabKey, "PreventTabPreloading")],
                     DetectOps = [RegOp.CheckDword(TabKey, "PreventTabPreloading", 1)],
-                },
-                new TweakDef
-                {
-                    Id = "ledge-enable-phishing-filter",
-                    Label = "Enable SmartScreen Phishing Filter in Legacy Edge",
-                    Category = "Browser",
-                    Description =
-                        "Enforces the SmartScreen phishing and malware filter in legacy Microsoft Edge, ensuring it cannot be disabled by the user and providing baseline threat protection.",
-                    Tags = ["edge", "legacy edge", "smartscreen", "phishing", "malware", "security", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 5,
-                    SafetyRating = 5,
-                    ImpactNote = "Ensures SmartScreen is always active in legacy Edge; critical for phishing protection.",
-                    RegistryKeys = [PhishingKey],
-                    ApplyOps = [RegOp.SetDword(PhishingKey, "EnabledV9", 1)],
-                    RemoveOps = [RegOp.DeleteValue(PhishingKey, "EnabledV9")],
-                    DetectOps = [RegOp.CheckDword(PhishingKey, "EnabledV9", 1)],
                 },
                 new TweakDef
                 {

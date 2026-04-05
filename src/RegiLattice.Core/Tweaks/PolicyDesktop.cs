@@ -272,42 +272,6 @@ internal static class PolicyDesktop
             },
             new TweakDef
             {
-                Id = "autorun-disable-all-drives-system",
-                Label = "Disable AutoRun System-Wide (All Drive Types)",
-                Category = "Display",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                Tags = ["autorun", "autoplay", "security", "policy", "system"],
-                Description =
-                    "Disables AutoRun on all drive types for all users via system policy "
-                    + "(HKLM). Affects all accounts including newly created ones. Stronger "
-                    + "than per-user setting for shared/managed machines.",
-                ApplyOps = [RegOp.SetDword(AutoRunSys, "NoDriveTypeAutoRun", 0xFF)],
-                RemoveOps = [RegOp.DeleteValue(AutoRunSys, "NoDriveTypeAutoRun")],
-                DetectOps = [RegOp.CheckDword(AutoRunSys, "NoDriveTypeAutoRun", 0xFF)],
-            },
-            new TweakDef
-            {
-                Id = "autorun-disable-removable-drives",
-                Label = "Disable AutoRun on Removable Drives Only",
-                Category = "Display",
-                NeedsAdmin = false,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                Tags = ["autorun", "usb", "removable", "security"],
-                Description =
-                    "Disables AutoRun specifically for removable drives (USB flash drives, "
-                    + "portable HDDs). Value 0x4 disables bit 2 (removable). CD/DVD and "
-                    + "fixed disk AutoRun remain unaffected.",
-                ApplyOps = [RegOp.SetDword(AutoRunUser, "NoDriveTypeAutoRun", 0x4)],
-                RemoveOps = [RegOp.DeleteValue(AutoRunUser, "NoDriveTypeAutoRun")],
-                DetectOps = [RegOp.CheckDword(AutoRunUser, "NoDriveTypeAutoRun", 0x4)],
-            },
-            new TweakDef
-            {
                 Id = "autorun-disable-autoplay-default",
                 Label = "Disable AutoPlay Default Handler",
                 Category = "Display",
@@ -341,42 +305,6 @@ internal static class PolicyDesktop
                 ApplyOps = [RegOp.SetDword(AutoRunPolicy2, "NoAutoPlay", 1)],
                 RemoveOps = [RegOp.DeleteValue(AutoRunPolicy2, "NoAutoPlay")],
                 DetectOps = [RegOp.CheckDword(AutoRunPolicy2, "NoAutoPlay", 1)],
-            },
-            new TweakDef
-            {
-                Id = "autorun-disable-autorun-exe",
-                Label = "Block AutoRun.inf Executable Launch",
-                Category = "Display",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                Tags = ["autorun", "autorun.inf", "security", "malware", "usb"],
-                Description =
-                    "Blocks the execution of entries in AutoRun.inf files via policy. "
-                    + "Prevents the [open], [shellexecute], and [shell] AutoRun.inf sections "
-                    + "from launching executables, even when AutoRun is otherwise enabled.",
-                ApplyOps = [RegOp.SetDword(AutoRunSys, "NoAutorun", 1)],
-                RemoveOps = [RegOp.DeleteValue(AutoRunSys, "NoAutorun")],
-                DetectOps = [RegOp.CheckDword(AutoRunSys, "NoAutorun", 1)],
-            },
-            new TweakDef
-            {
-                Id = "autorun-disable-cd-autoplay",
-                Label = "Disable AutoPlay for CD/DVD Drives",
-                Category = "Display",
-                NeedsAdmin = false,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                Tags = ["autorun", "cd", "dvd", "optical", "autoplay"],
-                Description =
-                    "Disables AutoPlay for CD and DVD optical drives (bits 0x20 + 0x4 = 32+4). "
-                    + "CD media will no longer prompt or auto-launch when inserted. "
-                    + "USB and fixed drives are unaffected.",
-                ApplyOps = [RegOp.SetDword(AutoRunUser, "NoDriveTypeAutoRun", 0x24)],
-                RemoveOps = [RegOp.DeleteValue(AutoRunUser, "NoDriveTypeAutoRun")],
-                DetectOps = [RegOp.CheckDword(AutoRunUser, "NoDriveTypeAutoRun", 0x24)],
             },
             new TweakDef
             {
@@ -775,24 +703,6 @@ internal static class PolicyDesktop
             },
             new TweakDef
             {
-                Id = "color-enable-dwm-color-depth",
-                Label = "Enable DWM 10-bit Color Depth",
-                Category = "Display",
-                NeedsAdmin = false,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                Tags = ["color", "dwm", "10bit", "display", "hdr"],
-                Description =
-                    "Enables 10-bit color depth processing through the Desktop Window Manager. "
-                    + "Reduces banding in smooth gradients and improves color accuracy on "
-                    + "HDR/10-bit-capable displays.",
-                ApplyOps = [RegOp.SetDword(DwmCompose, "Use10BitColorDepth", 1)],
-                RemoveOps = [RegOp.DeleteValue(DwmCompose, "Use10BitColorDepth")],
-                DetectOps = [RegOp.CheckDword(DwmCompose, "Use10BitColorDepth", 1)],
-            },
-            new TweakDef
-            {
                 Id = "color-disable-night-light-gamma",
                 Label = "Disable Night Light Gamma Ramp Interference",
                 Category = "Display",
@@ -1071,24 +981,6 @@ internal static class PolicyDesktop
                 ImpactScore = 4,
                 SafetyRating = 2,
                 ImpactNote = "Blocks all Control Panel access; users cannot change any system settings.",
-            },
-            new TweakDef
-            {
-                Id = "ctrlpanel-disable-time-date-settings",
-                Label = "Control Panel Policy: Prevent Users from Changing Date and Time",
-                Category = "Display",
-                Description =
-                    "Prevents standard users from modifying the system date and time. Incorrect system time affects security certificate validation, Kerberos authentication, log timestamps, and time-based audit trails. Restricting time modification to administrators only ensures clock integrity for security logging.",
-                Tags = ["control panel", "date", "time", "restriction", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                RegistryKeys = [ExplorerKey],
-                ApplyOps = [RegOp.SetDword(ExplorerKey, "NoControlPanel", 0)],
-                RemoveOps = [RegOp.DeleteValue(ExplorerKey, "NoControlPanel")],
-                DetectOps = [RegOp.CheckDword(ExplorerKey, "NoControlPanel", 0)],
-                ImpactScore = 2,
-                SafetyRating = 5,
-                ImpactNote = "This tweak re-enables the Control Panel (reverts the disable) — acts as the removal baseline.",
             },
             new TweakDef
             {
@@ -1438,24 +1330,6 @@ internal static class PolicyDesktop
             [
                 new TweakDef
                 {
-                    Id = "dxshdr-enable-hardware-accelerated-gpu-scheduling",
-                    Label = "DirectX: Enable Hardware-Accelerated GPU Scheduling (HAGS)",
-                    Category = "Display",
-                    Description =
-                        "Sets HwSchMode=2 in GraphicsDrivers hardware scheduling registry. Enables Hardware-Accelerated GPU Scheduling (HAGS), which moves GPU memory management scheduling from the CPU-based WDDM scheduler into the GPU hardware itself. "
-                        + "HAGS reduces scheduling latency for GPU workloads by 1–3 ms in sustained GPU-bound scenarios. It improves frame pacing for games and rendering applications by letting the GPU hardware decide when to submit work rather than waiting for the OS scheduler. Requires a GPU and driver that support WDDM 2.7 or later (NVIDIA RTX 10-series+, AMD RX 5000-series+).",
-                    Tags = ["gpu", "scheduling", "hags", "latency", "performance"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 3,
-                    SafetyRating = 4,
-                    ImpactNote = "HAGS reduces GPU scheduling latency ~1–3ms for GPU-bound workloads; requires WDDM 2.7+ driver.",
-                    ApplyOps = [RegOp.SetDword(GfxKey, "HwSchMode", 2)],
-                    RemoveOps = [RegOp.DeleteValue(GfxKey, "HwSchMode")],
-                    DetectOps = [RegOp.CheckDword(GfxKey, "HwSchMode", 2)],
-                },
-                new TweakDef
-                {
                     Id = "dxshdr-enable-d3d12-shader-cache",
                     Label = "DirectX: Enable D3D12 Shader Cache for Faster Game Load Times",
                     Category = "Display",
@@ -1489,42 +1363,6 @@ internal static class PolicyDesktop
                     ApplyOps = [RegOp.SetDword(GfxKey, "DisableDXGIInfoQueue", 1)],
                     RemoveOps = [RegOp.DeleteValue(GfxKey, "DisableDXGIInfoQueue")],
                     DetectOps = [RegOp.CheckDword(GfxKey, "DisableDXGIInfoQueue", 1)],
-                },
-                new TweakDef
-                {
-                    Id = "dxshdr-enable-preemption-granularity-dispatch",
-                    Label = "DirectX: Set GPU Preemption Granularity to Dispatch Level",
-                    Category = "Display",
-                    Description =
-                        "Sets TdrLevel=3 in GraphicsDrivers registry. Configures graphics preemption to dispatch-call level granularity. "
-                        + "At dispatch preemption granularity, the OS can interrupt and reschedule GPU workloads between individual compute dispatch calls rather than waiting for an entire render pass to complete. This improves the responsiveness of UI compositing (DWM) and desktop interaction during heavy GPU compute loads such as machine learning inference or large render jobs, as the desktop compositor can be re-prioritised mid-frame without stalling.",
-                    Tags = ["gpu", "preemption", "dispatch", "tdr", "responsiveness"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 3,
-                    SafetyRating = 3,
-                    ImpactNote = "Dispatch-level GPU preemption; better UI responsiveness under heavy GPU load. May affect GPU-intensive workloads.",
-                    ApplyOps = [RegOp.SetDword(GfxKey, "TdrLevel", 3)],
-                    RemoveOps = [RegOp.DeleteValue(GfxKey, "TdrLevel")],
-                    DetectOps = [RegOp.CheckDword(GfxKey, "TdrLevel", 3)],
-                },
-                new TweakDef
-                {
-                    Id = "dxshdr-extend-tdr-delay-to-10sec",
-                    Label = "DirectX: Extend TDR Delay to 10 Seconds for Heavy GPU Workloads",
-                    Category = "Display",
-                    Description =
-                        "Sets TdrDelay=10 in GraphicsDrivers registry. Extends the Timeout Detection and Recovery (TDR) timeout from the default 2 seconds to 10 seconds before Windows triggers a GPU driver reset. "
-                        + "The 2-second default TDR was designed for interactive desktop scenarios. Modern GPU workloads such as GPGPU compute, neural network inference, video transcoding, and DXR ray-tracing legitimately execute kernels for 3–8 seconds without returning to the OS. With the 2-second default, these workloads trigger false TDR resets that crash and restart the GPU, killing in-flight workloads. A 10-second timeout accommodates heavy compute without unnecessary resets.",
-                    Tags = ["gpu", "tdr", "compute", "timeout", "stability"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 3,
-                    SafetyRating = 4,
-                    ImpactNote = "TDR extended to 10s; accommodates long GPU compute kernels without false reset. Test on target hardware.",
-                    ApplyOps = [RegOp.SetDword(GfxKey, "TdrDelay", 10)],
-                    RemoveOps = [RegOp.DeleteValue(GfxKey, "TdrDelay")],
-                    DetectOps = [RegOp.CheckDword(GfxKey, "TdrDelay", 10)],
                 },
                 new TweakDef
                 {
@@ -3206,23 +3044,6 @@ internal static class PolicyDesktop
             [
                 new TweakDef
                 {
-                    Id = "inpp-deny-input-personalization",
-                    Label = "Block Input Personalization (Policy)",
-                    Category = "Display",
-                    Description =
-                        "Sets AllowInputPersonalization=0 to disable cloud-based input personalization across the device. Prevents Windows from sending typing, inking, and voice input data to Microsoft to improve personalized recognisers.",
-                    Tags = ["input", "personalization", "telemetry", "privacy", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 4,
-                    SafetyRating = 5,
-                    ImpactNote = "Disables cloud input personalization; local recognition still functional.",
-                    ApplyOps = [RegOp.SetDword(IpKey, "AllowInputPersonalization", 0)],
-                    RemoveOps = [RegOp.DeleteValue(IpKey, "AllowInputPersonalization")],
-                    DetectOps = [RegOp.CheckDword(IpKey, "AllowInputPersonalization", 0)],
-                },
-                new TweakDef
-                {
                     Id = "inpp-restrict-ink-collection",
                     Label = "Restrict Implicit Ink Collection",
                     Category = "Display",
@@ -3237,23 +3058,6 @@ internal static class PolicyDesktop
                     ApplyOps = [RegOp.SetDword(IpKey, "RestrictImplicitInkCollection", 1)],
                     RemoveOps = [RegOp.DeleteValue(IpKey, "RestrictImplicitInkCollection")],
                     DetectOps = [RegOp.CheckDword(IpKey, "RestrictImplicitInkCollection", 1)],
-                },
-                new TweakDef
-                {
-                    Id = "inpp-restrict-text-collection",
-                    Label = "Restrict Implicit Text Collection",
-                    Category = "Display",
-                    Description =
-                        "Sets RestrictImplicitTextCollection=1 to prevent Windows from silently collecting text samples (from keyboard input) for improving personalised language models and autocorrect.. Default: 0. Recommended: 1.",
-                    Tags = ["input", "text", "collection", "privacy", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 3,
-                    SafetyRating = 5,
-                    ImpactNote = "Prevents silent collection of typed text for ML models; autocorrect dictionary unaffected.",
-                    ApplyOps = [RegOp.SetDword(IpKey, "RestrictImplicitTextCollection", 1)],
-                    RemoveOps = [RegOp.DeleteValue(IpKey, "RestrictImplicitTextCollection")],
-                    DetectOps = [RegOp.CheckDword(IpKey, "RestrictImplicitTextCollection", 1)],
                 },
                 new TweakDef
                 {
@@ -3441,23 +3245,6 @@ internal static class PolicyDesktop
             },
             new TweakDef
             {
-                Id = "kiosk-disable-control-panel",
-                Label = "Kiosk: Block Control Panel and PC Settings",
-                Category = "Display",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                RegistryKeys = [ExplorerPolicy],
-                Tags = ["kiosk", "lockdown", "control-panel", "settings", "policy"],
-                Description =
-                    "Sets NoControlPanel=1 in Explorer policy. Removes Control Panel and Settings app from "
-                    + "Start menu and restricts direct access. "
-                    + "Default: accessible. Essential for kiosk and shared-terminal lockdown.",
-                ApplyOps = [RegOp.SetDword(ExplorerPolicy, "NoControlPanel", 1)],
-                RemoveOps = [RegOp.DeleteValue(ExplorerPolicy, "NoControlPanel")],
-                DetectOps = [RegOp.CheckDword(ExplorerPolicy, "NoControlPanel", 1)],
-            },
-            new TweakDef
-            {
                 Id = "kiosk-disable-run-dialog",
                 Label = "Kiosk: Remove Run Dialog from Start Menu",
                 Category = "Display",
@@ -3492,23 +3279,6 @@ internal static class PolicyDesktop
             },
             new TweakDef
             {
-                Id = "kiosk-disable-slideshow-personalization-gpo",
-                Label = "Kiosk: Disable Lock Screen Slideshow via Personalization Policy",
-                Category = "Display",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                RegistryKeys = [GpoSys],
-                Tags = ["kiosk", "lockscreen", "slideshow", "personalization", "policy"],
-                Description =
-                    "Sets NoLockScreenSlideshow=1 in Personalization policy. Prevents the lock screen from "
-                    + "cycling through pictures from Libraries or OneDrive. "
-                    + "Default: slideshow can be enabled by user. Useful for kiosk branding consistency.",
-                ApplyOps = [RegOp.SetDword(GpoSys, "NoLockScreenSlideshow", 1)],
-                RemoveOps = [RegOp.DeleteValue(GpoSys, "NoLockScreenSlideshow")],
-                DetectOps = [RegOp.CheckDword(GpoSys, "NoLockScreenSlideshow", 1)],
-            },
-            new TweakDef
-            {
                 Id = "kiosk-disable-camera-on-lockscreen",
                 Label = "Kiosk: Disable Camera Access from Lock Screen",
                 Category = "Display",
@@ -3523,23 +3293,6 @@ internal static class PolicyDesktop
                 ApplyOps = [RegOp.SetDword(GpoSys, "AllowCameraOnLockScreen", 0)],
                 RemoveOps = [RegOp.DeleteValue(GpoSys, "AllowCameraOnLockScreen")],
                 DetectOps = [RegOp.CheckDword(GpoSys, "AllowCameraOnLockScreen", 0)],
-            },
-            new TweakDef
-            {
-                Id = "kiosk-disable-app-compat-wizard",
-                Label = "Kiosk: Disable Program Compatibility Wizard",
-                Category = "Display",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                RegistryKeys = [AppCompatPolicy],
-                Tags = ["kiosk", "app-compat", "wizard", "policy", "lockdown"],
-                Description =
-                    "Sets DisableEngine=2 in AppCompat policy. Disables the Program Compatibility Wizard "
-                    + "that appears when applications crash. Prevents users from interacting with compatibility "
-                    + "repairs and sending data to Microsoft. Default: wizard enabled.",
-                ApplyOps = [RegOp.SetDword(AppCompatPolicy, "DisableEngine", 2)],
-                RemoveOps = [RegOp.DeleteValue(AppCompatPolicy, "DisableEngine")],
-                DetectOps = [RegOp.CheckDword(AppCompatPolicy, "DisableEngine", 2)],
             },
             new TweakDef
             {
@@ -4666,23 +4419,6 @@ internal static class PolicyDesktop
                 },
                 new TweakDef
                 {
-                    Id = "plock-disable-lockscreen-app-ads",
-                    Label = "Disable Lock Screen App Spotlight Ads",
-                    Category = "Display",
-                    Description =
-                        "Disables Windows Spotlight suggestions and app advertisements shown on the lock screen. Prevents Microsoft from delivering ads to the lock screen via cloud content. Default: enabled. Recommended: 1 (disabled).",
-                    Tags = ["lock-screen", "spotlight", "ads", "privacy", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 3,
-                    SafetyRating = 5,
-                    ImpactNote = "Lock screen shows static image only; no cloud-delivered spotlight images or app suggestions.",
-                    ApplyOps = [RegOp.SetDword(Key, "NoChangingLockScreen", 1)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "NoChangingLockScreen")],
-                    DetectOps = [RegOp.CheckDword(Key, "NoChangingLockScreen", 1)],
-                },
-                new TweakDef
-                {
                     Id = "plock-block-user-lock-screen-change",
                     Label = "Block User From Changing Lock Screen",
                     Category = "Display",
@@ -4811,59 +4547,6 @@ internal static class PolicyDesktop
 
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
-            new TweakDef
-            {
-                Id = "prsnlz-disable-lock-screen",
-                Label = "Disable Lock Screen (Skip to Login)",
-                Category = "Display",
-                Description =
-                    "Removes the lock screen entirely, jumping directly to the login prompt on wake or startup. Speeds up access but reduces the secure idle display.",
-                Tags = ["lock-screen", "personalization", "policy", "login"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 4,
-                ImpactNote = "Removes the lock screen; slightly reduces secure idle display posture.",
-                RegistryKeys = [Key],
-                ApplyOps = [RegOp.SetDword(Key, "NoLockScreen", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "NoLockScreen")],
-                DetectOps = [RegOp.CheckDword(Key, "NoLockScreen", 1)],
-            },
-            new TweakDef
-            {
-                Id = "prsnlz-disable-lock-screen-camera",
-                Label = "Disable Camera on Lock Screen",
-                Category = "Display",
-                Description = "Removes the camera shortcut from the lock screen, preventing photo or video capture without signing in.",
-                Tags = ["lock-screen", "camera", "privacy", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Prevents unauthenticated camera access from the lock screen.",
-                RegistryKeys = [Key],
-                ApplyOps = [RegOp.SetDword(Key, "NoLockScreenCamera", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "NoLockScreenCamera")],
-                DetectOps = [RegOp.CheckDword(Key, "NoLockScreenCamera", 1)],
-            },
-            new TweakDef
-            {
-                Id = "prsnlz-disable-lock-screen-slideshow",
-                Label = "Disable Lock Screen Slideshow",
-                Category = "Display",
-                Description =
-                    "Disables the lock screen photo slideshow feature, preventing images from a configured source from rotating on the lock screen.",
-                Tags = ["lock-screen", "slideshow", "personalization", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                ImpactNote = "Disables lock screen image rotation.",
-                RegistryKeys = [Key],
-                ApplyOps = [RegOp.SetDword(Key, "NoLockScreenSlideshow", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "NoLockScreenSlideshow")],
-                DetectOps = [RegOp.CheckDword(Key, "NoLockScreenSlideshow", 1)],
-            },
             new TweakDef
             {
                 Id = "prsnlz-disable-lock-screen-overlays",
@@ -5555,20 +5238,6 @@ internal static class PolicyDesktop
         [
             new TweakDef
             {
-                Id = "shellrst-no-run-dialog",
-                Label = "Remove Run from Start Menu",
-                Category = "Display",
-                Description =
-                    "Sets NoRun=1 in Policies\\Explorer. Removes the Run entry from the Start menu and disables the Win+R shortcut, closing an easy execution vector for arbitrary programs. Default: Run is visible.",
-                Tags = ["shell", "restriction", "policy", "gpo", "kiosk"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ApplyOps = [RegOp.SetDword(Pol, "NoRun", 1)],
-                RemoveOps = [RegOp.DeleteValue(Pol, "NoRun")],
-                DetectOps = [RegOp.CheckDword(Pol, "NoRun", 1)],
-            },
-            new TweakDef
-            {
                 Id = "shellrst-no-find-command",
                 Label = "Remove Find/Search from Start Menu",
                 Category = "Display",
@@ -5580,20 +5249,6 @@ internal static class PolicyDesktop
                 ApplyOps = [RegOp.SetDword(Pol, "NoFind", 1)],
                 RemoveOps = [RegOp.DeleteValue(Pol, "NoFind")],
                 DetectOps = [RegOp.CheckDword(Pol, "NoFind", 1)],
-            },
-            new TweakDef
-            {
-                Id = "shellrst-no-close-session",
-                Label = "Remove Shut Down from Start Menu",
-                Category = "Display",
-                Description =
-                    "Sets NoClose=1 in Policies\\Explorer. Removes the Shut Down, Restart, and Sleep options from the Start menu. Useful for kiosk machines or shared terminals where the power state should be managed by administrators only.",
-                Tags = ["shell", "restriction", "shutdown", "policy", "kiosk"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ApplyOps = [RegOp.SetDword(Pol, "NoClose", 1)],
-                RemoveOps = [RegOp.DeleteValue(Pol, "NoClose")],
-                DetectOps = [RegOp.CheckDword(Pol, "NoClose", 1)],
             },
             new TweakDef
             {
@@ -6504,24 +6159,6 @@ internal static class PolicyDesktop
         [
             new TweakDef
             {
-                Id = "shdn-disable-fast-startup",
-                Label = "Disable Fast Startup (Hybrid Boot)",
-                Category = "Display",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                Tags = ["shutdown", "fast startup", "hibernate", "sleep"],
-                Description =
-                    "Disables Hybrid Boot / Fast Startup (HiberbootEnabled=0). Fast startup "
-                    + "uses hibernation for the kernel session, which can cause issues with "
-                    + "dual-boot, full disk encryption, and Windows Update applying kernel patches.",
-                ApplyOps = [RegOp.SetDword(PowerSettings, "HiberbootEnabled", 0)],
-                RemoveOps = [RegOp.SetDword(PowerSettings, "HiberbootEnabled", 1)],
-                DetectOps = [RegOp.CheckDword(PowerSettings, "HiberbootEnabled", 0)],
-            },
-            new TweakDef
-            {
                 Id = "shdn-reduce-wait-to-kill-timeout",
                 Label = "Reduce WaitToKillServiceTimeout to 5 Seconds",
                 Category = "Display",
@@ -6615,63 +6252,6 @@ internal static class PolicyDesktop
                 [
                     RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "RunLogonScriptSync", 0),
                 ],
-            },
-            new TweakDef
-            {
-                Id = "shdn-clear-page-file-on-shutdown",
-                Label = "Clear Page File on System Shutdown",
-                Category = "Display",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 4,
-                Tags = ["shutdown", "page file", "security", "memory wipe"],
-                Description =
-                    "Zeroes the page file during system shutdown (ClearPageFileAtShutdown=1). "
-                    + "Prevents sensitive data left in paging memory from being extracted from "
-                    + "the disk when hibernation is disabled. Adds a few seconds to shutdown.",
-                ApplyOps =
-                [
-                    RegOp.SetDword(
-                        @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management",
-                        "ClearPageFileAtShutdown",
-                        1
-                    ),
-                ],
-                RemoveOps =
-                [
-                    RegOp.SetDword(
-                        @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management",
-                        "ClearPageFileAtShutdown",
-                        0
-                    ),
-                ],
-                DetectOps =
-                [
-                    RegOp.CheckDword(
-                        @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management",
-                        "ClearPageFileAtShutdown",
-                        1
-                    ),
-                ],
-            },
-            new TweakDef
-            {
-                Id = "shdn-reduce-process-kill-timeout",
-                Label = "Reduce WaitToKillAppTimeout to 4 Seconds",
-                Category = "Display",
-                NeedsAdmin = false,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 4,
-                Tags = ["shutdown", "app kill", "timeout", "speed"],
-                Description =
-                    "Reduces WaitToKillAppTimeout to 4,000 ms (from 20,000 ms default). "
-                    + "Shortens the time the system waits for app processes to exit before "
-                    + "forcing them to terminate during logout/shutdown.",
-                ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "WaitToKillAppTimeout", "4000")],
-                RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "WaitToKillAppTimeout", "20000")],
-                DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "WaitToKillAppTimeout", "4000")],
             },
             new TweakDef
             {
@@ -6860,42 +6440,6 @@ internal static class PolicyDesktop
         [
             new TweakDef
             {
-                Id = "tpad-disable-three-finger-tap-cortana",
-                Label = "Disable Three-Finger Tap (Cortana / Search)",
-                Category = "Display",
-                NeedsAdmin = false,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                Tags = ["touchpad", "gestures", "three-finger", "cortana"],
-                Description =
-                    "Disables the three-finger tap gesture that opens Cortana or Search "
-                    + "on Precision Touchpad devices. Useful for users who frequently "
-                    + "trigger it accidentally.",
-                ApplyOps = [RegOp.SetDword(Ptp, "ThreeFingerTapEnabled", 0)],
-                RemoveOps = [RegOp.SetDword(Ptp, "ThreeFingerTapEnabled", 1)],
-                DetectOps = [RegOp.CheckDword(Ptp, "ThreeFingerTapEnabled", 0)],
-            },
-            new TweakDef
-            {
-                Id = "tpad-disable-four-finger-tap",
-                Label = "Disable Four-Finger Tap (Action Center)",
-                Category = "Display",
-                NeedsAdmin = false,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                Tags = ["touchpad", "gestures", "four-finger", "action center"],
-                Description =
-                    "Disables the four-finger tap gesture that opens the Action Center "
-                    + "on Precision Touchpad. Prevents accidental notification panel openings "
-                    + "during normal typing and navigation.",
-                ApplyOps = [RegOp.SetDword(Ptp, "FourFingerTapEnabled", 0)],
-                RemoveOps = [RegOp.SetDword(Ptp, "FourFingerTapEnabled", 1)],
-                DetectOps = [RegOp.CheckDword(Ptp, "FourFingerTapEnabled", 0)],
-            },
-            new TweakDef
-            {
                 Id = "tpad-disable-three-finger-slide-task-view",
                 Label = "Disable Three-Finger Slide (Task View / Switch Apps)",
                 Category = "Display",
@@ -6947,42 +6491,6 @@ internal static class PolicyDesktop
                 ApplyOps = [RegOp.SetDword(Ptp, "ReverseScrollingEnabled", 1)],
                 RemoveOps = [RegOp.SetDword(Ptp, "ReverseScrollingEnabled", 0)],
                 DetectOps = [RegOp.CheckDword(Ptp, "ReverseScrollingEnabled", 1)],
-            },
-            new TweakDef
-            {
-                Id = "tpad-disable-tap-to-click",
-                Label = "Disable Tap to Click",
-                Category = "Display",
-                NeedsAdmin = false,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                Tags = ["touchpad", "tap", "click", "disable"],
-                Description =
-                    "Disables tap-to-click on the touchpad, requiring a physical button press "
-                    + "for all clicks. Reduces accidental clicks while typing. "
-                    + "TapEnabled=0.",
-                ApplyOps = [RegOp.SetDword(Ptp, "TapEnabled", 0)],
-                RemoveOps = [RegOp.SetDword(Ptp, "TapEnabled", 1)],
-                DetectOps = [RegOp.CheckDword(Ptp, "TapEnabled", 0)],
-            },
-            new TweakDef
-            {
-                Id = "tpad-disable-two-finger-tap-right-click",
-                Label = "Disable Two-Finger Tap Right-Click",
-                Category = "Display",
-                NeedsAdmin = false,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                Tags = ["touchpad", "two-finger", "right-click", "tap"],
-                Description =
-                    "Disables two-finger tap as a right-click gesture. Useful for users who "
-                    + "prefer to right-click only via the physical right button. "
-                    + "TwoFingerTapEnabled=0.",
-                ApplyOps = [RegOp.SetDword(Ptp, "TwoFingerTapEnabled", 0)],
-                RemoveOps = [RegOp.SetDword(Ptp, "TwoFingerTapEnabled", 1)],
-                DetectOps = [RegOp.CheckDword(Ptp, "TwoFingerTapEnabled", 0)],
             },
             new TweakDef
             {
@@ -7513,74 +7021,6 @@ internal static class PolicyDesktop
             [
                 new TweakDef
                 {
-                    Id = "wddmpol-enable-hwscheduling",
-                    Label = "Enable Hardware-Accelerated GPU Scheduling (HAGS)",
-                    Category = "Display",
-                    Description =
-                        "Enables Hardware-Accelerated GPU Scheduling (HAGS/WDDM 2.7) which offloads GPU memory scheduling decisions from the CPU-based WDDM scheduler to the GPU firmware, reducing latency and CPU overhead for GPU-bound workloads.",
-                    Tags = ["wddm", "gpu-scheduling", "hags", "performance", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 4,
-                    SafetyRating = 5,
-                    ImpactNote = "GPU Hardware Accelerated Scheduling enabled; reduced CPU-GPU scheduling latency and CPU overhead.",
-                    ApplyOps = [RegOp.SetDword(Key, "HwSchMode", 2)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "HwSchMode")],
-                    DetectOps = [RegOp.CheckDword(Key, "HwSchMode", 2)],
-                },
-                new TweakDef
-                {
-                    Id = "wddmpol-set-tdr-delay-8s",
-                    Label = "Set GPU Timeout Detection and Recovery Delay to 8 Seconds",
-                    Category = "Display",
-                    Description =
-                        "Sets the Timeout Detection and Recovery (TDR) delay to 8 seconds (from the default 2 seconds), preventing false positive GPU resets during long compute operations (ML inference, video encoding) that legitimately use the GPU for longer than 2 seconds.",
-                    Tags = ["wddm", "tdr", "gpu-timeout", "compute", "stability", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 3,
-                    SafetyRating = 5,
-                    ImpactNote = "TDR delay set to 8s; prevents false GPU resets during long compute jobs. Delays detection of real hangs.",
-                    ApplyOps = [RegOp.SetDword(Key, "TdrDelay", 8)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "TdrDelay")],
-                    DetectOps = [RegOp.CheckDword(Key, "TdrDelay", 8)],
-                },
-                new TweakDef
-                {
-                    Id = "wddmpol-set-tdr-level-recover",
-                    Label = "Set TDR Level to Recover GPU Without System Reboot",
-                    Category = "Display",
-                    Description =
-                        "Configures the TDR recovery level to attempt GPU reset and recovery without a full system reboot (TdrLevelRecover=3), allowing the display driver to be restarted and the session to continue after a GPU hang.",
-                    Tags = ["wddm", "tdr", "recovery", "gpu-reset", "stability", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 3,
-                    SafetyRating = 5,
-                    ImpactNote = "TDR recovery without reboot enabled; GPU hang results in driver restart, not full system crash.",
-                    ApplyOps = [RegOp.SetDword(Key, "TdrLevel", 3)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "TdrLevel")],
-                    DetectOps = [RegOp.CheckDword(Key, "TdrLevel", 3)],
-                },
-                new TweakDef
-                {
-                    Id = "wddmpol-enable-gpu-preemption-dma",
-                    Label = "Enable GPU DMA-Level Preemption for Responsiveness",
-                    Category = "Display",
-                    Description =
-                        "Sets the GPU preemption granularity to DMA buffer level, allowing the WDDM scheduler to preempt running GPU workloads at DMA packet boundaries for improved UI responsiveness during background GPU-intensive tasks.",
-                    Tags = ["wddm", "preemption", "dma", "scheduler", "responsiveness", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 3,
-                    SafetyRating = 5,
-                    ImpactNote = "GPU preemption at DMA level enabled; UI stays responsive during background GPU workloads.",
-                    ApplyOps = [RegOp.SetDword(ScKey, "EnablePreemption", 1)],
-                    RemoveOps = [RegOp.DeleteValue(ScKey, "EnablePreemption")],
-                    DetectOps = [RegOp.CheckDword(ScKey, "EnablePreemption", 1)],
-                },
-                new TweakDef
-                {
                     Id = "wddmpol-block-display-driver-fallback",
                     Label = "Block Fallback to Microsoft Basic Display Adapter",
                     Category = "Display",
@@ -8093,23 +7533,6 @@ internal static class PolicyDesktop
             },
             new TweakDef
             {
-                Id = "inkwsadv-disable-suggested-ink-apps",
-                Label = "Disable Suggested App Recommendations in Windows Ink Workspace",
-                Category = "Display",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                Description =
-                    "Disabling suggested app recommendations in Windows Ink Workspace prevents Microsoft Store app recommendations from appearing in the Ink Workspace panel which may install unauthorized software or display advertising content within the workspace. Suggested apps in Ink Workspace can prompt users to install pen-input optimized applications from the Microsoft Store which may not have been vetted by the organization's software approval process. Enterprise devices should display only organization-approved applications and features rather than consumer-oriented app recommendations that are not relevant to business workflows. Disabling Ink Workspace suggestions also removes a potential data collection vector where suggestion telemetry tracks which ink-related applications users show interest in. Software deployment in enterprise environments should be managed through IT-controlled channels rather than direct user-initiated app store downloads regardless of whether they are promoted through Ink Workspace. Organizations that use Windows Ink Workspace features should configure it to display only relevant line-of-business applications rather than general consumer app suggestions.",
-                Tags = ["ink-workspace", "app-suggestions", "store-apps", "enterprise-management", "policy"],
-                RegistryKeys = [Key],
-                ApplyOps = [RegOp.SetDword(Key, "AllowSuggestedAppsInWindowsInkWorkspace", 0)],
-                RemoveOps = [RegOp.DeleteValue(Key, "AllowSuggestedAppsInWindowsInkWorkspace")],
-                DetectOps = [RegOp.CheckDword(Key, "AllowSuggestedAppsInWindowsInkWorkspace", 0)],
-            },
-            new TweakDef
-            {
                 Id = "inkwsadv-restrict-ink-workspace-to-approved-users",
                 Label = "Restrict Windows Ink Workspace Feature Access to Authorized User Groups",
                 Category = "Display",
@@ -8262,24 +7685,6 @@ internal static class PolicyDesktop
         [
             new TweakDef
             {
-                Id = "search-disable-web-results",
-                Label = "Disable Web Search Results in Start/Search",
-                Category = "Display",
-                NeedsAdmin = false,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                Tags = ["search", "web", "start menu", "privacy", "bing"],
-                Description =
-                    "Disables the web search results that appear in the Start menu and "
-                    + "Windows Search alongside local results. Prevents queries from being "
-                    + "sent to Bing/Microsoft and speeds up local search results.",
-                ApplyOps = [RegOp.SetDword(SearchUser, "BingSearchEnabled", 0)],
-                RemoveOps = [RegOp.SetDword(SearchUser, "BingSearchEnabled", 1)],
-                DetectOps = [RegOp.CheckDword(SearchUser, "BingSearchEnabled", 0)],
-            },
-            new TweakDef
-            {
                 Id = "search-disable-web-results-policy",
                 Label = "Disable Web Results in Search via Policy",
                 Category = "Display",
@@ -8295,24 +7700,6 @@ internal static class PolicyDesktop
                 ApplyOps = [RegOp.SetDword(SearchPolicy, "DisableWebSearch", 1)],
                 RemoveOps = [RegOp.DeleteValue(SearchPolicy, "DisableWebSearch")],
                 DetectOps = [RegOp.CheckDword(SearchPolicy, "DisableWebSearch", 1)],
-            },
-            new TweakDef
-            {
-                Id = "search-disable-search-highlights",
-                Label = "Disable Search Highlights (Search Box Spotlight)",
-                Category = "Display",
-                NeedsAdmin = false,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                Tags = ["search", "highlights", "spotlight", "taskbar"],
-                Description =
-                    "Disables Windows Search Highlights (the animated search box and daily "
-                    + "spotlight content in the taskbar search). Reduces visual noise and "
-                    + "removes Microsoft content promotions from the taskbar.",
-                ApplyOps = [RegOp.SetDword(SearchUser, "SearchboxTaskbarMode", 0)],
-                RemoveOps = [RegOp.SetDword(SearchUser, "SearchboxTaskbarMode", 1)],
-                DetectOps = [RegOp.CheckDword(SearchUser, "SearchboxTaskbarMode", 0)],
             },
             new TweakDef
             {
@@ -8370,41 +7757,6 @@ internal static class PolicyDesktop
             },
             new TweakDef
             {
-                Id = "search-disable-search-taskbar-icon",
-                Label = "Hide Search Icon from Taskbar",
-                Category = "Display",
-                NeedsAdmin = false,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                Tags = ["search", "taskbar", "icon", "clean"],
-                Description =
-                    "Hides the Search icon/box from the taskbar. Windows Search is still "
-                    + "accessible via the Win key. Saves taskbar space on smaller screens.",
-                ApplyOps = [RegOp.SetDword(SearchUser, "SearchboxTaskbarMode", 0)],
-                RemoveOps = [RegOp.SetDword(SearchUser, "SearchboxTaskbarMode", 1)],
-                DetectOps = [RegOp.CheckDword(SearchUser, "SearchboxTaskbarMode", 0)],
-            },
-            new TweakDef
-            {
-                Id = "search-set-indexing-performance-mode",
-                Label = "Enable Search Indexer Backoff Mode (Low I/O)",
-                Category = "Display",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                Tags = ["search", "indexer", "performance", "io", "background"],
-                Description =
-                    "Sets the Windows Search indexer to backoff mode, reducing its disk I/O "
-                    + "priority when the system is under load. Prevents indexing from "
-                    + "degrading foreground application performance.",
-                ApplyOps = [RegOp.SetDword(SearchInternal, "SetupCompletedSuccessfully", 0)],
-                RemoveOps = [RegOp.DeleteValue(SearchInternal, "SetupCompletedSuccessfully")],
-                DetectOps = [RegOp.CheckDword(SearchInternal, "SetupCompletedSuccessfully", 0)],
-            },
-            new TweakDef
-            {
                 Id = "search-disable-device-sync-search",
                 Label = "Disable Cross-Device Search Sync",
                 Category = "Display",
@@ -8420,24 +7772,6 @@ internal static class PolicyDesktop
                 ApplyOps = [RegOp.SetDword(SearchPolicy, "AllowCortana", 0)],
                 RemoveOps = [RegOp.DeleteValue(SearchPolicy, "AllowCortana")],
                 DetectOps = [RegOp.CheckDword(SearchPolicy, "AllowCortana", 0)],
-            },
-            new TweakDef
-            {
-                Id = "search-enable-classic-search-box",
-                Label = "Use Compact Search Box (Icon Only)",
-                Category = "Display",
-                NeedsAdmin = false,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                Tags = ["search", "taskbar", "compact", "search box", "icon"],
-                Description =
-                    "Sets the taskbar search to compact icon-only mode (no text box). "
-                    + "Value 1 = Search icon only, value 2 = full search box. "
-                    + "Saves taskbar space while keeping search accessible.",
-                ApplyOps = [RegOp.SetDword(SearchUser, "SearchboxTaskbarMode", 1)],
-                RemoveOps = [RegOp.SetDword(SearchUser, "SearchboxTaskbarMode", 2)],
-                DetectOps = [RegOp.CheckDword(SearchUser, "SearchboxTaskbarMode", 1)],
             },
         ];
     }
@@ -8468,91 +7802,6 @@ internal static class PolicyDesktop
                 },
                 new TweakDef
                 {
-                    Id = "wsidx-disable-index-encrypted-stores",
-                    Label = "Disable Indexing of Encrypted Files",
-                    Category = "Display",
-                    Description =
-                        "Prevents Windows Search from indexing EFS-encrypted files. Reduces index attack surface when encrypted content is present. Default: allowed. Recommended: disable on sensitive systems.",
-                    Tags = ["search", "indexing", "encryption", "efs", "privacy", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 3,
-                    SafetyRating = 5,
-                    ImpactNote = "Encrypted files excluded from search index; those files won't appear in search results.",
-                    ApplyOps = [RegOp.SetDword(Key, "AllowIndexingEncryptedStoresOrItems", 0)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "AllowIndexingEncryptedStoresOrItems")],
-                    DetectOps = [RegOp.CheckDword(Key, "AllowIndexingEncryptedStoresOrItems", 0)],
-                },
-                new TweakDef
-                {
-                    Id = "wsidx-disable-location-in-search",
-                    Label = "Disable Location Usage in Search Results",
-                    Category = "Display",
-                    Description =
-                        "Prevents Windows Search from using device location to refine or personalise search results. Default: allowed. Recommended: disable for privacy.",
-                    Tags = ["search", "location", "privacy", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 3,
-                    SafetyRating = 5,
-                    ImpactNote = "Location data not used in search ranking; no impact on local file search.",
-                    ApplyOps = [RegOp.SetDword(Key, "AllowSearchToUseLocation", 0)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "AllowSearchToUseLocation")],
-                    DetectOps = [RegOp.CheckDword(Key, "AllowSearchToUseLocation", 0)],
-                },
-                new TweakDef
-                {
-                    Id = "wsidx-disable-removable-media-index",
-                    Label = "Disable Indexing of Removable Drives",
-                    Category = "Display",
-                    Description =
-                        "Prevents the Windows Search indexer from crawling USB drives, SD cards, and other removable media. Reduces I/O on external devices. Default: allowed.",
-                    Tags = ["search", "indexing", "removable-media", "usb", "performance", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 3,
-                    SafetyRating = 5,
-                    ImpactNote = "Removable drives excluded from search index; files still accessible via direct browse.",
-                    ApplyOps = [RegOp.SetDword(Key, "DisableRemovableDriveIndexing", 1)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "DisableRemovableDriveIndexing")],
-                    DetectOps = [RegOp.CheckDword(Key, "DisableRemovableDriveIndexing", 1)],
-                },
-                new TweakDef
-                {
-                    Id = "wsidx-disable-bing-web-search",
-                    Label = "Disable Bing Web Search in Windows Search",
-                    Category = "Display",
-                    Description =
-                        "Prevents Windows Search from sending queries to Bing for web results. Only local results are returned. Default: web search enabled.",
-                    Tags = ["search", "bing", "web", "privacy", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 5,
-                    SafetyRating = 5,
-                    ImpactNote = "No web results in Start menu search; all queries stay local.",
-                    ApplyOps = [RegOp.SetDword(Key, "DisableWebSearch", 1)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "DisableWebSearch")],
-                    DetectOps = [RegOp.CheckDword(Key, "DisableWebSearch", 1)],
-                },
-                new TweakDef
-                {
-                    Id = "wsidx-disable-connected-search",
-                    Label = "Disable Connected Search Suggestions",
-                    Category = "Display",
-                    Description =
-                        "Disables connected search suggestions that send partial keystrokes to Microsoft as the user types in the search box. Default: enabled.",
-                    Tags = ["search", "suggestions", "privacy", "telemetry", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 5,
-                    SafetyRating = 5,
-                    ImpactNote = "Search suggestions from the cloud are disabled; local suggestions still work.",
-                    ApplyOps = [RegOp.SetDword(Key, "ConnectedSearchUseWeb", 0)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "ConnectedSearchUseWeb")],
-                    DetectOps = [RegOp.CheckDword(Key, "ConnectedSearchUseWeb", 0)],
-                },
-                new TweakDef
-                {
                     Id = "wsidx-disable-safe-search",
                     Label = "Set Search SafeSearch to Strict via Policy",
                     Category = "Display",
@@ -8566,57 +7815,6 @@ internal static class PolicyDesktop
                     ApplyOps = [RegOp.SetDword(Key, "ConnectedSearchSafeSearch", 3)],
                     RemoveOps = [RegOp.DeleteValue(Key, "ConnectedSearchSafeSearch")],
                     DetectOps = [RegOp.CheckDword(Key, "ConnectedSearchSafeSearch", 3)],
-                },
-                new TweakDef
-                {
-                    Id = "wsidx-disable-search-on-metered",
-                    Label = "Disable Cloud Search on Metered Connections",
-                    Category = "Display",
-                    Description =
-                        "Prevents Windows Search from sending cloud queries when on a metered network connection. Saves bandwidth and reduces data charges. Default: allowed.",
-                    Tags = ["search", "metered", "bandwidth", "network", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 3,
-                    SafetyRating = 5,
-                    ImpactNote = "Cloud search queries blocked on metered networks; local search unaffected.",
-                    ApplyOps = [RegOp.SetDword(Key, "ConnectedSearchUseWebOverMeteredConnections", 0)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "ConnectedSearchUseWebOverMeteredConnections")],
-                    DetectOps = [RegOp.CheckDword(Key, "ConnectedSearchUseWebOverMeteredConnections", 0)],
-                },
-                new TweakDef
-                {
-                    Id = "wsidx-disable-index-backoff",
-                    Label = "Disable Indexer Backoff on Battery Power",
-                    Category = "Display",
-                    Description =
-                        "Prevents the Windows Search indexer from reducing speed when on battery power. Useful for always-on desktops misidentified as battery-powered. Default: backoff enabled.",
-                    Tags = ["search", "indexing", "battery", "performance", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 2,
-                    SafetyRating = 4,
-                    ImpactNote = "Indexer runs at full speed on battery; may increase power consumption on laptops.",
-                    ApplyOps = [RegOp.SetDword(Key, "PreventIndexOnBattery", 0)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "PreventIndexOnBattery")],
-                    DetectOps = [RegOp.CheckDword(Key, "PreventIndexOnBattery", 0)],
-                },
-                new TweakDef
-                {
-                    Id = "wsidx-force-directory-indexing",
-                    Label = "Allow Indexing Even When Low Disk Space",
-                    Category = "Display",
-                    Description =
-                        "Prevents the indexer from stopping when disk space falls below the default threshold. Ensures search continues on nearly-full drives. Default: indexer pauses on low space.",
-                    Tags = ["search", "indexing", "disk-space", "performance", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 2,
-                    SafetyRating = 3,
-                    ImpactNote = "Indexer keeps running on low-disk systems; could consume remaining space for index data.",
-                    ApplyOps = [RegOp.SetDword(Key, "PreventIndexingLowDiskSpaceMB", 0)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "PreventIndexingLowDiskSpaceMB")],
-                    DetectOps = [RegOp.CheckDword(Key, "PreventIndexingLowDiskSpaceMB", 0)],
                 },
             ];
     }

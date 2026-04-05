@@ -54,50 +54,6 @@ internal static class Performance
         },
         new TweakDef
         {
-            Id = "perf-disable-spectre-mitigations",
-            Label = "Disable Spectre/Meltdown Mitigations",
-            Category = "System",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description =
-                "Disables Spectre and Meltdown CPU mitigations for maximum performance. WARNING: reduces security. Only use on trusted, isolated machines. Default: mitigations enabled. Recommended: keep enabled unless benchmarking.",
-            Tags = ["performance", "spectre", "meltdown", "cpu", "security"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management"],
-            ApplyOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management",
-                    "FeatureSettingsOverride",
-                    3
-                ),
-                RegOp.SetDword(
-                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management",
-                    "FeatureSettingsOverrideMask",
-                    3
-                ),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(
-                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management",
-                    "FeatureSettingsOverride"
-                ),
-                RegOp.DeleteValue(
-                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management",
-                    "FeatureSettingsOverrideMask"
-                ),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(
-                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management",
-                    "FeatureSettingsOverride",
-                    3
-                ),
-            ],
-        },
-        new TweakDef
-        {
             Id = "perf-unpark-cpu-cores",
             Label = "Unpark All CPU Cores",
             Category = "System",
@@ -160,111 +116,6 @@ internal static class Performance
         },
         new TweakDef
         {
-            Id = "perf-multimedia-priority",
-            Label = "Multimedia Gaming Priority (SystemProfile)",
-            Category = "System",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Configures the multimedia system profile for maximum gaming priority (SystemResponsiveness=0, no network throttling). Default: balanced (20). Recommended: 0 for gaming.",
-            Tags = ["performance", "multimedia", "gaming", "priority", "network"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile"],
-            ApplyOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile",
-                    "SystemResponsiveness",
-                    0
-                ),
-                RegOp.SetString(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile",
-                    "NetworkThrottlingIndex",
-                    "4294967295"
-                ),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile",
-                    "SystemResponsiveness",
-                    20
-                ),
-                RegOp.DeleteValue(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile",
-                    "NetworkThrottlingIndex"
-                ),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile",
-                    "SystemResponsiveness",
-                    0
-                ),
-            ],
-        },
-        new TweakDef
-        {
-            Id = "perf-disable-prefetch",
-            Label = "Disable Prefetch (SSD Systems)",
-            Category = "System",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Disables the Windows Prefetcher which is unnecessary on SSD systems and wastes I/O cycles. Default: enabled (3). Recommended: disabled on SSDs.",
-            Tags = ["performance", "prefetch", "ssd", "io"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\PrefetchParameters"],
-            ApplyOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\PrefetchParameters",
-                    "EnablePrefetcher",
-                    0
-                ),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\PrefetchParameters",
-                    "EnablePrefetcher",
-                    3
-                ),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(
-                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\PrefetchParameters",
-                    "EnablePrefetcher",
-                    0
-                ),
-            ],
-        },
-        new TweakDef
-        {
-            Id = "perf-large-pages",
-            Label = "Enable Large Memory Pages",
-            Category = "System",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Enables large page support for improved memory performance in memory-intensive applications. Default: disabled. Recommended: enabled.",
-            Tags = ["performance", "memory", "large-pages", "ram"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "LargePageMinimum", 1),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "LargePageMinimum"),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "LargePageMinimum", 1),
-            ],
-        },
-        new TweakDef
-        {
             Id = "perf-disable-memory-compression",
             Label = "Disable Memory Page Combining",
             Category = "System",
@@ -285,59 +136,6 @@ internal static class Performance
             DetectOps =
             [
                 RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "DisablePageCombining", 1),
-            ],
-        },
-        new TweakDef
-        {
-            Id = "perf-games-io-priority",
-            Label = "Set Highest IO Priority for Games Multimedia Profile",
-            Category = "System",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description =
-                "Sets the Games multimedia system profile to highest scheduling priority (6) with no background-only restriction. Reduces stutter in games. Default: 2. Recommended: 6 for gaming.",
-            Tags = ["performance", "gaming", "io", "priority", "multimedia"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games"],
-            ApplyOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games",
-                    "Affinity",
-                    0
-                ),
-                RegOp.SetDword(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games",
-                    "Background Only",
-                    0
-                ),
-                RegOp.SetDword(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games",
-                    "Priority",
-                    6
-                ),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games",
-                    "Affinity"
-                ),
-                RegOp.DeleteValue(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games",
-                    "Background Only"
-                ),
-                RegOp.DeleteValue(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games",
-                    "Priority"
-                ),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games",
-                    "Priority",
-                    6
-                ),
             ],
         },
         new TweakDef
@@ -369,112 +167,6 @@ internal static class Performance
             ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer", "Max Cached Icons", "4096")],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer", "Max Cached Icons")],
             DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer", "Max Cached Icons", "4096")],
-        },
-        new TweakDef
-        {
-            Id = "perf-disable-page-file-clearing",
-            Label = "Disable Page File Clearing at Shutdown",
-            Category = "System",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables clearing the page file at shutdown. Faster shutdowns. Default: not cleared.",
-            Tags = ["performance", "pagefile", "shutdown", "speed"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management"],
-            ApplyOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management",
-                    "ClearPageFileAtShutdown",
-                    0
-                ),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management",
-                    "ClearPageFileAtShutdown",
-                    1
-                ),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(
-                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management",
-                    "ClearPageFileAtShutdown",
-                    0
-                ),
-            ],
-        },
-        new TweakDef
-        {
-            Id = "perf-increase-system-responsiveness",
-            Label = "Increase System Responsiveness Priority",
-            Category = "System",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Sets the system responsiveness to 0 (all resources for foreground). Default: 20.",
-            Tags = ["performance", "responsiveness", "priority", "foreground"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile"],
-            ApplyOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile",
-                    "SystemResponsiveness",
-                    0
-                ),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile",
-                    "SystemResponsiveness",
-                    20
-                ),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile",
-                    "SystemResponsiveness",
-                    0
-                ),
-            ],
-        },
-        new TweakDef
-        {
-            Id = "perf-disable-ntfs-last-access",
-            Label = "Disable NTFS Last Access (System Managed)",
-            Category = "System",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Disables NTFS last access timestamp updates. Reduces disk writes and improves file system performance. Uses value 0x80000001 (system managed off). Default: system managed on.",
-            Tags = ["performance", "ntfs", "filesystem", "disk"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem"],
-            ApplyOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem",
-                    "NtfsDisableLastAccessUpdate",
-                    unchecked((int)0x80000001)
-                ),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem",
-                    "NtfsDisableLastAccessUpdate",
-                    unchecked((int)0x80000000)
-                ),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(
-                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem",
-                    "NtfsDisableLastAccessUpdate",
-                    unchecked((int)0x80000001)
-                ),
-            ],
         },
         new TweakDef
         {
@@ -609,69 +301,6 @@ internal static class Performance
         },
         new TweakDef
         {
-            Id = "perf-increase-file-system-cache",
-            Label = "Increase File System Memory Cache",
-            Category = "System",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Doubles the default I/O page lock limit to 2 GB, allowing more file system data to be cached in RAM. Best for systems with 16 GB+ RAM.",
-            Tags = ["performance", "memory", "cache", "filesystem", "io"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "IoPageLockLimit", 2097152),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "IoPageLockLimit"),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(
-                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management",
-                    "IoPageLockLimit",
-                    2097152
-                ),
-            ],
-        },
-        new TweakDef
-        {
-            Id = "perf-increase-network-throttle",
-            Label = "Increase Network Throttling Index",
-            Category = "System",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Increases the network throttling index to maximum (0xFFFFFFFF), allowing multimedia and gaming applications to use full network bandwidth.",
-            Tags = ["performance", "network", "throttling", "multimedia", "gaming"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile"],
-            ApplyOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile",
-                    "NetworkThrottlingIndex",
-                    unchecked((int)0xFFFFFFFF)
-                ),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile",
-                    "NetworkThrottlingIndex"
-                ),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile",
-                    "NetworkThrottlingIndex",
-                    unchecked((int)0xFFFFFFFF)
-                ),
-            ],
-        },
-        new TweakDef
-        {
             Id = "perf-disable-power-throttling",
             Label = "Disable Power Throttling",
             Category = "System",
@@ -714,21 +343,6 @@ internal static class Performance
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanWorkstation\Parameters", "MaxCmds", 32)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanWorkstation\Parameters", "MaxCmds")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanWorkstation\Parameters", "MaxCmds", 32)],
-        },
-        new TweakDef
-        {
-            Id = "perf-wer-never-consent",
-            Label = "Never Send Windows Error Reports (Consent)",
-            Category = "System",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets DefaultConsent=4 (\"Never\") in the WER consent key. Even if WER is enabled, no reports are transmitted to Microsoft.",
-            Tags = ["performance", "wer", "consent", "privacy"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Windows Error Reporting\Consent"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Windows Error Reporting\Consent", "DefaultConsent", 4)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Windows Error Reporting\Consent", "DefaultConsent")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Windows Error Reporting\Consent", "DefaultConsent", 4)],
         },
         new TweakDef
         {
@@ -816,252 +430,14 @@ internal static class SystemOptimization
     [
         // ── Memory Management ────────────────────────────────────────────
 
-        new TweakDef
-        {
-            Id = "sysopt-large-system-cache",
-            Label = "Enable Large System Cache",
-            Category = "System",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Allocates more RAM to the file system cache for improved disk I/O on systems with plenty of memory.",
-            Tags = ["optimization", "memory", "cache", "performance"],
-            RegistryKeys = [MemMgmt],
-            ApplyOps = [RegOp.SetDword(MemMgmt, "LargeSystemCache", 1)],
-            RemoveOps = [RegOp.SetDword(MemMgmt, "LargeSystemCache", 0)],
-            DetectOps = [RegOp.CheckDword(MemMgmt, "LargeSystemCache", 1)],
-        },
-        new TweakDef
-        {
-            Id = "sysopt-disable-paging-executive",
-            Label = "Disable Paging Executive",
-            Category = "System",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Keeps kernel and driver code in physical memory instead of swapping to disk.",
-            Tags = ["optimization", "memory", "paging", "kernel"],
-            RegistryKeys = [MemMgmt],
-            ApplyOps = [RegOp.SetDword(MemMgmt, "DisablePagingExecutive", 1)],
-            RemoveOps = [RegOp.SetDword(MemMgmt, "DisablePagingExecutive", 0)],
-            DetectOps = [RegOp.CheckDword(MemMgmt, "DisablePagingExecutive", 1)],
-        },
-        new TweakDef
-        {
-            Id = "sysopt-io-page-lock-limit",
-            Label = "Set I/O Page Lock Limit (128 MB)",
-            Category = "System",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Sets the maximum memory that can be locked for I/O operations to 128 MB for better disk performance.",
-            Tags = ["optimization", "io", "memory", "lock"],
-            RegistryKeys = [MemMgmt],
-            ApplyOps = [RegOp.SetDword(MemMgmt, "IoPageLockLimit", 134217728)],
-            RemoveOps = [RegOp.DeleteValue(MemMgmt, "IoPageLockLimit")],
-            DetectOps = [RegOp.CheckDword(MemMgmt, "IoPageLockLimit", 134217728)],
-        },
-        new TweakDef
-        {
-            Id = "sysopt-clear-pagefile-at-shutdown",
-            Label = "Clear Page File at Shutdown",
-            Category = "System",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Zeroes the page file on shutdown for security — prevents data leakage but extends shutdown time.",
-            Tags = ["optimization", "security", "pagefile", "shutdown"],
-            RegistryKeys = [MemMgmt],
-            ApplyOps = [RegOp.SetDword(MemMgmt, "ClearPageFileAtShutdown", 1)],
-            RemoveOps = [RegOp.SetDword(MemMgmt, "ClearPageFileAtShutdown", 0)],
-            DetectOps = [RegOp.CheckDword(MemMgmt, "ClearPageFileAtShutdown", 1)],
-        },
-        new TweakDef
-        {
-            Id = "sysopt-second-level-data-cache",
-            Label = "Set L2 Cache Size (1024 KB)",
-            Category = "System",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Override the detected L2 cache size to 1024 KB for memory manager optimisation.",
-            Tags = ["optimization", "cache", "l2", "cpu"],
-            RegistryKeys = [MemMgmt],
-            ApplyOps = [RegOp.SetDword(MemMgmt, "SecondLevelDataCache", 1024)],
-            RemoveOps = [RegOp.DeleteValue(MemMgmt, "SecondLevelDataCache")],
-            DetectOps = [RegOp.CheckDword(MemMgmt, "SecondLevelDataCache", 1024)],
-        },
         // ── File System ──────────────────────────────────────────────────
 
-        new TweakDef
-        {
-            Id = "sysopt-ntfs-disable-8dot3",
-            Label = "Disable NTFS 8.3 Short Name Creation",
-            Category = "System",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Stops creation of legacy 8.3 short filenames, improving NTFS performance on directories with many files.",
-            Tags = ["optimization", "ntfs", "8dot3", "filesystem"],
-            RegistryKeys = [FileSystem],
-            ApplyOps = [RegOp.SetDword(FileSystem, "NtfsDisable8dot3NameCreation", 1)],
-            RemoveOps = [RegOp.SetDword(FileSystem, "NtfsDisable8dot3NameCreation", 0)],
-            DetectOps = [RegOp.CheckDword(FileSystem, "NtfsDisable8dot3NameCreation", 1)],
-        },
-        new TweakDef
-        {
-            Id = "sysopt-ntfs-disable-last-access",
-            Label = "Disable NTFS Last Access Timestamp",
-            Category = "System",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables updating the last access timestamp on files, reducing disk writes significantly.",
-            Tags = ["optimization", "ntfs", "timestamp", "disk"],
-            RegistryKeys = [FileSystem],
-            ApplyOps = [RegOp.SetDword(FileSystem, "NtfsDisableLastAccessUpdate", unchecked((int)0x80000001u))],
-            RemoveOps = [RegOp.SetDword(FileSystem, "NtfsDisableLastAccessUpdate", unchecked((int)0x80000000u))],
-            DetectOps = [RegOp.CheckDword(FileSystem, "NtfsDisableLastAccessUpdate", unchecked((int)0x80000001u))],
-        },
-        new TweakDef
-        {
-            Id = "sysopt-long-paths-enabled",
-            Label = "Enable Long Path Support (> 260 chars)",
-            Category = "System",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Enables file paths longer than the WIN32 MAX_PATH limit of 260 characters.",
-            Tags = ["optimization", "path", "long", "filesystem"],
-            RegistryKeys = [FileSystem],
-            ApplyOps = [RegOp.SetDword(FileSystem, "LongPathsEnabled", 1)],
-            RemoveOps = [RegOp.SetDword(FileSystem, "LongPathsEnabled", 0)],
-            DetectOps = [RegOp.CheckDword(FileSystem, "LongPathsEnabled", 1)],
-        },
-        new TweakDef
-        {
-            Id = "sysopt-ntfs-memory-usage-high",
-            Label = "NTFS Memory Usage: Maximum for Performance",
-            Category = "System",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Sets NTFS memory usage to maximum (2) for better performance on systems with ample RAM.",
-            Tags = ["optimization", "ntfs", "memory", "performance"],
-            RegistryKeys = [FileSystem],
-            ApplyOps = [RegOp.SetDword(FileSystem, "NtfsMemoryUsage", 2)],
-            RemoveOps = [RegOp.SetDword(FileSystem, "NtfsMemoryUsage", 1)],
-            DetectOps = [RegOp.CheckDword(FileSystem, "NtfsMemoryUsage", 2)],
-        },
         // ── Process Priority ─────────────────────────────────────────────
 
-        new TweakDef
-        {
-            Id = "sysopt-win32-priority-separation-fg",
-            Label = "Optimise Foreground App Priority",
-            Category = "System",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Prioritises foreground applications with short, variable time slices for responsive desktop use.",
-            Tags = ["optimization", "priority", "foreground", "responsiveness"],
-            RegistryKeys = [PriorityCtrl],
-            ApplyOps = [RegOp.SetDword(PriorityCtrl, "Win32PrioritySeparation", 38)],
-            RemoveOps = [RegOp.SetDword(PriorityCtrl, "Win32PrioritySeparation", 2)],
-            DetectOps = [RegOp.CheckDword(PriorityCtrl, "Win32PrioritySeparation", 38)],
-        },
-        new TweakDef
-        {
-            Id = "sysopt-win32-priority-separation-bg",
-            Label = "Equal Priority for Foreground and Background",
-            Category = "System",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Gives equal CPU priority to foreground and background processes — ideal for servers and background workloads.",
-            Tags = ["optimization", "priority", "background", "server"],
-            RegistryKeys = [PriorityCtrl],
-            ApplyOps = [RegOp.SetDword(PriorityCtrl, "Win32PrioritySeparation", 24)],
-            RemoveOps = [RegOp.SetDword(PriorityCtrl, "Win32PrioritySeparation", 2)],
-            DetectOps = [RegOp.CheckDword(PriorityCtrl, "Win32PrioritySeparation", 24)],
-        },
         // ── Multimedia / Gaming Scheduling ───────────────────────────────
 
-        new TweakDef
-        {
-            Id = "sysopt-mmcss-system-responsible",
-            Label = "MMCSS: Reserve 10% CPU for System",
-            Category = "System",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Limits multimedia scheduling to 90% of CPU, ensuring 10% remains for system tasks.",
-            Tags = ["optimization", "mmcss", "cpu", "multimedia"],
-            RegistryKeys = [Kernel],
-            ApplyOps = [RegOp.SetDword(Kernel, "SystemResponsiveness", 10)],
-            RemoveOps = [RegOp.SetDword(Kernel, "SystemResponsiveness", 20)],
-            DetectOps = [RegOp.CheckDword(Kernel, "SystemResponsiveness", 10)],
-        },
-        new TweakDef
-        {
-            Id = "sysopt-mmcss-gaming-mode",
-            Label = "MMCSS: Gaming Mode (0% Reserve)",
-            Category = "System",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Allows multimedia/games to use up to 100% of CPU — minimises system reserve.",
-            Tags = ["optimization", "mmcss", "gaming", "cpu"],
-            RegistryKeys = [Kernel],
-            ApplyOps = [RegOp.SetDword(Kernel, "SystemResponsiveness", 0)],
-            RemoveOps = [RegOp.SetDword(Kernel, "SystemResponsiveness", 20)],
-            DetectOps = [RegOp.CheckDword(Kernel, "SystemResponsiveness", 0)],
-        },
-        new TweakDef
-        {
-            Id = "sysopt-network-throttling-index",
-            Label = "Disable Network Throttling for Gaming",
-            Category = "System",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables multimedia-class network throttling to maximise network throughput during games.",
-            Tags = ["optimization", "network", "throttling", "gaming"],
-            RegistryKeys = [Kernel],
-            ApplyOps = [RegOp.SetDword(Kernel, "NetworkThrottlingIndex", unchecked((int)0xFFFFFFFF))],
-            RemoveOps = [RegOp.SetDword(Kernel, "NetworkThrottlingIndex", 10)],
-            DetectOps = [RegOp.CheckDword(Kernel, "NetworkThrottlingIndex", unchecked((int)0xFFFFFFFF))],
-        },
         // ── Crash & Error Handling ───────────────────────────────────────
 
-        new TweakDef
-        {
-            Id = "sysopt-crash-dump-small",
-            Label = "Set Small Memory Dump (256 KB)",
-            Category = "System",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Uses small memory dumps on BSOD — saves disk space without losing essential crash info.",
-            Tags = ["optimization", "crash", "dump", "bsod"],
-            RegistryKeys = [CrashCtrl],
-            ApplyOps = [RegOp.SetDword(CrashCtrl, "CrashDumpEnabled", 3)],
-            RemoveOps = [RegOp.SetDword(CrashCtrl, "CrashDumpEnabled", 7)],
-            DetectOps = [RegOp.CheckDword(CrashCtrl, "CrashDumpEnabled", 3)],
-        },
-        new TweakDef
-        {
-            Id = "sysopt-disable-auto-reboot-bsod",
-            Label = "Disable Auto Reboot on BSOD",
-            Category = "System",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Prevents automatic restart after a blue screen, allowing time to read the error.",
-            Tags = ["optimization", "crash", "reboot", "bsod"],
-            RegistryKeys = [CrashCtrl],
-            ApplyOps = [RegOp.SetDword(CrashCtrl, "AutoReboot", 0)],
-            RemoveOps = [RegOp.SetDword(CrashCtrl, "AutoReboot", 1)],
-            DetectOps = [RegOp.CheckDword(CrashCtrl, "AutoReboot", 0)],
-        },
-        new TweakDef
-        {
-            Id = "sysopt-disable-error-reporting",
-            Label = "Disable Windows Error Reporting",
-            Category = "System",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables sending error reports to Microsoft, reducing disk and network usage.",
-            Tags = ["optimization", "error", "reporting", "privacy"],
-            RegistryKeys = [WinErr],
-            ApplyOps = [RegOp.SetDword(WinErr, "Disabled", 1)],
-            RemoveOps = [RegOp.SetDword(WinErr, "Disabled", 0)],
-            DetectOps = [RegOp.CheckDword(WinErr, "Disabled", 1)],
-        },
         // ── Boot & Logon ─────────────────────────────────────────────────
 
         new TweakDef
@@ -1080,152 +456,12 @@ internal static class SystemOptimization
         },
         // ── Security & LSA ───────────────────────────────────────────────
 
-        new TweakDef
-        {
-            Id = "sysopt-lsa-protection",
-            Label = "Enable LSA Protection (RunAsPPL)",
-            Category = "System",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Runs the Local Security Authority as a protected process to prevent credential dumping attacks.",
-            Tags = ["optimization", "security", "lsa", "credential"],
-            RegistryKeys = [Lsa],
-            ApplyOps = [RegOp.SetDword(Lsa, "RunAsPPL", 1)],
-            RemoveOps = [RegOp.SetDword(Lsa, "RunAsPPL", 0)],
-            DetectOps = [RegOp.CheckDword(Lsa, "RunAsPPL", 1)],
-        },
         // ── Power & Energy ───────────────────────────────────────────────
 
-        new TweakDef
-        {
-            Id = "sysopt-disable-modern-standby",
-            Label = "Disable Modern Standby (S0 Low Power)",
-            Category = "System",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Reverts to legacy S3 sleep instead of Connected Standby — prevents background wake-ups.",
-            Tags = ["optimization", "power", "standby", "sleep"],
-            RegistryKeys = [Power],
-            ApplyOps = [RegOp.SetDword(Power, "PlatformAoAcOverride", 0)],
-            RemoveOps = [RegOp.DeleteValue(Power, "PlatformAoAcOverride")],
-            DetectOps = [RegOp.CheckDword(Power, "PlatformAoAcOverride", 0)],
-        },
-        new TweakDef
-        {
-            Id = "sysopt-disable-hibernate",
-            Label = "Disable Hibernate (Save Disk Space)",
-            Category = "System",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables hibernate and removes the hiberfil.sys file, freeing up several GB of disk space.",
-            Tags = ["optimization", "hibernate", "disk", "space"],
-            RegistryKeys = [Power],
-            ApplyOps = [RegOp.SetDword(Power, "HibernateEnabled", 0)],
-            RemoveOps = [RegOp.SetDword(Power, "HibernateEnabled", 1)],
-            DetectOps = [RegOp.CheckDword(Power, "HibernateEnabled", 0)],
-        },
         // ── Visual Effects Minimal ───────────────────────────────────────
 
         // ── Misc Performance ─────────────────────────────────────────────
 
-        new TweakDef
-        {
-            Id = "sysopt-smb-size-req-buffer",
-            Label = "Increase SMB Request Buffer Size (16 KB)",
-            Category = "System",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Increases the SMB request buffer size for better file sharing performance.",
-            Tags = ["optimization", "smb", "buffer", "network"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters", "SizReqBuf", 16384)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters", "SizReqBuf")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters", "SizReqBuf", 16384)],
-        },
-        new TweakDef
-        {
-            Id = "sysopt-disable-prefetch",
-            Label = "Disable Prefetch",
-            Category = "System",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables the Prefetch service — recommended for NVMe/SSD systems where it wastes I/O.",
-            Tags = ["optimization", "prefetch", "ssd", "disk"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\PrefetchParameters"],
-            ApplyOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\PrefetchParameters",
-                    "EnablePrefetcher",
-                    0
-                ),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\PrefetchParameters",
-                    "EnablePrefetcher",
-                    3
-                ),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(
-                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\PrefetchParameters",
-                    "EnablePrefetcher",
-                    0
-                ),
-            ],
-        },
-        new TweakDef
-        {
-            Id = "sysopt-disable-superfetch",
-            Label = "Disable SuperFetch / SysMain",
-            Category = "System",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables the SysMain (SuperFetch) service preloading — reduces RAM and disk usage on SSD systems.",
-            Tags = ["optimization", "superfetch", "sysmain", "memory"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\PrefetchParameters"],
-            ApplyOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\PrefetchParameters",
-                    "EnableSuperfetch",
-                    0
-                ),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\PrefetchParameters",
-                    "EnableSuperfetch",
-                    3
-                ),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(
-                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\PrefetchParameters",
-                    "EnableSuperfetch",
-                    0
-                ),
-            ],
-        },
-        new TweakDef
-        {
-            Id = "sysopt-disable-game-bar-presence",
-            Label = "Disable Game Bar Presence Writer",
-            Category = "System",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Disables the Game Bar presence writer for reduced background CPU usage.",
-            Tags = ["optimization", "game-bar", "presence", "cpu"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\GameBar"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\GameBar", "UseNexusForGameBarEnabled", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\GameBar", "UseNexusForGameBarEnabled", 1)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\GameBar", "UseNexusForGameBarEnabled", 0)],
-        },
         // ── Network Buffer Tuning ────────────────────────────────────────
 
         // ── UI Responsiveness ────────────────────────────────────────────
@@ -1239,20 +475,6 @@ internal static class SystemTweaks
 {
     internal static IReadOnlyList<TweakDef> Tweaks { get; } =
     [
-        new TweakDef
-        {
-            Id = "sys-disable-admin-shares",
-            Label = "Disable Administrative Shares (C$, ADMIN$)",
-            Category = "System",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Disables default administrative shares (C$, ADMIN$). Reduces lateral-movement attack surface on workstations.",
-            Tags = ["system", "security", "network", "shares"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters", "AutoShareWks", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters", "AutoShareWks")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters", "AutoShareWks", 0)],
-        },
         new TweakDef
         {
             Id = "sys-detailed-bsod",
@@ -1285,21 +507,6 @@ internal static class SystemTweaks
         },
         new TweakDef
         {
-            Id = "sys-restore-frequency",
-            Label = "Enable Unlimited System Restore Frequency",
-            Category = "System",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description =
-                "Sets RPSessionInterval to 0, allowing unlimited system restore point creation frequency. Default: 1. Recommended: 0 for frequent snapshots.",
-            Tags = ["system", "restore", "backup", "frequency"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\SystemRestore"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\SystemRestore", "RPSessionInterval", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\SystemRestore", "RPSessionInterval")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\SystemRestore", "RPSessionInterval", 0)],
-        },
-        new TweakDef
-        {
             Id = "sys-enable-utc-hardware-clock",
             Label = "Set Hardware Clock to UTC",
             Category = "System",
@@ -1312,36 +519,6 @@ internal static class SystemTweaks
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\TimeZoneInformation", "RealTimeIsUniversal", 1)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\TimeZoneInformation", "RealTimeIsUniversal")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\TimeZoneInformation", "RealTimeIsUniversal", 1)],
-        },
-        new TweakDef
-        {
-            Id = "sys-disable-error-reporting-queue",
-            Label = "Disable Windows Error Reporting Queue",
-            Category = "System",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Disables the WER queue that stores crash reports before upload. Saves disk space and reduces background IO. Default: enabled.",
-            Tags = ["system", "error-reporting", "wer", "queue"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Windows Error Reporting"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Windows Error Reporting", "DisableQueue", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Windows Error Reporting", "DisableQueue")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Windows Error Reporting", "DisableQueue", 1)],
-        },
-        new TweakDef
-        {
-            Id = "sys-pagefile-encrypt-off",
-            Label = "Disable Pagefile Encryption",
-            Category = "System",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets NtfsEncryptPagingFile=0 to disable NTFS encryption of the pagefile. Reduces CPU overhead during memory paging operations. Default: 0 on most systems.",
-            Tags = ["system", "pagefile", "ntfs", "encryption"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsEncryptPagingFile", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsEncryptPagingFile")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsEncryptPagingFile", 0)],
         },
         new TweakDef
         {
@@ -1375,21 +552,6 @@ internal static class SystemTweaks
         },
         new TweakDef
         {
-            Id = "sys-max-worker-threads",
-            Label = "Set Max LanmanServer Worker Threads to 8192",
-            Category = "System",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets MaxWorkItems=8192 in LanmanServer parameters. Increases the number of simultaneous outstanding server-side requests for SMB workloads. Default: system varies.",
-            Tags = ["system", "smb", "lanman", "threading"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters", "MaxWorkItems", 8192)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters", "MaxWorkItems")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters", "MaxWorkItems", 8192)],
-        },
-        new TweakDef
-        {
             Id = "sys-io-priority-boost",
             Label = "Enable I/O Priority Boost for Foreground",
             Category = "System",
@@ -1420,27 +582,6 @@ internal static class SystemTweaks
         },
         new TweakDef
         {
-            Id = "sys-heap-decommit-threshold",
-            Label = "Set Heap Decommit Free Block Threshold",
-            Category = "System",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets HeapDeCommitFreeBlockThreshold=0x40000 in Session Manager. Raises the size at which heap free blocks are returned to the OS, reducing per-process fragmentation overhead. Default: 0.",
-            Tags = ["system", "heap", "memory", "fragmentation"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager", "HeapDeCommitFreeBlockThreshold", 0x40000),
-            ],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager", "HeapDeCommitFreeBlockThreshold")],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager", "HeapDeCommitFreeBlockThreshold", 0x40000),
-            ],
-        },
-        new TweakDef
-        {
             Id = "sys-vm-write-watch-off",
             Label = "Disable VM Write Watch",
             Category = "System",
@@ -1453,30 +594,6 @@ internal static class SystemTweaks
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "WriteWatch", 0)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "WriteWatch")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "WriteWatch", 0)],
-        },
-        new TweakDef
-        {
-            Id = "sys-large-pages-enable",
-            Label = "Enable Large Page Mappings",
-            Category = "System",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets LargePageMinimum=0 in Memory Management to allow large page (2MB) memory allocations when possible. Reduces TLB pressure for large working sets. Default: depends.",
-            Tags = ["system", "large-pages", "memory", "tlb"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "LargePageMinimum", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "LargePageMinimum"),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "LargePageMinimum", 0),
-            ],
         },
         new TweakDef
         {
@@ -1713,42 +830,6 @@ internal static class MemoryOptimization
         },
         new TweakDef
         {
-            Id = "mem-clear-pagefile-on-shutdown",
-            Label = "Clear Page File at Shutdown",
-            Category = "System",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Zeros out the page file on shutdown. Prevents sensitive data from persisting in the page file.",
-            Tags = ["memory", "security", "privacy"],
-            SideEffects = "Shutdown takes slightly longer.",
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management"],
-            ApplyOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management",
-                    "ClearPageFileAtShutdown",
-                    1
-                ),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management",
-                    "ClearPageFileAtShutdown",
-                    0
-                ),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(
-                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management",
-                    "ClearPageFileAtShutdown",
-                    1
-                ),
-            ],
-        },
-        new TweakDef
-        {
             Id = "mem-set-iot-registry-quota",
             Label = "Increase Registry Size Limit",
             Category = "System",
@@ -1808,41 +889,6 @@ internal static class MemoryOptimization
                     @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management",
                     "SecondLevelDataCache",
                     1024
-                ),
-            ],
-        },
-        new TweakDef
-        {
-            Id = "mem-disable-prefetch-boost",
-            Label = "Reduce Prefetch Memory Usage",
-            Category = "System",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Reduces Prefetch/Superfetch memory consumption by lowering EnablePrefetcher to boot-only mode.",
-            Tags = ["memory", "performance", "prefetch"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\PrefetchParameters"],
-            ApplyOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\PrefetchParameters",
-                    "EnablePrefetcher",
-                    1
-                ),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\PrefetchParameters",
-                    "EnablePrefetcher",
-                    3
-                ),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(
-                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\PrefetchParameters",
-                    "EnablePrefetcher",
-                    1
                 ),
             ],
         },
@@ -1960,49 +1006,6 @@ internal static class MemoryOptimization
             DetectOps =
             [
                 RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "SystemPages", 0),
-            ],
-        },
-        new TweakDef
-        {
-            Id = "mem-enable-large-pages",
-            Label = "Enable Large Pages for Performance",
-            Category = "System",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Sets the system to prefer large memory pages (2 MB) which improves performance for memory-intensive applications.",
-            Tags = ["memory", "performance", "large-pages", "database"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management"],
-            ApplyOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management",
-                    "FeatureSettingsOverride",
-                    3
-                ),
-                RegOp.SetDword(
-                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management",
-                    "FeatureSettingsOverrideMask",
-                    3
-                ),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(
-                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management",
-                    "FeatureSettingsOverride"
-                ),
-                RegOp.DeleteValue(
-                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management",
-                    "FeatureSettingsOverrideMask"
-                ),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(
-                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management",
-                    "FeatureSettingsOverride",
-                    3
-                ),
             ],
         },
         // ── Sprint 20 additions ─────────────────────────────────────────────
@@ -2179,29 +1182,6 @@ internal static class MemoryOptimization
         // ── merged from: Gpu.cs ──────────────────────────────────────────────────
         new TweakDef
         {
-            Id = "gpu-tdr-timeout",
-            Label = "Increase GPU TDR Timeout (10s)",
-            Category = "Display",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description =
-                "Increases GPU Timeout Detection and Recovery delay from 2s to 10s. Prevents driver crash/reset during heavy GPU workloads like rendering, ML training, or compute shaders. Options: 2s (default) / 10s / 30s / 60s. Recommended: 10s.",
-            Tags = ["gpu", "stability", "tdr", "rendering"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers", "TdrDelay", 10),
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers", "TdrDdiDelay", 10),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers", "TdrDelay", 2),
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers", "TdrDdiDelay", 5),
-            ],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers", "TdrDelay", 10)],
-        },
-        new TweakDef
-        {
             Id = "gpu-disable-nvidia-telemetry",
             Label = "Disable NVIDIA Telemetry",
             Category = "Display",
@@ -2232,35 +1212,6 @@ internal static class MemoryOptimization
                 RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\NVIDIA Corporation\Global\FTS", "EnableRID66610"),
             ],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\NVIDIA Corporation\NvControlPanel2\Client", "OptInOrOutPreference", 0)],
-        },
-        new TweakDef
-        {
-            Id = "gpu-prefer-performance",
-            Label = "GPU Global High Performance Mode",
-            Category = "Display",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Sets global DirectX GPU preference to high performance with swap effect upgrade enabled. Improves frame pacing. Default: System default. Recommended: High Performance.",
-            Tags = ["gpu", "performance", "directx"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\DirectX\UserGpuPreferences"],
-            ApplyOps =
-            [
-                RegOp.SetString(
-                    @"HKEY_CURRENT_USER\Software\Microsoft\DirectX\UserGpuPreferences",
-                    "DirectXUserGlobalSettings",
-                    "SwapEffectUpgradeEnable=1;"
-                ),
-            ],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\DirectX\UserGpuPreferences", "DirectXUserGlobalSettings")],
-            DetectOps =
-            [
-                RegOp.CheckString(
-                    @"HKEY_CURRENT_USER\Software\Microsoft\DirectX\UserGpuPreferences",
-                    "DirectXUserGlobalSettings",
-                    "SwapEffectUpgradeEnable=1;"
-                ),
-            ],
         },
         new TweakDef
         {
@@ -2379,20 +1330,6 @@ internal static class MemoryOptimization
         },
         new TweakDef
         {
-            Id = "gpu-disable-hw-accelerated-scheduling",
-            Label = "Disable Hardware-Accelerated GPU Scheduling",
-            Category = "Display",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables hardware-accelerated GPU scheduling (HAGS). Can fix stuttering on older GPUs. Default: varies.",
-            Tags = ["gpu", "hags", "scheduling", "performance"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers", "HwSchMode", 1)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers", "HwSchMode", 2)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers", "HwSchMode", 1)],
-        },
-        new TweakDef
-        {
             Id = "gpu-force-high-performance-power",
             Label = "Force GPU High Performance Power Plan",
             Category = "Display",
@@ -2433,41 +1370,6 @@ internal static class MemoryOptimization
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Dwm", "EnableSWCursor", 1)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Dwm", "EnableSWCursor")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Dwm", "EnableSWCursor", 1)],
-        },
-        new TweakDef
-        {
-            Id = "gpu-increase-priority",
-            Label = "Increase GPU Thread Priority",
-            Category = "Display",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets the GPU thread priority to 8 in the MMCSS Games profile. Ensures GPU workloads get higher scheduling priority. Default: not set.",
-            Tags = ["gpu", "priority", "mmcss", "games"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games"],
-            ApplyOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games",
-                    "GPU Priority",
-                    8
-                ),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games",
-                    "GPU Priority"
-                ),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games",
-                    "GPU Priority",
-                    8
-                ),
-            ],
         },
         new TweakDef
         {
@@ -2772,88 +1674,6 @@ internal static class Startup
         },
         new TweakDef
         {
-            Id = "startup-disable-skype-autostart",
-            Label = "Disable Skype Auto-Start",
-            Category = "System",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Removes Skype from the HKCU Run key to prevent auto-start.",
-            Tags = ["startup", "skype"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run"],
-            ApplyOps =
-            [
-                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run", "Skype"),
-                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run", "Skype for Desktop"),
-            ],
-            DetectOps = [RegOp.CheckMissing(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run", "Skype")],
-        },
-        new TweakDef
-        {
-            Id = "startup-disable-store-autoinstall",
-            Label = "Disable Store Suggested App Install",
-            Category = "System",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Prevents Windows from silently installing suggested apps and OEM bloatware from the Microsoft Store.",
-            Tags = ["startup", "bloatware", "store"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager"],
-            ApplyOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
-                    "SilentInstalledAppsEnabled",
-                    0
-                ),
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager", "ContentDeliveryAllowed", 0),
-                RegOp.SetDword(
-                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
-                    "OemPreInstalledAppsEnabled",
-                    0
-                ),
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager", "PreInstalledAppsEnabled", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
-                    "SilentInstalledAppsEnabled",
-                    1
-                ),
-                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager", "ContentDeliveryAllowed"),
-                RegOp.DeleteValue(
-                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
-                    "OemPreInstalledAppsEnabled"
-                ),
-                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager", "PreInstalledAppsEnabled"),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(
-                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
-                    "SilentInstalledAppsEnabled",
-                    0
-                ),
-            ],
-        },
-        new TweakDef
-        {
-            Id = "startup-disable-teams",
-            Label = "Disable Teams Auto-Start",
-            Category = "System",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Removes Microsoft Teams from the HKCU Run key to prevent auto-start.",
-            Tags = ["startup", "teams", "performance"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run"],
-            ApplyOps =
-            [
-                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run", "com.squirrel.Teams.Teams"),
-                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run", "MicrosoftTeams"),
-            ],
-            DetectOps = [RegOp.CheckMissing(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run", "com.squirrel.Teams.Teams")],
-        },
-        new TweakDef
-        {
             Id = "startup-disable-cortana-startup",
             Label = "Disable Cortana Startup",
             Category = "System",
@@ -2885,20 +1705,6 @@ internal static class Startup
         },
         new TweakDef
         {
-            Id = "startup-disable-lock-screen",
-            Label = "Skip Lock Screen (Go Straight to Login)",
-            Category = "System",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Bypasses the lock screen so the machine goes directly to the password / PIN prompt on wake or boot.",
-            Tags = ["startup", "lockscreen", "login"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Personalization"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Personalization", "NoLockScreen", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Personalization", "NoLockScreen")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Personalization", "NoLockScreen", 1)],
-        },
-        new TweakDef
-        {
             Id = "startup-disable-first-logon-animation",
             Label = "Disable First Login Animation",
             Category = "System",
@@ -2918,29 +1724,6 @@ internal static class Startup
             DetectOps =
             [
                 RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "EnableFirstLogonAnimation", 0),
-            ],
-        },
-        new TweakDef
-        {
-            Id = "startup-disable-last-known-good",
-            Label = "Disable Last Known Good Boot Option",
-            Category = "System",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Disables the Last Known Good Configuration boot option. Default: Enabled. Recommended: Disabled for advanced users.",
-            Tags = ["startup", "boot", "last-known-good"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Configuration Manager"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Configuration Manager", "LastKnownGood", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Configuration Manager", "LastKnownGood"),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Configuration Manager", "LastKnownGood", 0),
             ],
         },
         new TweakDef
@@ -2974,186 +1757,6 @@ internal static class Startup
         },
         new TweakDef
         {
-            Id = "startup-start-disable-welcome-experience",
-            Label = "Disable Windows Welcome Experience",
-            Category = "System",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Disables the Windows welcome experience that shows after updates with feature highlights and suggestions. Default: Enabled. Recommended: Disabled.",
-            Tags = ["startup", "welcome", "experience", "updates", "nag"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager"],
-            ApplyOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
-                    "SubscribedContent-310093Enabled",
-                    0
-                ),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(
-                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
-                    "SubscribedContent-310093Enabled"
-                ),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(
-                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
-                    "SubscribedContent-310093Enabled",
-                    0
-                ),
-            ],
-        },
-        new TweakDef
-        {
-            Id = "startup-disable-lock-screen-app-notifications",
-            Label = "Disable Lock Screen App Notifications on Startup",
-            Category = "System",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables app notifications on the lock screen during startup. Reduces startup resource usage. Default: enabled.",
-            Tags = ["startup", "lock-screen", "notifications", "disable"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "DisableLockScreenAppNotifications", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "DisableLockScreenAppNotifications")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "DisableLockScreenAppNotifications", 1)],
-        },
-        new TweakDef
-        {
-            Id = "startup-disable-suggested-app-installs",
-            Label = "Disable Suggested App Auto-Installs",
-            Category = "System",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Prevents Windows from silently installing suggested apps from the Microsoft Store. Stops bloatware from appearing after updates. Default: enabled.",
-            Tags = ["startup", "suggested", "apps", "bloatware"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager"],
-            ApplyOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
-                    "SilentInstalledAppsEnabled",
-                    0
-                ),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
-                    "SilentInstalledAppsEnabled",
-                    1
-                ),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(
-                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
-                    "SilentInstalledAppsEnabled",
-                    0
-                ),
-            ],
-        },
-        new TweakDef
-        {
-            Id = "startup-disable-welcome-experience",
-            Label = "Disable Windows Welcome Experience",
-            Category = "System",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Disables the Windows Welcome Experience that shows after updates to highlight new features. Faster post-update boot.",
-            Tags = ["startup", "welcome", "experience", "updates"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager"],
-            ApplyOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
-                    "SubscribedContent-310093Enabled",
-                    0
-                ),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(
-                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
-                    "SubscribedContent-310093Enabled"
-                ),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(
-                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
-                    "SubscribedContent-310093Enabled",
-                    0
-                ),
-            ],
-        },
-        new TweakDef
-        {
-            Id = "startup-disable-tips-and-suggestions",
-            Label = "Disable Tips and Suggestions Notifications",
-            Category = "System",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Disables Windows tips, tricks, and suggestion notifications that appear periodically. Reduces distractions.",
-            Tags = ["startup", "tips", "suggestions", "notifications"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager"],
-            ApplyOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
-                    "SubscribedContent-338389Enabled",
-                    0
-                ),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(
-                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
-                    "SubscribedContent-338389Enabled"
-                ),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(
-                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
-                    "SubscribedContent-338389Enabled",
-                    0
-                ),
-            ],
-        },
-        new TweakDef
-        {
-            Id = "startup-disable-get-even-more-out-of-windows",
-            Label = "Disable 'Get Even More Out of Windows' Nag",
-            Category = "System",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Disables the 'Get even more out of Windows' full-screen nag that promotes Microsoft services. Default: enabled.",
-            Tags = ["startup", "nag", "promotion", "microsoft"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\UserProfileEngagement"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\UserProfileEngagement", "ScoobeSystemSettingEnabled", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\UserProfileEngagement", "ScoobeSystemSettingEnabled"),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(
-                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\UserProfileEngagement",
-                    "ScoobeSystemSettingEnabled",
-                    0
-                ),
-            ],
-        },
-        new TweakDef
-        {
             Id = "startup-set-boot-timeout-3s",
             Label = "Set Boot Menu Timeout to 3 Seconds",
             Category = "System",
@@ -3165,40 +1768,6 @@ internal static class Startup
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control", "SystemBootDevice", 3)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control", "SystemBootDevice")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control", "SystemBootDevice", 3)],
-        },
-        new TweakDef
-        {
-            Id = "startup-disable-windows-tips-finish-setup",
-            Label = "Disable Suggested Content in Settings",
-            Category = "System",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Prevents Windows from showing suggested content and ads in the Settings app. Reduces promotional distractions.",
-            Tags = ["startup", "settings", "suggestions", "ads"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager"],
-            ApplyOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
-                    "SubscribedContent-338393Enabled",
-                    0
-                ),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(
-                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
-                    "SubscribedContent-338393Enabled"
-                ),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(
-                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
-                    "SubscribedContent-338393Enabled",
-                    0
-                ),
-            ],
         },
         // ── Sprint 20 additions ─────────────────────────────────────────────
 
@@ -3280,42 +1849,6 @@ internal static class Startup
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\MicrosoftEdge\Main", "AllowPrelaunch", 0)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\MicrosoftEdge\Main", "AllowPrelaunch")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\MicrosoftEdge\Main", "AllowPrelaunch", 0)],
-        },
-        new TweakDef
-        {
-            Id = "startup-disable-prefetch-on-ssd",
-            Label = "Disable Prefetch for SSD Boot Drives",
-            Category = "System",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Disables boot and application prefetch on SSD boot drives. SSDs have fast random access, so prefetch adds unnecessary write wear.",
-            Tags = ["startup", "prefetch", "ssd", "performance"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\PrefetchParameters"],
-            ApplyOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\PrefetchParameters",
-                    "EnablePrefetcher",
-                    0
-                ),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\PrefetchParameters",
-                    "EnablePrefetcher",
-                    3
-                ),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(
-                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\PrefetchParameters",
-                    "EnablePrefetcher",
-                    0
-                ),
-            ],
         },
         new TweakDef
         {

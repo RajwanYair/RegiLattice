@@ -10,7 +10,7 @@ internal static class Audio
         {
             Id = "audio-disable-startup-sound",
             Label = "Disable Startup Sound",
-            Category = "Audio",
+            Category = "Audio & Media",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables the Windows boot/startup sound played when logging in.",
@@ -44,7 +44,7 @@ internal static class Audio
         {
             Id = "audio-disable-enhancements",
             Label = "Disable Audio Enhancements",
-            Category = "Audio",
+            Category = "Audio & Media",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Disables all audio enhancements (equalizer, bass boost, virtual surround, loudness equalization).",
@@ -58,7 +58,7 @@ internal static class Audio
         {
             Id = "audio-disable-spatial-audio",
             Label = "Disable Spatial Audio Auto-Activation",
-            Category = "Audio",
+            Category = "Audio & Media",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Disables automatic spatial audio (Windows Sonic / Dolby Atmos) activation by the OS.",
@@ -72,7 +72,7 @@ internal static class Audio
         {
             Id = "audio-set-24bit-quality",
             Label = "Set Default Audio to 24-bit Quality",
-            Category = "Audio",
+            Category = "Audio & Media",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Sets the default audio format to 24-bit quality for improved audio fidelity.",
@@ -86,7 +86,7 @@ internal static class Audio
         {
             Id = "audio-disable-exclusive-mode",
             Label = "Disable Audio Exclusive Mode",
-            Category = "Audio",
+            Category = "Audio & Media",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Prevents applications from taking exclusive control of audio devices, avoiding sound conflicts.",
@@ -100,7 +100,7 @@ internal static class Audio
         {
             Id = "audio-disable-low-battery-sound",
             Label = "Disable Low Battery Warning Sound",
-            Category = "Audio",
+            Category = "Audio & Media",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Silences the audible alert played when the battery level drops below the warning threshold.",
@@ -120,7 +120,7 @@ internal static class Audio
         {
             Id = "audio-exclusive-priority",
             Label = "Set Audio Exclusive Mode Priority",
-            Category = "Audio",
+            Category = "Audio & Media",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -166,7 +166,7 @@ internal static class Audio
         {
             Id = "audio-disable-effects-global",
             Label = "Disable Audio Effects Globally",
-            Category = "Audio",
+            Category = "Audio & Media",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -181,7 +181,7 @@ internal static class Audio
         {
             Id = "audio-exclusive-mode-priority",
             Label = "Set Exclusive Mode Audio Priority",
-            Category = "Audio",
+            Category = "Audio & Media",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -196,7 +196,7 @@ internal static class Audio
         {
             Id = "audio-disable-loudness-eq",
             Label = "Disable Loudness Equalization",
-            Category = "Audio",
+            Category = "Audio & Media",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -211,7 +211,7 @@ internal static class Audio
         {
             Id = "audio-48khz-sample-rate",
             Label = "Set Default Sample Rate to 48 kHz",
-            Category = "Audio",
+            Category = "Audio & Media",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -226,7 +226,7 @@ internal static class Audio
         {
             Id = "audio-disable-auto-gain",
             Label = "Disable Automatic Gain Control",
-            Category = "Audio",
+            Category = "Audio & Media",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -241,7 +241,7 @@ internal static class Audio
         {
             Id = "audio-disable-dynamic-silence",
             Label = "Disable Dynamic Silence Detection",
-            Category = "Audio",
+            Category = "Audio & Media",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -256,7 +256,7 @@ internal static class Audio
         {
             Id = "audio-disable-app-capture",
             Label = "Disable Audio Application Capture Loopback",
-            Category = "Audio",
+            Category = "Audio & Media",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -274,7 +274,7 @@ internal static class Audio
         {
             Id = "audio-disable-spatial-sound",
             Label = "Disable Spatial Sound",
-            Category = "Audio",
+            Category = "Audio & Media",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -289,7 +289,7 @@ internal static class Audio
         {
             Id = "audio-disable-audio-ducking",
             Label = "Disable Audio Ducking",
-            Category = "Audio",
+            Category = "Audio & Media",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Disables automatic volume reduction of other sounds during voice calls. Default: reduce other sounds by 80%.",
@@ -303,7 +303,7 @@ internal static class Audio
         {
             Id = "audio-disable-sound-scheme",
             Label = "Set Sound Scheme to No Sounds",
-            Category = "Audio",
+            Category = "Audio & Media",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Sets the Windows sound scheme to No Sounds. Silences all system event sounds. Default: Windows Default scheme.",
@@ -317,7 +317,7 @@ internal static class Audio
         {
             Id = "audio-disable-audio-enhancements-global",
             Label = "Disable Audio Enhancements Globally",
-            Category = "Audio",
+            Category = "Audio & Media",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables all audio signal enhancements system-wide. Ensures bit-perfect output. Default: per-device.",
@@ -331,7 +331,7 @@ internal static class Audio
         {
             Id = "audio-set-default-format-48khz",
             Label = "Set Default Audio Format to 48 kHz",
-            Category = "Audio",
+            Category = "Audio & Media",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Sets the default audio sample rate to 48000 Hz via the audio subsystem policy. Default: device-dependent.",
@@ -345,7 +345,7 @@ internal static class Audio
         {
             Id = "audio-disable-absolute-volume",
             Label = "Disable Bluetooth Absolute Volume",
-            Category = "Audio",
+            Category = "Audio & Media",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables Bluetooth absolute volume control. Separates Bluetooth device volume from system volume. Default: enabled.",
@@ -362,7 +362,7 @@ internal static class Audio
         {
             Id = "audio-disable-notification-sounds",
             Label = "Disable Notification Sounds",
-            Category = "Audio",
+            Category = "Audio & Media",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Disables all notification sounds. Toast and system notifications appear silently. Default: enabled.",
@@ -396,7 +396,7 @@ internal static class Audio
         {
             Id = "audio-disable-system-sounds",
             Label = "Disable System Sounds Scheme",
-            Category = "Audio",
+            Category = "Audio & Media",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -409,55 +409,9 @@ internal static class Audio
         },
         new TweakDef
         {
-            Id = "audio-reduce-audio-latency",
-            Label = "Reduce Audio Latency (MMCSS)",
-            Category = "Audio",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets the MMCSS Audio task to high priority and low latency scheduling. Reduces audio glitches and pops. Default: Normal scheduling.",
-            Tags = ["audio", "latency", "mmcss", "priority"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Audio"],
-            ApplyOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Audio",
-                    "Priority",
-                    6
-                ),
-                RegOp.SetString(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Audio",
-                    "Scheduling Category",
-                    "High"
-                ),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Audio",
-                    "Priority",
-                    2
-                ),
-                RegOp.SetString(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Audio",
-                    "Scheduling Category",
-                    "Medium"
-                ),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Audio",
-                    "Priority",
-                    6
-                ),
-            ],
-        },
-        new TweakDef
-        {
             Id = "audio-set-gpu-priority",
             Label = "Set Audio GPU Priority to 8",
-            Category = "Audio",
+            Category = "Audio & Media",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -490,55 +444,9 @@ internal static class Audio
         },
         new TweakDef
         {
-            Id = "audio-set-pro-audio-scheduling",
-            Label = "Set Pro Audio Scheduling Category",
-            Category = "Audio",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets the Pro Audio MMCSS task scheduling category to High. Optimises CPU scheduling for pro audio workloads. Default: High.",
-            Tags = ["audio", "pro-audio", "scheduling", "mmcss"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Pro Audio"],
-            ApplyOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Pro Audio",
-                    "Priority",
-                    6
-                ),
-                RegOp.SetString(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Pro Audio",
-                    "Scheduling Category",
-                    "High"
-                ),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Pro Audio",
-                    "Priority",
-                    1
-                ),
-                RegOp.SetString(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Pro Audio",
-                    "Scheduling Category",
-                    "High"
-                ),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Pro Audio",
-                    "Priority",
-                    6
-                ),
-            ],
-        },
-        new TweakDef
-        {
             Id = "audio-set-sfio-high-priority",
             Label = "Set SFIO Priority to High",
-            Category = "Audio",
+            Category = "Audio & Media",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -575,7 +483,7 @@ internal static class Audio
         {
             Id = "audio-disable-recording-quality-limit",
             Label = "Remove Recording Quality Limit",
-            Category = "Audio",
+            Category = "Audio & Media",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -590,7 +498,7 @@ internal static class Audio
         {
             Id = "audio-enable-stereo-mix",
             Label = "Enable Stereo Mix Device",
-            Category = "Audio",
+            Category = "Audio & Media",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Enables the Stereo Mix virtual recording device for capturing system audio output. Default: disabled/hidden.",
@@ -604,7 +512,7 @@ internal static class Audio
         {
             Id = "audio-set-mmcss-scheduling",
             Label = "Optimise MMCSS Audio Scheduling",
-            Category = "Audio",
+            Category = "Audio & Media",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -640,7 +548,7 @@ internal static class Audio
         {
             Id = "audio-disable-network-throttling",
             Label = "Disable Network Throttling for Audio",
-            Category = "Audio",
+            Category = "Audio & Media",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables network throttling during multimedia playback. Prevents network-related audio dropouts. Default: throttled.",
@@ -672,44 +580,9 @@ internal static class Audio
         },
         new TweakDef
         {
-            Id = "audio-set-device-priority-high",
-            Label = "Set Audio Device Priority to High",
-            Category = "Audio",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Sets audio device thread priority to high. Improves audio playback reliability under CPU load. Default: normal.",
-            Tags = ["audio", "priority", "device", "performance"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Audio"],
-            ApplyOps =
-            [
-                RegOp.SetString(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Audio",
-                    "Scheduling Category",
-                    "High"
-                ),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetString(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Audio",
-                    "Scheduling Category",
-                    "Medium"
-                ),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckString(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Audio",
-                    "Scheduling Category",
-                    "High"
-                ),
-            ],
-        },
-        new TweakDef
-        {
             Id = "audio-set-dpc-latency-low",
             Label = "Reduce Audio DPC Latency",
-            Category = "Audio",
+            Category = "Audio & Media",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Reduces Deferred Procedure Call (DPC) latency for audio processing. Minimises audio stuttering. Default: 10ms.",
@@ -743,7 +616,7 @@ internal static class Audio
         {
             Id = "audio-disable-beep-sounds",
             Label = "Disable System Beep",
-            Category = "Audio",
+            Category = "Audio & Media",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables the system beep (PC speaker). Stops the annoying beep on errors and backspace in CMD. Default: enabled.",
@@ -757,7 +630,7 @@ internal static class Audio
         {
             Id = "audio-disable-critical-battery-sound",
             Label = "Disable Critical Battery Sound",
-            Category = "Audio",
+            Category = "Audio & Media",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Silences the critical battery level alert sound. The visual notification remains. Default: enabled.",
@@ -771,7 +644,7 @@ internal static class Audio
         {
             Id = "audio-set-headphone-auto-detect",
             Label = "Enable Headphone Auto-Detection",
-            Category = "Audio",
+            Category = "Audio & Media",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Enables automatic audio device switching when headphones are plugged in or removed. Default: varies by driver.",
@@ -785,7 +658,7 @@ internal static class Audio
         {
             Id = "audio-disable-comms-ducking",
             Label = "Disable Communication Audio Ducking",
-            Category = "Audio",
+            Category = "Audio & Media",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -800,7 +673,7 @@ internal static class Audio
         {
             Id = "audio-set-pro-audio-priority",
             Label = "Set Pro Audio Task to Maximum Priority",
-            Category = "Audio",
+            Category = "Audio & Media",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -860,24 +733,9 @@ internal static class Audio
         },
         new TweakDef
         {
-            Id = "audio-disable-audio-idle-powerdown",
-            Label = "Disable Audio Device Power-Down on Idle",
-            Category = "Audio",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Prevents the audio subsystem from entering low-power idle state, eliminating the pop/click that occurs when audio wakes up after silence.",
-            Tags = ["audio", "power", "idle", "pop", "click", "crackling"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Audio"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Audio", "DisableProtectedAudioDG", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Audio", "DisableProtectedAudioDG")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Audio", "DisableProtectedAudioDG", 0)],
-        },
-        new TweakDef
-        {
             Id = "audio-set-avrcp-volume-sync",
             Label = "Disable Bluetooth AVRCP Volume Sync",
-            Category = "Audio",
+            Category = "Audio & Media",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -901,7 +759,7 @@ internal static class Audio
         {
             Id = "audio-set-audio-latency-mode",
             Label = "Set Audio Engine to Low-Latency Mode",
-            Category = "Audio",
+            Category = "Audio & Media",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -922,7 +780,7 @@ internal static class Audio
         {
             Id = "audio-enable-audio-log-off",
             Label = "Mute Audio Service Log Event Verbosity",
-            Category = "Audio",
+            Category = "Audio & Media",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -937,7 +795,7 @@ internal static class Audio
         {
             Id = "audio-set-endpoint-builder-manual",
             Label = "Set Audio Endpoint Builder to Manual Start",
-            Category = "Audio",
+            Category = "Audio & Media",
             NeedsAdmin = true,
             CorpSafe = false,
             Description =
@@ -952,7 +810,7 @@ internal static class Audio
         {
             Id = "audio-disable-voice-typing-toast",
             Label = "Disable Voice Typing Microphone Toast",
-            Category = "Audio",
+            Category = "Audio & Media",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Suppresses the toast notification prompting users to try Voice Typing when a microphone is connected.",
@@ -987,7 +845,7 @@ internal static class Audio
         {
             Id = "audio-set-render-clock-rate",
             Label = "Set Audio Render Clock Rate to 10000ns",
-            Category = "Audio",
+            Category = "Audio & Media",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -1022,7 +880,7 @@ internal static class Audio
         {
             Id = "audio-set-capture-clock-rate",
             Label = "Set Audio Capture Clock Rate to 10000ns",
-            Category = "Audio",
+            Category = "Audio & Media",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -1084,7 +942,7 @@ internal static class Multimedia
         {
             Id = "media-disable-autorun",
             Label = "Disable AutoRun for All Drives",
-            Category = "Audio",
+            Category = "Audio & Media",
             NeedsAdmin = true,
             CorpSafe = false,
             Description =
@@ -1099,7 +957,7 @@ internal static class Multimedia
         {
             Id = "media-disable-media-sharing",
             Label = "Disable Media Streaming/Sharing Service",
-            Category = "Audio",
+            Category = "Audio & Media",
             NeedsAdmin = true,
             CorpSafe = false,
             Description =
@@ -1114,7 +972,7 @@ internal static class Multimedia
         {
             Id = "media-set-wallpaper-quality",
             Label = "Set Wallpaper JPEG Quality to Maximum",
-            Category = "Audio",
+            Category = "Audio & Media",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -1129,7 +987,7 @@ internal static class Multimedia
         {
             Id = "media-disable-media-streaming",
             Label = "Disable Windows Media Streaming (Policy)",
-            Category = "Audio",
+            Category = "Audio & Media",
             NeedsAdmin = true,
             CorpSafe = false,
             Description =
@@ -1144,7 +1002,7 @@ internal static class Multimedia
         {
             Id = "media-set-default-player-assoc",
             Label = "Set Default Media Player Associations",
-            Category = "Audio",
+            Category = "Audio & Media",
             NeedsAdmin = true,
             CorpSafe = false,
             Description =
@@ -1167,7 +1025,7 @@ internal static class Multimedia
         {
             Id = "media-disable-wm-drm",
             Label = "Disable Windows Media DRM",
-            Category = "Audio",
+            Category = "Audio & Media",
             NeedsAdmin = true,
             CorpSafe = false,
             Description =
@@ -1182,7 +1040,7 @@ internal static class Multimedia
         {
             Id = "media-disable-gamebar-policy",
             Label = "Disable Xbox Game Bar (Policy)",
-            Category = "Audio",
+            Category = "Audio & Media",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -1197,7 +1055,7 @@ internal static class Multimedia
         {
             Id = "media-reduce-tooltip-delay",
             Label = "Instant Tooltip Display (0 ms)",
-            Category = "Audio",
+            Category = "Audio & Media",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -1215,7 +1073,7 @@ internal static class Multimedia
         {
             Id = "media-disable-casting",
             Label = "Disable Media Casting to Device",
-            Category = "Audio",
+            Category = "Audio & Media",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables the Cast to Device feature for media streaming. Default: enabled.",
@@ -1229,7 +1087,7 @@ internal static class Multimedia
         {
             Id = "media-disable-disc-burning",
             Label = "Disable CD/DVD Burning in Explorer",
-            Category = "Audio",
+            Category = "Audio & Media",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Disables the built-in CD/DVD burning capability in Windows Explorer. Default: enabled.",
@@ -1243,7 +1101,7 @@ internal static class Multimedia
         {
             Id = "media-disable-sound-scheme",
             Label = "Disable System Sound Scheme",
-            Category = "Audio",
+            Category = "Audio & Media",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -1259,7 +1117,7 @@ internal static class Multimedia
         {
             Id = "media-disable-wmp-autoplay",
             Label = "Disable WMP AutoPlay",
-            Category = "Audio",
+            Category = "Audio & Media",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Prevents Windows Media Player from automatically playing media when inserted.",
@@ -1273,7 +1131,7 @@ internal static class Multimedia
         {
             Id = "media-disable-wmp-codec-download",
             Label = "Disable WMP Automatic Codec Download",
-            Category = "Audio",
+            Category = "Audio & Media",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Prevents Windows Media Player from automatically downloading codecs from the internet.",
@@ -1287,7 +1145,7 @@ internal static class Multimedia
         {
             Id = "media-disable-video-thumbnail-cache",
             Label = "Disable Video Thumbnail Cache",
-            Category = "Audio",
+            Category = "Audio & Media",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Stops Windows from caching video thumbnail images in hidden system folders.",
@@ -1299,44 +1157,9 @@ internal static class Multimedia
         },
         new TweakDef
         {
-            Id = "media-set-system-responsiveness-media",
-            Label = "Optimise System Responsiveness for Media",
-            Category = "Audio",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Sets MMCSS SystemResponsiveness to 0 so multimedia threads get maximum CPU time.",
-            Tags = ["multimedia", "performance", "audio", "mmcss"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile"],
-            ApplyOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile",
-                    "SystemResponsiveness",
-                    0
-                ),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile",
-                    "SystemResponsiveness",
-                    20
-                ),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile",
-                    "SystemResponsiveness",
-                    0
-                ),
-            ],
-        },
-        new TweakDef
-        {
             Id = "media-enable-hardware-video-decode",
             Label = "Enable Hardware-Accelerated Video Decode",
-            Category = "Audio",
+            Category = "Audio & Media",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Forces Windows apps to use GPU hardware decoding for video playback to reduce CPU load.",
@@ -1348,77 +1171,9 @@ internal static class Multimedia
         },
         new TweakDef
         {
-            Id = "media-set-pro-audio-latency",
-            Label = "Set Pro Audio Scheduling Latency",
-            Category = "Audio",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Sets MMCSS Pro Audio task scheduling key for lower latency; optimises for audio production.",
-            Tags = ["multimedia", "audio", "latency", "pro-audio", "mmcss"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Pro Audio"],
-            ApplyOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Pro Audio",
-                    "GPU Priority",
-                    8
-                ),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Pro Audio",
-                    "GPU Priority"
-                ),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Pro Audio",
-                    "GPU Priority",
-                    8
-                ),
-            ],
-        },
-        new TweakDef
-        {
-            Id = "media-disable-casting-extension",
-            Label = "Disable Cast to Device Extension",
-            Category = "Audio",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Removes the 'Cast to device' option from Explorer context menus.",
-            Tags = ["multimedia", "casting", "context-menu"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Shell Extensions\Blocked"],
-            ApplyOps =
-            [
-                RegOp.SetString(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Shell Extensions\Blocked",
-                    "{7AD84985-87B4-4a16-BE58-8B72A5B390F7}",
-                    ""
-                ),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Shell Extensions\Blocked",
-                    "{7AD84985-87B4-4a16-BE58-8B72A5B390F7}"
-                ),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckString(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Shell Extensions\Blocked",
-                    "{7AD84985-87B4-4a16-BE58-8B72A5B390F7}",
-                    ""
-                ),
-            ],
-        },
-        new TweakDef
-        {
             Id = "media-disable-media-metadata-streaming",
             Label = "Disable Media Metadata Internet Lookup",
-            Category = "Audio",
+            Category = "Audio & Media",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Prevents Media Player from downloading album art and track metadata from the internet.",
@@ -1432,7 +1187,7 @@ internal static class Multimedia
         {
             Id = "media-disable-media-usage-reporting",
             Label = "Disable Media Usage Reporting",
-            Category = "Audio",
+            Category = "Audio & Media",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables anonymous usage reporting sent from Windows Media Player to Microsoft.",

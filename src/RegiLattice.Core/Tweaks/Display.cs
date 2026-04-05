@@ -126,20 +126,6 @@ internal static class Display
         },
         new TweakDef
         {
-            Id = "display-disable-cursor-shadow",
-            Label = "Disable Cursor Drop Shadow",
-            Category = "Display",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Removes the drop shadow rendered under the mouse cursor. Very slightly reduces compositor workload. Default: Enabled.",
-            Tags = ["display", "cursor", "shadow", "performance", "rendering"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Desktop"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Control Panel\Desktop", "CursorShadow", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Control Panel\Desktop", "CursorShadow", 1)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Control Panel\Desktop", "CursorShadow", 0)],
-        },
-        new TweakDef
-        {
             Id = "display-reduce-blur-intensity",
             Label = "Reduce DWM Blur Intensity (50%)",
             Category = "Display",
@@ -360,20 +346,6 @@ internal static class Display
         // ── Sprint 19 additions ────────────────────────────────────────────
         new TweakDef
         {
-            Id = "display-disable-windows-ink-workspace",
-            Label = "Disable Windows Ink Workspace",
-            Category = "Display",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables the Windows Ink Workspace overlay. Removes the pen/ink button from the taskbar area. Default: enabled.",
-            Tags = ["display", "ink", "workspace", "disable"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsInkWorkspace"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsInkWorkspace", "AllowWindowsInkWorkspace", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsInkWorkspace", "AllowWindowsInkWorkspace")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsInkWorkspace", "AllowWindowsInkWorkspace", 0)],
-        },
-        new TweakDef
-        {
             Id = "display-set-color-depth-32bit",
             Label = "Force 32-bit Color Depth",
             Category = "Display",
@@ -576,34 +548,6 @@ internal static class NightLight
         },
         new TweakDef
         {
-            Id = "night-per-process-gpu",
-            Label = "Enable Per-Process GPU Selection",
-            Category = "Display",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Enables DirectX swap chain upgrade for better GPU selection per application. May improve hybrid GPU laptops.",
-            Tags = ["night-light", "gpu", "directx", "per-process"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\DirectX\UserGpuPreferences"],
-            ApplyOps =
-            [
-                RegOp.SetString(
-                    @"HKEY_CURRENT_USER\Software\Microsoft\DirectX\UserGpuPreferences",
-                    "DirectXUserGlobalSettings",
-                    "SwapEffectUpgradeEnable=1;"
-                ),
-            ],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\DirectX\UserGpuPreferences", "DirectXUserGlobalSettings")],
-            DetectOps =
-            [
-                RegOp.CheckString(
-                    @"HKEY_CURRENT_USER\Software\Microsoft\DirectX\UserGpuPreferences",
-                    "DirectXUserGlobalSettings",
-                    "SwapEffectUpgradeEnable=1;"
-                ),
-            ],
-        },
-        new TweakDef
-        {
             Id = "night-disable-display-gp",
             Label = "Lock Display Settings (Policy)",
             Category = "Display",
@@ -687,21 +631,6 @@ internal static class NightLight
             ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\ColorFiltering", "Active", 0)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\ColorFiltering", "Active")],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\ColorFiltering", "Active", 0)],
-        },
-        new TweakDef
-        {
-            Id = "night-disable-dynamic-refresh",
-            Label = "Disable Dynamic Refresh Rate",
-            Category = "Display",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Disables dynamic refresh rate switching. Display stays at a fixed refresh rate instead of auto-adjusting. Avoids flickering issues. Default: dynamic.",
-            Tags = ["display", "refresh-rate", "dynamic", "disable"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\DirectX\UserGpuPreferences"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\DirectX\UserGpuPreferences", "DirectXUserGlobalSettings", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\DirectX\UserGpuPreferences", "DirectXUserGlobalSettings")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\DirectX\UserGpuPreferences", "DirectXUserGlobalSettings", 0)],
         },
         new TweakDef
         {
@@ -937,21 +866,6 @@ internal static class Fonts
             [
                 RegOp.CheckString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\FontSubstitutes", "MS Shell Dlg", "Segoe UI"),
             ],
-        },
-        new TweakDef
-        {
-            Id = "font-set-smoothing-orientation",
-            Label = "Set Font Smoothing Orientation to RGB",
-            Category = "Display",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Sets subpixel font smoothing orientation to RGB for standard LCD panels. Improves ClearType rendering on horizontal RGB displays. Default: 0 (auto). Recommended: 1 (RGB) for most monitors.",
-            Tags = ["fonts", "cleartype", "subpixel", "orientation", "rendering"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Desktop"],
-            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "FontSmoothingOrientation", "1")],
-            RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "FontSmoothingOrientation", "0")],
-            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "FontSmoothingOrientation", "1")],
         },
         new TweakDef
         {
@@ -1440,20 +1354,6 @@ internal static class DesktopCustomization
         },
         new TweakDef
         {
-            Id = "dtcust-search-icon-only",
-            Label = "Taskbar Search: Icon Only",
-            Category = "Display",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Shows just the search icon (magnifying glass) instead of the full search box.",
-            Tags = ["desktop", "taskbar", "search", "icon"],
-            RegistryKeys = [Search],
-            ApplyOps = [RegOp.SetDword(Search, "SearchboxTaskbarMode", 1)],
-            RemoveOps = [RegOp.SetDword(Search, "SearchboxTaskbarMode", 2)],
-            DetectOps = [RegOp.CheckDword(Search, "SearchboxTaskbarMode", 1)],
-        },
-        new TweakDef
-        {
             Id = "dtcust-hide-task-view-button",
             Label = "Hide Task View Button",
             Category = "Display",
@@ -1510,42 +1410,6 @@ internal static class DesktopCustomization
         },
         // ── Start Menu ───────────────────────────────────────────────────
 
-        new TweakDef
-        {
-            Id = "dtcust-disable-start-suggestions",
-            Label = "Disable Start Menu Suggestions",
-            Category = "Display",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Removes app suggestions and ads from the Start menu's recommended section.",
-            Tags = ["desktop", "start", "suggestions", "ads"],
-            RegistryKeys = [ContentDelivery],
-            ApplyOps =
-            [
-                RegOp.SetDword(ContentDelivery, "SystemPaneSuggestionsEnabled", 0),
-                RegOp.SetDword(ContentDelivery, "SubscribedContent-338388Enabled", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(ContentDelivery, "SystemPaneSuggestionsEnabled"),
-                RegOp.DeleteValue(ContentDelivery, "SubscribedContent-338388Enabled"),
-            ],
-            DetectOps = [RegOp.CheckDword(ContentDelivery, "SystemPaneSuggestionsEnabled", 0)],
-        },
-        new TweakDef
-        {
-            Id = "dtcust-disable-start-bing-search",
-            Label = "Disable Bing Search in Start Menu",
-            Category = "Display",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Prevents Start menu search from sending queries to Bing — local results only.",
-            Tags = ["desktop", "start", "bing", "search", "privacy"],
-            RegistryKeys = [Search],
-            ApplyOps = [RegOp.SetDword(Search, "BingSearchEnabled", 0)],
-            RemoveOps = [RegOp.DeleteValue(Search, "BingSearchEnabled")],
-            DetectOps = [RegOp.CheckDword(Search, "BingSearchEnabled", 0)],
-        },
         // ── Notifications & Action Centre ────────────────────────────────
 
         new TweakDef
@@ -1591,44 +1455,6 @@ internal static class DesktopCustomization
             ApplyOps = [RegOp.SetDword(PenWorkspace, "PenWorkspaceButtonDesiredVisibility", 0)],
             RemoveOps = [RegOp.SetDword(PenWorkspace, "PenWorkspaceButtonDesiredVisibility", 1)],
             DetectOps = [RegOp.CheckDword(PenWorkspace, "PenWorkspaceButtonDesiredVisibility", 0)],
-        },
-        new TweakDef
-        {
-            Id = "dtcust-disable-suggestions-lockscreen",
-            Label = "Disable Lock Screen Suggestions",
-            Category = "Display",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Removes fun facts, tips, and ads from the Windows lock screen.",
-            Tags = ["desktop", "lockscreen", "suggestions", "ads"],
-            RegistryKeys = [ContentDelivery],
-            ApplyOps = [RegOp.SetDword(ContentDelivery, "RotatingLockScreenOverlayEnabled", 0)],
-            RemoveOps = [RegOp.SetDword(ContentDelivery, "RotatingLockScreenOverlayEnabled", 1)],
-            DetectOps = [RegOp.CheckDword(ContentDelivery, "RotatingLockScreenOverlayEnabled", 0)],
-        },
-        new TweakDef
-        {
-            Id = "dtcust-disable-app-suggestions",
-            Label = "Disable Suggested Apps (Silently Installed)",
-            Category = "Display",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Prevents Windows from silently installing suggested apps like Candy Crush in the Start menu.",
-            Tags = ["desktop", "apps", "suggestions", "bloat"],
-            RegistryKeys = [ContentDelivery],
-            ApplyOps =
-            [
-                RegOp.SetDword(ContentDelivery, "SilentInstalledAppsEnabled", 0),
-                RegOp.SetDword(ContentDelivery, "OemPreInstalledAppsEnabled", 0),
-                RegOp.SetDword(ContentDelivery, "PreInstalledAppsEnabled", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(ContentDelivery, "SilentInstalledAppsEnabled"),
-                RegOp.DeleteValue(ContentDelivery, "OemPreInstalledAppsEnabled"),
-                RegOp.DeleteValue(ContentDelivery, "PreInstalledAppsEnabled"),
-            ],
-            DetectOps = [RegOp.CheckDword(ContentDelivery, "SilentInstalledAppsEnabled", 0)],
         },
         // ── File Operations ──────────────────────────────────────────────
 
@@ -1750,20 +1576,6 @@ internal static class WindowAppearance
 
         new TweakDef
         {
-            Id = "winapp-titlebar-color-active",
-            Label = "Show Accent Color on Title Bars",
-            Category = "Display",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Colours active title bars and window borders with the system accent colour.",
-            Tags = ["appearance", "titlebar", "accent", "color"],
-            RegistryKeys = [Dwm],
-            ApplyOps = [RegOp.SetDword(Dwm, "ColorPrevalence", 1)],
-            RemoveOps = [RegOp.SetDword(Dwm, "ColorPrevalence", 0)],
-            DetectOps = [RegOp.CheckDword(Dwm, "ColorPrevalence", 1)],
-        },
-        new TweakDef
-        {
             Id = "winapp-titlebar-color-inactive",
             Label = "Show Accent Color on Inactive Title Bars",
             Category = "Display",
@@ -1804,67 +1616,8 @@ internal static class WindowAppearance
             RemoveOps = [RegOp.SetDword(Desktop, "ForegroundFlashCount", 3)],
             DetectOps = [RegOp.CheckDword(Desktop, "ForegroundFlashCount", 0)],
         },
-        new TweakDef
-        {
-            Id = "winapp-disable-window-shake",
-            Label = "Disable Aero Shake (Minimize on Shake)",
-            Category = "Display",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Prevents shaking a window title bar from minimising all other windows.",
-            Tags = ["appearance", "aero", "shake", "minimize"],
-            RegistryKeys = [Explorer],
-            ApplyOps = [RegOp.SetDword(Explorer, "DisallowShaking", 1)],
-            RemoveOps = [RegOp.DeleteValue(Explorer, "DisallowShaking")],
-            DetectOps = [RegOp.CheckDword(Explorer, "DisallowShaking", 1)],
-        },
         // ── Scrollbar & Window Metrics ───────────────────────────────────
 
-        new TweakDef
-        {
-            Id = "winapp-scrollbar-width-thin",
-            Label = "Thin Scrollbars (13px)",
-            Category = "Display",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Sets scrollbar width to thin 13 pixels (default is 17). Requires sign-out.",
-            Tags = ["appearance", "scrollbar", "width", "thin"],
-            RegistryKeys = [Metrics],
-            ApplyOps = [RegOp.SetString(Metrics, "ScrollWidth", "-195")],
-            RemoveOps = [RegOp.SetString(Metrics, "ScrollWidth", "-255")],
-            DetectOps = [RegOp.CheckString(Metrics, "ScrollWidth", "-195")],
-            SideEffects = "Requires sign-out to take effect.",
-        },
-        new TweakDef
-        {
-            Id = "winapp-scrollbar-height-thin",
-            Label = "Thin Scroll Arrows (13px)",
-            Category = "Display",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Sets scrollbar button height to thin 13 pixels (default is 17). Requires sign-out.",
-            Tags = ["appearance", "scrollbar", "height", "thin"],
-            RegistryKeys = [Metrics],
-            ApplyOps = [RegOp.SetString(Metrics, "ScrollHeight", "-195")],
-            RemoveOps = [RegOp.SetString(Metrics, "ScrollHeight", "-255")],
-            DetectOps = [RegOp.CheckString(Metrics, "ScrollHeight", "-195")],
-            SideEffects = "Requires sign-out to take effect.",
-        },
-        new TweakDef
-        {
-            Id = "winapp-border-width-thin",
-            Label = "Thin Window Borders (1px)",
-            Category = "Display",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Sets window border width to 1 pixel (default is padded). Requires sign-out.",
-            Tags = ["appearance", "border", "width", "thin"],
-            RegistryKeys = [Metrics],
-            ApplyOps = [RegOp.SetString(Metrics, "BorderWidth", "-15")],
-            RemoveOps = [RegOp.SetString(Metrics, "BorderWidth", "-15")],
-            DetectOps = [RegOp.CheckString(Metrics, "BorderWidth", "-15")],
-            SideEffects = "Requires sign-out to take effect.",
-        },
         new TweakDef
         {
             Id = "winapp-padded-border-zero",
@@ -1880,83 +1633,10 @@ internal static class WindowAppearance
             DetectOps = [RegOp.CheckString(Metrics, "PaddedBorderWidth", "0")],
             SideEffects = "Requires sign-out to take effect.",
         },
-        new TweakDef
-        {
-            Id = "winapp-caption-height-compact",
-            Label = "Compact Title Bar Height (20px)",
-            Category = "Display",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Reduces the title bar height to 20 pixels for more screen space (default ~22). Requires sign-out.",
-            Tags = ["appearance", "titlebar", "height", "compact"],
-            RegistryKeys = [Metrics],
-            ApplyOps = [RegOp.SetString(Metrics, "CaptionHeight", "-300")],
-            RemoveOps = [RegOp.SetString(Metrics, "CaptionHeight", "-330")],
-            DetectOps = [RegOp.CheckString(Metrics, "CaptionHeight", "-300")],
-            SideEffects = "Requires sign-out to take effect.",
-        },
         // ── Icon Spacing ─────────────────────────────────────────────────
 
-        new TweakDef
-        {
-            Id = "winapp-icon-spacing-h-compact",
-            Label = "Compact Horizontal Icon Spacing (60px)",
-            Category = "Display",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Reduces horizontal desktop icon spacing to 60 pixels (default 75). Requires sign-out.",
-            Tags = ["appearance", "icon", "spacing", "horizontal"],
-            RegistryKeys = [Metrics],
-            ApplyOps = [RegOp.SetString(Metrics, "IconSpacing", "-900")],
-            RemoveOps = [RegOp.SetString(Metrics, "IconSpacing", "-1125")],
-            DetectOps = [RegOp.CheckString(Metrics, "IconSpacing", "-900")],
-            SideEffects = "Requires sign-out to take effect.",
-        },
-        new TweakDef
-        {
-            Id = "winapp-icon-spacing-v-compact",
-            Label = "Compact Vertical Icon Spacing (60px)",
-            Category = "Display",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Reduces vertical desktop icon spacing to 60 pixels (default 75). Requires sign-out.",
-            Tags = ["appearance", "icon", "spacing", "vertical"],
-            RegistryKeys = [Metrics],
-            ApplyOps = [RegOp.SetString(Metrics, "IconVerticalSpacing", "-900")],
-            RemoveOps = [RegOp.SetString(Metrics, "IconVerticalSpacing", "-1125")],
-            DetectOps = [RegOp.CheckString(Metrics, "IconVerticalSpacing", "-900")],
-            SideEffects = "Requires sign-out to take effect.",
-        },
         // ── Menu & Animation ─────────────────────────────────────────────
 
-        new TweakDef
-        {
-            Id = "winapp-menu-show-delay-fast",
-            Label = "Fast Menu Show Delay (100ms)",
-            Category = "Display",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Reduces the delay before sub-menus appear to 100ms (default 400ms).",
-            Tags = ["appearance", "menu", "delay", "speed"],
-            RegistryKeys = [Desktop],
-            ApplyOps = [RegOp.SetString(Desktop, "MenuShowDelay", "100")],
-            RemoveOps = [RegOp.SetString(Desktop, "MenuShowDelay", "400")],
-            DetectOps = [RegOp.CheckString(Desktop, "MenuShowDelay", "100")],
-        },
-        new TweakDef
-        {
-            Id = "winapp-menu-show-delay-instant",
-            Label = "Instant Menu Show Delay (0ms)",
-            Category = "Display",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Eliminates the delay before sub-menus appear (default 400ms).",
-            Tags = ["appearance", "menu", "delay", "instant"],
-            RegistryKeys = [Desktop],
-            ApplyOps = [RegOp.SetString(Desktop, "MenuShowDelay", "0")],
-            RemoveOps = [RegOp.SetString(Desktop, "MenuShowDelay", "400")],
-            DetectOps = [RegOp.CheckString(Desktop, "MenuShowDelay", "0")],
-        },
         new TweakDef
         {
             Id = "winapp-disable-menu-animations",
@@ -1985,50 +1665,8 @@ internal static class WindowAppearance
             RemoveOps = [RegOp.SetString(Desktop, "MinAnimate", "1")],
             DetectOps = [RegOp.CheckString(Desktop, "MinAnimate", "0")],
         },
-        new TweakDef
-        {
-            Id = "winapp-disable-cursor-blink",
-            Label = "Disable Cursor Blinking",
-            Category = "Display",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Stops the text cursor from blinking by setting the rate to -1 (infinite).",
-            Tags = ["appearance", "cursor", "blink"],
-            RegistryKeys = [Desktop],
-            ApplyOps = [RegOp.SetString(Desktop, "CursorBlinkRate", "-1")],
-            RemoveOps = [RegOp.SetString(Desktop, "CursorBlinkRate", "530")],
-            DetectOps = [RegOp.CheckString(Desktop, "CursorBlinkRate", "-1")],
-        },
         // ── Tooltip ──────────────────────────────────────────────────────
 
-        new TweakDef
-        {
-            Id = "winapp-tooltip-delay-fast",
-            Label = "Fast Tooltip Delay (200ms)",
-            Category = "Display",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Reduces tooltip delay to 200ms (default 400ms) for faster hover info.",
-            Tags = ["appearance", "tooltip", "delay"],
-            RegistryKeys = [Mouse],
-            ApplyOps = [RegOp.SetString(Mouse, "MouseHoverTime", "200")],
-            RemoveOps = [RegOp.SetString(Mouse, "MouseHoverTime", "400")],
-            DetectOps = [RegOp.CheckString(Mouse, "MouseHoverTime", "200")],
-        },
-        new TweakDef
-        {
-            Id = "winapp-tooltip-delay-instant",
-            Label = "Instant Tooltip Delay (0ms)",
-            Category = "Display",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Eliminates tooltip delay for instant hover info display.",
-            Tags = ["appearance", "tooltip", "delay", "instant"],
-            RegistryKeys = [Mouse],
-            ApplyOps = [RegOp.SetString(Mouse, "MouseHoverTime", "0")],
-            RemoveOps = [RegOp.SetString(Mouse, "MouseHoverTime", "400")],
-            DetectOps = [RegOp.CheckString(Mouse, "MouseHoverTime", "0")],
-        },
         // ── Alt+Tab & Multitasking Appearance ────────────────────────────
 
         new TweakDef
@@ -2045,106 +1683,8 @@ internal static class WindowAppearance
             RemoveOps = [RegOp.DeleteValue(Explorer, "AltTabSettings")],
             DetectOps = [RegOp.CheckDword(Explorer, "AltTabSettings", 1)],
         },
-        new TweakDef
-        {
-            Id = "winapp-alt-tab-no-edge-tabs",
-            Label = "Alt+Tab: Open Windows Only (No Edge Tabs)",
-            Category = "Display",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Prevents Edge browser tabs from appearing as separate items in Alt+Tab.",
-            Tags = ["appearance", "alt-tab", "edge", "tabs"],
-            RegistryKeys = [Explorer],
-            ApplyOps = [RegOp.SetDword(Explorer, "MultiTaskingAltTabFilter", 3)],
-            RemoveOps = [RegOp.DeleteValue(Explorer, "MultiTaskingAltTabFilter")],
-            DetectOps = [RegOp.CheckDword(Explorer, "MultiTaskingAltTabFilter", 3)],
-        },
         // ── Transparency & DWM Effects ───────────────────────────────────
 
-        new TweakDef
-        {
-            Id = "winapp-enable-transparency",
-            Label = "Enable Transparency Effects",
-            Category = "Display",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Enables transparency effects on Start, taskbar, and action centre.",
-            Tags = ["appearance", "transparency", "visual"],
-            RegistryKeys = [Themes],
-            ApplyOps = [RegOp.SetDword(Themes, "EnableTransparency", 1)],
-            RemoveOps = [RegOp.SetDword(Themes, "EnableTransparency", 0)],
-            DetectOps = [RegOp.CheckDword(Themes, "EnableTransparency", 1)],
-        },
-        new TweakDef
-        {
-            Id = "winapp-disable-transparency",
-            Label = "Disable Transparency Effects",
-            Category = "Display",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Disables all transparency effects for a solid look and slight performance gain.",
-            Tags = ["appearance", "transparency", "performance"],
-            RegistryKeys = [Themes],
-            ApplyOps = [RegOp.SetDword(Themes, "EnableTransparency", 0)],
-            RemoveOps = [RegOp.SetDword(Themes, "EnableTransparency", 1)],
-            DetectOps = [RegOp.CheckDword(Themes, "EnableTransparency", 0)],
-        },
-        new TweakDef
-        {
-            Id = "winapp-dwm-enable-blur",
-            Label = "Enable DWM Blur Behind",
-            Category = "Display",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Enables the blur-behind effect for DWM-managed windows (Aero Glass look).",
-            Tags = ["appearance", "dwm", "blur", "aero"],
-            RegistryKeys = [Dwm],
-            ApplyOps = [RegOp.SetDword(Dwm, "EnableAeroPeek", 1)],
-            RemoveOps = [RegOp.SetDword(Dwm, "EnableAeroPeek", 0)],
-            DetectOps = [RegOp.CheckDword(Dwm, "EnableAeroPeek", 1)],
-        },
-        new TweakDef
-        {
-            Id = "winapp-dwm-disable-peek",
-            Label = "Disable Desktop Peek (Aero Peek)",
-            Category = "Display",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Prevents hovering over Show Desktop from making windows transparent.",
-            Tags = ["appearance", "dwm", "peek", "desktop"],
-            RegistryKeys = [Dwm],
-            ApplyOps = [RegOp.SetDword(Dwm, "EnableAeroPeek", 0)],
-            RemoveOps = [RegOp.SetDword(Dwm, "EnableAeroPeek", 1)],
-            DetectOps = [RegOp.CheckDword(Dwm, "EnableAeroPeek", 0)],
-        },
-        new TweakDef
-        {
-            Id = "winapp-dwm-disable-flip3d",
-            Label = "Disable Flip3D Effect",
-            Category = "Display",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Disables the 3D flip window switching effect (legacy feature, saves GPU resources).",
-            Tags = ["appearance", "dwm", "flip3d", "visual"],
-            RegistryKeys = [Dwm],
-            ApplyOps = [RegOp.SetDword(Dwm, "Composition", 0)],
-            RemoveOps = [RegOp.SetDword(Dwm, "Composition", 1)],
-            DetectOps = [RegOp.CheckDword(Dwm, "Composition", 0)],
-        },
-        new TweakDef
-        {
-            Id = "winapp-enable-round-corners",
-            Label = "Enable Rounded Window Corners",
-            Category = "Display",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Ensures rounded corners on windows (default on Win11). Set UseWindowFrameStagingBuffer to 1.",
-            Tags = ["appearance", "corners", "rounded", "win11"],
-            RegistryKeys = [Dwm],
-            ApplyOps = [RegOp.SetDword(Dwm, "UseWindowFrameStagingBuffer", 1)],
-            RemoveOps = [RegOp.DeleteValue(Dwm, "UseWindowFrameStagingBuffer")],
-            DetectOps = [RegOp.CheckDword(Dwm, "UseWindowFrameStagingBuffer", 1)],
-        },
         // ── Cursor & Mouse Visual ────────────────────────────────────────
 
         new TweakDef
@@ -2160,20 +1700,6 @@ internal static class WindowAppearance
             ApplyOps = [RegOp.SetString(Cursors, "CursorShadow", "1")],
             RemoveOps = [RegOp.SetString(Cursors, "CursorShadow", "0")],
             DetectOps = [RegOp.CheckString(Cursors, "CursorShadow", "1")],
-        },
-        new TweakDef
-        {
-            Id = "winapp-disable-cursor-shadow",
-            Label = "Disable Cursor Shadow",
-            Category = "Display",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Removes the shadow under the mouse cursor for a cleaner look.",
-            Tags = ["appearance", "cursor", "shadow"],
-            RegistryKeys = [Cursors],
-            ApplyOps = [RegOp.SetString(Cursors, "CursorShadow", "0")],
-            RemoveOps = [RegOp.SetString(Cursors, "CursorShadow", "1")],
-            DetectOps = [RegOp.CheckString(Cursors, "CursorShadow", "0")],
         },
         new TweakDef
         {
@@ -2207,20 +1733,6 @@ internal static class WindowAppearance
         },
         new TweakDef
         {
-            Id = "winapp-light-mode-apps",
-            Label = "Light Mode for Apps",
-            Category = "Display",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Forces light mode for modern UWP/WinUI applications only.",
-            Tags = ["appearance", "light", "mode", "apps"],
-            RegistryKeys = [Themes],
-            ApplyOps = [RegOp.SetDword(Themes, "AppsUseLightTheme", 1)],
-            RemoveOps = [RegOp.SetDword(Themes, "AppsUseLightTheme", 0)],
-            DetectOps = [RegOp.CheckDword(Themes, "AppsUseLightTheme", 1)],
-        },
-        new TweakDef
-        {
             Id = "winapp-dark-mode-system",
             Label = "Dark Mode for System UI",
             Category = "Display",
@@ -2232,20 +1744,6 @@ internal static class WindowAppearance
             ApplyOps = [RegOp.SetDword(Themes, "SystemUsesLightTheme", 0)],
             RemoveOps = [RegOp.SetDword(Themes, "SystemUsesLightTheme", 1)],
             DetectOps = [RegOp.CheckDword(Themes, "SystemUsesLightTheme", 0)],
-        },
-        new TweakDef
-        {
-            Id = "winapp-light-mode-system",
-            Label = "Light Mode for System UI",
-            Category = "Display",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Forces light mode for system UI elements (Start, taskbar, action centre).",
-            Tags = ["appearance", "light", "mode", "system"],
-            RegistryKeys = [Themes],
-            ApplyOps = [RegOp.SetDword(Themes, "SystemUsesLightTheme", 1)],
-            RemoveOps = [RegOp.SetDword(Themes, "SystemUsesLightTheme", 0)],
-            DetectOps = [RegOp.CheckDword(Themes, "SystemUsesLightTheme", 1)],
         },
         // ── Font & Text ──────────────────────────────────────────────────
 
@@ -2295,92 +1793,8 @@ internal static class WindowAppearance
             RemoveOps = [RegOp.SetDword(Explorer, "HideIcons", 0)],
             DetectOps = [RegOp.CheckDword(Explorer, "HideIcons", 1)],
         },
-        new TweakDef
-        {
-            Id = "winapp-show-file-extensions",
-            Label = "Show File Extensions on Desktop",
-            Category = "Display",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Shows file extensions for desktop icons, matching Explorer behaviour.",
-            Tags = ["appearance", "desktop", "extensions", "files"],
-            RegistryKeys = [Explorer],
-            ApplyOps = [RegOp.SetDword(Explorer, "HideFileExt", 0)],
-            RemoveOps = [RegOp.SetDword(Explorer, "HideFileExt", 1)],
-            DetectOps = [RegOp.CheckDword(Explorer, "HideFileExt", 0)],
-        },
-        new TweakDef
-        {
-            Id = "winapp-disable-snap-assist-flyout",
-            Label = "Disable Snap Assist Flyout",
-            Category = "Display",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Prevents the snap layout flyout from appearing when hovering the maximise button.",
-            Tags = ["appearance", "snap", "flyout", "maximize"],
-            RegistryKeys = [Explorer],
-            ApplyOps = [RegOp.SetDword(Explorer, "EnableSnapAssistFlyout", 0)],
-            RemoveOps = [RegOp.SetDword(Explorer, "EnableSnapAssistFlyout", 1)],
-            DetectOps = [RegOp.CheckDword(Explorer, "EnableSnapAssistFlyout", 0)],
-        },
-        new TweakDef
-        {
-            Id = "winapp-taskbar-top-align",
-            Label = "Taskbar: Left-Align Icons",
-            Category = "Display",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Moves taskbar icons to the left instead of the default centred layout on Windows 11.",
-            Tags = ["appearance", "taskbar", "alignment", "left"],
-            RegistryKeys = [Explorer],
-            ApplyOps = [RegOp.SetDword(Explorer, "TaskbarAl", 0)],
-            RemoveOps = [RegOp.SetDword(Explorer, "TaskbarAl", 1)],
-            DetectOps = [RegOp.CheckDword(Explorer, "TaskbarAl", 0)],
-        },
-        new TweakDef
-        {
-            Id = "winapp-drag-full-windows",
-            Label = "Drag Full Windows (Not Outlines)",
-            Category = "Display",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Shows the full window content whilst dragging instead of a wire-frame outline.",
-            Tags = ["appearance", "drag", "windows", "visual"],
-            RegistryKeys = [Desktop],
-            ApplyOps = [RegOp.SetString(Desktop, "DragFullWindows", "1")],
-            RemoveOps = [RegOp.SetString(Desktop, "DragFullWindows", "0")],
-            DetectOps = [RegOp.CheckString(Desktop, "DragFullWindows", "1")],
-        },
-        new TweakDef
-        {
-            Id = "winapp-drag-outline-only",
-            Label = "Drag Window Outlines Only",
-            Category = "Display",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Shows only a wire-frame outline when dragging windows for lower CPU usage.",
-            Tags = ["appearance", "drag", "outline", "performance"],
-            RegistryKeys = [Desktop],
-            ApplyOps = [RegOp.SetString(Desktop, "DragFullWindows", "0")],
-            RemoveOps = [RegOp.SetString(Desktop, "DragFullWindows", "1")],
-            DetectOps = [RegOp.CheckString(Desktop, "DragFullWindows", "0")],
-        },
         // ── Wallpaper & Background ───────────────────────────────────────
 
-        new TweakDef
-        {
-            Id = "winapp-wallpaper-quality-max",
-            Label = "Maximum Wallpaper JPEG Quality",
-            Category = "Display",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Sets wallpaper JPEG compression to maximum quality (100%). Prevents blurry desktop backgrounds.",
-            Tags = ["appearance", "wallpaper", "quality", "jpeg"],
-            RegistryKeys = [Desktop],
-            ApplyOps = [RegOp.SetDword(Desktop, "JPEGImportQuality", 100)],
-            RemoveOps = [RegOp.DeleteValue(Desktop, "JPEGImportQuality")],
-            DetectOps = [RegOp.CheckDword(Desktop, "JPEGImportQuality", 100)],
-        },
         new TweakDef
         {
             Id = "winapp-solid-color-background",
@@ -2457,20 +1871,6 @@ internal static class WindowAppearance
 
         new TweakDef
         {
-            Id = "winapp-disable-smooth-scrolling",
-            Label = "Disable Smooth Scrolling",
-            Category = "Display",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Disables smooth scrolling animations in listboxes and controls.",
-            Tags = ["appearance", "scrolling", "smooth", "performance"],
-            RegistryKeys = [Desktop],
-            ApplyOps = [RegOp.SetDword(Desktop, "SmoothScroll", 0)],
-            RemoveOps = [RegOp.SetDword(Desktop, "SmoothScroll", 1)],
-            DetectOps = [RegOp.CheckDword(Desktop, "SmoothScroll", 0)],
-        },
-        new TweakDef
-        {
             Id = "winapp-disable-font-smoothing",
             Label = "Disable Font Smoothing",
             Category = "Display",
@@ -2497,90 +1897,6 @@ internal static class WindowAppearance
             ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "TaskbarAl", 0)],
             RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "TaskbarAl", 1)],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "TaskbarAl", 0)],
-        },
-        new TweakDef
-        {
-            Id = "tb-taskbar-small-icons",
-            Label = "Use Small Taskbar Icons",
-            Category = "Windows 11",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Shrinks taskbar icons and reduces taskbar height (Win10). Default: large icons. Recommended: small icons.",
-            Tags = ["taskbar", "icons", "size"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "TaskbarSmallIcons", 1)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "TaskbarSmallIcons", 0)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "TaskbarSmallIcons", 1)],
-        },
-        new TweakDef
-        {
-            Id = "tb-taskbar-hide-task-view",
-            Label = "Hide Task View Button",
-            Category = "Windows 11",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Hides the Task View button from the taskbar. You can still use Win+Tab for virtual desktops. Default: enabled. Recommended: disabled.",
-            Tags = ["taskbar", "task-view", "declutter"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "ShowTaskViewButton", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "ShowTaskViewButton", 1)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "ShowTaskViewButton", 0)],
-        },
-        new TweakDef
-        {
-            Id = "tb-taskbar-hide-widgets",
-            Label = "Hide Widgets (Policy)",
-            Category = "Windows 11",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description =
-                "Disables Widgets board and weather widget via HKLM policy. Frees resources used by the Edge WebView2 widget host. Default: enabled. Recommended: disabled.",
-            Tags = ["taskbar", "widgets", "policy", "performance"],
-            RegistryKeys =
-            [
-                @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Dsh",
-                @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced",
-            ],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Dsh", "AllowNewsAndInterests", 0),
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "TaskbarDa", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Dsh", "AllowNewsAndInterests"),
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "TaskbarDa", 1),
-            ],
-        },
-        new TweakDef
-        {
-            Id = "tb-taskbar-hide-chat",
-            Label = "Hide Chat / Teams Icon",
-            Category = "Windows 11",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Hides the Microsoft Teams Chat icon from the taskbar. Default: enabled. Recommended: disabled.",
-            Tags = ["taskbar", "chat", "teams", "declutter"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "TaskbarMn", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "TaskbarMn", 1)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "TaskbarMn", 0)],
-        },
-        new TweakDef
-        {
-            Id = "tb-taskbar-never-combine",
-            Label = "Never Combine Taskbar Buttons",
-            Category = "Windows 11",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Prevents taskbar from grouping windows of the same app. Each window gets its own button with a visible label. Default: always combine. Recommended: never combine.",
-            Tags = ["taskbar", "grouping", "buttons", "ux"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "TaskbarGlomLevel", 2)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "TaskbarGlomLevel", 0)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "TaskbarGlomLevel", 2)],
         },
         new TweakDef
         {
@@ -2612,21 +1928,6 @@ internal static class WindowAppearance
         },
         new TweakDef
         {
-            Id = "tb-taskbar-end-task",
-            Label = "Enable End Task in Taskbar",
-            Category = "Windows 11",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Adds an End Task option to the taskbar right-click menu for quickly killing unresponsive apps. Default: disabled. Recommended: enabled.",
-            Tags = ["taskbar", "end-task", "productivity"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "TaskbarEndTask", 1)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "TaskbarEndTask", 0)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "TaskbarEndTask", 1)],
-        },
-        new TweakDef
-        {
             Id = "tb-taskbar-disable-recent-search",
             Label = "Disable Recent Searches in Taskbar",
             Category = "Windows 11",
@@ -2650,20 +1951,6 @@ internal static class WindowAppearance
         },
         new TweakDef
         {
-            Id = "tb-taskbar-disable-people",
-            Label = "Disable People Bar on Taskbar",
-            Category = "Windows 11",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Removes the People bar from the taskbar. Default: Enabled. Recommended: Disabled.",
-            Tags = ["taskbar", "people", "social", "declutter"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\People"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\People", "PeopleBand", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\People", "PeopleBand", 1)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\People", "PeopleBand", 0)],
-        },
-        new TweakDef
-        {
             Id = "tb-disable-meet-now",
             Label = "Disable Meet Now Icon",
             Category = "Windows 11",
@@ -2678,29 +1965,6 @@ internal static class WindowAppearance
         },
         new TweakDef
         {
-            Id = "tb-show-seconds-clock",
-            Label = "Show Seconds in System Clock",
-            Category = "Windows 11",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Shows seconds in the taskbar system clock for precision timing. Default: Hidden. Recommended: Personal preference.",
-            Tags = ["taskbar", "clock", "seconds", "time"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "ShowSecondsInSystemClock", 1),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "ShowSecondsInSystemClock"),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "ShowSecondsInSystemClock", 1),
-            ],
-        },
-        new TweakDef
-        {
             Id = "tb-disable-animations",
             Label = "Disable Taskbar Animations",
             Category = "Windows 11",
@@ -2712,21 +1976,6 @@ internal static class WindowAppearance
             ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "TaskbarAnimations", 0)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "TaskbarAnimations")],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "TaskbarAnimations", 0)],
-        },
-        new TweakDef
-        {
-            Id = "tb-disable-recent-docs",
-            Label = "Disable Recent Documents Tracking",
-            Category = "Windows 11",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Disables Windows from tracking recently opened documents for taskbar jump lists. Reduces filesystem activity and improves privacy. Default: Enabled. Recommended: Disabled for privacy.",
-            Tags = ["taskbar", "recent-docs", "privacy", "history", "tracking"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "Start_TrackDocs", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "Start_TrackDocs")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "Start_TrackDocs", 0)],
         },
         new TweakDef
         {
@@ -2760,69 +2009,6 @@ internal static class WindowAppearance
         },
         new TweakDef
         {
-            Id = "tb-show-full-path-title",
-            Label = "Show Full Path in Explorer Title Bar",
-            Category = "Windows 11",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Shows the full folder path in Explorer window title bars, making it easier to identify windows. Default: folder name only.",
-            Tags = ["taskbar", "explorer", "path", "title"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\CabinetState"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\CabinetState", "FullPath", 1)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\CabinetState", "FullPath", 0)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\CabinetState", "FullPath", 1)],
-        },
-        new TweakDef
-        {
-            Id = "tb-disable-cortana-taskbar",
-            Label = "Disable Cortana in Taskbar",
-            Category = "Windows 11",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables Cortana from appearing in the taskbar via Group Policy. Default: enabled.",
-            Tags = ["taskbar", "cortana", "disable", "policy"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search", "AllowCortana", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search", "AllowCortana")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search", "AllowCortana", 0)],
-        },
-        new TweakDef
-        {
-            Id = "tb-taskbar-multi-display-show-all",
-            Label = "Show Taskbar on All Displays",
-            Category = "Windows 11",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Shows the taskbar on all connected monitors in a multi-display setup. Default: primary only on Win11.",
-            Tags = ["taskbar", "multi-display", "monitor", "show"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "MMTaskbarEnabled", 1)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "MMTaskbarEnabled", 0)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "MMTaskbarEnabled", 1)],
-        },
-        new TweakDef
-        {
-            Id = "tb-disable-thumbnail-preview",
-            Label = "Disable Taskbar Thumbnail Previews",
-            Category = "Windows 11",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Disables the thumbnail preview popup when hovering over taskbar buttons. Shows tooltip text instead. Default: enabled.",
-            Tags = ["taskbar", "thumbnail", "preview", "hover"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "ExtendedUIHoverTime", 30000),
-            ],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "ExtendedUIHoverTime")],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "ExtendedUIHoverTime", 30000),
-            ],
-        },
-        new TweakDef
-        {
             Id = "tb-set-thumbnail-size",
             Label = "Increase Thumbnail Preview Size",
             Category = "Windows 11",
@@ -2849,21 +2035,6 @@ internal static class WindowAppearance
             ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer", "HideClock", 1)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer", "HideClock")],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer", "HideClock", 1)],
-        },
-        new TweakDef
-        {
-            Id = "tb-set-search-icon-only",
-            Label = "Show Search as Icon Only (Not Full Box)",
-            Category = "Windows 11",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Sets SearchboxTaskbarMode=1 in the Search key. Shows a compact search icon on the taskbar instead of the expanded search box (mode 2) or nothing (mode 0), saving taskbar space.",
-            Tags = ["taskbar", "search", "icon", "compact"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Search"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Search", "SearchboxTaskbarMode", 1)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Search", "SearchboxTaskbarMode", 2)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Search", "SearchboxTaskbarMode", 1)],
         },
         new TweakDef
         {
@@ -2949,42 +2120,6 @@ internal static class WindowAppearance
         },
         new TweakDef
         {
-            Id = "tb-disable-start-suggestions",
-            Label = "Disable App Suggestions in Start Menu",
-            Category = "Windows 11",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Sets SystemPaneSuggestionsEnabled=0 in ContentDeliveryManager. Removes Microsoft-promoted app suggestions from appearing in the Start Menu's recommended section.",
-            Tags = ["taskbar", "start-menu", "suggestions", "ads"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager"],
-            ApplyOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
-                    "SystemPaneSuggestionsEnabled",
-                    0
-                ),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
-                    "SystemPaneSuggestionsEnabled",
-                    1
-                ),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(
-                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
-                    "SystemPaneSuggestionsEnabled",
-                    0
-                ),
-            ],
-        },
-        new TweakDef
-        {
             Id = "tb-hide-show-desktop-button",
             Label = "Hide the Show Desktop Button (Bottom-Right Corner)",
             Category = "Windows 11",
@@ -2997,21 +2132,6 @@ internal static class WindowAppearance
             ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "TaskbarSd", 0)],
             RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "TaskbarSd", 1)],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "TaskbarSd", 0)],
-        },
-        new TweakDef
-        {
-            Id = "tb-set-multimonitor-local-windows",
-            Label = "Show Only Local Windows on Each Monitor's Taskbar",
-            Category = "Windows 11",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Sets MMTaskbarMode=2 in Explorer Advanced. When multi-monitor taskbars are enabled, each monitor's taskbar shows only the windows that belong to apps on that monitor.",
-            Tags = ["taskbar", "multimonitor", "windows", "display"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "MMTaskbarMode", 2)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "MMTaskbarMode", 0)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "MMTaskbarMode", 2)],
         },
         new TweakDef
         {

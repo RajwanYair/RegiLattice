@@ -104,28 +104,6 @@ internal static class Network
         },
         new TweakDef
         {
-            Id = "net-increase-dns-cache",
-            Label = "Increase DNS Cache TTL (24h)",
-            Category = "Network",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Increases the DNS cache TTL to 24 hours and reduces negative cache to 5 seconds for faster repeat lookups.",
-            Tags = ["network", "performance", "dns", "cache"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters", "MaxCacheTtl", 86400),
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters", "MaxNegativeCacheTtl", 5),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters", "MaxCacheTtl"),
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters", "MaxNegativeCacheTtl"),
-            ],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters", "MaxCacheTtl", 86400)],
-        },
-        new TweakDef
-        {
             Id = "net-increase-arp-cache",
             Label = "Increase ARP Cache Size",
             Category = "Network",
@@ -299,22 +277,6 @@ internal static class Network
         },
         new TweakDef
         {
-            Id = "net-disable-ipv6",
-            Label = "Disable All IPv6 Tunneling Components",
-            Category = "Network",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description =
-                "Sets DisabledComponents=255 to disable all IPv6 tunnel adapters (6to4, ISATAP, Teredo, etc.) at once. Reduces attack surface on IPv4-only networks. Default: Enabled. Recommended: Disabled on pure IPv4 networks.",
-            Tags = ["network", "ipv6", "tunnel", "6to4", "isatap", "teredo", "security"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip6\Parameters"],
-            SideEffects = "IPv6 connectivity is fully disabled.",
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip6\Parameters", "DisabledComponents", 255)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip6\Parameters", "DisabledComponents")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip6\Parameters", "DisabledComponents", 255)],
-        },
-        new TweakDef
-        {
             Id = "net-disable-pnrp",
             Label = "Disable Peer Name Resolution Protocol",
             Category = "Network",
@@ -446,51 +408,6 @@ internal static class Network
         },
         new TweakDef
         {
-            Id = "net-enable-dns-over-https",
-            Label = "Enable DNS over HTTPS (DoH)",
-            Category = "Network",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description =
-                "Enables automatic DNS over HTTPS for the DNS client. Encrypts DNS queries for privacy. Requires a DoH-capable DNS server. Default: disabled.",
-            Tags = ["network", "dns", "doh", "https", "privacy"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters", "EnableAutoDoh", 2)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters", "EnableAutoDoh")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters", "EnableAutoDoh", 2)],
-        },
-        new TweakDef
-        {
-            Id = "net-prefer-ipv4",
-            Label = "Prefer IPv4 over IPv6",
-            Category = "Network",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Configures the system to prefer IPv4 over IPv6 without fully disabling IPv6. Sets DisabledComponents to 0x20. Default: IPv6 preferred.",
-            Tags = ["network", "ipv4", "ipv6", "preference"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip6\Parameters"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip6\Parameters", "DisabledComponents", 0x20)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip6\Parameters", "DisabledComponents")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip6\Parameters", "DisabledComponents", 0x20)],
-        },
-        new TweakDef
-        {
-            Id = "net-restrict-anonymous",
-            Label = "Restrict Anonymous Network Access",
-            Category = "Network",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description =
-                "Restricts anonymous enumeration of SAM accounts and shares. Prevents unauthenticated users from listing network resources. Default: allowed.",
-            Tags = ["network", "security", "anonymous", "enumeration"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa", "RestrictAnonymous", 1)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa", "RestrictAnonymous", 0)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa", "RestrictAnonymous", 1)],
-        },
-        new TweakDef
-        {
             Id = "net-tcp-initial-rtt",
             Label = "Set TCP Initial RTT to 300ms",
             Category = "Network",
@@ -533,42 +450,6 @@ internal static class Network
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters", "SynAttackProtect", 1)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters", "SynAttackProtect")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters", "SynAttackProtect", 1)],
-        },
-        new TweakDef
-        {
-            Id = "net-throttling-index",
-            Label = "Disable Multimedia Network Throttling",
-            Category = "Network",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets the multimedia system profile NetworkThrottlingIndex to 0xFFFFFFFF, disabling network traffic throttling during multimedia playback. Default: 10.",
-            Tags = ["network", "throttling", "multimedia", "bandwidth"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile"],
-            ApplyOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile",
-                    "NetworkThrottlingIndex",
-                    unchecked((int)0xFFFFFFFF)
-                ),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile",
-                    "NetworkThrottlingIndex",
-                    10
-                ),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile",
-                    "NetworkThrottlingIndex",
-                    unchecked((int)0xFFFFFFFF)
-                ),
-            ],
         },
         new TweakDef
         {
@@ -660,34 +541,6 @@ internal static class Network
         },
         new TweakDef
         {
-            Id = "net-afd-receive-window",
-            Label = "Increase AFD Default Receive Buffer",
-            Category = "Network",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Sets the AFD driver default receive window to 128 KB. Reduces buffer pressure on high-throughput socket applications.",
-            Tags = ["network", "afd", "socket", "buffer", "performance"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\AFD\Parameters"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\AFD\Parameters", "DefaultReceiveWindow", 131072)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\AFD\Parameters", "DefaultReceiveWindow")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\AFD\Parameters", "DefaultReceiveWindow", 131072)],
-        },
-        new TweakDef
-        {
-            Id = "net-afd-send-window",
-            Label = "Increase AFD Default Send Buffer",
-            Category = "Network",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Sets the AFD driver default send window to 128 KB. Improves throughput for high-volume socket senders.",
-            Tags = ["network", "afd", "socket", "buffer", "performance"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\AFD\Parameters"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\AFD\Parameters", "DefaultSendWindow", 131072)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\AFD\Parameters", "DefaultSendWindow")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\AFD\Parameters", "DefaultSendWindow", 131072)],
-        },
-        new TweakDef
-        {
             Id = "net-enable-selective-ack",
             Label = "Enable TCP Selective Acknowledgements (SACK)",
             Category = "Network",
@@ -763,20 +616,6 @@ internal static class NetworkOptimization
     [
         new TweakDef
         {
-            Id = "netopt-disable-nagle-algorithm",
-            Label = "Disable Nagle's Algorithm (Low Latency)",
-            Category = "Network",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables TCP Nagle's algorithm which buffers small packets. Improves latency for gaming and real-time apps.",
-            Tags = ["network", "latency", "gaming", "tcp"],
-            RegistryKeys = [TcpParams],
-            ApplyOps = [RegOp.SetDword(TcpParams, "TcpNoDelay", 1), RegOp.SetDword(TcpParams, "TcpAckFrequency", 1)],
-            RemoveOps = [RegOp.DeleteValue(TcpParams, "TcpNoDelay"), RegOp.DeleteValue(TcpParams, "TcpAckFrequency")],
-            DetectOps = [RegOp.CheckDword(TcpParams, "TcpNoDelay", 1)],
-        },
-        new TweakDef
-        {
             Id = "netopt-increase-tcp-window-size",
             Label = "Increase TCP Window Size (High Throughput)",
             Category = "Network",
@@ -822,52 +661,6 @@ internal static class NetworkOptimization
                     10
                 ),
             ],
-        },
-        new TweakDef
-        {
-            Id = "netopt-disable-network-throttling",
-            Label = "Disable Network Throttling Index",
-            Category = "Network",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Removes the Windows network throttling that limits non-multimedia traffic to 10 packets/ms.",
-            Tags = ["network", "throughput", "throttling", "performance"],
-            RegistryKeys = [$@"{LmKey}\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile"],
-            ApplyOps =
-            [
-                RegOp.SetDword(
-                    $@"{LmKey}\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile",
-                    "NetworkThrottlingIndex",
-                    unchecked((int)0xFFFFFFFF)
-                ),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue($@"{LmKey}\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile", "NetworkThrottlingIndex"),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(
-                    $@"{LmKey}\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile",
-                    "NetworkThrottlingIndex",
-                    unchecked((int)0xFFFFFFFF)
-                ),
-            ],
-        },
-        new TweakDef
-        {
-            Id = "netopt-set-tcp-timestamps",
-            Label = "Enable TCP Timestamps (RFC 1323)",
-            Category = "Network",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Enables TCP timestamps for improved RTT calculation and protection against wrapped sequence numbers. Better performance on high-bandwidth connections.",
-            Tags = ["network", "tcp", "timestamps", "rfc1323"],
-            RegistryKeys = [TcpParams],
-            ApplyOps = [RegOp.SetDword(TcpParams, "Tcp1323Opts", 1)],
-            RemoveOps = [RegOp.DeleteValue(TcpParams, "Tcp1323Opts")],
-            DetectOps = [RegOp.CheckDword(TcpParams, "Tcp1323Opts", 1)],
         },
         new TweakDef
         {
@@ -958,34 +751,6 @@ internal static class NetworkOptimization
         },
         new TweakDef
         {
-            Id = "netopt-disable-lmhosts-lookup",
-            Label = "Disable LMHOSTS Lookup",
-            Category = "Network",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables LMHOSTS file lookup for NetBIOS name resolution. Reduces unnecessary DNS overhead.",
-            Tags = ["network", "netbios", "performance", "security"],
-            RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Services\NetBT\Parameters"],
-            ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\NetBT\Parameters", "EnableLMHOSTS", 0)],
-            RemoveOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\NetBT\Parameters", "EnableLMHOSTS", 1)],
-            DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\NetBT\Parameters", "EnableLMHOSTS", 0)],
-        },
-        new TweakDef
-        {
-            Id = "netopt-disable-qos-packet-scheduler",
-            Label = "Remove QoS Bandwidth Reservation",
-            Category = "Network",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Sets QoS reserved bandwidth to 0% instead of the default 20% reservation.",
-            Tags = ["network", "bandwidth", "qos", "performance"],
-            RegistryKeys = [$@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows\Psched"],
-            ApplyOps = [RegOp.SetDword($@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows\Psched", "NonBestEffortLimit", 0)],
-            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows\Psched", "NonBestEffortLimit")],
-            DetectOps = [RegOp.CheckDword($@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows\Psched", "NonBestEffortLimit", 0)],
-        },
-        new TweakDef
-        {
             Id = "netopt-disable-adapter-power-save",
             Label = "Disable Network Adapter Power Saving",
             Category = "Network",
@@ -1064,28 +829,6 @@ internal static class NetworkOptimization
         },
         new TweakDef
         {
-            Id = "netopt-enable-dns-cache-boost",
-            Label = "Increase DNS Client Cache Size",
-            Category = "Network",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Increases the DNS client cache limits for faster repeated lookups.",
-            Tags = ["network", "dns", "cache", "performance"],
-            RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters"],
-            ApplyOps =
-            [
-                RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters", "MaxCacheEntryTtlLimit", 86400),
-                RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters", "MaxNegativeCacheTtl", 5),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue($@"{LmKey}\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters", "MaxCacheEntryTtlLimit"),
-                RegOp.DeleteValue($@"{LmKey}\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters", "MaxNegativeCacheTtl"),
-            ],
-            DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters", "MaxCacheEntryTtlLimit", 86400)],
-        },
-        new TweakDef
-        {
             Id = "netopt-enable-tcp-fast-open",
             Label = "Enable TCP Fast Open (TFO)",
             Category = "Network",
@@ -1114,28 +857,6 @@ internal static class NetworkOptimization
                 ),
             RemoveAction = _ => ShellRunner.RunPowerShell("Set-NetTCPSetting -SettingName InternetCustom -CongestionProvider Default"),
             DetectAction = () => false,
-        },
-        new TweakDef
-        {
-            Id = "netopt-increase-arp-cache",
-            Label = "Increase ARP Cache Size",
-            Category = "Network",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Increases the ARP cache limit from default 256 to 4096 entries for networks with many peers.",
-            Tags = ["network", "arp", "cache", "performance"],
-            RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters"],
-            ApplyOps =
-            [
-                RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters", "ArpCacheSize", 4096),
-                RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters", "ArpCacheLife", 300),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue($@"{LmKey}\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters", "ArpCacheSize"),
-                RegOp.DeleteValue($@"{LmKey}\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters", "ArpCacheLife"),
-            ],
-            DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters", "ArpCacheSize", 4096)],
         },
         new TweakDef
         {
@@ -1181,20 +902,6 @@ internal static class NetworkOptimization
         },
         new TweakDef
         {
-            Id = "netopt-increase-tcp-keepalive",
-            Label = "Reduce TCP Keep-Alive Interval",
-            Category = "Network",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Reduces the TCP keep-alive interval from 2 hours to 30 minutes, detecting dead connections faster.",
-            Tags = ["network", "tcp", "keepalive", "reliability"],
-            RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters"],
-            ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters", "KeepAliveTime", 1800000)],
-            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters", "KeepAliveTime")],
-            DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters", "KeepAliveTime", 1800000)],
-        },
-        new TweakDef
-        {
             Id = "netopt-enable-flow-control",
             Label = "Enable NIC Flow Control",
             Category = "Network",
@@ -1235,68 +942,6 @@ internal static class NetworkOptimization
         },
         new TweakDef
         {
-            Id = "netopt-set-dns-priority-ipv4",
-            Label = "Prioritise IPv4 DNS over IPv6",
-            Category = "Network",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Sets the prefix policy to prefer IPv4 DNS resolution, reducing lookup latency on networks without native IPv6.",
-            Tags = ["network", "dns", "ipv4", "ipv6"],
-            RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Services\Tcpip6\Parameters"],
-            ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\Tcpip6\Parameters", "DisabledComponents", 32)],
-            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SYSTEM\CurrentControlSet\Services\Tcpip6\Parameters", "DisabledComponents")],
-            DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\Tcpip6\Parameters", "DisabledComponents", 32)],
-        },
-        new TweakDef
-        {
-            Id = "netopt-increase-arp-cache-size",
-            Label = "Increase ARP Cache Size",
-            Category = "Network",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Increases the ARP table cache from default 256 to 4096 entries. Reduces ARP lookup latency on busy networks.",
-            Tags = ["network", "arp", "cache", "performance"],
-            RegistryKeys = [TcpParams],
-            ApplyOps = [RegOp.SetDword(TcpParams, "ArpCacheSize", 4096)],
-            RemoveOps = [RegOp.DeleteValue(TcpParams, "ArpCacheSize")],
-            DetectOps = [RegOp.CheckDword(TcpParams, "ArpCacheSize", 4096)],
-        },
-        new TweakDef
-        {
-            Id = "netopt-set-max-connections-per-server",
-            Label = "Increase Max Connections Per Server",
-            Category = "Network",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Sets maximum concurrent connections per server from default 2 to 16. Improves parallel download speed.",
-            Tags = ["network", "connections", "http", "speed"],
-            RegistryKeys = [$@"{LmKey}\SOFTWARE\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_MAXCONNECTIONSPERSERVER"],
-            ApplyOps =
-            [
-                RegOp.SetDword(
-                    $@"{LmKey}\SOFTWARE\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_MAXCONNECTIONSPERSERVER",
-                    "iexplore.exe",
-                    16
-                ),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(
-                    $@"{LmKey}\SOFTWARE\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_MAXCONNECTIONSPERSERVER",
-                    "iexplore.exe"
-                ),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(
-                    $@"{LmKey}\SOFTWARE\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_MAXCONNECTIONSPERSERVER",
-                    "iexplore.exe",
-                    16
-                ),
-            ],
-        },
-        new TweakDef
-        {
             Id = "netopt-disable-netbios-over-tcpip",
             Label = "Disable NetBIOS over TCP/IP",
             Category = "Network",
@@ -1308,49 +953,6 @@ internal static class NetworkOptimization
             ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\NetBT\Parameters", "NetbiosOptions", 2)],
             RemoveOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\NetBT\Parameters", "NetbiosOptions", 0)],
             DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\NetBT\Parameters", "NetbiosOptions", 2)],
-        },
-        new TweakDef
-        {
-            Id = "netopt-disable-wifi-sense",
-            Label = "Disable Wi-Fi Sense Auto-Connect",
-            Category = "Network",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Disables Wi-Fi Sense that auto-connects to suggested open hotspots and shared networks. Improves security and prevents unwanted connections.",
-            Tags = ["network", "wifi", "sense", "security"],
-            RegistryKeys = [$@"{LmKey}\SOFTWARE\Microsoft\WcmSvc\wifinetworkmanager\config"],
-            ApplyOps = [RegOp.SetDword($@"{LmKey}\SOFTWARE\Microsoft\WcmSvc\wifinetworkmanager\config", "AutoConnectAllowedOEM", 0)],
-            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SOFTWARE\Microsoft\WcmSvc\wifinetworkmanager\config", "AutoConnectAllowedOEM")],
-            DetectOps = [RegOp.CheckDword($@"{LmKey}\SOFTWARE\Microsoft\WcmSvc\wifinetworkmanager\config", "AutoConnectAllowedOEM", 0)],
-        },
-        new TweakDef
-        {
-            Id = "netopt-set-dns-cache-max-ttl",
-            Label = "Increase DNS Cache Max TTL to 1 Day",
-            Category = "Network",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Sets the maximum DNS cache TTL to 86400 seconds (1 day). Reduces DNS queries for frequently visited sites.",
-            Tags = ["network", "dns", "cache", "ttl"],
-            RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters"],
-            ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters", "MaxCacheTtl", 86400)],
-            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters", "MaxCacheTtl")],
-            DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters", "MaxCacheTtl", 86400)],
-        },
-        new TweakDef
-        {
-            Id = "netopt-set-dns-negative-cache-ttl",
-            Label = "Reduce DNS Negative Cache TTL",
-            Category = "Network",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Reduces the negative DNS cache TTL from 900s to 60s. Failed DNS lookups are retried sooner.",
-            Tags = ["network", "dns", "cache", "negative"],
-            RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters"],
-            ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters", "MaxNegativeCacheTtl", 60)],
-            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters", "MaxNegativeCacheTtl")],
-            DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters", "MaxNegativeCacheTtl", 60)],
         },
         new TweakDef
         {
@@ -1366,21 +968,6 @@ internal static class NetworkOptimization
             ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\WinHttpAutoProxySvc", "Start", 4)],
             RemoveOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\WinHttpAutoProxySvc", "Start", 3)],
             DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\WinHttpAutoProxySvc", "Start", 4)],
-        },
-        new TweakDef
-        {
-            Id = "netopt-enable-rss",
-            Label = "Enable Receive Side Scaling (RSS)",
-            Category = "Network",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Enables receive-side scaling to distribute network processing across multiple CPU cores. Improves throughput on multi-core systems.",
-            Tags = ["network", "rss", "multicore", "throughput"],
-            RegistryKeys = [TcpParams],
-            ApplyOps = [RegOp.SetDword(TcpParams, "EnableRSS", 1)],
-            RemoveOps = [RegOp.DeleteValue(TcpParams, "EnableRSS")],
-            DetectOps = [RegOp.CheckDword(TcpParams, "EnableRSS", 1)],
         },
         new TweakDef
         {
@@ -1401,20 +988,6 @@ internal static class NetworkOptimization
         },
         new TweakDef
         {
-            Id = "netopt-set-max-user-port",
-            Label = "Increase Max Ephemeral Port Range",
-            Category = "Network",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Increases the ephemeral port range to 65534. Prevents port exhaustion under high connection loads.",
-            Tags = ["network", "ports", "ephemeral", "connections"],
-            RegistryKeys = [TcpParams],
-            ApplyOps = [RegOp.SetDword(TcpParams, "MaxUserPort", 65534)],
-            RemoveOps = [RegOp.DeleteValue(TcpParams, "MaxUserPort")],
-            DetectOps = [RegOp.CheckDword(TcpParams, "MaxUserPort", 65534)],
-        },
-        new TweakDef
-        {
             Id = "netopt-set-default-ttl",
             Label = "Set Default IPv4 TTL to 64",
             Category = "Network",
@@ -1427,36 +1000,6 @@ internal static class NetworkOptimization
             ApplyOps = [RegOp.SetDword(TcpParams, "DefaultTTL", 64)],
             RemoveOps = [RegOp.DeleteValue(TcpParams, "DefaultTTL")],
             DetectOps = [RegOp.CheckDword(TcpParams, "DefaultTTL", 64)],
-        },
-        new TweakDef
-        {
-            Id = "netopt-enable-tcp-1323-opts",
-            Label = "Enable TCP Window Scaling and Timestamps",
-            Category = "Network",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets Tcp1323Opts=3 to enable both RFC 1323 large window scaling and TCP timestamps. Allows gigabit-scale receive windows and improves round-trip measurements.",
-            Tags = ["network", "tcp", "window-scaling", "timestamps", "performance"],
-            RegistryKeys = [TcpParams],
-            ApplyOps = [RegOp.SetDword(TcpParams, "Tcp1323Opts", 3)],
-            RemoveOps = [RegOp.DeleteValue(TcpParams, "Tcp1323Opts")],
-            DetectOps = [RegOp.CheckDword(TcpParams, "Tcp1323Opts", 3)],
-        },
-        new TweakDef
-        {
-            Id = "netopt-set-global-max-tcp-window",
-            Label = "Set Global Maximum TCP Window Size to 8 MB",
-            Category = "Network",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets GlobalMaxTcpWindowSize to 8 388 608 bytes (8 MB). Caps the global TCP receive window ceiling, allowing the auto-tuning algorithm room to grow on high-bandwidth connections.",
-            Tags = ["network", "tcp", "window", "bandwidth", "performance"],
-            RegistryKeys = [TcpParams],
-            ApplyOps = [RegOp.SetDword(TcpParams, "GlobalMaxTcpWindowSize", 8388608)],
-            RemoveOps = [RegOp.DeleteValue(TcpParams, "GlobalMaxTcpWindowSize")],
-            DetectOps = [RegOp.CheckDword(TcpParams, "GlobalMaxTcpWindowSize", 8388608)],
         },
         new TweakDef
         {
@@ -1487,21 +1030,6 @@ internal static class NetworkOptimization
             ApplyOps = [RegOp.SetDword(TcpParams, "EnablePMTUBHDetect", 0)],
             RemoveOps = [RegOp.DeleteValue(TcpParams, "EnablePMTUBHDetect")],
             DetectOps = [RegOp.CheckDword(TcpParams, "EnablePMTUBHDetect", 0)],
-        },
-        new TweakDef
-        {
-            Id = "netopt-set-max-half-open",
-            Label = "Limit Maximum Half-Open TCP Connections",
-            Category = "Network",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets TcpMaxHalfOpen to 100. Caps the number of simultaneous half-open (SYN-sent) connections, complementing SYN-flood attack protection.",
-            Tags = ["network", "tcp", "syn", "security", "connections"],
-            RegistryKeys = [TcpParams],
-            ApplyOps = [RegOp.SetDword(TcpParams, "TcpMaxHalfOpen", 100)],
-            RemoveOps = [RegOp.DeleteValue(TcpParams, "TcpMaxHalfOpen")],
-            DetectOps = [RegOp.CheckDword(TcpParams, "TcpMaxHalfOpen", 100)],
         },
         new TweakDef
         {
@@ -1592,21 +1120,6 @@ internal static class NetworkOptimization
             ApplyOps = [RegOp.SetDword(TcpParams, "DefaultMSS", 1460)],
             RemoveOps = [RegOp.DeleteValue(TcpParams, "DefaultMSS")],
             DetectOps = [RegOp.CheckDword(TcpParams, "DefaultMSS", 1460)],
-        },
-        new TweakDef
-        {
-            Id = "netopt-set-max-syn-retransmissions",
-            Label = "Reduce TCP SYN Retransmission Limit",
-            Category = "Network",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets TcpMaxConnectRetransmissions to 2. Unreachable hosts are declared unavailable after 2 SYN retries instead of the default, reducing connection hang time.",
-            Tags = ["network", "tcp", "syn", "retransmit", "performance"],
-            RegistryKeys = [TcpParams],
-            ApplyOps = [RegOp.SetDword(TcpParams, "TcpMaxConnectRetransmissions", 2)],
-            RemoveOps = [RegOp.DeleteValue(TcpParams, "TcpMaxConnectRetransmissions")],
-            DetectOps = [RegOp.CheckDword(TcpParams, "TcpMaxConnectRetransmissions", 2)],
         },
     ];
 }
@@ -1857,20 +1370,6 @@ internal static class DnsNetworking
         },
         new TweakDef
         {
-            Id = "dns-set-negative-cache-ttl-0",
-            Label = "Disable Negative DNS Cache",
-            Category = "Network",
-            NeedsAdmin = true,
-            Description =
-                "Sets negative DNS cache TTL to 0, so failed lookups are not cached. Useful for dynamic environments. Default: 900 seconds.",
-            Tags = ["dns", "cache", "negative", "ttl"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters", "NegativeCacheTime", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters", "NegativeCacheTime")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters", "NegativeCacheTime", 0)],
-        },
-        new TweakDef
-        {
             Id = "dns-disable-parallel-queries",
             Label = "Disable Parallel DNS Queries",
             Category = "Network",
@@ -1921,21 +1420,6 @@ internal static class DnsNetworking
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\DNSClient", "EnableDnsSec", 1)],
         },
         // ── Sprint 18 — 10 new DNS & Networking Advanced tweaks ────────────
-        new TweakDef
-        {
-            Id = "dns-set-dns-priority-v4",
-            Label = "Prioritise IPv4 DNS over IPv6",
-            Category = "Network",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Configures prefix policy to prefer IPv4 name resolution over IPv6, reducing latency on networks without native v6. Default: IPv6 preferred.",
-            Tags = ["dns", "ipv4", "ipv6", "priority", "latency"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip6\Parameters"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip6\Parameters", "DisabledComponents", 32)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip6\Parameters", "DisabledComponents")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip6\Parameters", "DisabledComponents", 32)],
-        },
         new TweakDef
         {
             Id = "dns-enable-dns-filtering-platform",
@@ -2255,76 +1739,6 @@ internal static class ProxyVpn
         },
         new TweakDef
         {
-            Id = "proxy-disable-ncsi-active-probing",
-            Label = "Disable NCSI Active Probing",
-            Category = "Network",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Disables Network Connectivity Status Indicator active probing to Microsoft servers. May show 'No Internet' warning.",
-            Tags = ["proxy", "network", "ncsi", "privacy", "telemetry"],
-            RegistryKeys = [VpnKey],
-            ApplyOps = [RegOp.SetDword(VpnKey, "NoActiveProbe", 1)],
-            RemoveOps = [RegOp.DeleteValue(VpnKey, "NoActiveProbe")],
-            DetectOps = [RegOp.CheckDword(VpnKey, "NoActiveProbe", 1)],
-        },
-        new TweakDef
-        {
-            Id = "proxy-disable-ipv6-transition",
-            Label = "Disable IPv6 Transition Technologies",
-            Category = "Network",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Disables Teredo, ISATAP, and 6to4 IPv6 tunneling protocols. Reduces attack surface and fixes VPN leaks.",
-            Tags = ["proxy", "network", "ipv6", "tunnel", "security"],
-            RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Services\Tcpip6\Parameters"],
-            ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\Tcpip6\Parameters", "DisabledComponents", 255)],
-            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SYSTEM\CurrentControlSet\Services\Tcpip6\Parameters", "DisabledComponents")],
-            DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\Tcpip6\Parameters", "DisabledComponents", 255)],
-        },
-        new TweakDef
-        {
-            Id = "proxy-disable-smart-multi-homed",
-            Label = "Disable Smart Multi-Homed Name Resolution",
-            Category = "Network",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables DNS queries across all network adapters simultaneously. Prevents DNS leak over VPN connections.",
-            Tags = ["proxy", "vpn", "dns", "leak", "privacy", "security"],
-            RegistryKeys = [$@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows NT\DNSClient"],
-            ApplyOps = [RegOp.SetDword($@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows NT\DNSClient", "DisableSmartNameResolution", 1)],
-            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows NT\DNSClient", "DisableSmartNameResolution")],
-            DetectOps = [RegOp.CheckDword($@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows NT\DNSClient", "DisableSmartNameResolution", 1)],
-        },
-        new TweakDef
-        {
-            Id = "proxy-disable-llmnr",
-            Label = "Disable LLMNR (Link-Local Multicast)",
-            Category = "Network",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables Link-Local Multicast Name Resolution. Mitigates LLMNR poisoning attacks on local networks.",
-            Tags = ["proxy", "network", "llmnr", "security", "poisoning"],
-            RegistryKeys = [$@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows NT\DNSClient"],
-            ApplyOps = [RegOp.SetDword($@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows NT\DNSClient", "EnableMulticast", 0)],
-            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows NT\DNSClient", "EnableMulticast")],
-            DetectOps = [RegOp.CheckDword($@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows NT\DNSClient", "EnableMulticast", 0)],
-        },
-        new TweakDef
-        {
-            Id = "proxy-disable-netbios-over-tcpip",
-            Label = "Disable NetBIOS over TCP/IP",
-            Category = "Network",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Disables NetBIOS over TCP/IP globally. Reduces attack surface and prevents NetBIOS name resolution over VPN.",
-            Tags = ["proxy", "network", "netbios", "security", "vpn"],
-            RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Services\NetBT\Parameters"],
-            ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\NetBT\Parameters", "NodeType", 2)],
-            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SYSTEM\CurrentControlSet\Services\NetBT\Parameters", "NodeType")],
-            DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\NetBT\Parameters", "NodeType", 2)],
-        },
-        new TweakDef
-        {
             Id = "proxy-set-winhttp-timeout",
             Label = "Set WinHTTP Connection Timeout (30s)",
             Category = "Network",
@@ -2336,35 +1750,6 @@ internal static class ProxyVpn
             ApplyOps = [RegOp.SetDword($@"{LmKey}\SOFTWARE\Microsoft\Windows\CurrentVersion\Internet Settings\WinHttp", "ConnectTimeout", 30000)],
             RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SOFTWARE\Microsoft\Windows\CurrentVersion\Internet Settings\WinHttp", "ConnectTimeout")],
             DetectOps = [RegOp.CheckDword($@"{LmKey}\SOFTWARE\Microsoft\Windows\CurrentVersion\Internet Settings\WinHttp", "ConnectTimeout", 30000)],
-        },
-        new TweakDef
-        {
-            Id = "proxy-disable-insecure-fallback",
-            Label = "Disable Insecure TLS Fallback",
-            Category = "Network",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables fallback to insecure SSL 2.0/3.0 and TLS 1.0/1.1 protocols. Forces modern TLS 1.2+.",
-            Tags = ["proxy", "security", "tls", "ssl", "encryption"],
-            RegistryKeys =
-            [
-                $@"{LmKey}\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\SSL 2.0\Client",
-                $@"{LmKey}\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\SSL 3.0\Client",
-            ],
-            ApplyOps =
-            [
-                RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\SSL 2.0\Client", "Enabled", 0),
-                RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\SSL 3.0\Client", "Enabled", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue($@"{LmKey}\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\SSL 2.0\Client", "Enabled"),
-                RegOp.DeleteValue($@"{LmKey}\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\SSL 3.0\Client", "Enabled"),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\SSL 2.0\Client", "Enabled", 0),
-            ],
         },
         new TweakDef
         {
@@ -2382,35 +1767,6 @@ internal static class ProxyVpn
         },
         new TweakDef
         {
-            Id = "proxy-enable-dns-over-https",
-            Label = "Enable DNS over HTTPS (System)",
-            Category = "Network",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            MinBuild = 22000,
-            Description = "Enables DNS over HTTPS (DoH) at the system level for encrypted DNS resolution.",
-            Tags = ["proxy", "dns", "doh", "encryption", "privacy", "security"],
-            RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters"],
-            ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters", "EnableAutoDoh", 2)],
-            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters", "EnableAutoDoh")],
-            DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters", "EnableAutoDoh", 2)],
-        },
-        new TweakDef
-        {
-            Id = "proxy-disable-wifi-sense",
-            Label = "Disable Wi-Fi Sense (Auto-Connect)",
-            Category = "Network",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables Wi-Fi Sense which automatically connects to open hotspots and shared networks.",
-            Tags = ["proxy", "wifi", "network", "security", "privacy"],
-            RegistryKeys = [$@"{LmKey}\SOFTWARE\Microsoft\WcmSvc\wifinetworkmanager\config"],
-            ApplyOps = [RegOp.SetDword($@"{LmKey}\SOFTWARE\Microsoft\WcmSvc\wifinetworkmanager\config", "AutoConnectAllowedOEM", 0)],
-            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SOFTWARE\Microsoft\WcmSvc\wifinetworkmanager\config", "AutoConnectAllowedOEM")],
-            DetectOps = [RegOp.CheckDword($@"{LmKey}\SOFTWARE\Microsoft\WcmSvc\wifinetworkmanager\config", "AutoConnectAllowedOEM", 0)],
-        },
-        new TweakDef
-        {
             Id = "proxy-disable-hotspot-2",
             Label = "Disable Hotspot 2.0 / Passpoint",
             Category = "Network",
@@ -2422,63 +1778,6 @@ internal static class ProxyVpn
             ApplyOps = [RegOp.SetDword($@"{LmKey}\SOFTWARE\Microsoft\WlanSvc\AnqpCache", "OsuRegistrationStatus", 0)],
             RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SOFTWARE\Microsoft\WlanSvc\AnqpCache", "OsuRegistrationStatus")],
             DetectOps = [RegOp.CheckDword($@"{LmKey}\SOFTWARE\Microsoft\WlanSvc\AnqpCache", "OsuRegistrationStatus", 0)],
-        },
-        new TweakDef
-        {
-            Id = "proxy-disable-wpad",
-            Label = "Disable WPAD Protocol",
-            Category = "Network",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Disables Web Proxy Auto-Discovery (WPAD) to prevent automatic proxy detection attacks.",
-            Tags = ["proxy", "wpad", "security", "network"],
-            RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Services\WinHttpAutoProxySvc"],
-            ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\WinHttpAutoProxySvc", "Start", 4)],
-            RemoveOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\WinHttpAutoProxySvc", "Start", 3)],
-            DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\WinHttpAutoProxySvc", "Start", 4)],
-        },
-        new TweakDef
-        {
-            Id = "proxy-enforce-tls12-minimum",
-            Label = "Enforce TLS 1.2 as Minimum",
-            Category = "Network",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables TLS 1.0 and 1.1, requiring TLS 1.2 or higher for all HTTPS connections.",
-            Tags = ["proxy", "tls", "security", "encryption", "https"],
-            RegistryKeys =
-            [
-                $@"{LmKey}\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.0\Client",
-                $@"{LmKey}\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.1\Client",
-            ],
-            ApplyOps =
-            [
-                RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.0\Client", "Enabled", 0),
-                RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.1\Client", "Enabled", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue($@"{LmKey}\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.0\Client", "Enabled"),
-                RegOp.DeleteValue($@"{LmKey}\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.1\Client", "Enabled"),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.0\Client", "Enabled", 0),
-            ],
-        },
-        new TweakDef
-        {
-            Id = "proxy-disable-multicast-dns",
-            Label = "Disable Multicast DNS (mDNS)",
-            Category = "Network",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables mDNS to prevent local network service discovery and reduce attack surface.",
-            Tags = ["proxy", "mdns", "network", "security", "dns"],
-            RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters"],
-            ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters", "EnableMDNS", 0)],
-            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters", "EnableMDNS")],
-            DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters", "EnableMDNS", 0)],
         },
         new TweakDef
         {
@@ -2555,48 +1854,6 @@ internal static class ProxyVpn
         },
         new TweakDef
         {
-            Id = "proxy-disable-ipv6-teredo",
-            Label = "Disable IPv6 Teredo Tunneling",
-            Category = "Network",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables the Teredo IPv4-to-IPv6 tunneling mechanism. Prevents unwanted inbound IPv6 connections.",
-            Tags = ["proxy", "ipv6", "teredo", "network", "security"],
-            RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Services\Tcpip6\Parameters"],
-            ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\Tcpip6\Parameters", "DisabledComponents", 0x8E)],
-            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SYSTEM\CurrentControlSet\Services\Tcpip6\Parameters", "DisabledComponents")],
-            DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\Tcpip6\Parameters", "DisabledComponents", 0x8E)],
-        },
-        new TweakDef
-        {
-            Id = "proxy-disable-connection-auto-tuning",
-            Label = "Disable HTTP Auto-Proxy Auto-Configuration",
-            Category = "Network",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Disables automatic proxy configuration (PAC) for HKCU WinINet, preventing accidental proxy configuration changes.",
-            Tags = ["proxy", "wininet", "http", "network"],
-            RegistryKeys = [$@"{CuKey}\Software\Microsoft\Windows\CurrentVersion\Internet Settings"],
-            ApplyOps = [RegOp.SetDword($@"{CuKey}\Software\Microsoft\Windows\CurrentVersion\Internet Settings", "AutoDetect", 0)],
-            RemoveOps = [RegOp.SetDword($@"{CuKey}\Software\Microsoft\Windows\CurrentVersion\Internet Settings", "AutoDetect", 1)],
-            DetectOps = [RegOp.CheckDword($@"{CuKey}\Software\Microsoft\Windows\CurrentVersion\Internet Settings", "AutoDetect", 0)],
-        },
-        new TweakDef
-        {
-            Id = "proxy-disable-6to4-tunneling",
-            Label = "Disable IPv6 6to4 Tunneling",
-            Category = "Network",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables the 6to4 automatic tunneling adapter which bypasses network filtering and may expose internal resources.",
-            Tags = ["proxy", "ipv6", "6to4", "tunnel", "network"],
-            RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Services\6to4"],
-            ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\6to4", "Start", 4)],
-            RemoveOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\6to4", "Start", 3)],
-            DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\6to4", "Start", 4)],
-        },
-        new TweakDef
-        {
             Id = "proxy-disable-ip-tunnel-adapter",
             Label = "Disable IP-HTTPS Tunneling Adapter",
             Category = "Network",
@@ -2608,50 +1865,6 @@ internal static class ProxyVpn
             ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\IpHttps", "Start", 4)],
             RemoveOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\IpHttps", "Start", 3)],
             DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\IpHttps", "Start", 4)],
-        },
-        new TweakDef
-        {
-            Id = "proxy-disable-network-connectivity-test",
-            Label = "Disable Network Connectivity Status Indicator (NCSI)",
-            Category = "Network",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description =
-                "Disables the NCSI probe that sends HTTP requests to microsoft.com to detect internet connectivity. Reduces background telemetry.",
-            Tags = ["proxy", "ncsi", "network", "telemetry", "privacy"],
-            RegistryKeys = [$@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows\NetworkConnectivityStatusIndicator"],
-            ApplyOps = [RegOp.SetDword($@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows\NetworkConnectivityStatusIndicator", "NoActiveProbe", 1)],
-            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows\NetworkConnectivityStatusIndicator", "NoActiveProbe")],
-            DetectOps = [RegOp.CheckDword($@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows\NetworkConnectivityStatusIndicator", "NoActiveProbe", 1)],
-        },
-        new TweakDef
-        {
-            Id = "proxy-disable-tcp-timestamps",
-            Label = "Disable TCP Timestamps",
-            Category = "Network",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables TCP timestamp option (RFC 1323). Prevents system uptime fingerprinting via network scanners.",
-            Tags = ["proxy", "tcp", "timestamps", "security", "network"],
-            RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters"],
-            ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters", "Tcp1323Opts", 0)],
-            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters", "Tcp1323Opts")],
-            DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters", "Tcp1323Opts", 0)],
-        },
-        new TweakDef
-        {
-            Id = "proxy-set-max-conn-per-server",
-            Label = "Increase Max Connections Per Server (WinINet)",
-            Category = "Network",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Increases MaxConnectionsPerServer to 128 in the HKLM WinINet settings. Allows services using WinINet to open more simultaneous connections to the same origin.",
-            Tags = ["proxy", "wininet", "connections", "performance"],
-            RegistryKeys = [$@"{LmKey}\Software\Microsoft\Windows\CurrentVersion\Internet Settings"],
-            ApplyOps = [RegOp.SetDword($@"{LmKey}\Software\Microsoft\Windows\CurrentVersion\Internet Settings", "MaxConnectionsPerServer", 128)],
-            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\Software\Microsoft\Windows\CurrentVersion\Internet Settings", "MaxConnectionsPerServer")],
-            DetectOps = [RegOp.CheckDword($@"{LmKey}\Software\Microsoft\Windows\CurrentVersion\Internet Settings", "MaxConnectionsPerServer", 128)],
         },
         new TweakDef
         {

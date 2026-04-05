@@ -31,34 +31,6 @@ internal static class RemoteDesktop
         },
         new TweakDef
         {
-            Id = "rdp-disable-remote-assistance",
-            Label = "Disable Remote Assistance",
-            Category = "Remote Desktop",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Disable offering and requesting Remote Assistance. Default: enabled. Recommended: disabled if unused.",
-            Tags = ["remote", "assistance", "help", "security"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Remote Assistance"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Remote Assistance", "fAllowToGetHelp", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Remote Assistance", "fAllowToGetHelp", 1)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Remote Assistance", "fAllowToGetHelp", 0)],
-        },
-        new TweakDef
-        {
-            Id = "rdp-disable-shadow",
-            Label = "Disable RDP Session Shadowing",
-            Category = "Remote Desktop",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Disables remote session shadowing/observation via RDP. Default: Allowed. Recommended: Disabled for privacy.",
-            Tags = ["rdp", "shadow", "observation", "security"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services", "Shadow", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services", "Shadow", 1)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services", "Shadow", 0)],
-        },
-        new TweakDef
-        {
             Id = "rdp-disable-wallpaper",
             Label = "Disable Desktop Wallpaper in RDP Sessions",
             Category = "Remote Desktop",
@@ -86,21 +58,6 @@ internal static class RemoteDesktop
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services", "AllowFontAntiAlias", 1)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services", "AllowFontAntiAlias")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services", "AllowFontAntiAlias", 1)],
-        },
-        new TweakDef
-        {
-            Id = "rdp-disable-audio-record",
-            Label = "Disable Audio Recording Redirection in RDP",
-            Category = "Remote Desktop",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Disables audio capture/microphone redirection from the client to the RDP session. Reduces attack surface and bandwidth. Default: Enabled. Recommended: Disabled.",
-            Tags = ["rdp", "audio", "microphone", "record", "security"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services", "fDisableCcm", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services", "fDisableCcm")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services", "fDisableCcm", 1)],
         },
         new TweakDef
         {
@@ -140,49 +97,6 @@ internal static class RemoteDesktop
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Terminal Server", "fSingleSessionPerUser", 1)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Terminal Server", "fSingleSessionPerUser")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Terminal Server", "fSingleSessionPerUser", 1)],
-        },
-        new TweakDef
-        {
-            Id = "rdp-set-max-idle-time-15min",
-            Label = "Set RDP Max Idle Time to 15 Minutes",
-            Category = "Remote Desktop",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disconnects idle RDP sessions after 15 minutes (900000 ms). Frees resources and improves security. Default: no limit.",
-            Tags = ["rdp", "idle", "timeout", "session"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services", "MaxIdleTime", 900000)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services", "MaxIdleTime")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services", "MaxIdleTime", 900000)],
-        },
-        new TweakDef
-        {
-            Id = "rdp-disable-drive-redirection",
-            Label = "Disable RDP Drive Redirection",
-            Category = "Remote Desktop",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables mapping local drives in RDP sessions. Prevents file access from remote to local. Default: enabled.",
-            Tags = ["rdp", "drive", "redirection", "security"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services", "fDisableCdm", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services", "fDisableCdm")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services", "fDisableCdm", 1)],
-        },
-        new TweakDef
-        {
-            Id = "rdp-set-encryption-high",
-            Label = "Set RDP Encryption Level to High",
-            Category = "Remote Desktop",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets RDP encryption to High (128-bit). Ensures maximum encryption for client-server communication. Default: client-compatible.",
-            Tags = ["rdp", "encryption", "security", "high"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services", "MinEncryptionLevel", 3)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services", "MinEncryptionLevel")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services", "MinEncryptionLevel", 3)],
         },
         new TweakDef
         {
@@ -239,29 +153,6 @@ internal static class RemoteDesktop
         },
         new TweakDef
         {
-            Id = "rdp-enable-keepalive",
-            Label = "Enable RDP Keep-Alive (1 min)",
-            Category = "Remote Desktop",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Enables RDP keep-alive packets every 60 seconds. Prevents idle sessions from being disconnected by firewalls or proxies. Default: off.",
-            Tags = ["rdp", "keepalive", "timeout", "connection"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services", "KeepAliveEnable", 1),
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services", "KeepAliveInterval", 1),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services", "KeepAliveEnable"),
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services", "KeepAliveInterval"),
-            ],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services", "KeepAliveEnable", 1)],
-        },
-        new TweakDef
-        {
             Id = "rdp-security-layer-ssl",
             Label = "Set RDP Security Layer to SSL/TLS",
             Category = "Remote Desktop",
@@ -281,27 +172,6 @@ internal static class RemoteDesktop
             DetectOps =
             [
                 RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp", "SecurityLayer", 2),
-            ],
-        },
-        new TweakDef
-        {
-            Id = "rdp-session-timeout-30m",
-            Label = "Set RDP Session Timeout to 30 Minutes",
-            Category = "Remote Desktop",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets the RDP disconnected session timeout to 30 minutes (1800000ms). Logs off disconnected sessions after 30 minutes. Default: no timeout.",
-            Tags = ["rdp", "session", "timeout", "disconnect"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services", "MaxDisconnectionTime", 1800000),
-            ],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services", "MaxDisconnectionTime")],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services", "MaxDisconnectionTime", 1800000),
             ],
         },
         new TweakDef
@@ -336,21 +206,6 @@ internal static class RemoteDesktop
         },
         new TweakDef
         {
-            Id = "rdp-set-remote-assistance-off",
-            Label = "Disable Windows Remote Assistance (Legacy)",
-            Category = "Remote Desktop",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Disables the legacy Windows Remote Assistance feature (msra.exe) via policy, which is separate from the modern Quick Assist. Remote Assistance is rarely needed and can be exploited.",
-            Tags = ["rdp", "remote-assistance", "legacy", "security", "msra"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Remote Assistance"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Remote Assistance", "fAllowFullControl", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Remote Assistance", "fAllowFullControl")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Remote Assistance", "fAllowFullControl", 0)],
-        },
-        new TweakDef
-        {
             Id = "rdp-set-audio-play-on-server",
             Label = "Set RDP Audio Playback to Remote Server",
             Category = "Remote Desktop",
@@ -378,42 +233,6 @@ internal static class RemoteDesktop
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services", "MaxMonitors")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services", "MaxMonitors", 1)],
         },
-        new TweakDef
-        {
-            Id = "rdp-set-connection-timeout-8h",
-            Label = "Set Maximum RDP Session Duration to 8 Hours",
-            Category = "Remote Desktop",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Limits active RDP sessions to 8 hours (28800000ms) to enforce session rotation and prevent forgotten sessions from consuming server resources indefinitely.",
-            Tags = ["rdp", "session", "timeout", "duration", "limit"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services", "MaxConnectionTime", 28800000),
-            ],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services", "MaxConnectionTime")],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services", "MaxConnectionTime", 28800000),
-            ],
-        },
-        new TweakDef
-        {
-            Id = "rdp-disable-lpt-port-redirect",
-            Label = "Disable RDP LPT Port Redirection",
-            Category = "Remote Desktop",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Prevents parallel (LPT) printer ports from being redirected to Remote Desktop sessions, commonly used by legacy printers and industrial equipment.",
-            Tags = ["rdp", "lpt", "parallel", "printer", "redirect", "security"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services", "fDisableLPT", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services", "fDisableLPT")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services", "fDisableLPT", 1)],
-        },
     ];
 }
 
@@ -429,159 +248,6 @@ internal static class RemoteManagement
 
     internal static IReadOnlyList<TweakDef> Tweaks { get; } =
     [
-        new TweakDef
-        {
-            Id = "rmt-disable-winrm-service",
-            Label = "Disable WinRM Service",
-            Category = "Remote Desktop",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets the WinRM (Windows Remote Management) service start type to Disabled. "
-                + "Prevents PowerShell Remoting and remote WMI sessions when no remote management is needed. "
-                + "Default: Manual. Recommended: Disabled on workstations not managed via WinRM.",
-            Tags = ["winrm", "remote", "powershell", "security", "hardening"],
-            RegistryKeys = [WinRmSvc],
-            ApplyOps = [RegOp.SetDword(WinRmSvc, "Start", 4)],
-            RemoveOps = [RegOp.SetDword(WinRmSvc, "Start", 3)],
-            DetectOps = [RegOp.CheckDword(WinRmSvc, "Start", 4)],
-        },
-        new TweakDef
-        {
-            Id = "rmt-winrm-block-unencrypted-server",
-            Label = "Block Unencrypted WinRM Traffic (Server)",
-            Category = "Remote Desktop",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets policy AllowUnencryptedTraffic=0 for the WinRM service (server-side). "
-                + "Forces all incoming WinRM sessions to use HTTPS/encrypted transport. "
-                + "Prevents credential interception on WinRM connections. Default: allowed. Recommended: blocked.",
-            Tags = ["winrm", "encryption", "security", "policy", "hardening"],
-            RegistryKeys = [WinRmSvcPol],
-            ApplyOps = [RegOp.SetDword(WinRmSvcPol, "AllowUnencryptedTraffic", 0)],
-            RemoveOps = [RegOp.DeleteValue(WinRmSvcPol, "AllowUnencryptedTraffic")],
-            DetectOps = [RegOp.CheckDword(WinRmSvcPol, "AllowUnencryptedTraffic", 0)],
-        },
-        new TweakDef
-        {
-            Id = "rmt-winrm-block-basic-auth-server",
-            Label = "Block Basic Authentication in WinRM Server",
-            Category = "Remote Desktop",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets policy AllowBasic=0 for the WinRM service. Prevents clients from authenticating using "
-                + "Basic HTTP authentication (plaintext Base64 credentials). Kerberos/Negotiate remain available. "
-                + "Default: allowed. Recommended: blocked.",
-            Tags = ["winrm", "authentication", "security", "policy", "hardening"],
-            RegistryKeys = [WinRmSvcPol],
-            ApplyOps = [RegOp.SetDword(WinRmSvcPol, "AllowBasic", 0)],
-            RemoveOps = [RegOp.DeleteValue(WinRmSvcPol, "AllowBasic")],
-            DetectOps = [RegOp.CheckDword(WinRmSvcPol, "AllowBasic", 0)],
-        },
-        new TweakDef
-        {
-            Id = "rmt-winrm-block-unencrypted-client",
-            Label = "Block Unencrypted WinRM Traffic (Client)",
-            Category = "Remote Desktop",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets policy AllowUnencryptedTraffic=0 for the WinRM client. "
-                + "Prevents this machine from initiating unencrypted WinRM sessions to remote hosts. "
-                + "Default: allowed. Recommended: blocked.",
-            Tags = ["winrm", "encryption", "security", "policy", "client"],
-            RegistryKeys = [WinRmCliPol],
-            ApplyOps = [RegOp.SetDword(WinRmCliPol, "AllowUnencryptedTraffic", 0)],
-            RemoveOps = [RegOp.DeleteValue(WinRmCliPol, "AllowUnencryptedTraffic")],
-            DetectOps = [RegOp.CheckDword(WinRmCliPol, "AllowUnencryptedTraffic", 0)],
-        },
-        new TweakDef
-        {
-            Id = "rmt-winrm-block-basic-auth-client",
-            Label = "Block Basic Authentication in WinRM Client",
-            Category = "Remote Desktop",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets policy AllowBasic=0 for the WinRM client. Prevents using Basic authentication "
-                + "when connecting to WinRM servers. Closes NTLM relay paths via Basic credentials. "
-                + "Default: allowed. Recommended: blocked.",
-            Tags = ["winrm", "authentication", "security", "policy", "client"],
-            RegistryKeys = [WinRmCliPol],
-            ApplyOps = [RegOp.SetDword(WinRmCliPol, "AllowBasic", 0)],
-            RemoveOps = [RegOp.DeleteValue(WinRmCliPol, "AllowBasic")],
-            DetectOps = [RegOp.CheckDword(WinRmCliPol, "AllowBasic", 0)],
-        },
-        new TweakDef
-        {
-            Id = "rmt-winrm-block-digest-auth",
-            Label = "Block Digest Authentication in WinRM Client",
-            Category = "Remote Desktop",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets policy AllowDigest=0 for the WinRM client. Digest authentication uses MD5 hashing "
-                + "and is considered weak. Blocking it forces Kerberos/Negotiate. "
-                + "Default: allowed. Recommended: blocked.",
-            Tags = ["winrm", "authentication", "digest", "security", "policy"],
-            RegistryKeys = [WinRmCliPol],
-            ApplyOps = [RegOp.SetDword(WinRmCliPol, "AllowDigest", 0)],
-            RemoveOps = [RegOp.DeleteValue(WinRmCliPol, "AllowDigest")],
-            DetectOps = [RegOp.CheckDword(WinRmCliPol, "AllowDigest", 0)],
-        },
-        new TweakDef
-        {
-            Id = "rmt-winrm-block-credssp",
-            Label = "Block CredSSP in WinRM Client",
-            Category = "Remote Desktop",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets policy AllowCredSSP=0 for the WinRM client. CredSSP delegates credentials to the "
-                + "remote host, creating credential theft risk on compromised endpoints. "
-                + "Default: allowed. Recommended: blocked unless explicitly needed.",
-            Tags = ["winrm", "credssp", "credential", "security", "policy"],
-            RegistryKeys = [WinRmCliPol],
-            ApplyOps = [RegOp.SetDword(WinRmCliPol, "AllowCredSSP", 0)],
-            RemoveOps = [RegOp.DeleteValue(WinRmCliPol, "AllowCredSSP")],
-            DetectOps = [RegOp.CheckDword(WinRmCliPol, "AllowCredSSP", 0)],
-        },
-        new TweakDef
-        {
-            Id = "rmt-restrict-rpc-clients",
-            Label = "Restrict Unauthenticated RPC Clients",
-            Category = "Remote Desktop",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets RPC policy RestrictRemoteClients=1 to block unauthenticated remote RPC connections. "
-                + "Authenticated connections and loopback are still permitted. "
-                + "Default: 0 (no restriction). Recommended: 1 on servers/workstations.",
-            Tags = ["rpc", "remote", "authentication", "security", "policy"],
-            RegistryKeys = [RpcPol],
-            ApplyOps = [RegOp.SetDword(RpcPol, "RestrictRemoteClients", 1)],
-            RemoveOps = [RegOp.DeleteValue(RpcPol, "RestrictRemoteClients")],
-            DetectOps = [RegOp.CheckDword(RpcPol, "RestrictRemoteClients", 1)],
-        },
-        new TweakDef
-        {
-            Id = "rmt-require-rpc-auth-ep",
-            Label = "Require Authentication for RPC Endpoint Resolution",
-            Category = "Remote Desktop",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets RPC policy EnableAuthEpResolution=1. The RPC endpoint mapper requires "
-                + "clients to authenticate when resolving remote endpoints. "
-                + "Prevents unauthenticated enumeration of RPC services. Default: 0.",
-            Tags = ["rpc", "endpoint", "authentication", "security", "policy"],
-            RegistryKeys = [RpcPol],
-            ApplyOps = [RegOp.SetDword(RpcPol, "EnableAuthEpResolution", 1)],
-            RemoveOps = [RegOp.DeleteValue(RpcPol, "EnableAuthEpResolution")],
-            DetectOps = [RegOp.CheckDword(RpcPol, "EnableAuthEpResolution", 1)],
-        },
         new TweakDef
         {
             Id = "rmt-winrm-limit-shell-memory",
@@ -730,21 +396,6 @@ internal static class RealVnc
         },
         new TweakDef
         {
-            Id = "vnc-session-timeout",
-            Label = "VNC: Set Idle Session Timeout (30 min)",
-            Category = "Remote Desktop",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description =
-                "Sets VNC idle session timeout to 30 minutes (1800 seconds). Automatically disconnects idle VNC sessions for security. Default: no timeout. Recommended: 1800.",
-            Tags = ["vnc", "timeout", "idle", "security"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\RealVNC\vncserver"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\RealVNC\vncserver", "IdleTimeout", 1800)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\RealVNC\vncserver", "IdleTimeout")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\RealVNC\vncserver", "IdleTimeout", 1800)],
-        },
-        new TweakDef
-        {
             Id = "vnc-disable-clipboard",
             Label = "VNC: Disable Clipboard Sharing (DWord)",
             Category = "Remote Desktop",
@@ -866,20 +517,6 @@ internal static class RealVnc
         },
         new TweakDef
         {
-            Id = "vnc-set-idle-timeout-300",
-            Label = "Set VNC Idle Timeout to 5 Minutes",
-            Category = "Remote Desktop",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disconnects VNC sessions after 5 minutes of inactivity. Default: no timeout.",
-            Tags = ["vnc", "idle", "timeout", "security"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\RealVNC\vncserver"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\RealVNC\vncserver", "IdleTimeout", 300)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\RealVNC\vncserver", "IdleTimeout")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\RealVNC\vncserver", "IdleTimeout", 300)],
-        },
-        new TweakDef
-        {
             Id = "vnc-hide-tray",
             Label = "Hide VNC Server Tray Icon",
             Category = "Remote Desktop",
@@ -960,40 +597,6 @@ internal static class PolicyRemoteAccess
             [
                 new TweakDef
                 {
-                    Id = "cliprdp-disable-clipboard-redirection",
-                    Label = "Disable Clipboard Redirection in RDP Sessions",
-                    Category = "Remote Desktop",
-                    Description =
-                        "Sets fDisableClip=1 to prevent clipboard contents from being shared between the RDP client and the remote session, blocking data exfiltration via clipboard.",
-                    Tags = ["rdp", "clipboard", "redirection", "hardening", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 5,
-                    SafetyRating = 5,
-                    ImpactNote = "Clipboard copy-paste between local and remote session is blocked. Copy-paste within the session still works.",
-                    ApplyOps = [RegOp.SetDword(Key, "fDisableClip", 1)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "fDisableClip")],
-                    DetectOps = [RegOp.CheckDword(Key, "fDisableClip", 1)],
-                },
-                new TweakDef
-                {
-                    Id = "cliprdp-disable-drive-redirection",
-                    Label = "Disable Drive Redirection in RDP Sessions",
-                    Category = "Remote Desktop",
-                    Description =
-                        "Sets fDisableCdm=1 to prevent local drives from being mapped into the remote session, blocking file transfer via mapped drives.",
-                    Tags = ["rdp", "drive", "redirection", "hardening", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 4,
-                    SafetyRating = 5,
-                    ImpactNote = "Local drives are not accessible inside RDP sessions; file sharing via drive mapping is blocked.",
-                    ApplyOps = [RegOp.SetDword(Key, "fDisableCdm", 1)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "fDisableCdm")],
-                    DetectOps = [RegOp.CheckDword(Key, "fDisableCdm", 1)],
-                },
-                new TweakDef
-                {
                     Id = "cliprdp-disable-printer-redirection",
                     Label = "Disable Printer Redirection in RDP Sessions",
                     Category = "Remote Desktop",
@@ -1060,23 +663,6 @@ internal static class PolicyRemoteAccess
                 },
                 new TweakDef
                 {
-                    Id = "cliprdp-disable-audio-recording-redirection",
-                    Label = "Disable Audio Recording Redirection in RDP",
-                    Category = "Remote Desktop",
-                    Description =
-                        "Sets fDisableAudioCapture=1 to prevent the remote session from recording audio through the local client's microphone.",
-                    Tags = ["rdp", "audio", "microphone", "redirection", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 3,
-                    SafetyRating = 5,
-                    ImpactNote = "Remote session cannot access local microphone; audio recording in session is disabled.",
-                    ApplyOps = [RegOp.SetDword(Key, "fDisableAudioCapture", 1)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "fDisableAudioCapture")],
-                    DetectOps = [RegOp.CheckDword(Key, "fDisableAudioCapture", 1)],
-                },
-                new TweakDef
-                {
                     Id = "cliprdp-disable-clipboard-file-copy",
                     Label = "Disable Clipboard File Copy from RDP Session",
                     Category = "Remote Desktop",
@@ -1107,23 +693,6 @@ internal static class PolicyRemoteAccess
                     ApplyOps = [RegOp.SetDword(Key, "fDisableUSBRedir", 1)],
                     RemoveOps = [RegOp.DeleteValue(Key, "fDisableUSBRedir")],
                     DetectOps = [RegOp.CheckDword(Key, "fDisableUSBRedir", 1)],
-                },
-                new TweakDef
-                {
-                    Id = "cliprdp-disable-pnp-redirection",
-                    Label = "Disable PnP Device Redirection in RDP Sessions",
-                    Category = "Remote Desktop",
-                    Description =
-                        "Disables Plug-and-Play device redirection so locally connected PnP devices (cameras, scanners, etc.) are not accessible from the remote session.",
-                    Tags = ["rdp", "pnp", "redirection", "hardening", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 3,
-                    SafetyRating = 5,
-                    ImpactNote = "PnP devices not forwarded into remote session; cameras and scanners inaccessible.",
-                    ApplyOps = [RegOp.SetDword(Key, "fDisablePNPRedir", 1)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "fDisablePNPRedir")],
-                    DetectOps = [RegOp.CheckDword(Key, "fDisablePNPRedir", 1)],
                 },
             ];
     }
@@ -1161,27 +730,6 @@ internal static class PolicyRemoteAccess
             },
             new TweakDef
             {
-                Id = "rdpclt-warn-on-auth-fail",
-                Label = "RDP Client: Warn When Server Authentication Fails",
-                Category = "Remote Desktop",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                MinBuild = 17763,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                RegistryKeys = [RdpClientPolicyKey],
-                Tags = ["rdp", "remote-desktop", "server-authentication", "certificate", "security", "mitm"],
-                Description =
-                    "Sets AuthenticationLevel=1 in Terminal Services\\Client policy. "
-                    + "Prompts the user with a warning before connecting when the server's identity "
-                    + "certificate cannot be verified. 0=always connect, 1=warn (default), 2=never connect "
-                    + "if auth fails. Setting 1 ensures users see MITM warnings instead of connecting silently.",
-                ApplyOps = [RegOp.SetDword(RdpClientPolicyKey, "AuthenticationLevel", 1)],
-                RemoveOps = [RegOp.DeleteValue(RdpClientPolicyKey, "AuthenticationLevel")],
-                DetectOps = [RegOp.CheckDword(RdpClientPolicyKey, "AuthenticationLevel", 1)],
-            },
-            new TweakDef
-            {
                 Id = "rdpclt-deny-on-auth-fail",
                 Label = "RDP Client: Block Connection When Server Authentication Fails",
                 Category = "Remote Desktop",
@@ -1203,69 +751,6 @@ internal static class PolicyRemoteAccess
             },
             new TweakDef
             {
-                Id = "rdpclt-disable-clipboard-redirection",
-                Label = "RDP Client: Disable Clipboard Redirection",
-                Category = "Remote Desktop",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                MinBuild = 17763,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                RegistryKeys = [RdpServerPolicy],
-                Tags = ["rdp", "remote-desktop", "clipboard", "data-exfiltration", "security", "dlp"],
-                Description =
-                    "Sets fDisableClip=1 in Terminal Services server policy. "
-                    + "Prevents clipboard content from being shared between the RDP client and the remote "
-                    + "server session. Blocks a common data-exfiltration vector where users copy sensitive "
-                    + "data between the corporate remote desktop and their local machine.",
-                ApplyOps = [RegOp.SetDword(RdpServerPolicy, "fDisableClip", 1)],
-                RemoveOps = [RegOp.DeleteValue(RdpServerPolicy, "fDisableClip")],
-                DetectOps = [RegOp.CheckDword(RdpServerPolicy, "fDisableClip", 1)],
-            },
-            new TweakDef
-            {
-                Id = "rdpclt-disable-drive-redirection",
-                Label = "RDP Client: Disable Local Drive Redirection",
-                Category = "Remote Desktop",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                MinBuild = 17763,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                RegistryKeys = [RdpServerPolicy],
-                Tags = ["rdp", "remote-desktop", "drive-redirection", "data-exfiltration", "security", "dlp"],
-                Description =
-                    "Sets fDisableCdm=1 in Terminal Services server policy. "
-                    + "Blocks access to local client drives (C:, D:, USB, etc.) from within the RDP "
-                    + "session. Prevents data exfiltration via drag-and-drop or file copy between the "
-                    + "remote session and local storage.",
-                ApplyOps = [RegOp.SetDword(RdpServerPolicy, "fDisableCdm", 1)],
-                RemoveOps = [RegOp.DeleteValue(RdpServerPolicy, "fDisableCdm")],
-                DetectOps = [RegOp.CheckDword(RdpServerPolicy, "fDisableCdm", 1)],
-            },
-            new TweakDef
-            {
-                Id = "rdpclt-disable-printer-redirection",
-                Label = "RDP Client: Disable Printer Redirection",
-                Category = "Remote Desktop",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                MinBuild = 17763,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                RegistryKeys = [RdpServerPolicy],
-                Tags = ["rdp", "remote-desktop", "printer", "redirection", "security"],
-                Description =
-                    "Sets fDisableCpm=1 in Terminal Services server policy. "
-                    + "Blocks local printers from being redirected into the RDP session. "
-                    + "Reduces the attack surface by preventing spooler access from the remote session "
-                    + "and blocking potential PrintNightmare-style printer driver exploitation via RDP.",
-                ApplyOps = [RegOp.SetDword(RdpServerPolicy, "fDisableCpm", 1)],
-                RemoveOps = [RegOp.DeleteValue(RdpServerPolicy, "fDisableCpm")],
-                DetectOps = [RegOp.CheckDword(RdpServerPolicy, "fDisableCpm", 1)],
-            },
-            new TweakDef
-            {
                 Id = "rdpclt-force-encryption-high",
                 Label = "RDP Client: Enforce High (128-Bit) RDP Encryption",
                 Category = "Remote Desktop",
@@ -1284,27 +769,6 @@ internal static class PolicyRemoteAccess
                 ApplyOps = [RegOp.SetDword(RdpServerPolicy, "MinEncryptionLevel", 3)],
                 RemoveOps = [RegOp.DeleteValue(RdpServerPolicy, "MinEncryptionLevel")],
                 DetectOps = [RegOp.CheckDword(RdpServerPolicy, "MinEncryptionLevel", 3)],
-            },
-            new TweakDef
-            {
-                Id = "rdpclt-set-session-timeout-30min",
-                Label = "RDP Client: Disconnect Idle Sessions After 30 Minutes",
-                Category = "Remote Desktop",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                MinBuild = 17763,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                RegistryKeys = [RdpServerPolicy],
-                Tags = ["rdp", "remote-desktop", "idle-timeout", "security"],
-                Description =
-                    "Sets MaxIdleTime=1800000 (30 minutes in ms) in Terminal Services policy. "
-                    + "Automatically disconnects RDP sessions that have been idle for more than 30 minutes. "
-                    + "Reduces the risk of unattended remote sessions being hijacked and prevents license "
-                    + "consumption by orphaned sessions.",
-                ApplyOps = [RegOp.SetDword(RdpServerPolicy, "MaxIdleTime", 1800000)],
-                RemoveOps = [RegOp.DeleteValue(RdpServerPolicy, "MaxIdleTime")],
-                DetectOps = [RegOp.CheckDword(RdpServerPolicy, "MaxIdleTime", 1800000)],
             },
             new TweakDef
             {
@@ -1739,23 +1203,6 @@ internal static class PolicyRemoteAccess
             },
             new TweakDef
             {
-                Id = "rpcpol-disable-unauthenticated-rpc",
-                Label = "Restrict Unauthenticated RPC Calls",
-                Category = "Remote Desktop",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 3,
-                Description =
-                    "RPC servers can be configured to reject unauthenticated connections and require that callers provide authentication credentials before being served. Restricting unauthenticated RPC prevents unknown callers from invoking RPC services without establishing an authenticated identity. Unauthenticated RPC calls can be used for reconnaissance and exploitation of services that implement insufficient authorization. Authenticated RPC provides the identity context necessary for access logging and auditing of service invocations. Enterprise hardening requirements typically include restricting unauthenticated access to RPC services on managed endpoints. Restricting unauthenticated RPC may require testing as some legitimate services use unauthenticated RPC for specific operational purposes.",
-                Tags = ["rpc", "authentication", "security", "policy"],
-                RegistryKeys = [Key],
-                ApplyOps = [RegOp.SetDword(Key, "RestrictRemoteClients", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "RestrictRemoteClients")],
-                DetectOps = [RegOp.CheckDword(Key, "RestrictRemoteClients", 1)],
-            },
-            new TweakDef
-            {
                 Id = "rpcpol-enable-rpc-message-integrity",
                 Label = "Enable RPC Connection Message Integrity",
                 Category = "Remote Desktop",
@@ -2083,119 +1530,6 @@ internal static class PolicyRemoteAccess
             [
                 new TweakDef
                 {
-                    Id = "tssvcadv-require-network-level-authentication",
-                    Label = "TS Adv: Require Network Level Authentication for RDP Connections",
-                    Category = "Remote Desktop",
-                    Description =
-                        "Sets UserAuthentication=1 in Terminal Services policy. Requires Network Level Authentication (NLA) for all Remote Desktop connections to this computer. NLA forces the connecting client to authenticate using their domain credentials before the full Windows logon screen is presented — if NLA fails, no graphical session or memory buffering occurs. "
-                        + "Without NLA, Remote Desktop presents a full Windows logon screen to any network client that completes the TLS handshake. This graphical pre-authentication screen consumes significant server-side memory and CPU for rendering, is vulnerable to credential brute-force attacks against the visible login prompt, and is exploitable via session pre-authentication logic flaws (BlueKeep/DejaBlue were pre-NLA vulnerabilities). With NLA, unauthenticated clients never reach the graphical login stage — the server rejects unauthenticated connections at the NTLMSSP or Kerberos layer before any session rendering occurs.",
-                    Tags = ["ts-adv", "rdp", "nla", "network-level-authentication", "bluekeep", "security"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 5,
-                    SafetyRating = 4,
-                    ImpactNote =
-                        "NLA required for all RDP; unauthenticated clients rejected before graphical session. Requires NLA-capable clients (Windows Vista+, all modern RDP clients).",
-                    ApplyOps = [RegOp.SetDword(Key, "UserAuthentication", 1)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "UserAuthentication")],
-                    DetectOps = [RegOp.CheckDword(Key, "UserAuthentication", 1)],
-                },
-                new TweakDef
-                {
-                    Id = "tssvcadv-require-tls-security-layer",
-                    Label = "TS Adv: Enforce TLS Security Layer for RDP Session Encryption",
-                    Category = "Remote Desktop",
-                    Description =
-                        "Sets SecurityLayer=2 in Terminal Services policy. Forces RDP to use TLS 1.2+ for the transport security layer of all Remote Desktop connections, replacing the legacy RDP Security Layer (SecurityLayer=0) and Negotiate mode (SecurityLayer=1). TLS authentication requires the server to present a valid certificate, providing mutual authentication and preventing connection to a man-in-the-middle rogue RDP server. "
-                        + "The legacy RDP Security Layer uses RC4-128 encryption proprietary to the RDP protocol. It provides no server identity verification — a client connecting to a rogue RDP endpoint (via DNS poisoning or BGP hijack) has no mechanism to verify they are connected to the legitimate server. With SecurityLayer=2 (SSL/TLS), the server presents an X.509 certificate that the client validates against a trusted CA. An RDP certificate pinned to the domain CA ensures that a man-in-the-middle attack requires forging a domain-trusted certificate — a significantly harder attack than spoofing the legacy RDP protocol layer.",
-                    Tags = ["ts-adv", "rdp", "tls", "security-layer", "certificate", "mitm"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 5,
-                    SafetyRating = 4,
-                    ImpactNote =
-                        "TLS required for all RDP transport. Legacy RDP Security Layer disabled. Requires valid server certificate — auto-generated self-signed cert is accepted but domain cert preferred.",
-                    ApplyOps = [RegOp.SetDword(Key, "SecurityLayer", 2)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "SecurityLayer")],
-                    DetectOps = [RegOp.CheckDword(Key, "SecurityLayer", 2)],
-                },
-                new TweakDef
-                {
-                    Id = "tssvcadv-enforce-high-encryption",
-                    Label = "TS Adv: Enforce High (128-bit) RDP Session Encryption Minimum",
-                    Category = "Remote Desktop",
-                    Description =
-                        "Sets MinEncryptionLevel=3 in Terminal Services policy (3 = High — 128-bit minimum). Requires all Remote Desktop sessions to use 128-bit or higher AES encryption. Setting 1 (Low) allows 56-bit DES; setting 2 (Client compatible) negotiates down to whatever the client supports. Setting 3 (High) rejects any client that cannot negotiate at least 128-bit AES encryption. "
-                        + "Low or medium encryption settings allow legacy RDP clients to negotiate DES-56 or RC4-40 encryption — both of which are trivially breakable with modern hardware within hours. Any network capture of a DES-56 encrypted RDP session can be decrypted offline. All modern RDP clients (Windows Vista+, FreeRDP 2.0+, macOS Microsoft Remote Desktop 10+, iOS/Android Microsoft Remote Desktop 10+) support 128-bit AES. Enforcing MinEncryptionLevel=3 rejects only RDP 4.0-era legacy clients created before 2001.",
-                    Tags = ["ts-adv", "rdp", "encryption", "128-bit", "aes", "minimum-encryption"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 4,
-                    SafetyRating = 5,
-                    ImpactNote =
-                        "128-bit minimum encryption enforced. DES-56 and RC4-40 clients rejected. All clients from 2002 onward are unaffected.",
-                    ApplyOps = [RegOp.SetDword(Key, "MinEncryptionLevel", 3)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "MinEncryptionLevel")],
-                    DetectOps = [RegOp.CheckDword(Key, "MinEncryptionLevel", 3)],
-                },
-                new TweakDef
-                {
-                    Id = "tssvcadv-limit-max-idle-time",
-                    Label = "TS Adv: Enforce 30-Minute Maximum RDP Session Idle Timeout",
-                    Category = "Remote Desktop",
-                    Description =
-                        "Sets MaxIdleTime=1800000 in Terminal Services policy (milliseconds — 30 minutes). Disconnects idle RDP sessions after 30 minutes of inactivity. An idle session that remains connected indefinitely is a persistent attack surface: an attacker who gains network access can hijack an idle session without re-authenticating (using RDP session shadowing or session token replay if credentials are weak). Disconnecting idle sessions forces re-authentication and clears the session's memory state. "
-                        + "Session idle time limits are a defence-in-depth control against insider threat and unauthorised physical access scenarios. A developer who leaves an RDP session connected overnight to a production server creates an unmonitored privileged session on that server. If the developer's endpoint is compromised (via malware or physical access), the attacker can traverse the existing RDP session to reach the server without any new authentication event in the Security log. MaxIdleTime forces session termination, requiring fresh authentication and generating a new logon event.",
-                    Tags = ["ts-adv", "rdp", "idle-timeout", "session-management", "disconnect"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 3,
-                    SafetyRating = 5,
-                    ImpactNote = "Sessions disconnecting after 30 minutes idle. Users should save work before stepping away from long RDP sessions.",
-                    ApplyOps = [RegOp.SetDword(Key, "MaxIdleTime", 1800000)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "MaxIdleTime")],
-                    DetectOps = [RegOp.CheckDword(Key, "MaxIdleTime", 1800000)],
-                },
-                new TweakDef
-                {
-                    Id = "tssvcadv-limit-max-connection-time",
-                    Label = "TS Adv: Enforce 8-Hour Maximum RDP Active Session Duration",
-                    Category = "Remote Desktop",
-                    Description =
-                        "Sets MaxConnectionTime=28800000 in Terminal Services policy (milliseconds — 8 hours). Terminates active RDP sessions after 8 hours of continuous connection, requiring re-authentication. Without a maximum connection time, a session established on Monday morning could remain continuously active through the weekend. Long-lived sessions accumulate open handles, privileged process tokens, and memory that should be periodically refreshed. "
-                        + "Maximum connection time is distinct from idle timeout — an active session that the user is continuously using can still run indefinitely without this limit. On shared terminal servers (RDSH — Remote Desktop Session Host), long-lived sessions consume CALs (RDS Client Access Licences) and server resources. From a security perspective, a 72-hour active session may have been left running after the initiating user departed (e.g., automated script session that outlived human oversight), creating an orphaned privileged session that is no longer monitored.",
-                    Tags = ["ts-adv", "rdp", "max-session-time", "session-management", "rdsh"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 3,
-                    SafetyRating = 5,
-                    ImpactNote =
-                        "Active sessions disconnected after 8 hours. Users running long overnight jobs via RDP should use scheduled tasks instead.",
-                    ApplyOps = [RegOp.SetDword(Key, "MaxConnectionTime", 28800000)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "MaxConnectionTime")],
-                    DetectOps = [RegOp.CheckDword(Key, "MaxConnectionTime", 28800000)],
-                },
-                new TweakDef
-                {
-                    Id = "tssvcadv-limit-reconnection-time",
-                    Label = "TS Adv: Enforce 15-Minute Disconnected Session Reconnection Limit",
-                    Category = "Remote Desktop",
-                    Description =
-                        "Sets MaxDisconnectionTime=900000 in Terminal Services policy (milliseconds — 15 minutes). Terminates disconnected (not active) RDP sessions after 15 minutes. A disconnected session maintains the user's running processes, network connections, and open files on the RDS host, consuming server-side resources. More importantly, a disconnected session can be reconnected from any client with the corresponding user credentials — if a user's credentials are stolen, an attacker can reconnect to an existing privileged session in a disconnected state. "
-                        + "The distinction between disconnected and logged-off is critical: when a user closes the RDP window without logging off, the session becomes disconnected — processes continue running, network connections remain active, and the session is available for reconnection. From an attacker's perspective, a disconnected session can be reconnected via standard RDP credentials. Terminating disconnected sessions after 15 minutes ensures that sessions cannot be indefinitely parked in disconnected state waiting for credential theft.",
-                    Tags = ["ts-adv", "rdp", "disconnection-timeout", "session-management"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 3,
-                    SafetyRating = 5,
-                    ImpactNote =
-                        "Disconnected sessions terminated after 15 minutes. Users must save work before disconnecting rather than leaving sessions in background.",
-                    ApplyOps = [RegOp.SetDword(Key, "MaxDisconnectionTime", 900000)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "MaxDisconnectionTime")],
-                    DetectOps = [RegOp.CheckDword(Key, "MaxDisconnectionTime", 900000)],
-                },
-                new TweakDef
-                {
                     Id = "tssvcadv-disable-session-shadowing",
                     Label = "TS Adv: Disable RDP Session Shadowing to Prevent Covert Observation",
                     Category = "Remote Desktop",
@@ -2250,25 +1584,6 @@ internal static class PolicyRemoteAccess
                     RemoveOps = [RegOp.DeleteValue(Key, "KeepAliveEnable"), RegOp.DeleteValue(Key, "KeepAliveInterval")],
                     DetectOps = [RegOp.CheckDword(Key, "KeepAliveEnable", 1)],
                 },
-                new TweakDef
-                {
-                    Id = "tssvcadv-disable-clipboard-redirection",
-                    Label = "TS Adv: Disable RDP Clipboard Redirection to Prevent Data Exfiltration",
-                    Category = "Remote Desktop",
-                    Description =
-                        "Sets DisableClipboardRedirection=1 in Terminal Services policy. Disables the clipboard channel in RDP sessions, preventing clients from copying text or files from their local clipboard into the RDP session (or vice versa). Clipboard redirection is a primary data exfiltration vector: an attacker with a compromised client endpoint can paste data from a server-side RDP session directly to a local application, bypassing DLP controls that monitor local clipboard activity. "
-                        + "In high-security environments (PCI DSS, HIPAA, financial trading floors), users operating on sensitive servers via RDP must not be able to copy sensitive data from the server to their client workstation. Clipboard redirection creates a bidirectional unmonitored channel between the server (where sensitive data resides) and the client workstation (which may be less hardened and have internet access). Eliminating clipboard redirection forces users to use proper documented data transfer mechanisms (shared drives with audit logging, email with DLP scanning) rather than direct clipboard copy.",
-                    Tags = ["ts-adv", "rdp", "clipboard", "data-exfiltration", "dlp", "disable-redirection"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 4,
-                    SafetyRating = 5,
-                    ImpactNote =
-                        "Clipboard copy-paste between RDP client and server blocked. Users cannot paste passwords or copy data across the RDP session boundary.",
-                    ApplyOps = [RegOp.SetDword(Key, "DisableClipboardRedirection", 1)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "DisableClipboardRedirection")],
-                    DetectOps = [RegOp.CheckDword(Key, "DisableClipboardRedirection", 1)],
-                },
             ];
     }
 
@@ -2279,82 +1594,6 @@ internal static class PolicyRemoteAccess
 
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
-            new TweakDef
-            {
-                Id = "tspol-require-nla",
-                Label = "RDS: Require Network Level Authentication (NLA)",
-                Category = "Remote Desktop",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 5,
-                SafetyRating = 5,
-                Tags = ["rdp", "rds", "nla", "authentication", "security", "group policy", "terminal services"],
-                Description =
-                    "Requires Network Level Authentication (NLA/CredSSP) before establishing an RDP session. "
-                    + "UserAuthentication = 1. Prevents brute-force attacks against the Windows login screen "
-                    + "by requiring valid credentials before the remote session is created. "
-                    + "Default: NLA not enforced. This is the single most impactful RDS security hardening step.",
-                ApplyOps = [RegOp.SetDword(TsPol, "UserAuthentication", 1)],
-                RemoveOps = [RegOp.SetDword(TsPol, "UserAuthentication", 0)],
-                DetectOps = [RegOp.CheckDword(TsPol, "UserAuthentication", 1)],
-            },
-            new TweakDef
-            {
-                Id = "tspol-set-encryption-high",
-                Label = "RDS: Enforce High (128-bit) Encryption Level",
-                Category = "Remote Desktop",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                Tags = ["rdp", "rds", "encryption", "security", "group policy", "terminal services"],
-                Description =
-                    "Forces all RDP/RDS session traffic to use 128-bit RC4 encryption (High level). "
-                    + "MinEncryptionLevel = 3 (1=Low, 2=Client-Compatible, 3=High, 4=FIPS). "
-                    + "Prevents session eavesdropping on 40-bit or client-negotiated weaker ciphers. "
-                    + "Default: client-compatible (2). Recommended: High (3) or FIPS (4) for sensitive data.",
-                ApplyOps = [RegOp.SetDword(TsPol, "MinEncryptionLevel", 3)],
-                RemoveOps = [RegOp.SetDword(TsPol, "MinEncryptionLevel", 2)],
-                DetectOps = [RegOp.CheckDword(TsPol, "MinEncryptionLevel", 3)],
-            },
-            new TweakDef
-            {
-                Id = "tspol-session-timeout-active",
-                Label = "RDS: Set Active Session Timeout to 4 Hours",
-                Category = "Remote Desktop",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                Tags = ["rdp", "rds", "timeout", "session", "security", "group policy", "terminal services"],
-                Description =
-                    "Limits active Remote Desktop sessions to a maximum of 4 hours (240 minutes). "
-                    + "MaxConnectionTime = 14400000 ms. "
-                    + "Prevents orphaned or hijacked sessions from remaining active indefinitely. "
-                    + "Default: no maximum connection time limit. Recommended for multi-user RDS servers.",
-                ApplyOps = [RegOp.SetDword(TsPol, "MaxConnectionTime", 14400000)],
-                RemoveOps = [RegOp.SetDword(TsPol, "MaxConnectionTime", 0)],
-                DetectOps = [RegOp.CheckDword(TsPol, "MaxConnectionTime", 14400000)],
-            },
-            new TweakDef
-            {
-                Id = "tspol-session-timeout-idle",
-                Label = "RDS: Disconnect Idle Sessions After 15 Minutes",
-                Category = "Remote Desktop",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                Tags = ["rdp", "rds", "idle", "timeout", "security", "group policy", "terminal services"],
-                Description =
-                    "Disconnects Remote Desktop sessions that have been idle for 15 minutes. "
-                    + "MaxIdleTime = 900000 ms. "
-                    + "Frees server resources and closes unattended sessions that could be hijacked "
-                    + "from an unlocked workstation. Default: no idle timeout. CIS benchmark recommended: 15 min.",
-                ApplyOps = [RegOp.SetDword(TsPol, "MaxIdleTime", 900000)],
-                RemoveOps = [RegOp.SetDword(TsPol, "MaxIdleTime", 0)],
-                DetectOps = [RegOp.CheckDword(TsPol, "MaxIdleTime", 900000)],
-            },
             new TweakDef
             {
                 Id = "tspol-session-timeout-disconnect",
@@ -2373,82 +1612,6 @@ internal static class PolicyRemoteAccess
                 ApplyOps = [RegOp.SetDword(TsPol, "MaxDisconnectionTime", 3600000)],
                 RemoveOps = [RegOp.SetDword(TsPol, "MaxDisconnectionTime", 0)],
                 DetectOps = [RegOp.CheckDword(TsPol, "MaxDisconnectionTime", 3600000)],
-            },
-            new TweakDef
-            {
-                Id = "tspol-disable-drive-redirection",
-                Label = "RDS: Disable Client Drive Redirection",
-                Category = "Remote Desktop",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                Tags = ["rdp", "rds", "drive redirection", "data loss prevention", "security", "group policy", "terminal services"],
-                Description =
-                    "Prevents RDP clients from mapping local drives into the remote session. "
-                    + "fDisableCdm = 1. Stops users from copying files between the local machine "
-                    + "and the RDS server via drive mapping. Key DLP control for preventing data exfiltration "
-                    + "from terminal servers through redirected drives. Default: drive redirection allowed.",
-                ApplyOps = [RegOp.SetDword(TsPol, "fDisableCdm", 1)],
-                RemoveOps = [RegOp.SetDword(TsPol, "fDisableCdm", 0)],
-                DetectOps = [RegOp.CheckDword(TsPol, "fDisableCdm", 1)],
-            },
-            new TweakDef
-            {
-                Id = "tspol-disable-clipboard-redirection",
-                Label = "RDS: Disable Client Clipboard Redirection",
-                Category = "Remote Desktop",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                Tags = ["rdp", "rds", "clipboard", "data loss prevention", "security", "group policy", "terminal services"],
-                Description =
-                    "Blocks clipboard synchronisation between the RDP client and the remote session. "
-                    + "fDisableClip = 1. Prevents copy-paste of sensitive data from the RDS server "
-                    + "to the local machine and vice versa. Critical DLP control. "
-                    + "Default: clipboard redirection allowed. CIS recommends disabling on shared RDS servers.",
-                ApplyOps = [RegOp.SetDword(TsPol, "fDisableClip", 1)],
-                RemoveOps = [RegOp.SetDword(TsPol, "fDisableClip", 0)],
-                DetectOps = [RegOp.CheckDword(TsPol, "fDisableClip", 1)],
-            },
-            new TweakDef
-            {
-                Id = "tspol-disable-printer-redirection",
-                Label = "RDS: Disable Client Printer Redirection",
-                Category = "Remote Desktop",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                Tags = ["rdp", "rds", "printing", "data loss prevention", "security", "group policy", "terminal services"],
-                Description =
-                    "Prevents local printers from appearing inside Remote Desktop sessions. "
-                    + "fDisableCpm = 1. Stops users from printing sensitive server-side documents to "
-                    + "local or home printers via the RDP session. "
-                    + "Default: printer redirection enabled. Recommended for HIPAA/regulated environments.",
-                ApplyOps = [RegOp.SetDword(TsPol, "fDisableCpm", 1)],
-                RemoveOps = [RegOp.SetDword(TsPol, "fDisableCpm", 0)],
-                DetectOps = [RegOp.CheckDword(TsPol, "fDisableCpm", 1)],
-            },
-            new TweakDef
-            {
-                Id = "tspol-single-session-per-user",
-                Label = "RDS: Limit Users to a Single Remote Session",
-                Category = "Remote Desktop",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                Tags = ["rdp", "rds", "session limit", "licensing", "group policy", "terminal services"],
-                Description =
-                    "Restricts each user account to a maximum of one concurrent Remote Desktop session. "
-                    + "fSingleSessionPerUser = 1. Prevents the same account from being used across "
-                    + "multiple simultaneous sessions, reducing session hijack risk and managing RDS CAL consumption. "
-                    + "Default: multiple concurrent sessions per user allowed.",
-                ApplyOps = [RegOp.SetDword(TsPol, "fSingleSessionPerUser", 1)],
-                RemoveOps = [RegOp.SetDword(TsPol, "fSingleSessionPerUser", 0)],
-                DetectOps = [RegOp.CheckDword(TsPol, "fSingleSessionPerUser", 1)],
             },
             new TweakDef
             {
@@ -2483,42 +1646,6 @@ internal static class PolicyRemoteAccess
             [
                 new TweakDef
                 {
-                    Id = "wdagfc-enable-wdag-for-edge",
-                    Label = "WDAG: Enable Application Guard for Microsoft Edge",
-                    Category = "Remote Desktop",
-                    Description =
-                        "Sets AllowAppHVSI_ProviderSet=1 in AppHVSI policy. Enables Windows Defender Application Guard (WDAG) for Microsoft Edge at the enterprise policy level. When WDAG is enabled, Edge opens untrusted websites (those not in the enterprise trusted zone) inside a hardware-isolated Hyper-V container. If a malicious website exploits a browser vulnerability within the WDAG container, the exploit is contained within the isolated environment and cannot access the host OS, its files, credentials, or the clipboard. The container is discarded after the session. This is the highest-grade browser isolation available on Windows.",
-                    Tags = ["wdag", "application-guard", "browser-isolation", "hyperv", "container"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 5,
-                    SafetyRating = 4,
-                    ImpactNote =
-                        "Edge opens untrusted websites in a Hyper-V container. Requires enterprise-grade hardware (Hyper-V support, SLAT, 8GB+ RAM). Container startup adds 5–15 second latency for the first WDAG session. Copy-paste between container and host is blocked by default unless explicitly enabled by policy. Printing and camera access are also restricted by default.",
-                    ApplyOps = [RegOp.SetDword(WdagKey, "AllowAppHVSI_ProviderSet", 1)],
-                    RemoveOps = [RegOp.DeleteValue(WdagKey, "AllowAppHVSI_ProviderSet")],
-                    DetectOps = [RegOp.CheckDword(WdagKey, "AllowAppHVSI_ProviderSet", 1)],
-                },
-                new TweakDef
-                {
-                    Id = "wdagfc-block-clipboard-from-container",
-                    Label = "WDAG: Block Clipboard from WDAG Container to Host",
-                    Category = "Remote Desktop",
-                    Description =
-                        "Sets AppHVSIClipboardSettings=1 in AppHVSI policy (host-to-container only). Configures clipboard sharing so that content can be pasted from the host into the WDAG container (needed to enter URLs or credentials) but content from the container cannot be pasted to the host. This prevents an attack where a compromised WDAG session tries to exfiltrate data by copying it to the clipboard and the user then pastes it outside the container. The asymmetric clipboard policy allows productive use of WDAG without creating an exfiltration channel.",
-                    Tags = ["wdag", "clipboard", "exfiltration-prevention", "asymmetric", "container"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 4,
-                    SafetyRating = 5,
-                    ImpactNote =
-                        "Clipboard is one-way: host → container only. Users cannot copy content from WDAG container sessions to the host. Legitimate workflows that require copying content from a WDAG session (e.g., copying a URL from an isolated browser to share) are blocked. Users must retype or use an approved sharing method.",
-                    ApplyOps = [RegOp.SetDword(WdagKey, "AppHVSIClipboardSettings", 1)],
-                    RemoveOps = [RegOp.DeleteValue(WdagKey, "AppHVSIClipboardSettings")],
-                    DetectOps = [RegOp.CheckDword(WdagKey, "AppHVSIClipboardSettings", 1)],
-                },
-                new TweakDef
-                {
                     Id = "wdagfc-block-print-from-container",
                     Label = "WDAG: Block Printing from the WDAG Container",
                     Category = "Remote Desktop",
@@ -2537,24 +1664,6 @@ internal static class PolicyRemoteAccess
                 },
                 new TweakDef
                 {
-                    Id = "wdagfc-disable-container-persistence",
-                    Label = "WDAG: Disable Container Persistence (Discard Container on Close)",
-                    Category = "Remote Desktop",
-                    Description =
-                        "Sets AllowPersistence=0 in AppHVSI policy. Configures WDAG to discard the container state when the WDAG session is closed — the container does not persist browser history, cookies, downloads, or any state between sessions. Each WDAG session starts from a clean container image. Persistence, if enabled, allows attack artefacts (malware files, poisoned cookies, modified registry state) to survive across WDAG sessions and potentially be leveraged in future sessions. Discarding the container eliminates the possibility of session-to-session attack propagation within WDAG.",
-                    Tags = ["wdag", "persistence", "container", "discard", "clean-slate"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 4,
-                    SafetyRating = 5,
-                    ImpactNote =
-                        "WDAG container is discarded on session close. No browsing history, cookies, or downloads persist in WDAG. Users who need to return to a WDAG session must log in again to websites. Clean container on each session eliminates attack artefact accumulation.",
-                    ApplyOps = [RegOp.SetDword(WdagKey, "AllowPersistence", 0)],
-                    RemoveOps = [RegOp.DeleteValue(WdagKey, "AllowPersistence")],
-                    DetectOps = [RegOp.CheckDword(WdagKey, "AllowPersistence", 0)],
-                },
-                new TweakDef
-                {
                     Id = "wdagfc-disable-camera-mic-in-container",
                     Label = "WDAG: Disable Camera and Microphone Access in WDAG Container",
                     Category = "Remote Desktop",
@@ -2570,24 +1679,6 @@ internal static class PolicyRemoteAccess
                     ApplyOps = [RegOp.SetDword(WdagKey, "AppHVSICameraAndMicrophoneSettings", 0)],
                     RemoveOps = [RegOp.DeleteValue(WdagKey, "AppHVSICameraAndMicrophoneSettings")],
                     DetectOps = [RegOp.CheckDword(WdagKey, "AppHVSICameraAndMicrophoneSettings", 0)],
-                },
-                new TweakDef
-                {
-                    Id = "wdagfc-block-file-download-from-container",
-                    Label = "WDAG: Block File Downloads from the WDAG Container to Host",
-                    Category = "Remote Desktop",
-                    Description =
-                        "Sets SaveFilesToHost=0 in AppHVSI policy. Prevents files downloaded within the WDAG container from being saved directly to the host file system. Without this restriction, a malicious site could prompt the user to download and save a file — the file lands on the host's file system outside the container isolation, potentially infecting the host. Blocking file save to host means downloads within WDAG are contained within the isolated environment. Users who need a downloaded file from a WDAG session must go through an approved file transfer workflow.",
-                    Tags = ["wdag", "file-download", "exfiltration", "container-escape", "host-protection"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 5,
-                    SafetyRating = 5,
-                    ImpactNote =
-                        "Files downloaded in the WDAG container cannot be saved to the host. Attempts to save downloads land in the container's temporary storage (discarded on close if persistence is disabled). Users cannot retrieve downloads from WDAG sessions without an explicit transfer mechanism defined by IT.",
-                    ApplyOps = [RegOp.SetDword(WdagKey, "SaveFilesToHost", 0)],
-                    RemoveOps = [RegOp.DeleteValue(WdagKey, "SaveFilesToHost")],
-                    DetectOps = [RegOp.CheckDword(WdagKey, "SaveFilesToHost", 0)],
                 },
                 new TweakDef
                 {
@@ -2673,186 +1764,6 @@ internal static class PolicyRemoteAccess
         [
             new TweakDef
             {
-                Id = "wdagpol-enable-application-guard",
-                Label = "Enable Windows Defender Application Guard for Edge",
-                Category = "Remote Desktop",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 5,
-                SafetyRating = 5,
-                Tags = ["wdag", "application guard", "edge", "security", "isolation", "enterprise"],
-                Description =
-                    "Enables Windows Defender Application Guard (WDAG) for Microsoft Edge via Group Policy. "
-                    + "Untrusted websites open in a Hyper-V isolated container, isolating the host from "
-                    + "browser-based exploits. AllowAppHVSI_ProviderSet = 1. "
-                    + "Default: disabled. Requires Virtualization-Based Security (VBS) and Hyper-V.",
-                MinBuild = 16299,
-                ApplyOps = [RegOp.SetDword(AppHvsi, "AllowAppHVSI_ProviderSet", 1)],
-                RemoveOps = [RegOp.SetDword(AppHvsi, "AllowAppHVSI_ProviderSet", 0)],
-                DetectOps = [RegOp.CheckDword(AppHvsi, "AllowAppHVSI_ProviderSet", 1)],
-            },
-            new TweakDef
-            {
-                Id = "wdagpol-disable-clipboard-to-container",
-                Label = "WDAG: Block Clipboard from Host to Container",
-                Category = "Remote Desktop",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                Tags = ["wdag", "clipboard", "isolation", "security", "enterprise"],
-                Description =
-                    "Restricts clipboard operations so content cannot be pasted from the host into the "
-                    + "Application Guard container. AppHVSIClipboardSettings = 1 (copy from container only). "
-                    + "Prevents credential theft and data exfiltration via clipboard paste into untrusted sites. "
-                    + "Default: bidirectional clipboard (0). Hardened value: 1.",
-                MinBuild = 16299,
-                ApplyOps = [RegOp.SetDword(AppHvsi, "AppHVSIClipboardSettings", 1)],
-                RemoveOps = [RegOp.SetDword(AppHvsi, "AppHVSIClipboardSettings", 0)],
-                DetectOps = [RegOp.CheckDword(AppHvsi, "AppHVSIClipboardSettings", 1)],
-            },
-            new TweakDef
-            {
-                Id = "wdagpol-disable-clipboard-to-host",
-                Label = "WDAG: Block Clipboard from Container to Host",
-                Category = "Remote Desktop",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 4,
-                Tags = ["wdag", "clipboard", "isolation", "security", "enterprise"],
-                Description =
-                    "Restricts clipboard so content inside the Application Guard container cannot be "
-                    + "pasted to the host. AppHVSIClipboardSettings = 2 (copy to container only). "
-                    + "Prevents malicious container content from reaching host applications. "
-                    + "Combine with wdagpol-disable-clipboard-to-container for full isolation (value 3).",
-                MinBuild = 16299,
-                ApplyOps = [RegOp.SetDword(AppHvsi, "AppHVSIClipboardSettings", 2)],
-                RemoveOps = [RegOp.SetDword(AppHvsi, "AppHVSIClipboardSettings", 0)],
-                DetectOps = [RegOp.CheckDword(AppHvsi, "AppHVSIClipboardSettings", 2)],
-            },
-            new TweakDef
-            {
-                Id = "wdagpol-disable-printing",
-                Label = "WDAG: Disable Printing from Application Guard Container",
-                Category = "Remote Desktop",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                Tags = ["wdag", "printing", "isolation", "security", "enterprise"],
-                Description =
-                    "Disables all printing from within the Application Guard container. "
-                    + "AppHVSIPrintingSettings = 0 (no printing). "
-                    + "Prevents document exfiltration via printing from untrusted container sessions. "
-                    + "Default: printing enabled (network, PDF, XPS, local printers all allowed).",
-                MinBuild = 16299,
-                ApplyOps = [RegOp.SetDword(AppHvsi, "AppHVSIPrintingSettings", 0)],
-                RemoveOps = [RegOp.DeleteValue(AppHvsi, "AppHVSIPrintingSettings")],
-                DetectOps = [RegOp.CheckDword(AppHvsi, "AppHVSIPrintingSettings", 0)],
-            },
-            new TweakDef
-            {
-                Id = "wdagpol-disable-data-persistence",
-                Label = "WDAG: Disable Container Data Persistence",
-                Category = "Remote Desktop",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                Tags = ["wdag", "persistence", "isolation", "security", "privacy", "enterprise"],
-                Description =
-                    "Disables data persistence in the Application Guard container. "
-                    + "AllowPersistence = 0. Browser data (cookies, history, passwords, downloads) is "
-                    + "deleted when the container session ends. "
-                    + "Default: persistence disabled. Some orgs enable it for usability — hardened value is 0.",
-                MinBuild = 16299,
-                ApplyOps = [RegOp.SetDword(AppHvsi, "AllowPersistence", 0)],
-                RemoveOps = [RegOp.DeleteValue(AppHvsi, "AllowPersistence")],
-                DetectOps = [RegOp.CheckDword(AppHvsi, "AllowPersistence", 0)],
-            },
-            new TweakDef
-            {
-                Id = "wdagpol-disable-camera-microphone",
-                Label = "WDAG: Disable Camera and Microphone in Container",
-                Category = "Remote Desktop",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                Tags = ["wdag", "camera", "microphone", "privacy", "isolation", "security", "enterprise"],
-                Description =
-                    "Prevents the Application Guard container from accessing the camera and microphone. "
-                    + "AllowCameraMicrophoneRedirection = 0. "
-                    + "Stops untrusted browser sessions from recording the user without consent. "
-                    + "Default: access disabled. Must be explicitly enabled if required.",
-                MinBuild = 18362,
-                ApplyOps = [RegOp.SetDword(AppHvsi, "AllowCameraMicrophoneRedirection", 0)],
-                RemoveOps = [RegOp.DeleteValue(AppHvsi, "AllowCameraMicrophoneRedirection")],
-                DetectOps = [RegOp.CheckDword(AppHvsi, "AllowCameraMicrophoneRedirection", 0)],
-            },
-            new TweakDef
-            {
-                Id = "wdagpol-disable-virtual-gpu",
-                Label = "WDAG: Disable Virtual GPU in Container",
-                Category = "Remote Desktop",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                Tags = ["wdag", "gpu", "isolation", "security", "enterprise"],
-                Description =
-                    "Disables hardware-accelerated rendering in the Application Guard container. "
-                    + "AllowVirtualGPU = 0. Reduces GPU attack surface — a compromised vGPU driver "
-                    + "could potentially escape the container. Rendering falls back to software. "
-                    + "Default: hardware GPU disabled for maximum isolation.",
-                MinBuild = 16299,
-                ApplyOps = [RegOp.SetDword(AppHvsi, "AllowVirtualGPU", 0)],
-                RemoveOps = [RegOp.DeleteValue(AppHvsi, "AllowVirtualGPU")],
-                DetectOps = [RegOp.CheckDword(AppHvsi, "AllowVirtualGPU", 0)],
-            },
-            new TweakDef
-            {
-                Id = "wdagpol-enable-audit-mode",
-                Label = "WDAG: Enable Audit Mode for Application Guard",
-                Category = "Remote Desktop",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                Tags = ["wdag", "audit", "logging", "security", "enterprise", "siem"],
-                Description =
-                    "Enables audit logging for Application Guard container events. "
-                    + "AuditApplicationGuard = 1. Events are logged to the Windows event log "
-                    + "(Microsoft-Windows-Windows Defender Application Guard/Operational). "
-                    + "Useful for SIEM integration and security monitoring of container activity.",
-                MinBuild = 16299,
-                ApplyOps = [RegOp.SetDword(AppHvsi, "AuditApplicationGuard", 1)],
-                RemoveOps = [RegOp.SetDword(AppHvsi, "AuditApplicationGuard", 0)],
-                DetectOps = [RegOp.CheckDword(AppHvsi, "AuditApplicationGuard", 1)],
-            },
-            new TweakDef
-            {
-                Id = "wdagpol-disable-download-to-host",
-                Label = "WDAG: Block Saving Container Downloads to Host",
-                Category = "Remote Desktop",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                Tags = ["wdag", "downloads", "isolation", "security", "enterprise"],
-                Description =
-                    "Prevents files downloaded in the Application Guard container from being saved "
-                    + "to the host filesystem. SaveFilesToHost = 0. "
-                    + "Stops container-side malware payloads from escaping isolation via the Downloads folder. "
-                    + "Default: download-to-host disabled for maximum isolation.",
-                MinBuild = 16299,
-                ApplyOps = [RegOp.SetDword(AppHvsi, "SaveFilesToHost", 0)],
-                RemoveOps = [RegOp.DeleteValue(AppHvsi, "SaveFilesToHost")],
-                DetectOps = [RegOp.CheckDword(AppHvsi, "SaveFilesToHost", 0)],
-            },
-            new TweakDef
-            {
                 Id = "wdagpol-configure-network-isolation",
                 Label = "WDAG: Enable Network Isolation for Container",
                 Category = "Remote Desktop",
@@ -2884,24 +1795,6 @@ internal static class PolicyRemoteAccess
         [
             new TweakDef
             {
-                Id = "winrm-client-no-basic",
-                Label = "Disable WinRM Client Basic Authentication",
-                Category = "Remote Desktop",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                Description =
-                    "Prevents WinRM clients from using Basic authentication, which transmits "
-                    + "credentials in Base64-encoded plaintext over the network. AllowBasic=0.",
-                Tags = ["winrm", "authentication", "basic auth", "security", "remote management"],
-                RegistryKeys = [Client],
-                ApplyOps = [RegOp.SetDword(Client, "AllowBasic", 0)],
-                RemoveOps = [RegOp.DeleteValue(Client, "AllowBasic")],
-                DetectOps = [RegOp.CheckDword(Client, "AllowBasic", 0)],
-            },
-            new TweakDef
-            {
                 Id = "winrm-client-no-unencrypted",
                 Label = "Disable Unencrypted WinRM Client Traffic",
                 Category = "Remote Desktop",
@@ -2918,24 +1811,6 @@ internal static class PolicyRemoteAccess
                 ApplyOps = [RegOp.SetDword(Client, "AllowUnencrypted", 0)],
                 RemoveOps = [RegOp.DeleteValue(Client, "AllowUnencrypted")],
                 DetectOps = [RegOp.CheckDword(Client, "AllowUnencrypted", 0)],
-            },
-            new TweakDef
-            {
-                Id = "winrm-client-no-digest",
-                Label = "Disable WinRM Client Digest Authentication",
-                Category = "Remote Desktop",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                Description =
-                    "Disables Digest authentication for WinRM clients. Digest is vulnerable "
-                    + "to offline dictionary and replay attacks. AllowDigest=0.",
-                Tags = ["winrm", "digest", "authentication", "security"],
-                RegistryKeys = [Client],
-                ApplyOps = [RegOp.SetDword(Client, "AllowDigest", 0)],
-                RemoveOps = [RegOp.DeleteValue(Client, "AllowDigest")],
-                DetectOps = [RegOp.CheckDword(Client, "AllowDigest", 0)],
             },
             new TweakDef
             {
@@ -2974,24 +1849,6 @@ internal static class PolicyRemoteAccess
                 ApplyOps = [RegOp.SetDword(Client, "AllowCredSSP", 0)],
                 RemoveOps = [RegOp.DeleteValue(Client, "AllowCredSSP")],
                 DetectOps = [RegOp.CheckDword(Client, "AllowCredSSP", 0)],
-            },
-            new TweakDef
-            {
-                Id = "winrm-service-no-basic",
-                Label = "Disable WinRM Service Basic Authentication",
-                Category = "Remote Desktop",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                Description =
-                    "Prevents the WinRM service (listener) from accepting Basic authentication "
-                    + "requests from remote clients. AllowBasic=0 on the service side.",
-                Tags = ["winrm", "service", "basic auth", "security", "listener"],
-                RegistryKeys = [Service],
-                ApplyOps = [RegOp.SetDword(Service, "AllowBasic", 0)],
-                RemoveOps = [RegOp.DeleteValue(Service, "AllowBasic")],
-                DetectOps = [RegOp.CheckDword(Service, "AllowBasic", 0)],
             },
             new TweakDef
             {
@@ -3077,144 +1934,6 @@ internal static class PolicyRemoteAccess
 
         public static IReadOnlyList<TweakDef> Data =>
             [
-                new TweakDef
-                {
-                    Id = "winrmpol-disable-basic-auth-client",
-                    Label = "Disable Basic Authentication on WinRM Client",
-                    Category = "Remote Desktop",
-                    Description =
-                        "Prevents the WinRM client from using HTTP Basic authentication, which transmits credentials in a reversibly encoded form. Forces use of Kerberos, NTLM, or certificate-based authentication instead. Default: Basic auth allowed. Recommended: 1 to prevent credential interception.",
-                    Tags = ["winrm", "remoting", "authentication", "basic-auth", "security", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 4,
-                    SafetyRating = 5,
-                    ImpactNote = "WinRM client refuses Basic authentication; credentials cannot be sent in cleartext over HTTP.",
-                    ApplyOps = [RegOp.SetDword(Client, "AllowBasic", 0)],
-                    RemoveOps = [RegOp.DeleteValue(Client, "AllowBasic")],
-                    DetectOps = [RegOp.CheckDword(Client, "AllowBasic", 0)],
-                },
-                new TweakDef
-                {
-                    Id = "winrmpol-disable-basic-auth-service",
-                    Label = "Disable Basic Authentication on WinRM Service",
-                    Category = "Remote Desktop",
-                    Description =
-                        "Prevents the WinRM service (listener) from accepting Basic authentication requests. Complementary to the client-side setting — both must be set to fully eliminate Basic auth from the WinRM channel. Default: Basic auth accepted by service. Recommended: 1.",
-                    Tags = ["winrm", "remoting", "authentication", "basic-auth", "security", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 4,
-                    SafetyRating = 5,
-                    ImpactNote = "WinRM service rejects Basic authentication; only Kerberos / NTLM / certificate connections succeed.",
-                    ApplyOps = [RegOp.SetDword(Service, "AllowBasic", 0)],
-                    RemoveOps = [RegOp.DeleteValue(Service, "AllowBasic")],
-                    DetectOps = [RegOp.CheckDword(Service, "AllowBasic", 0)],
-                },
-                new TweakDef
-                {
-                    Id = "winrmpol-require-encrypted-traffic-client",
-                    Label = "Require Encrypted Traffic on WinRM Client",
-                    Category = "Remote Desktop",
-                    Description =
-                        "Forces the WinRM client to use encrypted transport (HTTPS or Kerberos message-level encryption) for all remote management sessions. Plaintext HTTP-based sessions are refused. Default: unencrypted HTTP sessions permitted. Recommended: 1 on all managed endpoints.",
-                    Tags = ["winrm", "remoting", "encryption", "https", "security", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 5,
-                    SafetyRating = 5,
-                    ImpactNote = "WinRM client only uses encrypted channels; cleartext remote management sessions are blocked.",
-                    ApplyOps = [RegOp.SetDword(Client, "AllowUnencryptedTraffic", 0)],
-                    RemoveOps = [RegOp.DeleteValue(Client, "AllowUnencryptedTraffic")],
-                    DetectOps = [RegOp.CheckDword(Client, "AllowUnencryptedTraffic", 0)],
-                },
-                new TweakDef
-                {
-                    Id = "winrmpol-require-encrypted-traffic-service",
-                    Label = "Require Encrypted Traffic on WinRM Service",
-                    Category = "Remote Desktop",
-                    Description =
-                        "Forces the WinRM listener to reject any inbound session that does not use transport-level or message-level encryption. Prevents man-in-the-middle interception of remote management traffic. Default: unencrypted connections accepted. Recommended: 1.",
-                    Tags = ["winrm", "remoting", "encryption", "https", "security", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 5,
-                    SafetyRating = 5,
-                    ImpactNote =
-                        "WinRM service rejects non-encrypted inbound connections; remote PowerShell/WMI sessions must use HTTPS or Kerberos.",
-                    ApplyOps = [RegOp.SetDword(Service, "AllowUnencryptedTraffic", 0)],
-                    RemoveOps = [RegOp.DeleteValue(Service, "AllowUnencryptedTraffic")],
-                    DetectOps = [RegOp.CheckDword(Service, "AllowUnencryptedTraffic", 0)],
-                },
-                new TweakDef
-                {
-                    Id = "winrmpol-disable-digest-auth-client",
-                    Label = "Disable Digest Authentication on WinRM Client",
-                    Category = "Remote Desktop",
-                    Description =
-                        "Prevents the WinRM client from offering Digest authentication. Digest auth sends a hash of the credentials that can be cracked offline. Kerberos or certificate auth should be used instead. Default: Digest allowed on client. Recommended: 1.",
-                    Tags = ["winrm", "remoting", "digest-auth", "authentication", "security", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 3,
-                    SafetyRating = 5,
-                    ImpactNote = "WinRM client does not offer Digest auth; offline hash-cracking attacks against captured sessions are prevented.",
-                    ApplyOps = [RegOp.SetDword(Client, "AllowDigest", 0)],
-                    RemoveOps = [RegOp.DeleteValue(Client, "AllowDigest")],
-                    DetectOps = [RegOp.CheckDword(Client, "AllowDigest", 0)],
-                },
-                new TweakDef
-                {
-                    Id = "winrmpol-disable-credential-delegation",
-                    Label = "Disable Credential Delegation in WinRM",
-                    Category = "Remote Desktop",
-                    Description =
-                        "Prevents WinRM sessions from delegating the user's credentials to the remote machine (CredSSP / AllowCredSSP=0). Credential delegation is the basis of pass-the-credentials attacks — the remote host receives usable Kerberos tickets. Disable unless explicitly required for multi-hop scenarios. Default: CredSSP delegation permitted. Recommended: 1.",
-                    Tags = ["winrm", "remoting", "credssp", "delegation", "credentials", "security", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 5,
-                    SafetyRating = 5,
-                    ImpactNote = "WinRM CredSSP delegation is blocked; multi-hop credential forwarding attacks via remote management are prevented.",
-                    ApplyOps = [RegOp.SetDword(Client, "AllowCredSSP", 0)],
-                    RemoveOps = [RegOp.DeleteValue(Client, "AllowCredSSP")],
-                    DetectOps = [RegOp.CheckDword(Client, "AllowCredSSP", 0)],
-                },
-                new TweakDef
-                {
-                    Id = "winrmpol-disable-credssp-service",
-                    Label = "Disable CredSSP on WinRM Service",
-                    Category = "Remote Desktop",
-                    Description =
-                        "Prevents the WinRM service from accepting CredSSP-authenticated inbound connections. Blocking CredSSP at the service prevents the remote endpoint from collecting forwarded credentials even if an attacker manipulates the client configuration. Default: service accepts CredSSP. Recommended: 1.",
-                    Tags = ["winrm", "remoting", "credssp", "service", "security", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 5,
-                    SafetyRating = 5,
-                    ImpactNote = "WinRM service refuses CredSSP logons; remote credential harvesting via CredSSP is blocked.",
-                    ApplyOps = [RegOp.SetDword(Service, "AllowCredSSP", 0)],
-                    RemoveOps = [RegOp.DeleteValue(Service, "AllowCredSSP")],
-                    DetectOps = [RegOp.CheckDword(Service, "AllowCredSSP", 0)],
-                },
-                new TweakDef
-                {
-                    Id = "winrmpol-restrict-trusted-hosts",
-                    Label = "Restrict WinRM Trusted Hosts to Empty List",
-                    Category = "Remote Desktop",
-                    Description =
-                        "Sets the WinRM TrustedHosts list to empty, preventing the client from connecting to non-domain machines using NTLM. Trusted hosts bypass server certificate validation; an empty list forces certificate or Kerberos authentication. Default: TrustedHosts may be set by users. Recommended: 1 (empty list) in domain environments.",
-                    Tags = ["winrm", "remoting", "trusted-hosts", "ntlm", "security", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 3,
-                    SafetyRating = 5,
-                    ImpactNote =
-                        "TrustedHosts is locked to empty; WinRM cannot connect to non-domain hosts via NTLM without explicit admin configuration.",
-                    ApplyOps = [RegOp.SetString(Client, "TrustedHosts", "")],
-                    RemoveOps = [RegOp.DeleteValue(Client, "TrustedHosts")],
-                    DetectOps = [RegOp.CheckString(Client, "TrustedHosts", "")],
-                },
                 new TweakDef
                 {
                     Id = "winrmpol-disable-winrm-service",
@@ -3442,91 +2161,6 @@ internal static class PolicyRemoteAccess
 
         public static IReadOnlyList<TweakDef> Data =>
             [
-                new TweakDef
-                {
-                    Id = "winrmadv-disable-basic-auth-service",
-                    Label = "Disable WinRM Basic Authentication on Service (Listener)",
-                    Category = "Remote Desktop",
-                    Description =
-                        "Prevents the WinRM service from accepting Basic authentication credentials, which transmit usernames and passwords in Base64 without encryption. Forces use of Kerberos or CredSSP authenticated sessions.",
-                    Tags = ["winrm", "basic-auth", "authentication", "security", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 5,
-                    SafetyRating = 5,
-                    ImpactNote = "WinRM Basic authentication disabled on service; Kerberos or CredSSP required for remote management.",
-                    ApplyOps = [RegOp.SetDword(SvcKey, "AllowBasic", 0)],
-                    RemoveOps = [RegOp.DeleteValue(SvcKey, "AllowBasic")],
-                    DetectOps = [RegOp.CheckDword(SvcKey, "AllowBasic", 0)],
-                },
-                new TweakDef
-                {
-                    Id = "winrmadv-disable-basic-auth-client",
-                    Label = "Disable WinRM Basic Authentication on Client",
-                    Category = "Remote Desktop",
-                    Description =
-                        "Prevents the WinRM client from sending Basic authentication credentials to remote hosts, ensuring WinRM connections from this machine always use authenticated and encrypted transport.",
-                    Tags = ["winrm", "basic-auth", "client", "security", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 5,
-                    SafetyRating = 5,
-                    ImpactNote = "WinRM client Basic authentication disabled; remote management connections require Kerberos/CredSSP.",
-                    ApplyOps = [RegOp.SetDword(CliKey, "AllowBasic", 0)],
-                    RemoveOps = [RegOp.DeleteValue(CliKey, "AllowBasic")],
-                    DetectOps = [RegOp.CheckDword(CliKey, "AllowBasic", 0)],
-                },
-                new TweakDef
-                {
-                    Id = "winrmadv-require-https-transport",
-                    Label = "Require HTTPS Transport for All WinRM Connections",
-                    Category = "Remote Desktop",
-                    Description =
-                        "Configures WinRM to only accept management sessions over HTTPS (port 5986), blocking unencrypted HTTP WinRM connections (port 5985) that transmit management traffic in plaintext.",
-                    Tags = ["winrm", "https", "transport", "encryption", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 5,
-                    SafetyRating = 5,
-                    ImpactNote = "WinRM HTTP (5985) blocked; only HTTPS (5986) remote management sessions accepted.",
-                    ApplyOps = [RegOp.SetDword(SvcKey, "AllowUnencrypted", 0)],
-                    RemoveOps = [RegOp.DeleteValue(SvcKey, "AllowUnencrypted")],
-                    DetectOps = [RegOp.CheckDword(SvcKey, "AllowUnencrypted", 0)],
-                },
-                new TweakDef
-                {
-                    Id = "winrmadv-disable-client-digest-auth",
-                    Label = "Disable WinRM Client Digest Authentication",
-                    Category = "Remote Desktop",
-                    Description =
-                        "Prevents the WinRM client from using Digest authentication to remote hosts, as Digest sends password hashes that are susceptible to pass-the-hash attacks in non-Kerberos environments.",
-                    Tags = ["winrm", "digest-auth", "client", "pass-the-hash", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 4,
-                    SafetyRating = 5,
-                    ImpactNote = "WinRM Digest authentication disabled on client; hash-based auth not sent to remote endpoints.",
-                    ApplyOps = [RegOp.SetDword(CliKey, "AllowDigest", 0)],
-                    RemoveOps = [RegOp.DeleteValue(CliKey, "AllowDigest")],
-                    DetectOps = [RegOp.CheckDword(CliKey, "AllowDigest", 0)],
-                },
-                new TweakDef
-                {
-                    Id = "winrmadv-set-idle-timeout",
-                    Label = "Set WinRM Session Idle Timeout to 7200 Seconds (2 Hours)",
-                    Category = "Remote Desktop",
-                    Description =
-                        "Sets the WinRM service idle session timeout to 7200 seconds, ensuring that management sessions that have been idle for more than 2 hours are automatically terminated, preventing stale privileged sessions.",
-                    Tags = ["winrm", "session-timeout", "idle", "security", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 3,
-                    SafetyRating = 5,
-                    ImpactNote = "WinRM idle timeout set to 2 hours; stale privileged remote management sessions auto-terminated.",
-                    ApplyOps = [RegOp.SetDword(SvcKey, "IdleTimeoutms", 7200000)],
-                    RemoveOps = [RegOp.DeleteValue(SvcKey, "IdleTimeoutms")],
-                    DetectOps = [RegOp.CheckDword(SvcKey, "IdleTimeoutms", 7200000)],
-                },
                 new TweakDef
                 {
                     Id = "winrmadv-set-max-connections",

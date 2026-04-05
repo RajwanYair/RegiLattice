@@ -636,20 +636,6 @@ internal static class PhoneLink
         },
         new TweakDef
         {
-            Id = "phone-disable-nearby-share",
-            Label = "Disable Nearby Share",
-            Category = "Communication",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Disables Windows Nearby Sharing feature (file/link transfer to nearby devices). Default: Enabled.",
-            Tags = ["phone-link", "nearby-share", "sharing"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\CDP"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\CDP", "NearShareChannelUserAuthzPolicy", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\CDP", "NearShareChannelUserAuthzPolicy", 2)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\CDP", "NearShareChannelUserAuthzPolicy", 0)],
-        },
-        new TweakDef
-        {
             Id = "phone-disable-smartglass",
             Label = "Disable SmartGlass Companion",
             Category = "Communication",
@@ -726,29 +712,6 @@ internal static class PhoneLink
             ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\CDP", "WifiDirectEnabled", 0)],
             RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\CDP", "WifiDirectEnabled", 1)],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\CDP", "WifiDirectEnabled", 0)],
-        },
-        new TweakDef
-        {
-            Id = "phone-disable-timeline",
-            Label = "Disable Windows Timeline Activity Feed",
-            Category = "Communication",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Disables Windows Timeline activity feed and cross-device clipboard via policy. Stops syncing browsing and app activity to Microsoft cloud. Default: Enabled.",
-            Tags = ["phone-link", "timeline", "activity", "privacy", "cloud"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "EnableActivityFeed", 0),
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "AllowCrossDeviceClipboard", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "EnableActivityFeed", 1),
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "AllowCrossDeviceClipboard", 1),
-            ],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "EnableActivityFeed", 0)],
         },
         new TweakDef
         {

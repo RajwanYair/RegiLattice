@@ -261,48 +261,6 @@ internal static class PolicyAppControl
         [
             new TweakDef
             {
-                Id = "accompat-disable-inventory-collector",
-                Label = "Disable Application Compatibility Inventory Collector",
-                Category = "Security",
-                Description =
-                    "Disables the Application Compatibility Inventory Collector, which collects program data for app compatibility telemetry.",
-                Tags = ["appcompat", "privacy", "telemetry", "group-policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ApplyOps = [RegOp.SetDword(AppComp, "DisableInventory", 1)],
-                RemoveOps = [RegOp.DeleteValue(AppComp, "DisableInventory")],
-                DetectOps = [RegOp.CheckDword(AppComp, "DisableInventory", 1)],
-            },
-            new TweakDef
-            {
-                Id = "accompat-disable-program-compatibility-assistant",
-                Label = "Disable Program Compatibility Assistant",
-                Category = "Security",
-                Description =
-                    "Turns off the Program Compatibility Assistant (PCA), which monitors programs for known compatibility issues and prompts users.",
-                Tags = ["appcompat", "telemetry", "group-policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ApplyOps = [RegOp.SetDword(AppComp, "DisablePCA", 1)],
-                RemoveOps = [RegOp.DeleteValue(AppComp, "DisablePCA")],
-                DetectOps = [RegOp.CheckDword(AppComp, "DisablePCA", 1)],
-            },
-            new TweakDef
-            {
-                Id = "accompat-disable-application-impact-telemetry",
-                Label = "Turn Off Application Impact Telemetry",
-                Category = "Security",
-                Description =
-                    "Stops the Application Impact Telemetry (AIT) agent from collecting and uploading application usage statistics to Microsoft.",
-                Tags = ["appcompat", "privacy", "telemetry", "group-policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ApplyOps = [RegOp.SetDword(AppComp, "AITEnable", 0)],
-                RemoveOps = [RegOp.DeleteValue(AppComp, "AITEnable")],
-                DetectOps = [RegOp.CheckDword(AppComp, "AITEnable", 0)],
-            },
-            new TweakDef
-            {
                 Id = "accompat-disable-user-assistance-telemetry",
                 Label = "Disable User Assistance Telemetry",
                 Category = "Security",
@@ -327,47 +285,6 @@ internal static class PolicyAppControl
                 ApplyOps = [RegOp.SetDword(AppComp, "DisableWizard", 1)],
                 RemoveOps = [RegOp.DeleteValue(AppComp, "DisableWizard")],
                 DetectOps = [RegOp.CheckDword(AppComp, "DisableWizard", 1)],
-            },
-            new TweakDef
-            {
-                Id = "accompat-disable-engine",
-                Label = "Disable Application Compatibility Engine",
-                Category = "Security",
-                Description =
-                    "Turns off the Application Compatibility Engine, which performs shim lookups on every program launch. May cause some legacy applications to fail.",
-                Tags = ["appcompat", "performance", "group-policy"],
-                NeedsAdmin = true,
-                CorpSafe = false,
-                ApplyOps = [RegOp.SetDword(AppComp, "DisableEngine", 1)],
-                RemoveOps = [RegOp.DeleteValue(AppComp, "DisableEngine")],
-                DetectOps = [RegOp.CheckDword(AppComp, "DisableEngine", 1)],
-            },
-            new TweakDef
-            {
-                Id = "accompat-disable-switchback-compatibility",
-                Label = "Disable SwitchBack Compatibility Engine",
-                Category = "Security",
-                Description = "Disables the SwitchBack compatibility engine which detects applications incompatible with Windows version upgrades.",
-                Tags = ["appcompat", "performance", "group-policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ApplyOps = [RegOp.SetDword(AppComp, "SbEnable", 0)],
-                RemoveOps = [RegOp.DeleteValue(AppComp, "SbEnable")],
-                DetectOps = [RegOp.CheckDword(AppComp, "SbEnable", 0)],
-            },
-            new TweakDef
-            {
-                Id = "accompat-disable-steps-recorder",
-                Label = "Disable Steps Recorder",
-                Category = "Security",
-                Description =
-                    "Disables the Steps Recorder (Problem Steps Recorder) tool, which can capture screenshots and user actions for troubleshooting.",
-                Tags = ["appcompat", "privacy", "group-policy", "debloat"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ApplyOps = [RegOp.SetDword(AppComp, "DisableUAR", 1)],
-                RemoveOps = [RegOp.DeleteValue(AppComp, "DisableUAR")],
-                DetectOps = [RegOp.CheckDword(AppComp, "DisableUAR", 1)],
             },
             new TweakDef
             {
@@ -969,91 +886,6 @@ internal static class PolicyAppControl
                 },
                 new TweakDef
                 {
-                    Id = "appcon-deny-uwp-microphone",
-                    Label = "Deny Microphone Access to All UWP Apps",
-                    Category = "Security",
-                    Description =
-                        "Blocks all UWP applications from accessing the microphone device regardless of user-level privacy settings, ensuring that even if a user grants permission, the policy override prevents audio capture by Store apps.",
-                    Tags = ["appcontainer", "microphone", "privacy", "capability", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 4,
-                    SafetyRating = 5,
-                    ImpactNote = "Microphone access denied to all UWP apps via policy; user-level grants overridden. Voice apps will not work.",
-                    ApplyOps = [RegOp.SetDword(Key, "LetAppsAccessMicrophone", 2)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "LetAppsAccessMicrophone")],
-                    DetectOps = [RegOp.CheckDword(Key, "LetAppsAccessMicrophone", 2)],
-                },
-                new TweakDef
-                {
-                    Id = "appcon-deny-uwp-camera",
-                    Label = "Deny Camera Access to All UWP Apps",
-                    Category = "Security",
-                    Description =
-                        "Blocks all UWP applications from accessing the camera device via the AppContainer capability policy, preventing webcam capture by Store apps even if user-level permission has been granted.",
-                    Tags = ["appcontainer", "camera", "webcam", "privacy", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 4,
-                    SafetyRating = 5,
-                    ImpactNote = "Camera access denied to all UWP apps via policy; webcam capture by Store apps blocked system-wide.",
-                    ApplyOps = [RegOp.SetDword(Key, "LetAppsAccessCamera", 2)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "LetAppsAccessCamera")],
-                    DetectOps = [RegOp.CheckDword(Key, "LetAppsAccessCamera", 2)],
-                },
-                new TweakDef
-                {
-                    Id = "appcon-deny-uwp-location",
-                    Label = "Deny Location Access to All UWP Apps",
-                    Category = "Security",
-                    Description =
-                        "Blocks UWP applications from accessing GPS and Windows Location Services, preventing Store apps from determining the user's physical location regardless of user-level location permission grants.",
-                    Tags = ["appcontainer", "location", "gps", "privacy", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 3,
-                    SafetyRating = 5,
-                    ImpactNote = "Location access denied to all UWP apps via policy; GPS/location not available to Store apps.",
-                    ApplyOps = [RegOp.SetDword(Key, "LetAppsAccessLocation", 2)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "LetAppsAccessLocation")],
-                    DetectOps = [RegOp.CheckDword(Key, "LetAppsAccessLocation", 2)],
-                },
-                new TweakDef
-                {
-                    Id = "appcon-deny-uwp-contacts",
-                    Label = "Deny Contacts Access to All UWP Apps",
-                    Category = "Security",
-                    Description =
-                        "Blocks all UWP applications from accessing the Windows Contacts / People app contacts store, preventing Store apps from reading or exporting the user's contact list.",
-                    Tags = ["appcontainer", "contacts", "people", "privacy", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 3,
-                    SafetyRating = 5,
-                    ImpactNote = "Contacts access denied to all UWP apps via policy; contact list not accessible to Store apps.",
-                    ApplyOps = [RegOp.SetDword(Key, "LetAppsAccessContacts", 2)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "LetAppsAccessContacts")],
-                    DetectOps = [RegOp.CheckDword(Key, "LetAppsAccessContacts", 2)],
-                },
-                new TweakDef
-                {
-                    Id = "appcon-deny-uwp-calendar",
-                    Label = "Deny Calendar Access to All UWP Apps",
-                    Category = "Security",
-                    Description =
-                        "Blocks UWP applications from reading or modifying Windows Calendar data, preventing Store apps from accessing the user's appointment and scheduling information.",
-                    Tags = ["appcontainer", "calendar", "privacy", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 3,
-                    SafetyRating = 5,
-                    ImpactNote = "Calendar access denied to all UWP apps via policy; appointment data not accessible to Store apps.",
-                    ApplyOps = [RegOp.SetDword(Key, "LetAppsAccessCalendar", 2)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "LetAppsAccessCalendar")],
-                    DetectOps = [RegOp.CheckDword(Key, "LetAppsAccessCalendar", 2)],
-                },
-                new TweakDef
-                {
                     Id = "appcon-enable-appcontainer-network-isolation",
                     Label = "Enable Network Isolation for AppContainer Processes",
                     Category = "Security",
@@ -1312,24 +1144,6 @@ internal static class PolicyAppControl
         [
             new TweakDef
             {
-                Id = "appins-disable-app-installer",
-                Label = "Disable Windows Package Manager (winget)",
-                Category = "Security",
-                Description =
-                    "Disables the Windows Package Manager (winget / AppInstaller) entirely via machine-wide policy. Users cannot install or manage packages. Default: enabled.",
-                Tags = ["winget", "app-installer", "policy", "hardening"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 3,
-                ImpactNote = "Blocks all winget package operations; deploy only in locked-down environments.",
-                RegistryKeys = [Key],
-                ApplyOps = [RegOp.SetDword(Key, "EnableAppInstaller", 0)],
-                RemoveOps = [RegOp.DeleteValue(Key, "EnableAppInstaller")],
-                DetectOps = [RegOp.CheckDword(Key, "EnableAppInstaller", 0)],
-            },
-            new TweakDef
-            {
                 Id = "appins-disable-settings",
                 Label = "Disable WinGet Settings Modification",
                 Category = "Security",
@@ -1381,42 +1195,6 @@ internal static class PolicyAppControl
                 ApplyOps = [RegOp.SetDword(Key, "EnableLocalManifestFiles", 0)],
                 RemoveOps = [RegOp.DeleteValue(Key, "EnableLocalManifestFiles")],
                 DetectOps = [RegOp.CheckDword(Key, "EnableLocalManifestFiles", 0)],
-            },
-            new TweakDef
-            {
-                Id = "appins-require-hash-validation",
-                Label = "Require Installer Hash Validation",
-                Category = "Security",
-                Description =
-                    "Disables the ability to bypass SHA-256 hash validation for package installers. Packages with unknown or unverified hashes are blocked.",
-                Tags = ["winget", "app-installer", "security", "integrity"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                ImpactNote = "Enforces SHA-256 hash integrity verification for all package installs.",
-                RegistryKeys = [Key],
-                ApplyOps = [RegOp.SetDword(Key, "EnableHashOverride", 0)],
-                RemoveOps = [RegOp.DeleteValue(Key, "EnableHashOverride")],
-                DetectOps = [RegOp.CheckDword(Key, "EnableHashOverride", 0)],
-            },
-            new TweakDef
-            {
-                Id = "appins-disable-ms-installer-protocol",
-                Label = "Block ms-appinstaller: URI Protocol",
-                Category = "Security",
-                Description =
-                    "Disables the ms-appinstaller: URI protocol handler, which has been exploited in CVE-based campaigns to directly launch package installs from web links.",
-                Tags = ["winget", "app-installer", "security", "cve", "hardening"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 5,
-                SafetyRating = 5,
-                ImpactNote = "Closes the ms-appinstaller URI exploit vector for web-triggered package installs.",
-                RegistryKeys = [Key],
-                ApplyOps = [RegOp.SetDword(Key, "EnableMSAppInstallerProtocol", 0)],
-                RemoveOps = [RegOp.DeleteValue(Key, "EnableMSAppInstallerProtocol")],
-                DetectOps = [RegOp.CheckDword(Key, "EnableMSAppInstallerProtocol", 0)],
             },
             new TweakDef
             {
@@ -1697,91 +1475,6 @@ internal static class PolicyAppControl
         [
             new TweakDef
             {
-                Id = "apprstrt-disable-aedebug-auto",
-                Label = "App Restart: Disable Automatic JIT Debugger Attachment on Crash",
-                Category = "Security",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                RegistryKeys = [AeDebug],
-                Tags = ["crash", "aedebug", "jit-debug", "security", "policy"],
-                Description =
-                    "Sets Auto=0 in AeDebug. Prevents the system from automatically attaching a "
-                    + "just-in-time debugger to crashing processes. Stops unauthorised debugger invocation. "
-                    + "Default: 1 (auto-attach). Disabling prevents debugger-based privilege escalation.",
-                ApplyOps = [RegOp.SetString(AeDebug, "Auto", "0")],
-                RemoveOps = [RegOp.DeleteValue(AeDebug, "Auto")],
-                DetectOps = [RegOp.CheckString(AeDebug, "Auto", "0")],
-            },
-            new TweakDef
-            {
-                Id = "apprstrt-disable-auto-reboot-on-bugcheck",
-                Label = "App Restart: Disable Auto-Reboot After BSOD (Allow Admin Review)",
-                Category = "Security",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                RegistryKeys = [CrashCtl],
-                Tags = ["crash", "bsod", "auto-reboot", "bugcheck", "security", "forensics"],
-                Description =
-                    "Sets AutoReboot=0 in CrashControl. Stops Windows from automatically rebooting "
-                    + "after a kernel bug check (BSOD). The blue screen remains until manually rebooted. "
-                    + "Default: 1 (auto-reboot). Disabling allows forensic capture of the crash dump.",
-                ApplyOps = [RegOp.SetDword(CrashCtl, "AutoReboot", 0)],
-                RemoveOps = [RegOp.SetDword(CrashCtl, "AutoReboot", 1)],
-                DetectOps = [RegOp.CheckDword(CrashCtl, "AutoReboot", 0)],
-            },
-            new TweakDef
-            {
-                Id = "apprstrt-enable-crash-dump-complete",
-                Label = "App Restart: Enable Complete Memory Dump for Forensic Analysis",
-                Category = "Security",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                RegistryKeys = [CrashCtl],
-                Tags = ["crash", "dump", "memory", "forensics", "analysis", "security"],
-                Description =
-                    "Sets CrashDumpEnabled=1 in CrashControl. Configures Windows to write a complete "
-                    + "physical memory dump to disk on bug check. "
-                    + "Value 1=Complete, 2=Kernel, 3=Small, 7=Automatic. Default: 7. Use 2 (Kernel) for balanced analysis.",
-                ApplyOps = [RegOp.SetDword(CrashCtl, "CrashDumpEnabled", 2)],
-                RemoveOps = [RegOp.SetDword(CrashCtl, "CrashDumpEnabled", 7)],
-                DetectOps = [RegOp.CheckDword(CrashCtl, "CrashDumpEnabled", 2)],
-            },
-            new TweakDef
-            {
-                Id = "apprstrt-log-crash-event",
-                Label = "App Restart: Log Kernel Crash to Windows Event Log",
-                Category = "Security",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                RegistryKeys = [CrashCtl],
-                Tags = ["crash", "event-log", "audit", "security", "forensics"],
-                Description =
-                    "Sets LogEvent=1 in CrashControl. Writes an event to the System event log when "
-                    + "a kernel crash occurs. Enables SIEM alerting on system-level faults. "
-                    + "Default: 1 (already enabled). Explicit enforcement ensures SIEM visibility.",
-                ApplyOps = [RegOp.SetDword(CrashCtl, "LogEvent", 1)],
-                RemoveOps = [RegOp.DeleteValue(CrashCtl, "LogEvent")],
-                DetectOps = [RegOp.CheckDword(CrashCtl, "LogEvent", 1)],
-            },
-            new TweakDef
-            {
-                Id = "apprstrt-disable-wer-reporting",
-                Label = "App Restart: Disable Windows Error Reporting (WER) Telemetry",
-                Category = "Security",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                RegistryKeys = [WerPolicy],
-                Tags = ["wer", "error-reporting", "telemetry", "privacy", "policy"],
-                Description =
-                    "Sets Disabled=1 in WER policy. Prevents crash reports, problem reports, and "
-                    + "application error data from being sent to Microsoft. "
-                    + "Default: 0 (enabled). Disabling stops potential crash dump data leaving the network.",
-                ApplyOps = [RegOp.SetDword(WerPolicy, "Disabled", 1)],
-                RemoveOps = [RegOp.DeleteValue(WerPolicy, "Disabled")],
-                DetectOps = [RegOp.CheckDword(WerPolicy, "Disabled", 1)],
-            },
-            new TweakDef
-            {
                 Id = "apprstrt-disable-wer-queue",
                 Label = "App Restart: Disable WER Problem Queue",
                 Category = "Security",
@@ -1848,23 +1541,6 @@ internal static class PolicyAppControl
                 RemoveOps = [RegOp.DeleteValue(WerMain, "MaxQueueSize")],
                 DetectOps = [RegOp.CheckDword(WerMain, "MaxQueueSize", 1)],
             },
-            new TweakDef
-            {
-                Id = "apprstrt-overwrite-existing-dump",
-                Label = "App Restart: Overwrite Existing Crash Dump on New Crash",
-                Category = "Security",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                RegistryKeys = [CrashCtl],
-                Tags = ["crash", "dump", "overwrite", "disk-space", "forensics"],
-                Description =
-                    "Sets Overwrite=1 in CrashControl. Overwrites the existing memory dump file instead "
-                    + "of generating a new timestamped file. Prevents disk space exhaustion from crash loops. "
-                    + "Default: 1 (overwrite). Explicit enforcement maintains expected disk usage.",
-                ApplyOps = [RegOp.SetDword(CrashCtl, "Overwrite", 1)],
-                RemoveOps = [RegOp.DeleteValue(CrashCtl, "Overwrite")],
-                DetectOps = [RegOp.CheckDword(CrashCtl, "Overwrite", 1)],
-            },
         ];
     }
 
@@ -1896,23 +1572,6 @@ internal static class PolicyAppControl
                     ApplyOps = [RegOp.SetDword(ExeKey, "EnforcementMode", 1)],
                     RemoveOps = [RegOp.DeleteValue(ExeKey, "EnforcementMode")],
                     DetectOps = [RegOp.CheckDword(ExeKey, "EnforcementMode", 1)],
-                },
-                new TweakDef
-                {
-                    Id = "alockadv-enable-applocker-enforce-exe",
-                    Label = "Enable AppLocker Enforce Mode for Executables",
-                    Category = "Security",
-                    Description =
-                        "Enables AppLocker enforcement for executables, blocking any EXE file that does not match an allowed publisher, path, or hash rule — converting the application control policy from advisory to blocking.",
-                    Tags = ["applocker", "enforce-mode", "exe", "application-control", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 5,
-                    SafetyRating = 4,
-                    ImpactNote = "AppLocker EXE enforcement active; unlisted executables blocked. Requires allow-list rules to be in place.",
-                    ApplyOps = [RegOp.SetDword(ExeKey, "EnforcementMode", 2)],
-                    RemoveOps = [RegOp.DeleteValue(ExeKey, "EnforcementMode")],
-                    DetectOps = [RegOp.CheckDword(ExeKey, "EnforcementMode", 2)],
                 },
                 new TweakDef
                 {
@@ -2065,104 +1724,6 @@ internal static class PolicyAppControl
 
         public static IReadOnlyList<TweakDef> Data =>
             [
-                new TweakDef
-                {
-                    Id = "applocker-enforce-exe-rules",
-                    Label = "Enforce AppLocker EXE Rules",
-                    Category = "Security",
-                    Description = "Puts the AppLocker EXE rule collection into enforcement mode; unauthorised executables are blocked.",
-                    Tags = ["applocker", "exe", "enforce", "policy", "application-control"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 5,
-                    SafetyRating = 2,
-                    ImpactNote = "Value 1 = enforce; unauthorised EXE files are blocked immediately. Requires well-tested AppLocker rules first.",
-                    ApplyOps = [RegOp.SetDword(ExeKey, "EnforcementMode", 1)],
-                    RemoveOps = [RegOp.DeleteValue(ExeKey, "EnforcementMode")],
-                    DetectOps = [RegOp.CheckDword(ExeKey, "EnforcementMode", 1)],
-                },
-                new TweakDef
-                {
-                    Id = "applocker-audit-exe-rules",
-                    Label = "Set AppLocker EXE Rules to Audit Mode",
-                    Category = "Security",
-                    Description = "Puts the AppLocker EXE rule collection in audit-only mode; blocked events are logged but execution is allowed.",
-                    Tags = ["applocker", "exe", "audit", "policy", "application-control"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 3,
-                    SafetyRating = 5,
-                    ImpactNote = "Value 0 = audit only; events logged to Applications and Services\\ Microsoft\\ Windows\\ AppLocker.evtx.",
-                    ApplyOps = [RegOp.SetDword(ExeKey, "EnforcementMode", 0)],
-                    RemoveOps = [RegOp.DeleteValue(ExeKey, "EnforcementMode")],
-                    DetectOps = [RegOp.CheckDword(ExeKey, "EnforcementMode", 0)],
-                },
-                new TweakDef
-                {
-                    Id = "applocker-enforce-msi-rules",
-                    Label = "Enforce AppLocker MSI / Windows Installer Rules",
-                    Category = "Security",
-                    Description = "Puts the AppLocker Windows Installer (MSI and MSP) rule collection into enforcement mode.",
-                    Tags = ["applocker", "msi", "installer", "enforce", "policy", "application-control"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 5,
-                    SafetyRating = 2,
-                    ImpactNote = "Blocks unapproved MSI installations; users and scripts cannot install unauthorised packages.",
-                    ApplyOps = [RegOp.SetDword(MsiKey, "EnforcementMode", 1)],
-                    RemoveOps = [RegOp.DeleteValue(MsiKey, "EnforcementMode")],
-                    DetectOps = [RegOp.CheckDword(MsiKey, "EnforcementMode", 1)],
-                },
-                new TweakDef
-                {
-                    Id = "applocker-enforce-script-rules",
-                    Label = "Enforce AppLocker Script Rules",
-                    Category = "Security",
-                    Description =
-                        "Puts the AppLocker Script rule collection into enforcement mode; unapproved PowerShell, VBScript, and batch files are blocked.",
-                    Tags = ["applocker", "script", "powershell", "enforce", "policy", "application-control"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 5,
-                    SafetyRating = 2,
-                    ImpactNote = "Blocks unapproved scripts across PowerShell, CMD, WSH, and HTA; test rules thoroughly before enforcing.",
-                    ApplyOps = [RegOp.SetDword(ScriptKey, "EnforcementMode", 1)],
-                    RemoveOps = [RegOp.DeleteValue(ScriptKey, "EnforcementMode")],
-                    DetectOps = [RegOp.CheckDword(ScriptKey, "EnforcementMode", 1)],
-                },
-                new TweakDef
-                {
-                    Id = "applocker-enforce-dll-rules",
-                    Label = "Enforce AppLocker DLL Rules",
-                    Category = "Security",
-                    Description =
-                        "Puts the AppLocker DLL rule collection into enforcement mode; unapproved DLLs and OCX files are blocked from loading.",
-                    Tags = ["applocker", "dll", "enforce", "policy", "application-control"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 5,
-                    SafetyRating = 1,
-                    ImpactNote = "High-impact; blocks unauthorised DLLs. Requires extensive testing; misconfiguration can prevent OS boot.",
-                    ApplyOps = [RegOp.SetDword(DllKey, "EnforcementMode", 1)],
-                    RemoveOps = [RegOp.DeleteValue(DllKey, "EnforcementMode")],
-                    DetectOps = [RegOp.CheckDword(DllKey, "EnforcementMode", 1)],
-                },
-                new TweakDef
-                {
-                    Id = "applocker-enforce-appx-rules",
-                    Label = "Enforce AppLocker Packaged App Rules",
-                    Category = "Security",
-                    Description = "Puts the AppLocker Packaged App (MSIX/AppX) rule collection into enforcement mode for UWP applications.",
-                    Tags = ["applocker", "appx", "msix", "uwp", "enforce", "policy", "application-control"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 4,
-                    SafetyRating = 3,
-                    ImpactNote = "Blocks unapproved UWP and MSIX apps from launching; requires rules that allow business-critical apps.",
-                    ApplyOps = [RegOp.SetDword(AppxKey, "EnforcementMode", 1)],
-                    RemoveOps = [RegOp.DeleteValue(AppxKey, "EnforcementMode")],
-                    DetectOps = [RegOp.CheckDword(AppxKey, "EnforcementMode", 1)],
-                },
                 new TweakDef
                 {
                     Id = "applocker-enable-appid-service",
@@ -2335,29 +1896,6 @@ internal static class PolicyAppControl
                     RegOp.DeleteValue(HvciPol, "HypervisorEnforcedCodeIntegrity"),
                 ],
                 DetectOps = [RegOp.CheckDword(HvciPol, "HypervisorEnforcedCodeIntegrity", 2)],
-            },
-            new TweakDef
-            {
-                Id = "apl-enable-secured-core-vbs",
-                Label = "Enable Virtualization-Based Security (VBS)",
-                Category = "Security",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                Tags = ["vbs", "security", "virtualization", "hypervisor", "credential guard"],
-                Description =
-                    "Enables Virtualization-Based Security to create an isolated hypervisor environment. "
-                    + "Required for Credential Guard and HVCI. Set to be required if available (VBS locked).",
-                ApplyOps =
-                [
-                    RegOp.SetDword(DevGuardPol, "EnableVirtualizationBasedSecurity", 1),
-                    RegOp.SetDword(DevGuardPol, "RequirePlatformSecurityFeatures", 3),
-                ],
-                RemoveOps =
-                [
-                    RegOp.DeleteValue(DevGuardPol, "EnableVirtualizationBasedSecurity"),
-                    RegOp.DeleteValue(DevGuardPol, "RequirePlatformSecurityFeatures"),
-                ],
-                DetectOps = [RegOp.CheckDword(DevGuardPol, "EnableVirtualizationBasedSecurity", 1)],
             },
             new TweakDef
             {
@@ -2663,43 +2201,6 @@ internal static class PolicyAppControl
         [
             new TweakDef
             {
-                Id = "appp-deny-camera",
-                Label = "Policy: Force-Deny All UWP Apps Camera Access",
-                Category = "Security",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                Description =
-                    "Machine-level group policy that force-denies all UWP apps access to the "
-                    + "device camera, overriding per-user consent. LetAppsAccessCamera=2. "
-                    + "Complements aperm-deny-camera-access (user-level GUID).",
-                Tags = ["camera", "policy", "app privacy", "uwp", "privacy"],
-                RegistryKeys = [Policy],
-                ApplyOps = [RegOp.SetDword(Policy, "LetAppsAccessCamera", 2)],
-                RemoveOps = [RegOp.DeleteValue(Policy, "LetAppsAccessCamera")],
-                DetectOps = [RegOp.CheckDword(Policy, "LetAppsAccessCamera", 2)],
-            },
-            new TweakDef
-            {
-                Id = "appp-deny-microphone",
-                Label = "Policy: Force-Deny All UWP Apps Microphone Access",
-                Category = "Security",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                Description =
-                    "Machine-level policy force-denying all UWP apps access to the microphone. "
-                    + "LetAppsAccessMicrophone=2. Overrides user consent for all accounts.",
-                Tags = ["microphone", "policy", "app privacy", "uwp", "privacy"],
-                RegistryKeys = [Policy],
-                ApplyOps = [RegOp.SetDword(Policy, "LetAppsAccessMicrophone", 2)],
-                RemoveOps = [RegOp.DeleteValue(Policy, "LetAppsAccessMicrophone")],
-                DetectOps = [RegOp.CheckDword(Policy, "LetAppsAccessMicrophone", 2)],
-            },
-            new TweakDef
-            {
                 Id = "appp-deny-notifications",
                 Label = "Policy: Force-Deny All UWP Apps Notification Access",
                 Category = "Security",
@@ -2734,25 +2235,6 @@ internal static class PolicyAppControl
                 ApplyOps = [RegOp.SetDword(Policy, "LetAppsAccessAccountInfo", 2)],
                 RemoveOps = [RegOp.DeleteValue(Policy, "LetAppsAccessAccountInfo")],
                 DetectOps = [RegOp.CheckDword(Policy, "LetAppsAccessAccountInfo", 2)],
-            },
-            new TweakDef
-            {
-                Id = "appp-block-background-apps",
-                Label = "Policy: Block All UWP Apps from Running in Background",
-                Category = "Security",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 4,
-                Description =
-                    "Machine policy preventing UWP apps from running background tasks (live "
-                    + "tile updates, push notifications, location tracking). "
-                    + "LetAppsRunInBackground=2.",
-                Tags = ["background", "policy", "app privacy", "uwp", "performance"],
-                RegistryKeys = [Policy],
-                ApplyOps = [RegOp.SetDword(Policy, "LetAppsRunInBackground", 2)],
-                RemoveOps = [RegOp.DeleteValue(Policy, "LetAppsRunInBackground")],
-                DetectOps = [RegOp.CheckDword(Policy, "LetAppsRunInBackground", 2)],
             },
             new TweakDef
             {
@@ -2850,66 +2332,6 @@ internal static class PolicyAppControl
         [
             new TweakDef
             {
-                Id = "appprv2-deny-call-history",
-                Label = "App Privacy: Block all UWP apps from accessing call history",
-                Category = "Security",
-                Description =
-                    "Sets LetAppsAccessCallHistory=2 in AppPrivacy policy. Prevents all UWP apps from "
-                    + "reading the device call history (incoming/outgoing calls log) at machine level.",
-                Tags = ["privacy", "call-history", "app-privacy", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ApplyOps = [RegOp.SetDword(Policy, "LetAppsAccessCallHistory", 2)],
-                RemoveOps = [RegOp.DeleteValue(Policy, "LetAppsAccessCallHistory")],
-                DetectOps = [RegOp.CheckDword(Policy, "LetAppsAccessCallHistory", 2)],
-            },
-            new TweakDef
-            {
-                Id = "appprv2-deny-calendar",
-                Label = "App Privacy: Block all UWP apps from accessing the calendar",
-                Category = "Security",
-                Description =
-                    "Sets LetAppsAccessCalendar=2 in AppPrivacy policy. Prevents all UWP apps from "
-                    + "reading or writing calendar events at the machine policy level.",
-                Tags = ["privacy", "calendar", "app-privacy", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ApplyOps = [RegOp.SetDword(Policy, "LetAppsAccessCalendar", 2)],
-                RemoveOps = [RegOp.DeleteValue(Policy, "LetAppsAccessCalendar")],
-                DetectOps = [RegOp.CheckDword(Policy, "LetAppsAccessCalendar", 2)],
-            },
-            new TweakDef
-            {
-                Id = "appprv2-deny-contacts",
-                Label = "App Privacy: Block all UWP apps from accessing contacts",
-                Category = "Security",
-                Description =
-                    "Sets LetAppsAccessContacts=2 in AppPrivacy policy. Prevents all UWP apps from "
-                    + "reading or modifying the contacts/people store at the machine policy level.",
-                Tags = ["privacy", "contacts", "app-privacy", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ApplyOps = [RegOp.SetDword(Policy, "LetAppsAccessContacts", 2)],
-                RemoveOps = [RegOp.DeleteValue(Policy, "LetAppsAccessContacts")],
-                DetectOps = [RegOp.CheckDword(Policy, "LetAppsAccessContacts", 2)],
-            },
-            new TweakDef
-            {
-                Id = "appprv2-deny-radios",
-                Label = "App Privacy: Block all UWP apps from controlling radios (Wi-Fi/BT)",
-                Category = "Security",
-                Description =
-                    "Sets LetAppsAccessRadios=2 in AppPrivacy policy. Prevents all UWP apps from turning "
-                    + "Wi-Fi, Bluetooth, or other radio hardware on/off at the machine policy level.",
-                Tags = ["privacy", "radios", "bluetooth", "wifi", "app-privacy", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ApplyOps = [RegOp.SetDword(Policy, "LetAppsAccessRadios", 2)],
-                RemoveOps = [RegOp.DeleteValue(Policy, "LetAppsAccessRadios")],
-                DetectOps = [RegOp.CheckDword(Policy, "LetAppsAccessRadios", 2)],
-            },
-            new TweakDef
-            {
                 Id = "appprv2-deny-trusted-devices",
                 Label = "App Privacy: Block all UWP apps from accessing trusted devices",
                 Category = "Security",
@@ -2922,36 +2344,6 @@ internal static class PolicyAppControl
                 ApplyOps = [RegOp.SetDword(Policy, "LetAppsAccessTrustedDevices", 2)],
                 RemoveOps = [RegOp.DeleteValue(Policy, "LetAppsAccessTrustedDevices")],
                 DetectOps = [RegOp.CheckDword(Policy, "LetAppsAccessTrustedDevices", 2)],
-            },
-            new TweakDef
-            {
-                Id = "appprv2-deny-get-diagnostic-info",
-                Label = "App Privacy: Block all UWP apps from reading diagnostic information",
-                Category = "Security",
-                Description =
-                    "Sets LetAppsGetDiagnosticInfo=2 in AppPrivacy policy. Prevents all UWP apps from "
-                    + "retrieving diagnostic/health data from other apps running on the device.",
-                Tags = ["privacy", "diagnostic-info", "app-privacy", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ApplyOps = [RegOp.SetDword(Policy, "LetAppsGetDiagnosticInfo", 2)],
-                RemoveOps = [RegOp.DeleteValue(Policy, "LetAppsGetDiagnosticInfo")],
-                DetectOps = [RegOp.CheckDword(Policy, "LetAppsGetDiagnosticInfo", 2)],
-            },
-            new TweakDef
-            {
-                Id = "appprv2-deny-email",
-                Label = "App Privacy: Block all UWP apps from accessing email",
-                Category = "Security",
-                Description =
-                    "Sets LetAppsAccessEmail=2 in AppPrivacy policy. Prevents all UWP apps from reading "
-                    + "or sending email through the Windows Mail provider at the machine policy level.",
-                Tags = ["privacy", "email", "app-privacy", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ApplyOps = [RegOp.SetDword(Policy, "LetAppsAccessEmail", 2)],
-                RemoveOps = [RegOp.DeleteValue(Policy, "LetAppsAccessEmail")],
-                DetectOps = [RegOp.CheckDword(Policy, "LetAppsAccessEmail", 2)],
             },
             new TweakDef
             {
@@ -4110,42 +3502,6 @@ internal static class PolicyAppControl
             },
             new TweakDef
             {
-                Id = "appx-disable-sideloading",
-                Label = "Disable AppX Sideloading (Unsigned Packages)",
-                Category = "Security",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 4,
-                Tags = ["appx", "uwp", "sideloading", "policy", "security"],
-                Description =
-                    "Disables sideloading of untrusted AppX packages. AllowAllTrustedApps=0 "
-                    + "restricts installation to apps from the Microsoft Store or packages signed "
-                    + "with a trusted enterprise certificate.",
-                ApplyOps = [RegOp.SetDword(AppxPolicy2, "AllowAllTrustedApps", 0)],
-                RemoveOps = [RegOp.DeleteValue(AppxPolicy2, "AllowAllTrustedApps")],
-                DetectOps = [RegOp.CheckDword(AppxPolicy2, "AllowAllTrustedApps", 0)],
-            },
-            new TweakDef
-            {
-                Id = "appx-disable-dev-mode-sideload",
-                Label = "Disable Developer Mode AppX Sideloading",
-                Category = "Security",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                Tags = ["appx", "developer mode", "sideloading", "policy"],
-                Description =
-                    "Prevents AppX packages from being sideloaded in Developer Mode (without a "
-                    + "developer license). AllowDevelopmentWithoutDevLicense=0. Ensures only "
-                    + "signed packages from the Store can be installed.",
-                ApplyOps = [RegOp.SetDword(AppxPolicy2, "AllowDevelopmentWithoutDevLicense", 0)],
-                RemoveOps = [RegOp.DeleteValue(AppxPolicy2, "AllowDevelopmentWithoutDevLicense")],
-                DetectOps = [RegOp.CheckDword(AppxPolicy2, "AllowDevelopmentWithoutDevLicense", 0)],
-            },
-            new TweakDef
-            {
                 Id = "appx-restrict-deployment-to-system-volume",
                 Label = "Restrict AppX Deployment to System Volume Only",
                 Category = "Security",
@@ -4164,24 +3520,6 @@ internal static class PolicyAppControl
             },
             new TweakDef
             {
-                Id = "appx-block-store-app-installs",
-                Label = "Block Microsoft Store App Purchases and Installs",
-                Category = "Security",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 4,
-                Tags = ["appx", "microsoft store", "install", "policy", "enterprise"],
-                Description =
-                    "Prevents users from purchasing or installing new apps via the Microsoft Store. "
-                    + "RemoveWindowsStore=1. The Store app is still accessible for updates but "
-                    + "installs are blocked. Standard enterprise lockdown for unmanaged app control.",
-                ApplyOps = [RegOp.SetDword(MsStorePolicy, "RemoveWindowsStore", 1)],
-                RemoveOps = [RegOp.DeleteValue(MsStorePolicy, "RemoveWindowsStore")],
-                DetectOps = [RegOp.CheckDword(MsStorePolicy, "RemoveWindowsStore", 1)],
-            },
-            new TweakDef
-            {
                 Id = "appx-disable-store-auto-update",
                 Label = "Disable Automatic App Updates from Microsoft Store",
                 Category = "Security",
@@ -4197,24 +3535,6 @@ internal static class PolicyAppControl
                 ApplyOps = [RegOp.SetDword(MsStorePolicy, "AutoDownload", 2)],
                 RemoveOps = [RegOp.DeleteValue(MsStorePolicy, "AutoDownload")],
                 DetectOps = [RegOp.CheckDword(MsStorePolicy, "AutoDownload", 2)],
-            },
-            new TweakDef
-            {
-                Id = "appx-suppress-new-app-notification",
-                Label = "Suppress 'New App Installed' Notification in Explorer",
-                Category = "Security",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 1,
-                SafetyRating = 5,
-                Tags = ["appx", "notification", "explorer", "new app"],
-                Description =
-                    "Disables the 'You have new apps available' balloon notification that appears "
-                    + "in Windows Explorer when a new app can open a file type. NoNewAppAlert=1 "
-                    + "in the Explorer policy keeps the UI uncluttered.",
-                ApplyOps = [RegOp.SetDword(ExplorerPolicy, "NoNewAppAlert", 1)],
-                RemoveOps = [RegOp.DeleteValue(ExplorerPolicy, "NoNewAppAlert")],
-                DetectOps = [RegOp.CheckDword(ExplorerPolicy, "NoNewAppAlert", 1)],
             },
             new TweakDef
             {
@@ -4282,48 +3602,6 @@ internal static class PolicyAppControl
         [
             new TweakDef
             {
-                Id = "appxprov-block-sideload",
-                Label = "AppX Provisioning Policy: Block Sideloaded App Installation",
-                Category = "Security",
-                Description =
-                    "Prevents users from installing APPX packages that do not come from the Microsoft Store or a corporate store. "
-                    + "Sideloading enables installation of unvalidated applications that may contain malware or policy-violating functionality. "
-                    + "Blocking sideloading is a key control in CIS Level 1 hardening and enterprise security baselines. "
-                    + "Removing this policy permits sideloaded APPX installations (requires developer mode or allowlist).",
-                Tags = ["appx", "sideload", "security", "hardening", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                RegistryKeys = [Key],
-                ApplyOps = [RegOp.SetDword(Key, "AllowAllTrustedApps", 0)],
-                RemoveOps = [RegOp.DeleteValue(Key, "AllowAllTrustedApps")],
-                DetectOps = [RegOp.CheckDword(Key, "AllowAllTrustedApps", 0)],
-                ImpactScore = 4,
-                SafetyRating = 4,
-                ImpactNote = "Blocks sideloading of untrusted APPX; key security control preventing unvalidated app installation.",
-            },
-            new TweakDef
-            {
-                Id = "appxprov-block-developer-mode",
-                Label = "AppX Provisioning Policy: Block Developer Mode APPX Install",
-                Category = "Security",
-                Description =
-                    "Prevents enabling Developer Mode to allow unrestricted APPX sideloading on the device. "
-                    + "Developer Mode bypasses signature validation and store review, making it a significant security risk on production machines. "
-                    + "This policy prevents even local administrators from enabling Developer Mode without a corresponding GPO exemption. "
-                    + "Removing this policy allows administrators to enable Developer Mode.",
-                Tags = ["appx", "developer-mode", "security", "hardening", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                RegistryKeys = [Key],
-                ApplyOps = [RegOp.SetDword(Key, "AllowDevelopmentWithoutDevLicense", 0)],
-                RemoveOps = [RegOp.DeleteValue(Key, "AllowDevelopmentWithoutDevLicense")],
-                DetectOps = [RegOp.CheckDword(Key, "AllowDevelopmentWithoutDevLicense", 0)],
-                ImpactScore = 4,
-                SafetyRating = 4,
-                ImpactNote = "Blocks Developer Mode activation; prevents bypass of APPX signature validation.",
-            },
-            new TweakDef
-            {
                 Id = "appxprov-require-private-store",
                 Label = "AppX Provisioning Policy: Require Private Corporate Store Only",
                 Category = "Security",
@@ -4366,26 +3644,6 @@ internal static class PolicyAppControl
             },
             new TweakDef
             {
-                Id = "appxprov-disable-shared-local-appdata",
-                Label = "AppX Provisioning Policy: Disable Shared Local AppData for UWP",
-                Category = "Security",
-                Description =
-                    "Prevents Universal Windows Platform apps from accessing shared local AppData folders that may contain sensitive data from other user sessions. "
-                    + "Sandboxed UWP apps with shared AppData access risk cross-session data leakage in shared or kiosk environments. "
-                    + "Removing this policy permits UWP apps to use shared local AppData.",
-                Tags = ["appx", "appdata", "sandbox", "privacy", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                RegistryKeys = [Key],
-                ApplyOps = [RegOp.SetDword(Key, "AllowSharedLocalAppData", 0)],
-                RemoveOps = [RegOp.DeleteValue(Key, "AllowSharedLocalAppData")],
-                DetectOps = [RegOp.CheckDword(Key, "AllowSharedLocalAppData", 0)],
-                ImpactScore = 3,
-                SafetyRating = 4,
-                ImpactNote = "Restricts UWP shared AppData access; prevents cross-session data exposure in shared environments.",
-            },
-            new TweakDef
-            {
                 Id = "appxprov-block-consumer-provision",
                 Label = "AppX Provisioning Policy: Block Consumer Experience App Provisioning",
                 Category = "Security",
@@ -4404,26 +3662,6 @@ internal static class PolicyAppControl
                 ImpactScore = 4,
                 SafetyRating = 5,
                 ImpactNote = "Blocks silent consumer app provisioning at logon; maintains a clean enterprise app baseline.",
-            },
-            new TweakDef
-            {
-                Id = "appxprov-block-game-dvr-appstore",
-                Label = "AppX Provisioning Policy: Block Xbox App Store Integration",
-                Category = "Security",
-                Description =
-                    "Prevents the Xbox App and Xbox integrated Store components from being provisioned or auto-installed for managed accounts. "
-                    + "Xbox integration introduces gaming-related network traffic, Xbox Live account prompts, and gaming telemetry on enterprise machines. "
-                    + "Removing this policy allows Xbox App Store components to be provisioned for user accounts.",
-                Tags = ["appx", "xbox", "gaming", "enterprise", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                RegistryKeys = [Key],
-                ApplyOps = [RegOp.SetDword(Key, "BlockNonAdminUserInstall", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "BlockNonAdminUserInstall")],
-                DetectOps = [RegOp.CheckDword(Key, "BlockNonAdminUserInstall", 1)],
-                ImpactScore = 3,
-                SafetyRating = 4,
-                ImpactNote = "Blocks non-admin APPX installs including Xbox components; reduces gaming footprint on enterprise endpoints.",
             },
             new TweakDef
             {
@@ -4534,60 +3772,6 @@ internal static class PolicyAppControl
                     ApplyOps = [RegOp.SetDword(DgKey, "UsermodeCodeIntegrityPolicyEnforcementMode", 1)],
                     RemoveOps = [RegOp.DeleteValue(DgKey, "UsermodeCodeIntegrityPolicyEnforcementMode")],
                     DetectOps = [RegOp.CheckDword(DgKey, "UsermodeCodeIntegrityPolicyEnforcementMode", 1)],
-                },
-                new TweakDef
-                {
-                    Id = "wdacapp-enable-credential-guard",
-                    Label = "WDAC: Enable Credential Guard via Virtualization-Based Security",
-                    Category = "Security",
-                    Description =
-                        "Sets LsaCfgFlags=1 in DeviceGuard policy. Enables Credential Guard via Virtualization-Based Security (VBS). Credential Guard stores NTLM hashes and Kerberos Ticket Granting Tickets (TGTs) inside an isolated secure virtual machine backed by the CPU hypervisor. From outside the secure VM, no code — not even kernel code — can read these credentials. Without Credential Guard, NTLM hashes and Kerberos tickets stored in LSASS can be extracted by Mimikatz or similar tools, enabling Pass-the-Hash and Pass-the-Ticket attacks across the entire domain. Credential Guard eliminates these credential theft vectors for credentials stored in LSASS.",
-                    Tags = ["credential-guard", "vbs", "lsass", "pass-the-hash", "kerberos"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 5,
-                    SafetyRating = 4,
-                    ImpactNote =
-                        "NTLM hashes and Kerberos TGTs are isolated in a secure VM. Mimikatz and LSASS dump attacks cannot extract credentials from the secure enclave. Requires hardware-enforced virtualisation (SLAT). Some legacy authentication protocols (NTLMv1) and smart card configurations may be incompatible — test thoroughly in a lab before deployment.",
-                    ApplyOps = [RegOp.SetDword(DgKey, "LsaCfgFlags", 1)],
-                    RemoveOps = [RegOp.DeleteValue(DgKey, "LsaCfgFlags")],
-                    DetectOps = [RegOp.CheckDword(DgKey, "LsaCfgFlags", 1)],
-                },
-                new TweakDef
-                {
-                    Id = "wdacapp-enable-vbs",
-                    Label = "WDAC: Enable Virtualization-Based Security (VBS)",
-                    Category = "Security",
-                    Description =
-                        "Sets EnableVirtualizationBasedSecurity=1 in DeviceGuard policy. Enables Virtualization-Based Security (VBS) which creates an isolated hypervisor partition (Virtual Secure Mode) for protecting security-sensitive OS components. VBS is the foundation that HVCI and Credential Guard require to operate. Without VBS enabled, neither HVCI nor Credential Guard can function — they will be silently disabled even if their individual GPO keys are set. VBS requires hardware that supports SLAT (Second Level Address Translation), DEP, IOMMU, and Secure Boot. Modern CPUs and UEFI firmware universally support this.",
-                    Tags = ["vbs", "virtual-secure-mode", "hypervisor", "foundation", "security"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 5,
-                    SafetyRating = 4,
-                    ImpactNote =
-                        "VBS (Virtual Secure Mode) is enabled. This is the prerequisite for Credential Guard and HVCI. Requires SLAT, IOMMU, and Secure Boot. 3–10% memory overhead from hypervisor page table isolation. Incompatible with some nested virtualisation scenarios (running a Type-2 hypervisor inside a VBS-enabled environment).",
-                    ApplyOps = [RegOp.SetDword(DgKey, "EnableVirtualizationBasedSecurity", 1)],
-                    RemoveOps = [RegOp.DeleteValue(DgKey, "EnableVirtualizationBasedSecurity")],
-                    DetectOps = [RegOp.CheckDword(DgKey, "EnableVirtualizationBasedSecurity", 1)],
-                },
-                new TweakDef
-                {
-                    Id = "wdacapp-require-uefi-secure-firmware-for-vbs",
-                    Label = "WDAC: Require UEFI Firmware Lock for VBS (Platform Security Level 3)",
-                    Category = "Security",
-                    Description =
-                        "Sets RequirePlatformSecurityFeatures=3 in DeviceGuard policy. Sets the Required Platform Security Features flag to level 3 (Secure Boot + DMA protection required). Level 3 requires both UEFI Secure Boot (to ensure VBS is not bypassed by booting a modified OS) AND IOMMU DMA protection (to prevent DMA attacks using rogue PCIe devices that could read VBS-protected memory regions). Without DMA protection, a rogue Thunderbolt/PCIe device can bypass the hypervisor memory isolation and read Credential Guard secrets from the physical RAM.",
-                    Tags = ["vbs", "platform-security", "dma-protection", "iommu", "thunderbolt"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 5,
-                    SafetyRating = 4,
-                    ImpactNote =
-                        "VBS requires Secure Boot AND IOMMU DMA protection (platform security level 3). Devices without IOMMU or with disabled Thunderbolt DMA protection cannot enable VBS at this level. Required for full protection against DMA-based attacks on VBS-protected memory. Devices without these capabilities silently fail to enable VBS.",
-                    ApplyOps = [RegOp.SetDword(DgKey, "RequirePlatformSecurityFeatures", 3)],
-                    RemoveOps = [RegOp.DeleteValue(DgKey, "RequirePlatformSecurityFeatures")],
-                    DetectOps = [RegOp.CheckDword(DgKey, "RequirePlatformSecurityFeatures", 3)],
                 },
                 new TweakDef
                 {
@@ -4873,57 +4057,6 @@ internal static class PolicyAppControl
             [
                 new TweakDef
                 {
-                    Id = "storepol-disable-store-entirely",
-                    Label = "Disable Microsoft Store App Entirely",
-                    Category = "Security",
-                    Description =
-                        "Completely blocks access to the Microsoft Store application for all users on the machine, preventing app browsing, purchasing, and installation via the Store UI.",
-                    Tags = ["store", "disable", "uwp", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 4,
-                    SafetyRating = 5,
-                    ImpactNote = "Microsoft Store completely disabled; users cannot browse, buy, or install apps from the Store UI.",
-                    ApplyOps = [RegOp.SetDword(Key, "RemoveWindowsStore", 1)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "RemoveWindowsStore")],
-                    DetectOps = [RegOp.CheckDword(Key, "RemoveWindowsStore", 1)],
-                },
-                new TweakDef
-                {
-                    Id = "storepol-disable-auto-app-download",
-                    Label = "Disable Automatic App Download and Installation via Store",
-                    Category = "Security",
-                    Description =
-                        "Prevents the Microsoft Store from automatically downloading and installing promoted applications in the background, stopping unsolicited app additions to the Start menu without user action.",
-                    Tags = ["store", "auto-download", "uwp", "bloat", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 4,
-                    SafetyRating = 5,
-                    ImpactNote = "Automatic Store app downloads disabled; no apps silently installed via Store promotion pipeline.",
-                    ApplyOps = [RegOp.SetDword(Key, "AutoDownload", 2)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "AutoDownload")],
-                    DetectOps = [RegOp.CheckDword(Key, "AutoDownload", 2)],
-                },
-                new TweakDef
-                {
-                    Id = "storepol-require-private-store-only",
-                    Label = "Restrict Store to Private (Enterprise) Store Only",
-                    Category = "Security",
-                    Description =
-                        "Restricts the Microsoft Store to show only the organisation's Private Store (Microsoft Intune / Business Store), preventing employees from browsing or installing from the public consumer Store catalog.",
-                    Tags = ["store", "private-store", "enterprise", "intune", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 4,
-                    SafetyRating = 5,
-                    ImpactNote = "Only Private/Enterprise Store catalog shown; public consumer apps not accessible via Store.",
-                    ApplyOps = [RegOp.SetDword(Key, "RequirePrivateStoreOnly", 1)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "RequirePrivateStoreOnly")],
-                    DetectOps = [RegOp.CheckDword(Key, "RequirePrivateStoreOnly", 1)],
-                },
-                new TweakDef
-                {
                     Id = "storepol-disable-store-in-shelf",
                     Label = "Disable Microsoft Store Suggestions in Taskbar (Shelf)",
                     Category = "Security",
@@ -4938,40 +4071,6 @@ internal static class PolicyAppControl
                     ApplyOps = [RegOp.SetDword(Key, "DisableStoreShelf", 1)],
                     RemoveOps = [RegOp.DeleteValue(Key, "DisableStoreShelf")],
                     DetectOps = [RegOp.CheckDword(Key, "DisableStoreShelf", 1)],
-                },
-                new TweakDef
-                {
-                    Id = "storepol-disable-appx-sideloading",
-                    Label = "Disable Unsigned Appx Package Sideloading",
-                    Category = "Security",
-                    Description =
-                        "Prevents installation of unsigned (developer) Appx/MSIX packages that are not from the Microsoft Store or properly signed by a trusted publisher, blocking potential malware distribution via sideloaded UWP packages.",
-                    Tags = ["store", "sideloading", "appx", "unsigned", "security", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 4,
-                    SafetyRating = 5,
-                    ImpactNote = "Unsigned Appx sideloading disabled; only Store-published or enterprise-signed MSIX packages can install.",
-                    ApplyOps = [RegOp.SetDword(AppKey, "AllowAllTrustedApps", 0)],
-                    RemoveOps = [RegOp.DeleteValue(AppKey, "AllowAllTrustedApps")],
-                    DetectOps = [RegOp.CheckDword(AppKey, "AllowAllTrustedApps", 0)],
-                },
-                new TweakDef
-                {
-                    Id = "storepol-disable-appx-developer-mode",
-                    Label = "Disable Windows Developer Mode Package Installation",
-                    Category = "Security",
-                    Description =
-                        "Prevents enabling Windows Developer Mode which would allow unrestricted Appx sideloading without publisher signing requirements, ensuring UWP installation policy restrictions are not bypassed via Developer Mode.",
-                    Tags = ["store", "developer-mode", "appx", "security", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 4,
-                    SafetyRating = 5,
-                    ImpactNote = "Developer Mode blocked via policy; sideloading restrictions cannot be bypassed by enabling Developer Mode.",
-                    ApplyOps = [RegOp.SetDword(AppKey, "AllowDevelopmentWithoutDevLicense", 0)],
-                    RemoveOps = [RegOp.DeleteValue(AppKey, "AllowDevelopmentWithoutDevLicense")],
-                    DetectOps = [RegOp.CheckDword(AppKey, "AllowDevelopmentWithoutDevLicense", 0)],
                 },
                 new TweakDef
                 {
@@ -6207,57 +5306,6 @@ internal static class PolicyAppControl
             [
                 new TweakDef
                 {
-                    Id = "wdacpol-enable-hvci-kernel-mode",
-                    Label = "Enable Hypervisor-Protected Code Integrity (HVCI) in Strict Mode",
-                    Category = "Security",
-                    Description =
-                        "Enables HVCI (Memory integrity) in strict enforcement mode, protecting kernel-mode code and data in a Hyper-V virtual trust level, preventing kernel driver exploits from modifying kernel memory or loading unsigned drivers.",
-                    Tags = ["hvci", "memory-integrity", "kernel", "wdac", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 5,
-                    SafetyRating = 5,
-                    ImpactNote = "HVCI strict mode enabled; kernel memory protected by Hyper-V. Unsigned kernel driver exploits blocked.",
-                    ApplyOps = [RegOp.SetDword(CfgKey, "EnableVirtualizationBasedSecurity", 1)],
-                    RemoveOps = [RegOp.DeleteValue(CfgKey, "EnableVirtualizationBasedSecurity")],
-                    DetectOps = [RegOp.CheckDword(CfgKey, "EnableVirtualizationBasedSecurity", 1)],
-                },
-                new TweakDef
-                {
-                    Id = "wdacpol-require-platform-security-vbs",
-                    Label = "Require Platform Security Features for VBS (Secure Boot + DMA)",
-                    Category = "Security",
-                    Description =
-                        "Configures Virtualization Based Security to require both Secure Boot and DMA protection (IOMMU) as mandatory platform security features, ensuring VBS protection cannot be enabled without proper hardware isolation.",
-                    Tags = ["vbs", "secure-boot", "dma-protection", "hvci", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 5,
-                    SafetyRating = 5,
-                    ImpactNote = "VBS requires Secure Boot + DMA/IOMMU hardware; VBS cannot be bypassed by disabling hardware security.",
-                    ApplyOps = [RegOp.SetDword(CfgKey, "RequirePlatformSecurityFeatures", 3)],
-                    RemoveOps = [RegOp.DeleteValue(CfgKey, "RequirePlatformSecurityFeatures")],
-                    DetectOps = [RegOp.CheckDword(CfgKey, "RequirePlatformSecurityFeatures", 3)],
-                },
-                new TweakDef
-                {
-                    Id = "wdacpol-enable-umci-enforcement",
-                    Label = "Enable User Mode Code Integrity (UMCI) Enforcement via WDAC",
-                    Category = "Security",
-                    Description =
-                        "Enables User Mode Code Integrity enforcement via Windows Defender Application Control, requiring all user-mode executables and DLLs to be signed by an allow-listed publisher or policy rule before loading.",
-                    Tags = ["wdac", "umci", "user-mode", "code-signing", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 5,
-                    SafetyRating = 5,
-                    ImpactNote = "UMCI enforcement enabled; unsigned user-mode binaries blocked from executing. Requires WDAC policy deployment.",
-                    ApplyOps = [RegOp.SetDword(CfgKey, "HypervisorEnforcedCodeIntegrity", 1)],
-                    RemoveOps = [RegOp.DeleteValue(CfgKey, "HypervisorEnforcedCodeIntegrity")],
-                    DetectOps = [RegOp.CheckDword(CfgKey, "HypervisorEnforcedCodeIntegrity", 1)],
-                },
-                new TweakDef
-                {
                     Id = "wdacpol-disable-test-signing",
                     Label = "Disable Kernel Test Signing Mode (Block Development Bypass)",
                     Category = "Security",
@@ -6387,82 +5435,6 @@ internal static class PolicyAppControl
             [
                 new TweakDef
                 {
-                    Id = "winstadv-disable-always-install-elevated",
-                    Label = "Installer Adv: Disable AlwaysInstallElevated to Prevent MSI Privilege Escalation",
-                    Category = "Security",
-                    Description =
-                        "Sets AlwaysInstallElevated=0 in the machine-scope Windows Installer policy. The AlwaysInstallElevated policy (when set to 1 in BOTH HKLM and HKCU) allows standard users to run MSI installers with SYSTEM-level privileges. This is a critical privilege escalation vector: any malicious MSI file dropped by an attacker on a machine with both keys set to 1 will execute its custom actions with SYSTEM rights, enabling immediate privilege escalation to SYSTEM for any standard user. "
-                        + "AlwaysInstallElevated is one of the most well-known Windows privilege escalation misconfigurations — it is checked as a first-step by tools like PowerUp, BeRoot, and Sherlock. In penetration tests of enterprise environments, this setting is frequently found enabled on developer machines where IT set it to allow software installation without admin prompts. The fix is zero-cost: AlwaysInstallElevated=0 requires no user-visible workflow changes while eliminating a binary privilege escalation path for any attacker who can write a temporary MSI file.",
-                    Tags = ["winstadv", "msi", "alwaysinstallelevated", "privilege-escalation", "powerup", "system-priv"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 5,
-                    SafetyRating = 5,
-                    ImpactNote =
-                        "MSI privilege escalation via AlwaysInstallElevated disabled. Standard users cannot install in elevated context — no breakage if admin approval was already required.",
-                    ApplyOps = [RegOp.SetDword(Key, "AlwaysInstallElevated", 0)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "AlwaysInstallElevated")],
-                    DetectOps = [RegOp.CheckDword(Key, "AlwaysInstallElevated", 0)],
-                },
-                new TweakDef
-                {
-                    Id = "winstadv-disable-user-control-over-install",
-                    Label = "Installer Adv: Remove User Control Over Windows Installer Behaviour",
-                    Category = "Security",
-                    Description =
-                        "Sets EnableUserControl=0 in Windows Installer policy. Prevents standard users from changing Windows Installer installation options — including installation location, install/remove component selection, and rollback behaviour — during a privileged MSI installation. Without this restriction, a carefully crafted UI sequence in a malicious MSI can be used to direct installation output to attacker-controlled paths during an elevated installer run. "
-                        + "The EnableUserControl=1 setting allows the Transform (MST) feature to accept user-provided transforms that modify the installer's property table. In a DLL planting scenario: an elevated MSI installer that copies DLLs to a system path writes them to a location specified as INSTALLDIR. If the user can influence INSTALLDIR (e.g., via a malicious transform), they can redirect DLL installation to a subfolder they control — and a privileged service that loads from that path will load the attacker's DLL. Disabling user control eliminates this transform injection vector.",
-                    Tags = ["winstadv", "msi", "user-control", "transform-injection", "dll-planting"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 4,
-                    SafetyRating = 5,
-                    ImpactNote =
-                        "Standard users cannot modify Windows Installer options during elevated installations. Custom MST transforms under user control are rejected.",
-                    ApplyOps = [RegOp.SetDword(Key, "EnableUserControl", 0)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "EnableUserControl")],
-                    DetectOps = [RegOp.CheckDword(Key, "EnableUserControl", 0)],
-                },
-                new TweakDef
-                {
-                    Id = "winstadv-disable-patch-installation",
-                    Label = "Installer Adv: Prevent Standard Users from Applying MSI Patches Directly",
-                    Category = "Security",
-                    Description =
-                        "Sets DisablePatch=1 in Windows Installer policy. Prevents standard users from applying MSP (Microsoft Patch) files directly to installed MSI applications without administrator approval. Standard user MSP application runs at the user's privilege level; however, if the base MSI was installed at elevated privilege and the patch modifies system-scope files, inconsistency between patch installation context and base package context can leave system files in a mixed state exploitable by privilege escalation. "
-                        + "Patch files (MSP) can replace arbitrary files within an installed product by referencing the original MSI's file table. An attacker who controls a well-crafted MSP for an installed enterprise MSI (e.g., a third-party vendor application) can use a modified patch to replace an application DLL with a malicious version. If the original MSI installed files to a system-protected path but the MSP runs at user privilege, the Windows Installer service's elevated write context (used for patching) can be manipulated to write attacker-controlled content to protected paths.",
-                    Tags = ["winstadv", "msi", "msp", "patch", "disable-patch", "dll-replacement"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 4,
-                    SafetyRating = 4,
-                    ImpactNote =
-                        "Standard users cannot install MSP patches directly. IT-managed patching (WSUS, SCCM) unaffected — only manual MSP execution by standard users is blocked.",
-                    ApplyOps = [RegOp.SetDword(Key, "DisablePatch", 1)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "DisablePatch")],
-                    DetectOps = [RegOp.CheckDword(Key, "DisablePatch", 1)],
-                },
-                new TweakDef
-                {
-                    Id = "winstadv-prevent-rollback-cleanup",
-                    Label = "Installer Adv: Disable MSI Rollback to Prevent Temporary File Persistence",
-                    Category = "Security",
-                    Description =
-                        "Sets DisableRollback=1 in Windows Installer policy. Disables the Windows Installer rollback feature. Rollback creates temporary backup copies of files before overwriting them, enabling restoration if the installation fails. These rollback files (stored in %TEMP%\\MSI*) persist on disk during the installation and are deleted on success/failure. On machines with malware that monitors %TEMP% for incoming files, rollback temporary files can expose sensitive installation data. "
-                        + "The installer rollback mechanism creates temporary copies of existing files before overwriting them. These temporary rollback files contain the complete binary content of production files (DLLs, EXEs, config files, encryption keys bundled in MSI packages) and are world-readable during installation. A process running as a standard user at the same time as an elevated MSI installation can read the rollback files in %TEMP% and obtain sensitive data that the MSI package installs to protected locations. Disabling rollback eliminates these temporary file exposures at the cost of post-failure manual cleanup.",
-                    Tags = ["winstadv", "msi", "rollback", "temp-files", "sensitive-data"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 3,
-                    SafetyRating = 3,
-                    ImpactNote =
-                        "MSI rollback disabled. Failed installations require manual cleanup — MSIZMA files will not be automatically removed. Test on non-production before deploying widely.",
-                    ApplyOps = [RegOp.SetDword(Key, "DisableRollback", 1)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "DisableRollback")],
-                    DetectOps = [RegOp.CheckDword(Key, "DisableRollback", 1)],
-                },
-                new TweakDef
-                {
                     Id = "winstadv-disable-msi-internet-sources",
                     Label = "Installer Adv: Disable MSI Package Installation from Internet Sources",
                     Category = "Security",
@@ -6482,25 +5454,6 @@ internal static class PolicyAppControl
                 },
                 new TweakDef
                 {
-                    Id = "winstadv-enable-logging",
-                    Label = "Installer Adv: Enable Verbose MSI Logging for Installation Audit Trail",
-                    Category = "Security",
-                    Description =
-                        "Sets Logging='voicewarmupx' in Windows Installer policy (REG_SZ). Enables verbose Windows Installer logging to %TEMP%\\MSI*.log for all installations. Each character in the logging string controls a category: v=verbose, o=out-of-disk status, i=status messages, c=initial UI parameters, e=error messages, w=warning messages, a=action start, r=action-specific records, m=memory used, u=user requests, p=terminal properties, x=extra debug info. "
-                        + "Without installer logging, a failed or malicious MSI installation leaves no audit trail. When investigating a security incident where an attacker installed malware via MSI, the absence of installer logs makes forensic reconstruction of the installation impossible. MSI logs record every action taken during the installation — including all file copies, registry writes, custom action command lines, DLL invocations, and error codes. MSI logs are critical for SOC investigations of supply chain attacks, trojanised enterprise software, and malicious package installations.",
-                    Tags = ["winstadv", "msi", "logging", "audit", "forensics", "malware-investigation"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 3,
-                    SafetyRating = 5,
-                    ImpactNote =
-                        "Verbose MSI logging enabled to %TEMP%\\MSI*.log. Log files accumulate over time; clean up log files periodically. No performance impact on installation itself.",
-                    ApplyOps = [RegOp.SetString(Key, "Logging", "voicewarmupx")],
-                    RemoveOps = [RegOp.DeleteValue(Key, "Logging")],
-                    DetectOps = [RegOp.CheckString(Key, "Logging", "voicewarmupx")],
-                },
-                new TweakDef
-                {
                     Id = "winstadv-disable-advertised-shortcuts",
                     Label = "Installer Adv: Disable Advertised Shortcut Install-on-Demand to Prevent Elevation Abuse",
                     Category = "Security",
@@ -6517,44 +5470,6 @@ internal static class PolicyAppControl
                     ApplyOps = [RegOp.SetDword(Key, "DisableAdvertisedShortcuts", 1)],
                     RemoveOps = [RegOp.DeleteValue(Key, "DisableAdvertisedShortcuts")],
                     DetectOps = [RegOp.CheckDword(Key, "DisableAdvertisedShortcuts", 1)],
-                },
-                new TweakDef
-                {
-                    Id = "winstadv-limit-system-restore-checkpoints",
-                    Label = "Installer Adv: Limit System Restore Checkpoint Creation During MSI Installs",
-                    Category = "Security",
-                    Description =
-                        "Sets LimitSystemRestoreCheckpointing=1 in Windows Installer policy. Prevents Windows Installer from creating a System Restore checkpoint for every MSI installation. By default, each MSI install creates a restore point — on machines that install many packages (e.g., during software deployment runs), this generates numerous restore points that consume significant disk space and slow down batch installations. "
-                        + "On a freshly provisioned endpoint receiving its full software stack (100+ MSI packages via SCCM/Intune), each installation creates an individual system restore point — resulting in 100 restore points consuming many gigabytes. Shadow storage fills up, causing earlier restore points to be deleted, rendering pre-provisioning baseline restore points inaccessible. For enterprise-managed endpoints, System Center Config Manager provides a superior rollback mechanism — MSI restore points on managed machines create overhead without providing actionable rollback capability.",
-                    Tags = ["winstadv", "msi", "system-restore", "checkpoint", "disk-space", "provisioning"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 2,
-                    SafetyRating = 5,
-                    ImpactNote =
-                        "System Restore checkpoints not created during MSI installations. Reduces restore point proliferation and disk usage during batch software deployment.",
-                    ApplyOps = [RegOp.SetDword(Key, "LimitSystemRestoreCheckpointing", 1)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "LimitSystemRestoreCheckpointing")],
-                    DetectOps = [RegOp.CheckDword(Key, "LimitSystemRestoreCheckpointing", 1)],
-                },
-                new TweakDef
-                {
-                    Id = "winstadv-disable-safe-mode-installs",
-                    Label = "Installer Adv: Block MSI Installation in Windows Safe Mode",
-                    Category = "Security",
-                    Description =
-                        "Sets SafeForScripting=1 in Windows Installer policy. Disables MSI installation in Windows Safe Mode. Windows Safe Mode loads a minimal driver set — security software (AV, EDR, application control) may not load in safe mode, leaving the endpoint unprotected. An attacker who can force a reboot into Safe Mode (e.g., using bcdedit, AutoRuns persistence on safeboot key, or physical access) gains an environment where Windows Installer would normally still function without security controls active. "
-                        + "Safe Mode abuse is a known attacker technique for bypassing endpoint security tools: ESET, Symantec, CrowdStrike, and other security agents do not load their kernel-mode components in Safe Mode. Ransomware variants (LockerGoga, SunCrypt, REvil) have been observed forcing reboots into Safe Mode before executing their payload precisely to bypass endpoint security. Blocking MSI installation in Safe Mode prevents this technique from deploying additional malware payloads during the unprotected Safe Mode boot window.",
-                    Tags = ["winstadv", "msi", "safe-mode", "edralert bypass", "ransomware", "safeboot"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 4,
-                    SafetyRating = 5,
-                    ImpactNote =
-                        "MSI installation blocked in Windows Safe Mode. Legitimate safe mode maintenance that requires MSI installation must be performed from normal mode.",
-                    ApplyOps = [RegOp.SetDword(Key, "SafeForScripting", 1)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "SafeForScripting")],
-                    DetectOps = [RegOp.CheckDword(Key, "SafeForScripting", 1)],
                 },
                 new TweakDef
                 {
@@ -6585,24 +5500,6 @@ internal static class PolicyAppControl
 
         public static IReadOnlyList<TweakDef> Data =>
             [
-                new TweakDef
-                {
-                    Id = "msipl-disable-always-install-elevated",
-                    Label = "Disable Always Install With Elevated Privileges",
-                    Category = "Security",
-                    Description =
-                        "Prevents Windows Installer from using SYSTEM privileges when installing any program, closing a well-known local privilege escalation vector (MSI AlwaysInstallElevated).",
-                    Tags = ["msi", "installer", "privilege", "security", "elevation", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 5,
-                    SafetyRating = 5,
-                    ImpactNote = "Critical: eliminates the AlwaysInstallElevated local privilege escalation path.",
-                    RegistryKeys = [Key],
-                    ApplyOps = [RegOp.SetDword(Key, "AlwaysInstallElevated", 0)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "AlwaysInstallElevated")],
-                    DetectOps = [RegOp.CheckDword(Key, "AlwaysInstallElevated", 0)],
-                },
                 new TweakDef
                 {
                     Id = "msipl-disable-user-installs",
@@ -6728,24 +5625,6 @@ internal static class PolicyAppControl
                     ApplyOps = [RegOp.SetString(Key, "SearchOrder", "n")],
                     RemoveOps = [RegOp.DeleteValue(Key, "SearchOrder")],
                     DetectOps = [RegOp.CheckString(Key, "SearchOrder", "n")],
-                },
-                new TweakDef
-                {
-                    Id = "msipl-disable-rollback",
-                    Label = "Disable MSI Installation Rollback",
-                    Category = "Security",
-                    Description =
-                        "Disables the creation of rollback files during MSI installations, reducing disk usage at the cost of installation recovery capability if an install fails mid-way.",
-                    Tags = ["msi", "installer", "rollback", "disk", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 2,
-                    SafetyRating = 3,
-                    ImpactNote = "Frees disk space during installs; failed installs may leave partial state with no rollback option.",
-                    RegistryKeys = [Key],
-                    ApplyOps = [RegOp.SetDword(Key, "DisableRollback", 1)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "DisableRollback")],
-                    DetectOps = [RegOp.CheckDword(Key, "DisableRollback", 1)],
                 },
                 new TweakDef
                 {
@@ -6947,69 +5826,6 @@ internal static class PolicyAppControl
         [
             new TweakDef
             {
-                Id = "wsfb-disable-store-apps",
-                Label = "Windows Store For Business: Disable Store App Installation",
-                Category = "Security",
-                Description =
-                    "Prevents users from installing applications from the public Microsoft Store. "
-                    + "On managed endpoints the public Store should be replaced by the private organizational store or an approved software catalog. "
-                    + "This policy blocks direct Store access while allowing Microsoft-published in-box apps to receive updates. "
-                    + "Removing this policy re-enables public Store app installation for all users.",
-                Tags = ["store", "app-install", "enterprise", "lockdown", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                RegistryKeys = [Key],
-                ApplyOps = [RegOp.SetDword(Key, "DisableStoreApps", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "DisableStoreApps")],
-                DetectOps = [RegOp.CheckDword(Key, "DisableStoreApps", 1)],
-                ImpactScore = 4,
-                SafetyRating = 4,
-                ImpactNote = "Blocks public Store installs; reduces shadow-IT and unapproved software risk.",
-            },
-            new TweakDef
-            {
-                Id = "wsfb-require-private-store-only",
-                Label = "Windows Store For Business: Require Private Store Only",
-                Category = "Security",
-                Description =
-                    "Forces the Microsoft Store app to display only the organization's private store tab, hiding the public Store catalog entirely. "
-                    + "When set, employees see only IT-approved applications and cannot browse or purchase from the public Store. "
-                    + "This is the recommended configuration for organizations using Microsoft Store for Business or Education. "
-                    + "Removing this policy restores the public Store tab alongside the private store.",
-                Tags = ["store", "private-store", "enterprise", "approved-apps", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                RegistryKeys = [Key],
-                ApplyOps = [RegOp.SetDword(Key, "RequirePrivateStoreOnly", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "RequirePrivateStoreOnly")],
-                DetectOps = [RegOp.CheckDword(Key, "RequirePrivateStoreOnly", 1)],
-                ImpactScore = 4,
-                SafetyRating = 5,
-                ImpactNote = "Limits Store UI to approved corporate apps only; eliminates public Store browsing.",
-            },
-            new TweakDef
-            {
-                Id = "wsfb-disable-automatic-download-app-updates",
-                Label = "Windows Store For Business: Disable Automatic App Update Downloads",
-                Category = "Security",
-                Description =
-                    "Prevents the Microsoft Store from automatically downloading and installing updates for Store apps in the background. "
-                    + "Automatic background updates consume bandwidth and may apply changes to apps that IT has not yet validated. "
-                    + "With this policy set, Store app updates are only delivered through Intune, WSUS, or manually triggered update scans. "
-                    + "Removing this policy re-enables automatic background Store app update downloads.",
-                Tags = ["store", "auto-update", "bandwidth", "enterprise", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                RegistryKeys = [Key],
-                ApplyOps = [RegOp.SetDword(Key, "AutoDownload", 2)],
-                RemoveOps = [RegOp.DeleteValue(Key, "AutoDownload")],
-                DetectOps = [RegOp.CheckDword(Key, "AutoDownload", 2)],
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Stops background Store app update downloads; reduces unmanaged bandwidth consumption.",
-            },
-            new TweakDef
-            {
                 Id = "wsfb-disable-store-purchase",
                 Label = "Windows Store For Business: Disable Store Purchases",
                 Category = "Security",
@@ -7049,27 +5865,6 @@ internal static class PolicyAppControl
                 ImpactScore = 4,
                 SafetyRating = 4,
                 ImpactNote = "Blocks sideloaded MSIX/AppX packages; prevents unauthorized app deployment channels.",
-            },
-            new TweakDef
-            {
-                Id = "wsfb-disable-store-ui",
-                Label = "Windows Store For Business: Disable Store UI Entry Points",
-                Category = "Security",
-                Description =
-                    "Removes Store launch shortcuts and promoted links from the Start menu, taskbar, and Settings pages. "
-                    + "When this policy is applied, clicking app tiles that would normally redirect to the Store shows an error instead. "
-                    + "This prevents users from discovering and requesting unapproved applications through incidental Store exposure. "
-                    + "Removing this policy restores all Store UI entry points.",
-                Tags = ["store", "ui", "start-menu", "enterprise", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                RegistryKeys = [Key],
-                ApplyOps = [RegOp.SetDword(Key, "RemoveWindowsStore", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "RemoveWindowsStore")],
-                DetectOps = [RegOp.CheckDword(Key, "RemoveWindowsStore", 1)],
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Removes Store entry points from UI; reduces user exposure to consumer-oriented Store.",
             },
             new TweakDef
             {
@@ -7133,27 +5928,6 @@ internal static class PolicyAppControl
                 ImpactScore = 2,
                 SafetyRating = 5,
                 ImpactNote = "Hides gaming/Xbox content from Store; reduces consumer content exposure on work devices.",
-            },
-            new TweakDef
-            {
-                Id = "wsfb-disable-store-pre-install-reqs",
-                Label = "Windows Store For Business: Block App Pre-Install Promotions",
-                Category = "Security",
-                Description =
-                    "Prevents Microsoft from pre-installing or promoting Store applications via Windows Update or OOBE flows. "
-                    + "Microsoft occasionally pre-installs promoted applications (such as Spotify, TikTok, or Candy Crush) onto managed devices via the Store pre-install mechanism. "
-                    + "On corporate SOEs this behavior introduces unapproved software and clutters the Start menu with consumer content. "
-                    + "Removing this policy allows Microsoft to pre-install promoted Store applications.",
-                Tags = ["store", "pre-install", "bloatware", "enterprise", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                RegistryKeys = [Key],
-                ApplyOps = [RegOp.SetDword(Key, "DisableOSUpgrade", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "DisableOSUpgrade")],
-                DetectOps = [RegOp.CheckDword(Key, "DisableOSUpgrade", 1)],
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Blocks Store-driven pre-installs and OOBE promotions; keeps SOE image clean.",
             },
         ];
     }
