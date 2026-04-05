@@ -329,18 +329,98 @@ public sealed class TweakEngine
         return [token];
     }
 
-    public IReadOnlyList<TweakDef> Search(string query)
+    public IReadOnlyList<TweakDef> Search(string query, CancellationToken ct = default)
     {
+        ct.ThrowIfCancellationRequested();
         if (string.IsNullOrWhiteSpace(query))
             return _allTweaks;
         var lower = query.ToLowerInvariant();
         var tokens = lower.Split(' ', StringSplitOptions.RemoveEmptyEntries);
 
-        // Expand each token through the synonym map, then match tweaks
-        // where ALL expanded-token groups are satisfied (AND logic between groups).
+        // Expand each token through the synonym map (AND logic between groups)
         var expandedGroups = tokens.Select(ExpandSynonyms).ToList();
 
-        return _searchPairs.Where(p => expandedGroups.All(group => group.Any(term => p.Lower.Contains(term)))).Select(p => p.Tweak).ToList();
+        // Build ranked list: keep only tweaks where all expanded-token groups match,
+        // then order by relevance score (highest first).
+        var candidates = new List<(TweakDef Tweak, int Score)>();
+        foreach (var (searchText, tweak) in _searchPairs)
+        {
+            ct.ThrowIfCancellationRequested();
+            if (expandedGroups.All(group => group.Any(term => searchText.Contains(term))))
+            {
+                int score = ComputeSearchScore(lower, tokens, tweak);
+                candidates.Add((tweak, score));
+            }
+        }
+
+        candidates.Sort(static (a, b) => b.Score.CompareTo(a.Score));
+        return candidates.Select(static c => c.Tweak).ToList();
+    }
+
+    /// <summary>
+    /// Returns tweaks matching the query together with their relevance score, ordered by score descending.
+    /// Higher score = closer match (ID exact > label exact > tag > description > synonym).
+    /// </summary>
+    public IReadOnlyList<(TweakDef Tweak, int Score)> SearchRanked(string query, CancellationToken ct = default)
+    {
+        ct.ThrowIfCancellationRequested();
+        if (string.IsNullOrWhiteSpace(query))
+            return _allTweaks.Select(static t => (t, 0)).ToList();
+
+        var lower = query.ToLowerInvariant();
+        var tokens = lower.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+        var expandedGroups = tokens.Select(ExpandSynonyms).ToList();
+
+        var results = new List<(TweakDef Tweak, int Score)>();
+        foreach (var (searchText, tweak) in _searchPairs)
+        {
+            ct.ThrowIfCancellationRequested();
+            if (expandedGroups.All(group => group.Any(term => searchText.Contains(term))))
+                results.Add((tweak, ComputeSearchScore(lower, tokens, tweak)));
+        }
+
+        results.Sort(static (a, b) => b.Score.CompareTo(a.Score));
+        return results;
+    }
+
+    private static int ComputeSearchScore(string queryLower, string[] tokens, TweakDef tweak)
+    {
+        int score = 0;
+        var idLower = tweak.Id.ToLowerInvariant();
+        var labelLower = tweak.Label.ToLowerInvariant();
+
+        // ID match weights (100/80/60)
+        if (idLower == queryLower)
+            score += 100;
+        else if (idLower.StartsWith(queryLower, StringComparison.Ordinal))
+            score += 80;
+        else if (idLower.Contains(queryLower, StringComparison.Ordinal))
+            score += 60;
+
+        // Label match weights (70/50)
+        if (labelLower == queryLower)
+            score += 70;
+        else if (labelLower.Contains(queryLower, StringComparison.Ordinal))
+            score += 50;
+
+        // Tag exact match per token (40 each)
+        foreach (var token in tokens)
+            if (tweak.Tags.Any(tag => tag.Equals(token, StringComparison.OrdinalIgnoreCase)))
+                score += 40;
+
+        // Description match (20)
+        if (!string.IsNullOrEmpty(tweak.Description) && tweak.Description.Contains(queryLower, StringComparison.OrdinalIgnoreCase))
+            score += 20;
+
+        // Category match (15)
+        if (tweak.Category.Contains(queryLower, StringComparison.OrdinalIgnoreCase))
+            score += 15;
+
+        // Fallback: synonym match (10) — already passed the filter, so at least 10
+        if (score == 0)
+            score = 10;
+
+        return score;
     }
 
     public IReadOnlyList<TweakDef> Filter(
@@ -389,19 +469,32 @@ public sealed class TweakEngine
         }
     }
 
-    public Dictionary<string, TweakResult> StatusMap(bool parallel = false, IEnumerable<string>? ids = null)
+    public Dictionary<string, TweakResult> StatusMap(bool parallel = false, IEnumerable<string>? ids = null, CancellationToken ct = default)
     {
+        ct.ThrowIfCancellationRequested();
         var tweaks = ids is not null ? TweaksByIds(ids) : _allTweaks;
         var result = new ConcurrentDictionary<string, TweakResult>();
 
         if (parallel)
         {
-            Parallel.ForEach(tweaks, td => result[td.Id] = DetectStatus(td));
+            var options = new ParallelOptions { CancellationToken = ct };
+            Parallel.ForEach(
+                tweaks,
+                options,
+                td =>
+                {
+                    ct.ThrowIfCancellationRequested();
+                    result[td.Id] = DetectStatus(td);
+                }
+            );
         }
         else
         {
             foreach (var td in tweaks)
+            {
+                ct.ThrowIfCancellationRequested();
                 result[td.Id] = DetectStatus(td);
+            }
         }
         return new Dictionary<string, TweakResult>(result);
     }
@@ -692,5 +785,123 @@ public sealed class TweakEngine
             onProgress(i + 1, list.Count, td.Id, r);
         }
         return result;
+    }
+
+    // ── Phase 1.1: Transactional batch operations by ID ──────────────────────────────────────────
+
+    /// <summary>
+    /// Apply tweaks by ID with optional transactional rollback, progress callback, and cancellation.
+    /// When <paramref name="transactional"/> is <c>true</c>, any failure triggers an automatic
+    /// reverse-order revert of all previously applied tweaks in the batch.
+    /// </summary>
+    public BatchResult ApplyBatch(
+        IReadOnlyList<string> ids,
+        bool forceCorp = false,
+        bool transactional = false,
+        Action<int, int, string>? onProgress = null,
+        CancellationToken ct = default
+    )
+    {
+        var tweaks = TweaksByIds(ids);
+        var results = new List<(string Id, TweakResult Result)>(tweaks.Count);
+        var appliedTweaks = new List<TweakDef>();
+        bool rolledBack = false;
+        bool wasCancelled = false;
+        var rollbackErrors = new List<string>();
+
+        for (int i = 0; i < tweaks.Count; i++)
+        {
+            if (ct.IsCancellationRequested)
+            {
+                wasCancelled = true;
+                break;
+            }
+
+            var td = tweaks[i];
+            onProgress?.Invoke(i + 1, tweaks.Count, td.Id);
+
+            var result = Apply(td, forceCorp: forceCorp);
+            results.Add((td.Id, result));
+
+            if (result == TweakResult.Applied)
+                appliedTweaks.Add(td);
+
+            if (transactional && result == TweakResult.Error)
+            {
+                rolledBack = true;
+                foreach (var applied in Enumerable.Reverse(appliedTweaks))
+                {
+                    var revertResult = Remove(applied, forceCorp: forceCorp);
+                    if (revertResult == TweakResult.Error)
+                        rollbackErrors.Add(applied.Id);
+                }
+                break;
+            }
+        }
+
+        return new BatchResult
+        {
+            Results = results,
+            RolledBack = rolledBack,
+            RollbackErrors = rollbackErrors,
+            WasCancelled = wasCancelled,
+        };
+    }
+
+    /// <summary>
+    /// Remove tweaks by ID with optional transactional rollback, progress callback, and cancellation.
+    /// </summary>
+    public BatchResult RemoveBatch(
+        IReadOnlyList<string> ids,
+        bool forceCorp = false,
+        bool transactional = false,
+        Action<int, int, string>? onProgress = null,
+        CancellationToken ct = default
+    )
+    {
+        var tweaks = TweaksByIds(ids);
+        var results = new List<(string Id, TweakResult Result)>(tweaks.Count);
+        var removedTweaks = new List<TweakDef>();
+        bool rolledBack = false;
+        bool wasCancelled = false;
+        var rollbackErrors = new List<string>();
+
+        for (int i = 0; i < tweaks.Count; i++)
+        {
+            if (ct.IsCancellationRequested)
+            {
+                wasCancelled = true;
+                break;
+            }
+
+            var td = tweaks[i];
+            onProgress?.Invoke(i + 1, tweaks.Count, td.Id);
+
+            var result = Remove(td, forceCorp: forceCorp);
+            results.Add((td.Id, result));
+
+            if (result == TweakResult.NotApplied)
+                removedTweaks.Add(td);
+
+            if (transactional && result == TweakResult.Error)
+            {
+                rolledBack = true;
+                foreach (var removed in Enumerable.Reverse(removedTweaks))
+                {
+                    var revertResult = Apply(removed, forceCorp: forceCorp);
+                    if (revertResult == TweakResult.Error)
+                        rollbackErrors.Add(removed.Id);
+                }
+                break;
+            }
+        }
+
+        return new BatchResult
+        {
+            Results = results,
+            RolledBack = rolledBack,
+            RollbackErrors = rollbackErrors,
+            WasCancelled = wasCancelled,
+        };
     }
 }

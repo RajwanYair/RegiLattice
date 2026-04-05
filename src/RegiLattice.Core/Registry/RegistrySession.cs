@@ -268,6 +268,99 @@ public sealed class RegistrySession
         };
     }
 
+    // ── Execute with diff ───────────────────────────────────────────────
+
+    /// <summary>
+    /// Executes write operations and returns a before/after diff for each mutated value.
+    /// In DryRun mode, reads current values and reports what <em>would</em> change without writing.
+    /// </summary>
+    public (IReadOnlyList<RegDiff> Diffs, bool Success) ExecuteWithDiff(IReadOnlyList<RegOp> ops)
+    {
+        var diffs = new List<RegDiff>(ops.Count);
+
+        if (_dryRun)
+        {
+            // Preview mode: read current values and show what would change
+            foreach (var op in ops)
+            {
+                switch (op.Kind)
+                {
+                    case RegOpKind.SetValue:
+                        diffs.Add(
+                            new RegDiff
+                            {
+                                Path = op.Path,
+                                ValueName = op.Name,
+                                Before = ReadValue(op.Path, op.Name),
+                                After = op.Value,
+                            }
+                        );
+                        break;
+                    case RegOpKind.DeleteValue:
+                        diffs.Add(
+                            new RegDiff
+                            {
+                                Path = op.Path,
+                                ValueName = op.Name,
+                                Before = ReadValue(op.Path, op.Name),
+                                After = null,
+                            }
+                        );
+                        break;
+                    case RegOpKind.DeleteTree:
+                        diffs.Add(
+                            new RegDiff
+                            {
+                                Path = op.Path,
+                                ValueName = "(key)",
+                                Before = KeyExists(op.Path) ? "(exists)" : null,
+                                After = null,
+                            }
+                        );
+                        break;
+                }
+                Interlocked.Increment(ref _dryOps);
+            }
+            return (diffs, true);
+        }
+
+        // Live mode: capture before → execute → capture after
+        try
+        {
+            var before = new Dictionary<(string Path, string Name), object?>(ops.Count);
+            foreach (var op in ops)
+            {
+                if (op.Kind is RegOpKind.SetValue or RegOpKind.DeleteValue)
+                    before[(op.Path, op.Name)] = ReadValue(op.Path, op.Name);
+            }
+
+            Execute(ops);
+
+            foreach (var op in ops)
+            {
+                if (op.Kind is RegOpKind.SetValue or RegOpKind.DeleteValue)
+                {
+                    var key = (op.Path, op.Name);
+                    diffs.Add(
+                        new RegDiff
+                        {
+                            Path = op.Path,
+                            ValueName = op.Name,
+                            Before = before.GetValueOrDefault(key),
+                            After = ReadValue(op.Path, op.Name),
+                        }
+                    );
+                }
+            }
+            return (diffs, true);
+        }
+        catch (Exception ex)
+        {
+            WriteLog($"ExecuteWithDiff failed: {ex.Message}");
+            return (diffs, false);
+        }
+    }
+
     // ── Logging ─────────────────────────────────────────────────────────
 
     public void WriteLog(string message)
@@ -304,4 +397,25 @@ public sealed class RegistrySession
             _ => throw new ArgumentException($"Unknown registry hive: {hive}"),
         };
     }
+}
+
+/// <summary>
+/// Represents a before/after change to a single registry value, as produced by
+/// <see cref="RegistrySession.ExecuteWithDiff"/>.
+/// </summary>
+public sealed class RegDiff
+{
+    public required string Path { get; init; }
+    public required string ValueName { get; init; }
+
+    /// <summary>Value before the operation. <c>null</c> if the value did not exist.</summary>
+    public object? Before { get; init; }
+
+    /// <summary>Value after the operation. <c>null</c> if the value was deleted.</summary>
+    public object? After { get; init; }
+
+    /// <summary>True when Before and After differ (i.e. the operation actually changed the registry).</summary>
+    public bool Changed => !Equals(Before, After);
+
+    public override string ToString() => $"{Path}\\{ValueName}: {Before ?? "(null)"} → {After ?? "(null)"}";
 }

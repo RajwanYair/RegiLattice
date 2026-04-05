@@ -4,6 +4,52 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [6.14.0] — 2026-04-05
+
+### Added — Phase 1: Engine & Model Hardening
+
+- **`TweakRisk` flags (1.3)**: New `[Flags] TweakRisk` enum with 8 flags
+  (`None`, `ModifiesHKLM`, `ModifiesHKCU`, `DeletesKey`, `RequiresReboot`,
+  `AffectsService`, `AffectsNetwork`, `AffectsSecurity`, `PotentialDataLoss`).
+  `TweakDef` gains `RiskFlags` (explicit override) and `EffectiveRiskFlags` (auto-detected
+  from `ApplyOps` registry paths and `Category` string). Zero breaking changes.
+
+- **Search relevance ranking (1.5)**: `TweakEngine.Search()` now returns results
+  ordered by relevance score (ID exact match = 100 pts, prefix = 80, contains = 60,
+  label exact = 70, label contains = 50, tag exact = 40, description = 20, category = 15).
+  New `SearchRanked(query, ct)` method returns `IReadOnlyList<(TweakDef Tweak, int Score)>`
+  for callers that need raw scores.
+
+- **`CancellationToken` support (1.2)**: `Search()`, `SearchRanked()`, `StatusMap()`,
+  `ApplyBatch()` (new overload), and `RemoveBatch()` (new overload) all accept an optional
+  `CancellationToken`. Tokens are checked eagerly at method entry — an already-cancelled token
+  throws immediately without starting work.
+
+- **Transactional batch apply (1.1)**: New `ApplyBatch(IReadOnlyList<string> ids, bool forceCorp,
+  bool transactional, Action<int,int,string>? onProgress, CancellationToken ct)` and matching
+  `RemoveBatch` overload return `BatchResult`. When `transactional=true` and a tweak errors,
+  all previously applied tweaks are reverted in reverse order.
+
+- **`BatchResult` type (1.1)**: Sealed class with `Results`, `RolledBack`, `RollbackErrors`,
+  `WasCancelled`, `SuccessCount`, `FailureCount`, and `HasErrors` computed properties.
+
+- **Registry diff capture (1.4)**: `RegistrySession.ExecuteWithDiff(ops)` returns
+  `(IReadOnlyList<RegDiff> Diffs, bool Success)`. In DryRun mode reads current state and
+  returns what would change; in live mode captures before/after state around `Execute()`.
+
+- **`RegDiff` type (1.4)**: Sealed class with `Path`, `ValueName`, `Before`, `After`, `Changed`,
+  and a descriptive `ToString()` override.
+
+- **35 new Phase 1 tests**: `Phase1Tests.cs` covering TweakRisk auto-detection, search ranking,
+  CancellationToken early guards, BatchResult transactional behavior, and RegDiff capture.
+
+### Stats
+
+- Tweaks: **7,189** (unchanged)
+- Tests: **3,092** (+38 Phase 1 tests + 3 NRE regression tests)
+
+---
+
 ## [6.13.0] — 2026-04-05
 
 ### Changed
