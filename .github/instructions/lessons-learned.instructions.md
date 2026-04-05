@@ -1,4 +1,4 @@
----
+﻿---
 applyTo: "**/*.cs,**/tests/**,**/*Tests/**"
 ---
 
@@ -1416,7 +1416,8 @@ Version history:
 | v6.8.0 | 0 | -643 | — (consolidation: 15 file merges, 20 category renames, 643 duplicate tweaks removed; 45→30 files, 47→26 categories, 9490→8847 tweaks) |
 | v6.9.0 | 0 | 0 | — (doc consolidation: Architecture.md/Development.md/README.md stale counts fixed; git-workflow updated with SVG update mandate) |
 | v6.10.0 | 0 | -44 | — (Phase C: removed 44 scoop tool-install tweaks from Developer.cs; 8,847→8,803 tweaks) |
-**Current version**: v6.10.0 — 8,803 tweaks, 26 categories, 30 modules. Run full gap analysis on all three phases before creating any new module.
+| v6.11.0 | 5 | +50 | 667–671 (PolicyLocation/PolicyDataCollection/PolicyWinRM/PolicyCredentialUI/PolicyMediaPlayer) |
+**Current version**: v6.11.0 — 8,853 tweaks, 26 categories, 35 modules. Run full gap analysis on all three phases before creating any new module.
 
 ---
 

@@ -4,6 +4,37 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [6.11.0] — 2026-04-05
+
+### Added
+
+- **Sprint 667–671 — 5 new Group Policy modules (+50 tweaks)**:
+  - **PolicyLocation.cs** (Sprint 667–668): 10 tweaks — Windows Maps app policy (disable location, traffic,
+    auto-update, network access, geo-fence) + Location & Sensors platform policy (disable location platform,
+    scripting, Windows Location Provider, sensors, geolocation API). IDs: `priv-maps-*`, `priv-loc-*`.
+    Category: Privacy.
+  - **PolicyDataCollection.cs** (Sprint 669): 10 tweaks — Advanced telemetry suppression (AllowTelemetry=1,
+    LimitEnhancedDiagnosticDataWindowsAnalytics, DisableDeviceCensus, OneDrive diagnostic telemetry,
+    CompatibilityAppraiser) + AppCompat CEIP (PCA, engine, Switchback, CEIP reporting, UAC mitigation).
+    IDs: `telem-policy-*`. Category: Privacy.
+  - **PolicyWinRM.cs** (Sprint 670): 10 tweaks — WinRM server hardening (Basic auth, Digest auth,
+    unencrypted traffic, auto-config, CredSSP/RunAs) + WinRM client hardening (Basic auth, unencrypted
+    traffic, Digest auth, CredSSP, empty TrustedHosts). IDs: `sec-winrm-*`. Category: Security.
+  - **PolicyCredentialUI.cs** (Sprint 671): 10 tweaks — Credential UI hardening (admin enumeration,
+    trusted path, generic prompts, anonymous logon, web credential provider tile) + Credential Provider
+    policies (domain picker, cached credential display, lock screen last user, legal notice banner,
+    shutdown-without-logon). IDs: `sec-credui-*`. Category: Security.
+  - **PolicyMediaPlayer.cs** (Sprint 671): 10 tweaks — Windows Media Player privacy/security (first-run
+    wizard, auto codec download, MMS protocol, library sharing, DRM online acquisition, CD/DVD metadata,
+    music metadata, Radio UI, predictive buffering, hide Privacy tab). IDs: `media-policy-*`.
+    Category: Multimedia.
+
+### Stats
+
+- Tweaks: **8,853** (+50 from v6.10.0) | Categories: **26** | Modules: **35** (+5) | Tests: **3,051** (0 failures)
+
+---
+
 ## [6.10.0] — 2026-04-05
 
 ### Removed
