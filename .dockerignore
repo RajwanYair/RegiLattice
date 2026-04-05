@@ -1,0 +1,5 @@
+# Exclude everything from the Docker build context by default.
+# The packages.yml workflow copies only regilattice.exe into the context before building.
+**
+!Dockerfile
+!regilattice.exe

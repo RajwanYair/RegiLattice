@@ -1,0 +1,32 @@
+{
+  "name": "@rajwanyair/regilattice",
+  "version": "6.12.0",
+  "description": "RegiLattice — Windows registry tweak toolkit (7,189 tweaks across 23 categories)",
+  "keywords": ["windows", "registry", "tweaks", "performance", "privacy", "security", "debloat"],
+  "homepage": "https://github.com/RajwanYair/RegiLattice",
+  "bugs": {
+    "url": "https://github.com/RajwanYair/RegiLattice/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/RajwanYair/RegiLattice.git"
+  },
+  "license": "MIT",
+  "author": "Yair Rajwan",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
+  "os": ["win32"],
+  "cpu": ["x64"],
+  "scripts": {
+    "postinstall": "node install.js"
+  },
+  "bin": {
+    "regilattice": "./bin/regilattice.js"
+  },
+  "files": [
+    "bin/regilattice.js",
+    "install.js",
+    ".npmrc"
+  ]
+}

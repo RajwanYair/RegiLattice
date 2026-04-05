@@ -1,5 +1,6 @@
 # ── .NET build / publish ─────────────────────────────────────
 **/bin/
+!npm/bin/
 **/obj/
 dist/
 publish/

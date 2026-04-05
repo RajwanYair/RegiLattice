@@ -1,0 +1,239 @@
+name: Publish GitHub Packages
+
+# Triggered automatically when a GitHub Release is published (i.e. after release.yml
+# creates the release from a vX.Y.Z tag push). Can also be triggered manually to
+# republish packages for a specific release without re-running the full release workflow.
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      tag_name:
+        description: "Release tag to publish packages for (e.g. v6.12.0)"
+        required: true
+        type: string
+
+concurrency:
+  group: packages-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  packages: write
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+# ─────────────────────────────────────────────────────────────────────────────
+# 1. NuGet — RegiLattice.Core on GitHub Packages NuGet registry
+#    Consumers:  dotnet add package RegiLattice.Core --source https://nuget.pkg.github.com/RajwanYair/index.json
+# ─────────────────────────────────────────────────────────────────────────────
+jobs:
+  publish-nuget:
+    name: NuGet — RegiLattice.Core
+    runs-on: windows-latest
+    timeout-minutes: 20
+    env:
+      MSBUILDDISABLENODEREUSE: 1
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: "10.0.x"
+
+      - name: Cache NuGet
+        uses: actions/cache@v5
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj', 'Directory.Packages.props', 'global.json') }}
+          restore-keys: ${{ runner.os }}-nuget-
+
+      - name: Restore
+        run: dotnet restore src/RegiLattice.Core/RegiLattice.Core.csproj
+
+      - name: Build
+        run: dotnet build src/RegiLattice.Core/RegiLattice.Core.csproj -c Release --no-restore
+
+      - name: Pack
+        run: dotnet pack src/RegiLattice.Core/RegiLattice.Core.csproj -c Release --no-build -o publish/nuget
+
+      - name: Push to GitHub Packages NuGet
+        run: >-
+          dotnet nuget push publish/nuget/*.nupkg
+          --source "https://nuget.pkg.github.com/RajwanYair/index.json"
+          --api-key ${{ github.token }}
+          --skip-duplicate
+
+# ─────────────────────────────────────────────────────────────────────────────
+# 2. Container — CLI image on GitHub Container Registry (GHCR)
+#    Consumers:  docker pull ghcr.io/rajwanyair/regilattice:latest
+# ─────────────────────────────────────────────────────────────────────────────
+  publish-container:
+    name: Container — GHCR (Windows Nano Server)
+    runs-on: windows-2022
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Resolve tag name
+        id: tag
+        shell: pwsh
+        run: |
+          $tag = '${{ github.event.release.tag_name || inputs.tag_name }}'
+          Write-Output "name=$tag" >> $env:GITHUB_OUTPUT
+
+      - name: Download CLI binary from release
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $tag = '${{ steps.tag.outputs.name }}'
+          $asset = "RegiLatticeCLI-$tag-win-x64.exe"
+          gh release download $tag --pattern $asset --output regilattice.exe --repo '${{ github.repository }}'
+          $mb = [math]::Round((Get-Item regilattice.exe).Length / 1MB, 1)
+          Write-Host "Downloaded $asset ($mb MB)"
+
+      - name: Log in to GitHub Container Registry
+        shell: pwsh
+        run: |
+          echo '${{ github.token }}' | docker login ghcr.io -u '${{ github.actor }}' --password-stdin
+
+      - name: Switch Docker to Windows containers mode
+        shell: pwsh
+        run: |
+          $cli = 'C:\Program Files\Docker\Docker\DockerCli.exe'
+          if (Test-Path $cli) {
+            & $cli -SwitchDaemon
+            # Wait for the daemon to restart in Windows containers mode.
+            $ready = $false
+            for ($i = 0; $i -lt 30; $i++) {
+              Start-Sleep -Seconds 2
+              try { docker info | Out-Null; $ready = $true; break } catch {}
+            }
+            if (-not $ready) { Write-Error 'Docker daemon did not become ready after switch.'; exit 1 }
+            Write-Host 'Docker is now in Windows containers mode.'
+          } else {
+            Write-Error 'DockerCli.exe not found — cannot switch to Windows containers.'; exit 1
+          }
+
+      - name: Build container image
+        shell: pwsh
+        run: |
+          $tag   = '${{ steps.tag.outputs.name }}'
+          $owner = '${{ github.repository_owner }}'.ToLower()
+          $img   = "ghcr.io/$owner/regilattice"
+          docker build -t "${img}:${tag}" -t "${img}:latest" .
+          Write-Host "Built ${img}:${tag}"
+
+      - name: Push container image
+        shell: pwsh
+        run: |
+          $tag   = '${{ steps.tag.outputs.name }}'
+          $owner = '${{ github.repository_owner }}'.ToLower()
+          $img   = "ghcr.io/$owner/regilattice"
+          docker push "${img}:${tag}"
+          docker push "${img}:latest"
+          Write-Host "Pushed ${img}:${tag} and ${img}:latest"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# 3. npm — @rajwanyair/regilattice on GitHub Packages npm registry
+#    Consumers:  npm install @rajwanyair/regilattice --registry https://npm.pkg.github.com
+# ─────────────────────────────────────────────────────────────────────────────
+  publish-npm:
+    name: npm — @rajwanyair/regilattice
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          registry-url: "https://npm.pkg.github.com"
+          scope: "@rajwanyair"
+
+      - name: Set version from release tag
+        run: |
+          VERSION="${{ github.event.release.tag_name || inputs.tag_name }}"
+          VERSION="${VERSION#v}"
+          jq --arg v "$VERSION" '.version = $v' npm/package.json > /tmp/pkg.json
+          mv /tmp/pkg.json npm/package.json
+          echo "npm package version set to $VERSION"
+
+      - name: Publish to GitHub Packages npm
+        working-directory: npm
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ github.token }}
+
+# ─────────────────────────────────────────────────────────────────────────────
+# 4. Maven — com.rajwanyair:regilattice on GitHub Packages Apache Maven registry
+#    Consumers:  <dependency><groupId>com.rajwanyair</groupId><artifactId>regilattice</artifactId></dependency>
+# ─────────────────────────────────────────────────────────────────────────────
+  publish-maven:
+    name: Maven — com.rajwanyair:regilattice
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-java@v4
+        with:
+          java-version: "21"
+          distribution: "temurin"
+
+      - name: Set version from release tag
+        run: |
+          VERSION="${{ github.event.release.tag_name || inputs.tag_name }}"
+          VERSION="${VERSION#v}"
+          # Replace only the first <version> element (the project version, not any dependency versions)
+          sed -i "0,|<version>[^<]*</version>|s||<version>${VERSION}</version>|" maven/pom.xml
+          echo "Maven POM version set to $VERSION"
+
+      - name: Deploy to GitHub Packages Maven
+        run: >-
+          mvn deploy
+          --file maven/pom.xml
+          --settings maven/settings.xml
+          --batch-mode
+          -DskipTests
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          GITHUB_ACTOR: ${{ github.actor }}
+
+# ─────────────────────────────────────────────────────────────────────────────
+# 5. RubyGems — regilattice on GitHub Packages RubyGems registry
+#    Consumers:  gem install regilattice --source https://rubygems.pkg.github.com/RajwanYair
+# ─────────────────────────────────────────────────────────────────────────────
+  publish-gem:
+    name: RubyGems — regilattice
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.3"
+
+      - name: Set version from release tag
+        run: |
+          VERSION="${{ github.event.release.tag_name || inputs.tag_name }}"
+          VERSION="${VERSION#v}"
+          sed -i "s|VERSION = '[^']*'|VERSION = '${VERSION}'|" gem/lib/regilattice/version.rb
+          echo "Gem version set to $VERSION"
+
+      - name: Build gem
+        working-directory: gem
+        run: gem build regilattice.gemspec --output-dir ../publish/gem/
+
+      - name: Push to GitHub Packages RubyGems
+        run: |
+          mkdir -p ~/.gem
+          printf -- "---\n:github: Bearer %s\n" "${{ github.token }}" > ~/.gem/credentials
+          chmod 0600 ~/.gem/credentials
+          gem push \
+            --key github \
+            --host https://rubygems.pkg.github.com/RajwanYair \
+            publish/gem/regilattice-*.gem
