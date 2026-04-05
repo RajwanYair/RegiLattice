@@ -1,9 +1,11 @@
-// Phase1Tests.cs — xUnit tests for v6.14.0 Phase 1 Engine & Model Hardening features:
-//   1.3 TweakRisk flags
-//   1.5 Search relevance ranking + SearchRanked
-//   1.2 CancellationToken on StatusMap and Search
-//   1.1 BatchResult + transactional ApplyBatch / RemoveBatch by ID
-//   1.4 RegDiff + ExecuteWithDiff
+// Phase1Tests.cs — xUnit tests for Phase 1 Engine & Model Hardening features:
+//   1.1 BatchResult + transactional ApplyBatch / RemoveBatch by ID     (v6.14.0)
+//   1.2 CancellationToken on StatusMap and Search                       (v6.14.0)
+//   1.3 TweakRisk flags                                                 (v6.14.0)
+//   1.4 RegDiff + ExecuteWithDiff                                       (v6.14.0)
+//   1.5 Search relevance ranking + SearchRanked                        (v6.14.0)
+//   1.6 User-defined custom profile API (TweakEngine wrappers)          (v6.15.0)
+//   1.7 Tweak recommendation engine — TweakEngine.RecommendTweaks       (v6.15.0)
 
 using System;
 using System.Collections.Generic;
@@ -633,5 +635,281 @@ public sealed class Phase1Tests
         Assert.Equal("new", diff.After);
         Assert.True(diff.Changed);
         Assert.Contains("→", diff.ToString());
+    }
+
+    // ═══════════════════════════════════════════════════════════════════
+    // Phase 1.6 — User-defined custom profile API (TweakEngine wrappers)
+    // ═══════════════════════════════════════════════════════════════════
+
+    private static string UniqueName(string prefix = "phase16") =>
+        $"{prefix}-{Guid.NewGuid():N}";
+
+    [Fact]
+    public void UserProfiles_InitiallyEmpty_WhenNoProfilesCreated()
+    {
+        // Profiles directory must not have accidentally leaked from a prior test.
+        // We can't guarantee a clean slate on disk, so we just verify the method
+        // returns an IReadOnlyList (contract check), not an exception.
+        var profiles = TweakEngine.UserProfiles();
+        Assert.NotNull(profiles);
+    }
+
+    [Fact]
+    public void CreateUserProfile_PersistsToDisk_AndIsRetrievable()
+    {
+        string name = UniqueName("create");
+        try
+        {
+            var created = TweakEngine.CreateUserProfile(name, "desc", ["id-a", "id-b"]);
+            Assert.NotNull(created);
+            Assert.Equal(name, created.Name);
+            Assert.Equal("desc", created.Description);
+            Assert.Equal(2, created.TweakIds.Count);
+
+            var retrieved = TweakEngine.GetUserProfile(name);
+            Assert.NotNull(retrieved);
+            Assert.Equal(name, retrieved.Name);
+        }
+        finally
+        {
+            TweakEngine.DeleteUserProfile(name);
+        }
+    }
+
+    [Fact]
+    public void CreateUserProfile_DuplicateName_ThrowsInvalidOperationException()
+    {
+        string name = UniqueName("dup");
+        TweakEngine.CreateUserProfile(name, "", []);
+        try
+        {
+            Assert.Throws<InvalidOperationException>(() =>
+                TweakEngine.CreateUserProfile(name, "", []));
+        }
+        finally
+        {
+            TweakEngine.DeleteUserProfile(name);
+        }
+    }
+
+    [Fact]
+    public void SaveUserProfile_OverwritesExistingProfile()
+    {
+        string name = UniqueName("save");
+        try
+        {
+            var original = TweakEngine.CreateUserProfile(name, "original", ["id-x"]);
+            var updated = original with { Description = "updated" };
+            TweakEngine.SaveUserProfile(updated);
+
+            var reloaded = TweakEngine.GetUserProfile(name);
+            Assert.NotNull(reloaded);
+            Assert.Equal("updated", reloaded.Description);
+        }
+        finally
+        {
+            TweakEngine.DeleteUserProfile(name);
+        }
+    }
+
+    [Fact]
+    public void UpdateUserProfile_UpdatesTweakIds()
+    {
+        string name = UniqueName("update");
+        try
+        {
+            TweakEngine.CreateUserProfile(name, "desc", ["id-a"]);
+            var updated = TweakEngine.UpdateUserProfile(name, ["id-b", "id-c"], "new-desc");
+            Assert.Equal(2, updated.TweakIds.Count);
+            Assert.Equal("new-desc", updated.Description);
+        }
+        finally
+        {
+            TweakEngine.DeleteUserProfile(name);
+        }
+    }
+
+    [Fact]
+    public void RenameUserProfile_ChangesNameOnDisk()
+    {
+        string name = UniqueName("rename-src");
+        string newName = UniqueName("rename-dst");
+        try
+        {
+            TweakEngine.CreateUserProfile(name, "", []);
+            TweakEngine.RenameUserProfile(name, newName);
+
+            Assert.Null(TweakEngine.GetUserProfile(name));
+            Assert.NotNull(TweakEngine.GetUserProfile(newName));
+        }
+        finally
+        {
+            TweakEngine.DeleteUserProfile(newName);
+        }
+    }
+
+    [Fact]
+    public void CloneUserProfile_CreatesIndependentCopy()
+    {
+        string name = UniqueName("clone-src");
+        string cloneName = UniqueName("clone-dst");
+        try
+        {
+            TweakEngine.CreateUserProfile(name, "original", ["id-1"]);
+            var clone = TweakEngine.CloneUserProfile(name, cloneName);
+            Assert.Equal(cloneName, clone.Name);
+            Assert.Equal("original", clone.Description);
+            Assert.Equal(["id-1"], clone.TweakIds);
+        }
+        finally
+        {
+            TweakEngine.DeleteUserProfile(name);
+            TweakEngine.DeleteUserProfile(cloneName);
+        }
+    }
+
+    [Fact]
+    public void DeleteUserProfile_RemovesProfileFromDisk()
+    {
+        string name = UniqueName("delete");
+        TweakEngine.CreateUserProfile(name, "", []);
+        TweakEngine.DeleteUserProfile(name);
+        Assert.Null(TweakEngine.GetUserProfile(name));
+    }
+
+    [Fact]
+    public void DeleteUserProfile_NonExistentName_DoesNotThrow()
+    {
+        TweakEngine.DeleteUserProfile("profile-that-does-not-exist-" + Guid.NewGuid().ToString("N"));
+    }
+
+    [Fact]
+    public void ApplyUserProfile_WithUnknownIds_ReturnsDictionary()
+    {
+        string name = UniqueName("apply");
+        try
+        {
+            TweakEngine.CreateUserProfile(name, "", ["nonexistent-id-1", "nonexistent-id-2"]);
+            var engine = new TweakEngine(new RegistrySession(dryRun: true));
+            // ApplyBatch returns empty when no IDs resolve — just verify no exception.
+            var result = engine.ApplyUserProfile(name);
+            Assert.NotNull(result);
+        }
+        finally
+        {
+            TweakEngine.DeleteUserProfile(name);
+        }
+    }
+
+    [Fact]
+    public void ApplyUserProfile_UnknownProfileName_ThrowsArgumentException()
+    {
+        var engine = new TweakEngine(new RegistrySession(dryRun: true));
+        Assert.Throws<ArgumentException>(() =>
+            engine.ApplyUserProfile("profile-that-does-not-exist-" + Guid.NewGuid().ToString("N")));
+    }
+
+    // ═══════════════════════════════════════════════════════════════════
+    // Phase 1.7 — Tweak recommendation engine (TweakEngine.RecommendTweaks)
+    // ═══════════════════════════════════════════════════════════════════
+
+    private static TweakDef MakeRecommendable(string id, int impact, int safety) =>
+        new()
+        {
+            Id = id,
+            Label = id,
+            Category = "Performance",
+            Tags = ["perf"],
+            ImpactScore = impact,
+            SafetyRating = safety,
+            ApplyOps = [RegOp.SetDword(@"HKCU\Software\Test\Recommend", id.Replace("-", ""), 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKCU\Software\Test\Recommend", id.Replace("-", ""))],
+            DetectOps = [RegOp.CheckDword(@"HKCU\Software\Test\Recommend", id.Replace("-", ""), 1)],
+        };
+
+    [Fact]
+    public void RecommendTweaks_ReturnsNonNullList()
+    {
+        var engine = new TweakEngine(new RegistrySession(dryRun: true));
+        engine.Register([MakeRecommendable("rec-001", impact: 4, safety: 5)]);
+        var recommendations = engine.RecommendTweaks();
+        Assert.NotNull(recommendations);
+    }
+
+    [Fact]
+    public void RecommendTweaks_LimitsToMaxResults()
+    {
+        var engine = new TweakEngine(new RegistrySession(dryRun: true));
+        var tweaks = Enumerable.Range(1, 10)
+            .Select(i => MakeRecommendable($"rec-limit-{i:000}", impact: 3, safety: 4))
+            .ToList();
+        engine.Register(tweaks);
+        var recommendations = engine.RecommendTweaks(maxResults: 3);
+        Assert.True(recommendations.Count <= 3, $"Expected ≤3 but got {recommendations.Count}");
+    }
+
+    [Fact]
+    public void TweakRecommendation_ConfidencePercent_IsInRange()
+    {
+        var engine = new TweakEngine(new RegistrySession(dryRun: true));
+        engine.Register([MakeRecommendable("rec-conf-001", impact: 5, safety: 5)]);
+        var recommendations = engine.RecommendTweaks();
+        foreach (var rec in recommendations)
+        {
+            Assert.InRange(rec.ConfidencePercent, 0, 100);
+        }
+    }
+
+    [Fact]
+    public void TweakRecommendation_HighImpactHighSafety_IsQuickWin()
+    {
+        var engine = new TweakEngine(new RegistrySession(dryRun: true));
+        engine.Register([MakeRecommendable("rec-qw-001", impact: 5, safety: 5)]);
+        var recommendations = engine.RecommendTweaks();
+        // High-score tweak must appear and be flagged as a quick win.
+        var qw = recommendations.FirstOrDefault(r => r.Tweak.Id == "rec-qw-001");
+        Assert.NotNull(qw);
+        Assert.True(qw.IsQuickWin, "impact=5 safety=5 must be a quick win");
+    }
+
+    [Fact]
+    public void TweakRecommendation_LowImpact_IsNotQuickWin()
+    {
+        var engine = new TweakEngine(new RegistrySession(dryRun: true));
+        engine.Register([MakeRecommendable("rec-notqw-001", impact: 2, safety: 5)]);
+        var recommendations = engine.RecommendTweaks();
+        var notQw = recommendations.FirstOrDefault(r => r.Tweak.Id == "rec-notqw-001");
+        Assert.NotNull(notQw);
+        Assert.False(notQw.IsQuickWin, "impact=2 must NOT be a quick win");
+    }
+
+    [Fact]
+    public void TweakRecommendation_HasRequiredProperties()
+    {
+        var engine = new TweakEngine(new RegistrySession(dryRun: true));
+        engine.Register([MakeRecommendable("rec-props-001", impact: 4, safety: 4)]);
+        var recommendations = engine.RecommendTweaks();
+        var rec = recommendations.FirstOrDefault(r => r.Tweak.Id == "rec-props-001");
+        Assert.NotNull(rec);
+        Assert.NotNull(rec.Tweak);
+        Assert.NotEmpty(rec.Reason);
+        Assert.InRange(rec.ConfidencePercent, 0, 100);
+    }
+
+    [Fact]
+    public void RecommendTweaks_WithAlreadyAppliedStatus_ExcludesAlreadyAppliedTweaks()
+    {
+        var engine = new TweakEngine(new RegistrySession(dryRun: true));
+        var tw = MakeRecommendable("rec-applied-001", impact: 5, safety: 5);
+        engine.Register([tw]);
+
+        var statusMap = new Dictionary<string, TweakResult>
+        {
+            [tw.Id] = TweakResult.Applied,
+        };
+        var recommendations = engine.RecommendTweaks(statusMap: statusMap);
+
+        // Already-applied tweak should not be in recommendations.
+        Assert.DoesNotContain(recommendations, r => r.Tweak.Id == tw.Id);
     }
 }

@@ -904,4 +904,106 @@ public sealed class TweakEngine
             WasCancelled = wasCancelled,
         };
     }
+
+    // ── Phase 1.6: User-defined custom profiles (delegated to UserProfileService) ─────
+
+    /// <summary>
+    /// Returns all user-created custom profiles from disk, sorted by name.
+    /// These are distinct from the 5 built-in static profiles (<see cref="Profiles"/>).
+    /// </summary>
+    public static IReadOnlyList<UserProfile> UserProfiles() => UserProfileService.GetProfiles();
+
+    /// <summary>Returns a user-created custom profile by name, or <c>null</c> when not found.</summary>
+    public static UserProfile? GetUserProfile(string name) => UserProfileService.GetProfile(name);
+
+    /// <summary>
+    /// Creates a new user-defined custom profile with an explicit list of tweak IDs
+    /// and persists it to disk.
+    /// </summary>
+    /// <exception cref="InvalidOperationException">Thrown when a profile with the same name already exists.</exception>
+    public static UserProfile CreateUserProfile(string name, string description, IReadOnlyList<string> tweakIds) =>
+        UserProfileService.Create(name, description, tweakIds);
+
+    /// <summary>
+    /// Persists a user-defined profile (new or previously loaded) to disk,
+    /// replacing any existing file with the same sanitised name.
+    /// </summary>
+    public static void SaveUserProfile(UserProfile profile) => UserProfileService.Save(profile);
+
+    /// <summary>
+    /// Updates the tweak list of an existing user-defined profile and saves it.
+    /// </summary>
+    /// <exception cref="InvalidOperationException">Thrown when the named profile does not exist.</exception>
+    public static UserProfile UpdateUserProfile(string name, IReadOnlyList<string> tweakIds, string? description = null) =>
+        UserProfileService.Update(name, tweakIds, description);
+
+    /// <summary>
+    /// Renames a user-defined profile, moving its JSON file on disk and updating the Name field.
+    /// </summary>
+    /// <exception cref="InvalidOperationException">
+    /// Thrown when the source profile does not exist or the target name is already taken.
+    /// </exception>
+    public static UserProfile RenameUserProfile(string name, string newName) =>
+        UserProfileService.Rename(name, newName);
+
+    /// <summary>
+    /// Clones an existing user-defined profile under a new name.
+    /// </summary>
+    /// <exception cref="InvalidOperationException">
+    /// Thrown when the source profile does not exist or the target name is already taken.
+    /// </exception>
+    public static UserProfile CloneUserProfile(string name, string newName) =>
+        UserProfileService.Clone(name, newName);
+
+    /// <summary>
+    /// Deletes a user-defined profile by name.  No-op when the profile does not exist.
+    /// </summary>
+    public static void DeleteUserProfile(string name) => UserProfileService.Delete(name);
+
+    /// <summary>
+    /// Applies all tweaks stored in a user-defined custom profile by their recorded IDs.
+    /// Silently skips IDs that are no longer registered in the engine.
+    /// </summary>
+    /// <exception cref="ArgumentException">Thrown when no profile with <paramref name="name"/> exists.</exception>
+    public Dictionary<string, TweakResult> ApplyUserProfile(string name, bool forceCorp = false)
+    {
+        var profile = UserProfileService.GetProfile(name)
+            ?? throw new ArgumentException($"User profile '{name}' not found.", nameof(name));
+        return ApplyBatch(TweaksByIds(profile.TweakIds), forceCorp);
+    }
+
+    // ── Phase 1.7: Tweak recommendation engine (delegated to SmartScanService) ─────
+
+    /// <summary>
+    /// Returns the top <paramref name="maxResults"/> recommended tweaks for the current machine,
+    /// ranked by priority (ImpactScore × SafetyRating).
+    /// Unapplied tweaks with the highest combined score surface first.
+    /// </summary>
+    /// <param name="maxResults">Maximum number of recommendations to return (default 25).</param>
+    /// <param name="forceCorpSafe">
+    /// When <c>true</c>, restricts recommendations to <see cref="TweakDef.CorpSafe"/> tweaks only.
+    /// </param>
+    /// <param name="statusMap">
+    /// A pre-computed status map from <see cref="StatusMap(bool, IEnumerable{string}?, CancellationToken)"/>.
+    /// Pass <c>null</c> to treat all tweaks as candidates regardless of current state.
+    /// </param>
+    public IReadOnlyList<TweakRecommendation> RecommendTweaks(
+        int maxResults = SmartScanService.MaxRecommendations,
+        bool forceCorpSafe = false,
+        IReadOnlyDictionary<string, TweakResult>? statusMap = null
+    )
+    {
+        var scanResult = SmartScanService.Scan(this, statusMap, forceCorpSafe);
+        return scanResult
+            .Recommendations
+            .Take(maxResults)
+            .Select(static r => new TweakRecommendation
+            {
+                Tweak = r.Tweak,
+                ConfidencePercent = Math.Clamp(r.PriorityScore * 4, 0, 100),
+                Reason = r.Reason,
+                IsQuickWin = r.IsQuickWin,
+            })
+            .ToList();
+    }
 }
