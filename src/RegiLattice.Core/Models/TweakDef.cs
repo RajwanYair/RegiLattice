@@ -51,6 +51,21 @@ public enum TweakKind
     PackageManager,
 }
 
+/// <summary>Risk flags describing what a tweak may affect. Auto-detected from ApplyOps when not explicitly set.</summary>
+[Flags]
+public enum TweakRisk
+{
+    None = 0,
+    ModifiesHKLM = 1 << 0, // Machine-wide registry change (HKLM)
+    ModifiesHKCU = 1 << 1, // User-scope registry change (HKCU)
+    DeletesKey = 1 << 2, // Uses DeleteTree or DeleteValue
+    RequiresReboot = 1 << 3, // Change needs reboot to fully take effect
+    AffectsService = 1 << 4, // Stops or disables a Windows service
+    AffectsNetwork = 1 << 5, // Modifies firewall, proxy, or DNS settings
+    AffectsSecurity = 1 << 6, // Weakens or hardens a security boundary
+    PotentialDataLoss = 1 << 7, // Could cause data loss (e.g. deletes a cache/log tree)
+}
+
 /// <summary>Standard icon identifier for a tweak category.</summary>
 public enum CategoryIcon
 {
@@ -159,6 +174,66 @@ public sealed class TweakDef
     /// Example: "Reduces boot time by ~2–5 s by disabling heavy startup services."
     /// </summary>
     public string ImpactNote { get; init; } = "";
+
+    /// <summary>
+    /// Explicit risk flags for this tweak. When left as <see cref="TweakRisk.None"/>,
+    /// <see cref="EffectiveRiskFlags"/> auto-detects from <see cref="ApplyOps"/> and
+    /// <see cref="Category"/>.
+    /// </summary>
+    public TweakRisk RiskFlags { get; init; } = TweakRisk.None;
+
+    /// <summary>
+    /// Effective risk flags: combines explicit <see cref="RiskFlags"/> with auto-detected
+    /// flags derived from <see cref="ApplyOps"/> paths and <see cref="Category"/>.
+    /// </summary>
+    public TweakRisk EffectiveRiskFlags => _effectiveRiskFlags ??= ComputeEffectiveRiskFlags();
+    private TweakRisk? _effectiveRiskFlags;
+
+    private TweakRisk ComputeEffectiveRiskFlags()
+    {
+        TweakRisk flags = RiskFlags;
+
+        // Auto-detect from ApplyOps registry paths
+        foreach (var op in ApplyOps)
+        {
+            if (
+                op.Path.StartsWith("HKLM", StringComparison.OrdinalIgnoreCase)
+                || op.Path.StartsWith("HKEY_LOCAL_MACHINE", StringComparison.OrdinalIgnoreCase)
+                || op.Path.StartsWith("HKCR", StringComparison.OrdinalIgnoreCase)
+                || op.Path.StartsWith("HKEY_CLASSES_ROOT", StringComparison.OrdinalIgnoreCase)
+            )
+                flags |= TweakRisk.ModifiesHKLM;
+
+            if (
+                op.Path.StartsWith("HKCU", StringComparison.OrdinalIgnoreCase)
+                || op.Path.StartsWith("HKEY_CURRENT_USER", StringComparison.OrdinalIgnoreCase)
+            )
+                flags |= TweakRisk.ModifiesHKCU;
+
+            if (op.Kind is RegOpKind.DeleteTree or RegOpKind.DeleteValue)
+                flags |= TweakRisk.DeletesKey;
+        }
+
+        // Auto-detect from Category
+        switch (Category)
+        {
+            case "Services" or "Scheduled Tasks":
+                flags |= TweakRisk.AffectsService;
+                break;
+            case "Network" or "Network Optimization" or "DNS & Networking Advanced" or "Firewall" or "Proxy & VPN":
+                flags |= TweakRisk.AffectsNetwork;
+                break;
+            case "Security" or "Hardening" or "Encryption" or "User Account":
+                flags |= TweakRisk.AffectsSecurity;
+                break;
+        }
+
+        // Firewall affects both network and security
+        if (Category == "Firewall")
+            flags |= TweakRisk.AffectsNetwork | TweakRisk.AffectsSecurity;
+
+        return flags;
+    }
 
     /// <summary>How this tweak performs its work (auto-detected if KindHint not set, cached).</summary>
     public TweakKind Kind => _kind ??= KindHint ?? (ApplyAction is not null ? TweakKind.PowerShell : DetectKindFromOps());
@@ -464,4 +539,27 @@ public enum RegOpKind
     CheckValue,
     CheckMissing,
     CheckKeyMissing,
+}
+
+/// <summary>
+/// Result of a transactional batch apply or remove operation.
+/// Returned by the <see cref="TweakEngine.ApplyBatch(IReadOnlyList{string},bool,bool,Action{int,int,string}?,System.Threading.CancellationToken)"/>
+/// and <see cref="TweakEngine.RemoveBatch(IReadOnlyList{string},bool,bool,Action{int,int,string}?,System.Threading.CancellationToken)"/> overloads.
+/// </summary>
+public sealed class BatchResult
+{
+    public required IReadOnlyList<(string Id, TweakResult Result)> Results { get; init; }
+
+    /// <summary>True if the batch was transactional and rolled back due to a failure.</summary>
+    public bool RolledBack { get; init; }
+
+    /// <summary>IDs of tweaks that could not be reverted during rollback (empty when <see cref="RolledBack"/> is false).</summary>
+    public IReadOnlyList<string> RollbackErrors { get; init; } = [];
+
+    /// <summary>True if the cancellation token was triggered before all tweaks were processed.</summary>
+    public bool WasCancelled { get; init; }
+
+    public int SuccessCount => Results.Count(r => r.Result is TweakResult.Applied or TweakResult.NotApplied);
+    public int FailureCount => Results.Count(r => r.Result == TweakResult.Error);
+    public bool HasErrors => FailureCount > 0;
 }

@@ -230,6 +230,26 @@
 			"label": "force-rebuild-gui-tests",
 			"type": "shell",
 			"command": "dotnet build-server shutdown; Remove-Item \"$env:TEMP\\RegiLattice-build\\RegiLattice.GUI.Tests\" -Recurse -Force -ErrorAction SilentlyContinue; dotnet build tests/RegiLattice.GUI.Tests/RegiLattice.GUI.Tests.csproj -c Debug -m:1; dotnet test tests/RegiLattice.GUI.Tests/RegiLattice.GUI.Tests.csproj --settings tests/.runsettings --verbosity normal --blame-hang-timeout 60s --no-build --filter ExecutableValidation"
+		},
+		{
+			"label": "build-verify-fix",
+			"type": "shell",
+			"command": "$env:MSBUILDDISABLENODEREUSE = '1'; dotnet build RegiLattice.sln -c Debug -m:1 --verbosity minimal"
+		},
+		{
+			"label": "build-fix-verify",
+			"type": "shell",
+			"command": "$env:MSBUILDDISABLENODEREUSE = '1'; dotnet build RegiLattice.sln -c Debug -m:1 --verbosity minimal"
+		},
+		{
+			"label": "test-regression-gui",
+			"type": "shell",
+			"command": "dotnet test tests/RegiLattice.GUI.Tests/RegiLattice.GUI.Tests.csproj --settings tests/.runsettings --blame-hang-timeout 60s --no-build --filter \"TweakCardRow_Construction_DoesNotThrow|TweakBrowserPanel_SetEngine_DoesNotThrow|TweakBrowserPanel_Construction_DoesNotThrow\" --logger \"console;verbosity=normal\""
+		},
+		{
+			"label": "test-cardrow-regression",
+			"type": "shell",
+			"command": "dotnet test tests/RegiLattice.GUI.Tests/RegiLattice.GUI.Tests.csproj --settings tests/.runsettings --blame-hang-timeout 60s --no-build --filter 'TweakCardRow_Construction_DoesNotThrow' --logger 'console;verbosity=normal'"
 		}
 	]
 }

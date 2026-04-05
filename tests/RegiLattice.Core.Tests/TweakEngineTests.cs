@@ -1185,7 +1185,7 @@ public sealed class TweakEngineTests : IClassFixture<BuiltinsFixture>
     public void RemoveBatch_Empty_ReturnsEmptyDictionary()
     {
         var engine = TestHelpers.CreateEngine();
-        var result = engine.RemoveBatch([], forceCorp: true);
+        var result = engine.RemoveBatch(Array.Empty<TweakDef>(), forceCorp: true);
         Assert.Empty(result);
     }
 
