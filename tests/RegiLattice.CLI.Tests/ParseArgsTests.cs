@@ -1702,4 +1702,123 @@ public sealed class BatchSubcmdParseTests
         Assert.True(a.DryRun);
         Assert.True(a.Force);
     }
+
+    // ── Phase 3.1 — --json global output flag ───────────────────────────
+
+    [Fact]
+    public void ParseArgs_JsonFlag_SetsJsonOutputTrue()
+    {
+        var a = Program.ParseArgs(["--json"]);
+        Assert.NotNull(a);
+        Assert.True(a.JsonOutput);
+    }
+
+    [Fact]
+    public void ParseArgs_JsonFlag_SetsOutputFormatToJson()
+    {
+        var a = Program.ParseArgs(["--json"]);
+        Assert.NotNull(a);
+        Assert.Equal("json", a.OutputFormat);
+    }
+
+    [Fact]
+    public void ParseArgs_JsonFlag_CombinedWithList_BothSet()
+    {
+        var a = Program.ParseArgs(["--json", "--list"]);
+        Assert.NotNull(a);
+        Assert.True(a.JsonOutput);
+        Assert.True(a.ShowList);
+        Assert.Equal("json", a.OutputFormat);
+    }
+
+    [Fact]
+    public void ParseArgs_JsonFlag_CombinedWithStats_BothSet()
+    {
+        var a = Program.ParseArgs(["--stats", "--json"]);
+        Assert.NotNull(a);
+        Assert.True(a.Stats);
+        Assert.True(a.JsonOutput);
+    }
+
+    [Fact]
+    public void ParseArgs_OutputJsonLong_SetsOutputFormatToJson()
+    {
+        // --output json (pre-existing way) should also work
+        var a = Program.ParseArgs(["--output", "json"]);
+        Assert.NotNull(a);
+        Assert.Equal("json", a.OutputFormat);
+    }
+
+    // ── Phase 3.3 — conditional apply flags ─────────────────────────────
+
+    [Fact]
+    public void ParseArgs_IfNotApplied_SetsIfNotAppliedTrue()
+    {
+        var a = Program.ParseArgs(["--if-not-applied"]);
+        Assert.NotNull(a);
+        Assert.True(a.IfNotApplied);
+    }
+
+    [Fact]
+    public void ParseArgs_IfAdmin_SetsIfAdminTrue()
+    {
+        var a = Program.ParseArgs(["--if-admin"]);
+        Assert.NotNull(a);
+        Assert.True(a.IfAdmin);
+    }
+
+    [Fact]
+    public void ParseArgs_IfBuild_SetsIfBuildMin()
+    {
+        var a = Program.ParseArgs(["--if-build", "22000"]);
+        Assert.NotNull(a);
+        Assert.Equal(22000, a.IfBuildMin);
+    }
+
+    [Fact]
+    public void ParseArgs_IfBuild_NonNumericValue_KeepsDefault()
+    {
+        var a = Program.ParseArgs(["--if-build", "notanumber"]);
+        Assert.NotNull(a);
+        Assert.Equal(0, a.IfBuildMin);
+    }
+
+    [Fact]
+    public void ParseArgs_IfNotCorp_SetsIfNotCorpTrue()
+    {
+        var a = Program.ParseArgs(["--if-not-corp"]);
+        Assert.NotNull(a);
+        Assert.True(a.IfNotCorp);
+    }
+
+    [Fact]
+    public void ParseArgs_ConditionalFlags_CombinedWithApply_AllSet()
+    {
+        var a = Program.ParseArgs(["apply", "priv-disable-telemetry", "--if-not-applied", "--if-not-corp", "--dry-run"]);
+        Assert.NotNull(a);
+        Assert.Equal("apply", a.Mode);
+        Assert.Equal("priv-disable-telemetry", a.Tweak);
+        Assert.True(a.IfNotApplied);
+        Assert.True(a.IfNotCorp);
+        Assert.True(a.DryRun);
+    }
+
+    // ── Phase 3.4 — --wizard flag ────────────────────────────────────────
+
+    [Fact]
+    public void ParseArgs_Wizard_SetsWizardTrue()
+    {
+        var a = Program.ParseArgs(["--wizard"]);
+        Assert.NotNull(a);
+        Assert.True(a.Wizard);
+    }
+
+    [Fact]
+    public void ParseArgs_Wizard_CombinedWithDryRun_BothSet()
+    {
+        var a = Program.ParseArgs(["--wizard", "--dry-run"]);
+        Assert.NotNull(a);
+        Assert.True(a.Wizard);
+        Assert.True(a.DryRun);
+    }
 }

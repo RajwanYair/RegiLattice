@@ -156,4 +156,33 @@ internal sealed class CliArgs
 
     /// <summary>"apply" or "remove" — the batch operation to perform.</summary>
     public string? BatchMode { get; set; }
+
+    // ── Phase 3.1 — global --json output flag ────────────────────────
+    /// <summary>
+    /// When true, all command output is written as a single JSON object rather
+    /// than human-readable text. Equivalent to <c>--output json</c>.
+    /// </summary>
+    public bool JsonOutput { get; set; }
+
+    // ── Phase 3.3 — conditional apply flags ─────────────────────────
+    /// <summary>Skip apply/remove if tweak is already in the target state.</summary>
+    public bool IfNotApplied { get; set; }
+
+    /// <summary>Skip apply/remove if the process is not running elevated (admin).</summary>
+    public bool IfAdmin { get; set; }
+
+    /// <summary>
+    /// Skip apply/remove if the current Windows build number is below this value.
+    /// 0 means the check is disabled.
+    /// </summary>
+    public int IfBuildMin { get; set; }
+
+    /// <summary>
+    /// Skip apply/remove if <see cref="CorporateGuard.IsCorporateNetwork"/> returns true.
+    /// </summary>
+    public bool IfNotCorp { get; set; }
+
+    // ── Phase 3.4 — interactive wizard ──────────────────────────────
+    /// <summary>When true, launches the interactive profile setup wizard.</summary>
+    public bool Wizard { get; set; }
 }

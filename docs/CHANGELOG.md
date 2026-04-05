@@ -4,7 +4,38 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
-## [6.15.0] — 2026-04-06
+## [6.16.0] — 2026-04-07
+
+### Added — Phase 3.1 + 3.3 + 3.4: CLI & Integration
+
+- **`--json` global output flag (Phase 3.1)**: New `CliArgs.JsonOutput` bool property + `--json`
+  shorthand alias that simultaneously sets `OutputFormat = "json"`. All major commands now emit
+  structured JSON: `--stats`, `--list`, `--search`, `status`, `apply`, `remove`, `--profile`.
+  The `RunStats` method gained a JSON branch outputting 12 statistical fields
+  (`TotalTweaks`, `Categories`, `Profiles`, `Scopes`, `CorpSafe`, `NeedsAdmin`, `HasDetect`,
+  `HasDescription`, `HasDependsOn`, `QuickWins`, `ImpactDistribution`, `SafetyDistribution`,
+  `CategoryCounts`). `RunApplyProfile` gained a JSON branch with per-tweak result array.
+
+- **Conditional apply guards (Phase 3.3)**: Four new `CliArgs` properties guard `RunAction`:
+  - `--if-not-applied` — skips apply if tweak is already applied (returns exit code 2);
+    skips remove if tweak is already absent (returns 2). Works with JSON output.
+  - `--if-admin` — skips the action with exit code 2 if the process is not elevated.
+  - `--if-build <N>` — skips with exit code 2 if `WindowsBuild() < N`.
+  - `--if-not-corp` — skips with exit code 2 if `CorporateGuard.IsCorporateNetwork()` returns true.
+  All guards fire before the corporate-guard check and print a clear skip message.
+
+- **Interactive profile wizard (Phase 3.4)**: `--wizard` flag routes to new `RunWizard(CliArgs a)`
+  method. Asks three survey questions (primary use, privacy importance, corporate device),
+  computes weighted scores across all 5 built-in profiles, recommends the highest-scoring
+  profile, shows tweak count, confirms with the user, then applies. Respects `--dry-run`
+  (shows recommendation only, never applies). Respects `--json` flag on profile apply output.
+
+#### Stats
+
+- Tests: 3,105 → **3,132** (+27; 11 ParseArgs Phase 3 tests + 16 Dispatch Phase 3 tests)
+- Tweaks: 7,189 (unchanged)
+- Categories: 122 (unchanged)
+
 
 ### Added — Phase 1.6 + 1.7: Custom Profile API & Recommendation Engine
 
