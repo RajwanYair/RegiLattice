@@ -297,6 +297,20 @@ dotnet tool install --global wix
 dotnet tool update --global wix
 ```
 
+## Trademark Notices
+
+RegiLattice is an **independent open-source project** and is **not affiliated with, endorsed by, or sponsored by** Microsoft Corporation or any other company whose products are mentioned.
+
+Third-party names referenced in this project are trademarks or registered trademarks of their respective owners:
+
+- **Windows®**, **Windows 10**, **Windows 11**, **.NET**, **WinForms**, **Group Policy**, **Intune**, **OneDrive**, **Cortana**, **Microsoft Copilot**, and **Edge** are trademarks of **Microsoft Corporation**.
+- **Catppuccin**, **Nord**, **Dracula**, **Tokyo Night**, **Gruvbox**, **Solarized**, **One Dark Pro**, **Rosé Pine**, and **Everforest** are names of independent open-source colour-palette projects, used here as theme names only with attribution to their respective communities.
+- All other product and company names are trademarks™ or registered trademarks® of their respective owners.
+
+Use of these names is for **identification and descriptive purposes only** and does not imply any endorsement or affiliation.
+
+---
+
 ## License
 
 MIT — see [LICENSE](LICENSE) for details.
