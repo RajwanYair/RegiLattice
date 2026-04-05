@@ -23,45 +23,6 @@ internal static class Storage
         },
         new TweakDef
         {
-            Id = "stor-storage-disable-storage-sense",
-            Label = "Disable Storage Sense Auto-Cleanup",
-            Category = "Storage",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Disables Storage Sense, the automatic disk cleanup feature that deletes temp files and Recycle Bin content on a schedule. Prevents unintended file removal. Default: enabled. Recommended: disabled if you manage cleanup manually.",
-            Tags = ["storage", "cleanup", "storage-sense", "automatic"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy", "01", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy", "01", 1),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy", "01", 0),
-            ],
-        },
-        new TweakDef
-        {
-            Id = "stor-storage-disable-recycle-confirm",
-            Label = "Disable Recycle Bin Confirmation Dialog",
-            Category = "Storage",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Removes the confirmation prompt when deleting files to the Recycle Bin. Files still go to the Recycle Bin and can be restored. Default: enabled. Recommended: disabled for faster workflow.",
-            Tags = ["storage", "recycle-bin", "confirmation", "explorer"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer", "ConfirmFileDelete", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer", "ConfirmFileDelete", 1)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer", "ConfirmFileDelete", 0)],
-        },
-        new TweakDef
-        {
             Id = "stor-storage-compact-os",
             Label = "Enable Compact OS Compression Flag",
             Category = "Storage",
@@ -74,52 +35,6 @@ internal static class Storage
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem", "CompactOsEnabled", 1)],
             RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem", "CompactOsEnabled", 0)],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem", "CompactOsEnabled", 1)],
-        },
-        new TweakDef
-        {
-            Id = "stor-storage-disable-prefetch",
-            Label = "Disable Prefetch and Superfetch",
-            Category = "Storage",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description =
-                "Disables the Windows Prefetch and Superfetch (SysMain) caching mechanisms. On SSD systems these provide negligible benefit and consume disk I/O. Default: enabled (3). Recommended: disabled on SSD-only machines.",
-            Tags = ["storage", "prefetch", "superfetch", "sysmain", "ssd"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\PrefetchParameters"],
-            ApplyOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\PrefetchParameters",
-                    "EnablePrefetcher",
-                    0
-                ),
-                RegOp.SetDword(
-                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\PrefetchParameters",
-                    "EnableSuperfetch",
-                    0
-                ),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\PrefetchParameters",
-                    "EnablePrefetcher",
-                    3
-                ),
-                RegOp.SetDword(
-                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\PrefetchParameters",
-                    "EnableSuperfetch",
-                    3
-                ),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(
-                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\PrefetchParameters",
-                    "EnablePrefetcher",
-                    0
-                ),
-            ],
         },
         new TweakDef
         {
@@ -168,34 +83,6 @@ internal static class Storage
         },
         new TweakDef
         {
-            Id = "stor-disable-last-access",
-            Label = "Disable Last Access Time Stamp Updates",
-            Category = "Storage",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Disables NTFS last access time stamp updates to reduce disk I/O. Default: Enabled. Recommended: Disabled for SSDs.",
-            Tags = ["storage", "ntfs", "last-access", "performance", "ssd"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem"],
-            ApplyOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem",
-                    "NtfsDisableLastAccessUpdate",
-                    unchecked((int)0x80000001)
-                ),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem",
-                    "NtfsDisableLastAccessUpdate",
-                    unchecked((int)0x80000002)
-                ),
-            ],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsDisableLastAccessUpdate", 0)],
-        },
-        new TweakDef
-        {
             Id = "stor-set-recycle-bin-max-10pct",
             Label = "Set Recycle Bin Max Size to 10%",
             Category = "Storage",
@@ -224,20 +111,6 @@ internal static class Storage
         },
         // ── Sprint 20 additions ─────────────────────────────────────────────
 
-        new TweakDef
-        {
-            Id = "stor-disable-disk-quotas",
-            Label = "Disable Disk Quotas Enforcement",
-            Category = "Storage",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables NTFS disk quota enforcement. Frees I/O overhead from quota tracking on every write operation.",
-            Tags = ["storage", "ntfs", "quotas", "performance"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\DiskQuota"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\DiskQuota", "Enable", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\DiskQuota", "Enable")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\DiskQuota", "Enable", 0)],
-        },
         new TweakDef
         {
             Id = "stor-disable-volume-shadow-schedule",
@@ -328,30 +201,6 @@ internal static class Storage
         },
         new TweakDef
         {
-            Id = "stor-disable-storage-sense-cloud-clean",
-            Label = "Disable Storage Sense Cloud File Cleanup",
-            Category = "Storage",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Prevents Storage Sense from moving locally available cloud files (OneDrive) to online-only. Keeps files accessible offline. Default: cloud cleanup enabled.",
-            Tags = ["storage", "storage-sense", "onedrive", "cloud"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy", "32", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy", "32"),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy", "32", 0),
-            ],
-        },
-        new TweakDef
-        {
             Id = "stor-disable-ntfs-tunnel-cache",
             Label = "Disable NTFS Filename Tunnel Cache",
             Category = "Storage",
@@ -421,30 +270,6 @@ internal static class Storage
         },
         new TweakDef
         {
-            Id = "stor-disable-storage-sense-downloads-clean",
-            Label = "Disable Storage Sense Downloads Folder Cleanup",
-            Category = "Storage",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Prevents Storage Sense from automatically deleting old files in the Downloads folder. Default: deletes downloads not opened in 30+ days.",
-            Tags = ["storage", "storage-sense", "downloads", "cleanup"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy", "08", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy", "08"),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy", "08", 0),
-            ],
-        },
-        new TweakDef
-        {
             Id = "stor-enable-cloud-files-cleanup",
             Label = "Enable Storage Sense Cloud File Cleanup",
             Category = "Storage",
@@ -465,54 +290,6 @@ internal static class Storage
             DetectOps =
             [
                 RegOp.CheckDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy", "02", 1),
-            ],
-        },
-        new TweakDef
-        {
-            Id = "stor-disable-recyclebin-auto-clean",
-            Label = "Disable Storage Sense Recycle Bin Auto-Clean",
-            Category = "Storage",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Prevents Storage Sense from emptying the Recycle Bin automatically. Items remain in the bin until manually deleted. Default: files older than 30 days are auto-deleted.",
-            Tags = ["storage", "storage-sense", "recycle-bin"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy", "04", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy", "04", 1),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy", "04", 0),
-            ],
-        },
-        new TweakDef
-        {
-            Id = "stor-set-storage-sense-monthly",
-            Label = "Set Storage Sense to Run Monthly",
-            Category = "Storage",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Changes Storage Sense cadence from 'on low disk space' to monthly. Ensures periodic cleanup without triggering on temporary disk pressure. Default: run on low space (0).",
-            Tags = ["storage", "storage-sense", "schedule"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy", "2048", 30),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy", "2048", 0),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy", "2048", 30),
             ],
         },
         new TweakDef
@@ -724,41 +501,6 @@ internal static class FileSystem
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search", "AllowCloudSearch", 0)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search", "AllowCloudSearch")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search", "AllowCloudSearch", 0)],
-        },
-        new TweakDef
-        {
-            Id = "fs-disable-last-access-timestamp",
-            Label = "Disable Last Access Timestamps",
-            Category = "Storage",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables updating last-access timestamps on NTFS. Reduces disk writes and improves performance. Default: user managed.",
-            Tags = ["filesystem", "ntfs", "last-access", "performance"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem"],
-            ApplyOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem",
-                    "NtfsDisableLastAccessUpdate",
-                    unchecked((int)0x80000001)
-                ),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem",
-                    "NtfsDisableLastAccessUpdate",
-                    unchecked((int)0x80000000)
-                ),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(
-                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem",
-                    "NtfsDisableLastAccessUpdate",
-                    unchecked((int)0x80000001)
-                ),
-            ],
         },
         new TweakDef
         {
@@ -1060,65 +802,6 @@ internal static class SsdOptimization
     [
         new TweakDef
         {
-            Id = "ssd-disable-superfetch",
-            Label = "Disable Superfetch / SysMain on SSD",
-            Category = "Storage",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables the SysMain (Superfetch) service which pre-loads apps into memory. Unnecessary on SSDs and reduces write wear.",
-            Tags = ["ssd", "performance", "superfetch", "sysmain"],
-            RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Services\SysMain"],
-            ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\SysMain", "Start", 4)],
-            RemoveOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\SysMain", "Start", 2)],
-            DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\SysMain", "Start", 4)],
-        },
-        new TweakDef
-        {
-            Id = "ssd-disable-prefetch",
-            Label = "Disable Prefetch on SSD",
-            Category = "Storage",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables the Windows Prefetch feature. On SSDs, random read is fast enough that prefetching provides no benefit.",
-            Tags = ["ssd", "performance", "prefetch"],
-            RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\PrefetchParameters"],
-            ApplyOps =
-            [
-                RegOp.SetDword(
-                    $@"{LmKey}\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\PrefetchParameters",
-                    "EnablePrefetcher",
-                    0
-                ),
-                RegOp.SetDword(
-                    $@"{LmKey}\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\PrefetchParameters",
-                    "EnableSuperfetch",
-                    0
-                ),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(
-                    $@"{LmKey}\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\PrefetchParameters",
-                    "EnablePrefetcher",
-                    3
-                ),
-                RegOp.SetDword(
-                    $@"{LmKey}\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\PrefetchParameters",
-                    "EnableSuperfetch",
-                    3
-                ),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(
-                    $@"{LmKey}\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\PrefetchParameters",
-                    "EnablePrefetcher",
-                    0
-                ),
-            ],
-        },
-        new TweakDef
-        {
             Id = "ssd-disable-last-access-timestamp",
             Label = "Disable Last Access Timestamp (NTFS)",
             Category = "Storage",
@@ -1181,21 +864,6 @@ internal static class SsdOptimization
         },
         new TweakDef
         {
-            Id = "ssd-disable-windows-search-indexing",
-            Label = "Disable Windows Search Indexing",
-            Category = "Storage",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Disables the Windows Search Indexer service. Reduces write amplification on SSDs. Search will still work but without instant results.",
-            Tags = ["ssd", "performance", "indexing", "search"],
-            RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Services\WSearch"],
-            ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\WSearch", "Start", 4)],
-            RemoveOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\WSearch", "Start", 2)],
-            DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\WSearch", "Start", 4)],
-        },
-        new TweakDef
-        {
             Id = "ssd-enable-write-caching",
             Label = "Enable Write Caching on SSD",
             Category = "Storage",
@@ -1254,34 +922,6 @@ internal static class SsdOptimization
         },
         new TweakDef
         {
-            Id = "ssd-increase-ntfs-memory-usage",
-            Label = "Increase NTFS Memory Usage (Paged Pool)",
-            Category = "Storage",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Increases NTFS paged pool memory usage for better file system performance. Trades RAM for reduced disk I/O.",
-            Tags = ["ssd", "performance", "ntfs", "memory"],
-            RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Control\FileSystem"],
-            ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsMemoryUsage", 2)],
-            RemoveOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsMemoryUsage", 1)],
-            DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsMemoryUsage", 2)],
-        },
-        new TweakDef
-        {
-            Id = "ssd-large-system-cache",
-            Label = "Enable Large System Cache",
-            Category = "Storage",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Configures Windows to use a large system cache, improving file system performance at the cost of higher memory usage.",
-            Tags = ["ssd", "performance", "cache", "memory"],
-            RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management"],
-            ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "LargeSystemCache", 1)],
-            RemoveOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "LargeSystemCache", 0)],
-            DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "LargeSystemCache", 1)],
-        },
-        new TweakDef
-        {
             Id = "ssd-disable-boot-trace",
             Label = "Disable Boot Trace Logging",
             Category = "Storage",
@@ -1335,20 +975,6 @@ internal static class SsdOptimization
             ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\PriorityControl", "ConvertibleSlateMode", 0)],
             RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SYSTEM\CurrentControlSet\Control\PriorityControl", "ConvertibleSlateMode")],
             DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\PriorityControl", "ConvertibleSlateMode", 0)],
-        },
-        new TweakDef
-        {
-            Id = "ssd-increase-ntfs-mft-zone",
-            Label = "Increase NTFS MFT Zone Reservation",
-            Category = "Storage",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Increases the NTFS Master File Table zone reservation to reduce MFT fragmentation on SSDs with many small files.",
-            Tags = ["ssd", "performance", "ntfs", "mft", "fragmentation"],
-            RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Control\FileSystem"],
-            ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsMftZoneReservation", 2)],
-            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsMftZoneReservation")],
-            DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsMftZoneReservation", 2)],
         },
         new TweakDef
         {
@@ -1448,20 +1074,6 @@ internal static class SsdOptimization
         },
         new TweakDef
         {
-            Id = "ssd-increase-mft-zone-4",
-            Label = "Increase MFT Zone Reservation to 4",
-            Category = "Storage",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Reserves a larger contiguous area for the Master File Table, reducing MFT fragmentation on heavily used SSDs.",
-            Tags = ["ssd", "ntfs", "mft", "fragmentation"],
-            RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Control\FileSystem"],
-            ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsMftZoneReservation", 4)],
-            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsMftZoneReservation")],
-            DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsMftZoneReservation", 4)],
-        },
-        new TweakDef
-        {
             Id = "ssd-disable-log-file-flush",
             Label = "Reduce NTFS Log File Flush Frequency",
             Category = "Storage",
@@ -1477,50 +1089,6 @@ internal static class SsdOptimization
         },
         new TweakDef
         {
-            Id = "ssd-disable-pagefile-encryption",
-            Label = "Disable Page File Encryption",
-            Category = "Storage",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description =
-                "Disables page file encryption that adds CPU overhead and write amplification on SSDs. Less secure but faster swap performance.",
-            Tags = ["ssd", "pagefile", "encryption", "performance"],
-            RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Control\FileSystem"],
-            ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsEncryptPagingFile", 0)],
-            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsEncryptPagingFile")],
-            DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsEncryptPagingFile", 0)],
-        },
-        new TweakDef
-        {
-            Id = "ssd-optimize-power-scheme",
-            Label = "Optimize SSD Power Scheme Settings",
-            Category = "Storage",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Configures the active power scheme for SSDs by disabling aggressive power saving that causes latency on modern NVMe drives.",
-            Tags = ["ssd", "power", "nvme", "performance"],
-            RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Control\Power"],
-            ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\Power", "HibernateEnabled", 0)],
-            RemoveOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\Power", "HibernateEnabled", 1)],
-            DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\Power", "HibernateEnabled", 0)],
-        },
-        new TweakDef
-        {
-            Id = "ssd-disable-timestamp-on-directories",
-            Label = "Disable Timestamp Updates on Directories",
-            Category = "Storage",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables NTFS timestamp updates on directory access. Reduces unnecessary write operations during directory traversals.",
-            Tags = ["ssd", "ntfs", "timestamp", "io"],
-            RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Control\FileSystem"],
-            ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsDisableLastAccessUpdate", 1)],
-            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsDisableLastAccessUpdate")],
-            DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsDisableLastAccessUpdate", 1)],
-        },
-        new TweakDef
-        {
             Id = "ssd-enable-volatile-write-cache",
             Label = "Enable Volatile Write Cache on SSD",
             Category = "Storage",
@@ -1533,41 +1101,6 @@ internal static class SsdOptimization
             ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\disk", "EnableWriteCache", 1)],
             RemoveOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\disk", "EnableWriteCache", 0)],
             DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\disk", "EnableWriteCache", 1)],
-        },
-        new TweakDef
-        {
-            Id = "ssd-disable-content-indexing-global",
-            Label = "Disable Content Indexing via Registry",
-            Category = "Storage",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables Windows Search content indexing globally via registry. Reduces background I/O and write wear on SSDs.",
-            Tags = ["ssd", "indexing", "search", "performance"],
-            RegistryKeys = [$@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows\Windows Search"],
-            ApplyOps = [RegOp.SetDword($@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows\Windows Search", "AllowIndexingEncryptedStoresOrItems", 0)],
-            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows\Windows Search", "AllowIndexingEncryptedStoresOrItems")],
-            DetectOps = [RegOp.CheckDword($@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows\Windows Search", "AllowIndexingEncryptedStoresOrItems", 0)],
-        },
-        new TweakDef
-        {
-            Id = "ssd-disable-pagefile-clear-shutdown",
-            Label = "Disable Pagefile Wipe on Shutdown",
-            Category = "Storage",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description =
-                "Sets ClearPageFileAtShutdown=0 so Windows does not zero-fill the pagefile on every shutdown. Eliminates a large sequential write that significantly increases SSD wear-out and lengthens shutdown time.",
-            Tags = ["ssd", "pagefile", "shutdown", "performance", "wear"],
-            RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management"],
-            ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "ClearPageFileAtShutdown", 0)],
-            RemoveOps =
-            [
-                RegOp.DeleteValue($@"{LmKey}\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "ClearPageFileAtShutdown"),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "ClearPageFileAtShutdown", 0),
-            ],
         },
         new TweakDef
         {
@@ -1598,39 +1131,6 @@ internal static class SsdOptimization
             ApplyOps = [RegOp.SetDword($@"{LmKey}\SOFTWARE\Microsoft\Windows\CurrentVersion\OptimalLayout", "EnableAutoLayout", 0)],
             RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SOFTWARE\Microsoft\Windows\CurrentVersion\OptimalLayout", "EnableAutoLayout")],
             DetectOps = [RegOp.CheckDword($@"{LmKey}\SOFTWARE\Microsoft\Windows\CurrentVersion\OptimalLayout", "EnableAutoLayout", 0)],
-        },
-        new TweakDef
-        {
-            Id = "ssd-set-disk-timeout-fast",
-            Label = "Reduce Disk I/O Timeout to 20 s",
-            Category = "Storage",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets the disk service TimeOutValue to 20 seconds. SSDs respond orders of magnitude faster than HDDs; the default 45 s timeout means stalled SSD requests block the queue for far too long.",
-            Tags = ["ssd", "timeout", "disk", "performance"],
-            RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Services\disk"],
-            ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\disk", "TimeOutValue", 20)],
-            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SYSTEM\CurrentControlSet\Services\disk", "TimeOutValue")],
-            DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\disk", "TimeOutValue", 20)],
-        },
-        new TweakDef
-        {
-            Id = "ssd-limit-io-page-lock-pool",
-            Label = "Limit I/O Page-Lock Memory Pool to 1 MB",
-            Category = "Storage",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets IoPageLockLimit to 1 048 576 bytes (1 MB). Caps the amount of physical memory that can be locked for I/O transfers, keeping more RAM available for application buffers.",
-            Tags = ["ssd", "memory", "io", "pool", "performance"],
-            RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management"],
-            ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "IoPageLockLimit", 1048576)],
-            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "IoPageLockLimit")],
-            DetectOps =
-            [
-                RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "IoPageLockLimit", 1048576),
-            ],
         },
         new TweakDef
         {
@@ -1812,44 +1312,6 @@ internal static class PolicyStorage
             },
             new TweakDef
             {
-                Id = "cdbp-block-cdrom-read",
-                Label = "Block CD-ROM Read Access",
-                Category = "Storage",
-                Description =
-                    "Sets Deny_Read=1 in the CD-ROM removable storage device class policy (GUID {53f56308}). "
-                    + "Prevents all read operations from CD-ROM drives via the OS removable storage access policy layer. "
-                    + "Default: absent (read allowed). Recommended: 1 only in air-gapped environments where optical media is prohibited.",
-                Tags = ["cd", "read", "removable", "optical", "restriction"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 3,
-                ImpactNote = "Completely blocks CD-ROM read access; breaks all optical disc software — use with caution.",
-                ApplyOps = [RegOp.SetDword(CdRomKey, "Deny_Read", 1)],
-                RemoveOps = [RegOp.DeleteValue(CdRomKey, "Deny_Read")],
-                DetectOps = [RegOp.CheckDword(CdRomKey, "Deny_Read", 1)],
-            },
-            new TweakDef
-            {
-                Id = "cdbp-block-cdrom-write",
-                Label = "Block CD-ROM Write Access",
-                Category = "Storage",
-                Description =
-                    "Sets Deny_Write=1 in the CD-ROM device class policy. "
-                    + "Prevents write operations to CD-R/RW drives via the removable storage access layer. "
-                    + "Default: absent (write allowed). Recommended: 1 for data-loss-prevention on managed desktops.",
-                Tags = ["cd", "write", "removable", "optical", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 4,
-                ImpactNote = "Blocks CD-ROM writes at the device access policy layer.",
-                ApplyOps = [RegOp.SetDword(CdRomKey, "Deny_Write", 1)],
-                RemoveOps = [RegOp.DeleteValue(CdRomKey, "Deny_Write")],
-                DetectOps = [RegOp.CheckDword(CdRomKey, "Deny_Write", 1)],
-            },
-            new TweakDef
-            {
                 Id = "cdbp-block-cdrom-execute",
                 Label = "Block CD-ROM Execute (AutoRun)",
                 Category = "Storage",
@@ -1885,25 +1347,6 @@ internal static class PolicyStorage
                 ApplyOps = [RegOp.SetDword(DvdKey, "Deny_Read", 1)],
                 RemoveOps = [RegOp.DeleteValue(DvdKey, "Deny_Read")],
                 DetectOps = [RegOp.CheckDword(DvdKey, "Deny_Read", 1)],
-            },
-            new TweakDef
-            {
-                Id = "cdbp-block-dvd-write",
-                Label = "Block DVD Write Access",
-                Category = "Storage",
-                Description =
-                    "Sets Deny_Write=1 in the DVD device class policy. "
-                    + "Prevents all write operations to DVD±R/RW drives via the OS removable storage policy layer. "
-                    + "Default: absent (write allowed). Recommended: 1 for data-exfiltration prevention.",
-                Tags = ["dvd", "write", "removable", "optical", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 4,
-                ImpactNote = "Blocks DVD write at the device access policy layer; requires re-enable for disc authoring.",
-                ApplyOps = [RegOp.SetDword(DvdKey, "Deny_Write", 1)],
-                RemoveOps = [RegOp.DeleteValue(DvdKey, "Deny_Write")],
-                DetectOps = [RegOp.CheckDword(DvdKey, "Deny_Write", 1)],
             },
             new TweakDef
             {
@@ -2317,26 +1760,6 @@ internal static class PolicyStorage
         [
             new TweakDef
             {
-                Id = "fhp-disable-file-history",
-                Label = "Disable File History",
-                Category = "Storage",
-                Description =
-                    "Sets Disabled=1 in the File History policy key. "
-                    + "Turns off the File History backup service for all users on this machine. "
-                    + "The File History control panel applet will display the feature as disabled by policy. "
-                    + "Default: absent (File History available to users). Recommended: 1 on server or managed deployments using alternative backup solutions.",
-                Tags = ["file-history", "backup", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 4,
-                ImpactNote = "Disables File History; users lose automatic versioned file backup unless an alternative is configured.",
-                ApplyOps = [RegOp.SetDword(FhKey, "Disabled", 1)],
-                RemoveOps = [RegOp.DeleteValue(FhKey, "Disabled")],
-                DetectOps = [RegOp.CheckDword(FhKey, "Disabled", 1)],
-            },
-            new TweakDef
-            {
                 Id = "fhp-lock-onoff-switch",
                 Label = "Lock File History On/Off Switch",
                 Category = "Storage",
@@ -2373,26 +1796,6 @@ internal static class PolicyStorage
                 ApplyOps = [RegOp.SetDword(FhKey, "BackupInterval", 86400)],
                 RemoveOps = [RegOp.DeleteValue(FhKey, "BackupInterval")],
                 DetectOps = [RegOp.CheckDword(FhKey, "BackupInterval", 86400)],
-            },
-            new TweakDef
-            {
-                Id = "fhp-retention-until-space-needed",
-                Label = "File History: Keep Until Space Is Needed",
-                Category = "Storage",
-                Description =
-                    "Sets RetentionPolicy=1 in the File History policy key. "
-                    + "Configures File History to retain backup copies until the drive runs low on space, "
-                    + "at which point older versions are automatically removed. "
-                    + "Default: absent (user-configured). Recommended: 1 for space-constrained backup targets.",
-                Tags = ["file-history", "backup", "retention", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                ImpactNote = "Oldest backup versions are deleted automatically when backup drive space runs low.",
-                ApplyOps = [RegOp.SetDword(FhKey, "RetentionPolicy", 1)],
-                RemoveOps = [RegOp.DeleteValue(FhKey, "RetentionPolicy")],
-                DetectOps = [RegOp.CheckDword(FhKey, "RetentionPolicy", 1)],
             },
             new TweakDef
             {
@@ -2523,40 +1926,6 @@ internal static class PolicyStorage
         [
             new TweakDef
             {
-                Id = "filshare-disable-auto-share-wks",
-                Label = "Disable Automatic Administrative Workstation Shares",
-                Category = "Storage",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                Description =
-                    "Automatic administrative shares (C$ D$ ADMIN$ IPC$) are created by Windows Server automatically and provide administrative remote access. Disabling automatic workstation shares prevents these implicit access points from being created without explicit administrator action. Automatic administrative shares are used by attackers for lateral movement, remote file copying, and tools like PsExec and WMI. Many enterprise environments disable automatic shares on workstations where remote administration is handled through dedicated management solutions. Disabling automatic shares reduces the attack surface without impacting endpoint functionality for standard users. Remote management tools should be configured to use alternative mechanisms that do not require default administrative shares.",
-                Tags = ["file-share", "admin-shares", "network", "security", "policy"],
-                RegistryKeys = [Key],
-                ApplyOps = [RegOp.SetDword(Key, "AutoShareWks", 0)],
-                RemoveOps = [RegOp.DeleteValue(Key, "AutoShareWks")],
-                DetectOps = [RegOp.CheckDword(Key, "AutoShareWks", 0)],
-            },
-            new TweakDef
-            {
-                Id = "filshare-disable-auto-share-server",
-                Label = "Disable Automatic Administrative Server Shares",
-                Category = "Storage",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 4,
-                Description =
-                    "Server administrative shares are automatically created by the LanmanServer service providing full disk access to administrator accounts over the network. Disabling automatic server shares prevents implicit remote access paths that can be exploited if administrator credentials are compromised. Server shares are commonly required for legitimate file server operations but should be explicitly created rather than automatically managed. Explicit administrative share creation provides better visibility into which shares exist and who has access to each. Some management tools including legacy backup software may depend on automatic administrative shares for file system access. Organizations should audit management tool dependencies before disabling automatic server shares to avoid breaking critical operations.",
-                Tags = ["file-share", "server-shares", "network", "security", "policy"],
-                RegistryKeys = [Key],
-                ApplyOps = [RegOp.SetDword(Key, "AutoShareServer", 0)],
-                RemoveOps = [RegOp.DeleteValue(Key, "AutoShareServer")],
-                DetectOps = [RegOp.CheckDword(Key, "AutoShareServer", 0)],
-            },
-            new TweakDef
-            {
                 Id = "filshare-require-secure-dialect",
                 Label = "Set Minimum SMB Server Dialect",
                 Category = "Storage",
@@ -2571,23 +1940,6 @@ internal static class PolicyStorage
                 ApplyOps = [RegOp.SetDword(Key, "RequireSecureDialect", 1)],
                 RemoveOps = [RegOp.DeleteValue(Key, "RequireSecureDialect")],
                 DetectOps = [RegOp.CheckDword(Key, "RequireSecureDialect", 1)],
-            },
-            new TweakDef
-            {
-                Id = "filshare-enable-server-signing",
-                Label = "Require SMB Signing on Server",
-                Category = "Storage",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 5,
-                SafetyRating = 5,
-                Description =
-                    "SMB signing on the server component ensures that all incoming SMB connections are packet-signed preventing relay and tampering attacks. Requiring SMB signing eliminates the possibility of SMB relay attacks where an attacker captures and forwards an authenticated connection. SMB relay without signing is the foundation of many lateral movement techniques including NTLM relay and credential forwarding. File servers and domain controllers should always require SMB signing as they are the most valuable targets for relay attacks. Enabling SMB signing on all servers combined with client-side signing requirements creates a fully signed network protecting all SMB communications. Performance impact of SMB signing is minimal on modern hardware and should not be a reason to defer enablement.",
-                Tags = ["file-share", "smb-signing", "security", "policy"],
-                RegistryKeys = [Key],
-                ApplyOps = [RegOp.SetDword(Key, "EnableSecuritySignature", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "EnableSecuritySignature")],
-                DetectOps = [RegOp.CheckDword(Key, "EnableSecuritySignature", 1)],
             },
             new TweakDef
             {
@@ -2705,60 +2057,6 @@ internal static class PolicyStorage
             [
                 new TweakDef
                 {
-                    Id = "fswitness-enable-smb-signing-server",
-                    Label = "File Share Witness: Require SMB Signing on Server",
-                    Category = "Storage",
-                    Description =
-                        "Sets RequireSecuritySignature=1 in LanmanServer policy. Requires that all SMB connections to this machine as a server must use SMB packet signing. Without signing, SMB traffic is vulnerable to relay attacks (NTLM relay, SMB relay) where an attacker positioned between client and server can intercept and reuse SMB authentication tokens to authenticate to other services. SMB signing ensures each packet is cryptographically bound to the session — tampered or replayed packets are detected and rejected by both client and server.",
-                    Tags = ["smb", "signing", "relay-attack", "security", "server"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 5,
-                    SafetyRating = 4,
-                    ImpactNote =
-                        "All SMB clients must negotiate signing when connecting to this server. Legacy SMB clients that do not support signing (rare; pre-Vista) will be rejected. Slight CPU overhead per packet on high-throughput file servers.",
-                    ApplyOps = [RegOp.SetDword(SrvKey, "RequireSecuritySignature", 1)],
-                    RemoveOps = [RegOp.DeleteValue(SrvKey, "RequireSecuritySignature")],
-                    DetectOps = [RegOp.CheckDword(SrvKey, "RequireSecuritySignature", 1)],
-                },
-                new TweakDef
-                {
-                    Id = "fswitness-enable-smb-signing-client",
-                    Label = "File Share Witness: Require SMB Signing on Client",
-                    Category = "Storage",
-                    Description =
-                        "Sets RequireSecuritySignature=1 in LanmanWorkstation policy. Requires that all outbound SMB connections from this machine as a client use SMB packet signing. The complementary client-side SMB signing policy ensures this device cannot connect to a rogue or unpatched server that does not sign packets — closing the attack path where an attacker deploys a malicious SMB server to capture NTLMv2 hashes. Together with server-side signing (fswitness-enable-smb-signing-server), both ends of every SMB connection are protected.",
-                    Tags = ["smb", "signing", "client", "relay-attack", "security"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 5,
-                    SafetyRating = 4,
-                    ImpactNote =
-                        "This client only connects to SMB servers that support signing. Servers that do not support SMB signing are refused connections. Unpatched or misconfigured legacy file servers may become unreachable.",
-                    ApplyOps = [RegOp.SetDword(WrkKey, "RequireSecuritySignature", 1)],
-                    RemoveOps = [RegOp.DeleteValue(WrkKey, "RequireSecuritySignature")],
-                    DetectOps = [RegOp.CheckDword(WrkKey, "RequireSecuritySignature", 1)],
-                },
-                new TweakDef
-                {
-                    Id = "fswitness-disable-guestaccess-smb",
-                    Label = "File Share Witness: Disable SMB Guest Access on Client",
-                    Category = "Storage",
-                    Description =
-                        "Sets AllowInsecureGuestAuth=0 in LanmanWorkstation policy. Prevents the SMB client from connecting to a file share using unauthenticated guest access. When a Windows SMB client cannot authenticate with the credentials it has (wrong username/password), it may fall back to connecting as 'Guest' — an anonymous account with no password. Rogue SMB servers exploit this fallback to man-in-the-middle legitimate connections. Microsoft disabled guest access by default in Windows 10 1709; this policy enforces the setting via Group Policy to prevent local overrides.",
-                    Tags = ["smb", "guest", "unauthenticated", "security", "lateral-movement"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 5,
-                    SafetyRating = 4,
-                    ImpactNote =
-                        "SMB guest connections are blocked. Shares with misconfigured permissions that previously allowed guest may become inaccessible. SMB connections require valid credentials. Users with wrong passwords receive an authentication error rather than a guest session.",
-                    ApplyOps = [RegOp.SetDword(WrkKey, "AllowInsecureGuestAuth", 0)],
-                    RemoveOps = [RegOp.DeleteValue(WrkKey, "AllowInsecureGuestAuth")],
-                    DetectOps = [RegOp.CheckDword(WrkKey, "AllowInsecureGuestAuth", 0)],
-                },
-                new TweakDef
-                {
                     Id = "fswitness-disable-smb1-server",
                     Label = "File Share Witness: Disable SMB1 Protocol on Server",
                     Category = "Storage",
@@ -2795,60 +2093,6 @@ internal static class PolicyStorage
                 },
                 new TweakDef
                 {
-                    Id = "fswitness-enable-smb-encryption",
-                    Label = "File Share Witness: Enable SMB3 Encryption on Server",
-                    Category = "Storage",
-                    Description =
-                        "Sets EncryptData=1 in LanmanServer policy. Enables mandatory AES-CCM or AES-GCM encryption for all SMB3 data transfers between client and server. SMB signing (enforced separately) provides integrity but not confidentiality — signing prevents tampering but a network observer can still read file contents in plaintext. SMB encryption wraps the data payload in a cryptographic envelope. Required for environments where file shares carry sensitive data (PII, financial, health records) and the network is not fully trusted (branch offices, cloud-hosted file servers).",
-                    Tags = ["smb3", "encryption", "confidentiality", "data-protection", "aes"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 4,
-                    SafetyRating = 4,
-                    ImpactNote =
-                        "All SMB3 connections to this server use encryption. Clients must support SMB3 encryption (Windows 8+ / Server 2012+). CPU overhead for encryption; significant impact on high-bandwidth file copy operations on CPU-constrained servers.",
-                    ApplyOps = [RegOp.SetDword(SrvKey, "EncryptData", 1)],
-                    RemoveOps = [RegOp.DeleteValue(SrvKey, "EncryptData")],
-                    DetectOps = [RegOp.CheckDword(SrvKey, "EncryptData", 1)],
-                },
-                new TweakDef
-                {
-                    Id = "fswitness-set-idle-connection-timeout",
-                    Label = "File Share Witness: Set SMB Server Idle Connection Timeout to 15 Minutes",
-                    Category = "Storage",
-                    Description =
-                        "Sets AutoDisconnect=15 in LanmanServer policy. Sets the idle timeout for SMB server connections to 15 minutes. By default, SMB servers disconnect idle clients after 15 minutes, but the policy value can be changed. An excessively long idle timeout keeps network connections open and server-side session state allocated for users who have walked away from their desks. Idle sessions can also be reused after token expiry, enabling authentication bypass with stale credentials. 15 minutes matches the optimal balance between session reuse costs and reconnection overhead.",
-                    Tags = ["smb", "idle-timeout", "session-management", "server", "security"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 3,
-                    SafetyRating = 5,
-                    ImpactNote =
-                        "Idle SMB sessions are disconnected after 15 minutes. Users reconnect transparently when accessing mapped drives after idle disconnection. Short-lived applications that hold SMB connections open but rarely use them may silently reconnect.",
-                    ApplyOps = [RegOp.SetDword(SrvKey, "AutoDisconnect", 15)],
-                    RemoveOps = [RegOp.DeleteValue(SrvKey, "AutoDisconnect")],
-                    DetectOps = [RegOp.CheckDword(SrvKey, "AutoDisconnect", 15)],
-                },
-                new TweakDef
-                {
-                    Id = "fswitness-restrict-anonymous-share-enum",
-                    Label = "File Share Witness: Restrict Anonymous Network Share Enumeration",
-                    Category = "Storage",
-                    Description =
-                        "Sets RestrictNullSessAccess=1 in LanmanServer policy. Prevents unauthenticated (null session) enumeration of network shares over the IPC$ pipe. Without this restriction, an attacker who discovers a Windows server's IP address can use null session connections to enumerate all shared folder names, providing the attacker with a map of file shares they can then target with brute-force credential attacks. This setting is enabled by default but can be disabled by administrators or overwrote by other policies; enforcing it via policy ensures it cannot be changed.",
-                    Tags = ["smb", "anonymous", "null-session", "enumeration", "hardening"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 4,
-                    SafetyRating = 5,
-                    ImpactNote =
-                        "Anonymous (null session) network share enumeration is blocked. Legitimate client connections with credentials are unaffected. Tools like NetScan and LanSweeper that enumerate shares with null sessions may not discover shares on this server.",
-                    ApplyOps = [RegOp.SetDword(SrvKey, "RestrictNullSessAccess", 1)],
-                    RemoveOps = [RegOp.DeleteValue(SrvKey, "RestrictNullSessAccess")],
-                    DetectOps = [RegOp.CheckDword(SrvKey, "RestrictNullSessAccess", 1)],
-                },
-                new TweakDef
-                {
                     Id = "fswitness-enable-smb-hardened-unc",
                     Label = "File Share Witness: Enable Hardened UNC Path Requirements",
                     Category = "Storage",
@@ -2864,24 +2108,6 @@ internal static class PolicyStorage
                     ApplyOps = [RegOp.SetDword(WrkKey, "HardenedUNCPathsEnabled", 1)],
                     RemoveOps = [RegOp.DeleteValue(WrkKey, "HardenedUNCPathsEnabled")],
                     DetectOps = [RegOp.CheckDword(WrkKey, "HardenedUNCPathsEnabled", 1)],
-                },
-                new TweakDef
-                {
-                    Id = "fswitness-disable-admin-shares",
-                    Label = "File Share Witness: Disable Automatic Administrative Shares",
-                    Category = "Storage",
-                    Description =
-                        "Sets AutoShareWks=0 in LanmanServer policy. Disables the automatic creation of administrative hidden shares (C$, D$, ADMIN$) on workstations. Administrative shares allow remote administrative access to root drive paths over SMB. While useful for IT management tools and legacy remote administration scripts, these shares provide an attackers with direct filesystem access if a privileged account is compromised. In environments using modern management tools (Intune, SCCM, WinRM), the administrative shares are rarely needed and present unnecessary lateral movement surface.",
-                    Tags = ["smb", "admin-shares", "attack-surface", "lateral-movement", "hardening"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 4,
-                    SafetyRating = 3,
-                    ImpactNote =
-                        "C$, D$, ADMIN$ administrative shares are removed. Remote administration tools that rely on these shares (PsExec, legacy SCCM push, RoboCopy to C$) stop working. Verify that all management tools use WinRM, WMI, or agent-based access before applying.",
-                    ApplyOps = [RegOp.SetDword(SrvKey, "AutoShareWks", 0)],
-                    RemoveOps = [RegOp.DeleteValue(SrvKey, "AutoShareWks")],
-                    DetectOps = [RegOp.CheckDword(SrvKey, "AutoShareWks", 0)],
                 },
             ];
     }
@@ -3408,23 +2634,6 @@ internal static class PolicyStorage
             [
                 new TweakDef
                 {
-                    Id = "refspol-disable-integrity-streams",
-                    Label = "Disable ReFS Integrity Streams (Checksums)",
-                    Category = "Storage",
-                    Description =
-                        "Disables data integrity streams (SHA-256 checksums per block) on ReFS volumes, removing per-I/O checksum overhead at the cost of eliminating the ability to detect silent data corruption.",
-                    Tags = ["refs", "integrity", "checksum", "file-system", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 3,
-                    SafetyRating = 3,
-                    ImpactNote = "ReFS integrity streams disabled; slight I/O improvement but silent data corruption no longer detected.",
-                    ApplyOps = [RegOp.SetDword(Key, "DisableIntegrityStreams", 1)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "DisableIntegrityStreams")],
-                    DetectOps = [RegOp.CheckDword(Key, "DisableIntegrityStreams", 1)],
-                },
-                new TweakDef
-                {
                     Id = "refspol-disable-scrubbing",
                     Label = "Disable ReFS Background Data Scrubbing",
                     Category = "Storage",
@@ -3822,91 +3031,6 @@ internal static class PolicyStorage
         [
             new TweakDef
             {
-                Id = "vss-enable-system-restore",
-                Label = "VSS: Enable System Restore (Volume Shadow Copy)",
-                Category = "Storage",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                MinBuild = 17763,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                RegistryKeys = [SrPolicy],
-                Tags = ["vss", "shadow-copy", "system-restore", "backup", "recovery"],
-                Description =
-                    "Sets DisableSR=0 and DisableConfig=0 in the SystemRestore policy. "
-                    + "Enables System Restore protection so that Windows can automatically create restore "
-                    + "points before significant changes (updates, driver installs). "
-                    + "Required for Automatic Repair to offer working restore points.",
-                ApplyOps = [RegOp.SetDword(SrPolicy, "DisableSR", 0), RegOp.SetDword(SrPolicy, "DisableConfig", 0)],
-                RemoveOps = [RegOp.DeleteValue(SrPolicy, "DisableSR"), RegOp.DeleteValue(SrPolicy, "DisableConfig")],
-                DetectOps = [RegOp.CheckDword(SrPolicy, "DisableSR", 0), RegOp.CheckDword(SrPolicy, "DisableConfig", 0)],
-            },
-            new TweakDef
-            {
-                Id = "vss-disable-system-restore",
-                Label = "VSS: Disable System Restore to Reclaim Disk Space",
-                Category = "Storage",
-                NeedsAdmin = true,
-                CorpSafe = false,
-                MinBuild = 17763,
-                ImpactScore = 2,
-                SafetyRating = 2,
-                RegistryKeys = [SrPolicy],
-                Tags = ["vss", "shadow-copy", "system-restore", "disk-space", "cleanup"],
-                Description =
-                    "Sets DisableSR=1 in the SystemRestore policy. "
-                    + "Turns off Windows System Restore across all drives. "
-                    + "Reclaims disk space reserved for shadow copies (up to several GB). "
-                    + "WARNING: disabling System Restore removes the rollback mechanism for driver/update "
-                    + "failures. Only recommended for SSD-constrained machines with alternative backups.",
-                ApplyOps = [RegOp.SetDword(SrPolicy, "DisableSR", 1)],
-                RemoveOps = [RegOp.DeleteValue(SrPolicy, "DisableSR")],
-                DetectOps = [RegOp.CheckDword(SrPolicy, "DisableSR", 1)],
-            },
-            new TweakDef
-            {
-                Id = "vss-set-restore-point-frequency-daily",
-                Label = "VSS: Limit Automatic Restore Points to Once Per Day",
-                Category = "Storage",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                MinBuild = 17763,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                RegistryKeys = [SrSettings],
-                Tags = ["vss", "shadow-copy", "system-restore", "disk-space", "performance"],
-                Description =
-                    "Sets RPSessionInterval=1440 (minutes) in SystemRestore settings. "
-                    + "Prevents Windows from creating more than one restore point per day when apps "
-                    + "request it. Default is 0 (no interval restriction), which can create dozens of "
-                    + "restore points in a single app-install session and consume significant disk space.",
-                ApplyOps = [RegOp.SetDword(SrSettings, "RPSessionInterval", 1440)],
-                RemoveOps = [RegOp.DeleteValue(SrSettings, "RPSessionInterval")],
-                DetectOps = [RegOp.CheckDword(SrSettings, "RPSessionInterval", 1440)],
-            },
-            new TweakDef
-            {
-                Id = "vss-limit-shadow-storage-15pct",
-                Label = "VSS: Cap Shadow Copy Storage at 15% of Drive Capacity",
-                Category = "Storage",
-                NeedsAdmin = true,
-                CorpSafe = false,
-                MinBuild = 17763,
-                ImpactScore = 2,
-                SafetyRating = 4,
-                RegistryKeys = [SrSettings],
-                Tags = ["vss", "shadow-copy", "disk-space", "storage"],
-                Description =
-                    "Sets DiskPercent=15 in SystemRestore settings. "
-                    + "Limits the maximum disk space that VSS/System Restore can use across all drives "
-                    + "to 15% of each volume's capacity. The Windows default varies (often up to 30%). "
-                    + "Lower value = fewer old restore points retained; reduces disk footprint.",
-                ApplyOps = [RegOp.SetDword(SrSettings, "DiskPercent", 15)],
-                RemoveOps = [RegOp.DeleteValue(SrSettings, "DiskPercent")],
-                DetectOps = [RegOp.CheckDword(SrSettings, "DiskPercent", 15)],
-            },
-            new TweakDef
-            {
                 Id = "vss-increase-writer-timeout",
                 Label = "VSS: Increase Writer Timeout to 120 Seconds",
                 Category = "Storage",
@@ -3967,27 +3091,6 @@ internal static class PolicyStorage
                 ApplyOps = [RegOp.SetDword(VssDisks, "AllowSnapshotsOnFixedDrives", 0)],
                 RemoveOps = [RegOp.DeleteValue(VssDisks, "AllowSnapshotsOnFixedDrives")],
                 DetectOps = [RegOp.CheckDword(VssDisks, "AllowSnapshotsOnFixedDrives", 0)],
-            },
-            new TweakDef
-            {
-                Id = "vss-disallow-user-config",
-                Label = "VSS: Hide System Restore Configuration from Standard Users",
-                Category = "Storage",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                MinBuild = 17763,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                RegistryKeys = [SrPolicy],
-                Tags = ["vss", "shadow-copy", "system-restore", "security", "policy"],
-                Description =
-                    "Sets DisableConfig=1 in the SystemRestore policy. "
-                    + "Hides the System Restore configuration tab in System Properties from standard users. "
-                    + "They cannot turn off system protection, create restore points manually, or change "
-                    + "shadow copy storage size. Admins retain full access.",
-                ApplyOps = [RegOp.SetDword(SrPolicy, "DisableConfig", 1)],
-                RemoveOps = [RegOp.DeleteValue(SrPolicy, "DisableConfig")],
-                DetectOps = [RegOp.CheckDword(SrPolicy, "DisableConfig", 1)],
             },
             new TweakDef
             {
@@ -5007,24 +4110,6 @@ internal static class PolicyStorage
             [
                 new TweakDef
                 {
-                    Id = "storsense-disable-storage-sense",
-                    Label = "Disable Storage Sense via Policy",
-                    Category = "Storage",
-                    Description =
-                        "Prevents Storage Sense from running automatically, overriding any per-user Storage Sense settings. Useful in managed environments where disk cleanup is handled by separate tools.",
-                    Tags = ["storage sense", "cleanup", "disk", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 3,
-                    SafetyRating = 5,
-                    ImpactNote = "Stops automatic disk cleanup; administrators must manage free space through other means.",
-                    RegistryKeys = [Key],
-                    ApplyOps = [RegOp.SetDword(Key, "AllowStorageSenseGlobal", 0)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "AllowStorageSenseGlobal")],
-                    DetectOps = [RegOp.CheckDword(Key, "AllowStorageSenseGlobal", 0)],
-                },
-                new TweakDef
-                {
                     Id = "storsense-disable-temp-file-cleanup",
                     Label = "Disable Storage Sense Temporary File Cleanup",
                     Category = "Storage",
@@ -5097,61 +4182,6 @@ internal static class PolicyStorage
                 },
                 new TweakDef
                 {
-                    Id = "storsense-set-recycle-bin-30days",
-                    Label = "Set Storage Sense Recycle Bin Cleanup Threshold to 30 Days",
-                    Category = "Storage",
-                    Description =
-                        "Configures Storage Sense to automatically empty Recycle Bin items that have been deleted for more than 30 days, providing consistent disk reclamation on managed devices.",
-                    Tags = ["storage sense", "recycle bin", "cleanup", "threshold", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 3,
-                    SafetyRating = 4,
-                    ImpactNote =
-                        "Files in Recycle Bin older than 30 days are permanently deleted; warn users who rely on long-term recycle bin retention.",
-                    RegistryKeys = [Key],
-                    ApplyOps = [RegOp.SetDword(Key, "ConfigStorageSenseRecycleBinCleanupThreshold", 30)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "ConfigStorageSenseRecycleBinCleanupThreshold")],
-                    DetectOps = [RegOp.CheckDword(Key, "ConfigStorageSenseRecycleBinCleanupThreshold", 30)],
-                },
-                new TweakDef
-                {
-                    Id = "storsense-set-downloads-cleanup-60days",
-                    Label = "Set Storage Sense Downloads Cleanup Threshold to 60 Days",
-                    Category = "Storage",
-                    Description =
-                        "Configures Storage Sense to remove files from the Downloads folder that have not been opened in 60 days, helping reclaim disk space from accumulated stale downloads.",
-                    Tags = ["storage sense", "downloads", "cleanup", "threshold", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 3,
-                    SafetyRating = 3,
-                    ImpactNote = "Downloads untouched for 60 days are deleted; users may lose files they intended to keep.",
-                    RegistryKeys = [Key],
-                    ApplyOps = [RegOp.SetDword(Key, "ConfigStorageSenseDownloadsCleanupThreshold", 60)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "ConfigStorageSenseDownloadsCleanupThreshold")],
-                    DetectOps = [RegOp.CheckDword(Key, "ConfigStorageSenseDownloadsCleanupThreshold", 60)],
-                },
-                new TweakDef
-                {
-                    Id = "storsense-set-cloud-dehydrate-60days",
-                    Label = "Set Storage Sense Cloud Dehydration Threshold to 60 Days",
-                    Category = "Storage",
-                    Description =
-                        "Configures Storage Sense to dehydrate OneDrive files that have not been opened in 60 days, freeing local disk space while keeping files accessible via cloud sync.",
-                    Tags = ["storage sense", "onedrive", "cloud", "dehydration", "threshold", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 3,
-                    SafetyRating = 3,
-                    ImpactNote = "Files unused for 60 days move to cloud-only; offline access requires re-download.",
-                    RegistryKeys = [Key],
-                    ApplyOps = [RegOp.SetDword(Key, "ConfigStorageSenseCloudContentDehydrationThreshold", 60)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "ConfigStorageSenseCloudContentDehydrationThreshold")],
-                    DetectOps = [RegOp.CheckDword(Key, "ConfigStorageSenseCloudContentDehydrationThreshold", 60)],
-                },
-                new TweakDef
-                {
                     Id = "storsense-enforce-storage-policies",
                     Label = "Enforce Storage Sense Policies on All Users",
                     Category = "Storage",
@@ -5167,24 +4197,6 @@ internal static class PolicyStorage
                     ApplyOps = [RegOp.SetDword(Key, "StoragePoliciesEnabled", 1)],
                     RemoveOps = [RegOp.DeleteValue(Key, "StoragePoliciesEnabled")],
                     DetectOps = [RegOp.CheckDword(Key, "StoragePoliciesEnabled", 1)],
-                },
-                new TweakDef
-                {
-                    Id = "storsense-set-run-cadence-weekly",
-                    Label = "Set Storage Sense Run Cadence to Weekly",
-                    Category = "Storage",
-                    Description =
-                        "Configures Storage Sense to run automatically once per week, providing more frequent disk space reclamation for devices with high file turnover or limited storage.",
-                    Tags = ["storage sense", "cadence", "schedule", "weekly", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 3,
-                    SafetyRating = 5,
-                    ImpactNote = "More frequent cleanup than monthly; suitable for devices with limited storage capacity.",
-                    RegistryKeys = [Key],
-                    ApplyOps = [RegOp.SetDword(Key, "ConfigStorageSenseGlobalCadence", 7)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "ConfigStorageSenseGlobalCadence")],
-                    DetectOps = [RegOp.CheckDword(Key, "ConfigStorageSenseGlobalCadence", 7)],
                 },
             ];
     }
@@ -5523,23 +4535,6 @@ internal static class PolicyStorage
                     ApplyOps = [RegOp.SetDword(Key, "EnablePoolHealthAuditLog", 1)],
                     RemoveOps = [RegOp.DeleteValue(Key, "EnablePoolHealthAuditLog")],
                     DetectOps = [RegOp.CheckDword(Key, "EnablePoolHealthAuditLog", 1)],
-                },
-                new TweakDef
-                {
-                    Id = "sspol-set-rebuild-priority-low",
-                    Label = "Set Storage Spaces Rebuild Priority to Low",
-                    Category = "Storage",
-                    Description =
-                        "Sets the Storage Spaces rebuild I/O priority to low, ensuring that pool resynchronisation after a drive failure occurs as a background low-priority task without impacting foreground workload I/O.",
-                    Tags = ["storage-spaces", "rebuild", "io-priority", "performance", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 3,
-                    SafetyRating = 5,
-                    ImpactNote = "Pool rebuild priority set to low; rebuild takes longer but does not impact foreground I/O.",
-                    ApplyOps = [RegOp.SetDword(Key, "RebuildPriority", 0)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "RebuildPriority")],
-                    DetectOps = [RegOp.CheckDword(Key, "RebuildPriority", 0)],
                 },
                 new TweakDef
                 {

@@ -3361,7 +3361,7 @@ public sealed class ConflictDetectorTests
 {
     // Known conflicting pair used across multiple tests.
     private const string IdA = "energy-enable-hardware-accelerated-gpu-scheduling";
-    private const string IdB = "sac-disable-hvci";
+    private const string IdB = "vbs-enable-hvci";
 
     // ── AllConflicts ──────────────────────────────────────────────────────
 
@@ -3445,7 +3445,7 @@ public sealed class ConflictDetectorTests
     public void Detect_UnrelatedIds_ReturnsEmpty()
     {
         // Two IDs that share no known conflict pair.
-        var conflicts = ConflictDetector.Detect(["explorer-show-hidden-files", "audio-disable-sound-scheme"]);
+        var conflicts = ConflictDetector.Detect(["dtcust-show-hidden-files", "audio-disable-sound-scheme"]);
         Assert.Empty(conflicts);
     }
 
@@ -3461,7 +3461,7 @@ public sealed class ConflictDetectorTests
     [Fact]
     public void ConflictsFor_IdWithNoConflictInApplied_ReturnsEmpty()
     {
-        var result = ConflictDetector.ConflictsFor(IdA, ["explorer-show-hidden-files"]);
+        var result = ConflictDetector.ConflictsFor(IdA, ["dtcust-show-hidden-files"]);
         Assert.Empty(result);
     }
 
@@ -3476,7 +3476,7 @@ public sealed class ConflictDetectorTests
     public void ConflictsFor_IdNotInAnyConflict_AlwaysReturnsEmpty()
     {
         // An ID that is not part of any known pair.
-        var result = ConflictDetector.ConflictsFor("explorer-show-hidden-files", [IdA, IdB, "sac-disable-virtualization-based-security"]);
+        var result = ConflictDetector.ConflictsFor("dtcust-show-hidden-files", [IdA, IdB, "sac-disable-virtualization-based-security"]);
         Assert.Empty(result);
     }
 

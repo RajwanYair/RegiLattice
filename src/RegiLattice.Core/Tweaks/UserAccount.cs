@@ -44,63 +44,6 @@ internal static class UserAccount
         },
         new TweakDef
         {
-            Id = "uac-disable-for-built-in-admin",
-            Label = "Disable UAC for Built-in Administrator",
-            Category = "User Account",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Runs the built-in Administrator account in Admin Approval Mode without UAC prompts.",
-            Tags = ["uac", "security", "admin"],
-            RegistryKeys = [UacKey],
-            ApplyOps = [RegOp.SetDword(UacKey, "FilterAdministratorToken", 0)],
-            RemoveOps = [RegOp.SetDword(UacKey, "FilterAdministratorToken", 1)],
-            DetectOps = [RegOp.CheckDword(UacKey, "FilterAdministratorToken", 0)],
-        },
-        new TweakDef
-        {
-            Id = "uac-enable-admin-approval-mode",
-            Label = "Enable Admin Approval Mode",
-            Category = "User Account",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Enables Admin Approval Mode for all admin accounts. This is the standard UAC setting recommended by Microsoft.",
-            Tags = ["uac", "security", "admin", "best-practice"],
-            RegistryKeys = [UacKey],
-            ApplyOps = [RegOp.SetDword(UacKey, "EnableLUA", 1)],
-            RemoveOps = [RegOp.SetDword(UacKey, "EnableLUA", 0)],
-            DetectOps = [RegOp.CheckDword(UacKey, "EnableLUA", 1)],
-        },
-        new TweakDef
-        {
-            Id = "uac-virtualise-file-registry",
-            Label = "Enable UAC File/Registry Virtualisation",
-            Category = "User Account",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Enables UAC virtualisation which redirects write failures for legacy apps to per-user locations instead of System32 or HKLM.",
-            Tags = ["uac", "compatibility", "virtualisation"],
-            RegistryKeys = [UacKey],
-            ApplyOps = [RegOp.SetDword(UacKey, "EnableVirtualization", 1)],
-            RemoveOps = [RegOp.SetDword(UacKey, "EnableVirtualization", 0)],
-            DetectOps = [RegOp.CheckDword(UacKey, "EnableVirtualization", 1)],
-        },
-        new TweakDef
-        {
-            Id = "uac-disable-auto-admin-logon",
-            Label = "Disable Automatic Admin Logon",
-            Category = "User Account",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Prevents Windows from automatically logging in as administrator. Requires manual credential entry at sign-in.",
-            Tags = ["uac", "security", "logon", "admin"],
-            RegistryKeys = [$@"{LmKey}\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon"],
-            ApplyOps = [RegOp.SetString($@"{LmKey}\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon", "AutoAdminLogon", "0")],
-            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon", "AutoAdminLogon")],
-            DetectOps = [RegOp.CheckString($@"{LmKey}\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon", "AutoAdminLogon", "0")],
-        },
-        new TweakDef
-        {
             Id = "uac-set-account-lockout-10",
             Label = "Set Account Lockout After 10 Attempts",
             Category = "User Account",
@@ -140,21 +83,6 @@ internal static class UserAccount
                 }
                 return false;
             },
-        },
-        new TweakDef
-        {
-            Id = "uac-disable-credential-guard-lock-timeout",
-            Label = "Disable Credential Guard Lock Timeout",
-            Category = "User Account",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Disables the Windows Credential Guard automatic lock timeout. Useful for development machines where frequent re-auth is annoying.",
-            Tags = ["uac", "security", "credential-guard", "timeout"],
-            RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Control\Lsa"],
-            ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\Lsa", "LsaCfgFlags", 0)],
-            RemoveOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\Lsa", "LsaCfgFlags", 1)],
-            DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\Lsa", "LsaCfgFlags", 0)],
         },
         new TweakDef
         {
@@ -220,20 +148,6 @@ internal static class UserAccount
         },
         new TweakDef
         {
-            Id = "uac-enable-installer-detection",
-            Label = "Enable Installer Detection for UAC",
-            Category = "User Account",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Enables Windows installer detection which prompts for elevation when setup programs are detected.",
-            Tags = ["uac", "security", "installer", "elevation"],
-            RegistryKeys = [UacKey],
-            ApplyOps = [RegOp.SetDword(UacKey, "EnableInstallerDetection", 1)],
-            RemoveOps = [RegOp.SetDword(UacKey, "EnableInstallerDetection", 0)],
-            DetectOps = [RegOp.CheckDword(UacKey, "EnableInstallerDetection", 1)],
-        },
-        new TweakDef
-        {
             Id = "uac-standard-user-prompt-credentials",
             Label = "Standard Users Must Enter Admin Credentials",
             Category = "User Account",
@@ -245,36 +159,6 @@ internal static class UserAccount
             ApplyOps = [RegOp.SetDword(UacKey, "ConsentPromptBehaviorUser", 1)],
             RemoveOps = [RegOp.SetDword(UacKey, "ConsentPromptBehaviorUser", 0)],
             DetectOps = [RegOp.CheckDword(UacKey, "ConsentPromptBehaviorUser", 1)],
-        },
-        new TweakDef
-        {
-            Id = "uac-disable-remote-uac",
-            Label = "Disable Remote UAC Filtering",
-            Category = "User Account",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description =
-                "Disables remote UAC filtering so that remote admin connections get full admin tokens. Needed for some remote management tools.",
-            Tags = ["uac", "remote", "admin", "management"],
-            SideEffects = "Reduces security for remote admin sessions.",
-            RegistryKeys = [$@"{LmKey}\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System"],
-            ApplyOps = [RegOp.SetDword($@"{LmKey}\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "LocalAccountTokenFilterPolicy", 1)],
-            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "LocalAccountTokenFilterPolicy")],
-            DetectOps = [RegOp.CheckDword($@"{LmKey}\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "LocalAccountTokenFilterPolicy", 1)],
-        },
-        new TweakDef
-        {
-            Id = "uac-enable-secure-desktop",
-            Label = "Enable Secure Desktop for UAC Prompts",
-            Category = "User Account",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Ensures UAC prompts are displayed on the secure desktop, preventing other applications from interfering with the prompt.",
-            Tags = ["uac", "security", "secure-desktop", "hardening"],
-            RegistryKeys = [UacKey],
-            ApplyOps = [RegOp.SetDword(UacKey, "PromptOnSecureDesktop", 1)],
-            RemoveOps = [RegOp.SetDword(UacKey, "PromptOnSecureDesktop", 0)],
-            DetectOps = [RegOp.CheckDword(UacKey, "PromptOnSecureDesktop", 1)],
         },
         new TweakDef
         {
@@ -317,62 +201,6 @@ internal static class UserAccount
         },
         new TweakDef
         {
-            Id = "uac-disable-biometrics-policy",
-            Label = "Disable Biometric Authentication Policy",
-            Category = "User Account",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables Windows Biometric Service usage through Group Policy, preventing fingerprint and face login.",
-            Tags = ["uac", "biometrics", "policy", "security"],
-            RegistryKeys = [$@"{LmKey}\SOFTWARE\Policies\Microsoft\Biometrics"],
-            ApplyOps = [RegOp.SetDword($@"{LmKey}\SOFTWARE\Policies\Microsoft\Biometrics", "Enabled", 0)],
-            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SOFTWARE\Policies\Microsoft\Biometrics", "Enabled")],
-            DetectOps = [RegOp.CheckDword($@"{LmKey}\SOFTWARE\Policies\Microsoft\Biometrics", "Enabled", 0)],
-        },
-        new TweakDef
-        {
-            Id = "uac-disable-smartcard-removal-lock",
-            Label = "Disable Smart Card Removal Lock",
-            Category = "User Account",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Prevents Windows from locking the workstation when a smart card is removed from the reader.",
-            Tags = ["uac", "smartcard", "policy", "lock"],
-            RegistryKeys = [$@"{LmKey}\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon"],
-            ApplyOps = [RegOp.SetString($@"{LmKey}\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon", "ScRemoveOption", "0")],
-            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon", "ScRemoveOption")],
-            DetectOps = [RegOp.CheckString($@"{LmKey}\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon", "ScRemoveOption", "0")],
-        },
-        new TweakDef
-        {
-            Id = "uac-disable-windows-hello-for-business",
-            Label = "Disable Windows Hello for Business",
-            Category = "User Account",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables Windows Hello for Business enrollment, preventing PIN/biometric login provisioning via Azure AD or AD.",
-            Tags = ["uac", "hello", "pin", "azure-ad", "policy"],
-            RegistryKeys = [$@"{LmKey}\SOFTWARE\Policies\Microsoft\PassportForWork"],
-            ApplyOps = [RegOp.SetDword($@"{LmKey}\SOFTWARE\Policies\Microsoft\PassportForWork", "Enabled", 0)],
-            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SOFTWARE\Policies\Microsoft\PassportForWork", "Enabled")],
-            DetectOps = [RegOp.CheckDword($@"{LmKey}\SOFTWARE\Policies\Microsoft\PassportForWork", "Enabled", 0)],
-        },
-        new TweakDef
-        {
-            Id = "uac-disable-microsoft-account-logon",
-            Label = "Disable Microsoft Account User Authentication",
-            Category = "User Account",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Blocks Microsoft (Live) accounts from being used for local logon, enforcing local-only or domain accounts.",
-            Tags = ["uac", "microsoft-account", "policy", "security", "privacy"],
-            RegistryKeys = [$@"{LmKey}\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System"],
-            ApplyOps = [RegOp.SetDword($@"{LmKey}\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "NoConnectedUser", 3)],
-            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "NoConnectedUser")],
-            DetectOps = [RegOp.CheckDword($@"{LmKey}\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "NoConnectedUser", 3)],
-        },
-        new TweakDef
-        {
             Id = "uac-enforce-password-complexity",
             Label = "Enforce Password Complexity",
             Category = "User Account",
@@ -408,20 +236,6 @@ internal static class UserAccount
             ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\CSC\Parameters", "Start", 4)],
             RemoveOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\CSC\Parameters", "Start", 2)],
             DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\CSC\Parameters", "Start", 4)],
-        },
-        new TweakDef
-        {
-            Id = "uac-disable-fast-user-switching",
-            Label = "Disable Fast User Switching",
-            Category = "User Account",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables fast user switching from the logon screen, preventing users from switching sessions without signing out.",
-            Tags = ["uac", "fast-user-switching", "policy", "security"],
-            RegistryKeys = [$@"{LmKey}\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System"],
-            ApplyOps = [RegOp.SetDword($@"{LmKey}\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "HideFastUserSwitching", 1)],
-            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "HideFastUserSwitching")],
-            DetectOps = [RegOp.CheckDword($@"{LmKey}\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "HideFastUserSwitching", 1)],
         },
         new TweakDef
         {
@@ -486,21 +300,6 @@ internal static class UserAccount
         },
         new TweakDef
         {
-            Id = "uac-set-machine-pw-max-age",
-            Label = "Set Machine Account Password Maximum Age to 30 Days",
-            Category = "User Account",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets MaximumPasswordAge=30 in Netlogon Parameters. Limits machine account password lifetime to 30 days, ensuring domain-joined computers regularly rotate their machine credentials.",
-            Tags = ["uac", "machine-account", "password", "rotation"],
-            RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Services\Netlogon\Parameters"],
-            ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\Netlogon\Parameters", "MaximumPasswordAge", 30)],
-            RemoveOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\Netlogon\Parameters", "MaximumPasswordAge", 30)],
-            DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\Netlogon\Parameters", "MaximumPasswordAge", 30)],
-        },
-        new TweakDef
-        {
             Id = "uac-enable-print-drivers-admin-only",
             Label = "Restrict Printer Driver Installation to Admins Only",
             Category = "User Account",
@@ -525,36 +324,6 @@ internal static class UserAccount
         },
         new TweakDef
         {
-            Id = "uac-set-ntlm-min-server-security",
-            Label = "Set NTLM Minimum Server Session Security (128-bit + NTLMv2)",
-            Category = "User Account",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets NTLMMinServerSec=537395200 in LSA\\MSV1_0. Requires NTLMv2 session security and 128-bit encryption for all inbound NTLM server sessions, blocking weaker LM/NTLMv1 connections.",
-            Tags = ["uac", "ntlm", "security", "encryption"],
-            RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Control\Lsa\MSV1_0"],
-            ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\Lsa\MSV1_0", "NTLMMinServerSec", 537395200)],
-            RemoveOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\Lsa\MSV1_0", "NTLMMinServerSec", 0)],
-            DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\Lsa\MSV1_0", "NTLMMinServerSec", 537395200)],
-        },
-        new TweakDef
-        {
-            Id = "uac-set-ntlm-min-client-security",
-            Label = "Set NTLM Minimum Client Session Security (128-bit + NTLMv2)",
-            Category = "User Account",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets NTLMMinClientSec=537395200 in LSA\\MSV1_0. Requires NTLMv2 session security and 128-bit encryption for all outbound NTLM client sessions.",
-            Tags = ["uac", "ntlm", "security", "encryption"],
-            RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Control\Lsa\MSV1_0"],
-            ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\Lsa\MSV1_0", "NTLMMinClientSec", 537395200)],
-            RemoveOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\Lsa\MSV1_0", "NTLMMinClientSec", 0)],
-            DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\Lsa\MSV1_0", "NTLMMinClientSec", 537395200)],
-        },
-        new TweakDef
-        {
             Id = "uac-dont-display-domain-name",
             Label = "Hide Domain Name on Logon Screen",
             Category = "User Account",
@@ -567,67 +336,6 @@ internal static class UserAccount
             ApplyOps = [RegOp.SetDword($@"{UacKey}", "DontDisplayDomainName", 1)],
             RemoveOps = [RegOp.DeleteValue($@"{UacKey}", "DontDisplayDomainName")],
             DetectOps = [RegOp.CheckDword($@"{UacKey}", "DontDisplayDomainName", 1)],
-        },
-        new TweakDef
-        {
-            Id = "uac-disable-credential-caching",
-            Label = "Disable Domain Credential Caching (DisableDomainCreds)",
-            Category = "User Account",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description =
-                "Sets DisableDomainCreds=1 in the LSA key. Prevents Windows from caching domain credentials in the Credential Manager, so previous logon tokens cannot be reused if the machine is compromised.",
-            Tags = ["uac", "lsa", "credentials", "security"],
-            SideEffects = "Users will be prompted for credentials on every network resource access if domain controllers are unavailable.",
-            RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Control\Lsa"],
-            ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\Lsa", "DisableDomainCreds", 1)],
-            RemoveOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\Lsa", "DisableDomainCreds", 0)],
-            DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\Lsa", "DisableDomainCreds", 1)],
-        },
-        new TweakDef
-        {
-            Id = "uac-enable-domain-channel-signing",
-            Label = "Require Domain Secure Channel Signing",
-            Category = "User Account",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets RequireSignOrSeal=1 in Netlogon Parameters. Mandates digital signing or encryption on all domain secure channel communications, protecting against session hijacking attacks.",
-            Tags = ["uac", "domain", "netlogon", "signing", "security"],
-            RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Services\Netlogon\Parameters"],
-            ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\Netlogon\Parameters", "RequireSignOrSeal", 1)],
-            RemoveOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\Netlogon\Parameters", "RequireSignOrSeal", 0)],
-            DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\Netlogon\Parameters", "RequireSignOrSeal", 1)],
-        },
-        new TweakDef
-        {
-            Id = "uac-enable-domain-channel-seal",
-            Label = "Require Domain Secure Channel Message Sealing",
-            Category = "User Account",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets SealSecureChannel=1 in Netlogon Parameters. Enforces encryption (sealing) on all domain secure channel data, preventing eavesdropping on machine-to-DC communications.",
-            Tags = ["uac", "domain", "netlogon", "encryption", "security"],
-            RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Services\Netlogon\Parameters"],
-            ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\Netlogon\Parameters", "SealSecureChannel", 1)],
-            RemoveOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\Netlogon\Parameters", "SealSecureChannel", 0)],
-            DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\Netlogon\Parameters", "SealSecureChannel", 1)],
-        },
-        new TweakDef
-        {
-            Id = "uac-enable-domain-strong-key",
-            Label = "Require Strong Session Key for Domain Secure Channel",
-            Category = "User Account",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets RequireStrongKey=1 in Netlogon Parameters. Forces the use of a strong (128-bit) session key for all domain secure channel traffic, rejecting machines that can only negotiate weaker keys.",
-            Tags = ["uac", "domain", "netlogon", "key", "security"],
-            RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Services\Netlogon\Parameters"],
-            ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\Netlogon\Parameters", "RequireStrongKey", 1)],
-            RemoveOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\Netlogon\Parameters", "RequireStrongKey", 0)],
-            DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Services\Netlogon\Parameters", "RequireStrongKey", 1)],
         },
     ];
 }
@@ -646,42 +354,6 @@ internal static class UserActivity
 
     internal static IReadOnlyList<TweakDef> Tweaks { get; } =
     [
-        new TweakDef
-        {
-            Id = "activity-disable-publishing",
-            Label = "Disable User Activity Publishing (No Timeline Sync to Cloud)",
-            Category = "User Account",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            ImpactScore = 3,
-            SafetyRating = 5,
-            Tags = ["activity", "timeline", "privacy", "cloud sync"],
-            Description =
-                "Prevents Windows from publishing user activity to Microsoft's cloud "
-                + "Activity History service. EnableActivityFeed=0 stops Timeline data "
-                + "from leaving the device.",
-            ApplyOps = [RegOp.SetDword(ActivityPolicy, "EnableActivityFeed", 0)],
-            RemoveOps = [RegOp.SetDword(ActivityPolicy, "EnableActivityFeed", 1)],
-            DetectOps = [RegOp.CheckDword(ActivityPolicy, "EnableActivityFeed", 0)],
-        },
-        new TweakDef
-        {
-            Id = "activity-disable-cloud-sync",
-            Label = "Disable Activity History Cloud Sync Between Devices",
-            Category = "User Account",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            ImpactScore = 3,
-            SafetyRating = 5,
-            Tags = ["activity", "cloud", "sync", "timeline", "privacy"],
-            Description =
-                "Stops Windows from uploading activity history to Microsoft's servers "
-                + "for cross-device sync. AllowCrossDeviceClipboard=0 + "
-                + "UploadUserActivities=0. Keep activity history local-only.",
-            ApplyOps = [RegOp.SetDword(ActivityPolicy, "UploadUserActivities", 0)],
-            RemoveOps = [RegOp.SetDword(ActivityPolicy, "UploadUserActivities", 1)],
-            DetectOps = [RegOp.CheckDword(ActivityPolicy, "UploadUserActivities", 0)],
-        },
         new TweakDef
         {
             Id = "activity-disable-storage",
@@ -738,49 +410,6 @@ internal static class WindowsHello
     [
         new TweakDef
         {
-            Id = "hello-disable-hello-for-work",
-            Label = "Disable Windows Hello for Business Provisioning",
-            Category = "User Account",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Tags = ["windows hello", "biometrics", "security", "policy"],
-            Description =
-                "Prevents Windows Hello for Business from provisioning on this device "
-                + "via Group Policy. Useful on personal machines enrolled in Intune by mistake.",
-            ApplyOps = [RegOp.SetDword(HelloPol, "Enabled", 0)],
-            RemoveOps = [RegOp.DeleteValue(HelloPol, "Enabled")],
-            DetectOps = [RegOp.CheckDword(HelloPol, "Enabled", 0)],
-        },
-        new TweakDef
-        {
-            Id = "hello-disable-biometric-enrollment",
-            Label = "Disable Biometric Enrollment (GPO)",
-            Category = "User Account",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Tags = ["windows hello", "biometrics", "fingerprint", "policy"],
-            Description = "Blocks all biometric enrollment via GPO. Prevents Windows from " + "prompting to add a fingerprint or face after sign-in.",
-            ApplyOps = [RegOp.SetDword(BioPol, "Enabled", 0)],
-            RemoveOps = [RegOp.DeleteValue(BioPol, "Enabled")],
-            DetectOps = [RegOp.CheckDword(BioPol, "Enabled", 0)],
-        },
-        new TweakDef
-        {
-            Id = "hello-disable-facial-recognition-enhanced",
-            Label = "Disable Enhanced Anti-Spoofing for Facial Recognition",
-            Category = "User Account",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Tags = ["windows hello", "biometrics", "face recognition"],
-            Description =
-                "Disables the enhanced anti-spoofing check for facial recognition, "
-                + "useful when using a basic webcam that doesn't support 3D scanning.",
-            ApplyOps = [RegOp.SetDword(BioFace, "EnhancedAntiSpoofing", 0)],
-            RemoveOps = [RegOp.DeleteValue(BioFace, "EnhancedAntiSpoofing")],
-            DetectOps = [RegOp.CheckDword(BioFace, "EnhancedAntiSpoofing", 0)],
-        },
-        new TweakDef
-        {
             Id = "hello-disable-dynamic-lock",
             Label = "Disable Dynamic Lock (Phone Proximity Auto-Lock)",
             Category = "User Account",
@@ -793,47 +422,6 @@ internal static class WindowsHello
             ApplyOps = [RegOp.SetDword(DynLock, "EnableGoodbye", 0)],
             RemoveOps = [RegOp.DeleteValue(DynLock, "EnableGoodbye")],
             DetectOps = [RegOp.CheckDword(DynLock, "EnableGoodbye", 0)],
-        },
-        new TweakDef
-        {
-            Id = "hello-disable-pin-recovery",
-            Label = "Disable PIN Recovery via Microsoft Account",
-            Category = "User Account",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Tags = ["windows hello", "pin", "privacy", "microsoft account"],
-            Description =
-                "Prevents Windows from uploading a PIN recovery key to your " + "Microsoft account, keeping the PIN credential fully local.",
-            ApplyOps = [RegOp.SetDword(HelloPol, "EnablePinRecovery", 0)],
-            RemoveOps = [RegOp.DeleteValue(HelloPol, "EnablePinRecovery")],
-            DetectOps = [RegOp.CheckDword(HelloPol, "EnablePinRecovery", 0)],
-        },
-        new TweakDef
-        {
-            Id = "hello-enforce-strong-pin-length",
-            Label = "Enforce Minimum PIN Length (6 Digits)",
-            Category = "User Account",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Tags = ["windows hello", "pin", "security", "hardening"],
-            Description =
-                "Sets the minimum PIN length to 6 digits via Group Policy, " + "improving resistance to brute-force attacks on the local login.",
-            ApplyOps = [RegOp.SetDword(PinCplx, "MinimumPINLength", 6)],
-            RemoveOps = [RegOp.DeleteValue(PinCplx, "MinimumPINLength")],
-            DetectOps = [RegOp.CheckDword(PinCplx, "MinimumPINLength", 6)],
-        },
-        new TweakDef
-        {
-            Id = "hello-enable-pin-expiry",
-            Label = "Enable PIN Expiry (90-Day Rotation)",
-            Category = "User Account",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Tags = ["windows hello", "pin", "security", "policy"],
-            Description = "Requires the PIN to be changed every 90 days, matching common " + "enterprise password rotation policies.",
-            ApplyOps = [RegOp.SetDword(PinCplx, "Expiration", 90)],
-            RemoveOps = [RegOp.DeleteValue(PinCplx, "Expiration")],
-            DetectOps = [RegOp.CheckDword(PinCplx, "Expiration", 90)],
         },
         new TweakDef
         {
@@ -865,116 +453,6 @@ internal static class WindowsHello
             ApplyOps = [RegOp.SetDword(CredProvPol, "BlockDomainPicturePassword", 1)],
             RemoveOps = [RegOp.DeleteValue(CredProvPol, "BlockDomainPicturePassword")],
             DetectOps = [RegOp.CheckDword(CredProvPol, "BlockDomainPicturePassword", 1)],
-        },
-        new TweakDef
-        {
-            Id = "hello-disable-pin-on-device-provisioning",
-            Label = "Disable Forced PIN Creation During Setup",
-            Category = "User Account",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Tags = ["windows hello", "pin", "setup", "oobe"],
-            Description =
-                "Prevents Windows from prompting to create a Windows Hello PIN " + "during the Out-of-Box Experience. Allows password-only accounts.",
-            ApplyOps = [RegOp.SetDword(HelloPol, "DisablePostLogonProvisioning", 1)],
-            RemoveOps = [RegOp.DeleteValue(HelloPol, "DisablePostLogonProvisioning")],
-            DetectOps = [RegOp.CheckDword(HelloPol, "DisablePostLogonProvisioning", 1)],
-        },
-        new TweakDef
-        {
-            Id = "hello-enforce-anti-spoofing",
-            Label = "Enforce Enhanced Anti-Spoofing for Facial Recognition",
-            Category = "User Account",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Tags = ["windows hello", "face recognition", "biometric", "anti-spoofing", "security"],
-            Description =
-                "Requires Windows Hello facial recognition to use enhanced liveness "
-                + "detection, blocking login attempts using photos or masks. "
-                + "Only compatible cameras (IR depth-sensing) with certified drivers can satisfy this policy.",
-            ApplyOps = [RegOp.SetDword(BioFace, "EnhancedAntiSpoofing", 1)],
-            RemoveOps = [RegOp.DeleteValue(BioFace, "EnhancedAntiSpoofing")],
-            DetectOps = [RegOp.CheckDword(BioFace, "EnhancedAntiSpoofing", 1)],
-        },
-        new TweakDef
-        {
-            Id = "hello-set-min-pin-length-8",
-            Label = "Set Minimum Windows Hello PIN Length to 8 Digits",
-            Category = "User Account",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Tags = ["windows hello", "pin", "complexity", "policy", "security"],
-            Description =
-                "Raises the minimum Windows Hello for Business PIN length to 8 characters "
-                + "via Group Policy, replacing the insecure 4-digit default. "
-                + "Applies to domain-joined and Entra ID-joined devices.",
-            ApplyOps = [RegOp.SetDword(PinCplx, "MinimumPINLength", 8)],
-            RemoveOps = [RegOp.DeleteValue(PinCplx, "MinimumPINLength")],
-            DetectOps = [RegOp.CheckDword(PinCplx, "MinimumPINLength", 8)],
-        },
-        new TweakDef
-        {
-            Id = "hello-set-max-pin-length-20",
-            Label = "Set Maximum Windows Hello PIN Length to 20 Digits",
-            Category = "User Account",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Tags = ["windows hello", "pin", "complexity", "policy", "length"],
-            Description =
-                "Caps the maximum Windows Hello PIN length at 20 characters. "
-                + "Prevents trivially long PINs that bypass complexity checking "
-                + "while still allowing strong passphrases.",
-            ApplyOps = [RegOp.SetDword(PinCplx, "MaximumPINLength", 20)],
-            RemoveOps = [RegOp.DeleteValue(PinCplx, "MaximumPINLength")],
-            DetectOps = [RegOp.CheckDword(PinCplx, "MaximumPINLength", 20)],
-        },
-        new TweakDef
-        {
-            Id = "hello-require-digits-in-pin",
-            Label = "Require Digits in Windows Hello PIN",
-            Category = "User Account",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Tags = ["windows hello", "pin", "complexity", "digits", "policy"],
-            Description =
-                "Enforces that at least one digit (0–9) must appear in the "
-                + "Windows Hello PIN, preventing all-alpha PINs on devices that have "
-                + "expanded the PIN character set.",
-            ApplyOps = [RegOp.SetDword(PinCplx, "Digits", 1)],
-            RemoveOps = [RegOp.DeleteValue(PinCplx, "Digits")],
-            DetectOps = [RegOp.CheckDword(PinCplx, "Digits", 1)],
-        },
-        new TweakDef
-        {
-            Id = "hello-require-uppercase-in-pin",
-            Label = "Require Uppercase Letters in Windows Hello PIN",
-            Category = "User Account",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Tags = ["windows hello", "pin", "complexity", "uppercase", "policy"],
-            Description =
-                "Requires at least one uppercase letter in the Windows Hello PIN. "
-                + "Effective only when the device policy allows alphanumeric PINs "
-                + "(MinimumPINLength ≥ 4 with letters permitted).",
-            ApplyOps = [RegOp.SetDword(PinCplx, "UppercaseLetters", 1)],
-            RemoveOps = [RegOp.DeleteValue(PinCplx, "UppercaseLetters")],
-            DetectOps = [RegOp.CheckDword(PinCplx, "UppercaseLetters", 1)],
-        },
-        new TweakDef
-        {
-            Id = "hello-require-special-chars-in-pin",
-            Label = "Require Special Characters in Windows Hello PIN",
-            Category = "User Account",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Tags = ["windows hello", "pin", "complexity", "special characters", "policy"],
-            Description =
-                "Requires the PIN to include at least one special character. "
-                + "Combined with digit and uppercase requirements this enforces "
-                + "a password-grade PIN on supported Win11 policies.",
-            ApplyOps = [RegOp.SetDword(PinCplx, "SpecialCharacters", 1)],
-            RemoveOps = [RegOp.DeleteValue(PinCplx, "SpecialCharacters")],
-            DetectOps = [RegOp.CheckDword(PinCplx, "SpecialCharacters", 1)],
         },
         new TweakDef
         {
@@ -1024,22 +502,6 @@ internal static class WindowsHello
             ApplyOps = [RegOp.SetDword(CredProvPol, "EnableWebSignIn", 0)],
             RemoveOps = [RegOp.DeleteValue(CredProvPol, "EnableWebSignIn")],
             DetectOps = [RegOp.CheckDword(CredProvPol, "EnableWebSignIn", 0)],
-        },
-        new TweakDef
-        {
-            Id = "hello-disable-biometric-domain-users",
-            Label = "Disable Biometrics for Domain Users",
-            Category = "User Account",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Tags = ["windows hello", "biometric", "domain", "policy", "security"],
-            Description =
-                "Prevents domain-joined users from enrolling in or using Windows "
-                + "Hello biometrics (fingerprint, iris, face) for domain account "
-                + "authentication. Enforces PIN or smart-card only for domain logins.",
-            ApplyOps = [RegOp.SetDword(BioPol, "DomainAccountsEnabled", 0)],
-            RemoveOps = [RegOp.DeleteValue(BioPol, "DomainAccountsEnabled")],
-            DetectOps = [RegOp.CheckDword(BioPol, "DomainAccountsEnabled", 0)],
         },
     ];
 }
@@ -1208,20 +670,6 @@ internal static class LockScreen
         },
         new TweakDef
         {
-            Id = "lock-disable-slideshow",
-            Label = "Disable Lock Screen Slideshow",
-            Category = "User Account",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables the slideshow feature on the lock screen. Reduces memory and GPU usage. Default: user-configurable.",
-            Tags = ["lock-screen", "slideshow", "disable", "performance"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Personalization"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Personalization", "NoLockScreenSlideshow", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Personalization", "NoLockScreenSlideshow")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Personalization", "NoLockScreenSlideshow", 1)],
-        },
-        new TweakDef
-        {
             Id = "lock-auto-lock-10min",
             Label = "Auto-Lock After 10 Minutes",
             Category = "User Account",
@@ -1238,26 +686,6 @@ internal static class LockScreen
             DetectOps =
             [
                 RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "InactivityTimeoutSecs", 600),
-            ],
-        },
-        new TweakDef
-        {
-            Id = "lock-auto-lock-5min",
-            Label = "Auto-Lock After 5 Minutes",
-            Category = "User Account",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Sets the inactivity timeout to 5 minutes with automatic lock. Stricter security policy. Default: no timeout.",
-            Tags = ["lock-screen", "auto-lock", "timeout", "strict"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "InactivityTimeoutSecs", 300),
-            ],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "InactivityTimeoutSecs")],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "InactivityTimeoutSecs", 300),
             ],
         },
         new TweakDef
@@ -1284,50 +712,6 @@ internal static class LockScreen
             DetectOps =
             [
                 RegOp.CheckString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "legalnoticecaption", ""),
-            ],
-        },
-        new TweakDef
-        {
-            Id = "lock-disable-ads",
-            Label = "Disable Lock Screen Advertisements",
-            Category = "User Account",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Disables fun facts, tips, and tricks (ads) on the lock screen. Prevents Microsoft from showing promotional content. Default: enabled.",
-            Tags = ["lock-screen", "ads", "tips", "spotlight"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager"],
-            ApplyOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
-                    "RotatingLockScreenOverlayEnabled",
-                    0
-                ),
-                RegOp.SetDword(
-                    @"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
-                    "SubscribedContent-338387Enabled",
-                    0
-                ),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(
-                    @"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
-                    "RotatingLockScreenOverlayEnabled"
-                ),
-                RegOp.DeleteValue(
-                    @"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
-                    "SubscribedContent-338387Enabled"
-                ),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(
-                    @"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
-                    "RotatingLockScreenOverlayEnabled",
-                    0
-                ),
             ],
         },
         new TweakDef
@@ -1376,34 +760,6 @@ internal static class LockScreen
             DetectOps =
             [
                 RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "DontDisplayLockedUserId", 3),
-            ],
-        },
-        new TweakDef
-        {
-            Id = "lock-disable-spotlight-rotation",
-            Label = "Disable Windows Spotlight Rotating Lock Screen Images",
-            Category = "User Account",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Sets RotatingLockScreenEnabled=0 in the ContentDeliveryManager key. Stops the lock screen background from cycling through Microsoft Spotlight images downloaded from the internet.",
-            Tags = ["lock-screen", "spotlight", "background", "images"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager", "RotatingLockScreenEnabled", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager", "RotatingLockScreenEnabled", 1),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(
-                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
-                    "RotatingLockScreenEnabled",
-                    0
-                ),
             ],
         },
         new TweakDef
@@ -1538,20 +894,6 @@ internal static class Screensaver
         },
         new TweakDef
         {
-            Id = "ss-blank-screensaver",
-            Label = "Set Blank (Black) Screensaver",
-            Category = "User Account",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Set screensaver to plain black screen. Default: none. Recommended: blank for OLED.",
-            Tags = ["screensaver", "blank", "black", "oled"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Desktop"],
-            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "SCRNSAVE.EXE", "C:\\Windows\\System32\\scrnsave.scr")],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Control Panel\Desktop", "SCRNSAVE.EXE")],
-            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "SCRNSAVE.EXE", "C:\\Windows\\System32\\scrnsave.scr")],
-        },
-        new TweakDef
-        {
             Id = "ss-require-password-on-resume",
             Label = "Require Password on Screensaver Resume",
             Category = "User Account",
@@ -1563,20 +905,6 @@ internal static class Screensaver
             ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "ScreenSaverIsSecure", "1")],
             RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "ScreenSaverIsSecure", "0")],
             DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "ScreenSaverIsSecure", "1")],
-        },
-        new TweakDef
-        {
-            Id = "ss-set-screensaver-blank",
-            Label = "Set Screensaver to Blank (Most Efficient)",
-            Category = "User Account",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Sets the screensaver to the blank (black screen) option. Lowest power usage. Default: none.",
-            Tags = ["screensaver", "blank", "power", "efficiency"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Desktop"],
-            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "SCRNSAVE.EXE", @"C:\Windows\System32\scrnsave.scr")],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Control Panel\Desktop", "SCRNSAVE.EXE")],
-            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "SCRNSAVE.EXE", @"C:\Windows\System32\scrnsave.scr")],
         },
         new TweakDef
         {
@@ -1618,51 +946,6 @@ internal static class Screensaver
         },
         new TweakDef
         {
-            Id = "ss-force-policy",
-            Label = "Force Screen Saver via Policy",
-            Category = "User Account",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Enforces screen saver activation via Group Policy. Overrides user preferences. Default: not enforced.",
-            Tags = ["screensaver", "force", "policy", "security"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Control Panel\Desktop"],
-            ApplyOps = [RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Control Panel\Desktop", "ScreenSaveActive", "1")],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Control Panel\Desktop", "ScreenSaveActive")],
-            DetectOps = [RegOp.CheckString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Control Panel\Desktop", "ScreenSaveActive", "1")],
-        },
-        new TweakDef
-        {
-            Id = "ss-prevent-screensaver-change",
-            Label = "Prevent Screen Saver Changes",
-            Category = "User Account",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Prevents users from changing the screen saver settings. Locks the current screen saver configuration. Default: allowed.",
-            Tags = ["screensaver", "prevent", "change", "policy"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "NoDispScrSavPage", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "NoDispScrSavPage")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "NoDispScrSavPage", 1)],
-        },
-        new TweakDef
-        {
-            Id = "ss-scr-password-on-resume",
-            Label = "Enforce Password on Resume (Policy)",
-            Category = "User Account",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Enforces password requirement on screen saver resume via Group Policy. Machine-wide enforcement. Default: not enforced.",
-            Tags = ["screensaver", "password", "resume", "policy"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Control Panel\Desktop"],
-            ApplyOps = [RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Control Panel\Desktop", "ScreenSaverIsSecure", "1")],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Control Panel\Desktop", "ScreenSaverIsSecure")],
-            DetectOps =
-            [
-                RegOp.CheckString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Control Panel\Desktop", "ScreenSaverIsSecure", "1"),
-            ],
-        },
-        new TweakDef
-        {
             Id = "ss-set-monitor-timeout-10min",
             Label = "Set Monitor Power Off to 10 Minutes",
             Category = "User Account",
@@ -1673,26 +956,6 @@ internal static class Screensaver
             ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop\ScreenSaveTimeOut", "MonitorPowerOff", "600")],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Control Panel\Desktop\ScreenSaveTimeOut", "MonitorPowerOff")],
             DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Desktop\ScreenSaveTimeOut", "MonitorPowerOff", "600")],
-        },
-        new TweakDef
-        {
-            Id = "ss-enable-lock-workstation",
-            Label = "Enable Lock Workstation (Ctrl+Alt+Del)",
-            Category = "User Account",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Ensures the Lock Workstation option is available on Ctrl+Alt+Del. Default: enabled.",
-            Tags = ["lock", "workstation", "security", "ctrl-alt-del"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "DisableLockWorkstation", 0)],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "DisableLockWorkstation"),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "DisableLockWorkstation", 0),
-            ],
         },
     ];
 }
@@ -2055,24 +1318,6 @@ internal static class PolicyFido
     [
         new TweakDef
         {
-            Id = "fido-enable-security-key-signin",
-            Label = "Enable FIDO2 Security Key Sign-In",
-            Category = "Security",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Enables FIDO2 hardware security key logon at the Windows sign-in screen. Users can authenticate with a YubiKey, Titan Key, or any CTAP2-compliant device instead of a password.",
-            Tags = ["fido", "security-key", "authentication", "mfa", "policy", "webauthn"],
-            RegistryKeys = [Key],
-            ImpactScore = 4,
-            SafetyRating = 5,
-            ImpactNote = "Hardware security key sign-in enabled; strong phishing-resistant MFA at logon.",
-            ApplyOps = [RegOp.SetDword(Key, "EnableFIDODeviceLogon", 1)],
-            RemoveOps = [RegOp.DeleteValue(Key, "EnableFIDODeviceLogon")],
-            DetectOps = [RegOp.CheckDword(Key, "EnableFIDODeviceLogon", 1)],
-        },
-        new TweakDef
-        {
             Id = "fido-disable-security-key-signin",
             Label = "Block FIDO2 Security Key Sign-In",
             Category = "Security",
@@ -2109,24 +1354,6 @@ internal static class PolicyFido
         },
         new TweakDef
         {
-            Id = "fido-enable-nfc-security-keys",
-            Label = "Enable NFC FIDO2 Security Keys",
-            Category = "Security",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Allows NFC-based FIDO2 security keys at Windows sign-in via the FIDO device logon policy. Enables contactless hardware authentication for environments using NFC-capable keys.",
-            Tags = ["fido", "nfc", "security-key", "authentication", "policy"],
-            RegistryKeys = [Key],
-            ImpactScore = 3,
-            SafetyRating = 5,
-            ImpactNote = "NFC FIDO2 keys enabled for logon; contactless hardware MFA supported.",
-            ApplyOps = [RegOp.SetDword(Key, "EnableNFCFIDODevices", 1)],
-            RemoveOps = [RegOp.DeleteValue(Key, "EnableNFCFIDODevices")],
-            DetectOps = [RegOp.CheckDword(Key, "EnableNFCFIDODevices", 1)],
-        },
-        new TweakDef
-        {
             Id = "fido-disable-nfc-security-keys",
             Label = "Block NFC FIDO2 Security Keys",
             Category = "Security",
@@ -2141,24 +1368,6 @@ internal static class PolicyFido
             ApplyOps = [RegOp.SetDword(Key, "EnableNFCFIDODevices", 0)],
             RemoveOps = [RegOp.DeleteValue(Key, "EnableNFCFIDODevices")],
             DetectOps = [RegOp.CheckDword(Key, "EnableNFCFIDODevices", 0)],
-        },
-        new TweakDef
-        {
-            Id = "fido-enable-ble-security-keys",
-            Label = "Enable Bluetooth FIDO2 Security Keys",
-            Category = "Security",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Allows Bluetooth LE-based FIDO2 security keys at Windows sign-in. Enables wireless hardware authentication for environments permitting BLE hardware security keys.",
-            Tags = ["fido", "bluetooth", "ble", "security-key", "authentication", "policy"],
-            RegistryKeys = [Key],
-            ImpactScore = 3,
-            SafetyRating = 4,
-            ImpactNote = "BLE FIDO2 keys enabled for logon; wireless hardware MFA supported.",
-            ApplyOps = [RegOp.SetDword(Key, "EnableBLEFIDODevices", 1)],
-            RemoveOps = [RegOp.DeleteValue(Key, "EnableBLEFIDODevices")],
-            DetectOps = [RegOp.CheckDword(Key, "EnableBLEFIDODevices", 1)],
         },
         new TweakDef
         {
@@ -2247,150 +1456,6 @@ internal static class PolicyWindowsHello
     [
         new TweakDef
         {
-            Id = "whi-disable-windows-hello",
-            Label = "Disable Windows Hello for Business",
-            Category = "Security",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Disables Windows Hello for Business provisioning via Group Policy. Prevents users from enrolling biometrics or PINs as a primary corporate credential. Does not affect local PIN sign-in.",
-            Tags = ["windows-hello", "whfb", "policy", "authentication", "disable"],
-            RegistryKeys = [Key],
-            ImpactScore = 3,
-            SafetyRating = 5,
-            ImpactNote = "Windows Hello for Business provisioning blocked; password-based domain auth required.",
-            ApplyOps = [RegOp.SetDword(Key, "Enabled", 0)],
-            RemoveOps = [RegOp.DeleteValue(Key, "Enabled")],
-            DetectOps = [RegOp.CheckDword(Key, "Enabled", 0)],
-        },
-        new TweakDef
-        {
-            Id = "whi-require-tpm",
-            Label = "Require TPM for Windows Hello",
-            Category = "Security",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Requires a Trusted Platform Module (TPM) chip to provision Windows Hello for Business. Prevents Hello enrollment on devices without hardware security — credentials are bound to the TPM.",
-            Tags = ["windows-hello", "tpm", "policy", "authentication", "hardware"],
-            RegistryKeys = [Key],
-            ImpactScore = 5,
-            SafetyRating = 5,
-            ImpactNote = "Hello credentials require TPM hardware; software-only Hello blocked.",
-            ApplyOps = [RegOp.SetDword(Key, "RequireSecurityDevice", 1)],
-            RemoveOps = [RegOp.DeleteValue(Key, "RequireSecurityDevice")],
-            DetectOps = [RegOp.CheckDword(Key, "RequireSecurityDevice", 1)],
-        },
-        new TweakDef
-        {
-            Id = "whi-set-pin-min-length-8",
-            Label = "Set Windows Hello PIN Minimum Length to 8",
-            Category = "Security",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Enforces a minimum PIN length of 8 digits for Windows Hello. Short PINs are statistically easier to guess; 8 characters provides a baseline against brute-force attacks.",
-            Tags = ["windows-hello", "pin", "complexity", "policy", "authentication"],
-            RegistryKeys = [PinKey],
-            ImpactScore = 4,
-            SafetyRating = 5,
-            ImpactNote = "Hello PIN must be at least 8 characters; brute-force resistance improved.",
-            ApplyOps = [RegOp.SetDword(PinKey, "MinimumPINLength", 8)],
-            RemoveOps = [RegOp.DeleteValue(PinKey, "MinimumPINLength")],
-            DetectOps = [RegOp.CheckDword(PinKey, "MinimumPINLength", 8)],
-        },
-        new TweakDef
-        {
-            Id = "whi-set-pin-max-length-127",
-            Label = "Set Windows Hello PIN Maximum Length to 127",
-            Category = "Security",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets the maximum Windows Hello PIN length to 127 characters. Allows extremely long PINs for high-security deployments that treat the PIN as a passphrase.",
-            Tags = ["windows-hello", "pin", "complexity", "policy", "passphrase"],
-            RegistryKeys = [PinKey],
-            ImpactScore = 2,
-            SafetyRating = 5,
-            ImpactNote = "Hello PIN up to 127 chars; passphrase-length PINs permitted.",
-            ApplyOps = [RegOp.SetDword(PinKey, "MaximumPINLength", 127)],
-            RemoveOps = [RegOp.DeleteValue(PinKey, "MaximumPINLength")],
-            DetectOps = [RegOp.CheckDword(PinKey, "MaximumPINLength", 127)],
-        },
-        new TweakDef
-        {
-            Id = "whi-require-pin-digits",
-            Label = "Require Digits in Windows Hello PIN",
-            Category = "Security",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Requires at least one digit (0–9) in the Windows Hello PIN. Combined with uppercase/lowercase/special requirements, significantly increases PIN entropy.",
-            Tags = ["windows-hello", "pin", "digits", "complexity", "policy"],
-            RegistryKeys = [PinKey],
-            ImpactScore = 3,
-            SafetyRating = 5,
-            ImpactNote = "Hello PIN must include at least one digit; prevents all-alpha PINs.",
-            ApplyOps = [RegOp.SetDword(PinKey, "Digits", 1)],
-            RemoveOps = [RegOp.DeleteValue(PinKey, "Digits")],
-            DetectOps = [RegOp.CheckDword(PinKey, "Digits", 1)],
-        },
-        new TweakDef
-        {
-            Id = "whi-require-pin-uppercase",
-            Label = "Require Uppercase Letters in Windows Hello PIN",
-            Category = "Security",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Requires at least one uppercase letter in the Windows Hello PIN. Enforces mixed-case alphanumeric PIN composition for improved entropy.",
-            Tags = ["windows-hello", "pin", "uppercase", "complexity", "policy"],
-            RegistryKeys = [PinKey],
-            ImpactScore = 3,
-            SafetyRating = 5,
-            ImpactNote = "Hello PIN must include at least one uppercase letter.",
-            ApplyOps = [RegOp.SetDword(PinKey, "UppercaseLetters", 1)],
-            RemoveOps = [RegOp.DeleteValue(PinKey, "UppercaseLetters")],
-            DetectOps = [RegOp.CheckDword(PinKey, "UppercaseLetters", 1)],
-        },
-        new TweakDef
-        {
-            Id = "whi-require-pin-lowercase",
-            Label = "Require Lowercase Letters in Windows Hello PIN",
-            Category = "Security",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Requires at least one lowercase letter in the Windows Hello PIN. Combined with digit and uppercase requirements, PIN entropy is substantially increased.",
-            Tags = ["windows-hello", "pin", "lowercase", "complexity", "policy"],
-            RegistryKeys = [PinKey],
-            ImpactScore = 3,
-            SafetyRating = 5,
-            ImpactNote = "Hello PIN must include at least one lowercase letter.",
-            ApplyOps = [RegOp.SetDword(PinKey, "LowercaseLetters", 1)],
-            RemoveOps = [RegOp.DeleteValue(PinKey, "LowercaseLetters")],
-            DetectOps = [RegOp.CheckDword(PinKey, "LowercaseLetters", 1)],
-        },
-        new TweakDef
-        {
-            Id = "whi-require-pin-special-chars",
-            Label = "Require Special Characters in Windows Hello PIN",
-            Category = "Security",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Requires at least one special character in the Windows Hello PIN (!@#$%^&* etc.). Maximum PIN entropy mode — treat the PIN like a strong password.",
-            Tags = ["windows-hello", "pin", "special-chars", "complexity", "policy"],
-            RegistryKeys = [PinKey],
-            ImpactScore = 3,
-            SafetyRating = 5,
-            ImpactNote = "Hello PIN must include at least one special character.",
-            ApplyOps = [RegOp.SetDword(PinKey, "SpecialCharacters", 1)],
-            RemoveOps = [RegOp.DeleteValue(PinKey, "SpecialCharacters")],
-            DetectOps = [RegOp.CheckDword(PinKey, "SpecialCharacters", 1)],
-        },
-        new TweakDef
-        {
             Id = "whi-set-pin-expiry-90-days",
             Label = "Set Windows Hello PIN Expiry to 90 Days",
             Category = "Security",
@@ -2442,42 +1507,6 @@ internal static class PolicyEntraId
     [
         new TweakDef
         {
-            Id = "entra-block-workplace-join",
-            Label = "Block Entra ID Workplace Join",
-            Category = "Security",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Blocks Workplace Join (Entra ID / Azure AD device registration) via Group Policy. Prevents personal devices from registering with the organisation's Azure AD tenant without explicit IT approval.",
-            Tags = ["entra", "azure-ad", "workplace-join", "device-registration", "policy"],
-            RegistryKeys = [JoinKey],
-            ImpactScore = 4,
-            SafetyRating = 5,
-            ImpactNote = "Workplace Join (device registration) blocked; IT controls device enrollment.",
-            ApplyOps = [RegOp.SetDword(JoinKey, "BlockAADWorkplaceJoin", 1)],
-            RemoveOps = [RegOp.DeleteValue(JoinKey, "BlockAADWorkplaceJoin")],
-            DetectOps = [RegOp.CheckDword(JoinKey, "BlockAADWorkplaceJoin", 1)],
-        },
-        new TweakDef
-        {
-            Id = "entra-disable-auto-workplace-join",
-            Label = "Disable Automatic Entra ID Workplace Join",
-            Category = "Security",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Disables automatic Workplace Join for domain-joined hybrid devices. Prevents the OS from silently registering the device with Azure AD during domain join or user sign-in.",
-            Tags = ["entra", "azure-ad", "workplace-join", "auto-join", "policy"],
-            RegistryKeys = [JoinKey],
-            ImpactScore = 3,
-            SafetyRating = 5,
-            ImpactNote = "Auto Workplace Join disabled; manual enrollment required.",
-            ApplyOps = [RegOp.SetDword(JoinKey, "autoWorkplaceJoin", 0)],
-            RemoveOps = [RegOp.DeleteValue(JoinKey, "autoWorkplaceJoin")],
-            DetectOps = [RegOp.CheckDword(JoinKey, "autoWorkplaceJoin", 0)],
-        },
-        new TweakDef
-        {
             Id = "entra-block-microsoft-accounts",
             Label = "Block Microsoft Consumer Accounts",
             Category = "Security",
@@ -2493,24 +1522,6 @@ internal static class PolicyEntraId
             ApplyOps = [RegOp.SetDword(MsaKey, "DisableUserAuth", 1)],
             RemoveOps = [RegOp.DeleteValue(MsaKey, "DisableUserAuth")],
             DetectOps = [RegOp.CheckDword(MsaKey, "DisableUserAuth", 1)],
-        },
-        new TweakDef
-        {
-            Id = "entra-disable-cloud-consumer-experience",
-            Label = "Disable Microsoft Consumer Cloud Experiences",
-            Category = "Security",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Blocks consumer-oriented Microsoft cloud experiences (OneDrive ads, Cortana suggestions, cross-device sync prompts) via Group Policy. Ensures managed devices focus on enterprise services only.",
-            Tags = ["entra", "cloud", "consumer", "experience", "policy", "corporate"],
-            RegistryKeys = [CloudKey],
-            ImpactScore = 4,
-            SafetyRating = 5,
-            ImpactNote = "Consumer cloud experiences and cross-device prompts disabled on managed devices.",
-            ApplyOps = [RegOp.SetDword(CloudKey, "DisableConsumerAccountStateContent", 1)],
-            RemoveOps = [RegOp.DeleteValue(CloudKey, "DisableConsumerAccountStateContent")],
-            DetectOps = [RegOp.CheckDword(CloudKey, "DisableConsumerAccountStateContent", 1)],
         },
         new TweakDef
         {
@@ -2635,60 +1646,6 @@ internal static class PolicyKerberos
     [
         new TweakDef
         {
-            Id = "kerberos-disable-des-encryption",
-            Label = "Disable DES Kerberos Encryption",
-            Category = "Security",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Removes DES (des-cbc-crc and des-cbc-md5) from the Kerberos supported encryption types. DES is cryptographically broken; this forces AES-256/AES-128 and RC4 only.",
-            Tags = ["kerberos", "des", "encryption", "policy", "authentication", "hardening"],
-            RegistryKeys = [Key],
-            ImpactScore = 5,
-            SafetyRating = 4,
-            ImpactNote = "DES Kerberos encryption removed; AES-256/AES-128 and RC4 are used instead.",
-            ApplyOps = [RegOp.SetDword(Key, "SupportedEncryptionTypes", 0x7FFFFFFC)],
-            RemoveOps = [RegOp.DeleteValue(Key, "SupportedEncryptionTypes")],
-            DetectOps = [RegOp.CheckDword(Key, "SupportedEncryptionTypes", 0x7FFFFFFC)],
-        },
-        new TweakDef
-        {
-            Id = "kerberos-require-aes256-only",
-            Label = "Require AES-256 Kerberos Encryption Only",
-            Category = "Security",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Restricts Kerberos to AES-256-CTS-HMAC-SHA1-96 only (0x10 = AES256). The strongest standard Kerberos cipher. Incompatible with legacy systems that only support RC4 or DES.",
-            Tags = ["kerberos", "aes256", "encryption", "policy", "authentication", "hardening"],
-            RegistryKeys = [Key],
-            ImpactScore = 5,
-            SafetyRating = 3,
-            ImpactNote = "Only AES-256 Kerberos allowed; legacy RC4/DES systems will fail authentication.",
-            ApplyOps = [RegOp.SetDword(Key, "SupportedEncryptionTypes", 0x10)],
-            RemoveOps = [RegOp.DeleteValue(Key, "SupportedEncryptionTypes")],
-            DetectOps = [RegOp.CheckDword(Key, "SupportedEncryptionTypes", 0x10)],
-        },
-        new TweakDef
-        {
-            Id = "kerberos-enable-aes-and-rc4",
-            Label = "Allow AES-256 + AES-128 + RC4 Kerberos",
-            Category = "Security",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Configures Kerberos to support AES-256, AES-128, and RC4-HMAC while explicitly excluding DES. Balanced security for environments with mixed legacy and modern systems.",
-            Tags = ["kerberos", "aes", "rc4", "encryption", "policy", "authentication"],
-            RegistryKeys = [Key],
-            ImpactScore = 4,
-            SafetyRating = 5,
-            ImpactNote = "AES-256+AES-128+RC4 allowed; DES excluded. Suitable for most mixed environments.",
-            ApplyOps = [RegOp.SetDword(Key, "SupportedEncryptionTypes", 0x7C)],
-            RemoveOps = [RegOp.DeleteValue(Key, "SupportedEncryptionTypes")],
-            DetectOps = [RegOp.CheckDword(Key, "SupportedEncryptionTypes", 0x7C)],
-        },
-        new TweakDef
-        {
             Id = "kerberos-enable-claims",
             Label = "Enable Kerberos Claims Authentication",
             Category = "Security",
@@ -2725,78 +1682,6 @@ internal static class PolicyKerberos
         },
         new TweakDef
         {
-            Id = "kerberos-disable-rc4",
-            Label = "Disable RC4-HMAC Kerberos Encryption",
-            Category = "Security",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Removes RC4-HMAC from the Kerberos supported encryption list. RC4 is considered weak (NIST deprecated 2015). Only AES-256 and AES-128 are retained. May break legacy NAS or non-Microsoft Kerberos implementations.",
-            Tags = ["kerberos", "rc4", "encryption", "policy", "hardening", "nist"],
-            RegistryKeys = [Key],
-            ImpactScore = 5,
-            SafetyRating = 3,
-            ImpactNote = "RC4 Kerberos removed; AES-only. May break legacy Samba/NFS/MIT Kerberos systems.",
-            ApplyOps = [RegOp.SetDword(Key, "SupportedEncryptionTypes", 0x18)],
-            RemoveOps = [RegOp.DeleteValue(Key, "SupportedEncryptionTypes")],
-            DetectOps = [RegOp.CheckDword(Key, "SupportedEncryptionTypes", 0x18)],
-        },
-        new TweakDef
-        {
-            Id = "kerberos-set-max-ticket-age-10h",
-            Label = "Set Kerberos Max Ticket Age to 10 Hours",
-            Category = "Security",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets the maximum Kerberos TGT lifetime to 10 hours. Short ticket lifetimes limit the window of opportunity for a stolen ticket to be used in pass-the-ticket attacks.",
-            Tags = ["kerberos", "ticket", "age", "lifetime", "policy", "pass-the-ticket"],
-            RegistryKeys = [LsaKey],
-            ImpactScore = 4,
-            SafetyRating = 5,
-            ImpactNote = "Kerberos TGT lifetime 10 h; stolen tickets expire faster.",
-            ApplyOps = [RegOp.SetDword(LsaKey, "MaxTicketAge", 10)],
-            RemoveOps = [RegOp.DeleteValue(LsaKey, "MaxTicketAge")],
-            DetectOps = [RegOp.CheckDword(LsaKey, "MaxTicketAge", 10)],
-        },
-        new TweakDef
-        {
-            Id = "kerberos-set-max-renew-age-7d",
-            Label = "Set Kerberos Ticket Renewal Limit to 7 Days",
-            Category = "Security",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets the maximum Kerberos TGT renewal period to 7 days. After 7 days, users must re-authenticate fully. Aligns with weekly credential attestation requirements.",
-            Tags = ["kerberos", "ticket", "renewal", "policy", "authentication"],
-            RegistryKeys = [LsaKey],
-            ImpactScore = 3,
-            SafetyRating = 5,
-            ImpactNote = "TGT cannot be renewed after 7 days; full re-authentication required weekly.",
-            ApplyOps = [RegOp.SetDword(LsaKey, "MaxRenewAge", 7)],
-            RemoveOps = [RegOp.DeleteValue(LsaKey, "MaxRenewAge")],
-            DetectOps = [RegOp.CheckDword(LsaKey, "MaxRenewAge", 7)],
-        },
-        new TweakDef
-        {
-            Id = "kerberos-set-clock-skew-3min",
-            Label = "Set Kerberos Max Clock Skew to 3 Minutes",
-            Category = "Security",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Reduces Kerberos tolerance for clock drift to 3 minutes (from the default 5). Tighter clock synchronisation reduces the window for replay attacks that exploit clock skew.",
-            Tags = ["kerberos", "clock-skew", "replay-attack", "policy", "ntp", "hardening"],
-            RegistryKeys = [LsaKey],
-            ImpactScore = 3,
-            SafetyRating = 5,
-            ImpactNote = "3-minute clock skew tolerance; tighter replay-attack window. Requires reliable NTP.",
-            ApplyOps = [RegOp.SetDword(LsaKey, "SkewTime", 3)],
-            RemoveOps = [RegOp.DeleteValue(LsaKey, "SkewTime")],
-            DetectOps = [RegOp.CheckDword(LsaKey, "SkewTime", 3)],
-        },
-        new TweakDef
-        {
             Id = "kerberos-enable-kdc-proxy",
             Label = "Enable Kerberos KDC Proxy",
             Category = "Security",
@@ -2825,132 +1710,6 @@ internal static class PolicyAppInstaller
 
     internal static IReadOnlyList<TweakDef> Tweaks { get; } =
     [
-        new TweakDef
-        {
-            Id = "appinst-disable-app-installer",
-            Label = "Disable App Installer (WinGet / MSIX)",
-            Category = "Security",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Disables the Windows App Installer (WinGet) entirely via Group Policy. Prevents sideloading of MSIX packages and use of the appinstaller:// URI scheme. Enforces managed software distribution only.",
-            Tags = ["app-installer", "winget", "msix", "sideloading", "policy", "security"],
-            RegistryKeys = [Key],
-            ImpactScore = 4,
-            SafetyRating = 5,
-            ImpactNote = "App Installer disabled; no MSIX sideloading or winget use permitted.",
-            ApplyOps = [RegOp.SetDword(Key, "EnableAppInstaller", 0)],
-            RemoveOps = [RegOp.DeleteValue(Key, "EnableAppInstaller")],
-            DetectOps = [RegOp.CheckDword(Key, "EnableAppInstaller", 0)],
-        },
-        new TweakDef
-        {
-            Id = "appinst-disable-local-manifest",
-            Label = "Disable App Installer Local Manifest Files",
-            Category = "Security",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Blocks the use of local YAML manifest files with App Installer / WinGet. Prevents `winget install --manifest local.yaml` for arbitrary package installation from local files.",
-            Tags = ["app-installer", "winget", "manifest", "local", "policy", "sideloading"],
-            RegistryKeys = [Key],
-            ImpactScore = 4,
-            SafetyRating = 5,
-            ImpactNote = "Local manifest install (`--manifest`) blocked; approved sources only.",
-            ApplyOps = [RegOp.SetDword(Key, "EnableLocalManifestFiles", 0)],
-            RemoveOps = [RegOp.DeleteValue(Key, "EnableLocalManifestFiles")],
-            DetectOps = [RegOp.CheckDword(Key, "EnableLocalManifestFiles", 0)],
-        },
-        new TweakDef
-        {
-            Id = "appinst-disable-hash-override",
-            Label = "Disable App Installer Hash Override",
-            Category = "Security",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Prevents the `--ignore-security-hash` flag from bypassing App Installer's SHA-256 checksum validation. Ensures all installed packages match their verified hash — no tampered packages.",
-            Tags = ["app-installer", "winget", "hash", "integrity", "policy", "security"],
-            RegistryKeys = [Key],
-            ImpactScore = 5,
-            SafetyRating = 5,
-            ImpactNote = "Hash verification cannot be bypassed; tampered packages will fail to install.",
-            ApplyOps = [RegOp.SetDword(Key, "EnableHashOverride", 0)],
-            RemoveOps = [RegOp.DeleteValue(Key, "EnableHashOverride")],
-            DetectOps = [RegOp.CheckDword(Key, "EnableHashOverride", 0)],
-        },
-        new TweakDef
-        {
-            Id = "appinst-disable-msappinstaller-protocol",
-            Label = "Disable ms-appinstaller:// URI Protocol",
-            Category = "Security",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Disables the ms-appinstaller:// URI scheme. This protocol has been exploited to deliver malware — legitimate hosting via Teams/Edge link redirects to MSIX packages. Blocking it prevents click-to-install phishing attacks.",
-            Tags = ["app-installer", "msix", "protocol", "uri", "phishing", "malware", "policy"],
-            RegistryKeys = [Key],
-            ImpactScore = 5,
-            SafetyRating = 5,
-            ImpactNote = "ms-appinstaller:// URI blocked; click-to-MSIX delivery attack vector removed.",
-            ApplyOps = [RegOp.SetDword(Key, "EnableMSAppInstallerProtocol", 0)],
-            RemoveOps = [RegOp.DeleteValue(Key, "EnableMSAppInstallerProtocol")],
-            DetectOps = [RegOp.CheckDword(Key, "EnableMSAppInstallerProtocol", 0)],
-        },
-        new TweakDef
-        {
-            Id = "appinst-disable-experimental-features",
-            Label = "Disable App Installer Experimental Features",
-            Category = "Security",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Prevents users from enabling experimental / preview features in WinGet via Group Policy. Experimental features are untested and may contain undisclosed bugs or attack surface.",
-            Tags = ["app-installer", "winget", "experimental", "policy", "security"],
-            RegistryKeys = [Key],
-            ImpactScore = 3,
-            SafetyRating = 5,
-            ImpactNote = "WinGet experimental features blocked; only stable functionality permitted.",
-            ApplyOps = [RegOp.SetDword(Key, "EnableExperimentalFeatures", 0)],
-            RemoveOps = [RegOp.DeleteValue(Key, "EnableExperimentalFeatures")],
-            DetectOps = [RegOp.CheckDword(Key, "EnableExperimentalFeatures", 0)],
-        },
-        new TweakDef
-        {
-            Id = "appinst-disable-settings-page",
-            Label = "Disable App Installer Settings Page",
-            Category = "Security",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Hides the settings page within App Installer / WinGet, preventing users from changing configuration. Locks down the managed state of the installer on corporate devices.",
-            Tags = ["app-installer", "winget", "settings", "lock", "policy", "corporate"],
-            RegistryKeys = [Key],
-            ImpactScore = 2,
-            SafetyRating = 5,
-            ImpactNote = "App Installer settings page hidden; IT manages configuration.",
-            ApplyOps = [RegOp.SetDword(Key, "EnableSettings", 0)],
-            RemoveOps = [RegOp.DeleteValue(Key, "EnableSettings")],
-            DetectOps = [RegOp.CheckDword(Key, "EnableSettings", 0)],
-        },
-        new TweakDef
-        {
-            Id = "appinst-disable-store-source",
-            Label = "Block Microsoft Store App Installer Source",
-            Category = "Security",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Removes the Microsoft Store as a WinGet package source via Group Policy. Forces all package installations to use internal corporate repositories only, preventing unapproved Store app installations.",
-            Tags = ["app-installer", "winget", "microsoft-store", "source", "policy", "corporate"],
-            RegistryKeys = [Key],
-            ImpactScore = 4,
-            SafetyRating = 5,
-            ImpactNote = "Microsoft Store source removed from WinGet; only corporate repos allowed.",
-            ApplyOps = [RegOp.SetDword(Key, "EnableMicrosoftStoreSource", 0)],
-            RemoveOps = [RegOp.DeleteValue(Key, "EnableMicrosoftStoreSource")],
-            DetectOps = [RegOp.CheckDword(Key, "EnableMicrosoftStoreSource", 0)],
-        },
         new TweakDef
         {
             Id = "appinst-disable-local-archive-install",
@@ -3966,23 +2725,6 @@ internal static class PolicyAuth
             [
                 new TweakDef
                 {
-                    Id = "biometric-disable-biometrics-service",
-                    Label = "Disable Windows Biometrics Service",
-                    Category = "User Account",
-                    Description =
-                        "Disables the Windows Biometric Service (WBS), preventing any biometric authentication including Windows Hello fingerprint and face recognition. Use on systems where biometrics are not permitted.",
-                    Tags = ["biometrics", "windows-hello", "fingerprint", "face", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 4,
-                    SafetyRating = 5,
-                    ImpactNote = "Windows Biometric Service disabled; no fingerprint or face sign-in available. PIN or password required.",
-                    ApplyOps = [RegOp.SetDword(Key, "Enabled", 0)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "Enabled")],
-                    DetectOps = [RegOp.CheckDword(Key, "Enabled", 0)],
-                },
-                new TweakDef
-                {
                     Id = "biometric-disable-face-recognition",
                     Label = "Disable Windows Hello Face Recognition",
                     Category = "User Account",
@@ -4589,21 +3331,6 @@ internal static class PolicyAuth
             },
             new TweakDef
             {
-                Id = "credcache-enable-lsa-protection",
-                Label = "Enable LSA Protected Process Light (PPL)",
-                Category = "User Account",
-                NeedsAdmin = true,
-                CorpSafe = false,
-                Description =
-                    "Runs LSASS as a Protected Process Light to block credential-dumping tools. "
-                    + "RunAsPPL=1. Requires Secure Boot and a system reboot. Default: disabled.",
-                Tags = ["lsa", "lsass", "ppl", "credentials", "hardening"],
-                ApplyOps = [RegOp.SetDword(Lsa, "RunAsPPL", 1)],
-                RemoveOps = [RegOp.DeleteValue(Lsa, "RunAsPPL")],
-                DetectOps = [RegOp.CheckDword(Lsa, "RunAsPPL", 1)],
-            },
-            new TweakDef
-            {
                 Id = "credcache-disable-domain-creds",
                 Label = "Block storing network authentication credentials",
                 Category = "User Account",
@@ -4617,66 +3344,6 @@ internal static class PolicyAuth
                 RemoveOps = [RegOp.DeleteValue(Lsa, "DisableDomainCreds")],
                 DetectOps = [RegOp.CheckDword(Lsa, "DisableDomainCreds", 1)],
             },
-            new TweakDef
-            {
-                Id = "credcache-restrict-anonymous",
-                Label = "Restrict anonymous enumeration of accounts and shares",
-                Category = "User Account",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                Description =
-                    "Prevents anonymous users from enumerating SAM accounts and network shares. "
-                    + "RestrictAnonymous=1. Default: 0. Recommended baseline: 1 or 2.",
-                Tags = ["anonymous", "sam", "enumeration", "hardening"],
-                ApplyOps = [RegOp.SetDword(Lsa, "RestrictAnonymous", 1)],
-                RemoveOps = [RegOp.DeleteValue(Lsa, "RestrictAnonymous")],
-                DetectOps = [RegOp.CheckDword(Lsa, "RestrictAnonymous", 1)],
-            },
-            new TweakDef
-            {
-                Id = "credcache-restrict-anonymous-sam",
-                Label = "Restrict anonymous enumeration of SAM account names",
-                Category = "User Account",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                Description =
-                    "Prevents anonymous connections from enumerating SAM account names. "
-                    + "RestrictAnonymousSAM=1. Ensures this setting is policy-enforced and cannot be cleared.",
-                Tags = ["anonymous", "sam", "policy", "hardening"],
-                ApplyOps = [RegOp.SetDword(Lsa, "RestrictAnonymousSAM", 1)],
-                RemoveOps = [RegOp.DeleteValue(Lsa, "RestrictAnonymousSAM")],
-                DetectOps = [RegOp.CheckDword(Lsa, "RestrictAnonymousSAM", 1)],
-            },
-            new TweakDef
-            {
-                Id = "credcache-disable-everyone-anonymous",
-                Label = "Remove Anonymous from the Everyone group",
-                Category = "User Account",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                Description =
-                    "Prevents the Anonymous user from being a member of the Everyone group. "
-                    + "EveryoneIncludesAnonymous=0. Restricts access to resources that grant permissions to Everyone.",
-                Tags = ["anonymous", "everyone", "access-control", "hardening"],
-                ApplyOps = [RegOp.SetDword(Lsa, "EveryoneIncludesAnonymous", 0)],
-                RemoveOps = [RegOp.DeleteValue(Lsa, "EveryoneIncludesAnonymous")],
-                DetectOps = [RegOp.CheckDword(Lsa, "EveryoneIncludesAnonymous", 0)],
-            },
-            new TweakDef
-            {
-                Id = "credcache-disable-lm-hash",
-                Label = "Disable LM hash storage for passwords",
-                Category = "User Account",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                Description =
-                    "Prevents Windows from storing an LM hash on the next password change. "
-                    + "NoLmHash=1. LM hashes are trivially crackable; disabling prevents offline attacks.",
-                Tags = ["lm", "hash", "password", "credentials", "hardening"],
-                ApplyOps = [RegOp.SetDword(Lsa, "NoLmHash", 1)],
-                RemoveOps = [RegOp.DeleteValue(Lsa, "NoLmHash")],
-                DetectOps = [RegOp.CheckDword(Lsa, "NoLmHash", 1)],
-            },
         ];
     }
 
@@ -4687,22 +3354,6 @@ internal static class PolicyAuth
 
         public static IReadOnlyList<TweakDef> Data =>
             [
-                new TweakDef
-                {
-                    Id = "creddel-enable-restricted-admin",
-                    Label = "Enable Restricted Admin Mode for RDP",
-                    Category = "User Account",
-                    Description = "Forces Remote Desktop connections to use Restricted Admin mode, preventing credential forwarding to remote hosts.",
-                    Tags = ["credentials", "delegation", "rdp", "restricted-admin", "security"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 5,
-                    SafetyRating = 4,
-                    ImpactNote = "Prevents network credential forwarding over RDP; administrators must have local admin rights on target.",
-                    ApplyOps = [RegOp.SetDword(CredDelKey, "RestrictedRemoteAdministration", 1)],
-                    RemoveOps = [RegOp.DeleteValue(CredDelKey, "RestrictedRemoteAdministration")],
-                    DetectOps = [RegOp.CheckDword(CredDelKey, "RestrictedRemoteAdministration", 1)],
-                },
                 new TweakDef
                 {
                     Id = "creddel-disable-remote-host-delegation",
@@ -4895,23 +3546,6 @@ internal static class PolicyAuth
             },
             new TweakDef
             {
-                Id = "credmgr-deny-remote-desktop-credential-delegation",
-                Label = "Deny Credential Delegation through Remote Desktop without NLA",
-                Category = "User Account",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 5,
-                SafetyRating = 5,
-                Description =
-                    "Credential delegation through Remote Desktop without Network Level Authentication allows attackers to present a rogue RDP server that captures user credentials before showing any connection UI. Denying credential delegation without NLA ensures that credentials are only forwarded after the server's identity has been verified through NLA mutual authentication. Pre-NLA credential delegation is a classic man-in-the-middle attack vector for RDP where a network attacker can harvest credentials from unpatched or misconfigured RDP clients. NLA requires that the client authenticate to the server before establishing the remote desktop session preventing eavesdropping on the initial credential exchange. All organizations should require NLA for all RDP connections and deny credential delegation to servers that do not support NLA. Remote Desktop Gateway solutions provide NLA enforcement for external RDP access and should be used for all external remote access scenarios.",
-                Tags = ["credentials", "rdp", "nla", "man-in-the-middle", "policy"],
-                RegistryKeys = [Key],
-                ApplyOps = [RegOp.SetDword(Key, "DenyDefaultCredentials", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "DenyDefaultCredentials")],
-                DetectOps = [RegOp.CheckDword(Key, "DenyDefaultCredentials", 1)],
-            },
-            new TweakDef
-            {
                 Id = "credmgr-restrict-saved-rdp-credentials",
                 Label = "Prevent Saving of Remote Desktop Connection Credentials",
                 Category = "User Account",
@@ -4926,23 +3560,6 @@ internal static class PolicyAuth
                 ApplyOps = [RegOp.SetDword(Key, "DisallowSavedCredentials", 1)],
                 RemoveOps = [RegOp.DeleteValue(Key, "DisallowSavedCredentials")],
                 DetectOps = [RegOp.CheckDword(Key, "DisallowSavedCredentials", 1)],
-            },
-            new TweakDef
-            {
-                Id = "credmgr-enable-restricted-admin-mode",
-                Label = "Enable Restricted Admin Mode for Remote Desktop Connections",
-                Category = "User Account",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 5,
-                SafetyRating = 4,
-                Description =
-                    "Restricted Admin Mode prevents credential delegation when connecting via RDP by using the connecting computer's credentials rather than the user's credentials on the remote system. Enabling Restricted Admin Mode reduces the credential material exposed to the remote system limiting credential theft from a compromised RDP host. In Restricted Admin Mode administrative access is available but the full user credentials are not sent to the remote server making them unavailable for lateral movement from that server. Organizations should enable Restricted Admin Mode for all privileged RDP connections especially to servers that may be compromised. Restricted Admin Mode has the trade-off that network resources accessed from the remote session use the remote computer's credentials not the user's potentially causing access failures. Combining Restricted Admin Mode with privileged access workstations provides defense-in-depth against credential theft through RDP.",
-                Tags = ["credentials", "rdp", "restricted-admin", "pass-the-hash", "policy"],
-                RegistryKeys = [Key],
-                ApplyOps = [RegOp.SetDword(Key, "RestrictedRemoteAdministration", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "RestrictedRemoteAdministration")],
-                DetectOps = [RegOp.CheckDword(Key, "RestrictedRemoteAdministration", 1)],
             },
             new TweakDef
             {
@@ -5222,19 +3839,6 @@ internal static class PolicyAuth
 
         public static IReadOnlyList<TweakDef> Data { get; } =
         [
-            new TweakDef
-            {
-                Id = "credui-disable-password-reveal",
-                Label = "Disable Password Reveal Button in Credential UI",
-                Category = "User Account",
-                Description = "Hides the password-reveal eye icon in credential dialogs and the lock screen, reducing shoulder-surfing risk.",
-                Tags = ["credential", "security", "group-policy", "hardening", "password"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ApplyOps = [RegOp.SetDword(CredUi, "DisablePasswordReveal", 1)],
-                RemoveOps = [RegOp.DeleteValue(CredUi, "DisablePasswordReveal")],
-                DetectOps = [RegOp.CheckDword(CredUi, "DisablePasswordReveal", 1)],
-            },
             new TweakDef
             {
                 Id = "credui-disable-administrator-enumeration",
@@ -5552,58 +4156,6 @@ internal static class PolicyAuth
             [
                 new TweakDef
                 {
-                    Id = "kerbmit-disable-rc4-encryption",
-                    Label = "Disable RC4 for Kerberos Ticket Encryption",
-                    Category = "User Account",
-                    Description =
-                        "Sets SupportedEncryptionTypes=0x18 (24) in Kerberos Parameters to allow only AES-128 and AES-256, removing RC4-HMAC support. Kerberoasting succeeds primarily because service tickets encrypted with RC4-HMAC can be cracked offline in hours or days on a GPU. Enforcing AES-only encryption requires 10×–100× more compute for offline attacks, making cracking economically infeasible for properly generated key material.",
-                    Tags = ["kerberos", "rc4", "aes", "kerberoasting", "hardening"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 5,
-                    SafetyRating = 3,
-                    ImpactNote =
-                        "Disables RC4 Kerberos; legacy services with RC4-only service accounts will fail TGS; upgrade service account keys first.",
-                    ApplyOps = [RegOp.SetDword(KerbKey, "SupportedEncryptionTypes", 24)],
-                    RemoveOps = [RegOp.DeleteValue(KerbKey, "SupportedEncryptionTypes")],
-                    DetectOps = [RegOp.CheckDword(KerbKey, "SupportedEncryptionTypes", 24)],
-                },
-                new TweakDef
-                {
-                    Id = "kerbmit-set-max-service-ticket-age",
-                    Label = "Reduce Kerberos Service Ticket Lifetime (600 min)",
-                    Category = "User Account",
-                    Description =
-                        "Sets MaxServiceAge=600 in Kerberos Parameters. Reduces the maximum service ticket (TGS) lifetime from the Windows default of 600 minutes. Shorter ticket lifetimes reduce the window of opportunity for Kerberoasted tickets to be cracked and used: a ticket valid for 10 hours gives an attacker 10 hours to crack it; reducing to 10 minutes means the ticket expires before most cracking jobs complete.",
-                    Tags = ["kerberos", "ticket-lifetime", "tgs", "kerberoasting", "hardening"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 4,
-                    SafetyRating = 4,
-                    ImpactNote = "Reduces service ticket lifetime; very short lifetimes increase KDC load from more frequent ticket requests.",
-                    ApplyOps = [RegOp.SetDword(KerbKey, "MaxServiceAge", 600)],
-                    RemoveOps = [RegOp.DeleteValue(KerbKey, "MaxServiceAge")],
-                    DetectOps = [RegOp.CheckDword(KerbKey, "MaxServiceAge", 600)],
-                },
-                new TweakDef
-                {
-                    Id = "kerbmit-reduce-max-tgt-age",
-                    Label = "Reduce Kerberos TGT Lifetime (600 min)",
-                    Category = "User Account",
-                    Description =
-                        "Sets MaxTicketAge=600 in Kerberos Parameters. Limits the maximum lifetime of Kerberos Ticket-Granting Tickets. A shorter TGT lifetime limits how long a compromised TGT can be used for privilege escalation (Pass-the-Ticket attacks). After TGT expiry the user must re-authenticate, providing a natural checkpoint to detect and respond to compromised credentials before they can be used further.",
-                    Tags = ["kerberos", "tgt", "ticket-lifetime", "pass-the-ticket", "hardening"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 4,
-                    SafetyRating = 4,
-                    ImpactNote = "Reduces TGT lifetime; users will be re-prompted for credentials more frequently in long sessions.",
-                    ApplyOps = [RegOp.SetDword(KerbKey, "MaxTicketAge", 600)],
-                    RemoveOps = [RegOp.DeleteValue(KerbKey, "MaxTicketAge")],
-                    DetectOps = [RegOp.CheckDword(KerbKey, "MaxTicketAge", 600)],
-                },
-                new TweakDef
-                {
                     Id = "kerbmit-tighten-clock-skew",
                     Label = "Tighten Kerberos Clock Skew Tolerance (2 min)",
                     Category = "User Account",
@@ -5652,23 +4204,6 @@ internal static class PolicyAuth
                     ApplyOps = [RegOp.SetDword(KerbKey, "RestrictReceivingNTLMTraffic", 2)],
                     RemoveOps = [RegOp.DeleteValue(KerbKey, "RestrictReceivingNTLMTraffic")],
                     DetectOps = [RegOp.CheckDword(KerbKey, "RestrictReceivingNTLMTraffic", 2)],
-                },
-                new TweakDef
-                {
-                    Id = "kerbmit-set-renewal-window",
-                    Label = "Reduce Kerberos Ticket Renewal Window (4 days)",
-                    Category = "User Account",
-                    Description =
-                        "Sets MaxRenewAge=4 in Kerberos Parameters. Limits how long a Kerberos TGT can be renewed without full re-authentication. The Windows default is 7 days — meaning a stolen TGT can be continuously renewed for a week without the user re-entering credentials. Reducing to 4 days tightens the window during which a compromised TGT provides persistent access, improving detection opportunities.",
-                    Tags = ["kerberos", "renewal", "tgt", "persistence", "hardening"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 3,
-                    SafetyRating = 5,
-                    ImpactNote = "Reduces TGT renewal window to 4 days; users on extended leave may need to re-authenticate on return.",
-                    ApplyOps = [RegOp.SetDword(KerbKey, "MaxRenewAge", 4)],
-                    RemoveOps = [RegOp.DeleteValue(KerbKey, "MaxRenewAge")],
-                    DetectOps = [RegOp.CheckDword(KerbKey, "MaxRenewAge", 4)],
                 },
                 new TweakDef
                 {
@@ -5735,111 +4270,6 @@ internal static class PolicyAuth
         [
             new TweakDef
             {
-                Id = "krb-require-aes256-encryption",
-                Label = "Kerberos: Require AES-256 Encryption for Ticket Grants",
-                Category = "User Account",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                MinBuild = 17763,
-                ImpactScore = 4,
-                SafetyRating = 4,
-                RegistryKeys = [KrbLsaParams],
-                Tags = ["kerberos", "authentication", "aes256", "encryption", "security", "hardening"],
-                Description =
-                    "Sets SupportedEncryptionTypes=0x18 (24 decimal) in Kerberos\\Parameters. "
-                    + "Bit mask 0x18 enables only AES-128-CTS-HMAC-SHA1-96 and AES-256-CTS-HMAC-SHA1-96. "
-                    + "Disables the weaker RC4-HMAC (NTLM-hash-based) cipher used in older 'Kerberoasting' "
-                    + "attacks. Requires Windows Server 2008 R2 or later as the KDC.",
-                ApplyOps = [RegOp.SetDword(KrbLsaParams, "SupportedEncryptionTypes", 0x18)],
-                RemoveOps = [RegOp.DeleteValue(KrbLsaParams, "SupportedEncryptionTypes")],
-                DetectOps = [RegOp.CheckDword(KrbLsaParams, "SupportedEncryptionTypes", 0x18)],
-            },
-            new TweakDef
-            {
-                Id = "krb-disable-des-encryption",
-                Label = "Kerberos: Disable DES Encryption Types",
-                Category = "User Account",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                MinBuild = 17763,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                RegistryKeys = [KrbPolicyParams],
-                Tags = ["kerberos", "authentication", "des", "encryption", "security", "hardening"],
-                Description =
-                    "Sets SupportedEncryptionTypes=0x7FFFFFF8 in Windows Kerberos policy. "
-                    + "Disables all DES and RC4-MD5 ciphers (bits 0–2 cleared), retaining AES-128/256 "
-                    + "and future ciphers. DES was retired by NIST in 2004; its presence enables "
-                    + "down-grade attacks in mixed-mode Active Directory environments.",
-                ApplyOps = [RegOp.SetDword(KrbPolicyParams, "SupportedEncryptionTypes", 0x7FFFFFF8)],
-                RemoveOps = [RegOp.DeleteValue(KrbPolicyParams, "SupportedEncryptionTypes")],
-                DetectOps = [RegOp.CheckDword(KrbPolicyParams, "SupportedEncryptionTypes", 0x7FFFFFF8)],
-            },
-            new TweakDef
-            {
-                Id = "krb-set-max-ticket-life-8h",
-                Label = "Kerberos: Set Maximum Ticket Lifetime to 8 Hours",
-                Category = "User Account",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                MinBuild = 17763,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                RegistryKeys = [KrbLsaParams],
-                Tags = ["kerberos", "authentication", "ticket-lifetime", "security"],
-                Description =
-                    "Sets MaxTicketAge=8 in Kerberos\\Parameters. "
-                    + "Limits the maximum lifetime of Kerberos service tickets to 8 hours (value in hours). "
-                    + "Default is 10 hours. Shorter lifetime reduces the window in which a stolen ticket "
-                    + "can be replayed (golden/silver ticket attacks have a narrower useful window).",
-                ApplyOps = [RegOp.SetDword(KrbLsaParams, "MaxTicketAge", 8)],
-                RemoveOps = [RegOp.DeleteValue(KrbLsaParams, "MaxTicketAge")],
-                DetectOps = [RegOp.CheckDword(KrbLsaParams, "MaxTicketAge", 8)],
-            },
-            new TweakDef
-            {
-                Id = "krb-set-max-renewable-ticket-life-7d",
-                Label = "Kerberos: Set Maximum Renewable Ticket Lifetime to 7 Days",
-                Category = "User Account",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                MinBuild = 17763,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                RegistryKeys = [KrbLsaParams],
-                Tags = ["kerberos", "authentication", "ticket-lifetime", "security"],
-                Description =
-                    "Sets MaxRenewAge=7 in Kerberos\\Parameters. "
-                    + "Limits the maximum renewable lifetime of a Kerberos TGT to 7 days (value in days). "
-                    + "Default is 7 days; setting it explicitly via registry ensures it is not overridden. "
-                    + "Renewable tickets allow continuous session renewal without re-entering credentials.",
-                ApplyOps = [RegOp.SetDword(KrbLsaParams, "MaxRenewAge", 7)],
-                RemoveOps = [RegOp.DeleteValue(KrbLsaParams, "MaxRenewAge")],
-                DetectOps = [RegOp.CheckDword(KrbLsaParams, "MaxRenewAge", 7)],
-            },
-            new TweakDef
-            {
-                Id = "krb-disable-clock-skew-tolerance",
-                Label = "Kerberos: Tighten Clock-Skew Tolerance to 3 Minutes",
-                Category = "User Account",
-                NeedsAdmin = true,
-                CorpSafe = false,
-                MinBuild = 17763,
-                ImpactScore = 2,
-                SafetyRating = 3,
-                RegistryKeys = [KrbLsaParams],
-                Tags = ["kerberos", "authentication", "clock-skew", "security", "ntp"],
-                Description =
-                    "Sets SkewTime=3 in Kerberos\\Parameters. "
-                    + "Reduces the accepted clock skew between the client and KDC from 5 minutes (default) "
-                    + "to 3 minutes. A smaller window narrows replay-attack opportunities while still "
-                    + "tolerating NTP drift. Requires accurate NTP synchronisation.",
-                ApplyOps = [RegOp.SetDword(KrbLsaParams, "SkewTime", 3)],
-                RemoveOps = [RegOp.DeleteValue(KrbLsaParams, "SkewTime")],
-                DetectOps = [RegOp.CheckDword(KrbLsaParams, "SkewTime", 3)],
-            },
-            new TweakDef
-            {
                 Id = "krb-require-preauth",
                 Label = "Kerberos: Require Pre-Authentication for All Accounts",
                 Category = "User Account",
@@ -5880,27 +4310,6 @@ internal static class PolicyAuth
                 ApplyOps = [RegOp.SetDword(KrbPolicyParams, "EnableCbacAndArmor", 1)],
                 RemoveOps = [RegOp.DeleteValue(KrbPolicyParams, "EnableCbacAndArmor")],
                 DetectOps = [RegOp.CheckDword(KrbPolicyParams, "EnableCbacAndArmor", 1)],
-            },
-            new TweakDef
-            {
-                Id = "krb-disable-rc4-hmac",
-                Label = "Kerberos: Explicitly Disable RC4-HMAC (ARCFOUR) Encryption",
-                Category = "User Account",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                MinBuild = 19041,
-                ImpactScore = 4,
-                SafetyRating = 4,
-                RegistryKeys = [KrbLsaParams],
-                Tags = ["kerberos", "authentication", "rc4", "arcfour", "kerberoasting", "security", "hardening"],
-                Description =
-                    "Sets SupportedEncryptionTypes=0x7FFFFFB8 in Kerberos\\Parameters (clears RC4 bits). "
-                    + "Explicitly removes RC4-HMAC (type 23) from the supported encryption set. "
-                    + "RC4-HMAC is vulnerable to Kerberoasting (offline NTLM-hash cracking) and should "
-                    + "not be used in environments with Windows Server 2019+ domain controllers.",
-                ApplyOps = [RegOp.SetDword(KrbLsaParams, "SupportedEncryptionTypes", 0x7FFFFFB8)],
-                RemoveOps = [RegOp.DeleteValue(KrbLsaParams, "SupportedEncryptionTypes")],
-                DetectOps = [RegOp.CheckDword(KrbLsaParams, "SupportedEncryptionTypes", 0x7FFFFFB8)],
             },
             new TweakDef
             {
@@ -6367,39 +4776,6 @@ internal static class PolicyAuth
             },
             new TweakDef
             {
-                Id = "kerb-disable-rc4-encryption",
-                Label = "Disable RC4-HMAC Encryption for Kerberos",
-                Category = "User Account",
-                Description = "Removes RC4-HMAC from Kerberos supported encryption types, forcing AES128/AES256 only.",
-                Tags = ["kerberos", "rc4", "encryption", "hardening"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 5,
-                SafetyRating = 3,
-                ImpactNote =
-                    "RC4 in Kerberos enables AS-REP roasting and other attacks. Removing it requires all principal accounts to have AES keys set.",
-                ApplyOps = [RegOp.SetDword(KerbPolicyKey, "SupportedEncryptionTypes", 2147483616)],
-                RemoveOps = [RegOp.DeleteValue(KerbPolicyKey, "SupportedEncryptionTypes")],
-                DetectOps = [RegOp.CheckDword(KerbPolicyKey, "SupportedEncryptionTypes", 2147483616)],
-            },
-            new TweakDef
-            {
-                Id = "kerb-require-aes256",
-                Label = "Require AES256 for Kerberos",
-                Category = "User Account",
-                Description = "Configures Kerberos to prefer AES256-CTS-HMAC-SHA1-96 as the sole supported encryption type.",
-                Tags = ["kerberos", "aes256", "encryption", "hardening"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 3,
-                ImpactNote = "Gold standard for Kerberos crypto. Requires all service and user accounts to have AES256 keys pre-provisioned.",
-                ApplyOps = [RegOp.SetDword(KerbLsaKey, "SupportedEncryptionTypes", 24)],
-                RemoveOps = [RegOp.DeleteValue(KerbLsaKey, "SupportedEncryptionTypes")],
-                DetectOps = [RegOp.CheckDword(KerbLsaKey, "SupportedEncryptionTypes", 24)],
-            },
-            new TweakDef
-            {
                 Id = "kerb-set-max-ticket-age-600",
                 Label = "Set Kerberos Maximum Ticket Age to 600 Minutes",
                 Category = "User Account",
@@ -6522,24 +4898,6 @@ internal static class PolicyAuth
 
         public static IReadOnlyList<TweakDef> Data =>
             [
-                new TweakDef
-                {
-                    Id = "krbadv-enable-claims-support",
-                    Label = "Enable Kerberos Claims and Compound Authentication Support",
-                    Category = "User Account",
-                    Description =
-                        "Enables Kerberos claims-based authentication and compound authentication (user + device claims), required for Dynamic Access Control (DAC) file share access and conditional access policies based on device health claims.",
-                    Tags = ["kerberos", "claims", "compound-auth", "dac", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 4,
-                    SafetyRating = 5,
-                    ImpactNote =
-                        "Kerberos claims and compound auth enabled; required for Dynamic Access Control and device-based conditional access.",
-                    ApplyOps = [RegOp.SetDword(Key, "EnableCbacAndArmor", 1)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "EnableCbacAndArmor")],
-                    DetectOps = [RegOp.CheckDword(Key, "EnableCbacAndArmor", 1)],
-                },
                 new TweakDef
                 {
                     Id = "krbadv-require-fast-armoring",
@@ -6874,26 +5232,6 @@ internal static class PolicyAuth
 
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
-            new TweakDef
-            {
-                Id = "laps-backup-to-azure-ad",
-                Label = "LAPS: Back Up Local Admin Password to Azure AD / Entra ID",
-                Category = "User Account",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                MinBuild = 22621,
-                ImpactScore = 4,
-                SafetyRating = 4,
-                Tags = ["laps", "entra-id", "azure-ad", "password-backup", "admin-password"],
-                Description =
-                    "Sets BackupDirectory=1 in the Windows LAPS policy. "
-                    + "Configures Windows LAPS to back up the managed local administrator password to "
-                    + "Azure Active Directory (now Microsoft Entra ID). Values: 0=disabled, 1=Azure AD, 2=Active Directory. "
-                    + "Allows IT admins to retrieve the password via the Entra ID portal without on-premises AD infrastructure.",
-                ApplyOps = [RegOp.SetDword(LapsPolicy, "BackupDirectory", 1)],
-                RemoveOps = [RegOp.DeleteValue(LapsPolicy, "BackupDirectory")],
-                DetectOps = [RegOp.CheckDword(LapsPolicy, "BackupDirectory", 1)],
-            },
             new TweakDef
             {
                 Id = "laps-backup-to-ad",
@@ -7269,109 +5607,6 @@ internal static class PolicyAuth
             [
                 new TweakDef
                 {
-                    Id = "lsapol-enable-lsa-runasppl",
-                    Label = "Enable LSA Protected Process Light (RunAsPPL) Credential Guard",
-                    Category = "User Account",
-                    Description =
-                        "Enables RunAsPPL for lsass.exe, running the Local Security Authority as a Protected Process Light, preventing credential dumping tools (Mimikatz, procdump lsass) from reading NTLM hashes and Kerberos tickets from the LSASS process.",
-                    Tags = ["lsa", "runasppl", "credential-dump", "mimikatz", "security", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 5,
-                    SafetyRating = 5,
-                    ImpactNote = "LSA RunAsPPL enabled; Mimikatz and LSASS credential dumping tools blocked from reading process memory.",
-                    ApplyOps = [RegOp.SetDword(Key, "RunAsPPL", 1)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "RunAsPPL")],
-                    DetectOps = [RegOp.CheckDword(Key, "RunAsPPL", 1)],
-                },
-                new TweakDef
-                {
-                    Id = "lsapol-disable-anonymous-enumeration-sam",
-                    Label = "Disable Anonymous SAM Account and Share Enumeration",
-                    Category = "User Account",
-                    Description =
-                        "Prevents anonymous network connections from enumerating local SAM accounts and security groups, blocking reconnaissance that discovers usernames for use in password spraying or brute-force attacks.",
-                    Tags = ["lsa", "anonymous-enumeration", "sam", "reconnaissance", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 5,
-                    SafetyRating = 5,
-                    ImpactNote = "Anonymous SAM enumeration disabled; usernames not discoverable by unauthenticated network connections.",
-                    ApplyOps = [RegOp.SetDword(Key, "RestrictAnonymousSAM", 1)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "RestrictAnonymousSAM")],
-                    DetectOps = [RegOp.CheckDword(Key, "RestrictAnonymousSAM", 1)],
-                },
-                new TweakDef
-                {
-                    Id = "lsapol-restrict-anonymous-access",
-                    Label = "Restrict Anonymous Access to Named Pipes and Shares",
-                    Category = "User Account",
-                    Description =
-                        "Blocks anonymous access to all named pipes and network shares, preventing unauthenticated connections that could be used for pass-the-hash attacks or to access network resources without valid credentials.",
-                    Tags = ["lsa", "anonymous-access", "named-pipes", "shares", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 5,
-                    SafetyRating = 5,
-                    ImpactNote = "Anonymous named pipe and share access blocked; unauthenticated CIFS/RPC connections rejected.",
-                    ApplyOps = [RegOp.SetDword(Key, "RestrictAnonymous", 1)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "RestrictAnonymous")],
-                    DetectOps = [RegOp.CheckDword(Key, "RestrictAnonymous", 1)],
-                },
-                new TweakDef
-                {
-                    Id = "lsapol-disable-wdigest-cleartext",
-                    Label = "Disable WDigest Cleartext Password Caching in LSASS",
-                    Category = "User Account",
-                    Description =
-                        "Disables the WDigest authentication provider's cleartext password caching in LSASS memory, preventing credential dumping tools from extracting reversible plaintext passwords from the WDigest cache.",
-                    Tags = ["lsa", "wdigest", "cleartext-password", "mimikatz", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 5,
-                    SafetyRating = 5,
-                    ImpactNote = "WDigest cleartext caching disabled; plaintext passwords no longer extractable from LSASS memory.",
-                    ApplyOps = [RegOp.SetDword(CfgKey, "UseLogonCredential", 0)],
-                    RemoveOps = [RegOp.DeleteValue(CfgKey, "UseLogonCredential")],
-                    DetectOps = [RegOp.CheckDword(CfgKey, "UseLogonCredential", 0)],
-                },
-                new TweakDef
-                {
-                    Id = "lsapol-enable-lsa-audit",
-                    Label = "Enable LSA Authentication Audit Logging",
-                    Category = "User Account",
-                    Description =
-                        "Enables comprehensive Security audit logging for all LSA authentication events, including logon successes, failures, privilege escalations, and token creation, supporting SIEM-based authentication anomaly detection.",
-                    Tags = ["lsa", "audit", "authentication", "event-log", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 4,
-                    SafetyRating = 5,
-                    ImpactNote = "LSA authentication audit logging enabled; all logon and privilege events recorded for SIEM.",
-                    ApplyOps = [RegOp.SetDword(Key, "AuditBaseObjects", 1)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "AuditBaseObjects")],
-                    DetectOps = [RegOp.CheckDword(Key, "AuditBaseObjects", 1)],
-                },
-                new TweakDef
-                {
-                    Id = "lsapol-crash-on-audit-fail",
-                    Label = "Crash System When Security Audit Log Is Full (CrashOnAuditFail)",
-                    Category = "User Account",
-                    Description =
-                        "Configures LSA to crash the system with a BSOD when the Security audit log becomes full and events cannot be written, ensuring audit records are never silently dropped on high-security systems that require complete audit trails.",
-                    Tags = ["lsa", "audit-fail", "crash-on-full", "compliance", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 4,
-                    SafetyRating = 3,
-                    ImpactNote =
-                        "System BSOD on Security log full; complete audit trail guaranteed but availability risk if log fills. Use with large log size.",
-                    ApplyOps = [RegOp.SetDword(Key, "CrashOnAuditFail", 1)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "CrashOnAuditFail")],
-                    DetectOps = [RegOp.CheckDword(Key, "CrashOnAuditFail", 1)],
-                },
-                new TweakDef
-                {
                     Id = "lsapol-disable-legacy-auth-packages",
                     Label = "Remove Legacy Security Support Provider Packages from LSA",
                     Category = "User Account",
@@ -7454,23 +5689,6 @@ internal static class PolicyAuth
         [
             new TweakDef
             {
-                Id = "lgncache-reduce-cached-logons",
-                Label = "Logon Cache: Set Cached Domain Logon Count to 2",
-                Category = "User Account",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                RegistryKeys = [Winlogon],
-                Tags = ["logon", "cache", "domain", "credential", "security", "policy"],
-                Description =
-                    "Sets CachedLogonsCount=2 in Winlogon. Limits the number of domain credentials cached "
-                    + "locally to 2. Reduces the credential footprint on the disk. "
-                    + "Default: 10. Setting to 2 retains minimal offline logon capability while reducing exposure.",
-                ApplyOps = [RegOp.SetString(Winlogon, "CachedLogonsCount", "2")],
-                RemoveOps = [RegOp.DeleteValue(Winlogon, "CachedLogonsCount")],
-                DetectOps = [RegOp.CheckString(Winlogon, "CachedLogonsCount", "2")],
-            },
-            new TweakDef
-            {
                 Id = "lgncache-disable-cached-logons",
                 Label = "Logon Cache: Disable Cached Domain Logons (0 Cached)",
                 Category = "User Account",
@@ -7520,108 +5738,6 @@ internal static class PolicyAuth
                 RemoveOps = [RegOp.DeleteValue(Winlogon, "PasswordExpiryWarning")],
                 DetectOps = [RegOp.CheckDword(Winlogon, "PasswordExpiryWarning", 14)],
             },
-            new TweakDef
-            {
-                Id = "lgncache-force-unlock-logon",
-                Label = "Logon Cache: Require Domain Credential to Unlock Workstation",
-                Category = "User Account",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                RegistryKeys = [Winlogon],
-                Tags = ["logon", "unlock", "domain", "credential", "security", "compliance"],
-                Description =
-                    "Sets ForceUnlockLogon=1 in Winlogon. Requires the same domain logon credential that was "
-                    + "used to lock the workstation. Local password changes are not accepted to unlock. "
-                    + "Default: 0. Prevents privilege escalation via local account unlocking.",
-                ApplyOps = [RegOp.SetDword(Winlogon, "ForceUnlockLogon", 1)],
-                RemoveOps = [RegOp.DeleteValue(Winlogon, "ForceUnlockLogon")],
-                DetectOps = [RegOp.CheckDword(Winlogon, "ForceUnlockLogon", 1)],
-            },
-            new TweakDef
-            {
-                Id = "lgncache-netlogon-require-strong-key",
-                Label = "Logon Cache: Require Strong Session Keys for Netlogon",
-                Category = "User Account",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                RegistryKeys = [NetlogonParams],
-                Tags = ["logon", "netlogon", "kerberos", "session-key", "security", "domain"],
-                Description =
-                    "Sets RequireStrongKey=1 in Netlogon Parameters. Requires 128-bit session key for "
-                    + "Netlogon secure channel communications. Prevents downgrade to weaker encryption. "
-                    + "Default: 0. Required for hardened AD environments.",
-                ApplyOps = [RegOp.SetDword(NetlogonParams, "RequireStrongKey", 1)],
-                RemoveOps = [RegOp.DeleteValue(NetlogonParams, "RequireStrongKey")],
-                DetectOps = [RegOp.CheckDword(NetlogonParams, "RequireStrongKey", 1)],
-            },
-            new TweakDef
-            {
-                Id = "lgncache-netlogon-require-sign-seal",
-                Label = "Logon Cache: Require Signing and Sealing of Netlogon Channel",
-                Category = "User Account",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                RegistryKeys = [NetlogonParams],
-                Tags = ["logon", "netlogon", "sign", "seal", "secure-channel", "domain", "security"],
-                Description =
-                    "Sets RequireSignOrSeal=1 in Netlogon Parameters. Requires all domain controllers to "
-                    + "sign and seal all secure channel data for member machines. "
-                    + "Default: 0. Protects against Netlogon MITM and downgrade attacks (CVE-2020-1472 pattern).",
-                ApplyOps = [RegOp.SetDword(NetlogonParams, "RequireSignOrSeal", 1)],
-                RemoveOps = [RegOp.DeleteValue(NetlogonParams, "RequireSignOrSeal")],
-                DetectOps = [RegOp.CheckDword(NetlogonParams, "RequireSignOrSeal", 1)],
-            },
-            new TweakDef
-            {
-                Id = "lgncache-netlogon-seal-secure-channel",
-                Label = "Logon Cache: Seal Netlogon Secure Channel When Possible",
-                Category = "User Account",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                RegistryKeys = [NetlogonParams],
-                Tags = ["logon", "netlogon", "seal", "encrypt", "domain", "security"],
-                Description =
-                    "Sets SealSecureChannel=1 in Netlogon Parameters. Encrypts all data on the Netlogon "
-                    + "secure channel when supported by the domain controller. "
-                    + "Default: 0. Ensures confidentiality of domain authentication traffic.",
-                ApplyOps = [RegOp.SetDword(NetlogonParams, "SealSecureChannel", 1)],
-                RemoveOps = [RegOp.DeleteValue(NetlogonParams, "SealSecureChannel")],
-                DetectOps = [RegOp.CheckDword(NetlogonParams, "SealSecureChannel", 1)],
-            },
-            new TweakDef
-            {
-                Id = "lgncache-netlogon-sign-secure-channel",
-                Label = "Logon Cache: Sign Netlogon Secure Channel When Possible",
-                Category = "User Account",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                RegistryKeys = [NetlogonParams],
-                Tags = ["logon", "netlogon", "sign", "integrity", "domain", "security"],
-                Description =
-                    "Sets SignSecureChannel=1 in Netlogon Parameters. Digitally signs all data sent over "
-                    + "the Netlogon secure channel. Provides integrity verification of DC communications. "
-                    + "Default: 0. Complements SealSecureChannel for full MITM protection.",
-                ApplyOps = [RegOp.SetDword(NetlogonParams, "SignSecureChannel", 1)],
-                RemoveOps = [RegOp.DeleteValue(NetlogonParams, "SignSecureChannel")],
-                DetectOps = [RegOp.CheckDword(NetlogonParams, "SignSecureChannel", 1)],
-            },
-            new TweakDef
-            {
-                Id = "lgncache-disable-domain-password-cache",
-                Label = "Logon Cache: Disable Domain Password Caching in Credential Manager",
-                Category = "User Account",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                RegistryKeys = [Lsa],
-                Tags = ["logon", "credential-manager", "password", "cache", "lsa", "security"],
-                Description =
-                    "Sets DisableDomainCreds=1 in LSA. Prevents Windows from caching domain credentials "
-                    + "in the Credential Manager (Windows Vault). Applies to saved network passwords. "
-                    + "Default: 0 (caching allowed). Disabling reduces persistent credential exposure.",
-                ApplyOps = [RegOp.SetDword(Lsa, "DisableDomainCreds", 1)],
-                RemoveOps = [RegOp.DeleteValue(Lsa, "DisableDomainCreds")],
-                DetectOps = [RegOp.CheckDword(Lsa, "DisableDomainCreds", 1)],
-            },
         ];
     }
 
@@ -7646,36 +5762,6 @@ internal static class PolicyAuth
                 ApplyOps = [RegOp.SetDword(LogonSys, "DontDisplayLastUserName", 1)],
                 RemoveOps = [RegOp.DeleteValue(LogonSys, "DontDisplayLastUserName")],
                 DetectOps = [RegOp.CheckDword(LogonSys, "DontDisplayLastUserName", 1)],
-            },
-            new TweakDef
-            {
-                Id = "logonpol-hide-network-selection",
-                Label = "Hide network selection UI at logon screen (policy)",
-                Category = "User Account",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                Description =
-                    "Removes the network selection widget from the logon screen, preventing network changes before sign-in. "
-                    + "DontDisplayNetworkSelectionUI=1. Reduces attack surface on shared machines.",
-                Tags = ["logon", "network", "ui", "policy"],
-                ApplyOps = [RegOp.SetDword(LogonSys, "DontDisplayNetworkSelectionUI", 1)],
-                RemoveOps = [RegOp.DeleteValue(LogonSys, "DontDisplayNetworkSelectionUI")],
-                DetectOps = [RegOp.CheckDword(LogonSys, "DontDisplayNetworkSelectionUI", 1)],
-            },
-            new TweakDef
-            {
-                Id = "logonpol-hide-account-details-on-signin",
-                Label = "Block users from showing account details at sign-in (policy)",
-                Category = "User Account",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                Description =
-                    "Prevents users from showing account details (email/username) on the sign-in screen. "
-                    + "BlockUserFromShowingAccountDetailsOnSignin=1. Reduces personal data exposure.",
-                Tags = ["logon", "account", "privacy", "policy"],
-                ApplyOps = [RegOp.SetDword(LogonSys, "BlockUserFromShowingAccountDetailsOnSignin", 1)],
-                RemoveOps = [RegOp.DeleteValue(LogonSys, "BlockUserFromShowingAccountDetailsOnSignin")],
-                DetectOps = [RegOp.CheckDword(LogonSys, "BlockUserFromShowingAccountDetailsOnSignin", 1)],
             },
             new TweakDef
             {
@@ -7998,40 +6084,6 @@ internal static class PolicyAuth
 
         public static IReadOnlyList<TweakDef> Data =>
             [
-                new TweakDef
-                {
-                    Id = "pwdless-enforce-whfb",
-                    Label = "Enforce Windows Hello for Business Enrollment",
-                    Category = "User Account",
-                    Description =
-                        "Requires all users to enroll in Windows Hello for Business during first sign-in, enforcing passwordless primary authentication and deprecating the use of traditional passwords for Windows sign-in.",
-                    Tags = ["whfb", "passwordless", "windows-hello", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 5,
-                    SafetyRating = 5,
-                    ImpactNote = "WHfB enrollment required; users must set up biometric or PIN to complete first sign-in after enrollment period.",
-                    ApplyOps = [RegOp.SetDword(Key, "Enabled", 1)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "Enabled")],
-                    DetectOps = [RegOp.CheckDword(Key, "Enabled", 1)],
-                },
-                new TweakDef
-                {
-                    Id = "pwdless-require-tpm",
-                    Label = "Require TPM for Windows Hello for Business",
-                    Category = "User Account",
-                    Description =
-                        "Mandates that WHfB private keys are protected by the device TPM, preventing WHfB credentials from being stored in software (file-based storage) where they could be exported.",
-                    Tags = ["whfb", "tpm", "passwordless", "windows-hello", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 5,
-                    SafetyRating = 5,
-                    ImpactNote = "WHfB requires TPM; devices without TPM 2.0 cannot enroll in WHfB.",
-                    ApplyOps = [RegOp.SetDword(Key, "RequireSecurityDevice", 1)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "RequireSecurityDevice")],
-                    DetectOps = [RegOp.CheckDword(Key, "RequireSecurityDevice", 1)],
-                },
                 new TweakDef
                 {
                     Id = "pwdless-disable-password-fallback",
@@ -8381,23 +6433,6 @@ internal static class PolicyAuth
             [
                 new TweakDef
                 {
-                    Id = "scprov-block-no-eku-certs",
-                    Label = "Block Smart Card Certs Without EKU",
-                    Category = "User Account",
-                    Description =
-                        "Blocks smart card certificates that lack Extended Key Usage (EKU) extensions from being accepted for logon. Prevents improperly issued certificates from authenticating. Default: 1 (allow). Recommended: 0 (block).",
-                    Tags = ["smart-card", "pki", "eku", "certificate", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 4,
-                    SafetyRating = 4,
-                    ImpactNote = "Prevents authentication with malformed or incorrectly issued smart card certificates lacking EKU.",
-                    ApplyOps = [RegOp.SetDword(Key, "AllowCertificatesWithNoEKU", 0)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "AllowCertificatesWithNoEKU")],
-                    DetectOps = [RegOp.CheckDword(Key, "AllowCertificatesWithNoEKU", 0)],
-                },
-                new TweakDef
-                {
                     Id = "scprov-block-signature-only-keys",
                     Label = "Block Signature-Only Smart Card Keys",
                     Category = "User Account",
@@ -8446,40 +6481,6 @@ internal static class PolicyAuth
                     ApplyOps = [RegOp.SetDword(Key, "EnumerateECCCerts", 1)],
                     RemoveOps = [RegOp.DeleteValue(Key, "EnumerateECCCerts")],
                     DetectOps = [RegOp.CheckDword(Key, "EnumerateECCCerts", 1)],
-                },
-                new TweakDef
-                {
-                    Id = "scprov-filter-dup-certs",
-                    Label = "Filter Duplicate Logon Certificates",
-                    Category = "User Account",
-                    Description =
-                        "De-duplicates certificates shown in the smart card logon picker when a card carries multiple identical certificates. Prevents UI confusion during logon. Default: 0. Recommended: 1.",
-                    Tags = ["smart-card", "duplicate", "certificate", "logon", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 2,
-                    SafetyRating = 5,
-                    ImpactNote = "Cosmetic improvement; removes duplicate certificate entries from the logon picker.",
-                    ApplyOps = [RegOp.SetDword(Key, "FilterDuplicateCerts", 1)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "FilterDuplicateCerts")],
-                    DetectOps = [RegOp.CheckDword(Key, "FilterDuplicateCerts", 1)],
-                },
-                new TweakDef
-                {
-                    Id = "scprov-force-read-all-certs",
-                    Label = "Force Reading All Smart Card Certificates",
-                    Category = "User Account",
-                    Description =
-                        "Forces the system to read all certificates from a smart card rather than stopping at the first valid one. Ensures complete certificate inventory for logon selection. Default: 0. Recommended: 1 for multi-cert cards.",
-                    Tags = ["smart-card", "certificate", "enumeration", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 2,
-                    SafetyRating = 5,
-                    ImpactNote = "Slightly increases smart card logon time; ensures all certs on the card are available.",
-                    ApplyOps = [RegOp.SetDword(Key, "ForceReadingAllCertificates", 1)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "ForceReadingAllCertificates")],
-                    DetectOps = [RegOp.CheckDword(Key, "ForceReadingAllCertificates", 1)],
                 },
                 new TweakDef
                 {
@@ -8795,23 +6796,6 @@ internal static class PolicyAuth
             [
                 new TweakDef
                 {
-                    Id = "whfbpin-set-minimum-length-8",
-                    Label = "Set WHfB PIN Minimum Length to 8 Digits",
-                    Category = "User Account",
-                    Description =
-                        "Sets the minimum Windows Hello for Business PIN length to 8 characters, exceeding the Windows default of 6 characters and increasing PIN brute-force resistance.",
-                    Tags = ["whfb", "windows-hello", "pin", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 4,
-                    SafetyRating = 5,
-                    ImpactNote = "WHfB PIN must be at least 8 characters; users with shorter PINs must re-set.",
-                    ApplyOps = [RegOp.SetDword(Key, "MinimumPINLength", 8)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "MinimumPINLength")],
-                    DetectOps = [RegOp.CheckDword(Key, "MinimumPINLength", 8)],
-                },
-                new TweakDef
-                {
                     Id = "whfbpin-set-maximum-length-16",
                     Label = "Set WHfB PIN Maximum Length to 16 Digits",
                     Category = "User Account",
@@ -8826,40 +6810,6 @@ internal static class PolicyAuth
                     ApplyOps = [RegOp.SetDword(Key, "MaximumPINLength", 16)],
                     RemoveOps = [RegOp.DeleteValue(Key, "MaximumPINLength")],
                     DetectOps = [RegOp.CheckDword(Key, "MaximumPINLength", 16)],
-                },
-                new TweakDef
-                {
-                    Id = "whfbpin-require-uppercase",
-                    Label = "Require Uppercase Letters in WHfB PIN",
-                    Category = "User Account",
-                    Description =
-                        "Requires that WHfB PINs contain at least one uppercase letter when using an alphanumeric PIN, increasing PIN complexity and resistance to dictionary attacks.",
-                    Tags = ["whfb", "windows-hello", "pin", "complexity", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 3,
-                    SafetyRating = 5,
-                    ImpactNote = "WHfB PIN must contain uppercase; digits-only PINs disallowed.",
-                    ApplyOps = [RegOp.SetDword(Key, "UppercaseLetters", 1)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "UppercaseLetters")],
-                    DetectOps = [RegOp.CheckDword(Key, "UppercaseLetters", 1)],
-                },
-                new TweakDef
-                {
-                    Id = "whfbpin-require-lowercase",
-                    Label = "Require Lowercase Letters in WHfB PIN",
-                    Category = "User Account",
-                    Description =
-                        "Requires that WHfB PINs contain at least one lowercase letter, enforcing mixed-case alphanumeric PINs for greater entropy.",
-                    Tags = ["whfb", "windows-hello", "pin", "complexity", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 3,
-                    SafetyRating = 5,
-                    ImpactNote = "WHfB PIN must contain lowercase; all-uppercase or all-digit PINs disallowed.",
-                    ApplyOps = [RegOp.SetDword(Key, "LowercaseLetters", 1)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "LowercaseLetters")],
-                    DetectOps = [RegOp.CheckDword(Key, "LowercaseLetters", 1)],
                 },
                 new TweakDef
                 {
@@ -8894,40 +6844,6 @@ internal static class PolicyAuth
                     ApplyOps = [RegOp.SetDword(Key, "History", 5)],
                     RemoveOps = [RegOp.DeleteValue(Key, "History")],
                     DetectOps = [RegOp.CheckDword(Key, "History", 5)],
-                },
-                new TweakDef
-                {
-                    Id = "whfbpin-set-expiry-180-days",
-                    Label = "Set WHfB PIN Expiry to 180 Days",
-                    Category = "User Account",
-                    Description =
-                        "Sets the Windows Hello for Business PIN expiry period to 180 days, requiring periodic PIN rotation to limit the impact of a compromised PIN.",
-                    Tags = ["whfb", "windows-hello", "pin", "expiry", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 3,
-                    SafetyRating = 5,
-                    ImpactNote = "WHfB PIN expires after 180 days; users prompted to create a new PIN on expiry.",
-                    ApplyOps = [RegOp.SetDword(Key, "Expiration", 180)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "Expiration")],
-                    DetectOps = [RegOp.CheckDword(Key, "Expiration", 180)],
-                },
-                new TweakDef
-                {
-                    Id = "whfbpin-require-digits",
-                    Label = "Require Digits in WHfB Alphanumeric PIN",
-                    Category = "User Account",
-                    Description =
-                        "Requires that alphanumeric WHfB PINs contain at least one digit, preventing purely alphabetic PINs and ensuring a minimum numeric component in the PIN.",
-                    Tags = ["whfb", "windows-hello", "pin", "digits", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 2,
-                    SafetyRating = 5,
-                    ImpactNote = "WHfB alphanumeric PIN must include at least one digit.",
-                    ApplyOps = [RegOp.SetDword(Key, "Digits", 1)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "Digits")],
-                    DetectOps = [RegOp.CheckDword(Key, "Digits", 1)],
                 },
                 new TweakDef
                 {
@@ -8973,40 +6889,6 @@ internal static class PolicyAuth
 
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
-            new TweakDef
-            {
-                Id = "helloadv-require-hello-for-domain-auth",
-                Label = "Require Windows Hello as Primary Domain Authentication Method",
-                Category = "User Account",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 5,
-                SafetyRating = 5,
-                Description =
-                    "Windows Hello for Business uses asymmetric key cryptography to replace password-based domain authentication providing phishing-resistant authentication that cannot be replayed. Requiring Windows Hello as the primary authentication method eliminates NTLM and Kerberos password hash exposure for domain authentication. Windows Hello for Business credentials are bound to the device and protected by the TPM making credential theft through standard techniques ineffective. Password-based authentication hashes can be captured from network traffic or from LSASS memory while Hello credentials cannot be harvested and replayed. Organizations should deploy Windows Hello for Business as part of a phishing-resistant MFA strategy aligned with NIST 800-63-3 AAL3 requirements. Hello for Business requires compatible hardware with TPM 2.0 and Windows 10 1703 or later for cloud or hybrid deployments.",
-                Tags = ["windows-hello", "phishing-resistant", "domain-auth", "passwordless", "policy"],
-                RegistryKeys = [Key],
-                ApplyOps = [RegOp.SetDword(Key, "Enabled", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "Enabled")],
-                DetectOps = [RegOp.CheckDword(Key, "Enabled", 1)],
-            },
-            new TweakDef
-            {
-                Id = "helloadv-require-tpm-for-hello",
-                Label = "Require TPM Chip for Windows Hello Key Storage",
-                Category = "User Account",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 5,
-                SafetyRating = 5,
-                Description =
-                    "Windows Hello for Business keys stored in the TPM are protected by hardware-bound key storage that cannot be exported even with administrative access to the operating system. Requiring TPM for Hello key storage ensures that credentials cannot be extracted from the system and used on another device. Software-based Hello keys stored only in the OS credential store can potentially be extracted through privilege escalation attacks making TPM storage the required configuration for high-security deployments. TPM-bound credentials require both the specific device and the user's PIN or biometric to authenticate combining something you have and something you know or are. Organizations should require TPM 2.0 for all new device purchases to support TPM-protected Hello credentials and other security features like Measured Boot and Device Health Attestation. The RequireSecurityDevice policy ensures that software fallback for Hello keys is not permitted when a TPM is unavailable.",
-                Tags = ["windows-hello", "tpm", "hardware-security", "key-protection", "policy"],
-                RegistryKeys = [Key],
-                ApplyOps = [RegOp.SetDword(Key, "RequireSecurityDevice", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "RequireSecurityDevice")],
-                DetectOps = [RegOp.CheckDword(Key, "RequireSecurityDevice", 1)],
-            },
             new TweakDef
             {
                 Id = "helloadv-set-minimum-pin-length",
@@ -9169,23 +7051,6 @@ internal static class PolicyAuth
                     ApplyOps = [RegOp.SetDword(Key, "autoWorkplaceJoin", 0)],
                     RemoveOps = [RegOp.DeleteValue(Key, "autoWorkplaceJoin")],
                     DetectOps = [RegOp.CheckDword(Key, "autoWorkplaceJoin", 0)],
-                },
-                new TweakDef
-                {
-                    Id = "wpjoin-block-aad",
-                    Label = "Block Azure AD Workplace Join",
-                    Category = "User Account",
-                    Description =
-                        "Prevents users from performing Azure AD Workplace Join on the device. Useful in air-gapped environments or where cloud synchronisation is not permitted. Default: 0. Recommended: 1 for offline/air-gapped networks.",
-                    Tags = ["workplace-join", "azure-ad", "block", "cloud", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 4,
-                    SafetyRating = 4,
-                    ImpactNote = "Blocks AAD join; device cannot register cloud identity. May affect Intune enrolment.",
-                    ApplyOps = [RegOp.SetDword(Key, "BlockAADWorkplaceJoin", 1)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "BlockAADWorkplaceJoin")],
-                    DetectOps = [RegOp.CheckDword(Key, "BlockAADWorkplaceJoin", 1)],
                 },
                 new TweakDef
                 {

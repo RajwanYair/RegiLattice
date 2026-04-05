@@ -89,21 +89,6 @@ internal static class Backup
         },
         new TweakDef
         {
-            Id = "backup-disable-error-reporting",
-            Label = "Disable Windows Error Reporting",
-            Category = "Storage",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Stops Windows Error Reporting from collecting and sending crash data. Reduces disk I/O and network usage from WER telemetry uploads.",
-            Tags = ["backup", "wer", "error-reporting", "privacy", "performance"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Error Reporting"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Error Reporting", "Disabled", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Error Reporting", "Disabled")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Error Reporting", "Disabled", 1)],
-        },
-        new TweakDef
-        {
             Id = "backup-disable-reliability-monitor",
             Label = "Disable Reliability Monitoring",
             Category = "Storage",
@@ -355,47 +340,6 @@ internal static class Recovery
     [
         new TweakDef
         {
-            Id = "recovery-limit-restore-disk-usage",
-            Label = "Limit System Restore Disk Usage to 5%",
-            Category = "Storage",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Limits the disk space used by System Restore shadow copies to 5% of the drive. Saves space while preserving restore capability. Default: 10-15%.",
-            Tags = ["recovery", "system-restore", "disk-space", "limit"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\SystemRestore"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\SystemRestore", "DiskPercent", 5)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\SystemRestore", "DiskPercent")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\SystemRestore", "DiskPercent", 5)],
-        },
-        new TweakDef
-        {
-            Id = "recovery-increase-restore-frequency",
-            Label = "System Restore: Daily Checkpoints",
-            Category = "Storage",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets System Restore to create automatic restore points every 24 hours (86400 seconds). Default: 24 hours but may be skipped under load.",
-            Tags = ["recovery", "system-restore", "checkpoint", "daily"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\SystemRestore"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\SystemRestore", "RPGlobalInterval", 86400),
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\SystemRestore", "RPSessionInterval", 86400),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\SystemRestore", "RPGlobalInterval"),
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\SystemRestore", "RPSessionInterval"),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\SystemRestore", "RPGlobalInterval", 86400),
-            ],
-        },
-        new TweakDef
-        {
             Id = "recovery-disable-auto-repair-prompt",
             Label = "Disable Automatic Repair at Boot",
             Category = "Storage",
@@ -431,70 +375,6 @@ internal static class Recovery
             DetectOps =
             [
                 RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Configuration Manager", "WinREEnabled", 0),
-            ],
-        },
-        new TweakDef
-        {
-            Id = "recovery-disable-problem-reports",
-            Label = "Disable Problem Reports & Solutions",
-            Category = "Storage",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Disables automatic problem report generation and solution checks. Reduces background activity and telemetry. Default: enabled.",
-            Tags = ["recovery", "problem-reports", "disable", "privacy"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Error Reporting"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Error Reporting", "DontSendAdditionalData", 1),
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Error Reporting", "DontShowUI", 1),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Error Reporting", "DontSendAdditionalData"),
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Error Reporting", "DontShowUI"),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Error Reporting", "DontSendAdditionalData", 1),
-            ],
-        },
-        new TweakDef
-        {
-            Id = "recovery-enable-auto-recovery",
-            Label = "Enable Automatic Recovery",
-            Category = "Storage",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Enables the Windows automatic recovery feature that detects startup failures and offers repair options. Default: enabled.",
-            Tags = ["recovery", "auto-recovery", "startup", "repair"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager", "AutoChkTimeout", 10)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager", "AutoChkTimeout")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager", "AutoChkTimeout", 10)],
-        },
-        new TweakDef
-        {
-            Id = "recovery-disable-auto-restart-sign-on",
-            Label = "Disable Auto-Restart Sign-On (ARSO)",
-            Category = "Storage",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Disables automatic sign-on after restart/update. Prevents Windows from caching credentials and auto-logging in after reboot. Default: enabled.",
-            Tags = ["recovery", "security", "arso", "sign-on", "restart"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "DisableAutomaticRestartSignOn", 1),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "DisableAutomaticRestartSignOn"),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "DisableAutomaticRestartSignOn", 1),
             ],
         },
         new TweakDef
@@ -550,34 +430,6 @@ internal static class Recovery
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "AutoRebootTimeout", 30)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "AutoRebootTimeout")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "AutoRebootTimeout", 30)],
-        },
-        new TweakDef
-        {
-            Id = "recovery-enable-event-log-crash",
-            Label = "Write Crash Events to System Log",
-            Category = "Storage",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Ensures crash/BSOD events are written to the Windows Event Log. Essential for post-crash diagnostics. Default: enabled.",
-            Tags = ["recovery", "crash", "event-log", "diagnostics"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "LogEvent", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "LogEvent")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "LogEvent", 1)],
-        },
-        new TweakDef
-        {
-            Id = "recovery-disable-send-alert",
-            Label = "Disable Admin Alert on Crash",
-            Category = "Storage",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables sending an administrative alert when a crash occurs. Reduces noise on standalone systems. Default: off.",
-            Tags = ["recovery", "crash", "alert", "notification"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "SendAlert", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "SendAlert")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "SendAlert", 0)],
         },
         new TweakDef
         {
@@ -648,20 +500,6 @@ internal static class Recovery
         },
         new TweakDef
         {
-            Id = "recovery-increase-crash-dump-count",
-            Label = "Keep Last 50 Minidump Files",
-            Category = "Storage",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Increases the number of retained minidump files from 10 (default) to 50 for longer crash history. Default: 10 files.",
-            Tags = ["recovery", "minidump", "retention", "crash-history", "debugging"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "MinidumpsCount", 50)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "MinidumpsCount")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "MinidumpsCount", 50)],
-        },
-        new TweakDef
-        {
             Id = "recovery-disable-startup-repair-prompt",
             Label = "Disable Startup Repair Recommendation Prompt",
             Category = "Storage",
@@ -691,85 +529,6 @@ internal static class SystemRestore
     [
         new TweakDef
         {
-            Id = "restore-disable-system-restore",
-            Label = "Disable System Restore",
-            Category = "Storage",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Disables System Restore entirely. Saves disk space but removes ability to rollback system changes.",
-            Tags = ["restore", "system-protection", "disk-space", "recovery"],
-            RegistryKeys = [SppKey],
-            ApplyOps = [RegOp.SetDword(SppKey, "DisableSR", 1)],
-            RemoveOps = [RegOp.DeleteValue(SppKey, "DisableSR")],
-            DetectOps = [RegOp.CheckDword(SppKey, "DisableSR", 1)],
-        },
-        new TweakDef
-        {
-            Id = "restore-disable-config-change-restore",
-            Label = "Disable Restore Point on Config Changes",
-            Category = "Storage",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables automatic restore point creation when system configuration changes are made.",
-            Tags = ["restore", "system-protection", "performance", "auto"],
-            RegistryKeys = [SppKey],
-            ApplyOps = [RegOp.SetDword(SppKey, "DisableConfig", 1)],
-            RemoveOps = [RegOp.DeleteValue(SppKey, "DisableConfig")],
-            DetectOps = [RegOp.CheckDword(SppKey, "DisableConfig", 1)],
-        },
-        new TweakDef
-        {
-            Id = "restore-set-max-frequency-daily",
-            Label = "Limit Restore Points to Once Per Day",
-            Category = "Storage",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets minimum interval between automatic restore points to 24 hours (1440 minutes). Reduces disk usage from frequent restore points.",
-            Tags = ["restore", "system-protection", "performance", "frequency", "disk-space"],
-            RegistryKeys = [SrKey],
-            ApplyOps = [RegOp.SetDword(SrKey, "SystemRestorePointCreationFrequency", 1440)],
-            RemoveOps = [RegOp.DeleteValue(SrKey, "SystemRestorePointCreationFrequency")],
-            DetectOps = [RegOp.CheckDword(SrKey, "SystemRestorePointCreationFrequency", 1440)],
-        },
-        new TweakDef
-        {
-            Id = "restore-disable-vss-service",
-            Label = "Set Volume Shadow Copy to Manual",
-            Category = "Storage",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Sets Volume Shadow Copy (VSS) service start type to manual. Saves resources but disables automatic backups.",
-            Tags = ["restore", "vss", "shadow-copy", "service", "performance"],
-            RegistryKeys = [VssKey],
-            ApplyOps = [RegOp.SetDword(VssKey, "Start", 3)],
-            RemoveOps = [RegOp.SetDword(VssKey, "Start", 2)],
-            DetectOps = [RegOp.CheckDword(VssKey, "Start", 3)],
-        },
-        new TweakDef
-        {
-            Id = "restore-disable-previous-versions",
-            Label = "Disable Previous Versions Tab",
-            Category = "Storage",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Hides the Previous Versions tab in file/folder properties. Reduces VSS dependency.",
-            Tags = ["restore", "previous-versions", "explorer", "ui"],
-            RegistryKeys = [$@"{LmKey}\SOFTWARE\Policies\Microsoft\PreviousVersions"],
-            ApplyOps =
-            [
-                RegOp.SetDword($@"{LmKey}\SOFTWARE\Policies\Microsoft\PreviousVersions", "DisableBackupRestore", 1),
-                RegOp.SetDword($@"{LmKey}\SOFTWARE\Policies\Microsoft\PreviousVersions", "DisableLocalPage", 1),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue($@"{LmKey}\SOFTWARE\Policies\Microsoft\PreviousVersions", "DisableBackupRestore"),
-                RegOp.DeleteValue($@"{LmKey}\SOFTWARE\Policies\Microsoft\PreviousVersions", "DisableLocalPage"),
-            ],
-            DetectOps = [RegOp.CheckDword($@"{LmKey}\SOFTWARE\Policies\Microsoft\PreviousVersions", "DisableBackupRestore", 1)],
-        },
-        new TweakDef
-        {
             Id = "restore-enable-scheduled-points",
             Label = "Enable Scheduled Restore Points",
             Category = "Storage",
@@ -795,62 +554,6 @@ internal static class SystemRestore
             ApplyOps = [RegOp.SetDword($@"{LmKey}\SOFTWARE\Microsoft\Windows\Windows Error Reporting", "DisableQueue", 1)],
             RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SOFTWARE\Microsoft\Windows\Windows Error Reporting", "DisableQueue")],
             DetectOps = [RegOp.CheckDword($@"{LmKey}\SOFTWARE\Microsoft\Windows\Windows Error Reporting", "DisableQueue", 1)],
-        },
-        new TweakDef
-        {
-            Id = "restore-disable-wer-archive",
-            Label = "Disable WER Report Archiving",
-            Category = "Storage",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables archiving of sent Windows Error Reports. Reduces disk space usage.",
-            Tags = ["restore", "wer", "error-reporting", "archive", "disk-space"],
-            RegistryKeys = [$@"{LmKey}\SOFTWARE\Microsoft\Windows\Windows Error Reporting"],
-            ApplyOps = [RegOp.SetDword($@"{LmKey}\SOFTWARE\Microsoft\Windows\Windows Error Reporting", "DisableArchive", 1)],
-            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SOFTWARE\Microsoft\Windows\Windows Error Reporting", "DisableArchive")],
-            DetectOps = [RegOp.CheckDword($@"{LmKey}\SOFTWARE\Microsoft\Windows\Windows Error Reporting", "DisableArchive", 1)],
-        },
-        new TweakDef
-        {
-            Id = "restore-set-wer-consent-send-always",
-            Label = "Auto-Send Error Reports (No Prompt)",
-            Category = "Storage",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Automatically sends Windows Error Reports without prompting the user. Reduces interruptions.",
-            Tags = ["restore", "wer", "error-reporting", "consent", "ui"],
-            RegistryKeys = [$@"{LmKey}\SOFTWARE\Microsoft\Windows\Windows Error Reporting\Consent"],
-            ApplyOps = [RegOp.SetDword($@"{LmKey}\SOFTWARE\Microsoft\Windows\Windows Error Reporting\Consent", "DefaultConsent", 4)],
-            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SOFTWARE\Microsoft\Windows\Windows Error Reporting\Consent", "DefaultConsent")],
-            DetectOps = [RegOp.CheckDword($@"{LmKey}\SOFTWARE\Microsoft\Windows\Windows Error Reporting\Consent", "DefaultConsent", 4)],
-        },
-        new TweakDef
-        {
-            Id = "restore-disable-wer-logging",
-            Label = "Disable Windows Error Reporting Logging",
-            Category = "Storage",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables Windows Error Reporting event logging to reduce unnecessary disk I/O.",
-            Tags = ["restore", "wer", "error-reporting", "logging", "performance"],
-            RegistryKeys = [$@"{LmKey}\SOFTWARE\Microsoft\Windows\Windows Error Reporting"],
-            ApplyOps = [RegOp.SetDword($@"{LmKey}\SOFTWARE\Microsoft\Windows\Windows Error Reporting", "LoggingDisabled", 1)],
-            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SOFTWARE\Microsoft\Windows\Windows Error Reporting", "LoggingDisabled")],
-            DetectOps = [RegOp.CheckDword($@"{LmKey}\SOFTWARE\Microsoft\Windows\Windows Error Reporting", "LoggingDisabled", 1)],
-        },
-        new TweakDef
-        {
-            Id = "restore-set-wer-max-queue-5",
-            Label = "Limit WER Report Queue to 5",
-            Category = "Storage",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Limits the Windows Error Reporting queue to 5 reports maximum. Prevents disk space waste from accumulated reports.",
-            Tags = ["restore", "wer", "error-reporting", "queue", "disk-space"],
-            RegistryKeys = [$@"{LmKey}\SOFTWARE\Microsoft\Windows\Windows Error Reporting"],
-            ApplyOps = [RegOp.SetDword($@"{LmKey}\SOFTWARE\Microsoft\Windows\Windows Error Reporting", "MaxQueueCount", 5)],
-            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SOFTWARE\Microsoft\Windows\Windows Error Reporting", "MaxQueueCount")],
-            DetectOps = [RegOp.CheckDword($@"{LmKey}\SOFTWARE\Microsoft\Windows\Windows Error Reporting", "MaxQueueCount", 5)],
         },
         new TweakDef
         {
@@ -894,34 +597,6 @@ internal static class SystemRestore
             ApplyOps = [RegOp.SetDword(VssKey, "MinDiffAreaFileSize", 3000)],
             RemoveOps = [RegOp.DeleteValue(VssKey, "MinDiffAreaFileSize")],
             DetectOps = [RegOp.CheckDword(VssKey, "MinDiffAreaFileSize", 3000)],
-        },
-        new TweakDef
-        {
-            Id = "restore-disable-wer-dump-type",
-            Label = "Disable WER Full Crash Dump Collection",
-            Category = "Storage",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Sets WER to collect mini dumps instead of full application crash dumps. Saves disk space.",
-            Tags = ["restore", "wer", "crash", "dump", "disk-space"],
-            RegistryKeys = [$@"{LmKey}\SOFTWARE\Microsoft\Windows\Windows Error Reporting\LocalDumps"],
-            ApplyOps = [RegOp.SetDword($@"{LmKey}\SOFTWARE\Microsoft\Windows\Windows Error Reporting\LocalDumps", "DumpType", 1)],
-            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SOFTWARE\Microsoft\Windows\Windows Error Reporting\LocalDumps", "DumpType")],
-            DetectOps = [RegOp.CheckDword($@"{LmKey}\SOFTWARE\Microsoft\Windows\Windows Error Reporting\LocalDumps", "DumpType", 1)],
-        },
-        new TweakDef
-        {
-            Id = "restore-limit-wer-dump-count",
-            Label = "Limit Local Crash Dumps to 3",
-            Category = "Storage",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Limits the number of local crash dump files retained per application to 3.",
-            Tags = ["restore", "wer", "crash", "dump", "disk-space", "limit"],
-            RegistryKeys = [$@"{LmKey}\SOFTWARE\Microsoft\Windows\Windows Error Reporting\LocalDumps"],
-            ApplyOps = [RegOp.SetDword($@"{LmKey}\SOFTWARE\Microsoft\Windows\Windows Error Reporting\LocalDumps", "DumpCount", 3)],
-            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SOFTWARE\Microsoft\Windows\Windows Error Reporting\LocalDumps", "DumpCount")],
-            DetectOps = [RegOp.CheckDword($@"{LmKey}\SOFTWARE\Microsoft\Windows\Windows Error Reporting\LocalDumps", "DumpCount", 3)],
         },
         new TweakDef
         {
@@ -1006,20 +681,6 @@ internal static class SystemRestore
             ApplyOps = [RegOp.SetDword($@"{LmKey}\SOFTWARE\Microsoft\Windows\Windows Error Reporting", "ResponseTimeoutSecs", 20)],
             RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SOFTWARE\Microsoft\Windows\Windows Error Reporting", "ResponseTimeoutSecs")],
             DetectOps = [RegOp.CheckDword($@"{LmKey}\SOFTWARE\Microsoft\Windows\Windows Error Reporting", "ResponseTimeoutSecs", 20)],
-        },
-        new TweakDef
-        {
-            Id = "restore-disable-bsod-alert-send",
-            Label = "Disable BSOD Administrator Alert",
-            Category = "Storage",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Prevents Windows from sending a crash alert notification to connected network administrators on BSOD.",
-            Tags = ["restore", "bsod", "alert", "notification", "network", "admin"],
-            RegistryKeys = [$@"{LmKey}\SYSTEM\CurrentControlSet\Control\CrashControl"],
-            ApplyOps = [RegOp.SetDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\CrashControl", "SendAlert", 0)],
-            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SYSTEM\CurrentControlSet\Control\CrashControl", "SendAlert")],
-            DetectOps = [RegOp.CheckDword($@"{LmKey}\SYSTEM\CurrentControlSet\Control\CrashControl", "SendAlert", 0)],
         },
     ];
 }
@@ -1469,27 +1130,6 @@ internal static class CloudStorage
         },
         new TweakDef
         {
-            Id = "cloud-disable-google-drive-autostart",
-            Label = "Disable Google Drive Autostart",
-            Category = "Cloud Storage",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Prevents Google Drive from starting automatically at logon. Default: starts with Windows.",
-            Tags = ["cloud", "google-drive", "startup", "autostart"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Run"],
-            ApplyOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Run", "GoogleDriveFS")],
-            RemoveOps =
-            [
-                RegOp.SetString(
-                    @"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Run",
-                    "GoogleDriveFS",
-                    "\"C:\\Program Files\\Google\\Drive File Stream\\launch.bat\""
-                ),
-            ],
-            DetectOps = [RegOp.CheckMissing(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Run", "GoogleDriveFS")],
-        },
-        new TweakDef
-        {
             Id = "cloud-disable-box-auto-update",
             Label = "Disable Box Drive Auto-Update",
             Category = "Cloud Storage",
@@ -1501,98 +1141,6 @@ internal static class CloudStorage
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Box\Box", "AutoUpdate", 0)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Box\Box", "AutoUpdate")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Box\Box", "AutoUpdate", 0)],
-        },
-        new TweakDef
-        {
-            Id = "cloud-disable-mega-sync-autostart",
-            Label = "Disable MEGA Sync Autostart",
-            Category = "Cloud Storage",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Prevents MEGA Sync client from starting automatically at logon. Default: starts with Windows.",
-            Tags = ["cloud", "mega", "sync", "startup", "autostart"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Run"],
-            ApplyOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Run", "MEGAsync")],
-            RemoveOps =
-            [
-                RegOp.SetString(
-                    @"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Run",
-                    "MEGAsync",
-                    "\"C:\\Users\\%USERNAME%\\AppData\\Local\\MEGAsync\\MEGAsync.exe\""
-                ),
-            ],
-            DetectOps = [RegOp.CheckMissing(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Run", "MEGAsync")],
-        },
-        new TweakDef
-        {
-            Id = "cloud-disable-icloud-sync-on-startup",
-            Label = "Disable iCloud Sync on Startup",
-            Category = "Cloud Storage",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Prevents Apple iCloud from starting automatically at login. Saves bandwidth and resources. Default: enabled.",
-            Tags = ["cloud", "icloud", "sync", "autostart"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Run"],
-            ApplyOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Run", "iCloudServices")],
-            RemoveOps =
-            [
-                RegOp.SetString(
-                    @"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Run",
-                    "iCloudServices",
-                    @"%ProgramFiles%\Common Files\Apple\Internet Services\iCloudServices.exe"
-                ),
-            ],
-            DetectOps = [RegOp.CheckMissing(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Run", "iCloudServices")],
-        },
-        new TweakDef
-        {
-            Id = "cloud-disable-suggestions",
-            Label = "Disable Cloud Storage Suggestions",
-            Category = "Cloud Storage",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Disables Windows suggestions to use cloud storage services. Prevents Microsoft account and OneDrive promotions. Default: enabled.",
-            Tags = ["cloud", "suggestions", "promotions", "disable"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager"],
-            ApplyOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
-                    "SubscribedContent-338388Enabled",
-                    0
-                ),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(
-                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
-                    "SubscribedContent-338388Enabled"
-                ),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(
-                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
-                    "SubscribedContent-338388Enabled",
-                    0
-                ),
-            ],
-        },
-        new TweakDef
-        {
-            Id = "cloud-overlay-optimise",
-            Label = "Optimise Cloud Sync Overlay Icons",
-            Category = "Cloud Storage",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Disables cloud-optimized content delivery from Windows. Reduces background data usage and telemetry from cloud storage features. Default: enabled.",
-            Tags = ["cloud", "overlay", "sync", "optimise"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CloudContent"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CloudContent", "DisableCloudOptimizedContent", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CloudContent", "DisableCloudOptimizedContent")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CloudContent", "DisableCloudOptimizedContent", 1)],
         },
     ];
 }
@@ -1687,23 +1235,6 @@ internal static class CloudExperience
         },
         new TweakDef
         {
-            Id = "oobe-disable-tips",
-            Label = "Disable OOBE and Start Tips (Welcome Messages)",
-            Category = "Cloud Storage",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            ImpactScore = 1,
-            SafetyRating = 5,
-            Tags = ["oobe", "tips", "welcome", "onboarding"],
-            Description =
-                "Disables the 'Did you know' and welcome tips in the Start menu and "
-                + "after Windows updates. SoftLandingEnabled=0 in Content Delivery Manager.",
-            ApplyOps = [RegOp.SetDword(ContentDelivery, "SoftLandingEnabled", 0)],
-            RemoveOps = [RegOp.SetDword(ContentDelivery, "SoftLandingEnabled", 1)],
-            DetectOps = [RegOp.CheckDword(ContentDelivery, "SoftLandingEnabled", 0)],
-        },
-        new TweakDef
-        {
             Id = "oobe-disable-roaming-profile-setup",
             Label = "Disable Roaming Profile Setup Prompt",
             Category = "Cloud Storage",
@@ -1737,40 +1268,6 @@ internal static class CloudExperience
             ApplyOps = [RegOp.SetDword(ContentDelivery, "RotatingLockScreenEnabled", 0)],
             RemoveOps = [RegOp.SetDword(ContentDelivery, "RotatingLockScreenEnabled", 1)],
             DetectOps = [RegOp.CheckDword(ContentDelivery, "RotatingLockScreenEnabled", 0)],
-        },
-        new TweakDef
-        {
-            Id = "oobe-disable-subscription-content",
-            Label = "Disable Subscription-Based Cloud Content in Start",
-            Category = "Cloud Storage",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            ImpactScore = 2,
-            SafetyRating = 5,
-            Tags = ["oobe", "subscription", "content", "start menu", "ads"],
-            Description =
-                "Disables subscription-based recommended and promoted content in the "
-                + "Start menu. SubscribedContent-338388Enabled=0. Removes the "
-                + "'Get the most out of Windows' suggestions.",
-            ApplyOps = [RegOp.SetDword(ContentDelivery, "SubscribedContent-338388Enabled", 0)],
-            RemoveOps = [RegOp.SetDword(ContentDelivery, "SubscribedContent-338388Enabled", 1)],
-            DetectOps = [RegOp.CheckDword(ContentDelivery, "SubscribedContent-338388Enabled", 0)],
-        },
-        new TweakDef
-        {
-            Id = "oobe-disable-third-party-suggestions",
-            Label = "Disable Third-Party App Suggestions in Start and Store",
-            Category = "Cloud Storage",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            ImpactScore = 2,
-            SafetyRating = 5,
-            Tags = ["oobe", "third party", "suggestions", "start", "ads"],
-            Description =
-                "Disables third-party sponsored app suggestions in the Start menu and " + "Microsoft Store. SubscribedContent-338389Enabled=0.",
-            ApplyOps = [RegOp.SetDword(ContentDelivery, "SubscribedContent-338389Enabled", 0)],
-            RemoveOps = [RegOp.SetDword(ContentDelivery, "SubscribedContent-338389Enabled", 1)],
-            DetectOps = [RegOp.CheckDword(ContentDelivery, "SubscribedContent-338389Enabled", 0)],
         },
         new TweakDef
         {
@@ -1827,24 +1324,6 @@ internal static class CloudExperience
         },
         new TweakDef
         {
-            Id = "oobe-disable-soft-landing",
-            Label = "Disable Start Layout Soft-Landing Suggestions",
-            Category = "Cloud Storage",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            ImpactScore = 2,
-            SafetyRating = 5,
-            Tags = ["oobe", "start", "suggestions", "soft-landing", "layout"],
-            Description =
-                "Disables 'soft-landing' content — clickable tips and suggestions injected "
-                + "into the Start menu and notification area after first login "
-                + "(SoftLandingEnabled=0).",
-            ApplyOps = [RegOp.SetDword(ContentDelivery, "SoftLandingEnabled", 0)],
-            RemoveOps = [RegOp.SetDword(ContentDelivery, "SoftLandingEnabled", 1)],
-            DetectOps = [RegOp.CheckDword(ContentDelivery, "SoftLandingEnabled", 0)],
-        },
-        new TweakDef
-        {
             Id = "oobe-disable-start-system-pane-suggestions",
             Label = "Disable System Pane Suggestions in Start",
             Category = "Cloud Storage",
@@ -1894,24 +1373,6 @@ internal static class CloudExperience
             ApplyOps = [RegOp.SetDword(ContentDelivery, "SubscribedContent-338388Enabled", 0)],
             RemoveOps = [RegOp.SetDword(ContentDelivery, "SubscribedContent-338388Enabled", 1)],
             DetectOps = [RegOp.CheckDword(ContentDelivery, "SubscribedContent-338388Enabled", 0)],
-        },
-        new TweakDef
-        {
-            Id = "oobe-disable-subscribed-content-338389",
-            Label = "Disable Lock Screen Spotlight Tips (SubscribedContent-338389)",
-            Category = "Cloud Storage",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            ImpactScore = 1,
-            SafetyRating = 5,
-            Tags = ["oobe", "spotlight", "lock screen", "tips", "ads"],
-            Description =
-                "Disables the rotating lock screen tips/suggestions from Windows Spotlight "
-                + "(SubscribedContent-338389Enabled=0). Stops Microsoft from delivering "
-                + "promotional messages on the lock screen.",
-            ApplyOps = [RegOp.SetDword(ContentDelivery, "SubscribedContent-338389Enabled", 0)],
-            RemoveOps = [RegOp.SetDword(ContentDelivery, "SubscribedContent-338389Enabled", 1)],
-            DetectOps = [RegOp.CheckDword(ContentDelivery, "SubscribedContent-338389Enabled", 0)],
         },
         new TweakDef
         {
@@ -1977,20 +1438,6 @@ internal static class OneDrive
     [
         new TweakDef
         {
-            Id = "od-onedrive-upload-throttle",
-            Label = "Throttle OneDrive Upload (1 MB/s)",
-            Category = "Cloud Storage",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Limits OneDrive upload bandwidth to 1000 KB/s to prevent saturating your connection.",
-            Tags = ["onedrive", "bandwidth", "network"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\OneDrive"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\OneDrive", "UploadBandwidthLimit", 1000)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\OneDrive", "UploadBandwidthLimit")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\OneDrive", "UploadBandwidthLimit", 1000)],
-        },
-        new TweakDef
-        {
             Id = "od-onedrive-disable-personal",
             Label = "Disable OneDrive Personal Account Sign-In",
             Category = "Cloud Storage",
@@ -2002,20 +1449,6 @@ internal static class OneDrive
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\OneDrive", "DisablePersonalSync", 1)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\OneDrive", "DisablePersonalSync")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\OneDrive", "DisablePersonalSync", 1)],
-        },
-        new TweakDef
-        {
-            Id = "od-onedrive-max-upload-rate",
-            Label = "Limit OneDrive Upload Rate (125 KB/s)",
-            Category = "Cloud Storage",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Caps OneDrive upload bandwidth at 125 KB/s to minimise network impact.",
-            Tags = ["onedrive", "bandwidth", "upload", "network"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\OneDrive"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\OneDrive", "UploadBandwidthLimit", 125)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\OneDrive", "UploadBandwidthLimit")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\OneDrive", "UploadBandwidthLimit", 125)],
         },
         new TweakDef
         {
@@ -2058,21 +1491,6 @@ internal static class OneDrive
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\OneDrive", "SilentAccountConfig", 1)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\OneDrive", "SilentAccountConfig")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\OneDrive", "SilentAccountConfig", 1)],
-        },
-        new TweakDef
-        {
-            Id = "od-onedrive-reduce-bandwidth",
-            Label = "OneDrive Reduce Sync Traffic",
-            Category = "Cloud Storage",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Limits OneDrive upload bandwidth to 50%. Prevents OneDrive from saturating network connection. Default: Unlimited. Recommended: 50% for shared networks.",
-            Tags = ["onedrive", "bandwidth", "network", "performance"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\OneDrive"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\OneDrive", "UploadBandwidthLimit", 50)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\OneDrive", "UploadBandwidthLimit")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\OneDrive", "UploadBandwidthLimit", 50)],
         },
         new TweakDef
         {
@@ -2574,81 +1992,6 @@ internal static class PolicyCloud
 
         public static IReadOnlyList<TweakDef> Data { get; } =
         [
-            new TweakDef
-            {
-                Id = "ccpol-disable-windows-consumer-features",
-                Label = "Cloud Content: Disable Windows consumer features (app suggestions)",
-                Category = "Cloud Storage",
-                Description =
-                    "Sets DisableWindowsConsumerFeatures=1 in the CloudContent policy. Turns off the "
-                    + "'consumer experience' that silently installs promoted apps and shows app suggestions.",
-                Tags = ["cloud", "consumer", "suggestions", "debloat", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ApplyOps = [RegOp.SetDword(Cloud, "DisableWindowsConsumerFeatures", 1)],
-                RemoveOps = [RegOp.DeleteValue(Cloud, "DisableWindowsConsumerFeatures")],
-                DetectOps = [RegOp.CheckDword(Cloud, "DisableWindowsConsumerFeatures", 1)],
-            },
-            new TweakDef
-            {
-                Id = "ccpol-disable-third-party-suggestions",
-                Label = "Cloud Content: Disable third-party app suggestions in Start and search",
-                Category = "Cloud Storage",
-                Description =
-                    "Sets DisableThirdPartySuggestions=1 in CloudContent policy (machine scope). Prevents "
-                    + "third-party paid app promotions from appearing in Start menu tiles and search results.",
-                Tags = ["cloud", "suggestions", "third-party", "ads", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ApplyOps = [RegOp.SetDword(Cloud, "DisableThirdPartySuggestions", 1)],
-                RemoveOps = [RegOp.DeleteValue(Cloud, "DisableThirdPartySuggestions")],
-                DetectOps = [RegOp.CheckDword(Cloud, "DisableThirdPartySuggestions", 1)],
-            },
-            new TweakDef
-            {
-                Id = "ccpol-disable-cloud-optimized-content",
-                Label = "Cloud Content: Disable cloud-optimised content delivery",
-                Category = "Cloud Storage",
-                Description =
-                    "Sets DisableCloudOptimizedContent=1 in CloudContent policy. Stops Windows from "
-                    + "fetching and injecting cloud-optimized UI content (personalized tips, spotlight).",
-                Tags = ["cloud", "content", "spotlight", "debloat", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ApplyOps = [RegOp.SetDword(Cloud, "DisableCloudOptimizedContent", 1)],
-                RemoveOps = [RegOp.DeleteValue(Cloud, "DisableCloudOptimizedContent")],
-                DetectOps = [RegOp.CheckDword(Cloud, "DisableCloudOptimizedContent", 1)],
-            },
-            new TweakDef
-            {
-                Id = "ccpol-disable-spotlight-on-lock-screen",
-                Label = "Cloud Content: Disable Windows Spotlight on the lock screen",
-                Category = "Cloud Storage",
-                Description =
-                    "Sets DisableWindowsSpotlightFeatures=1 in CloudContent policy (machine scope). "
-                    + "Prevents Windows Spotlight from downloading and displaying rotating lock-screen images.",
-                Tags = ["cloud", "spotlight", "lock-screen", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ApplyOps = [RegOp.SetDword(Cloud, "DisableWindowsSpotlightFeatures", 1)],
-                RemoveOps = [RegOp.DeleteValue(Cloud, "DisableWindowsSpotlightFeatures")],
-                DetectOps = [RegOp.CheckDword(Cloud, "DisableWindowsSpotlightFeatures", 1)],
-            },
-            new TweakDef
-            {
-                Id = "ccpol-disable-spotlight-on-action-center",
-                Label = "Cloud Content: Disable Spotlight suggestions in Action Center",
-                Category = "Cloud Storage",
-                Description =
-                    "Sets DisableWindowsSpotlightWindowsWelcomeExperience=1 in CloudContent policy. "
-                    + "Suppresses the 'Get to know Windows' / 'What's new' Spotlight popups after updates.",
-                Tags = ["cloud", "spotlight", "action-center", "welcome", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ApplyOps = [RegOp.SetDword(Cloud, "DisableWindowsSpotlightWindowsWelcomeExperience", 1)],
-                RemoveOps = [RegOp.DeleteValue(Cloud, "DisableWindowsSpotlightWindowsWelcomeExperience")],
-                DetectOps = [RegOp.CheckDword(Cloud, "DisableWindowsSpotlightWindowsWelcomeExperience", 1)],
-            },
             new TweakDef
             {
                 Id = "ccpol-disable-spotlight-on-settings",
@@ -3177,24 +2520,6 @@ internal static class PolicyCloud
                 },
                 new TweakDef
                 {
-                    Id = "cfsync-disable-onedrive-personal",
-                    Label = "Cloud File Sync: Disable Personal OneDrive Account Sync",
-                    Category = "Cloud Storage",
-                    Description =
-                        "Sets DisablePersonalSync=1 in OneDrive policy. Prevents users from signing in to their personal (non-Microsoft 365 commercial) OneDrive accounts through the OneDrive sync client. This is a data loss prevention control: without this restriction, users can drag corporate files from their SharePoint-connected OneDrive work library into their personal OneDrive folder and sync them to personal cloud storage that has no corporate DLP controls. Only Microsoft 365 work/school accounts are permitted.",
-                    Tags = ["onedrive", "personal-sync", "dlp", "data-loss", "restriction"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 4,
-                    SafetyRating = 5,
-                    ImpactNote =
-                        "Personal OneDrive sync is blocked. Users can only sync OneDrive for Business accounts. Files cannot be moved from work OneDrive to personal OneDrive via the sync client.",
-                    ApplyOps = [RegOp.SetDword(OdKey, "DisablePersonalSync", 1)],
-                    RemoveOps = [RegOp.DeleteValue(OdKey, "DisablePersonalSync")],
-                    DetectOps = [RegOp.CheckDword(OdKey, "DisablePersonalSync", 1)],
-                },
-                new TweakDef
-                {
                     Id = "cfsync-enable-known-folder-move",
                     Label = "Cloud File Sync: Enable Known Folder Move to OneDrive for Business",
                     Category = "Cloud Storage",
@@ -3213,24 +2538,6 @@ internal static class PolicyCloud
                 },
                 new TweakDef
                 {
-                    Id = "cfsync-set-upload-bandwidth-limit",
-                    Label = "Cloud File Sync: Set OneDrive Upload Bandwidth Limit to 50%",
-                    Category = "Cloud Storage",
-                    Description =
-                        "Sets UploadBandwidthLimit=50 in OneDrive policy. Caps the OneDrive sync client's upload bandwidth to 50% of the detected available bandwidth. Without a cap, OneDrive can saturate the uplink during large initial sync operations (e.g., after Known Folder Move, or when a new large document is added), degrading performance for all other network-dependent applications and services. The percentage-based cap is adaptive: on a fast connection, OneDrive uses 50% of a large bandwidth allocation; on a slow connection, it is proportionally throttled.",
-                    Tags = ["onedrive", "bandwidth", "throttle", "network", "performance"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 3,
-                    SafetyRating = 5,
-                    ImpactNote =
-                        "OneDrive uploads are throttled to 50% of available bandwidth. Initial sync after KFM or large library additions takes longer. Network performance for other applications is preserved.",
-                    ApplyOps = [RegOp.SetDword(OdKey, "UploadBandwidthLimit", 50)],
-                    RemoveOps = [RegOp.DeleteValue(OdKey, "UploadBandwidthLimit")],
-                    DetectOps = [RegOp.CheckDword(OdKey, "UploadBandwidthLimit", 50)],
-                },
-                new TweakDef
-                {
                     Id = "cfsync-disable-wf-auto-setup",
                     Label = "Cloud File Sync: Disable Automatic Work Folders Setup",
                     Category = "Cloud Storage",
@@ -3246,24 +2553,6 @@ internal static class PolicyCloud
                     ApplyOps = [RegOp.SetDword(WfKey, "AutoSetup", 0)],
                     RemoveOps = [RegOp.DeleteValue(WfKey, "AutoSetup")],
                     DetectOps = [RegOp.CheckDword(WfKey, "AutoSetup", 0)],
-                },
-                new TweakDef
-                {
-                    Id = "cfsync-enable-files-on-demand",
-                    Label = "Cloud File Sync: Enable OneDrive Files On-Demand",
-                    Category = "Cloud Storage",
-                    Description =
-                        "Sets FilesOnDemandEnabled=1 in OneDrive policy. Enables Files On-Demand for all OneDrive for Business sync clients: files appear in Explorer with placeholder icons but are not downloaded until accessed. Only files the user explicitly opens or marks for offline use occupy local disk space. For large OneDrive libraries (25 GB+), Files On-Demand prevents disk exhaustion: without it, enabling KFM on a device with a 128 GB boot drive and a 50 GB OneDrive library fills the drive. Required for Known Folder Move in large environments.",
-                    Tags = ["onedrive", "files-on-demand", "disk-space", "sync", "performance"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 4,
-                    SafetyRating = 5,
-                    ImpactNote =
-                        "OneDrive files are placeholders until opened. Files are downloaded on access. Offline access requires explicit marking. Essential for large OneDrive libraries on limited-storage devices.",
-                    ApplyOps = [RegOp.SetDword(OdKey, "FilesOnDemandEnabled", 1)],
-                    RemoveOps = [RegOp.DeleteValue(OdKey, "FilesOnDemandEnabled")],
-                    DetectOps = [RegOp.CheckDword(OdKey, "FilesOnDemandEnabled", 1)],
                 },
                 new TweakDef
                 {
@@ -3300,24 +2589,6 @@ internal static class PolicyCloud
                     ApplyOps = [RegOp.SetDword(OdKey, "TenantRestriction", 1)],
                     RemoveOps = [RegOp.DeleteValue(OdKey, "TenantRestriction")],
                     DetectOps = [RegOp.CheckDword(OdKey, "TenantRestriction", 1)],
-                },
-                new TweakDef
-                {
-                    Id = "cfsync-enable-silent-account-config",
-                    Label = "Cloud File Sync: Enable Silent OneDrive Account Configuration",
-                    Category = "Cloud Storage",
-                    Description =
-                        "Sets SilentAccountConfig=1 in OneDrive policy. Allows OneDrive to configure itself silently using the signed-in user's Azure AD credentials when the user logs into a Hybrid Azure AD Joined or Azure AD Joined device. Without silent configuration, users are prompted to manually set up OneDrive by entering their email address and signing in. With silent configuration, OneDrive picks up the user's Microsoft 365 identity from the device's AAD join state and configures sync automatically — essential for seamless onboarding at scale.",
-                    Tags = ["onedrive", "silent-config", "aad", "enterprise", "onboarding"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 4,
-                    SafetyRating = 5,
-                    ImpactNote =
-                        "OneDrive configures automatically on Azure AD Joined / Hybrid AAD Joined devices. Users see OneDrive already configured at first logon. Requires Azure AD Join or Hybrid Azure AD Join.",
-                    ApplyOps = [RegOp.SetDword(OdKey, "SilentAccountConfig", 1)],
-                    RemoveOps = [RegOp.DeleteValue(OdKey, "SilentAccountConfig")],
-                    DetectOps = [RegOp.CheckDword(OdKey, "SilentAccountConfig", 1)],
                 },
                 new TweakDef
                 {
@@ -3721,24 +2992,6 @@ internal static class PolicyCloud
             [
                 new TweakDef
                 {
-                    Id = "cloudqt-enable-storage-sense-enforcement",
-                    Label = "Cloud Storage Quota: Enable Storage Sense Automatic Disk Cleanup",
-                    Category = "Cloud Storage",
-                    Description =
-                        "Sets AllowStorageSenseGlobal=1 in the StorageSense policy key. Enables Windows Storage Sense — the automatic disk space cleanup feature that removes temporary files, empties the recycle bin, removes locally cached cloud-only files (OneDrive Files On-Demand) that have not been used recently, and cleans up Windows Update delivery files. Storage Sense proactively prevents the disk-fill scenario that causes OS instability on devices with limited SSD storage. Without Storage Sense, devices gradually accumulate gigabytes of recoverable temporary data that is never cleaned up automatically.",
-                    Tags = ["storage-sense", "disk-cleanup", "temp-files", "onedrive-cache", "automatic"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 4,
-                    SafetyRating = 5,
-                    ImpactNote =
-                        "Storage Sense runs automatically on a configured cadence. Recycle bin emptied, temp files removed, and unused OneDrive cache files evicted back to cloud-only status. Files evicted from OneDrive local cache will need to be re-downloaded when next accessed. Configure the cadence and thresholds using additional StorageSense policy keys.",
-                    ApplyOps = [RegOp.SetDword(StorageSenseKey, "AllowStorageSenseGlobal", 1)],
-                    RemoveOps = [RegOp.DeleteValue(StorageSenseKey, "AllowStorageSenseGlobal")],
-                    DetectOps = [RegOp.CheckDword(StorageSenseKey, "AllowStorageSenseGlobal", 1)],
-                },
-                new TweakDef
-                {
                     Id = "cloudqt-set-storage-sense-cadence-monthly",
                     Label = "Cloud Storage Quota: Set Storage Sense Run Cadence to Monthly",
                     Category = "Cloud Storage",
@@ -3772,42 +3025,6 @@ internal static class PolicyCloud
                     ApplyOps = [RegOp.SetDword(StorageSenseKey, "ConfigStorageSenseCloudContentDehydrationThreshold", 60)],
                     RemoveOps = [RegOp.DeleteValue(StorageSenseKey, "ConfigStorageSenseCloudContentDehydrationThreshold")],
                     DetectOps = [RegOp.CheckDword(StorageSenseKey, "ConfigStorageSenseCloudContentDehydrationThreshold", 60)],
-                },
-                new TweakDef
-                {
-                    Id = "cloudqt-disable-third-party-cloud-storage-promotion",
-                    Label = "Cloud Storage Quota: Disable Third-Party Cloud Storage Provider Promotions in Windows",
-                    Category = "Cloud Storage",
-                    Description =
-                        "Sets DisableThirdPartySuggestions=1 in the CloudContent policy key. Prevents Windows from promoting or integrating third-party cloud storage providers (Dropbox, Box, Google Drive, iCloud) in Windows Explorer, Save As dialogs, and File Picker. In enterprise environments with an approved cloud storage platform (OneDrive for Business), promoting third-party alternatives creates shadow IT risk — users connecting personal Dropbox or Google Drive accounts to corporate devices create uncontrolled data sync paths outside DLP policy coverage. Disabling third-party promotions reinforces the corporate cloud storage platform strategy.",
-                    Tags = ["cloud-storage", "third-party", "dropbox", "shadow-it", "dlp"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 3,
-                    SafetyRating = 5,
-                    ImpactNote =
-                        "Third-party cloud storage provider promotions removed from Windows Explorer and Save As dialogs. Third-party sync clients (Dropbox, Box, Google Drive) already installed continue to function — this only prevents new promotions. To block the sync clients themselves, use AppLocker or Windows Defender Application Control.",
-                    ApplyOps = [RegOp.SetDword(CloudContentKey, "DisableThirdPartySuggestions", 1)],
-                    RemoveOps = [RegOp.DeleteValue(CloudContentKey, "DisableThirdPartySuggestions")],
-                    DetectOps = [RegOp.CheckDword(CloudContentKey, "DisableThirdPartySuggestions", 1)],
-                },
-                new TweakDef
-                {
-                    Id = "cloudqt-disable-windows-consumer-cloud-features",
-                    Label = "Cloud Storage Quota: Disable Windows Consumer Cloud Features (Spotlight, Store Suggestions)",
-                    Category = "Cloud Storage",
-                    Description =
-                        "Sets DisableWindowsConsumerFeatures=1 in the CloudContent policy key (also DisableSoftLanding=1). Disables Windows consumer-facing cloud features including Windows Spotlight ads on the lock screen, Start menu app suggestions from the Microsoft Store, Microsoft 365 family subscription promotions, and automatic installation of consumer app recommendations. These features generate unsolicited network traffic to Microsoft content delivery networks and may install apps (Family features, consumer apps) that are not appropriate in enterprise environments.",
-                    Tags = ["cloud-content", "spotlight", "consumer-features", "enterprise", "store-suggestions"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 3,
-                    SafetyRating = 5,
-                    ImpactNote =
-                        "Windows consumer cloud features disabled. Lock screen Spotlight images replaced with static photos. Start menu suggestions and promoted apps removed. Spontaneously installed consumer apps (Candy Crush, Phone Link, etc.) are blocked. No functional impact on enterprise applications or OneDrive for Business.",
-                    ApplyOps = [RegOp.SetDword(CloudContentKey, "DisableWindowsConsumerFeatures", 1)],
-                    RemoveOps = [RegOp.DeleteValue(CloudContentKey, "DisableWindowsConsumerFeatures")],
-                    DetectOps = [RegOp.CheckDword(CloudContentKey, "DisableWindowsConsumerFeatures", 1)],
                 },
                 new TweakDef
                 {
@@ -3881,24 +3098,6 @@ internal static class PolicyCloud
                     RemoveOps = [RegOp.DeleteValue(StorageSenseKey, "ConfigStorageSenseDownloadsCleanupThreshold")],
                     DetectOps = [RegOp.CheckDword(StorageSenseKey, "ConfigStorageSenseDownloadsCleanupThreshold", 90)],
                 },
-                new TweakDef
-                {
-                    Id = "cloudqt-disable-cloud-content-during-oobe",
-                    Label = "Cloud Storage Quota: Disable Cloud Content and Subscription Promotions During OOBE",
-                    Category = "Cloud Storage",
-                    Description =
-                        "Sets DisableCloudOptimizedContent=1 in the CloudContent policy key. Prevents Windows Out-of-Box Experience (OOBE) from displaying cloud-delivered promotional content — Microsoft 365 subscription upsells, recommended apps, tailored welcome screens based on consumer signals, and first-run experience tiles sourced from Microsoft CDN. During enterprise device provisioning (Windows Autopilot, MDM enrolment), cloud-optimised content creates deployment inconsistency and may delay the provisioning flow by waiting for network-delivered content. A clean, policy-defined OOBE without cloud content ensures predictable provisioning.",
-                    Tags = ["cloud-content", "oobe", "provisioning", "autopilot", "enterprise-deployment"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 3,
-                    SafetyRating = 5,
-                    ImpactNote =
-                        "Cloud-delivered OOBE promotional content disabled. OOBE uses static configured content only. Windows Autopilot and MDM enrollment flows are unaffected functionally. First-run welcome screens show default Windows UI rather than personalized or promoted content.",
-                    ApplyOps = [RegOp.SetDword(CloudContentKey, "DisableCloudOptimizedContent", 1)],
-                    RemoveOps = [RegOp.DeleteValue(CloudContentKey, "DisableCloudOptimizedContent")],
-                    DetectOps = [RegOp.CheckDword(CloudContentKey, "DisableCloudOptimizedContent", 1)],
-                },
             ];
     }
 
@@ -3911,85 +3110,6 @@ internal static class PolicyCloud
 
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
-            new TweakDef
-            {
-                Id = "cdpol-disable-consumer-experiences",
-                Label = "Disable Windows Consumer Experiences (Bloatware Auto-Install)",
-                Category = "Cloud Storage",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 5,
-                SafetyRating = 5,
-                Tags = ["content delivery", "bloatware", "debloat", "consumer", "privacy", "group policy"],
-                Description =
-                    "Disables the Content Delivery Manager from auto-installing suggested third-party apps "
-                    + "(games, Candy Crush, Spotify etc.) via Windows Consumer Experiences. "
-                    + "DisableWindowsConsumerFeatures = 1. "
-                    + "Essential for enterprise deployments and clean Windows installations. "
-                    + "Default: consumer app suggestions silently installed after setup.",
-                ApplyOps = [RegOp.SetDword(CloudPol, "DisableWindowsConsumerFeatures", 1)],
-                RemoveOps = [RegOp.SetDword(CloudPol, "DisableWindowsConsumerFeatures", 0)],
-                DetectOps = [RegOp.CheckDword(CloudPol, "DisableWindowsConsumerFeatures", 1)],
-            },
-            new TweakDef
-            {
-                Id = "cdpol-disable-windows-spotlight",
-                Label = "Disable Windows Spotlight on Lock Screen",
-                Category = "Cloud Storage",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                Tags = ["content delivery", "spotlight", "lock screen", "privacy", "group policy"],
-                Description =
-                    "Disables Windows Spotlight on the lock screen via Group Policy. "
-                    + "DisableWindowsSpotlightFeatures = 1. "
-                    + "Prevents Microsoft-curated wallpapers, tips, and ads from displaying on the lock screen. "
-                    + "Default: Spotlight enabled showing Bing-sourced images and suggestions.",
-                ApplyOps = [RegOp.SetDword(CloudPol, "DisableWindowsSpotlightFeatures", 1)],
-                RemoveOps = [RegOp.SetDword(CloudPol, "DisableWindowsSpotlightFeatures", 0)],
-                DetectOps = [RegOp.CheckDword(CloudPol, "DisableWindowsSpotlightFeatures", 1)],
-            },
-            new TweakDef
-            {
-                Id = "cdpol-disable-spotlight-action-center",
-                Label = "Disable Windows Spotlight in Action Center",
-                Category = "Cloud Storage",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                Tags = ["content delivery", "spotlight", "action center", "notifications", "group policy"],
-                Description =
-                    "Prevents Windows Spotlight suggestions and tips from appearing in notifications "
-                    + "and the Action Center. "
-                    + "DisableWindowsSpotlightOnActionCenter = 1. "
-                    + "Removes Microsoft promotional content from the notification tray. "
-                    + "Default: Spotlight Action Center content enabled.",
-                ApplyOps = [RegOp.SetDword(CloudPol, "DisableWindowsSpotlightOnActionCenter", 1)],
-                RemoveOps = [RegOp.SetDword(CloudPol, "DisableWindowsSpotlightOnActionCenter", 0)],
-                DetectOps = [RegOp.CheckDword(CloudPol, "DisableWindowsSpotlightOnActionCenter", 1)],
-            },
-            new TweakDef
-            {
-                Id = "cdpol-disable-third-party-spotlight",
-                Label = "Disable Third-Party App Suggestions in Spotlight",
-                Category = "Cloud Storage",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                Tags = ["content delivery", "spotlight", "ads", "privacy", "third-party", "group policy"],
-                Description =
-                    "Blocks third-party application advertisements and suggestions from appearing "
-                    + "within the Windows Spotlight and lock screen features. "
-                    + "DisableThirdPartySuggestions = 1. "
-                    + "Prevents marketplaced app promotions from appearing even when Spotlight is otherwise active. "
-                    + "Default: third-party suggestions shown.",
-                ApplyOps = [RegOp.SetDword(CloudPol, "DisableThirdPartySuggestions", 1)],
-                RemoveOps = [RegOp.SetDword(CloudPol, "DisableThirdPartySuggestions", 0)],
-                DetectOps = [RegOp.CheckDword(CloudPol, "DisableThirdPartySuggestions", 1)],
-            },
             new TweakDef
             {
                 Id = "cdpol-disable-start-suggestions",
@@ -4011,45 +3131,6 @@ internal static class PolicyCloud
                 ApplyOps = [RegOp.SetDword(StartPol, "HideRecommendedSection", 1)],
                 RemoveOps = [RegOp.SetDword(StartPol, "HideRecommendedSection", 0)],
                 DetectOps = [RegOp.CheckDword(StartPol, "HideRecommendedSection", 1)],
-            },
-            new TweakDef
-            {
-                Id = "cdpol-disable-spotlight-taskbar",
-                Label = "Disable Windows Spotlight on Taskbar and Search",
-                Category = "Cloud Storage",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                Tags = ["content delivery", "spotlight", "taskbar", "search", "privacy", "group policy"],
-                Description =
-                    "Removes Windows Spotlight suggestions from the taskbar search box and Search Home. "
-                    + "DisableWindowsSpotlightOnSettings = 1. "
-                    + "Prevents Bing-powered content from appearing in the taskbar search callout. "
-                    + "Default: Spotlight taskbar content enabled on Windows 11.",
-                MinBuild = 22000,
-                ApplyOps = [RegOp.SetDword(CloudPol, "DisableWindowsSpotlightOnSettings", 1)],
-                RemoveOps = [RegOp.SetDword(CloudPol, "DisableWindowsSpotlightOnSettings", 0)],
-                DetectOps = [RegOp.CheckDword(CloudPol, "DisableWindowsSpotlightOnSettings", 1)],
-            },
-            new TweakDef
-            {
-                Id = "cdpol-disable-oobe-tips",
-                Label = "Disable Spotlight-Based Tips and Tricks During Setup (OOBE)",
-                Category = "Cloud Storage",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                Tags = ["content delivery", "oobe", "setup", "tips", "group policy"],
-                Description =
-                    "Disables Windows Spotlight-powered tips and suggestions shown during Out-of-Box "
-                    + "Experience (OOBE) and Windows first-run setup screens. "
-                    + "DisableWindowsSpotlightWindowsWelcomeExperience = 1. "
-                    + "Streamlines enterprise provisioning and audit by removing consumer-targeted prompts.",
-                ApplyOps = [RegOp.SetDword(CloudPol, "DisableWindowsSpotlightWindowsWelcomeExperience", 1)],
-                RemoveOps = [RegOp.SetDword(CloudPol, "DisableWindowsSpotlightWindowsWelcomeExperience", 0)],
-                DetectOps = [RegOp.CheckDword(CloudPol, "DisableWindowsSpotlightWindowsWelcomeExperience", 1)],
             },
             new TweakDef
             {
@@ -4138,23 +3219,6 @@ internal static class PolicyCloud
             },
             new TweakDef
             {
-                Id = "dskanlyt-set-diagnostic-data-level",
-                Label = "Set Diagnostic Data Collection Level to Security Only",
-                Category = "Cloud Storage",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                Description =
-                    "Diagnostic data levels control the amount of telemetry transmitted to Microsoft with Security being the minimal level and Full being the maximum. Setting diagnostic data to Security level (0) transmits only the minimum data required to keep Windows secure including Malicious Software Removal Tool data and Windows Defender security intelligence. Restricting diagnostic data to Security level minimizes the organizational data transmitted to Microsoft while still receiving security updates. Enterprise editions of Windows 10 and later support the Security (0) level which is not available on consumer editions. Organizations concerned about data privacy should configure Security level or at most Basic Enhanced level for managed systems. Desktop Analytics requires at least Enhanced diagnostic data level to provide full compatibility and update readiness intelligence.",
-                Tags = ["desktop-analytics", "diagnostic-data", "telemetry", "privacy", "policy"],
-                RegistryKeys = [Key],
-                ApplyOps = [RegOp.SetDword(Key, "AllowTelemetry", 0)],
-                RemoveOps = [RegOp.DeleteValue(Key, "AllowTelemetry")],
-                DetectOps = [RegOp.CheckDword(Key, "AllowTelemetry", 0)],
-            },
-            new TweakDef
-            {
                 Id = "dskanlyt-disable-msdt-telemetry",
                 Label = "Disable Microsoft Diagnostics and Troubleshooting Tool Telemetry",
                 Category = "Cloud Storage",
@@ -4169,23 +3233,6 @@ internal static class PolicyCloud
                 ApplyOps = [RegOp.SetDword(Key, "DisableDiagnosticData", 1)],
                 RemoveOps = [RegOp.DeleteValue(Key, "DisableDiagnosticData")],
                 DetectOps = [RegOp.CheckDword(Key, "DisableDiagnosticData", 1)],
-            },
-            new TweakDef
-            {
-                Id = "dskanlyt-disable-data-in-device-health-reports",
-                Label = "Disable Device Health Attestation Data Reporting to External Services",
-                Category = "Cloud Storage",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                Description =
-                    "Device Health Attestation reports security configuration data including boot state and security feature status to cloud services for compliance verification. Disabling external Device Health Attestation data reporting prevents health data from being transmitted to Microsoft cloud services for organizations that use internal attestation systems. Organizations running on-premises Device Health Attestation servers manage their own attestation data without requiring Microsoft cloud services for health reporting. Cloud-based Device Health Attestation provides valuable security enforcement for conditional access but requires transmitting device state to Microsoft. The choice between cloud and on-premises Device Health Attestation should align with the organization's data sovereignty and privacy requirements. Organizations deploying Microsoft Intune typically rely on cloud-based Device Health Attestation as part of conditional access policy enforcement.",
-                Tags = ["desktop-analytics", "device-health", "attestation", "reporting", "policy"],
-                RegistryKeys = [Key],
-                ApplyOps = [RegOp.SetDword(Key, "LimitDiagnosticLogCollection", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "LimitDiagnosticLogCollection")],
-                DetectOps = [RegOp.CheckDword(Key, "LimitDiagnosticLogCollection", 1)],
             },
             new TweakDef
             {
@@ -4223,23 +3270,6 @@ internal static class PolicyCloud
             },
             new TweakDef
             {
-                Id = "dskanlyt-restrict-feedback-hub-telemetry",
-                Label = "Restrict Feedback Hub from Submitting User Diagnostic Data",
-                Category = "Cloud Storage",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                Description =
-                    "Windows Feedback Hub allows users to submit feedback to Microsoft that can include diagnostic logs screenshots and system state information which requires careful control in enterprise environments. Restricting Feedback Hub telemetry prevents users from intentionally or inadvertently submitting sensitive system information through the feedback channel. Feedback submissions can include diagnostic logs from applications or system components that contain sensitive business data requiring restriction in regulated environments. Organizations should restrict Feedback Hub access for all managed systems while maintaining channels for product feedback through approved enterprise feedback mechanisms. Feedback Hub feedback settings should be part of the overall data classification and transmission policy for managed endpoints. Disabling Feedback Hub does not prevent Windows from collecting system telemetry through other channels which must be controlled separately.",
-                Tags = ["desktop-analytics", "feedback-hub", "telemetry", "privacy", "policy"],
-                RegistryKeys = [Key],
-                ApplyOps = [RegOp.SetDword(Key, "AllowTelemetry", 0)],
-                RemoveOps = [RegOp.DeleteValue(Key, "AllowTelemetry")],
-                DetectOps = [RegOp.CheckDword(Key, "AllowTelemetry", 0)],
-            },
-            new TweakDef
-            {
                 Id = "dskanlyt-disable-compat-appraiser-task",
                 Label = "Disable Compatibility Appraiser Scheduled Task for Analytics",
                 Category = "Cloud Storage",
@@ -4254,40 +3284,6 @@ internal static class PolicyCloud
                 ApplyOps = [RegOp.SetDword(Key, "DisableCompatibilityAppraiser", 1)],
                 RemoveOps = [RegOp.DeleteValue(Key, "DisableCompatibilityAppraiser")],
                 DetectOps = [RegOp.CheckDword(Key, "DisableCompatibilityAppraiser", 1)],
-            },
-            new TweakDef
-            {
-                Id = "dskanlyt-restrict-enhanced-diagnostic-data",
-                Label = "Restrict Enhanced Diagnostic Data to Required Minimum Events",
-                Category = "Cloud Storage",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                Description =
-                    "Enhanced diagnostic data level transmits additional optional events beyond the Basic level that provide richer analytics data but also represent greater data transmission and privacy exposure. Restricting Enhanced diagnostic data to the required events subset limits transmission to only events required for Desktop Analytics without sending all Enhanced level events. Windows 10 1803 introduced an Enhanced Required Events option that allows Desktop Analytics usage while minimizing miscellaneous Enhanced events. Organizations using Desktop Analytics who want to minimize data transmission should configure Enhanced Required Events rather than the full Enhanced level. The EnableOneSettingsAuditing and RequiredEventsPolicies settings control which specific Enhanced events are transmitted when Enhanced Required Events is configured. Regular review of configured diagnostic data policies through compliance monitoring ensures that settings remain aligned with the organization's data handling requirements.",
-                Tags = ["desktop-analytics", "enhanced-diagnostics", "data-minimization", "privacy", "policy"],
-                RegistryKeys = [Key],
-                ApplyOps = [RegOp.SetDword(Key, "LimitEnhancedDiagnosticDataWindowsAnalytics", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "LimitEnhancedDiagnosticDataWindowsAnalytics")],
-                DetectOps = [RegOp.CheckDword(Key, "LimitEnhancedDiagnosticDataWindowsAnalytics", 1)],
-            },
-            new TweakDef
-            {
-                Id = "dskanlyt-audit-diagnostic-data-changes",
-                Label = "Enable Audit Logging for Diagnostic Data Policy Configuration Changes",
-                Category = "Cloud Storage",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                Description =
-                    "Diagnostic data configuration audit logging captures changes to telemetry settings that could indicate attempts to circumvent data collection restrictions or silently increase diagnostic data levels. Enabling audit logging for diagnostic policy changes provides visibility into telemetry configuration modifications that may violate organizational privacy policies. Changes to AllowTelemetry and related policies should be rare in production environments and any unauthorized changes should trigger security investigation. Malware that attempts to re-enable telemetry collection after it has been disabled will generate audit events that can be detected through SIEM alerting. Diagnostic data policy auditing should be included in the baseline configuration monitoring for all managed systems. Correlation of diagnostic data policy changes with user logon events helps identify which accounts made changes for accountability.",
-                Tags = ["desktop-analytics", "audit", "policy-monitoring", "telemetry", "policy"],
-                RegistryKeys = [Key],
-                ApplyOps = [RegOp.SetDword(Key, "EnableOneSettingsAuditing", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "EnableOneSettingsAuditing")],
-                DetectOps = [RegOp.CheckDword(Key, "EnableOneSettingsAuditing", 1)],
             },
         ];
     }
@@ -4509,24 +3505,6 @@ internal static class PolicyCloud
                 },
                 new TweakDef
                 {
-                    Id = "odsync-prevent-personal-onedrive-use",
-                    Label = "OneDrive Sync: Block Personal OneDrive Accounts (Allow Only Tenant Accounts)",
-                    Category = "Cloud Storage",
-                    Description =
-                        "Sets DisablePersonalSync=1 in the OneDrive policy key. Prevents users from signing into the OneDrive sync client with a personal Microsoft account (Hotmail, Outlook.com, Xbox Live). In enterprise environments, allowing personal OneDrive accounts on corporate devices creates a shadow IT data exfiltration path — users can silently sync corporate files to their personal OneDrive. Restricting the sync client to tenant-managed (Azure AD) accounts ensures that synced data is governed by the enterprise DLP and retention policies.",
-                    Tags = ["onedrive", "personal-account", "data-exfiltration", "shadow-it", "tenant-restriction"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 4,
-                    SafetyRating = 5,
-                    ImpactNote =
-                        "Personal OneDrive syncing blocked on this device. Users cannot sync their personal OneDrive files to a corporate device. If users store personal files on OneDrive and access them at work, they must use the OneDrive.com web interface. The sync client only accepts corporate Azure AD account logins.",
-                    ApplyOps = [RegOp.SetDword(OneDriveKey, "DisablePersonalSync", 1)],
-                    RemoveOps = [RegOp.DeleteValue(OneDriveKey, "DisablePersonalSync")],
-                    DetectOps = [RegOp.CheckDword(OneDriveKey, "DisablePersonalSync", 1)],
-                },
-                new TweakDef
-                {
                     Id = "odsync-allow-sync-on-metered-network",
                     Label = "OneDrive Sync: Prevent OneDrive Sync on Metered Connections",
                     Category = "Cloud Storage",
@@ -4542,60 +3520,6 @@ internal static class PolicyCloud
                     ApplyOps = [RegOp.SetDword(OneDriveKey, "DisableSyncOnMeteredNetwork", 1)],
                     RemoveOps = [RegOp.DeleteValue(OneDriveKey, "DisableSyncOnMeteredNetwork")],
                     DetectOps = [RegOp.CheckDword(OneDriveKey, "DisableSyncOnMeteredNetwork", 1)],
-                },
-                new TweakDef
-                {
-                    Id = "odsync-set-max-upload-bandwidth-400kbps",
-                    Label = "OneDrive Sync: Limit Upload Bandwidth to 400 Kbps",
-                    Category = "Cloud Storage",
-                    Description =
-                        "Sets UploadBandwidthLimit=400 in the OneDrive policy key (value in Kbps). Throttles OneDrive upload bandwidth to 400 Kbps. This prevents OneDrive initial KFM migration or large file uploads from saturating a corporate WAN link. A 400 Kbps upload cap allows OneDrive to sync in the background without impacting VoIP call quality (which requires ~100 Kbps per call), video conferencing (which requires 1.5–4 Mbps per call), or line-of-business application connectivity. For faster connections (100 Mbps LAN), the cap can be increased — adjust to match your WAN uplink capacity.",
-                    Tags = ["onedrive", "upload-bandwidth", "throttle", "wan", "qos"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 3,
-                    SafetyRating = 5,
-                    ImpactNote =
-                        "OneDrive upload limited to 400 Kbps. Initial KFM migration of large document libraries may take several days at 400 Kbps. For initial deployment, consider a temporary higher limit (2000 Kbps) for the first two weeks, then reduce to 400 Kbps steady-state.",
-                    ApplyOps = [RegOp.SetDword(OneDriveKey, "UploadBandwidthLimit", 400)],
-                    RemoveOps = [RegOp.DeleteValue(OneDriveKey, "UploadBandwidthLimit")],
-                    DetectOps = [RegOp.CheckDword(OneDriveKey, "UploadBandwidthLimit", 400)],
-                },
-                new TweakDef
-                {
-                    Id = "odsync-enable-file-on-demand",
-                    Label = "OneDrive Sync: Enable Files On-Demand (Cloud-Only Placeholder Files)",
-                    Category = "Cloud Storage",
-                    Description =
-                        "Sets FilesOnDemandEnabled=1 in the OneDrive policy key. Enables OneDrive Files On-Demand, which creates placeholder files in the local OneDrive folder for files stored in OneDrive without downloading the content until the file is opened. Files On-Demand dramatically reduces local storage consumption — a OneDrive library with 100 GB of files may only consume 50 MB of local disk space if most files have never been accessed. Downloaded files are cached locally for offline access. This is critical for devices with small SSD storage (128–256 GB) and large OneDrive libraries.",
-                    Tags = ["onedrive", "files-on-demand", "storage-savings", "placeholder", "cloud-only"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 4,
-                    SafetyRating = 5,
-                    ImpactNote =
-                        "Files On-Demand enabled. File Explorer shows cloud-only files as placeholder icons. Opening a cloud-only file triggers a download — may cause a brief delay on first open. Antivirus on-access scans will automatically download cloud-only files when scanning, potentially consuming disk space and network bandwidth.",
-                    ApplyOps = [RegOp.SetDword(OneDriveKey, "FilesOnDemandEnabled", 1)],
-                    RemoveOps = [RegOp.DeleteValue(OneDriveKey, "FilesOnDemandEnabled")],
-                    DetectOps = [RegOp.CheckDword(OneDriveKey, "FilesOnDemandEnabled", 1)],
-                },
-                new TweakDef
-                {
-                    Id = "odsync-enable-silent-sign-in",
-                    Label = "OneDrive Sync: Enable Silent Azure AD Sign-In (Single Sign-On with AzureAD)",
-                    Category = "Cloud Storage",
-                    Description =
-                        "Sets SilentAccountConfig=1 in the OneDrive policy key. Enables OneDrive to automatically sign in with the user's Azure Active Directory account without displaying any sign-in prompts. This uses Azure AD SSO to automatically configure the OneDrive sync client on first logon — users never see a OneDrive setup wizard or sign-in dialog. This is the enterprise-grade deployment method for OneDrive — it ensures 100% adoption without user-initiated setup, which is critical for KFM to protect all devices automatically.",
-                    Tags = ["onedrive", "silent-signin", "azure-ad", "sso", "auto-configure"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 4,
-                    SafetyRating = 5,
-                    ImpactNote =
-                        "OneDrive automatically signs in using Azure AD credentials. Requires Azure AD joined or Hybrid Azure AD joined devices. Works on-premises and in cloud-only deployments. Users see a brief OneDrive startup notification on first logon — no action required.",
-                    ApplyOps = [RegOp.SetDword(OneDriveKey, "SilentAccountConfig", 1)],
-                    RemoveOps = [RegOp.DeleteValue(OneDriveKey, "SilentAccountConfig")],
-                    DetectOps = [RegOp.CheckDword(OneDriveKey, "SilentAccountConfig", 1)],
                 },
                 new TweakDef
                 {
@@ -4810,42 +3734,6 @@ internal static class PolicyCloud
             },
             new TweakDef
             {
-                Id = "ssync-disable-text-personalization",
-                Label = "Disable Typing / Text Input Personalization",
-                Category = "Cloud Storage",
-                NeedsAdmin = false,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                Description =
-                    "Prevents Windows from collecting your typing patterns for autocorrect and "
-                    + "next-word predictions. RestrictImplicitTextCollection=1 in InputPersonalization.",
-                Tags = ["personalization", "typing", "autocorrect", "privacy", "input"],
-                RegistryKeys = [InputPers],
-                ApplyOps = [RegOp.SetDword(InputPers, "RestrictImplicitTextCollection", 1)],
-                RemoveOps = [RegOp.SetDword(InputPers, "RestrictImplicitTextCollection", 0)],
-                DetectOps = [RegOp.CheckDword(InputPers, "RestrictImplicitTextCollection", 1)],
-            },
-            new TweakDef
-            {
-                Id = "ssync-disable-ink-personalization",
-                Label = "Disable Handwriting / Ink Personalization",
-                Category = "Cloud Storage",
-                NeedsAdmin = false,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                Description =
-                    "Stops Windows from collecting handwriting samples to improve ink recognition "
-                    + "accuracy. RestrictImplicitInkCollection=1 in InputPersonalization.",
-                Tags = ["personalization", "handwriting", "ink", "stylus", "privacy"],
-                RegistryKeys = [InputPers],
-                ApplyOps = [RegOp.SetDword(InputPers, "RestrictImplicitInkCollection", 1)],
-                RemoveOps = [RegOp.SetDword(InputPers, "RestrictImplicitInkCollection", 0)],
-                DetectOps = [RegOp.CheckDword(InputPers, "RestrictImplicitInkCollection", 1)],
-            },
-            new TweakDef
-            {
                 Id = "ssync-disable-input-personalization-policy",
                 Label = "Disable Input Personalization — Machine Policy",
                 Category = "Cloud Storage",
@@ -4873,22 +3761,6 @@ internal static class PolicyCloud
 
         public static IReadOnlyList<TweakDef> Data =>
             [
-                new TweakDef
-                {
-                    Id = "syncsec-disable-all-setting-sync",
-                    Label = "Disable All Settings Sync",
-                    Category = "Cloud Storage",
-                    Description = "Disables the Windows settings synchronisation feature entirely and prevents users from re-enabling it.",
-                    Tags = ["sync", "settings", "cloud", "privacy", "microsoft-account"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 4,
-                    SafetyRating = 5,
-                    ImpactNote = "All settings sync is stopped; value 2 = forced off, user cannot override.",
-                    ApplyOps = [RegOp.SetDword(SyncKey, "DisableSettingSync", 2)],
-                    RemoveOps = [RegOp.DeleteValue(SyncKey, "DisableSettingSync")],
-                    DetectOps = [RegOp.CheckDword(SyncKey, "DisableSettingSync", 2)],
-                },
                 new TweakDef
                 {
                     Id = "syncsec-block-user-override",
@@ -4920,22 +3792,6 @@ internal static class PolicyCloud
                     ApplyOps = [RegOp.SetDword(SyncKey, "DisableCredentialsSettingSync", 2)],
                     RemoveOps = [RegOp.DeleteValue(SyncKey, "DisableCredentialsSettingSync")],
                     DetectOps = [RegOp.CheckDword(SyncKey, "DisableCredentialsSettingSync", 2)],
-                },
-                new TweakDef
-                {
-                    Id = "syncsec-disable-personalization-sync",
-                    Label = "Disable Personalization Settings Sync",
-                    Category = "Cloud Storage",
-                    Description = "Prevents Windows from syncing wallpaper, colour, themes, and other personalisation settings to the cloud.",
-                    Tags = ["sync", "personalization", "theme", "privacy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 3,
-                    SafetyRating = 5,
-                    ImpactNote = "Personalization stays local; no roaming of desktop background or colour accent to other devices.",
-                    ApplyOps = [RegOp.SetDword(SyncKey, "DisablePersonalizationSettingSync", 2)],
-                    RemoveOps = [RegOp.DeleteValue(SyncKey, "DisablePersonalizationSettingSync")],
-                    DetectOps = [RegOp.CheckDword(SyncKey, "DisablePersonalizationSettingSync", 2)],
                 },
                 new TweakDef
                 {
@@ -4987,22 +3843,6 @@ internal static class PolicyCloud
                 },
                 new TweakDef
                 {
-                    Id = "syncsec-disable-accessibility-sync",
-                    Label = "Disable Accessibility Settings Sync",
-                    Category = "Cloud Storage",
-                    Description = "Stops Windows from syncing accessibility options such as magnifier, narrator, and high contrast settings.",
-                    Tags = ["sync", "accessibility", "privacy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 2,
-                    SafetyRating = 5,
-                    ImpactNote = "Accessibility preferences remain device-local; must be re-configured on each device.",
-                    ApplyOps = [RegOp.SetDword(SyncKey, "DisableAccessibilitySettingSync", 2)],
-                    RemoveOps = [RegOp.DeleteValue(SyncKey, "DisableAccessibilitySettingSync")],
-                    DetectOps = [RegOp.CheckDword(SyncKey, "DisableAccessibilitySettingSync", 2)],
-                },
-                new TweakDef
-                {
                     Id = "syncsec-disable-sync-on-metered",
                     Label = "Disable Settings Sync on Metered Networks",
                     Category = "Cloud Storage",
@@ -5016,22 +3856,6 @@ internal static class PolicyCloud
                     ApplyOps = [RegOp.SetDword(SyncKey, "DisableSyncOnPaidNetwork", 1)],
                     RemoveOps = [RegOp.DeleteValue(SyncKey, "DisableSyncOnPaidNetwork")],
                     DetectOps = [RegOp.CheckDword(SyncKey, "DisableSyncOnPaidNetwork", 1)],
-                },
-                new TweakDef
-                {
-                    Id = "syncsec-disable-language-sync",
-                    Label = "Disable Language and Keyboard Settings Sync",
-                    Category = "Cloud Storage",
-                    Description = "Prevents Windows from syncing language preferences, keyboard layouts, and input method settings to the cloud.",
-                    Tags = ["sync", "language", "keyboard", "input", "privacy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 2,
-                    SafetyRating = 5,
-                    ImpactNote = "Language and IME configuration stays local; no roaming of locale settings across devices.",
-                    ApplyOps = [RegOp.SetDword(SyncKey, "DisableLanguageSettingSync", 2)],
-                    RemoveOps = [RegOp.DeleteValue(SyncKey, "DisableLanguageSettingSync")],
-                    DetectOps = [RegOp.CheckDword(SyncKey, "DisableLanguageSettingSync", 2)],
                 },
             ];
     }
@@ -5134,42 +3958,6 @@ internal static class PolicyCloud
                     ApplyOps = [RegOp.SetDword(SharepointKey, "DisableSharePointStoreAddins", 1)],
                     RemoveOps = [RegOp.DeleteValue(SharepointKey, "DisableSharePointStoreAddins")],
                     DetectOps = [RegOp.CheckDword(SharepointKey, "DisableSharePointStoreAddins", 1)],
-                },
-                new TweakDef
-                {
-                    Id = "spol-enable-connected-experiences",
-                    Label = "SharePoint Online: Enable Required Connected Experiences (Disable Optional Diagnostic Data Opt-out)",
-                    Category = "Cloud Storage",
-                    Description =
-                        "Sets DisconnectedState=0 in the Office Privacy policy key. Ensures that 'required connected experiences' in Office (spell check, grammar check, co-authoring, document recovery) remain enabled and cannot be disabled by users. The Office 'Disconnected Experiences' setting allows users to disable all cloud-connected features, which prevents essential collaboration features like SharePoint co-authoring, OneDrive sync status, and Exchange mail flow from functioning. In enterprise deployments, connected experiences should be enforced to ensure Office functionality meets business requirements.",
-                    Tags = ["office", "connected-experiences", "sharepoint", "coauthoring", "privacy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 3,
-                    SafetyRating = 5,
-                    ImpactNote =
-                        "Office connected experiences enforced — users cannot disable cloud-connected Office features. Some optional connected experiences (LinkedIn integration, translation, proofing tool cloud lookups) may still be controllable via separate policies. Required connected experiences (co-authoring, OneDrive, spell check) remain active.",
-                    ApplyOps = [RegOp.SetDword(OfficePrivacyKey, "DisconnectedState", 0)],
-                    RemoveOps = [RegOp.DeleteValue(OfficePrivacyKey, "DisconnectedState")],
-                    DetectOps = [RegOp.CheckDword(OfficePrivacyKey, "DisconnectedState", 0)],
-                },
-                new TweakDef
-                {
-                    Id = "spol-disable-optional-connected-experiences",
-                    Label = "SharePoint Online: Disable Optional Connected Experiences (Third-Party Add-ons in Office)",
-                    Category = "Cloud Storage",
-                    Description =
-                        "Sets UserContentDisabled=1 in the Office Privacy policy key. Disables optional connected experiences in Office that access user content and connect to third-party services — for example, the Office Intelligent Services panel that submits document sections to third-party APIs for translation, AI writing assistance, or research suggestions. These optional experiences transmit document content to external (non-Microsoft) services, which may violate data residency requirements or expose confidential content. Disabling optional connected experiences reduces the Office external data transmission footprint.",
-                    Tags = ["office", "optional-experiences", "third-party", "privacy", "data-residency"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 2,
-                    SafetyRating = 5,
-                    ImpactNote =
-                        "Optional connected experiences disabled. Third-party Office add-in services that submit document content to external APIs will not activate. Built-in Microsoft services (SharePoint, OneDrive, Exchange connected experiences, Microsoft Translator) are not classified as optional third-party experiences and remain functional.",
-                    ApplyOps = [RegOp.SetDword(OfficePrivacyKey, "UserContentDisabled", 1)],
-                    RemoveOps = [RegOp.DeleteValue(OfficePrivacyKey, "UserContentDisabled")],
-                    DetectOps = [RegOp.CheckDword(OfficePrivacyKey, "UserContentDisabled", 1)],
                 },
                 new TweakDef
                 {

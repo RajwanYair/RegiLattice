@@ -8,28 +8,6 @@ internal static class Gaming
     [
         new TweakDef
         {
-            Id = "game-disable-game-mode",
-            Label = "Disable Windows Game Mode",
-            Category = "Gaming",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Disables Windows Game Mode which can cause stutter in some games.",
-            Tags = ["gaming", "performance", "game-mode"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\GameBar"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\GameBar", "AllowAutoGameMode", 0),
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\GameBar", "AutoGameModeEnabled", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\GameBar", "AllowAutoGameMode"),
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\GameBar", "AutoGameModeEnabled", 1),
-            ],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\GameBar", "AutoGameModeEnabled", 0)],
-        },
-        new TweakDef
-        {
             Id = "game-disable-xbox-services",
             Label = "Disable Xbox Background Services",
             Category = "Gaming",
@@ -248,160 +226,6 @@ internal static class Gaming
         },
         new TweakDef
         {
-            Id = "game-network-throttling-off",
-            Label = "Disable Multimedia Network Throttling",
-            Category = "Gaming",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Disables the multimedia network throttling that limits non-multimedia traffic during audio/video playback. Prevents bandwidth caps during gaming. Default: 10.",
-            Tags = ["gaming", "network", "throttling", "bandwidth"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile"],
-            ApplyOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile",
-                    "NetworkThrottlingIndex",
-                    unchecked((int)0xFFFFFFFF)
-                ),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile",
-                    "NetworkThrottlingIndex",
-                    10
-                ),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile",
-                    "NetworkThrottlingIndex",
-                    unchecked((int)0xFFFFFFFF)
-                ),
-            ],
-        },
-        new TweakDef
-        {
-            Id = "game-set-system-responsiveness",
-            Label = "Set System Responsiveness to 0%",
-            Category = "Gaming",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets SystemResponsiveness to 0, reserving zero percent of CPU for background tasks. Maximises CPU availability for foreground games. Default: 20.",
-            Tags = ["gaming", "responsiveness", "cpu", "performance"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile"],
-            ApplyOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile",
-                    "SystemResponsiveness",
-                    0
-                ),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile",
-                    "SystemResponsiveness",
-                    20
-                ),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile",
-                    "SystemResponsiveness",
-                    0
-                ),
-            ],
-        },
-        new TweakDef
-        {
-            Id = "game-system-profile-games",
-            Label = "Optimise GPU Priority for Games",
-            Category = "Gaming",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets the Games multimedia system profile to GPU priority 8 (high) and scheduling category High. Ensures games receive priority GPU time. Default: GPU priority 8, scheduling Normal.",
-            Tags = ["gaming", "gpu", "priority", "scheduling"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games"],
-            ApplyOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games",
-                    "GPU Priority",
-                    8
-                ),
-                RegOp.SetString(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games",
-                    "Scheduling Category",
-                    "High"
-                ),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games",
-                    "GPU Priority",
-                    8
-                ),
-                RegOp.SetString(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games",
-                    "Scheduling Category",
-                    "Medium"
-                ),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckString(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games",
-                    "Scheduling Category",
-                    "High"
-                ),
-            ],
-        },
-        new TweakDef
-        {
-            Id = "game-set-sfio-priority-high",
-            Label = "Set Game SFIO Priority to High",
-            Category = "Gaming",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Raises the Synchronous File I/O priority for the Games multimedia profile. Reduces stuttering caused by disk I/O during gaming.",
-            Tags = ["gaming", "sfio", "io", "performance", "multimedia-profile"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games"],
-            ApplyOps =
-            [
-                RegOp.SetString(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games",
-                    "SFIO Priority",
-                    "High"
-                ),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetString(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games",
-                    "SFIO Priority",
-                    "Normal"
-                ),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckString(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games",
-                    "SFIO Priority",
-                    "High"
-                ),
-            ],
-        },
-        new TweakDef
-        {
             Id = "game-disable-ndu-service",
             Label = "Disable Network Data Usage Monitor (NDU)",
             Category = "Gaming",
@@ -413,78 +237,6 @@ internal static class Gaming
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Ndu", "Start", 4)],
             RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Ndu", "Start", 2)],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Ndu", "Start", 4)],
-        },
-        new TweakDef
-        {
-            Id = "game-set-system-responsiveness-zero",
-            Label = "Maximise CPU Time for Games (SystemResponsiveness=0)",
-            Category = "Gaming",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets SystemResponsiveness to 0 in the multimedia system profile, giving games up to 100% of CPU scheduling time instead of the default 20%.",
-            Tags = ["gaming", "cpu", "performance", "multimedia-profile"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile"],
-            ApplyOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile",
-                    "SystemResponsiveness",
-                    0
-                ),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile",
-                    "SystemResponsiveness",
-                    20
-                ),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile",
-                    "SystemResponsiveness",
-                    0
-                ),
-            ],
-        },
-        new TweakDef
-        {
-            Id = "game-set-network-throttling-off",
-            Label = "Disable Network Throttling Index for Games",
-            Category = "Gaming",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets NetworkThrottlingIndex to max (0xFFFFFFFF) removing Windows network throttling during multimedia/gaming to improve throughput.",
-            Tags = ["gaming", "network", "throttling", "latency", "performance"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile"],
-            ApplyOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile",
-                    "NetworkThrottlingIndex",
-                    unchecked((int)0xFFFFFFFF)
-                ),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile",
-                    "NetworkThrottlingIndex",
-                    10
-                ),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile",
-                    "NetworkThrottlingIndex",
-                    unchecked((int)0xFFFFFFFF)
-                ),
-            ],
         },
         new TweakDef
         {
@@ -555,78 +307,6 @@ internal static class Gaming
                     @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games",
                     "Latency Sensitivity",
                     "High"
-                ),
-            ],
-        },
-        new TweakDef
-        {
-            Id = "game-set-background-only-false",
-            Label = "Prevent Games from Running as Background Only",
-            Category = "Gaming",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets Background Only=False for the Games multimedia profile task, ensuring games receive full foreground priority scheduling.",
-            Tags = ["gaming", "background", "priority", "scheduling"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games"],
-            ApplyOps =
-            [
-                RegOp.SetString(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games",
-                    "Background Only",
-                    "False"
-                ),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetString(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games",
-                    "Background Only",
-                    "True"
-                ),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckString(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games",
-                    "Background Only",
-                    "False"
-                ),
-            ],
-        },
-        new TweakDef
-        {
-            Id = "game-set-priority-6",
-            Label = "Set Game Task CPU Priority to 6",
-            Category = "Gaming",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Raises the CPU priority weight for the Games multimedia profile task from 2 to 6, giving game threads more scheduling time.",
-            Tags = ["gaming", "cpu", "priority", "performance"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games"],
-            ApplyOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games",
-                    "Priority",
-                    6
-                ),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games",
-                    "Priority",
-                    2
-                ),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games",
-                    "Priority",
-                    6
                 ),
             ],
         },
@@ -952,34 +632,6 @@ internal static class Gaming
         },
         new TweakDef
         {
-            Id = "game-disable-background-app-access",
-            Label = "Disable Global Background App Access",
-            Category = "Gaming",
-            NeedsAdmin = false,
-            CorpSafe = false,
-            Description =
-                "Globally disables background app access for all UWP applications. Prevents background apps from consuming CPU/RAM/network while gaming. Default: individual app settings.",
-            Tags = ["game", "background", "uwp", "performance"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\BackgroundAccessApplications"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\BackgroundAccessApplications", "GlobalUserDisabled", 1),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\BackgroundAccessApplications", "GlobalUserDisabled", 0),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(
-                    @"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\BackgroundAccessApplications",
-                    "GlobalUserDisabled",
-                    1
-                ),
-            ],
-        },
-        new TweakDef
-        {
             Id = "game-disable-bcast-dvr-svc",
             Label = "Disable Broadcast DVR User Service",
             Category = "Gaming",
@@ -1067,42 +719,6 @@ internal static class Gaming
         },
         new TweakDef
         {
-            Id = "game-set-mmcss-clock-rate",
-            Label = "Set MMCSS Games Clock Rate to 5000 (0.5ms)",
-            Category = "Gaming",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets the MMCSS Games task minimum scheduling clock rate to 5000 (in 100-ns units = 0.5 ms). Reduces the minimum scheduler quantum for game threads to sub-millisecond intervals. Default: 10000 (1ms).",
-            Tags = ["game", "mmcss", "clock", "latency", "scheduler"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games"],
-            ApplyOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games",
-                    "Clock Rate",
-                    5000
-                ),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games",
-                    "Clock Rate",
-                    10000
-                ),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games",
-                    "Clock Rate",
-                    5000
-                ),
-            ],
-        },
-        new TweakDef
-        {
             Id = "game-disable-uwp-bg-access",
             Label = "Block All UWP Apps from Running in Background (GPO)",
             Category = "Gaming",
@@ -1149,21 +765,6 @@ internal static class XboxGameBar
         },
         new TweakDef
         {
-            Id = "xbgb-disable-controller-activation",
-            Label = "Disable Game Bar Activation via Controller",
-            Category = "Gaming",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Tags = ["gaming", "xbox", "game bar", "controller"],
-            Description =
-                "Prevents pressing the Xbox button on an XInput controller from opening "
-                + "the Game Bar overlay, avoiding accidental pop-ups mid-game.",
-            ApplyOps = [RegOp.SetDword(GameBar, "ShowStartupPanel", 0), RegOp.SetDword(GameBar, "UseNexusForGameBarEnabled", 0)],
-            RemoveOps = [RegOp.DeleteValue(GameBar, "ShowStartupPanel"), RegOp.SetDword(GameBar, "UseNexusForGameBarEnabled", 1)],
-            DetectOps = [RegOp.CheckDword(GameBar, "UseNexusForGameBarEnabled", 0)],
-        },
-        new TweakDef
-        {
             Id = "xbgb-disable-capture-audio",
             Label = "Disable Game Bar Audio Capture",
             Category = "Gaming",
@@ -1200,21 +801,6 @@ internal static class XboxGameBar
             ApplyOps = [RegOp.SetDword(GameBar, "GameBarTipsEnabled", 0), RegOp.SetDword(GameBar, "FirstTimeExperienceCompleted", 1)],
             RemoveOps = [RegOp.DeleteValue(GameBar, "GameBarTipsEnabled"), RegOp.DeleteValue(GameBar, "FirstTimeExperienceCompleted")],
             DetectOps = [RegOp.CheckDword(GameBar, "GameBarTipsEnabled", 0)],
-        },
-        new TweakDef
-        {
-            Id = "xbgb-disable-game-dvr-policy",
-            Label = "Disable Game DVR via Group Policy",
-            Category = "Gaming",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Tags = ["gaming", "xbox", "game-dvr", "policy"],
-            Description =
-                "Applies the Group Policy that disables Game DVR recording at the "
-                + "system level, complementing the per-user GameConfigStore setting.",
-            ApplyOps = [RegOp.SetDword(GamebarPol, "AllowGameDVR", 0)],
-            RemoveOps = [RegOp.DeleteValue(GamebarPol, "AllowGameDVR")],
-            DetectOps = [RegOp.CheckDword(GamebarPol, "AllowGameDVR", 0)],
         },
         new TweakDef
         {
@@ -1332,22 +918,6 @@ internal static class XboxGameBar
         },
         new TweakDef
         {
-            Id = "xbgb-disable-fse-hook",
-            Label = "Disable Game DVR Fullscreen Exclusivity Hook",
-            Category = "Gaming",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Tags = ["gaming", "xbox", "fullscreen", "fse", "performance"],
-            Description =
-                "Prevents Game DVR from hooking into the fullscreen exclusive "
-                + "(FSE) path used by legacy DirectX games, eliminating a source "
-                + "of frame-rate stutters on older titles.",
-            ApplyOps = [RegOp.SetDword(GameCfg, "GameDVR_HonorUserFSEBehaviorMode", 0)],
-            RemoveOps = [RegOp.DeleteValue(GameCfg, "GameDVR_HonorUserFSEBehaviorMode")],
-            DetectOps = [RegOp.CheckDword(GameCfg, "GameDVR_HonorUserFSEBehaviorMode", 0)],
-        },
-        new TweakDef
-        {
             Id = "xbgb-disable-dxgi-fse-compat",
             Label = "Disable Game DVR DXGI Fullscreen Compatibility Mode",
             Category = "Gaming",
@@ -1361,52 +931,6 @@ internal static class XboxGameBar
             ApplyOps = [RegOp.SetDword(GameCfg, "GameDVR_DXGIHonorFSEWindowsCompatible", 0)],
             RemoveOps = [RegOp.DeleteValue(GameCfg, "GameDVR_DXGIHonorFSEWindowsCompatible")],
             DetectOps = [RegOp.CheckDword(GameCfg, "GameDVR_DXGIHonorFSEWindowsCompatible", 0)],
-        },
-        new TweakDef
-        {
-            Id = "xbgb-disable-startup-panel",
-            Label = "Disable Game Bar Startup Tip Panel",
-            Category = "Gaming",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Tags = ["gaming", "xbox", "game bar", "startup"],
-            Description =
-                "Hides the introductory tip panel that appears the first time " + "Game Bar is opened after an OS update or new installation.",
-            ApplyOps = [RegOp.SetDword(GameBar, "ShowStartupPanel", 0)],
-            RemoveOps = [RegOp.DeleteValue(GameBar, "ShowStartupPanel")],
-            DetectOps = [RegOp.CheckDword(GameBar, "ShowStartupPanel", 0)],
-        },
-        new TweakDef
-        {
-            Id = "xbgb-disable-nexus-bar",
-            Label = "Disable Game Bar Nexus Pop-up Panel",
-            Category = "Gaming",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Tags = ["gaming", "xbox", "game bar", "nexus", "ui"],
-            Description =
-                "Disables the Nexus (circular game-bar widget) pop-up panel that "
-                + "appears at the edge of the screen when a game is detected, "
-                + "removing a persistent UI intrusion during gameplay.",
-            ApplyOps = [RegOp.SetDword(GameBar, "UseNexusForGameBarEnabled", 0)],
-            RemoveOps = [RegOp.DeleteValue(GameBar, "UseNexusForGameBarEnabled")],
-            DetectOps = [RegOp.CheckDword(GameBar, "UseNexusForGameBarEnabled", 0)],
-        },
-        new TweakDef
-        {
-            Id = "xbgb-enable-game-mode-all-games",
-            Label = "Allow Game Mode for All Games (Enable AllowAutoGameMode)",
-            Category = "Gaming",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Tags = ["gaming", "xbox", "game mode", "performance"],
-            Description =
-                "Sets the Game Bar flag that allows Windows Game Mode to "
-                + "auto-activate for any process that registers as a game, "
-                + "giving it CPU/GPU scheduling priority.",
-            ApplyOps = [RegOp.SetDword(GameBar, "AllowAutoGameMode", 1)],
-            RemoveOps = [RegOp.DeleteValue(GameBar, "AllowAutoGameMode")],
-            DetectOps = [RegOp.CheckDword(GameBar, "AllowAutoGameMode", 1)],
         },
         new TweakDef
         {
@@ -1649,23 +1173,6 @@ internal static class PolicyGaming
             [
                 new TweakDef
                 {
-                    Id = "gamebar-disable-gamedvr",
-                    Label = "Disable Game DVR Background Recording",
-                    Category = "Gaming",
-                    Description =
-                        "Disables the Game DVR background recording feature that continuously records game footage to disk, freeing GPU encoder time and eliminating the performance overhead of continuous H.264/H.265 encoding in the background.",
-                    Tags = ["gamedvr", "recording", "background", "performance", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 4,
-                    SafetyRating = 5,
-                    ImpactNote = "Game DVR background recording disabled; GPU encoder freed, disk writes stopped, game perf overhead removed.",
-                    ApplyOps = [RegOp.SetDword(Key, "AllowGameDVR", 0)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "AllowGameDVR")],
-                    DetectOps = [RegOp.CheckDword(Key, "AllowGameDVR", 0)],
-                },
-                new TweakDef
-                {
                     Id = "gamebar-disable-gamebar-tips",
                     Label = "Disable Game Bar First-Run Tips and Overlay Prompts",
                     Category = "Gaming",
@@ -1827,27 +1334,6 @@ internal static class PolicyGaming
 
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
-            new TweakDef
-            {
-                Id = "gamedvr-disable-all",
-                Label = "Game DVR Policy: Disable Game DVR Recording",
-                Category = "Gaming",
-                Description =
-                    "Disables Windows Game DVR (Game Digital Video Recording) via Group Policy. "
-                    + "Game DVR continuously captures gameplay footage in the background, consuming CPU, GPU, RAM, and disk resources even when the user is not actively recording. "
-                    + "On non-gaming workstations this is pure overhead with no benefit. "
-                    + "Removing this policy re-enables Game DVR recording capability.",
-                Tags = ["gamedvr", "recording", "game-bar", "performance", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                RegistryKeys = [Key],
-                ApplyOps = [RegOp.SetDword(Key, "AllowGameDVR", 0)],
-                RemoveOps = [RegOp.DeleteValue(Key, "AllowGameDVR")],
-                DetectOps = [RegOp.CheckDword(Key, "AllowGameDVR", 0)],
-                ImpactScore = 4,
-                SafetyRating = 5,
-                ImpactNote = "Disables Game DVR background recording; recovers continuous background resource overhead.",
-            },
             new TweakDef
             {
                 Id = "gamedvr-disable-game-bar",
@@ -2460,170 +1946,6 @@ internal static class PolicyGaming
 
         public static IReadOnlyList<TweakDef> Data =>
             [
-                new TweakDef
-                {
-                    Id = "gamperf-set-games-scheduling-gpu100",
-                    Label = "Gaming Perf: Set Game Scheduler GPU Priority to Maximum (100%)",
-                    Category = "Gaming",
-                    Description =
-                        "Sets GPU Priority=8 in Multimedia SystemProfile Games task. Configures the Windows Multimedia Class Scheduler Service (MMCSS) to assign the highest GPU execution priority to processes registered under the Games scheduling category. "
-                        + "MMCSS Games profile governs time-critical GPU resource allocation for games and real-time rendering applications. Setting GPU Priority=8 (the maximum value) ensures game rendering passes are given priority access to the GPU command queue over background tasks such as desktop composition, codec decode, or system monitoring overlays.",
-                    Tags = ["gaming", "gpu", "scheduler", "mmcss", "priority"],
-                    NeedsAdmin = true,
-                    CorpSafe = false,
-                    ImpactScore = 4,
-                    SafetyRating = 4,
-                    ImpactNote = "Max GPU scheduling priority for games; other GPU workloads de-prioritised while game is running.",
-                    ApplyOps = [RegOp.SetDword(GamesKey, "GPU Priority", 8)],
-                    RemoveOps = [RegOp.DeleteValue(GamesKey, "GPU Priority")],
-                    DetectOps = [RegOp.CheckDword(GamesKey, "GPU Priority", 8)],
-                },
-                new TweakDef
-                {
-                    Id = "gamperf-set-games-scheduling-priority-high",
-                    Label = "Gaming Perf: Set Game Thread Priority to High",
-                    Category = "Gaming",
-                    Description =
-                        "Sets Priority=6 in Multimedia SystemProfile Games task. Sets the Windows MMCSS thread priority for game processes to 6, which maps to the 'High' thread scheduling priority. "
-                        + "MMCSS priority 6 (High) gives game threads elevated scheduling preference over normal threads (priority 2) and background threads (priority 1), without reaching real-time priority levels that could cause system instability. This ensures game simulation and rendering threads are not preempted by background telemetry and maintenance tasks during time-sensitive frame computation.",
-                    Tags = ["gaming", "cpu", "thread-priority", "mmcss", "scheduler"],
-                    NeedsAdmin = true,
-                    CorpSafe = false,
-                    ImpactScore = 3,
-                    SafetyRating = 4,
-                    ImpactNote = "Game threads at High priority; reduced preemption from background tasks during frame computation.",
-                    ApplyOps = [RegOp.SetDword(GamesKey, "Priority", 6)],
-                    RemoveOps = [RegOp.DeleteValue(GamesKey, "Priority")],
-                    DetectOps = [RegOp.CheckDword(GamesKey, "Priority", 6)],
-                },
-                new TweakDef
-                {
-                    Id = "gamperf-set-mmcss-scheduling-category-high",
-                    Label = "Gaming Perf: Set MMCSS Games Scheduling Category to High",
-                    Category = "Gaming",
-                    Description =
-                        "Sets Scheduling Category=High in Multimedia SystemProfile Games task. Configures the MMCSS scheduling category for the Games profile, determining how aggressively the scheduler boosts game thread quantum lengths. "
-                        + "The High scheduling category allows game threads to receive longer CPU quantum slices per scheduling interval compared to Medium or Low, reducing the frequency of context switches during active rendering loops. Fewer context switches mean less OS scheduling overhead per frame and more deterministic frame timing.",
-                    Tags = ["gaming", "cpu", "quantum", "mmcss", "frame-time"],
-                    NeedsAdmin = true,
-                    CorpSafe = false,
-                    ImpactScore = 3,
-                    SafetyRating = 4,
-                    ImpactNote = "High scheduling category for game threads; longer CPU quanta reduce context-switch overhead per frame.",
-                    ApplyOps = [RegOp.SetString(GamesKey, "Scheduling Category", "High")],
-                    RemoveOps = [RegOp.DeleteValue(GamesKey, "Scheduling Category")],
-                    DetectOps = [RegOp.CheckString(GamesKey, "Scheduling Category", "High")],
-                },
-                new TweakDef
-                {
-                    Id = "gamperf-set-mmcss-sfio-priority-high",
-                    Label = "Gaming Perf: Set MMCSS SFIO Priority to High for Asset Streaming",
-                    Category = "Gaming",
-                    Description =
-                        "Sets SFIO Priority=High in Multimedia SystemProfile Games task. Sets the Scheduled File I/O (SFIO) priority for game processes within MMCSS to High. "
-                        + "Modern games heavily rely on background asset streaming — loading textures, audio, and map data from disk while the game is running. SFIO priority determines how quickly the OS services I/O requests from game processes relative to other I/O consumers. High SFIO priority ensures disk operations for game asset streaming are serviced before background indexer, antivirus scanner, or cloud sync I/O.",
-                    Tags = ["gaming", "io", "sfio", "asset-streaming", "disk"],
-                    NeedsAdmin = true,
-                    CorpSafe = false,
-                    ImpactScore = 3,
-                    SafetyRating = 4,
-                    ImpactNote = "High SFIO priority for game I/O; asset streaming served ahead of background disk consumers.",
-                    ApplyOps = [RegOp.SetString(GamesKey, "SFIO Priority", "High")],
-                    RemoveOps = [RegOp.DeleteValue(GamesKey, "SFIO Priority")],
-                    DetectOps = [RegOp.CheckString(GamesKey, "SFIO Priority", "High")],
-                },
-                new TweakDef
-                {
-                    Id = "gamperf-set-games-affinity-all-cores",
-                    Label = "Gaming Perf: Set MMCSS Games Affinity to All CPU Cores",
-                    Category = "Gaming",
-                    Description =
-                        "Sets Affinity=0 in Multimedia SystemProfile Games task. Sets the CPU affinity mask for the MMCSS Games scheduling category to 0, which instructs MMCSS to allow game threads to run on all available CPU cores rather than a constrained subset. "
-                        + "A value of 0 in the Affinity field means no affinity restriction — game threads can migrate to any core. This is optimal for modern games that use job-graph and worker-thread models to parallelise simulation, physics, and audio processing across all available cores. Pinning to a subset of cores (non-zero affinity) reduces parallelism and can cause load imbalance on multi-core CPUs.",
-                    Tags = ["gaming", "cpu", "affinity", "cores", "parallel"],
-                    NeedsAdmin = true,
-                    CorpSafe = false,
-                    ImpactScore = 3,
-                    SafetyRating = 4,
-                    ImpactNote = "Unrestricted CPU core affinity for game threads; game parallelism spans all CCD/cores.",
-                    ApplyOps = [RegOp.SetDword(GamesKey, "Affinity", 0)],
-                    RemoveOps = [RegOp.DeleteValue(GamesKey, "Affinity")],
-                    DetectOps = [RegOp.CheckDword(GamesKey, "Affinity", 0)],
-                },
-                new TweakDef
-                {
-                    Id = "gamperf-disable-background-only-affinity",
-                    Label = "Gaming Perf: Disable Background-Only MMCSS Affinity Restriction",
-                    Category = "Gaming",
-                    Description =
-                        "Sets Background Only=False in Multimedia SystemProfile Games task. Clears the background-only restriction flag for the MMCSS Games profile, ensuring game processes are not treated as background-priority workloads by the scheduler. "
-                        + "When Background Only is True, MMCSS treats threads in that category as background work — deprioritising their scheduling and reducing their CPU time allocation when a foreground process is active. For games that must be in the foreground to run, setting this False is a no-op in practice, but explicitly clearing it in MMCSS configuration prevents any edge-case scenario where the game process is momentarily backgrounded (e.g., during Alt+Tab) from permanently degrading its scheduling.",
-                    Tags = ["gaming", "cpu", "background", "mmcss", "foreground"],
-                    NeedsAdmin = true,
-                    CorpSafe = false,
-                    ImpactScore = 2,
-                    SafetyRating = 5,
-                    ImpactNote = "Game threads not restricted to background-only affinity; normal scheduling during brief window focus changes.",
-                    ApplyOps = [RegOp.SetString(GamesKey, "Background Only", "False")],
-                    RemoveOps = [RegOp.DeleteValue(GamesKey, "Background Only")],
-                    DetectOps = [RegOp.CheckString(GamesKey, "Background Only", "False")],
-                },
-                new TweakDef
-                {
-                    Id = "gamperf-set-system-responsiveness-20pct",
-                    Label = "Gaming Perf: Set SystemResponsiveness to Reserve 20% CPU for Background Tasks",
-                    Category = "Gaming",
-                    Description =
-                        "Sets SystemResponsiveness=20 in Multimedia SystemProfile (parent key). Controls what percentage of CPU time MMCSS reserves for background tasks when a high-priority multimedia or gaming application is running. "
-                        + "The default value is 20 (20% reserved for background). Setting this to 20 (or lower) maximises the CPU time available to the gaming/multimedia process. Values above 20 make the system more responsive to background tasks at the cost of game frame rates. Windows audio and game processes compete for the 80% non-reserved pool; a 20% reservation ensures the system remains stable (audio does not glitch) even under full game load.",
-                    Tags = ["gaming", "cpu", "mmcss", "responsiveness", "background"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 3,
-                    SafetyRating = 4,
-                    ImpactNote = "20% CPU reserved for background tasks; 80% available to games — matches Windows MMCSS default but made explicit.",
-                    ApplyOps = [RegOp.SetDword(SysKey, "SystemResponsiveness", 20)],
-                    RemoveOps = [RegOp.DeleteValue(SysKey, "SystemResponsiveness")],
-                    DetectOps = [RegOp.CheckDword(SysKey, "SystemResponsiveness", 20)],
-                },
-                new TweakDef
-                {
-                    Id = "gamperf-enable-network-throttling-index-bypass",
-                    Label = "Gaming Perf: Disable MMCSS Network Throttling for Low-Latency Gaming",
-                    Category = "Gaming",
-                    Description =
-                        "Sets NetworkThrottlingIndex=0xFFFFFFFF in Multimedia SystemProfile. Disables MMCSS network throttling for multimedia applications. "
-                        + "By default, MMCSS throttles network activity for multimedia processes to prevent network I/O from interrupting the CPU scheduler's time allocations for audio/video threads. While beneficial for video playback, this throttling adds latency to outbound network packets from game processes. Setting NetworkThrottlingIndex to 0xFFFFFFFF disables the throttle, allowing game networking threads to send packets at their full rate without artificial scheduling delays.",
-                    Tags = ["gaming", "network", "latency", "mmcss", "throttling"],
-                    NeedsAdmin = true,
-                    CorpSafe = false,
-                    ImpactScore = 3,
-                    SafetyRating = 3,
-                    ImpactNote =
-                        "Network throttling disabled for multimedia tasks; game packets sent without MMCSS-imposed delay. May affect audio in edge cases.",
-                    ApplyOps = [RegOp.SetDword(SysKey, "NetworkThrottlingIndex", unchecked((int)0xFFFFFFFF))],
-                    RemoveOps = [RegOp.DeleteValue(SysKey, "NetworkThrottlingIndex")],
-                    DetectOps = [RegOp.CheckDword(SysKey, "NetworkThrottlingIndex", unchecked((int)0xFFFFFFFF))],
-                },
-                new TweakDef
-                {
-                    Id = "gamperf-set-games-clock-rate-10000hz",
-                    Label = "Gaming Perf: Set MMCSS Games Clock Rate to 10,000 Hz (0.1 ms Precision)",
-                    Category = "Gaming",
-                    Description =
-                        "Sets Clock Rate=10000 in Multimedia SystemProfile Games task. Sets the Windows multimedia timer resolution for game processes to 10,000 units (100 microseconds / 0.1 ms). "
-                        + "The Clock Rate value in MMCSS controls the minimum timer resolution requested by game processes. A higher clock rate (lower number of 100ns units) results in more frequent clock interrupts, enabling finer-grained sleep/wait precision for game loops. "
-                        + "10,000 (0.1ms) represents the finest practical clock granularity achievable on x86 hardware. This benefits games with precision sleep-based frame limiters and reduces the floor on observable frame timing jitter.",
-                    Tags = ["gaming", "timer", "clock", "mmcss", "precision"],
-                    NeedsAdmin = true,
-                    CorpSafe = false,
-                    ImpactScore = 3,
-                    SafetyRating = 3,
-                    ImpactNote = "0.1ms timer clock for game tasks; tighter frame timing precision at cost of slightly higher interrupt rate.",
-                    ApplyOps = [RegOp.SetDword(GamesKey, "Clock Rate", 10000)],
-                    RemoveOps = [RegOp.DeleteValue(GamesKey, "Clock Rate")],
-                    DetectOps = [RegOp.CheckDword(GamesKey, "Clock Rate", 10000)],
-                },
                 new TweakDef
                 {
                     Id = "gamperf-enable-multimedia-gaming-class-scheduler",

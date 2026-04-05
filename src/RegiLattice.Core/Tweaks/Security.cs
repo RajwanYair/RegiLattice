@@ -8,21 +8,6 @@ internal static class Security
     [
         new TweakDef
         {
-            Id = "sec-enable-dep-always",
-            Label = "Enable DEP (Always On)",
-            Category = "Security",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets Data Execution Prevention to AlwaysOn mode via registry flag. Prevents code execution from non-executable memory pages system-wide.",
-            Tags = ["security", "dep", "memory", "hardening"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "MoveImages", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "MoveImages")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "MoveImages", 0)],
-        },
-        new TweakDef
-        {
             Id = "sec-enable-safe-dll-search",
             Label = "Enable Safe DLL Search Mode",
             Category = "Security",
@@ -35,21 +20,6 @@ internal static class Security
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager", "SafeDllSearchMode", 1)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager", "SafeDllSearchMode")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager", "SafeDllSearchMode", 1)],
-        },
-        new TweakDef
-        {
-            Id = "sec-reduce-cached-logons",
-            Label = "Reduce Cached Logon Count to 1",
-            Category = "Security",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description =
-                "Reduces the number of cached domain logon credentials to 1 (default: 10). Minimises credential theft risk if the machine is compromised.",
-            Tags = ["security", "cached-logons", "credentials", "hardening"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon"],
-            ApplyOps = [RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon", "CachedLogonsCount", "1")],
-            RemoveOps = [RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon", "CachedLogonsCount", "10")],
-            DetectOps = [RegOp.CheckString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon", "CachedLogonsCount", "1")],
         },
         new TweakDef
         {
@@ -69,175 +39,8 @@ internal static class Security
                 RegOp.CheckString(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa", "RestrictRemoteSAM", @"O:BAG:BAD:(A;;RC;;;BA)"),
             ],
         },
-        new TweakDef
-        {
-            Id = "sec-disable-wpad",
-            Label = "Disable WPAD (Web Proxy Auto-Discovery)",
-            Category = "Security",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description =
-                "Disables WPAD proxy auto-detection, preventing man-in-the-middle attacks via rogue WPAD servers on corporate or public networks.",
-            Tags = ["security", "wpad", "proxy", "network", "mitm"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\WinHttpAutoProxySvc"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\WinHttpAutoProxySvc", "Start", 4)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\WinHttpAutoProxySvc", "Start", 3)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\WinHttpAutoProxySvc", "Start", 4)],
-        },
-        new TweakDef
-        {
-            Id = "sec-enforce-smb-signing",
-            Label = "Enforce SMB Packet Signing",
-            Category = "Security",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Requires SMB packet signing on the client side. Prevents SMB relay attacks and ensures data integrity for file sharing.",
-            Tags = ["security", "smb", "signing", "network", "hardening"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanWorkstation\Parameters"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanWorkstation\Parameters", "RequireSecuritySignature", 1),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanWorkstation\Parameters", "RequireSecuritySignature", 0),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanWorkstation\Parameters", "RequireSecuritySignature", 1),
-            ],
-        },
-        new TweakDef
-        {
-            Id = "sec-disable-powershell-v2",
-            Label = "Disable PowerShell v2 Engine (Policy)",
-            Category = "Security",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Disables the legacy PowerShell v2 engine via policy key. PS v2 bypasses modern logging and AMSI, making it a popular attack vector.",
-            Tags = ["security", "powershell", "amsi", "hardening", "downgrade-attack"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\PowerShell"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\PowerShell", "EnableScripts", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\PowerShell", "EnableScripts")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\PowerShell", "EnableScripts", 0)],
-        },
-        new TweakDef
-        {
-            Id = "sec-block-wdigest-caching",
-            Label = "Block WDigest Credential Caching",
-            Category = "Security",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Disables WDigest authentication which stores plaintext credentials in LSASS memory. Critical hardening against credential theft.",
-            Tags = ["security", "wdigest", "credentials", "hardening", "lsass"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\WDigest"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\WDigest", "UseLogonCredential", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\WDigest", "UseLogonCredential")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\WDigest", "UseLogonCredential", 0)],
-        },
-        new TweakDef
-        {
-            Id = "sec-disable-lm-hash",
-            Label = "Disable LM Hash Storage",
-            Category = "Security",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Prevents Windows from storing LAN Manager (LM) hash values for passwords. LM hashes are trivially crackable.",
-            Tags = ["security", "password", "lm-hash", "hardening", "ntlm"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa", "NoLMHash", 1)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa", "NoLMHash", 0)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa", "NoLMHash", 1)],
-        },
-        new TweakDef
-        {
-            Id = "sec-enforce-sehop",
-            Label = "Enforce SEHOP (SEH Chain Validation)",
-            Category = "Security",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Enables Structured Exception Handler Overwrite Protection. Prevents exploit techniques that abuse SEH chains.",
-            Tags = ["security", "sehop", "exploit-protection", "hardening"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\kernel"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\kernel", "DisableExceptionChainValidation", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\kernel", "DisableExceptionChainValidation"),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\kernel", "DisableExceptionChainValidation", 0),
-            ],
-        },
-        new TweakDef
-        {
-            Id = "sec-force-strong-key-protection",
-            Label = "Force Strong Key Protection for Certificates",
-            Category = "Security",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Requires a strong password or hardware token for private key access when using certificate-based authentication.",
-            Tags = ["security", "certificates", "key-protection", "hardening"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Cryptography"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Cryptography", "ForceKeyProtection", 2)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Cryptography", "ForceKeyProtection")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Cryptography", "ForceKeyProtection", 2)],
-        },
-        new TweakDef
-        {
-            Id = "sec-restrict-null-session-pipes",
-            Label = "Restrict Anonymous Named Pipe Access",
-            Category = "Security",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Removes all null session pipes, preventing anonymous access to named pipes for network reconnaissance.",
-            Tags = ["security", "named-pipes", "anonymous", "hardening", "network"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters"],
-            ApplyOps = [RegOp.SetMultiSz(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters", "NullSessionPipes", [])],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters", "NullSessionPipes")],
-            DetectOps = [RegOp.CheckString(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters", "NullSessionPipes", "")],
-        },
-        new TweakDef
-        {
-            Id = "sec-set-ntlmv2-only",
-            Label = "Enforce NTLMv2 Only (Disable LMv1/NTLM)",
-            Category = "Security",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description =
-                "Sets LAN Manager authentication to NTLMv2 only, refusing weaker LM and NTLMv1 responses. Critical for NTLM relay attack prevention.",
-            Tags = ["security", "ntlm", "authentication", "hardening", "relay-attack"],
-            SideEffects = "Very old network clients may fail to authenticate.",
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa", "LmCompatibilityLevel", 5)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa", "LmCompatibilityLevel")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa", "LmCompatibilityLevel", 5)],
-        },
         // ── Sprint 21 additions ─────────────────────────────────────────────
 
-        new TweakDef
-        {
-            Id = "sec-enable-credential-guard-vbs",
-            Label = "Enable Credential Guard",
-            Category = "Security",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Enables Windows Credential Guard to protect NTLM hashes and Kerberos tickets using virtualization-based security. Prevents pass-the-hash attacks.",
-            Tags = ["security", "credential-guard", "vbs", "hardening"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\DeviceGuard"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\DeviceGuard", "EnableVirtualizationBasedSecurity", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\DeviceGuard", "EnableVirtualizationBasedSecurity")],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\DeviceGuard", "EnableVirtualizationBasedSecurity", 1),
-            ],
-        },
         new TweakDef
         {
             Id = "sec-enforce-audit-policy",
@@ -282,55 +85,6 @@ internal static class Security
         },
         new TweakDef
         {
-            Id = "sec-enforce-smb-encryption",
-            Label = "Enforce SMB Encryption",
-            Category = "Security",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Requires encryption for all SMB 3.0+ connections. Prevents eavesdropping on file share traffic.",
-            Tags = ["security", "smb", "encryption", "network"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters", "EncryptData", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters", "EncryptData")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters", "EncryptData", 1)],
-        },
-        new TweakDef
-        {
-            Id = "sec-restrict-anonymous-access-shares",
-            Label = "Restrict Anonymous Access to Named Pipes and Shares",
-            Category = "Security",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Restricts anonymous access to named pipes and shares. Prevents null session enumeration of shared resources.",
-            Tags = ["security", "anonymous", "shares", "named-pipes"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters", "RestrictNullSessAccess", 1)],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters", "RestrictNullSessAccess"),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters", "RestrictNullSessAccess", 1),
-            ],
-        },
-        new TweakDef
-        {
-            Id = "sec-require-ldap-signing",
-            Label = "Require LDAP Client Signing",
-            Category = "Security",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Requires LDAP clients to request packet signing. Value 2 = require signing. Prevents LDAP relay attacks where a man-in-the-middle could intercept authentication.",
-            Tags = ["security", "ldap", "signing", "active-directory", "hardening"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\ldap"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\ldap", "LDAPClientIntegrity", 2)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\ldap", "LDAPClientIntegrity")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\ldap", "LDAPClientIntegrity", 2)],
-        },
-        new TweakDef
-        {
             Id = "sec-enable-run-as-different-user",
             Label = "Enable Run As Different User in Explorer",
             Category = "Security",
@@ -343,41 +97,6 @@ internal static class Security
             ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\Explorer", "ShowRunAsDifferentUserInStart", 1)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\Explorer", "ShowRunAsDifferentUserInStart")],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\Explorer", "ShowRunAsDifferentUserInStart", 1)],
-        },
-        new TweakDef
-        {
-            Id = "sec-disable-office-macros-internet",
-            Label = "Block Office Macros from Internet Sources",
-            Category = "Security",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Prevents Office applications from running macros in files downloaded from the internet, closing a major malware delivery vector (macro-based attacks).",
-            Tags = ["security", "office", "macros", "malware", "internet", "phishing"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Office\16.0\Word\Security"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Office\16.0\Word\Security", "blockcontentexecutionfrominternet", 1),
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Office\16.0\Excel\Security", "blockcontentexecutionfrominternet", 1),
-                RegOp.SetDword(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Office\16.0\PowerPoint\Security",
-                    "blockcontentexecutionfrominternet",
-                    1
-                ),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Office\16.0\Word\Security", "blockcontentexecutionfrominternet"),
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Office\16.0\Excel\Security", "blockcontentexecutionfrominternet"),
-                RegOp.DeleteValue(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Office\16.0\PowerPoint\Security",
-                    "blockcontentexecutionfrominternet"
-                ),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Office\16.0\Word\Security", "blockcontentexecutionfrominternet", 1),
-            ],
         },
         new TweakDef
         {
@@ -428,21 +147,6 @@ internal static class Security
                     8
                 ),
             ],
-        },
-        new TweakDef
-        {
-            Id = "sec-disable-named-pipe-impersonation",
-            Label = "Restrict Named Pipe Impersonation",
-            Category = "Security",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Restricts anonymous access to named pipes and shares, preventing token impersonation attacks via named pipes by unauthenticated processes.",
-            Tags = ["security", "named-pipe", "impersonation", "anonymous", "hardening"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters", "NullSessionPipes", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters", "NullSessionPipes")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters", "NullSessionPipes", 0)],
         },
     ];
 }
@@ -1345,37 +1049,6 @@ internal static class Hardening
     [
         new TweakDef
         {
-            Id = "harden-restrict-ntlm-outgoing",
-            Label = "Restrict Outgoing NTLM Traffic",
-            Category = "Security",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description =
-                "Restricts outgoing NTLM authentication to audit mode first, then deny all. Improves security posture against relay attacks.",
-            Tags = ["hardening", "security", "ntlm", "authentication"],
-            SideEffects = "May break legacy apps requiring NTLM.",
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa\MSV1_0"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa\MSV1_0", "RestrictSendingNTLMTraffic", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa\MSV1_0", "RestrictSendingNTLMTraffic")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa\MSV1_0", "RestrictSendingNTLMTraffic", 1)],
-        },
-        new TweakDef
-        {
-            Id = "harden-enable-aslr-force",
-            Label = "Force ASLR for All Images",
-            Category = "Security",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Forces Address Space Layout Randomization for all executables, including those not compiled with ASLR. CIS benchmark recommendation.",
-            Tags = ["hardening", "security", "aslr", "exploit-mitigation"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\kernel"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\kernel", "MitigationOptions", 256)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\kernel", "MitigationOptions")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\kernel", "MitigationOptions", 256)],
-        },
-        new TweakDef
-        {
             Id = "harden-disable-remote-uac-filter",
             Label = "Enable Remote UAC (LocalAccountTokenFilterPolicy)",
             Category = "Security",
@@ -1708,72 +1381,6 @@ internal static class SmartAppControl
     [
         new TweakDef
         {
-            Id = "sac-set-evaluation-mode",
-            Label = "Set Smart App Control to Evaluation Mode",
-            Category = "Security",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Tags = ["smart app control", "sac", "security", "wdac"],
-            Description =
-                "Puts Smart App Control into evaluation (audit) mode — it monitors "
-                + "apps but does not block anything. Useful to assess impact before "
-                + "enabling enforcement. Value: 2=Evaluate, 1=Enforce, 0=Off.",
-            ApplyOps = [RegOp.SetDword(SacState, "VerifiedAndReputablePolicyState", 2)],
-            RemoveOps = [RegOp.DeleteValue(SacState, "VerifiedAndReputablePolicyState")],
-            DetectOps = [RegOp.CheckDword(SacState, "VerifiedAndReputablePolicyState", 2)],
-        },
-        new TweakDef
-        {
-            Id = "sac-disable-smart-app-control",
-            Label = "Disable Smart App Control",
-            Category = "Security",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Tags = ["smart app control", "sac", "security", "gaming", "performance"],
-            Description =
-                "Turns off Smart App Control entirely. "
-                + "Required for running unsigned apps, custom scripts, or tools with"
-                + " unknown publishers. Also avoids false-positive latency during app launch.",
-            ApplyOps = [RegOp.SetDword(SacState, "VerifiedAndReputablePolicyState", 0)],
-            RemoveOps = [RegOp.SetDword(SacState, "VerifiedAndReputablePolicyState", 2)], // revert to evaluate
-            DetectOps = [RegOp.CheckDword(SacState, "VerifiedAndReputablePolicyState", 0)],
-        },
-        new TweakDef
-        {
-            Id = "sac-disable-hvci",
-            Label = "Disable Memory Integrity (HVCI)",
-            Category = "Security",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Tags = ["hvci", "memory integrity", "gaming", "performance", "vbs"],
-            Description =
-                "Disables Hypervisor-Protected Code Integrity (HVCI / Memory Integrity). "
-                + "Can improve gaming frame rates (3–10%) by enabling drivers that are "
-                + "incompatible with HVCI. Reduces protection against driver-level malware. "
-                + "Requires reboot.",
-            ApplyOps = [RegOp.SetDword(HvciPol, "Enabled", 0), RegOp.SetDword(HvciPol, "WasEnabledBy", 0)],
-            RemoveOps = [RegOp.SetDword(HvciPol, "Enabled", 1), RegOp.SetDword(HvciPol, "WasEnabledBy", 1)],
-            DetectOps = [RegOp.CheckDword(HvciPol, "Enabled", 0)],
-        },
-        new TweakDef
-        {
-            Id = "sac-disable-virtualization-based-security",
-            Label = "Disable Virtualization-Based Security (VBS)",
-            Category = "Security",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Tags = ["vbs", "virtualization", "gaming", "performance", "security"],
-            Description =
-                "Disables Virtualization-Based Security — the hypervisor layer that "
-                + "hosts HVCI and Credential Guard. Frees CPU/memory reserved for the "
-                + "hypervisor. Significant performance impact on some Ryzen systems. "
-                + "Requires reboot.",
-            ApplyOps = [RegOp.SetDword(VbsPol, "EnableVirtualizationBasedSecurity", 0)],
-            RemoveOps = [RegOp.SetDword(VbsPol, "EnableVirtualizationBasedSecurity", 1)],
-            DetectOps = [RegOp.CheckDword(VbsPol, "EnableVirtualizationBasedSecurity", 0)],
-        },
-        new TweakDef
-        {
             Id = "sac-disable-intelligent-security-graph",
             Label = "Disable ISG Cloud Lookup for Smart App Control",
             Category = "Security",
@@ -1836,22 +1443,6 @@ internal static class SmartAppControl
             ApplyOps = [RegOp.SetDword(SacFeedPol, "DisableSacTelemetry", 1)],
             RemoveOps = [RegOp.DeleteValue(SacFeedPol, "DisableSacTelemetry")],
             DetectOps = [RegOp.CheckDword(SacFeedPol, "DisableSacTelemetry", 1)],
-        },
-        new TweakDef
-        {
-            Id = "sac-disable-secure-boot-policy-refresh",
-            Label = "Disable Secure Boot Policy Refresh at Boot",
-            Category = "Security",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Tags = ["secure boot", "sac", "boot", "performance"],
-            Description =
-                "Prevents Windows from re-reading the Secure Boot policy from UEFI "
-                + "at every boot, shaving a few milliseconds off POST time on slow "
-                + "firmware. Has no security impact after initial policy load.",
-            ApplyOps = [RegOp.SetDword(VbsPol, "RequirePlatformSecurityFeatures", 0)],
-            RemoveOps = [RegOp.DeleteValue(VbsPol, "RequirePlatformSecurityFeatures")],
-            DetectOps = [RegOp.CheckDword(VbsPol, "RequirePlatformSecurityFeatures", 0)],
         },
         new TweakDef
         {
@@ -1926,28 +1517,6 @@ internal static class PolicyCertificate
             },
             new TweakDef
             {
-                Id = "certae-enable-machine-autoenroll",
-                Label = "Enable Machine Certificate Auto-Enrollment with Renewal",
-                Category = "Security",
-                Description =
-                    "Sets AEPolicy=7 in the machine Cryptography AutoEnrollment policy key. "
-                    + "Enables machine certificate auto-enrollment, automatic renewal of expiring certs, "
-                    + "and archiving of the old cert private key after renewal. Provides the most complete "
-                    + "automated machine certificate lifecycle management. "
-                    + "Recommended in enterprise environments using NDES or enterprise CA with 802.1X or VPN. "
-                    + "Default: 4 (no auto-renewal). Recommended: 7 if the CA supports key archiving.",
-                Tags = ["certificate", "auto-enrollment", "renewal", "pki", "machine", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Machine certificates auto-enrolled and auto-renewed with key archiving enabled.",
-                ApplyOps = [RegOp.SetDword(AeLm, "AEPolicy", 7)],
-                RemoveOps = [RegOp.DeleteValue(AeLm, "AEPolicy")],
-                DetectOps = [RegOp.CheckDword(AeLm, "AEPolicy", 7)],
-            },
-            new TweakDef
-            {
                 Id = "certae-disable-user-autoenroll",
                 Label = "Disable User Certificate Auto-Enrollment",
                 Category = "Security",
@@ -1966,27 +1535,6 @@ internal static class PolicyCertificate
                 ApplyOps = [RegOp.SetDword(AeCu, "AEPolicy", 0)],
                 RemoveOps = [RegOp.DeleteValue(AeCu, "AEPolicy")],
                 DetectOps = [RegOp.CheckDword(AeCu, "AEPolicy", 0)],
-            },
-            new TweakDef
-            {
-                Id = "certae-enable-user-autoenroll",
-                Label = "Enable User Certificate Auto-Enrollment with Renewal",
-                Category = "Security",
-                Description =
-                    "Sets AEPolicy=7 in the user Cryptography AutoEnrollment policy key. "
-                    + "Enables user certificate auto-enrollment, automatic renewal, and key archiving "
-                    + "for the current user. Appropriate in enterprise environments where users need "
-                    + "S/MIME email or VPN user certificates that are managed by an enterprise CA. "
-                    + "Default: 4. Recommended: 7 when full user certificate lifecycle management is desired.",
-                Tags = ["certificate", "auto-enrollment", "user", "renewal", "policy"],
-                NeedsAdmin = false,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "User certificates auto-enrolled and auto-renewed with key archiving for this user.",
-                ApplyOps = [RegOp.SetDword(AeCu, "AEPolicy", 7)],
-                RemoveOps = [RegOp.DeleteValue(AeCu, "AEPolicy")],
-                DetectOps = [RegOp.CheckDword(AeCu, "AEPolicy", 7)],
             },
             new TweakDef
             {
@@ -2425,25 +1973,6 @@ internal static class PolicyCertificate
             },
             new TweakDef
             {
-                Id = "certpol-cert-padding-check-64",
-                Label = "Enable Certificate Padding Check (64-bit)",
-                Category = "Security",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                Description =
-                    "Sets EnableCertPaddingCheck=1 in Wintrust for 64-bit binaries, enabling "
-                    + "strict enforcement of X.509 certificate padding to mitigate the Win32/Simda "
-                    + "and related certificate-spoofing attacks (MS13-098 hardening).",
-                Tags = ["certificate", "padding check", "wintrust", "security", "x509"],
-                RegistryKeys = [WintrustKey],
-                ApplyOps = [RegOp.SetString(WintrustKey, "EnableCertPaddingCheck", "1")],
-                RemoveOps = [RegOp.DeleteValue(WintrustKey, "EnableCertPaddingCheck")],
-                DetectOps = [RegOp.CheckString(WintrustKey, "EnableCertPaddingCheck", "1")],
-            },
-            new TweakDef
-            {
                 Id = "certpol-cert-padding-check-32",
                 Label = "Enable Certificate Padding Check (32-bit / WoW64)",
                 Category = "Security",
@@ -2517,68 +2046,6 @@ internal static class PolicyCertificate
         [
             new TweakDef
             {
-                Id = "certpol-enable-machine-autoenroll",
-                Label = "Certificates: Enable Machine Auto-Enrollment",
-                Category = "Security",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                MinBuild = 17763,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                RegistryKeys = [AutoEnrollMachine],
-                Tags = ["certificates", "pki", "auto-enrollment", "security"],
-                Description =
-                    "Sets AEPolicy=7 in the Cryptography\\AutoEnrollment machine policy. "
-                    + "Value 7 enables full auto-enrollment: automatically request, renew, and publish "
-                    + "machine certificates to the Personal store when templates are available in AD. "
-                    + "Requires domain membership and an enterprise CA. Reduces certificate expiry surprises.",
-                ApplyOps = [RegOp.SetDword(AutoEnrollMachine, "AEPolicy", 7)],
-                RemoveOps = [RegOp.DeleteValue(AutoEnrollMachine, "AEPolicy")],
-                DetectOps = [RegOp.CheckDword(AutoEnrollMachine, "AEPolicy", 7)],
-            },
-            new TweakDef
-            {
-                Id = "certpol-disable-machine-autoenroll",
-                Label = "Certificates: Disable Machine Auto-Enrollment",
-                Category = "Security",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                MinBuild = 17763,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                RegistryKeys = [AutoEnrollMachine],
-                Tags = ["certificates", "pki", "auto-enrollment", "security"],
-                Description =
-                    "Sets AEPolicy=0 in the Cryptography\\AutoEnrollment machine policy. "
-                    + "Disables automatic certificate enrollment and renewal on the machine. "
-                    + "Use on standalone workstations not joined to a PKI-enabled AD domain.",
-                ApplyOps = [RegOp.SetDword(AutoEnrollMachine, "AEPolicy", 0)],
-                RemoveOps = [RegOp.DeleteValue(AutoEnrollMachine, "AEPolicy")],
-                DetectOps = [RegOp.CheckDword(AutoEnrollMachine, "AEPolicy", 0)],
-            },
-            new TweakDef
-            {
-                Id = "certpol-enable-user-autoenroll",
-                Label = "Certificates: Enable User Auto-Enrollment",
-                Category = "Security",
-                NeedsAdmin = false,
-                CorpSafe = true,
-                MinBuild = 17763,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                RegistryKeys = [AutoEnrollUser],
-                Tags = ["certificates", "pki", "auto-enrollment", "user", "security"],
-                Description =
-                    "Sets AEPolicy=7 in the Cryptography\\AutoEnrollment user policy. "
-                    + "Enables per-user auto-enrollment so that user certificates (e.g. email signing, "
-                    + "smart-card logon) are automatically requested and renewed against the CA. "
-                    + "Requires domain membership and matching certificate templates.",
-                ApplyOps = [RegOp.SetDword(AutoEnrollUser, "AEPolicy", 7)],
-                RemoveOps = [RegOp.DeleteValue(AutoEnrollUser, "AEPolicy")],
-                DetectOps = [RegOp.CheckDword(AutoEnrollUser, "AEPolicy", 7)],
-            },
-            new TweakDef
-            {
                 Id = "certpol-protect-root-store",
                 Label = "Certificates: Protect Root CA Store from User Modification",
                 Category = "Security",
@@ -2618,48 +2085,6 @@ internal static class PolicyCertificate
                 ApplyOps = [RegOp.SetDword(CryptBasePolicy, "DisableOCSP", 1), RegOp.SetDword(CryptBasePolicy, "DisableCRLFetch", 1)],
                 RemoveOps = [RegOp.DeleteValue(CryptBasePolicy, "DisableOCSP"), RegOp.DeleteValue(CryptBasePolicy, "DisableCRLFetch")],
                 DetectOps = [RegOp.CheckDword(CryptBasePolicy, "DisableOCSP", 1), RegOp.CheckDword(CryptBasePolicy, "DisableCRLFetch", 1)],
-            },
-            new TweakDef
-            {
-                Id = "certpol-require-publishers-approval",
-                Label = "Certificates: Require Trusted Publishers Approval for Unsigned Code",
-                Category = "Security",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                MinBuild = 17763,
-                ImpactScore = 4,
-                SafetyRating = 4,
-                RegistryKeys = [TrustProviderPolicy],
-                Tags = ["certificates", "pki", "trusted-publisher", "software-restriction", "security"],
-                Description =
-                    "Sets PolicyScope=1 in Software Restriction Policies. "
-                    + "Requires that software is signed by a trusted publisher before execution. "
-                    + "Raises the bar for malware that relies on self-signed or unsigned executables. "
-                    + "Users can add exceptions via the Trusted Publishers store.",
-                ApplyOps = [RegOp.SetDword(TrustProviderPolicy, "PolicyScope", 1)],
-                RemoveOps = [RegOp.DeleteValue(TrustProviderPolicy, "PolicyScope")],
-                DetectOps = [RegOp.CheckDword(TrustProviderPolicy, "PolicyScope", 1)],
-            },
-            new TweakDef
-            {
-                Id = "certpol-strong-key-protection",
-                Label = "Certificates: Enforce Strong Private-Key Protection",
-                Category = "Security",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                MinBuild = 17763,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                RegistryKeys = [CryptBasePolicy],
-                Tags = ["certificates", "pki", "private-key", "security", "hardening"],
-                Description =
-                    "Sets ForceKeyProtection=2 in the Cryptography policy. "
-                    + "Forces a PIN/password dialog each time a private key is used, preventing "
-                    + "background applications from silently accessing stored private keys. "
-                    + "0=no protection, 1=warn on first use, 2=require password always.",
-                ApplyOps = [RegOp.SetDword(CryptBasePolicy, "ForceKeyProtection", 2)],
-                RemoveOps = [RegOp.DeleteValue(CryptBasePolicy, "ForceKeyProtection")],
-                DetectOps = [RegOp.CheckDword(CryptBasePolicy, "ForceKeyProtection", 2)],
             },
             new TweakDef
             {
@@ -3577,62 +3002,6 @@ internal static class Firewall
         },
         new TweakDef
         {
-            Id = "fw-enable-logging-dropped",
-            Label = "Enable Firewall Logging (Dropped Packets)",
-            Category = "Security",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Enables logging of dropped packets on the domain profile. Helps troubleshoot firewall rules and detect intrusion attempts. Default: not logged.",
-            Tags = ["firewall", "logging", "security", "audit", "dropped"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\DomainProfile\Logging"],
-            ApplyOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\DomainProfile\Logging",
-                    "LogDroppedPackets",
-                    1
-                ),
-                RegOp.SetDword(
-                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\StandardProfile\Logging",
-                    "LogDroppedPackets",
-                    1
-                ),
-                RegOp.SetDword(
-                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\PublicProfile\Logging",
-                    "LogDroppedPackets",
-                    1
-                ),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\DomainProfile\Logging",
-                    "LogDroppedPackets",
-                    0
-                ),
-                RegOp.SetDword(
-                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\StandardProfile\Logging",
-                    "LogDroppedPackets",
-                    0
-                ),
-                RegOp.SetDword(
-                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\PublicProfile\Logging",
-                    "LogDroppedPackets",
-                    0
-                ),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(
-                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\DomainProfile\Logging",
-                    "LogDroppedPackets",
-                    1
-                ),
-            ],
-        },
-        new TweakDef
-        {
             Id = "fw-enable-logging-success",
             Label = "Enable Firewall Logging (Successful Connections)",
             Category = "Security",
@@ -3833,59 +3202,6 @@ internal static class Firewall
         },
         new TweakDef
         {
-            Id = "fw-default-outbound-allow",
-            Label = "Default Outbound Action: Allow",
-            Category = "Security",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets the default outbound action to Allow on all profiles. Standard configuration that doesn't break apps. Default: Allow.",
-            Tags = ["firewall", "security", "outbound", "allow", "default"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\DomainProfile"],
-            ApplyOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\DomainProfile",
-                    "DefaultOutboundAction",
-                    0
-                ),
-                RegOp.SetDword(
-                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\StandardProfile",
-                    "DefaultOutboundAction",
-                    0
-                ),
-                RegOp.SetDword(
-                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\PublicProfile",
-                    "DefaultOutboundAction",
-                    0
-                ),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(
-                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\DomainProfile",
-                    "DefaultOutboundAction"
-                ),
-                RegOp.DeleteValue(
-                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\StandardProfile",
-                    "DefaultOutboundAction"
-                ),
-                RegOp.DeleteValue(
-                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\PublicProfile",
-                    "DefaultOutboundAction"
-                ),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(
-                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\DomainProfile",
-                    "DefaultOutboundAction",
-                    0
-                ),
-            ],
-        },
-        new TweakDef
-        {
             Id = "fw-disable-stealth-mode",
             Label = "Enable Stealth Mode (Ignore Unsolicited)",
             Category = "Security",
@@ -4009,114 +3325,6 @@ internal static class Firewall
         },
         new TweakDef
         {
-            Id = "fw-enable-logging-success-private",
-            Label = "Enable Success Logging (Private Profile)",
-            Category = "Security",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Logs successful connections on the private profile. Useful for auditing which programs communicate on your home network. Default: not logged.",
-            Tags = ["firewall", "logging", "security", "audit", "private"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\StandardProfile\Logging"],
-            ApplyOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\StandardProfile\Logging",
-                    "LogSuccessfulConnections",
-                    1
-                ),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\StandardProfile\Logging",
-                    "LogSuccessfulConnections",
-                    0
-                ),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(
-                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\StandardProfile\Logging",
-                    "LogSuccessfulConnections",
-                    1
-                ),
-            ],
-        },
-        new TweakDef
-        {
-            Id = "fw-enable-logging-dropped-public",
-            Label = "Enable Dropped Packet Logging (Public)",
-            Category = "Security",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Enables logging of dropped packets specifically on the public profile. Critical for detecting attacks on untrusted networks. Default: not logged.",
-            Tags = ["firewall", "logging", "security", "dropped", "public"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\PublicProfile\Logging"],
-            ApplyOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\PublicProfile\Logging",
-                    "LogDroppedPackets",
-                    1
-                ),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\PublicProfile\Logging",
-                    "LogDroppedPackets",
-                    0
-                ),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(
-                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\PublicProfile\Logging",
-                    "LogDroppedPackets",
-                    1
-                ),
-            ],
-        },
-        new TweakDef
-        {
-            Id = "fw-increase-log-size-public",
-            Label = "Increase Firewall Log Size (Public)",
-            Category = "Security",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Increases the maximum firewall log file size on the public profile to 32 MB. Default: 4 MB, which can roll over quickly on busy networks.",
-            Tags = ["firewall", "logging", "public", "log-size"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\PublicProfile\Logging"],
-            ApplyOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\PublicProfile\Logging",
-                    "LogFileSize",
-                    32768
-                ),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\PublicProfile\Logging",
-                    "LogFileSize",
-                    4096
-                ),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(
-                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\PublicProfile\Logging",
-                    "LogFileSize",
-                    32768
-                ),
-            ],
-        },
-        new TweakDef
-        {
             Id = "fw-disable-notifications-domain",
             Label = "Disable Firewall Notifications (Domain)",
             Category = "Security",
@@ -4147,79 +3355,6 @@ internal static class Firewall
                 RegOp.CheckDword(
                     @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\DomainProfile",
                     "DisableNotifications",
-                    1
-                ),
-            ],
-        },
-        new TweakDef
-        {
-            Id = "fw-disable-notifications-private",
-            Label = "Disable Firewall Notifications (Private)",
-            Category = "Security",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Disables firewall notification popups on the private/home profile. Stops popups when apps try to listen on the network. Default: enabled.",
-            Tags = ["firewall", "notifications", "private", "quiet"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\StandardProfile"],
-            ApplyOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\StandardProfile",
-                    "DisableNotifications",
-                    1
-                ),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\StandardProfile",
-                    "DisableNotifications",
-                    0
-                ),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(
-                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\StandardProfile",
-                    "DisableNotifications",
-                    1
-                ),
-            ],
-        },
-        new TweakDef
-        {
-            Id = "fw-default-outbound-block-public",
-            Label = "Default Block Outbound (Public Profile)",
-            Category = "Security",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description =
-                "Sets default outbound action to block on the public profile. Only explicitly allowed apps can send data. Prevents data exfiltration but may break many apps. Default: allow.",
-            Tags = ["firewall", "security", "outbound", "public", "block"],
-            SideEffects = "May break internet access for apps without explicit outbound rules.",
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\PublicProfile"],
-            ApplyOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\PublicProfile",
-                    "DefaultOutboundAction",
-                    1
-                ),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\PublicProfile",
-                    "DefaultOutboundAction",
-                    0
-                ),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(
-                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\PublicProfile",
-                    "DefaultOutboundAction",
                     1
                 ),
             ],
@@ -4403,40 +3538,6 @@ internal static class Firewall
         },
         new TweakDef
         {
-            Id = "fw-enable-private-profile-logging",
-            Label = "Enable Private Profile Firewall Logging",
-            Category = "Security",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Enables dropped packet logging for the private (home) firewall profile. Default: logging off.",
-            Tags = ["firewall", "logging", "private", "audit", "home"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\StandardProfile\Logging"],
-            ApplyOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\StandardProfile\Logging",
-                    "LogDroppedPackets",
-                    1
-                ),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(
-                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\StandardProfile\Logging",
-                    "LogDroppedPackets"
-                ),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(
-                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\StandardProfile\Logging",
-                    "LogDroppedPackets",
-                    1
-                ),
-            ],
-        },
-        new TweakDef
-        {
             Id = "fw-block-netbios-inbound",
             Label = "Block NetBIOS Inbound (All Profiles)",
             Category = "Security",
@@ -4571,42 +3672,6 @@ internal static class Firewall
                     @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\StandardProfile\Logging",
                     "LogFileMaxSize",
                     32768
-                ),
-            ],
-        },
-        new TweakDef
-        {
-            Id = "fw-enable-domain-outbound-block",
-            Label = "Default-Block Outbound on Domain Profile",
-            Category = "Security",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description =
-                "Sets default outbound action to block on the domain firewall profile. Strict egress filtering for corp environments. Default: allow.",
-            Tags = ["firewall", "outbound", "domain", "egress", "restrictive"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\DomainProfile"],
-            ApplyOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\DomainProfile",
-                    "DefaultOutboundAction",
-                    1
-                ),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\DomainProfile",
-                    "DefaultOutboundAction",
-                    0
-                ),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(
-                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\DomainProfile",
-                    "DefaultOutboundAction",
-                    1
                 ),
             ],
         },
@@ -4996,44 +4061,6 @@ internal static class PolicyFirewallProfiles
     [
         new TweakDef
         {
-            Id = "fw-policy-domain-enable",
-            Label = "Enforce Firewall On (Domain Profile)",
-            Category = "Security",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets EnableFirewall=1 under the Domain profile Group Policy path. "
-                + "Forces Windows Firewall to remain enabled for domain-joined network connections, even if a local administrator attempts to disable it. "
-                + "Prevents bypassing the firewall when connected to the corporate network.",
-            Tags = ["firewall", "domain", "policy", "enforce", "security"],
-            ImpactScore = 5,
-            SafetyRating = 5,
-            ImpactNote = "Guarantees firewall active on domain networks; prevents local admin overrides.",
-            ApplyOps = [RegOp.SetDword(Domain, "EnableFirewall", 1)],
-            RemoveOps = [RegOp.DeleteValue(Domain, "EnableFirewall")],
-            DetectOps = [RegOp.CheckDword(Domain, "EnableFirewall", 1)],
-        },
-        new TweakDef
-        {
-            Id = "fw-policy-domain-block-inbound",
-            Label = "Block Unsolicited Inbound (Domain Profile)",
-            Category = "Security",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets DefaultInboundAction=1 (Block) under the Domain profile Group Policy path. "
-                + "Instructs Windows Firewall to block all inbound connections that do not match an explicit allow rule when on a domain network. "
-                + "Reduces attack surface by ensuring only explicitly permitted inbound traffic reaches the endpoint.",
-            Tags = ["firewall", "domain", "inbound", "block", "policy"],
-            ImpactScore = 4,
-            SafetyRating = 4,
-            ImpactNote = "Blocks unsolicited inbound on domain-joined networks; explicit rules required for services.",
-            ApplyOps = [RegOp.SetDword(Domain, "DefaultInboundAction", 1)],
-            RemoveOps = [RegOp.DeleteValue(Domain, "DefaultInboundAction")],
-            DetectOps = [RegOp.CheckDword(Domain, "DefaultInboundAction", 1)],
-        },
-        new TweakDef
-        {
             Id = "fw-policy-domain-allow-outbound",
             Label = "Allow Outbound by Default (Domain Profile)",
             Category = "Security",
@@ -5050,101 +4077,6 @@ internal static class PolicyFirewallProfiles
             ApplyOps = [RegOp.SetDword(Domain, "DefaultOutboundAction", 0)],
             RemoveOps = [RegOp.DeleteValue(Domain, "DefaultOutboundAction")],
             DetectOps = [RegOp.CheckDword(Domain, "DefaultOutboundAction", 0)],
-        },
-        new TweakDef
-        {
-            Id = "fw-policy-private-enable",
-            Label = "Enforce Firewall On (Private Profile)",
-            Category = "Security",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets EnableFirewall=1 under the Private profile Group Policy path. "
-                + "Forces Windows Firewall to remain active on home and trusted private networks. "
-                + "Prevents disabling the firewall even when users believe they are on a safe home network.",
-            Tags = ["firewall", "private", "policy", "enforce", "home-network"],
-            ImpactScore = 5,
-            SafetyRating = 5,
-            ImpactNote = "Guarantees firewall active on private/home networks.",
-            ApplyOps = [RegOp.SetDword(Private, "EnableFirewall", 1)],
-            RemoveOps = [RegOp.DeleteValue(Private, "EnableFirewall")],
-            DetectOps = [RegOp.CheckDword(Private, "EnableFirewall", 1)],
-        },
-        new TweakDef
-        {
-            Id = "fw-policy-private-block-inbound",
-            Label = "Block Unsolicited Inbound (Private Profile)",
-            Category = "Security",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets DefaultInboundAction=1 (Block) under the Private profile Group Policy path. "
-                + "Blocks inbound connections that lack an explicit allow rule when on private/trusted networks. "
-                + "Protects against lateral movement and inbound attacks from trusted-but-compromised devices on the same home or office network.",
-            Tags = ["firewall", "private", "inbound", "block", "policy"],
-            ImpactScore = 4,
-            SafetyRating = 4,
-            ImpactNote = "Blocks unsolicited inbound on private networks; may affect file/printer sharing.",
-            ApplyOps = [RegOp.SetDword(Private, "DefaultInboundAction", 1)],
-            RemoveOps = [RegOp.DeleteValue(Private, "DefaultInboundAction")],
-            DetectOps = [RegOp.CheckDword(Private, "DefaultInboundAction", 1)],
-        },
-        new TweakDef
-        {
-            Id = "fw-policy-private-allow-outbound",
-            Label = "Allow Outbound by Default (Private Profile)",
-            Category = "Security",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets DefaultOutboundAction=0 (Allow) under the Private profile Group Policy path. "
-                + "Allows outbound connections by default on private networks. "
-                + "Maintains normal application connectivity for home users while keeping inbound protections active.",
-            Tags = ["firewall", "private", "outbound", "allow", "policy"],
-            ImpactScore = 3,
-            SafetyRating = 5,
-            ImpactNote = "Maintains normal outbound connectivity on private networks.",
-            ApplyOps = [RegOp.SetDword(Private, "DefaultOutboundAction", 0)],
-            RemoveOps = [RegOp.DeleteValue(Private, "DefaultOutboundAction")],
-            DetectOps = [RegOp.CheckDword(Private, "DefaultOutboundAction", 0)],
-        },
-        new TweakDef
-        {
-            Id = "fw-policy-public-enable",
-            Label = "Enforce Firewall On (Public Profile)",
-            Category = "Security",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets EnableFirewall=1 under the Public profile Group Policy path. "
-                + "The Public profile applies when connected to untrusted networks such as airports, coffee shops and hotel Wi-Fi. "
-                + "Ensures the firewall cannot be disabled in the most exposed network context.",
-            Tags = ["firewall", "public", "policy", "enforce", "wi-fi", "untrusted"],
-            ImpactScore = 5,
-            SafetyRating = 5,
-            ImpactNote = "Critical: guarantees firewall active on public/untrusted networks.",
-            ApplyOps = [RegOp.SetDword(Public, "EnableFirewall", 1)],
-            RemoveOps = [RegOp.DeleteValue(Public, "EnableFirewall")],
-            DetectOps = [RegOp.CheckDword(Public, "EnableFirewall", 1)],
-        },
-        new TweakDef
-        {
-            Id = "fw-policy-public-block-inbound",
-            Label = "Block All Inbound (Public Profile)",
-            Category = "Security",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets DefaultInboundAction=1 (Block) under the Public profile Group Policy path. "
-                + "Blocks all unsolicited inbound connections on public networks where device exposure is highest. "
-                + "Prevents network scanning, port probing, and drive-by exploitation from other devices on shared public Wi-Fi.",
-            Tags = ["firewall", "public", "inbound", "block", "policy", "wi-fi"],
-            ImpactScore = 5,
-            SafetyRating = 5,
-            ImpactNote = "Critical protection on public Wi-Fi; blocks all unsolicited inbound.",
-            ApplyOps = [RegOp.SetDword(Public, "DefaultInboundAction", 1)],
-            RemoveOps = [RegOp.DeleteValue(Public, "DefaultInboundAction")],
-            DetectOps = [RegOp.CheckDword(Public, "DefaultInboundAction", 1)],
         },
         new TweakDef
         {
@@ -5165,25 +4097,6 @@ internal static class PolicyFirewallProfiles
             RemoveOps = [RegOp.DeleteValue(Public, "DefaultOutboundAction")],
             DetectOps = [RegOp.CheckDword(Public, "DefaultOutboundAction", 0)],
         },
-        new TweakDef
-        {
-            Id = "fw-policy-public-disable-notifications",
-            Label = "Show Firewall Block Notifications (Public Profile)",
-            Category = "Security",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets DisableNotifications=0 under the Public profile Group Policy path. "
-                + "Ensures Windows Firewall displays a notification when an application is blocked on public networks. "
-                + "Helps users and IT staff identify applications attempting unexpected inbound connections on untrusted networks.",
-            Tags = ["firewall", "public", "notifications", "policy", "visibility"],
-            ImpactScore = 3,
-            SafetyRating = 5,
-            ImpactNote = "Shows notifications when apps are blocked on public networks.",
-            ApplyOps = [RegOp.SetDword(Public, "DisableNotifications", 0)],
-            RemoveOps = [RegOp.DeleteValue(Public, "DisableNotifications")],
-            DetectOps = [RegOp.CheckDword(Public, "DisableNotifications", 0)],
-        },
     ];
 }
 
@@ -5203,101 +4116,6 @@ internal static class PolicyNetLogon
     [
         new TweakDef
         {
-            Id = "sec-netlogon-sign-secure-channel",
-            Label = "Require Netlogon Secure Channel Signing",
-            Category = "Security",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets SignSecureChannel=1 in Netlogon parameters. "
-                + "Requires all Netlogon secure channel communications between this machine and its domain controller to use digital signing. "
-                + "Prevents man-in-the-middle attacks that tamper with domain authentication traffic on compromised network segments.",
-            Tags = ["netlogon", "domain", "secure-channel", "signing", "ad", "authentication"],
-            ImpactScore = 4,
-            SafetyRating = 4,
-            ImpactNote = "Hardens DC communication; requires DC support for secure channel signing.",
-            ApplyOps = [RegOp.SetDword(SvcKey, "SignSecureChannel", 1)],
-            RemoveOps = [RegOp.SetDword(SvcKey, "SignSecureChannel", 0)],
-            DetectOps = [RegOp.CheckDword(SvcKey, "SignSecureChannel", 1)],
-        },
-        new TweakDef
-        {
-            Id = "sec-netlogon-seal-secure-channel",
-            Label = "Require Netlogon Secure Channel Sealing",
-            Category = "Security",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets SealSecureChannel=1 in Netlogon parameters. "
-                + "Requires encryption (sealing) of all Netlogon secure channel data in addition to signing. "
-                + "Prevents eavesdropping on domain authentication credentials and policy traffic intercepted between the endpoint and its DC.",
-            Tags = ["netlogon", "domain", "secure-channel", "sealing", "encryption", "ad"],
-            ImpactScore = 4,
-            SafetyRating = 4,
-            ImpactNote = "Encrypts DC-endpoint channel; requires modern DC with NTLMv2/Kerberos support.",
-            ApplyOps = [RegOp.SetDword(SvcKey, "SealSecureChannel", 1)],
-            RemoveOps = [RegOp.SetDword(SvcKey, "SealSecureChannel", 0)],
-            DetectOps = [RegOp.CheckDword(SvcKey, "SealSecureChannel", 1)],
-        },
-        new TweakDef
-        {
-            Id = "sec-netlogon-require-sign-or-seal",
-            Label = "Require Netlogon Signing or Sealing",
-            Category = "Security",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets RequireSignOrSeal=1 in Netlogon parameters. "
-                + "Prevents the machine from joining a domain unless the domain controller supports Netlogon secure channel signing or sealing. "
-                + "Ensures no downgrade attack can force the endpoint to communicate with a spoofed DC that lacks signing support.",
-            Tags = ["netlogon", "domain", "sign-or-seal", "security", "ad"],
-            ImpactScore = 4,
-            SafetyRating = 4,
-            ImpactNote = "Blocks domain join if DC lacks secure-channel support; requires modern Windows Server DCs.",
-            ApplyOps = [RegOp.SetDword(SvcKey, "RequireSignOrSeal", 1)],
-            RemoveOps = [RegOp.SetDword(SvcKey, "RequireSignOrSeal", 0)],
-            DetectOps = [RegOp.CheckDword(SvcKey, "RequireSignOrSeal", 1)],
-        },
-        new TweakDef
-        {
-            Id = "sec-netlogon-require-strong-key",
-            Label = "Require Strong Netlogon Session Key",
-            Category = "Security",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets RequireStrongKey=1 in Netlogon parameters. "
-                + "Forces the Netlogon secure channel to use 128-bit strong session keys for encryption. "
-                + "Prevents use of weaker 56-bit DES-based session keys that were vulnerable to brute-force attacks on older domain configurations.",
-            Tags = ["netlogon", "domain", "strong-key", "crypto", "128-bit", "ad"],
-            ImpactScore = 4,
-            SafetyRating = 4,
-            ImpactNote = "Enforces 128-bit key for secure channel; DCs must support 128-bit session keys.",
-            ApplyOps = [RegOp.SetDword(SvcKey, "RequireStrongKey", 1)],
-            RemoveOps = [RegOp.SetDword(SvcKey, "RequireStrongKey", 0)],
-            DetectOps = [RegOp.CheckDword(SvcKey, "RequireStrongKey", 1)],
-        },
-        new TweakDef
-        {
-            Id = "sec-netlogon-disable-nt4-crypto",
-            Label = "Disable NT4 Compatible Cryptography",
-            Category = "Security",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets AllowNT4Crypto=0 in Netlogon parameters. "
-                + "Prevents use of NT4-era RC4/DES cryptographic algorithms for Netlogon secure channel. "
-                + "Eliminates weak legacy cipher usage that was introduced for backward compatibility with Windows NT 4.0 domain controllers no longer in use.",
-            Tags = ["netlogon", "domain", "nt4", "crypto", "legacy", "weak-cipher"],
-            ImpactScore = 4,
-            SafetyRating = 3,
-            ImpactNote = "Breaks compatibility with NT4 DCs (obsolete); required for modern environments.",
-            ApplyOps = [RegOp.SetDword(SvcKey, "AllowNT4Crypto", 0)],
-            RemoveOps = [RegOp.DeleteValue(SvcKey, "AllowNT4Crypto")],
-            DetectOps = [RegOp.CheckDword(SvcKey, "AllowNT4Crypto", 0)],
-        },
-        new TweakDef
-        {
             Id = "sec-netlogon-dns-only-domain-join",
             Label = "Restrict Domain Join to DNS Registration",
             Category = "Security",
@@ -5314,44 +4132,6 @@ internal static class PolicyNetLogon
             ApplyOps = [RegOp.SetDword(SvcKey, "AllowDNSOnlyJoin", 1)],
             RemoveOps = [RegOp.DeleteValue(SvcKey, "AllowDNSOnlyJoin")],
             DetectOps = [RegOp.CheckDword(SvcKey, "AllowDNSOnlyJoin", 1)],
-        },
-        new TweakDef
-        {
-            Id = "sec-netlogon-disable-password-change",
-            Label = "Disable Machine Account Password Auto-Change",
-            Category = "Security",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets DisablePasswordChange=1 in Netlogon parameters. "
-                + "Prevents the computer from automatically changing its machine account password every 30 days. "
-                + "Useful for read-only media deployments and scenarios where domain machine accounts must remain static; should be combined with strong initial password management.",
-            Tags = ["netlogon", "machine-account", "password", "domain", "static"],
-            ImpactScore = 2,
-            SafetyRating = 3,
-            ImpactNote = "Disables auto password rotation; only safe for purpose-built static-image environments.",
-            ApplyOps = [RegOp.SetDword(SvcKey, "DisablePasswordChange", 1)],
-            RemoveOps = [RegOp.DeleteValue(SvcKey, "DisablePasswordChange")],
-            DetectOps = [RegOp.CheckDword(SvcKey, "DisablePasswordChange", 1)],
-        },
-        new TweakDef
-        {
-            Id = "sec-netlogon-max-password-age",
-            Label = "Enforce Maximum Machine Password Age (30 days)",
-            Category = "Security",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets MaximumPasswordAge=30 in Netlogon parameters. "
-                + "Sets the maximum number of days before the computer automatically changes its machine account password to 30. "
-                + "Limits the window during which a captured machine account hash remains usable for pass-the-hash attacks.",
-            Tags = ["netlogon", "password-rotation", "machine-account", "security", "ad"],
-            ImpactScore = 3,
-            SafetyRating = 5,
-            ImpactNote = "Forces 30-day machine account password rotation.",
-            ApplyOps = [RegOp.SetDword(SvcKey, "MaximumPasswordAge", 30)],
-            RemoveOps = [RegOp.DeleteValue(SvcKey, "MaximumPasswordAge")],
-            DetectOps = [RegOp.CheckDword(SvcKey, "MaximumPasswordAge", 30)],
         },
         new TweakDef
         {
@@ -5450,25 +4230,6 @@ internal static class PolicyReliabilityMonitor
         },
         new TweakDef
         {
-            Id = "maint-wer-disable-corporate-upload",
-            Label = "Disable WER Upload to Microsoft (Corp WER Server)",
-            Category = "Privacy",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets CorporateWerServer=0 and LoggingDisabled=0 in WER policy, keeping local WER logging but disabling external uploads. "
-                + "Retains crash dump collection for internal analysis without transmitting potentially sensitive memory dumps to Microsoft. "
-                + "Appropriate for regulated industries where crash data may contain PII or business-confidential memory contents.",
-            Tags = ["wer", "crash-dump", "upload", "corporate", "privacy", "pii"],
-            ImpactScore = 3,
-            SafetyRating = 5,
-            ImpactNote = "Keeps local dumps; prevents transmission to Microsoft reporting endpoint.",
-            ApplyOps = [RegOp.SetDword(WerKey, "CorporateWerUseSSL", 1), RegOp.SetDword(WerKey, "LoggingDisabled", 0)],
-            RemoveOps = [RegOp.DeleteValue(WerKey, "CorporateWerUseSSL"), RegOp.DeleteValue(WerKey, "LoggingDisabled")],
-            DetectOps = [RegOp.CheckDword(WerKey, "CorporateWerUseSSL", 1)],
-        },
-        new TweakDef
-        {
             Id = "maint-wer-disable-kernel-faults",
             Label = "Exclude Kernel-Level Faults from WER",
             Category = "Privacy",
@@ -5504,25 +4265,6 @@ internal static class PolicyReliabilityMonitor
             ApplyOps = [RegOp.SetDword(WerKey, "DumpType", 0)],
             RemoveOps = [RegOp.DeleteValue(WerKey, "DumpType")],
             DetectOps = [RegOp.CheckDword(WerKey, "DumpType", 0)],
-        },
-        new TweakDef
-        {
-            Id = "maint-pch-disable-reporting-v4",
-            Label = "Disable Legacy PCHealth Error Reporting",
-            Category = "Privacy",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets DoReport=0 in PCHealth\\ErrorReporting policy. "
-                + "Disables the legacy Windows XP/Vista-era PCHealth error reporting component that predates the modern WER pipeline. "
-                + "This path is still read on modern Windows for backward compatibility; setting it prevents unexpected legacy reporting activity.",
-            Tags = ["pchealth", "error-reporting", "legacy", "telemetry"],
-            ImpactScore = 2,
-            SafetyRating = 5,
-            ImpactNote = "Disables legacy PCHealth error uploader; no user-visible impact.",
-            ApplyOps = [RegOp.SetDword(PcKey, "DoReport", 0)],
-            RemoveOps = [RegOp.DeleteValue(PcKey, "DoReport")],
-            DetectOps = [RegOp.CheckDword(PcKey, "DoReport", 0)],
         },
         new TweakDef
         {
@@ -5600,46 +4342,6 @@ internal static class PolicyDNSSecurity
     [
         new TweakDef
         {
-            Id = "net-dns-policy-disable-llmnr",
-            Label = "Disable LLMNR (Link-Local Multicast Name Resolution)",
-            Category = "Network",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets EnableMulticast=0 in DNS client policy. "
-                + "Disables LLMNR (Link-Local Multicast Name Resolution), which resolves single-label hostnames on the local subnet. "
-                + "LLMNR responses are unauthenticated and can be spoofed by attackers (Responder/MITM attacks); "
-                + "disabling LLMNR forces all name resolution through DNS where responses can be validated.",
-            Tags = ["dns", "llmnr", "multicast", "responder", "mitm", "security", "network"],
-            ImpactScore = 5,
-            SafetyRating = 4,
-            ImpactNote = "Blocks LLMNR; single-label name resolution requires proper DNS entries.",
-            ApplyOps = [RegOp.SetDword(DnsKey, "EnableMulticast", 0)],
-            RemoveOps = [RegOp.DeleteValue(DnsKey, "EnableMulticast")],
-            DetectOps = [RegOp.CheckDword(DnsKey, "EnableMulticast", 0)],
-        },
-        new TweakDef
-        {
-            Id = "net-dns-policy-disable-smart-resolution",
-            Label = "Disable DNS Smart Name Resolution",
-            Category = "Network",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets DisableSmartNameResolution=1 in DNS client policy. "
-                + "Prevents DNS client from appending connection-specific suffixes when resolving names that fail primary DNS lookup. "
-                + "Smart name resolution can leak internal hostnames to external DNS servers when a split-horizon resolution fails, "
-                + "inadvertently revealing internal network structure to external resolvers.",
-            Tags = ["dns", "smart-resolution", "suffix", "privacy", "leak"],
-            ImpactScore = 3,
-            SafetyRating = 4,
-            ImpactNote = "Stops hostname guessing via suffix appending; may affect unqualified name resolution.",
-            ApplyOps = [RegOp.SetDword(DnsKey, "DisableSmartNameResolution", 1)],
-            RemoveOps = [RegOp.DeleteValue(DnsKey, "DisableSmartNameResolution")],
-            DetectOps = [RegOp.CheckDword(DnsKey, "DisableSmartNameResolution", 1)],
-        },
-        new TweakDef
-        {
             Id = "net-dns-policy-prefer-local-responses",
             Label = "Prefer Local DNS Responses Over Cached External",
             Category = "Network",
@@ -5656,25 +4358,6 @@ internal static class PolicyDNSSecurity
             ApplyOps = [RegOp.SetDword(DnsKey, "AddrConfigControl", 1)],
             RemoveOps = [RegOp.DeleteValue(DnsKey, "AddrConfigControl")],
             DetectOps = [RegOp.CheckDword(DnsKey, "AddrConfigControl", 1)],
-        },
-        new TweakDef
-        {
-            Id = "net-dns-policy-disable-multicast-to-others",
-            Label = "Restrict DNS Multicast Query Scope",
-            Category = "Network",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets QueryAdapterName=0 in DNS client policy. "
-                + "Restricts the DNS client from broadcasting adapter names as part of multicast DNS queries. "
-                + "Prevents information disclosure of network adapter hostnames and interface identifiers to other machines on the subnet via mDNS/LLMNR broadcast frames.",
-            Tags = ["dns", "multicast", "adapter", "information-disclosure", "mdns"],
-            ImpactScore = 3,
-            SafetyRating = 5,
-            ImpactNote = "Stops adapter name broadcast in DNS queries; minor information hardening.",
-            ApplyOps = [RegOp.SetDword(DnsKey, "QueryAdapterName", 0)],
-            RemoveOps = [RegOp.DeleteValue(DnsKey, "QueryAdapterName")],
-            DetectOps = [RegOp.CheckDword(DnsKey, "QueryAdapterName", 0)],
         },
         new TweakDef
         {
@@ -5817,44 +4500,6 @@ internal static class PolicySmartScreenWin
     [
         new TweakDef
         {
-            Id = "sec-smartscreen-enable-win",
-            Label = "Enable Windows SmartScreen (Shell)",
-            Category = "Security",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets EnableSmartScreen=1 in Windows System policy. "
-                + "Forces Windows SmartScreen to be enabled for all executable file reputation checks at the shell level. "
-                + "SmartScreen blocks or warns when users attempt to run executable files downloaded from the Internet that have not established a reputation with Microsoft's cloud service.",
-            Tags = ["smartscreen", "shell", "policy", "reputation", "download-check"],
-            ImpactScore = 5,
-            SafetyRating = 5,
-            ImpactNote = "Enables SmartScreen for all downloaded executables; may prompt on unsigned apps.",
-            ApplyOps = [RegOp.SetDword(SysKey, "EnableSmartScreen", 1)],
-            RemoveOps = [RegOp.DeleteValue(SysKey, "EnableSmartScreen")],
-            DetectOps = [RegOp.CheckDword(SysKey, "EnableSmartScreen", 1)],
-        },
-        new TweakDef
-        {
-            Id = "sec-smartscreen-shell-block-level",
-            Label = "Set SmartScreen Shell Level to Block",
-            Category = "Security",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets ShellSmartScreenLevel=Block in Windows System policy. "
-                + "Configures SmartScreen to block execution of files with bad reputation rather than only showing a warning that users can override. "
-                + "Prevents social engineering attacks where users dismiss SmartScreen warnings to run malicious downloaders.",
-            Tags = ["smartscreen", "shell", "block", "policy", "no-bypass"],
-            ImpactScore = 5,
-            SafetyRating = 4,
-            ImpactNote = "Blocks unrecognised executables; users cannot override — use Warn for flexibility.",
-            ApplyOps = [RegOp.SetString(SysKey, "ShellSmartScreenLevel", "Block")],
-            RemoveOps = [RegOp.DeleteValue(SysKey, "ShellSmartScreenLevel")],
-            DetectOps = [RegOp.CheckString(SysKey, "ShellSmartScreenLevel", "Block")],
-        },
-        new TweakDef
-        {
             Id = "sec-smartscreen-enhanced-phishing-capture",
             Label = "Enable Enhanced Phishing Protection — Capture Check",
             Category = "Security",
@@ -5928,26 +4573,6 @@ internal static class PolicySmartScreenWin
             ApplyOps = [RegOp.SetDword(WtdsKey, "NotifyUnsafeApp", 1)],
             RemoveOps = [RegOp.DeleteValue(WtdsKey, "NotifyUnsafeApp")],
             DetectOps = [RegOp.CheckDword(WtdsKey, "NotifyUnsafeApp", 1)],
-        },
-        new TweakDef
-        {
-            Id = "sec-smartscreen-safer-default-level",
-            Label = "Set Software Restriction Policy Default Level (Unrestricted Audit)",
-            Category = "Security",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets DefaultLevel=262144 in Software Restriction Policy (SRP) code identifiers. "
-                + "Establishes the baseline trust level for Software Restriction Policies to Unrestricted with audit logging. "
-                + "When SRP is deployed, this default ensures all software is permitted to run but all execution is logged, "
-                + "enabling detection of unauthorized software without blocking legitimate applications.",
-            Tags = ["srp", "software-restriction", "safer", "default", "audit"],
-            ImpactScore = 3,
-            SafetyRating = 5,
-            ImpactNote = "Establishes SRP audit mode; no blocking without additional path/hash rules.",
-            ApplyOps = [RegOp.SetDword(SaferKey, "DefaultLevel", 262144)],
-            RemoveOps = [RegOp.DeleteValue(SaferKey, "DefaultLevel")],
-            DetectOps = [RegOp.CheckDword(SaferKey, "DefaultLevel", 262144)],
         },
         new TweakDef
         {

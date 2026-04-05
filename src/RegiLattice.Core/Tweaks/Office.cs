@@ -347,18 +347,6 @@ internal static class Office
         },
         new TweakDef
         {
-            Id = "office-vba-warnings-high",
-            Label = "Set VBA macro security to high (disable unsigned macros)",
-            Category = "Office",
-            Tags = ["office", "vba", "macro", "security"],
-            NeedsAdmin = false,
-            CorpSafe = true,
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Office\16.0\Word\Security", "VBAWarnings", 2)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Office\16.0\Word\Security", "VBAWarnings")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Office\16.0\Word\Security", "VBAWarnings", 2)],
-        },
-        new TweakDef
-        {
             Id = "office-experiment-opt-out",
             Label = "Opt out of Office experiment programs",
             Category = "Office",
@@ -687,41 +675,6 @@ internal static class Adobe
             ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Adobe\Acrobat Reader\DC\AVGeneral", "iPageViewLayoutMode", 0)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Adobe\Acrobat Reader\DC\AVGeneral", "iPageViewLayoutMode")],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Adobe\Acrobat Reader\DC\AVGeneral", "iPageViewLayoutMode", 0)],
-        },
-        new TweakDef
-        {
-            Id = "adobe-disable-welcome-screen",
-            Label = "Disable Adobe What's New Screen",
-            Category = "Office",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Disables the What's New promotional screen shown after Adobe Reader updates. Different from the start screen. Default: shown. Recommended: hidden.",
-            Tags = ["adobe", "welcome", "whats-new", "ux"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Adobe\Acrobat Reader\DC\FeatureLockDown\cWelcomeScreen"],
-            ApplyOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Adobe\Acrobat Reader\DC\FeatureLockDown\cWelcomeScreen",
-                    "bShowWelcomeScreen",
-                    0
-                ),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Adobe\Acrobat Reader\DC\FeatureLockDown\cWelcomeScreen",
-                    "bShowWelcomeScreen"
-                ),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Adobe\Acrobat Reader\DC\FeatureLockDown\cWelcomeScreen",
-                    "bShowWelcomeScreen",
-                    0
-                ),
-            ],
         },
         new TweakDef
         {
@@ -1334,40 +1287,6 @@ internal static class LibreOffice
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\LibreOffice\org.openoffice.Setup\Office", "MSDocumentHandler", 1)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\LibreOffice\org.openoffice.Setup\Office", "MSDocumentHandler")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\LibreOffice\org.openoffice.Setup\Office", "MSDocumentHandler", 1)],
-        },
-        new TweakDef
-        {
-            Id = "lo-libreoffice-disable-macro-exec",
-            Label = "Disable LibreOffice Macro Execution",
-            Category = "Office",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables macro execution in LibreOffice documents. Prevents potentially malicious macros from running. Default: prompt.",
-            Tags = ["libreoffice", "macro", "security", "disable"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\LibreOffice\org.openoffice.Office.Common\Security\Scripting"],
-            ApplyOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\LibreOffice\org.openoffice.Office.Common\Security\Scripting",
-                    "MacroSecurityLevel",
-                    3
-                ),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\LibreOffice\org.openoffice.Office.Common\Security\Scripting",
-                    "MacroSecurityLevel"
-                ),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\LibreOffice\org.openoffice.Office.Common\Security\Scripting",
-                    "MacroSecurityLevel",
-                    3
-                ),
-            ],
         },
     ];
 }

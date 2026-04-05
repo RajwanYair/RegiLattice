@@ -10,7 +10,7 @@ internal static class Power
         {
             Id = "power-disable-hibernation",
             Label = "Disable Hibernation",
-            Category = "Power",
+            Category = "Performance",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables hibernation and removes the hiberfil.sys file.",
@@ -32,7 +32,7 @@ internal static class Power
         {
             Id = "power-disable-fast-startup",
             Label = "Disable Fast Startup",
-            Category = "Power",
+            Category = "Performance",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables Windows Fast Startup (hybrid boot) which can cause driver and dual-boot issues.",
@@ -46,7 +46,7 @@ internal static class Power
         {
             Id = "power-disable-connected-standby",
             Label = "Disable Connected Standby",
-            Category = "Power",
+            Category = "Performance",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables Modern/Connected Standby which can cause high battery drain and wake-from-sleep issues on some laptops.",
@@ -58,46 +58,9 @@ internal static class Power
         },
         new TweakDef
         {
-            Id = "power-disable-core-parking",
-            Label = "Disable CPU Core Parking",
-            Category = "Power",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables CPU core parking so all cores stay active. Can improve latency-sensitive workloads and gaming.",
-            Tags = ["power", "cpu", "performance", "gaming"],
-            RegistryKeys =
-            [
-                @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\PowerSettings\54533251-82be-4824-96c1-47b60b740d00\0cc5b647-c1df-4637-891a-dec35c318583",
-            ],
-            ApplyOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\PowerSettings\54533251-82be-4824-96c1-47b60b740d00\0cc5b647-c1df-4637-891a-dec35c318583",
-                    "ValueMax",
-                    0
-                ),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(
-                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\PowerSettings\54533251-82be-4824-96c1-47b60b740d00\0cc5b647-c1df-4637-891a-dec35c318583",
-                    "ValueMax"
-                ),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(
-                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\PowerSettings\54533251-82be-4824-96c1-47b60b740d00\0cc5b647-c1df-4637-891a-dec35c318583",
-                    "ValueMax",
-                    0
-                ),
-            ],
-        },
-        new TweakDef
-        {
             Id = "power-disable-sleep-ac",
             Label = "Disable Auto-Sleep on AC Power",
-            Category = "Power",
+            Category = "Performance",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Prevents the PC from automatically sleeping while on AC power.",
@@ -135,7 +98,7 @@ internal static class Power
         {
             Id = "power-disable-disk-idle",
             Label = "Disable Disk Idle Timeout",
-            Category = "Power",
+            Category = "Performance",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Prevents hard drives from spinning down when idle. Reduces wake latency.",
@@ -149,7 +112,7 @@ internal static class Power
         {
             Id = "power-disable-adaptive-brightness",
             Label = "Disable Adaptive Display Brightness",
-            Category = "Power",
+            Category = "Performance",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -167,7 +130,7 @@ internal static class Power
         {
             Id = "power-pwr-pcie-link-pm-off",
             Label = "Disable PCI Express Link State Power Management",
-            Category = "Power",
+            Category = "Performance",
             NeedsAdmin = true,
             CorpSafe = false,
             Description =
@@ -182,7 +145,7 @@ internal static class Power
         {
             Id = "power-pwr-disable-idle-states",
             Label = "Disable Processor Idle States",
-            Category = "Power",
+            Category = "Performance",
             NeedsAdmin = true,
             CorpSafe = false,
             Description =
@@ -203,45 +166,9 @@ internal static class Power
         },
         new TweakDef
         {
-            Id = "power-disable-sleep-away",
-            Label = "Disable Hibernate Boot and Sleep Away",
-            Category = "Power",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description =
-                "Disables HiberBoot and SleepAway features that use disk-based sleep states. Ensures clean cold boots each time. Default: Enabled. Recommended: Disabled.",
-            Tags = ["power", "hibernate", "hiberboot", "sleep-away", "boot"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power"],
-            ApplyOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\PowerSettings\238c9fa8-0aad-41ed-83f4-97be242c8f20\29f6c1db-86da-48c5-9fdb-f2b67b1f44da",
-                    "ValueMax",
-                    0
-                ),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\PowerSettings\238c9fa8-0aad-41ed-83f4-97be242c8f20\29f6c1db-86da-48c5-9fdb-f2b67b1f44da",
-                    "ValueMax",
-                    1800
-                ),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(
-                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\PowerSettings\238c9fa8-0aad-41ed-83f4-97be242c8f20\29f6c1db-86da-48c5-9fdb-f2b67b1f44da",
-                    "ValueMax",
-                    0
-                ),
-            ],
-        },
-        new TweakDef
-        {
             Id = "power-set-high-performance-plan",
             Label = "Set Active Power Plan to High Performance",
-            Category = "Power",
+            Category = "Performance",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Sets the active power scheme to High Performance (8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c). Default: Balanced.",
@@ -276,7 +203,7 @@ internal static class Power
         {
             Id = "power-disable-hard-disk-idle-timeout",
             Label = "Disable Hard Disk Idle Turn Off",
-            Category = "Power",
+            Category = "Performance",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Prevents Windows from spinning down hard disks after idle. Avoids seek delays on HDDs. Default: 20 minutes.",
@@ -315,7 +242,7 @@ internal static class Power
         {
             Id = "power-ultimate-performance-plan",
             Label = "Enable Ultimate Performance Power Plan (powercfg)",
-            Category = "Power",
+            Category = "Performance",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -356,7 +283,7 @@ internal static class Power
         {
             Id = "power-disable-hibernate",
             Label = "Disable Hibernation (powercfg)",
-            Category = "Power",
+            Category = "Performance",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables hibernation and removes the hiberfil.sys file, freeing disk space equal to RAM size.",
@@ -382,44 +309,9 @@ internal static class Power
         },
         new TweakDef
         {
-            Id = "power-disable-ntfs-last-access",
-            Label = "Disable NTFS Last Access Timestamp",
-            Category = "Power",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables NTFS last access timestamp updates. Reduces disk write I/O and improves SSD endurance. Default: system managed.",
-            Tags = ["power", "ntfs", "filesystem", "ssd", "performance"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem"],
-            ApplyOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem",
-                    "NtfsDisableLastAccessUpdate",
-                    unchecked((int)0x80000001)
-                ),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem",
-                    "NtfsDisableLastAccessUpdate",
-                    unchecked((int)0x80000000)
-                ),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(
-                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem",
-                    "NtfsDisableLastAccessUpdate",
-                    unchecked((int)0x80000001)
-                ),
-            ],
-        },
-        new TweakDef
-        {
             Id = "power-disable-pci-express-pm",
             Label = "Disable PCI Express ASPM (Driver)",
-            Category = "Power",
+            Category = "Performance",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -434,7 +326,7 @@ internal static class Power
         {
             Id = "power-high-performance-plan",
             Label = "Activate High Performance Plan",
-            Category = "Power",
+            Category = "Performance",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -461,7 +353,7 @@ internal static class Power
         {
             Id = "power-max-processor-turbo",
             Label = "Maximise Processor State (100%)",
-            Category = "Power",
+            Category = "Performance",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -486,7 +378,7 @@ internal static class Power
         {
             Id = "power-no-password-on-resume",
             Label = "No Password on Wake/Resume",
-            Category = "Power",
+            Category = "Performance",
             NeedsAdmin = true,
             CorpSafe = false,
             Description =
@@ -530,7 +422,7 @@ internal static class Power
         {
             Id = "power-pwr-disable-usb-selective-suspend",
             Label = "Disable USB Selective Suspend (Hub)",
-            Category = "Power",
+            Category = "Performance",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -545,7 +437,7 @@ internal static class Power
         {
             Id = "power-standby-reserve-grace",
             Label = "Set Standby Reserve Grace Period to 0",
-            Category = "Power",
+            Category = "Performance",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -609,7 +501,7 @@ internal static class EnergySaver
         {
             Id = "energy-disable-energy-saver-brightness-reduction",
             Label = "Disable Energy Saver Screen Dimming",
-            Category = "Power",
+            Category = "Performance",
             NeedsAdmin = false,
             CorpSafe = true,
             Tags = ["energy saver", "brightness", "battery", "display"],
@@ -625,7 +517,7 @@ internal static class EnergySaver
         {
             Id = "energy-set-energy-saver-threshold",
             Label = "Set Energy Saver Auto-Activate Threshold to 30%",
-            Category = "Power",
+            Category = "Performance",
             NeedsAdmin = false,
             CorpSafe = true,
             Tags = ["energy saver", "battery", "power"],
@@ -641,7 +533,7 @@ internal static class EnergySaver
         {
             Id = "energy-disable-energy-saver-on-ac",
             Label = "Disable Energy Saver on AC Power",
-            Category = "Power",
+            Category = "Performance",
             NeedsAdmin = false,
             CorpSafe = true,
             Tags = ["energy saver", "power", "ac", "performance"],
@@ -656,7 +548,7 @@ internal static class EnergySaver
         {
             Id = "energy-disable-background-activity-manager",
             Label = "Disable Background Activity Manager Throttling",
-            Category = "Power",
+            Category = "Performance",
             NeedsAdmin = true,
             CorpSafe = true,
             Tags = ["energy saver", "background", "performance"],
@@ -672,7 +564,7 @@ internal static class EnergySaver
         {
             Id = "energy-enable-hardware-accelerated-gpu-scheduling",
             Label = "Enable Hardware-Accelerated GPU Scheduling (HAGS)",
-            Category = "Power",
+            Category = "Performance",
             NeedsAdmin = true,
             CorpSafe = true,
             Tags = ["gaming", "gpu", "performance", "latency", "hags"],
@@ -688,7 +580,7 @@ internal static class EnergySaver
         {
             Id = "energy-set-timer-resolution-highest",
             Label = "Increase System Timer Resolution (1 ms)",
-            Category = "Power",
+            Category = "Performance",
             NeedsAdmin = true,
             CorpSafe = false,
             Tags = ["performance", "gaming", "latency", "timer", "scheduler"],
@@ -705,7 +597,7 @@ internal static class EnergySaver
         {
             Id = "energy-disable-auto-brightness-sensor",
             Label = "Disable Auto-Brightness (Ambient Light Sensor)",
-            Category = "Power",
+            Category = "Performance",
             NeedsAdmin = false,
             CorpSafe = true,
             Tags = ["energy saver", "brightness", "display", "ambient light"],
@@ -721,7 +613,7 @@ internal static class EnergySaver
         {
             Id = "energy-disable-battery-limit-notification",
             Label = "Disable Low-Battery Notification Below 30%",
-            Category = "Power",
+            Category = "Performance",
             NeedsAdmin = true,
             CorpSafe = true,
             Tags = ["energy saver", "battery", "notifications"],
@@ -737,7 +629,7 @@ internal static class EnergySaver
         {
             Id = "energy-enable-efficiency-mode-background",
             Label = "Enable Windows Efficiency Mode for Background Apps",
-            Category = "Power",
+            Category = "Performance",
             NeedsAdmin = true,
             CorpSafe = true,
             Tags = ["energy saver", "efficiency mode", "background", "battery", "performance"],
@@ -753,7 +645,7 @@ internal static class EnergySaver
         {
             Id = "energy-disable-promotional-notifications",
             Label = "Disable Windows Energy Saver Promotional Notifications",
-            Category = "Power",
+            Category = "Performance",
             NeedsAdmin = true,
             CorpSafe = true,
             Tags = ["energy saver", "notifications", "debloat"],
@@ -769,7 +661,7 @@ internal static class EnergySaver
         {
             Id = "energy-set-saver-threshold-15pct",
             Label = "Set Energy Saver Auto-Activate Threshold to 15%",
-            Category = "Power",
+            Category = "Performance",
             NeedsAdmin = false,
             CorpSafe = true,
             Tags = ["energy saver", "battery", "threshold"],
@@ -785,7 +677,7 @@ internal static class EnergySaver
         {
             Id = "energy-disable-auto-saver",
             Label = "Disable Automatic Energy Saver Activation",
-            Category = "Power",
+            Category = "Performance",
             NeedsAdmin = false,
             CorpSafe = true,
             Tags = ["energy saver", "battery", "auto"],
@@ -801,7 +693,7 @@ internal static class EnergySaver
         {
             Id = "energy-disable-saver-dim-amount",
             Label = "Set Energy Saver Screen Dim Amount to Zero",
-            Category = "Power",
+            Category = "Performance",
             NeedsAdmin = false,
             CorpSafe = true,
             Tags = ["energy saver", "brightness", "battery", "display"],
@@ -817,7 +709,7 @@ internal static class EnergySaver
         {
             Id = "energy-enable-battery-care",
             Label = "Enable Battery Care (Charge Limit) Feature",
-            Category = "Power",
+            Category = "Performance",
             NeedsAdmin = true,
             CorpSafe = true,
             Tags = ["energy saver", "battery care", "battery health", "charging"],
@@ -833,7 +725,7 @@ internal static class EnergySaver
         {
             Id = "energy-set-charge-limit-80",
             Label = "Set Battery Charge Limit to 80%",
-            Category = "Power",
+            Category = "Performance",
             NeedsAdmin = true,
             CorpSafe = true,
             Tags = ["energy saver", "battery care", "battery health", "charging", "80 percent"],
@@ -849,7 +741,7 @@ internal static class EnergySaver
         {
             Id = "energy-disable-background-tasks-battery",
             Label = "Disable Background App Tasks While on Battery",
-            Category = "Power",
+            Category = "Performance",
             NeedsAdmin = true,
             CorpSafe = true,
             Tags = ["energy saver", "battery", "background apps", "efficiency"],
@@ -865,7 +757,7 @@ internal static class EnergySaver
         {
             Id = "energy-disable-network-on-saver",
             Label = "Restrict Network Activity During Energy Saver",
-            Category = "Power",
+            Category = "Performance",
             NeedsAdmin = true,
             CorpSafe = true,
             Tags = ["energy saver", "battery", "network", "background"],
@@ -881,7 +773,7 @@ internal static class EnergySaver
         {
             Id = "energy-disable-push-sync-on-saver",
             Label = "Disable Cloud Sync During Energy Saver",
-            Category = "Power",
+            Category = "Performance",
             NeedsAdmin = true,
             CorpSafe = true,
             Tags = ["energy saver", "battery", "sync", "onedrive", "background"],
@@ -897,7 +789,7 @@ internal static class EnergySaver
         {
             Id = "energy-disable-location-on-saver",
             Label = "Disable Location Services During Energy Saver",
-            Category = "Power",
+            Category = "Performance",
             NeedsAdmin = true,
             CorpSafe = true,
             Tags = ["energy saver", "battery", "location", "gps", "privacy"],
@@ -913,7 +805,7 @@ internal static class EnergySaver
         {
             Id = "energy-disable-battery-reminder",
             Label = "Disable Energy Saver Battery Reminder Notifications",
-            Category = "Power",
+            Category = "Performance",
             NeedsAdmin = true,
             CorpSafe = true,
             Tags = ["energy saver", "battery", "notifications"],
@@ -939,38 +831,9 @@ internal static class PowerManagement
     [
         new TweakDef
         {
-            Id = "pwrmgmt-disable-fast-startup",
-            Label = "Disable Fast Startup (Hybrid Boot)",
-            Category = "Power",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables Fast Startup which hibernates the kernel. Prevents issues with dual-boot, BIOS updates, and bitlocker.",
-            Tags = ["power", "fast-startup", "boot", "hybrid"],
-            SideEffects = "Cold boot times will be slightly longer.",
-            RegistryKeys = [$@"{PowerKey}\PowerSettings"],
-            ApplyOps = [RegOp.SetDword(PowerKey, "HibernateEnabled", 0)],
-            RemoveOps = [RegOp.SetDword(PowerKey, "HibernateEnabled", 1)],
-            DetectOps = [RegOp.CheckDword(PowerKey, "HibernateEnabled", 0)],
-        },
-        new TweakDef
-        {
-            Id = "pwrmgmt-disable-connected-standby",
-            Label = "Disable Connected/Modern Standby",
-            Category = "Power",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables Modern Standby (S0ix) which can cause battery drain and overheating while 'sleeping'.",
-            Tags = ["power", "standby", "sleep", "battery"],
-            RegistryKeys = [PowerKey],
-            ApplyOps = [RegOp.SetDword(PowerKey, "PlatformAoAcOverride", 0)],
-            RemoveOps = [RegOp.DeleteValue(PowerKey, "PlatformAoAcOverride")],
-            DetectOps = [RegOp.CheckDword(PowerKey, "PlatformAoAcOverride", 0)],
-        },
-        new TweakDef
-        {
             Id = "pwrmgmt-set-high-performance-plan",
             Label = "Set High Performance Power Plan",
-            Category = "Power",
+            Category = "Performance",
             NeedsAdmin = true,
             CorpSafe = true,
             KindHint = TweakKind.SystemCommand,
@@ -988,7 +851,7 @@ internal static class PowerManagement
         {
             Id = "pwrmgmt-disable-cpu-parking",
             Label = "Disable CPU Core Parking",
-            Category = "Power",
+            Category = "Performance",
             NeedsAdmin = true,
             CorpSafe = true,
             KindHint = TweakKind.SystemCommand,
@@ -1014,7 +877,7 @@ internal static class PowerManagement
         {
             Id = "pwrmgmt-set-max-cpu-state-100",
             Label = "Set Maximum CPU State to 100%",
-            Category = "Power",
+            Category = "Performance",
             NeedsAdmin = true,
             CorpSafe = true,
             KindHint = TweakKind.SystemCommand,
@@ -1042,7 +905,7 @@ internal static class PowerManagement
         {
             Id = "pwrmgmt-disable-sleep-timeout-ac",
             Label = "Disable Sleep on AC Power",
-            Category = "Power",
+            Category = "Performance",
             NeedsAdmin = true,
             CorpSafe = true,
             KindHint = TweakKind.SystemCommand,
@@ -1056,7 +919,7 @@ internal static class PowerManagement
         {
             Id = "pwrmgmt-disable-screen-timeout-ac",
             Label = "Disable Screen Off on AC Power",
-            Category = "Power",
+            Category = "Performance",
             NeedsAdmin = true,
             CorpSafe = true,
             KindHint = TweakKind.SystemCommand,
@@ -1070,7 +933,7 @@ internal static class PowerManagement
         {
             Id = "pwrmgmt-disable-usb-selective-suspend",
             Label = "Disable USB Selective Suspend",
-            Category = "Power",
+            Category = "Performance",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Prevents USB devices from being suspended to save power. Fixes disconnecting peripherals.",
@@ -1084,7 +947,7 @@ internal static class PowerManagement
         {
             Id = "pwrmgmt-set-lid-close-nothing",
             Label = "Set Lid Close Action to Do Nothing",
-            Category = "Power",
+            Category = "Performance",
             NeedsAdmin = true,
             CorpSafe = true,
             KindHint = TweakKind.SystemCommand,
@@ -1106,7 +969,7 @@ internal static class PowerManagement
         {
             Id = "pwrmgmt-disable-wake-timers",
             Label = "Disable Wake Timers",
-            Category = "Power",
+            Category = "Performance",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Prevents scheduled tasks and Windows Update from waking the computer from sleep.",
@@ -1135,7 +998,7 @@ internal static class PowerManagement
         {
             Id = "pwrmgmt-enable-hibernate-after-sleep",
             Label = "Enable Hibernate After 3 Hours of Sleep",
-            Category = "Power",
+            Category = "Performance",
             NeedsAdmin = true,
             CorpSafe = true,
             KindHint = TweakKind.SystemCommand,
@@ -1157,7 +1020,7 @@ internal static class PowerManagement
         {
             Id = "pwrmgmt-set-min-cpu-state-5",
             Label = "Set Minimum CPU State to 5% (Power Save)",
-            Category = "Power",
+            Category = "Performance",
             NeedsAdmin = true,
             CorpSafe = true,
             KindHint = TweakKind.SystemCommand,
@@ -1180,7 +1043,7 @@ internal static class PowerManagement
         {
             Id = "pwrmgmt-disable-adaptive-brightness",
             Label = "Disable Adaptive Brightness",
-            Category = "Power",
+            Category = "Performance",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables automatic brightness adjustment based on ambient light sensor.",
@@ -1202,7 +1065,7 @@ internal static class PowerManagement
         {
             Id = "pwrmgmt-disable-hard-disk-timeout",
             Label = "Disable Hard Disk Auto Power-Off",
-            Category = "Power",
+            Category = "Performance",
             NeedsAdmin = true,
             CorpSafe = true,
             KindHint = TweakKind.SystemCommand,
@@ -1224,7 +1087,7 @@ internal static class PowerManagement
         {
             Id = "pwrmgmt-disable-core-parking",
             Label = "Disable CPU Core Parking (All Cores Active)",
-            Category = "Power",
+            Category = "Performance",
             NeedsAdmin = true,
             CorpSafe = true,
             KindHint = TweakKind.SystemCommand,
@@ -1246,7 +1109,7 @@ internal static class PowerManagement
         {
             Id = "pwrmgmt-set-pci-express-max-performance",
             Label = "PCI Express Link State — Maximum Performance",
-            Category = "Power",
+            Category = "Performance",
             NeedsAdmin = true,
             CorpSafe = true,
             KindHint = TweakKind.SystemCommand,
@@ -1268,7 +1131,7 @@ internal static class PowerManagement
         {
             Id = "pwrmgmt-disable-display-scaling",
             Label = "Disable Display Power Savings",
-            Category = "Power",
+            Category = "Performance",
             NeedsAdmin = true,
             CorpSafe = true,
             KindHint = TweakKind.SystemCommand,
@@ -1290,7 +1153,7 @@ internal static class PowerManagement
         {
             Id = "pwrmgmt-enable-high-precision-timer",
             Label = "Enable High Precision Event Timer",
-            Category = "Power",
+            Category = "Performance",
             NeedsAdmin = true,
             CorpSafe = true,
             KindHint = TweakKind.SystemCommand,
@@ -1307,47 +1170,9 @@ internal static class PowerManagement
         },
         new TweakDef
         {
-            Id = "pwrmgmt-disable-turbo-boost",
-            Label = "Disable CPU Turbo Boost (Thermal Control)",
-            Category = "Power",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Caps CPU frequency at base clock by disabling turbo boost. Reduces heat and power consumption.",
-            Tags = ["power", "cpu", "turbo", "thermal"],
-            RegistryKeys =
-            [
-                @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\PowerSettings\54533251-82be-4824-96c1-47b60b740d00\be337238-0d82-4146-a960-4f3749d470c7",
-            ],
-            ApplyOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\PowerSettings\54533251-82be-4824-96c1-47b60b740d00\be337238-0d82-4146-a960-4f3749d470c7",
-                    "Attributes",
-                    2
-                ),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\PowerSettings\54533251-82be-4824-96c1-47b60b740d00\be337238-0d82-4146-a960-4f3749d470c7",
-                    "Attributes",
-                    1
-                ),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(
-                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\PowerSettings\54533251-82be-4824-96c1-47b60b740d00\be337238-0d82-4146-a960-4f3749d470c7",
-                    "Attributes",
-                    2
-                ),
-            ],
-        },
-        new TweakDef
-        {
             Id = "pwrmgmt-disable-processor-boost",
             Label = "Disable Processor Turbo Boost via Registry",
-            Category = "Power",
+            Category = "Performance",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -1386,7 +1211,7 @@ internal static class PowerManagement
         {
             Id = "pwrmgmt-disable-processor-idle-promote",
             Label = "Disable Processor Idle Promote Threshold",
-            Category = "Power",
+            Category = "Performance",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -1425,7 +1250,7 @@ internal static class PowerManagement
         {
             Id = "pwrmgmt-disable-throttle-states",
             Label = "Disable CPU Throttle States (T-States)",
-            Category = "Power",
+            Category = "Performance",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -1464,7 +1289,7 @@ internal static class PowerManagement
         {
             Id = "pwrmgmt-disable-energy-saver",
             Label = "Disable Energy Saver (Battery Saver Override)",
-            Category = "Power",
+            Category = "Performance",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -1479,7 +1304,7 @@ internal static class PowerManagement
         {
             Id = "pwrmgmt-disable-away-mode",
             Label = "Disable Away Mode",
-            Category = "Power",
+            Category = "Performance",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -1518,7 +1343,7 @@ internal static class PowerManagement
         {
             Id = "pwrmgmt-set-min-processor-state-100",
             Label = "Set Minimum Processor State to 100%",
-            Category = "Power",
+            Category = "Performance",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -1557,7 +1382,7 @@ internal static class PowerManagement
         {
             Id = "pwrmgmt-disable-system-unattended-timeout",
             Label = "Disable System Unattended Sleep Timeout",
-            Category = "Power",
+            Category = "Performance",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -1596,7 +1421,7 @@ internal static class PowerManagement
         {
             Id = "pwrmgmt-disable-dimmed-display-timeout",
             Label = "Disable Dimmed Display Timeout",
-            Category = "Power",
+            Category = "Performance",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables the hidden dimmed display timeout setting. Prevents screen from dimming before the display timeout kicks in.",
@@ -1634,7 +1459,7 @@ internal static class PowerManagement
         {
             Id = "pwrmgmt-disable-lid-close-action",
             Label = "Do Nothing on Lid Close (AC Power)",
-            Category = "Power",
+            Category = "Performance",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -1673,7 +1498,7 @@ internal static class PowerManagement
         {
             Id = "pwrmgmt-disable-hybrid-sleep",
             Label = "Disable Hybrid Sleep",
-            Category = "Power",
+            Category = "Performance",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =

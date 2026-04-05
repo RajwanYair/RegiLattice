@@ -22,11 +22,11 @@ public static class ConflictDetector
         // ── HVCI / Virtualization-Based Security ─────────────────────────────
         new(
             "energy-enable-hardware-accelerated-gpu-scheduling",
-            "sac-disable-hvci",
+            "vbs-enable-hvci",
             "HAGS requires the GPU driver model that HVCI-off also modifies; enabling both may cause display driver instability."
         ),
         new(
-            "sac-disable-hvci",
+            "vbs-enable-hvci",
             "sac-disable-virtualization-based-security",
             "HVCI is a VBS sub-feature; disabling VBS already disables HVCI. Setting both targets overlapping policy keys and may produce unexpected state."
         ),

@@ -825,22 +825,6 @@ internal static class PolicyNetwork
             },
             new TweakDef
             {
-                Id = "bc-enable-hosted-mode",
-                Label = "Enable BranchCache in Hosted Cache Mode",
-                Category = "Network",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                Tags = ["branchcache", "network", "caching", "hosted", "server"],
-                Description =
-                    "Enables BranchCache and configures it in Hosted Cache mode. Content is cached on a "
-                    + "dedicated server at the branch office; clients upload content to the server and peers "
-                    + "download from it. Requires a Windows Server running the BranchCache hosted cache role.",
-                ApplyOps = [RegOp.SetDword(Svc, "Enable", 1), RegOp.SetDword(Svc, "PeerDistributionMode", 2)],
-                RemoveOps = [RegOp.DeleteValue(Svc, "Enable"), RegOp.DeleteValue(Svc, "PeerDistributionMode")],
-                DetectOps = [RegOp.CheckDword(Svc, "PeerDistributionMode", 2)],
-            },
-            new TweakDef
-            {
                 Id = "bc-set-cache-25pct",
                 Label = "Set BranchCache Cache to 25% of Disk",
                 Category = "Network",
@@ -982,23 +966,6 @@ internal static class PolicyNetwork
 
         public static IReadOnlyList<TweakDef> Data =>
             [
-                new TweakDef
-                {
-                    Id = "branchcache-enable-service",
-                    Label = "Enable BranchCache Service via Policy",
-                    Category = "Network",
-                    Description =
-                        "Enables the BranchCache distributed caching service via Group Policy. BranchCache caches WAN content locally for faster repeat access. Default: not configured.",
-                    Tags = ["branchcache", "caching", "wan", "performance", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 4,
-                    SafetyRating = 4,
-                    ImpactNote = "Enables local content caching; reduces WAN bandwidth for repeated downloads.",
-                    ApplyOps = [RegOp.SetDword(SvcKey, "Enable", 1)],
-                    RemoveOps = [RegOp.DeleteValue(SvcKey, "Enable")],
-                    DetectOps = [RegOp.CheckDword(SvcKey, "Enable", 1)],
-                },
                 new TweakDef
                 {
                     Id = "branchcache-distributed-mode",
@@ -1409,29 +1376,6 @@ internal static class PolicyNetwork
                 },
                 new TweakDef
                 {
-                    Id = "mcc-block-p2p-delivery-optimization",
-                    Label = "Block Peer-to-Peer Delivery Optimization",
-                    Category = "Network",
-                    Description =
-                        "Sets the Delivery Optimization download mode to HTTP-only (mode 0), preventing Windows from using "
-                        + "peer-to-peer transfers between devices on the local network or internet. "
-                        + "Content is sourced from Microsoft CDN or MCC only.",
-                    Tags = ["mcc", "delivery-optimization", "p2p", "bandwidth", "security"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    MinBuild = 19041,
-                    ImpactScore = 3,
-                    SafetyRating = 5,
-                    ImpactNote =
-                        "Prevents devices from sharing update packages with each other; "
-                        + "reduces lateral data movement and ensures organisational control over update source.",
-                    RegistryKeys = [DeliveryOptKey],
-                    ApplyOps = [RegOp.SetDword(DeliveryOptKey, "DODownloadMode", 0)],
-                    RemoveOps = [RegOp.DeleteValue(DeliveryOptKey, "DODownloadMode")],
-                    DetectOps = [RegOp.CheckDword(DeliveryOptKey, "DODownloadMode", 0)],
-                },
-                new TweakDef
-                {
                     Id = "mcc-limit-background-bandwidth-percent",
                     Label = "Limit Delivery Optimization Background Bandwidth (50%)",
                     Category = "Network",
@@ -1492,48 +1436,6 @@ internal static class PolicyNetwork
                     ApplyOps = [RegOp.SetDword(MccClientKey, "MaxCacheSizeGB", 20)],
                     RemoveOps = [RegOp.DeleteValue(MccClientKey, "MaxCacheSizeGB")],
                     DetectOps = [RegOp.CheckDword(MccClientKey, "MaxCacheSizeGB", 20)],
-                },
-                new TweakDef
-                {
-                    Id = "mcc-disable-upload-to-peers",
-                    Label = "Disable Upload of Cached Content to Peers",
-                    Category = "Network",
-                    Description =
-                        "Prevents the device from uploading locally cached Delivery Optimization content to other clients on the LAN or internet, "
-                        + "configuring the node as a download-only client.",
-                    Tags = ["mcc", "delivery-optimization", "upload", "p2p", "bandwidth"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    MinBuild = 19041,
-                    ImpactScore = 3,
-                    SafetyRating = 5,
-                    ImpactNote =
-                        "Ensures devices only consume bandwidth for their own downloads, not to serve other clients. "
-                        + "Useful for metered-connection endpoints.",
-                    RegistryKeys = [DeliveryOptKey],
-                    ApplyOps = [RegOp.SetDword(DeliveryOptKey, "DOMaxUploadBandwidth", 0)],
-                    RemoveOps = [RegOp.DeleteValue(DeliveryOptKey, "DOMaxUploadBandwidth")],
-                    DetectOps = [RegOp.CheckDword(DeliveryOptKey, "DOMaxUploadBandwidth", 0)],
-                },
-                new TweakDef
-                {
-                    Id = "mcc-restrict-to-lan-peers-only",
-                    Label = "Restrict Delivery Optimization Peers to LAN Only",
-                    Category = "Network",
-                    Description =
-                        "Configures Delivery Optimization to allow peer-to-peer transfers only within the local area network (LAN), not over the internet. "
-                        + "Prevents content sharing with devices outside the organisation's network boundary.",
-                    Tags = ["mcc", "delivery-optimization", "lan", "p2p", "security"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    MinBuild = 19041,
-                    ImpactScore = 3,
-                    SafetyRating = 5,
-                    ImpactNote = "Limits peer-to-peer transfers to LAN mode (mode 1) — devices on the same subnet; no internet peering occurs.",
-                    RegistryKeys = [DeliveryOptKey],
-                    ApplyOps = [RegOp.SetDword(DeliveryOptKey, "DODownloadMode", 1)],
-                    RemoveOps = [RegOp.DeleteValue(DeliveryOptKey, "DODownloadMode")],
-                    DetectOps = [RegOp.CheckDword(DeliveryOptKey, "DODownloadMode", 1)],
                 },
                 new TweakDef
                 {
@@ -1927,21 +1829,6 @@ internal static class PolicyNetwork
 
         public static IReadOnlyList<TweakDef> Data { get; } =
         [
-            new TweakDef
-            {
-                Id = "doptpol-download-mode-local",
-                Label = "Restrict DO Download Mode to Local PC Only",
-                Category = "Network",
-                Description =
-                    "Sets Delivery Optimization download mode to 0 (HTTP only, no peering). Prevents Windows Update content from being shared with or downloaded from other PCs on the network or internet. Default: 1 (LAN). Recommended: 0 for enterprise/privacy.",
-                Tags = ["delivery-optimization", "windows-update", "network", "bandwidth"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                RegistryKeys = [Do],
-                ApplyOps = [RegOp.SetDword(Do, "DODownloadMode", 0)],
-                RemoveOps = [RegOp.DeleteValue(Do, "DODownloadMode")],
-                DetectOps = [RegOp.CheckDword(Do, "DODownloadMode", 0)],
-            },
             new TweakDef
             {
                 Id = "doptpol-min-background-qos",
@@ -2491,24 +2378,6 @@ internal static class PolicyNetwork
                 },
                 new TweakDef
                 {
-                    Id = "dsqos-disable-packet-scheduler-reserve",
-                    Label = "DiffServ QoS: Release Reserved Bandwidth (Remove 20% QoS Reserve)",
-                    Category = "Network",
-                    Description =
-                        "Sets NonBestEffortLimit=0 in Psched. Windows reserves up to 20% of network adapter bandwidth by default for the QoS Packet Scheduler service. On a 1 Gbps NIC, this reserved 200 Mbps is unused unless active QoS flows are running. Setting NonBestEffortLimit=0 releases the reservation and allows all applications to use 100% of available bandwidth. This is commonly recommended for workstations where QoS prioritization flows are not actively in use.",
-                    Tags = ["qos", "bandwidth", "reserve", "psched", "performance"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 3,
-                    SafetyRating = 5,
-                    ImpactNote =
-                        "20% bandwidth reservation released. On high-traffic servers with active QoS, this may reduce effectiveness of QoS markings.",
-                    ApplyOps = [RegOp.SetDword(PsvKey, "NonBestEffortLimit", 0)],
-                    RemoveOps = [RegOp.DeleteValue(PsvKey, "NonBestEffortLimit")],
-                    DetectOps = [RegOp.CheckDword(PsvKey, "NonBestEffortLimit", 0)],
-                },
-                new TweakDef
-                {
                     Id = "dsqos-enable-qos-packet-scheduler",
                     Label = "DiffServ QoS: Enable Windows QoS Packet Scheduler Service",
                     Category = "Network",
@@ -2665,23 +2534,6 @@ internal static class PolicyNetwork
 
         public static IReadOnlyList<TweakDef> Data =>
             [
-                new TweakDef
-                {
-                    Id = "daccess-disable-ncsi-active-probing",
-                    Label = "DirectAccess: Disable NCSI Active Internet Probing",
-                    Category = "Network",
-                    Description =
-                        "Sets NoActiveProbe=1 under NCSI. Prevents Windows Network Connectivity Status Indicator (the icon status checker) from sending HTTP probes to Microsoft's internet connectivity test servers (msftconnecttest.com). These probes occur every 30 seconds on each network interface change. In air-gapped, isolated, or high-security networks, these outbound probes leak metadata about internal network changes to Microsoft infrastructure. Disabling NCSI probing stops IETF 6761 local DNS leaks and reduces background telemetry.",
-                    Tags = ["directaccess", "ncsi", "probing", "privacy", "network"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 3,
-                    SafetyRating = 4,
-                    ImpactNote = "NCSI will show 'No internet' or 'Limited' even on a connected system. This is cosmetic only but may confuse users.",
-                    ApplyOps = [RegOp.SetDword(NcsiKey, "NoActiveProbe", 1)],
-                    RemoveOps = [RegOp.DeleteValue(NcsiKey, "NoActiveProbe")],
-                    DetectOps = [RegOp.CheckDword(NcsiKey, "NoActiveProbe", 1)],
-                },
                 new TweakDef
                 {
                     Id = "daccess-use-custom-ncsi-probe",
@@ -2868,21 +2720,6 @@ internal static class PolicyNetwork
             },
             new TweakDef
             {
-                Id = "dnscgpo-disable-reverse-lookup-registration",
-                Label = "Disable DNS Reverse-Lookup (PTR) Registration",
-                Category = "Network",
-                Description =
-                    "Prevents automatic DNS PTR record registration for this machine's IP addresses. Reduces network exposure by not publishing reverse-lookup mappings. Default: 1. Recommended: 0 for privacy-focused deployments.",
-                Tags = ["dns", "ptr", "reverse-lookup", "registration", "privacy"],
-                NeedsAdmin = true,
-                CorpSafe = false,
-                RegistryKeys = [DnsCl],
-                ApplyOps = [RegOp.SetDword(DnsCl, "RegisterReverseLookup", 0)],
-                RemoveOps = [RegOp.DeleteValue(DnsCl, "RegisterReverseLookup")],
-                DetectOps = [RegOp.CheckDword(DnsCl, "RegisterReverseLookup", 0)],
-            },
-            new TweakDef
-            {
                 Id = "dnscgpo-disable-multicast-fqdn",
                 Label = "Disable DNS Multicast FQDN Resolution",
                 Category = "Network",
@@ -2895,21 +2732,6 @@ internal static class PolicyNetwork
                 ApplyOps = [RegOp.SetDword(DnsCl, "AllowMulticastFQDNDiscovery", 0)],
                 RemoveOps = [RegOp.DeleteValue(DnsCl, "AllowMulticastFQDNDiscovery")],
                 DetectOps = [RegOp.CheckDword(DnsCl, "AllowMulticastFQDNDiscovery", 0)],
-            },
-            new TweakDef
-            {
-                Id = "dnscgpo-disable-domain-name-devolution",
-                Label = "Disable DNS Domain-Name Devolution",
-                Category = "Network",
-                Description =
-                    "Disables DNS domain-name devolution (shortening multi-label names to try parent domain suffixes). Prevents unintended name resolution via parent domains when a query fails at the primary domain. Default: 1. Recommended: 0.",
-                Tags = ["dns", "devolution", "name-resolution", "security"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                RegistryKeys = [DnsCl],
-                ApplyOps = [RegOp.SetDword(DnsCl, "UseDomainNameDevolution", 0)],
-                RemoveOps = [RegOp.DeleteValue(DnsCl, "UseDomainNameDevolution")],
-                DetectOps = [RegOp.CheckDword(DnsCl, "UseDomainNameDevolution", 0)],
             },
             new TweakDef
             {
@@ -2955,21 +2777,6 @@ internal static class PolicyNetwork
                 ApplyOps = [RegOp.SetDword(DnsCl, "RegistrationRefreshInterval", 86400)],
                 RemoveOps = [RegOp.DeleteValue(DnsCl, "RegistrationRefreshInterval")],
                 DetectOps = [RegOp.CheckDword(DnsCl, "RegistrationRefreshInterval", 86400)],
-            },
-            new TweakDef
-            {
-                Id = "dnscgpo-disable-smart-name-resolution",
-                Label = "Disable DNS Smart Multi-Homed Name Resolution",
-                Category = "Network",
-                Description =
-                    "Disables DNS smart multi-homed name resolution, which forwards queries to all DNS servers on all adapters in parallel. Prevents DNS response spoofing via a rogue adapter on multi-homed machines. Default: not set. Recommended: 1.",
-                Tags = ["dns", "multi-home", "smart", "name-resolution", "security"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                RegistryKeys = [DnsCl],
-                ApplyOps = [RegOp.SetDword(DnsCl, "DisableSmartNameResolution", 1)],
-                RemoveOps = [RegOp.DeleteValue(DnsCl, "DisableSmartNameResolution")],
-                DetectOps = [RegOp.CheckDword(DnsCl, "DisableSmartNameResolution", 1)],
             },
             new TweakDef
             {
@@ -3242,24 +3049,6 @@ internal static class PolicyNetwork
                     ApplyOps = [RegOp.SetDword(Key, "EnableDNSSEC", 1)],
                     RemoveOps = [RegOp.DeleteValue(Key, "EnableDNSSEC")],
                     DetectOps = [RegOp.CheckDword(Key, "EnableDNSSEC", 1)],
-                },
-                new TweakDef
-                {
-                    Id = "dohpol-disable-llmnr",
-                    Label = "Disable LLMNR (Link-Local Multicast Name Resolution)",
-                    Category = "Network",
-                    Description =
-                        "Disables LLMNR to prevent mDNS-style name poisoning attacks (Responder tool) by eliminating the fallback multicast name resolution protocol.",
-                    Tags = ["doh", "llmnr", "dns", "hardening", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 4,
-                    SafetyRating = 4,
-                    ImpactNote =
-                        "Eliminates LLMNR; mitigates LLMNR-poisoning attacks (Responder). Local hostname resolution falls back to NetBIOS if not disabled.",
-                    ApplyOps = [RegOp.SetDword(Key, "EnableMulticast", 0)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "EnableMulticast")],
-                    DetectOps = [RegOp.CheckDword(Key, "EnableMulticast", 0)],
                 },
                 new TweakDef
                 {
@@ -3725,24 +3514,6 @@ internal static class PolicyNetwork
         [
             new TweakDef
             {
-                Id = "homegroup-disable-homegroup",
-                Label = "HomeGroup: Disable HomeGroup (Prevent Creation and Join)",
-                Category = "Network",
-                Description =
-                    "Prevents Windows from creating or joining HomeGroups. HomeGroup was a Windows feature (removed in Windows 10 1803) that allowed easy resource sharing over a local network. Where the underlying registry paths and services still exist (transition systems), disabling HomeGroup ensures no legacy sharing mechanism can be activated. This covers both domain-joined machines and upgraded systems that may still have HomeGroup registry entries.",
-                Tags = ["homegroup", "sharing", "network", "policy", "legacy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                RegistryKeys = [HomeGroupKey],
-                ApplyOps = [RegOp.SetDword(HomeGroupKey, "DisableHomeGroup", 1)],
-                RemoveOps = [RegOp.DeleteValue(HomeGroupKey, "DisableHomeGroup")],
-                DetectOps = [RegOp.CheckDword(HomeGroupKey, "DisableHomeGroup", 1)],
-                ImpactScore = 2,
-                SafetyRating = 5,
-                ImpactNote = "HomeGroup was removed in Windows 10 v1803; this policy simply enforces the removal on upgraded systems.",
-            },
-            new TweakDef
-            {
                 Id = "homegroup-block-sharing-wizard",
                 Label = "HomeGroup: Block Network Sharing Wizard",
                 Category = "Network",
@@ -3854,24 +3625,6 @@ internal static class PolicyNetwork
                 ImpactScore = 3,
                 SafetyRating = 5,
                 ImpactNote = "Removes ICS option from the user's adapter properties; user-scope complement to machine-level ICS block.",
-            },
-            new TweakDef
-            {
-                Id = "homegroup-block-aad-workplace-join",
-                Label = "HomeGroup: Block Azure AD Workplace Join (Unmanaged Devices)",
-                Category = "Network",
-                Description =
-                    "Prevents users from registering this device with Azure Active Directory (AAD / Entra ID) as a Workplace Join device. Workplace Join allows personal (BYOD) devices to access corporate resources like Exchange email and SharePoint through conditional access policies. In environments where only fully MDM-enrolled corporate devices are permitted, blocking Workplace Join ensures personal devices cannot gain partial access to corporate resources through the lighter-weight registration path.",
-                Tags = ["homegroup", "azure ad", "workplace join", "byod", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                RegistryKeys = [WorkplaceKey],
-                ApplyOps = [RegOp.SetDword(WorkplaceKey, "BlockAADWorkplaceJoin", 1)],
-                RemoveOps = [RegOp.DeleteValue(WorkplaceKey, "BlockAADWorkplaceJoin")],
-                DetectOps = [RegOp.CheckDword(WorkplaceKey, "BlockAADWorkplaceJoin", 1)],
-                ImpactScore = 4,
-                SafetyRating = 4,
-                ImpactNote = "Blocks AAD Workplace Join registration; users cannot self-enroll personal devices for conditional access.",
             },
             new TweakDef
             {
@@ -5609,61 +5362,6 @@ internal static class PolicyNetwork
         [
             new TweakDef
             {
-                Id = "legprot-disable-llmnr",
-                Label = "Disable LLMNR (Link-Local Multicast Name Resolution)",
-                Category = "Network",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                Tags = ["llmnr", "multicast", "name resolution", "responder", "security"],
-                Description =
-                    "Disables LLMNR — a broadcast-based name resolution protocol exploited by "
-                    + "tools like Responder to perform NTLM credential capture via LLMNR poisoning. "
-                    + "EnableMulticast=0 in DNS Client policy. Non-domain devices should use DNS only.",
-                ApplyOps = [RegOp.SetDword(DnsClient, "EnableMulticast", 0)],
-                RemoveOps = [RegOp.DeleteValue(DnsClient, "EnableMulticast")],
-                DetectOps = [RegOp.CheckDword(DnsClient, "EnableMulticast", 0)],
-            },
-            new TweakDef
-            {
-                Id = "legprot-disable-mdns",
-                Label = "Disable mDNS (Multicast DNS / Bonjour)",
-                Category = "Network",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                Tags = ["mdns", "multicast dns", "bonjour", "zeroconf", "security"],
-                Description =
-                    "Disables mDNS (Multicast DNS, also known as Bonjour or Zeroconf). "
-                    + "EnableMDNS=0 in Dnscache parameters. mDNS is only needed for zero-config "
-                    + "local discovery; on corporate or secure networks, use DNS and WINS instead.",
-                ApplyOps = [RegOp.SetDword(DnsClientSvc, "EnableMDNS", 0)],
-                RemoveOps = [RegOp.DeleteValue(DnsClientSvc, "EnableMDNS")],
-                DetectOps = [RegOp.CheckDword(DnsClientSvc, "EnableMDNS", 0)],
-            },
-            new TweakDef
-            {
-                Id = "legprot-disable-netbios",
-                Label = "Disable NetBIOS over TCP/IP System-Wide",
-                Category = "Network",
-                NeedsAdmin = true,
-                CorpSafe = false,
-                ImpactScore = 4,
-                SafetyRating = 4,
-                Tags = ["netbios", "nbns", "legacy protocol", "security"],
-                Description =
-                    "Disables NetBIOS over TCP/IP at the system level. NetbiosOptions=2 sets "
-                    + "NetBIOS as disabled by default (overrides DHCP). NetBIOS is exploited "
-                    + "by NBNS poisoning attacks. WARNING: may break legacy app connectivity "
-                    + "that relies on NetBIOS name resolution on older Windows networks.",
-                ApplyOps = [RegOp.SetDword(NetBtParams, "NetbiosOptions", 2)],
-                RemoveOps = [RegOp.SetDword(NetBtParams, "NetbiosOptions", 0)],
-                DetectOps = [RegOp.CheckDword(NetBtParams, "NetbiosOptions", 2)],
-            },
-            new TweakDef
-            {
                 Id = "legprot-disable-lltd",
                 Label = "Disable LLTD (Link-Layer Topology Discovery)",
                 Category = "Network",
@@ -5679,43 +5377,6 @@ internal static class PolicyNetwork
                 ApplyOps = [RegOp.SetDword(LltdSvc, "Start", 4)],
                 RemoveOps = [RegOp.SetDword(LltdSvc, "Start", 3)],
                 DetectOps = [RegOp.CheckDword(LltdSvc, "Start", 4)],
-            },
-            new TweakDef
-            {
-                Id = "legprot-disable-teredo",
-                Label = "Disable Teredo IPv6 Tunneling",
-                Category = "Network",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                Tags = ["teredo", "ipv6", "tunnel", "legacy network"],
-                Description =
-                    "Disables Teredo — an IPv6 tunneling mechanism that encapsulates IPv6 traffic "
-                    + "in IPv4 UDP packets. Teredo can bypass firewalls and creates unexpected "
-                    + "network exposure. DisabledComponents bitmask is set via TCP/IP v6 parameters.",
-                ApplyOps = [RegOp.SetDword(TeledoSvc, "DisabledComponents", 1)],
-                RemoveOps = [RegOp.DeleteValue(TeledoSvc, "DisabledComponents")],
-                DetectOps = [RegOp.CheckDword(TeledoSvc, "DisabledComponents", 1)],
-            },
-            new TweakDef
-            {
-                Id = "legprot-disable-isatap",
-                Label = "Disable ISATAP IPv6 Tunneling",
-                Category = "Network",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                Tags = ["isatap", "ipv6", "tunnel", "legacy network"],
-                Description =
-                    "Disables ISATAP (Intra-Site Automatic Tunnel Addressing Protocol) — an "
-                    + "IPv6 transition mechanism that tunnels IPv6 in IPv4 within an organization. "
-                    + "Modern networks use native IPv6; ISATAP adds unnecessary complexity and "
-                    + "attack surface. DisabledComponents+=4 in the bitmask.",
-                ApplyOps = [RegOp.SetDword(TeledoSvc, "DisabledComponents", 4)],
-                RemoveOps = [RegOp.DeleteValue(TeledoSvc, "DisabledComponents")],
-                DetectOps = [RegOp.CheckDword(TeledoSvc, "DisabledComponents", 4)],
             },
             new TweakDef
             {
@@ -5753,33 +5414,6 @@ internal static class PolicyNetwork
                 ApplyOps = [RegOp.SetDword(NetBtParams, "EnableWins", 0)],
                 RemoveOps = [RegOp.DeleteValue(NetBtParams, "EnableWins")],
                 DetectOps = [RegOp.CheckDword(NetBtParams, "EnableWins", 0)],
-            },
-            new TweakDef
-            {
-                Id = "legprot-enforce-dotnet-tls-strong-crypto",
-                Label = "Enforce Strong Cryptography for .NET Framework",
-                Category = "Network",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                Tags = ["dotnet", "tls", "strong crypto", "schannel", "security"],
-                Description =
-                    "Forces .NET Framework 4.x applications to use strong TLS (TLS 1.2+) instead "
-                    + "of defaulting to old protocols like SSL 3.0 or TLS 1.0. "
-                    + "SchUseStrongCrypto=1 in the .NET Framework registry. Critical for legacy .NET "
-                    + "apps that haven't been explicitly updated to use modern TLS.",
-                ApplyOps =
-                [
-                    RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\.NETFramework\v4.0.30319", "SchUseStrongCrypto", 1),
-                    RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft\.NETFramework\v4.0.30319", "SchUseStrongCrypto", 1),
-                ],
-                RemoveOps =
-                [
-                    RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\.NETFramework\v4.0.30319", "SchUseStrongCrypto"),
-                    RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft\.NETFramework\v4.0.30319", "SchUseStrongCrypto"),
-                ],
-                DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\.NETFramework\v4.0.30319", "SchUseStrongCrypto", 1)],
             },
             new TweakDef
             {
@@ -6929,24 +6563,6 @@ internal static class PolicyNetwork
             [
                 new TweakDef
                 {
-                    Id = "netio-enable-tcp-1323-timestamps",
-                    Label = "Net IO: Enable TCP 1323 Timestamps for Accurate RTT",
-                    Category = "Network",
-                    Description =
-                        "Sets Tcp1323Opts=1 under TCP/IP parameters. Enables RFC 1323 TCP timestamps which embed a timestamp value in every TCP segment. Timestamps allow the stack to accurately calculate round-trip time (RTT) for congestion control algorithms (CUBIC, NewReno) and detect spurious retransmissions more accurately. On high-bandwidth links with packet reordering, RFC 1323 timestamps significantly improve throughput stability by preventing premature retransmissions due to RTT measurement jitter.",
-                    Tags = ["tcp", "timestamps", "rtt", "offload", "network"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 3,
-                    SafetyRating = 5,
-                    ImpactNote =
-                        "Enables TCP timestamps. On some very old firewalls, TCP timestamps cause packets to be dropped. Modern enterprise firewalls handle timestamps correctly.",
-                    ApplyOps = [RegOp.SetDword(TcpKey, "Tcp1323Opts", 1)],
-                    RemoveOps = [RegOp.DeleteValue(TcpKey, "Tcp1323Opts")],
-                    DetectOps = [RegOp.CheckDword(TcpKey, "Tcp1323Opts", 1)],
-                },
-                new TweakDef
-                {
                     Id = "netio-set-tcp-checksum-hardware",
                     Label = "Net IO: Enable TCP/IP Hardware Checksum Offload",
                     Category = "Network",
@@ -7019,60 +6635,6 @@ internal static class PolicyNetwork
                 },
                 new TweakDef
                 {
-                    Id = "netio-increase-max-ports",
-                    Label = "Net IO: Increase Ephemeral Port Range to 49152-65535",
-                    Category = "Network",
-                    Description =
-                        "Sets MaxUserPort=65534 and TcpTimedWaitDelay=30 in TCP/IP parameters. Expands the ephemeral port range to the RFC 6335 recommended range (49152–65535) and reduces the TIME_WAIT period to 30 seconds. The default Windows range is 49152–65535 already, but TIME_WAIT of 4 minutes means busy servers can exhaust 16,383 ports in 4 minutes at moderate connection rates. Reducing TIME_WAIT to 30 seconds allows 5–10× more concurrent connections on database servers, load balancers, and web proxy servers.",
-                    Tags = ["tcp", "ports", "time-wait", "connections", "server"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 4,
-                    SafetyRating = 4,
-                    ImpactNote =
-                        "Shorter TIME_WAIT increases port reuse risk. On high-traffic servers handling TCP connections to external parties, shorter TIME_WAIT may cause connection confusion with duplicate TCP segment detection disabled.",
-                    ApplyOps = [RegOp.SetDword(TcpKey, "MaxUserPort", 65534), RegOp.SetDword(TcpKey, "TcpTimedWaitDelay", 30)],
-                    RemoveOps = [RegOp.DeleteValue(TcpKey, "MaxUserPort"), RegOp.DeleteValue(TcpKey, "TcpTimedWaitDelay")],
-                    DetectOps = [RegOp.CheckDword(TcpKey, "MaxUserPort", 65534)],
-                },
-                new TweakDef
-                {
-                    Id = "netio-enable-tcp-keepalive",
-                    Label = "Net IO: Enable TCP Keep-Alive with 2-Hour Interval",
-                    Category = "Network",
-                    Description =
-                        "Sets KeepAliveTime=7200000 and KeepAliveInterval=1000 in TCP/IP policy. Enables TCP keep-alive probes with a 2-hour idle detection and 1-second probe interval. TCP keep-alives detect broken idle connections (firewalls that silently drop stateful entries, NAT timeouts, disconnected cables) and clean up orphaned sockets. This prevents resource exhaustion on servers that maintain long-lived application connections (SQL Server, LDAP, message queues) where the remote party may have disconnected without sending TCP RST.",
-                    Tags = ["tcp", "keepalive", "connection", "timeout", "server"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 3,
-                    SafetyRating = 5,
-                    ImpactNote =
-                        "Keep-alive probes are sent after 2 hours of TCP idle time. Some applications (Oracle DB, older LDAP pools) have their own keep-alive settings that should be aligned.",
-                    ApplyOps = [RegOp.SetDword(TcpKey, "KeepAliveTime", 7200000), RegOp.SetDword(TcpKey, "KeepAliveInterval", 1000)],
-                    RemoveOps = [RegOp.DeleteValue(TcpKey, "KeepAliveTime"), RegOp.DeleteValue(TcpKey, "KeepAliveInterval")],
-                    DetectOps = [RegOp.CheckDword(TcpKey, "KeepAliveTime", 7200000)],
-                },
-                new TweakDef
-                {
-                    Id = "netio-disable-ipv4-source-routing",
-                    Label = "Net IO: Disable IPv4 Source Routing (Anti-Spoofing)",
-                    Category = "Network",
-                    Description =
-                        "Sets DisableIPSourceRouting=2 in TCP/IP parameters. Drops and logs all IPv4 packets containing source routing options (Strict Source Route, Loose Source Route). IP source routing allows the sender to explicitly specify the route a packet takes through the network, overriding routing table decisions. This is used in IP spoofing attacks, source routing reconnaissance, and some firewall bypasses. Setting 2 (drop and log) ensures these packets are both rejected and generate security event log entries.",
-                    Tags = ["tcp", "source-routing", "spoofing", "network", "hardening"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 4,
-                    SafetyRating = 5,
-                    ImpactNote =
-                        "Legitimate source-routed applications are extremely rare on enterprise networks. This setting has no impact on normal TCP/IP traffic.",
-                    ApplyOps = [RegOp.SetDword(TcpKey, "DisableIPSourceRouting", 2)],
-                    RemoveOps = [RegOp.DeleteValue(TcpKey, "DisableIPSourceRouting")],
-                    DetectOps = [RegOp.CheckDword(TcpKey, "DisableIPSourceRouting", 2)],
-                },
-                new TweakDef
-                {
                     Id = "netio-disable-ipv6-source-routing",
                     Label = "Net IO: Disable IPv6 Source Routing (Anti-Spoofing)",
                     Category = "Network",
@@ -7088,24 +6650,6 @@ internal static class PolicyNetwork
                     ApplyOps = [RegOp.SetDword(TcpifKey, "DisableIPv6SourceRouting", 1)],
                     RemoveOps = [RegOp.DeleteValue(TcpifKey, "DisableIPv6SourceRouting")],
                     DetectOps = [RegOp.CheckDword(TcpifKey, "DisableIPv6SourceRouting", 1)],
-                },
-                new TweakDef
-                {
-                    Id = "netio-enable-syn-attack-protection",
-                    Label = "Net IO: Enable SYN Flood Attack Protection (SYN Cookies)",
-                    Category = "Network",
-                    Description =
-                        "Sets SynAttackProtect=1 in TCP/IP parameters. Enables SYN cookie-based SYN flood attack protection. Under a SYN flood attack, the server normally allocates a half-open TCP connection entry for each SYN packet received, exhausting the TCP incomplete connection queue. With SYN attack protection enabled, the stack uses SYN cookies: the server encodes connection state into the initial sequence number instead of allocating memory, allowing it to handle millions of SYN packets per second without queue exhaustion.",
-                    Tags = ["tcp", "syn-flood", "dos", "syn-cookie", "hardening"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 5,
-                    SafetyRating = 5,
-                    ImpactNote =
-                        "SYN cookies are transparent to legitimate TCP clients. On very busy servers (>50,000 new connections/second) SYN cookie computation has a small CPU overhead.",
-                    ApplyOps = [RegOp.SetDword(TcpKey, "SynAttackProtect", 1)],
-                    RemoveOps = [RegOp.DeleteValue(TcpKey, "SynAttackProtect")],
-                    DetectOps = [RegOp.CheckDword(TcpKey, "SynAttackProtect", 1)],
                 },
             ];
     }
@@ -7858,40 +7402,6 @@ internal static class PolicyNetwork
             [
                 new TweakDef
                 {
-                    Id = "netbridge-prohibit-bridge-installation",
-                    Label = "Prohibit Installation of Network Bridges",
-                    Category = "Network",
-                    Description =
-                        "Prevents users from creating network bridge connections that combine multiple network adapters into a single bridged segment, closing the route by which a user could bypass network segmentation controls.",
-                    Tags = ["network-bridge", "segmentation", "security", "adapter", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 4,
-                    SafetyRating = 5,
-                    ImpactNote = "Network bridge creation prohibited; users cannot bridge two network adapters to bypass segmentation.",
-                    ApplyOps = [RegOp.SetDword(Key, "NC_AllowNetBridge_NLA", 0)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "NC_AllowNetBridge_NLA")],
-                    DetectOps = [RegOp.CheckDword(Key, "NC_AllowNetBridge_NLA", 0)],
-                },
-                new TweakDef
-                {
-                    Id = "netbridge-prohibit-ics",
-                    Label = "Prohibit Internet Connection Sharing",
-                    Category = "Network",
-                    Description =
-                        "Disables Windows Internet Connection Sharing (ICS) on all connections, preventing a machine from acting as an ad-hoc NAT gateway and creating an unmonitored network egress path for other devices.",
-                    Tags = ["ics", "internet-sharing", "nat", "network-policy", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 4,
-                    SafetyRating = 5,
-                    ImpactNote = "ICS prohibited; this machine cannot share its internet connection with other devices.",
-                    ApplyOps = [RegOp.SetDword(Key, "NC_ShowSharedAccessUI", 0)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "NC_ShowSharedAccessUI")],
-                    DetectOps = [RegOp.CheckDword(Key, "NC_ShowSharedAccessUI", 0)],
-                },
-                new TweakDef
-                {
                     Id = "netbridge-prohibit-personal-hotspot",
                     Label = "Prohibit Windows Mobile Hotspot (Personal Hotspot)",
                     Category = "Network",
@@ -7906,23 +7416,6 @@ internal static class PolicyNetwork
                     ApplyOps = [RegOp.SetDword(Key, "NC_ShowSharedAccessHotspot", 0)],
                     RemoveOps = [RegOp.DeleteValue(Key, "NC_ShowSharedAccessHotspot")],
                     DetectOps = [RegOp.CheckDword(Key, "NC_ShowSharedAccessHotspot", 0)],
-                },
-                new TweakDef
-                {
-                    Id = "netbridge-block-add-remove-connections",
-                    Label = "Block Standard Users from Adding or Removing Network Connections",
-                    Category = "Network",
-                    Description =
-                        "Prevents non-administrator users from creating new network connections or deleting existing ones, ensuring that network adapter configuration is managed exclusively by IT administrators.",
-                    Tags = ["network-connections", "standard-user", "admin", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 3,
-                    SafetyRating = 5,
-                    ImpactNote = "Standard users blocked from adding or deleting network connections; admin required.",
-                    ApplyOps = [RegOp.SetDword(Key, "NC_AddRemoveComponents", 0)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "NC_AddRemoveComponents")],
-                    DetectOps = [RegOp.CheckDword(Key, "NC_AddRemoveComponents", 0)],
                 },
                 new TweakDef
                 {
@@ -7957,40 +7450,6 @@ internal static class PolicyNetwork
                     ApplyOps = [RegOp.SetDword(Key, "NC_LanConnect", 0)],
                     RemoveOps = [RegOp.DeleteValue(Key, "NC_LanConnect")],
                     DetectOps = [RegOp.CheckDword(Key, "NC_LanConnect", 0)],
-                },
-                new TweakDef
-                {
-                    Id = "netbridge-block-ras-connection-manager",
-                    Label = "Block Access to the Remote Access Connection Manager",
-                    Category = "Network",
-                    Description =
-                        "Prevents non-administrator users from using the Remote Access Connection Manager to create, modify, or delete remote access (dial-up, VPN) connection entries.",
-                    Tags = ["ras", "remote-access", "vpn", "dial-up", "standard-user", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 3,
-                    SafetyRating = 5,
-                    ImpactNote = "Remote Access Connection Manager access blocked for standard users; VPN entries protected.",
-                    ApplyOps = [RegOp.SetDword(Key, "NC_RasMyProperties", 0)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "NC_RasMyProperties")],
-                    DetectOps = [RegOp.CheckDword(Key, "NC_RasMyProperties", 0)],
-                },
-                new TweakDef
-                {
-                    Id = "netbridge-hide-lan-component-properties",
-                    Label = "Hide Properties of LAN Network Components from Standard Users",
-                    Category = "Network",
-                    Description =
-                        "Removes the ability for standard users to view or modify the properties of LAN adapter components (TCP/IP, DNS, WINS bindings) from the Network Connections folder, preventing unauthorised IP configuration changes.",
-                    Tags = ["lan", "network-properties", "tcp-ip", "standard-user", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 3,
-                    SafetyRating = 5,
-                    ImpactNote = "LAN adapter component properties hidden for standard users; IP/DNS configuration protected.",
-                    ApplyOps = [RegOp.SetDword(Key, "NC_LanProperties", 0)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "NC_LanProperties")],
-                    DetectOps = [RegOp.CheckDword(Key, "NC_LanProperties", 0)],
                 },
                 new TweakDef
                 {
@@ -8054,38 +7513,6 @@ internal static class PolicyNetwork
             },
             new TweakDef
             {
-                Id = "netconn-prevent-bridge",
-                Label = "Prevent Users from Creating Network Bridges",
-                Category = "Network",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                Tags = ["network", "bridge", "security", "policy", "connections"],
-                Description =
-                    "Prohibits standard users from creating network bridges (NC_AllowNetBridge_NLA=0). "
-                    + "Network bridges can bypass firewall segmentation and create unexpected routing paths. "
-                    + "Essential in corporate environments where VLANs provide network isolation.",
-                ApplyOps = [RegOp.SetDword(Pol, "NC_AllowNetBridge_NLA", 0)],
-                RemoveOps = [RegOp.DeleteValue(Pol, "NC_AllowNetBridge_NLA")],
-                DetectOps = [RegOp.CheckDword(Pol, "NC_AllowNetBridge_NLA", 0)],
-            },
-            new TweakDef
-            {
-                Id = "netconn-prevent-add-remove-components",
-                Label = "Prevent Adding or Removing Network Components",
-                Category = "Network",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                Tags = ["network", "components", "policy", "security", "install"],
-                Description =
-                    "Prevents standard users from installing or uninstalling network protocols, clients, "
-                    + "and services via the adapter Properties dialog (NC_AddRemoveComponents=0). Stops "
-                    + "installation of rogue protocol drivers or removal of security-critical components.",
-                ApplyOps = [RegOp.SetDword(Pol, "NC_AddRemoveComponents", 0)],
-                RemoveOps = [RegOp.DeleteValue(Pol, "NC_AddRemoveComponents")],
-                DetectOps = [RegOp.CheckDword(Pol, "NC_AddRemoveComponents", 0)],
-            },
-            new TweakDef
-            {
                 Id = "netconn-prevent-change-binding",
                 Label = "Prevent Changing Network Component Binding Order",
                 Category = "Network",
@@ -8118,22 +7545,6 @@ internal static class PolicyNetwork
             },
             new TweakDef
             {
-                Id = "netconn-prevent-lan-access-properties",
-                Label = "Prevent Accessing LAN Adapter Properties",
-                Category = "Network",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                Tags = ["network", "lan", "properties", "adapter", "policy"],
-                Description =
-                    "Prevents standard users from opening the Properties dialog for LAN (Ethernet) "
-                    + "connections (NC_LanProperties=0). Stops modification of IP address/DNS settings, "
-                    + "protocol binding, and adapter configuration on corporate workstations.",
-                ApplyOps = [RegOp.SetDword(Pol, "NC_LanProperties", 0)],
-                RemoveOps = [RegOp.DeleteValue(Pol, "NC_LanProperties")],
-                DetectOps = [RegOp.CheckDword(Pol, "NC_LanProperties", 0)],
-            },
-            new TweakDef
-            {
                 Id = "netconn-prevent-ras-connect",
                 Label = "Prevent Standard Users Connecting VPN/Dial-Up",
                 Category = "Network",
@@ -8147,38 +7558,6 @@ internal static class PolicyNetwork
                 ApplyOps = [RegOp.SetDword(Pol, "NC_RasConnect", 0)],
                 RemoveOps = [RegOp.DeleteValue(Pol, "NC_RasConnect")],
                 DetectOps = [RegOp.CheckDword(Pol, "NC_RasConnect", 0)],
-            },
-            new TweakDef
-            {
-                Id = "netconn-prevent-ras-all-user-properties",
-                Label = "Prevent Viewing All-User VPN Connection Properties",
-                Category = "Network",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                Tags = ["network", "vpn", "properties", "all-user", "policy"],
-                Description =
-                    "Prevents standard users from viewing or editing the properties of VPN/dial-up "
-                    + "connections created for all users (NC_RasAllUserProperties=0). Hides server "
-                    + "addresses, credentials, and routing configuration from non-admin users.",
-                ApplyOps = [RegOp.SetDword(Pol, "NC_RasAllUserProperties", 0)],
-                RemoveOps = [RegOp.DeleteValue(Pol, "NC_RasAllUserProperties")],
-                DetectOps = [RegOp.CheckDword(Pol, "NC_RasAllUserProperties", 0)],
-            },
-            new TweakDef
-            {
-                Id = "netconn-prohibit-internet-connection-sharing",
-                Label = "Prohibit Internet Connection Sharing (ICS)",
-                Category = "Network",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                Tags = ["network", "ics", "sharing", "hotspot", "policy"],
-                Description =
-                    "Prohibits enabling Internet Connection Sharing via the Network Connections folder "
-                    + "(NC_ShowSharedAccessUI=0). Prevents workstations from acting as unauthorised NAT "
-                    + "gateways which could bypass network security controls and create rogue access points.",
-                ApplyOps = [RegOp.SetDword(Pol, "NC_ShowSharedAccessUI", 0)],
-                RemoveOps = [RegOp.DeleteValue(Pol, "NC_ShowSharedAccessUI")],
-                DetectOps = [RegOp.CheckDword(Pol, "NC_ShowSharedAccessUI", 0)],
             },
             new TweakDef
             {
@@ -8491,26 +7870,6 @@ internal static class PolicyNetwork
             },
             new TweakDef
             {
-                Id = "ndiag-disable-scripted-diagnostics",
-                Label = "Disable Scripted Diagnostics",
-                Category = "Network",
-                Description =
-                    "Sets EnableDiagnostics=0 in the ScriptedDiagnostics policy key. "
-                    + "Disables the Windows Scripted Diagnostics service that powers interactive troubleshooting packs (*.diagpkg). "
-                    + "Troubleshooting wizards in Control Panel and Settings will be unavailable. "
-                    + "Default: absent (enabled). Recommended: 0 when automated diagnosis must be controlled by IT.",
-                Tags = ["diagnostics", "scripted", "troubleshooter", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                ImpactNote = "Disables all Windows Troubleshooter wizards; built-in scripted diagnostic packs are suppressed.",
-                ApplyOps = [RegOp.SetDword(ScriptDiag, "EnableDiagnostics", 0)],
-                RemoveOps = [RegOp.DeleteValue(ScriptDiag, "EnableDiagnostics")],
-                DetectOps = [RegOp.CheckDword(ScriptDiag, "EnableDiagnostics", 0)],
-            },
-            new TweakDef
-            {
                 Id = "ndiag-validate-diag-helpers",
                 Label = "Require Validation of Diagnostic Helper Modules",
                 Category = "Network",
@@ -8600,128 +7959,6 @@ internal static class PolicyNetwork
 
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
-            new TweakDef
-            {
-                Id = "netdisc-disable-lltd-mapper",
-                Label = "Disable LLTD Mapper I/O Driver",
-                Category = "Network",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 4,
-                Description =
-                    "Disables the Link Layer Topology Discovery (LLTD) Mapper I/O driver, "
-                    + "preventing this machine from being mapped in the Windows Network Map. "
-                    + "EnableLLTDIO=0.",
-                Tags = ["network discovery", "lltd", "map", "privacy", "security"],
-                RegistryKeys = [Lltd],
-                ApplyOps = [RegOp.SetDword(Lltd, "EnableLLTDIO", 0)],
-                RemoveOps = [RegOp.DeleteValue(Lltd, "EnableLLTDIO")],
-                DetectOps = [RegOp.CheckDword(Lltd, "EnableLLTDIO", 0)],
-            },
-            new TweakDef
-            {
-                Id = "netdisc-disable-lltd-on-domain",
-                Label = "Disable LLTD I/O on Domain Networks",
-                Category = "Network",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 4,
-                Description = "Prevents the LLTD Mapper I/O driver from running on domain-joined network " + "segments. AllowLLTDIOOnDomain=0.",
-                Tags = ["network discovery", "lltd", "domain", "security"],
-                RegistryKeys = [Lltd],
-                ApplyOps = [RegOp.SetDword(Lltd, "AllowLLTDIOOnDomain", 0)],
-                RemoveOps = [RegOp.DeleteValue(Lltd, "AllowLLTDIOOnDomain")],
-                DetectOps = [RegOp.CheckDword(Lltd, "AllowLLTDIOOnDomain", 0)],
-            },
-            new TweakDef
-            {
-                Id = "netdisc-disable-lltd-on-public",
-                Label = "Disable LLTD I/O on Public Networks",
-                Category = "Network",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                Description = "Prevents LLTD topology discovery on public / untrusted networks. " + "AllowLLTDIOOnPublicNet=0.",
-                Tags = ["network discovery", "lltd", "public network", "security"],
-                RegistryKeys = [Lltd],
-                ApplyOps = [RegOp.SetDword(Lltd, "AllowLLTDIOOnPublicNet", 0)],
-                RemoveOps = [RegOp.DeleteValue(Lltd, "AllowLLTDIOOnPublicNet")],
-                DetectOps = [RegOp.CheckDword(Lltd, "AllowLLTDIOOnPublicNet", 0)],
-            },
-            new TweakDef
-            {
-                Id = "netdisc-disable-lltd-responder",
-                Label = "Disable LLTD Responder",
-                Category = "Network",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 4,
-                Description =
-                    "Disables the LLTD Responder so this machine does not respond to network "
-                    + "topology discovery probes from other devices on the LAN. EnableRspndr=0.",
-                Tags = ["network discovery", "lltd", "responder", "privacy"],
-                RegistryKeys = [Lltd],
-                ApplyOps = [RegOp.SetDword(Lltd, "EnableRspndr", 0)],
-                RemoveOps = [RegOp.DeleteValue(Lltd, "EnableRspndr")],
-                DetectOps = [RegOp.CheckDword(Lltd, "EnableRspndr", 0)],
-            },
-            new TweakDef
-            {
-                Id = "netdisc-disable-lltd-responder-domain",
-                Label = "Disable LLTD Responder on Domain Networks",
-                Category = "Network",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 4,
-                Description = "Prevents the LLTD Responder from answering topology probes on domain " + "network segments. AllowRspndrOnDomain=0.",
-                Tags = ["network discovery", "lltd", "responder", "domain"],
-                RegistryKeys = [Lltd],
-                ApplyOps = [RegOp.SetDword(Lltd, "AllowRspndrOnDomain", 0)],
-                RemoveOps = [RegOp.DeleteValue(Lltd, "AllowRspndrOnDomain")],
-                DetectOps = [RegOp.CheckDword(Lltd, "AllowRspndrOnDomain", 0)],
-            },
-            new TweakDef
-            {
-                Id = "netdisc-disable-mdns",
-                Label = "Disable Multicast DNS (mDNS)",
-                Category = "Network",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 4,
-                Description =
-                    "Disables the mDNS resolver in the Windows DNS Client. mDNS broadcasts "
-                    + "device names and can reveal information on local networks. EnableMDNS=0.",
-                Tags = ["network discovery", "mdns", "multicast", "dns", "privacy"],
-                RegistryKeys = [Dns],
-                ApplyOps = [RegOp.SetDword(Dns, "EnableMDNS", 0)],
-                RemoveOps = [RegOp.DeleteValue(Dns, "EnableMDNS")],
-                DetectOps = [RegOp.CheckDword(Dns, "EnableMDNS", 0)],
-            },
-            new TweakDef
-            {
-                Id = "netdisc-netbios-pnode",
-                Label = "Configure NetBIOS to P-Node (Unicast Only)",
-                Category = "Network",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 4,
-                Description =
-                    "Sets NetBIOS name resolution to P-Node (Point-to-Point), which only uses "
-                    + "WINS/DNS unicast queries and does not broadcast name requests on the "
-                    + "local subnet. NodeType=2 reduces LAN broadcast traffic.",
-                Tags = ["netbios", "broadcast", "wins", "name resolution", "network"],
-                RegistryKeys = [NetBt],
-                ApplyOps = [RegOp.SetDword(NetBt, "NodeType", 2)],
-                RemoveOps = [RegOp.DeleteValue(NetBt, "NodeType")],
-                DetectOps = [RegOp.CheckDword(NetBt, "NodeType", 2)],
-            },
         ];
     }
 
@@ -8783,23 +8020,6 @@ internal static class PolicyNetwork
                 ApplyOps = [RegOp.SetString(HardenedPaths, @"\\*\*", "RequireAuthentication=1")],
                 RemoveOps = [RegOp.DeleteValue(HardenedPaths, @"\\*\*")],
                 DetectOps = [RegOp.CheckString(HardenedPaths, @"\\*\*", "RequireAuthentication=1")],
-            },
-            new TweakDef
-            {
-                Id = "nethpth-harden-ipc-share",
-                Label = "Network: Require Mutual Authentication for IPC$ Shares",
-                Category = "Network",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                RegistryKeys = [HardenedPaths],
-                Tags = ["network", "unc", "ipc", "smb", "hardening", "security"],
-                Description =
-                    @"Sets \\*\IPC$ = ""RequireMutualAuthentication=1"" in UNC Hardened Paths. "
-                    + "Hardens connections to the IPC$ null session share used for named pipes and RPCs. "
-                    + "Default: unauthenticated access allowed to IPC$ from some tools.",
-                ApplyOps = [RegOp.SetString(HardenedPaths, @"\\*\IPC$", "RequireMutualAuthentication=1")],
-                RemoveOps = [RegOp.DeleteValue(HardenedPaths, @"\\*\IPC$")],
-                DetectOps = [RegOp.CheckString(HardenedPaths, @"\\*\IPC$", "RequireMutualAuthentication=1")],
             },
             new TweakDef
             {
@@ -8921,78 +8141,6 @@ internal static class PolicyNetwork
         [
             new TweakDef
             {
-                Id = "nic-increase-tcp-receive-window",
-                Label = "Increase TCP Receive Window Size (256 KB)",
-                Category = "Network",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 4,
-                Tags = ["nic", "tcp", "receive window", "throughput", "network"],
-                Description =
-                    "Sets the TCP receive window to 262144 bytes (256 KB). Larger windows "
-                    + "improve throughput on high-bandwidth, high-latency links like fibre "
-                    + "or VPN tunnels by allowing more in-flight data.",
-                ApplyOps = [RegOp.SetDword(TcpIp, "TcpWindowSize", 262144)],
-                RemoveOps = [RegOp.DeleteValue(TcpIp, "TcpWindowSize")],
-                DetectOps = [RegOp.CheckDword(TcpIp, "TcpWindowSize", 262144)],
-            },
-            new TweakDef
-            {
-                Id = "nic-enable-tcp-timestamps",
-                Label = "Enable TCP Timestamps (RFC 1323)",
-                Category = "Network",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                Tags = ["nic", "tcp", "timestamps", "rfc1323", "rtt"],
-                Description =
-                    "Enables TCP timestamps option (RFC 1323) so the kernel can accurately "
-                    + "measure RTT and detect lost packets without waiting for a retransmit "
-                    + "timeout. Improves congestion control on lossy connections.",
-                ApplyOps = [RegOp.SetDword(TcpIp, "Tcp1323Opts", 3)],
-                RemoveOps = [RegOp.SetDword(TcpIp, "Tcp1323Opts", 0)],
-                DetectOps = [RegOp.CheckDword(TcpIp, "Tcp1323Opts", 3)],
-            },
-            new TweakDef
-            {
-                Id = "nic-increase-max-syn-retransmissions",
-                Label = "Reduce TCP SYN Retransmissions (Faster Port Failure)",
-                Category = "Network",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 4,
-                Tags = ["nic", "tcp", "syn", "retransmit", "latency"],
-                Description =
-                    "Reduces maximum SYN retransmissions from the default 2 to 2, so failed "
-                    + "TCP connection attempts time out sooner (saves ~6 s per stuck connect). "
-                    + "Useful for desktops that frequently attempt to connect to unavailable hosts.",
-                ApplyOps = [RegOp.SetDword(TcpIp, "TcpMaxConnectRetransmissions", 2)],
-                RemoveOps = [RegOp.DeleteValue(TcpIp, "TcpMaxConnectRetransmissions")],
-                DetectOps = [RegOp.CheckDword(TcpIp, "TcpMaxConnectRetransmissions", 2)],
-            },
-            new TweakDef
-            {
-                Id = "nic-reduce-tcp-timed-wait-delay",
-                Label = "Reduce TCP TIME_WAIT Delay to 30 Seconds",
-                Category = "Network",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 4,
-                Tags = ["nic", "tcp", "time wait", "port reuse", "server"],
-                Description =
-                    "Sets TcpTimedWaitDelay to 30 seconds (down from default 60 s). "
-                    + "Enables faster port recycling for high-throughput servers or clients "
-                    + "that make large numbers of short TCP connections.",
-                ApplyOps = [RegOp.SetDword(TcpIp, "TcpTimedWaitDelay", 30)],
-                RemoveOps = [RegOp.DeleteValue(TcpIp, "TcpTimedWaitDelay")],
-                DetectOps = [RegOp.CheckDword(TcpIp, "TcpTimedWaitDelay", 30)],
-            },
-            new TweakDef
-            {
                 Id = "nic-disable-tcp-chimney-offload",
                 Label = "Disable TCP Chimney Offload",
                 Category = "Network",
@@ -9011,60 +8159,6 @@ internal static class PolicyNetwork
             },
             new TweakDef
             {
-                Id = "nic-enable-rss",
-                Label = "Enable Receive-Side Scaling (RSS)",
-                Category = "Network",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                Tags = ["nic", "rss", "receive side scaling", "multicore", "throughput"],
-                Description =
-                    "Enables Receive-Side Scaling so incoming NIC interrupts are distributed "
-                    + "across multiple CPU cores. Significantly improves multi-stream network "
-                    + "throughput on multi-core systems with supported NICs.",
-                ApplyOps = [RegOp.SetDword(TcpIp, "EnableRSS", 1)],
-                RemoveOps = [RegOp.DeleteValue(TcpIp, "EnableRSS")],
-                DetectOps = [RegOp.CheckDword(TcpIp, "EnableRSS", 1)],
-            },
-            new TweakDef
-            {
-                Id = "nic-increase-afd-send-backlog",
-                Label = "Increase AFD Socket Send Backlog (High-Throughput Servers)",
-                Category = "Network",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 4,
-                Tags = ["nic", "afd", "socket", "backlog", "server"],
-                Description =
-                    "Increases the AFD socket send buffer maximum to allow apps to post "
-                    + "large writes without blocking. DefaultSendWindow=262144 (256 KB). "
-                    + "Benefits high-throughput servers and file transfer applications.",
-                ApplyOps = [RegOp.SetDword(AfD, "DefaultSendWindow", 262144)],
-                RemoveOps = [RegOp.DeleteValue(AfD, "DefaultSendWindow")],
-                DetectOps = [RegOp.CheckDword(AfD, "DefaultSendWindow", 262144)],
-            },
-            new TweakDef
-            {
-                Id = "nic-increase-afd-receive-backlog",
-                Label = "Increase AFD Socket Receive Backlog (High-Throughput Servers)",
-                Category = "Network",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 4,
-                Tags = ["nic", "afd", "socket", "receive", "backlog"],
-                Description =
-                    "Increases the AFD default receive window to 262144 bytes so the kernel "
-                    + "buffers more incoming data per socket. Reduces packet loss under burst "
-                    + "traffic from fast remote hosts.",
-                ApplyOps = [RegOp.SetDword(AfD, "DefaultReceiveWindow", 262144)],
-                RemoveOps = [RegOp.DeleteValue(AfD, "DefaultReceiveWindow")],
-                DetectOps = [RegOp.CheckDword(AfD, "DefaultReceiveWindow", 262144)],
-            },
-            new TweakDef
-            {
                 Id = "nic-enable-ctcp",
                 Label = "Enable Compound TCP (CTCP) Congestion Control",
                 Category = "Network",
@@ -9080,24 +8174,6 @@ internal static class PolicyNetwork
                 ApplyOps = [RegOp.SetDword(TcpIp, "EnableCTCP", 1)],
                 RemoveOps = [RegOp.DeleteValue(TcpIp, "EnableCTCP")],
                 DetectOps = [RegOp.CheckDword(TcpIp, "EnableCTCP", 1)],
-            },
-            new TweakDef
-            {
-                Id = "nic-reduce-max-port-range",
-                Label = "Increase Dynamic Port Range (High-Connection Apps)",
-                Category = "Network",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 4,
-                Tags = ["nic", "port range", "ephemeral", "connections"],
-                Description =
-                    "Expands the ephemeral port pool by raising MaxUserPort to 65534 "
-                    + "(from default 5000). Prevents 'address already in use' errors on "
-                    + "systems that establish thousands of concurrent short-lived connections.",
-                ApplyOps = [RegOp.SetDword(TcpIp, "MaxUserPort", 65534)],
-                RemoveOps = [RegOp.DeleteValue(TcpIp, "MaxUserPort")],
-                DetectOps = [RegOp.CheckDword(TcpIp, "MaxUserPort", 65534)],
             },
         ];
     }
@@ -9293,21 +8369,6 @@ internal static class PolicyNetwork
         [
             new TweakDef
             {
-                Id = "netlltd-disable-lltdio",
-                Label = "LLTD: Disable Link Layer Topology Discovery I/O driver",
-                Category = "Network",
-                Description =
-                    "Sets EnableLLTDIO=0 in the LLTD policy key. Prevents the LLTD Mapper I/O driver "
-                    + "from discovering the network topology used by the Network Map feature in router UIs.",
-                Tags = ["network", "lltd", "discovery", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ApplyOps = [RegOp.SetDword(Lltd, "EnableLLTDIO", 0)],
-                RemoveOps = [RegOp.DeleteValue(Lltd, "EnableLLTDIO")],
-                DetectOps = [RegOp.CheckDword(Lltd, "EnableLLTDIO", 0)],
-            },
-            new TweakDef
-            {
                 Id = "netlltd-prohibit-lltdio-private",
                 Label = "LLTD: Prohibit LLTD I/O driver on private networks",
                 Category = "Network",
@@ -9323,51 +8384,6 @@ internal static class PolicyNetwork
             },
             new TweakDef
             {
-                Id = "netlltd-no-lltdio-domain",
-                Label = "LLTD: Disallow LLTD I/O driver on domain networks",
-                Category = "Network",
-                Description =
-                    "Sets AllowLLTDIOOnDomain=0. Blocks the LLTD Mapper I/O driver on domain-joined "
-                    + "networks, preventing unsanctioned topology mapping in corporate environments.",
-                Tags = ["network", "lltd", "domain", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ApplyOps = [RegOp.SetDword(Lltd, "AllowLLTDIOOnDomain", 0)],
-                RemoveOps = [RegOp.DeleteValue(Lltd, "AllowLLTDIOOnDomain")],
-                DetectOps = [RegOp.CheckDword(Lltd, "AllowLLTDIOOnDomain", 0)],
-            },
-            new TweakDef
-            {
-                Id = "netlltd-no-lltdio-public",
-                Label = "LLTD: Disallow LLTD I/O driver on public networks",
-                Category = "Network",
-                Description =
-                    "Sets AllowLLTDIOOnPublicNet=0. Prevents the LLTD Mapper I/O driver from running on "
-                    + "public network profiles such as hotel or airport Wi-Fi, reducing attack surface.",
-                Tags = ["network", "lltd", "public", "policy", "security"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ApplyOps = [RegOp.SetDword(Lltd, "AllowLLTDIOOnPublicNet", 0)],
-                RemoveOps = [RegOp.DeleteValue(Lltd, "AllowLLTDIOOnPublicNet")],
-                DetectOps = [RegOp.CheckDword(Lltd, "AllowLLTDIOOnPublicNet", 0)],
-            },
-            new TweakDef
-            {
-                Id = "netlltd-disable-rspndr",
-                Label = "LLTD: Disable Link Layer Topology Discovery Responder",
-                Category = "Network",
-                Description =
-                    "Sets EnableRspndr=0 in the LLTD policy key. Disables the LLTD Responder so this "
-                    + "machine does not appear in other devices' Network Map displays.",
-                Tags = ["network", "lltd", "responder", "policy", "stealth"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ApplyOps = [RegOp.SetDword(Lltd, "EnableRspndr", 0)],
-                RemoveOps = [RegOp.DeleteValue(Lltd, "EnableRspndr")],
-                DetectOps = [RegOp.CheckDword(Lltd, "EnableRspndr", 0)],
-            },
-            new TweakDef
-            {
                 Id = "netlltd-prohibit-rspndr-private",
                 Label = "LLTD: Prohibit LLTD Responder on private networks",
                 Category = "Network",
@@ -9380,36 +8396,6 @@ internal static class PolicyNetwork
                 ApplyOps = [RegOp.SetDword(Lltd, "ProhibitRspndrOnPrivateNet", 1)],
                 RemoveOps = [RegOp.DeleteValue(Lltd, "ProhibitRspndrOnPrivateNet")],
                 DetectOps = [RegOp.CheckDword(Lltd, "ProhibitRspndrOnPrivateNet", 1)],
-            },
-            new TweakDef
-            {
-                Id = "netlltd-no-rspndr-domain",
-                Label = "LLTD: Disallow LLTD Responder on domain networks",
-                Category = "Network",
-                Description =
-                    "Sets AllowRspndrOnDomain=0. Prevents the LLTD Responder from operating on domain "
-                    + "networks, hiding this machine from corporate network map scans.",
-                Tags = ["network", "lltd", "responder", "domain", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ApplyOps = [RegOp.SetDword(Lltd, "AllowRspndrOnDomain", 0)],
-                RemoveOps = [RegOp.DeleteValue(Lltd, "AllowRspndrOnDomain")],
-                DetectOps = [RegOp.CheckDword(Lltd, "AllowRspndrOnDomain", 0)],
-            },
-            new TweakDef
-            {
-                Id = "netlltd-no-rspndr-public",
-                Label = "LLTD: Disallow LLTD Responder on public networks",
-                Category = "Network",
-                Description =
-                    "Sets AllowRspndrOnPublicNet=0. Prevents the LLTD Responder from running on public "
-                    + "network profiles, hiding this machine from network map scans on public Wi-Fi.",
-                Tags = ["network", "lltd", "responder", "public", "policy", "security"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ApplyOps = [RegOp.SetDword(Lltd, "AllowRspndrOnPublicNet", 0)],
-                RemoveOps = [RegOp.DeleteValue(Lltd, "AllowRspndrOnPublicNet")],
-                DetectOps = [RegOp.CheckDword(Lltd, "AllowRspndrOnPublicNet", 0)],
             },
             new TweakDef
             {
@@ -9451,23 +8437,6 @@ internal static class PolicyNetwork
 
         public static IReadOnlyList<TweakDef> Data =>
             [
-                new TweakDef
-                {
-                    Id = "nlapol-disable-active-probing",
-                    Label = "Disable NCSI Active Network Probing",
-                    Category = "Network",
-                    Description =
-                        "Sets NoActiveProbe=1 to disable the Network Connectivity Status Indicator active probe that contacts Microsoft servers (msftconnecttest.com). Stops phone-home traffic on every network connect.",
-                    Tags = ["ncsi", "probe", "privacy", "network", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 4,
-                    SafetyRating = 4,
-                    ImpactNote = "Stops NCSI phone-home probes; network status indicator may show 'No internet' on some scenarios.",
-                    ApplyOps = [RegOp.SetDword(Key, "NoActiveProbe", 1)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "NoActiveProbe")],
-                    DetectOps = [RegOp.CheckDword(Key, "NoActiveProbe", 1)],
-                },
                 new TweakDef
                 {
                     Id = "nlapol-disable-ms-connectivity-test",
@@ -9744,33 +8713,6 @@ internal static class PolicyNetwork
                     ApplyOps = [RegOp.SetDword(DiagKey, "PktMonEnabled", 1)],
                     RemoveOps = [RegOp.DeleteValue(DiagKey, "PktMonEnabled")],
                     DetectOps = [RegOp.CheckDword(DiagKey, "PktMonEnabled", 1)],
-                },
-                new TweakDef
-                {
-                    Id = "netmon-disable-network-location-wizard",
-                    Label = "Network Monitoring: Disable Network Location Wizard Popup",
-                    Category = "Network",
-                    Description =
-                        "Sets NC_ShowSharedAccessUI=0 and DomainNetworkFirewallProfile=1 in network policy. Suppresses the 'Set Network Location' wizard that prompts users to classify a new network as Public, Private, or Domain. In a corporate environment, network location should be set automatically via domain detection (domain-joined machines that can reach the DC use the Domain profile). User-facing prompts to classify networks can result in corporate network infrastructure being classified as Public (overly restrictive) or Private (insufficiently restrictive).",
-                    Tags = ["netmon", "network-location", "wizard", "firewall-profile", "ui"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 3,
-                    SafetyRating = 5,
-                    ImpactNote =
-                        "Network classification prompt is suppressed. Domain-joined machines auto-detect domain networks. Non-domain-joined VMs should have network location set via script.",
-                    ApplyOps =
-                    [
-                        RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Network Connections", "NC_ShowSharedAccessUI", 0),
-                    ],
-                    RemoveOps =
-                    [
-                        RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Network Connections", "NC_ShowSharedAccessUI"),
-                    ],
-                    DetectOps =
-                    [
-                        RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Network Connections", "NC_ShowSharedAccessUI", 0),
-                    ],
                 },
                 new TweakDef
                 {
@@ -10059,28 +9001,6 @@ internal static class PolicyNetwork
                 ApplyOps = [RegOp.SetDword(ProjKey, "NoNetworkProjector", 1)],
                 RemoveOps = [RegOp.DeleteValue(ProjKey, "NoNetworkProjector")],
                 DetectOps = [RegOp.CheckDword(ProjKey, "NoNetworkProjector", 1)],
-            },
-            new TweakDef
-            {
-                Id = "netproj-disable-project-to-this-pc",
-                Label = "Disable 'Project to This PC' (Miracast Receiver)",
-                Category = "Network",
-                Description =
-                    "Sets AllowProjectionToPC=0 in the Connect policy key. "
-                    + "Prevents this machine from acting as a Miracast receiver ('Project to This PC'). "
-                    + "When enabled, the PC accepts incoming wireless display connections from phones, "
-                    + "tablets, and other PCs on the same Wi-Fi network. Disabling this removes the "
-                    + "reception capability entirely, preventing unauthorised display mirroring onto "
-                    + "this machine. Default: absent (projection receiver allowed).",
-                Tags = ["network-projection", "miracast", "wireless-display", "receiver", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                ImpactNote = "Miracast 'Project to This PC' receiver mode disabled; no incoming wireless display connections.",
-                ApplyOps = [RegOp.SetDword(ConnKey, "AllowProjectionToPC", 0)],
-                RemoveOps = [RegOp.DeleteValue(ConnKey, "AllowProjectionToPC")],
-                DetectOps = [RegOp.CheckDword(ConnKey, "AllowProjectionToPC", 0)],
             },
             new TweakDef
             {
@@ -10834,24 +9754,6 @@ internal static class PolicyNetwork
             },
             new TweakDef
             {
-                Id = "ntpgpo-enforce-ntp-type",
-                Label = "NTP Policy: Enforce NTP Synchronisation Type",
-                Category = "Network",
-                Description =
-                    "Sets the Windows Time service synchronisation type to NTP, ensuring that the machine always uses an external NTP server rather than relying solely on the domain hierarchy (NT5DS) or free-running internal clock (NoSync). On machines that are occasionally disconnected from the domain, pure NT5DS mode means no time sync occurs when the DC is unreachable. Setting type to NTP with a fallback ensures time accuracy even during DC outages.",
-                Tags = ["ntp", "time sync", "w32time", "domain", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                RegistryKeys = [NtpParametersKey],
-                ApplyOps = [RegOp.SetString(NtpParametersKey, "Type", "NTP")],
-                RemoveOps = [RegOp.DeleteValue(NtpParametersKey, "Type")],
-                DetectOps = [RegOp.CheckString(NtpParametersKey, "Type", "NTP")],
-                ImpactScore = 3,
-                SafetyRating = 4,
-                ImpactNote = "Forces NTP sync type; domain machines normally use NT5DS — verify NTP server policy is also set before deploying.",
-            },
-            new TweakDef
-            {
                 Id = "ntpgpo-set-cross-site-sync-flags",
                 Label = "NTP Policy: Set NTP Cross-Site Synchronisation Flags",
                 Category = "Network",
@@ -10885,60 +9787,6 @@ internal static class PolicyNetwork
                 ImpactScore = 3,
                 SafetyRating = 5,
                 ImpactNote = "Sets NTP poll interval to 15 minutes; smaller intervals add network traffic but improve time accuracy.",
-            },
-            new TweakDef
-            {
-                Id = "ntpgpo-set-event-log-flags",
-                Label = "NTP Policy: Set W32Time Event Log Verbosity Flags",
-                Category = "Network",
-                Description =
-                    "Sets the EventLogFlags value to 3 in the W32Time Config policy, enabling W32Time to log both time-source change events and significant time adjustments to the System event log. These events allow security analysts to detect unusual time manipulation attempts (a precursor to log tampering or Kerberos replay attacks). Without verbose logging, time sync anomalies are invisible in standard Windows monitoring pipelines.",
-                Tags = ["ntp", "time sync", "event log", "security monitoring", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                RegistryKeys = [NtpConfigKey],
-                ApplyOps = [RegOp.SetDword(NtpConfigKey, "EventLogFlags", 3)],
-                RemoveOps = [RegOp.DeleteValue(NtpConfigKey, "EventLogFlags")],
-                DetectOps = [RegOp.CheckDword(NtpConfigKey, "EventLogFlags", 3)],
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Enables W32Time change and adjustment events in System Event Log; minor increase in log volume.",
-            },
-            new TweakDef
-            {
-                Id = "ntpgpo-set-max-pos-phase-correction",
-                Label = "NTP Policy: Set Maximum Positive Phase Correction for NTP",
-                Category = "Network",
-                Description =
-                    "Configures the MaxPosPhaseCorrection value (in seconds) to limit how far forward the Windows Time service will jump the local clock in a single correction. By default, Windows Time accepts any positive time correction from an NTP source, which means an adversary-controlled or misconfigured NTP server could jump the clock forward many hours in one step, invalidating all certificate-based authentication and causing log gaps. A 3600-second cap (1 hour) provides a reasonable safety limit.",
-                Tags = ["ntp", "time sync", "phase correction", "security", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                RegistryKeys = [NtpConfigKey],
-                ApplyOps = [RegOp.SetDword(NtpConfigKey, "MaxPosPhaseCorrection", 3600)],
-                RemoveOps = [RegOp.DeleteValue(NtpConfigKey, "MaxPosPhaseCorrection")],
-                DetectOps = [RegOp.CheckDword(NtpConfigKey, "MaxPosPhaseCorrection", 3600)],
-                ImpactScore = 3,
-                SafetyRating = 4,
-                ImpactNote = "Caps positive clock jumps at 1 hour; machines with severe clock drift may need multiple sync cycles to recover.",
-            },
-            new TweakDef
-            {
-                Id = "ntpgpo-set-max-neg-phase-correction",
-                Label = "NTP Policy: Set Maximum Negative Phase Correction for NTP",
-                Category = "Network",
-                Description =
-                    "Configures the MaxNegPhaseCorrection value (in seconds) to limit how far backward the Windows Time service will roll back the local clock in a single correction. Unbounded backward time corrections can cause Kerberos ticket replay windows to expand unexpectedly, allow log entries to appear to pre-date their corresponding events, and trigger false positives in time-based security controls. A 3600-second limit (1 hour) is the recommended security baseline.",
-                Tags = ["ntp", "time sync", "phase correction", "kerberos", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                RegistryKeys = [NtpConfigKey],
-                ApplyOps = [RegOp.SetDword(NtpConfigKey, "MaxNegPhaseCorrection", 3600)],
-                RemoveOps = [RegOp.DeleteValue(NtpConfigKey, "MaxNegPhaseCorrection")],
-                DetectOps = [RegOp.CheckDword(NtpConfigKey, "MaxNegPhaseCorrection", 3600)],
-                ImpactScore = 3,
-                SafetyRating = 4,
-                ImpactNote = "Caps negative (backward) clock corrections at 1 hour; machines that are very far ahead may need manual intervention.",
             },
             new TweakDef
             {
@@ -10976,25 +9824,6 @@ internal static class PolicyNetwork
                 SafetyRating = 5,
                 ImpactNote =
                     "Limits NTP peer retry doublings to 7; after ~32 hours without an NTP response, the service stops retrying until restarted.",
-            },
-            new TweakDef
-            {
-                Id = "ntpgpo-set-announce-flags",
-                Label = "NTP Policy: Configure W32Time Announce Flags for Domain Hierarchy",
-                Category = "Network",
-                Description =
-                    "Sets the AnnounceFlags value to 10 in W32Time Config, configuring the time service to announce itself as a reliable time source when acting as a DC-level NTP server for domain clients. A value of 10 (0x0A) enables both 'always reliable' and 'auto-reliable' flags. This prevents workstations from querying internet NTP sources instead of the authoritative domain hierarchy, and ensures PDC emulators are correctly identified as the time authority by child DCs.",
-                Tags = ["ntp", "time sync", "announce flags", "domain controller", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                RegistryKeys = [NtpConfigKey],
-                ApplyOps = [RegOp.SetDword(NtpConfigKey, "AnnounceFlags", 10)],
-                RemoveOps = [RegOp.DeleteValue(NtpConfigKey, "AnnounceFlags")],
-                DetectOps = [RegOp.CheckDword(NtpConfigKey, "AnnounceFlags", 10)],
-                ImpactScore = 3,
-                SafetyRating = 4,
-                ImpactNote =
-                    "Configures W32Time announce flags; primarily relevant on domain controllers — apply cautiously on standalone workstations.",
             },
         ];
     }
@@ -11403,24 +10232,6 @@ internal static class PolicyNetwork
                 },
                 new TweakDef
                 {
-                    Id = "rnas-restrict-rpc-remote-calls",
-                    Label = "Remote Access: Restrict Unauthenticated RPC Remote Calls",
-                    Category = "Network",
-                    Description =
-                        "Sets RestrictRemoteClients=1 in RPC policy. Restricts unauthenticated (anonymous) RPC remote procedure calls to the local machine. By default, Windows accepts anonymous RPC calls from any network client for certain services (print spooler, DCOM). This is the root cause exploit path for critical Windows vulnerabilities including PrintNightmare (CVE-2021-34527) and several DCOM escalation chains. Restricting anonymous RPC to local clients eliminates these remote code execution attack vectors.",
-                    Tags = ["remote-access", "rpc", "anonymous", "printspooler", "harden"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 5,
-                    SafetyRating = 4,
-                    ImpactNote =
-                        "Blocks unauthenticated RPC from remote machines. May break legacy applications using anonymous DCOM or RPC on the local network.",
-                    ApplyOps = [RegOp.SetDword(RemAccKey, "RestrictRemoteClients", 1)],
-                    RemoveOps = [RegOp.DeleteValue(RemAccKey, "RestrictRemoteClients")],
-                    DetectOps = [RegOp.CheckDword(RemAccKey, "RestrictRemoteClients", 1)],
-                },
-                new TweakDef
-                {
                     Id = "rnas-enable-remote-access-audit",
                     Label = "Remote Access: Enable Remote Access Service Audit Logging",
                     Category = "Network",
@@ -11576,45 +10387,6 @@ internal static class PolicyNetwork
         [
             new TweakDef
             {
-                Id = "smbshare-disable-insecure-guest-logons",
-                Label = "Disable Insecure Guest Logons to SMB Servers",
-                Category = "Network",
-                Description = "Prevents the SMB client from allowing insecure guest logons to SMB file servers, protecting against credential theft.",
-                Tags = ["smb", "network", "group-policy", "hardening", "guest"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ApplyOps = [RegOp.SetDword(LanWs, "AllowInsecureGuestAuth", 0)],
-                RemoveOps = [RegOp.DeleteValue(LanWs, "AllowInsecureGuestAuth")],
-                DetectOps = [RegOp.CheckDword(LanWs, "AllowInsecureGuestAuth", 0)],
-            },
-            new TweakDef
-            {
-                Id = "smbshare-require-smb-signing-client",
-                Label = "Require SMB Packet Signing (Client)",
-                Category = "Network",
-                Description = "Requires the SMB client to sign all packets, preventing man-in-the-middle and NTLM relay attacks.",
-                Tags = ["smb", "network", "security", "hardening", "signing"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ApplyOps = [RegOp.SetDword(LanSrv, "RequireSecuritySignature", 1)],
-                RemoveOps = [RegOp.DeleteValue(LanSrv, "RequireSecuritySignature")],
-                DetectOps = [RegOp.CheckDword(LanSrv, "RequireSecuritySignature", 1)],
-            },
-            new TweakDef
-            {
-                Id = "smbshare-enable-smb-signing-server",
-                Label = "Enable SMB Packet Signing (Server)",
-                Category = "Network",
-                Description = "Enables SMB packet signing on the server side, allowing signed connections from clients that request it.",
-                Tags = ["smb", "network", "security", "hardening", "signing"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ApplyOps = [RegOp.SetDword(LanSrv, "EnableSecuritySignature", 1)],
-                RemoveOps = [RegOp.DeleteValue(LanSrv, "EnableSecuritySignature")],
-                DetectOps = [RegOp.CheckDword(LanSrv, "EnableSecuritySignature", 1)],
-            },
-            new TweakDef
-            {
                 Id = "smbshare-restrict-null-session-access",
                 Label = "Restrict Null Session Access to Named Pipes and Shares",
                 Category = "Network",
@@ -11652,20 +10424,6 @@ internal static class PolicyNetwork
                 ApplyOps = [RegOp.SetMultiSz(LanSrv, "NullSessionShares", [])],
                 RemoveOps = [RegOp.DeleteValue(LanSrv, "NullSessionShares")],
                 DetectOps = [RegOp.CheckString(LanSrv, "NullSessionShares", "")],
-            },
-            new TweakDef
-            {
-                Id = "smbshare-auto-disconnect-idle-sessions",
-                Label = "Auto-Disconnect Idle SMB Sessions After 15 Minutes",
-                Category = "Network",
-                Description =
-                    "Automatically disconnects idle SMB sessions after 15 minutes, freeing resources and reducing exposure of open connections.",
-                Tags = ["smb", "network", "performance", "security"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ApplyOps = [RegOp.SetDword(LanSrv, "AutoDisconnect", 15)],
-                RemoveOps = [RegOp.DeleteValue(LanSrv, "AutoDisconnect")],
-                DetectOps = [RegOp.CheckDword(LanSrv, "AutoDisconnect", 15)],
             },
             new TweakDef
             {
@@ -11904,23 +10662,6 @@ internal static class PolicyNetwork
         [
             new TweakDef
             {
-                Id = "smb-increase-max-cmds",
-                Label = "Increase SMB Outstanding Command Limit",
-                Category = "Network",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 4,
-                Tags = ["smb", "network", "performance", "workstation"],
-                Description =
-                    "Increases the SMB client outstanding command limit from 50 to 256. "
-                    + "Improves file-server throughput when accessing many files concurrently.",
-                ApplyOps = [RegOp.SetDword(LmWks, "MaxCmds", 256)],
-                RemoveOps = [RegOp.DeleteValue(LmWks, "MaxCmds")],
-                DetectOps = [RegOp.CheckDword(LmWks, "MaxCmds", 256)],
-            },
-            new TweakDef
-            {
                 Id = "smb-enable-large-mtu",
                 Label = "Enable SMB Large MTU Support",
                 Category = "Network",
@@ -11955,24 +10696,6 @@ internal static class PolicyNetwork
             },
             new TweakDef
             {
-                Id = "smb-disable-oplocks-server",
-                Label = "Disable Opportunistic Locks on SMB Server",
-                Category = "Network",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 3,
-                Tags = ["smb", "server", "oplocks", "stability"],
-                Description =
-                    "Disables opportunistic locks (oplocks) on the LanMan Server service. "
-                    + "Recommended when SMB shares serve legacy applications prone to "
-                    + "oplock-related file corruption.",
-                ApplyOps = [RegOp.SetDword(LmSrv, "EnableOplocks", 0)],
-                RemoveOps = [RegOp.SetDword(LmSrv, "EnableOplocks", 1)],
-                DetectOps = [RegOp.CheckDword(LmSrv, "EnableOplocks", 0)],
-            },
-            new TweakDef
-            {
                 Id = "smb-increase-server-max-work-items",
                 Label = "Increase SMB Server Work Items",
                 Category = "Network",
@@ -12004,42 +10727,6 @@ internal static class PolicyNetwork
                 ApplyOps = [RegOp.SetDword(LmSrv, "MaxRawWorkItems", 512)],
                 RemoveOps = [RegOp.DeleteValue(LmSrv, "MaxRawWorkItems")],
                 DetectOps = [RegOp.CheckDword(LmSrv, "MaxRawWorkItems", 512)],
-            },
-            new TweakDef
-            {
-                Id = "smb-disable-smb1",
-                Label = "Disable SMB 1.0 Protocol (Server-Side)",
-                Category = "Network",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                Tags = ["smb", "smb1", "security", "legacy", "hardening"],
-                Description =
-                    "Disables the legacy SMB 1.0 protocol on the SMB server component. "
-                    + "SMBv1 is vulnerable to EternalBlue/WannaCry. Modern Windows (10/11) "
-                    + "does not require SMB1 for normal file sharing.",
-                ApplyOps = [RegOp.SetDword(LmSrv, "SMB1", 0)],
-                RemoveOps = [RegOp.SetDword(LmSrv, "SMB1", 1)],
-                DetectOps = [RegOp.CheckDword(LmSrv, "SMB1", 0)],
-            },
-            new TweakDef
-            {
-                Id = "smb-enforce-smb-signing-server",
-                Label = "Enforce SMB Signing on Server",
-                Category = "Network",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                Tags = ["smb", "signing", "security", "hardening", "mitm"],
-                Description =
-                    "Requires SMB packet signing for all server connections. Prevents "
-                    + "man-in-the-middle attacks against SMB sessions. May reduce throughput "
-                    + "by ~10–15% due to signing overhead.",
-                ApplyOps = [RegOp.SetDword(LmSrv, "RequireSecuritySignature", 1)],
-                RemoveOps = [RegOp.SetDword(LmSrv, "RequireSecuritySignature", 0)],
-                DetectOps = [RegOp.CheckDword(LmSrv, "RequireSecuritySignature", 1)],
             },
             new TweakDef
             {
@@ -12089,57 +10776,6 @@ internal static class PolicyNetwork
 
         public static IReadOnlyList<TweakDef> Data =>
             [
-                new TweakDef
-                {
-                    Id = "smbsvr-require-server-signing",
-                    Label = "Require SMB Server Packet Signing on All Connections",
-                    Category = "Network",
-                    Description =
-                        "Configures the SMB server to require packet signing on all incoming connections, preventing NTLM relay attacks and connection hijacking by clients that do not sign their SMB traffic.",
-                    Tags = ["smb", "signing", "server", "ntlm-relay", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 5,
-                    SafetyRating = 5,
-                    ImpactNote = "SMB server signing required; unsigned connections rejected. NTLM relay and session hijacking mitigated.",
-                    ApplyOps = [RegOp.SetDword(Key, "RequireSecuritySignature", 1)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "RequireSecuritySignature")],
-                    DetectOps = [RegOp.CheckDword(Key, "RequireSecuritySignature", 1)],
-                },
-                new TweakDef
-                {
-                    Id = "smbsvr-require-client-signing",
-                    Label = "Require SMB Client Packet Signing for All Outbound Connections",
-                    Category = "Network",
-                    Description =
-                        "Configures the SMB client (LanmanWorkstation) to require packet signing on all outbound SMB connections, ensuring this machine never sends unsigned SMB traffic to remote servers.",
-                    Tags = ["smb", "signing", "client", "outbound", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 5,
-                    SafetyRating = 5,
-                    ImpactNote = "SMB client signing required for outbound connections; session tampering against network shares blocked.",
-                    ApplyOps = [RegOp.SetDword(SrvKey, "RequireSecuritySignature", 1)],
-                    RemoveOps = [RegOp.DeleteValue(SrvKey, "RequireSecuritySignature")],
-                    DetectOps = [RegOp.CheckDword(SrvKey, "RequireSecuritySignature", 1)],
-                },
-                new TweakDef
-                {
-                    Id = "smbsvr-disable-smb1-server",
-                    Label = "Disable SMBv1 Protocol on Server (Remove EternalBlue Attack Surface)",
-                    Category = "Network",
-                    Description =
-                        "Completely disables the SMBv1 server protocol, removing the attack surface exploited by EternalBlue (MS17-010), WannaCry, and NotPetya. SMBv2 and SMBv3 are fully supported by all versions of Windows since Vista.",
-                    Tags = ["smb", "smb1", "eternalblue", "wannacry", "security", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 5,
-                    SafetyRating = 5,
-                    ImpactNote = "SMBv1 server disabled; EternalBlue/WannaCry/NotPetya attack surface eliminated.",
-                    ApplyOps = [RegOp.SetDword(Key, "SMB1", 0)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "SMB1")],
-                    DetectOps = [RegOp.CheckDword(Key, "SMB1", 0)],
-                },
                 new TweakDef
                 {
                     Id = "smbsvr-disable-smb-compression",
@@ -12194,23 +10830,6 @@ internal static class PolicyNetwork
                 },
                 new TweakDef
                 {
-                    Id = "smbsvr-set-max-connections-512",
-                    Label = "Set SMB Server Maximum Concurrent Connections to 512",
-                    Category = "Network",
-                    Description =
-                        "Sets the SMB server maximum concurrent user sessions to 512, limiting resource exhaustion from session flooding attacks that open thousands of SMB connections without completing authentication.",
-                    Tags = ["smb", "max-connections", "dos-prevention", "resource-limit", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 3,
-                    SafetyRating = 5,
-                    ImpactNote = "SMB concurrent sessions limited to 512; connection flooding resource exhaustion mitigated.",
-                    ApplyOps = [RegOp.SetDword(Key, "MaxMpxCt", 512)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "MaxMpxCt")],
-                    DetectOps = [RegOp.CheckDword(Key, "MaxMpxCt", 512)],
-                },
-                new TweakDef
-                {
                     Id = "smbsvr-log-auth-failures",
                     Label = "Log SMB Authentication Failure Events in Security Log",
                     Category = "Network",
@@ -12225,23 +10844,6 @@ internal static class PolicyNetwork
                     ApplyOps = [RegOp.SetDword(PolKey, "LogAuthFailures", 1)],
                     RemoveOps = [RegOp.DeleteValue(PolKey, "LogAuthFailures")],
                     DetectOps = [RegOp.CheckDword(PolKey, "LogAuthFailures", 1)],
-                },
-                new TweakDef
-                {
-                    Id = "smbsvr-disable-admin-shares",
-                    Label = "Disable Automatic Hidden Administrative Shares (C$, D$, ADMIN$)",
-                    Category = "Network",
-                    Description =
-                        "Prevents the LanmanServer service from automatically creating hidden administrative shares (C$, D$, ADMIN$) at startup, reducing the attack surface for lateral movement via default administrative share enumeration.",
-                    Tags = ["smb", "admin-shares", "lateral-movement", "enumeration", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 4,
-                    SafetyRating = 5,
-                    ImpactNote = "Hidden admin shares (C$, ADMIN$) disabled; automatic lateral movement share targets removed.",
-                    ApplyOps = [RegOp.SetDword(Key, "AutoShareServer", 0)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "AutoShareServer")],
-                    DetectOps = [RegOp.CheckDword(Key, "AutoShareServer", 0)],
                 },
                 new TweakDef
                 {
@@ -12283,90 +10885,6 @@ internal static class PolicyNetwork
                 ApplyOps = [RegOp.SetDword(SmbSrv, "AutoShareServer", 0)],
                 RemoveOps = [RegOp.DeleteValue(SmbSrv, "AutoShareServer")],
                 DetectOps = [RegOp.CheckDword(SmbSrv, "AutoShareServer", 0)],
-            },
-            new TweakDef
-            {
-                Id = "smbsrv-disable-admin-share-workstation",
-                Label = "Disable Hidden Admin Shares (Workstation Mode)",
-                Category = "Network",
-                Description =
-                    "Sets AutoShareWks=0 in LanmanServer parameters. Prevents Windows from automatically creating the hidden workstation administrative shares (C$, D$, ADMIN$) when the computer starts. Best practice for standalone workstations where remote admin shares are not required.",
-                Tags = ["smb", "admin-share", "workstation", "security", "hardening"],
-                NeedsAdmin = true,
-                CorpSafe = false,
-                ApplyOps = [RegOp.SetDword(SmbSrv, "AutoShareWks", 0)],
-                RemoveOps = [RegOp.DeleteValue(SmbSrv, "AutoShareWks")],
-                DetectOps = [RegOp.CheckDword(SmbSrv, "AutoShareWks", 0)],
-            },
-            new TweakDef
-            {
-                Id = "smbsrv-enable-oplocks",
-                Label = "Enable SMB Opportunistic Locking",
-                Category = "Network",
-                Description =
-                    "Sets EnableOpLocks=1 in LanmanServer parameters. Ensures opportunistic locking (oplocks) is enabled for SMB shares. Oplocks allow the SMB client to cache file data locally without re-reading from the server on every access, significantly improving throughput for frequently accessed files.",
-                Tags = ["smb", "oplocks", "performance", "server"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ApplyOps = [RegOp.SetDword(SmbSrv, "EnableOpLocks", 1)],
-                RemoveOps = [RegOp.DeleteValue(SmbSrv, "EnableOpLocks")],
-                DetectOps = [RegOp.CheckDword(SmbSrv, "EnableOpLocks", 1)],
-            },
-            new TweakDef
-            {
-                Id = "smbsrv-enable-forced-logoff",
-                Label = "Disconnect SMB Sessions When Logon Hours Expire",
-                Category = "Network",
-                Description =
-                    "Sets EnableForcedLogoff=1 in LanmanServer parameters. Instructs the SMB server to forcibly disconnect client sessions whose account logon hours have expired instead of allowing the session to continue indefinitely. Enforces time-based access policies set in Active Directory.",
-                Tags = ["smb", "session", "logoff", "policy", "security"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ApplyOps = [RegOp.SetDword(SmbSrv, "EnableForcedLogoff", 1)],
-                RemoveOps = [RegOp.DeleteValue(SmbSrv, "EnableForcedLogoff")],
-                DetectOps = [RegOp.CheckDword(SmbSrv, "EnableForcedLogoff", 1)],
-            },
-            new TweakDef
-            {
-                Id = "smbsrv-set-irp-stack-size",
-                Label = "Increase SMB IRP Stack Size to 15",
-                Category = "Network",
-                Description =
-                    "Sets IRPStackSize=15 in LanmanServer parameters. Increases the Windows I/O Request Packet stack depth for the SMB server. The default of 11 can be insufficient for deeply nested filter drivers (antivirus, DLP, encryption). Value 15 is Microsoft's recommended increase when SMB errors occur with third-party filters.",
-                Tags = ["smb", "irp", "performance", "server", "tuning"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ApplyOps = [RegOp.SetDword(SmbSrv, "IRPStackSize", 15)],
-                RemoveOps = [RegOp.DeleteValue(SmbSrv, "IRPStackSize")],
-                DetectOps = [RegOp.CheckDword(SmbSrv, "IRPStackSize", 15)],
-            },
-            new TweakDef
-            {
-                Id = "smbsrv-max-mpx-count",
-                Label = "Set SMB Max Multiplex Count to 2048",
-                Category = "Network",
-                Description =
-                    "Sets MaxMpxCt=2048 in LanmanServer parameters. Controls the maximum number of simultaneous outstanding SMB requests the server will accept per client connection. Default is 50 which can be a bottleneck for workloads that use many concurrent file operations (e.g. software build servers or archive tools).",
-                Tags = ["smb", "mpx", "performance", "server", "tuning"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ApplyOps = [RegOp.SetDword(SmbSrv, "MaxMpxCt", 2048)],
-                RemoveOps = [RegOp.DeleteValue(SmbSrv, "MaxMpxCt")],
-                DetectOps = [RegOp.CheckDword(SmbSrv, "MaxMpxCt", 2048)],
-            },
-            new TweakDef
-            {
-                Id = "smbsrv-max-work-items",
-                Label = "Set SMB Server Work Item Pool to 8192",
-                Category = "Network",
-                Description =
-                    "Sets MaxWorkItems=8192 in LanmanServer parameters. Increases the SMB server work-item thread pool from the default 4096 to 8192 entries. Work items handle incoming client SMB requests; a larger pool reduces the chance of request queuing delays under high simultaneous connection counts.",
-                Tags = ["smb", "workitems", "performance", "server", "tuning"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ApplyOps = [RegOp.SetDword(SmbSrv, "MaxWorkItems", 8192)],
-                RemoveOps = [RegOp.DeleteValue(SmbSrv, "MaxWorkItems")],
-                DetectOps = [RegOp.CheckDword(SmbSrv, "MaxWorkItems", 8192)],
             },
             new TweakDef
             {
@@ -13287,21 +11805,6 @@ internal static class PolicyNetwork
             },
             new TweakDef
             {
-                Id = "wcmpol-block-non-domain",
-                Label = "Block WCM Connections to Non-Domain Networks",
-                Category = "Network",
-                Description =
-                    "Blocks Windows Connection Manager from connecting to non-domain networks when the machine is domain-joined and internet is available via domain network. Reduces attack surface from untrusted Wi-Fi. Default: 0. Recommended: 1 for corporate.",
-                Tags = ["connection-manager", "network", "domain", "security"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                RegistryKeys = [Wcm],
-                ApplyOps = [RegOp.SetDword(Wcm, "fBlockNonDomain", 1)],
-                RemoveOps = [RegOp.DeleteValue(Wcm, "fBlockNonDomain")],
-                DetectOps = [RegOp.CheckDword(Wcm, "fBlockNonDomain", 1)],
-            },
-            new TweakDef
-            {
                 Id = "wcmpol-prefer-wired-network",
                 Label = "Prefer Wired over Wireless in WCM",
                 Category = "Network",
@@ -13620,42 +12123,6 @@ internal static class PolicyNetwork
                 },
                 new TweakDef
                 {
-                    Id = "wpad-enable-wpad-dns-block",
-                    Label = "WPAD: Block WPAD DNS Resolution to Prevent WPAD Poisoning",
-                    Category = "Network",
-                    Description =
-                        "Sets DisableWpad=1 in Internet Settings. Adds a NRPT rule to block DNS lookups for the 'wpad' hostname, preventing WPAD DNS hijacking attacks. When a machine attempts WPAD auto-detection and there is no legitimate 'wpad' DNS entry, attackers can register a 'wpad' hostname in the same broadcast domain and broadcast DHCP options to hijack all proxy settings. Blocking WPAD DNS resolution provides defence-in-depth against WPAD-based proxy hijacking.",
-                    Tags = ["wpad", "proxy", "dns", "security", "poisoning"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 4,
-                    SafetyRating = 5,
-                    ImpactNote =
-                        "Prevents DNS-based WPAD auto-detection. Explicit PAC file URL or manual proxy setting required for proxy-dependent environments.",
-                    ApplyOps = [RegOp.SetDword(InetKey, "DisableWpad", 1)],
-                    RemoveOps = [RegOp.DeleteValue(InetKey, "DisableWpad")],
-                    DetectOps = [RegOp.CheckDword(InetKey, "DisableWpad", 1)],
-                },
-                new TweakDef
-                {
-                    Id = "wpad-set-enhanced-protected-mode",
-                    Label = "WPAD: Enable Enhanced Protected Mode for Proxy Script Execution",
-                    Category = "Network",
-                    Description =
-                        "Sets EnableEnhancedProtectedMode=1 in Internet Settings. Enables Enhanced Protected Mode (EPM) for Internet Explorer security zones where PAC scripts execute. EPM runs the PAC script evaluation process in a sandboxed AppContainer with restricted filesystem access. Without EPM, malicious PAC scripts served by a rogue proxy can potentially execute code in the context of the WinINet PAC evaluator and access session credentials.",
-                    Tags = ["wpad", "pac", "enhanced-protected-mode", "security", "sandbox"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 4,
-                    SafetyRating = 5,
-                    ImpactNote =
-                        "Enhanced Protected Mode restricts PAC script context. Malformed or complex PAC scripts may behave differently under EPM. Test PAC files in EPM before deployment.",
-                    ApplyOps = [RegOp.SetDword(InetKey, "EnableEnhancedProtectedMode", 1)],
-                    RemoveOps = [RegOp.DeleteValue(InetKey, "EnableEnhancedProtectedMode")],
-                    DetectOps = [RegOp.CheckDword(InetKey, "EnableEnhancedProtectedMode", 1)],
-                },
-                new TweakDef
-                {
                     Id = "wpad-disable-pac-script-download-prompt",
                     Label = "WPAD: Suppress PAC File Download Confirmation Prompt",
                     Category = "Network",
@@ -13692,24 +12159,6 @@ internal static class PolicyNetwork
                 },
                 new TweakDef
                 {
-                    Id = "wpad-disable-proxy-bypass-list",
-                    Label = "WPAD: Prevent Users from Modifying the Proxy Bypass List",
-                    Category = "Network",
-                    Description =
-                        "Sets ProxySettingsPerUser=0 in Internet Settings. Enforces machine-wide proxy settings and prevents per-user proxy configuration overrides. Without this setting, individual users can access Internet Settings and change proxy bypass lists or override the corporate PAC file, routing certain traffic outside the proxy and bypassing corporate web filtering. Machine-wide enforcement ensures all user accounts on the machine use the same managed proxy configuration.",
-                    Tags = ["wpad", "proxy", "bypass", "enforcement", "security"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 4,
-                    SafetyRating = 5,
-                    ImpactNote =
-                        "Proxy settings are machine-wide and non-modifiable by standard users. Power users who need proxy exceptions must request IT intervention.",
-                    ApplyOps = [RegOp.SetDword(InetKey, "ProxySettingsPerUser", 0)],
-                    RemoveOps = [RegOp.DeleteValue(InetKey, "ProxySettingsPerUser")],
-                    DetectOps = [RegOp.CheckDword(InetKey, "ProxySettingsPerUser", 0)],
-                },
-                new TweakDef
-                {
                     Id = "wpad-enable-winhttp-proxy",
                     Label = "WPAD: Enable WinHTTP Proxy Inheritance from IE Settings",
                     Category = "Network",
@@ -13725,24 +12174,6 @@ internal static class PolicyNetwork
                     ApplyOps = [RegOp.SetDword(InetKey, "EnableLegacyAutoProxyFeatures", 1)],
                     RemoveOps = [RegOp.DeleteValue(InetKey, "EnableLegacyAutoProxyFeatures")],
                     DetectOps = [RegOp.CheckDword(InetKey, "EnableLegacyAutoProxyFeatures", 1)],
-                },
-                new TweakDef
-                {
-                    Id = "wpad-disable-trusted-sites-user-add",
-                    Label = "WPAD: Prevent Users from Adding Trusted Sites to Proxy Bypass",
-                    Category = "Network",
-                    Description =
-                        "Sets Security_HKLM_only=1 in Internet Settings. Restricts Internet Explorer security zone configuration to machine-level Group Policy only, preventing users from adding sites to the Trusted Sites zone and thereby creating proxy exceptions. The Trusted Sites zone is frequently used to add sites that bypass proxy inspection, content filtering, and HTTPS inspection. Locking zones to HKLM prevents security bypass through zone manipulation.",
-                    Tags = ["wpad", "trusted-sites", "zones", "security", "proxy-bypass"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 4,
-                    SafetyRating = 5,
-                    ImpactNote =
-                        "Users cannot add trusted sites or local sites to bypass proxy. All zone changes must go through Group Policy. May inconvenience power users adding internal intranet sites.",
-                    ApplyOps = [RegOp.SetDword(InetKey, "Security_HKLM_only", 1)],
-                    RemoveOps = [RegOp.DeleteValue(InetKey, "Security_HKLM_only")],
-                    DetectOps = [RegOp.CheckDword(InetKey, "Security_HKLM_only", 1)],
                 },
                 new TweakDef
                 {
@@ -13792,23 +12223,6 @@ internal static class PolicyNetwork
             [
                 new TweakDef
                 {
-                    Id = "wificonn-minimize-simultaneous-connections",
-                    Label = "Block Simultaneous Connections to Multiple Networks",
-                    Category = "Network",
-                    Description =
-                        "Prevents Windows from maintaining simultaneous connections to both a domain network and a non-domain network, closing a potential data exfiltration path where traffic could be bridged between isolation zones.",
-                    Tags = ["wi-fi", "multi-homed", "domain", "segmentation", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 4,
-                    SafetyRating = 5,
-                    ImpactNote = "Simultaneous domain and non-domain network connections blocked; only one network active at a time.",
-                    ApplyOps = [RegOp.SetDword(Key, "fMinimizeConnections", 3)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "fMinimizeConnections")],
-                    DetectOps = [RegOp.CheckDword(Key, "fMinimizeConnections", 3)],
-                },
-                new TweakDef
-                {
                     Id = "wificonn-disable-softap",
                     Label = "Disable Windows Wi-Fi SoftAP (Software Access Point)",
                     Category = "Network",
@@ -13823,23 +12237,6 @@ internal static class PolicyNetwork
                     ApplyOps = [RegOp.SetDword(Key, "fDisableSoftAP", 1)],
                     RemoveOps = [RegOp.DeleteValue(Key, "fDisableSoftAP")],
                     DetectOps = [RegOp.CheckDword(Key, "fDisableSoftAP", 1)],
-                },
-                new TweakDef
-                {
-                    Id = "wificonn-block-non-domain-when-on-domain",
-                    Label = "Block Non-Domain Wi-Fi When Domain Network is Connected",
-                    Category = "Network",
-                    Description =
-                        "Prevents users from connecting to any non-domain Wi-Fi network while a domain network connection is active, ensuring that domain-joined machines cannot escape corporate network monitoring by switching to a personal hotspot.",
-                    Tags = ["wi-fi", "domain", "non-domain", "corporate", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 4,
-                    SafetyRating = 5,
-                    ImpactNote = "Non-domain Wi-Fi blocked while domain network is active; machines stay on monitored corporate network.",
-                    ApplyOps = [RegOp.SetDword(Key, "fBlockNonDomain", 1)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "fBlockNonDomain")],
-                    DetectOps = [RegOp.CheckDword(Key, "fBlockNonDomain", 1)],
                 },
                 new TweakDef
                 {
@@ -13982,24 +12379,6 @@ internal static class PolicyNetwork
         [
             new TweakDef
             {
-                Id = "wifi-disable-wifi-sense",
-                Label = "Disable Wi-Fi Sense (Auto-Join Shared Networks)",
-                Category = "Network",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                Tags = ["wifi", "wi-fi sense", "auto connect", "privacy", "security"],
-                Description =
-                    "Disables Wi-Fi Sense which automatically connects to networks shared by "
-                    + "contacts via Outlook or Facebook. AutoConnectAllowedOEM=0. "
-                    + "Prevents connecting to unknown shared networks without user approval.",
-                ApplyOps = [RegOp.SetDword(WiFiSense, "AutoConnectAllowedOEM", 0)],
-                RemoveOps = [RegOp.SetDword(WiFiSense, "AutoConnectAllowedOEM", 1)],
-                DetectOps = [RegOp.CheckDword(WiFiSense, "AutoConnectAllowedOEM", 0)],
-            },
-            new TweakDef
-            {
                 Id = "wifi-disable-wifi-sense-policy",
                 Label = "Disable Wi-Fi Sense via Group Policy",
                 Category = "Network",
@@ -14014,24 +12393,6 @@ internal static class PolicyNetwork
                 ApplyOps = [RegOp.SetDword(WiFiSensePolicy, "AutoConnectAllowedOEM", 0)],
                 RemoveOps = [RegOp.DeleteValue(WiFiSensePolicy, "AutoConnectAllowedOEM")],
                 DetectOps = [RegOp.CheckDword(WiFiSensePolicy, "AutoConnectAllowedOEM", 0)],
-            },
-            new TweakDef
-            {
-                Id = "wifi-disable-auto-switch-network",
-                Label = "Disable Automatic Network Switching When Wired",
-                Category = "Network",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                Tags = ["wifi", "auto switch", "wired", "network priority"],
-                Description =
-                    "Prevents Windows from automatically switching between Wi-Fi and Ethernet "
-                    + "connections. fMinimizeConnections=1. Ensures the active connection "
-                    + "is used exclusively without background network switching.",
-                ApplyOps = [RegOp.SetDword(WifiPolicy, "fMinimizeConnections", 1)],
-                RemoveOps = [RegOp.DeleteValue(WifiPolicy, "fMinimizeConnections")],
-                DetectOps = [RegOp.CheckDword(WifiPolicy, "fMinimizeConnections", 1)],
             },
             new TweakDef
             {
@@ -14533,96 +12894,6 @@ internal static class PolicyNetwork
             [
                 new TweakDef
                 {
-                    Id = "wins-disable-netbios-over-tcp",
-                    Label = "WINS: Disable NetBIOS over TCP/IP (NBT)",
-                    Category = "Network",
-                    Description =
-                        "Sets NetbiosOptions=2 (disable) in NetBT parameters. Disables NetBIOS over TCP/IP name resolution, which removes the NetBIOS SS port (TCP 139) and datagram port (UDP 138) from all network interfaces. NetBIOS is a pre-DNS name resolution protocol that exposes the machine's NetBIOS name to the local LAN broadcast domain, enabling LAN-wide workgroup enumeration and NTLM relay attacks. Modern networks use DNS-only name resolution; NetBIOS is a legacy protocol and an attack surface that should be disabled in all hardened environments.",
-                    Tags = ["wins", "netbios", "nbt", "legacy", "hardening"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 4,
-                    SafetyRating = 4,
-                    ImpactNote =
-                        "Disables NetBIOS name resolution. Legacy applications, network printers, and file shares discovered via NetBIOS broadcast (e.g., accessing \\\\COMPUTERNAME without DNS entry) will break.",
-                    ApplyOps = [RegOp.SetDword(NetbtKey, "NetbiosOptions", 2)],
-                    RemoveOps = [RegOp.DeleteValue(NetbtKey, "NetbiosOptions")],
-                    DetectOps = [RegOp.CheckDword(NetbtKey, "NetbiosOptions", 2)],
-                },
-                new TweakDef
-                {
-                    Id = "wins-disable-node-type-broadcast",
-                    Label = "WINS: Disable NetBIOS Broadcast Node Type (Set to H-Node)",
-                    Category = "Network",
-                    Description =
-                        "Sets NodeType=8 (H-Node: WINS then broadcast) in NetBT parameters. Changes the NetBIOS name resolution order from B-Node (broadcast only) to H-Node (WINS server first, broadcast fallback). B-Node broadcasts NetBIOS name queries to the entire LAN broadcast domain, generating traffic across all hosts and leaking internal machine names. H-Node uses the configured WINS server first (unicast), falling back to broadcast only when WINS is unavailable. Even in environments without WINS servers, H-Node reduces unnecessary broadcast traffic.",
-                    Tags = ["wins", "netbios", "node-type", "broadcast", "network"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 2,
-                    SafetyRating = 5,
-                    ImpactNote =
-                        "Sets H-Node for NetBIOS. If WINS servers are not configured, resolution falls back to broadcast (which already happens with default B-Node). No functional change for most modern environments.",
-                    ApplyOps = [RegOp.SetDword(NetbtKey, "NodeType", 8)],
-                    RemoveOps = [RegOp.DeleteValue(NetbtKey, "NodeType")],
-                    DetectOps = [RegOp.CheckDword(NetbtKey, "NodeType", 8)],
-                },
-                new TweakDef
-                {
-                    Id = "wins-enable-devolution",
-                    Label = "WINS: Enable DNS Name Devolution for Short Name Resolution",
-                    Category = "Network",
-                    Description =
-                        "Sets UseDomainNameDevolution=1 in DNS client policy. Enables DNS name devolution which allows users to resolve hostnames using only the first component (e.g., 'server1' resolves to 'server1.corp.contoso.com') by appending the primary DNS suffix and its parent suffixes. Without devolution, users must type the fully qualified domain name. Devolution improves usability in domain environments while using DNS instead of NetBIOS broadcast for short-name resolution.",
-                    Tags = ["wins", "dns", "devolution", "short-name", "usability"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 2,
-                    SafetyRating = 5,
-                    ImpactNote =
-                        "Enables DNS suffix devolution. On machines joined to deeply nested AD sub-domains, devolution can result in unexpected name resolution collisions. Test in complex multi-domain forests.",
-                    ApplyOps = [RegOp.SetDword(DnsKey, "UseDomainNameDevolution", 1)],
-                    RemoveOps = [RegOp.DeleteValue(DnsKey, "UseDomainNameDevolution")],
-                    DetectOps = [RegOp.CheckDword(DnsKey, "UseDomainNameDevolution", 1)],
-                },
-                new TweakDef
-                {
-                    Id = "wins-disable-multicast-dns",
-                    Label = "WINS: Disable mDNS (Multicast DNS) for Enterprise Networks",
-                    Category = "Network",
-                    Description =
-                        "Sets EnableMulticast=0 in DNS client policy. Disables Multicast DNS (mDNS / Bonjour / .local resolution) which sends name queries to the multicast address 224.0.0.251. mDNS is designed for consumer peer-to-peer networks (Apple Bonjour, Google Cast discovery) and is inappropriate in enterprise environments where DNS servers manage all name resolution. mDNS multicast traffic consumes LAN bandwidth and multicast processing overhead on all hosts in the broadcast domain. Disabling it reduces unnecessary multicast traffic.",
-                    Tags = ["wins", "mdns", "multicast", "bonjour", "enterprise"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 3,
-                    SafetyRating = 4,
-                    ImpactNote =
-                        "Disables mDNS resolution. Applications using .local resolution (Bonjour printers, Apple devices, Chromecasts) depend on mDNS. Only disable on managed enterprise machines where DNS handles all name resolution.",
-                    ApplyOps = [RegOp.SetDword(DnsKey, "EnableMulticast", 0)],
-                    RemoveOps = [RegOp.DeleteValue(DnsKey, "EnableMulticast")],
-                    DetectOps = [RegOp.CheckDword(DnsKey, "EnableMulticast", 0)],
-                },
-                new TweakDef
-                {
-                    Id = "wins-set-negative-ttl-cache",
-                    Label = "WINS: Reduce Negative DNS Cache TTL to 5 Seconds",
-                    Category = "Network",
-                    Description =
-                        "Sets NegativeCacheTime=5 in DNS client policy. Reduces the time Windows caches negative DNS results (NXDOMAIN responses — 'hostname not found') to 5 seconds. The default 5-minute negative TTL causes incorrectly cached NXDOMAIN entries to persist for 5 minutes, blocking access to newly provisioned hosts for that duration. This is a common issue in rapidly provisioned cloud environments where new VMs generate DNS entries that may temporarily return NXDOMAIN before replication completes.",
-                    Tags = ["wins", "dns", "negative-cache", "nxdomain", "ttl"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 3,
-                    SafetyRating = 5,
-                    ImpactNote =
-                        "Shorter negative TTL increases DNS query load slightly as failed lookups are re-tried sooner. Benefit is faster recovery from transient DNS unavailability.",
-                    ApplyOps = [RegOp.SetDword(DnsKey, "NegativeCacheTime", 5)],
-                    RemoveOps = [RegOp.DeleteValue(DnsKey, "NegativeCacheTime")],
-                    DetectOps = [RegOp.CheckDword(DnsKey, "NegativeCacheTime", 5)],
-                },
-                new TweakDef
-                {
                     Id = "wins-set-dns-cache-timeout",
                     Label = "WINS: Set DNS Cache Entry Maximum TTL to 1 Hour",
                     Category = "Network",
@@ -14638,24 +12909,6 @@ internal static class PolicyNetwork
                     ApplyOps = [RegOp.SetDword(DnsKey, "MaxCacheTtl", 3600)],
                     RemoveOps = [RegOp.DeleteValue(DnsKey, "MaxCacheTtl")],
                     DetectOps = [RegOp.CheckDword(DnsKey, "MaxCacheTtl", 3600)],
-                },
-                new TweakDef
-                {
-                    Id = "wins-enable-register-adapters",
-                    Label = "WINS: Enable DNS Registration for All Network Adapters",
-                    Category = "Network",
-                    Description =
-                        "Sets RegisterAdapterName=1 in DNS client policy. Ensures that all network adapters (including VPN adapters, virtual NICs) register their IP addresses against the primary DNS server. By default, Windows may suppress DNS registration for secondary adapters or adapters with low metric values. Enabling registration for all adapters ensures that VPN tunnel IPs, management interfaces, and secondary NICs are resolvable by name from the corporate DNS server, which is essential for IT remote management tools.",
-                    Tags = ["wins", "dns", "registration", "adapter", "management"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 2,
-                    SafetyRating = 5,
-                    ImpactNote =
-                        "All adapter IPs are registered in DNS. This may create multiple A records for a single hostname if multiple adapters have network connectivity. Configure DNS scavenging appropriately.",
-                    ApplyOps = [RegOp.SetDword(DnsKey, "RegisterAdapterName", 1)],
-                    RemoveOps = [RegOp.DeleteValue(DnsKey, "RegisterAdapterName")],
-                    DetectOps = [RegOp.CheckDword(DnsKey, "RegisterAdapterName", 1)],
                 },
                 new TweakDef
                 {

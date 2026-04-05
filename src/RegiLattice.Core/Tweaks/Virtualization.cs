@@ -31,42 +31,6 @@ internal static class Virtualization
         },
         new TweakDef
         {
-            Id = "virt-disable-credential-guard",
-            Label = "Disable Credential Guard",
-            Category = "Virtualization",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Disables Credential Guard (VBS-backed LSASS protection). May be needed for compatibility with third-party VPN/auth tools.",
-            Tags = ["virtualization", "security", "credential-guard"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DeviceGuard"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DeviceGuard", "LsaCfgFlags", 0),
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DeviceGuard", "EnableVirtualizationBasedSecurity", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DeviceGuard", "LsaCfgFlags", 1),
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DeviceGuard", "EnableVirtualizationBasedSecurity", 1),
-            ],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DeviceGuard", "LsaCfgFlags", 0)],
-        },
-        new TweakDef
-        {
-            Id = "virt-disable-sandbox",
-            Label = "Disable Windows Sandbox",
-            Category = "Virtualization",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables the Windows Sandbox feature via policy.",
-            Tags = ["virtualization", "sandbox", "policy"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Sandbox"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Sandbox", "AllowSandbox", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Sandbox", "AllowSandbox", 1)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Sandbox", "AllowSandbox", 0)],
-        },
-        new TweakDef
-        {
             Id = "virt-disable-hvci",
             Label = "Disable HVCI (Memory Integrity)",
             Category = "Virtualization",
@@ -94,21 +58,6 @@ internal static class Virtualization
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\HyperV", "DisableAutomaticStopAction", 1)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\HyperV", "DisableAutomaticStopAction")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\HyperV", "DisableAutomaticStopAction", 1)],
-        },
-        new TweakDef
-        {
-            Id = "virt-disable-appguard",
-            Label = "Disable Application Guard",
-            Category = "Virtualization",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description =
-                "Disables Microsoft Defender Application Guard (MDAG). Frees memory and CPU used by isolation containers for Edge browser. Default: Enabled. Recommended: Disabled if not needed.",
-            Tags = ["virtualization", "appguard", "security", "performance"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\AppHVSI"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\AppHVSI", "AllowAppHVSI_ProviderSet", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\AppHVSI", "AllowAppHVSI_ProviderSet")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\AppHVSI", "AllowAppHVSI_ProviderSet", 0)],
         },
         new TweakDef
         {
@@ -169,42 +118,6 @@ internal static class Virtualization
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\vmms", "Start", 3)],
             RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\vmms", "Start", 2)],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\vmms", "Start", 3)],
-        },
-        new TweakDef
-        {
-            Id = "virt-enable-vm-platform",
-            Label = "Enable Virtual Machine Platform",
-            Category = "Virtualization",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description =
-                "Enables the Virtual Machine Platform / Hypervisor Enforced Code Integrity. Required for WSL2 and Android subsystem. Default: Disabled. Recommended: Enabled if using VMs.",
-            Tags = ["virtualization", "vm-platform", "wsl2", "hypervisor"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\DeviceGuard\Scenarios\HypervisorEnforcedCodeIntegrity"],
-            ApplyOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\DeviceGuard\Scenarios\HypervisorEnforcedCodeIntegrity",
-                    "Enabled",
-                    1
-                ),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\DeviceGuard\Scenarios\HypervisorEnforcedCodeIntegrity",
-                    "Enabled",
-                    0
-                ),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(
-                    @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\DeviceGuard\Scenarios\HypervisorEnforcedCodeIntegrity",
-                    "Enabled",
-                    1
-                ),
-            ],
         },
         new TweakDef
         {
@@ -308,24 +221,6 @@ internal static class Virtualization
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\HyperV", "HvpScheduler")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\HyperV", "HvpScheduler", 2)],
         },
-        new TweakDef
-        {
-            Id = "virt-require-platform-security",
-            Label = "Require Virtualization Platform Security",
-            Category = "Virtualization",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Requires UEFI Secure Boot and TPM for Hyper-V platform security features. Enforces hardware-backed isolation. Default: not required.",
-            Tags = ["virtualization", "platform", "security", "tpm"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DeviceGuard"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DeviceGuard", "RequirePlatformSecurityFeatures", 3)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DeviceGuard", "RequirePlatformSecurityFeatures")],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DeviceGuard", "RequirePlatformSecurityFeatures", 3),
-            ],
-        },
         // ── Sprint 21 additions ─────────────────────────────────────────────
 
         new TweakDef
@@ -342,21 +237,6 @@ internal static class Virtualization
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Virtual Machine\Auto", "DisableTimeSync", 1)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Virtual Machine\Auto", "DisableTimeSync")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Virtual Machine\Auto", "DisableTimeSync", 1)],
-        },
-        new TweakDef
-        {
-            Id = "virt-set-hyperv-scheduler-classic",
-            Label = "Set Hyper-V Classic Scheduler",
-            Category = "Virtualization",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets the hypervisor scheduler type to classic (non-root). Better CPU performance for VMs at the cost of security mitigations.",
-            Tags = ["virtualization", "hyper-v", "scheduler", "performance"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\HyperV"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\HyperV", "SchedulerType", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\HyperV", "SchedulerType")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\HyperV", "SchedulerType", 1)],
         },
         new TweakDef
         {
@@ -847,82 +727,6 @@ internal static class WindowsSandboxAdv
     [
         new TweakDef
         {
-            Id = "sandbox-disable-networking",
-            Label = "Disable Windows Sandbox Networking",
-            Category = "Virtualization",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Tags = ["sandbox", "security", "network", "isolation"],
-            Description =
-                "Disables network access inside Windows Sandbox via Group Policy. "
-                + "Useful when analysing potentially malicious files and you don't want the sample to phone home or download payloads.",
-            ApplyOps = [RegOp.SetDword(SbPol, "AllowNetworking", 0)],
-            RemoveOps = [RegOp.DeleteValue(SbPol, "AllowNetworking")],
-            DetectOps = [RegOp.CheckDword(SbPol, "AllowNetworking", 0)],
-        },
-        new TweakDef
-        {
-            Id = "sandbox-disable-vgpu",
-            Label = "Disable Windows Sandbox vGPU (Protect Host GPU Driver)",
-            Category = "Virtualization",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Tags = ["sandbox", "security", "gpu", "vgpu", "isolation"],
-            Description =
-                "Disables GPU virtualization for Windows Sandbox. "
-                + "Prevents sandbox workloads from accessing the host GPU driver attack surface. "
-                + "Sandbox falls back to software rendering — slower but more isolated.",
-            ApplyOps = [RegOp.SetDword(SbPol, "AllowVGPU", 0)],
-            RemoveOps = [RegOp.DeleteValue(SbPol, "AllowVGPU")],
-            DetectOps = [RegOp.CheckDword(SbPol, "AllowVGPU", 0)],
-        },
-        new TweakDef
-        {
-            Id = "sandbox-disable-clipboard",
-            Label = "Disable Windows Sandbox Clipboard Sharing",
-            Category = "Virtualization",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Tags = ["sandbox", "security", "clipboard", "isolation", "data exfiltration"],
-            Description =
-                "Prevents clipboard data from being shared between the host and the sandbox. "
-                + "Stops malicious code inside the sandbox from reading sensitive clipboard contents (passwords, tokens) from the host.",
-            ApplyOps = [RegOp.SetDword(SbPol, "AllowClipboardRedirection", 0)],
-            RemoveOps = [RegOp.DeleteValue(SbPol, "AllowClipboardRedirection")],
-            DetectOps = [RegOp.CheckDword(SbPol, "AllowClipboardRedirection", 0)],
-        },
-        new TweakDef
-        {
-            Id = "sandbox-disable-audio",
-            Label = "Disable Windows Sandbox Audio Input",
-            Category = "Virtualization",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Tags = ["sandbox", "security", "audio", "microphone", "isolation"],
-            Description =
-                "Disables microphone and audio input redirection into Windows Sandbox. "
-                + "Prevents malware inside the sandbox from accessing the host's microphone to eavesdrop.",
-            ApplyOps = [RegOp.SetDword(SbPol, "AllowAudioInput", 0)],
-            RemoveOps = [RegOp.DeleteValue(SbPol, "AllowAudioInput")],
-            DetectOps = [RegOp.CheckDword(SbPol, "AllowAudioInput", 0)],
-        },
-        new TweakDef
-        {
-            Id = "sandbox-disable-video-input",
-            Label = "Disable Windows Sandbox Camera/Video Input",
-            Category = "Virtualization",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Tags = ["sandbox", "security", "camera", "video", "privacy", "isolation"],
-            Description =
-                "Disables camera and video input device redirection into Windows Sandbox. "
-                + "Prevents code inside the sandbox from activating the host's camera.",
-            ApplyOps = [RegOp.SetDword(SbPol, "AllowVideoInput", 0)],
-            RemoveOps = [RegOp.DeleteValue(SbPol, "AllowVideoInput")],
-            DetectOps = [RegOp.CheckDword(SbPol, "AllowVideoInput", 0)],
-        },
-        new TweakDef
-        {
             Id = "sandbox-disable-printer-sharing",
             Label = "Disable Windows Sandbox Printer Redirection",
             Category = "Virtualization",
@@ -935,21 +739,6 @@ internal static class WindowsSandboxAdv
             ApplyOps = [RegOp.SetDword(SbPol, "AllowPrintAccess", 0)],
             RemoveOps = [RegOp.DeleteValue(SbPol, "AllowPrintAccess")],
             DetectOps = [RegOp.CheckDword(SbPol, "AllowPrintAccess", 0)],
-        },
-        new TweakDef
-        {
-            Id = "sandbox-protect-client-folders",
-            Label = "Restrict Windows Sandbox Mapped Folder Write Access",
-            Category = "Virtualization",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Tags = ["sandbox", "security", "mapped folders", "write protection", "isolation"],
-            Description =
-                "Enforces read-only mode for all host folders mapped into Windows Sandbox by policy. "
-                + "Prevents executed code from writing back to host filesystem through shared directories.",
-            ApplyOps = [RegOp.SetDword(SbPol, "AllowMappedFolders", 1), RegOp.SetDword(SbPol, "AllowWriteToMappedFolders", 0)],
-            RemoveOps = [RegOp.DeleteValue(SbPol, "AllowWriteToMappedFolders")],
-            DetectOps = [RegOp.CheckDword(SbPol, "AllowWriteToMappedFolders", 0)],
         },
         new TweakDef
         {
@@ -968,22 +757,6 @@ internal static class WindowsSandboxAdv
         },
         new TweakDef
         {
-            Id = "sandbox-disable-all-folder-mapping",
-            Label = "Disable All Host Folder Mapping in Sandbox",
-            Category = "Virtualization",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Tags = ["sandbox", "isolation", "folders", "security"],
-            Description =
-                "Completely blocks host folder sharing into Windows Sandbox via Group Policy. "
-                + "Combined with the write-protect tweak this provides the strongest "
-                + "isolation: no host files are accessible from within the sandbox at all.",
-            ApplyOps = [RegOp.SetDword(SbPol, "AllowMappedFolders", 0)],
-            RemoveOps = [RegOp.DeleteValue(SbPol, "AllowMappedFolders")],
-            DetectOps = [RegOp.CheckDword(SbPol, "AllowMappedFolders", 0)],
-        },
-        new TweakDef
-        {
             Id = "sandbox-disable-microphone",
             Label = "Disable Microphone Input in Windows Sandbox",
             Category = "Virtualization",
@@ -997,22 +770,6 @@ internal static class WindowsSandboxAdv
             ApplyOps = [RegOp.SetDword(SbPol, "AllowMicrophoneInput", 0)],
             RemoveOps = [RegOp.DeleteValue(SbPol, "AllowMicrophoneInput")],
             DetectOps = [RegOp.CheckDword(SbPol, "AllowMicrophoneInput", 0)],
-        },
-        new TweakDef
-        {
-            Id = "sandbox-enable-protected-client",
-            Label = "Enable Protected Client Mode for Windows Sandbox",
-            Category = "Virtualization",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Tags = ["sandbox", "protected client", "isolation", "security"],
-            Description =
-                "Runs the Sandbox's RDP client in Windows Protected Process Light (PPL) "
-                + "mode. This blocks injection into the sandbox session host process "
-                + "from even admin-level processes on the host.",
-            ApplyOps = [RegOp.SetDword(SbPol, "AllowProtectedClient", 1)],
-            RemoveOps = [RegOp.DeleteValue(SbPol, "AllowProtectedClient")],
-            DetectOps = [RegOp.CheckDword(SbPol, "AllowProtectedClient", 1)],
         },
         new TweakDef
         {
@@ -2075,29 +1832,6 @@ internal static class PolicySubsystems
             },
             new TweakDef
             {
-                Id = "sbpol-disable-networking",
-                Label = "Disable Networking Inside Windows Sandbox",
-                Category = "Virtualization",
-                Description =
-                    "Sets AllowNetworking=0 in the Sandbox policy key. "
-                    + "Prevents the Windows Sandbox environment from accessing the host's network adapters "
-                    + "or the internet. Running untrusted applications with live network access allows "
-                    + "them to exfiltrate data, phone home for additional payloads, or probe internal "
-                    + "network services. Disabling Sandbox networking creates a true air-gap for testing. "
-                    + "Default: absent (networking enabled in Sandbox). "
-                    + "Recommended: 0 to create an isolated analysis environment.",
-                Tags = ["sandbox", "networking", "isolation", "air-gap", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Sandbox has no network access; untrusted apps cannot reach the internet or internal network.",
-                ApplyOps = [RegOp.SetDword(SandboxKey, "AllowNetworking", 0)],
-                RemoveOps = [RegOp.DeleteValue(SandboxKey, "AllowNetworking")],
-                DetectOps = [RegOp.CheckDword(SandboxKey, "AllowNetworking", 0)],
-            },
-            new TweakDef
-            {
                 Id = "sbpol-disable-clipboard",
                 Label = "Disable Clipboard Sharing With Windows Sandbox",
                 Category = "Virtualization",
@@ -2118,30 +1852,6 @@ internal static class PolicySubsystems
                 ApplyOps = [RegOp.SetDword(SandboxKey, "AllowClipboardRedirection", 0)],
                 RemoveOps = [RegOp.DeleteValue(SandboxKey, "AllowClipboardRedirection")],
                 DetectOps = [RegOp.CheckDword(SandboxKey, "AllowClipboardRedirection", 0)],
-            },
-            new TweakDef
-            {
-                Id = "sbpol-disable-vgpu",
-                Label = "Disable Virtualized GPU (vGPU) in Windows Sandbox",
-                Category = "Virtualization",
-                Description =
-                    "Sets AllowVGPU=0 in the Sandbox policy key. "
-                    + "Disables GPU hardware acceleration (virtualised GPU) inside Windows Sandbox. "
-                    + "vGPU in Sandbox allows the containerised environment to access the system's "
-                    + "graphics adapter for accelerated rendering. However, graphics driver vulnerabilities "
-                    + "exposed through hypervisor shared vGPU paths have historically been VM-escape attack "
-                    + "vectors. Disabling vGPU forces software rendering inside Sandbox, eliminating this "
-                    + "attack surface at the cost of rendering performance. "
-                    + "Default: absent (vGPU on). Recommended: 0 for maximum isolation.",
-                Tags = ["sandbox", "vgpu", "gpu", "vm-escape", "isolation", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Sandbox uses software rendering; GPU escape paths eliminated, performance reduced.",
-                ApplyOps = [RegOp.SetDword(SandboxKey, "AllowVGPU", 0)],
-                RemoveOps = [RegOp.DeleteValue(SandboxKey, "AllowVGPU")],
-                DetectOps = [RegOp.CheckDword(SandboxKey, "AllowVGPU", 0)],
             },
             new TweakDef
             {

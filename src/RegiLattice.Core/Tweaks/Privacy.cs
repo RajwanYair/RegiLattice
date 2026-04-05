@@ -606,71 +606,6 @@ internal static class Privacy
         },
         new TweakDef
         {
-            Id = "priv-disable-input-personalization",
-            Label = "Disable Input Personalization (Inking & Typing)",
-            Category = "Privacy",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Disables online speech recognition, inking, and typing personalization. Prevents sending typing data to Microsoft. Default: enabled.",
-            Tags = ["privacy", "input", "inking", "typing", "personalization"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\InputPersonalization"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\InputPersonalization", "RestrictImplicitInkCollection", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\InputPersonalization", "RestrictImplicitInkCollection")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\InputPersonalization", "RestrictImplicitInkCollection", 1)],
-        },
-        new TweakDef
-        {
-            Id = "priv-disable-tailored-experiences",
-            Label = "Disable Tailored Experiences",
-            Category = "Privacy",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Disables tailored experiences with diagnostic data. Prevents Microsoft from using your data to customize tips and recommendations. Default: enabled.",
-            Tags = ["privacy", "tailored", "experiences", "recommendations"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Privacy"],
-            ApplyOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Privacy",
-                    "TailoredExperiencesWithDiagnosticDataEnabled",
-                    0
-                ),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Privacy",
-                    "TailoredExperiencesWithDiagnosticDataEnabled",
-                    1
-                ),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(
-                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Privacy",
-                    "TailoredExperiencesWithDiagnosticDataEnabled",
-                    0
-                ),
-            ],
-        },
-        new TweakDef
-        {
-            Id = "priv-disable-web-search-in-start",
-            Label = "Disable Web Search Results in Start Menu",
-            Category = "Privacy",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Prevents Start menu search from querying Bing web results. Keeps search results local only. Faster and more private.",
-            Tags = ["privacy", "search", "bing", "web", "start"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search", "DisableWebSearch", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search", "DisableWebSearch")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search", "DisableWebSearch", 1)],
-        },
-        new TweakDef
-        {
             Id = "priv-disable-cloud-content-search",
             Label = "Disable Cloud Content Search (OneDrive/Outlook)",
             Category = "Privacy",
@@ -694,55 +629,6 @@ internal static class Privacy
                 RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\SearchSettings", "IsAADCloudSearchEnabled", 0),
                 RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\SearchSettings", "IsMSACloudSearchEnabled", 0),
             ],
-        },
-        new TweakDef
-        {
-            Id = "priv-disable-suggest-ways-to-finish-setup",
-            Label = "Disable 'Suggest Ways to Finish Setting Up' Prompt",
-            Category = "Privacy",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Disables the 'Suggest ways to finish setting up my device' prompt that pushes Microsoft account linking and OneDrive setup.",
-            Tags = ["privacy", "setup", "nag", "microsoft"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager"],
-            ApplyOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
-                    "SubscribedContent-310093Enabled",
-                    0
-                ),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(
-                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
-                    "SubscribedContent-310093Enabled"
-                ),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(
-                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
-                    "SubscribedContent-310093Enabled",
-                    0
-                ),
-            ],
-        },
-        new TweakDef
-        {
-            Id = "priv-disable-app-launch-tracking",
-            Label = "Disable App Launch Tracking",
-            Category = "Privacy",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Prevents Windows from tracking which apps you launch to improve Start menu suggestions. Improves privacy.",
-            Tags = ["privacy", "tracking", "launch", "start"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "Start_TrackProgs", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "Start_TrackProgs", 1)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "Start_TrackProgs", 0)],
         },
         new TweakDef
         {
@@ -780,81 +666,6 @@ internal static class Privacy
         },
         new TweakDef
         {
-            Id = "priv-disable-motion-access",
-            Label = "Block Apps from Accessing Motion Sensors",
-            Category = "Privacy",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets LetAppsAccessMotion=2 (Force Deny) in AppPrivacy policy. Prevents all apps from reading accelerometer, gyroscope, and other motion sensor data.",
-            Tags = ["privacy", "motion", "sensors", "app-access"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy", "LetAppsAccessMotion", 2)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy", "LetAppsAccessMotion")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy", "LetAppsAccessMotion", 2)],
-        },
-        new TweakDef
-        {
-            Id = "priv-disable-phone-call-access",
-            Label = "Block Apps from Making Phone Calls",
-            Category = "Privacy",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets LetAppsAccessPhone=2 (Force Deny) in AppPrivacy policy. Prevents apps from initiating or reading phone calls via the Windows Phone Call subsystem.",
-            Tags = ["privacy", "phone", "calls", "app-access"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy", "LetAppsAccessPhone", 2)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy", "LetAppsAccessPhone")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy", "LetAppsAccessPhone", 2)],
-        },
-        new TweakDef
-        {
-            Id = "priv-disable-trusted-devices-access",
-            Label = "Block Apps from Accessing Trusted Devices",
-            Category = "Privacy",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets LetAppsAccessTrustedDevices=2 (Force Deny). Prevents apps from communicating with paired trusted peripherals such as smartcards and wearables.",
-            Tags = ["privacy", "trusted-devices", "peripherals", "app-access"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy", "LetAppsAccessTrustedDevices", 2)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy", "LetAppsAccessTrustedDevices")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy", "LetAppsAccessTrustedDevices", 2)],
-        },
-        new TweakDef
-        {
-            Id = "priv-disable-sync-with-devices",
-            Label = "Block Apps from Syncing with Unpaired Devices",
-            Category = "Privacy",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets LetAppsSyncWithDevices=2 (Force Deny). Prevents apps from synchronising data with USB, Bluetooth, and other peripheral devices without user consent.",
-            Tags = ["privacy", "sync", "devices", "bluetooth"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy", "LetAppsSyncWithDevices", 2)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy", "LetAppsSyncWithDevices")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy", "LetAppsSyncWithDevices", 2)],
-        },
-        new TweakDef
-        {
-            Id = "priv-disable-documents-app-access",
-            Label = "Block Apps from Accessing Documents Library",
-            Category = "Privacy",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets LetAppsAccessDocumentsLibrary=2 (Force Deny). Prevents UWP apps from reading or writing files in the user's Documents folder without explicit per-file consent.",
-            Tags = ["privacy", "documents", "library", "app-access"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy", "LetAppsAccessDocumentsLibrary", 2)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy", "LetAppsAccessDocumentsLibrary")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy", "LetAppsAccessDocumentsLibrary", 2)],
-        },
-        new TweakDef
-        {
             Id = "priv-disable-pictures-app-access",
             Label = "Block Apps from Accessing Pictures Library",
             Category = "Privacy",
@@ -882,36 +693,6 @@ internal static class Privacy
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy", "LetAppsAccessVideosLibrary")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy", "LetAppsAccessVideosLibrary", 2)],
         },
-        new TweakDef
-        {
-            Id = "priv-disable-notification-app-access",
-            Label = "Block Apps from Accessing Notifications",
-            Category = "Privacy",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets LetAppsAccessNotifications=2 (Force Deny). Prevents apps from reading the system notification feed, stopping cross-app notification snooping.",
-            Tags = ["privacy", "notifications", "app-access"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy", "LetAppsAccessNotifications", 2)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy", "LetAppsAccessNotifications")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy", "LetAppsAccessNotifications", 2)],
-        },
-        new TweakDef
-        {
-            Id = "priv-disable-gaze-input-access",
-            Label = "Block Apps from Accessing Gaze / Eye-Tracking Input",
-            Category = "Privacy",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets LetAppsAccessGazeInput=2 (Force Deny). Prevents apps from reading eye-tracking or gaze input data from supported hardware.",
-            Tags = ["privacy", "gaze", "eye-tracking", "input", "app-access"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy", "LetAppsAccessGazeInput", 2)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy", "LetAppsAccessGazeInput")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy", "LetAppsAccessGazeInput", 2)],
-        },
     ];
 }
 
@@ -924,21 +705,6 @@ internal static class WindowsRecall
 
     internal static IReadOnlyList<TweakDef> Tweaks { get; } =
     [
-        new TweakDef
-        {
-            Id = "recall-disable-recall",
-            Label = "Disable Windows Recall",
-            Category = "Privacy",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            MinBuild = 26100,
-            Description = "Disables Windows Recall (AI-powered timeline snapshots) system-wide via Group Policy.",
-            Tags = ["recall", "ai", "privacy", "copilot-plus", "snapshots"],
-            RegistryKeys = [$@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows\WindowsAI"],
-            ApplyOps = [RegOp.SetDword($@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows\WindowsAI", "DisableAIDataAnalysis", 1)],
-            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows\WindowsAI", "DisableAIDataAnalysis")],
-            DetectOps = [RegOp.CheckDword($@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows\WindowsAI", "DisableAIDataAnalysis", 1)],
-        },
         new TweakDef
         {
             Id = "recall-disable-saving-snapshots",
@@ -1076,105 +842,6 @@ internal static class WindowsRecall
         },
         new TweakDef
         {
-            Id = "recall-disable-ai-search-highlights",
-            Label = "Disable AI Search Highlights",
-            Category = "Privacy",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            MinBuild = 22621,
-            Description = "Disables AI-generated search highlights and trending content in Windows Search.",
-            Tags = ["recall", "ai", "search", "highlights", "privacy"],
-            RegistryKeys = [$@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows\Windows Search"],
-            ApplyOps = [RegOp.SetDword($@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows\Windows Search", "EnableDynamicContentInWSB", 0)],
-            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows\Windows Search", "EnableDynamicContentInWSB")],
-            DetectOps = [RegOp.CheckDword($@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows\Windows Search", "EnableDynamicContentInWSB", 0)],
-        },
-        new TweakDef
-        {
-            Id = "recall-disable-inking-and-typing-personalization",
-            Label = "Disable Inking & Typing AI Personalization",
-            Category = "Privacy",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables AI-powered inking and typing personalization that sends data to Microsoft.",
-            Tags = ["recall", "ai", "privacy", "typing", "inking", "personalization"],
-            RegistryKeys = [$@"{LmKey}\SOFTWARE\Policies\Microsoft\InputPersonalization"],
-            ApplyOps =
-            [
-                RegOp.SetDword($@"{LmKey}\SOFTWARE\Policies\Microsoft\InputPersonalization", "AllowInputPersonalization", 0),
-                RegOp.SetDword($@"{LmKey}\SOFTWARE\Policies\Microsoft\InputPersonalization", "RestrictImplicitInkCollection", 1),
-                RegOp.SetDword($@"{LmKey}\SOFTWARE\Policies\Microsoft\InputPersonalization", "RestrictImplicitTextCollection", 1),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue($@"{LmKey}\SOFTWARE\Policies\Microsoft\InputPersonalization", "AllowInputPersonalization"),
-                RegOp.DeleteValue($@"{LmKey}\SOFTWARE\Policies\Microsoft\InputPersonalization", "RestrictImplicitInkCollection"),
-                RegOp.DeleteValue($@"{LmKey}\SOFTWARE\Policies\Microsoft\InputPersonalization", "RestrictImplicitTextCollection"),
-            ],
-            DetectOps = [RegOp.CheckDword($@"{LmKey}\SOFTWARE\Policies\Microsoft\InputPersonalization", "AllowInputPersonalization", 0)],
-        },
-        new TweakDef
-        {
-            Id = "recall-disable-activity-history",
-            Label = "Disable Activity History",
-            Category = "Privacy",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            MinBuild = 22621,
-            Description = "Disables activity history collection and timeline features used by Recall.",
-            Tags = ["recall", "ai", "privacy", "activity", "timeline"],
-            RegistryKeys = [$@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows\System"],
-            ApplyOps =
-            [
-                RegOp.SetDword($@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows\System", "EnableActivityFeed", 0),
-                RegOp.SetDword($@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows\System", "PublishUserActivities", 0),
-                RegOp.SetDword($@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows\System", "UploadUserActivities", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue($@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows\System", "EnableActivityFeed"),
-                RegOp.DeleteValue($@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows\System", "PublishUserActivities"),
-                RegOp.DeleteValue($@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows\System", "UploadUserActivities"),
-            ],
-            DetectOps = [RegOp.CheckDword($@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows\System", "EnableActivityFeed", 0)],
-        },
-        new TweakDef
-        {
-            Id = "recall-disable-voice-activation",
-            Label = "Disable Voice Activation for AI",
-            Category = "Privacy",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            MinBuild = 22621,
-            Description = "Prevents AI assistants from listening for voice activation keywords.",
-            Tags = ["recall", "ai", "privacy", "voice", "microphone"],
-            RegistryKeys = [$@"{CuKey}\Software\Microsoft\Speech_OneCore\Settings\VoiceActivation\UserPreferenceForAllApps"],
-            ApplyOps =
-            [
-                RegOp.SetDword(
-                    $@"{CuKey}\Software\Microsoft\Speech_OneCore\Settings\VoiceActivation\UserPreferenceForAllApps",
-                    "AgentActivationEnabled",
-                    0
-                ),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(
-                    $@"{CuKey}\Software\Microsoft\Speech_OneCore\Settings\VoiceActivation\UserPreferenceForAllApps",
-                    "AgentActivationEnabled"
-                ),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(
-                    $@"{CuKey}\Software\Microsoft\Speech_OneCore\Settings\VoiceActivation\UserPreferenceForAllApps",
-                    "AgentActivationEnabled",
-                    0
-                ),
-            ],
-        },
-        new TweakDef
-        {
             Id = "recall-disable-online-tips",
             Label = "Disable Online Tips & Suggestions",
             Category = "Privacy",
@@ -1205,21 +872,6 @@ internal static class WindowsRecall
         },
         new TweakDef
         {
-            Id = "recall-disable-suggested-actions",
-            Label = "Disable AI Suggested Actions",
-            Category = "Privacy",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            MinBuild = 22621,
-            Description = "Disables AI-powered suggested actions when copying dates, phone numbers, or addresses.",
-            Tags = ["recall", "ai", "clipboard", "suggestions"],
-            RegistryKeys = [$@"{CuKey}\Software\Microsoft\Windows\CurrentVersion\SmartActionPlatform\SmartClipboard"],
-            ApplyOps = [RegOp.SetDword($@"{CuKey}\Software\Microsoft\Windows\CurrentVersion\SmartActionPlatform\SmartClipboard", "Disabled", 1)],
-            RemoveOps = [RegOp.DeleteValue($@"{CuKey}\Software\Microsoft\Windows\CurrentVersion\SmartActionPlatform\SmartClipboard", "Disabled")],
-            DetectOps = [RegOp.CheckDword($@"{CuKey}\Software\Microsoft\Windows\CurrentVersion\SmartActionPlatform\SmartClipboard", "Disabled", 1)],
-        },
-        new TweakDef
-        {
             Id = "recall-disable-publish-user-activities",
             Label = "Disable Publishing User Activities (HKCU)",
             Category = "Privacy",
@@ -1243,36 +895,6 @@ internal static class WindowsRecall
         },
         new TweakDef
         {
-            Id = "recall-disable-cross-device-clipboard",
-            Label = "Disable Cross-Device Clipboard Sync",
-            Category = "Privacy",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            MinBuild = 17763,
-            Description = "Disables cross-device clipboard synchronization that shares clipboard content across Windows devices.",
-            Tags = ["recall", "ai", "clipboard", "cloud", "privacy", "sync", "cross-device"],
-            RegistryKeys = [$@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows\System"],
-            ApplyOps = [RegOp.SetDword($@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows\System", "AllowCrossDeviceClipboard", 0)],
-            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows\System", "AllowCrossDeviceClipboard")],
-            DetectOps = [RegOp.CheckDword($@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows\System", "AllowCrossDeviceClipboard", 0)],
-        },
-        new TweakDef
-        {
-            Id = "recall-disable-typing-insights",
-            Label = "Disable Typing Insights Collection",
-            Category = "Privacy",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            MinBuild = 19041,
-            Description = "Disables Typing Insights, which collects text input data to improve autocorrect and predictions.",
-            Tags = ["recall", "ai", "typing", "personalization", "privacy", "input"],
-            RegistryKeys = [$@"{CuKey}\Software\Microsoft\Input\Settings"],
-            ApplyOps = [RegOp.SetDword($@"{CuKey}\Software\Microsoft\Input\Settings", "InsightsEnabled", 0)],
-            RemoveOps = [RegOp.DeleteValue($@"{CuKey}\Software\Microsoft\Input\Settings", "InsightsEnabled")],
-            DetectOps = [RegOp.CheckDword($@"{CuKey}\Software\Microsoft\Input\Settings", "InsightsEnabled", 0)],
-        },
-        new TweakDef
-        {
             Id = "recall-disable-taskbar-ai-widget-content",
             Label = "Disable AI Dynamic Content in Taskbar Widgets",
             Category = "Privacy",
@@ -1286,69 +908,6 @@ internal static class WindowsRecall
             RemoveOps = [RegOp.DeleteValue($@"{CuKey}\Software\Microsoft\Windows\CurrentVersion\Feeds\DSB", "ShowDynamicContent")],
             DetectOps = [RegOp.CheckDword($@"{CuKey}\Software\Microsoft\Windows\CurrentVersion\Feeds\DSB", "ShowDynamicContent", 0)],
         },
-        new TweakDef
-        {
-            Id = "recall-disable-cloud-search-results",
-            Label = "Disable Cloud Search in Windows Search",
-            Category = "Privacy",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            MinBuild = 17763,
-            Description = "Disables cloud-powered search results from Bing and OneDrive inside Windows Search.",
-            Tags = ["recall", "ai", "search", "cloud", "bing", "privacy", "onedrive"],
-            RegistryKeys = [$@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows\Windows Search"],
-            ApplyOps = [RegOp.SetDword($@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows\Windows Search", "AllowCloudSearch", 0)],
-            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows\Windows Search", "AllowCloudSearch")],
-            DetectOps = [RegOp.CheckDword($@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows\Windows Search", "AllowCloudSearch", 0)],
-        },
-        new TweakDef
-        {
-            Id = "recall-disable-voice-data-collection",
-            Label = "Disable Online Speech Recognition Data Upload",
-            Category = "Privacy",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            MinBuild = 17763,
-            Description = "Opts out of uploading voice samples to Microsoft for online speech recognition improvement.",
-            Tags = ["recall", "ai", "speech", "voice", "privacy", "microphone"],
-            RegistryKeys = [$@"{CuKey}\Software\Microsoft\Speech_OneCore\Settings\OnlineSpeechPrivacy"],
-            ApplyOps = [RegOp.SetDword($@"{CuKey}\Software\Microsoft\Speech_OneCore\Settings\OnlineSpeechPrivacy", "HasAccepted", 0)],
-            RemoveOps = [RegOp.DeleteValue($@"{CuKey}\Software\Microsoft\Speech_OneCore\Settings\OnlineSpeechPrivacy", "HasAccepted")],
-            DetectOps = [RegOp.CheckDword($@"{CuKey}\Software\Microsoft\Speech_OneCore\Settings\OnlineSpeechPrivacy", "HasAccepted", 0)],
-        },
-        new TweakDef
-        {
-            Id = "recall-disable-content-delivery-features",
-            Label = "Disable ContentDelivery Feature Management",
-            Category = "Privacy",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            MinBuild = 19041,
-            Description = "Disables ContentDeliveryManager feature management, which enables future AI-driven content pushes.",
-            Tags = ["recall", "ai", "content-delivery", "suggestions", "privacy", "advertising"],
-            RegistryKeys = [$@"{CuKey}\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager"],
-            ApplyOps = [RegOp.SetDword($@"{CuKey}\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager", "FeatureManagementEnabled", 0)],
-            RemoveOps = [RegOp.DeleteValue($@"{CuKey}\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager", "FeatureManagementEnabled")],
-            DetectOps =
-            [
-                RegOp.CheckDword($@"{CuKey}\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager", "FeatureManagementEnabled", 0),
-            ],
-        },
-        new TweakDef
-        {
-            Id = "recall-disable-spotlight-on-settings",
-            Label = "Disable Windows Spotlight in Settings App",
-            Category = "Privacy",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            MinBuild = 19041,
-            Description = "Disables AI/Spotlight-powered content suggestions embedded in the Windows Settings application.",
-            Tags = ["recall", "ai", "spotlight", "settings", "advertising", "suggestions"],
-            RegistryKeys = [$@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows\CloudContent"],
-            ApplyOps = [RegOp.SetDword($@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows\CloudContent", "DisableWindowsSpotlightOnSettings", 1)],
-            RemoveOps = [RegOp.DeleteValue($@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows\CloudContent", "DisableWindowsSpotlightOnSettings")],
-            DetectOps = [RegOp.CheckDword($@"{LmKey}\SOFTWARE\Policies\Microsoft\Windows\CloudContent", "DisableWindowsSpotlightOnSettings", 1)],
-        },
     ];
 }
 
@@ -1358,32 +917,6 @@ internal static class TelemetryAdvanced
 {
     internal static IReadOnlyList<TweakDef> Tweaks { get; } =
     [
-        new TweakDef
-        {
-            Id = "telem-disable-diag-optin",
-            Label = "Block Diagnostic Data Settings Changes",
-            Category = "Privacy",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Disables the diagnostic data viewer and prevents users from changing opt-in level via Settings. Default: allowed. Recommended: 1 (blocked).",
-            Tags = ["telemetry", "diagnostic", "settings", "policy"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DataCollection"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DataCollection", "DisableDiagnosticDataViewer", 1),
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DataCollection", "DisableOneSettingsSyncDiag", 1),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DataCollection", "DisableDiagnosticDataViewer"),
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DataCollection", "DisableOneSettingsSyncDiag"),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DataCollection", "DisableDiagnosticDataViewer", 1),
-            ],
-        },
         new TweakDef
         {
             Id = "telem-disable-handwriting",
@@ -1459,21 +992,6 @@ internal static class TelemetryAdvanced
         },
         new TweakDef
         {
-            Id = "telem-disable-mrt-report",
-            Label = "Disable MRT Infection Reporting",
-            Category = "Privacy",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description =
-                "Prevents the Malicious Software Removal Tool from reporting infection information to Microsoft. Default: Enabled. Recommended: Disabled for privacy.",
-            Tags = ["telemetry", "mrt", "malware", "reporting", "privacy"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\MRT"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\MRT", "DontReportInfectionInformation", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\MRT", "DontReportInfectionInformation")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\MRT", "DontReportInfectionInformation", 1)],
-        },
-        new TweakDef
-        {
             Id = "telem-disable-speech-model-update",
             Label = "Disable Speech Model Automatic Update",
             Category = "Privacy",
@@ -1504,54 +1022,6 @@ internal static class TelemetryAdvanced
         },
         new TweakDef
         {
-            Id = "telem-disable-kms-client-emulation",
-            Label = "Disable KMS Client Online AVS Validation",
-            Category = "Privacy",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables automatic KMS client activation validation pings. Reduces outbound telemetry traffic. Default: enabled.",
-            Tags = ["telemetry", "kms", "activation", "validation"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\CurrentVersion\Software Protection Platform"],
-            ApplyOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\CurrentVersion\Software Protection Platform",
-                    "NoGenTicket",
-                    1
-                ),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\CurrentVersion\Software Protection Platform",
-                    "NoGenTicket"
-                ),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\CurrentVersion\Software Protection Platform",
-                    "NoGenTicket",
-                    1
-                ),
-            ],
-        },
-        new TweakDef
-        {
-            Id = "telem-disable-advertising-id",
-            Label = "Disable Advertising ID (Policy)",
-            Category = "Privacy",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables the per-user advertising ID via Group Policy. Prevents personalised ad tracking across apps. Default: enabled.",
-            Tags = ["telemetry", "advertising-id", "privacy", "policy"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AdvertisingInfo"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AdvertisingInfo", "DisabledByGroupPolicy", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AdvertisingInfo", "DisabledByGroupPolicy")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AdvertisingInfo", "DisabledByGroupPolicy", 1)],
-        },
-        new TweakDef
-        {
             Id = "telem-telemetry-set-max-size",
             Label = "Set Telemetry Cache Max Size to 0 MB",
             Category = "Privacy",
@@ -1563,77 +1033,6 @@ internal static class TelemetryAdvanced
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DataCollection", "MaxTelemetryCacheSize", 0)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DataCollection", "MaxTelemetryCacheSize")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DataCollection", "MaxTelemetryCacheSize", 0)],
-        },
-        new TweakDef
-        {
-            Id = "telem-disable-one-settings-download",
-            Label = "Disable OneSettings Telemetry Configuration Downloads",
-            Category = "Privacy",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets DisableOneSettingsDownloads=1 in DataCollection policy. Prevents Windows from downloading dynamic telemetry configuration updates (\"OneSettings\") from Microsoft servers.",
-            Tags = ["telemetry", "one-settings", "download", "privacy"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DataCollection"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DataCollection", "DisableOneSettingsDownloads", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DataCollection", "DisableOneSettingsDownloads")],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DataCollection", "DisableOneSettingsDownloads", 1),
-            ],
-        },
-        new TweakDef
-        {
-            Id = "telem-limit-diagnostic-log",
-            Label = "Limit Diagnostic Log Collection to Minimum",
-            Category = "Privacy",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets LimitDiagnosticLogCollection=1. Restricts the additional diagnostic log bundles gathered by Windows Feedback Hub and Windows Error Reporting to the minimum required.",
-            Tags = ["telemetry", "diagnostic", "logs", "privacy"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DataCollection"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DataCollection", "LimitDiagnosticLogCollection", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DataCollection", "LimitDiagnosticLogCollection")],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DataCollection", "LimitDiagnosticLogCollection", 1),
-            ],
-        },
-        new TweakDef
-        {
-            Id = "telem-disable-cloud-analytics-enhanced",
-            Label = "Restrict Enhanced Diagnostic Data to Windows Analytics",
-            Category = "Privacy",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets LimitEnhancedDiagnosticDataWindowsAnalytics=1. Even when Enhanced telemetry is enabled, only the subset required by Windows Analytics for update-health monitoring is uploaded.",
-            Tags = ["telemetry", "enhanced", "analytics", "privacy"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DataCollection"],
-            ApplyOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DataCollection",
-                    "LimitEnhancedDiagnosticDataWindowsAnalytics",
-                    1
-                ),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DataCollection",
-                    "LimitEnhancedDiagnosticDataWindowsAnalytics"
-                ),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DataCollection",
-                    "LimitEnhancedDiagnosticDataWindowsAnalytics",
-                    1
-                ),
-            ],
         },
         new TweakDef
         {
@@ -1662,21 +1061,6 @@ internal static class TelemetryAdvanced
                     1
                 ),
             ],
-        },
-        new TweakDef
-        {
-            Id = "telem-disable-insider-builds",
-            Label = "Disable Windows Insider Preview Build Access",
-            Category = "Privacy",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets AllowBuildPreview=0 via PreviewBuilds policy. Prevents the device from enrolling in Windows Insider Program flights, eliminating associated feedback and diagnostic data collection.",
-            Tags = ["telemetry", "insider", "preview", "builds"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\PreviewBuilds"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\PreviewBuilds", "AllowBuildPreview", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\PreviewBuilds", "AllowBuildPreview")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\PreviewBuilds", "AllowBuildPreview", 0)],
         },
         new TweakDef
         {
@@ -1741,21 +1125,6 @@ internal static class TelemetryAdvanced
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\Maps", "AutoUpdateEnabled", 0)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\Maps", "AutoUpdateEnabled")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\Maps", "AutoUpdateEnabled", 0)],
-        },
-        new TweakDef
-        {
-            Id = "telem-disable-oobe-privacy-wizard",
-            Label = "Disable OOBE Privacy Experience Wizard",
-            Category = "Privacy",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets DisablePrivacyExperience=1 in the OOBE key. Prevents Windows from launching the privacy-settings wizard that prompts users to send diagnostic data after installation or upgrade.",
-            Tags = ["telemetry", "oobe", "setup", "privacy", "wizard"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\OOBE"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\OOBE", "DisablePrivacyExperience", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\OOBE", "DisablePrivacyExperience")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\OOBE", "DisablePrivacyExperience", 1)],
         },
     ];
 }
@@ -2017,24 +1386,6 @@ internal static class PolicyPrivacy
             },
             new TweakDef
             {
-                Id = "datacol-disable-enterprise-auth-proxy",
-                Label = "Disable Enterprise Auth Proxy for Telemetry",
-                Category = "Privacy",
-                Description =
-                    "Prevents Windows telemetry service from using authenticated proxy servers to send diagnostic data. Forces direct transmission or blocks it entirely.",
-                Tags = ["telemetry", "proxy", "network", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                ImpactNote = "Prevents telemetry from routing through enterprise auth proxies.",
-                RegistryKeys = [Key],
-                ApplyOps = [RegOp.SetDword(Key, "DisableEnterpriseAuthProxy", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "DisableEnterpriseAuthProxy")],
-                DetectOps = [RegOp.CheckDword(Key, "DisableEnterpriseAuthProxy", 1)],
-            },
-            new TweakDef
-            {
                 Id = "datacol-disable-device-delete-button",
                 Label = "Disable Delete Device Diagnostic Data Button",
                 Category = "Privacy",
@@ -2050,42 +1401,6 @@ internal static class PolicyPrivacy
                 ApplyOps = [RegOp.SetDword(Key, "DisableDeviceDelete", 1)],
                 RemoveOps = [RegOp.DeleteValue(Key, "DisableDeviceDelete")],
                 DetectOps = [RegOp.CheckDword(Key, "DisableDeviceDelete", 1)],
-            },
-            new TweakDef
-            {
-                Id = "datacol-disable-feedback-notifications",
-                Label = "Suppress Windows Feedback Reminder Pop-Ups",
-                Category = "Privacy",
-                Description =
-                    "Prevents Windows from displaying feedback reminder notifications that prompt users to rate experiences or submit feedback to Microsoft.",
-                Tags = ["feedback", "notifications", "privacy", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                ImpactNote = "Removes Windows feedback notification pop-ups.",
-                RegistryKeys = [Key],
-                ApplyOps = [RegOp.SetDword(Key, "DoNotShowFeedbackNotifications", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "DoNotShowFeedbackNotifications")],
-                DetectOps = [RegOp.CheckDword(Key, "DoNotShowFeedbackNotifications", 1)],
-            },
-            new TweakDef
-            {
-                Id = "datacol-disable-device-name-in-telemetry",
-                Label = "Block Device Name in Telemetry Submissions",
-                Category = "Privacy",
-                Description =
-                    "Prevents Windows from including the device's computer name in telemetry payloads sent to Microsoft. Reduces machine-identifying data in diagnostics.",
-                Tags = ["telemetry", "device-name", "privacy", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Stops the machine hostname from being sent in telemetry payloads.",
-                RegistryKeys = [Key],
-                ApplyOps = [RegOp.SetDword(Key, "AllowDeviceNameInTelemetry", 0)],
-                RemoveOps = [RegOp.DeleteValue(Key, "AllowDeviceNameInTelemetry")],
-                DetectOps = [RegOp.CheckDword(Key, "AllowDeviceNameInTelemetry", 0)],
             },
             new TweakDef
             {
@@ -2588,80 +1903,6 @@ internal static class PolicyPrivacy
         [
             new TweakDef
             {
-                Id = "loc-disable-location-scripting",
-                Label = "Disable Location Scripting",
-                Category = "Privacy",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                Description =
-                    "Blocks scripted applications (ActiveX, WSH) from querying device location "
-                    + "via the Windows Location scripting interface. DisableLocationScripting=1.",
-                Tags = ["location", "privacy", "scripting", "activex"],
-                RegistryKeys = [LocPolicy],
-                ApplyOps = [RegOp.SetDword(LocPolicy, "DisableLocationScripting", 1)],
-                RemoveOps = [RegOp.DeleteValue(LocPolicy, "DisableLocationScripting")],
-                DetectOps = [RegOp.CheckDword(LocPolicy, "DisableLocationScripting", 1)],
-            },
-            new TweakDef
-            {
-                Id = "loc-disable-sensors",
-                Label = "Disable Windows Sensor Platform",
-                Category = "Privacy",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 4,
-                Description =
-                    "Disables the Windows Sensor framework, blocking access to hardware sensors "
-                    + "such as ambient-light, accelerometer, and barometer. DisableSensors=1.",
-                Tags = ["location", "sensors", "hardware", "privacy"],
-                RegistryKeys = [LocPolicy],
-                ApplyOps = [RegOp.SetDword(LocPolicy, "DisableSensors", 1)],
-                RemoveOps = [RegOp.DeleteValue(LocPolicy, "DisableSensors")],
-                DetectOps = [RegOp.CheckDword(LocPolicy, "DisableSensors", 1)],
-            },
-            new TweakDef
-            {
-                Id = "loc-disable-location-provider",
-                Label = "Disable Windows Location Provider",
-                Category = "Privacy",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                Description =
-                    "Disables the Windows Location Provider (WLP), which supplies geolocation "
-                    + "data to apps from GPS, Wi-Fi triangulation, and IP geolocation. "
-                    + "DisableWindowsLocationProvider=1.",
-                Tags = ["location", "provider", "gps", "privacy"],
-                RegistryKeys = [LocPolicy],
-                ApplyOps = [RegOp.SetDword(LocPolicy, "DisableWindowsLocationProvider", 1)],
-                RemoveOps = [RegOp.DeleteValue(LocPolicy, "DisableWindowsLocationProvider")],
-                DetectOps = [RegOp.CheckDword(LocPolicy, "DisableWindowsLocationProvider", 1)],
-            },
-            new TweakDef
-            {
-                Id = "loc-policy-deny-app-location",
-                Label = "Policy: Force-Deny All UWP Apps Location Access",
-                Category = "Privacy",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                Description =
-                    "Machine-level group policy that forces all UWP apps to be denied location "
-                    + "access regardless of user consent. LetAppsAccessLocation=2 (Force Deny). "
-                    + "Complements priv-disable-location (which disables the OS service).",
-                Tags = ["location", "policy", "app privacy", "uwp"],
-                RegistryKeys = [AppPrivacy],
-                ApplyOps = [RegOp.SetDword(AppPrivacy, "LetAppsAccessLocation", 2)],
-                RemoveOps = [RegOp.DeleteValue(AppPrivacy, "LetAppsAccessLocation")],
-                DetectOps = [RegOp.CheckDword(AppPrivacy, "LetAppsAccessLocation", 2)],
-            },
-            new TweakDef
-            {
                 Id = "loc-policy-deny-app-motion",
                 Label = "Policy: Force-Deny All UWP Apps Motion Sensor Access",
                 Category = "Privacy",
@@ -2677,42 +1918,6 @@ internal static class PolicyPrivacy
                 ApplyOps = [RegOp.SetDword(AppPrivacy, "LetAppsAccessMotion", 2)],
                 RemoveOps = [RegOp.DeleteValue(AppPrivacy, "LetAppsAccessMotion")],
                 DetectOps = [RegOp.CheckDword(AppPrivacy, "LetAppsAccessMotion", 2)],
-            },
-            new TweakDef
-            {
-                Id = "loc-disable-search-location",
-                Label = "Disable Location-Based Windows Search Results",
-                Category = "Privacy",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 1,
-                SafetyRating = 5,
-                Description =
-                    "Prevents Windows Search from refining results based on the device's geographic "
-                    + "location. AllowSearchToUseLocation=0 in the Windows Search policy.",
-                Tags = ["location", "search", "cortana", "privacy"],
-                RegistryKeys = [WinSearch],
-                ApplyOps = [RegOp.SetDword(WinSearch, "AllowSearchToUseLocation", 0)],
-                RemoveOps = [RegOp.DeleteValue(WinSearch, "AllowSearchToUseLocation")],
-                DetectOps = [RegOp.CheckDword(WinSearch, "AllowSearchToUseLocation", 0)],
-            },
-            new TweakDef
-            {
-                Id = "loc-disable-wifi-location",
-                Label = "Disable Wi-Fi Location Auto-Connect",
-                Category = "Privacy",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 1,
-                SafetyRating = 5,
-                Description =
-                    "Disables Wi-Fi location-aware automatic connection feature. "
-                    + "AutoConnectAllowedOEM=0 prevents location-based Wi-Fi network switching.",
-                Tags = ["location", "wifi", "auto-connect", "privacy", "network"],
-                RegistryKeys = [WifiConfig],
-                ApplyOps = [RegOp.SetDword(WifiConfig, "AutoConnectAllowedOEM", 0)],
-                RemoveOps = [RegOp.DeleteValue(WifiConfig, "AutoConnectAllowedOEM")],
-                DetectOps = [RegOp.CheckDword(WifiConfig, "AutoConnectAllowedOEM", 0)],
             },
             new TweakDef
             {
@@ -2791,57 +1996,6 @@ internal static class PolicyPrivacy
             [
                 new TweakDef
                 {
-                    Id = "locsns-disable-location",
-                    Label = "Disable All Location Services",
-                    Category = "Privacy",
-                    Description =
-                        "Disables the Windows location platform, preventing all applications and system components from accessing the device's geographic location. Default: enabled. Recommended: 1 (disabled) on workstations where geo-location is unnecessary.",
-                    Tags = ["location", "privacy", "sensors", "gps", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 4,
-                    SafetyRating = 5,
-                    ImpactNote = "No application can access location; maps, weather, and location-aware apps lose positioning.",
-                    ApplyOps = [RegOp.SetDword(Key, "DisableLocation", 1)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "DisableLocation")],
-                    DetectOps = [RegOp.CheckDword(Key, "DisableLocation", 1)],
-                },
-                new TweakDef
-                {
-                    Id = "locsns-disable-scripted-location",
-                    Label = "Disable Scripted Location Access",
-                    Category = "Privacy",
-                    Description =
-                        "Prevents scripts (JScript, VBScript, PowerShell) and web content from accessing the Windows location platform. Closes browser-script and WSH location enumeration vectors. Default: enabled. Recommended: 1 (disabled).",
-                    Tags = ["location", "scripting", "privacy", "web", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 4,
-                    SafetyRating = 5,
-                    ImpactNote = "Web and script-based location lookups are blocked; physical GPS and platform APIs are unaffected.",
-                    ApplyOps = [RegOp.SetDword(Key, "DisableLocationScripting", 1)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "DisableLocationScripting")],
-                    DetectOps = [RegOp.CheckDword(Key, "DisableLocationScripting", 1)],
-                },
-                new TweakDef
-                {
-                    Id = "locsns-disable-sensors",
-                    Label = "Disable Hardware Sensor Driver Framework",
-                    Category = "Privacy",
-                    Description =
-                        "Disables the Windows sensor platform, preventing ambient light, accelerometer, gyroscope, and other sensor drivers from reporting data to applications. Default: enabled. Recommended: 1 (disabled) on fixed workstations.",
-                    Tags = ["sensors", "hardware", "accelerometer", "privacy", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 3,
-                    SafetyRating = 5,
-                    ImpactNote = "All hardware sensors (light, motion, barometer) are unavailable to applications.",
-                    ApplyOps = [RegOp.SetDword(Key, "DisableSensors", 1)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "DisableSensors")],
-                    DetectOps = [RegOp.CheckDword(Key, "DisableSensors", 1)],
-                },
-                new TweakDef
-                {
                     Id = "locsns-disable-windowed-location",
                     Label = "Disable Windowed Location Mode",
                     Category = "Privacy",
@@ -2890,23 +2044,6 @@ internal static class PolicyPrivacy
                     ApplyOps = [RegOp.SetDword(Key, "DisableFusedLocationProvider", 1)],
                     RemoveOps = [RegOp.DeleteValue(Key, "DisableFusedLocationProvider")],
                     DetectOps = [RegOp.CheckDword(Key, "DisableFusedLocationProvider", 1)],
-                },
-                new TweakDef
-                {
-                    Id = "locsns-clear-location-history",
-                    Label = "Disable Location History Logging",
-                    Category = "Privacy",
-                    Description =
-                        "Prevents Windows from storing a history of the device's geographic location. Location data is used for each query only and not retained locally. Default: enabled. Recommended: 1 (disabled) for regulatory compliance.",
-                    Tags = ["location", "history", "privacy", "data-retention", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 4,
-                    SafetyRating = 5,
-                    ImpactNote = "No location data is stored on-disk; each app request resolves live position only.",
-                    ApplyOps = [RegOp.SetDword(Key, "DisableLocationHistory", 1)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "DisableLocationHistory")],
-                    DetectOps = [RegOp.CheckDword(Key, "DisableLocationHistory", 1)],
                 },
                 new TweakDef
                 {
@@ -2981,41 +2118,6 @@ internal static class PolicyPrivacy
         [
             new TweakDef
             {
-                Id = "msa-disable-account-sync",
-                Label = "Disable Microsoft Account Settings Sync",
-                Category = "Privacy",
-                NeedsAdmin = true,
-                CorpSafe = false,
-                ImpactScore = 3,
-                SafetyRating = 4,
-                Tags = ["msa", "sync", "settings", "privacy"],
-                Description =
-                    "Disables the Sync Your Settings feature (DisableSettingSync=2). "
-                    + "Prevents Windows settings like theme, passwords, and language preferences "
-                    + "from being uploaded to and synced through your Microsoft Account.",
-                ApplyOps = [RegOp.SetDword(SyncPolicy, "DisableSettingSync", 2)],
-                RemoveOps = [RegOp.DeleteValue(SyncPolicy, "DisableSettingSync")],
-                DetectOps = [RegOp.CheckDword(SyncPolicy, "DisableSettingSync", 2)],
-            },
-            new TweakDef
-            {
-                Id = "msa-disable-sync-override",
-                Label = "Prevent Users from Overriding Settings Sync Policy",
-                Category = "Privacy",
-                NeedsAdmin = true,
-                CorpSafe = false,
-                ImpactScore = 3,
-                SafetyRating = 4,
-                Tags = ["msa", "sync", "policy", "lock"],
-                Description =
-                    "Sets DisableSettingSyncUserOverride=1 to prevent users from re-enabling "
-                    + "Settings Sync through the Settings app. Complements DisableSettingSync.",
-                ApplyOps = [RegOp.SetDword(SyncPolicy, "DisableSettingSyncUserOverride", 1)],
-                RemoveOps = [RegOp.DeleteValue(SyncPolicy, "DisableSettingSyncUserOverride")],
-                DetectOps = [RegOp.CheckDword(SyncPolicy, "DisableSettingSyncUserOverride", 1)],
-            },
-            new TweakDef
-            {
                 Id = "msa-block-msa-signin",
                 Label = "Block Microsoft Account Sign-In for Apps",
                 Category = "Privacy",
@@ -3032,51 +2134,6 @@ internal static class PolicyPrivacy
                 ApplyOps = [RegOp.SetDword(SignIn, "NoConnectedUser", 3)],
                 RemoveOps = [RegOp.DeleteValue(SignIn, "NoConnectedUser")],
                 DetectOps = [RegOp.CheckDword(SignIn, "NoConnectedUser", 3)],
-            },
-            new TweakDef
-            {
-                Id = "msa-disable-windows-hello-provision",
-                Label = "Disable Windows Hello Provisioning (Local Account)",
-                Category = "Privacy",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 4,
-                Tags = ["msa", "windows hello", "provisioning", "pin", "policy"],
-                Description =
-                    "Prevents Windows from requiring and prompting users to set up a Windows "
-                    + "Hello PIN or biometric. Enabled=0 disables the PassportForWork policy. "
-                    + "Suitable for shared PCs or environments using passwords only.",
-                ApplyOps = [RegOp.SetDword(PassportPolicy, "Enabled", 0)],
-                RemoveOps = [RegOp.DeleteValue(PassportPolicy, "Enabled")],
-                DetectOps = [RegOp.CheckDword(PassportPolicy, "Enabled", 0)],
-            },
-            new TweakDef
-            {
-                Id = "msa-disable-optional-diagnostic-sync",
-                Label = "Disable Optional Diagnostic Data Sync via MSA",
-                Category = "Privacy",
-                NeedsAdmin = true,
-                CorpSafe = false,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                Tags = ["msa", "diagnostic", "sync", "privacy", "telemetry"],
-                Description =
-                    "Disables the optional background upload of diagnostic/telemetry data "
-                    + "associated with a signed-in Microsoft Account. Complements the main "
-                    + "telemetry disable tweak with an MSA-scoped opt-out.",
-                ApplyOps =
-                [
-                    RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DataCollection", "AllowDeviceNameInTelemetry", 0),
-                ],
-                RemoveOps =
-                [
-                    RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DataCollection", "AllowDeviceNameInTelemetry"),
-                ],
-                DetectOps =
-                [
-                    RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DataCollection", "AllowDeviceNameInTelemetry", 0),
-                ],
             },
             new TweakDef
             {
@@ -3119,45 +2176,6 @@ internal static class PolicyPrivacy
             },
             new TweakDef
             {
-                Id = "msa-disable-suggested-apps-msa",
-                Label = "Disable MSA-Based Suggested Apps and Content",
-                Category = "Privacy",
-                NeedsAdmin = false,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                Tags = ["msa", "suggested apps", "ads", "privacy"],
-                Description =
-                    "Disables personalised app and content suggestions delivered through "
-                    + "the Microsoft Account integration (CloudContent\\DisableSoftLanding=1). "
-                    + "Stops account-based promotional content in the Start menu and apps.",
-                ApplyOps =
-                [
-                    RegOp.SetDword(
-                        @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
-                        "SilentInstalledAppsEnabled",
-                        0
-                    ),
-                ],
-                RemoveOps =
-                [
-                    RegOp.SetDword(
-                        @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
-                        "SilentInstalledAppsEnabled",
-                        1
-                    ),
-                ],
-                DetectOps =
-                [
-                    RegOp.CheckDword(
-                        @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
-                        "SilentInstalledAppsEnabled",
-                        0
-                    ),
-                ],
-            },
-            new TweakDef
-            {
                 Id = "msa-disable-theme-sync",
                 Label = "Disable Theme Sync via Microsoft Account",
                 Category = "Privacy",
@@ -3173,42 +2191,6 @@ internal static class PolicyPrivacy
                 ApplyOps = [RegOp.SetDword(SyncPolicy, "DisableThemeSettingSync", 1)],
                 RemoveOps = [RegOp.DeleteValue(SyncPolicy, "DisableThemeSettingSync")],
                 DetectOps = [RegOp.CheckDword(SyncPolicy, "DisableThemeSettingSync", 1)],
-            },
-            new TweakDef
-            {
-                Id = "msa-disable-password-sync",
-                Label = "Disable Password Sync via Microsoft Account",
-                Category = "Privacy",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 4,
-                Tags = ["msa", "password", "sync", "credential", "security"],
-                Description =
-                    "Disables syncing of saved app and website passwords through the "
-                    + "Microsoft Account sync channel. Prevents credentials from being "
-                    + "transmitted to Microsoft servers. DisableCredentialsSettingSync=1.",
-                ApplyOps = [RegOp.SetDword(SyncPolicy, "DisableCredentialsSettingSync", 1)],
-                RemoveOps = [RegOp.DeleteValue(SyncPolicy, "DisableCredentialsSettingSync")],
-                DetectOps = [RegOp.CheckDword(SyncPolicy, "DisableCredentialsSettingSync", 1)],
-            },
-            new TweakDef
-            {
-                Id = "msa-disable-app-settings-sync",
-                Label = "Disable Per-App Settings Sync via Microsoft Account",
-                Category = "Privacy",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                Tags = ["msa", "app settings", "sync", "store apps"],
-                Description =
-                    "Disables per-app settings sync so individual app configurations (like "
-                    + "UWP app preferences) are not uploaded and synced through the Microsoft "
-                    + "Account. DisableApplicationSettingSync=1.",
-                ApplyOps = [RegOp.SetDword(SyncPolicy, "DisableApplicationSettingSync", 1)],
-                RemoveOps = [RegOp.DeleteValue(SyncPolicy, "DisableApplicationSettingSync")],
-                DetectOps = [RegOp.CheckDword(SyncPolicy, "DisableApplicationSettingSync", 1)],
             },
         ];
     }
@@ -3633,131 +2615,6 @@ internal static class PolicyPrivacy
         [
             new TweakDef
             {
-                Id = "srchweb-disable-cloud-search",
-                Label = "Disable Cloud-Augmented Search Results",
-                Category = "Privacy",
-                Description =
-                    "Prevents Windows Search from combining local results with cloud (Bing/MSN index) results. Search returns only locally-indexed content.",
-                Tags = ["search", "cloud", "bing", "privacy", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                ImpactNote = "Removes Bing cloud augmentation from Windows Search; fully local results only.",
-                RegistryKeys = [Key],
-                ApplyOps = [RegOp.SetDword(Key, "AllowCloudSearch", 0)],
-                RemoveOps = [RegOp.DeleteValue(Key, "AllowCloudSearch")],
-                DetectOps = [RegOp.CheckDword(Key, "AllowCloudSearch", 0)],
-            },
-            new TweakDef
-            {
-                Id = "srchweb-disable-cortana-policy",
-                Label = "Disable Cortana AI Assistant (Machine Policy)",
-                Category = "Privacy",
-                Description = "Machine-wide Group Policy to disable Cortana integration in Windows Search. Overrides per-user and per-app settings.",
-                Tags = ["cortana", "search", "ai", "policy", "privacy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                ImpactNote = "Machine-wide policy disable for Cortana AI integration.",
-                RegistryKeys = [Key],
-                ApplyOps = [RegOp.SetDword(Key, "AllowCortana", 0)],
-                RemoveOps = [RegOp.DeleteValue(Key, "AllowCortana")],
-                DetectOps = [RegOp.CheckDword(Key, "AllowCortana", 0)],
-            },
-            new TweakDef
-            {
-                Id = "srchweb-disable-cortana-above-lock",
-                Label = "Disable Cortana on Lock Screen",
-                Category = "Privacy",
-                Description =
-                    "Prevents Cortana from responding to voice or text queries when the device is locked. Blocks unauthenticated access to Cortana assistant features.",
-                Tags = ["cortana", "lock-screen", "policy", "security"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Prevents unauthenticated access to Cortana from locked state.",
-                RegistryKeys = [Key],
-                ApplyOps = [RegOp.SetDword(Key, "AllowCortanaAboveLock", 0)],
-                RemoveOps = [RegOp.DeleteValue(Key, "AllowCortanaAboveLock")],
-                DetectOps = [RegOp.CheckDword(Key, "AllowCortanaAboveLock", 0)],
-            },
-            new TweakDef
-            {
-                Id = "srchweb-disable-web-results",
-                Label = "Disable Web Results in Windows Search",
-                Category = "Privacy",
-                Description =
-                    "Prevents Windows Search from including Bing web results alongside local search results. Search is limited to locally-indexed files and apps.",
-                Tags = ["search", "web", "bing", "privacy", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                ImpactNote = "Removes all Bing web results from Windows Search; local results only.",
-                RegistryKeys = [Key],
-                ApplyOps = [RegOp.SetDword(Key, "ConnectedSearchUseWeb", 0)],
-                RemoveOps = [RegOp.DeleteValue(Key, "ConnectedSearchUseWeb")],
-                DetectOps = [RegOp.CheckDword(Key, "ConnectedSearchUseWeb", 0)],
-            },
-            new TweakDef
-            {
-                Id = "srchweb-disable-web-over-metered",
-                Label = "Disable Web Search over Metered Connections",
-                Category = "Privacy",
-                Description =
-                    "Blocks web-augmented search results when the device is connected via a metered network. Reduces unexpected data usage during web search on limited plans.",
-                Tags = ["search", "metered", "data", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Blocks Bing web search over metered connections.",
-                RegistryKeys = [Key],
-                ApplyOps = [RegOp.SetDword(Key, "ConnectedSearchUseWebOverMeteredConnections", 0)],
-                RemoveOps = [RegOp.DeleteValue(Key, "ConnectedSearchUseWebOverMeteredConnections")],
-                DetectOps = [RegOp.CheckDword(Key, "ConnectedSearchUseWebOverMeteredConnections", 0)],
-            },
-            new TweakDef
-            {
-                Id = "srchweb-disable-search-location",
-                Label = "Disable Location Access in Windows Search",
-                Category = "Privacy",
-                Description =
-                    "Prevents Windows Search from using the device's current location to improve local search results. Removes a location-data disclosure path.",
-                Tags = ["search", "location", "privacy", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Prevents location data from being used to augment search results.",
-                RegistryKeys = [Key],
-                ApplyOps = [RegOp.SetDword(Key, "AllowSearchToUseLocation", 0)],
-                RemoveOps = [RegOp.DeleteValue(Key, "AllowSearchToUseLocation")],
-                DetectOps = [RegOp.CheckDword(Key, "AllowSearchToUseLocation", 0)],
-            },
-            new TweakDef
-            {
-                Id = "srchweb-disable-bing-in-search",
-                Label = "Disable Bing Web Search in Start/Taskbar",
-                Category = "Privacy",
-                Description =
-                    "Completely disables Bing web search from appearing in the Windows Start menu and taskbar search. All search results come from the local index only.",
-                Tags = ["search", "bing", "start", "taskbar", "privacy", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                ImpactNote = "Completely removes Bing from Start/taskbar search.",
-                RegistryKeys = [Key],
-                ApplyOps = [RegOp.SetDword(Key, "DisableWebSearch", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "DisableWebSearch")],
-                DetectOps = [RegOp.CheckDword(Key, "DisableWebSearch", 1)],
-            },
-            new TweakDef
-            {
                 Id = "srchweb-enforce-safe-search",
                 Label = "Enforce Strict SafeSearch for Web Results",
                 Category = "Privacy",
@@ -3774,42 +2631,6 @@ internal static class PolicyPrivacy
                 RemoveOps = [RegOp.DeleteValue(Key, "SafeSearchMode")],
                 DetectOps = [RegOp.CheckDword(Key, "SafeSearchMode", 2)],
             },
-            new TweakDef
-            {
-                Id = "srchweb-disable-dynamic-content-wsb",
-                Label = "Disable Dynamic Content in Windows Search Box",
-                Category = "Privacy",
-                Description =
-                    "Prevents Windows Search Box from showing dynamic highlights, trending topics, and promotional content. Keeps the search bar focused on user-typed queries.",
-                Tags = ["search", "search-box", "highlights", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Removes trending topics and promotional content from the search box.",
-                RegistryKeys = [Key],
-                ApplyOps = [RegOp.SetDword(Key, "EnableDynamicContentInWSB", 0)],
-                RemoveOps = [RegOp.DeleteValue(Key, "EnableDynamicContentInWSB")],
-                DetectOps = [RegOp.CheckDword(Key, "EnableDynamicContentInWSB", 0)],
-            },
-            new TweakDef
-            {
-                Id = "srchweb-disable-indexing-encrypted",
-                Label = "Disable Indexing of Encrypted Files",
-                Category = "Privacy",
-                Description =
-                    "Prevents Windows Search from indexing encrypted files and stores. Reduces the risk that sensitive encrypted content is extractable via the search index.",
-                Tags = ["search", "encryption", "indexing", "security", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Prevents encrypted file contents from appearing in the search index.",
-                RegistryKeys = [Key],
-                ApplyOps = [RegOp.SetDword(Key, "AllowIndexingEncryptedStoresOrItems", 0)],
-                RemoveOps = [RegOp.DeleteValue(Key, "AllowIndexingEncryptedStoresOrItems")],
-                DetectOps = [RegOp.CheckDword(Key, "AllowIndexingEncryptedStoresOrItems", 0)],
-            },
         ];
     }
 
@@ -3823,57 +2644,6 @@ internal static class PolicyPrivacy
 
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
-            new TweakDef
-            {
-                Id = "sensor-block-location-scripting",
-                Label = "Block Script Access to Location Services",
-                Category = "Privacy",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                Tags = ["sensor", "location", "scripting", "privacy", "policy"],
-                Description =
-                    "Prevents scripts (Windows Script Host, PowerShell, browser scripts via MSHTML) from "
-                    + "accessing the Windows Location Platform API (DisableLocationScripting=1). Scripts "
-                    + "in browser controls and automation tools cannot query the device's geographic position. "
-                    + "Distinct from the full location disable in Privacy.cs.",
-                ApplyOps = [RegOp.SetDword(LocSensors, "DisableLocationScripting", 1)],
-                RemoveOps = [RegOp.DeleteValue(LocSensors, "DisableLocationScripting")],
-                DetectOps = [RegOp.CheckDword(LocSensors, "DisableLocationScripting", 1)],
-            },
-            new TweakDef
-            {
-                Id = "sensor-disable-all-sensors",
-                Label = "Disable All Sensor Devices via Policy",
-                Category = "Privacy",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                Tags = ["sensor", "hardware", "disable", "privacy", "policy"],
-                Description =
-                    "Disables all sensor hardware (ambient light sensors, accelerometers, compasses, "
-                    + "barometers, proximity sensors) via policy (DisableSensors=1). Applications cannot "
-                    + "query sensor data. Does not affect GPS/location which is controlled separately. "
-                    + "Useful for kiosk and high-security deployments.",
-                ApplyOps = [RegOp.SetDword(LocSensors, "DisableSensors", 1)],
-                RemoveOps = [RegOp.DeleteValue(LocSensors, "DisableSensors")],
-                DetectOps = [RegOp.CheckDword(LocSensors, "DisableSensors", 1)],
-            },
-            new TweakDef
-            {
-                Id = "sensor-disable-windows-location-provider",
-                Label = "Disable Windows Location Platform Provider",
-                Category = "Privacy",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                Tags = ["sensor", "location", "provider", "windows", "privacy"],
-                Description =
-                    "Disables the Windows Location Platform, which aggregates GPS, Wi-Fi triangulation, "
-                    + "and IP-based positioning (DisableWindowsLocationProvider=1). Applications requesting "
-                    + "location data receive no position fix even when GPS hardware is present. "
-                    + "Works alongside Privacy.cs DisableLocation for defence-in-depth.",
-                ApplyOps = [RegOp.SetDword(LocSensors, "DisableWindowsLocationProvider", 1)],
-                RemoveOps = [RegOp.DeleteValue(LocSensors, "DisableWindowsLocationProvider")],
-                DetectOps = [RegOp.CheckDword(LocSensors, "DisableWindowsLocationProvider", 1)],
-            },
             new TweakDef
             {
                 Id = "sensor-block-location-user-override",
@@ -4003,91 +2773,6 @@ internal static class PolicyPrivacy
         [
             new TweakDef
             {
-                Id = "sensor-disable-location",
-                Label = "Disable Location Services",
-                Category = "Privacy",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                Description =
-                    "The Windows Location Service uses GPS, Wi-Fi positioning, and IP geolocation to determine the device's physical location for applications. Disabling location services through policy prevents all applications from accessing location data on corporate workstations. Enterprise productivity applications typically do not require location access, and allowing it creates unnecessary privacy risks. Location data can reveal workplace addresses, employee movement patterns, and organizational site information. Many compliance frameworks including GDPR and HIPAA require that location tracking be disabled on devices handling sensitive data. Disabling location services has no impact on standard enterprise application workflows.",
-                Tags = ["location", "privacy", "sensors", "policy"],
-                RegistryKeys = [Key],
-                ApplyOps = [RegOp.SetDword(Key, "DisableLocation", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "DisableLocation")],
-                DetectOps = [RegOp.CheckDword(Key, "DisableLocation", 1)],
-            },
-            new TweakDef
-            {
-                Id = "sensor-disable-sensors",
-                Label = "Disable Sensor Data Access",
-                Category = "Privacy",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                Description =
-                    "Windows sensors include ambient light sensors, accelerometers, gyroscopes, and other physical measurement devices integrated into modern hardware. Disabling sensor access through policy prevents applications from reading sensor data from integrated hardware platforms. Enterprise desktop and laptop applications rarely require access to environmental sensor data. Sensor data including accelerometer and orientation information can be used for device fingerprinting and motion inference attacks. The sensor framework represents an attack surface that can be eliminated on devices without legitimate sensor data use cases. Disabling sensors does not affect standard input devices, display adapters, or network hardware.",
-                Tags = ["sensors", "privacy", "hardware", "policy"],
-                RegistryKeys = [Key],
-                ApplyOps = [RegOp.SetDword(Key, "DisableSensors", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "DisableSensors")],
-                DetectOps = [RegOp.CheckDword(Key, "DisableSensors", 1)],
-            },
-            new TweakDef
-            {
-                Id = "sensor-disable-location-scripting",
-                Label = "Disable Location Scripting Access",
-                Category = "Privacy",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                Description =
-                    "Location scripting allows web applications and scripted environments to query the Windows Location Service through script-based APIs. Disabling location scripting prevents browser-based and script-based applications from requesting location data through the scripting interface. This policy blocks location access from Internet Explorer zones, web-based applications, and Windows Script Host environments. Web applications requesting location data can transmit this information to remote servers without user awareness in fully automated scripts. Enterprise security policies should deny location access to scripting environments as a default-deny principle. Standard desktop application location access is separately controlled by the DisableLocation policy.",
-                Tags = ["location", "scripting", "browser", "policy"],
-                RegistryKeys = [Key],
-                ApplyOps = [RegOp.SetDword(Key, "DisableLocationScripting", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "DisableLocationScripting")],
-                DetectOps = [RegOp.CheckDword(Key, "DisableLocationScripting", 1)],
-            },
-            new TweakDef
-            {
-                Id = "sensor-block-location-provider-svc",
-                Label = "Disable Windows Location Provider",
-                Category = "Privacy",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                Description =
-                    "The Windows Location Provider supplies location information to the Location Service by combining GPS signals, Wi-Fi triangulation, and IP geolocation data. Disabling the Windows Location Provider removes the primary data source for the operating system's location awareness. Applications requesting location data receive a permission-denied response when the location provider is disabled at the policy level. This creates a defense-in-depth configuration where both the location service and its data provider are disabled. Wi-Fi positioning data transmitted to Microsoft's location database during queries is prevented when the provider is disabled. Disabling this provider is a recommended component of enterprise privacy hardening on managed endpoints.",
-                Tags = ["location", "provider", "privacy", "policy"],
-                RegistryKeys = [Key],
-                ApplyOps = [RegOp.SetDword(Key, "DisableWindowsLocationProvider", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "DisableWindowsLocationProvider")],
-                DetectOps = [RegOp.CheckDword(Key, "DisableWindowsLocationProvider", 1)],
-            },
-            new TweakDef
-            {
-                Id = "sensor-disable-location-telemetry",
-                Label = "Disable Location Telemetry",
-                Category = "Privacy",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                Description =
-                    "Location service telemetry reports data about location requests, provider accuracy, and positioning events to Microsoft for service improvement. This telemetry can include coarse location information used to calibrate the positioning algorithms. Disabling location telemetry prevents any location-adjacent data from being transmitted through the telemetry pipeline. Organizations subject to strict privacy regulations cannot permit location data to leave the enterprise through any channel including diagnostic telemetry. Disabling location telemetry complements the DisableLocation policy to ensure comprehensive location data protection. The location service and sensor framework continue to behave identically regardless of telemetry status.",
-                Tags = ["location", "telemetry", "privacy", "policy"],
-                RegistryKeys = [Key],
-                ApplyOps = [RegOp.SetDword(Key, "DisableLocationTelemetry", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "DisableLocationTelemetry")],
-                DetectOps = [RegOp.CheckDword(Key, "DisableLocationTelemetry", 1)],
-            },
-            new TweakDef
-            {
                 Id = "sensor-disable-geocoder",
                 Label = "Disable Geocoder Service",
                 Category = "Privacy",
@@ -4102,23 +2787,6 @@ internal static class PolicyPrivacy
                 ApplyOps = [RegOp.SetDword(Key, "DisableGeocoderService", 1)],
                 RemoveOps = [RegOp.DeleteValue(Key, "DisableGeocoderService")],
                 DetectOps = [RegOp.CheckDword(Key, "DisableGeocoderService", 1)],
-            },
-            new TweakDef
-            {
-                Id = "sensor-disable-location-history",
-                Label = "Disable Location History",
-                Category = "Privacy",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                Description =
-                    "Location history stores a record of positions visited by the device, enabling location-aware applications to provide context from past locations. Disabling location history prevents Windows from maintaining a persistent log of device movements over time. A location history log represents a comprehensive record of employee movements that creates significant privacy and legal risks. Data protection regulations including GDPR classify location history as personal data requiring explicit consent for collection. Disabling location history eliminates this data store from the device, reducing the potential impact of a security breach. No enterprise productivity application requires access to local location history data.",
-                Tags = ["location", "history", "privacy", "policy"],
-                RegistryKeys = [Key],
-                ApplyOps = [RegOp.SetDword(Key, "DisableLocationHistory", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "DisableLocationHistory")],
-                DetectOps = [RegOp.CheckDword(Key, "DisableLocationHistory", 1)],
             },
             new TweakDef
             {
@@ -4421,90 +3089,6 @@ internal static class PolicyPrivacy
         [
             new TweakDef
             {
-                Id = "wdiag-disable-wer-reporting",
-                Label = "Diagnostics: Disable Windows Error Reporting (WER)",
-                Category = "Privacy",
-                NeedsAdmin = true,
-                CorpSafe = false,
-                MinBuild = 17763,
-                ImpactScore = 3,
-                SafetyRating = 4,
-                RegistryKeys = [WerPolicy],
-                Tags = ["diagnostics", "wer", "error-reporting", "privacy", "telemetry", "crash", "microsoft"],
-                Description =
-                    "Sets Disabled=1 in the Windows Error Reporting policy. "
-                    + "Stops the WerFault.exe process from uploading crash dumps, minidumps, and "
-                    + "application error reports to Microsoft. Reduces background I/O on crash events "
-                    + "and prevents unintentional sensitive data transmission in crash reports.",
-                ApplyOps = [RegOp.SetDword(WerPolicy, "Disabled", 1)],
-                RemoveOps = [RegOp.DeleteValue(WerPolicy, "Disabled")],
-                DetectOps = [RegOp.CheckDword(WerPolicy, "Disabled", 1)],
-            },
-            new TweakDef
-            {
-                Id = "wdiag-disable-wer-queue",
-                Label = "Diagnostics: Disable Windows Error Report Queue (Prevent Deferred Uploads)",
-                Category = "Privacy",
-                NeedsAdmin = true,
-                CorpSafe = false,
-                MinBuild = 17763,
-                ImpactScore = 2,
-                SafetyRating = 4,
-                RegistryKeys = [WerService],
-                Tags = ["diagnostics", "wer", "error-reporting", "privacy", "disk"],
-                Description =
-                    "Sets DontSendAdditionalData=1 in the WER service key. "
-                    + "Prevents WER from sending additional data beyond the basic error notification "
-                    + "(e.g. queued minidump files, extended diagnostic data) to Microsoft. "
-                    + "The queue can accumulate gigabytes of crash archives on unstable systems.",
-                ApplyOps = [RegOp.SetDword(WerService, "DontSendAdditionalData", 1)],
-                RemoveOps = [RegOp.DeleteValue(WerService, "DontSendAdditionalData")],
-                DetectOps = [RegOp.CheckDword(WerService, "DontSendAdditionalData", 1)],
-            },
-            new TweakDef
-            {
-                Id = "wdiag-opt-out-wer-enterprise",
-                Label = "Diagnostics: Opt Out of Windows Error Reporting Enterprise Tier",
-                Category = "Privacy",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                MinBuild = 17763,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                RegistryKeys = [WerPCHealth],
-                Tags = ["diagnostics", "wer", "error-reporting", "privacy", "enterprise"],
-                Description =
-                    "Sets DoReport=0 in PCHealth\\ErrorReporting. "
-                    + "Disables Windows Error Reporting at the PCHealth layer (legacy 'Dr Watson' path). "
-                    + "This covers older error-reporting pathways that bypass the modern WER policy. "
-                    + "CorpSafe=true because corporate environments often control WER separately.",
-                ApplyOps = [RegOp.SetDword(WerPCHealth, "DoReport", 0)],
-                RemoveOps = [RegOp.DeleteValue(WerPCHealth, "DoReport")],
-                DetectOps = [RegOp.CheckDword(WerPCHealth, "DoReport", 0)],
-            },
-            new TweakDef
-            {
-                Id = "wdiag-disable-app-compat-telemetry",
-                Label = "Diagnostics: Disable Application Compatibility Telemetry (CEIP)",
-                Category = "Privacy",
-                NeedsAdmin = true,
-                CorpSafe = false,
-                MinBuild = 17763,
-                ImpactScore = 3,
-                SafetyRating = 4,
-                RegistryKeys = [AppCompatPolicy],
-                Tags = ["diagnostics", "app-compat", "telemetry", "privacy", "ceip"],
-                Description =
-                    "Sets DisableInventory=1 and DisableUAR=1 in AppCompat policy. "
-                    + "Stops the Application Compatibility Telemetry component from collecting and "
-                    + "uploading application compatibility data and 'User Activity Reporting' logs. "
-                    + "This data feeds into Microsoft's CEIP program.",
-                ApplyOps = [RegOp.SetDword(AppCompatPolicy, "DisableInventory", 1), RegOp.SetDword(AppCompatPolicy, "DisableUAR", 1)],
-                RemoveOps = [RegOp.DeleteValue(AppCompatPolicy, "DisableInventory"), RegOp.DeleteValue(AppCompatPolicy, "DisableUAR")],
-                DetectOps = [RegOp.CheckDword(AppCompatPolicy, "DisableInventory", 1), RegOp.CheckDword(AppCompatPolicy, "DisableUAR", 1)],
-            },
-            new TweakDef
-            {
                 Id = "wdiag-disable-app-compat-engine",
                 Label = "Diagnostics: Disable Application Compatibility Engine",
                 Category = "Privacy",
@@ -4524,48 +3108,6 @@ internal static class PolicyPrivacy
                 ApplyOps = [RegOp.SetDword(AppCompatPolicy, "DisableProgramLog", 1)],
                 RemoveOps = [RegOp.DeleteValue(AppCompatPolicy, "DisableProgramLog")],
                 DetectOps = [RegOp.CheckDword(AppCompatPolicy, "DisableProgramLog", 1)],
-            },
-            new TweakDef
-            {
-                Id = "wdiag-disable-psr",
-                Label = "Diagnostics: Disable Problem Steps Recorder (PSR / psr.exe)",
-                Category = "Privacy",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                MinBuild = 17763,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                RegistryKeys = [WerPolicy],
-                Tags = ["diagnostics", "psr", "screen-capture", "privacy", "security"],
-                Description =
-                    "Sets DisableArchive=1 in the WER policy (blocks PSR archive creation). "
-                    + "Disables the Problem Steps Recorder (psr.exe) which can silently screenshot "
-                    + "an entire troubleshooting session. Prevents potential privacy exposure if "
-                    + "support staff misuse PSR on sensitive workloads.",
-                ApplyOps = [RegOp.SetDword(WerPolicy, "DisableArchive", 1)],
-                RemoveOps = [RegOp.DeleteValue(WerPolicy, "DisableArchive")],
-                DetectOps = [RegOp.CheckDword(WerPolicy, "DisableArchive", 1)],
-            },
-            new TweakDef
-            {
-                Id = "wdiag-disable-feedback-notifications",
-                Label = "Diagnostics: Disable Windows Feedback and Satisfaction Surveys",
-                Category = "Privacy",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                MinBuild = 17763,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                RegistryKeys = [FeedbackPolicy],
-                Tags = ["diagnostics", "feedback", "feedback-hub", "notifications", "privacy", "debloat"],
-                Description =
-                    "Sets DoNotShowFeedbackNotifications=1 in DataCollection policy. "
-                    + "Prevents Windows from displaying pop-up feedback request dialogs "
-                    + "(\"How do you like Windows?\", \"Rate your experience\"). "
-                    + "These notifications are distracting and require user interaction to dismiss.",
-                ApplyOps = [RegOp.SetDword(FeedbackPolicy, "DoNotShowFeedbackNotifications", 1)],
-                RemoveOps = [RegOp.DeleteValue(FeedbackPolicy, "DoNotShowFeedbackNotifications")],
-                DetectOps = [RegOp.CheckDword(FeedbackPolicy, "DoNotShowFeedbackNotifications", 1)],
             },
             new TweakDef
             {
@@ -4827,153 +3369,6 @@ internal static class PolicyPrivacy
         [
             new TweakDef
             {
-                Id = "diagtrk-set-telemetry-security-only",
-                Label = "Windows DiagTrack: Set Telemetry to Security (Level 0)",
-                Category = "Privacy",
-                Description =
-                    "Sets the Windows diagnostic data collection level to Security (level 0) — the lowest telemetry tier. "
-                    + "Security-level telemetry sends only data required for Windows Defender ATP and Windows security functions. "
-                    + "No app usage, browsing, or performance data is collected at this level. "
-                    + "Note: Security level (0) applies to Enterprise and Education editions only; other editions receive Basic as their minimum.",
-                Tags = ["telemetry", "diagtrack", "privacy", "security-level", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                RegistryKeys = [Key],
-                ApplyOps = [RegOp.SetDword(Key, "AllowTelemetry", 0)],
-                RemoveOps = [RegOp.DeleteValue(Key, "AllowTelemetry")],
-                DetectOps = [RegOp.CheckDword(Key, "AllowTelemetry", 0)],
-                ImpactScore = 5,
-                SafetyRating = 5,
-                ImpactNote = "Minimizes telemetry to security-only; maximum privacy for enterprise endpoints.",
-            },
-            new TweakDef
-            {
-                Id = "diagtrk-disable-opt-in-change-notifications",
-                Label = "Windows DiagTrack: Disable Telemetry Opt-In Change Notifications",
-                Category = "Privacy",
-                Description =
-                    "Prevents Windows from prompting users to change their diagnostic data settings. "
-                    + "When telemetry is centrally managed via GPO, user-facing prompts to adjust data collection settings are noise and could cause confusion. "
-                    + "This policy suppresses the Settings dialog and toast notifications that ask users to consent to telemetry level changes. "
-                    + "Removing this policy re-enables opt-in change notifications and Settings prompts.",
-                Tags = ["telemetry", "diagtrack", "opt-in", "notifications", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                RegistryKeys = [Key],
-                ApplyOps = [RegOp.SetDword(Key, "DisableTelemetryOptInChangeNotification", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "DisableTelemetryOptInChangeNotification")],
-                DetectOps = [RegOp.CheckDword(Key, "DisableTelemetryOptInChangeNotification", 1)],
-                ImpactScore = 2,
-                SafetyRating = 5,
-                ImpactNote = "Suppresses telemetry opt-in dialogs; keeps managed telemetry settings stable.",
-            },
-            new TweakDef
-            {
-                Id = "diagtrk-disable-opt-in-settings-ui",
-                Label = "Windows DiagTrack: Disable Telemetry Opt-In Settings UI",
-                Category = "Privacy",
-                Description =
-                    "Hides the diagnostic data opt-in settings page in the Privacy section of Windows Settings. "
-                    + "When telemetry is managed via GPO or Intune, the Settings page is redundant and could confuse users into thinking they can adjust the policy. "
-                    + "Hiding the page ensures users do not inadvertently change settings that are centrally managed. "
-                    + "Removing this policy restores the telemetry settings UI in Windows Settings > Privacy.",
-                Tags = ["telemetry", "diagtrack", "settings-ui", "privacy", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                RegistryKeys = [Key],
-                ApplyOps = [RegOp.SetDword(Key, "DisableTelemetryOptInSettingsUx", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "DisableTelemetryOptInSettingsUx")],
-                DetectOps = [RegOp.CheckDword(Key, "DisableTelemetryOptInSettingsUx", 1)],
-                ImpactScore = 2,
-                SafetyRating = 5,
-                ImpactNote = "Removes telemetry UI from Settings; prevents user changes to managed telemetry policy.",
-            },
-            new TweakDef
-            {
-                Id = "diagtrk-disable-enterprise-auth-proxy",
-                Label = "Windows DiagTrack: Disable Enterprise Authentication Proxy for Telemetry",
-                Category = "Privacy",
-                Description =
-                    "Prevents the DiagTrack service from using authenticated proxy servers for telemetry data uploads. "
-                    + "When an enterprise proxy requires NTLM/Kerberos authentication, the DiagTrack service may authenticate with machine credentials. "
-                    + "Disabling this proxy allows the service to fail uploads rather than authenticate, reducing credential exposure over potentially monitored proxies. "
-                    + "Removing this policy allows DiagTrack to use the enterprise auth proxy for uploads.",
-                Tags = ["telemetry", "diagtrack", "proxy", "enterprise", "credentials", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                RegistryKeys = [Key],
-                ApplyOps = [RegOp.SetDword(Key, "DisableEnterpriseAuthProxy", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "DisableEnterpriseAuthProxy")],
-                DetectOps = [RegOp.CheckDword(Key, "DisableEnterpriseAuthProxy", 1)],
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Blocks DiagTrack proxy auth; prevents machine credential use for telemetry uploads.",
-            },
-            new TweakDef
-            {
-                Id = "diagtrk-disable-device-name-in-telemetry",
-                Label = "Windows DiagTrack: Prevent Device Name from Being Sent in Telemetry",
-                Category = "Privacy",
-                Description =
-                    "Prevents Windows from including the device hostname in diagnostic telemetry data sent to Microsoft. "
-                    + "Device names can reveal organizational naming conventions, asset tag formats, and employee details. "
-                    + "With this policy set, telemetry reports use an anonymized device identifier instead of the human-readable hostname. "
-                    + "Removing this policy allows the device name to be included in telemetry.",
-                Tags = ["telemetry", "diagtrack", "device-name", "privacy", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                RegistryKeys = [Key],
-                ApplyOps = [RegOp.SetDword(Key, "AllowDeviceNameInTelemetry", 0)],
-                RemoveOps = [RegOp.DeleteValue(Key, "AllowDeviceNameInTelemetry")],
-                DetectOps = [RegOp.CheckDword(Key, "AllowDeviceNameInTelemetry", 0)],
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Excludes hostname from telemetry; prevents device naming convention disclosure.",
-            },
-            new TweakDef
-            {
-                Id = "diagtrk-limit-diagnostic-log-collection",
-                Label = "Windows DiagTrack: Limit Diagnostic Log Collection",
-                Category = "Privacy",
-                Description =
-                    "Limits the amount of diagnostic log data that the Connected User Experiences and Telemetry service can collect. "
-                    + "Unrestricted log collection can gather large volumes of user activity and application usage data. "
-                    + "Limiting collection reduces the diagnostic data footprint while still allowing critical security telemetry. "
-                    + "Removing this policy restores unrestricted diagnostic log collection by DiagTrack.",
-                Tags = ["telemetry", "diagtrack", "log-collection", "privacy", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                RegistryKeys = [Key],
-                ApplyOps = [RegOp.SetDword(Key, "LimitDiagnosticLogCollection", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "LimitDiagnosticLogCollection")],
-                DetectOps = [RegOp.CheckDword(Key, "LimitDiagnosticLogCollection", 1)],
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Limits diagnostic log volume; reduces telemetry data footprint on managed endpoints.",
-            },
-            new TweakDef
-            {
-                Id = "diagtrk-disable-dump-collection",
-                Label = "Windows DiagTrack: Disable Crash Dump Collection for Telemetry",
-                Category = "Privacy",
-                Description =
-                    "Prevents the DiagTrack service from collecting and uploading process crash dumps as part of diagnostic telemetry. "
-                    + "Crash dumps can contain sensitive memory contents, user data, and application secrets captured at the moment of a crash. "
-                    + "Disabling dump collection ensures no memory contents are transmitted to Microsoft telemetry endpoints. "
-                    + "Removing this policy allows DiagTrack to include crash dumps in telemetry uploads.",
-                Tags = ["telemetry", "diagtrack", "crash-dump", "privacy", "memory", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                RegistryKeys = [Key],
-                ApplyOps = [RegOp.SetDword(Key, "DoNotShowFeedbackNotifications", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "DoNotShowFeedbackNotifications")],
-                DetectOps = [RegOp.CheckDword(Key, "DoNotShowFeedbackNotifications", 1)],
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Suppresses feedback collection notifications; reduces DiagTrack memory upload.",
-            },
-            new TweakDef
-            {
                 Id = "diagtrk-limit-dump-collection",
                 Label = "Windows DiagTrack: Limit Dump Collection Level",
                 Category = "Privacy",
@@ -4992,27 +3387,6 @@ internal static class PolicyPrivacy
                 ImpactScore = 3,
                 SafetyRating = 5,
                 ImpactNote = "Limits memory dump level for telemetry; reduces sensitive data in crash reports.",
-            },
-            new TweakDef
-            {
-                Id = "diagtrk-disable-one-settings-downloads",
-                Label = "Windows DiagTrack: Disable OneSettings Policy Downloads",
-                Category = "Privacy",
-                Description =
-                    "Prevents Windows from downloading configuration and feature flag updates via the OneSettings service used by DiagTrack. "
-                    + "OneSettings allows Microsoft to remotely change Windows behavior, feature availability, and telemetry configurations. "
-                    + "Blocking OneSettings downloads ensures that remote policy changes cannot override locally set configurations on managed endpoints. "
-                    + "Removing this policy allows OneSettings to download and apply remote configuration changes.",
-                Tags = ["telemetry", "diagtrack", "onesettings", "remote-config", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                RegistryKeys = [Key],
-                ApplyOps = [RegOp.SetDword(Key, "DisableOneSettingsDownloads", 1)],
-                RemoveOps = [RegOp.DeleteValue(Key, "DisableOneSettingsDownloads")],
-                DetectOps = [RegOp.CheckDword(Key, "DisableOneSettingsDownloads", 1)],
-                ImpactScore = 4,
-                SafetyRating = 5,
-                ImpactNote = "Blocks remote Windows configuration changes via OneSettings; preserves local policy integrity.",
             },
             new TweakDef
             {
@@ -5100,24 +3474,6 @@ internal static class PolicyPrivacy
                 ApplyOps = [RegOp.SetDword(EdpKey, "WIPEnabled", 1)],
                 RemoveOps = [RegOp.DeleteValue(EdpKey, "WIPEnabled")],
                 DetectOps = [RegOp.CheckDword(EdpKey, "WIPEnabled", 1)],
-            },
-            new TweakDef
-            {
-                Id = "wippol-silent-mode",
-                Label = "WIP: Set Silent Enforcement (Audit Without Block)",
-                Category = "Privacy",
-                Description =
-                    "Sets WIP/EDP to silent enforcement mode. Personal data leakage is logged to the event log but not blocked. Useful for piloting WIP before enforcing restrictions.",
-                Tags = ["wip", "edp", "dlp", "audit", "silent", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Sets WIP to audit-only mode for piloting before full enforcement.",
-                RegistryKeys = [EdpKey],
-                ApplyOps = [RegOp.SetDword(EdpKey, "EnforcementMode", 1)],
-                RemoveOps = [RegOp.DeleteValue(EdpKey, "EnforcementMode")],
-                DetectOps = [RegOp.CheckDword(EdpKey, "EnforcementMode", 1)],
             },
             new TweakDef
             {
@@ -5209,24 +3565,6 @@ internal static class PolicyPrivacy
                 RemoveOps = [RegOp.DeleteValue(EdpKey, "ClipboardProtectionLevel")],
                 DetectOps = [RegOp.CheckDword(EdpKey, "ClipboardProtectionLevel", 2)],
             },
-            new TweakDef
-            {
-                Id = "wippol-enterprise-ip-isolation",
-                Label = "WIP: Enable Enterprise Network Isolation",
-                Category = "Privacy",
-                Description =
-                    "Activates WIP network isolation policy — only IP ranges and domains defined in the enterprise network boundary list are treated as 'work' destinations.",
-                Tags = ["wip", "edp", "network-isolation", "enterprise", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 4,
-                ImpactNote = "Activates WIP network isolation policy for enterprise boundaries.",
-                RegistryKeys = [NetIsoKey],
-                ApplyOps = [RegOp.SetDword(NetIsoKey, "EnterpriseCloudResources", 1)],
-                RemoveOps = [RegOp.DeleteValue(NetIsoKey, "EnterpriseCloudResources")],
-                DetectOps = [RegOp.CheckDword(NetIsoKey, "EnterpriseCloudResources", 1)],
-            },
         ];
     }
 
@@ -5285,21 +3623,6 @@ internal static class PolicyPrivacy
                 ApplyOps = [RegOp.SetDword(WinSearch, "ConnectedSearchPrivacy", 3)],
                 RemoveOps = [RegOp.DeleteValue(WinSearch, "ConnectedSearchPrivacy")],
                 DetectOps = [RegOp.CheckDword(WinSearch, "ConnectedSearchPrivacy", 3)],
-            },
-            new TweakDef
-            {
-                Id = "wmaps-enforce-safe-search-strict",
-                Label = "Search: Enforce strict SafeSearch in Windows Search",
-                Category = "Privacy",
-                Description =
-                    "Sets ConnectedSearchSafeSearch=2 (machine policy). Value 2 = Strict; filters adult "
-                    + "content from Windows Search results. Default: 1 (moderate).",
-                Tags = ["search", "safe-search", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ApplyOps = [RegOp.SetDword(WinSearch, "ConnectedSearchSafeSearch", 2)],
-                RemoveOps = [RegOp.DeleteValue(WinSearch, "ConnectedSearchSafeSearch")],
-                DetectOps = [RegOp.CheckDword(WinSearch, "ConnectedSearchSafeSearch", 2)],
             },
             new TweakDef
             {
@@ -5403,60 +3726,6 @@ internal static class PolicyWindowsInk
     [
         new TweakDef
         {
-            Id = "winks-disable-ink-workspace",
-            Label = "Disable Windows Ink Workspace",
-            Category = "Privacy",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Disables the Windows Ink Workspace button and panel via Group Policy. Removes the ink toolbar from the taskbar and prevents users from accessing pen, sticky notes, and whiteboard tools.",
-            Tags = ["ink", "pen", "tablet", "policy", "privacy", "windows-ink"],
-            RegistryKeys = [Key],
-            ImpactScore = 3,
-            SafetyRating = 5,
-            ImpactNote = "Ink Workspace panel hidden; pen tablet shortcut button removed from taskbar.",
-            ApplyOps = [RegOp.SetDword(Key, "AllowWindowsInkWorkspace", 0)],
-            RemoveOps = [RegOp.DeleteValue(Key, "AllowWindowsInkWorkspace")],
-            DetectOps = [RegOp.CheckDword(Key, "AllowWindowsInkWorkspace", 0)],
-        },
-        new TweakDef
-        {
-            Id = "winks-disable-ink-above-lock",
-            Label = "Disable Ink Workspace Above Lock Screen",
-            Category = "Privacy",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Blocks access to Windows Ink Workspace when the device is locked. Prevents unauthenticated users from using ink features including sticky notes from the lock screen.",
-            Tags = ["ink", "lock-screen", "policy", "privacy", "windows-ink", "security"],
-            RegistryKeys = [Key],
-            ImpactScore = 4,
-            SafetyRating = 5,
-            ImpactNote = "Ink tools blocked on lock screen; no unauthenticated access to pen features.",
-            ApplyOps = [RegOp.SetDword(Key, "AllowWindowsInkWorkspace", 1)],
-            RemoveOps = [RegOp.DeleteValue(Key, "AllowWindowsInkWorkspace")],
-            DetectOps = [RegOp.CheckDword(Key, "AllowWindowsInkWorkspace", 1)],
-        },
-        new TweakDef
-        {
-            Id = "winks-disable-ink-suggested-apps",
-            Label = "Disable Ink Workspace Suggested Apps",
-            Category = "Privacy",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Disables Microsoft Store app suggestions shown in Windows Ink Workspace. Stops advertising-style prompts that appear alongside pen tools.",
-            Tags = ["ink", "suggested-apps", "ads", "policy", "privacy", "windows-ink"],
-            RegistryKeys = [Key],
-            ImpactScore = 2,
-            SafetyRating = 5,
-            ImpactNote = "App suggestions removed from Ink Workspace; no store prompts.",
-            ApplyOps = [RegOp.SetDword(Key, "AllowSuggestedAppsInWindowsInkWorkspace", 0)],
-            RemoveOps = [RegOp.DeleteValue(Key, "AllowSuggestedAppsInWindowsInkWorkspace")],
-            DetectOps = [RegOp.CheckDword(Key, "AllowSuggestedAppsInWindowsInkWorkspace", 0)],
-        },
-        new TweakDef
-        {
             Id = "winks-disable-ink-touch-keyboard-autoinvoke",
             Label = "Disable Touch Keyboard Auto-Invoke in Ink",
             Category = "Privacy",
@@ -5472,27 +3741,6 @@ internal static class PolicyWindowsInk
             ApplyOps = [RegOp.SetDword(Key, "TouchKeyboardAutoInvokeEnabled", 0)],
             RemoveOps = [RegOp.DeleteValue(Key, "TouchKeyboardAutoInvokeEnabled")],
             DetectOps = [RegOp.CheckDword(Key, "TouchKeyboardAutoInvokeEnabled", 0)],
-        },
-        new TweakDef
-        {
-            Id = "winks-disable-ink-personalization",
-            Label = "Disable Ink Personalization Data Collection",
-            Category = "Privacy",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Disables Microsoft's collection of inking and typing data used to improve autocorrect and word suggestions. Prevents handwriting samples and typed text patterns from being uploaded to Microsoft.",
-            Tags = ["ink", "personalization", "privacy", "telemetry", "policy", "data-collection"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\InputPersonalization"],
-            ImpactScore = 3,
-            SafetyRating = 5,
-            ImpactNote = "Ink/typing personalization data collection stopped; no usage samples sent to Microsoft.",
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\InputPersonalization", "RestrictImplicitInkCollection", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\InputPersonalization", "RestrictImplicitInkCollection")],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\InputPersonalization", "RestrictImplicitInkCollection", 1),
-            ],
         },
         new TweakDef
         {
@@ -5524,78 +3772,6 @@ internal static class PolicyLocationSensors
 
     internal static IReadOnlyList<TweakDef> Tweaks { get; } =
     [
-        new TweakDef
-        {
-            Id = "locsvc-disable-location",
-            Label = "Disable Location Services (System-Wide)",
-            Category = "Privacy",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Disables the Windows Location Services system feature via Group Policy. Prevents all applications from accessing the location sensor. Stronger than the per-app user setting.",
-            Tags = ["location", "gps", "sensors", "policy", "privacy"],
-            RegistryKeys = [Key],
-            ImpactScore = 4,
-            SafetyRating = 5,
-            ImpactNote = "Location access disabled for all apps system-wide; GPS/Wi-Fi geolocation blocked.",
-            ApplyOps = [RegOp.SetDword(Key, "DisableLocation", 1)],
-            RemoveOps = [RegOp.DeleteValue(Key, "DisableLocation")],
-            DetectOps = [RegOp.CheckDword(Key, "DisableLocation", 1)],
-        },
-        new TweakDef
-        {
-            Id = "locsvc-disable-location-scripting",
-            Label = "Disable Location Scripting API",
-            Category = "Privacy",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Prevents scripts (JScript, VBScript) from accessing the Windows Location API. Blocks web-based or scripting attacks that could request fine-grained location data.",
-            Tags = ["location", "scripting", "policy", "privacy", "security"],
-            RegistryKeys = [Key],
-            ImpactScore = 3,
-            SafetyRating = 5,
-            ImpactNote = "Script-based location queries blocked; web scripts cannot access GPS/Wi-Fi location.",
-            ApplyOps = [RegOp.SetDword(Key, "DisableLocationScripting", 1)],
-            RemoveOps = [RegOp.DeleteValue(Key, "DisableLocationScripting")],
-            DetectOps = [RegOp.CheckDword(Key, "DisableLocationScripting", 1)],
-        },
-        new TweakDef
-        {
-            Id = "locsvc-disable-sensors",
-            Label = "Disable Sensor Platform",
-            Category = "Privacy",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Disables the Windows Sensor Platform that allows applications to access ambient light, accelerometer, gyroscope, and other physical sensors. Reduces hardware fingerprinting attack surface.",
-            Tags = ["sensors", "accelerometer", "ambient-light", "policy", "privacy"],
-            RegistryKeys = [Key],
-            ImpactScore = 3,
-            SafetyRating = 5,
-            ImpactNote = "Physical sensor access blocked for all apps; fingerprinting via motion sensors prevented.",
-            ApplyOps = [RegOp.SetDword(Key, "DisableSensors", 1)],
-            RemoveOps = [RegOp.DeleteValue(Key, "DisableSensors")],
-            DetectOps = [RegOp.CheckDword(Key, "DisableSensors", 1)],
-        },
-        new TweakDef
-        {
-            Id = "locsvc-disable-windows-location-provider",
-            Label = "Disable Windows Location Provider Service",
-            Category = "Privacy",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Disables the Windows Location Provider service that uses Wi-Fi, Bluetooth, and IP address data to estimate geographic location without a GPS chip.",
-            Tags = ["location", "wi-fi", "bluetooth", "geolocation", "policy", "privacy"],
-            RegistryKeys = [Key],
-            ImpactScore = 4,
-            SafetyRating = 5,
-            ImpactNote = "Wi-Fi/BT based geolocation provider disabled; IP-based location fallback also blocked.",
-            ApplyOps = [RegOp.SetDword(Key, "DisableWindowsLocationProvider", 1)],
-            RemoveOps = [RegOp.DeleteValue(Key, "DisableWindowsLocationProvider")],
-            DetectOps = [RegOp.CheckDword(Key, "DisableWindowsLocationProvider", 1)],
-        },
         new TweakDef
         {
             Id = "locsvc-disable-location-awareness",
@@ -5716,42 +3892,6 @@ internal static class PolicyCloudClipboard
 
     internal static IReadOnlyList<TweakDef> Tweaks { get; } =
     [
-        new TweakDef
-        {
-            Id = "clipol-disable-clipboard-history",
-            Label = "Disable Clipboard History (Win+V)",
-            Category = "Privacy",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Disables the Clipboard History feature (Win+V) via Group Policy. Clipboard history stores the last 25 items copied so users can paste previous clips; disabling prevents all copied data from being retained.",
-            Tags = ["clipboard", "history", "privacy", "policy", "win+v"],
-            RegistryKeys = [Key],
-            ImpactScore = 3,
-            SafetyRating = 5,
-            ImpactNote = "Clipboard history disabled; Win+V shows empty; only current clipboard item retained.",
-            ApplyOps = [RegOp.SetDword(Key, "AllowClipboardHistory", 0)],
-            RemoveOps = [RegOp.DeleteValue(Key, "AllowClipboardHistory")],
-            DetectOps = [RegOp.CheckDword(Key, "AllowClipboardHistory", 0)],
-        },
-        new TweakDef
-        {
-            Id = "clipol-disable-cross-device-clipboard",
-            Label = "Disable Cross-Device Clipboard Sync",
-            Category = "Privacy",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Disables the Cloud Clipboard feature that synchronises clipboard content between Windows devices signed into the same Microsoft account. Prevents copied text, images, and documents from being uploaded to Microsoft servers.",
-            Tags = ["clipboard", "cloud", "sync", "cross-device", "privacy", "policy"],
-            RegistryKeys = [Key],
-            ImpactScore = 4,
-            SafetyRating = 5,
-            ImpactNote = "Clipboard data not synced to cloud or other devices; stays local only.",
-            ApplyOps = [RegOp.SetDword(Key, "AllowCrossDeviceClipboard", 0)],
-            RemoveOps = [RegOp.DeleteValue(Key, "AllowCrossDeviceClipboard")],
-            DetectOps = [RegOp.CheckDword(Key, "AllowCrossDeviceClipboard", 0)],
-        },
         new TweakDef
         {
             Id = "clipol-disable-phone-clipboard-sync",
@@ -5919,139 +4059,6 @@ internal static class PolicyWindowsSearch
     [
         new TweakDef
         {
-            Id = "wsepol-disable-cortana",
-            Label = "Disable Cortana via Policy",
-            Category = "Privacy",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets AllowCortana=0 under the Windows Search Group Policy path. "
-                + "Prevents Cortana from being used as the search assistant. "
-                + "Reduces background network activity and telemetry associated with Cortana queries.",
-            Tags = ["cortana", "search", "policy", "privacy"],
-            ImpactScore = 4,
-            SafetyRating = 5,
-            ImpactNote = "Disables Cortana voice assistant and reduces search-related telemetry.",
-            ApplyOps = [RegOp.SetDword(Key, "AllowCortana", 0)],
-            RemoveOps = [RegOp.DeleteValue(Key, "AllowCortana")],
-            DetectOps = [RegOp.CheckDword(Key, "AllowCortana", 0)],
-        },
-        new TweakDef
-        {
-            Id = "wsepol-disable-web-search",
-            Label = "Disable Web Search in Start Menu via Policy",
-            Category = "Privacy",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets DisableWebSearch=1 under the Windows Search Group Policy path. "
-                + "Prevents web results from appearing in the Start menu search box. "
-                + "Keeps local search results only and stops search queries from being sent to Bing.",
-            Tags = ["search", "bing", "web", "policy", "privacy"],
-            ImpactScore = 4,
-            SafetyRating = 5,
-            ImpactNote = "Removes web results from Start search; stops Bing queries.",
-            ApplyOps = [RegOp.SetDword(Key, "DisableWebSearch", 1)],
-            RemoveOps = [RegOp.DeleteValue(Key, "DisableWebSearch")],
-            DetectOps = [RegOp.CheckDword(Key, "DisableWebSearch", 1)],
-        },
-        new TweakDef
-        {
-            Id = "wsepol-disable-connected-search-web",
-            Label = "Disable Connected Search Web Results via Policy",
-            Category = "Privacy",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets ConnectedSearchUseWeb=0 under the Windows Search Group Policy path. "
-                + "Disables the Connected Search feature that sends search queries to Microsoft "
-                + "web services. Local search only; no outbound web search requests.",
-            Tags = ["search", "web", "policy", "privacy", "connected-search"],
-            ImpactScore = 3,
-            SafetyRating = 5,
-            ImpactNote = "Blocks outbound connected search queries to Microsoft servers.",
-            ApplyOps = [RegOp.SetDword(Key, "ConnectedSearchUseWeb", 0)],
-            RemoveOps = [RegOp.DeleteValue(Key, "ConnectedSearchUseWeb")],
-            DetectOps = [RegOp.CheckDword(Key, "ConnectedSearchUseWeb", 0)],
-        },
-        new TweakDef
-        {
-            Id = "wsepol-disable-cloud-search",
-            Label = "Disable Cloud Search via Policy",
-            Category = "Privacy",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets AllowCloudSearch=0 under the Windows Search Group Policy path. "
-                + "Prevents Windows Search from including results from cloud sources (OneDrive, Outlook, etc.). "
-                + "Search results are limited to local files and indexed content.",
-            Tags = ["search", "cloud", "policy", "privacy", "onedrive"],
-            ImpactScore = 3,
-            SafetyRating = 5,
-            ImpactNote = "Removes cloud content from search results; local search only.",
-            ApplyOps = [RegOp.SetDword(Key, "AllowCloudSearch", 0)],
-            RemoveOps = [RegOp.DeleteValue(Key, "AllowCloudSearch")],
-            DetectOps = [RegOp.CheckDword(Key, "AllowCloudSearch", 0)],
-        },
-        new TweakDef
-        {
-            Id = "wsepol-disable-search-location",
-            Label = "Block Location Access in Search via Policy",
-            Category = "Privacy",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets AllowSearchToUseLocation=0 under the Windows Search Group Policy path. "
-                + "Prevents Windows Search from using the device location to tailor search results. "
-                + "Improves privacy by stopping location-based query enrichment.",
-            Tags = ["search", "location", "policy", "privacy"],
-            ImpactScore = 4,
-            SafetyRating = 5,
-            ImpactNote = "Blocks search from accessing device location data.",
-            ApplyOps = [RegOp.SetDword(Key, "AllowSearchToUseLocation", 0)],
-            RemoveOps = [RegOp.DeleteValue(Key, "AllowSearchToUseLocation")],
-            DetectOps = [RegOp.CheckDword(Key, "AllowSearchToUseLocation", 0)],
-        },
-        new TweakDef
-        {
-            Id = "wsepol-enforce-safe-search-strict",
-            Label = "Enforce Strict SafeSearch via Policy",
-            Category = "Privacy",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets ConnectedSearchSafeSearch=2 (Strict) under the Windows Search Group Policy path. "
-                + "Forces the strictest SafeSearch level for web-connected search queries, "
-                + "filtering explicit content from any search results returned via Cortana or Bing integration.",
-            Tags = ["search", "safesearch", "policy", "security"],
-            ImpactScore = 3,
-            SafetyRating = 5,
-            ImpactNote = "Forces strict SafeSearch; filters explicit content from web search.",
-            ApplyOps = [RegOp.SetDword(Key, "ConnectedSearchSafeSearch", 2)],
-            RemoveOps = [RegOp.DeleteValue(Key, "ConnectedSearchSafeSearch")],
-            DetectOps = [RegOp.CheckDword(Key, "ConnectedSearchSafeSearch", 2)],
-        },
-        new TweakDef
-        {
-            Id = "wsepol-disable-dynamic-search-content",
-            Label = "Disable Dynamic Content in Search Box via Policy",
-            Category = "Privacy",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets EnableDynamicContentInWSB=0 under the Windows Search Group Policy path. "
-                + "Stops the search box from displaying dynamic promotional content, news tiles, "
-                + "or trending topics pulled from Microsoft servers.",
-            Tags = ["search", "dynamic-content", "policy", "privacy"],
-            ImpactScore = 2,
-            SafetyRating = 5,
-            ImpactNote = "Hides dynamic news/trending content in the search box.",
-            ApplyOps = [RegOp.SetDword(Key, "EnableDynamicContentInWSB", 0)],
-            RemoveOps = [RegOp.DeleteValue(Key, "EnableDynamicContentInWSB")],
-            DetectOps = [RegOp.CheckDword(Key, "EnableDynamicContentInWSB", 0)],
-        },
-        new TweakDef
-        {
             Id = "wsepol-block-remote-query",
             Label = "Block Remote Cortana Query via Policy",
             Category = "Privacy",
@@ -6069,44 +4076,6 @@ internal static class PolicyWindowsSearch
             RemoveOps = [RegOp.DeleteValue(Key, "DisableRemoteQuery")],
             DetectOps = [RegOp.CheckDword(Key, "DisableRemoteQuery", 1)],
         },
-        new TweakDef
-        {
-            Id = "wsepol-opt-out-search-privacy",
-            Label = "Opt Out of Connected Search Privacy Sharing via Policy",
-            Category = "Privacy",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets ConnectedSearchPrivacy=3 (No history) under the Windows Search Group Policy path. "
-                + "Configures the strictest privacy level for connected search, preventing "
-                + "search query history from being stored or shared with Microsoft.",
-            Tags = ["search", "privacy", "policy", "history"],
-            ImpactScore = 3,
-            SafetyRating = 5,
-            ImpactNote = "Prevents search query history from being stored or shared.",
-            ApplyOps = [RegOp.SetDword(Key, "ConnectedSearchPrivacy", 3)],
-            RemoveOps = [RegOp.DeleteValue(Key, "ConnectedSearchPrivacy")],
-            DetectOps = [RegOp.CheckDword(Key, "ConnectedSearchPrivacy", 3)],
-        },
-        new TweakDef
-        {
-            Id = "wsepol-prevent-battery-indexing",
-            Label = "Prevent Search Indexing on Battery via Policy",
-            Category = "Privacy",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets PreventIndexOnBattery=1 under the Windows Search Group Policy path. "
-                + "Stops the Windows Search indexer from running when the device is on battery power. "
-                + "Preserves battery life on laptops by deferring index updates until AC power is available.",
-            Tags = ["search", "indexer", "battery", "policy", "performance"],
-            ImpactScore = 2,
-            SafetyRating = 5,
-            ImpactNote = "Halts background indexing on battery; extends laptop battery life.",
-            ApplyOps = [RegOp.SetDword(Key, "PreventIndexOnBattery", 1)],
-            RemoveOps = [RegOp.DeleteValue(Key, "PreventIndexOnBattery")],
-            DetectOps = [RegOp.CheckDword(Key, "PreventIndexOnBattery", 1)],
-        },
     ];
 }
 
@@ -6122,196 +4091,6 @@ internal static class PolicyAppPrivacy
 
     internal static IReadOnlyList<TweakDef> Tweaks { get; } =
     [
-        new TweakDef
-        {
-            Id = "apppriv-block-camera-access",
-            Label = "Block App Camera Access via Policy",
-            Category = "Privacy",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets LetAppsAccessCamera=2 (Force Deny) under the AppPrivacy Group Policy path. "
-                + "Prevents all apps from accessing the camera. "
-                + "Reduces attack surface for rogue apps attempting to record video without user consent.",
-            Tags = ["camera", "privacy", "policy", "app-access"],
-            ImpactScore = 4,
-            SafetyRating = 4,
-            ImpactNote = "Blocks all app camera access; may break video conferencing apps.",
-            ApplyOps = [RegOp.SetDword(Key, "LetAppsAccessCamera", 2)],
-            RemoveOps = [RegOp.DeleteValue(Key, "LetAppsAccessCamera")],
-            DetectOps = [RegOp.CheckDword(Key, "LetAppsAccessCamera", 2)],
-        },
-        new TweakDef
-        {
-            Id = "apppriv-block-microphone-access",
-            Label = "Block App Microphone Access via Policy",
-            Category = "Privacy",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets LetAppsAccessMicrophone=2 (Force Deny) under the AppPrivacy Group Policy path. "
-                + "Prevents all apps from accessing the microphone. "
-                + "Stops background audio capture by apps not whitelisted by the administrator.",
-            Tags = ["microphone", "audio", "privacy", "policy", "app-access"],
-            ImpactScore = 4,
-            SafetyRating = 4,
-            ImpactNote = "Blocks all app microphone access; may affect voice chat apps.",
-            ApplyOps = [RegOp.SetDword(Key, "LetAppsAccessMicrophone", 2)],
-            RemoveOps = [RegOp.DeleteValue(Key, "LetAppsAccessMicrophone")],
-            DetectOps = [RegOp.CheckDword(Key, "LetAppsAccessMicrophone", 2)],
-        },
-        new TweakDef
-        {
-            Id = "apppriv-block-contacts-access",
-            Label = "Block App Contacts Access via Policy",
-            Category = "Privacy",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets LetAppsAccessContacts=2 (Force Deny) under the AppPrivacy Group Policy path. "
-                + "Prevents apps from reading the user contact list. "
-                + "Mitigates data harvesting by apps that attempt to exfiltrate address book entries.",
-            Tags = ["contacts", "privacy", "policy", "app-access"],
-            ImpactScore = 4,
-            SafetyRating = 4,
-            ImpactNote = "Blocks all app access to contacts list.",
-            ApplyOps = [RegOp.SetDword(Key, "LetAppsAccessContacts", 2)],
-            RemoveOps = [RegOp.DeleteValue(Key, "LetAppsAccessContacts")],
-            DetectOps = [RegOp.CheckDword(Key, "LetAppsAccessContacts", 2)],
-        },
-        new TweakDef
-        {
-            Id = "apppriv-block-calendar-access",
-            Label = "Block App Calendar Access via Policy",
-            Category = "Privacy",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets LetAppsAccessCalendar=2 (Force Deny) under the AppPrivacy Group Policy path. "
-                + "Prevents apps from reading or modifying the user calendar. "
-                + "Protects meeting schedules and personal appointments from third-party app access.",
-            Tags = ["calendar", "privacy", "policy", "app-access"],
-            ImpactScore = 3,
-            SafetyRating = 4,
-            ImpactNote = "Blocks all app calendar read/write access.",
-            ApplyOps = [RegOp.SetDword(Key, "LetAppsAccessCalendar", 2)],
-            RemoveOps = [RegOp.DeleteValue(Key, "LetAppsAccessCalendar")],
-            DetectOps = [RegOp.CheckDword(Key, "LetAppsAccessCalendar", 2)],
-        },
-        new TweakDef
-        {
-            Id = "apppriv-block-call-history-access",
-            Label = "Block App Call History Access via Policy",
-            Category = "Privacy",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets LetAppsAccessCallHistory=2 (Force Deny) under the AppPrivacy Group Policy path. "
-                + "Prevents apps from reading call history records. "
-                + "Protects communication history from being accessed by data broker apps.",
-            Tags = ["call-history", "privacy", "policy", "app-access"],
-            ImpactScore = 3,
-            SafetyRating = 4,
-            ImpactNote = "Blocks all app access to call history records.",
-            ApplyOps = [RegOp.SetDword(Key, "LetAppsAccessCallHistory", 2)],
-            RemoveOps = [RegOp.DeleteValue(Key, "LetAppsAccessCallHistory")],
-            DetectOps = [RegOp.CheckDword(Key, "LetAppsAccessCallHistory", 2)],
-        },
-        new TweakDef
-        {
-            Id = "apppriv-block-messaging-access",
-            Label = "Block App Messaging Access via Policy",
-            Category = "Privacy",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets LetAppsAccessMessaging=2 (Force Deny) under the AppPrivacy Group Policy path. "
-                + "Prevents apps from sending or reading SMS/MMS messages. "
-                + "Stops apps from using the messaging capability for data exfiltration.",
-            Tags = ["messaging", "sms", "privacy", "policy", "app-access"],
-            ImpactScore = 3,
-            SafetyRating = 4,
-            ImpactNote = "Blocks all app SMS/messaging access.",
-            ApplyOps = [RegOp.SetDword(Key, "LetAppsAccessMessaging", 2)],
-            RemoveOps = [RegOp.DeleteValue(Key, "LetAppsAccessMessaging")],
-            DetectOps = [RegOp.CheckDword(Key, "LetAppsAccessMessaging", 2)],
-        },
-        new TweakDef
-        {
-            Id = "apppriv-block-voice-activation",
-            Label = "Block App Voice Activation via Policy",
-            Category = "Privacy",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets LetAppsActivateWithVoice=2 (Force Deny) under the AppPrivacy Group Policy path. "
-                + "Prevents apps from being activated by voice commands. "
-                + "Stops always-on microphone listening used for wake-word detection.",
-            Tags = ["voice", "privacy", "policy", "app-access", "microphone"],
-            ImpactScore = 3,
-            SafetyRating = 5,
-            ImpactNote = "Disables app wake-word/voice activation features.",
-            ApplyOps = [RegOp.SetDword(Key, "LetAppsActivateWithVoice", 2)],
-            RemoveOps = [RegOp.DeleteValue(Key, "LetAppsActivateWithVoice")],
-            DetectOps = [RegOp.CheckDword(Key, "LetAppsActivateWithVoice", 2)],
-        },
-        new TweakDef
-        {
-            Id = "apppriv-block-account-info-access",
-            Label = "Block App Account Info Access via Policy",
-            Category = "Privacy",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets LetAppsAccessAccountInfo=2 (Force Deny) under the AppPrivacy Group Policy path. "
-                + "Prevents apps from accessing account information such as the user's name, "
-                + "display picture, or username. Reduces personal information exposure.",
-            Tags = ["account", "privacy", "policy", "app-access", "identity"],
-            ImpactScore = 4,
-            SafetyRating = 4,
-            ImpactNote = "Blocks app access to account name, photo, and username.",
-            ApplyOps = [RegOp.SetDword(Key, "LetAppsAccessAccountInfo", 2)],
-            RemoveOps = [RegOp.DeleteValue(Key, "LetAppsAccessAccountInfo")],
-            DetectOps = [RegOp.CheckDword(Key, "LetAppsAccessAccountInfo", 2)],
-        },
-        new TweakDef
-        {
-            Id = "apppriv-block-background-apps",
-            Label = "Block Apps Running in Background via Policy",
-            Category = "Privacy",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets LetAppsRunInBackground=2 (Force Deny) under the AppPrivacy Group Policy path. "
-                + "Prevents apps from running as background tasks while not in focus. "
-                + "Reduces CPU and battery consumption from idle background app activity.",
-            Tags = ["background", "apps", "policy", "performance", "battery"],
-            ImpactScore = 3,
-            SafetyRating = 4,
-            ImpactNote = "Stops apps from running background tasks; saves CPU and battery.",
-            ApplyOps = [RegOp.SetDword(Key, "LetAppsRunInBackground", 2)],
-            RemoveOps = [RegOp.DeleteValue(Key, "LetAppsRunInBackground")],
-            DetectOps = [RegOp.CheckDword(Key, "LetAppsRunInBackground", 2)],
-        },
-        new TweakDef
-        {
-            Id = "apppriv-block-diagnostics-access",
-            Label = "Block App Diagnostic Info Access via Policy",
-            Category = "Privacy",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets LetAppsGetDiagnosticInfo=2 (Force Deny) under the AppPrivacy Group Policy path. "
-                + "Prevents apps from reading diagnostic information about other running apps. "
-                + "Blocks potential information disclosure via the diagnostics API.",
-            Tags = ["diagnostics", "privacy", "policy", "app-access"],
-            ImpactScore = 3,
-            SafetyRating = 5,
-            ImpactNote = "Blocks app access to diagnostic info about other processes.",
-            ApplyOps = [RegOp.SetDword(Key, "LetAppsGetDiagnosticInfo", 2)],
-            RemoveOps = [RegOp.DeleteValue(Key, "LetAppsGetDiagnosticInfo")],
-            DetectOps = [RegOp.CheckDword(Key, "LetAppsGetDiagnosticInfo", 2)],
-        },
     ];
 }
 
@@ -6328,63 +4107,6 @@ internal static class PolicyUserExperience
 
     internal static IReadOnlyList<TweakDef> Tweaks { get; } =
     [
-        new TweakDef
-        {
-            Id = "uxpol-disable-consumer-features",
-            Label = "Disable Windows Consumer Experiences via Policy",
-            Category = "System",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets DisableWindowsConsumerFeatures=1 under the CloudContent Group Policy path. "
-                + "Prevents Windows from automatically installing sponsored apps and showing "
-                + "promotional content to users. Essential for enterprise deployments.",
-            Tags = ["consumer", "bloatware", "policy", "enterprise"],
-            ImpactScore = 5,
-            SafetyRating = 5,
-            ImpactNote = "Stops Windows from installing sponsored/suggested apps automatically.",
-            ApplyOps = [RegOp.SetDword(Key, "DisableWindowsConsumerFeatures", 1)],
-            RemoveOps = [RegOp.DeleteValue(Key, "DisableWindowsConsumerFeatures")],
-            DetectOps = [RegOp.CheckDword(Key, "DisableWindowsConsumerFeatures", 1)],
-        },
-        new TweakDef
-        {
-            Id = "uxpol-disable-spotlight",
-            Label = "Disable Windows Spotlight via Policy",
-            Category = "System",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets DisableWindowsSpotlightFeatures=1 under the CloudContent Group Policy path. "
-                + "Disables all Windows Spotlight features including dynamic lock screen images, "
-                + "fun facts, Start suggestions, and action center tips from Microsoft.",
-            Tags = ["spotlight", "lock-screen", "policy", "privacy"],
-            ImpactScore = 4,
-            SafetyRating = 5,
-            ImpactNote = "Disables all Windows Spotlight cloud content features.",
-            ApplyOps = [RegOp.SetDword(Key, "DisableWindowsSpotlightFeatures", 1)],
-            RemoveOps = [RegOp.DeleteValue(Key, "DisableWindowsSpotlightFeatures")],
-            DetectOps = [RegOp.CheckDword(Key, "DisableWindowsSpotlightFeatures", 1)],
-        },
-        new TweakDef
-        {
-            Id = "uxpol-disable-third-party-suggestions",
-            Label = "Disable Third-Party App Suggestions via Policy",
-            Category = "System",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets DisableThirdPartySuggestions=1 under the CloudContent Group Policy path. "
-                + "Blocks third-party app recommendations from appearing in Spotlight, "
-                + "the Start menu, and Settings suggestions.",
-            Tags = ["suggestions", "third-party", "policy", "privacy"],
-            ImpactScore = 4,
-            SafetyRating = 5,
-            ImpactNote = "Removes third-party app ads from Spotlight and Start menu.",
-            ApplyOps = [RegOp.SetDword(Key, "DisableThirdPartySuggestions", 1)],
-            RemoveOps = [RegOp.DeleteValue(Key, "DisableThirdPartySuggestions")],
-            DetectOps = [RegOp.CheckDword(Key, "DisableThirdPartySuggestions", 1)],
-        },
         new TweakDef
         {
             Id = "uxpol-disable-lock-screen-app-notifications",
@@ -6404,120 +4126,6 @@ internal static class PolicyUserExperience
             RemoveOps = [RegOp.DeleteValue(Key, "DisableLockScreenAppNotifications")],
             DetectOps = [RegOp.CheckDword(Key, "DisableLockScreenAppNotifications", 1)],
         },
-        new TweakDef
-        {
-            Id = "uxpol-disable-welcome-experience",
-            Label = "Disable Windows Welcome Experience via Policy",
-            Category = "System",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets DisableWindowsSpotlightWindowsWelcomeExperience=1 under the CloudContent Group Policy path. "
-                + "Hides the full-screen Windows welcome experience that displays after major updates "
-                + "highlighting new features. Reduces sign-in friction.",
-            Tags = ["welcome", "oobe", "policy", "spotlight"],
-            ImpactScore = 3,
-            SafetyRating = 5,
-            ImpactNote = "Prevents full-screen welcome/feature highlight page after updates.",
-            ApplyOps = [RegOp.SetDword(Key, "DisableWindowsSpotlightWindowsWelcomeExperience", 1)],
-            RemoveOps = [RegOp.DeleteValue(Key, "DisableWindowsSpotlightWindowsWelcomeExperience")],
-            DetectOps = [RegOp.CheckDword(Key, "DisableWindowsSpotlightWindowsWelcomeExperience", 1)],
-        },
-        new TweakDef
-        {
-            Id = "uxpol-disable-soft-landing",
-            Label = "Disable Feature Tips and Soft-Landing via Policy",
-            Category = "System",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets DisableSoftLanding=1 under the CloudContent Group Policy path. "
-                + "Prevents Windows from showing feature introductory tips, fun facts, and tooltip "
-                + "overlays that guide new users. Suitable for controlled enterprise environments.",
-            Tags = ["tips", "soft-landing", "policy", "enterprise"],
-            ImpactScore = 2,
-            SafetyRating = 5,
-            ImpactNote = "Removes introductory tips and feature hint overlays from Windows.",
-            ApplyOps = [RegOp.SetDword(Key, "DisableSoftLanding", 1)],
-            RemoveOps = [RegOp.DeleteValue(Key, "DisableSoftLanding")],
-            DetectOps = [RegOp.CheckDword(Key, "DisableSoftLanding", 1)],
-        },
-        new TweakDef
-        {
-            Id = "uxpol-disable-tailored-diagnostic-experiences",
-            Label = "Disable Tailored Experiences with Diagnostic Data via Policy",
-            Category = "System",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets DisableTailoredExperiencesWithDiagnosticData=1 under the CloudContent Group Policy path. "
-                + "Prevents Windows from using diagnostic data to show personalized tips, ads, "
-                + "and recommendations. Reduces the feedback loop between telemetry and targeted content.",
-            Tags = ["diagnostic-data", "tailored", "policy", "privacy", "telemetry"],
-            ImpactScore = 4,
-            SafetyRating = 5,
-            ImpactNote = "Stops diagnostic data from being used to personalise Windows content.",
-            ApplyOps = [RegOp.SetDword(Key, "DisableTailoredExperiencesWithDiagnosticData", 1)],
-            RemoveOps = [RegOp.DeleteValue(Key, "DisableTailoredExperiencesWithDiagnosticData")],
-            DetectOps = [RegOp.CheckDword(Key, "DisableTailoredExperiencesWithDiagnosticData", 1)],
-        },
-        new TweakDef
-        {
-            Id = "uxpol-disable-spotlight-action-center",
-            Label = "Disable Spotlight Suggestions in Action Center via Policy",
-            Category = "System",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets DisableWindowsSpotlightOnActionCenter=1 under the CloudContent Group Policy path. "
-                + "Prevents Microsoft Spotlight from injecting promotional or feature suggestions "
-                + "into the Windows Action Center notification pane.",
-            Tags = ["spotlight", "action-center", "policy", "notifications"],
-            ImpactScore = 3,
-            SafetyRating = 5,
-            ImpactNote = "Removes Spotlight ads and suggestions from Action Center.",
-            ApplyOps = [RegOp.SetDword(Key, "DisableWindowsSpotlightOnActionCenter", 1)],
-            RemoveOps = [RegOp.DeleteValue(Key, "DisableWindowsSpotlightOnActionCenter")],
-            DetectOps = [RegOp.CheckDword(Key, "DisableWindowsSpotlightOnActionCenter", 1)],
-        },
-        new TweakDef
-        {
-            Id = "uxpol-disable-spotlight-on-settings",
-            Label = "Disable Spotlight in Settings App via Policy",
-            Category = "System",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets DisableWindowsSpotlightOnSettings=1 under the CloudContent Group Policy path. "
-                + "Stops Windows Spotlight from inserting promotional content and feature highlights "
-                + "into the Settings app pages.",
-            Tags = ["spotlight", "settings", "policy", "privacy"],
-            ImpactScore = 2,
-            SafetyRating = 5,
-            ImpactNote = "Removes Spotlight banners from within the Settings app.",
-            ApplyOps = [RegOp.SetDword(Key, "DisableWindowsSpotlightOnSettings", 1)],
-            RemoveOps = [RegOp.DeleteValue(Key, "DisableWindowsSpotlightOnSettings")],
-            DetectOps = [RegOp.CheckDword(Key, "DisableWindowsSpotlightOnSettings", 1)],
-        },
-        new TweakDef
-        {
-            Id = "uxpol-disable-cloud-optimized-content",
-            Label = "Disable Cloud-Optimized Content via Policy",
-            Category = "System",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets DisableCloudOptimizedContent=1 under the CloudContent Group Policy path. "
-                + "Prevents Windows from downloading and displaying cloud-optimized promotional "
-                + "content, advertisements, and feature spotlights on the lock screen and Start menu.",
-            Tags = ["cloud", "content", "policy", "privacy", "enterprise"],
-            ImpactScore = 4,
-            SafetyRating = 5,
-            ImpactNote = "Blocks cloud-sourced promotional content on lock screen and Start.",
-            ApplyOps = [RegOp.SetDword(Key, "DisableCloudOptimizedContent", 1)],
-            RemoveOps = [RegOp.DeleteValue(Key, "DisableCloudOptimizedContent")],
-            DetectOps = [RegOp.CheckDword(Key, "DisableCloudOptimizedContent", 1)],
-        },
     ];
 }
 
@@ -6536,196 +4144,6 @@ internal static class PolicyEventLogAudit
 
     internal static IReadOnlyList<TweakDef> Tweaks { get; } =
     [
-        new TweakDef
-        {
-            Id = "evtpol-app-log-max-size",
-            Label = "Set Application Event Log to 64 MB via Policy",
-            Category = "Security",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets MaxSize=65536 (64 MB in KB) under the Application EventLog Group Policy path. "
-                + "Ensures the Application event log retains sufficient history for diagnostics "
-                + "and compliance reviews. The value is in kilobytes.",
-            Tags = ["event-log", "application", "policy", "audit", "sizing"],
-            ImpactScore = 3,
-            SafetyRating = 5,
-            ImpactNote = "Grows Application log capacity to 64 MB for better event retention.",
-            ApplyOps = [RegOp.SetDword(AppLog, "MaxSize", 65536)],
-            RemoveOps = [RegOp.DeleteValue(AppLog, "MaxSize")],
-            DetectOps = [RegOp.CheckDword(AppLog, "MaxSize", 65536)],
-        },
-        new TweakDef
-        {
-            Id = "evtpol-sec-log-max-size",
-            Label = "Set Security Event Log to 192 MB via Policy",
-            Category = "Security",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets MaxSize=196608 (192 MB in KB) under the Security EventLog Group Policy path. "
-                + "Aligns with NIST SP 800-92 guidance for security audit log capacity. "
-                + "Ensures logon and privilege events are retained for incident response.",
-            Tags = ["event-log", "security", "policy", "audit", "nist", "sizing"],
-            ImpactScore = 4,
-            SafetyRating = 5,
-            ImpactNote = "Grows Security log to 192 MB; NIST-recommended for audit retention.",
-            ApplyOps = [RegOp.SetDword(SecLog, "MaxSize", 196608)],
-            RemoveOps = [RegOp.DeleteValue(SecLog, "MaxSize")],
-            DetectOps = [RegOp.CheckDword(SecLog, "MaxSize", 196608)],
-        },
-        new TweakDef
-        {
-            Id = "evtpol-sys-log-max-size",
-            Label = "Set System Event Log to 64 MB via Policy",
-            Category = "Security",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets MaxSize=65536 (64 MB in KB) under the System EventLog Group Policy path. "
-                + "Provides adequate capacity for driver, service, and OS-level events "
-                + "used in troubleshooting and change auditing.",
-            Tags = ["event-log", "system", "policy", "audit", "sizing"],
-            ImpactScore = 3,
-            SafetyRating = 5,
-            ImpactNote = "Grows System log to 64 MB for OS event history retention.",
-            ApplyOps = [RegOp.SetDword(SysLog, "MaxSize", 65536)],
-            RemoveOps = [RegOp.DeleteValue(SysLog, "MaxSize")],
-            DetectOps = [RegOp.CheckDword(SysLog, "MaxSize", 65536)],
-        },
-        new TweakDef
-        {
-            Id = "evtpol-setup-log-max-size",
-            Label = "Set Setup Event Log to 32 MB via Policy",
-            Category = "Security",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets MaxSize=32768 (32 MB in KB) under the Setup EventLog Group Policy path. "
-                + "Retains enough Windows update and component installation events "
-                + "to support post-deployment validation and rollback analysis.",
-            Tags = ["event-log", "setup", "policy", "audit", "sizing"],
-            ImpactScore = 2,
-            SafetyRating = 5,
-            ImpactNote = "Grows Setup log to 32 MB for Windows Update event retention.",
-            ApplyOps = [RegOp.SetDword(SetupLog, "MaxSize", 32768)],
-            RemoveOps = [RegOp.DeleteValue(SetupLog, "MaxSize")],
-            DetectOps = [RegOp.CheckDword(SetupLog, "MaxSize", 32768)],
-        },
-        new TweakDef
-        {
-            Id = "evtpol-app-log-retention",
-            Label = "Set Application Log to Overwrite as Needed via Policy",
-            Category = "Security",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets Retention=0 under the Application EventLog Group Policy path. "
-                + "Configures the Application event log to overwrite old events when full "
-                + "rather than stopping logging or requiring manual clearance.",
-            Tags = ["event-log", "application", "policy", "audit", "retention"],
-            ImpactScore = 2,
-            SafetyRating = 5,
-            ImpactNote = "Application log overwrites oldest events when full; no logging interruption.",
-            ApplyOps = [RegOp.SetDword(AppLog, "Retention", 0)],
-            RemoveOps = [RegOp.DeleteValue(AppLog, "Retention")],
-            DetectOps = [RegOp.CheckDword(AppLog, "Retention", 0)],
-        },
-        new TweakDef
-        {
-            Id = "evtpol-sec-log-retention",
-            Label = "Set Security Log to Overwrite as Needed via Policy",
-            Category = "Security",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets Retention=0 under the Security EventLog Group Policy path. "
-                + "Configures the Security event log to overwrite old events when full. "
-                + "Prevents audit failure conditions caused by a full security log.",
-            Tags = ["event-log", "security", "policy", "audit", "retention"],
-            ImpactScore = 3,
-            SafetyRating = 5,
-            ImpactNote = "Security log overwrites when full; prevents audit-failure shutdown.",
-            ApplyOps = [RegOp.SetDword(SecLog, "Retention", 0)],
-            RemoveOps = [RegOp.DeleteValue(SecLog, "Retention")],
-            DetectOps = [RegOp.CheckDword(SecLog, "Retention", 0)],
-        },
-        new TweakDef
-        {
-            Id = "evtpol-sys-log-retention",
-            Label = "Set System Log to Overwrite as Needed via Policy",
-            Category = "Security",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets Retention=0 under the System EventLog Group Policy path. "
-                + "Configures the System event log to overwrite old entries when full, "
-                + "maintaining continuous logging of OS and driver events.",
-            Tags = ["event-log", "system", "policy", "audit", "retention"],
-            ImpactScore = 2,
-            SafetyRating = 5,
-            ImpactNote = "System log overwrites when full; continuous OS event capture.",
-            ApplyOps = [RegOp.SetDword(SysLog, "Retention", 0)],
-            RemoveOps = [RegOp.DeleteValue(SysLog, "Retention")],
-            DetectOps = [RegOp.CheckDword(SysLog, "Retention", 0)],
-        },
-        new TweakDef
-        {
-            Id = "evtpol-app-restrict-guest-access",
-            Label = "Restrict Guest Access to Application Log via Policy",
-            Category = "Security",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets RestrictGuestAccess=1 under the Application EventLog Group Policy path. "
-                + "Prevents guest accounts from reading Application event log entries. "
-                + "Reduces information disclosure to unauthenticated or low-privilege sessions.",
-            Tags = ["event-log", "application", "policy", "security", "access-control"],
-            ImpactScore = 3,
-            SafetyRating = 5,
-            ImpactNote = "Denies guest accounts from reading the Application log.",
-            ApplyOps = [RegOp.SetDword(AppLog, "RestrictGuestAccess", 1)],
-            RemoveOps = [RegOp.DeleteValue(AppLog, "RestrictGuestAccess")],
-            DetectOps = [RegOp.CheckDword(AppLog, "RestrictGuestAccess", 1)],
-        },
-        new TweakDef
-        {
-            Id = "evtpol-sec-restrict-guest-access",
-            Label = "Restrict Guest Access to Security Log via Policy",
-            Category = "Security",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets RestrictGuestAccess=1 under the Security EventLog Group Policy path. "
-                + "Prevents guest accounts from viewing security audit records. "
-                + "Protects logon and privilege audit trails from low-privilege access.",
-            Tags = ["event-log", "security", "policy", "security", "access-control"],
-            ImpactScore = 4,
-            SafetyRating = 5,
-            ImpactNote = "Denies guest accounts from reading security audit events.",
-            ApplyOps = [RegOp.SetDword(SecLog, "RestrictGuestAccess", 1)],
-            RemoveOps = [RegOp.DeleteValue(SecLog, "RestrictGuestAccess")],
-            DetectOps = [RegOp.CheckDword(SecLog, "RestrictGuestAccess", 1)],
-        },
-        new TweakDef
-        {
-            Id = "evtpol-sys-restrict-guest-access",
-            Label = "Restrict Guest Access to System Log via Policy",
-            Category = "Security",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets RestrictGuestAccess=1 under the System EventLog Group Policy path. "
-                + "Prevents guest accounts from viewing system-level events including "
-                + "driver loads, service starts, and hardware errors.",
-            Tags = ["event-log", "system", "policy", "security", "access-control"],
-            ImpactScore = 3,
-            SafetyRating = 5,
-            ImpactNote = "Denies guest accounts from reading the System event log.",
-            ApplyOps = [RegOp.SetDword(SysLog, "RestrictGuestAccess", 1)],
-            RemoveOps = [RegOp.DeleteValue(SysLog, "RestrictGuestAccess")],
-            DetectOps = [RegOp.CheckDword(SysLog, "RestrictGuestAccess", 1)],
-        },
     ];
 }
 
@@ -6742,195 +4160,5 @@ internal static class PolicySyncSettings
 
     internal static IReadOnlyList<TweakDef> Tweaks { get; } =
     [
-        new TweakDef
-        {
-            Id = "syncpol-disable-all-sync",
-            Label = "Disable All Settings Sync via Policy",
-            Category = "Privacy",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets DisableSettingSync=2 under the SettingSync Group Policy path. "
-                + "Turns off roaming sync for all Windows settings categories. "
-                + "Prevents user settings from being uploaded to or downloaded from Microsoft Account/Azure AD.",
-            Tags = ["sync", "roaming", "policy", "privacy", "enterprise"],
-            ImpactScore = 4,
-            SafetyRating = 5,
-            ImpactNote = "All Windows settings stay machine-local; no cloud sync roaming.",
-            ApplyOps = [RegOp.SetDword(Key, "DisableSettingSync", 2)],
-            RemoveOps = [RegOp.DeleteValue(Key, "DisableSettingSync")],
-            DetectOps = [RegOp.CheckDword(Key, "DisableSettingSync", 2)],
-        },
-        new TweakDef
-        {
-            Id = "syncpol-prevent-user-sync-override",
-            Label = "Prevent User from Overriding Sync Settings via Policy",
-            Category = "Privacy",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets DisableSettingSyncUserOverride=1 under the SettingSync Group Policy path. "
-                + "Locks sync policy settings so users cannot re-enable syncing in the "
-                + "Settings app even if they have a linked Microsoft Account.",
-            Tags = ["sync", "policy", "enterprise", "lock"],
-            ImpactScore = 3,
-            SafetyRating = 5,
-            ImpactNote = "Prevents users from enabling sync in Settings when blocked by policy.",
-            ApplyOps = [RegOp.SetDword(Key, "DisableSettingSyncUserOverride", 1)],
-            RemoveOps = [RegOp.DeleteValue(Key, "DisableSettingSyncUserOverride")],
-            DetectOps = [RegOp.CheckDword(Key, "DisableSettingSyncUserOverride", 1)],
-        },
-        new TweakDef
-        {
-            Id = "syncpol-disable-credentials-sync",
-            Label = "Disable Credentials/Password Sync via Policy",
-            Category = "Privacy",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets DisableCredentialsSettingSync=2 under the SettingSync Group Policy path. "
-                + "Prevents roaming sync of saved passwords, Wi-Fi credentials, and stored account "
-                + "tokens. Keeps credentials machine-local and reduces credential exposure.",
-            Tags = ["sync", "credentials", "passwords", "policy", "security"],
-            ImpactScore = 5,
-            SafetyRating = 5,
-            ImpactNote = "Prevents cloud sync of saved passwords and Wi-Fi credentials.",
-            ApplyOps = [RegOp.SetDword(Key, "DisableCredentialsSettingSync", 2)],
-            RemoveOps = [RegOp.DeleteValue(Key, "DisableCredentialsSettingSync")],
-            DetectOps = [RegOp.CheckDword(Key, "DisableCredentialsSettingSync", 2)],
-        },
-        new TweakDef
-        {
-            Id = "syncpol-disable-personalization-sync",
-            Label = "Disable Personalization Sync via Policy",
-            Category = "Privacy",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets DisablePersonalizationSettingSync=2 under the SettingSync Group Policy path. "
-                + "Prevents roaming sync of desktop wallpaper, colors, and lock screen images. "
-                + "Keeps machine appearance independent of the user's Microsoft Account profile.",
-            Tags = ["sync", "personalization", "wallpaper", "policy"],
-            ImpactScore = 3,
-            SafetyRating = 5,
-            ImpactNote = "Desktop wallpaper and colors stay machine-specific; no cloud roaming.",
-            ApplyOps = [RegOp.SetDword(Key, "DisablePersonalizationSettingSync", 2)],
-            RemoveOps = [RegOp.DeleteValue(Key, "DisablePersonalizationSettingSync")],
-            DetectOps = [RegOp.CheckDword(Key, "DisablePersonalizationSettingSync", 2)],
-        },
-        new TweakDef
-        {
-            Id = "syncpol-disable-app-settings-sync",
-            Label = "Disable App Settings Sync via Policy",
-            Category = "Privacy",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets DisableApplicationSettingSync=2 under the SettingSync Group Policy path. "
-                + "Prevents roaming sync of per-app settings for Microsoft Store apps. "
-                + "App data stays local and is not replicated to other devices via the cloud.",
-            Tags = ["sync", "apps", "store", "policy"],
-            ImpactScore = 3,
-            SafetyRating = 4,
-            ImpactNote = "Store app settings remain local; no cross-device app state syncing.",
-            ApplyOps = [RegOp.SetDword(Key, "DisableApplicationSettingSync", 2)],
-            RemoveOps = [RegOp.DeleteValue(Key, "DisableApplicationSettingSync")],
-            DetectOps = [RegOp.CheckDword(Key, "DisableApplicationSettingSync", 2)],
-        },
-        new TweakDef
-        {
-            Id = "syncpol-disable-start-layout-sync",
-            Label = "Disable Start Layout Sync via Policy",
-            Category = "Privacy",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets DisableStartLayoutSettingSync=2 under the SettingSync Group Policy path. "
-                + "Prevents the Start menu tile layout from syncing across devices. "
-                + "Useful when deploying customised Start layouts that must not be overwritten.",
-            Tags = ["sync", "start-menu", "layout", "policy", "enterprise"],
-            ImpactScore = 2,
-            SafetyRating = 5,
-            ImpactNote = "Start menu layout stays machine-specific; no cloud override.",
-            ApplyOps = [RegOp.SetDword(Key, "DisableStartLayoutSettingSync", 2)],
-            RemoveOps = [RegOp.DeleteValue(Key, "DisableStartLayoutSettingSync")],
-            DetectOps = [RegOp.CheckDword(Key, "DisableStartLayoutSettingSync", 2)],
-        },
-        new TweakDef
-        {
-            Id = "syncpol-disable-theme-sync",
-            Label = "Disable Theme Sync via Policy",
-            Category = "Privacy",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets DisableThemeSettingSync=2 under the SettingSync Group Policy path. "
-                + "Prevents Windows theme (colors, sounds, cursors) from roaming to other devices. "
-                + "Maintains machine-specific branding or standardised appearance.",
-            Tags = ["sync", "themes", "colors", "policy"],
-            ImpactScore = 2,
-            SafetyRating = 5,
-            ImpactNote = "Windows theme remains local; corporate theme cannot be overridden by sync.",
-            ApplyOps = [RegOp.SetDword(Key, "DisableThemeSettingSync", 2)],
-            RemoveOps = [RegOp.DeleteValue(Key, "DisableThemeSettingSync")],
-            DetectOps = [RegOp.CheckDword(Key, "DisableThemeSettingSync", 2)],
-        },
-        new TweakDef
-        {
-            Id = "syncpol-disable-language-sync",
-            Label = "Disable Language Preferences Sync via Policy",
-            Category = "Privacy",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets DisableLanguageSettingSync=2 under the SettingSync Group Policy path. "
-                + "Prevents roaming sync of language settings, regional formats, and keyboard layouts. "
-                + "Ensures locale settings are set per machine or via Group Policy, not user preference.",
-            Tags = ["sync", "language", "locale", "policy"],
-            ImpactScore = 2,
-            SafetyRating = 5,
-            ImpactNote = "Language and keyboard layout stays machine-local; no cross-device sync.",
-            ApplyOps = [RegOp.SetDword(Key, "DisableLanguageSettingSync", 2)],
-            RemoveOps = [RegOp.DeleteValue(Key, "DisableLanguageSettingSync")],
-            DetectOps = [RegOp.CheckDword(Key, "DisableLanguageSettingSync", 2)],
-        },
-        new TweakDef
-        {
-            Id = "syncpol-disable-accessibility-sync",
-            Label = "Disable Accessibility Settings Sync via Policy",
-            Category = "Privacy",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets DisableAccessibilitySettingSync=2 under the SettingSync Group Policy path. "
-                + "Prevents roaming sync of accessibility settings such as high contrast, "
-                + "Narrator preferences, and Magnifier state.",
-            Tags = ["sync", "accessibility", "policy"],
-            ImpactScore = 2,
-            SafetyRating = 5,
-            ImpactNote = "Accessibility settings stay machine-local; no cross-device sync.",
-            ApplyOps = [RegOp.SetDword(Key, "DisableAccessibilitySettingSync", 2)],
-            RemoveOps = [RegOp.DeleteValue(Key, "DisableAccessibilitySettingSync")],
-            DetectOps = [RegOp.CheckDword(Key, "DisableAccessibilitySettingSync", 2)],
-        },
-        new TweakDef
-        {
-            Id = "syncpol-disable-desktop-theme-sync",
-            Label = "Disable Desktop Theme Sync via Policy",
-            Category = "Privacy",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets DisableDesktopThemeSettingSync=2 under the SettingSync Group Policy path. "
-                + "Prevents desktop-specific theme settings (background slideshow, accent colour) "
-                + "from being synced independently of the main theme sync setting.",
-            Tags = ["sync", "desktop", "theme", "policy"],
-            ImpactScore = 2,
-            SafetyRating = 5,
-            ImpactNote = "Desktop-specific theme settings stay local; no cloud background sync.",
-            ApplyOps = [RegOp.SetDword(Key, "DisableDesktopThemeSettingSync", 2)],
-            RemoveOps = [RegOp.DeleteValue(Key, "DisableDesktopThemeSettingSync")],
-            DetectOps = [RegOp.CheckDword(Key, "DisableDesktopThemeSettingSync", 2)],
-        },
     ];
 }

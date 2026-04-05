@@ -148,76 +148,6 @@ internal static class Copilot
         },
         new TweakDef
         {
-            Id = "ai-copilot-disable-tips-notifications",
-            Label = "Disable Copilot Tips & Notifications",
-            Category = "AI / Copilot",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Disables Windows Copilot tips, suggestions, and notification prompts. Prevents AI feature promotion popups. Default: enabled.",
-            Tags = ["ai", "copilot", "tips", "notifications"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager"],
-            ApplyOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
-                    "SubscribedContent-338388Enabled",
-                    0
-                ),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(
-                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
-                    "SubscribedContent-338388Enabled"
-                ),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(
-                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
-                    "SubscribedContent-338388Enabled",
-                    0
-                ),
-            ],
-        },
-        new TweakDef
-        {
-            Id = "ai-disable-ai-suggestions",
-            Label = "Disable AI Suggestions in Settings",
-            Category = "AI / Copilot",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Disables AI-powered suggestions and recommendations in Windows Settings. Removes intelligent content cards. Default: enabled.",
-            Tags = ["ai", "suggestions", "settings", "disable"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager"],
-            ApplyOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
-                    "SubscribedContent-353694Enabled",
-                    0
-                ),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(
-                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
-                    "SubscribedContent-353694Enabled"
-                ),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(
-                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
-                    "SubscribedContent-353694Enabled",
-                    0
-                ),
-            ],
-        },
-        new TweakDef
-        {
             Id = "ai-disable-activity-history-upload",
             Label = "Disable Activity History Cloud Upload",
             Category = "AI / Copilot",
@@ -380,42 +310,6 @@ internal static class Copilot
         },
         new TweakDef
         {
-            Id = "ai-disable-start-menu-suggestions",
-            Label = "Disable AI Start Menu App Suggestions",
-            Category = "AI / Copilot",
-            NeedsAdmin = false,
-            CorpSafe = false,
-            Description =
-                "Disables AI-generated app suggestions shown in the Start menu's Recommended section. Removes personalised app promotion. Default: enabled.",
-            Tags = ["ai", "start-menu", "suggestions", "privacy"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager"],
-            ApplyOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
-                    "SystemPaneSuggestionsEnabled",
-                    0
-                ),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
-                    "SystemPaneSuggestionsEnabled",
-                    1
-                ),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(
-                    @"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
-                    "SystemPaneSuggestionsEnabled",
-                    0
-                ),
-            ],
-        },
-        new TweakDef
-        {
             Id = "ai-disable-lock-screen-overlay",
             Label = "Disable Lock Screen Spotlight Overlay Facts",
             Category = "AI / Copilot",
@@ -490,42 +384,6 @@ internal static class Copilot
                 RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CloudContent", "DisableWindowsSpotlightOnActionCenter", 1),
             ],
         },
-        new TweakDef
-        {
-            Id = "ai-disable-content-delivery-autoinstall",
-            Label = "Disable AI-Driven Silent App Auto-Install",
-            Category = "AI / Copilot",
-            NeedsAdmin = false,
-            CorpSafe = false,
-            Description =
-                "Disables silent automatic installation of apps recommended by the Content Delivery Manager AI. Prevents Microsoft from quietly installing promoted apps. Default: enabled on consumer Windows.",
-            Tags = ["ai", "debloat", "content-delivery", "privacy"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager"],
-            ApplyOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
-                    "SilentInstalledAppsEnabled",
-                    0
-                ),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
-                    "SilentInstalledAppsEnabled",
-                    1
-                ),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(
-                    @"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
-                    "SilentInstalledAppsEnabled",
-                    0
-                ),
-            ],
-        },
     ];
 }
 
@@ -561,22 +419,6 @@ internal static class CopilotPlus
 
     internal static IReadOnlyList<TweakDef> Tweaks { get; } =
     [
-        new TweakDef
-        {
-            Id = "cplplus-disable-recall-snapshots",
-            Label = "Disable Windows Recall Snapshot Storage",
-            Category = "AI / Copilot",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Tags = ["copilot+", "recall", "privacy", "npu", "ai"],
-            Description =
-                "Prevents Windows Recall from storing encrypted screenshots "
-                + "(snapshots) of your screen activity. The feature remains installed "
-                + "but the continuous screen capture pipeline is stopped.",
-            ApplyOps = [RegOp.SetDword(RecallAdv, "DisableAIDataAnalysis", 1), RegOp.SetDword(RecallAdv, "AllowRecallEnablement", 0)],
-            RemoveOps = [RegOp.DeleteValue(RecallAdv, "DisableAIDataAnalysis"), RegOp.DeleteValue(RecallAdv, "AllowRecallEnablement")],
-            DetectOps = [RegOp.CheckDword(RecallAdv, "DisableAIDataAnalysis", 1)],
-        },
         new TweakDef
         {
             Id = "cplplus-disable-npu-inference-policy",
@@ -1342,40 +1184,6 @@ internal static class Speech
         },
         new TweakDef
         {
-            Id = "speech-disable-voice-activation",
-            Label = "Disable Voice Activation (Wake Words)",
-            Category = "AI / Copilot",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Prevents apps from listening for wake words (Hey Cortana, etc.). Recommended: Disabled for privacy.",
-            Tags = ["speech", "voice", "activation", "cortana", "privacy"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy", "LetAppsActivateWithVoice", 2)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy", "LetAppsActivateWithVoice")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy", "LetAppsActivateWithVoice", 2)],
-        },
-        new TweakDef
-        {
-            Id = "speech-disable-voice-above-lock",
-            Label = "Disable Voice Activation Above Lock",
-            Category = "AI / Copilot",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Prevents voice activation when the screen is locked. Security measure against wake-word hijacking.",
-            Tags = ["speech", "voice", "lock-screen", "security"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy", "LetAppsActivateWithVoiceAboveLock", 2)],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy", "LetAppsActivateWithVoiceAboveLock"),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy", "LetAppsActivateWithVoiceAboveLock", 2),
-            ],
-        },
-        new TweakDef
-        {
             Id = "speech-disable-narrator-cursor",
             Label = "Disable Narrator Cursor Indicator",
             Category = "AI / Copilot",
@@ -1541,20 +1349,6 @@ internal static class Speech
         },
         new TweakDef
         {
-            Id = "speech-disable-dictation",
-            Label = "Disable Voice Typing (Win+H Dictation)",
-            Category = "AI / Copilot",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables the Win+H voice typing (dictation) feature via policy. Default: enabled.",
-            Tags = ["speech", "dictation", "voice-typing", "disable"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\InputPersonalization"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\InputPersonalization", "AllowInputPersonalization", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\InputPersonalization", "AllowInputPersonalization")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\InputPersonalization", "AllowInputPersonalization", 0)],
-        },
-        new TweakDef
-        {
             Id = "speech-disable-narrator-hotkey",
             Label = "Disable Narrator Hotkey (Win+Enter)",
             Category = "AI / Copilot",
@@ -1602,40 +1396,6 @@ internal static class Speech
             DetectOps =
             [
                 RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\CPSS\Store\SpeechSettings", "DictationEnabled", 0),
-            ],
-        },
-        new TweakDef
-        {
-            Id = "speech-disable-background-voice-activation",
-            Label = "Disable Voice Activation",
-            Category = "AI / Copilot",
-            NeedsAdmin = false,
-            Description =
-                "Disables voice activation for all apps. Prevents apps from listening for voice commands in the background. Default: enabled.",
-            Tags = ["speech", "voice-activation", "privacy", "microphone"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Speech_OneCore\Settings\VoiceActivation\UserPreferenceForAllApps"],
-            ApplyOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_CURRENT_USER\Software\Microsoft\Speech_OneCore\Settings\VoiceActivation\UserPreferenceForAllApps",
-                    "AgentActivationEnabled",
-                    0
-                ),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(
-                    @"HKEY_CURRENT_USER\Software\Microsoft\Speech_OneCore\Settings\VoiceActivation\UserPreferenceForAllApps",
-                    "AgentActivationEnabled"
-                ),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(
-                    @"HKEY_CURRENT_USER\Software\Microsoft\Speech_OneCore\Settings\VoiceActivation\UserPreferenceForAllApps",
-                    "AgentActivationEnabled",
-                    0
-                ),
             ],
         },
         new TweakDef
@@ -1705,42 +1465,6 @@ internal static class Speech
         },
         new TweakDef
         {
-            Id = "speech-disable-cortana-voice-activation",
-            Label = "Disable Cortana Voice Activation",
-            Category = "AI / Copilot",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Disables Cortana from being invoked via voice commands. Prevents background microphone listening for \"Hey Cortana\". Default: enabled.",
-            Tags = ["speech", "cortana", "privacy", "microphone"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Speech_OneCore\Settings\VoiceActivation\UserPreferenceForAllApps"],
-            ApplyOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Speech_OneCore\Settings\VoiceActivation\UserPreferenceForAllApps",
-                    "AgentActivationEnabled",
-                    0
-                ),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Speech_OneCore\Settings\VoiceActivation\UserPreferenceForAllApps",
-                    "AgentActivationEnabled",
-                    1
-                ),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(
-                    @"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Speech_OneCore\Settings\VoiceActivation\UserPreferenceForAllApps",
-                    "AgentActivationEnabled",
-                    0
-                ),
-            ],
-        },
-        new TweakDef
-        {
             Id = "speech-disable-narrator-natural-voice-dl",
             Label = "Disable Narrator Natural Voice Download",
             Category = "AI / Copilot",
@@ -1753,20 +1477,6 @@ internal static class Speech
             ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Narrator", "NaturalVoicesDownloadEnabled", 0)],
             RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Narrator", "NaturalVoicesDownloadEnabled", 1)],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Narrator", "NaturalVoicesDownloadEnabled", 0)],
-        },
-        new TweakDef
-        {
-            Id = "speech-disable-speech-data-sharing",
-            Label = "Disable Speech Data Sharing with Microsoft",
-            Category = "AI / Copilot",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Prevents Windows from sending speech data (voice samples) to Microsoft for service improvement. Default: sharing enabled.",
-            Tags = ["speech", "privacy", "telemetry", "data-sharing"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\SpeechModel"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\SpeechModel", "AllowSpeechModelUpdate", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\SpeechModel", "AllowSpeechModelUpdate")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\SpeechModel", "AllowSpeechModelUpdate", 0)],
         },
         new TweakDef
         {
@@ -2490,24 +2200,6 @@ internal static class PolicyAI
                     ApplyOps = [RegOp.SetDword(CopilotKey, "DisableImageCreator", 1)],
                     RemoveOps = [RegOp.DeleteValue(CopilotKey, "DisableImageCreator")],
                     DetectOps = [RegOp.CheckDword(CopilotKey, "DisableImageCreator", 1)],
-                },
-                new TweakDef
-                {
-                    Id = "aicw-disable-edge-copilot-sidebar",
-                    Label = "AI Copilot Web: Disable Copilot Sidebar in Microsoft Edge",
-                    Category = "AI / Copilot",
-                    Description =
-                        "Sets HubsSidebarEnabled=0 in Edge policy. Removes the Copilot and Discover sidebar panel from Microsoft Edge. The sidebar contains AI-powered summarisation, writing assistance, and web search features. When disabled, clicking the sidebar toggle button has no effect and the panel does not appear. Reduces distractions in focused work environments, removes browser-based AI features that might transmit page content to cloud services, and simplifies the Edge UI for corporate deployments.",
-                    Tags = ["copilot", "edge", "sidebar", "browser", "enterprise"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 3,
-                    SafetyRating = 5,
-                    ImpactNote =
-                        "Edge Copilot/Discover sidebar is hidden. AI writing and summarisation features in the Edge sidebar are unavailable. Core browser functionality is unchanged.",
-                    ApplyOps = [RegOp.SetDword(EdgeAiKey, "HubsSidebarEnabled", 0)],
-                    RemoveOps = [RegOp.DeleteValue(EdgeAiKey, "HubsSidebarEnabled")],
-                    DetectOps = [RegOp.CheckDword(EdgeAiKey, "HubsSidebarEnabled", 0)],
                 },
                 new TweakDef
                 {
@@ -3398,23 +3090,6 @@ internal static class PolicyAI
             [
                 new TweakDef
                 {
-                    Id = "copsbar-disable-copilot-sidebar",
-                    Label = "Disable Windows Copilot Sidebar",
-                    Category = "AI / Copilot",
-                    Description =
-                        "Disables the Windows Copilot chat sidebar (the AI assistant panel on the right edge of the screen), removing the Copilot button from the taskbar and preventing the sidebar from opening.",
-                    Tags = ["copilot", "sidebar", "taskbar", "ai", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 4,
-                    SafetyRating = 5,
-                    ImpactNote = "Windows Copilot sidebar disabled; Copilot taskbar button removed.",
-                    ApplyOps = [RegOp.SetDword(Key, "TurnOffWindowsCopilot", 1)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "TurnOffWindowsCopilot")],
-                    DetectOps = [RegOp.CheckDword(Key, "TurnOffWindowsCopilot", 1)],
-                },
-                new TweakDef
-                {
                     Id = "copsbar-disable-copilot-key",
                     Label = "Disable the Copilot Hardware Key",
                     Category = "AI / Copilot",
@@ -3960,23 +3635,6 @@ internal static class PolicyAI
 
         public static IReadOnlyList<TweakDef> Data =>
             [
-                new TweakDef
-                {
-                    Id = "rcsnap-disable-recall",
-                    Label = "Disable Windows Recall AI Snapshots",
-                    Category = "AI / Copilot",
-                    Description =
-                        "Disables the Windows Recall feature entirely, preventing the AI from taking periodic screenshots ('snapshots') of the user's screen for semantic search indexing on Copilot+ PCs.",
-                    Tags = ["recall", "ai", "copilot-plus", "privacy", "snapshot", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 5,
-                    SafetyRating = 5,
-                    ImpactNote = "Windows Recall disabled; no AI snapshots taken. Recall search feature unavailable.",
-                    ApplyOps = [RegOp.SetDword(Key, "DisableAIDataAnalysis", 1)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "DisableAIDataAnalysis")],
-                    DetectOps = [RegOp.CheckDword(Key, "DisableAIDataAnalysis", 1)],
-                },
                 new TweakDef
                 {
                     Id = "rcsnap-block-sensitive-content-capture",

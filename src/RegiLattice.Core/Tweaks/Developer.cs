@@ -638,21 +638,6 @@ internal static class Developer
         },
         new TweakDef
         {
-            Id = "dev-set-wer-consent-silent",
-            Label = "Set WER to Auto-Send Reports Without Consent Prompt",
-            Category = "Developer",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets DefaultConsent=1 in WER\\Consent. Sends Windows Error Reports automatically without asking the user for permission, eliminating consent dialogs in development environments.",
-            Tags = ["developer", "wer", "consent", "crash"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Windows Error Reporting\Consent"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Windows Error Reporting\Consent", "DefaultConsent", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Windows Error Reporting\Consent", "DefaultConsent")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Windows Error Reporting\Consent", "DefaultConsent", 1)],
-        },
-        new TweakDef
-        {
             Id = "dev-disable-file-download-block",
             Label = "Prevent Windows from Blocking Downloaded Files (Zone.Identifier)",
             Category = "Developer",
@@ -674,21 +659,6 @@ internal static class Developer
             [
                 RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Attachments", "SaveZoneInformation", 1),
             ],
-        },
-        new TweakDef
-        {
-            Id = "dev-show-super-hidden-files",
-            Label = "Show OS-Protected Super-Hidden Files in Explorer",
-            Category = "Developer",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Sets ShowSuperHidden=1 in Explorer Advanced. Reveals system-protected files (Thumbs.db, desktop.ini, hiberfil.sys) in Explorer. Useful when diagnosing file system or boot issues.",
-            Tags = ["developer", "explorer", "system-files", "hidden"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "ShowSuperHidden", 1)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "ShowSuperHidden", 0)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "ShowSuperHidden", 1)],
         },
         new TweakDef
         {
@@ -723,41 +693,6 @@ internal static class DevDrive
 {
     internal static IReadOnlyList<TweakDef> Tweaks { get; } =
     [
-        new TweakDef
-        {
-            Id = "dev-disable-filter-attach",
-            Label = "Disable Anti-Malware Minifilter",
-            Category = "Developer",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description =
-                "Disables real-time anti-malware minifilter driver (Dev Drive performance mode). Fastest I/O but reduces security. Only use on trusted dev volumes.",
-            Tags = ["dev-drive", "minifilter", "performance", "security"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Real-Time Protection"],
-            ApplyOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Real-Time Protection",
-                    "DisableRealtimeMonitoring",
-                    1
-                ),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Real-Time Protection",
-                    "DisableRealtimeMonitoring"
-                ),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Real-Time Protection",
-                    "DisableRealtimeMonitoring",
-                    1
-                ),
-            ],
-        },
         new TweakDef
         {
             Id = "dev-disable-efs-warning",
@@ -1152,36 +1087,6 @@ internal static class DevDrive
         },
         new TweakDef
         {
-            Id = "dev-disable-app-compat-engine",
-            Label = "Disable Application Compatibility Engine",
-            Category = "Developer",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description =
-                "Disables the Application Compatibility Engine which checks every process launch against a compatibility database. Speeds up process startup on dev machines with modern software only. Default: enabled.",
-            Tags = ["dev", "compat", "performance", "gpo"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppCompat"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppCompat", "DisableEngine", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppCompat", "DisableEngine")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppCompat", "DisableEngine", 1)],
-        },
-        new TweakDef
-        {
-            Id = "dev-disable-program-compat-telemetry",
-            Label = "Disable Application Telemetry (Compat)",
-            Category = "Developer",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Disables Application Impact Telemetry (AIT) which logs app usage and compatibility events. Reduces background disk and network activity from the compat engine. Default: enabled.",
-            Tags = ["dev", "compat", "telemetry", "gpo"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppCompat"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppCompat", "AITEnable", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppCompat", "AITEnable")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppCompat", "AITEnable", 0)],
-        },
-        new TweakDef
-        {
             Id = "dev-disable-wer-service-dev",
             Label = "Disable Windows Error Reporting Service (Dev)",
             Category = "Developer",
@@ -1256,29 +1161,6 @@ internal static class VsCode
             ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Software\Policies\Microsoft\VisualStudioCode", "UpdateMode", "disabled")],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Policies\Microsoft\VisualStudioCode", "UpdateMode")],
             DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Software\Policies\Microsoft\VisualStudioCode", "UpdateMode", "disabled")],
-        },
-        new TweakDef
-        {
-            Id = "vscode-vsc-disable-telemetry",
-            Label = "Disable VS Code Telemetry (Machine Policy)",
-            Category = "Developer",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description =
-                "Disables VS Code telemetry via HKLM machine-level policy. Applies to all users on the machine. Default: Enabled. Recommended: Disabled.",
-            Tags = ["vscode", "telemetry", "privacy", "machine-policy"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\VSCode"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\VSCode", "EnableTelemetry", 0),
-                RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\VSCode", "telemetry.telemetryLevel", "off"),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\VSCode", "EnableTelemetry"),
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\VSCode", "telemetry.telemetryLevel"),
-            ],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\VSCode", "EnableTelemetry", 0)],
         },
         new TweakDef
         {
@@ -1552,20 +1434,6 @@ internal static class VsCode
         // ── Sprint 47 additions ───────────────────────────────────────────────
         new TweakDef
         {
-            Id = "vscode-policy-crash-reporter",
-            Label = "Disable VS Code Crash Reporter",
-            Category = "Developer",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Blocks VS Code from sending crash reports to Microsoft via group policy.",
-            Tags = ["vscode", "privacy", "telemetry"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\VSCode"],
-            ApplyOps = [RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\VSCode", "enable-crash-reporter", "false")],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\VSCode", "enable-crash-reporter")],
-            DetectOps = [RegOp.CheckString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\VSCode", "enable-crash-reporter", "false")],
-        },
-        new TweakDef
-        {
             Id = "vscode-policy-extension-gallery",
             Label = "Disable VS Code Extension Gallery",
             Category = "Developer",
@@ -1649,20 +1517,6 @@ internal static class VsCode
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\VSCode", "output.linkify", 0)],
         },
         // ── merged from: Wsl.cs ──────────────────────────────────────────────────
-        new TweakDef
-        {
-            Id = "wsl-nested-virt",
-            Label = "WSL Nested Virtualisation",
-            Category = "Virtualization",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Enables nested virtualisation for WSL 2 guests, allowing Docker Desktop, KVM, and other VM workloads inside WSL.",
-            Tags = ["wsl", "virtualisation", "docker"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Virtualization"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss", "EnableNestedVirtualization", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss", "EnableNestedVirtualization")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss", "EnableNestedVirtualization", 1)],
-        },
         new TweakDef
         {
             Id = "wsl-disable-interop",
@@ -1752,21 +1606,6 @@ internal static class VsCode
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows", "DebugConsole", 1)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows", "DebugConsole")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows", "DebugConsole", 1)],
-        },
-        new TweakDef
-        {
-            Id = "wsl-enforce-v2-policy",
-            Label = "Enforce WSL Version 2 as Default (Policy)",
-            Category = "Virtualization",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Enforces WSL version 2 as the default for all new distributions via machine-wide Group Policy. Default: not set. Recommended: version 2.",
-            Tags = ["wsl", "version", "v2", "policy", "default"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Lxss"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Lxss", "DefaultVersion", 2)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Lxss", "DefaultVersion")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Lxss", "DefaultVersion", 2)],
         },
         new TweakDef
         {
@@ -2219,21 +2058,6 @@ internal static class VsCode
         },
         new TweakDef
         {
-            Id = "wsl-dns-tunneling",
-            Label = "Enable WSL DNS Tunneling",
-            Category = "Virtualization",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Enables DNS tunneling in WSL2 so DNS requests are routed through the Windows host. Improves name resolution behind VPNs/proxies.",
-            Tags = ["wsl", "dns", "tunneling", "networking", "vpn"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss", "EnableDnsTunneling", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss", "EnableDnsTunneling")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss", "EnableDnsTunneling", 1)],
-        },
-        new TweakDef
-        {
             Id = "wsl-enable-localhost-forward",
             Label = "Enable WSL Localhost Forwarding",
             Category = "Virtualization",
@@ -2325,21 +2149,6 @@ internal static class VsCode
         },
         new TweakDef
         {
-            Id = "wsl-memory-reclaim",
-            Label = "Enable WSL Auto Memory Reclaim",
-            Category = "Virtualization",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Enables automatic memory reclaim so WSL2 returns unused cached memory to Windows. Reduces host memory pressure. Win11 22H2+.",
-            Tags = ["wsl", "memory", "reclaim", "performance"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss", "EnableAutoMemoryReclaim", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss", "EnableAutoMemoryReclaim")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss", "EnableAutoMemoryReclaim", 1)],
-        },
-        new TweakDef
-        {
             Id = "wsl-mirrored-network",
             Label = "Enable WSL Mirrored Networking",
             Category = "Virtualization",
@@ -2425,7 +2234,7 @@ internal static class PolicyPowerShell
                 {
                     Id = "isedep-block-ise-launch",
                     Label = "Block PowerShell ISE Launch",
-                    Category = "PowerShell",
+                    Category = "Developer",
                     Description =
                         "Blocks launch of the Windows PowerShell ISE (Integrated Scripting Environment), which is end-of-life and lacks modern security controls like AMSI integration.",
                     Tags = ["powershell", "ise", "deprecation", "security", "policy"],
@@ -2442,7 +2251,7 @@ internal static class PolicyPowerShell
                 {
                     Id = "isedep-force-remoting-allsigned",
                     Label = "Block Unsigned Scripts via PS Remoting",
-                    Category = "PowerShell",
+                    Category = "Developer",
                     Description =
                         "Sets the remoting script execution policy to AllSigned, so scripts delivered via WinRM PowerShell remoting sessions must be digitally signed.",
                     Tags = ["powershell", "remoting", "signing", "security", "policy"],
@@ -2459,7 +2268,7 @@ internal static class PolicyPowerShell
                 {
                     Id = "isedep-disable-v2-engine",
                     Label = "Disable PowerShell v2 Engine",
-                    Category = "PowerShell",
+                    Category = "Developer",
                     Description =
                         "Disables the Windows PowerShell version 2 engine (powershell.exe -version 2) which bypasses modern security controls such as AMSI, ETW, and Constrained Language Mode.",
                     Tags = ["powershell", "v2", "downgrade", "security", "policy"],
@@ -2476,7 +2285,7 @@ internal static class PolicyPowerShell
                 {
                     Id = "isedep-enable-protected-event-logging",
                     Label = "Enable Protected Event Logging",
-                    Category = "PowerShell",
+                    Category = "Developer",
                     Description =
                         "Enables Protected Event Logging (PEL) for PowerShell, which encrypts sensitive PowerShell script block log entries at rest using a certificate, protecting them from unauthorized access.",
                     Tags = ["powershell", "event-logging", "encryption", "security", "policy"],
@@ -2493,7 +2302,7 @@ internal static class PolicyPowerShell
                 {
                     Id = "isedep-disable-credential-prompt",
                     Label = "Disable Credential Prompt in PowerShell Sessions",
-                    Category = "PowerShell",
+                    Category = "Developer",
                     Description =
                         "Disables interactive credential prompts within PowerShell sessions, forcing scripts to use pre-provisioned credentials or fail instead of prompting the user.",
                     Tags = ["powershell", "credentials", "prompt", "security", "policy"],
@@ -2508,26 +2317,9 @@ internal static class PolicyPowerShell
                 },
                 new TweakDef
                 {
-                    Id = "isedep-enable-module-logging",
-                    Label = "Enable Module Logging for PowerShell",
-                    Category = "PowerShell",
-                    Description =
-                        "Enables module-level logging for all PowerShell modules by default, ensuring that all custom module invocations are captured in the Windows PowerShell/Operational event log.",
-                    Tags = ["powershell", "module-logging", "audit", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 3,
-                    SafetyRating = 5,
-                    ImpactNote = "All loaded PS module commands logged; log volume scales with module usage.",
-                    ApplyOps = [RegOp.SetDword(Key, "EnableModuleLogging", 1)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "EnableModuleLogging")],
-                    DetectOps = [RegOp.CheckDword(Key, "EnableModuleLogging", 1)],
-                },
-                new TweakDef
-                {
                     Id = "isedep-disable-script-download",
                     Label = "Disable Script Download from Internet in PowerShell",
-                    Category = "PowerShell",
+                    Category = "Developer",
                     Description =
                         "Blocks PowerShell from downloading and executing scripts from internet URIs using Invoke-Expression (IEX) with web requests, a common living-off-the-land attack technique.",
                     Tags = ["powershell", "download-cradle", "iex", "security", "policy"],
@@ -2544,7 +2336,7 @@ internal static class PolicyPowerShell
                 {
                     Id = "isedep-block-ps-dev-mode",
                     Label = "Block PowerShell Developer Mode",
-                    Category = "PowerShell",
+                    Category = "Developer",
                     Description =
                         "Disables the PowerShell developer mode flag that bypasses certain security policies, ensuring that production machines do not inadvertently run in a relaxed-security development mode.",
                     Tags = ["powershell", "developer-mode", "security", "policy"],
@@ -2561,7 +2353,7 @@ internal static class PolicyPowerShell
                 {
                     Id = "isedep-disable-ps-telemetry",
                     Label = "Disable Windows PowerShell 5 Telemetry",
-                    Category = "PowerShell",
+                    Category = "Developer",
                     Description =
                         "Disables usage telemetry collection in Windows PowerShell 5.1, preventing execution metadata and error statistics from being sent to Microsoft.",
                     Tags = ["powershell", "ps5", "telemetry", "privacy", "policy"],
@@ -2578,7 +2370,7 @@ internal static class PolicyPowerShell
                 {
                     Id = "isedep-force-network-restricted-sessions",
                     Label = "Force Network-Restricted PowerShell Remoting Sessions",
-                    Category = "PowerShell",
+                    Category = "Developer",
                     Description =
                         "Forces all incoming PowerShell remoting sessions to run as NetworkRestricted, preventing remotely established sessions from making outbound network connections.",
                     Tags = ["powershell", "remoting", "network-restricted", "hardening", "policy"],
@@ -2607,104 +2399,9 @@ internal static class PolicyPowerShell
         [
             new TweakDef
             {
-                Id = "pspolicy-script-block-logging",
-                Label = "Enable PowerShell Script Block Logging",
-                Category = "PowerShell",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                Description =
-                    "Enables PowerShell Script Block Logging (GPO) so that all script blocks "
-                    + "executed by PowerShell are written to the Operational event log "
-                    + "(Microsoft-Windows-PowerShell/Operational). Essential for threat hunting.",
-                Tags = ["powershell", "logging", "script block", "security", "audit"],
-                RegistryKeys = [ScriptBlockLogging],
-                ApplyOps = [RegOp.SetDword(ScriptBlockLogging, "EnableScriptBlockLogging", 1)],
-                RemoveOps = [RegOp.DeleteValue(ScriptBlockLogging, "EnableScriptBlockLogging")],
-                DetectOps = [RegOp.CheckDword(ScriptBlockLogging, "EnableScriptBlockLogging", 1)],
-            },
-            new TweakDef
-            {
-                Id = "pspolicy-script-invocation-logging",
-                Label = "Enable PowerShell Script Invocation Logging",
-                Category = "PowerShell",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                Description =
-                    "Enables logging of script-block invocation start/stop events in addition "
-                    + "to the raw script text. Adds invocation sequence to event IDs 4104/4105/4106. "
-                    + "EnableScriptBlockInvocationLogging=1.",
-                Tags = ["powershell", "logging", "invocation logging", "security"],
-                RegistryKeys = [ScriptBlockLogging],
-                ApplyOps = [RegOp.SetDword(ScriptBlockLogging, "EnableScriptBlockInvocationLogging", 1)],
-                RemoveOps = [RegOp.DeleteValue(ScriptBlockLogging, "EnableScriptBlockInvocationLogging")],
-                DetectOps = [RegOp.CheckDword(ScriptBlockLogging, "EnableScriptBlockInvocationLogging", 1)],
-            },
-            new TweakDef
-            {
-                Id = "pspolicy-module-logging",
-                Label = "Enable PowerShell Module Logging",
-                Category = "PowerShell",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                Description =
-                    "Enables Module Logging, which records pipeline execution details for "
-                    + "specified (or all) PowerShell modules to the Windows event log. "
-                    + "Helps detect malicious module imports. EnableModuleLogging=1.",
-                Tags = ["powershell", "module logging", "security", "audit"],
-                RegistryKeys = [ModuleLogging],
-                ApplyOps = [RegOp.SetDword(ModuleLogging, "EnableModuleLogging", 1)],
-                RemoveOps = [RegOp.DeleteValue(ModuleLogging, "EnableModuleLogging")],
-                DetectOps = [RegOp.CheckDword(ModuleLogging, "EnableModuleLogging", 1)],
-            },
-            new TweakDef
-            {
-                Id = "pspolicy-transcription-on",
-                Label = "Enable PowerShell Transcription",
-                Category = "PowerShell",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 4,
-                Description =
-                    "Turns on PowerShell Transcription, writing a plain-text record of every "
-                    + "PowerShell session (all commands and output) to a configured output "
-                    + "directory. EnableTranscripting=1.",
-                Tags = ["powershell", "transcription", "logging", "audit"],
-                RegistryKeys = [Transcription],
-                ApplyOps = [RegOp.SetDword(Transcription, "EnableTranscripting", 1)],
-                RemoveOps = [RegOp.DeleteValue(Transcription, "EnableTranscripting")],
-                DetectOps = [RegOp.CheckDword(Transcription, "EnableTranscripting", 1)],
-            },
-            new TweakDef
-            {
-                Id = "pspolicy-transcription-header",
-                Label = "Include Invocation Header in PowerShell Transcripts",
-                Category = "PowerShell",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 4,
-                Description =
-                    "Adds timestamps, username, and invocation details to each PowerShell "
-                    + "transcript header, making audit review significantly easier. "
-                    + "EnableInvocationHeader=1.",
-                Tags = ["powershell", "transcription", "header", "audit"],
-                RegistryKeys = [Transcription],
-                ApplyOps = [RegOp.SetDword(Transcription, "EnableInvocationHeader", 1)],
-                RemoveOps = [RegOp.DeleteValue(Transcription, "EnableInvocationHeader")],
-                DetectOps = [RegOp.CheckDword(Transcription, "EnableInvocationHeader", 1)],
-            },
-            new TweakDef
-            {
                 Id = "pspolicy-transcription-output-path",
                 Label = "Set PowerShell Transcript Output Directory",
-                Category = "PowerShell",
+                Category = "Developer",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 2,
@@ -2723,7 +2420,7 @@ internal static class PolicyPowerShell
             {
                 Id = "pspolicy-disable-ps2-engine",
                 Label = "Disable PowerShell 2.0 Engine",
-                Category = "PowerShell",
+                Category = "Developer",
                 NeedsAdmin = true,
                 CorpSafe = true,
                 ImpactScore = 3,
@@ -2737,63 +2434,6 @@ internal static class PolicyPowerShell
                 ApplyOps = [RegOp.SetDword(PsRoot, "EnablePS2", 0)],
                 RemoveOps = [RegOp.DeleteValue(PsRoot, "EnablePS2")],
                 DetectOps = [RegOp.CheckDword(PsRoot, "EnablePS2", 0)],
-            },
-            new TweakDef
-            {
-                Id = "pspolicy-protected-event-logging",
-                Label = "Enable Protected Event Logging",
-                Category = "PowerShell",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 4,
-                Description =
-                    "Enables Protected Event Logging, which encrypts sensitive event log data "
-                    + "(such as PowerShell credentials in transcripts) using a CMS certificate, "
-                    + "so only authorized readers can decrypt. EnableProtectedEventLogging=1.",
-                Tags = ["powershell", "event log", "encryption", "protected logging", "security"],
-                RegistryKeys = [ProtectedEventLogging],
-                ApplyOps = [RegOp.SetDword(ProtectedEventLogging, "EnableProtectedEventLogging", 1)],
-                RemoveOps = [RegOp.DeleteValue(ProtectedEventLogging, "EnableProtectedEventLogging")],
-                DetectOps = [RegOp.CheckDword(ProtectedEventLogging, "EnableProtectedEventLogging", 1)],
-            },
-            new TweakDef
-            {
-                Id = "pspolicy-enable-scripts",
-                Label = "Enable PowerShell Script Execution (GPO)",
-                Category = "PowerShell",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 4,
-                Description =
-                    "Sets EnableScripts=1 via GPO, activating the policy-controlled execution "
-                    + "policy. Must be enabled before ExecutionPolicy can be enforced via "
-                    + "Group Policy. Set together with pspolicy-require-signed-scripts.",
-                Tags = ["powershell", "execution policy", "scripts", "gpo"],
-                RegistryKeys = [PsRoot],
-                ApplyOps = [RegOp.SetDword(PsRoot, "EnableScripts", 1)],
-                RemoveOps = [RegOp.DeleteValue(PsRoot, "EnableScripts")],
-                DetectOps = [RegOp.CheckDword(PsRoot, "EnableScripts", 1)],
-            },
-            new TweakDef
-            {
-                Id = "pspolicy-require-signed-scripts",
-                Label = "Require Signed PowerShell Scripts (AllSigned)",
-                Category = "PowerShell",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 4,
-                Description =
-                    "Sets ExecutionPolicy=AllSigned via GPO, requiring that all scripts and "
-                    + "configuration files — including local scripts — be signed by a trusted "
-                    + "publisher. Strongest policy-level execution restriction.",
-                Tags = ["powershell", "execution policy", "signed", "allsigned", "security"],
-                RegistryKeys = [PsRoot],
-                ApplyOps = [RegOp.SetString(PsRoot, "ExecutionPolicy", "AllSigned")],
-                RemoveOps = [RegOp.DeleteValue(PsRoot, "ExecutionPolicy")],
-                DetectOps = [RegOp.CheckString(PsRoot, "ExecutionPolicy", "AllSigned")],
             },
         ];
     }
@@ -2810,7 +2450,7 @@ internal static class PolicyPowerShell
                 {
                     Id = "ps7exec-enable-constrained-language",
                     Label = "Enable Constrained Language Mode in PowerShell 7",
-                    Category = "PowerShell",
+                    Category = "Developer",
                     Description =
                         "Enables Constrained Language Mode (CLM) for PowerShell 7 (pwsh), restricting the .NET types and COM objects that scripts can use and mitigating fileless malware execution.",
                     Tags = ["powershell", "ps7", "constrained-language", "security", "policy"],
@@ -2827,7 +2467,7 @@ internal static class PolicyPowerShell
                 {
                     Id = "ps7exec-set-allsigned-policy",
                     Label = "Enforce AllSigned Execution Policy in PowerShell 7",
-                    Category = "PowerShell",
+                    Category = "Developer",
                     Description =
                         "Sets the PowerShell 7 execution policy to AllSigned, requiring all scripts (including local scripts) to be digitally signed by a trusted publisher before execution.",
                     Tags = ["powershell", "ps7", "execution-policy", "signing", "security", "policy"],
@@ -2844,7 +2484,7 @@ internal static class PolicyPowerShell
                 {
                     Id = "ps7exec-disable-remoting",
                     Label = "Disable PowerShell 7 Remoting",
-                    Category = "PowerShell",
+                    Category = "Developer",
                     Description =
                         "Disables PowerShell 7 remoting (WinRM/SSH transport) via policy, preventing pwsh from being used as a remote administration target.",
                     Tags = ["powershell", "ps7", "remoting", "security", "policy"],
@@ -2861,7 +2501,7 @@ internal static class PolicyPowerShell
                 {
                     Id = "ps7exec-disable-implicit-remoting",
                     Label = "Disable PS7 Implicit Remoting Module Import",
-                    Category = "PowerShell",
+                    Category = "Developer",
                     Description =
                         "Disables implicit remoting module imports in PowerShell 7, preventing a script from automatically importing and executing remote commands from untrusted sources.",
                     Tags = ["powershell", "ps7", "implicit-remoting", "security", "policy"],
@@ -2878,7 +2518,7 @@ internal static class PolicyPowerShell
                 {
                     Id = "ps7exec-require-signed-modules",
                     Label = "Require Signed Module Manifests in PowerShell 7",
-                    Category = "PowerShell",
+                    Category = "Developer",
                     Description =
                         "Requires all PowerShell 7 module manifests (.psd1) to be signed by a trusted publisher before the module can be loaded, blocking unsigned third-party modules.",
                     Tags = ["powershell", "ps7", "modules", "signing", "security", "policy"],
@@ -2895,7 +2535,7 @@ internal static class PolicyPowerShell
                 {
                     Id = "ps7exec-block-ps-gallery",
                     Label = "Block PowerShell Gallery Repository in PS7",
-                    Category = "PowerShell",
+                    Category = "Developer",
                     Description =
                         "Disables access to the default PowerShell Gallery online repository in PowerShell 7, forcing module and script installation through an approved internal repository.",
                     Tags = ["powershell", "ps7", "gallery", "policy"],
@@ -2912,7 +2552,7 @@ internal static class PolicyPowerShell
                 {
                     Id = "ps7exec-enable-script-block-logging",
                     Label = "Enable Script Block Logging in PowerShell 7",
-                    Category = "PowerShell",
+                    Category = "Developer",
                     Description =
                         "Enables script block logging in PowerShell 7 to record all script blocks executed to the event log (Microsoft-Windows-PowerShell/Operational), supporting forensic analysis.",
                     Tags = ["powershell", "ps7", "script-block-logging", "audit", "policy"],
@@ -2929,7 +2569,7 @@ internal static class PolicyPowerShell
                 {
                     Id = "ps7exec-enable-invocation-logging",
                     Label = "Enable Script Block Invocation Logging in PS7",
-                    Category = "PowerShell",
+                    Category = "Developer",
                     Description =
                         "Enables verbose script block invocation logging in PowerShell 7, capturing start and stop events for each script block execution for detailed forensic trails.",
                     Tags = ["powershell", "ps7", "invocation-logging", "audit", "policy"],
@@ -2946,7 +2586,7 @@ internal static class PolicyPowerShell
                 {
                     Id = "ps7exec-disable-telemetry",
                     Label = "Disable PowerShell 7 Telemetry",
-                    Category = "PowerShell",
+                    Category = "Developer",
                     Description =
                         "Disables the PowerShell 7 telemetry feature that sends usage statistics (command names, error categories, OS info) to Microsoft via opt-out environment variable enforcement at policy level.",
                     Tags = ["powershell", "ps7", "telemetry", "privacy", "policy"],
@@ -2963,7 +2603,7 @@ internal static class PolicyPowerShell
                 {
                     Id = "ps7exec-disable-update-notif",
                     Label = "Disable PowerShell 7 Update Notifications",
-                    Category = "PowerShell",
+                    Category = "Developer",
                     Description =
                         "Suppresses in-session PowerShell 7 update available notifications that prompt users to download newer versions, deferring updates to a managed patching process.",
                     Tags = ["powershell", "ps7", "update", "notifications", "policy"],
@@ -2989,94 +2629,9 @@ internal static class PolicyPowerShell
             [
                 new TweakDef
                 {
-                    Id = "sbloga-enable-script-block-logging",
-                    Label = "Enable Script Block Logging (Windows PS)",
-                    Category = "PowerShell",
-                    Description =
-                        "Enables PowerShell script block logging for Windows PowerShell 5.1 via the dedicated ScriptBlockLogging policy key, recording all executed script blocks to the PowerShell/Operational event log.",
-                    Tags = ["powershell", "script-block-logging", "audit", "siem", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 5,
-                    SafetyRating = 5,
-                    ImpactNote = "Full script block content logged; essential for threat hunting but increases log volume.",
-                    ApplyOps = [RegOp.SetDword(Key, "EnableScriptBlockLogging", 1)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "EnableScriptBlockLogging")],
-                    DetectOps = [RegOp.CheckDword(Key, "EnableScriptBlockLogging", 1)],
-                },
-                new TweakDef
-                {
-                    Id = "sbloga-enable-invocation-header",
-                    Label = "Enable Script Block Invocation Header Logging",
-                    Category = "PowerShell",
-                    Description =
-                        "Enables logging of the start and stop events for each function/script-block invocation, providing timestamped execution boundaries in the event log.",
-                    Tags = ["powershell", "script-block-logging", "invocation", "audit", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 3,
-                    SafetyRating = 5,
-                    ImpactNote = "Invocation start/stop events logged; detailed execution trail generated.",
-                    ApplyOps = [RegOp.SetDword(Key, "EnableScriptBlockInvocationLogging", 1)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "EnableScriptBlockInvocationLogging")],
-                    DetectOps = [RegOp.CheckDword(Key, "EnableScriptBlockInvocationLogging", 1)],
-                },
-                new TweakDef
-                {
-                    Id = "sbloga-enable-transcription",
-                    Label = "Enable PowerShell Transcript Logging",
-                    Category = "PowerShell",
-                    Description =
-                        "Enables PowerShell session transcription that saves a full text copy of every PowerShell session to a transcript file on disk, providing a human-readable audit trail.",
-                    Tags = ["powershell", "transcription", "audit", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 4,
-                    SafetyRating = 5,
-                    ImpactNote = "Every PS session recorded to transcript file; disk space usage increases with PS activity.",
-                    ApplyOps = [RegOp.SetDword(Key2, "EnableTranscripting", 1)],
-                    RemoveOps = [RegOp.DeleteValue(Key2, "EnableTranscripting")],
-                    DetectOps = [RegOp.CheckDword(Key2, "EnableTranscripting", 1)],
-                },
-                new TweakDef
-                {
-                    Id = "sbloga-enable-invocation-header-transcript",
-                    Label = "Include Invocation Header in PS Transcripts",
-                    Category = "PowerShell",
-                    Description =
-                        "Adds invocation header information (command name, arguments, timestamps, username, process info) to PowerShell transcript files.",
-                    Tags = ["powershell", "transcription", "header", "audit", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 3,
-                    SafetyRating = 5,
-                    ImpactNote = "Transcript files include rich header context for each command.",
-                    ApplyOps = [RegOp.SetDword(Key2, "EnableInvocationHeader", 1)],
-                    RemoveOps = [RegOp.DeleteValue(Key2, "EnableInvocationHeader")],
-                    DetectOps = [RegOp.CheckDword(Key2, "EnableInvocationHeader", 1)],
-                },
-                new TweakDef
-                {
-                    Id = "sbloga-set-output-directory",
-                    Label = "Set Centralised PowerShell Transcript Directory",
-                    Category = "PowerShell",
-                    Description =
-                        "Sets the PowerShell transcript output directory to a centralised network share or admin-controlled path so all endpoint transcripts are collected in one location.",
-                    Tags = ["powershell", "transcription", "directory", "audit", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 4,
-                    SafetyRating = 5,
-                    ImpactNote = "Transcripts written to admin-specified path; ensure path is writable and monitored.",
-                    ApplyOps = [RegOp.SetString(Key2, "OutputDirectory", @"C:\Windows\Logs\PowerShell")],
-                    RemoveOps = [RegOp.DeleteValue(Key2, "OutputDirectory")],
-                    DetectOps = [RegOp.CheckString(Key2, "OutputDirectory", @"C:\Windows\Logs\PowerShell")],
-                },
-                new TweakDef
-                {
                     Id = "sbloga-log-encoded-commands",
                     Label = "Log Encoded PowerShell Command Executions",
-                    Category = "PowerShell",
+                    Category = "Developer",
                     Description =
                         "Enables script block logging specifically targeting Base64-encoded commands (-EncodedCommand), which are commonly used by malware to obfuscate payloads.",
                     Tags = ["powershell", "encoded-commands", "obfuscation", "security", "policy"],
@@ -3093,7 +2648,7 @@ internal static class PolicyPowerShell
                 {
                     Id = "sbloga-log-dynamic-code",
                     Label = "Log Dynamically Generated PowerShell Code",
-                    Category = "PowerShell",
+                    Category = "Developer",
                     Description =
                         "Enables logging of dynamically generated PowerShell code (e.g., from Invoke-Expression or Add-Type), capturing obfuscated payloads that are assembled at runtime.",
                     Tags = ["powershell", "dynamic-code", "invoke-expression", "security", "policy"],
@@ -3110,7 +2665,7 @@ internal static class PolicyPowerShell
                 {
                     Id = "sbloga-set-max-log-size",
                     Label = "Set PowerShell Operational Log Max Size to 512 MB",
-                    Category = "PowerShell",
+                    Category = "Developer",
                     Description =
                         "Increases the Microsoft-Windows-PowerShell/Operational event log maximum size to 512 MB to prevent log overwriting (circular buffer) during high-volume script block logging.",
                     Tags = ["powershell", "event-log", "size", "audit", "policy"],
@@ -3136,7 +2691,7 @@ internal static class PolicyPowerShell
                 {
                     Id = "sbloga-retain-on-clear",
                     Label = "Retain PowerShell Log Archive on Clear",
-                    Category = "PowerShell",
+                    Category = "Developer",
                     Description =
                         "Configures the PowerShell operational event log to archive before clearing when the log becomes full, preventing permanent log loss during log maintenance.",
                     Tags = ["powershell", "event-log", "archive", "audit", "policy"],
@@ -3158,32 +2713,6 @@ internal static class PolicyPowerShell
                         RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\EventLog\PowerShellOperational", "Retention", 0),
                     ],
                 },
-                new TweakDef
-                {
-                    Id = "sbloga-block-clear-eventlog",
-                    Label = "Block Standard Users from Clearing Event Logs",
-                    Category = "PowerShell",
-                    Description =
-                        "Restricts the ability to clear the PowerShell and Windows event logs to administrators only, preventing attackers with standard user access from clearing their tracks.",
-                    Tags = ["powershell", "event-log", "clear", "hardening", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 4,
-                    SafetyRating = 5,
-                    ImpactNote = "Only admins can clear event logs; standard users get access denied.",
-                    ApplyOps =
-                    [
-                        RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\EventLog\Security", "RestrictGuestAccess", 1),
-                    ],
-                    RemoveOps =
-                    [
-                        RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\EventLog\Security", "RestrictGuestAccess"),
-                    ],
-                    DetectOps =
-                    [
-                        RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\EventLog\Security", "RestrictGuestAccess", 1),
-                    ],
-                },
             ];
     }
 
@@ -3200,7 +2729,7 @@ internal static class PolicyPowerShell
             {
                 Id = "sdiag-disable-scripted-diagnostics",
                 Label = "Disable Scripted Diagnostics Execution",
-                Category = "PowerShell",
+                Category = "Developer",
                 Description =
                     "Sets ExecutionPolicy=0 in the ScriptedDiagnostics policy key. "
                     + "Prevents Windows from executing scripted diagnostic packages (.diagpkg, .diag files), "
@@ -3221,7 +2750,7 @@ internal static class PolicyPowerShell
             {
                 Id = "sdiag-disable-online-troubleshooters",
                 Label = "Disable Online Troubleshooting Recommendations",
-                Category = "PowerShell",
+                Category = "Developer",
                 Description =
                     "Sets EnabledPolicy=0 in the ScriptedDiagnosticsProvider Policy key. "
                     + "Prevents Windows from downloading and applying troubleshooting recommendations from Microsoft's "
@@ -3241,7 +2770,7 @@ internal static class PolicyPowerShell
             {
                 Id = "sdiag-disable-recommended-troubleshooting",
                 Label = "Disable Windows Recommended Troubleshooting",
-                Category = "PowerShell",
+                Category = "Developer",
                 Description =
                     "Sets TurnOffWindowsErrorReportingServer=1 in the AllowRecommendations "
                     + "Troubleshooting policy key. Disables the 'Recommended troubleshooting' feature "
@@ -3262,7 +2791,7 @@ internal static class PolicyPowerShell
             {
                 Id = "sdiag-disable-automatic-maintenance-diagnostics",
                 Label = "Disable Automatic Maintenance Diagnostics",
-                Category = "PowerShell",
+                Category = "Developer",
                 Description =
                     "Sets EnableAutomatedTroubleshooting=0 in the ScriptedDiagnostics policy key. "
                     + "Prevents Windows Automatic Maintenance from running scripted diagnostic jobs "
@@ -3283,7 +2812,7 @@ internal static class PolicyPowerShell
             {
                 Id = "sdiag-disable-elevated-troubleshooter",
                 Label = "Disable Elevated Scripted Troubleshooter Execution",
-                Category = "PowerShell",
+                Category = "Developer",
                 Description =
                     "Sets RunAsHighestAvailablePrivilege=0 in the ScriptedDiagnostics policy key. "
                     + "Prevents scripted diagnostic packages from automatically requesting elevation to "
@@ -3304,7 +2833,7 @@ internal static class PolicyPowerShell
             {
                 Id = "sdiag-disable-results-upload",
                 Label = "Disable Diagnostic Results Upload",
-                Category = "PowerShell",
+                Category = "Developer",
                 Description =
                     "Sets AllowDiagnosticDataUpload=0 in the ScriptedDiagnostics policy key. "
                     + "Prevents scripted diagnostic packages from uploading their results logs, "
@@ -3324,7 +2853,7 @@ internal static class PolicyPowerShell
             {
                 Id = "sdiag-disable-user-initiated-troubleshooter",
                 Label = "Block User-Initiated Troubleshooters",
-                Category = "PowerShell",
+                Category = "Developer",
                 Description =
                     "Sets DisableUserDiagnostics=1 in the ScriptedDiagnostics policy key. "
                     + "Prevents non-administrator users from launching troubleshooters from Settings "
@@ -3345,7 +2874,7 @@ internal static class PolicyPowerShell
             {
                 Id = "sdiag-disable-third-party-diagnostics",
                 Label = "Block Third-Party Diagnostic Packages",
-                Category = "PowerShell",
+                Category = "Developer",
                 Description =
                     "Sets AllowThirdPartyDiagnostics=0 in the ScriptedDiagnostics policy key. "
                     + "Prevents Windows from running scripted diagnostic packages (.diagpkg) from publishers "
@@ -3365,7 +2894,7 @@ internal static class PolicyPowerShell
             {
                 Id = "sdiag-disable-scheduled-diagnostics",
                 Label = "Disable Scheduled Diagnostic Tasks",
-                Category = "PowerShell",
+                Category = "Developer",
                 Description =
                     "Sets DisableScheduledDiagnostics=1 in the ScriptedDiagnostics policy key. "
                     + "Prevents the Scheduled Maintenance Diagnostics task scheduler jobs from creating "
@@ -3386,7 +2915,7 @@ internal static class PolicyPowerShell
             {
                 Id = "sdiag-disable-troubleshooting-history",
                 Label = "Disable Troubleshooting History Storage",
-                Category = "PowerShell",
+                Category = "Developer",
                 Description =
                     "Sets DisableTroubleshootingHistory=1 in the ScriptedDiagnostics policy key. "
                     + "Prevents Windows from writing troubleshooter run results and histories to the "
@@ -3418,7 +2947,7 @@ internal static class PolicyPowerShell
                 {
                     Id = "termadv-disable-auto-update",
                     Label = "Disable Windows Terminal Auto-Update",
-                    Category = "PowerShell",
+                    Category = "Developer",
                     Description =
                         "Disables automatic update checks and downloads for Windows Terminal, ensuring the terminal version is managed by WSUS or package management rather than in-app updates.",
                     Tags = ["terminal", "update", "policy"],
@@ -3435,7 +2964,7 @@ internal static class PolicyPowerShell
                 {
                     Id = "termadv-disable-telemetry",
                     Label = "Disable Windows Terminal Telemetry",
-                    Category = "PowerShell",
+                    Category = "Developer",
                     Description =
                         "Disables usage telemetry collection in Windows Terminal including keyboard shortcut usage, profile creation frequency, and renderer performance data.",
                     Tags = ["terminal", "telemetry", "privacy", "policy"],
@@ -3452,7 +2981,7 @@ internal static class PolicyPowerShell
                 {
                     Id = "termadv-disable-store-launch",
                     Label = "Disable Store Launch from Windows Terminal",
-                    Category = "PowerShell",
+                    Category = "Developer",
                     Description =
                         "Prevents Windows Terminal from launching the Microsoft Store for extensions, themes, or profile suggestions, reducing MS Store telemetry exposure.",
                     Tags = ["terminal", "store", "policy"],
@@ -3469,7 +2998,7 @@ internal static class PolicyPowerShell
                 {
                     Id = "termadv-disable-startup-tasks",
                     Label = "Disable Windows Terminal Startup Tasks",
-                    Category = "PowerShell",
+                    Category = "Developer",
                     Description =
                         "Disables Windows Terminal startup task registration that auto-starts terminal on user login, reducing unnecessary background process startup.",
                     Tags = ["terminal", "startup", "policy"],
@@ -3486,7 +3015,7 @@ internal static class PolicyPowerShell
                 {
                     Id = "termadv-enforce-restricted-profile",
                     Label = "Enforce Restricted Profile in Windows Terminal",
-                    Category = "PowerShell",
+                    Category = "Developer",
                     Description =
                         "Enables restricted profile enforcement in Windows Terminal, blocking users from modifying terminal profiles, settings JSON, or key bindings.",
                     Tags = ["terminal", "profile", "restriction", "policy"],
@@ -3503,7 +3032,7 @@ internal static class PolicyPowerShell
                 {
                     Id = "termadv-disable-extensions",
                     Label = "Disable Windows Terminal Extensions",
-                    Category = "PowerShell",
+                    Category = "Developer",
                     Description =
                         "Disables the ability to install or run third-party extensions in Windows Terminal, reducing the attack surface from unvetted extension code execution.",
                     Tags = ["terminal", "extensions", "security", "policy"],
@@ -3520,7 +3049,7 @@ internal static class PolicyPowerShell
                 {
                     Id = "termadv-block-ssh-agent",
                     Label = "Block SSH Agent Integration in Windows Terminal",
-                    Category = "PowerShell",
+                    Category = "Developer",
                     Description =
                         "Disables the SSH agent forwarding integration in Windows Terminal, preventing terminal sessions from forwarding SSH keys to remote hosts.",
                     Tags = ["terminal", "ssh", "agent", "security", "policy"],
@@ -3537,7 +3066,7 @@ internal static class PolicyPowerShell
                 {
                     Id = "termadv-disable-preview-builds",
                     Label = "Disable Windows Terminal Preview Build Channel",
-                    Category = "PowerShell",
+                    Category = "Developer",
                     Description =
                         "Forces Windows Terminal to the stable release channel, disabling the Preview and Canary build channels to ensure only stable, vetted versions are used.",
                     Tags = ["terminal", "preview", "channel", "policy"],
@@ -3554,7 +3083,7 @@ internal static class PolicyPowerShell
                 {
                     Id = "termadv-disable-update-notifications",
                     Label = "Disable Update Notifications in Windows Terminal",
-                    Category = "PowerShell",
+                    Category = "Developer",
                     Description =
                         "Suppresses in-app update available notifications in Windows Terminal, which can distract users and prompt unauthorized manual updates.",
                     Tags = ["terminal", "update", "notifications", "policy"],
@@ -3571,7 +3100,7 @@ internal static class PolicyPowerShell
                 {
                     Id = "termadv-block-manual-updates",
                     Label = "Block Manual Windows Terminal Updates by Users",
-                    Category = "PowerShell",
+                    Category = "Developer",
                     Description =
                         "Prevents standard users from triggering manual Windows Terminal update checks or downloads, ensuring that all terminal update operations require administrator rights.",
                     Tags = ["terminal", "update", "restriction", "policy"],
@@ -3592,41 +3121,6 @@ internal static class PackageManagement
 {
     internal static IReadOnlyList<TweakDef> Tweaks { get; } =
     [
-        new TweakDef
-        {
-            Id = "pkg-disable-suggested-apps",
-            Label = "Disable Suggested App Installations",
-            Category = "Developer",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Prevents Windows from silently installing suggested apps. Default: Enabled. Recommended: Disabled.",
-            Tags = ["packages", "suggested", "bloatware"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager"],
-            ApplyOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
-                    "SilentInstalledAppsEnabled",
-                    0
-                ),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
-                    "SilentInstalledAppsEnabled",
-                    1
-                ),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(
-                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
-                    "SilentInstalledAppsEnabled",
-                    0
-                ),
-            ],
-        },
         new TweakDef
         {
             Id = "pkg-disable-winget-auto-update",
@@ -4204,21 +3698,6 @@ internal static class ScoopTools
         },
         new TweakDef
         {
-            Id = "scoop-set-global-install-path",
-            Label = "Set Scoop Global Install Path",
-            Category = "Developer",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Sets the Scoop global apps install directory to C:\\ScoopGlobal. Keeps system programs organised. Default: %ProgramData%\\scoop.",
-            Tags = ["scoop", "global", "install-path", "directory"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Environment"],
-            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Environment", "SCOOP_GLOBAL", @"C:\ScoopGlobal")],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Environment", "SCOOP_GLOBAL")],
-            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Environment", "SCOOP_GLOBAL", @"C:\ScoopGlobal")],
-        },
-        new TweakDef
-        {
             Id = "scoop-set-virustotal-api-key",
             Label = "Set Scoop VirusTotal API Key Variable",
             Category = "Developer",
@@ -4698,25 +4177,6 @@ internal static class Java
         },
         new TweakDef
         {
-            Id = "java-disable-console-output",
-            Label = "Disable Java Console Output",
-            Category = "Developer",
-            NeedsAdmin = true,
-            Description = "Hides the Java console for deployed applications. Reduces clutter for end users. Default: show console.",
-            Tags = ["java", "console", "output"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties"],
-            ApplyOps =
-            [
-                RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties", "deployment.console.startup.mode", "HIDE"),
-            ],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties", "deployment.console.startup.mode")],
-            DetectOps =
-            [
-                RegOp.CheckString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\JavaSoft\DeploymentProperties", "deployment.console.startup.mode", "HIDE"),
-            ],
-        },
-        new TweakDef
-        {
             Id = "java-set-proxy-direct",
             Label = "Set Java Proxy to Direct (No Proxy)",
             Category = "Developer",
@@ -5167,7 +4627,7 @@ internal static class WindowsTerminal
         {
             Id = "term-enable-console-v2",
             Label = "Enable Console V2 Host",
-            Category = "PowerShell",
+            Category = "Developer",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -5182,7 +4642,7 @@ internal static class WindowsTerminal
         {
             Id = "term-disable-quick-edit",
             Label = "Disable Quick Edit Mode",
-            Category = "PowerShell",
+            Category = "Developer",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -5197,7 +4657,7 @@ internal static class WindowsTerminal
         {
             Id = "term-enable-insert-mode",
             Label = "Enable Insert Mode by Default",
-            Category = "PowerShell",
+            Category = "Developer",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Sets insert mode as the default typing mode in consoles. Default: 1 (insert). Recommended: 1.",
@@ -5211,7 +4671,7 @@ internal static class WindowsTerminal
         {
             Id = "term-enable-line-wrap",
             Label = "Enable Line Wrapping",
-            Category = "PowerShell",
+            Category = "Developer",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Enables automatic line wrapping when resizing the console. Default: 1. Recommended: 1.",
@@ -5225,7 +4685,7 @@ internal static class WindowsTerminal
         {
             Id = "term-disable-legacy-console",
             Label = "Disable Legacy Console Mode",
-            Category = "PowerShell",
+            Category = "Developer",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -5238,34 +4698,9 @@ internal static class WindowsTerminal
         },
         new TweakDef
         {
-            Id = "term-enable-ctrl-cv",
-            Label = "Enable Ctrl+Shift+C/V Copy-Paste",
-            Category = "PowerShell",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Enables Ctrl+Shift+C / Ctrl+Shift+V clipboard shortcuts in the classic console. Also enables filter-on-paste and line selection. Default: enabled. Recommended: enabled.",
-            Tags = ["terminal", "copy", "paste", "keyboard", "shortcuts"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Console"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Console", "CtrlKeyShortcutsDisabled", 0),
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Console", "FilterOnPaste", 1),
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Console", "LineSelection", 1),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Console", "CtrlKeyShortcutsDisabled"),
-                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Console", "FilterOnPaste"),
-                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Console", "LineSelection"),
-            ],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Console", "CtrlKeyShortcutsDisabled", 0)],
-        },
-        new TweakDef
-        {
             Id = "term-set-window-opacity",
             Label = "Set Console Window Opacity (95%)",
-            Category = "PowerShell",
+            Category = "Developer",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Sets console window to 95% opacity for slight transparency. Default: 255 (opaque). Recommended: 242 (95%).",
@@ -5279,7 +4714,7 @@ internal static class WindowsTerminal
         {
             Id = "term-set-default-wt",
             Label = "Set Default Terminal to Windows Terminal (Win11)",
-            Category = "PowerShell",
+            Category = "Developer",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -5298,7 +4733,7 @@ internal static class WindowsTerminal
         {
             Id = "term-disable-splash",
             Label = "Disable Terminal Splash Screen",
-            Category = "PowerShell",
+            Category = "Developer",
             NeedsAdmin = true,
             CorpSafe = false,
             Description =
@@ -5311,23 +4746,9 @@ internal static class WindowsTerminal
         },
         new TweakDef
         {
-            Id = "term-set-default-terminal-wt",
-            Label = "Set Windows Terminal as Default Console App",
-            Category = "PowerShell",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Sets Windows Terminal as the default terminal application for all console programs. Default: Windows Console Host.",
-            Tags = ["terminal", "default", "console", "wt"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Console\%%Startup"],
-            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Console\%%Startup", "DelegationConsole", "{2EACA947-7F5F-4CFA-BA87-8F7FBEEFBE69}")],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Console\%%Startup", "DelegationConsole")],
-            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Console\%%Startup", "DelegationConsole", "{2EACA947-7F5F-4CFA-BA87-8F7FBEEFBE69}")],
-        },
-        new TweakDef
-        {
             Id = "term-enable-acrylic-background",
             Label = "Enable Terminal Acrylic Background via Policy",
-            Category = "PowerShell",
+            Category = "Developer",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Enables acrylic (translucent) background in Windows Terminal via machine policy. Default: disabled.",
@@ -5341,7 +4762,7 @@ internal static class WindowsTerminal
         {
             Id = "term-disable-bell",
             Label = "Disable Terminal Bell Sound via Policy",
-            Category = "PowerShell",
+            Category = "Developer",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables the bell (beep) sound in Windows Terminal. Default: enabled.",
@@ -5355,7 +4776,7 @@ internal static class WindowsTerminal
         {
             Id = "term-set-default-profile-pwsh",
             Label = "Set Default Shell to PowerShell 7 via Policy",
-            Category = "PowerShell",
+            Category = "Developer",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Sets the default shell profile in Windows Terminal to PowerShell 7 via machine policy. Default: Windows PowerShell 5.1.",
@@ -5381,23 +4802,9 @@ internal static class WindowsTerminal
         },
         new TweakDef
         {
-            Id = "term-disable-automatic-updates",
-            Label = "Disable Windows Terminal Auto-Update",
-            Category = "PowerShell",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables automatic updates for Windows Terminal. Use winget or manual update instead. Default: auto-update.",
-            Tags = ["terminal", "update", "auto", "disable"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsTerminal"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsTerminal", "DisableAutoUpdate", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsTerminal", "DisableAutoUpdate")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsTerminal", "DisableAutoUpdate", 1)],
-        },
-        new TweakDef
-        {
             Id = "term-campbell-color-scheme",
             Label = "Set Windows Terminal Campbell Theme",
-            Category = "PowerShell",
+            Category = "Developer",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -5412,7 +4819,7 @@ internal static class WindowsTerminal
         {
             Id = "term-default-windows-terminal",
             Label = "Set Windows Terminal as Default Console",
-            Category = "PowerShell",
+            Category = "Developer",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -5427,7 +4834,7 @@ internal static class WindowsTerminal
         {
             Id = "term-enable-always-on-top",
             Label = "Enable Terminal Always On Top",
-            Category = "PowerShell",
+            Category = "Developer",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -5440,23 +4847,9 @@ internal static class WindowsTerminal
         },
         new TweakDef
         {
-            Id = "term-large-buffer",
-            Label = "Set Terminal Large Scrollback Buffer",
-            Category = "PowerShell",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Increases the console scrollback buffer to 9999 lines. Allows reviewing more terminal output history. Default: 300 lines.",
-            Tags = ["terminal", "buffer", "scrollback", "history"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Console"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Console", "HistoryBufferSize", 9999)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Console", "HistoryBufferSize", 300)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Console", "HistoryBufferSize", 9999)],
-        },
-        new TweakDef
-        {
             Id = "term-set-cursor-block",
             Label = "Set Terminal Block Cursor",
-            Category = "PowerShell",
+            Category = "Developer",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Sets the console cursor shape to a solid block. More visible than the default underscore cursor. Default: underscore.",
@@ -5470,7 +4863,7 @@ internal static class WindowsTerminal
         {
             Id = "term-set-font-weight-bold",
             Label = "Set Console Font Weight to Bold",
-            Category = "PowerShell",
+            Category = "Developer",
             NeedsAdmin = false,
             Description = "Sets the console font weight to bold (700). Improves readability on high-DPI displays. Default: normal (400).",
             Tags = ["console", "font", "bold", "terminal"],
@@ -5483,7 +4876,7 @@ internal static class WindowsTerminal
         {
             Id = "term-disable-scroll-forward",
             Label = "Disable Forward Scrolling",
-            Category = "PowerShell",
+            Category = "Developer",
             NeedsAdmin = false,
             Description = "Disables the ability to scroll forward past the current output. Default: enabled.",
             Tags = ["console", "scroll", "terminal"],
@@ -5496,7 +4889,7 @@ internal static class WindowsTerminal
         {
             Id = "term-disable-ctrl-key-shortcuts",
             Label = "Disable Ctrl Key Shortcuts",
-            Category = "PowerShell",
+            Category = "Developer",
             NeedsAdmin = false,
             Description = "Disables Ctrl+C/Ctrl+V shortcuts in the legacy console host. Useful when Ctrl+C is needed for SIGINT. Default: enabled.",
             Tags = ["console", "ctrl", "shortcuts", "terminal"],
@@ -5509,7 +4902,7 @@ internal static class WindowsTerminal
         {
             Id = "term-enable-trim-leading-zeros",
             Label = "Enable Trim Leading Zeros",
-            Category = "PowerShell",
+            Category = "Developer",
             NeedsAdmin = false,
             Description = "Trims leading zeros when double-clicking to select numbers in the console. Default: disabled.",
             Tags = ["console", "selection", "terminal"],
@@ -5520,22 +4913,9 @@ internal static class WindowsTerminal
         },
         new TweakDef
         {
-            Id = "term-set-history-buffer-999",
-            Label = "Set History Buffer Size to 999",
-            Category = "PowerShell",
-            NeedsAdmin = false,
-            Description = "Increases the command history buffer to 999 entries (maximum). Default: 50.",
-            Tags = ["console", "history", "buffer", "terminal"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Console"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Console", "HistoryBufferSize", 999)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Console", "HistoryBufferSize")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Console", "HistoryBufferSize", 999)],
-        },
-        new TweakDef
-        {
             Id = "term-disable-number-of-history-buffers",
             Label = "Set Number of History Buffers to 4",
-            Category = "PowerShell",
+            Category = "Developer",
             NeedsAdmin = false,
             Description = "Sets the number of history buffers to 4 (one per console process). Default: 4.",
             Tags = ["console", "history", "buffer", "terminal"],
@@ -5562,7 +4942,7 @@ internal static class PowerShellTweaks
         {
             Id = "ps-disable-print-spooler",
             Label = "Disable Print Spooler Service",
-            Category = "PowerShell",
+            Category = "Developer",
             NeedsAdmin = true,
             CorpSafe = false,
             KindHint = TweakKind.ServiceControl,
@@ -5584,7 +4964,7 @@ internal static class PowerShellTweaks
         {
             Id = "ps-disable-remote-registry",
             Label = "Disable Remote Registry Service",
-            Category = "PowerShell",
+            Category = "Developer",
             NeedsAdmin = true,
             CorpSafe = false,
             KindHint = TweakKind.ServiceControl,
@@ -5605,7 +4985,7 @@ internal static class PowerShellTweaks
         {
             Id = "ps-disable-fax-service",
             Label = "Disable Fax Service",
-            Category = "PowerShell",
+            Category = "Developer",
             NeedsAdmin = true,
             CorpSafe = true,
             KindHint = TweakKind.ServiceControl,
@@ -5624,7 +5004,7 @@ internal static class PowerShellTweaks
         {
             Id = "ps-disable-xbox-services",
             Label = "Disable Xbox Live Services",
-            Category = "PowerShell",
+            Category = "Developer",
             NeedsAdmin = true,
             CorpSafe = true,
             KindHint = TweakKind.ServiceControl,
@@ -5649,7 +5029,7 @@ internal static class PowerShellTweaks
         {
             Id = "ps-clear-temp-files",
             Label = "Clear Temporary Files",
-            Category = "PowerShell",
+            Category = "Developer",
             NeedsAdmin = false,
             CorpSafe = true,
             KindHint = TweakKind.PowerShell,
@@ -5675,7 +5055,7 @@ internal static class PowerShellTweaks
         {
             Id = "ps-flush-dns-cache",
             Label = "Flush DNS Cache",
-            Category = "PowerShell",
+            Category = "Developer",
             NeedsAdmin = true,
             CorpSafe = true,
             KindHint = TweakKind.PowerShell,
@@ -5689,7 +5069,7 @@ internal static class PowerShellTweaks
         {
             Id = "ps-disable-diagnostics-hub",
             Label = "Disable Diagnostics Hub Service",
-            Category = "PowerShell",
+            Category = "Developer",
             NeedsAdmin = true,
             CorpSafe = true,
             KindHint = TweakKind.ServiceControl,
@@ -5716,7 +5096,7 @@ internal static class PowerShellTweaks
         {
             Id = "ps-disable-wmp-network-sharing",
             Label = "Disable WMP Network Sharing Service",
-            Category = "PowerShell",
+            Category = "Developer",
             NeedsAdmin = true,
             CorpSafe = true,
             KindHint = TweakKind.ServiceControl,
@@ -5738,7 +5118,7 @@ internal static class PowerShellTweaks
         {
             Id = "ps-disable-geolocation-service",
             Label = "Disable Geolocation Service",
-            Category = "PowerShell",
+            Category = "Developer",
             NeedsAdmin = true,
             CorpSafe = true,
             KindHint = TweakKind.ServiceControl,
@@ -5759,7 +5139,7 @@ internal static class PowerShellTweaks
         {
             Id = "ps-disable-connected-user-experience",
             Label = "Disable Connected User Experience (DiagTrack)",
-            Category = "PowerShell",
+            Category = "Developer",
             NeedsAdmin = true,
             CorpSafe = true,
             KindHint = TweakKind.ServiceControl,
@@ -5783,7 +5163,7 @@ internal static class PowerShellTweaks
         {
             Id = "ps-disable-dmwappush-service",
             Label = "Disable Device Management WAP Push Service",
-            Category = "PowerShell",
+            Category = "Developer",
             NeedsAdmin = true,
             CorpSafe = false,
             KindHint = TweakKind.ServiceControl,
@@ -5805,7 +5185,7 @@ internal static class PowerShellTweaks
         {
             Id = "ps-optimize-network-adapter",
             Label = "Optimize Network Adapter Power Settings",
-            Category = "PowerShell",
+            Category = "Developer",
             NeedsAdmin = true,
             CorpSafe = true,
             KindHint = TweakKind.PowerShell,
@@ -5827,7 +5207,7 @@ internal static class PowerShellTweaks
         {
             Id = "ps-disable-execution-policy-restriction",
             Label = "Set PowerShell Execution Policy to RemoteSigned",
-            Category = "PowerShell",
+            Category = "Developer",
             NeedsAdmin = true,
             CorpSafe = true,
             KindHint = TweakKind.PowerShell,
@@ -5848,7 +5228,7 @@ internal static class PowerShellTweaks
         {
             Id = "ps-enable-remoting",
             Label = "Enable PowerShell Remoting",
-            Category = "PowerShell",
+            Category = "Developer",
             NeedsAdmin = true,
             CorpSafe = false,
             KindHint = TweakKind.PowerShell,
@@ -5866,7 +5246,7 @@ internal static class PowerShellTweaks
         {
             Id = "ps-disable-telemetry",
             Label = "Disable PowerShell Telemetry",
-            Category = "PowerShell",
+            Category = "Developer",
             NeedsAdmin = false,
             CorpSafe = true,
             KindHint = TweakKind.PowerShell,
@@ -5881,7 +5261,7 @@ internal static class PowerShellTweaks
         {
             Id = "ps-enable-constrained-language-mode",
             Label = "Enable PowerShell Constrained Language Mode",
-            Category = "PowerShell",
+            Category = "Developer",
             NeedsAdmin = false,
             CorpSafe = false,
             KindHint = TweakKind.PowerShell,
@@ -5896,7 +5276,7 @@ internal static class PowerShellTweaks
         {
             Id = "ps-set-transcript-logging",
             Label = "Disable PowerShell Transcription Logging",
-            Category = "PowerShell",
+            Category = "Developer",
             NeedsAdmin = true,
             CorpSafe = false,
             KindHint = TweakKind.PowerShell,
@@ -5916,7 +5296,7 @@ internal static class PowerShellTweaks
         {
             Id = "ps-enable-protected-event-logging",
             Label = "Enable Protected Event Logging",
-            Category = "PowerShell",
+            Category = "Developer",
             NeedsAdmin = true,
             CorpSafe = true,
             KindHint = TweakKind.PowerShell,
@@ -5937,7 +5317,7 @@ internal static class PowerShellTweaks
         {
             Id = "ps-disable-clipboard-history-via-ps",
             Label = "Disable Clipboard History via Policy",
-            Category = "PowerShell",
+            Category = "Developer",
             NeedsAdmin = true,
             CorpSafe = false,
             KindHint = TweakKind.PowerShell,
@@ -5957,7 +5337,7 @@ internal static class PowerShellTweaks
         {
             Id = "ps-optimize-page-file",
             Label = "Set Page File to System-Managed",
-            Category = "PowerShell",
+            Category = "Developer",
             NeedsAdmin = true,
             CorpSafe = true,
             KindHint = TweakKind.PowerShell,
@@ -5972,7 +5352,7 @@ internal static class PowerShellTweaks
         {
             Id = "ps-enable-tls12",
             Label = "Enable TLS 1.2 for .NET Applications",
-            Category = "PowerShell",
+            Category = "Developer",
             NeedsAdmin = true,
             CorpSafe = true,
             KindHint = TweakKind.PowerShell,
@@ -5995,7 +5375,7 @@ internal static class PowerShellTweaks
         {
             Id = "ps-disable-powershell-v2-engine",
             Label = "Disable PowerShell v2 Engine (Attack Surface Reduction)",
-            Category = "PowerShell",
+            Category = "Developer",
             NeedsAdmin = true,
             CorpSafe = true,
             KindHint = TweakKind.SystemCommand,
@@ -6016,7 +5396,7 @@ internal static class PowerShellTweaks
         {
             Id = "ps-enable-windows-sandbox",
             Label = "Enable Windows Sandbox (Disposable Isolated Environment)",
-            Category = "PowerShell",
+            Category = "Developer",
             NeedsAdmin = true,
             CorpSafe = true,
             KindHint = TweakKind.SystemCommand,
@@ -6039,7 +5419,7 @@ internal static class PowerShellTweaks
         {
             Id = "ps-enable-controlled-folder-access",
             Label = "Enable Controlled Folder Access (Ransomware Protection)",
-            Category = "PowerShell",
+            Category = "Developer",
             NeedsAdmin = true,
             CorpSafe = true,
             KindHint = TweakKind.PowerShell,
@@ -6058,7 +5438,7 @@ internal static class PowerShellTweaks
         {
             Id = "ps-enable-network-protection",
             Label = "Enable Windows Defender Network Protection",
-            Category = "PowerShell",
+            Category = "Developer",
             NeedsAdmin = true,
             CorpSafe = true,
             KindHint = TweakKind.PowerShell,
@@ -6077,7 +5457,7 @@ internal static class PowerShellTweaks
         {
             Id = "ps-set-defender-scan-cpu-limit",
             Label = "Limit Defender Scans to 50% CPU Average",
-            Category = "PowerShell",
+            Category = "Developer",
             NeedsAdmin = true,
             CorpSafe = true,
             KindHint = TweakKind.PowerShell,
@@ -6096,7 +5476,7 @@ internal static class PowerShellTweaks
         {
             Id = "ps-enable-smb-signing-server",
             Label = "Require SMB Signing on This Server (via PowerShell)",
-            Category = "PowerShell",
+            Category = "Developer",
             NeedsAdmin = true,
             CorpSafe = true,
             KindHint = TweakKind.PowerShell,
@@ -6115,7 +5495,7 @@ internal static class PowerShellTweaks
         {
             Id = "ps-enable-smb-signing-client",
             Label = "Require SMB Signing on This Client (via PowerShell)",
-            Category = "PowerShell",
+            Category = "Developer",
             NeedsAdmin = true,
             CorpSafe = true,
             KindHint = TweakKind.PowerShell,
@@ -6134,7 +5514,7 @@ internal static class PowerShellTweaks
         {
             Id = "ps-disable-smb-guest-fallback",
             Label = "Disable SMB Insecure Guest Logon Fallback",
-            Category = "PowerShell",
+            Category = "Developer",
             NeedsAdmin = true,
             CorpSafe = true,
             KindHint = TweakKind.PowerShell,
@@ -6153,7 +5533,7 @@ internal static class PowerShellTweaks
         {
             Id = "ps-enable-smb-encryption-server",
             Label = "Enable SMB Encryption on This Server (via PowerShell)",
-            Category = "PowerShell",
+            Category = "Developer",
             NeedsAdmin = true,
             CorpSafe = true,
             KindHint = TweakKind.PowerShell,
@@ -6172,7 +5552,7 @@ internal static class PowerShellTweaks
         {
             Id = "ps-disable-teredo",
             Label = "Disable Teredo IPv6 Tunnelling",
-            Category = "PowerShell",
+            Category = "Developer",
             NeedsAdmin = true,
             CorpSafe = true,
             KindHint = TweakKind.SystemCommand,
@@ -6191,7 +5571,7 @@ internal static class PowerShellTweaks
         {
             Id = "ps-disable-6to4",
             Label = "Disable 6to4 IPv6 Transition Protocol",
-            Category = "PowerShell",
+            Category = "Developer",
             NeedsAdmin = true,
             CorpSafe = true,
             KindHint = TweakKind.SystemCommand,
@@ -6210,7 +5590,7 @@ internal static class PowerShellTweaks
         {
             Id = "ps-disable-isatap",
             Label = "Disable ISATAP IPv6 Transition Interface",
-            Category = "PowerShell",
+            Category = "Developer",
             NeedsAdmin = true,
             CorpSafe = true,
             KindHint = TweakKind.SystemCommand,
@@ -6229,7 +5609,7 @@ internal static class PowerShellTweaks
         {
             Id = "ps-enable-defender-realtime",
             Label = "Ensure Windows Defender Realtime Protection is On",
-            Category = "PowerShell",
+            Category = "Developer",
             NeedsAdmin = true,
             CorpSafe = true,
             KindHint = TweakKind.PowerShell,
@@ -6258,7 +5638,7 @@ internal static class CommandLineTweaks
         {
             Id = "cmd-disable-hyper-v-hypervisor",
             Label = "Disable Hyper-V Hypervisor (bcdedit)",
-            Category = "PowerShell",
+            Category = "Developer",
             NeedsAdmin = true,
             CorpSafe = false,
             KindHint = TweakKind.SystemCommand,
@@ -6277,7 +5657,7 @@ internal static class CommandLineTweaks
         {
             Id = "cmd-enable-boot-log",
             Label = "Enable Boot Log (bcdedit)",
-            Category = "PowerShell",
+            Category = "Developer",
             NeedsAdmin = true,
             CorpSafe = true,
             KindHint = TweakKind.SystemCommand,
@@ -6295,7 +5675,7 @@ internal static class CommandLineTweaks
         {
             Id = "cmd-increase-tscsyncpolicy",
             Label = "Set TSC Sync Policy to Enhanced (bcdedit)",
-            Category = "PowerShell",
+            Category = "Developer",
             NeedsAdmin = true,
             CorpSafe = true,
             KindHint = TweakKind.SystemCommand,
@@ -6313,7 +5693,7 @@ internal static class CommandLineTweaks
         {
             Id = "cmd-disable-dynamic-tick",
             Label = "Disable Dynamic Tick (bcdedit)",
-            Category = "PowerShell",
+            Category = "Developer",
             NeedsAdmin = true,
             CorpSafe = false,
             KindHint = TweakKind.SystemCommand,
@@ -6332,7 +5712,7 @@ internal static class CommandLineTweaks
         {
             Id = "cmd-set-platform-tick-high",
             Label = "Force Platform Clock to High Resolution (bcdedit)",
-            Category = "PowerShell",
+            Category = "Developer",
             NeedsAdmin = true,
             CorpSafe = false,
             KindHint = TweakKind.SystemCommand,
@@ -6351,7 +5731,7 @@ internal static class CommandLineTweaks
         {
             Id = "cmd-disable-netbios-over-tcpip",
             Label = "Disable NetBIOS over TCP/IP (netsh)",
-            Category = "PowerShell",
+            Category = "Developer",
             NeedsAdmin = true,
             CorpSafe = false,
             KindHint = TweakKind.SystemCommand,
@@ -6373,7 +5753,7 @@ internal static class CommandLineTweaks
         {
             Id = "cmd-enable-tcp-autotuning",
             Label = "Set TCP Auto-Tuning to Normal (netsh)",
-            Category = "PowerShell",
+            Category = "Developer",
             NeedsAdmin = true,
             CorpSafe = true,
             KindHint = TweakKind.SystemCommand,
@@ -6392,7 +5772,7 @@ internal static class CommandLineTweaks
         {
             Id = "cmd-enable-rss",
             Label = "Enable Receive Side Scaling (netsh)",
-            Category = "PowerShell",
+            Category = "Developer",
             NeedsAdmin = true,
             CorpSafe = true,
             KindHint = TweakKind.SystemCommand,
@@ -6411,7 +5791,7 @@ internal static class CommandLineTweaks
         {
             Id = "cmd-disable-tcp-timestamps",
             Label = "Disable TCP Timestamps (netsh)",
-            Category = "PowerShell",
+            Category = "Developer",
             NeedsAdmin = true,
             CorpSafe = false,
             KindHint = TweakKind.SystemCommand,
@@ -6430,7 +5810,7 @@ internal static class CommandLineTweaks
         {
             Id = "cmd-enable-ecn",
             Label = "Enable ECN Capability (netsh)",
-            Category = "PowerShell",
+            Category = "Developer",
             NeedsAdmin = true,
             CorpSafe = true,
             KindHint = TweakKind.SystemCommand,
@@ -6450,7 +5830,7 @@ internal static class CommandLineTweaks
         {
             Id = "cmd-set-ultimate-perf-plan",
             Label = "Activate Ultimate Performance Power Plan (powercfg)",
-            Category = "PowerShell",
+            Category = "Developer",
             NeedsAdmin = true,
             CorpSafe = true,
             KindHint = TweakKind.SystemCommand,
@@ -6477,7 +5857,7 @@ internal static class CommandLineTweaks
         {
             Id = "cmd-disable-usb-selective-suspend",
             Label = "Disable USB Selective Suspend (powercfg)",
-            Category = "PowerShell",
+            Category = "Developer",
             NeedsAdmin = true,
             CorpSafe = true,
             KindHint = TweakKind.SystemCommand,
@@ -6520,7 +5900,7 @@ internal static class CommandLineTweaks
         {
             Id = "cmd-disable-ie-feature",
             Label = "Disable Internet Explorer (DISM)",
-            Category = "PowerShell",
+            Category = "Developer",
             NeedsAdmin = true,
             CorpSafe = true,
             KindHint = TweakKind.SystemCommand,
@@ -6540,7 +5920,7 @@ internal static class CommandLineTweaks
         {
             Id = "cmd-enable-sandbox",
             Label = "Enable Windows Sandbox (DISM)",
-            Category = "PowerShell",
+            Category = "Developer",
             NeedsAdmin = true,
             CorpSafe = true,
             KindHint = TweakKind.SystemCommand,
@@ -6561,7 +5941,7 @@ internal static class CommandLineTweaks
         {
             Id = "cmd-enable-net35",
             Label = "Enable .NET Framework 3.5",
-            Category = "PowerShell",
+            Category = "Developer",
             NeedsAdmin = true,
             CorpSafe = true,
             KindHint = TweakKind.SystemCommand,
@@ -6580,7 +5960,7 @@ internal static class CommandLineTweaks
         {
             Id = "cmd-disable-ipv6-tunnel-adapters",
             Label = "Disable IPv6 Tunnel Adapters (6to4, ISATAP, Teredo)",
-            Category = "PowerShell",
+            Category = "Developer",
             NeedsAdmin = true,
             CorpSafe = false,
             KindHint = TweakKind.SystemCommand,
@@ -6604,7 +5984,7 @@ internal static class CommandLineTweaks
         {
             Id = "cmd-enable-ntp-high-freq",
             Label = "Set NTP Polling to High Frequency",
-            Category = "PowerShell",
+            Category = "Developer",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Configures the Windows Time service to poll NTP servers more frequently (every 256s instead of 3600s).",
@@ -6626,7 +6006,7 @@ internal static class CommandLineTweaks
         {
             Id = "cmd-set-multi-plane-overlay",
             Label = "Enable Multi-Plane Overlay (MPO)",
-            Category = "PowerShell",
+            Category = "Developer",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Ensures Multi-Plane Overlay is enabled for GPU composition offloading, reducing CPU usage.",

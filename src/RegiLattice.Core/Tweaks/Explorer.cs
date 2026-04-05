@@ -8,73 +8,9 @@ internal static class Explorer
     [
         new TweakDef
         {
-            Id = "explorer-show-hidden-files",
-            Label = "Show Hidden Files",
-            Category = "Explorer",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Shows hidden files and folders in Explorer.",
-            Tags = ["explorer", "files"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "Hidden", 1)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "Hidden", 2)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "Hidden", 1)],
-        },
-        new TweakDef
-        {
-            Id = "explorer-open-this-pc",
-            Label = "Open Explorer to This PC",
-            Category = "Explorer",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Opens File Explorer to 'This PC' instead of Quick Access.",
-            Tags = ["explorer", "navigation"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "LaunchTo", 1)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "LaunchTo", 2)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "LaunchTo", 1)],
-        },
-        new TweakDef
-        {
-            Id = "explorer-disable-thumbnails",
-            Label = "Disable Folder Thumbnails",
-            Category = "Explorer",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Shows icons instead of thumbnails for faster folder browsing.",
-            Tags = ["explorer", "performance"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "IconsOnly", 1)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "IconsOnly", 0)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "IconsOnly", 1)],
-        },
-        new TweakDef
-        {
-            Id = "explorer-disable-recent-files",
-            Label = "Disable Recent Files in Quick Access",
-            Category = "Explorer",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Disables recent and frequent files from appearing in Quick Access.",
-            Tags = ["explorer", "privacy"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer", "ShowRecent", 0),
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer", "ShowFrequent", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer", "ShowRecent", 1),
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer", "ShowFrequent", 1),
-            ],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer", "ShowRecent", 0)],
-        },
-        new TweakDef
-        {
             Id = "explorer-disable-search-history",
             Label = "Disable Search History",
-            Category = "Explorer",
+            Category = "System",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Prevents Windows from storing device search history.",
@@ -97,7 +33,7 @@ internal static class Explorer
         {
             Id = "explorer-disable-gallery",
             Label = "Disable Gallery in Nav Pane",
-            Category = "Explorer",
+            Category = "System",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Removes the Gallery entry from Explorer navigation pane (23H2+).",
@@ -129,23 +65,9 @@ internal static class Explorer
         },
         new TweakDef
         {
-            Id = "explorer-compact-view",
-            Label = "Enable Compact View",
-            Category = "Explorer",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Reduces item spacing in Explorer for a denser file list.",
-            Tags = ["explorer", "win11"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "UseCompactMode", 1)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "UseCompactMode", 0)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "UseCompactMode", 1)],
-        },
-        new TweakDef
-        {
             Id = "explorer-disable-auto-folder-type",
             Label = "Disable Auto Folder Type Detection",
-            Category = "Explorer",
+            Category = "System",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Prevents Explorer from auto-detecting folder content type (e.g. 'Pictures', 'Music') which causes slow loading.",
@@ -177,77 +99,9 @@ internal static class Explorer
         },
         new TweakDef
         {
-            Id = "explorer-disable-merge-conflicts",
-            Label = "Disable Folder Merge Conflicts",
-            Category = "Explorer",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Hides folder merge conflict prompts when copying/moving folders.",
-            Tags = ["explorer", "ux"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "HideMergeConflicts", 1)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "HideMergeConflicts", 0)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "HideMergeConflicts", 1)],
-        },
-        new TweakDef
-        {
-            Id = "explorer-thumbnail-performance",
-            Label = "Optimize Thumbnail Caching & Quality",
-            Category = "Explorer",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Optimizes Explorer thumbnail display: keeps thumbnail cache, increases size to 256px and quality to 100%, disables thumbs.db on network folders. Results in sharper, faster file previews. Default: 96px low quality. Recommended: 256px max quality.",
-            Tags = ["explorer", "thumbnails", "performance", "quality"],
-            RegistryKeys =
-            [
-                @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer",
-                @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced",
-            ],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "DisableThumbnailCache", 0),
-                RegOp.SetDword(
-                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced",
-                    "DisableThumbsDBOnNetworkFolders",
-                    1
-                ),
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer", "ThumbnailSize", 256),
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer", "ThumbnailQuality", 100),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "DisableThumbnailCache"),
-                RegOp.SetDword(
-                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced",
-                    "DisableThumbsDBOnNetworkFolders",
-                    0
-                ),
-                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer", "ThumbnailSize"),
-                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer", "ThumbnailQuality"),
-            ],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer", "ThumbnailSize", 256)],
-        },
-        new TweakDef
-        {
-            Id = "explorer-show-status-bar",
-            Label = "Show Explorer Status Bar",
-            Category = "Explorer",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Enables the status bar at the bottom of Explorer windows showing selected item count, size, and free space. Default: Hidden. Recommended: Shown.",
-            Tags = ["explorer", "ux", "status-bar"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "ShowStatusBar", 1)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "ShowStatusBar", 0)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "ShowStatusBar", 1)],
-        },
-        new TweakDef
-        {
             Id = "explorer-disable-recent-docs",
             Label = "Disable Recent Documents History",
-            Category = "Explorer",
+            Category = "System",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -265,7 +119,7 @@ internal static class Explorer
         {
             Id = "explorer-disable-thumb-cache-cleanup",
             Label = "Disable Thumbnail Cache Auto-Cleanup",
-            Category = "Explorer",
+            Category = "System",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -287,33 +141,9 @@ internal static class Explorer
         },
         new TweakDef
         {
-            Id = "explorer-navpane-expand",
-            Label = "Expand Nav Pane to Current Folder",
-            Category = "Explorer",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Automatically expands the navigation pane tree to show the current folder location. Default: collapsed. Recommended: expanded.",
-            Tags = ["explorer", "navigation", "pane", "expand", "folder"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "NavPaneExpandToCurrentFolder", 1),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "NavPaneExpandToCurrentFolder", 0),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "NavPaneExpandToCurrentFolder", 1),
-            ],
-        },
-        new TweakDef
-        {
             Id = "explorer-folder-size-tips",
             Label = "Show File Size in Folder Tooltips",
-            Category = "Explorer",
+            Category = "System",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -332,24 +162,9 @@ internal static class Explorer
         },
         new TweakDef
         {
-            Id = "explorer-disable-sharing-wizard",
-            Label = "Disable Sharing Wizard",
-            Category = "Explorer",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Disables the simplified sharing wizard and uses the advanced security permissions dialog instead. Default: enabled. Recommended: disabled.",
-            Tags = ["explorer", "sharing", "wizard", "advanced", "permissions"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "SharingWizardOn", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "SharingWizardOn", 1)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "SharingWizardOn", 0)],
-        },
-        new TweakDef
-        {
             Id = "explorer-disable-new-app-alert",
             Label = "Disable 'New App' Notifications",
-            Category = "Explorer",
+            Category = "System",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -362,24 +177,9 @@ internal static class Explorer
         },
         new TweakDef
         {
-            Id = "explorer-checkbox-selection",
-            Label = "Enable Item Check Boxes",
-            Category = "Explorer",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Shows checkboxes next to file and folder names for easier multi-selection without holding Ctrl. Default: disabled. Recommended: personal preference.",
-            Tags = ["explorer", "checkbox", "selection", "multi-select"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "AutoCheckSelect", 1)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "AutoCheckSelect", 0)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "AutoCheckSelect", 1)],
-        },
-        new TweakDef
-        {
             Id = "explorer-disable-sync-ads",
             Label = "Disable Sync Provider Ads",
-            Category = "Explorer",
+            Category = "System",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -407,7 +207,7 @@ internal static class Explorer
         {
             Id = "explorer-always-show-menus",
             Label = "Always Show Classic Menu Bar",
-            Category = "Explorer",
+            Category = "System",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -422,7 +222,7 @@ internal static class Explorer
         {
             Id = "explorer-separate-process",
             Label = "Launch Folders in Separate Process",
-            Category = "Explorer",
+            Category = "System",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -437,7 +237,7 @@ internal static class Explorer
         {
             Id = "explorer-show-drive-letters-first",
             Label = "Show Drive Letters Before Drive Names",
-            Category = "Explorer",
+            Category = "System",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -458,7 +258,7 @@ internal static class Explorer
         {
             Id = "explorer-show-encrypted-color",
             Label = "Show Encrypted/Compressed Files in Color",
-            Category = "Explorer",
+            Category = "System",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -482,7 +282,7 @@ internal static class Explorer
         {
             Id = "explorer-always-show-icons",
             Label = "Always Show File Icons (Disable Live Thumbnails)",
-            Category = "Explorer",
+            Category = "System",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -497,7 +297,7 @@ internal static class Explorer
         {
             Id = "explorer-show-empty-drives",
             Label = "Show Empty Removable Drives in This PC",
-            Category = "Explorer",
+            Category = "System",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -514,47 +314,13 @@ internal static class Explorer
                 RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "HideDrivesWithNoMedia", 0),
             ],
         },
-        new TweakDef
-        {
-            Id = "explorer-disable-folder-type-discovery",
-            Label = "Disable Automatic Folder Type Discovery",
-            Category = "Explorer",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Prevents Explorer from auto-detecting folder type (documents, music, pictures) and changing layout. Default: auto-detect.",
-            Tags = ["explorer", "folder", "type", "discovery", "layout"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Classes\Local Settings\Software\Microsoft\Windows\Shell\Bags\AllFolders\Shell"],
-            ApplyOps =
-            [
-                RegOp.SetString(
-                    @"HKEY_CURRENT_USER\Software\Classes\Local Settings\Software\Microsoft\Windows\Shell\Bags\AllFolders\Shell",
-                    "FolderType",
-                    "NotSpecified"
-                ),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(
-                    @"HKEY_CURRENT_USER\Software\Classes\Local Settings\Software\Microsoft\Windows\Shell\Bags\AllFolders\Shell",
-                    "FolderType"
-                ),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckString(
-                    @"HKEY_CURRENT_USER\Software\Classes\Local Settings\Software\Microsoft\Windows\Shell\Bags\AllFolders\Shell",
-                    "FolderType",
-                    "NotSpecified"
-                ),
-            ],
-        },
         // ── Restored stubs with real registry operations ──────────────────
 
         new TweakDef
         {
             Id = "explorer-ai-thumbnail",
             Label = "Register AI Image PerceivedType",
-            Category = "Explorer",
+            Category = "System",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Sets PerceivedType=image for .aimodel files so Explorer treats them as image assets for thumbnail generation.",
@@ -576,7 +342,7 @@ internal static class Explorer
         {
             Id = "explorer-avif-thumbnail",
             Label = "Register AVIF as Image Type",
-            Category = "Explorer",
+            Category = "System",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Sets PerceivedType=image and ContentType for .avif so Explorer generates thumbnails.",
@@ -598,7 +364,7 @@ internal static class Explorer
         {
             Id = "explorer-eps-thumbnail",
             Label = "Register EPS as Image Type",
-            Category = "Explorer",
+            Category = "System",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Sets PerceivedType=image and ContentType for .eps so Explorer treats it as an image type.",
@@ -620,7 +386,7 @@ internal static class Explorer
         {
             Id = "explorer-font-thumbnail",
             Label = "Register Font PerceivedType",
-            Category = "Explorer",
+            Category = "System",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Sets PerceivedType=document for .ttf/.otf so Explorer can show font previews.",
@@ -642,7 +408,7 @@ internal static class Explorer
         {
             Id = "explorer-heic-thumbnail",
             Label = "Register HEIC as Image Type",
-            Category = "Explorer",
+            Category = "System",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Sets PerceivedType=image and ContentType for .heic/.heif so Explorer generates thumbnails.",
@@ -668,7 +434,7 @@ internal static class Explorer
         {
             Id = "explorer-launch-to-this-pc",
             Label = "Open Explorer to This PC (Policy)",
-            Category = "Explorer",
+            Category = "System",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Forces Explorer to open to 'This PC' via machine-level policy. Complements the per-user LaunchTo setting.",
@@ -682,7 +448,7 @@ internal static class Explorer
         {
             Id = "explorer-pdf-thumbnail",
             Label = "Register PDF as Document Type",
-            Category = "Explorer",
+            Category = "System",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Sets PerceivedType=document and ContentType for .pdf to enable thumbnail generation.",
@@ -704,7 +470,7 @@ internal static class Explorer
         {
             Id = "explorer-ps-here",
             Label = "Open PowerShell Here Context Menu",
-            Category = "Explorer",
+            Category = "System",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Adds 'Open PowerShell Here' to the folder background context menu.",
@@ -730,7 +496,7 @@ internal static class Explorer
         {
             Id = "explorer-psd-thumbnail",
             Label = "Register PSD as Image Type",
-            Category = "Explorer",
+            Category = "System",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Sets PerceivedType=image and ContentType for .psd (Photoshop) files.",
@@ -752,7 +518,7 @@ internal static class Explorer
         {
             Id = "explorer-raw-thumbnail",
             Label = "Register RAW Camera Files as Image",
-            Category = "Explorer",
+            Category = "System",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Sets PerceivedType=image for common RAW camera formats (.cr2, .nef, .arw, .dng).",
@@ -782,23 +548,9 @@ internal static class Explorer
         },
         new TweakDef
         {
-            Id = "explorer-show-file-extensions",
-            Label = "Show File Extensions",
-            Category = "Explorer",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Shows file name extensions for all known file types. Default: hidden. Recommended: shown.",
-            Tags = ["explorer", "file-extensions", "security", "visibility"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "HideFileExt", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "HideFileExt")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "HideFileExt", 0)],
-        },
-        new TweakDef
-        {
             Id = "explorer-stl-thumbnail",
             Label = "Register STL as 3D Model Type",
-            Category = "Explorer",
+            Category = "System",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Sets PerceivedType and ContentType for .stl (3D printing) files.",
@@ -820,7 +572,7 @@ internal static class Explorer
         {
             Id = "explorer-svg-thumbnail",
             Label = "Register SVG as Image Type",
-            Category = "Explorer",
+            Category = "System",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Sets PerceivedType=image and ContentType for .svg so Explorer treats it as an image.",
@@ -842,7 +594,7 @@ internal static class Explorer
         {
             Id = "explorer-webp-thumbnail",
             Label = "Register WebP as Image Type",
-            Category = "Explorer",
+            Category = "System",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Sets PerceivedType=image and ContentType for .webp so Explorer generates thumbnails.",
@@ -872,7 +624,7 @@ internal static class Clipboard
         {
             Id = "clip-increase-drag-threshold",
             Label = "Increase Drag-Drop Threshold (10 px)",
-            Category = "Explorer",
+            Category = "System",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -895,7 +647,7 @@ internal static class Clipboard
         {
             Id = "clip-instant-drag-delay",
             Label = "Set Instant Drag Delay (0 ms)",
-            Category = "Explorer",
+            Category = "System",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -910,7 +662,7 @@ internal static class Clipboard
         {
             Id = "clip-disable-suggested-actions",
             Label = "Disable Clipboard Suggested Actions",
-            Category = "Explorer",
+            Category = "System",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -925,7 +677,7 @@ internal static class Clipboard
         {
             Id = "clip-disable-clipboard-roaming",
             Label = "Disable Clipboard Roaming (Policy)",
-            Category = "Explorer",
+            Category = "System",
             NeedsAdmin = true,
             CorpSafe = false,
             Description =
@@ -940,7 +692,7 @@ internal static class Clipboard
         {
             Id = "clip-disable-drag-full-windows",
             Label = "Disable Full Window Drag",
-            Category = "Explorer",
+            Category = "System",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -955,7 +707,7 @@ internal static class Clipboard
         {
             Id = "clip-max-history-items",
             Label = "Increase Clipboard History Limit",
-            Category = "Explorer",
+            Category = "System",
             NeedsAdmin = true,
             CorpSafe = false,
             Description =
@@ -970,7 +722,7 @@ internal static class Clipboard
         {
             Id = "clip-disable-clipboard-history",
             Label = "Disable Clipboard History",
-            Category = "Explorer",
+            Category = "System",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Disables Windows clipboard history via Group Policy. Only the last copied item is kept. Default: user setting.",
@@ -984,7 +736,7 @@ internal static class Clipboard
         {
             Id = "clip-disable-drop-target-hovering",
             Label = "Disable Drop Target Window Activation",
-            Category = "Explorer",
+            Category = "System",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Prevents windows from coming to the foreground when hovering a drag item over a taskbar button. Default: enabled.",
@@ -998,7 +750,7 @@ internal static class Clipboard
         {
             Id = "clip-disable-clipboard-experience",
             Label = "Disable Clipboard Experience UI",
-            Category = "Explorer",
+            Category = "System",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -1013,7 +765,7 @@ internal static class Clipboard
         {
             Id = "clip-disable-suggestions",
             Label = "Disable Clipboard Suggestions",
-            Category = "Explorer",
+            Category = "System",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -1028,7 +780,7 @@ internal static class Clipboard
         {
             Id = "clip-disable-text-suggestions",
             Label = "Disable Text Suggestions (Input)",
-            Category = "Explorer",
+            Category = "System",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Disables text suggestions and autocomplete for hardware keyboard input. Reduces background processing. Default: enabled.",
@@ -1042,7 +794,7 @@ internal static class Clipboard
         {
             Id = "clip-enable-history-user",
             Label = "Enable Clipboard History (User)",
-            Category = "Explorer",
+            Category = "System",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Enables the Clipboard History feature at the user level. Allows Win+V to show clipboard history. Default: off.",
@@ -1056,7 +808,7 @@ internal static class Clipboard
         {
             Id = "clip-enable-smart-paste",
             Label = "Enable Smart Paste",
-            Category = "Explorer",
+            Category = "System",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Enables the Smart Paste feature that intelligently reformats pasted content. Default: off.",
@@ -1071,7 +823,7 @@ internal static class Clipboard
         {
             Id = "clip-disable-emoji-panel",
             Label = "Disable Emoji Panel",
-            Category = "Explorer",
+            Category = "System",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Disables the emoji panel that appears when pressing Windows+. (period).",
@@ -1085,7 +837,7 @@ internal static class Clipboard
         {
             Id = "clip-disable-clipboard-sync-across-devices",
             Label = "Disable Clipboard Sync Across Devices",
-            Category = "Explorer",
+            Category = "System",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Prevents Windows from syncing clipboard data to other signed-in devices via Microsoft account.",
@@ -1099,7 +851,7 @@ internal static class Clipboard
         {
             Id = "clip-disable-paste-preview",
             Label = "Disable Clipboard Paste Preview Suggestions",
-            Category = "Explorer",
+            Category = "System",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Disables the paste format suggestion tooltip that appears after pasting content.",
@@ -1113,7 +865,7 @@ internal static class Clipboard
         {
             Id = "clip-disable-snip-sketch-clipboard-auto",
             Label = "Disable Snip & Sketch Auto-Copy to Clipboard",
-            Category = "Explorer",
+            Category = "System",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Prevents Snipping Tool / Snip & Sketch from automatically copying screenshots to the clipboard.",
@@ -1136,7 +888,7 @@ internal static class Clipboard
         {
             Id = "clip-disable-gif-panel",
             Label = "Disable GIF Panel",
-            Category = "Explorer",
+            Category = "System",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Removes the GIF search pane that appears in the emoji picker (Windows+. panel).",
@@ -1150,7 +902,7 @@ internal static class Clipboard
         {
             Id = "clip-disable-clipboard-notifications",
             Label = "Disable Clipboard Copy Notifications",
-            Category = "Explorer",
+            Category = "System",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Suppresses the toast notification that appears after saving a screenshot with Print Screen.",
@@ -1164,7 +916,7 @@ internal static class Clipboard
         {
             Id = "clip-disable-sticker-panel",
             Label = "Disable Sticker / Meme Panel",
-            Category = "Explorer",
+            Category = "System",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Removes the sticker and meme categories from the emoji picker panel.",
@@ -1178,7 +930,7 @@ internal static class Clipboard
         {
             Id = "clip-disable-cloud-clipboard-prompt",
             Label = "Disable Cloud Clipboard Activation Prompt",
-            Category = "Explorer",
+            Category = "System",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Prevents Windows from asking you to enable cloud clipboard (cross-device sync) in Windows 10/11.",
@@ -1192,7 +944,7 @@ internal static class Clipboard
         {
             Id = "clip-disable-typing-insights",
             Label = "Disable Typing Insights Collection",
-            Category = "Explorer",
+            Category = "System",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Disables Windows collecting typing and touch keyboard usage patterns for improvement feedback.",
@@ -1207,7 +959,7 @@ internal static class Clipboard
         {
             Id = "ctx-add-powershell-here",
             Label = "Add 'Open PowerShell Here' to Context Menu",
-            Category = "Explorer",
+            Category = "System",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -1229,7 +981,7 @@ internal static class Clipboard
         {
             Id = "ctx-add-wt-here",
             Label = "Add 'Open Windows Terminal Here' to Context Menu",
-            Category = "Explorer",
+            Category = "System",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -1248,7 +1000,7 @@ internal static class Clipboard
         {
             Id = "ctx-add-cmd-here",
             Label = "Add 'Open Command Prompt Here' to Context Menu",
-            Category = "Explorer",
+            Category = "System",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -1267,7 +1019,7 @@ internal static class Clipboard
         {
             Id = "ctx-add-copy-path",
             Label = "Add 'Copy Path' to File Context Menu",
-            Category = "Explorer",
+            Category = "System",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -1282,7 +1034,7 @@ internal static class Clipboard
         {
             Id = "ctx-add-open-cmd-here",
             Label = "Add Open Command Prompt Here",
-            Category = "Explorer",
+            Category = "System",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Adds an 'Open Command Prompt Here' option to the folder context menu. Default: removed in Win11.",
@@ -1304,7 +1056,7 @@ internal static class Clipboard
         {
             Id = "ctx-remove-share-context-menu",
             Label = "Remove Share Context Menu",
-            Category = "Explorer",
+            Category = "System",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Removes the 'Share' option from the right-click context menu. Default: visible.",
@@ -1338,7 +1090,7 @@ internal static class Clipboard
         {
             Id = "ctx-remove-give-access-to",
             Label = "Remove Give Access To Menu",
-            Category = "Explorer",
+            Category = "System",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Removes the 'Give access to' sharing option from the context menu. Default: visible.",
@@ -1372,7 +1124,7 @@ internal static class Clipboard
         {
             Id = "ctx-remove-troubleshoot-compatibility",
             Label = "Remove 'Troubleshoot Compatibility' from Context Menu",
-            Category = "Explorer",
+            Category = "System",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Removes the 'Troubleshoot compatibility' option from file context menus. Default: shown.",
@@ -1406,7 +1158,7 @@ internal static class Clipboard
         {
             Id = "ctx-remove-cast-to-device",
             Label = "Remove 'Cast to Device' from Context Menu",
-            Category = "Explorer",
+            Category = "System",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Removes the 'Cast to device' (Play To) option from the context menu. Default: shown.",
@@ -1440,7 +1192,7 @@ internal static class Clipboard
         {
             Id = "ctx-remove-edit-with-paint3d",
             Label = "Remove 'Edit with Paint 3D' from Context Menu",
-            Category = "Explorer",
+            Category = "System",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Removes 'Edit with Paint 3D' from the right-click menu for image files. Default: shown.",
@@ -1474,7 +1226,7 @@ internal static class Clipboard
         {
             Id = "ctx-remove-include-in-library",
             Label = "Remove 'Include in Library' from Context Menu",
-            Category = "Explorer",
+            Category = "System",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Removes the 'Include in library' option from folder context menus. Default: shown.",
@@ -1508,7 +1260,7 @@ internal static class Clipboard
         {
             Id = "ctx-remove-previous-versions",
             Label = "Remove 'Restore Previous Versions' from Context Menu",
-            Category = "Explorer",
+            Category = "System",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Removes the 'Restore previous versions' tab from file/folder properties. Default: shown.",
@@ -1542,7 +1294,7 @@ internal static class Clipboard
         {
             Id = "ctx-add-take-ownership",
             Label = "Add 'Take Ownership' to Context Menu",
-            Category = "Explorer",
+            Category = "System",
             NeedsAdmin = false,
             CorpSafe = false,
             Description =
@@ -1582,7 +1334,7 @@ internal static class Clipboard
         {
             Id = "ctx-add-open-with-notepad",
             Label = "Add 'Open with Notepad' to Context Menu",
-            Category = "Explorer",
+            Category = "System",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Adds 'Open with Notepad' to the right-click menu for all files. Quick way to view file contents. Default: not present.",
@@ -1607,7 +1359,7 @@ internal static class Clipboard
         {
             Id = "ctx-classic-context-menu",
             Label = "Force Classic Context Menu (User)",
-            Category = "Explorer",
+            Category = "System",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Restores the Windows 10 full context menu by overriding the Windows 11 compact menu CLSID.",
@@ -1624,7 +1376,7 @@ internal static class Clipboard
         {
             Id = "ctx-remove-defender-scan",
             Label = "Remove 'Scan with Defender' Context",
-            Category = "Explorer",
+            Category = "System",
             NeedsAdmin = true,
             CorpSafe = false,
             Description = "Removes the 'Scan with Microsoft Defender' entry from the right-click context menu.",
@@ -1641,7 +1393,7 @@ internal static class Clipboard
         {
             Id = "ctx-remove-give-access",
             Label = "Remove 'Give Access To' Context",
-            Category = "Explorer",
+            Category = "System",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Removes the 'Give access to' sharing menu from the right-click context menu.",
@@ -1662,7 +1414,7 @@ internal static class Clipboard
         {
             Id = "ctx-remove-include-library",
             Label = "Remove 'Include in Library' Context",
-            Category = "Explorer",
+            Category = "System",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Removes the 'Include in library' entry from the folder context menu.",
@@ -1683,7 +1435,7 @@ internal static class Clipboard
         {
             Id = "ctx-remove-paint3d-edit",
             Label = "Remove 'Edit with Paint 3D' Context",
-            Category = "Explorer",
+            Category = "System",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Removes the 'Edit with Paint 3D' option from image file context menus.",
@@ -1715,7 +1467,7 @@ internal static class Clipboard
         {
             Id = "ctx-remove-photos-edit",
             Label = "Remove 'Edit with Photos' Context",
-            Category = "Explorer",
+            Category = "System",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Removes the 'Edit with Photos' option from image file context menus.",
@@ -1749,7 +1501,7 @@ internal static class Clipboard
         {
             Id = "ctx-remove-pin-to-start",
             Label = "Remove 'Pin to Start' Context Entry",
-            Category = "Explorer",
+            Category = "System",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Removes the 'Pin to Start' context menu option from files and folders.",
@@ -1770,7 +1522,7 @@ internal static class Clipboard
         {
             Id = "ctx-remove-print",
             Label = "Remove 'Print' Context Menu Entry",
-            Category = "Explorer",
+            Category = "System",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Removes the 'Print' entry from the right-click context menu for supported file types.",
@@ -1793,7 +1545,7 @@ internal static class Clipboard
         {
             Id = "ctx-remove-send-to",
             Label = "Remove 'Send To' Context Menu",
-            Category = "Explorer",
+            Category = "System",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Removes the 'Send to' cascading menu from the right-click context menu.",
@@ -1814,7 +1566,7 @@ internal static class Clipboard
         {
             Id = "ctx-remove-share",
             Label = "Remove 'Share' Context Menu Entry",
-            Category = "Explorer",
+            Category = "System",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Removes the 'Share' modern sharing entry from the right-click context menu.",
@@ -1828,7 +1580,7 @@ internal static class Clipboard
         {
             Id = "ctx-remove-troubleshoot-compat",
             Label = "Remove 'Troubleshoot Compatibility'",
-            Category = "Explorer",
+            Category = "System",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Removes the 'Troubleshoot compatibility' entry from the context menu for executables.",
@@ -1849,7 +1601,7 @@ internal static class Clipboard
         {
             Id = "ctx-remove-wmp-context",
             Label = "Remove Windows Media Context Entries",
-            Category = "Explorer",
+            Category = "System",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Removes Windows Media Player context menu entries (Play, Add to playlist, etc.).",
@@ -1887,7 +1639,7 @@ internal static class Shell
         {
             Id = "shell-set-console-buffer-9999",
             Label = "Set Console Screen Buffer to 9999 Lines",
-            Category = "Explorer",
+            Category = "System",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Sets the console screen buffer size to 9999 lines. More scrollback history. Default: 300.",
@@ -1901,7 +1653,7 @@ internal static class Shell
         {
             Id = "shell-disable-cmd-autorun",
             Label = "Disable CMD AutoRun Commands",
-            Category = "Explorer",
+            Category = "System",
             NeedsAdmin = false,
             CorpSafe = true,
             Description = "Clears the CMD AutoRun registry value. Prevents potentially malicious auto-execution. Default: not set.",
@@ -1915,7 +1667,7 @@ internal static class Shell
         {
             Id = "shell-set-powershell-execution-remotesigned",
             Label = "Set PowerShell Execution Policy to RemoteSigned",
-            Category = "Explorer",
+            Category = "System",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -1947,7 +1699,7 @@ internal static class Shell
         {
             Id = "shell-add-python-to-path",
             Label = "Add Python App Installer to PATH",
-            Category = "Explorer",
+            Category = "System",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -1966,7 +1718,7 @@ internal static class Shell
         {
             Id = "shell-classic-context-menu",
             Label = "Restore Classic Context Menu (Shell)",
-            Category = "Explorer",
+            Category = "System",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -1984,7 +1736,7 @@ internal static class Shell
         {
             Id = "shell-cmd-autocomplete",
             Label = "Enable Command Prompt AutoComplete",
-            Category = "Explorer",
+            Category = "System",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -2007,7 +1759,7 @@ internal static class Shell
         {
             Id = "shell-disable-python-store-alias",
             Label = "Disable Python Store Redirect Alias",
-            Category = "Explorer",
+            Category = "System",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -2051,7 +1803,7 @@ internal static class Shell
         {
             Id = "shell-file-hash-context",
             Label = "Add File Hash to Context Menu",
-            Category = "Explorer",
+            Category = "System",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -2075,7 +1827,7 @@ internal static class Shell
         {
             Id = "shell-open-cmd-here",
             Label = "Add 'Open CMD Here' to Context Menu",
-            Category = "Explorer",
+            Category = "System",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Adds 'Open Command Prompt Here' to the directory background context menu. Default: not available.",
@@ -2101,7 +1853,7 @@ internal static class Shell
         {
             Id = "shell-open-ps-here",
             Label = "Add 'Open PowerShell Here' to Context Menu",
-            Category = "Explorer",
+            Category = "System",
             NeedsAdmin = true,
             CorpSafe = true,
             Description = "Adds 'Open PowerShell Here' to the directory background context menu. Default: not available.",
@@ -2124,7 +1876,7 @@ internal static class Shell
         {
             Id = "shell-open-wt-here",
             Label = "Add 'Open Windows Terminal Here'",
-            Category = "Explorer",
+            Category = "System",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -2147,7 +1899,7 @@ internal static class Shell
         {
             Id = "shell-take-ownership",
             Label = "Add 'Take Ownership' to Context Menu",
-            Category = "Explorer",
+            Category = "System",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =
@@ -2170,45 +1922,9 @@ internal static class Shell
         },
         new TweakDef
         {
-            Id = "shell-disable-thumbnail-net-cache",
-            Label = "Disable Thumbs.db on Network Folders",
-            Category = "Explorer",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Sets DisableThumbsDBOnNetworkFolders=1 in Explorer Advanced. Stops Windows from creating Thumbs.db thumbnail cache files on UNC and mapped network drives, which can cause file-locking issues for other users.",
-            Tags = ["shell", "explorer", "thumbnail", "network"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
-            ApplyOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced",
-                    "DisableThumbsDBOnNetworkFolders",
-                    1
-                ),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(
-                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced",
-                    "DisableThumbsDBOnNetworkFolders",
-                    0
-                ),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(
-                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced",
-                    "DisableThumbsDBOnNetworkFolders",
-                    1
-                ),
-            ],
-        },
-        new TweakDef
-        {
             Id = "shell-enable-numlock-startup",
             Label = "Enable Num Lock on Startup",
-            Category = "Explorer",
+            Category = "System",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -2223,7 +1939,7 @@ internal static class Shell
         {
             Id = "shell-restore-previous-folders",
             Label = "Reopen Previous Folder Windows on Login",
-            Category = "Explorer",
+            Category = "System",
             NeedsAdmin = false,
             CorpSafe = true,
             Description =
@@ -2238,7 +1954,7 @@ internal static class Shell
         {
             Id = "shell-disable-recent-docs-policy",
             Label = "Disable Recent Documents Tracking (Policy)",
-            Category = "Explorer",
+            Category = "System",
             NeedsAdmin = true,
             CorpSafe = true,
             Description =

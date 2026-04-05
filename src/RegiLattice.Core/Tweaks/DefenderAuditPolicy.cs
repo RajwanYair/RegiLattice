@@ -48,23 +48,6 @@ internal static class PolicyDefender
         [
             new TweakDef
             {
-                Id = "amsi-enable-scriptblock-logging",
-                Label = "AMSI: Enable PowerShell Script Block Logging",
-                Category = "Security",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                RegistryKeys = [ScriptBlockLog],
-                Tags = ["amsi", "powershell", "logging", "script-block", "security", "forensics"],
-                Description =
-                    "Sets EnableScriptBlockLogging=1 in ScriptBlockLogging policy. Records all PowerShell script "
-                    + "block executions to Windows Event Log (Event ID 4104). "
-                    + "Essential for forensic analysis and detecting obfuscated malicious scripts. Default: disabled.",
-                ApplyOps = [RegOp.SetDword(ScriptBlockLog, "EnableScriptBlockLogging", 1)],
-                RemoveOps = [RegOp.DeleteValue(ScriptBlockLog, "EnableScriptBlockLogging")],
-                DetectOps = [RegOp.CheckDword(ScriptBlockLog, "EnableScriptBlockLogging", 1)],
-            },
-            new TweakDef
-            {
                 Id = "amsi-enable-scriptblock-invocation-logging",
                 Label = "AMSI: Enable PowerShell Script Block Invocation Logging",
                 Category = "Security",
@@ -79,40 +62,6 @@ internal static class PolicyDefender
                 ApplyOps = [RegOp.SetDword(ScriptBlockLog, "EnableScriptBlockInvocationLogging", 1)],
                 RemoveOps = [RegOp.DeleteValue(ScriptBlockLog, "EnableScriptBlockInvocationLogging")],
                 DetectOps = [RegOp.CheckDword(ScriptBlockLog, "EnableScriptBlockInvocationLogging", 1)],
-            },
-            new TweakDef
-            {
-                Id = "amsi-enable-module-logging",
-                Label = "AMSI: Enable PowerShell Module Logging",
-                Category = "Security",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                RegistryKeys = [ModuleLog],
-                Tags = ["amsi", "powershell", "logging", "module", "security", "compliance"],
-                Description =
-                    "Sets EnableModuleLogging=1 in ModuleLogging policy. Logs the complete output of pipeline "
-                    + "executions for all PowerShell modules. Enables auditing of all PS commands invoked. "
-                    + "Default: disabled. Generates high log volume but full command visibility.",
-                ApplyOps = [RegOp.SetDword(ModuleLog, "EnableModuleLogging", 1)],
-                RemoveOps = [RegOp.DeleteValue(ModuleLog, "EnableModuleLogging")],
-                DetectOps = [RegOp.CheckDword(ModuleLog, "EnableModuleLogging", 1)],
-            },
-            new TweakDef
-            {
-                Id = "amsi-enable-transcription",
-                Label = "AMSI: Enable PowerShell Transcription Logging",
-                Category = "Security",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                RegistryKeys = [Transcription],
-                Tags = ["amsi", "powershell", "transcription", "logging", "audit", "security"],
-                Description =
-                    "Sets EnableTranscripting=1 in Transcription policy. Writes all PowerShell input and output "
-                    + "to a text transcript file in a centrally configured directory. "
-                    + "Default: disabled. Essential for SIEM forwarding and post-incident analysis.",
-                ApplyOps = [RegOp.SetDword(Transcription, "EnableTranscripting", 1)],
-                RemoveOps = [RegOp.DeleteValue(Transcription, "EnableTranscripting")],
-                DetectOps = [RegOp.CheckDword(Transcription, "EnableTranscripting", 1)],
             },
             new TweakDef
             {
@@ -230,57 +179,6 @@ internal static class PolicyDefender
             [
                 new TweakDef
                 {
-                    Id = "asr-block-office-child-process",
-                    Label = "ASR: Block Office Applications from Creating Child Processes",
-                    Category = "Security",
-                    Description =
-                        "Sets ASR rule D4F940AB-401B-4EFC-AADC-AD5F3C50688A=1 (block). Prevents Microsoft Office applications (Word, Excel, PowerPoint) from spawning child processes. Malware campaigns frequently abuse Office macros to launch cmd.exe, PowerShell, or wscript.exe. Blocking child process creation from Office significantly raises the bar for macro-based malware without affecting normal Office functionality.",
-                    Tags = ["asr", "defender", "office", "macro", "hardening"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 5,
-                    SafetyRating = 4,
-                    ImpactNote = "High-impact ASR rule; disables macro-spawned processes. May break legacy VBA add-ins that shell out.",
-                    ApplyOps = [RegOp.SetDword(AsrKey, "D4F940AB-401B-4EFC-AADC-AD5F3C50688A", 1)],
-                    RemoveOps = [RegOp.DeleteValue(AsrKey, "D4F940AB-401B-4EFC-AADC-AD5F3C50688A")],
-                    DetectOps = [RegOp.CheckDword(AsrKey, "D4F940AB-401B-4EFC-AADC-AD5F3C50688A", 1)],
-                },
-                new TweakDef
-                {
-                    Id = "asr-block-credential-theft",
-                    Label = "ASR: Block Credential Stealing from LSASS",
-                    Category = "Security",
-                    Description =
-                        "Sets ASR rule 9E6C4E1F-7D60-472F-BA1A-A39EF669E4B2=1 (block). Blocks tools such as Mimikatz, ProcDump, and Task Manager from reading credential material from lsass.exe memory. This is one of the highest-value ASR rules — lateral movement attacks almost universally require LSASS credential theft. LSA Protection (PPL) is the primary guard; this rule adds a second layer via Defender.",
-                    Tags = ["asr", "defender", "lsass", "credential-theft", "hardening"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 5,
-                    SafetyRating = 4,
-                    ImpactNote = "Prevents LSASS memory read. May affect debuggers or monitoring agents that legitimately read LSASS.",
-                    ApplyOps = [RegOp.SetDword(AsrKey, "9E6C4E1F-7D60-472F-BA1A-A39EF669E4B2", 1)],
-                    RemoveOps = [RegOp.DeleteValue(AsrKey, "9E6C4E1F-7D60-472F-BA1A-A39EF669E4B2")],
-                    DetectOps = [RegOp.CheckDword(AsrKey, "9E6C4E1F-7D60-472F-BA1A-A39EF669E4B2", 1)],
-                },
-                new TweakDef
-                {
-                    Id = "asr-block-obfuscated-macros",
-                    Label = "ASR: Block Execution of Potentially Obfuscated Scripts",
-                    Category = "Security",
-                    Description =
-                        "Sets ASR rule 5BEB7EFE-FD9A-4556-801D-275E5FFC04CC=1 (block). Prevents execution of scripts that appear obfuscated — a strong indicator of malicious intent. Obfuscation is used by commodity malware, fileless attacks, and PowerShell stagers to evade static AV. This rule causes AMSI to perform deeper analysis before script execution. Most legitimate administrative scripts are not obfuscated.",
-                    Tags = ["asr", "defender", "powershell", "obfuscation", "hardening"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 4,
-                    SafetyRating = 3,
-                    ImpactNote = "May block minified or base64-encoded scripts. Audit existing scripts before enabling in production.",
-                    ApplyOps = [RegOp.SetDword(AsrKey, "5BEB7EFE-FD9A-4556-801D-275E5FFC04CC", 1)],
-                    RemoveOps = [RegOp.DeleteValue(AsrKey, "5BEB7EFE-FD9A-4556-801D-275E5FFC04CC")],
-                    DetectOps = [RegOp.CheckDword(AsrKey, "5BEB7EFE-FD9A-4556-801D-275E5FFC04CC", 1)],
-                },
-                new TweakDef
-                {
                     Id = "asr-block-win32-from-macros",
                     Label = "ASR: Block Win32 API Calls from Office Macros",
                     Category = "Security",
@@ -295,41 +193,6 @@ internal static class PolicyDefender
                     ApplyOps = [RegOp.SetDword(AsrKey, "92E97FA1-2EDF-4476-BDD6-9DD0B4DDDC7B", 1)],
                     RemoveOps = [RegOp.DeleteValue(AsrKey, "92E97FA1-2EDF-4476-BDD6-9DD0B4DDDC7B")],
                     DetectOps = [RegOp.CheckDword(AsrKey, "92E97FA1-2EDF-4476-BDD6-9DD0B4DDDC7B", 1)],
-                },
-                new TweakDef
-                {
-                    Id = "asr-block-email-executable",
-                    Label = "ASR: Block Executable Content from Email and Webmail",
-                    Category = "Security",
-                    Description =
-                        "Sets ASR rule BE9BA2D9-53EA-4CDC-84E5-9B1EEEE46550=1 (block). Prevents execution of .exe, .dll, .ps1, .js, .vbs content downloaded from email clients (Outlook, Thunderbird) or web browsers. Email-based delivery of malicious attachments is the #1 initial access vector. This rule creates a hard block on executable content received via email regardless of file extension spoofing.",
-                    Tags = ["asr", "defender", "email", "attachment", "hardening"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 5,
-                    SafetyRating = 4,
-                    ImpactNote =
-                        "High-value protection. May affect legitimate EXE attachments; use audit mode first in environments with frequent EXE email delivery.",
-                    ApplyOps = [RegOp.SetDword(AsrKey, "BE9BA2D9-53EA-4CDC-84E5-9B1EEEE46550", 1)],
-                    RemoveOps = [RegOp.DeleteValue(AsrKey, "BE9BA2D9-53EA-4CDC-84E5-9B1EEEE46550")],
-                    DetectOps = [RegOp.CheckDword(AsrKey, "BE9BA2D9-53EA-4CDC-84E5-9B1EEEE46550", 1)],
-                },
-                new TweakDef
-                {
-                    Id = "asr-block-office-injection",
-                    Label = "ASR: Block Office Applications from Injecting into Other Processes",
-                    Category = "Security",
-                    Description =
-                        "Sets ASR rule 75668C1F-73B5-4CF0-BB93-3ECF5CB7CC84=1 (block). Prevents Office apps from injecting code into other running processes via CreateRemoteThread, WriteProcessMemory, or similar techniques. Process injection is a core technique for privilege escalation and AV bypass. Blocking injection from Office eliminates an important pivot point for macro-based attacks.",
-                    Tags = ["asr", "defender", "office", "process-injection", "hardening"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 4,
-                    SafetyRating = 4,
-                    ImpactNote = "Prevents Office from injecting into other processes; may affect some Office add-ins.",
-                    ApplyOps = [RegOp.SetDword(AsrKey, "75668C1F-73B5-4CF0-BB93-3ECF5CB7CC84", 1)],
-                    RemoveOps = [RegOp.DeleteValue(AsrKey, "75668C1F-73B5-4CF0-BB93-3ECF5CB7CC84")],
-                    DetectOps = [RegOp.CheckDword(AsrKey, "75668C1F-73B5-4CF0-BB93-3ECF5CB7CC84", 1)],
                 },
                 new TweakDef
                 {
@@ -348,57 +211,6 @@ internal static class PolicyDefender
                     RemoveOps = [RegOp.DeleteValue(AsrKey, "D3E037E1-3EB8-44C8-A917-57927947596D")],
                     DetectOps = [RegOp.CheckDword(AsrKey, "D3E037E1-3EB8-44C8-A917-57927947596D", 1)],
                 },
-                new TweakDef
-                {
-                    Id = "asr-block-wmi-persistence",
-                    Label = "ASR: Block Persistence via WMI Event Subscription",
-                    Category = "Security",
-                    Description =
-                        "Sets ASR rule E6DB77E5-3DF2-4CF1-B95A-636979351E5B=1 (block). Prevents malware from creating WMI event subscriptions that survive reboots (a fileless persistence technique). WMI subscriptions triggered on startup are used by APT groups and ransomware to maintain access across reboots. Blocking new WMI-based persistence while preserving existing administrative WMI use is a low-disruption, high-value hardening measure.",
-                    Tags = ["asr", "defender", "wmi", "persistence", "hardening"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 5,
-                    SafetyRating = 4,
-                    ImpactNote = "Blocks WMI event subscription creation. Some monitoring tools use WMI subscriptions; verify before deploying.",
-                    ApplyOps = [RegOp.SetDword(AsrKey, "E6DB77E5-3DF2-4CF1-B95A-636979351E5B", 1)],
-                    RemoveOps = [RegOp.DeleteValue(AsrKey, "E6DB77E5-3DF2-4CF1-B95A-636979351E5B")],
-                    DetectOps = [RegOp.CheckDword(AsrKey, "E6DB77E5-3DF2-4CF1-B95A-636979351E5B", 1)],
-                },
-                new TweakDef
-                {
-                    Id = "asr-block-untrusted-usb",
-                    Label = "ASR: Block Untrusted and Unsigned Processes Running from USB",
-                    Category = "Security",
-                    Description =
-                        "Sets ASR rule B2B3F03D-6A65-4F7B-A9C7-1C7EF74A9BA4=1 (block). Prevents unsigned or untrusted executables from running directly from USB drives. Physical access attacks (BadUSB, rubber duck, Raspberry Pi) rely on auto-running or user-launched executables from removable media. Requiring Authenticode signatures on USB-launched code raises the physical-access threat bar significantly.",
-                    Tags = ["asr", "defender", "usb", "removable-media", "hardening"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 4,
-                    SafetyRating = 4,
-                    ImpactNote = "Blocks unsigned executables from USB. Administrative tools on USB drives must be signed.",
-                    ApplyOps = [RegOp.SetDword(AsrKey, "B2B3F03D-6A65-4F7B-A9C7-1C7EF74A9BA4", 1)],
-                    RemoveOps = [RegOp.DeleteValue(AsrKey, "B2B3F03D-6A65-4F7B-A9C7-1C7EF74A9BA4")],
-                    DetectOps = [RegOp.CheckDword(AsrKey, "B2B3F03D-6A65-4F7B-A9C7-1C7EF74A9BA4", 1)],
-                },
-                new TweakDef
-                {
-                    Id = "asr-enable-audit-mode",
-                    Label = "ASR: Set All Rules to Audit Mode (Non-Disruptive Monitoring)",
-                    Category = "Security",
-                    Description =
-                        "Sets ExploitGuard_ASR_Rules=2 (audit mode). Forces all configured ASR rules to audit mode: events are logged without blocking execution. Use this setting when initially deploying ASR to identify false positives before switching to block mode. Windows Defender Security Center and Event Viewer (Event ID 1121/1122) will show which rules would have fired. Switch to value 1 (block) after completing the audit period.",
-                    Tags = ["asr", "defender", "audit", "monitoring"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 3,
-                    SafetyRating = 5,
-                    ImpactNote = "Audit-only; no blocking. Use as a staging step before enabling block mode.",
-                    ApplyOps = [RegOp.SetDword(AsrBaseKey, "ExploitGuard_ASR_Rules", 2)],
-                    RemoveOps = [RegOp.DeleteValue(AsrBaseKey, "ExploitGuard_ASR_Rules")],
-                    DetectOps = [RegOp.CheckDword(AsrBaseKey, "ExploitGuard_ASR_Rules", 2)],
-                },
             ];
     }
 
@@ -410,41 +222,6 @@ internal static class PolicyDefender
 
         public static IReadOnlyList<TweakDef> Data =>
             [
-                new TweakDef
-                {
-                    Id = "cfa-enable-block-mode",
-                    Label = "Controlled Folder Access: Enable Block Mode",
-                    Category = "Security",
-                    Description =
-                        "Sets EnableControlledFolderAccess=1 (enabled, block mode). Activates Controlled Folder Access, which prevents untrusted applications from modifying files in protected folders such as Documents, Pictures, and Desktop. This is the most effective built-in ransomware protection available in Windows. Any untrusted process attempting to write to protected folders is blocked and an event is logged to the Security event channel.",
-                    Tags = ["cfa", "ransomware", "defender", "folder-protection", "hardening"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 5,
-                    SafetyRating = 3,
-                    ImpactNote =
-                        "Strong ransomware protection. Common false positives: backup tools, photo editors, custom apps writing to Documents. Build an allow-list before deploying.",
-                    ApplyOps = [RegOp.SetDword(CfaKey, "EnableControlledFolderAccess", 1)],
-                    RemoveOps = [RegOp.DeleteValue(CfaKey, "EnableControlledFolderAccess")],
-                    DetectOps = [RegOp.CheckDword(CfaKey, "EnableControlledFolderAccess", 1)],
-                },
-                new TweakDef
-                {
-                    Id = "cfa-enable-audit-mode",
-                    Label = "Controlled Folder Access: Enable Audit Mode",
-                    Category = "Security",
-                    Description =
-                        "Sets EnableControlledFolderAccess=2 (audit mode). Logs all write attempts to protected folders without blocking them. Use audit mode to identify which applications need to be added to the CFA allow-list before enabling block mode. Events appear in Event Viewer under Microsoft-Windows-Windows Defender/Operational with Event ID 1124. Microsoft recommends a 2–4 week audit period before switching to block mode.",
-                    Tags = ["cfa", "audit", "defender", "monitoring"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 3,
-                    SafetyRating = 5,
-                    ImpactNote = "Audit-only; use before enabling block mode to prevent application breakage.",
-                    ApplyOps = [RegOp.SetDword(CfaKey, "EnableControlledFolderAccess", 2)],
-                    RemoveOps = [RegOp.DeleteValue(CfaKey, "EnableControlledFolderAccess")],
-                    DetectOps = [RegOp.CheckDword(CfaKey, "EnableControlledFolderAccess", 2)],
-                },
                 new TweakDef
                 {
                     Id = "cfa-protect-network-drives",
@@ -532,40 +309,6 @@ internal static class PolicyDefender
                 },
                 new TweakDef
                 {
-                    Id = "cfa-enable-block-mode-disk",
-                    Label = "Controlled Folder Access: Enable Block Mode Including Disk Sectors",
-                    Category = "Security",
-                    Description =
-                        "Sets EnableControlledFolderAccess=3 (block mode with disk sector protection). Combines standard CFA file-level protection with block mode for raw disk writes in a single policy value. Using value 3 is the strongest CFA configuration, protecting against both file-encrypting ransomware and MBR/boot-sector wipers in one policy. Equivalent to enabling EnableControlledFolderAccess=1 AND EnableControlledFolderAccessForRawAccess=1 separately.",
-                    Tags = ["cfa", "ransomware", "mbr", "wiper", "hardening"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 5,
-                    SafetyRating = 2,
-                    ImpactNote = "Maximum protection but highest false positive risk. Only use after completing an audit period with value 2.",
-                    ApplyOps = [RegOp.SetDword(CfaKey, "EnableControlledFolderAccess", 3)],
-                    RemoveOps = [RegOp.DeleteValue(CfaKey, "EnableControlledFolderAccess")],
-                    DetectOps = [RegOp.CheckDword(CfaKey, "EnableControlledFolderAccess", 3)],
-                },
-                new TweakDef
-                {
-                    Id = "cfa-audit-mode-disk",
-                    Label = "Controlled Folder Access: Audit Mode Including Disk Sector Checks",
-                    Category = "Security",
-                    Description =
-                        "Sets EnableControlledFolderAccess=4 (audit mode with disk sector monitoring). Logs both file-level and raw disk sector write attempts to protected locations without blocking them. Use value 4 when planning to deploy value 3 (block + disk) to pre-identify which applications perform raw disk writes. Events are logged to the Windows Defender/Operational channel with Event IDs 1124 (allowed) and 1125 (would-be blocked).",
-                    Tags = ["cfa", "audit", "disk", "monitoring"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 3,
-                    SafetyRating = 5,
-                    ImpactNote = "Audits disk sector writes in addition to file writes. No blocking; safe for production.",
-                    ApplyOps = [RegOp.SetDword(CfaKey, "EnableControlledFolderAccess", 4)],
-                    RemoveOps = [RegOp.DeleteValue(CfaKey, "EnableControlledFolderAccess")],
-                    DetectOps = [RegOp.CheckDword(CfaKey, "EnableControlledFolderAccess", 4)],
-                },
-                new TweakDef
-                {
                     Id = "cfa-enforce-allow-list-only",
                     Label = "Controlled Folder Access: Enforce Allow-List Only Mode",
                     Category = "Security",
@@ -595,118 +338,6 @@ internal static class PolicyDefender
 
         internal static IReadOnlyList<TweakDef> Data { get; } =
         [
-            new TweakDef
-            {
-                Id = "defadv-cloud-block-level-high",
-                Label = "Set Defender Cloud Block Level to High",
-                Category = "Security",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 4,
-                Description =
-                    "Sets MpCloudBlockLevel=4 (High), causing Defender to block more "
-                    + "aggressively when cloud analysis is inconclusive. Values: "
-                    + "0=Default, 2=Moderate, 4=High, 6=High+, 8=Zero tolerance.",
-                Tags = ["defender", "cloud protection", "block level", "security"],
-                RegistryKeys = [MpEngine],
-                ApplyOps = [RegOp.SetDword(MpEngine, "MpCloudBlockLevel", 4)],
-                RemoveOps = [RegOp.DeleteValue(MpEngine, "MpCloudBlockLevel")],
-                DetectOps = [RegOp.CheckDword(MpEngine, "MpCloudBlockLevel", 4)],
-            },
-            new TweakDef
-            {
-                Id = "defadv-cloud-extended-timeout",
-                Label = "Extend Defender Cloud-Check Timeout to 50 s",
-                Category = "Security",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 4,
-                Description =
-                    "Sets MpBafsExtendedTimeout=50 to allow 50 seconds (default: 10 s) for the "
-                    + "cloud to analyse a suspicious file before executing it, improving detection "
-                    + "rates for novel threats.",
-                Tags = ["defender", "cloud protection", "timeout", "bafs"],
-                RegistryKeys = [MpEngine],
-                ApplyOps = [RegOp.SetDword(MpEngine, "MpBafsExtendedTimeout", 50)],
-                RemoveOps = [RegOp.DeleteValue(MpEngine, "MpBafsExtendedTimeout")],
-                DetectOps = [RegOp.CheckDword(MpEngine, "MpBafsExtendedTimeout", 50)],
-            },
-            new TweakDef
-            {
-                Id = "defadv-maps-advanced-membership",
-                Label = "Enable MAPS Advanced Membership (Automatic Sample Reporting)",
-                Category = "Security",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 4,
-                Description =
-                    "Sets SpynetReporting=2 (Advanced MAPS membership), sending additional "
-                    + "information to Microsoft about potentially malicious software. Required "
-                    + "for cloud protection to function fully. 0=Disabled, 1=Basic, 2=Advanced.",
-                Tags = ["defender", "maps", "cloud", "spynet", "telemetry"],
-                RegistryKeys = [Spynet],
-                ApplyOps = [RegOp.SetDword(Spynet, "SpynetReporting", 2)],
-                RemoveOps = [RegOp.DeleteValue(Spynet, "SpynetReporting")],
-                DetectOps = [RegOp.CheckDword(Spynet, "SpynetReporting", 2)],
-            },
-            new TweakDef
-            {
-                Id = "defadv-auto-sample-submission",
-                Label = "Enable Automatic Sample Submission (Safe Samples)",
-                Category = "Security",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 4,
-                Description =
-                    "Sets SubmitSamplesConsent=1 to automatically send safe samples "
-                    + "(safe file types) to Microsoft for analysis. 0=Always prompt, "
-                    + "1=Auto safe samples, 2=Never, 3=Always automatic.",
-                Tags = ["defender", "sample submission", "maps", "cloud"],
-                RegistryKeys = [Spynet],
-                ApplyOps = [RegOp.SetDword(Spynet, "SubmitSamplesConsent", 1)],
-                RemoveOps = [RegOp.DeleteValue(Spynet, "SubmitSamplesConsent")],
-                DetectOps = [RegOp.CheckDword(Spynet, "SubmitSamplesConsent", 1)],
-            },
-            new TweakDef
-            {
-                Id = "defadv-enable-behavior-monitoring",
-                Label = "Enable Defender Behavior Monitoring",
-                Category = "Security",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                Description =
-                    "Ensures behavior monitoring is enabled in Defender real-time protection "
-                    + "by setting DisableBehaviorMonitoring=0. Policy-enforced default-on.",
-                Tags = ["defender", "behaviour monitoring", "real-time protection", "security"],
-                RegistryKeys = [RealTime],
-                ApplyOps = [RegOp.SetDword(RealTime, "DisableBehaviorMonitoring", 0)],
-                RemoveOps = [RegOp.DeleteValue(RealTime, "DisableBehaviorMonitoring")],
-                DetectOps = [RegOp.CheckDword(RealTime, "DisableBehaviorMonitoring", 0)],
-            },
-            new TweakDef
-            {
-                Id = "defadv-enable-ioav-protection",
-                Label = "Enable Defender On-Access (I/O) Scans",
-                Category = "Security",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                Description =
-                    "Ensures I/O AV protection is enabled by policy (DisableIOAVProtection=0). "
-                    + "Defender scans all downloaded files and attachments via real-time hooks.",
-                Tags = ["defender", "on-access", "ioav", "real-time protection"],
-                RegistryKeys = [RealTime],
-                ApplyOps = [RegOp.SetDword(RealTime, "DisableIOAVProtection", 0)],
-                RemoveOps = [RegOp.DeleteValue(RealTime, "DisableIOAVProtection")],
-                DetectOps = [RegOp.CheckDword(RealTime, "DisableIOAVProtection", 0)],
-            },
             new TweakDef
             {
                 Id = "defadv-enable-script-scanning",
@@ -814,23 +445,6 @@ internal static class PolicyDefender
                 },
                 new TweakDef
                 {
-                    Id = "avadv-block-sample-submission-non-consent",
-                    Label = "Block Automatic Sample Submission Without User Consent",
-                    Category = "Security",
-                    Description =
-                        "Configures Defender to always prompt before sending potentially sensitive file samples to Microsoft for cloud analysis, preventing automatic cloud submission of suspicious documents that may contain confidential data.",
-                    Tags = ["defender", "sample-submission", "privacy", "cloud", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 4,
-                    SafetyRating = 5,
-                    ImpactNote = "Sample submission requires user consent; suspicious files not silently sent to Microsoft.",
-                    ApplyOps = [RegOp.SetDword(SpynetKey, "SubmitSamplesConsent", 2)],
-                    RemoveOps = [RegOp.DeleteValue(SpynetKey, "SubmitSamplesConsent")],
-                    DetectOps = [RegOp.CheckDword(SpynetKey, "SubmitSamplesConsent", 2)],
-                },
-                new TweakDef
-                {
                     Id = "avadv-set-cloud-protection-level-high",
                     Label = "Set Defender Cloud Protection Level to High",
                     Category = "Security",
@@ -862,43 +476,6 @@ internal static class PolicyDefender
                     ApplyOps = [RegOp.SetDword(ScanKey, "ScheduleQuickScanTime", 120)],
                     RemoveOps = [RegOp.DeleteValue(ScanKey, "ScheduleQuickScanTime")],
                     DetectOps = [RegOp.CheckDword(ScanKey, "ScheduleQuickScanTime", 120)],
-                },
-                new TweakDef
-                {
-                    Id = "avadv-enable-realtime-protection",
-                    Label = "Enforce Real-Time Protection is Always On",
-                    Category = "Security",
-                    Description =
-                        "Sets a policy that ensures Windows Defender real-time protection monitoring is always active, preventing GPO or local policy from disabling file-system monitoring on covered endpoints.",
-                    Tags = ["defender", "real-time-protection", "always-on", "antivirus", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 5,
-                    SafetyRating = 5,
-                    ImpactNote = "Real-time protection enforced as always-on; cannot be disabled via local policy or settings.",
-                    ApplyOps =
-                    [
-                        RegOp.SetDword(
-                            @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Real-Time Protection",
-                            "DisableRealtimeMonitoring",
-                            0
-                        ),
-                    ],
-                    RemoveOps =
-                    [
-                        RegOp.DeleteValue(
-                            @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Real-Time Protection",
-                            "DisableRealtimeMonitoring"
-                        ),
-                    ],
-                    DetectOps =
-                    [
-                        RegOp.CheckDword(
-                            @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Real-Time Protection",
-                            "DisableRealtimeMonitoring",
-                            0
-                        ),
-                    ],
                 },
                 new TweakDef
                 {
@@ -970,43 +547,6 @@ internal static class PolicyDefender
                     ApplyOps = [RegOp.SetDword(QtnKey, "PurgeItemsAfterDelay", 30)],
                     RemoveOps = [RegOp.DeleteValue(QtnKey, "PurgeItemsAfterDelay")],
                     DetectOps = [RegOp.CheckDword(QtnKey, "PurgeItemsAfterDelay", 30)],
-                },
-                new TweakDef
-                {
-                    Id = "avadv-enable-behavior-monitoring",
-                    Label = "Enforce Defender Behaviour Monitoring is Always On",
-                    Category = "Security",
-                    Description =
-                        "Ensures Windows Defender behavioural monitoring (which detects suspicious process activities and file access patterns in real-time) is enforced as always active via policy, providing protection against fileless malware.",
-                    Tags = ["defender", "behaviour-monitoring", "fileless", "antivirus", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 5,
-                    SafetyRating = 5,
-                    ImpactNote = "Defender behaviour monitoring enforced; fileless and process-based malware detected in real-time.",
-                    ApplyOps =
-                    [
-                        RegOp.SetDword(
-                            @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Real-Time Protection",
-                            "DisableBehaviorMonitoring",
-                            0
-                        ),
-                    ],
-                    RemoveOps =
-                    [
-                        RegOp.DeleteValue(
-                            @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Real-Time Protection",
-                            "DisableBehaviorMonitoring"
-                        ),
-                    ],
-                    DetectOps =
-                    [
-                        RegOp.CheckDword(
-                            @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Real-Time Protection",
-                            "DisableBehaviorMonitoring",
-                            0
-                        ),
-                    ],
                 },
                 new TweakDef
                 {
@@ -1375,24 +915,6 @@ internal static class PolicyDefender
                     RemoveOps = [RegOp.DeleteValue(ExploitKey, "EAF")],
                     DetectOps = [RegOp.CheckDword(ExploitKey, "EAF", 1)],
                 },
-                new TweakDef
-                {
-                    Id = "defexploit-enable-cloud-sample-submission",
-                    Label = "Exploit Protection: Maximize Exploit Block Cloud Sample Submission",
-                    Category = "Security",
-                    Description =
-                        "Sets MpCloudBlockLevel=6 in MpEngine. Sets the Defender cloud protection block level to 6 (high blocking sensitivity with immediate sample submission). When an exploit attempt is detected and blocked, the triggering binary is submitted to Microsoft's cloud for analysis within seconds. Faster sample submission improves the quality of cloud-based detection for zero-day exploit attempts affecting other machines in the tenant.",
-                    Tags = ["exploit-protection", "cloud", "sample", "zero-day", "hardening"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 4,
-                    SafetyRating = 5,
-                    ImpactNote =
-                        "Increases sample upload rate. Privacy-sensitive in environments with NDA or classified data — verify data governance policies first.",
-                    ApplyOps = [RegOp.SetDword(MpKey, "MpCloudBlockLevel", 6)],
-                    RemoveOps = [RegOp.DeleteValue(MpKey, "MpCloudBlockLevel")],
-                    DetectOps = [RegOp.CheckDword(MpKey, "MpCloudBlockLevel", 6)],
-                },
             ];
     }
 
@@ -1404,23 +926,6 @@ internal static class PolicyDefender
 
         public static IReadOnlyList<TweakDef> Data =>
             [
-                new TweakDef
-                {
-                    Id = "fwadv-enable-domain-firewall",
-                    Label = "Enable Windows Firewall — Domain Profile",
-                    Category = "Security",
-                    Description =
-                        "Enforces Windows Firewall enabled state on the domain network profile via Group Policy, preventing local override by users.",
-                    Tags = ["firewall", "domain", "policy", "hardening"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 5,
-                    SafetyRating = 5,
-                    ImpactNote = "Prevents domain users from disabling the firewall through local settings.",
-                    ApplyOps = [RegOp.SetDword(Domain, "EnableFirewall", 1)],
-                    RemoveOps = [RegOp.DeleteValue(Domain, "EnableFirewall")],
-                    DetectOps = [RegOp.CheckDword(Domain, "EnableFirewall", 1)],
-                },
                 new TweakDef
                 {
                     Id = "fwadv-enable-standard-firewall",
@@ -1436,23 +941,6 @@ internal static class PolicyDefender
                     ApplyOps = [RegOp.SetDword(Standard, "EnableFirewall", 1)],
                     RemoveOps = [RegOp.DeleteValue(Standard, "EnableFirewall")],
                     DetectOps = [RegOp.CheckDword(Standard, "EnableFirewall", 1)],
-                },
-                new TweakDef
-                {
-                    Id = "fwadv-block-inbound-domain",
-                    Label = "Block Inbound Connections by Default — Domain Profile",
-                    Category = "Security",
-                    Description =
-                        "Sets DefaultInboundAction=1 (Block) on the domain profile. All inbound traffic is blocked unless explicitly permitted by a firewall rule.",
-                    Tags = ["firewall", "inbound", "domain", "hardening"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 4,
-                    SafetyRating = 4,
-                    ImpactNote = "Blocks unsolicited inbound on domain networks; pre-configure required inbound rules.",
-                    ApplyOps = [RegOp.SetDword(Domain, "DefaultInboundAction", 1)],
-                    RemoveOps = [RegOp.DeleteValue(Domain, "DefaultInboundAction")],
-                    DetectOps = [RegOp.CheckDword(Domain, "DefaultInboundAction", 1)],
                 },
                 new TweakDef
                 {
@@ -1585,40 +1073,6 @@ internal static class PolicyDefender
 
         public static IReadOnlyList<TweakDef> Data =>
             [
-                new TweakDef
-                {
-                    Id = "defnet-enable-block-mode",
-                    Label = "Network Protection: Enable Block Mode",
-                    Category = "Security",
-                    Description =
-                        "Sets EnableNetworkProtection=1 (block mode). Activates Defender Network Protection, which uses Microsoft's cloud-based threat intelligence to block outbound connections to known-malicious IP addresses and domains. NP operates at the kernel level via the Windows Filtering Platform, intercepting connections before they leave the machine. Covers all applications (not just browsers), including LOLBins and malware command-and-control beaconing.",
-                    Tags = ["network-protection", "defender", "c2", "malware", "hardening"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 5,
-                    SafetyRating = 4,
-                    ImpactNote = "Blocks connections to Microsoft-rated malicious hosts. Rare false positives for uncommon legitimate domains.",
-                    ApplyOps = [RegOp.SetDword(NetProtKey, "EnableNetworkProtection", 1)],
-                    RemoveOps = [RegOp.DeleteValue(NetProtKey, "EnableNetworkProtection")],
-                    DetectOps = [RegOp.CheckDword(NetProtKey, "EnableNetworkProtection", 1)],
-                },
-                new TweakDef
-                {
-                    Id = "defnet-enable-audit-mode",
-                    Label = "Network Protection: Enable Audit Mode",
-                    Category = "Security",
-                    Description =
-                        "Sets EnableNetworkProtection=2 (audit mode). Logs all Network Protection block events to Event ID 1125 without actually blocking the connection. Use audit mode to understand which outbound connections would be blocked before switching to block mode. Useful for identifying legitimate business applications that connect to hosts that NP would flag. Requires Microsoft Defender Antivirus to be the active AV.",
-                    Tags = ["network-protection", "defender", "audit", "monitoring"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 3,
-                    SafetyRating = 5,
-                    ImpactNote = "Audit-only; no connections blocked. Safe to deploy first.",
-                    ApplyOps = [RegOp.SetDword(NetProtKey, "EnableNetworkProtection", 2)],
-                    RemoveOps = [RegOp.DeleteValue(NetProtKey, "EnableNetworkProtection")],
-                    DetectOps = [RegOp.CheckDword(NetProtKey, "EnableNetworkProtection", 2)],
-                },
                 new TweakDef
                 {
                     Id = "defnet-block-low-reputation",
@@ -1952,50 +1406,6 @@ internal static class PolicyDefender
 
         public static IReadOnlyList<TweakDef> Data { get; } =
         [
-            new TweakDef
-            {
-                Id = "elam-set-driver-init-policy-good",
-                Label = "ELAM: Allow Only Known-Good Drivers at Boot",
-                Category = "Security",
-                Description =
-                    "Sets DriverLoadPolicy=1 in the EarlyLaunch Policies key. "
-                    + "Instructs Windows Boot Manager to load ONLY drivers rated as 'Good' by the ELAM driver during boot. "
-                    + "Drivers classified as 'Unknown' or 'Bad' are blocked from initialising, giving the strongest "
-                    + "pre-OS boot protection. "
-                    + "Values: 1=Good only, 3=Good+Unknown, 7=Good+Unknown+Bad(BootCritical), 0=Unknown+Bad all. "
-                    + "Default: 3 (Good+Unknown). Recommended: 1 for maximum hardening.",
-                Tags = ["elam", "boot", "driver", "malware", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 3,
-                ImpactNote = "Only ELAM-rated 'Good' boot drivers are loaded; unknown third-party drivers may be blocked at boot.",
-                ApplyOps = [RegOp.SetDword(ElaKey, "DriverLoadPolicy", 1)],
-                RemoveOps = [RegOp.DeleteValue(ElaKey, "DriverLoadPolicy")],
-                DetectOps = [RegOp.CheckDword(ElaKey, "DriverLoadPolicy", 1)],
-            },
-            new TweakDef
-            {
-                Id = "elam-set-driver-init-policy-good-unknown",
-                Label = "ELAM: Allow Good and Unknown Drivers at Boot",
-                Category = "Security",
-                Description =
-                    "Sets DriverLoadPolicy=3 in the EarlyLaunch Policies key. "
-                    + "Instructs Windows Boot Manager to load drivers rated as 'Good' or 'Unknown' by the ELAM driver. "
-                    + "This is the Windows default and appropriate for most systems — blocks only definitively 'Bad' drivers. "
-                    + "Recommended over DriverLoadPolicy=1 when third-party boot-start drivers (e.g., storage controllers) "
-                    + "are present that have not yet received an ELAM classification. "
-                    + "Default: 3. Recommended: 3 as a balanced baseline.",
-                Tags = ["elam", "boot", "driver", "balanced", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 4,
-                ImpactNote = "Boot drivers rated 'Good' or 'Unknown' are loaded; only 'Bad'-rated drivers are blocked.",
-                ApplyOps = [RegOp.SetDword(ElaKey, "DriverLoadPolicy", 3)],
-                RemoveOps = [RegOp.DeleteValue(ElaKey, "DriverLoadPolicy")],
-                DetectOps = [RegOp.CheckDword(ElaKey, "DriverLoadPolicy", 3)],
-            },
             new TweakDef
             {
                 Id = "elam-set-driver-init-critical-only",
@@ -2381,23 +1791,6 @@ internal static class PolicyDefender
             [
                 new TweakDef
                 {
-                    Id = "egpol-enable-asr-rules",
-                    Label = "Enable Attack Surface Reduction (ASR) Rules Engine",
-                    Category = "Security",
-                    Description =
-                        "Activates the Windows Defender Exploit Guard Attack Surface Reduction rules engine, which enforces behavioural restrictions on Office, browser, and email applications to prevent common malware persistence and exploitation techniques.",
-                    Tags = ["exploit-guard", "asr", "defender", "attack-surface-reduction", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 5,
-                    SafetyRating = 5,
-                    ImpactNote = "ASR rules engine enabled; behavioural restrictions active for Office, scripts, and email clients.",
-                    ApplyOps = [RegOp.SetDword(AsrKey, "ExploitGuard_ASR_Rules", 1)],
-                    RemoveOps = [RegOp.DeleteValue(AsrKey, "ExploitGuard_ASR_Rules")],
-                    DetectOps = [RegOp.CheckDword(AsrKey, "ExploitGuard_ASR_Rules", 1)],
-                },
-                new TweakDef
-                {
                     Id = "egpol-enable-network-protection-block",
                     Label = "Enable Defender Network Protection in Block Mode",
                     Category = "Security",
@@ -2412,23 +1805,6 @@ internal static class PolicyDefender
                     ApplyOps = [RegOp.SetDword(EgKey, "EnableNetworkProtection", 1)],
                     RemoveOps = [RegOp.DeleteValue(EgKey, "EnableNetworkProtection")],
                     DetectOps = [RegOp.CheckDword(EgKey, "EnableNetworkProtection", 1)],
-                },
-                new TweakDef
-                {
-                    Id = "egpol-enable-cfa-block-mode",
-                    Label = "Enable Controlled Folder Access in Block Mode",
-                    Category = "Security",
-                    Description =
-                        "Activates Controlled Folder Access (CFA) in Block mode, which prevents untrusted applications from making changes to protected folders (Documents, Desktop, Pictures), protecting against ransomware encryption of user files.",
-                    Tags = ["exploit-guard", "controlled-folder-access", "ransomware", "defender", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 5,
-                    SafetyRating = 4,
-                    ImpactNote = "CFA Block mode enabled; untrusted apps cannot modify Documents/Desktop/Pictures. May block legacy apps.",
-                    ApplyOps = [RegOp.SetDword(CfaKey, "EnableControlledFolderAccess", 1)],
-                    RemoveOps = [RegOp.DeleteValue(CfaKey, "EnableControlledFolderAccess")],
-                    DetectOps = [RegOp.CheckDword(CfaKey, "EnableControlledFolderAccess", 1)],
                 },
                 new TweakDef
                 {
@@ -2675,21 +2051,6 @@ internal static class PolicyDefender
             },
             new TweakDef
             {
-                Id = "fwlog-domain-log-size",
-                Label = "Set Domain firewall log size to 16 MB (policy)",
-                Category = "Security",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                Description =
-                    "Sets the maximum Domain profile firewall log file size to 16 MB via GPO policy. "
-                    + "LogFileSize=16384 (KB). Default: 4096 KB (4 MB). Larger logs retain more history.",
-                Tags = ["firewall", "logging", "size", "domain", "policy"],
-                ApplyOps = [RegOp.SetDword(DomainLog, "LogFileSize", 16384)],
-                RemoveOps = [RegOp.DeleteValue(DomainLog, "LogFileSize")],
-                DetectOps = [RegOp.CheckDword(DomainLog, "LogFileSize", 16384)],
-            },
-            new TweakDef
-            {
                 Id = "fwlog-private-log-dropped",
                 Label = "Log dropped packets — Private firewall profile (policy)",
                 Category = "Security",
@@ -2717,20 +2078,6 @@ internal static class PolicyDefender
                 ApplyOps = [RegOp.SetDword(PrivateLog, "LogSuccessfulConnections", 1)],
                 RemoveOps = [RegOp.DeleteValue(PrivateLog, "LogSuccessfulConnections")],
                 DetectOps = [RegOp.CheckDword(PrivateLog, "LogSuccessfulConnections", 1)],
-            },
-            new TweakDef
-            {
-                Id = "fwlog-private-log-size",
-                Label = "Set Private firewall log size to 16 MB (policy)",
-                Category = "Security",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                Description =
-                    "Sets the maximum Private profile firewall log file size to 16 MB via GPO policy. " + "LogFileSize=16384 (KB). Default: 4096 KB.",
-                Tags = ["firewall", "logging", "size", "private", "policy"],
-                ApplyOps = [RegOp.SetDword(PrivateLog, "LogFileSize", 16384)],
-                RemoveOps = [RegOp.DeleteValue(PrivateLog, "LogFileSize")],
-                DetectOps = [RegOp.CheckDword(PrivateLog, "LogFileSize", 16384)],
             },
             new TweakDef
             {
@@ -2843,23 +2190,6 @@ internal static class PolicyDefender
                 },
                 new TweakDef
                 {
-                    Id = "fwprof-block-local-merge-private",
-                    Label = "Block Local Firewall Rules from Overriding GPO on Private Profile",
-                    Category = "Security",
-                    Description =
-                        "Prevents locally defined firewall rules from overriding Group Policy rules on the Private profile, ensuring GPO-deployed firewall rules cannot be undermined by applications or malware creating local exceptions.",
-                    Tags = ["firewall", "local-merge", "gpo", "private-profile", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 4,
-                    SafetyRating = 5,
-                    ImpactNote = "Local rule merge blocked on private profile; only GPO rules apply. Local app exceptions cannot override.",
-                    ApplyOps = [RegOp.SetDword(PrivKey, "AllowLocalPolicyMerge", 0)],
-                    RemoveOps = [RegOp.DeleteValue(PrivKey, "AllowLocalPolicyMerge")],
-                    DetectOps = [RegOp.CheckDword(PrivKey, "AllowLocalPolicyMerge", 0)],
-                },
-                new TweakDef
-                {
                     Id = "fwprof-disable-notifications-private",
                     Label = "Disable Firewall Blocked App Notifications on Private Profile",
                     Category = "Security",
@@ -2874,74 +2204,6 @@ internal static class PolicyDefender
                     ApplyOps = [RegOp.SetDword(PrivKey, "DisableNotifications", 1)],
                     RemoveOps = [RegOp.DeleteValue(PrivKey, "DisableNotifications")],
                     DetectOps = [RegOp.CheckDword(PrivKey, "DisableNotifications", 1)],
-                },
-                new TweakDef
-                {
-                    Id = "fwprof-log-dropped-packets-public",
-                    Label = "Log Dropped Packets on Public Firewall Profile",
-                    Category = "Security",
-                    Description =
-                        "Enables firewall logging of dropped packet events on the Public profile, recording all blocked inbound/outbound connection attempts on public networks for security incident investigation.",
-                    Tags = ["firewall", "log-dropped", "public-profile", "audit", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 3,
-                    SafetyRating = 5,
-                    ImpactNote = "Dropped packets logged on public profile; blocked connections recorded in public profile firewall log.",
-                    ApplyOps = [RegOp.SetDword(PubLog, "LogDroppedPackets", 1)],
-                    RemoveOps = [RegOp.DeleteValue(PubLog, "LogDroppedPackets")],
-                    DetectOps = [RegOp.CheckDword(PubLog, "LogDroppedPackets", 1)],
-                },
-                new TweakDef
-                {
-                    Id = "fwprof-log-allowed-packets-public",
-                    Label = "Log Allowed Connections on Public Firewall Profile",
-                    Category = "Security",
-                    Description =
-                        "Enables firewall logging of successfully allowed connections on the Public profile, providing a record of all established connections on public networks for behavioural baselining and anomaly detection.",
-                    Tags = ["firewall", "log-allowed", "public-profile", "audit", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 3,
-                    SafetyRating = 5,
-                    ImpactNote = "Allowed connections logged on public profile; all successful outbound traffic recorded in firewall log.",
-                    ApplyOps = [RegOp.SetDword(PubLog, "LogSuccessfulConnections", 1)],
-                    RemoveOps = [RegOp.DeleteValue(PubLog, "LogSuccessfulConnections")],
-                    DetectOps = [RegOp.CheckDword(PubLog, "LogSuccessfulConnections", 1)],
-                },
-                new TweakDef
-                {
-                    Id = "fwprof-set-log-max-size-domain",
-                    Label = "Set Maximum Firewall Log Size to 32 MB on Domain Profile",
-                    Category = "Security",
-                    Description =
-                        "Sets the maximum firewall log file size to 32768 KB (32 MB) on the Domain profile, ensuring sufficient log retention for forensic investigation without unbounded disk consumption.",
-                    Tags = ["firewall", "log-size", "domain-profile", "logging", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 2,
-                    SafetyRating = 5,
-                    ImpactNote = "Domain profile firewall log capped at 32 MB; adequate retention for investigation without disk overflow.",
-                    ApplyOps = [RegOp.SetDword(DomLog, "LogFileSize", 32768)],
-                    RemoveOps = [RegOp.DeleteValue(DomLog, "LogFileSize")],
-                    DetectOps = [RegOp.CheckDword(DomLog, "LogFileSize", 32768)],
-                },
-                new TweakDef
-                {
-                    Id = "fwprof-set-log-max-size-public",
-                    Label = "Set Maximum Firewall Log Size to 32 MB on Public Profile",
-                    Category = "Security",
-                    Description =
-                        "Sets the maximum firewall log file size to 32768 KB (32 MB) on the Public profile, ensuring that firewall log entries on untrusted public networks are retained for post-incident forensic analysis.",
-                    Tags = ["firewall", "log-size", "public-profile", "logging", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 2,
-                    SafetyRating = 5,
-                    ImpactNote = "Public profile firewall log capped at 32 MB; public network activity retained for post-incident review.",
-                    ApplyOps = [RegOp.SetDword(PubLog, "LogFileSize", 32768)],
-                    RemoveOps = [RegOp.DeleteValue(PubLog, "LogFileSize")],
-                    DetectOps = [RegOp.CheckDword(PubLog, "LogFileSize", 32768)],
                 },
                 new TweakDef
                 {
@@ -3202,23 +2464,6 @@ internal static class PolicyDefender
                 },
                 new TweakDef
                 {
-                    Id = "ssadv-enable-smartscreen-store-apps",
-                    Label = "Enable SmartScreen for Microsoft Store Apps",
-                    Category = "Security",
-                    Description =
-                        "Enables SmartScreen reputation checks for Universal Windows Platform (UWP) apps installed from the Microsoft Store, checking each app against the SmartScreen database before allowing execution.",
-                    Tags = ["smartscreen", "store-apps", "uwp", "defender", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 4,
-                    SafetyRating = 5,
-                    ImpactNote = "SmartScreen enabled for Store apps; UWP apps checked against reputation before execution.",
-                    ApplyOps = [RegOp.SetDword(Key, "EnableSmartScreen", 1)],
-                    RemoveOps = [RegOp.DeleteValue(Key, "EnableSmartScreen")],
-                    DetectOps = [RegOp.CheckDword(Key, "EnableSmartScreen", 1)],
-                },
-                new TweakDef
-                {
                     Id = "ssadv-block-smartscreen-override",
                     Label = "Block Users from Overriding SmartScreen Warnings",
                     Category = "Security",
@@ -3233,40 +2478,6 @@ internal static class PolicyDefender
                     ApplyOps = [RegOp.SetDword(ExplKey, "PreventOverride", 1)],
                     RemoveOps = [RegOp.DeleteValue(ExplKey, "PreventOverride")],
                     DetectOps = [RegOp.CheckDword(ExplKey, "PreventOverride", 1)],
-                },
-                new TweakDef
-                {
-                    Id = "ssadv-enable-edge-phish-filter",
-                    Label = "Enable Edge Phishing Filter (SmartScreen for URLs)",
-                    Category = "Security",
-                    Description =
-                        "Enables the Edge/IE SmartScreen Phishing Filter that checks every visited URL against Microsoft's database of known phishing and malware distribution sites, warning or blocking access to malicious web pages.",
-                    Tags = ["smartscreen", "phishing-filter", "edge", "url", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 5,
-                    SafetyRating = 5,
-                    ImpactNote = "Edge phishing filter enabled; visited URLs checked against Microsoft malicious site database.",
-                    ApplyOps = [RegOp.SetDword(EdgeKey, "EnabledV9", 1)],
-                    RemoveOps = [RegOp.DeleteValue(EdgeKey, "EnabledV9")],
-                    DetectOps = [RegOp.CheckDword(EdgeKey, "EnabledV9", 1)],
-                },
-                new TweakDef
-                {
-                    Id = "ssadv-block-edge-phish-override",
-                    Label = "Block Users from Overriding Edge Phishing Site Warnings",
-                    Category = "Security",
-                    Description =
-                        "Prevents users from clicking through Edge SmartScreen warnings about phishing sites, making phishing site warnings non-bypassable hard blocks to protect against social engineering attacks.",
-                    Tags = ["smartscreen", "phishing", "edge", "override", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 5,
-                    SafetyRating = 5,
-                    ImpactNote = "Edge phishing site blocks enforced; users cannot bypass SmartScreen warnings for malicious URLs.",
-                    ApplyOps = [RegOp.SetDword(EdgeKey, "PreventOverride", 1)],
-                    RemoveOps = [RegOp.DeleteValue(EdgeKey, "PreventOverride")],
-                    DetectOps = [RegOp.CheckDword(EdgeKey, "PreventOverride", 1)],
                 },
                 new TweakDef
                 {
@@ -3368,35 +2579,6 @@ internal static class PolicyDefender
         [
             new TweakDef
             {
-                Id = "smartscr-enable-shell",
-                Label = "Enable Windows SmartScreen (shell)",
-                Category = "Security",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                Description =
-                    "Enables Windows Defender SmartScreen for file and app checks in Explorer/shell via GPO. "
-                    + "EnableSmartScreen=1. Default: enabled. Recommended: enforced via policy.",
-                Tags = ["smartscreen", "shell", "security", "policy"],
-                ApplyOps = [RegOp.SetDword(WinSys, "EnableSmartScreen", 1)],
-                RemoveOps = [RegOp.DeleteValue(WinSys, "EnableSmartScreen")],
-                DetectOps = [RegOp.CheckDword(WinSys, "EnableSmartScreen", 1)],
-            },
-            new TweakDef
-            {
-                Id = "smartscr-shell-block-level",
-                Label = "Set SmartScreen shell level to Block",
-                Category = "Security",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                Description =
-                    "Forces SmartScreen to block unknown/malicious files instead of just warning. " + "ShellSmartScreenLevel=Block. Default: Warn.",
-                Tags = ["smartscreen", "shell", "block", "policy"],
-                ApplyOps = [RegOp.SetString(WinSys, "ShellSmartScreenLevel", "Block")],
-                RemoveOps = [RegOp.DeleteValue(WinSys, "ShellSmartScreenLevel")],
-                DetectOps = [RegOp.CheckString(WinSys, "ShellSmartScreenLevel", "Block")],
-            },
-            new TweakDef
-            {
                 Id = "smartscr-app-install-control-enabled",
                 Label = "Enable Defender SmartScreen app install control",
                 Category = "Security",
@@ -3427,35 +2609,6 @@ internal static class PolicyDefender
             },
             new TweakDef
             {
-                Id = "smartscr-ie-phishing-filter",
-                Label = "Enable IE/Edge Legacy SmartScreen phishing filter",
-                Category = "Security",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                Description =
-                    "Enables the IE/Edge Legacy SmartScreen phishing filter via policy. "
-                    + "EnabledV9=1. Blocks known phishing sites and malware downloads.",
-                Tags = ["smartscreen", "ie", "phishing", "policy"],
-                ApplyOps = [RegOp.SetDword(IEPhish, "EnabledV9", 1)],
-                RemoveOps = [RegOp.DeleteValue(IEPhish, "EnabledV9")],
-                DetectOps = [RegOp.CheckDword(IEPhish, "EnabledV9", 1)],
-            },
-            new TweakDef
-            {
-                Id = "smartscr-ie-prevent-site-override",
-                Label = "Prevent user bypassing SmartScreen for malicious sites",
-                Category = "Security",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                Description =
-                    "Prevents users from bypassing SmartScreen filter warnings for malicious websites in IE/Edge Legacy. " + "PreventOverride=1.",
-                Tags = ["smartscreen", "ie", "override", "policy"],
-                ApplyOps = [RegOp.SetDword(IEPhish, "PreventOverride", 1)],
-                RemoveOps = [RegOp.DeleteValue(IEPhish, "PreventOverride")],
-                DetectOps = [RegOp.CheckDword(IEPhish, "PreventOverride", 1)],
-            },
-            new TweakDef
-            {
                 Id = "smartscr-ie-prevent-app-rep-override",
                 Label = "Prevent user bypassing SmartScreen for unknown apps",
                 Category = "Security",
@@ -3468,36 +2621,6 @@ internal static class PolicyDefender
                 ApplyOps = [RegOp.SetDword(IEPhish, "PreventOverrideAppRepUnknown", 1)],
                 RemoveOps = [RegOp.DeleteValue(IEPhish, "PreventOverrideAppRepUnknown")],
                 DetectOps = [RegOp.CheckDword(IEPhish, "PreventOverrideAppRepUnknown", 1)],
-            },
-            new TweakDef
-            {
-                Id = "smartscr-edge-enable",
-                Label = "Enable Microsoft Edge SmartScreen (policy)",
-                Category = "Security",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                Description =
-                    "Enables Windows Defender SmartScreen in Microsoft Edge via managed GPO policy. "
-                    + "SmartScreenEnabled=1. Recommended: always enforced.",
-                Tags = ["smartscreen", "edge", "security", "policy"],
-                ApplyOps = [RegOp.SetDword(EdgePol, "SmartScreenEnabled", 1)],
-                RemoveOps = [RegOp.DeleteValue(EdgePol, "SmartScreenEnabled")],
-                DetectOps = [RegOp.CheckDword(EdgePol, "SmartScreenEnabled", 1)],
-            },
-            new TweakDef
-            {
-                Id = "smartscr-edge-pua-block",
-                Label = "Enable Edge SmartScreen PUA blocking (policy)",
-                Category = "Security",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                Description =
-                    "Enables Microsoft Edge SmartScreen detection and blocking of Potentially Unwanted Applications (PUA). "
-                    + "SmartScreenPuaEnabled=1.",
-                Tags = ["smartscreen", "edge", "pua", "policy"],
-                ApplyOps = [RegOp.SetDword(EdgePol, "SmartScreenPuaEnabled", 1)],
-                RemoveOps = [RegOp.DeleteValue(EdgePol, "SmartScreenPuaEnabled")],
-                DetectOps = [RegOp.CheckDword(EdgePol, "SmartScreenPuaEnabled", 1)],
             },
             new TweakDef
             {
@@ -3757,22 +2880,6 @@ internal static class PolicyDefender
             [
                 new TweakDef
                 {
-                    Id = "fwpol-enable-domain-profile",
-                    Label = "Enable Firewall on Domain Profile",
-                    Category = "Security",
-                    Description = "Ensures Windows Defender Firewall is active on Domain network profile connections.",
-                    Tags = ["firewall", "domain", "profile", "policy", "security"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 5,
-                    SafetyRating = 5,
-                    ImpactNote = "Firewall enforced on domain-joined networks; prevents admin from disabling it without policy change.",
-                    ApplyOps = [RegOp.SetDword(DomainKey, "EnableFirewall", 1)],
-                    RemoveOps = [RegOp.DeleteValue(DomainKey, "EnableFirewall")],
-                    DetectOps = [RegOp.CheckDword(DomainKey, "EnableFirewall", 1)],
-                },
-                new TweakDef
-                {
                     Id = "fwpol-enable-private-profile",
                     Label = "Enable Firewall on Private Profile",
                     Category = "Security",
@@ -3805,22 +2912,6 @@ internal static class PolicyDefender
                 },
                 new TweakDef
                 {
-                    Id = "fwpol-block-inbound-domain",
-                    Label = "Block All Inbound Connections on Domain Profile",
-                    Category = "Security",
-                    Description = "Sets the default inbound action to block all inbound connections on the domain network profile.",
-                    Tags = ["firewall", "domain", "inbound", "block", "policy", "security"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 4,
-                    SafetyRating = 3,
-                    ImpactNote = "Blocks all unsolicited inbound traffic on domain networks; explicit allow rules required for managed services.",
-                    ApplyOps = [RegOp.SetDword(DomainKey, "DefaultInboundAction", 1)],
-                    RemoveOps = [RegOp.DeleteValue(DomainKey, "DefaultInboundAction")],
-                    DetectOps = [RegOp.CheckDword(DomainKey, "DefaultInboundAction", 1)],
-                },
-                new TweakDef
-                {
                     Id = "fwpol-block-inbound-public",
                     Label = "Block All Inbound Connections on Public Profile",
                     Category = "Security",
@@ -3834,54 +2925,6 @@ internal static class PolicyDefender
                     ApplyOps = [RegOp.SetDword(PublicKey, "DefaultInboundAction", 1)],
                     RemoveOps = [RegOp.DeleteValue(PublicKey, "DefaultInboundAction")],
                     DetectOps = [RegOp.CheckDword(PublicKey, "DefaultInboundAction", 1)],
-                },
-                new TweakDef
-                {
-                    Id = "fwpol-no-local-rules-domain",
-                    Label = "Prevent Local Firewall Rules on Domain Profile",
-                    Category = "Security",
-                    Description = "Disallows local administrators from creating firewall allow-rules that bypass Group Policy domain profile rules.",
-                    Tags = ["firewall", "domain", "local-rules", "policy", "security"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 4,
-                    SafetyRating = 4,
-                    ImpactNote = "Only GP-delivered firewall rules apply on the Domain profile; local exceptions are ignored.",
-                    ApplyOps = [RegOp.SetDword(DomainKey, "AllowLocalPolicyMerge", 0)],
-                    RemoveOps = [RegOp.DeleteValue(DomainKey, "AllowLocalPolicyMerge")],
-                    DetectOps = [RegOp.CheckDword(DomainKey, "AllowLocalPolicyMerge", 0)],
-                },
-                new TweakDef
-                {
-                    Id = "fwpol-no-local-rules-public",
-                    Label = "Prevent Local Firewall Rules on Public Profile",
-                    Category = "Security",
-                    Description = "Disallows local firewall rule creation on the Public profile, enforcing only policy-delivered rules.",
-                    Tags = ["firewall", "public", "local-rules", "policy", "security"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 4,
-                    SafetyRating = 4,
-                    ImpactNote = "GP rules are authoritative on public networks; local admin cannot weaken public profile protection.",
-                    ApplyOps = [RegOp.SetDword(PublicKey, "AllowLocalPolicyMerge", 0)],
-                    RemoveOps = [RegOp.DeleteValue(PublicKey, "AllowLocalPolicyMerge")],
-                    DetectOps = [RegOp.CheckDword(PublicKey, "AllowLocalPolicyMerge", 0)],
-                },
-                new TweakDef
-                {
-                    Id = "fwpol-unicast-response-domain",
-                    Label = "Disable Unicast Response to Multicast on Domain Profile",
-                    Category = "Security",
-                    Description = "Prevents the firewall from allowing unicast responses to multicast/broadcast packets on Domain networks.",
-                    Tags = ["firewall", "domain", "multicast", "unicast", "policy"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 3,
-                    SafetyRating = 4,
-                    ImpactNote = "Reduces information disclosure via multicast; may affect some network discovery features.",
-                    ApplyOps = [RegOp.SetDword(DomainKey, "DisableUnicastResponsesToMulticastBroadcast", 1)],
-                    RemoveOps = [RegOp.DeleteValue(DomainKey, "DisableUnicastResponsesToMulticastBroadcast")],
-                    DetectOps = [RegOp.CheckDword(DomainKey, "DisableUnicastResponsesToMulticastBroadcast", 1)],
                 },
                 new TweakDef
                 {
@@ -4879,43 +3922,6 @@ internal static class PolicyAudit
         [
             new TweakDef
             {
-                Id = "werpol-disable-wer",
-                Label = "Disable Windows Error Reporting via Group Policy",
-                Category = "Security",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 3,
-                Tags = ["wer", "error reporting", "crash", "privacy", "group policy"],
-                Description =
-                    "Disables Windows Error Reporting (WER) system-wide via Group Policy. "
-                    + "Disabled = 1. No crash reports are collected, stored, or sent to Microsoft. "
-                    + "Default: enabled. Recommended for air-gapped or high-privacy deployments. "
-                    + "Note: disabling WER also prevents WER-based crash analysis in Event Viewer.",
-                ApplyOps = [RegOp.SetDword(WerPol, "Disabled", 1)],
-                RemoveOps = [RegOp.SetDword(WerPol, "Disabled", 0)],
-                DetectOps = [RegOp.CheckDword(WerPol, "Disabled", 1)],
-            },
-            new TweakDef
-            {
-                Id = "werpol-disable-internet-send",
-                Label = "WER: Block Sending Error Reports to Microsoft",
-                Category = "Security",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                Tags = ["wer", "error reporting", "telemetry", "privacy", "group policy"],
-                Description =
-                    "Prevents Windows Error Reporting from sending crash data over the internet to Microsoft. "
-                    + "DontSendAdditionalData = 1. Crash data is still collected locally but not transmitted. "
-                    + "Preferred privacy setting that retains local crash diagnostics while stopping uploads.",
-                ApplyOps = [RegOp.SetDword(WerPol, "DontSendAdditionalData", 1)],
-                RemoveOps = [RegOp.SetDword(WerPol, "DontSendAdditionalData", 0)],
-                DetectOps = [RegOp.CheckDword(WerPol, "DontSendAdditionalData", 1)],
-            },
-            new TweakDef
-            {
                 Id = "werpol-disable-crash-dialog",
                 Label = "WER: Suppress Crash Report Dialog",
                 Category = "Security",
@@ -4931,25 +3937,6 @@ internal static class PolicyAudit
                 ApplyOps = [RegOp.SetDword(WerPol, "DontShowUI", 1)],
                 RemoveOps = [RegOp.SetDword(WerPol, "DontShowUI", 0)],
                 DetectOps = [RegOp.CheckDword(WerPol, "DontShowUI", 1)],
-            },
-            new TweakDef
-            {
-                Id = "werpol-bypass-throttling",
-                Label = "WER: Bypass Error Report Throttling",
-                Category = "Security",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                Tags = ["wer", "error reporting", "crash", "diagnostics", "group policy"],
-                Description =
-                    "Disables WER's built-in throttling that limits how many reports can be sent. "
-                    + "BypassDataThrottling = 1. Ensures all crash reports are captured in corporate "
-                    + "WER server deployments where local rate-limiting would mask incident scope. "
-                    + "Default: throttling enabled. Use in conjunction with a corporate WER server.",
-                ApplyOps = [RegOp.SetDword(WerPol, "BypassDataThrottling", 1)],
-                RemoveOps = [RegOp.SetDword(WerPol, "BypassDataThrottling", 0)],
-                DetectOps = [RegOp.CheckDword(WerPol, "BypassDataThrottling", 1)],
             },
             new TweakDef
             {
@@ -5624,63 +4611,6 @@ internal static class PolicyAudit
         [
             new TweakDef
             {
-                Id = "evtgpo-application-size-128mb",
-                Label = "Set Application Event Log Size to 128 MB (GPO)",
-                Category = "Security",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                Description =
-                    "Sets the Application event log maximum size to 128 MB (131072 KB) via GPO. "
-                    + "Enforces the size policy even if administrators change the local setting. "
-                    + "Uses the GPO path Policies\\Windows\\EventLog\\Application\\MaxSize.",
-                Tags = ["event log", "application log", "size", "gpo", "audit"],
-                RegistryKeys = [App],
-                ApplyOps = [RegOp.SetDword(App, "MaxSize", 131072)],
-                RemoveOps = [RegOp.DeleteValue(App, "MaxSize")],
-                DetectOps = [RegOp.CheckDword(App, "MaxSize", 131072)],
-            },
-            new TweakDef
-            {
-                Id = "evtgpo-security-size-1gb",
-                Label = "Set Security Event Log Size to 1 GB (GPO)",
-                Category = "Security",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 3,
-                SafetyRating = 5,
-                Description =
-                    "Sets the Security event log maximum size to 1 GB (1048576 KB) via GPO. "
-                    + "Recommended for environments with verbose audit policies to avoid overwriting "
-                    + "forensic evidence. Policies\\Windows\\EventLog\\Security\\MaxSize.",
-                Tags = ["event log", "security log", "audit", "forensics", "gpo"],
-                RegistryKeys = [Sec],
-                ApplyOps = [RegOp.SetDword(Sec, "MaxSize", 1048576)],
-                RemoveOps = [RegOp.DeleteValue(Sec, "MaxSize")],
-                DetectOps = [RegOp.CheckDword(Sec, "MaxSize", 1048576)],
-            },
-            new TweakDef
-            {
-                Id = "evtgpo-system-size-128mb",
-                Label = "Set System Event Log Size to 128 MB (GPO)",
-                Category = "Security",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                Description =
-                    "Sets the System event log maximum size to 128 MB (131072 KB) via GPO. "
-                    + "Provides adequate retention for driver, service, and system error events "
-                    + "on busy servers. Policies\\Windows\\EventLog\\System\\MaxSize.",
-                Tags = ["event log", "system log", "size", "gpo"],
-                RegistryKeys = [Sys],
-                ApplyOps = [RegOp.SetDword(Sys, "MaxSize", 131072)],
-                RemoveOps = [RegOp.DeleteValue(Sys, "MaxSize")],
-                DetectOps = [RegOp.CheckDword(Sys, "MaxSize", 131072)],
-            },
-            new TweakDef
-            {
                 Id = "evtgpo-setup-size-64mb",
                 Label = "Set Setup Event Log Size to 64 MB (GPO)",
                 Category = "Security",
@@ -5735,25 +4665,6 @@ internal static class PolicyAudit
                 ApplyOps = [RegOp.SetDword(App, "Retention", 0)],
                 RemoveOps = [RegOp.DeleteValue(App, "Retention")],
                 DetectOps = [RegOp.CheckDword(App, "Retention", 0)],
-            },
-            new TweakDef
-            {
-                Id = "evtgpo-security-overwrite",
-                Label = "Overwrite Security Event Log When Full (GPO)",
-                Category = "Security",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                Description =
-                    "Sets Security event log Retention=0 via GPO. On systems with CrashOnAuditFail "
-                    + "disabled, this ensures the security log continues to operate without "
-                    + "blocking the system when full.",
-                Tags = ["event log", "security log", "retention", "overwrite", "gpo"],
-                RegistryKeys = [Sec],
-                ApplyOps = [RegOp.SetDword(Sec, "Retention", 0)],
-                RemoveOps = [RegOp.DeleteValue(Sec, "Retention")],
-                DetectOps = [RegOp.CheckDword(Sec, "Retention", 0)],
             },
             new TweakDef
             {
@@ -7177,24 +6088,6 @@ internal static class PolicyAudit
             },
             new TweakDef
             {
-                Id = "audit-require-sign-seal-dc",
-                Label = "Require Secure Channel Signing and Sealing",
-                Category = "Security",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                Tags = ["audit", "netlogon", "signing", "security", "domain"],
-                Description =
-                    "Requires that all Netlogon secure channel traffic be signed and sealed. "
-                    + "Prevents Netlogon relay attacks (Zerologon CVE-2020-1472). "
-                    + "Set to 1 to require both signing and sealing.",
-                ApplyOps = [RegOp.SetDword(NetLogon, "RequireSignOrSeal", 1)],
-                RemoveOps = [RegOp.DeleteValue(NetLogon, "RequireSignOrSeal")],
-                DetectOps = [RegOp.CheckDword(NetLogon, "RequireSignOrSeal", 1)],
-            },
-            new TweakDef
-            {
                 Id = "audit-disable-ntlm-v1",
                 Label = "Disable NTLMv1 Authentication (Require NTLMv2)",
                 Category = "Security",
@@ -7249,24 +6142,6 @@ internal static class PolicyAudit
             },
             new TweakDef
             {
-                Id = "audit-restrict-anonymous-full",
-                Label = "Fully Restrict Anonymous Network Access",
-                Category = "Security",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                Tags = ["audit", "anonymous", "restricted", "network", "security"],
-                Description =
-                    "Sets RestrictAnonymous to 1, preventing null-session connections from "
-                    + "enumerating shares and users. Blocks anonymous pipe/-share access. "
-                    + "Value 2 would be full isolation (may break some workgroup scenarios).",
-                ApplyOps = [RegOp.SetDword(Lsa, "RestrictAnonymous", 1)],
-                RemoveOps = [RegOp.SetDword(Lsa, "RestrictAnonymous", 0)],
-                DetectOps = [RegOp.CheckDword(Lsa, "RestrictAnonymous", 1)],
-            },
-            new TweakDef
-            {
                 Id = "audit-force-audit-policy-on-logon",
                 Label = "Force Audit Policy Update on Every Logon",
                 Category = "Security",
@@ -7282,43 +6157,6 @@ internal static class PolicyAudit
                 ApplyOps = [RegOp.SetDword(Lsa, "ForceGuest", 0)],
                 RemoveOps = [RegOp.DeleteValue(Lsa, "ForceGuest")],
                 DetectOps = [RegOp.CheckDword(Lsa, "ForceGuest", 0)],
-            },
-            new TweakDef
-            {
-                Id = "audit-enable-crash-on-audit-fail",
-                Label = "Enable System Halt on Security Audit Failure",
-                Category = "Security",
-                NeedsAdmin = true,
-                CorpSafe = false,
-                ImpactScore = 5,
-                SafetyRating = 2,
-                Tags = ["audit", "crash", "halt", "security", "compliance"],
-                Description =
-                    "Causes Windows to halt (BSOD) if the security event log cannot accept "
-                    + "new events. Value 2 = halt. Used in high-security environments where "
-                    + "audit trail continuity is mandatory (e.g. FISMA-High). "
-                    + "WARNING: system will freeze if log is full.",
-                ApplyOps = [RegOp.SetDword(Lsa, "CrashOnAuditFail", 2)],
-                RemoveOps = [RegOp.SetDword(Lsa, "CrashOnAuditFail", 0)],
-                DetectOps = [RegOp.CheckDword(Lsa, "CrashOnAuditFail", 2)],
-            },
-            new TweakDef
-            {
-                Id = "audit-disable-anonymous-token-enumeration",
-                Label = "Disable Anonymous Account Token Enumeration",
-                Category = "Security",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 4,
-                SafetyRating = 5,
-                Tags = ["audit", "anonymous", "token", "enumeration", "security"],
-                Description =
-                    "Prevents anonymous connections from enumerating account names and groups "
-                    + "via the SAM protocol. Reduces attack surface for password spraying and "
-                    + "user enumeration over the network.",
-                ApplyOps = [RegOp.SetDword(Lsa, "EveryoneIncludesAnonymous", 0)],
-                RemoveOps = [RegOp.DeleteValue(Lsa, "EveryoneIncludesAnonymous")],
-                DetectOps = [RegOp.CheckDword(Lsa, "EveryoneIncludesAnonymous", 0)],
             },
         ];
     }
