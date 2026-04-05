@@ -1964,7 +1964,6 @@ internal static class Debloat
     ];
 }
 
-
 internal static class MsStore
 {
     internal static IReadOnlyList<TweakDef> Tweaks { get; } =
@@ -3176,4 +3175,3 @@ internal static class Widgets
         },
     ];
 }
-

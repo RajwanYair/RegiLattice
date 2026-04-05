@@ -1994,7 +1994,6 @@ internal static class Edge
     ];
 }
 
-
 internal static class PolicyBrowser
 {
     public static IReadOnlyList<TweakDef> Tweaks =>

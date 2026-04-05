@@ -114,43 +114,45 @@ internal static class AppIcons
         int[] sizes = [16, 32, 48, 64, 128, 256];
 
         // Render each size to a PNG byte array.
-        byte[][] pngs = sizes.Select(sz =>
-        {
-            using var bmp = new Bitmap(sz, sz, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-            using var g = Graphics.FromImage(bmp);
-            g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
-            g.CompositingQuality = System.Drawing.Drawing2D.CompositingQuality.HighQuality;
-            g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
-            g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
-            g.Clear(Color.Transparent);
-            draw(g, sz);
-            using var ms = new System.IO.MemoryStream();
-            bmp.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
-            return ms.ToArray();
-        }).ToArray();
+        byte[][] pngs = sizes
+            .Select(sz =>
+            {
+                using var bmp = new Bitmap(sz, sz, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+                using var g = Graphics.FromImage(bmp);
+                g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+                g.CompositingQuality = System.Drawing.Drawing2D.CompositingQuality.HighQuality;
+                g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
+                g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
+                g.Clear(Color.Transparent);
+                draw(g, sz);
+                using var ms = new System.IO.MemoryStream();
+                bmp.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
+                return ms.ToArray();
+            })
+            .ToArray();
 
         // Pack PNG frames into an ICO binary stream (RFC-compatible PNG-in-ICO, Vista+).
         using var ico = new System.IO.MemoryStream();
         using var bw = new System.IO.BinaryWriter(ico);
 
         // ICO file header
-        bw.Write((short)0);               // Reserved
-        bw.Write((short)1);               // Type: 1 = ICO
-        bw.Write((short)sizes.Length);    // Image count
+        bw.Write((short)0); // Reserved
+        bw.Write((short)1); // Type: 1 = ICO
+        bw.Write((short)sizes.Length); // Image count
 
         // Directory entries (16 bytes each)
         int offset = 6 + sizes.Length * 16;
         for (int i = 0; i < sizes.Length; i++)
         {
             int sz = sizes[i];
-            bw.Write((byte)(sz >= 256 ? 0 : sz));  // Width  (0 encodes 256)
-            bw.Write((byte)(sz >= 256 ? 0 : sz));  // Height (0 encodes 256)
-            bw.Write((byte)0);                     // Color count (0 = TrueColor)
-            bw.Write((byte)0);                     // Reserved
-            bw.Write((short)1);                    // Planes
-            bw.Write((short)32);                   // Bit depth
-            bw.Write((int)pngs[i].Length);         // Data size in bytes
-            bw.Write((int)offset);                 // Offset from start of file
+            bw.Write((byte)(sz >= 256 ? 0 : sz)); // Width  (0 encodes 256)
+            bw.Write((byte)(sz >= 256 ? 0 : sz)); // Height (0 encodes 256)
+            bw.Write((byte)0); // Color count (0 = TrueColor)
+            bw.Write((byte)0); // Reserved
+            bw.Write((short)1); // Planes
+            bw.Write((short)32); // Bit depth
+            bw.Write((int)pngs[i].Length); // Data size in bytes
+            bw.Write((int)offset); // Offset from start of file
             offset += pngs[i].Length;
         }
 

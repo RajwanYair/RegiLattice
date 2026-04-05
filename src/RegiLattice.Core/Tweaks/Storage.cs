@@ -1210,7 +1210,6 @@ internal static class SsdOptimization
     ];
 }
 
-
 internal static class PolicyStorage
 {
     public static IReadOnlyList<TweakDef> Tweaks =>

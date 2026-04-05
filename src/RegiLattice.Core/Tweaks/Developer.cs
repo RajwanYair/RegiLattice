@@ -1130,7 +1130,6 @@ internal static class DevDrive
 
 // ── merged from VsCode.cs ────────────────────────────────────────
 
-
 internal static class PolicyPowerShell
 {
     public static IReadOnlyList<TweakDef> Tweaks =>

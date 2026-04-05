@@ -2311,21 +2311,9 @@ internal static class PolicyRemoteAssistance
             ImpactScore = 2,
             SafetyRating = 5,
             ImpactNote = "RA invitation tickets expire within 1 hour; stale invitations cannot be reused.",
-            ApplyOps =
-            [
-                RegOp.SetDword(RemAssistRA, "MaxTicketExpiryUnits", 1),
-                RegOp.SetDword(RemAssistRA, "MaxTicketExpiry", 1),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(RemAssistRA, "MaxTicketExpiryUnits"),
-                RegOp.DeleteValue(RemAssistRA, "MaxTicketExpiry"),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(RemAssistRA, "MaxTicketExpiryUnits", 1),
-                RegOp.CheckDword(RemAssistRA, "MaxTicketExpiry", 1),
-            ],
+            ApplyOps = [RegOp.SetDword(RemAssistRA, "MaxTicketExpiryUnits", 1), RegOp.SetDword(RemAssistRA, "MaxTicketExpiry", 1)],
+            RemoveOps = [RegOp.DeleteValue(RemAssistRA, "MaxTicketExpiryUnits"), RegOp.DeleteValue(RemAssistRA, "MaxTicketExpiry")],
+            DetectOps = [RegOp.CheckDword(RemAssistRA, "MaxTicketExpiryUnits", 1), RegOp.CheckDword(RemAssistRA, "MaxTicketExpiry", 1)],
         },
         new TweakDef
         {
