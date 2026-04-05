@@ -229,7 +229,7 @@ public sealed class GuiStartupTests
         var engine = new TweakEngine();
         var ex = Record.Exception(() => engine.RegisterBuiltins());
         Assert.Null(ex);
-        Assert.True(engine.TweakCount > 9000, $"Expected >9000 tweaks after RegisterBuiltins, got {engine.TweakCount}");
+        Assert.True(engine.TweakCount > 8000, $"Expected >8000 tweaks after RegisterBuiltins, got {engine.TweakCount}");
     }
 
     // ── Program.ResolveManagerArg ── logic test without instantiating any Form ──

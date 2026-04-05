@@ -8,28 +8,6 @@ internal static class Input
     [
         new TweakDef
         {
-            Id = "input-fast-keyboard-repeat",
-            Label = "Maximize Keyboard Repeat Rate",
-            Category = "Input",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Sets keyboard repeat speed to maximum and delay to shortest.",
-            Tags = ["input", "keyboard", "performance"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Keyboard"],
-            ApplyOps =
-            [
-                RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Keyboard", "KeyboardSpeed", "31"),
-                RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Keyboard", "KeyboardDelay", "0"),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Keyboard", "KeyboardSpeed", "31"),
-                RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Keyboard", "KeyboardDelay", "1"),
-            ],
-            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Keyboard", "KeyboardDelay", "0")],
-        },
-        new TweakDef
-        {
             Id = "input-disable-touchpad-tap",
             Label = "Disable Touchpad Tap-to-Click (Perf)",
             Category = "Input",
@@ -42,21 +20,6 @@ internal static class Input
             ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad", "TapEnabled", 0)],
             RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad", "TapEnabled", 1)],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad", "TapEnabled", 0)],
-        },
-        new TweakDef
-        {
-            Id = "input-increase-hover-time",
-            Label = "Increase Mouse Hover Time (1s)",
-            Category = "Input",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Increases mouse hover delay from 400ms to 1000ms. Reduces accidental tooltip popups. Options: 400ms (default) / 1000ms. Recommended: 1000ms.",
-            Tags = ["input", "mouse", "ux"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Mouse"],
-            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Mouse", "MouseHoverTime", "1000")],
-            RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Mouse", "MouseHoverTime", "400")],
-            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Mouse", "MouseHoverTime", "1000")],
         },
         new TweakDef
         {
@@ -85,20 +48,6 @@ internal static class Input
             ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "WheelScrollLines", "5")],
             RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "WheelScrollLines", "3")],
             DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "WheelScrollLines", "5")],
-        },
-        new TweakDef
-        {
-            Id = "input-keyboard-delay-zero",
-            Label = "Set Keyboard Repeat Delay to Minimum",
-            Category = "Input",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Sets keyboard repeat delay to 0 (minimum) for faster key repeat.",
-            Tags = ["input", "keyboard", "performance"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Keyboard"],
-            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Keyboard", "KeyboardDelay", "0")],
-            RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Keyboard", "KeyboardDelay", "1")],
-            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Keyboard", "KeyboardDelay", "0")],
         },
         new TweakDef
         {
@@ -162,62 +111,6 @@ internal static class Input
         },
         new TweakDef
         {
-            Id = "input-increase-keyboard-repeat-rate",
-            Label = "Increase Keyboard Repeat Rate",
-            Category = "Input",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Sets keyboard repeat rate to maximum (31). Makes held keys repeat faster. Default: 31.",
-            Tags = ["input", "keyboard", "repeat", "rate"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Keyboard"],
-            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Keyboard", "KeyboardSpeed", "31")],
-            RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Keyboard", "KeyboardSpeed", "31")],
-            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Keyboard", "KeyboardSpeed", "31")],
-        },
-        new TweakDef
-        {
-            Id = "input-reduce-keyboard-delay",
-            Label = "Reduce Keyboard Repeat Delay",
-            Category = "Input",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Reduces the delay before a held key starts repeating to minimum (0 = ~250ms). Default: 1 (~500ms).",
-            Tags = ["input", "keyboard", "delay", "repeat"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Keyboard"],
-            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Keyboard", "KeyboardDelay", "0")],
-            RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Keyboard", "KeyboardDelay", "1")],
-            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Keyboard", "KeyboardDelay", "0")],
-        },
-        new TweakDef
-        {
-            Id = "input-disable-mouse-trails",
-            Label = "Disable Mouse Pointer Trails",
-            Category = "Input",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Disables the mouse pointer trail effect. Default: disabled.",
-            Tags = ["input", "mouse", "trails", "pointer"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Mouse"],
-            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Mouse", "MouseTrails", "0")],
-            RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Mouse", "MouseTrails", "0")],
-            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Mouse", "MouseTrails", "0")],
-        },
-        new TweakDef
-        {
-            Id = "input-disable-snap-mouse-to-button",
-            Label = "Disable Snap Mouse to Default Button",
-            Category = "Input",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Disables automatically snapping the mouse cursor to the default button in dialog boxes. Default: disabled.",
-            Tags = ["input", "mouse", "snap", "dialog"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Mouse"],
-            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Mouse", "SnapToDefaultButton", "0")],
-            RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Mouse", "SnapToDefaultButton", "0")],
-            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Mouse", "SnapToDefaultButton", "0")],
-        },
-        new TweakDef
-        {
             Id = "input-disable-mouse-accel",
             Label = "Disable Mouse Acceleration",
             Category = "Input",
@@ -241,21 +134,6 @@ internal static class Input
             ],
             DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Mouse", "MouseSpeed", "0")],
         },
-        new TweakDef
-        {
-            Id = "input-enhanced-pointer-precision",
-            Label = "Disable Enhanced Pointer Precision",
-            Category = "Input",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Disables the Windows Enhanced Pointer Precision feature. Provides raw unfiltered mouse input for consistent cursor movement. Default: enabled.",
-            Tags = ["input", "pointer", "precision", "raw"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Mouse"],
-            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Mouse", "MouseSensitivity", "10")],
-            RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Mouse", "MouseSensitivity", "10")],
-            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Mouse", "MouseSensitivity", "10")],
-        },
         // ── Sprint 19 additions ────────────────────────────────────────────
         new TweakDef
         {
@@ -270,20 +148,6 @@ internal static class Input
             ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Siuf\Rules", "NumberOfSIUFInPeriod", 0)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Siuf\Rules", "NumberOfSIUFInPeriod")],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Siuf\Rules", "NumberOfSIUFInPeriod", 0)],
-        },
-        new TweakDef
-        {
-            Id = "input-set-wheel-scroll-chars",
-            Label = "Set Horizontal Scroll to 3 Characters",
-            Category = "Input",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Sets the horizontal mouse wheel scroll distance to 3 characters per notch. Default: 3.",
-            Tags = ["input", "mouse", "scroll", "horizontal"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Desktop"],
-            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "WheelScrollChars", "3")],
-            RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "WheelScrollChars", "3")],
-            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "WheelScrollChars", "3")],
         },
         new TweakDef
         {
@@ -352,20 +216,6 @@ internal static class Input
         },
         new TweakDef
         {
-            Id = "input-set-mouse-pointer-speed",
-            Label = "Set Mouse Pointer Speed to Maximum",
-            Category = "Input",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Sets the mouse pointer speed to maximum (20). Useful for high-resolution displays. Default: 10.",
-            Tags = ["input", "mouse", "speed", "pointer"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Mouse"],
-            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Mouse", "MouseSpeed", "2")],
-            RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Mouse", "MouseSpeed", "1")],
-            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Mouse", "MouseSpeed", "2")],
-        },
-        new TweakDef
-        {
             Id = "input-disable-mouse-sonar",
             Label = "Disable Mouse Sonar (Show Pointer on Ctrl Press)",
             Category = "Input",
@@ -423,21 +273,6 @@ internal static class Input
             ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Keyboard Layout\Toggle", "ToggleHotkey", "3")],
             RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Keyboard Layout\Toggle", "ToggleHotkey", "1")],
             DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Keyboard Layout\Toggle", "ToggleHotkey", "3")],
-        },
-        new TweakDef
-        {
-            Id = "input-set-mouse-hover-height",
-            Label = "Set Mouse Hover Area Height to 4 px",
-            Category = "Input",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Sets MouseHoverHeight=4 in Control Panel\\Mouse. Defines the vertical size of the hover rectangle; keeping it small prevents unintended hover activations on dense UIs.",
-            Tags = ["input", "mouse", "hover", "precision"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Mouse"],
-            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Mouse", "MouseHoverHeight", "4")],
-            RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Mouse", "MouseHoverHeight", "4")],
-            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Mouse", "MouseHoverHeight", "4")],
         },
         new TweakDef
         {
@@ -582,20 +417,6 @@ internal static class TouchPen
     [
         new TweakDef
         {
-            Id = "touch-disable-ink-workspace",
-            Label = "Disable Windows Ink Workspace",
-            Category = "Input",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables the Windows Ink Workspace via Group Policy. Hides the Ink Workspace button and features.",
-            Tags = ["touch", "pen", "ink", "workspace", "policy"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsInkWorkspace"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsInkWorkspace", "AllowWindowsInkWorkspace", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsInkWorkspace", "AllowWindowsInkWorkspace", 1)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsInkWorkspace", "AllowWindowsInkWorkspace", 0)],
-        },
-        new TweakDef
-        {
             Id = "touch-disable-pen-button",
             Label = "Hide Pen Workspace Taskbar Button",
             Category = "Input",
@@ -619,29 +440,6 @@ internal static class TouchPen
                     "PenWorkspaceButtonDesiredVisibility",
                     0
                 ),
-            ],
-        },
-        new TweakDef
-        {
-            Id = "touch-disable-ink-suggestions",
-            Label = "Disable Ink Work Suggested Apps",
-            Category = "Input",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Removes suggested apps from the Windows Ink Workspace. Policy setting.",
-            Tags = ["touch", "pen", "ink", "suggestions", "ads"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsInkWorkspace"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsInkWorkspace", "AllowSuggestedAppsInWindowsInkWorkspace", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsInkWorkspace", "AllowSuggestedAppsInWindowsInkWorkspace"),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsInkWorkspace", "AllowSuggestedAppsInWindowsInkWorkspace", 0),
             ],
         },
         new TweakDef
@@ -703,56 +501,6 @@ internal static class TouchPen
         },
         new TweakDef
         {
-            Id = "touch-disable-3finger",
-            Label = "Disable Three-Finger Gestures",
-            Category = "Input",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Disables three-finger tap and slide gestures on precision touchpads (task view, volume, etc.).",
-            Tags = ["touch", "touchpad", "gestures", "three-finger"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad", "ThreeFingerSlideEnabled", 0),
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad", "ThreeFingerTapEnabled", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad", "ThreeFingerSlideEnabled", 1),
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad", "ThreeFingerTapEnabled", 1),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad", "ThreeFingerSlideEnabled", 0),
-            ],
-        },
-        new TweakDef
-        {
-            Id = "touch-disable-4finger",
-            Label = "Disable Four-Finger Gestures",
-            Category = "Input",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Disables four-finger tap and slide gestures on precision touchpads (desktop switch, etc.).",
-            Tags = ["touch", "touchpad", "gestures", "four-finger"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad", "FourFingerSlideEnabled", 0),
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad", "FourFingerTapEnabled", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad", "FourFingerSlideEnabled", 1),
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad", "FourFingerTapEnabled", 1),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad", "FourFingerSlideEnabled", 0),
-            ],
-        },
-        new TweakDef
-        {
             Id = "touch-disable-edge-swipe",
             Label = "Disable Edge Swipe Gesture (Policy)",
             Category = "Input",
@@ -778,24 +526,6 @@ internal static class TouchPen
             ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Wisp\Pen\SysEventParameters", "FlicksEnabled", 0)],
             RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Wisp\Pen\SysEventParameters", "FlicksEnabled", 1)],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Wisp\Pen\SysEventParameters", "FlicksEnabled", 0)],
-        },
-        new TweakDef
-        {
-            Id = "touch-disable-2finger-tap",
-            Label = "Disable Two-Finger Tap (Right-Click)",
-            Category = "Input",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Disables two-finger tap as a right-click gesture on precision touchpads. Prevents accidental right-click menus while typing. Default: Enabled.",
-            Tags = ["touch", "touchpad", "two-finger", "right-click", "gesture"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad", "TwoFingerTapEnabled", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad", "TwoFingerTapEnabled", 1)],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PrecisionTouchPad", "TwoFingerTapEnabled", 0),
-            ],
         },
         new TweakDef
         {
@@ -914,48 +644,6 @@ internal static class TouchPen
         },
         new TweakDef
         {
-            Id = "touch-disable-pen-workspace",
-            Label = "Disable Pen Workspace Button",
-            Category = "Input",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Hides the Windows Ink Workspace button from the taskbar system tray. Default: visible.",
-            Tags = ["touch", "pen", "ink-workspace", "taskbar"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PenWorkspace"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PenWorkspace", "PenWorkspaceButtonDesiredVisibility", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PenWorkspace", "PenWorkspaceButtonDesiredVisibility"),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(
-                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PenWorkspace",
-                    "PenWorkspaceButtonDesiredVisibility",
-                    0
-                ),
-            ],
-        },
-        new TweakDef
-        {
-            Id = "touch-disable-visual-feedback",
-            Label = "Disable Touch Visual Feedback",
-            Category = "Input",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Disables the visual feedback animations shown when touching the screen. Removes the touch ripple effects. Default: enabled.",
-            Tags = ["touch", "visual", "feedback", "animation"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Cursors"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Control Panel\Cursors", "ContactVisualization", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Control Panel\Cursors", "ContactVisualization", 1)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Control Panel\Cursors", "ContactVisualization", 0)],
-        },
-        new TweakDef
-        {
             Id = "touch-disable-flicks-policy",
             Label = "Disable Pen Flicks via Group Policy",
             Category = "Input",
@@ -990,36 +678,6 @@ internal static class TouchPen
             [
                 RegOp.CheckDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\PenWorkspace", "PenWorkspaceAppSuggestionsEnabled", 0),
             ],
-        },
-        new TweakDef
-        {
-            Id = "touch-disable-handwriting-panel-auto",
-            Label = "Disable Handwriting Panel Auto-Invoke",
-            Category = "Input",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Disables automatic pop-up of the touch handwriting panel when a text field is focussed with a pen. Default: auto-show enabled.",
-            Tags = ["touch", "pen", "handwriting"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\TabletTip\1.7"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\TabletTip\1.7", "TipbandDesiredVisibility", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\TabletTip\1.7", "TipbandDesiredVisibility")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\TabletTip\1.7", "TipbandDesiredVisibility", 0)],
-        },
-        new TweakDef
-        {
-            Id = "touch-disable-touch-keyboard-deploy",
-            Label = "Disable Auto Touch Keyboard Deployment",
-            Category = "Input",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Disables automatic deployment of the touch keyboard when a text field is tapped. Useful when using an external keyboard with touch input. Default: auto-deploy.",
-            Tags = ["touch", "keyboard", "auto"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\TabletTip\1.7"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\TabletTip\1.7", "EnableDesktopModeAutoInvoke", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\TabletTip\1.7", "EnableDesktopModeAutoInvoke", 1)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\TabletTip\1.7", "EnableDesktopModeAutoInvoke", 0)],
         },
         new TweakDef
         {
@@ -1104,33 +762,6 @@ internal static class TouchPen
         },
         new TweakDef
         {
-            Id = "touch-disable-pen-workspace-button",
-            Label = "Hide Pen Workspace Button from Taskbar",
-            Category = "Input",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Removes the pen workspace icon from the taskbar notification area. Default: visible when pen is attached.",
-            Tags = ["touch", "pen", "taskbar", "ink"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\PenWorkspace"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\PenWorkspace", "PenWorkspaceButtonDesiredVisibility", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\PenWorkspace", "PenWorkspaceButtonDesiredVisibility"),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(
-                    @"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\PenWorkspace",
-                    "PenWorkspaceButtonDesiredVisibility",
-                    0
-                ),
-            ],
-        },
-        new TweakDef
-        {
             Id = "touch-disable-autocorrect",
             Label = "Disable Touch Keyboard Auto-Correct",
             Category = "Input",
@@ -1143,51 +774,6 @@ internal static class TouchPen
             ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\TabletTip\1.7", "EnableAutoCorrection", 0)],
             RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\TabletTip\1.7", "EnableAutoCorrection", 1)],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\TabletTip\1.7", "EnableAutoCorrection", 0)],
-        },
-        new TweakDef
-        {
-            Id = "touch-disable-text-suggestions",
-            Label = "Disable Touch Keyboard Text Suggestions",
-            Category = "Input",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Disables word prediction suggestions on the touch keyboard. Reduces distraction during touch typing. Default: text suggestions enabled.",
-            Tags = ["touch", "keyboard", "suggestions", "privacy"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\TabletTip\1.7"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\TabletTip\1.7", "EnableTextPrediction", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\TabletTip\1.7", "EnableTextPrediction", 1)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\TabletTip\1.7", "EnableTextPrediction", 0)],
-        },
-        new TweakDef
-        {
-            Id = "touch-disable-spell-check",
-            Label = "Disable Touch Keyboard Spell Check",
-            Category = "Input",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Disables spell checking on the touch keyboard. Removes red underlines for misspelled words during touch input. Default: spell check enabled.",
-            Tags = ["touch", "keyboard", "spellcheck"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\TabletTip\1.7"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\TabletTip\1.7", "EnableSpellchecking", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\TabletTip\1.7", "EnableSpellchecking", 1)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\TabletTip\1.7", "EnableSpellchecking", 0)],
-        },
-        new TweakDef
-        {
-            Id = "touch-hide-tip-band",
-            Label = "Hide Touch Keyboard Tip Band",
-            Category = "Input",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Hides the handwriting panel tip band that appears above the touch keyboard. Gives more screen space during handwriting input. Default: tip band visible.",
-            Tags = ["touch", "keyboard", "handwriting", "ui"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\TabletTip\1.7"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\TabletTip\1.7", "TipbandDesiredVisibility", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\TabletTip\1.7", "TipbandDesiredVisibility", 1)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\TabletTip\1.7", "TipbandDesiredVisibility", 0)],
         },
         new TweakDef
         {

@@ -99,29 +99,6 @@ internal static class Gaming
         },
         new TweakDef
         {
-            Id = "game-gaming-disable-dvr-background",
-            Label = "Disable Game DVR Background Recording",
-            Category = "Gaming",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Disables Game DVR background recording. Frees GPU encoder and disk I/O resources. Default: Enabled. Recommended: Disabled for maximum FPS.",
-            Tags = ["gaming", "dvr", "recording", "performance"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\System\GameConfigStore", @"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\GameDVR"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\System\GameConfigStore", "GameDVR_Enabled", 0),
-                RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\GameDVR", "AppCaptureEnabled", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\System\GameConfigStore", "GameDVR_Enabled", 1),
-                RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\GameDVR", "AppCaptureEnabled", 1),
-            ],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\System\GameConfigStore", "GameDVR_Enabled", 0)],
-        },
-        new TweakDef
-        {
             Id = "game-disable-game-bar-tips",
             Label = "Disable Game Bar Tips",
             Category = "Gaming",
@@ -152,60 +129,6 @@ internal static class Gaming
         },
         new TweakDef
         {
-            Id = "game-enable-timer-resolution",
-            Label = "Enable Global Timer Resolution Requests",
-            Category = "Gaming",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description =
-                "Enables global timer resolution requests for lower input latency. Allows applications to request higher timer precision (0.5 ms). Default: 0 (disabled). Recommended: 1 for competitive gaming.",
-            Tags = ["gaming", "timer", "resolution", "latency", "precision"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\kernel"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\kernel", "GlobalTimerResolutionRequests", 1),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\kernel", "GlobalTimerResolutionRequests", 0),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\kernel", "GlobalTimerResolutionRequests", 1),
-            ],
-        },
-        new TweakDef
-        {
-            Id = "game-disable-dvr-policy",
-            Label = "Disable Game DVR (Policy)",
-            Category = "Gaming",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Disables Game DVR and Game Bar via HKLM group policy. Prevents background game recording system-wide. Default: Enabled. Recommended: Disabled for performance.",
-            Tags = ["gaming", "dvr", "game-bar", "recording", "policy"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\GameDVR"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\GameDVR", "AllowGameDVR", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\GameDVR", "AllowGameDVR")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\GameDVR", "AllowGameDVR", 0)],
-        },
-        new TweakDef
-        {
-            Id = "game-disable-dvr-configstore",
-            Label = "Disable Game DVR (ConfigStore)",
-            Category = "Gaming",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Disables Game DVR via the user-level GameConfigStore. Complements the policy-level DVR disable. Default: Enabled. Recommended: Disabled for performance.",
-            Tags = ["gaming", "dvr", "configstore", "recording", "user"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\System\GameConfigStore"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\System\GameConfigStore", "GameDVR_Enabled", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\System\GameConfigStore", "GameDVR_Enabled")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\System\GameConfigStore", "GameDVR_Enabled", 0)],
-        },
-        new TweakDef
-        {
             Id = "game-disable-game-bar-presence-writer",
             Label = "Disable Game Bar Presence Writer",
             Category = "Gaming",
@@ -218,34 +141,6 @@ internal static class Gaming
             ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\System\GameConfigStore", "GameDVR_FSEBehavior", 2)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\System\GameConfigStore", "GameDVR_FSEBehavior")],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\System\GameConfigStore", "GameDVR_FSEBehavior", 2)],
-        },
-        new TweakDef
-        {
-            Id = "game-disable-auto-gamemode",
-            Label = "Disable Auto Game Mode Detection",
-            Category = "Gaming",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Disables Windows automatic Game Mode detection. Prevents Windows from changing priorities unexpectedly. Default: enabled.",
-            Tags = ["gaming", "game-mode", "auto-detect", "priority"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\GameBar"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\GameBar", "AutoGameModeEnabled", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\GameBar", "AutoGameModeEnabled", 1)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\GameBar", "AutoGameModeEnabled", 0)],
-        },
-        new TweakDef
-        {
-            Id = "game-disable-variable-refresh-rate",
-            Label = "Disable Variable Refresh Rate (VRR)",
-            Category = "Gaming",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Disables Windows variable refresh rate for windowed games. Useful if VRR causes flickering. Default: enabled.",
-            Tags = ["gaming", "vrr", "refresh-rate", "display"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\DirectX\UserGpuPreferences"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\DirectX\UserGpuPreferences", "DirectXUserGlobalSettings", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\DirectX\UserGpuPreferences", "DirectXUserGlobalSettings")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\DirectX\UserGpuPreferences", "DirectXUserGlobalSettings", 0)],
         },
         new TweakDef
         {
@@ -275,50 +170,6 @@ internal static class Gaming
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\WMI\Autologger\DiagTrack", "Start", 0)],
             RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\WMI\Autologger\DiagTrack", "Start", 1)],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\WMI\Autologger\DiagTrack", "Start", 0)],
-        },
-        new TweakDef
-        {
-            Id = "game-disable-fullscreen-optimizations",
-            Label = "Disable Fullscreen Optimizations",
-            Category = "Gaming",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Disables DWM fullscreen optimizations globally. Forces true exclusive fullscreen for better frame pacing. Default: enabled.",
-            Tags = ["gaming", "fullscreen", "dwm", "performance"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\System\GameConfigStore"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\System\GameConfigStore", "GameDVR_FSEBehavior", 2)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\System\GameConfigStore", "GameDVR_FSEBehavior")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\System\GameConfigStore", "GameDVR_FSEBehavior", 2)],
-        },
-        new TweakDef
-        {
-            Id = "game-disable-gamedvr",
-            Label = "Disable Game DVR (User)",
-            Category = "Gaming",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Disables Game DVR at the user level. Prevents background game recording and screenshot capture. Default: enabled.",
-            Tags = ["gaming", "dvr", "recording", "performance"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\System\GameConfigStore"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\System\GameConfigStore", "GameDVR_Enabled", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\System\GameConfigStore", "GameDVR_Enabled", 1)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\System\GameConfigStore", "GameDVR_Enabled", 0)],
-        },
-        new TweakDef
-        {
-            Id = "game-force-exclusive-fullscreen",
-            Label = "Force Exclusive Fullscreen Mode",
-            Category = "Gaming",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Forces applications to use exclusive fullscreen mode instead of borderless windowed. Reduces input latency. Default: automatic.",
-            Tags = ["gaming", "fullscreen", "exclusive", "latency"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\System\GameConfigStore"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\System\GameConfigStore", "GameDVR_FSEBehaviorMode", 2)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\System\GameConfigStore", "GameDVR_FSEBehaviorMode")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\System\GameConfigStore", "GameDVR_FSEBehaviorMode", 2)],
         },
         new TweakDef
         {
@@ -781,20 +632,6 @@ internal static class Gaming
         },
         new TweakDef
         {
-            Id = "game-disable-xbox-accessory-svc",
-            Label = "Disable Xbox Accessory Management Service",
-            Category = "Gaming",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Disables the Xbox Accessory Management service (XboxGipSvc). Saves resources when no Xbox controllers are used.",
-            Tags = ["gaming", "xbox", "service", "performance"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\XboxGipSvc"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\XboxGipSvc", "Start", 4)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\XboxGipSvc", "Start", 3)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\XboxGipSvc", "Start", 4)],
-        },
-        new TweakDef
-        {
             Id = "game-increase-max-user-port",
             Label = "Increase Max UDP/TCP Port Range for Gaming",
             Category = "Gaming",
@@ -825,21 +662,6 @@ internal static class Gaming
         },
         new TweakDef
         {
-            Id = "game-disable-gameinput-service",
-            Label = "Disable GameInput Service (Non-Xbox Controllers)",
-            Category = "Gaming",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Disables the Microsoft GameInput service when Xbox controllers or GameInput-compatible devices are not in use. Frees background threads.",
-            Tags = ["gaming", "gameinput", "controller", "service"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\GameInput"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\GameInput", "Start", 4)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\GameInput", "Start", 3)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\GameInput", "Start", 4)],
-        },
-        new TweakDef
-        {
             Id = "game-set-dxgi-flip-model",
             Label = "Prefer Flip Presentation Model for DirectX",
             Category = "Gaming",
@@ -866,66 +688,6 @@ internal static class Gaming
                     "SwapEffectUpgradeEnable=0;"
                 ),
             ],
-        },
-        new TweakDef
-        {
-            Id = "game-enable-game-bar-perf-counter",
-            Label = "Enable Game Bar Performance Counter Overlay",
-            Category = "Gaming",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Enables the performance overlay showing FPS, CPU, and GPU usage within the Xbox Game Bar. Requires Game Bar to be enabled.",
-            Tags = ["gaming", "game-bar", "overlay", "fps", "counter"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\GameBar"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\GameBar", "ShowStartupPanel", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\GameBar", "ShowStartupPanel")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\GameBar", "ShowStartupPanel", 0)],
-        },
-        new TweakDef
-        {
-            Id = "game-disable-diagtrack-autologger",
-            Label = "Disable DiagTrack Autologger During Gaming",
-            Category = "Gaming",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description =
-                "Disables the DiagTrack autologger session, which periodically collects telemetry data and causes micro-stutters during gaming.",
-            Tags = ["gaming", "diagtrack", "telemetry", "stutter", "performance"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\WMI\Autologger\DiagTrack"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\WMI\Autologger\DiagTrack", "Start", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\WMI\Autologger\DiagTrack", "Start", 1)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\WMI\Autologger\DiagTrack", "Start", 0)],
-        },
-        new TweakDef
-        {
-            Id = "game-set-xgip-service-manual",
-            Label = "Set Xbox Accessories Service to Manual Start",
-            Category = "Gaming",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets the Xbox Accessories Manager service (XboxGipSvc) to manual start if you don't use Xbox controllers/accessories, freeing startup resources.",
-            Tags = ["gaming", "xbox", "accessories", "service", "startup"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\XboxGipSvc"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\XboxGipSvc", "Start", 3)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\XboxGipSvc", "Start", 2)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\XboxGipSvc", "Start", 3)],
-        },
-        new TweakDef
-        {
-            Id = "game-disable-ndu-adapter",
-            Label = "Disable Network Data Usage Monitor for Gaming",
-            Category = "Gaming",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Disables the Windows Network Data Usage (Ndu) monitoring driver that polls network adapters every second and can cause micro-stutters in CPU-bound games.",
-            Tags = ["gaming", "ndu", "network", "cpu", "stutter"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Ndu"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Ndu", "Start", 4)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Ndu", "Start", 2)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Ndu", "Start", 4)],
         },
         new TweakDef
         {
@@ -1038,21 +800,6 @@ internal static class Gaming
         },
         new TweakDef
         {
-            Id = "game-mode-auto-enable",
-            Label = "Enable Auto Game Mode Activation",
-            Category = "Gaming",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Forces AutoGameModeEnabled=1 so Windows 11 automatically activates Game Mode when a full-screen game is detected. Default: enabled on Win11.",
-            Tags = ["gaming", "game-mode", "performance"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\GameBar"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\GameBar", "AutoGameModeEnabled", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\GameBar", "AutoGameModeEnabled")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\GameBar", "AutoGameModeEnabled", 1)],
-        },
-        new TweakDef
-        {
             Id = "game-input-hooks-fast",
             Label = "Reduce LowLevel Input Hook Timeout",
             Category = "Gaming",
@@ -1131,21 +878,6 @@ internal static class Gaming
         },
         new TweakDef
         {
-            Id = "game-fse-behavior-optimize",
-            Label = "Set FSE Behavior Mode for Fullscreen Optimization",
-            Category = "Gaming",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Sets GameDVR_FSEBehaviorMode=2 which forces exclusive fullscreen mode for games running through GameConfigStore. Reduces DWM overhead. Default: 0.",
-            Tags = ["gaming", "fullscreen", "fse", "performance"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\System\GameConfigStore"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\System\GameConfigStore", "GameDVR_FSEBehaviorMode", 2)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\System\GameConfigStore", "GameDVR_FSEBehaviorMode")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\System\GameConfigStore", "GameDVR_FSEBehaviorMode", 2)],
-        },
-        new TweakDef
-        {
             Id = "game-audio-latency-1ms",
             Label = "Set Multimedia Audio Latency to 1ms",
             Category = "Gaming",
@@ -1202,36 +934,6 @@ internal static class Gaming
                     "False"
                 ),
             ],
-        },
-        new TweakDef
-        {
-            Id = "game-disable-xbox-auth-manager",
-            Label = "Disable Xbox Live Authentication Manager Service",
-            Category = "Gaming",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Disables the Xbox Live Authentication Manager (XblAuthManager) service. Reduces Xbox-related background overhead on PCs that do not use Xbox Live. Default: manual start.",
-            Tags = ["game", "xbox", "service", "performance"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\XblAuthManager"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\XblAuthManager", "Start", 4)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\XblAuthManager", "Start", 3)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\XblAuthManager", "Start", 4)],
-        },
-        new TweakDef
-        {
-            Id = "game-disable-xbox-live-game-save",
-            Label = "Disable Xbox Live Game Save Service",
-            Category = "Gaming",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Disables the Xbox Live Game Save (XblGameSave) service which syncs game saves to the Xbox cloud. Removes background upload overhead for non-Xbox users. Default: manual start.",
-            Tags = ["game", "xbox", "cloud", "save", "service"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\XblGameSave"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\XblGameSave", "Start", 4)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\XblGameSave", "Start", 3)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\XblGameSave", "Start", 4)],
         },
         new TweakDef
         {

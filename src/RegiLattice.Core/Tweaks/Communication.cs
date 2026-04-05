@@ -154,25 +154,6 @@ internal static class Communication
         },
         new TweakDef
         {
-            Id = "comm-disable-teams-autostart",
-            Label = "Disable Teams Auto-Start (Policy)",
-            Category = "Communication",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Prevents Microsoft Teams from starting automatically at login. Reduces boot time and memory usage. Default: Auto-start. Recommended: Disabled.",
-            Tags = ["communication", "teams", "startup", "performance"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Teams"],
-            ApplyOps =
-            [
-                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run", "com.squirrel.Teams.Teams"),
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Teams", "DisableAutoStart", 1),
-            ],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Teams", "DisableAutoStart")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Teams", "DisableAutoStart", 1)],
-        },
-        new TweakDef
-        {
             Id = "comm-disable-skype-telemetry",
             Label = "Disable Skype Telemetry",
             Category = "Communication",
@@ -181,21 +162,6 @@ internal static class Communication
             Description = "Disables Skype for Business telemetry and diagnostic data collection. Default: Enabled. Recommended: Disabled.",
             Tags = ["communication", "skype", "telemetry", "privacy"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\SkypeForBusiness"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\SkypeForBusiness", "DisableTelemetry", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\SkypeForBusiness", "DisableTelemetry")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\SkypeForBusiness", "DisableTelemetry", 1)],
-        },
-        new TweakDef
-        {
-            Id = "comm-disable-skype-telemetry-user",
-            Label = "Disable Skype Telemetry (User)",
-            Category = "Communication",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Disables Skype desktop telemetry data collection at the user level. Reduces background data transmission. Default: Enabled. Recommended: Disabled for privacy.",
-            Tags = ["communication", "skype", "telemetry", "privacy", "user"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Skype\Telemetry"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\SkypeForBusiness", "DisableTelemetry", 1)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\SkypeForBusiness", "DisableTelemetry")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\SkypeForBusiness", "DisableTelemetry", 1)],
@@ -234,20 +200,6 @@ internal static class Communication
             ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Discord", "OPEN_ON_STARTUP", 0)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\SOFTWARE\Discord", "OPEN_ON_STARTUP")],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\SOFTWARE\Discord", "OPEN_ON_STARTUP", 0)],
-        },
-        new TweakDef
-        {
-            Id = "comm-disable-teams-gpu-acceleration",
-            Label = "Disable Teams GPU Acceleration",
-            Category = "Communication",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Disables GPU hardware acceleration in Microsoft Teams. Can fix display glitches. Default: enabled.",
-            Tags = ["communication", "teams", "gpu", "hardware-acceleration"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Teams"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Teams", "disableGpu", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Teams", "disableGpu")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Teams", "disableGpu", 1)],
         },
         new TweakDef
         {
@@ -888,48 +840,6 @@ internal static class PhoneLink
             ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\CDP", "EnableRemoteMessages", 0)],
             RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\CDP", "EnableRemoteMessages", 1)],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\CDP", "EnableRemoteMessages", 0)],
-        },
-        new TweakDef
-        {
-            Id = "phone-disable-nearby-sharing",
-            Label = "Disable Nearby Sharing",
-            Category = "Communication",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Disables Nearby sharing over Bluetooth. Prevents file/link sharing with nearby devices. Default: disabled.",
-            Tags = ["phone-link", "nearby", "sharing", "bluetooth"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\CDP"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\CDP", "NearShareChannelUserAuthzPolicy", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\CDP", "NearShareChannelUserAuthzPolicy")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\CDP", "NearShareChannelUserAuthzPolicy", 0)],
-        },
-        new TweakDef
-        {
-            Id = "phone-disable-app-notifications",
-            Label = "Disable Phone Link Notifications",
-            Category = "Communication",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Disables notification mirroring from Phone Link. Prevents phone notifications from appearing on the PC. Default: enabled.",
-            Tags = ["phone-link", "notifications", "mirror", "disable"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\CDP"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\CDP", "EnableRemoteNotifications", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\CDP", "EnableRemoteNotifications")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\CDP", "EnableRemoteNotifications", 0)],
-        },
-        new TweakDef
-        {
-            Id = "phone-disable-suggestions",
-            Label = "Disable Phone Link Suggestions",
-            Category = "Communication",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Disables Phone Link from showing app suggestions and promotions. Default: enabled.",
-            Tags = ["phone-link", "suggestions", "promotions", "disable"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\CDP"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\CDP", "RomeSdkChannelUserAuthzPolicy", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\CDP", "RomeSdkChannelUserAuthzPolicy")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\CDP", "RomeSdkChannelUserAuthzPolicy", 0)],
         },
         new TweakDef
         {

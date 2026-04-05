@@ -147,21 +147,6 @@ internal static class Power
         },
         new TweakDef
         {
-            Id = "power-disable-hdd-powerdown",
-            Label = "Disable Hard Disk Power Down",
-            Category = "Power",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Disables hibernation (hiberfil.sys). Frees disk space equal to RAM size and speeds up shutdown. Default: Enabled. Recommended: Disabled for desktops with SSDs.",
-            Tags = ["power", "hibernate", "disk", "performance"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power", "HibernateEnabled", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power", "HibernateEnabled", 1)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power", "HibernateEnabled", 0)],
-        },
-        new TweakDef
-        {
             Id = "power-disable-adaptive-brightness",
             Label = "Disable Adaptive Display Brightness",
             Category = "Power",
@@ -394,21 +379,6 @@ internal static class Power
                 return !stdout.Contains("Hibernate", StringComparison.OrdinalIgnoreCase)
                     || stdout.Contains("not available", StringComparison.OrdinalIgnoreCase);
             },
-        },
-        new TweakDef
-        {
-            Id = "power-disable-energy-estimation",
-            Label = "Disable Energy Estimation Engine",
-            Category = "Power",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Disables the energy estimation engine used by Windows to throttle power consumption. Prevents performance reduction from estimated power budgets. Default: enabled.",
-            Tags = ["power", "energy", "estimation", "performance"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power", "EnergyEstimationEnabled", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power", "EnergyEstimationEnabled")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power", "EnergyEstimationEnabled", 0)],
         },
         new TweakDef
         {
@@ -1230,20 +1200,6 @@ internal static class PowerManagement
         },
         new TweakDef
         {
-            Id = "pwrmgmt-disable-power-throttling",
-            Label = "Disable Power Throttling",
-            Category = "Power",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables Windows power throttling to prevent CPU frequency capping on background processes.",
-            Tags = ["power", "cpu", "performance", "throttling"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\PowerThrottling"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\PowerThrottling", "PowerThrottlingOff", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\PowerThrottling", "PowerThrottlingOff")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\PowerThrottling", "PowerThrottlingOff", 1)],
-        },
-        new TweakDef
-        {
             Id = "pwrmgmt-disable-hard-disk-timeout",
             Label = "Disable Hard Disk Auto Power-Off",
             Category = "Power",
@@ -1329,34 +1285,6 @@ internal static class PowerManagement
                 ShellRunner.Run("powercfg.exe", ["-setactive", "scheme_current"]);
             },
             DetectAction = () => false,
-        },
-        new TweakDef
-        {
-            Id = "pwrmgmt-disable-processor-idle-demote",
-            Label = "Disable CPU Idle Demotion",
-            Category = "Power",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Prevents the OS from demoting a processor to a deeper C-state, reducing latency spikes.",
-            Tags = ["power", "cpu", "latency", "c-state"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power", "CsEnabled", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power", "CsEnabled")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power", "CsEnabled", 0)],
-        },
-        new TweakDef
-        {
-            Id = "pwrmgmt-disable-energy-estimation",
-            Label = "Disable Energy Estimation Engine",
-            Category = "Power",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables the Windows energy estimation engine to reduce overhead on battery-powered systems used as desktops.",
-            Tags = ["power", "energy", "battery", "overhead"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power", "EnergyEstimationEnabled", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power", "EnergyEstimationEnabled")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power", "EnergyEstimationEnabled", 0)],
         },
         new TweakDef
         {

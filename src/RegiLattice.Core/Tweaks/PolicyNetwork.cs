@@ -2738,27 +2738,6 @@ internal static class PolicyNetwork
                 },
                 new TweakDef
                 {
-                    Id = "daccess-disable-ipv6-transition",
-                    Label = "DirectAccess: Disable IPv6 Transition Technologies (6to4/Teredo)",
-                    Category = "Network",
-                    Description =
-                        "Sets Teredo_Active=0 and DisabledComponents=255 in IP/TCP policies. Disables IPv6 transition protocols (Teredo, 6to4, ISATAP) that are used by DirectAccess for IPv6-over-IPv4 transport but create unmonitored IPv6 tunnels that bypass firewalls. When a modern DirectAccess deployment uses native IPv6 or IP-HTTPS, these legacy transition technologies are not needed and represent attack surfaces where IPv6 traffic can bypass IPv4-only firewall rules.",
-                    Tags = ["directaccess", "ipv6", "teredo", "6to4", "network"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 3,
-                    SafetyRating = 4,
-                    ImpactNote =
-                        "Disables IPv6 transition tunneling. Breaks DirectAccess on networks requiring Teredo. Only apply if your DA deployment uses IP-HTTPS or native IPv6.",
-                    ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip6\Parameters", "DisabledComponents", 255)],
-                    RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip6\Parameters", "DisabledComponents")],
-                    DetectOps =
-                    [
-                        RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip6\Parameters", "DisabledComponents", 255),
-                    ],
-                },
-                new TweakDef
-                {
                     Id = "daccess-enable-corporate-resources-check",
                     Label = "DirectAccess: Enable Corporate Resource Detection",
                     Category = "Network",
@@ -8743,60 +8722,6 @@ internal static class PolicyNetwork
                 RemoveOps = [RegOp.DeleteValue(NetBt, "NodeType")],
                 DetectOps = [RegOp.CheckDword(NetBt, "NodeType", 2)],
             },
-            new TweakDef
-            {
-                Id = "netdisc-disable-upnp-host-svc",
-                Label = "Disable UPnP Host Service",
-                Category = "Network",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 4,
-                Description =
-                    "Disables the UPnP Device Host service (upnphost), which allows the "
-                    + "machine to be discovered and controlled via Universal Plug and Play. "
-                    + "Start=4 (Disabled).",
-                Tags = ["upnp", "network discovery", "service", "security"],
-                ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\upnphost", "Start", 4)],
-                RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\upnphost", "Start", 3)],
-                DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\upnphost", "Start", 4)],
-            },
-            new TweakDef
-            {
-                Id = "netdisc-disable-ssdp-svc",
-                Label = "Disable SSDP Discovery Service",
-                Category = "Network",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 4,
-                Description =
-                    "Disables the SSDP Discovery service (SSDPSRV), which provides Simple "
-                    + "Service Discovery Protocol announcements. Prevents UPnP device enumeration. "
-                    + "Start=4 (Disabled).",
-                Tags = ["ssdp", "upnp", "network discovery", "service"],
-                ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SSDPSRV", "Start", 4)],
-                RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SSDPSRV", "Start", 3)],
-                DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SSDPSRV", "Start", 4)],
-            },
-            new TweakDef
-            {
-                Id = "netdisc-disable-fdrespub-svc",
-                Label = "Disable Function Discovery Resource Publication",
-                Category = "Network",
-                NeedsAdmin = true,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 4,
-                Description =
-                    "Disables the Function Discovery Resource Publication service (FDResPub), "
-                    + "which makes this computer discoverable on the network for file/printer "
-                    + "sharing. Start=4 (Disabled).",
-                Tags = ["network discovery", "fdrespub", "sharing", "service"],
-                ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\FDResPub", "Start", 4)],
-                RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\FDResPub", "Start", 3)],
-                DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\FDResPub", "Start", 4)],
-            },
         ];
     }
 
@@ -14695,24 +14620,6 @@ internal static class PolicyNetwork
                     ApplyOps = [RegOp.SetDword(DnsKey, "NegativeCacheTime", 5)],
                     RemoveOps = [RegOp.DeleteValue(DnsKey, "NegativeCacheTime")],
                     DetectOps = [RegOp.CheckDword(DnsKey, "NegativeCacheTime", 5)],
-                },
-                new TweakDef
-                {
-                    Id = "wins-disable-llmnr",
-                    Label = "WINS: Disable LLMNR (Link-Local Multicast Name Resolution)",
-                    Category = "Network",
-                    Description =
-                        "Sets EnableMulticast=0 and QueryPolicy=1 in DNS client (LLMNR) policy. Disables Link-Local Multicast Name Resolution (LLMNR) which is exploited in Responder/NBNSPoison MITM attacks. LLMNR broadcasts name queries when DNS fails; an attacker running Responder can answer any LLMNR query with a fraudulent response, redirecting authentication traffic to a rogue host and capturing NTLMv2 hashes for offline cracking. Disabling LLMNR is a top-10 Active Directory hardening recommendation in every security benchmark.",
-                    Tags = ["wins", "llmnr", "responder", "ntlm-relay", "hardening"],
-                    NeedsAdmin = true,
-                    CorpSafe = true,
-                    ImpactScore = 5,
-                    SafetyRating = 5,
-                    ImpactNote =
-                        "Breaking change if any application depends on LLMNR for name resolution. On properly configured networks with working DNS, LLMNR is never used.",
-                    ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\DNSClient", "EnableMulticast", 0)],
-                    RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\DNSClient", "EnableMulticast")],
-                    DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\DNSClient", "EnableMulticast", 0)],
                 },
                 new TweakDef
                 {

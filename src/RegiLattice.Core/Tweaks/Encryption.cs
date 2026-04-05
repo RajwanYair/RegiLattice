@@ -1,4 +1,4 @@
-﻿namespace RegiLattice.Core.Tweaks;
+namespace RegiLattice.Core.Tweaks;
 
 using RegiLattice.Core.Models;
 
@@ -314,38 +314,6 @@ internal static class Encryption
         },
         new TweakDef
         {
-            Id = "enc-disable-rc4",
-            Label = "Disable RC4 Cipher",
-            Category = "Encryption",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables the weak RC4 cipher across all key lengths. Protects against RC4-based attacks. Default: may be enabled.",
-            Tags = ["cipher", "rc4", "security", "encryption"],
-            RegistryKeys =
-            [
-                @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers\RC4 128/128",
-                @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers\RC4 40/128",
-                @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers\RC4 56/128",
-            ],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers\RC4 128/128", "Enabled", 0),
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers\RC4 40/128", "Enabled", 0),
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers\RC4 56/128", "Enabled", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers\RC4 128/128", "Enabled"),
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers\RC4 40/128", "Enabled"),
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers\RC4 56/128", "Enabled"),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers\RC4 128/128", "Enabled", 0),
-            ],
-        },
-        new TweakDef
-        {
             Id = "enc-disable-des",
             Label = "Disable DES Cipher",
             Category = "Encryption",
@@ -466,119 +434,6 @@ internal static class Encryption
                     "Enabled",
                     0
                 ),
-            ],
-        },
-        new TweakDef
-        {
-            Id = "enc-disable-rc4-128",
-            Label = "Disable RC4 128-bit Cipher",
-            Category = "Encryption",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables the RC4 128-bit cipher suite. RC4 is considered broken and vulnerable to multiple attacks. Default: enabled.",
-            Tags = ["cipher", "rc4", "security", "encryption", "weak"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers\RC4 128/128"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers\RC4 128/128", "Enabled", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers\RC4 128/128", "Enabled"),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers\RC4 128/128", "Enabled", 0),
-            ],
-        },
-        new TweakDef
-        {
-            Id = "enc-disable-rc4-56",
-            Label = "Disable RC4 56-bit Cipher",
-            Category = "Encryption",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables the RC4 56-bit cipher suite. Very weak cipher with known vulnerabilities. Default: enabled.",
-            Tags = ["cipher", "rc4", "security", "encryption", "weak"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers\RC4 56/128"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers\RC4 56/128", "Enabled", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers\RC4 56/128", "Enabled"),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers\RC4 56/128", "Enabled", 0),
-            ],
-        },
-        new TweakDef
-        {
-            Id = "enc-disable-rc4-40",
-            Label = "Disable RC4 40-bit Cipher",
-            Category = "Encryption",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables the RC4 40-bit export cipher. Extremely weak, trivially breakable. Default: enabled.",
-            Tags = ["cipher", "rc4", "security", "encryption", "export"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers\RC4 40/128"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers\RC4 40/128", "Enabled", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers\RC4 40/128", "Enabled"),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers\RC4 40/128", "Enabled", 0),
-            ],
-        },
-        new TweakDef
-        {
-            Id = "enc-disable-des-56",
-            Label = "Disable DES 56-bit Cipher",
-            Category = "Encryption",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables the weak DES 56-bit cipher. Easily brute-forced by modern hardware. Default: enabled.",
-            Tags = ["cipher", "des", "security", "encryption", "weak"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers\DES 56/56"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers\DES 56/56", "Enabled", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers\DES 56/56", "Enabled"),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers\DES 56/56", "Enabled", 0),
-            ],
-        },
-        new TweakDef
-        {
-            Id = "enc-disable-null-encryption",
-            Label = "Disable NULL Cipher",
-            Category = "Encryption",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Disables the NULL cipher which provides no encryption at all. Should always be disabled. Default: disabled on modern systems.",
-            Tags = ["cipher", "null", "security", "encryption", "hardening"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers\NULL"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers\NULL", "Enabled", 0)],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers\NULL", "Enabled"),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers\NULL", "Enabled", 0),
             ],
         },
         new TweakDef
@@ -734,29 +589,6 @@ internal static class Encryption
         // ── Sprint 18 — 10 new Encryption tweaks ──────────────────────────
         new TweakDef
         {
-            Id = "enc-disable-des-cipher",
-            Label = "Disable DES Cipher Suite",
-            Category = "Encryption",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables the insecure DES cipher in SChannel. Prevents use of weak 56-bit encryption. Default: enabled.",
-            Tags = ["encryption", "des", "cipher", "weak", "security"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers\DES 56/56"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers\DES 56/56", "Enabled", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers\DES 56/56", "Enabled"),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers\DES 56/56", "Enabled", 0),
-            ],
-        },
-        new TweakDef
-        {
             Id = "enc-force-strong-key-usage",
             Label = "Enforce Strong Key Usage for SChannel",
             Category = "Encryption",
@@ -797,30 +629,6 @@ internal static class Encryption
         },
         new TweakDef
         {
-            Id = "enc-disable-export-ciphers",
-            Label = "Disable Export-Grade Ciphers (40/56-bit)",
-            Category = "Encryption",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Disables weak export-grade 40-bit and 56-bit RC2/RC4 cipher suites. Prevents FREAK/Logjam-style attacks. Default: enabled.",
-            Tags = ["encryption", "export", "cipher", "freak", "logjam", "weak"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers\RC4 40/128"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers\RC4 40/128", "Enabled", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers\RC4 40/128", "Enabled"),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers\RC4 40/128", "Enabled", 0),
-            ],
-        },
-        new TweakDef
-        {
             Id = "enc-enable-ocsp-stapling",
             Label = "Enable OCSP Stapling for TLS",
             Category = "Encryption",
@@ -854,24 +662,6 @@ internal static class Encryption
                     "CryptnetCachedOcspSwitchToCrlCount",
                     0
                 ),
-            ],
-        },
-        new TweakDef
-        {
-            Id = "enc-disable-md5-signatures",
-            Label = "Disable MD5 in TLS Signatures",
-            Category = "Encryption",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Disables MD5 hash algorithm for TLS signature verification. MD5 is cryptographically broken. Default: may be enabled for compatibility.",
-            Tags = ["encryption", "md5", "tls", "hash", "broken", "security"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Hashes\MD5"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Hashes\MD5", "Enabled", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Hashes\MD5", "Enabled")],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Hashes\MD5", "Enabled", 0),
             ],
         },
         new TweakDef

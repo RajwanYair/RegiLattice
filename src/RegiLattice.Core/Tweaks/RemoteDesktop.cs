@@ -8,29 +8,6 @@ internal static class RemoteDesktop
     [
         new TweakDef
         {
-            Id = "rdp-require-nla",
-            Label = "Require NLA for RDP",
-            Category = "Remote Desktop",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Require Network Level Authentication before RDP session. Default: enabled. Recommended: enabled for security.",
-            Tags = ["rdp", "nla", "authentication", "security"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp", "UserAuthentication", 1),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp", "UserAuthentication", 0),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp", "UserAuthentication", 1),
-            ],
-        },
-        new TweakDef
-        {
             Id = "rdp-high-encryption",
             Label = "RDP High Encryption Level",
             Category = "Remote Desktop",
@@ -68,20 +45,6 @@ internal static class RemoteDesktop
         },
         new TweakDef
         {
-            Id = "rdp-disable-rdp",
-            Label = "Disable Remote Desktop",
-            Category = "Remote Desktop",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Disables Remote Desktop connections entirely. Default: Depends on edition. Recommended: Disabled if unused.",
-            Tags = ["rdp", "remote", "disable", "security"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Terminal Server"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services", "fDisableClip", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services", "fDisableClip")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services", "fDisableClip", 1)],
-        },
-        new TweakDef
-        {
             Id = "rdp-disable-shadow",
             Label = "Disable RDP Session Shadowing",
             Category = "Remote Desktop",
@@ -93,33 +56,6 @@ internal static class RemoteDesktop
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services", "Shadow", 0)],
             RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services", "Shadow", 1)],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services", "Shadow", 0)],
-        },
-        new TweakDef
-        {
-            Id = "rdp-disable-printer-policy",
-            Label = "Disable RDP Printer Redirection (Policy + WinStation)",
-            Category = "Remote Desktop",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Disables printer redirection in RDP via both policy and WinStation config. Blocks client printers from mapping to RDP sessions. Default: allowed. Recommended: disabled.",
-            Tags = ["rdp", "printer", "redirect", "policy"],
-            RegistryKeys =
-            [
-                @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services",
-                @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp",
-            ],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services", "fDisableCpm", 1),
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp", "fDisableCpm", 1),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services", "fDisableCpm"),
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp", "fDisableCpm", 0),
-            ],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services", "fDisableCpm", 1)],
         },
         new TweakDef
         {
@@ -221,20 +157,6 @@ internal static class RemoteDesktop
         },
         new TweakDef
         {
-            Id = "rdp-disable-clipboard-redirection",
-            Label = "Disable RDP Clipboard Redirection",
-            Category = "Remote Desktop",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables clipboard sharing between RDP client and server. Prevents data leakage. Default: enabled.",
-            Tags = ["rdp", "clipboard", "redirection", "security"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services", "fDisableClip", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services", "fDisableClip")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services", "fDisableClip", 1)],
-        },
-        new TweakDef
-        {
             Id = "rdp-disable-drive-redirection",
             Label = "Disable RDP Drive Redirection",
             Category = "Remote Desktop",
@@ -317,51 +239,6 @@ internal static class RemoteDesktop
         },
         new TweakDef
         {
-            Id = "rdp-disable-clipboard-redirect",
-            Label = "Disable RDP Clipboard Redirect (Policy)",
-            Category = "Remote Desktop",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Disables clipboard redirection in RDP sessions via Group Policy. Prevents clipboard content from being shared between local and remote. Default: allowed.",
-            Tags = ["rdp", "clipboard", "security", "policy"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services", "fDisableClip", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services", "fDisableClip")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services", "fDisableClip", 1)],
-        },
-        new TweakDef
-        {
-            Id = "rdp-disable-drive-redirect",
-            Label = "Disable RDP Drive Redirect (Policy)",
-            Category = "Remote Desktop",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Disables drive redirection in RDP sessions via Group Policy. Prevents local drives from being accessible in the remote session. Default: allowed.",
-            Tags = ["rdp", "drive", "redirect", "security", "policy"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services", "fDisableCdm", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services", "fDisableCdm")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services", "fDisableCdm", 1)],
-        },
-        new TweakDef
-        {
-            Id = "rdp-disable-printer-redirect",
-            Label = "Disable RDP Printer Redirect (Policy)",
-            Category = "Remote Desktop",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Disables printer redirection in RDP sessions via Group Policy. Prevents local printers from being mapped in the remote session. Default: allowed.",
-            Tags = ["rdp", "printer", "redirect", "security", "policy"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services", "fDisableCpm", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services", "fDisableCpm")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services", "fDisableCpm", 1)],
-        },
-        new TweakDef
-        {
             Id = "rdp-enable-keepalive",
             Label = "Enable RDP Keep-Alive (1 min)",
             Category = "Remote Desktop",
@@ -382,35 +259,6 @@ internal static class RemoteDesktop
                 RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services", "KeepAliveInterval"),
             ],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services", "KeepAliveEnable", 1)],
-        },
-        new TweakDef
-        {
-            Id = "rdp-enable-remote-desktop",
-            Label = "Enable Remote Desktop",
-            Category = "Remote Desktop",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Enables Remote Desktop connections on this machine. Opens the system for incoming RDP connections. Default: disabled.",
-            Tags = ["rdp", "remote-desktop", "access", "server"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Terminal Server"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Terminal Server", "fDenyTSConnections", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Terminal Server", "fDenyTSConnections", 1)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Terminal Server", "fDenyTSConnections", 0)],
-        },
-        new TweakDef
-        {
-            Id = "rdp-idle-timeout-15m",
-            Label = "Set RDP Idle Timeout to 15 Minutes",
-            Category = "Remote Desktop",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets the RDP idle session timeout to 15 minutes (900000ms). Disconnects idle sessions to free resources. Default: no timeout.",
-            Tags = ["rdp", "idle", "timeout", "session"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services", "MaxIdleTime", 900000)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services", "MaxIdleTime")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services", "MaxIdleTime", 900000)],
         },
         new TweakDef
         {
@@ -455,21 +303,6 @@ internal static class RemoteDesktop
             [
                 RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services", "MaxDisconnectionTime", 1800000),
             ],
-        },
-        new TweakDef
-        {
-            Id = "rdp-set-max-connections-unlimited",
-            Label = "Allow Unlimited Concurrent RDP Connections",
-            Category = "Remote Desktop",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description =
-                "Removes the default single-session limit for concurrent RDP connections. Requires appropriate Windows Server or RDSH licensing. Useful on multi-user workstations.",
-            Tags = ["rdp", "connections", "concurrent", "sessions", "unlimited"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Terminal Server"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Terminal Server", "fSingleSessionPerUser", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Terminal Server", "fSingleSessionPerUser", 1)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Terminal Server", "fSingleSessionPerUser", 0)],
         },
         new TweakDef
         {
@@ -530,45 +363,6 @@ internal static class RemoteDesktop
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services", "AudioRedirectionMode", 1)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services", "AudioRedirectionMode")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services", "AudioRedirectionMode", 1)],
-        },
-        new TweakDef
-        {
-            Id = "rdp-disable-com-port-redirect",
-            Label = "Disable RDP COM Port Redirection",
-            Category = "Remote Desktop",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Prevents COM (serial) port hardware from being redirected to Remote Desktop sessions. Reduces attack surface on systems with serial port equipment.",
-            Tags = ["rdp", "com", "serial", "port", "redirect", "security"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services", "fDisableCcm", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services", "fDisableCcm")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services", "fDisableCcm", 1)],
-        },
-        new TweakDef
-        {
-            Id = "rdp-enforce-tls-security-layer",
-            Label = "Enforce TLS Security Layer for RDP",
-            Category = "Remote Desktop",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Forces RDP to use TLS for transport security instead of falling back to RDP Security layer. Prevents downgrade attacks. Value 2 = SSL/TLS required.",
-            Tags = ["rdp", "tls", "security", "encryption", "hardening"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp", "SecurityLayer", 2),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp", "SecurityLayer", 1),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp", "SecurityLayer", 2),
-            ],
         },
         new TweakDef
         {
@@ -966,29 +760,6 @@ internal static class RealVnc
         },
         new TweakDef
         {
-            Id = "vnc-encryption-always",
-            Label = "VNC: Enforce Encryption Always On (Policy)",
-            Category = "Remote Desktop",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description =
-                "Forces VNC encryption to AlwaysOn via group policy key and sets EncryptionForced flag. Ensures connections are always encrypted regardless of server config. Default: PreferOn. Recommended: AlwaysOn.",
-            Tags = ["vnc", "encryption", "policy", "security"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\RealVNC\vncserver"],
-            ApplyOps =
-            [
-                RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\RealVNC\vncserver", "Encryption", "AlwaysOn"),
-                RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\RealVNC\vncserver", "Encryption", "AlwaysOn"),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\RealVNC\vncserver", "Encryption", "PreferOn"),
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\RealVNC\vncserver", "Encryption"),
-            ],
-            DetectOps = [RegOp.CheckString(@"HKEY_LOCAL_MACHINE\SOFTWARE\RealVNC\vncserver", "Encryption", "AlwaysOn")],
-        },
-        new TweakDef
-        {
             Id = "vnc-disable-file-transfer",
             Label = "VNC: Disable File Transfer",
             Category = "Remote Desktop",
@@ -1009,21 +780,6 @@ internal static class RealVnc
                 RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\RealVNC\vncserver", "EnableFileTransfer"),
             ],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\RealVNC\vncserver", "EnableFileTransfer", 0)],
-        },
-        new TweakDef
-        {
-            Id = "vnc-auth-system",
-            Label = "VNC: Set Authentication to SystemAuth",
-            Category = "Remote Desktop",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description =
-                "Sets VNC authentication to SystemAuth (Windows credentials). Uses OS-level authentication instead of VNC-specific password. Default: VncAuth. Recommended: SystemAuth for enterprise.",
-            Tags = ["vnc", "auth", "system", "security"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\RealVNC\vncserver", @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\RealVNC\vncserver"],
-            ApplyOps = [RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\RealVNC\vncserver", "Authentication", "VncAuth+SystemAuth")],
-            RemoveOps = [RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\RealVNC\vncserver", "Authentication", "SingleSignOn")],
-            DetectOps = [RegOp.CheckString(@"HKEY_LOCAL_MACHINE\SOFTWARE\RealVNC\vncserver", "Authentication", "SystemAuth")],
         },
         new TweakDef
         {
@@ -1121,62 +877,6 @@ internal static class RealVnc
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\RealVNC\vncserver", "IdleTimeout", 300)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\RealVNC\vncserver", "IdleTimeout")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\RealVNC\vncserver", "IdleTimeout", 300)],
-        },
-        new TweakDef
-        {
-            Id = "vnc-enable-query-connect",
-            Label = "Enable VNC Query Connect Prompt",
-            Category = "Remote Desktop",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Requires the local user to accept each connection before granting access. Default: disabled.",
-            Tags = ["vnc", "query", "connect", "prompt", "security"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\RealVNC\vncserver"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\RealVNC\vncserver", "QueryConnect", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\RealVNC\vncserver", "QueryConnect")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\RealVNC\vncserver", "QueryConnect", 1)],
-        },
-        new TweakDef
-        {
-            Id = "vnc-disable-clipboard-sync",
-            Label = "Disable VNC Clipboard Synchronization",
-            Category = "Remote Desktop",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables clipboard sharing between VNC client and server. Prevents copy-paste data leakage. Default: enabled.",
-            Tags = ["vnc", "clipboard", "sync", "disable", "security"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\RealVNC\vncserver"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\RealVNC\vncserver", "SendCutText", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\RealVNC\vncserver", "SendCutText")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\RealVNC\vncserver", "SendCutText", 0)],
-        },
-        new TweakDef
-        {
-            Id = "vnc-enable-encryption-always",
-            Label = "Enforce VNC Encryption (Always On)",
-            Category = "Remote Desktop",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Forces all VNC connections to use encryption. Connections without encryption support are rejected. Default: prefer on.",
-            Tags = ["vnc", "encryption", "security", "enforce"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\RealVNC\vncserver"],
-            ApplyOps = [RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\RealVNC\vncserver", "Encryption", "AlwaysOn")],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\RealVNC\vncserver", "Encryption")],
-            DetectOps = [RegOp.CheckString(@"HKEY_LOCAL_MACHINE\SOFTWARE\RealVNC\vncserver", "Encryption", "AlwaysOn")],
-        },
-        new TweakDef
-        {
-            Id = "vnc-set-idle-timeout-3600",
-            Label = "Set VNC Idle Timeout to 1 Hour",
-            Category = "Remote Desktop",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disconnects idle VNC sessions after 1 hour. Frees resources and improves security. Default: 0 (no timeout).",
-            Tags = ["vnc", "idle", "timeout", "security"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\RealVNC\vncserver"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\RealVNC\vncserver", "IdleTimeout", 3600)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\RealVNC\vncserver", "IdleTimeout")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\RealVNC\vncserver", "IdleTimeout", 3600)],
         },
         new TweakDef
         {

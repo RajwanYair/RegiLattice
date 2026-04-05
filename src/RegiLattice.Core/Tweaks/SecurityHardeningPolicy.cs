@@ -435,37 +435,6 @@ internal static class PolicySecurityHardening
             },
             new TweakDef
             {
-                Id = "biadmin-require-elevation-uac",
-                Label = "Built-in Admin Policy: Elevate Only Signed Executables Without Prompting Admin",
-                Category = "Security",
-                Description =
-                    "Configures UAC to silently elevate only executables that are securely signed and validated. Unsigned executables that request elevation will prompt the administrator. This prevents unsigned trojans and malware from silently elevating by mimicking a legitimate system binary.",
-                Tags = ["uac", "elevation", "signed", "builtin", "admin", "security", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System"],
-                ApplyOps =
-                [
-                    RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "ConsentPromptBehaviorAdmin", 2),
-                ],
-                RemoveOps =
-                [
-                    RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "ConsentPromptBehaviorAdmin"),
-                ],
-                DetectOps =
-                [
-                    RegOp.CheckDword(
-                        @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System",
-                        "ConsentPromptBehaviorAdmin",
-                        2
-                    ),
-                ],
-                ImpactScore = 4,
-                SafetyRating = 4,
-                ImpactNote = "UAC prompts admin for unsigned elevations; signed system binaries elevate silently.",
-            },
-            new TweakDef
-            {
                 Id = "biadmin-block-uac-virtualization",
                 Label = "Built-in Admin Policy: Disable UAC File/Registry Virtualization for Admins",
                 Category = "Security",
@@ -734,24 +703,6 @@ internal static class PolicySecurityHardening
                 ImpactScore = 3,
                 SafetyRating = 5,
                 ImpactNote = "Keeps biometrics policy baseline enabled; set to 0 to fully disable Windows Hello Face.",
-            },
-            new TweakDef
-            {
-                Id = "camprivacy-restrict-cortana-camera",
-                Label = "Camera Privacy Policy: Block Cortana from Accessing Camera",
-                Category = "Security",
-                Description =
-                    "Prevents the Cortana voice and AI assistant from activating or accessing the device camera. Cortana camera access enables continuous visual context gathering — a privacy concern on device without hardware camera shutters.",
-                Tags = ["camera", "cortana", "privacy", "ai", "policy"],
-                NeedsAdmin = true,
-                CorpSafe = true,
-                RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search"],
-                ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search", "AllowCortana", 0)],
-                RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search", "AllowCortana")],
-                DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search", "AllowCortana", 0)],
-                ImpactScore = 3,
-                SafetyRating = 5,
-                ImpactNote = "Disables Cortana at policy level; search reverts to local indexing only.",
             },
             new TweakDef
             {
