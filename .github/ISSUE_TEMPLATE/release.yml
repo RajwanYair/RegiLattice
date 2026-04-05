@@ -1,0 +1,88 @@
+name: Release Checklist
+description: Track a version bump and release — created automatically by release-prep.yml or manually for planned releases
+title: "Release vX.Y.Z"
+labels: ["release"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Release Checklist
+        Complete every item before pushing the version tag. The tag push triggers `release.yml` which publishes EXEs + MSI to GitHub Releases.
+
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      description: The semantic version being released (e.g. 6.15.0)
+      placeholder: "6.15.0"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: bump-type
+    attributes:
+      label: Bump Type
+      options:
+        - PATCH — bug fixes, refactoring, docs
+        - MINOR — new tweaks, features, services
+        - MAJOR — breaking API changes
+    validations:
+      required: true
+
+  - type: textarea
+    id: changes
+    attributes:
+      label: Summary of Changes
+      description: Brief description of what is included in this release.
+      placeholder: |
+        - 5 new policy modules (50 tweaks)
+        - Fixed NRE crash in TweakEngine.Search
+        - Updated README diagrams
+    validations:
+      required: true
+
+  - type: textarea
+    id: linked-issues
+    attributes:
+      label: Linked Issues / PRs
+      description: List issues or PRs included in this release. Use `Closes #N` syntax.
+      placeholder: |
+        Closes #42
+        Closes #43
+        Related to #40
+
+  - type: checkboxes
+    id: pre-release
+    attributes:
+      label: Pre-Release Checks
+      options:
+        - label: "`dotnet build RegiLattice.sln -c Release` — 0 errors, 0 warnings"
+        - label: "`dotnet test` — all 3 projects pass (0 failures)"
+        - label: "`--validate` — tweak integrity clean"
+        - label: No stale debug code or `.tmp/` leftovers
+
+  - type: checkboxes
+    id: version-files
+    attributes:
+      label: Version Files Updated
+      options:
+        - label: "`Directory.Build.props` — all 4 version properties"
+        - label: "`installer/Package.wxs` — Version attribute"
+        - label: "`docs/CHANGELOG.md` — new version section added"
+        - label: "`CHANGELOG.md` (root stub) — updated"
+        - label: "`README.md` — badge, download link, counts"
+        - label: "`.github/copilot-instructions.md` — Quick Facts table"
+        - label: "SVG files updated (stats, banner, architecture, how-it-works, features)"
+        - label: Package registry files (scoop, winget, chocolatey)
+
+  - type: checkboxes
+    id: release-steps
+    attributes:
+      label: Release Steps
+      options:
+        - label: "Committed: `chore: bump version to vX.Y.Z`"
+        - label: "Tagged: `git tag vX.Y.Z`"
+        - label: "Pushed: `git push && git push --tags`"
+        - label: "GitHub Release verified — all artifacts present"
+        - label: "GitHub About sidebar updated (`gh repo edit`)"
+        - label: "Issue closed after successful release"

@@ -29,6 +29,25 @@ argument-hint: "Version type: patch, minor, or major (e.g. 'minor bump for new f
 
 ## Step-by-Step Release Process
 
+### 0. Create a release issue and branch (MANDATORY for version bumps)
+
+**Automated path** (preferred):
+1. Run `release-prep.yml` via GitHub Actions with version, bump type, and summary
+2. This auto-creates: a **release issue** (with full checklist), a `release/vX.Y.Z` branch, and a **draft PR**
+3. Check out the release branch locally: `git checkout release/vX.Y.Z; git pull`
+
+**Manual path** (for local-only prep):
+```powershell
+# Create branch
+git checkout -b release/vX.Y.Z
+
+# Create issue via gh CLI
+gh issue create --title "Release vX.Y.Z" --label "release" --body "Release checklist for vX.Y.Z. See PR."
+
+# After pushing changes:
+gh pr create --title "chore: release vX.Y.Z" --body "Closes #NN" --base main
+```
+
 ### 1. Pre-flight checks
 ```powershell
 # Run all tests — must be 0 failures
@@ -68,7 +87,7 @@ Update ALL properties simultaneously — never leave them out of sync:
 
 ### 4. Update root `CHANGELOG.md` stub with the latest entry summary
 
-### 5. Commit
+### 5. Push to release branch and merge PR
 ```powershell
 git add -A
 git commit -m "chore: bump version to vX.Y.Z
@@ -77,14 +96,20 @@ git commit -m "chore: bump version to vX.Y.Z
 - installer/Package.wxs: Version updated
 - README.md: badge + download link updated
 - CHANGELOG(s): vX.Y.Z entry added
+Closes #NN
 Total: N NNN tweaks, N NNN tests (0 failures)"
+
+git push origin release/vX.Y.Z
 ```
+
+Mark the draft PR as ready for review. Wait for CI to pass. Merge to `main`.
 
 ### 6. Tag and push (triggers GitHub Actions release workflow)
 ```powershell
+git checkout main
+git pull
 git tag vX.Y.Z
-git push
-git push --tags
+git push --tags   # ← TRIGGERS release.yml
 ```
 
 ### 7. Post-release verification (MANDATORY — do not skip)
@@ -98,6 +123,7 @@ Wait 3–5 minutes then:
    - `RegiLattice.GUI.exe` (GUI portable)
    - `RegiLattice.exe` (CLI portable)
    - `*.msi` (installer — may be absent if WiX build failed, which is OK)
+5. Close the release issue (auto-closed if PR body had `Closes #NN`)
    - `SHA256SUMS.txt` (checksums)
 
 **Only after these checks pass** is the release complete. Do NOT skip this step — past releases
