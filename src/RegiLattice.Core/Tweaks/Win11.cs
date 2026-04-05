@@ -32,36 +32,6 @@ internal static class Win11
         },
         new TweakDef
         {
-            Id = "w11-disable-chat-icon",
-            Label = "Disable Chat/Teams Taskbar Icon",
-            Category = "Windows 11",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Removes the Chat/Teams icon from the Windows 11 taskbar. Default: Shown. Recommended: Hidden.",
-            Tags = ["win11", "chat", "teams", "taskbar"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "TaskbarMn", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "TaskbarMn", 1)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "TaskbarMn", 0)],
-        },
-        new TweakDef
-        {
-            Id = "w11-disable-cross-device",
-            Label = "Disable Cross-Device Resume",
-            Category = "Windows 11",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Disables Cross-Device Resume (CDP) which syncs activities across devices linked to the same Microsoft account. Win11 24H2+. Default: enabled. Recommended: disabled for privacy.",
-            Tags = ["win11", "cross-device", "cdp", "privacy", "24h2"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System"],
-            MinBuild = 26100,
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "EnableCdp", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "EnableCdp")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "EnableCdp", 0)],
-        },
-        new TweakDef
-        {
             Id = "w11-disable-rounded-corners",
             Label = "Disable Rounded Window Corners",
             Category = "Windows 11",
@@ -89,30 +59,6 @@ internal static class Win11
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Explorer", "ForceClassicTaskbarContextMenu", 1)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Explorer", "ForceClassicTaskbarContextMenu")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Explorer", "ForceClassicTaskbarContextMenu", 1)],
-        },
-        new TweakDef
-        {
-            Id = "w11-disable-suggested-actions-policy",
-            Label = "Disable Suggested Actions (Policy)",
-            Category = "Windows 11",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Disables Windows 11 Suggested Actions popup via Group Policy. Machine-wide enforcement for managed environments. Default: enabled. Recommended: disabled.",
-            Tags = ["win11", "suggested-actions", "policy", "gpo"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Explorer"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\SmartActionPlatform\SmartClipboard", "Disabled", 1),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\SmartActionPlatform\SmartClipboard", "Disabled"),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\SmartActionPlatform\SmartClipboard", "Disabled", 1),
-            ],
         },
         new TweakDef
         {
@@ -152,21 +98,6 @@ internal static class Win11
             ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Lighting", "AmbientLightingEnabled", 0)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Lighting", "AmbientLightingEnabled")],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Lighting", "AmbientLightingEnabled", 0)],
-        },
-        new TweakDef
-        {
-            Id = "w11-disable-recent-start",
-            Label = "Disable Recent Items in Start Menu",
-            Category = "Windows 11",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Disables tracking and display of recently opened documents in the Start menu. Improves privacy. Default: Enabled. Recommended: Disabled.",
-            Tags = ["win11", "start-menu", "recent", "privacy", "tracking"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "Start_TrackDocs", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "Start_TrackDocs")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "Start_TrackDocs", 0)],
         },
         new TweakDef
         {
@@ -380,20 +311,6 @@ internal static class Win11
         },
         new TweakDef
         {
-            Id = "w11-disable-bing-search",
-            Label = "Disable Bing in Start Menu Search",
-            Category = "Windows 11",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Prevents web/Bing results from appearing in the Start menu search box.",
-            Tags = ["win11", "bing", "search", "start-menu", "privacy"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\Explorer"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\Explorer", "DisableSearchBoxSuggestions", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\Explorer", "DisableSearchBoxSuggestions")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\Explorer", "DisableSearchBoxSuggestions", 1)],
-        },
-        new TweakDef
-        {
             Id = "w11-disable-lockscreen-tips",
             Label = "Disable Lock Screen Tips & Ads",
             Category = "Windows 11",
@@ -485,29 +402,6 @@ internal static class Win11
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Chat", "ChatIcon", 3)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Chat", "ChatIcon")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Chat", "ChatIcon", 3)],
-        },
-        new TweakDef
-        {
-            Id = "w11-disable-wu-autorestart",
-            Label = "Prevent Auto-Restart for Windows Update",
-            Category = "Windows 11",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Prevents Windows from automatically rebooting when a user is signed in after installing updates.",
-            Tags = ["win11", "windows-update", "restart", "policy"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU", "NoAutoRebootWithLoggedOnUsers", 1),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU", "NoAutoRebootWithLoggedOnUsers"),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU", "NoAutoRebootWithLoggedOnUsers", 1),
-            ],
         },
         new TweakDef
         {
@@ -658,79 +552,6 @@ internal static class Win11
         },
         new TweakDef
         {
-            Id = "w11-clock-seconds",
-            Label = "Show Seconds in System Clock",
-            Category = "Windows 11",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            MinBuild = 22000,
-            Description =
-                "Sets ShowSecondsInSystemClock=1 to display seconds in the taskbar system clock. Useful for monitoring and timing tasks. Default: off.",
-            Tags = ["win11", "clock", "taskbar", "seconds"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "ShowSecondsInSystemClock", 1),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "ShowSecondsInSystemClock"),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "ShowSecondsInSystemClock", 1),
-            ],
-        },
-        new TweakDef
-        {
-            Id = "w11-lock-screen-disable",
-            Label = "Disable Lock Screen via Policy",
-            Category = "Windows 11",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            MinBuild = 22000,
-            Description =
-                "Sets NoLockScreen=1 in the Personalization policy key to bypass the lock screen and go directly to the sign-in box. Default: 0 (lock screen shown).",
-            Tags = ["win11", "lock-screen", "policy", "login"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Personalization"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Personalization", "NoLockScreen", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Personalization", "NoLockScreen")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Personalization", "NoLockScreen", 1)],
-        },
-        new TweakDef
-        {
-            Id = "w11-taskbar-wiggle-off",
-            Label = "Disable Taskbar Badge Wiggle Animation",
-            Category = "Windows 11",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            MinBuild = 22000,
-            Description =
-                "Sets TaskbarAcrylicOpacity=0 and disables the badge-count wiggle animation on pinned app buttons. Reduces visual noise in the taskbar. Default: enabled.",
-            Tags = ["win11", "taskbar", "animation", "ui"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "TaskbarAnimations", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "TaskbarAnimations")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "TaskbarAnimations", 0)],
-        },
-        new TweakDef
-        {
-            Id = "w11-power-button-action",
-            Label = "Set Power Menu Shutdown as Default Action",
-            Category = "Windows 11",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            MinBuild = 22000,
-            Description =
-                "Sets CsEnabled=0 in the power policy to change the default power button behavior. Helps ensure a clean shutdown on systems with connected standby. Default: depends on OEM.",
-            Tags = ["win11", "power", "shutdown", "button"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power", "CsEnabled", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power", "CsEnabled")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power", "CsEnabled", 0)],
-        },
-        new TweakDef
-        {
             Id = "w11-start-app-list-off",
             Label = "Hide All Apps List in Start Menu",
             Category = "Windows 11",
@@ -789,34 +610,6 @@ internal static class Win11
         },
         new TweakDef
         {
-            Id = "w11-disable-explorer-ads",
-            Label = "Disable File Explorer Sync Provider Ads",
-            Category = "Windows 11",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Disables promotional notifications from sync providers (e.g., OneDrive) shown inside File Explorer. Removes subscription and cloud storage upsell banners. Default: enabled.",
-            Tags = ["w11", "explorer", "ads", "onedrive", "ui"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "ShowSyncProviderNotifications", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "ShowSyncProviderNotifications", 1),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(
-                    @"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced",
-                    "ShowSyncProviderNotifications",
-                    0
-                ),
-            ],
-        },
-        new TweakDef
-        {
             Id = "w11-disable-notification-center",
             Label = "Disable Notification Center (Action Center)",
             Category = "Windows 11",
@@ -847,36 +640,6 @@ internal static class Win11
         },
         new TweakDef
         {
-            Id = "w11-disable-lock-screen-camera",
-            Label = "Disable Camera Access on Lock Screen",
-            Category = "Windows 11",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Disables the lock screen camera by setting NoLockScreenCamera=1 via Group Policy. Prevents the camera from being accessible while the device is locked. Default: camera accessible on lock screen.",
-            Tags = ["w11", "lock-screen", "camera", "privacy", "gpo"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Personalization"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Personalization", "NoLockScreenCamera", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Personalization", "NoLockScreenCamera")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Personalization", "NoLockScreenCamera", 1)],
-        },
-        new TweakDef
-        {
-            Id = "w11-disable-lock-screen-app-notif",
-            Label = "Disable App Notifications on Lock Screen",
-            Category = "Windows 11",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description =
-                "Disables app notification previews shown on the lock screen (DisableLockScreenAppNotifications=1 via Group Policy). Prevents sensitive notification content from being visible while the device is locked. Default: notifications shown.",
-            Tags = ["w11", "lock-screen", "notifications", "privacy", "gpo"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "DisableLockScreenAppNotifications", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "DisableLockScreenAppNotifications")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "DisableLockScreenAppNotifications", 1)],
-        },
-        new TweakDef
-        {
             Id = "w11-disable-shutdown-tracking",
             Label = "Disable Shutdown Reason Tracker Dialog",
             Category = "Windows 11",
@@ -904,21 +667,6 @@ internal static class Win11
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "DisableStartupSound", 1)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "DisableStartupSound")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "DisableStartupSound", 1)],
-        },
-        new TweakDef
-        {
-            Id = "w11-set-wallpaper-quality-100",
-            Label = "Disable Wallpaper JPEG Compression",
-            Category = "Windows 11",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Sets JPEG import quality for desktop wallpapers to 100 (no compression). Prevents Windows from silently re-compressing high-quality wallpaper images when they are applied. Default: 85 (lossy compression).",
-            Tags = ["w11", "wallpaper", "quality", "jpeg", "display"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Desktop"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Control Panel\Desktop", "JPEGImportQuality", 100)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Control Panel\Desktop", "JPEGImportQuality")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Control Panel\Desktop", "JPEGImportQuality", 100)],
         },
     ];
 }
@@ -998,34 +746,6 @@ internal static class Cortana
         },
         new TweakDef
         {
-            Id = "cortana-disable-cortana-completely",
-            Label = "Disable Cortana Entirely",
-            Category = "Windows 11",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Completely disables Cortana via Group Policy.",
-            Tags = ["cortana", "privacy", "assistant"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search", "AllowCortanaAboveLock", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search", "AllowCortanaAboveLock")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search", "AllowCortanaAboveLock", 0)],
-        },
-        new TweakDef
-        {
-            Id = "cortana-disable-search-highlights-dynamic",
-            Label = "Disable Dynamic Search Highlights",
-            Category = "Windows 11",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Disables dynamic search highlights and tips in the search box.",
-            Tags = ["search", "cortana", "highlights", "ux"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\SearchSettings"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search", "EnableDynamicContentInWSB", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search", "EnableDynamicContentInWSB")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search", "EnableDynamicContentInWSB", 0)],
-        },
-        new TweakDef
-        {
             Id = "cortana-disable-cloud-search-aadmsa",
             Label = "Disable AAD/MSA Cloud Search",
             Category = "Windows 11",
@@ -1059,111 +779,6 @@ internal static class Cortana
             ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\SearchSettings", "SearchMode", 0)],
             RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\SearchSettings", "SearchMode", 1)],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\SearchSettings", "SearchMode", 0)],
-        },
-        new TweakDef
-        {
-            Id = "cortana-disable-search-location",
-            Label = "Disable Windows Search Location Access",
-            Category = "Windows 11",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Prevents Windows Search from using device location.",
-            Tags = ["search", "cortana", "location", "privacy"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Search"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Search", "AllowSearchToUseLocation", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Search", "AllowSearchToUseLocation", 1)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Search", "AllowSearchToUseLocation", 0)],
-        },
-        new TweakDef
-        {
-            Id = "cortana-disable-search-highlights",
-            Label = "Disable Search Highlights",
-            Category = "Windows 11",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Disables search highlights (trending searches, news) in the Windows Search box. Reduces distractions and network traffic. Default: Enabled. Recommended: Disabled.",
-            Tags = ["cortana", "search", "highlights", "performance"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\SearchSettings"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search", "EnableDynamicContentInWSB", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search", "EnableDynamicContentInWSB")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search", "EnableDynamicContentInWSB", 0)],
-        },
-        new TweakDef
-        {
-            Id = "cortana-disable-cloud-search",
-            Label = "Disable Cloud Search",
-            Category = "Windows 11",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Disables cloud content in Windows Search results. Only shows local files and settings. Default: Enabled. Recommended: Disabled for privacy.",
-            Tags = ["cortana", "search", "cloud", "privacy"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Search", "AllowCloudSearch", 0),
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Search", "AllowSearchToUseLocation", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Search", "AllowCloudSearch"),
-                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Search", "AllowSearchToUseLocation"),
-            ],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Search", "AllowCloudSearch", 0)],
-        },
-        new TweakDef
-        {
-            Id = "cortana-disable-web-search",
-            Label = "Disable Search Box Web Suggestions",
-            Category = "Windows 11",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Disables web suggestions and results in the Windows Search box. Only shows local results. Default: Enabled. Recommended: Disabled for privacy.",
-            Tags = ["cortana", "search", "web", "suggestions", "privacy"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\Explorer"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Search", "BingSearchEnabled", 0),
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Search", "CortanaConsent", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Search", "BingSearchEnabled"),
-                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Search", "CortanaConsent"),
-            ],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Search", "BingSearchEnabled", 0)],
-        },
-        new TweakDef
-        {
-            Id = "cortana-disable-bing-search",
-            Label = "Disable Bing Search in Start Menu",
-            Category = "Windows 11",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Disables Bing search results integration in the Start menu and taskbar search. Default: Enabled. Recommended: Disabled for privacy.",
-            Tags = ["cortana", "bing", "search", "start-menu", "privacy"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Search"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Search", "BingSearchEnabled", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Search", "BingSearchEnabled")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Search", "BingSearchEnabled", 0)],
-        },
-        new TweakDef
-        {
-            Id = "cortana-disable-cloud-personalization",
-            Label = "Disable Cloud Content Personalization",
-            Category = "Windows 11",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description =
-                "Disables cloud-based content personalization in Windows Search via HKLM policy (AllowCloudSearch=0). Default: Enabled. Recommended: Disabled for privacy.",
-            Tags = ["cortana", "search", "cloud", "personalization", "policy"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search", "AllowCloudSearch", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search", "AllowCloudSearch")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search", "AllowCloudSearch", 0)],
         },
         new TweakDef
         {
@@ -1217,30 +832,6 @@ internal static class Cortana
         },
         new TweakDef
         {
-            Id = "cortana-disable-device-search-history",
-            Label = "Disable Device Search History",
-            Category = "Windows 11",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Disables local device search history storage. Prevents Windows from saving search queries on the device. Default: Enabled. Recommended: Disabled for privacy.",
-            Tags = ["cortana", "search", "history", "device", "privacy"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\SearchSettings"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\SearchSettings", "IsDeviceSearchHistoryEnabled", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\SearchSettings", "IsDeviceSearchHistoryEnabled"),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\SearchSettings", "IsDeviceSearchHistoryEnabled", 0),
-            ],
-        },
-        new TweakDef
-        {
             Id = "cortana-disable-search-indexing-battery",
             Label = "Disable Search Indexing on Battery",
             Category = "Windows 11",
@@ -1266,20 +857,6 @@ internal static class Cortana
             ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\SearchSettings", "SafeSearchMode", 0)],
             RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\SearchSettings", "SafeSearchMode", 1)],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\SearchSettings", "SafeSearchMode", 0)],
-        },
-        new TweakDef
-        {
-            Id = "cortana-disable-bing-search-in-start",
-            Label = "Disable Bing Search in Start Menu",
-            Category = "Windows 11",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Disables Bing web search results from appearing in Start menu searches. Only local results shown. Default: enabled.",
-            Tags = ["cortana", "bing", "search", "start-menu"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Policies\Microsoft\Windows\Explorer"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Policies\Microsoft\Windows\Explorer", "DisableSearchBoxSuggestions", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\SOFTWARE\Policies\Microsoft\Windows\Explorer", "DisableSearchBoxSuggestions")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\SOFTWARE\Policies\Microsoft\Windows\Explorer", "DisableSearchBoxSuggestions", 1)],
         },
         new TweakDef
         {
@@ -1325,24 +902,6 @@ internal static class Cortana
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search", "ConnectedSearchUseWeb")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search", "ConnectedSearchUseWeb", 0)],
         },
-        new TweakDef
-        {
-            Id = "cortana-disable-cloud-content-search",
-            Label = "Disable Cloud Content Search",
-            Category = "Windows 11",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Disables searching cloud content (OneDrive, Outlook, SharePoint) from Windows Search. Local files only. Default: cloud content included.",
-            Tags = ["cortana", "cloud", "search", "content"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\SearchSettings"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\SearchSettings", "IsAADCloudSearchEnabled", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\SearchSettings", "IsAADCloudSearchEnabled")],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\SearchSettings", "IsAADCloudSearchEnabled", 0),
-            ],
-        },
         // ── Sprint 21 additions ─────────────────────────────────────────────
 
         new TweakDef
@@ -1358,58 +917,6 @@ internal static class Cortana
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Explorer", "NoUseStoreOpenWith", 1)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Explorer", "NoUseStoreOpenWith")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Explorer", "NoUseStoreOpenWith", 1)],
-        },
-        new TweakDef
-        {
-            Id = "cortana-disable-search-history-local",
-            Label = "Disable Local Search History",
-            Category = "Windows 11",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Disables local search history in the Windows Search box. Prevents recent searches from appearing as suggestions.",
-            Tags = ["cortana", "search", "history", "local"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\SearchSettings"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\SearchSettings", "IsDeviceSearchHistoryEnabled", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\SearchSettings", "IsDeviceSearchHistoryEnabled"),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\SearchSettings", "IsDeviceSearchHistoryEnabled", 0),
-            ],
-        },
-        new TweakDef
-        {
-            Id = "cortana-disable-cortana-consent",
-            Label = "Disable Cortana Consent Required",
-            Category = "Windows 11",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables the Cortana consent popup that appears on first use. Prevents Cortana from requesting permissions.",
-            Tags = ["cortana", "consent", "popup", "disable"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search", "AllowCortana", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search", "AllowCortana")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search", "AllowCortana", 0)],
-        },
-        new TweakDef
-        {
-            Id = "cortana-show-search-icon-only",
-            Label = "Show Search Icon Only (Hide Search Box)",
-            Category = "Windows 11",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Shows only the search icon on the taskbar instead of the full search box. Saves taskbar space while keeping search accessible.",
-            Tags = ["cortana", "search", "icon", "taskbar"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Search"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Search", "SearchboxTaskbarMode", 1)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Search", "SearchboxTaskbarMode", 2)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Search", "SearchboxTaskbarMode", 1)],
         },
         new TweakDef
         {
@@ -1482,21 +989,6 @@ internal static class Cortana
             [
                 RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search", "AllowIndexingEncryptedStoresOrItems", 0),
             ],
-        },
-        new TweakDef
-        {
-            Id = "cortana-limit-search-indexer-throttle",
-            Label = "Throttle Search Indexer CPU Usage",
-            Category = "Windows 11",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Limits the Search Indexer to reduced performance mode. Caps CPU usage during indexing, trading speed for lower system impact.",
-            Tags = ["cortana", "indexer", "throttle", "cpu"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows Search"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows Search", "SetupCompletedSuccessfully", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows Search", "SetupCompletedSuccessfully")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows Search", "SetupCompletedSuccessfully", 0)],
         },
         new TweakDef
         {
@@ -1687,21 +1179,6 @@ internal static class Cortana
         },
         new TweakDef
         {
-            Id = "cortana-disable-dynamic-wsb-content",
-            Label = "Disable Dynamic Content in Windows Search Bar",
-            Category = "Windows 11",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets EnableDynamicContentInWSB=0 via Windows Search policy. Prevents the search bar from displaying rotating news, trending searches, or other dynamic web content.",
-            Tags = ["cortana", "search", "dynamic-content", "news", "privacy"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search", "EnableDynamicContentInWSB", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search", "EnableDynamicContentInWSB")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search", "EnableDynamicContentInWSB", 0)],
-        },
-        new TweakDef
-        {
             Id = "cortana-gpo-block-bing-answers",
             Label = "Disable Bing Answers in Windows Search (Policy)",
             Category = "Windows 11",
@@ -1737,48 +1214,6 @@ internal static class IndexingSearch
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\WSearch", "Start", 4)],
             RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\WSearch", "Start", 2)],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\WSearch", "Start", 4)],
-        },
-        new TweakDef
-        {
-            Id = "idx-disable-web-search",
-            Label = "Disable Web Search in Start",
-            Category = "Windows 11",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Disable web search results in Start menu. Policy setting. Default: enabled. Recommended: disabled.",
-            Tags = ["web", "search", "start", "bing"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search", "DisableWebSearch", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search", "DisableWebSearch")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search", "DisableWebSearch", 1)],
-        },
-        new TweakDef
-        {
-            Id = "idx-disable-connected-search",
-            Label = "Disable Connected Search (Bing)",
-            Category = "Windows 11",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Disable Bing online results in Windows Search. Default: enabled. Recommended: disabled for privacy.",
-            Tags = ["bing", "connected", "online", "privacy"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search", "ConnectedSearchUseWeb", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search", "ConnectedSearchUseWeb")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search", "ConnectedSearchUseWeb", 0)],
-        },
-        new TweakDef
-        {
-            Id = "idx-disable-search-highlights",
-            Label = "Disable Search Highlights",
-            Category = "Windows 11",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Disable trending/interest highlights in search. Default: enabled. Recommended: disabled.",
-            Tags = ["highlights", "interests", "trending", "bing"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Search"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Search", "BingSearchEnabled", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Search", "BingSearchEnabled", 1)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Search", "BingSearchEnabled", 0)],
         },
         new TweakDef
         {
@@ -1825,20 +1260,6 @@ internal static class IndexingSearch
         },
         new TweakDef
         {
-            Id = "idx-disable-cloud-search",
-            Label = "Disable Cloud Content in Search",
-            Category = "Windows 11",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Disable cloud content (OneDrive, M365) from appearing in search. Default: enabled.",
-            Tags = ["cloud", "search", "onedrive", "m365"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search", "AllowCloudSearch", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search", "AllowCloudSearch")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search", "AllowCloudSearch", 0)],
-        },
-        new TweakDef
-        {
             Id = "idx-disable-search-location",
             Label = "Disable Location for Search",
             Category = "Windows 11",
@@ -1850,54 +1271,6 @@ internal static class IndexingSearch
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search", "AllowSearchToUseLocation", 0)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search", "AllowSearchToUseLocation")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search", "AllowSearchToUseLocation", 0)],
-        },
-        new TweakDef
-        {
-            Id = "idx-disable-dynamic-searchbox",
-            Label = "Disable Dynamic Search Box Content",
-            Category = "Windows 11",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Disables dynamic content in the search box (IsDynamicSearchBoxEnabled=0). Removes trending searches and images from the search experience. Default: enabled. Recommended: disabled.",
-            Tags = ["search", "dynamic", "searchbox", "privacy"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\SearchSettings"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\SearchSettings", "IsDynamicSearchBoxEnabled", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\SearchSettings", "IsDynamicSearchBoxEnabled"),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\SearchSettings", "IsDynamicSearchBoxEnabled", 0),
-            ],
-        },
-        new TweakDef
-        {
-            Id = "idx-disable-recent-search",
-            Label = "Disable Recent Search Suggestions",
-            Category = "Windows 11",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Disables recent search history suggestions in Windows Search. Prevents previously searched terms from appearing as suggestions. Default: enabled. Recommended: disabled for privacy.",
-            Tags = ["search", "recent", "history", "suggestions", "privacy"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\SearchSettings"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\SearchSettings", "IsDeviceSearchHistoryEnabled", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\SearchSettings", "IsDeviceSearchHistoryEnabled"),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\SearchSettings", "IsDeviceSearchHistoryEnabled", 0),
-            ],
         },
         new TweakDef
         {
@@ -1919,36 +1292,6 @@ internal static class IndexingSearch
             [
                 RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows Search\Gathering Manager", "DesiredRemainingDiskSpaceMB", 5000),
             ],
-        },
-        new TweakDef
-        {
-            Id = "idx-disable-outlook-indexing",
-            Label = "Disable Outlook Indexing",
-            Category = "Windows 11",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description =
-                "Prevents Windows Search from indexing Outlook email data via policy. Reduces indexer CPU and disk usage on large mailboxes. Default: indexed. Recommended: Disabled if Outlook search unused.",
-            Tags = ["search", "outlook", "email", "indexing", "performance"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search", "PreventIndexingOutlook", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search", "PreventIndexingOutlook")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search", "PreventIndexingOutlook", 1)],
-        },
-        new TweakDef
-        {
-            Id = "idx-prevent-indexing-battery",
-            Label = "Prevent Indexing on Battery Power",
-            Category = "Windows 11",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description =
-                "Prevents the Windows Search indexer from running when on battery power. Significantly improves laptop battery life. Default: indexing continues. Recommended: Apply on laptops.",
-            Tags = ["search", "indexer", "battery", "power", "laptop"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search", "PreventIndexOnBattery", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search", "PreventIndexOnBattery")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search", "PreventIndexOnBattery", 1)],
         },
         new TweakDef
         {
@@ -2027,92 +1370,6 @@ internal static class IndexingSearch
             ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Search", "IsMSACloudSearchEnabled", 0)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Search", "IsMSACloudSearchEnabled")],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Search", "IsMSACloudSearchEnabled", 0)],
-        },
-        new TweakDef
-        {
-            Id = "idx-disable-search-indexing-backoff",
-            Label = "Disable Search Indexing Backoff",
-            Category = "Windows 11",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Prevents the search indexer from reducing indexing speed when the system is busy. Indexes faster at the cost of more CPU. Default: enabled.",
-            Tags = ["search", "indexing", "backoff", "performance"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows Search"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows Search", "SetupCompletedSuccessfully", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows Search", "SetupCompletedSuccessfully")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows Search", "SetupCompletedSuccessfully", 0)],
-        },
-        new TweakDef
-        {
-            Id = "idx-disable-cortana-in-search",
-            Label = "Disable Cortana in Windows Search",
-            Category = "Windows 11",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables Cortana integration in Windows Search. No web suggestions or Bing queries. Default: enabled.",
-            Tags = ["search", "cortana", "bing", "web"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search", "AllowCortana", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search", "AllowCortana")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search", "AllowCortana", 0)],
-        },
-        new TweakDef
-        {
-            Id = "idx-limit-indexer-locations",
-            Label = "Disable Indexing of Outlook Data",
-            Category = "Windows 11",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Prevents Windows Search from indexing Outlook data stores. Reduces indexer CPU and disk usage. Default: indexed.",
-            Tags = ["search", "indexing", "outlook", "email"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search", "PreventIndexingOutlook", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search", "PreventIndexingOutlook")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search", "PreventIndexingOutlook", 1)],
-        },
-        new TweakDef
-        {
-            Id = "idx-disable-search-web-results",
-            Label = "Disable Web Results in Search",
-            Category = "Windows 11",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables web results in Windows Search. Only local files and apps appear. Default: enabled.",
-            Tags = ["search", "web", "bing", "local-only"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search", "ConnectedSearchUseWeb", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search", "ConnectedSearchUseWeb")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search", "ConnectedSearchUseWeb", 0)],
-        },
-        new TweakDef
-        {
-            Id = "idx-disable-indexing-on-battery",
-            Label = "Disable Indexing on Battery Power",
-            Category = "Windows 11",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Prevents the search indexer from running on battery power. Saves battery life on laptops. Default: reduced indexing.",
-            Tags = ["search", "indexing", "battery", "power"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search", "PreventIndexOnBattery", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search", "PreventIndexOnBattery")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search", "PreventIndexOnBattery", 1)],
-        },
-        new TweakDef
-        {
-            Id = "idx-disable-cloud-accounts",
-            Label = "Disable Cloud Account Search Indexing",
-            Category = "Windows 11",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Prevents Windows Search from indexing cloud-based accounts (Microsoft, work/school). Limits search to local content only. Default: indexed.",
-            Tags = ["indexing", "cloud", "accounts", "search"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search", "DisableWebSearch", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search", "DisableWebSearch")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search", "DisableWebSearch", 1)],
         },
     ];
 }
@@ -3140,6 +2397,2463 @@ internal static class Debloat
             ApplyOps = [RegOp.SetDword(ContentDelivery, "SubscribedContent-310093Enabled", 0)],
             RemoveOps = [RegOp.DeleteValue(ContentDelivery, "SubscribedContent-310093Enabled")],
             DetectOps = [RegOp.CheckDword(ContentDelivery, "SubscribedContent-310093Enabled", 0)],
+        },
+    ];
+}
+
+
+internal static class MsStore
+{
+    internal static IReadOnlyList<TweakDef> Tweaks { get; } =
+    [
+        new TweakDef
+        {
+            Id = "msstore-disable-auto-install",
+            Label = "Disable Auto-Install of Suggested Apps",
+            Category = "Windows 11",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Disables automatic installation of suggested apps. Default: enabled. Recommended: disabled.",
+            Tags = ["store", "auto-install", "suggestions", "bloat"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager"],
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
+                    "SilentInstalledAppsEnabled",
+                    0
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
+                    "SilentInstalledAppsEnabled"
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
+                    "SilentInstalledAppsEnabled",
+                    0
+                ),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "msstore-disable-tips",
+            Label = "Disable Windows Tips About Store",
+            Category = "Windows 11",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Disables Windows tips and suggestions about the Store. Default: enabled. Recommended: disabled.",
+            Tags = ["store", "tips", "suggestions", "ux"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager"],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager", "SoftLandingEnabled", 0),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager", "SoftLandingEnabled"),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager", "SoftLandingEnabled", 0),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "msstore-disable-consumer-features",
+            Label = "Disable Consumer Features / App Suggestions",
+            Category = "Windows 11",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description = "Disables Windows consumer features and app suggestions. Default: enabled. Recommended: disabled.",
+            Tags = ["store", "consumer", "suggestions", "policy"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CloudContent"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CloudContent", "DisableWindowsConsumerFeatures", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CloudContent", "DisableWindowsConsumerFeatures")],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CloudContent", "DisableWindowsConsumerFeatures", 1),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "msstore-disable-app-suggestions-start",
+            Label = "Disable App Suggestions in Start",
+            Category = "Windows 11",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Disables app suggestions in the Start menu. Default: enabled. Recommended: disabled.",
+            Tags = ["store", "start", "suggestions", "ux"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager"],
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
+                    "SystemPaneSuggestionsEnabled",
+                    0
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
+                    "SystemPaneSuggestionsEnabled"
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
+                    "SystemPaneSuggestionsEnabled",
+                    0
+                ),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "msstore-disable-push-install",
+            Label = "Disable Remote Push-to-Install",
+            Category = "Windows 11",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description =
+                "Disables remote push-to-install from Microsoft Store. Prevents apps from being silently installed via the web store. Default: enabled. Recommended: disabled.",
+            Tags = ["store", "push", "install", "silent"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager"],
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
+                    "SilentInstalledAppsEnabled",
+                    0
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
+                    "SilentInstalledAppsEnabled"
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
+                    "SilentInstalledAppsEnabled",
+                    0
+                ),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "msstore-store-disable-auto-install-suggested",
+            Label = "Disable Auto-Install of Suggested Apps",
+            Category = "Windows 11",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description =
+                "Disables silent auto-install of suggested apps via ContentDeliveryManager. Prevents Microsoft from pushing unwanted app installations. Default: enabled. Recommended: disabled.",
+            Tags = ["store", "auto-install", "suggested", "silent", "bloatware"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager"],
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
+                    "SilentInstalledAppsEnabled",
+                    0
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
+                    "SilentInstalledAppsEnabled"
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
+                    "SilentInstalledAppsEnabled",
+                    0
+                ),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "msstore-store-disable-video-autoplay",
+            Label = "Disable Store Video Autoplay",
+            Category = "Windows 11",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Disables video autoplay in the Microsoft Store app. Default: enabled. Recommended: disabled.",
+            Tags = ["store", "video", "autoplay", "media"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Store"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Store", "AutoPlayVideo", 0)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Store", "AutoPlayVideo", 1)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Store", "AutoPlayVideo", 0)],
+        },
+        new TweakDef
+        {
+            Id = "msstore-oem-apps-disable",
+            Label = "Disable OEM Pre-Installed App Delivery",
+            Category = "Windows 11",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description =
+                "Prevents ContentDeliveryManager from installing OEM-bundled apps silently on new accounts or upgrades. Default: enabled. Recommended: disabled.",
+            Tags = ["store", "oem", "preinstalled", "bloatware", "cdm"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager"],
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
+                    "OemPreInstalledAppsEnabled",
+                    0
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
+                    "OemPreInstalledAppsEnabled"
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
+                    "OemPreInstalledAppsEnabled",
+                    0
+                ),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "msstore-feature-mgmt-disable",
+            Label = "Disable Store Feature Management Experiments",
+            Category = "Windows 11",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description =
+                "Disables ContentDeliveryManager feature management, preventing Microsoft from running A/B experiments that silently enable new Store and content features. Default: enabled. Recommended: disabled.",
+            Tags = ["store", "feature-management", "experiments", "cdm", "privacy"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager"],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager", "FeatureManagementEnabled", 0),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager", "FeatureManagementEnabled"),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
+                    "FeatureManagementEnabled",
+                    0
+                ),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "msstore-disable-post-upgrade-apps",
+            Label = "Disable Post-Upgrade App Restoration",
+            Category = "Windows 11",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description =
+                "Prevents Windows from reinstalling Store apps after a feature upgrade or clean install via ContentDeliveryManager. Default: enabled. Recommended: disabled.",
+            Tags = ["store", "post-upgrade", "apps", "bloatware", "cdm"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager"],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager", "WindowsPostUpgradeEnabled", 0),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager", "WindowsPostUpgradeEnabled"),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
+                    "WindowsPostUpgradeEnabled",
+                    0
+                ),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "msstore-disable-start-tips",
+            Label = "Disable Cortana/Bing Tips in Start Menu",
+            Category = "Windows 11",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description =
+                "Disables SubscribedContent-280810 delivery which pushes Cortana and Bing tips into the Start menu. Default: enabled. Recommended: disabled.",
+            Tags = ["store", "cortana", "bing", "tips", "start", "cdm"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager"],
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
+                    "SubscribedContent-280810Enabled",
+                    0
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
+                    "SubscribedContent-280810Enabled"
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
+                    "SubscribedContent-280810Enabled",
+                    0
+                ),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "msstore-disable-push-notifications",
+            Label = "Disable Store Push Notifications",
+            Category = "Windows 11",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables push notifications from the Microsoft Store. Default: enabled.",
+            Tags = ["msstore", "notifications", "push", "disable"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsStore"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsStore", "DisablePushNotifications", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsStore", "DisablePushNotifications")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsStore", "DisablePushNotifications", 1)],
+        },
+        new TweakDef
+        {
+            Id = "msstore-disable-private-store-only",
+            Label = "Restrict to Private Store Only",
+            Category = "Windows 11",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Restricts Microsoft Store to only show private store apps (enterprise). Default: all apps visible.",
+            Tags = ["msstore", "private-store", "enterprise", "restrict"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsStore"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsStore", "RequirePrivateStoreOnly", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsStore", "RequirePrivateStoreOnly")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsStore", "RequirePrivateStoreOnly", 1)],
+        },
+        new TweakDef
+        {
+            Id = "msstore-disable-silent-app-installs",
+            Label = "Disable Silent App Installations",
+            Category = "Windows 11",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Prevents Microsoft Store from silently installing suggested apps. Default: enabled.",
+            Tags = ["msstore", "silent", "install", "bloatware"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager"],
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
+                    "SilentInstalledAppsEnabled",
+                    0
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
+                    "SilentInstalledAppsEnabled",
+                    1
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
+                    "SilentInstalledAppsEnabled",
+                    0
+                ),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "msstore-disable-app-suggestions",
+            Label = "Disable App Suggestions in Start Menu",
+            Category = "Windows 11",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Disables app suggestions (ads) in the Start menu from the Microsoft Store. Default: enabled.",
+            Tags = ["msstore", "suggestions", "start-menu", "ads"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager"],
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
+                    "SystemPaneSuggestionsEnabled",
+                    0
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
+                    "SystemPaneSuggestionsEnabled",
+                    1
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
+                    "SystemPaneSuggestionsEnabled",
+                    0
+                ),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "msstore-store-disable-app-recommendations",
+            Label = "Disable Store App Recommendations",
+            Category = "Windows 11",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description =
+                "Disables app recommendation popups from the Microsoft Store. Prevents promotional content in the Store app. Default: enabled.",
+            Tags = ["msstore", "recommendations", "apps", "disable"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager"],
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
+                    "SubscribedContent-314559Enabled",
+                    0
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
+                    "SubscribedContent-314559Enabled"
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
+                    "SubscribedContent-314559Enabled",
+                    0
+                ),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "msstore-video-autoplay-off",
+            Label = "Disable Store video autoplay",
+            Category = "Windows 11",
+            Tags = ["msstore", "video", "autoplay"],
+            NeedsAdmin = false,
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager", "VideoAutoplay", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager", "VideoAutoplay")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager", "VideoAutoplay", 0)],
+        },
+        new TweakDef
+        {
+            Id = "msstore-oem-preinstall-off",
+            Label = "Disable OEM-preinstalled app recommendations",
+            Category = "Windows 11",
+            Tags = ["msstore", "oem", "preinstall", "bloat"],
+            NeedsAdmin = false,
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
+                    "OemPreInstalledAppsEnabled",
+                    0
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
+                    "OemPreInstalledAppsEnabled"
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
+                    "OemPreInstalledAppsEnabled",
+                    0
+                ),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "msstore-silent-installs-off",
+            Label = "Disable silent app installations",
+            Category = "Windows 11",
+            Tags = ["msstore", "silent", "install", "bloat"],
+            NeedsAdmin = false,
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
+                    "SilentInstalledAppsEnabled",
+                    0
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
+                    "SilentInstalledAppsEnabled"
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
+                    "SilentInstalledAppsEnabled",
+                    0
+                ),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "msstore-require-purchase-auth",
+            Label = "Require admin authorization for Microsoft Store purchases",
+            Category = "Windows 11",
+            Tags = ["msstore", "purchase", "authorization", "policy"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsStore", "RequirePurchaseAuthorization", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsStore", "RequirePurchaseAuthorization")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsStore", "RequirePurchaseAuthorization", 1)],
+        },
+        new TweakDef
+        {
+            Id = "msstore-disable-store-apps-policy",
+            Label = "Disable Microsoft Store application access via GPO",
+            Category = "Windows 11",
+            Tags = ["msstore", "disable", "gpo", "policy"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsStore", "DisableStoreApps", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsStore", "DisableStoreApps")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsStore", "DisableStoreApps", 1)],
+        },
+        new TweakDef
+        {
+            Id = "msstore-disable-welcome-app",
+            Label = "Disable Windows welcome experience / app suggestion notifications",
+            Category = "Windows 11",
+            Tags = ["msstore", "welcome", "notification", "cdm"],
+            NeedsAdmin = false,
+            CorpSafe = true,
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager", "WelcomeAppEnabled", 0),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager", "WelcomeAppEnabled"),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager", "WelcomeAppEnabled", 0),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "msstore-disable-subscribed-338380",
+            Label = "Disable SubscribedContent-338380 (Start menu app suggestions)",
+            Category = "Windows 11",
+            Tags = ["msstore", "subscribed-content", "suggestions", "privacy"],
+            NeedsAdmin = false,
+            CorpSafe = true,
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
+                    "SubscribedContent-338380Enabled",
+                    0
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
+                    "SubscribedContent-338380Enabled"
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
+                    "SubscribedContent-338380Enabled",
+                    0
+                ),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "msstore-disable-subscribed-310091",
+            Label = "Disable SubscribedContent-310091 (Windows welcome experience highlights)",
+            Category = "Windows 11",
+            Tags = ["msstore", "subscribed-content", "welcome", "privacy"],
+            NeedsAdmin = false,
+            CorpSafe = true,
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
+                    "SubscribedContent-310091Enabled",
+                    0
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
+                    "SubscribedContent-310091Enabled"
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
+                    "SubscribedContent-310091Enabled",
+                    0
+                ),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "msstore-disable-subscribed-314559",
+            Label = "Disable SubscribedContent-314559 (social media / tips highlights)",
+            Category = "Windows 11",
+            Tags = ["msstore", "subscribed-content", "social", "privacy"],
+            NeedsAdmin = false,
+            CorpSafe = true,
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
+                    "SubscribedContent-314559Enabled",
+                    0
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
+                    "SubscribedContent-314559Enabled"
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
+                    "SubscribedContent-314559Enabled",
+                    0
+                ),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "msstore-disable-enterprise-cloud-store",
+            Label = "Disable Windows Store for Business / Enterprise cloud integration",
+            Category = "Windows 11",
+            Tags = ["msstore", "enterprise", "business", "cloud", "policy"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsStore", "EnableWindowsStoreForBusiness", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsStore", "EnableWindowsStoreForBusiness")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsStore", "EnableWindowsStoreForBusiness", 0)],
+        },
+        new TweakDef
+        {
+            Id = "msstore-disable-adinfo",
+            Label = "Disable Windows personalized advertising ID",
+            Category = "Windows 11",
+            Tags = ["msstore", "ads", "advertising", "privacy"],
+            NeedsAdmin = false,
+            CorpSafe = true,
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\AdvertisingInfo", "Enabled", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\AdvertisingInfo", "Enabled")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\AdvertisingInfo", "Enabled", 0)],
+        },
+    ];
+}
+
+// ── merged from SnapMultitasking.cs ────────────────────────────────────────
+internal static class SnapMultitasking
+{
+    internal static IReadOnlyList<TweakDef> Tweaks { get; } =
+    [
+        new TweakDef
+        {
+            Id = "snap-disable-snap-assist",
+            Label = "Disable Snap Assist",
+            Category = "Windows 11",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Disable showing suggestions when snapping windows. Default: enabled. Recommended: personal preference.",
+            Tags = ["snap", "assist", "window", "suggestion"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "SnapAssist", 0)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "SnapAssist", 1)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "SnapAssist", 0)],
+        },
+        new TweakDef
+        {
+            Id = "snap-disable-snap-groups",
+            Label = "Disable Snap Groups in Alt+Tab",
+            Category = "Windows 11",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Disable grouping Snap windows in Alt+Tab and taskbar. Default: enabled.",
+            Tags = ["snap", "groups", "alt-tab", "taskbar"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "EnableTaskGroups", 0)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "EnableTaskGroups", 1)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "EnableTaskGroups", 0)],
+        },
+        new TweakDef
+        {
+            Id = "snap-alttab-windows-only",
+            Label = "Alt+Tab: Open Windows Only",
+            Category = "Windows 11",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Show only open windows in Alt+Tab, not browser tabs. Default: includes Edge tabs.",
+            Tags = ["alt-tab", "tabs", "edge", "windows"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\MultitaskingView\AllUpView"],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\MultitaskingView\AllUpView", "Enabled", 0),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\MultitaskingView\AllUpView", "Enabled"),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\MultitaskingView\AllUpView", "Enabled", 0),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "snap-vd-all-monitors",
+            Label = "Show Desktops on All Monitors",
+            Category = "Windows 11",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Show virtual desktop windows on all monitors in taskbar. Default: current monitor only.",
+            Tags = ["virtual-desktop", "monitor", "taskbar"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "VirtualDesktopTaskbarFilter", 0),
+            ],
+            RemoveOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "VirtualDesktopTaskbarFilter", 1),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "VirtualDesktopTaskbarFilter", 0),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "snap-disable-auto-arrange",
+            Label = "Disable Auto-Arrange on Dock",
+            Category = "Windows 11",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Disable automatic window rearrangement when docking/undocking. Default: enabled.",
+            Tags = ["dock", "arrange", "resize"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "JointResize", 0)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "JointResize", 1)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "JointResize", 0)],
+        },
+        new TweakDef
+        {
+            Id = "snap-disable-snap-fill",
+            Label = "Disable Snap Fill Available Space",
+            Category = "Windows 11",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Disable automatically filling available space when snapping a window. Default: enabled.",
+            Tags = ["snap", "fill", "space", "resize"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "SnapFill", 0)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "SnapFill", 1)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "SnapFill", 0)],
+        },
+        new TweakDef
+        {
+            Id = "snap-disable-dwm-anim-policy",
+            Label = "Disable DWM Animations (Policy)",
+            Category = "Windows 11",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description = "Machine-wide policy to disable Desktop Window Manager animations. Default: enabled.",
+            Tags = ["dwm", "animation", "policy"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DWM"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DWM", "DisallowAnimations", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DWM", "DisallowAnimations")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DWM", "DisallowAnimations", 1)],
+        },
+        new TweakDef
+        {
+            Id = "snap-disable-edge-snapping",
+            Label = "Disable Window Edge Snap (Aero Snap)",
+            Category = "Windows 11",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Disables Aero Snap (dragging windows to screen edges). Default: enabled.",
+            Tags = ["snap", "aero", "edge", "disable"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Desktop"],
+            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "WindowArrangementActive", "0")],
+            RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "WindowArrangementActive", "1")],
+            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "WindowArrangementActive", "0")],
+        },
+        new TweakDef
+        {
+            Id = "snap-disable-alt-tab-edge-tabs",
+            Label = "Disable Edge Tabs in Alt+Tab",
+            Category = "Windows 11",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Prevents Microsoft Edge tabs from appearing in the Alt+Tab switcher. Shows only open windows. Default: recent 5 tabs.",
+            Tags = ["snap", "alt-tab", "edge", "tabs"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "MultiTaskingAltTabFilter", 3),
+            ],
+            RemoveOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "MultiTaskingAltTabFilter", 0),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "MultiTaskingAltTabFilter", 3),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "snap-disable-desktop-peek",
+            Label = "Disable Desktop Peek",
+            Category = "Windows 11",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description =
+                "Disables the desktop peek feature when hovering over the Show Desktop button. Prevents accidental window hiding. Default: enabled.",
+            Tags = ["snap", "desktop", "peek", "disable"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "DisablePreviewDesktop", 1)],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "DisablePreviewDesktop"),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "DisablePreviewDesktop", 1),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "snap-disable-vd-edge-swipe",
+            Label = "Disable Virtual Desktop Edge Swipe",
+            Category = "Windows 11",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description =
+                "Disables the touchpad edge swipe gesture for switching virtual desktops. Prevents accidental desktop switches. Default: enabled.",
+            Tags = ["snap", "virtual-desktop", "swipe", "gesture"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "EnableEdgeSwipe", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "EnableEdgeSwipe")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "EnableEdgeSwipe", 0)],
+        },
+        new TweakDef
+        {
+            Id = "snap-vd-switch-anim-speed",
+            Label = "Speed Up Virtual Desktop Switch Animation",
+            Category = "Windows 11",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description =
+                "Reduces the virtual desktop switch animation duration. Makes workspace switching feel more responsive. Default: standard speed.",
+            Tags = ["snap", "virtual-desktop", "animation", "speed"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "VDDesktopIconsEnabled", 0)],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "VDDesktopIconsEnabled"),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "VDDesktopIconsEnabled", 0),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "snap-disable-snap-across-monitors",
+            Label = "Disable Snap Across Monitors",
+            Category = "Windows 11",
+            NeedsAdmin = false,
+            Description = "Prevents windows from snapping across monitor boundaries in multi-monitor setups. Default: enabled.",
+            Tags = ["snap", "monitor", "multi-display"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "MultiMonSnap", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "MultiMonSnap")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "MultiMonSnap", 0)],
+        },
+    ];
+}
+
+// ── Merged from VirtualDesktops.cs ──────────────────────────────────────────────────
+
+internal static class VirtualDesktops
+{
+    private const string VdKey = @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\VirtualDesktops";
+
+    private const string TaskView = @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced";
+
+    private const string TaskViewPolicy = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Explorer";
+
+    private const string AltTabKey = @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced";
+
+    private const string DwmKey = @"HKEY_CURRENT_USER\Software\Microsoft\Windows\DWM";
+
+    internal static IReadOnlyList<TweakDef> Tweaks { get; } =
+    [
+        new TweakDef
+        {
+            Id = "vd-show-all-windows-in-alt-tab",
+            Label = "Show All VD Windows in Alt+Tab",
+            Category = "Windows 11",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            ImpactScore = 3,
+            SafetyRating = 5,
+            Tags = ["virtual desktops", "alt-tab", "task view", "windows"],
+            Description =
+                "Configures Alt+Tab to show windows from all virtual desktops (default "
+                + "Win11 behavior). Value 1 = all desktops. Useful if a previous policy "
+                + "restricted Alt+Tab to the current desktop only.",
+            ApplyOps = [RegOp.SetDword(AltTabKey, "VirtualDesktopAltTabFilter", 1)],
+            RemoveOps = [RegOp.DeleteValue(AltTabKey, "VirtualDesktopAltTabFilter")],
+            DetectOps = [RegOp.CheckDword(AltTabKey, "VirtualDesktopAltTabFilter", 1)],
+        },
+        new TweakDef
+        {
+            Id = "vd-show-current-desktop-in-alt-tab",
+            Label = "Show Only Current VD Windows in Alt+Tab",
+            Category = "Windows 11",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            ImpactScore = 3,
+            SafetyRating = 5,
+            Tags = ["virtual desktops", "alt-tab", "focus", "productivity"],
+            Description =
+                "Restricts Alt+Tab to only show windows from the current virtual desktop. "
+                + "Value 2 = current desktop only. Reduces clutter when using many desktops.",
+            ApplyOps = [RegOp.SetDword(AltTabKey, "VirtualDesktopAltTabFilter", 2)],
+            RemoveOps = [RegOp.DeleteValue(AltTabKey, "VirtualDesktopAltTabFilter")],
+            DetectOps = [RegOp.CheckDword(AltTabKey, "VirtualDesktopAltTabFilter", 2)],
+        },
+        new TweakDef
+        {
+            Id = "vd-show-all-taskbar-buttons",
+            Label = "Show Taskbar Buttons from All Virtual Desktops",
+            Category = "Windows 11",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            ImpactScore = 3,
+            SafetyRating = 5,
+            Tags = ["virtual desktops", "taskbar", "buttons", "all desktops"],
+            Description =
+                "Configures the taskbar to show app buttons from all virtual desktops "
+                + "instead of only the current one. Value 1 = show all. Useful for quick "
+                + "cross-desktop app switching without Task View.",
+            ApplyOps = [RegOp.SetDword(TaskView, "VirtualDesktopTaskbarFilter", 1)],
+            RemoveOps = [RegOp.DeleteValue(TaskView, "VirtualDesktopTaskbarFilter")],
+            DetectOps = [RegOp.CheckDword(TaskView, "VirtualDesktopTaskbarFilter", 1)],
+        },
+        new TweakDef
+        {
+            Id = "vd-show-current-taskbar-buttons",
+            Label = "Show Only Current VD Taskbar Buttons",
+            Category = "Windows 11",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            ImpactScore = 3,
+            SafetyRating = 5,
+            Tags = ["virtual desktops", "taskbar", "current desktop", "focus"],
+            Description =
+                "Restricts the taskbar to only show buttons for apps open on the current "
+                + "virtual desktop. Value 2 = current desktop only. Keeps the taskbar clean "
+                + "when using many virtual desktops.",
+            ApplyOps = [RegOp.SetDword(TaskView, "VirtualDesktopTaskbarFilter", 2)],
+            RemoveOps = [RegOp.DeleteValue(TaskView, "VirtualDesktopTaskbarFilter")],
+            DetectOps = [RegOp.CheckDword(TaskView, "VirtualDesktopTaskbarFilter", 2)],
+        },
+        new TweakDef
+        {
+            Id = "vd-disable-task-view-button",
+            Label = "Hide Task View Button from Taskbar",
+            Category = "Windows 11",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            ImpactScore = 2,
+            SafetyRating = 5,
+            Tags = ["virtual desktops", "task view", "taskbar", "button", "clean"],
+            Description =
+                "Hides the Task View (multi-desktop) button from the taskbar. "
+                + "Virtual desktops remain functional via Win+Tab or Win+Ctrl+D. "
+                + "Reduces taskbar clutter on single-user desktops.",
+            ApplyOps = [RegOp.SetDword(TaskView, "ShowTaskViewButton", 0)],
+            RemoveOps = [RegOp.SetDword(TaskView, "ShowTaskViewButton", 1)],
+            DetectOps = [RegOp.CheckDword(TaskView, "ShowTaskViewButton", 0)],
+        },
+        new TweakDef
+        {
+            Id = "vd-disable-task-view-system",
+            Label = "Disable Task View Feature via Policy",
+            Category = "Windows 11",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            ImpactScore = 2,
+            SafetyRating = 4,
+            Tags = ["virtual desktops", "task view", "policy", "disable"],
+            Description =
+                "Disables the Task View (Win+Tab) feature entirely via system policy. "
+                + "Users cannot access virtual desktops, and the shortcut is disabled. "
+                + "Intended for kiosk/corporate lockdown environments.",
+            ApplyOps = [RegOp.SetDword(TaskViewPolicy, "DisableTaskView", 1)],
+            RemoveOps = [RegOp.DeleteValue(TaskViewPolicy, "DisableTaskView")],
+            DetectOps = [RegOp.CheckDword(TaskViewPolicy, "DisableTaskView", 1)],
+        },
+        new TweakDef
+        {
+            Id = "vd-disable-snap-assist-flyout",
+            Label = "Disable Snap Assist Desktop Flyout on Switch",
+            Category = "Windows 11",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            ImpactScore = 2,
+            SafetyRating = 5,
+            Tags = ["virtual desktops", "snap", "flyout", "animation", "ux"],
+            Description =
+                "Disables the snap group flyout that appears when hovering over taskbar "
+                + "buttons during virtual desktop operations. Reduces UI clutter for power "
+                + "users who prefer compact taskbar behavior.",
+            ApplyOps = [RegOp.SetDword(TaskView, "EnableSnapAssistFlyout", 0)],
+            RemoveOps = [RegOp.SetDword(TaskView, "EnableSnapAssistFlyout", 1)],
+            DetectOps = [RegOp.CheckDword(TaskView, "EnableSnapAssistFlyout", 0)],
+        },
+        new TweakDef
+        {
+            Id = "vd-disable-desktops-on-taskbar",
+            Label = "Disable Virtual Desktop Previews on Taskbar Hover",
+            Category = "Windows 11",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            ImpactScore = 2,
+            SafetyRating = 5,
+            Tags = ["virtual desktops", "taskbar", "preview", "hover"],
+            Description =
+                "Disables the virtual desktop thumbnail previews that appear when hovering "
+                + "over the Task View button. Saves screen space and reduces compositor load "
+                + "on hover-intensive workflows.",
+            ApplyOps = [RegOp.SetDword(TaskView, "TaskView", 0)],
+            RemoveOps = [RegOp.SetDword(TaskView, "TaskView", 1)],
+            DetectOps = [RegOp.CheckDword(TaskView, "TaskView", 0)],
+        },
+        new TweakDef
+        {
+            Id = "vd-set-taskbar-multimonitor-all",
+            Label = "Show All Desktop Windows on All Monitor Taskbars",
+            Category = "Windows 11",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            ImpactScore = 2,
+            SafetyRating = 5,
+            Tags = ["virtual desktops", "taskbar", "multimonitor", "windows"],
+            Description =
+                "Configures multi-monitor taskbars to show buttons for windows "
+                + "from all virtual desktops (MMTaskbarMode=0). The default shows "
+                + "only the current desktop on each monitor's taskbar.",
+            ApplyOps = [RegOp.SetDword(TaskView, "MMTaskbarMode", 0)],
+            RemoveOps = [RegOp.DeleteValue(TaskView, "MMTaskbarMode")],
+            DetectOps = [RegOp.CheckDword(TaskView, "MMTaskbarMode", 0)],
+        },
+        new TweakDef
+        {
+            Id = "vd-set-taskbar-multimonitor-local-only",
+            Label = "Show Only Local Monitor Windows on Each Monitor Taskbar",
+            Category = "Windows 11",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            ImpactScore = 2,
+            SafetyRating = 5,
+            Tags = ["virtual desktops", "taskbar", "multimonitor", "focus"],
+            Description =
+                "Configures multi-monitor taskbars to show only windows that are "
+                + "open on that specific monitor (MMTaskbarMode=2). Reduces clutter "
+                + "on multi-monitor setups.",
+            ApplyOps = [RegOp.SetDword(TaskView, "MMTaskbarMode", 2)],
+            RemoveOps = [RegOp.DeleteValue(TaskView, "MMTaskbarMode")],
+            DetectOps = [RegOp.CheckDword(TaskView, "MMTaskbarMode", 2)],
+        },
+        new TweakDef
+        {
+            Id = "vd-disable-aero-peek",
+            Label = "Disable Aero Peek (Desktop Peek Overlay)",
+            Category = "Windows 11",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            ImpactScore = 2,
+            SafetyRating = 5,
+            Tags = ["virtual desktops", "aero", "peek", "dwm", "transparency"],
+            Description =
+                "Disables the Aero Peek feature that toggles window transparency to "
+                + "show the desktop when hovering over the 'Show Desktop' corner button. "
+                + "Removes the glass overlay effect (EnableAeroPeek=0).",
+            ApplyOps = [RegOp.SetDword(DwmKey, "EnableAeroPeek", 0)],
+            RemoveOps = [RegOp.SetDword(DwmKey, "EnableAeroPeek", 1)],
+            DetectOps = [RegOp.CheckDword(DwmKey, "EnableAeroPeek", 0)],
+        },
+        new TweakDef
+        {
+            Id = "vd-disable-snap-fill",
+            Label = "Disable Snap Fill (Auto-Fill Adjacent Window After Snap)",
+            Category = "Windows 11",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            ImpactScore = 2,
+            SafetyRating = 5,
+            Tags = ["virtual desktops", "snap", "fill", "layout"],
+            Description =
+                "Prevents Windows from prompting you to fill the remaining screen area "
+                + "after snapping a window. Only the snapped window moves; no assist popup "
+                + "appears for the other half (SnapFill=0).",
+            ApplyOps = [RegOp.SetDword(TaskView, "SnapFill", 0)],
+            RemoveOps = [RegOp.SetDword(TaskView, "SnapFill", 1)],
+            DetectOps = [RegOp.CheckDword(TaskView, "SnapFill", 0)],
+        },
+        new TweakDef
+        {
+            Id = "vd-disable-snap-revert",
+            Label = "Disable Snap Revert (Don't Move Partner Window When Moving Dragged Window)",
+            Category = "Windows 11",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            ImpactScore = 2,
+            SafetyRating = 5,
+            Tags = ["virtual desktops", "snap", "revert", "layout"],
+            Description =
+                "When dragging a snapped window away from its position, disables the "
+                + "automatic reverting of the paired window to its pre-snap size and position "
+                + "(SnapRevert=0). Gives more predictable behavior.",
+            ApplyOps = [RegOp.SetDword(TaskView, "SnapRevert", 0)],
+            RemoveOps = [RegOp.SetDword(TaskView, "SnapRevert", 1)],
+            DetectOps = [RegOp.CheckDword(TaskView, "SnapRevert", 0)],
+        },
+        new TweakDef
+        {
+            Id = "vd-disable-taskbar-grouping",
+            Label = "Never Group Taskbar Buttons",
+            Category = "Windows 11",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            ImpactScore = 3,
+            SafetyRating = 5,
+            Tags = ["virtual desktops", "taskbar", "grouping", "buttons"],
+            Description =
+                "Prevents the taskbar from grouping multiple windows of the same app "
+                + "into a single button. Each open window gets its own dedicated button "
+                + "regardless of how many are open (TaskbarGlomLevel=2).",
+            ApplyOps = [RegOp.SetDword(TaskView, "TaskbarGlomLevel", 2)],
+            RemoveOps = [RegOp.DeleteValue(TaskView, "TaskbarGlomLevel")],
+            DetectOps = [RegOp.CheckDword(TaskView, "TaskbarGlomLevel", 2)],
+        },
+        new TweakDef
+        {
+            Id = "vd-enable-background-per-desktop",
+            Label = "Enable Unique Wallpaper Per Virtual Desktop",
+            Category = "Windows 11",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            ImpactScore = 1,
+            SafetyRating = 5,
+            Tags = ["virtual desktops", "wallpaper", "background", "personalization"],
+            Description =
+                "Allows each virtual desktop to have its own wallpaper that changes "
+                + "automatically when you switch desktops. Enables the per-desktop background "
+                + "feature (BackgroundChangesOnDesktopSwitch=1).",
+            ApplyOps = [RegOp.SetDword(VdKey, "BackgroundChangesOnDesktopSwitch", 1)],
+            RemoveOps = [RegOp.SetDword(VdKey, "BackgroundChangesOnDesktopSwitch", 0)],
+            DetectOps = [RegOp.CheckDword(VdKey, "BackgroundChangesOnDesktopSwitch", 1)],
+        },
+        new TweakDef
+        {
+            Id = "vd-disable-alt-tab-thumbnails",
+            Label = "Delay Alt+Tab Thumbnail Preview (Effectively Disable Hover Thumbnails)",
+            Category = "Windows 11",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            ImpactScore = 1,
+            SafetyRating = 5,
+            Tags = ["virtual desktops", "alt-tab", "thumbnails", "hover", "performance"],
+            Description =
+                "Sets the taskbar thumbnail hover delay to 30 seconds, effectively "
+                + "preventing thumbnail previews from appearing while still keeping the "
+                + "feature technically enabled (ExtendedUIHoverTime=30000 ms).",
+            ApplyOps = [RegOp.SetDword(TaskView, "ExtendedUIHoverTime", 30000)],
+            RemoveOps = [RegOp.DeleteValue(TaskView, "ExtendedUIHoverTime")],
+            DetectOps = [RegOp.CheckDword(TaskView, "ExtendedUIHoverTime", 30000)],
+        },
+        new TweakDef
+        {
+            Id = "vd-show-taskbar-on-secondary-monitors",
+            Label = "Show Taskbar on All Monitors (Multi-Monitor)",
+            Category = "Windows 11",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            ImpactScore = 2,
+            SafetyRating = 5,
+            Tags = ["virtual desktops", "taskbar", "multimonitor", "secondary"],
+            Description =
+                "Enables the extended taskbar on secondary monitors so each display "
+                + "shows its own taskbar. Useful when the multi-monitor taskbar was "
+                + "previously disabled (MMTaskbarEnabled=1).",
+            ApplyOps = [RegOp.SetDword(TaskView, "MMTaskbarEnabled", 1)],
+            RemoveOps = [RegOp.SetDword(TaskView, "MMTaskbarEnabled", 0)],
+            DetectOps = [RegOp.CheckDword(TaskView, "MMTaskbarEnabled", 1)],
+        },
+        new TweakDef
+        {
+            Id = "vd-disable-taskbar-end-task-button",
+            Label = "Disable End Task Button on Taskbar (Windows 11 23H2+)",
+            Category = "Windows 11",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            ImpactScore = 1,
+            SafetyRating = 5,
+            Tags = ["virtual desktops", "taskbar", "end-task", "windows 11"],
+            Description =
+                "Removes the 'End Task' button that appears in the right-click context "
+                + "menu for taskbar buttons in Windows 11 version 23H2 and later. "
+                + "Prevents accidental process termination (TaskbarEndTask=0).",
+            ApplyOps = [RegOp.SetDword(TaskView, "TaskbarEndTask", 0)],
+            RemoveOps = [RegOp.SetDword(TaskView, "TaskbarEndTask", 1)],
+            DetectOps = [RegOp.CheckDword(TaskView, "TaskbarEndTask", 0)],
+        },
+    ];
+}
+
+// ── merged from Notifications.cs ──
+internal static class Notifications
+{
+    internal static IReadOnlyList<TweakDef> Tweaks { get; } =
+    [
+        new TweakDef
+        {
+            Id = "notif-disable-toast",
+            Label = "Disable Toast Notifications",
+            Category = "Windows 11",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Disables pop-up toast notifications from all applications. Default: enabled. Recommended: disabled.",
+            Tags = ["notifications", "toast", "popup"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\CurrentVersion\PushNotifications"],
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\CurrentVersion\PushNotifications",
+                    "NoToastApplicationNotification",
+                    1
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(
+                    @"HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\CurrentVersion\PushNotifications",
+                    "NoToastApplicationNotification"
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\CurrentVersion\PushNotifications",
+                    "NoToastApplicationNotification",
+                    1
+                ),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "notif-disable-lock-screen",
+            Label = "Disable Lock Screen Notifications",
+            Category = "Windows 11",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Prevents notifications from appearing on the lock screen. Default: enabled. Recommended: disabled.",
+            Tags = ["notifications", "lock-screen", "privacy"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Notifications\Settings"],
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Notifications\Settings",
+                    "NOC_GLOBAL_SETTING_ALLOW_TOASTS_ABOVE_LOCK",
+                    0
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Notifications\Settings",
+                    "NOC_GLOBAL_SETTING_ALLOW_TOASTS_ABOVE_LOCK",
+                    1
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Notifications\Settings",
+                    "NOC_GLOBAL_SETTING_ALLOW_TOASTS_ABOVE_LOCK",
+                    0
+                ),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "notif-disable-sounds",
+            Label = "Disable Notification Sounds",
+            Category = "Windows 11",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Silences all notification sounds system-wide. Default: enabled. Recommended: disabled.",
+            Tags = ["notifications", "sounds", "audio"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Notifications\Settings"],
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Notifications\Settings",
+                    "NOC_GLOBAL_SETTING_ALLOW_NOTIFICATION_SOUND",
+                    0
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Notifications\Settings",
+                    "NOC_GLOBAL_SETTING_ALLOW_NOTIFICATION_SOUND",
+                    1
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Notifications\Settings",
+                    "NOC_GLOBAL_SETTING_ALLOW_NOTIFICATION_SOUND",
+                    0
+                ),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "notif-disable-suggestions",
+            Label = "Disable Windows Suggestions / Tips",
+            Category = "Windows 11",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Stops Windows from showing tips, tricks, and suggestion notifications. Default: enabled. Recommended: disabled.",
+            Tags = ["notifications", "suggestions", "tips"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager"],
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
+                    "SubscribedContent-338389Enabled",
+                    0
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
+                    "SubscribedContent-338389Enabled",
+                    1
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
+                    "SubscribedContent-338389Enabled",
+                    0
+                ),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "notif-disable-welcome",
+            Label = "Disable Windows Welcome Experience",
+            Category = "Windows 11",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Disables the Windows welcome experience shown after updates. Default: enabled. Recommended: disabled.",
+            Tags = ["notifications", "welcome", "updates"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager"],
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
+                    "SubscribedContent-310093Enabled",
+                    0
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
+                    "SubscribedContent-310093Enabled",
+                    1
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
+                    "SubscribedContent-310093Enabled",
+                    0
+                ),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "notif-disable-app-suggestions",
+            Label = "Disable Suggested Apps in Start",
+            Category = "Windows 11",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Prevents Windows from suggesting apps in the Start menu. Default: enabled. Recommended: disabled.",
+            Tags = ["notifications", "suggestions", "start-menu"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager"],
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
+                    "SubscribedContent-338388Enabled",
+                    0
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
+                    "SubscribedContent-338388Enabled",
+                    1
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
+                    "SubscribedContent-338388Enabled",
+                    0
+                ),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "notif-quiet-hours-auto",
+            Label = "Auto-enable Quiet Hours",
+            Category = "Windows 11",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Enables quiet hours (focus assist) to suppress all toast notifications. Default: disabled. Recommended: enabled.",
+            Tags = ["notifications", "quiet-hours", "focus-assist"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Notifications\Settings"],
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Notifications\Settings",
+                    "NOC_GLOBAL_SETTING_TOASTS_ENABLED",
+                    0
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Notifications\Settings",
+                    "NOC_GLOBAL_SETTING_TOASTS_ENABLED",
+                    1
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Notifications\Settings",
+                    "NOC_GLOBAL_SETTING_TOASTS_ENABLED",
+                    0
+                ),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "notif-disable-startup-app-notif",
+            Label = "Disable Background App Notifications",
+            Category = "Windows 11",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Disables 'apps are running in the background' system toast notifications. Default: enabled. Recommended: disabled.",
+            Tags = ["notifications", "background", "startup"],
+            RegistryKeys =
+            [
+                @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Notifications\Settings\Windows.SystemToast.BackgroundAccess",
+            ],
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Notifications\Settings\Windows.SystemToast.BackgroundAccess",
+                    "Enabled",
+                    0
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Notifications\Settings\Windows.SystemToast.BackgroundAccess",
+                    "Enabled"
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Notifications\Settings\Windows.SystemToast.BackgroundAccess",
+                    "Enabled",
+                    0
+                ),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "notif-quiet-hours",
+            Label = "Disable Push Toast Notifications",
+            Category = "Windows 11",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Disables all push toast notifications globally. Default: Enabled. Recommended: Disabled for focus.",
+            Tags = ["notifications", "toast", "push", "quiet-hours"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\PushNotifications"],
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Notifications\Settings",
+                    "NOC_GLOBAL_SETTING_TOASTS_ENABLED",
+                    0
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Notifications\Settings",
+                    "NOC_GLOBAL_SETTING_TOASTS_ENABLED",
+                    1
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Notifications\Settings",
+                    "NOC_GLOBAL_SETTING_TOASTS_ENABLED",
+                    0
+                ),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "notif-display-time-3s",
+            Label = "Set Notification Display Time to 3 Seconds",
+            Category = "Windows 11",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description =
+                "Sets notification display duration to 3 seconds instead of the default 5. Reduces visual distraction. Default: 5s. Recommended: 3s.",
+            Tags = ["notifications", "display-time", "duration", "accessibility"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Accessibility"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Control Panel\Accessibility", "MessageDuration", 3)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Control Panel\Accessibility", "MessageDuration", 5)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Control Panel\Accessibility", "MessageDuration", 3)],
+        },
+        new TweakDef
+        {
+            Id = "notif-disable-security-center",
+            Label = "Disable Windows Security Center Notifications",
+            Category = "Windows 11",
+            NeedsAdmin = false,
+            CorpSafe = false,
+            Description =
+                "Disables toast notifications from the Windows Security and Maintenance center. Reduces interruptions from security alerts. Default: Enabled. Recommended: Disabled.",
+            Tags = ["notifications", "security", "maintenance", "center"],
+            RegistryKeys =
+            [
+                @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Notifications\Settings\Windows.SystemToast.SecurityAndMaintenance",
+            ],
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Notifications\Settings\Windows.SystemToast.SecurityAndMaintenance",
+                    "Enabled",
+                    0
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Notifications\Settings\Windows.SystemToast.SecurityAndMaintenance",
+                    "Enabled"
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Notifications\Settings\Windows.SystemToast.SecurityAndMaintenance",
+                    "Enabled",
+                    0
+                ),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "notif-disable-autoconnect",
+            Label = "Disable Auto Connect Network Notifications",
+            Category = "Windows 11",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description =
+                "Disables notifications from the AutoConnect (hotspot) system toast. Reduces Wi-Fi connection prompt interruptions. Default: Enabled. Recommended: Disabled.",
+            Tags = ["notifications", "network", "autoconnect", "wifi"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Notifications\Settings\Windows.SystemToast.AutoConnect"],
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Notifications\Settings\Windows.SystemToast.AutoConnect",
+                    "Enabled",
+                    0
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Notifications\Settings\Windows.SystemToast.AutoConnect",
+                    "Enabled"
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Notifications\Settings\Windows.SystemToast.AutoConnect",
+                    "Enabled",
+                    0
+                ),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "notif-disable-account-notif",
+            Label = "Disable Microsoft Account Connected Notifications",
+            Category = "Windows 11",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description =
+                "Disables notification toasts from Microsoft account connected services. Stops account sync prompts and MSA-linked notifications. Default: Enabled. Recommended: Disabled.",
+            Tags = ["notifications", "account", "microsoft", "msa"],
+            RegistryKeys =
+            [
+                @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Notifications\Settings\MicrosoftAccount.Notifications.Connected",
+            ],
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Notifications\Settings\MicrosoftAccount.Notifications.Connected",
+                    "Enabled",
+                    0
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Notifications\Settings\MicrosoftAccount.Notifications.Connected",
+                    "Enabled"
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Notifications\Settings\MicrosoftAccount.Notifications.Connected",
+                    "Enabled",
+                    0
+                ),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "notif-disable-lock-screen-toasts",
+            Label = "Disable Notifications on Lock Screen",
+            Category = "Windows 11",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description =
+                "Prevents app toast notifications from displaying on the lock screen. Protects notification content from shoulder-surfers. Default: Enabled. Recommended: Disabled.",
+            Tags = ["notifications", "lock-screen", "privacy", "toast"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\CurrentVersion\PushNotifications"],
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Notifications\Settings",
+                    "NOC_GLOBAL_SETTING_ALLOW_TOASTS_ABOVE_LOCK",
+                    0
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Notifications\Settings",
+                    "NOC_GLOBAL_SETTING_ALLOW_TOASTS_ABOVE_LOCK",
+                    1
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Notifications\Settings",
+                    "NOC_GLOBAL_SETTING_ALLOW_TOASTS_ABOVE_LOCK",
+                    0
+                ),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "notif-disable-notification-sounds",
+            Label = "Disable Notification Sounds",
+            Category = "Windows 11",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Disables all Windows notification sounds. Toasts still appear silently. Default: enabled.",
+            Tags = ["notifications", "sounds", "mute", "silent"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Notifications\Settings"],
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Notifications\Settings",
+                    "NOC_GLOBAL_SETTING_ALLOW_NOTIFICATION_SOUND",
+                    0
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Notifications\Settings",
+                    "NOC_GLOBAL_SETTING_ALLOW_NOTIFICATION_SOUND",
+                    1
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Notifications\Settings",
+                    "NOC_GLOBAL_SETTING_ALLOW_NOTIFICATION_SOUND",
+                    0
+                ),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "notif-reduce-toast-duration",
+            Label = "Reduce Toast Notification Duration",
+            Category = "Windows 11",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Reduces the time toast notifications are displayed from 5 seconds to 3 seconds. Default: 5000ms.",
+            Tags = ["notifications", "toast", "duration", "timeout"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Accessibility"],
+            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Accessibility", "MessageDuration", "3")],
+            RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Accessibility", "MessageDuration", "5")],
+            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Accessibility", "MessageDuration", "3")],
+        },
+        new TweakDef
+        {
+            Id = "notif-silence-global-sounds",
+            Label = "Silence All Notification Sounds",
+            Category = "Windows 11",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description =
+                "Silences all Windows notification sounds globally. Visual notifications still appear but without audio. Default: sounds enabled.",
+            Tags = ["notifications", "sounds", "silence", "mute"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Notifications\Settings"],
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Notifications\Settings",
+                    "NOC_GLOBAL_SETTING_ALLOW_NOTIFICATION_SOUND",
+                    0
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Notifications\Settings",
+                    "NOC_GLOBAL_SETTING_ALLOW_NOTIFICATION_SOUND"
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Notifications\Settings",
+                    "NOC_GLOBAL_SETTING_ALLOW_NOTIFICATION_SOUND",
+                    0
+                ),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "notif-disable-defender-user-notif",
+            Label = "Suppress Windows Defender Notifications",
+            Category = "Windows 11",
+            NeedsAdmin = false,
+            CorpSafe = false,
+            Description = "Suppresses Windows Defender security notifications that appear during scans and threat detections.",
+            Tags = ["notifications", "defender", "antivirus", "security"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows Defender\UX Configuration"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows Defender\UX Configuration", "Notification_Suppress", 1)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows Defender\UX Configuration", "Notification_Suppress", 0)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows Defender\UX Configuration", "Notification_Suppress", 1)],
+        },
+        new TweakDef
+        {
+            Id = "notif-disable-reboot-required",
+            Label = "Disable Windows Update Reboot Required Notification",
+            Category = "Windows 11",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description = "Prevents Windows Update from nagging users to reboot when an update is pending installation.",
+            Tags = ["notifications", "windows-update", "reboot", "nagging"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate"],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate", "SetAutoRestartNotificationDisable", 1),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate", "SetAutoRestartNotificationDisable"),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate", "SetAutoRestartNotificationDisable", 1),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "notif-disable-smartscreen-user",
+            Label = "Disable SmartScreen Evaluation Notifications (User)",
+            Category = "Windows 11",
+            NeedsAdmin = false,
+            CorpSafe = false,
+            Description = "Disables per-user SmartScreen web content evaluation, suppressing SmartScreen block and warning notifications.",
+            Tags = ["notifications", "smartscreen", "browser", "privacy"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\AppHost"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\AppHost", "EnableWebContentEvaluation", 0)],
+            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\AppHost", "EnableWebContentEvaluation", 1)],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\AppHost", "EnableWebContentEvaluation", 0)],
+        },
+        new TweakDef
+        {
+            Id = "notif-disable-taskbar-suggestions",
+            Label = "Disable Taskbar & Start Suggestions",
+            Category = "Windows 11",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description =
+                "Disables Microsoft-promoted content appearing in the taskbar system pane. Removes commercial suggestions from the system tray area.",
+            Tags = ["notifications", "taskbar", "suggestions", "ux"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDelivery"],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDelivery", "SystemPaneSuggestionsEnabled", 0),
+            ],
+            RemoveOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDelivery", "SystemPaneSuggestionsEnabled", 1),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDelivery", "SystemPaneSuggestionsEnabled", 0),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "notif-disable-oem-preinstall-suggestions",
+            Label = "Disable OEM Preinstalled App Suggestions",
+            Category = "Windows 11",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Prevents Windows from suggesting OEM preinstalled applications and cloud app links via notification banners.",
+            Tags = ["notifications", "oem", "preinstall", "privacy"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDelivery"],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDelivery", "OemPreInstalledAppsEnabled", 0),
+            ],
+            RemoveOps =
+            [
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDelivery", "OemPreInstalledAppsEnabled", 1),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDelivery", "OemPreInstalledAppsEnabled", 0),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "notif-disable-no-logged-users-reboot",
+            Label = "Allow Reboot with Logged-On Users (Windows Update)",
+            Category = "Windows 11",
+            NeedsAdmin = true,
+            CorpSafe = false,
+            Description = "Prevents Windows Update from rebooting while a user is logged on. Eliminates surprise forced-reboot notifications.",
+            Tags = ["notifications", "windows-update", "reboot", "ux"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate", "NoAutoRebootWithLoggedOnUsers", 1)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate", "NoAutoRebootWithLoggedOnUsers")],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate", "NoAutoRebootWithLoggedOnUsers", 1),
+            ],
+        },
+    ];
+}
+
+// === Merged from: Widgets.cs ===
+
+internal static class Widgets
+{
+    internal static IReadOnlyList<TweakDef> Tweaks { get; } =
+    [
+        new TweakDef
+        {
+            Id = "widgets-news-disable-news-interests",
+            Label = "Disable News and Interests (Win10)",
+            Category = "Windows 11",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Disables the News and Interests taskbar widget in Win10. Removes the weather/news flyout from the taskbar. Default: enabled. Recommended: disabled.",
+            Tags = ["widgets", "news", "interests", "taskbar", "win10"],
+            RegistryKeys =
+            [
+                @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Feeds",
+                @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Feeds",
+            ],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Feeds", "EnableFeeds", 0),
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Feeds", "ShellFeedsTaskbarViewMode", 2),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Feeds", "EnableFeeds"),
+                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Feeds", "ShellFeedsTaskbarViewMode", 0),
+            ],
+            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Feeds", "EnableFeeds", 0)],
+        },
+        new TweakDef
+        {
+            Id = "widgets-news-disable-welcome-experience",
+            Label = "Disable Welcome Experience",
+            Category = "Windows 11",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description =
+                "Disables the Windows Welcome Experience page that opens after updates to show new features. Default: enabled. Recommended: disabled.",
+            Tags = ["widgets", "welcome", "update", "experience"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager"],
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
+                    "SubscribedContent-310093Enabled",
+                    0
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
+                    "SubscribedContent-310093Enabled"
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
+                    "SubscribedContent-310093Enabled",
+                    0
+                ),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "widgets-news-disable-get-more",
+            Label = "Disable 'Get Even More Out of Windows'",
+            Category = "Windows 11",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description =
+                "Disables the 'Get Even More Out of Windows' popup and similar Microsoft 365 / OneDrive nag prompts. Default: enabled. Recommended: disabled.",
+            Tags = ["widgets", "suggestions", "nag", "onedrive", "m365"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager"],
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
+                    "SubscribedContent-338393Enabled",
+                    0
+                ),
+                RegOp.SetDword(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
+                    "SubscribedContent-353694Enabled",
+                    0
+                ),
+                RegOp.SetDword(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
+                    "SubscribedContent-353696Enabled",
+                    0
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
+                    "SubscribedContent-338393Enabled"
+                ),
+                RegOp.DeleteValue(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
+                    "SubscribedContent-353694Enabled"
+                ),
+                RegOp.DeleteValue(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
+                    "SubscribedContent-353696Enabled"
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
+                    "SubscribedContent-338393Enabled",
+                    0
+                ),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "widgets-news-disable-start-suggestions",
+            Label = "Disable Suggested Apps in Start Menu",
+            Category = "Windows 11",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description =
+                "Disables suggested (promoted) apps in the Start menu. Stops Microsoft Store app recommendations. Default: enabled. Recommended: disabled.",
+            Tags = ["widgets", "start", "suggestions", "apps", "ads"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager"],
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
+                    "SubscribedContent-338388Enabled",
+                    0
+                ),
+                RegOp.SetDword(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
+                    "SystemPaneSuggestionsEnabled",
+                    0
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
+                    "SubscribedContent-338388Enabled"
+                ),
+                RegOp.SetDword(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
+                    "SystemPaneSuggestionsEnabled",
+                    1
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
+                    "SystemPaneSuggestionsEnabled",
+                    0
+                ),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "widgets-news-disable-settings-suggestions",
+            Label = "Disable Suggested Content in Settings",
+            Category = "Windows 11",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Disables suggested content and feature highlights in the Windows Settings app. Default: enabled. Recommended: disabled.",
+            Tags = ["widgets", "settings", "suggestions", "content"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager"],
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
+                    "SubscribedContent-338393Enabled",
+                    0
+                ),
+                RegOp.SetDword(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
+                    "SubscribedContent-353698Enabled",
+                    0
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
+                    "SubscribedContent-338393Enabled"
+                ),
+                RegOp.DeleteValue(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
+                    "SubscribedContent-353698Enabled"
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
+                    "SubscribedContent-353698Enabled",
+                    0
+                ),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "widgets-news-disable-finish-setup",
+            Label = "Disable 'Finish Setting Up' Reminder",
+            Category = "Windows 11",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description =
+                "Disables the recurring 'Let's finish setting up your device' nag screen after updates. Default: enabled. Recommended: disabled.",
+            Tags = ["widgets", "finish-setup", "nag", "reminder"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager"],
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
+                    "SubscribedContent-310093Enabled",
+                    0
+                ),
+                RegOp.SetDword(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
+                    "SubscribedContent-338389Enabled",
+                    0
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
+                    "SubscribedContent-310093Enabled"
+                ),
+                RegOp.DeleteValue(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
+                    "SubscribedContent-338389Enabled"
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
+                    "SubscribedContent-310093Enabled",
+                    0
+                ),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "widgets-disable-third-party-suggestions",
+            Label = "Disable Third-Party App Suggestions",
+            Category = "Windows 11",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description =
+                "Disables Windows from showing suggestions for third-party apps in search and feeds. Reduces promotional content. Default: Enabled. Recommended: Disabled.",
+            Tags = ["widgets", "suggestions", "third-party", "ads", "privacy"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager"],
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
+                    "ThirdPartySuggestionsEnabled",
+                    0
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
+                    "ThirdPartySuggestionsEnabled"
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
+                    "ThirdPartySuggestionsEnabled",
+                    0
+                ),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "widgets-disable-spotlight",
+            Label = "Disable Windows Spotlight on Lock Screen",
+            Category = "Windows 11",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description = "Disables Windows Spotlight images and tips on the lock screen. Default: enabled.",
+            Tags = ["widgets", "spotlight", "lock-screen", "disable"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CloudContent"],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CloudContent", "DisableWindowsSpotlightOnLockScreen", 1),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CloudContent", "DisableWindowsSpotlightOnLockScreen"),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CloudContent", "DisableWindowsSpotlightOnLockScreen", 1),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "widgets-news-disable-subscribed-content",
+            Label = "Disable Subscribed Content Suggestions",
+            Category = "Windows 11",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description =
+                "Disables Microsoft subscribed content suggestions shown in Settings and lock screen. Removes premium service promotions. Default: enabled.",
+            Tags = ["widgets", "subscribed", "content", "suggestions"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager"],
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
+                    "SubscribedContent-338389Enabled",
+                    0
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
+                    "SubscribedContent-338389Enabled"
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager",
+                    "SubscribedContent-338389Enabled",
+                    0
+                ),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "widgets-disable-lock-app-notifications",
+            Label = "Disable App Notifications on Lock Screen",
+            Category = "Windows 11",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Sets DisableLockScreenAppNotifications=1 in CloudContent policy. Prevents app toast notifications from appearing on the lock screen.",
+            Tags = ["widgets", "lock-screen", "notifications", "privacy"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CloudContent"],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CloudContent", "DisableLockScreenAppNotifications", 1),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CloudContent", "DisableLockScreenAppNotifications"),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CloudContent", "DisableLockScreenAppNotifications", 1),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "widgets-disable-spotlight-in-settings-gpo",
+            Label = "Disable Windows Spotlight in Settings App (Policy)",
+            Category = "Windows 11",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Sets DisableWindowsSpotlightInSettings=1. Prevents the Settings app from showing Spotlight-sourced feature suggestions and background images.",
+            Tags = ["widgets", "spotlight", "settings", "gpo"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CloudContent"],
+            ApplyOps =
+            [
+                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CloudContent", "DisableWindowsSpotlightInSettings", 1),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CloudContent", "DisableWindowsSpotlightInSettings"),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CloudContent", "DisableWindowsSpotlightInSettings", 1),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "widgets-disable-spotlight-welcome-gpo",
+            Label = "Disable Windows Spotlight Welcome Experience (Policy)",
+            Category = "Windows 11",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Sets DisableWindowsSpotlightWindowsWelcomeExperience=1. Disables the full-screen Spotlight highlight shown after major Windows updates.",
+            Tags = ["widgets", "spotlight", "welcome", "gpo"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CloudContent"],
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CloudContent",
+                    "DisableWindowsSpotlightWindowsWelcomeExperience",
+                    1
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CloudContent",
+                    "DisableWindowsSpotlightWindowsWelcomeExperience"
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CloudContent",
+                    "DisableWindowsSpotlightWindowsWelcomeExperience",
+                    1
+                ),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "widgets-disable-tailored-diag-experiences",
+            Label = "Disable Tailored Experiences from Diagnostic Data (Policy)",
+            Category = "Windows 11",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Sets DisableTailoredExperiencesWithDiagnosticData=1. Prevents Windows from using collected diagnostic data to show personalised tips, advertising, and feature recommendations.",
+            Tags = ["widgets", "tailored", "diagnostic", "privacy", "gpo"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CloudContent"],
+            ApplyOps =
+            [
+                RegOp.SetDword(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CloudContent",
+                    "DisableTailoredExperiencesWithDiagnosticData",
+                    1
+                ),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CloudContent",
+                    "DisableTailoredExperiencesWithDiagnosticData"
+                ),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CloudContent",
+                    "DisableTailoredExperiencesWithDiagnosticData",
+                    1
+                ),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "widgets-disable-taskbar-meet-now",
+            Label = "Hide Teams Meet Now Button from Taskbar",
+            Category = "Windows 11",
+            NeedsAdmin = false,
+            CorpSafe = true,
+            Description = "Sets TaskbarMn=0 in Explorer settings. Removes the Teams \"Meet Now\" button from the Windows 10/11 system tray area.",
+            Tags = ["widgets", "taskbar", "teams", "meet-now", "ui"],
+            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer", "TaskbarMn", 0)],
+            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer", "TaskbarMn")],
+            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer", "TaskbarMn", 0)],
+        },
+        new TweakDef
+        {
+            Id = "widgets-disable-spotlight-in-search-gpo",
+            Label = "Disable Windows Spotlight in Search Interface (Policy)",
+            Category = "Windows 11",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Sets DisableWindowsSpotlightInSearch=1. Removes Spotlight-sourced background images and suggestions from the Windows Search home panel.",
+            Tags = ["widgets", "spotlight", "search", "gpo"],
+            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CloudContent"],
+            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CloudContent", "DisableWindowsSpotlightInSearch", 1)],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CloudContent", "DisableWindowsSpotlightInSearch"),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CloudContent", "DisableWindowsSpotlightInSearch", 1),
+            ],
         },
     ];
 }

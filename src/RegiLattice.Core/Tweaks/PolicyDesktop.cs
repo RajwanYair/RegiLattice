@@ -6700,24 +6700,6 @@ internal static class PolicyDesktop
                     RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "HideShutdownScripts", 0),
                 ],
             },
-            new TweakDef
-            {
-                Id = "shdn-disable-restart-apps-on-signin",
-                Label = "Disable Restart of Apps After Reboot/Sign-In",
-                Category = "Display",
-                NeedsAdmin = false,
-                CorpSafe = true,
-                ImpactScore = 2,
-                SafetyRating = 5,
-                Tags = ["shutdown", "restart", "startup apps", "reboot", "sign-in"],
-                Description =
-                    "Prevents Windows from re-opening apps that were running before a reboot "
-                    + "or sign-out/sign-in cycle. RestartApps=0. Keeps the desktop clean "
-                    + "after every login.",
-                ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows NT\CurrentVersion\Winlogon", "RestartApps", 0)],
-                RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows NT\CurrentVersion\Winlogon", "RestartApps")],
-                DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows NT\CurrentVersion\Winlogon", "RestartApps", 0)],
-            },
         ];
     }
 

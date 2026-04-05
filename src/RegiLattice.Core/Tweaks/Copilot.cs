@@ -27,42 +27,6 @@ internal static class Copilot
         },
         new TweakDef
         {
-            Id = "ai-disable-edge-copilot",
-            Label = "Disable Copilot in Edge Browser",
-            Category = "AI / Copilot",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables the Copilot sidebar and page context sharing in Microsoft Edge.",
-            Tags = ["ai", "copilot", "edge", "privacy"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "HubsSidebarEnabled", 0),
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "CopilotCDPPageContext", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "HubsSidebarEnabled"),
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "CopilotCDPPageContext"),
-            ],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "HubsSidebarEnabled", 0)],
-        },
-        new TweakDef
-        {
-            Id = "ai-disable-copilot-button",
-            Label = "Hide Copilot Taskbar Button",
-            Category = "AI / Copilot",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Hides the Copilot button from the Windows 11 taskbar.",
-            Tags = ["ai", "copilot", "taskbar", "ux"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "ShowCopilotButton", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "ShowCopilotButton", 1)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "ShowCopilotButton", 0)],
-        },
-        new TweakDef
-        {
             Id = "ai-disable-bing-chat",
             Label = "Disable Bing Chat in Search",
             Category = "AI / Copilot",
@@ -92,20 +56,6 @@ internal static class Copilot
         },
         new TweakDef
         {
-            Id = "ai-disable-copilot-taskbar",
-            Label = "Remove Copilot from Taskbar",
-            Category = "AI / Copilot",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Removes the Copilot button from the Windows taskbar.",
-            Tags = ["ai", "copilot", "taskbar"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "ShowCopilotButton", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "ShowCopilotButton", 1)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "ShowCopilotButton", 0)],
-        },
-        new TweakDef
-        {
             Id = "ai-disable-ai-start-suggestions",
             Label = "Disable AI-Powered Suggestions in Settings",
             Category = "AI / Copilot",
@@ -129,77 +79,6 @@ internal static class Copilot
         },
         new TweakDef
         {
-            Id = "ai-disable-copilot-edge",
-            Label = "Disable Copilot in Edge Browser",
-            Category = "AI / Copilot",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables the Copilot CDP page context feature in Microsoft Edge.",
-            Tags = ["ai", "copilot", "edge"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "CopilotCDPPageContext", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "CopilotCDPPageContext")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "CopilotCDPPageContext", 0)],
-        },
-        new TweakDef
-        {
-            Id = "ai-copilot-disable-recall",
-            Label = "Disable Recall Feature",
-            Category = "AI / Copilot",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Disables Windows Recall AI feature that takes periodic screenshots. Prevents privacy-invasive screen capture and analysis. Default: Enabled. Recommended: Disabled.",
-            Tags = ["copilot", "recall", "privacy", "ai"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsAI"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsAI", "DisableAIDataAnalysis", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsAI", "DisableAIDataAnalysis")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsAI", "DisableAIDataAnalysis", 1)],
-        },
-        new TweakDef
-        {
-            Id = "ai-copilot-disable-taskbar-button",
-            Label = "Disable Copilot Taskbar Button",
-            Category = "AI / Copilot",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Hides the Copilot button from the Windows taskbar. Reduces visual clutter. Default: Shown. Recommended: Hidden.",
-            Tags = ["copilot", "taskbar", "ux", "ai"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "ShowCopilotButton", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "ShowCopilotButton", 1)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "ShowCopilotButton", 0)],
-        },
-        new TweakDef
-        {
-            Id = "ai-disable-recall",
-            Label = "Disable Windows Recall (HKLM Policy)",
-            Category = "AI / Copilot",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Disables Windows Recall AI data analysis via HKLM Group Policy. Default: Enabled. Recommended: Disabled.",
-            Tags = ["ai", "recall", "privacy", "policy"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsAI"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsAI", "DisableAIDataAnalysis", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsAI", "DisableAIDataAnalysis")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsAI", "DisableAIDataAnalysis", 1)],
-        },
-        new TweakDef
-        {
-            Id = "ai-disable-copilot-keyboard",
-            Label = "Disable Copilot Keyboard Shortcut",
-            Category = "AI / Copilot",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Hides the Copilot button and disables keyboard shortcut. Default: Shown. Recommended: Hidden.",
-            Tags = ["ai", "copilot", "keyboard", "shortcut"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "ShowCopilotButton", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "ShowCopilotButton", 1)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "ShowCopilotButton", 0)],
-        },
-        new TweakDef
-        {
             Id = "ai-disable-copilot-runtime-24h2",
             Label = "Disable Copilot Runtime (24H2)",
             Category = "AI / Copilot",
@@ -216,22 +95,6 @@ internal static class Copilot
         },
         new TweakDef
         {
-            Id = "ai-disable-bing-chat-edge-24h2",
-            Label = "Disable Bing Chat in Edge (24H2)",
-            Category = "AI / Copilot",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                @"Blocks Bing Chat / Copilot in Edge sidebar using the updated 24H2 policy path (BingChat\IsUserEligible). Default: enabled. Recommended: disabled.",
-            Tags = ["ai", "copilot", "edge", "bing-chat", "24h2"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge\BingChat"],
-            MinBuild = 26100,
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\Explorer", "DisableSearchBoxSuggestions", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\Explorer", "DisableSearchBoxSuggestions")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\Explorer", "DisableSearchBoxSuggestions", 1)],
-        },
-        new TweakDef
-        {
             Id = "ai-copilot-ineligible",
             Label = "Block Copilot User Eligibility",
             Category = "AI / Copilot",
@@ -244,64 +107,6 @@ internal static class Copilot
             ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\Shell\Copilot\BingChat", "IsUserEligible", 0)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\Shell\Copilot\BingChat", "IsUserEligible")],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\Shell\Copilot\BingChat", "IsUserEligible", 0)],
-        },
-        new TweakDef
-        {
-            Id = "ai-disable-copilot-edge-sidebar",
-            Label = "Disable Copilot Edge Sidebar (Policy)",
-            Category = "AI / Copilot",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Disables the Copilot/Bing sidebar in Microsoft Edge via the HubsSidebarEnabled policy. Default: enabled. Recommended: disabled.",
-            Tags = ["ai", "copilot", "edge", "sidebar", "policy"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "CopilotCDPPageContext", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "CopilotCDPPageContext")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "CopilotCDPPageContext", 0)],
-        },
-        new TweakDef
-        {
-            Id = "ai-copilot-disable-ai-in-settings",
-            Label = "Disable AI Suggestions in Windows Settings",
-            Category = "AI / Copilot",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Disables AI data analysis features in the Windows Settings app via the WindowsAI group policy. Default: Enabled. Recommended: Disabled for privacy.",
-            Tags = ["ai", "copilot", "settings", "policy", "privacy"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsAI"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsAI", "DisableAIDataAnalysis", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsAI", "DisableAIDataAnalysis")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsAI", "DisableAIDataAnalysis", 1)],
-        },
-        new TweakDef
-        {
-            Id = "ai-disable-copilot-taskbar-icon",
-            Label = "Hide Copilot Taskbar Icon",
-            Category = "AI / Copilot",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Hides the Copilot button from the Windows 11 taskbar. Default: visible.",
-            Tags = ["ai", "copilot", "taskbar", "icon", "hide"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "ShowCopilotButton", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "ShowCopilotButton", 1)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "ShowCopilotButton", 0)],
-        },
-        new TweakDef
-        {
-            Id = "ai-disable-cloud-content-suggestions",
-            Label = "Disable Cloud Content AI Suggestions",
-            Category = "AI / Copilot",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables cloud-based content suggestions powered by AI in Windows experiences. Default: enabled.",
-            Tags = ["ai", "cloud", "content", "suggestions"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CloudContent"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CloudContent", "DisableCloudOptimizedContent", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CloudContent", "DisableCloudOptimizedContent")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CloudContent", "DisableCloudOptimizedContent", 1)],
         },
         new TweakDef
         {
@@ -410,21 +215,6 @@ internal static class Copilot
                     0
                 ),
             ],
-        },
-        new TweakDef
-        {
-            Id = "ai-disable-recall-snapshots",
-            Label = "Disable Windows Recall Snapshots",
-            Category = "AI / Copilot",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Disables Windows Recall (AI-powered screen snapshots). Prevents periodic screenshots and AI indexing of desktop activity. Default: varies.",
-            Tags = ["ai", "recall", "snapshots", "privacy"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsAI"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsAI", "DisableAIDataAnalysis", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsAI", "DisableAIDataAnalysis")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsAI", "DisableAIDataAnalysis", 1)],
         },
         new TweakDef
         {
@@ -557,20 +347,6 @@ internal static class Copilot
             ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Privacy", "UserInfoSharing", 0)],
             RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Privacy", "UserInfoSharing", 1)],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Privacy", "UserInfoSharing", 0)],
-        },
-        new TweakDef
-        {
-            Id = "ai-disable-copilot-start-button",
-            Label = "Hide Copilot Button in Taskbar",
-            Category = "AI / Copilot",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Removes the Copilot button from the taskbar. Default: shown in Windows 11 24H2+.",
-            Tags = ["ai", "copilot", "taskbar", "button"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "ShowCopilotButton", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "ShowCopilotButton", 1)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "ShowCopilotButton", 0)],
         },
         new TweakDef
         {
@@ -985,30 +761,6 @@ internal static class Ms365Copilot
         },
         new TweakDef
         {
-            Id = "m365-disable-copilot-web-search",
-            Label = "Disable M365 Copilot Web Search",
-            Category = "AI / Copilot",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Prevents M365 Copilot from using Bing web search to enhance responses. Keeps Copilot responses limited to local/org data only. Default: Enabled. Recommended: Disabled for data privacy.",
-            Tags = ["m365", "copilot", "web", "search", "privacy"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\office\16.0\common\copilotwebsearch"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\office\16.0\common\copilotwebsearch", "DisableCopilotWebSearch", 1),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\office\16.0\common\copilotwebsearch", "DisableCopilotWebSearch"),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\office\16.0\common\copilotwebsearch", "DisableCopilotWebSearch", 1),
-            ],
-        },
-        new TweakDef
-        {
             Id = "m365-disable-copilot-plugins",
             Label = "Disable M365 Copilot Plugins",
             Category = "AI / Copilot",
@@ -1252,45 +1004,6 @@ internal static class Ms365Copilot
         },
         new TweakDef
         {
-            Id = "m365-disable-copilot-web",
-            Label = "Disable M365 Copilot Web Access (User)",
-            Category = "AI / Copilot",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Disables M365 Copilot web/graph access at the user level via OfficeGraph policy. Prevents Copilot from reaching external data sources. Default: Enabled. Recommended: Disabled for privacy.",
-            Tags = ["m365", "copilot", "web", "privacy", "officegraph"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Policies\Microsoft\Office\16.0\Common\OfficeGraph"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\office\16.0\common\copilotwebsearch", "DisableCopilotWebSearch", 1),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\office\16.0\common\copilotwebsearch", "DisableCopilotWebSearch"),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\office\16.0\common\copilotwebsearch", "DisableCopilotWebSearch", 1),
-            ],
-        },
-        new TweakDef
-        {
-            Id = "m365-disable-loop-components",
-            Label = "Disable Loop Components in M365 (User)",
-            Category = "AI / Copilot",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Disables Microsoft Loop embedded components in Office apps at the user level. Prevents Fluid/Loop collaborative blocks from rendering. Default: Enabled. Recommended: Disabled if Loop is not needed.",
-            Tags = ["m365", "loop", "fluid", "components", "collaboration"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Policies\Microsoft\Office\16.0\Common\Fluid"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Loop", "DisableLoop", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Loop", "DisableLoop")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Loop", "DisableLoop", 1)],
-        },
-        new TweakDef
-        {
             Id = "m365-disable-word-copilot-compose",
             Label = "Disable Copilot Compose in Word",
             Category = "AI / Copilot",
@@ -1372,33 +1085,6 @@ internal static class Ms365Copilot
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\office\16.0\common\privacy", "usercontentdisabled", 2)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\office\16.0\common\privacy", "usercontentdisabled")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\office\16.0\common\privacy", "usercontentdisabled", 2)],
-        },
-        new TweakDef
-        {
-            Id = "m365-disable-optional-experiences",
-            Label = "Disable M365 Optional Connected Experiences",
-            Category = "AI / Copilot",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables optional connected experiences like LinkedIn resume assistant, 3D maps, etc. Default: enabled.",
-            Tags = ["m365", "optional", "connected", "linkedin"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\office\16.0\common\privacy"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\office\16.0\common\privacy", "controllerconnectedservicesenabled", 2),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\office\16.0\common\privacy", "controllerconnectedservicesenabled"),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\office\16.0\common\privacy",
-                    "controllerconnectedservicesenabled",
-                    2
-                ),
-            ],
         },
         new TweakDef
         {
@@ -1855,20 +1541,6 @@ internal static class Speech
         },
         new TweakDef
         {
-            Id = "speech-disable-online-speech-recognition",
-            Label = "Disable Online Speech Recognition",
-            Category = "AI / Copilot",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Disables the online speech recognition service. Voice data won't be sent to Microsoft. Default: enabled.",
-            Tags = ["speech", "online", "recognition", "privacy"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Speech_OneCore\Settings\OnlineSpeechPrivacy"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Speech_OneCore\Settings\OnlineSpeechPrivacy", "HasAccepted", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Speech_OneCore\Settings\OnlineSpeechPrivacy", "HasAccepted", 1)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Speech_OneCore\Settings\OnlineSpeechPrivacy", "HasAccepted", 0)],
-        },
-        new TweakDef
-        {
             Id = "speech-disable-dictation",
             Label = "Disable Voice Typing (Win+H Dictation)",
             Category = "AI / Copilot",
@@ -1894,34 +1566,6 @@ internal static class Speech
             ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Narrator\NoRoam", "WinEnterLaunchEnabled", 0)],
             RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Narrator\NoRoam", "WinEnterLaunchEnabled", 1)],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Narrator\NoRoam", "WinEnterLaunchEnabled", 0)],
-        },
-        new TweakDef
-        {
-            Id = "speech-disable-text-to-speech-cloud",
-            Label = "Disable Cloud-Based Text-to-Speech Voices",
-            Category = "AI / Copilot",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Prevents Windows from downloading cloud TTS voices. Uses only local voices. Default: enabled.",
-            Tags = ["speech", "tts", "cloud", "voices"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Speech"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Speech", "AllowSpeechModelUpdate", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Speech", "AllowSpeechModelUpdate")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Speech", "AllowSpeechModelUpdate", 0)],
-        },
-        new TweakDef
-        {
-            Id = "speech-disable-policy",
-            Label = "Disable Online Speech Recognition via Policy",
-            Category = "AI / Copilot",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables online speech recognition services via Group Policy. Forces offline-only speech processing. Default: allowed.",
-            Tags = ["speech", "recognition", "online", "policy"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\InputPersonalization"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\InputPersonalization", "AllowInputPersonalization", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\InputPersonalization", "AllowInputPersonalization")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\InputPersonalization", "AllowInputPersonalization", 0)],
         },
         new TweakDef
         {
@@ -1996,19 +1640,6 @@ internal static class Speech
         },
         new TweakDef
         {
-            Id = "speech-narrator-verbose-off",
-            Label = "Set Narrator Verbosity to Off",
-            Category = "AI / Copilot",
-            NeedsAdmin = false,
-            Description = "Reduces Narrator verbosity to minimum level (0). Less chatty narration. Default: medium (2).",
-            Tags = ["narrator", "verbosity", "accessibility"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Narrator\NoRoam"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Narrator\NoRoam", "DetailedFeedback", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Narrator\NoRoam", "DetailedFeedback")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Narrator\NoRoam", "DetailedFeedback", 0)],
-        },
-        new TweakDef
-        {
             Id = "speech-disable-narrator-sounds",
             Label = "Disable Narrator Sound Effects",
             Category = "AI / Copilot",
@@ -2035,19 +1666,6 @@ internal static class Speech
         },
         new TweakDef
         {
-            Id = "speech-disable-cloud-recognition",
-            Label = "Disable Online Speech Recognition",
-            Category = "AI / Copilot",
-            NeedsAdmin = false,
-            Description = "Disables cloud-based speech recognition. Speech is processed locally only. Default: cloud-enabled.",
-            Tags = ["speech", "recognition", "cloud", "privacy"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Speech_OneCore\Settings\OnlineSpeechPrivacy"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Speech_OneCore\Settings\OnlineSpeechPrivacy", "HasAccepted", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Speech_OneCore\Settings\OnlineSpeechPrivacy", "HasAccepted")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Speech_OneCore\Settings\OnlineSpeechPrivacy", "HasAccepted", 0)],
-        },
-        new TweakDef
-        {
             Id = "speech-narrator-auto-read-notifications",
             Label = "Enable Narrator Read Notifications",
             Category = "AI / Copilot",
@@ -2058,19 +1676,6 @@ internal static class Speech
             ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Narrator\NoRoam", "ReadHints", 1)],
             RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Narrator\NoRoam", "ReadHints", 0)],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Narrator\NoRoam", "ReadHints", 1)],
-        },
-        new TweakDef
-        {
-            Id = "speech-disable-speech-model-updates",
-            Label = "Disable Speech Model Updates",
-            Category = "AI / Copilot",
-            NeedsAdmin = true,
-            Description = "Disables automatic speech model updates via Windows Update. Default: enabled.",
-            Tags = ["speech", "update", "model", "privacy"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Speech"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Speech", "AllowSpeechModelUpdate", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Speech", "AllowSpeechModelUpdate")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Speech", "AllowSpeechModelUpdate", 0)],
         },
         new TweakDef
         {
@@ -2294,21 +1899,6 @@ internal static class Speech
                     0
                 ),
             ],
-        },
-        new TweakDef
-        {
-            Id = "speech-disable-online-speech-privacy",
-            Label = "Disable Online Speech Recognition Privacy Consent",
-            Category = "AI / Copilot",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description =
-                "Revokes the cloud speech privacy consent across the system. Blocks Windows from sending voice data to Microsoft's speech recognition service. Default: consent accepted at first use.",
-            Tags = ["speech", "privacy", "cloud", "recognition", "policy"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\InputPersonalization"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\InputPersonalization", "AllowInputPersonalization", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\InputPersonalization", "AllowInputPersonalization")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\InputPersonalization", "AllowInputPersonalization", 0)],
         },
         new TweakDef
         {

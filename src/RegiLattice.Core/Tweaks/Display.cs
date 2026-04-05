@@ -53,20 +53,6 @@ internal static class Display
         },
         new TweakDef
         {
-            Id = "display-disable-wallpaper-compression",
-            Label = "Disable Wallpaper JPEG Compression",
-            Category = "Display",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Sets wallpaper JPEG import quality to 100%, preventing Windows from compressing desktop wallpapers.",
-            Tags = ["display", "wallpaper", "quality", "compression"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Desktop"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Control Panel\Desktop", "JPEGImportQuality", 100)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Control Panel\Desktop", "JPEGImportQuality")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Control Panel\Desktop", "JPEGImportQuality", 100)],
-        },
-        new TweakDef
-        {
             Id = "display-accent-title-bars",
             Label = "Accent Color on Title Bars",
             Category = "Display",
@@ -110,44 +96,6 @@ internal static class Display
         },
         new TweakDef
         {
-            Id = "display-dpi-override",
-            Label = "Set Display Scaling DPI Override",
-            Category = "Display",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Forces display scaling to 100% (96 DPI) using the legacy DPI override. Disables DPI virtualization for crisp rendering. Default: System-managed. Recommended: 96 DPI for external monitors.",
-            Tags = ["display", "dpi", "scaling", "performance"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Desktop"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Control Panel\Desktop", "Win8DpiScaling", 1),
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Control Panel\Desktop", "LogPixels", 96),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Control Panel\Desktop", "Win8DpiScaling"),
-                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Control Panel\Desktop", "LogPixels"),
-            ],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Control Panel\Desktop", "Win8DpiScaling", 1)],
-        },
-        new TweakDef
-        {
-            Id = "display-disable-adaptive-brightness-icm",
-            Label = "Disable Adaptive Brightness (ICM)",
-            Category = "Display",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Disables adaptive brightness via ICM display calibration. Prevents automatic brightness adjustments based on content. Default: Enabled. Recommended: Disabled for consistent brightness.",
-            Tags = ["display", "brightness", "icm", "calibration"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\ICM\Calibration"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SensrSvc", "Start", 4)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SensrSvc", "Start", 3)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SensrSvc", "Start", 4)],
-        },
-        new TweakDef
-        {
             Id = "display-hardware-cursor",
             Label = "Force Hardware Cursor",
             Category = "Display",
@@ -160,24 +108,6 @@ internal static class Display
             ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "SmoothScroll", "0")],
             RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "SmoothScroll", "1")],
             DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "SmoothScroll", "0")],
-        },
-        new TweakDef
-        {
-            Id = "display-disable-transparency-effect",
-            Label = "Disable Window Transparency Effect",
-            Category = "Display",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Disables window transparency and acrylic blur effects. Improves rendering performance on integrated GPUs. Default: Enabled. Recommended: Disabled for performance.",
-            Tags = ["display", "transparency", "acrylic", "performance"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize", "EnableTransparency", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize", "EnableTransparency", 1)],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize", "EnableTransparency", 0),
-            ],
         },
         new TweakDef
         {
@@ -269,20 +199,6 @@ internal static class Display
         },
         new TweakDef
         {
-            Id = "display-disable-window-animations",
-            Label = "Disable Window Animations",
-            Category = "Display",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Disables minimize/maximize window animations. Makes window transitions instant. Default: animated.",
-            Tags = ["display", "animation", "window", "performance"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Desktop\WindowMetrics"],
-            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop\WindowMetrics", "MinAnimate", "0")],
-            RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop\WindowMetrics", "MinAnimate", "1")],
-            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Desktop\WindowMetrics", "MinAnimate", "0")],
-        },
-        new TweakDef
-        {
             Id = "display-set-dpi-scaling-override",
             Label = "Force Per-Monitor DPI Awareness",
             Category = "Display",
@@ -294,20 +210,6 @@ internal static class Display
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\SideBySide", "PreferExternalManifest", 1)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\SideBySide", "PreferExternalManifest")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\SideBySide", "PreferExternalManifest", 1)],
-        },
-        new TweakDef
-        {
-            Id = "display-disable-animation-effects",
-            Label = "Disable Window Animation Effects",
-            Category = "Display",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Disables window minimize/maximize and transition animation effects. Snappier window management. Default: animated.",
-            Tags = ["display", "animation", "effects", "performance"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Desktop\WindowMetrics"],
-            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop\WindowMetrics", "MinAnimate", "0")],
-            RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop\WindowMetrics", "MinAnimate", "1")],
-            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Desktop\WindowMetrics", "MinAnimate", "0")],
         },
         new TweakDef
         {
@@ -469,20 +371,6 @@ internal static class Display
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsInkWorkspace", "AllowWindowsInkWorkspace", 0)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsInkWorkspace", "AllowWindowsInkWorkspace")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsInkWorkspace", "AllowWindowsInkWorkspace", 0)],
-        },
-        new TweakDef
-        {
-            Id = "display-force-disable-hdr",
-            Label = "Force Disable HDR",
-            Category = "Display",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Forces HDR to be disabled system-wide. Useful for monitors that don't support HDR properly. Default: auto-detect.",
-            Tags = ["display", "hdr", "disable"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\VideoSettings"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\VideoSettings", "EnableHDRForPlayback", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\VideoSettings", "EnableHDRForPlayback")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\VideoSettings", "EnableHDRForPlayback", 0)],
         },
         new TweakDef
         {
@@ -929,28 +817,6 @@ internal static class Fonts
         },
         new TweakDef
         {
-            Id = "font-disable-antialiasing",
-            Label = "Disable Font Antialiasing (Performance)",
-            Category = "Display",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Turns off all font smoothing and antialiasing for a minor performance gain — text will appear jagged on LCD displays.",
-            Tags = ["fonts", "antialiasing", "performance"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Desktop"],
-            ApplyOps =
-            [
-                RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "FontSmoothingType", "0"),
-                RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "FontSmoothing", "0"),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "FontSmoothingType", "2"),
-                RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "FontSmoothing", "2"),
-            ],
-            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "FontSmoothingType", "0")],
-        },
-        new TweakDef
-        {
             Id = "font-set-segoe-ui",
             Label = "Set Default System Font to Segoe UI",
             Category = "Display",
@@ -996,20 +862,6 @@ internal static class Fonts
             Description = "Disables the Windows Font Cache Service (FontCache). May reduce memory usage but can slow down font loading.",
             Tags = ["fonts", "cache", "service", "performance"],
             RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\FontCache"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\FontCache", "Start", 4)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\FontCache", "Start", 2)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\FontCache", "Start", 4)],
-        },
-        new TweakDef
-        {
-            Id = "font-disable-fontcache3-service",
-            Label = "Disable Font Cache 3.0 Service",
-            Category = "Display",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Disables the Windows Presentation Foundation Font Cache 3.0 Service used by WPF applications.",
-            Tags = ["fonts", "cache", "wpf", "service"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\FontCache3.0.0.0"],
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\FontCache", "Start", 4)],
             RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\FontCache", "Start", 2)],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\FontCache", "Start", 4)],
@@ -1088,21 +940,6 @@ internal static class Fonts
         },
         new TweakDef
         {
-            Id = "font-fonts-disable-font-antialiasing",
-            Label = "Disable Font Anti-Aliasing",
-            Category = "Display",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Disables font smoothing/anti-aliasing for sharper pixel-aligned text. May improve readability on low-DPI screens. Default: 2 (enabled). Recommended: Disabled for CRT/low-DPI.",
-            Tags = ["fonts", "antialiasing", "smoothing", "rendering"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Desktop"],
-            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "FontSmoothing", "0")],
-            RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "FontSmoothing", "2")],
-            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "FontSmoothing", "0")],
-        },
-        new TweakDef
-        {
             Id = "font-set-smoothing-orientation",
             Label = "Set Font Smoothing Orientation to RGB",
             Category = "Display",
@@ -1115,21 +952,6 @@ internal static class Fonts
             ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "FontSmoothingOrientation", "1")],
             RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "FontSmoothingOrientation", "0")],
             DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "FontSmoothingOrientation", "1")],
-        },
-        new TweakDef
-        {
-            Id = "font-set-cleartype-contrast",
-            Label = "Set ClearType High Contrast",
-            Category = "Display",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Sets ClearType gamma to 1000 for higher contrast text rendering. Makes text appear bolder and easier to read on most displays. Default: 1400. Recommended: 1000 for high-DPI screens.",
-            Tags = ["fonts", "cleartype", "contrast", "gamma", "rendering"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Desktop"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Control Panel\Desktop", "FontSmoothingGamma", 1000)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Control Panel\Desktop", "FontSmoothingGamma", 1400)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Control Panel\Desktop", "FontSmoothingGamma", 1000)],
         },
         new TweakDef
         {
@@ -1165,20 +987,6 @@ internal static class Fonts
         },
         new TweakDef
         {
-            Id = "font-disable-font-smoothing",
-            Label = "Disable ClearType Font Smoothing",
-            Category = "Display",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Disables ClearType font smoothing. Can improve sharpness on some displays. Default: enabled.",
-            Tags = ["fonts", "cleartype", "smoothing", "rendering"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Desktop"],
-            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "FontSmoothing", "0")],
-            RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "FontSmoothing", "2")],
-            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "FontSmoothing", "0")],
-        },
-        new TweakDef
-        {
             Id = "font-block-untrusted-fonts",
             Label = "Block Untrusted Fonts",
             Category = "Display",
@@ -1193,20 +1001,6 @@ internal static class Fonts
             ],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Kernel", "MitigationOptions")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Kernel", "MitigationOptions", 1)],
-        },
-        new TweakDef
-        {
-            Id = "font-set-default-console-font",
-            Label = "Set Cascadia Mono as Default Console Font",
-            Category = "Display",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Sets Cascadia Mono as the default console/terminal font. Requires the font to be installed. Default: Consolas.",
-            Tags = ["fonts", "console", "terminal", "cascadia"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Console"],
-            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Console", "FaceName", "Cascadia Mono")],
-            RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Console", "FaceName", "Consolas")],
-            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Console", "FaceName", "Cascadia Mono")],
         },
         new TweakDef
         {
@@ -1248,27 +1042,6 @@ internal static class Fonts
         },
         new TweakDef
         {
-            Id = "font-block-untrusted",
-            Label = "Block Untrusted Fonts",
-            Category = "Display",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Blocks loading of untrusted fonts to mitigate font parsing vulnerabilities. Only system-installed fonts are rendered. Default: allowed.",
-            Tags = ["fonts", "untrusted", "security", "block"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Kernel"],
-            ApplyOps =
-            [
-                RegOp.SetQword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Kernel", "MitigationOptions", 0x1000000000000),
-            ],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Kernel", "MitigationOptions")],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\MitigationOptions", "MitigationOptions_FontBocking", 1),
-            ],
-        },
-        new TweakDef
-        {
             Id = "font-disable-download-edge",
             Label = "Disable Font Download in Edge",
             Category = "Display",
@@ -1281,50 +1054,6 @@ internal static class Fonts
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "DefaultWebFontsSetting", 2)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "DefaultWebFontsSetting")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "DefaultWebFontsSetting", 2)],
-        },
-        new TweakDef
-        {
-            Id = "font-enable-smoothing",
-            Label = "Enable ClearType Font Smoothing",
-            Category = "Display",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Enables ClearType sub-pixel font smoothing. Improves text readability on LCD displays. Default: enabled on most systems.",
-            Tags = ["fonts", "cleartype", "smoothing", "display"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Desktop"],
-            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "FontSmoothing", "2")],
-            RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "FontSmoothing", "0")],
-            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "FontSmoothing", "2")],
-        },
-        new TweakDef
-        {
-            Id = "font-fonts-cleartype-performance",
-            Label = "Optimize ClearType for Performance",
-            Category = "Display",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Sets ClearType tuning to optimize for rendering performance over maximum quality. Reduces font rendering overhead. Default: quality-optimized.",
-            Tags = ["fonts", "cleartype", "performance", "tuning"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Desktop"],
-            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "FontSmoothingType", "1")],
-            RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "FontSmoothingType", "2")],
-            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "FontSmoothingType", "1")],
-        },
-        new TweakDef
-        {
-            Id = "font-fonts-disable-streaming",
-            Label = "Disable Font Streaming",
-            Category = "Display",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Disables Windows font streaming (cloud font download). Prevents background font fetching from Microsoft servers. Default: enabled.",
-            Tags = ["fonts", "streaming", "cloud", "disable"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "EnableFontProviders", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "EnableFontProviders")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "EnableFontProviders", 0)],
         },
         // ── Sprint 19 additions ────────────────────────────────────────────
         new TweakDef
@@ -1343,34 +1072,6 @@ internal static class Fonts
         },
         new TweakDef
         {
-            Id = "font-disable-font-substitution-policy",
-            Label = "Disable Font Substitution",
-            Category = "Display",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Disables automatic font substitution for missing fonts. Applications will use their fallback fonts instead. Default: enabled.",
-            Tags = ["fonts", "substitution", "fallback", "disable"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\FontSubstitutes"],
-            ApplyOps =
-            [
-                RegOp.SetString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\FontSubstitutes", "MS Shell Dlg", "Segoe UI"),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetString(
-                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\FontSubstitutes",
-                    "MS Shell Dlg",
-                    "Microsoft Sans Serif"
-                ),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckString(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\FontSubstitutes", "MS Shell Dlg", "Segoe UI"),
-            ],
-        },
-        new TweakDef
-        {
             Id = "font-set-icon-title-font-cascadia",
             Label = "Set Icon Title Font to Cascadia Mono",
             Category = "Display",
@@ -1385,20 +1086,6 @@ internal static class Fonts
         },
         new TweakDef
         {
-            Id = "font-force-truetype-rendering",
-            Label = "Force TrueType Font Rendering",
-            Category = "Display",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Forces TrueType rendering mode for all fonts, preventing bitmap font fallback. Default: auto-select.",
-            Tags = ["fonts", "truetype", "rendering", "quality"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Desktop"],
-            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "FontSmoothing", "2")],
-            RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "FontSmoothing", "0")],
-            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "FontSmoothing", "2")],
-        },
-        new TweakDef
-        {
             Id = "font-disable-font-hinting",
             Label = "Disable Font Hinting",
             Category = "Display",
@@ -1410,20 +1097,6 @@ internal static class Fonts
             ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Control Panel\Desktop", "FontSmoothingOrientation", 0)],
             RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Control Panel\Desktop", "FontSmoothingOrientation", 1)],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Control Panel\Desktop", "FontSmoothingOrientation", 0)],
-        },
-        new TweakDef
-        {
-            Id = "font-set-system-font-size-default",
-            Label = "Reset System Font Size to Default",
-            Category = "Display",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Resets the system-wide font size to the Windows default (96 DPI = 100%). Overrides any custom scaling.",
-            Tags = ["fonts", "size", "default", "reset"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Desktop"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Control Panel\Desktop", "LogPixels", 96)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Control Panel\Desktop", "LogPixels")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Control Panel\Desktop", "LogPixels", 96)],
         },
         new TweakDef
         {
@@ -2977,20 +2650,6 @@ internal static class WindowAppearance
         },
         new TweakDef
         {
-            Id = "tb-taskbar-disable-notification-badges",
-            Label = "Disable Notification Badge Overlay",
-            Category = "Windows 11",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Disables unread notification badges on taskbar app icons. Default: Enabled. Recommended: Disabled.",
-            Tags = ["taskbar", "badges", "notifications"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "TaskbarBadges", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "TaskbarBadges", 1)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "TaskbarBadges", 0)],
-        },
-        new TweakDef
-        {
             Id = "tb-taskbar-disable-people",
             Label = "Disable People Bar on Taskbar",
             Category = "Windows 11",
@@ -3101,62 +2760,6 @@ internal static class WindowAppearance
         },
         new TweakDef
         {
-            Id = "tb-set-taskbar-small-icons",
-            Label = "Use Small Taskbar Icons",
-            Category = "Windows 11",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Sets the taskbar to use small icons, increasing available space. Only works on Windows 10. Default: large.",
-            Tags = ["taskbar", "small", "icons", "appearance"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "TaskbarSmallIcons", 1)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "TaskbarSmallIcons", 0)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "TaskbarSmallIcons", 1)],
-        },
-        new TweakDef
-        {
-            Id = "tb-disable-taskbar-people",
-            Label = "Disable People Button on Taskbar",
-            Category = "Windows 11",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Hides the People button from the taskbar. Default: shown.",
-            Tags = ["taskbar", "people", "contacts", "hide"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\People"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\People", "PeopleBand", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\People", "PeopleBand", 1)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\People", "PeopleBand", 0)],
-        },
-        new TweakDef
-        {
-            Id = "tb-move-taskbar-left",
-            Label = "Align Taskbar Icons to Left (Windows 11)",
-            Category = "Windows 11",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Aligns taskbar icons to the left side instead of centered. Windows 11 only. Default: center.",
-            Tags = ["taskbar", "alignment", "left", "windows-11"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "TaskbarAl", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "TaskbarAl", 1)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "TaskbarAl", 0)],
-        },
-        new TweakDef
-        {
-            Id = "tb-set-button-grouping",
-            Label = "Never Group Taskbar Buttons",
-            Category = "Windows 11",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Prevents the taskbar from grouping similar windows together. Each window gets its own button. Default: always combine.",
-            Tags = ["taskbar", "grouping", "buttons", "combine"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "TaskbarGlomLevel", 2)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "TaskbarGlomLevel", 0)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "TaskbarGlomLevel", 2)],
-        },
-        new TweakDef
-        {
             Id = "tb-show-full-path-title",
             Label = "Show Full Path in Explorer Title Bar",
             Category = "Windows 11",
@@ -3183,20 +2786,6 @@ internal static class WindowAppearance
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search", "AllowCortana", 0)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search", "AllowCortana")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search", "AllowCortana", 0)],
-        },
-        new TweakDef
-        {
-            Id = "tb-disable-taskbar-animations",
-            Label = "Disable Taskbar Animations",
-            Category = "Windows 11",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Disables taskbar button animations (slide, pulse, flash). Reduces visual distractions. Default: enabled.",
-            Tags = ["taskbar", "animation", "disable", "performance"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "TaskbarAnimations", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "TaskbarAnimations", 1)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "TaskbarAnimations", 0)],
         },
         new TweakDef
         {

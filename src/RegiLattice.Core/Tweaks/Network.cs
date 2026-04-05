@@ -199,33 +199,6 @@ internal static class Network
         },
         new TweakDef
         {
-            Id = "net-increase-max-connections",
-            Label = "Increase Max User Port Range",
-            Category = "Network",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description =
-                "Increases maximum ephemeral port range to 65534. Allows more concurrent outbound connections for high-throughput workloads. Default: 5000. Recommended: 65534 for servers.",
-            Tags = ["network", "port", "connections", "throughput", "server"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters", "MaxUserPort", 65534),
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters", "TcpTimedWaitDelay", 30),
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\AFD\Parameters", "DefaultReceiveWindow", 65535),
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\AFD\Parameters", "DefaultSendWindow", 65535),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters", "MaxUserPort"),
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters", "TcpTimedWaitDelay"),
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\AFD\Parameters", "DefaultReceiveWindow"),
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\AFD\Parameters", "DefaultSendWindow"),
-            ],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters", "MaxUserPort", 65534)],
-        },
-        new TweakDef
-        {
             Id = "net-disable-teredo",
             Label = "Disable Teredo Tunneling",
             Category = "Network",
@@ -410,20 +383,6 @@ internal static class Network
         },
         new TweakDef
         {
-            Id = "net-enable-rss",
-            Label = "Enable Receive Side Scaling (RSS)",
-            Category = "Network",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Enables Receive Side Scaling to distribute network receive processing across multiple CPUs. Default: enabled.",
-            Tags = ["network", "rss", "performance", "multi-core"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\TCPIP\Parameters"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\TCPIP\Parameters", "EnableRSS", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\TCPIP\Parameters", "EnableRSS")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\TCPIP\Parameters", "EnableRSS", 1)],
-        },
-        new TweakDef
-        {
             Id = "net-increase-tcp-connections",
             Label = "Increase Max TCP Connections per Server",
             Category = "Network",
@@ -499,20 +458,6 @@ internal static class Network
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters", "EnableAutoDoh", 2)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters", "EnableAutoDoh")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters", "EnableAutoDoh", 2)],
-        },
-        new TweakDef
-        {
-            Id = "net-increase-max-tcp",
-            Label = "Increase Maximum User Ports",
-            Category = "Network",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Increases the maximum ephemeral TCP port range to 65534. Allows more simultaneous outbound connections. Default: 5000.",
-            Tags = ["network", "tcp", "ports", "connections"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters", "MaxUserPort", 65534)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters", "MaxUserPort")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters", "MaxUserPort", 65534)],
         },
         new TweakDef
         {
@@ -624,20 +569,6 @@ internal static class Network
                     unchecked((int)0xFFFFFFFF)
                 ),
             ],
-        },
-        new TweakDef
-        {
-            Id = "net-reduce-timed-wait-delay",
-            Label = "Reduce TCP TIME_WAIT Delay",
-            Category = "Network",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Reduces the TCP TIME_WAIT socket recycling delay from 240 s to 30 s. Frees ports faster under high connection churn.",
-            Tags = ["network", "tcp", "time-wait", "performance"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters", "TcpTimedWaitDelay", 30)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters", "TcpTimedWaitDelay")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters", "TcpTimedWaitDelay", 30)],
         },
         new TweakDef
         {
@@ -1763,21 +1694,6 @@ internal static class DnsNetworking
         },
         new TweakDef
         {
-            Id = "dns-disable-qos-reserve",
-            Label = "Remove QoS Reserved Bandwidth",
-            Category = "Network",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets QoS non-best-effort bandwidth limit to 0%, reclaiming the 20% Windows reserves by default. Default: 20. Recommended: 0.",
-            Tags = ["dns", "qos", "bandwidth", "performance", "network"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Psched"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Psched", "NonBestEffortLimit", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Psched", "NonBestEffortLimit")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Psched", "NonBestEffortLimit", 0)],
-        },
-        new TweakDef
-        {
             Id = "dns-increase-socket-buffers",
             Label = "Increase Socket Buffer Sizes (256 KB)",
             Category = "Network",
@@ -1798,29 +1714,6 @@ internal static class DnsNetworking
                 RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\AFD\Parameters", "DefaultSendWindow"),
             ],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\AFD\Parameters", "DefaultReceiveWindow", 262144)],
-        },
-        new TweakDef
-        {
-            Id = "dns-tcp-keepalive-tuning",
-            Label = "Tune TCP Keep-Alive Intervals",
-            Category = "Network",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets TCP KeepAliveTime to 5 minutes and KeepAliveInterval to 1 second for faster detection of dead connections. Default: KeepAliveTime=7200000 (2h). Recommended: 300000 (5m).",
-            Tags = ["dns", "tcp", "keepalive", "performance", "network"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters", "KeepAliveTime", 300000),
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters", "KeepAliveInterval", 1000),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters", "KeepAliveTime"),
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters", "KeepAliveInterval"),
-            ],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters", "KeepAliveTime", 300000)],
         },
         new TweakDef
         {
@@ -1893,52 +1786,6 @@ internal static class DnsNetworking
         },
         new TweakDef
         {
-            Id = "dns-enable-doh",
-            Label = "Enable DNS-over-HTTPS",
-            Category = "Network",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Enables DNS-over-HTTPS (DoH) for encrypted DNS resolution. Requires a DoH-capable DNS server. Default: plaintext DNS.",
-            Tags = ["dns", "doh", "encrypted", "privacy"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters", "EnableAutoDoh", 2)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters", "EnableAutoDoh")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters", "EnableAutoDoh", 2)],
-        },
-        new TweakDef
-        {
-            Id = "dns-set-cache-size-512",
-            Label = "Increase DNS Cache Size",
-            Category = "Network",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Increases the DNS resolver cache maximum entry count from default to 512. Reduces repeat DNS lookups. Default: system-managed.",
-            Tags = ["dns", "cache", "size", "performance"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters", "MaxCacheEntryTtlLimit", 86400)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters", "MaxCacheEntryTtlLimit")],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters", "MaxCacheEntryTtlLimit", 86400),
-            ],
-        },
-        new TweakDef
-        {
-            Id = "dns-disable-multicast-dns",
-            Label = "Disable Multicast DNS (mDNS)",
-            Category = "Network",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables mDNS (Bonjour-style) name resolution. Reduces network chatter on enterprise networks. Default: enabled.",
-            Tags = ["dns", "mdns", "multicast", "bonjour"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters", "EnableMDNS", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters", "EnableMDNS")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters", "EnableMDNS", 0)],
-        },
-        new TweakDef
-        {
             Id = "dns-set-negative-cache-ttl",
             Label = "Reduce Negative DNS Cache TTL",
             Category = "Network",
@@ -1950,21 +1797,6 @@ internal static class DnsNetworking
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters", "NegativeCacheTime", 5)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters", "NegativeCacheTime")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters", "NegativeCacheTime", 5)],
-        },
-        new TweakDef
-        {
-            Id = "dns-disable-netbios-over-tcp",
-            Label = "Disable NetBIOS over TCP/IP",
-            Category = "Network",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description =
-                "Disables NetBIOS over TCP/IP. Eliminates NBT broadcasts and reduces attack surface. May break legacy apps. Default: enabled.",
-            Tags = ["dns", "netbios", "tcp", "security"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\NetBT\Parameters"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\NetBT\Parameters", "NodeType", 2)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\NetBT\Parameters", "NodeType")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\NetBT\Parameters", "NodeType", 2)],
         },
         new TweakDef
         {
@@ -1998,21 +1830,6 @@ internal static class DnsNetworking
         },
         new TweakDef
         {
-            Id = "dns-increase-cache-entry-ttl",
-            Label = "Increase DNS Cache TTL",
-            Category = "Network",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Increases the DNS cache entry TTL to 86400 seconds (24 hours). Reduces DNS lookup frequency. Improves browsing speed. Default: server-defined.",
-            Tags = ["dns", "cache", "ttl", "performance"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters", "MaxCacheTtl", 86400)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters", "MaxCacheTtl")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters", "MaxCacheTtl", 86400)],
-        },
-        new TweakDef
-        {
             Id = "dns-reduce-query-timeout",
             Label = "Reduce DNS Query Timeout",
             Category = "Network",
@@ -2024,20 +1841,6 @@ internal static class DnsNetworking
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters", "QueryRetryInterval", 2000)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters", "QueryRetryInterval")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters", "QueryRetryInterval", 2000)],
-        },
-        new TweakDef
-        {
-            Id = "dns-disable-multicast-name-resolution",
-            Label = "Disable Multicast Name Resolution (LLMNR)",
-            Category = "Network",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables Link-Local Multicast Name Resolution (LLMNR). Prevents LLMNR poisoning attacks. Default: enabled.",
-            Tags = ["dns", "llmnr", "multicast", "security", "poisoning"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\DNSClient"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\DNSClient", "EnableMulticast", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\DNSClient", "EnableMulticast")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\DNSClient", "EnableMulticast", 0)],
         },
         new TweakDef
         {
@@ -2054,35 +1857,6 @@ internal static class DnsNetworking
         },
         new TweakDef
         {
-            Id = "dns-disable-name-devolution-policy",
-            Label = "Disable DNS Devolution",
-            Category = "Network",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Disables DNS name devolution (searching parent domains). Prevents unintended DNS queries to parent zones. Default: enabled.",
-            Tags = ["dns", "devolution", "security", "domain"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\DNSClient"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\DNSClient", "UseDomainNameDevolution", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\DNSClient", "UseDomainNameDevolution")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\DNSClient", "UseDomainNameDevolution", 0)],
-        },
-        new TweakDef
-        {
-            Id = "dns-disable-netbios-over-tcpip",
-            Label = "Disable NetBIOS over TCP/IP",
-            Category = "Network",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables NetBIOS name resolution over TCP/IP. Mitigates NBT-NS poisoning attacks. Default: enabled.",
-            Tags = ["dns", "netbios", "tcp", "security", "poisoning"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\NetBT\Parameters"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\NetBT\Parameters", "NodeType", 2)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\NetBT\Parameters", "NodeType")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\NetBT\Parameters", "NodeType", 2)],
-        },
-        new TweakDef
-        {
             Id = "dns-set-negative-cache-ttl-0",
             Label = "Disable Negative DNS Cache",
             Category = "Network",
@@ -2094,33 +1868,6 @@ internal static class DnsNetworking
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters", "NegativeCacheTime", 0)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters", "NegativeCacheTime")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters", "NegativeCacheTime", 0)],
-        },
-        new TweakDef
-        {
-            Id = "dns-disable-smart-multihomed-policy",
-            Label = "Disable Smart Multi-Homed Name Resolution",
-            Category = "Network",
-            NeedsAdmin = true,
-            Description =
-                "Disables Smart Multi-Homed Name Resolution which sends DNS queries to all adapters simultaneously. Security risk on VPN. Default: enabled.",
-            Tags = ["dns", "smart", "multi-homed", "vpn", "security"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\DNSClient"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\DNSClient", "DisableSmartNameResolution", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\DNSClient", "DisableSmartNameResolution")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\DNSClient", "DisableSmartNameResolution", 1)],
-        },
-        new TweakDef
-        {
-            Id = "dns-set-max-cache-ttl-86400",
-            Label = "Limit DNS Cache TTL to 24 Hours",
-            Category = "Network",
-            NeedsAdmin = true,
-            Description = "Caps the DNS cache entry TTL at 86400 seconds (24 hours). Prevents stale DNS entries. Default: unlimited.",
-            Tags = ["dns", "cache", "ttl", "staleness"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters", "MaxCacheTtl", 86400)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters", "MaxCacheTtl")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters", "MaxCacheTtl", 86400)],
         },
         new TweakDef
         {
@@ -2176,20 +1923,6 @@ internal static class DnsNetworking
         // ── Sprint 18 — 10 new DNS & Networking Advanced tweaks ────────────
         new TweakDef
         {
-            Id = "dns-disable-llmnr-via-policy",
-            Label = "Disable LLMNR via Group Policy",
-            Category = "Network",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables Link-Local Multicast Name Resolution (LLMNR) to prevent name resolution poisoning attacks. Default: enabled.",
-            Tags = ["dns", "llmnr", "security", "poisoning", "multicast"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\DNSClient"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\DNSClient", "EnableMulticast", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\DNSClient", "EnableMulticast")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\DNSClient", "EnableMulticast", 0)],
-        },
-        new TweakDef
-        {
             Id = "dns-set-dns-priority-v4",
             Label = "Prioritise IPv4 DNS over IPv6",
             Category = "Network",
@@ -2205,21 +1938,6 @@ internal static class DnsNetworking
         },
         new TweakDef
         {
-            Id = "dns-disable-smart-protocol-reorder",
-            Label = "Disable Smart Multi-Homed Name Resolution",
-            Category = "Network",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Prevents Windows from sending DNS queries to all adapters simultaneously. Reduces DNS leaks on VPN connections. Default: enabled.",
-            Tags = ["dns", "multi-homed", "vpn", "leak", "privacy"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\DNSClient"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\DNSClient", "DisableSmartNameResolution", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\DNSClient", "DisableSmartNameResolution")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\DNSClient", "DisableSmartNameResolution", 1)],
-        },
-        new TweakDef
-        {
             Id = "dns-enable-dns-filtering-platform",
             Label = "Enable DNS Client Diagnostic Logging",
             Category = "Network",
@@ -2231,49 +1949,6 @@ internal static class DnsNetworking
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters", "EnableLogging", 1)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters", "EnableLogging")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters", "EnableLogging", 1)],
-        },
-        new TweakDef
-        {
-            Id = "dns-disable-wins-resolution",
-            Label = "Disable WINS Name Resolution",
-            Category = "Network",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Disables legacy WINS/NBNS name resolution in the TCP/IP stack. Reduces NetBIOS attack surface. Default: enabled.",
-            Tags = ["dns", "wins", "netbios", "legacy", "security"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\NetBT\Parameters"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\NetBT\Parameters", "EnableLMHOSTS", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\NetBT\Parameters", "EnableLMHOSTS")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\NetBT\Parameters", "EnableLMHOSTS", 0)],
-        },
-        new TweakDef
-        {
-            Id = "dns-set-max-negative-cache-ttl",
-            Label = "Limit Negative DNS Cache TTL to 5 Seconds",
-            Category = "Network",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Limits how long failed DNS lookups are cached. Faster recovery after DNS changes or outages. Default: 900s (15 min).",
-            Tags = ["dns", "cache", "negative-cache", "ttl", "performance"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters", "NegativeCacheTime", 5)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters", "NegativeCacheTime")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters", "NegativeCacheTime", 5)],
-        },
-        new TweakDef
-        {
-            Id = "dns-disable-devolution-fallback",
-            Label = "Disable DNS Devolution",
-            Category = "Network",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description =
-                "Prevents Windows from walking up the domain suffix hierarchy when resolving names. Reduces information leakage. Default: enabled.",
-            Tags = ["dns", "devolution", "suffix", "privacy", "security"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\DNSClient"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\DNSClient", "UseDomainNameDevolution", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\DNSClient", "UseDomainNameDevolution")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\DNSClient", "UseDomainNameDevolution", 0)],
         },
         new TweakDef
         {

@@ -172,45 +172,6 @@ internal static class Virtualization
         },
         new TweakDef
         {
-            Id = "virt-nested-virt-policy",
-            Label = "Enable Nested Virtualization (Policy)",
-            Category = "Virtualization",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description =
-                "Enables nested virtualization via Hyper-V group policy. Allows hypervisors inside VMs at the policy level. Default: Not set. Recommended: Enabled for dev workloads.",
-            Tags = ["hyperv", "virtualization", "nested", "policy"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\HyperV"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\HyperV", "AllowNestedVirtualization", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\HyperV", "AllowNestedVirtualization")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\HyperV", "AllowNestedVirtualization", 1)],
-        },
-        new TweakDef
-        {
-            Id = "virt-enable-enhanced-session",
-            Label = "Enable Hyper-V Enhanced Session Mode",
-            Category = "Virtualization",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description =
-                "Enables Hyper-V Enhanced Session Mode for RDP-like VM experience with clipboard, audio, and drive sharing. Default: Disabled. Recommended: Enabled.",
-            Tags = ["hyperv", "virtualization", "enhanced-session", "rdp"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Virtualization"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Virtualization", "AllowEnhancedSessionMode", 1),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Virtualization", "AllowEnhancedSessionMode", 0),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Virtualization", "AllowEnhancedSessionMode", 1),
-            ],
-        },
-        new TweakDef
-        {
             Id = "virt-enable-vm-platform",
             Label = "Enable Virtual Machine Platform",
             Category = "Virtualization",
@@ -274,63 +235,6 @@ internal static class Virtualization
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\HyperV", "DisableRemoteDesktopVirtualization", 1)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\HyperV", "DisableRemoteDesktopVirtualization")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\HyperV", "DisableRemoteDesktopVirtualization", 1)],
-        },
-        new TweakDef
-        {
-            Id = "virt-vmms-manual",
-            Label = "Set Hyper-V Virtual Machine Management Service to Manual",
-            Category = "Virtualization",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets the Hyper-V Virtual Machine Management Service (VMMS) to manual start. Frees resources if Hyper-V VMs are not regularly used. Default: Automatic. Recommended: Manual on non-VM hosts.",
-            Tags = ["virtualization", "vmms", "hyperv", "service", "startup"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\vmms"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\vmms", "Start", 3)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\vmms", "Start", 2)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\vmms", "Start", 3)],
-        },
-        new TweakDef
-        {
-            Id = "virt-enable-wsl2-default",
-            Label = "Set WSL Default Version to 2",
-            Category = "Virtualization",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Sets the default WSL version to 2 (full Linux kernel via Hyper-V). Default: 1.",
-            Tags = ["virtualization", "wsl", "wsl2", "linux"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss", "DefaultVersion", 2)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss", "DefaultVersion", 1)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Lxss", "DefaultVersion", 2)],
-        },
-        new TweakDef
-        {
-            Id = "virt-disable-hyper-v-vmms",
-            Label = "Disable Hyper-V Virtual Machine Management",
-            Category = "Virtualization",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Disables the Hyper-V Virtual Machine Management service. Frees resources if not using Hyper-V VMs. Default: auto.",
-            Tags = ["virtualization", "hyper-v", "vmms", "service"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\vmms"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\vmms", "Start", 4)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\vmms", "Start", 2)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\vmms", "Start", 4)],
-        },
-        new TweakDef
-        {
-            Id = "virt-disable-sandbox-networking",
-            Label = "Disable Windows Sandbox Networking",
-            Category = "Virtualization",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables networking inside Windows Sandbox. Isolates sandbox from the network. Default: enabled.",
-            Tags = ["virtualization", "sandbox", "networking", "isolation"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Sandbox"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Sandbox", "AllowNetworking", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Sandbox", "AllowNetworking")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Sandbox", "AllowNetworking", 0)],
         },
         new TweakDef
         {
@@ -497,20 +401,6 @@ internal static class Virtualization
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\vmickvpexchange", "Start", 4)],
             RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\vmickvpexchange", "Start", 3)],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\vmickvpexchange", "Start", 4)],
-        },
-        new TweakDef
-        {
-            Id = "virt-disable-wdag-policy",
-            Label = "Disable Windows Defender Application Guard via Policy",
-            Category = "Virtualization",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables Windows Defender Application Guard (WDAG) via Group Policy. Frees VBS resources when WDAG is not needed.",
-            Tags = ["virtualization", "wdag", "policy", "performance"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\AppHVSI"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\AppHVSI", "AllowAppHVSI_ProviderSet", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\AppHVSI", "AllowAppHVSI_ProviderSet")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\AppHVSI", "AllowAppHVSI_ProviderSet", 0)],
         },
         new TweakDef
         {
@@ -1155,22 +1045,6 @@ internal static class WindowsSandboxAdv
             ApplyOps = [RegOp.SetDword(ContainerPol, "DisableWindowsInstaller", 1)],
             RemoveOps = [RegOp.DeleteValue(ContainerPol, "DisableWindowsInstaller")],
             DetectOps = [RegOp.CheckDword(ContainerPol, "DisableWindowsInstaller", 1)],
-        },
-        new TweakDef
-        {
-            Id = "sandbox-disable-telemetry",
-            Label = "Disable Telemetry and Diagnostics Inside Sandbox",
-            Category = "Virtualization",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Tags = ["sandbox", "telemetry", "privacy", "diagnostics"],
-            Description =
-                "Turns off Windows telemetry and diagnostic data collection "
-                + "within the sandbox environment. Useful for clean-slate testing "
-                + "and prevents telemetry from leaking sandbox activity to Microsoft.",
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DataCollection", "AllowTelemetry", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DataCollection", "AllowTelemetry")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DataCollection", "AllowTelemetry", 0)],
         },
         new TweakDef
         {

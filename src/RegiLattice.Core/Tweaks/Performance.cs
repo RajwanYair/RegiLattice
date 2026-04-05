@@ -54,21 +54,6 @@ internal static class Performance
         },
         new TweakDef
         {
-            Id = "perf-disable-last-access",
-            Label = "Disable Last Access Timestamp",
-            Category = "System",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Disables NTFS last access timestamp updates. Reduces disk I/O for every file read operation. Default: 0 (Enabled). Recommended: 1 (Disabled).",
-            Tags = ["performance", "ntfs", "disk", "io"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsDisableLastAccessUpdate", 1)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsDisableLastAccessUpdate", 0)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem", "NtfsDisableLastAccessUpdate", 1)],
-        },
-        new TweakDef
-        {
             Id = "perf-disable-spectre-mitigations",
             Label = "Disable Spectre/Meltdown Mitigations",
             Category = "System",
@@ -304,21 +289,6 @@ internal static class Performance
         },
         new TweakDef
         {
-            Id = "perf-win32-priority-sep",
-            Label = "Optimize Win32 Priority Separation for Performance",
-            Category = "System",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description =
-                "Sets Win32PrioritySeparation=38 (hex 26) to give foreground programs 6x more CPU time than background processes. Maximises responsiveness. Default: 2. Recommended: 38 for gaming/workstations.",
-            Tags = ["performance", "priority", "foreground", "cpu", "win32"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\PriorityControl"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\PriorityControl", "Win32PrioritySeparation", 38)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\PriorityControl", "Win32PrioritySeparation", 2)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\PriorityControl", "Win32PrioritySeparation", 38)],
-        },
-        new TweakDef
-        {
             Id = "perf-games-io-priority",
             Label = "Set Highest IO Priority for Games Multimedia Profile",
             Category = "System",
@@ -402,27 +372,6 @@ internal static class Performance
         },
         new TweakDef
         {
-            Id = "perf-clear-recent-docs-exit",
-            Label = "Clear Recent Documents on Logoff",
-            Category = "System",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Clears the recent documents list when the user logs off. Improves privacy and slightly speeds up logoff. Default: Not cleared. Recommended: Enabled for shared machines.",
-            Tags = ["performance", "privacy", "recent-docs", "logoff", "explorer"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer", "ClearRecentDocsOnExit", 1)],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer", "ClearRecentDocsOnExit"),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer", "ClearRecentDocsOnExit", 1),
-            ],
-        },
-        new TweakDef
-        {
             Id = "perf-disable-page-file-clearing",
             Label = "Disable Page File Clearing at Shutdown",
             Category = "System",
@@ -490,35 +439,6 @@ internal static class Performance
                     0
                 ),
             ],
-        },
-        new TweakDef
-        {
-            Id = "perf-set-win32-priority-separation-26",
-            Label = "Optimize Win32 Priority Separation for Programs",
-            Category = "System",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Sets Win32PrioritySeparation to 26 (short, variable, foreground boost). Optimal for desktop responsiveness. Default: 2.",
-            Tags = ["performance", "priority", "foreground", "scheduling"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\PriorityControl"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\PriorityControl", "Win32PrioritySeparation", 26)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\PriorityControl", "Win32PrioritySeparation", 2)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\PriorityControl", "Win32PrioritySeparation", 26)],
-        },
-        new TweakDef
-        {
-            Id = "perf-disable-background-apps",
-            Label = "Disable Background Apps (Policy)",
-            Category = "System",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Disables background execution of UWP/Store apps via Group Policy. Reduces CPU and memory usage from idle apps. Default: allowed.",
-            Tags = ["performance", "background", "uwp", "apps"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy", "LetAppsRunInBackground", 2)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy", "LetAppsRunInBackground")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy", "LetAppsRunInBackground", 2)],
         },
         new TweakDef
         {
@@ -689,20 +609,6 @@ internal static class Performance
         },
         new TweakDef
         {
-            Id = "perf-disable-explorer-search-history",
-            Label = "Disable Explorer Search History",
-            Category = "System",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Prevents File Explorer from storing search history, eliminating background indexing of recent search queries.",
-            Tags = ["performance", "explorer", "search", "history"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Policies\Microsoft\Windows\Explorer"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Policies\Microsoft\Windows\Explorer", "DisableSearchBoxSuggestions", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\SOFTWARE\Policies\Microsoft\Windows\Explorer", "DisableSearchBoxSuggestions")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\SOFTWARE\Policies\Microsoft\Windows\Explorer", "DisableSearchBoxSuggestions", 1)],
-        },
-        new TweakDef
-        {
             Id = "perf-increase-file-system-cache",
             Label = "Increase File System Memory Cache",
             Category = "System",
@@ -766,21 +672,6 @@ internal static class Performance
         },
         new TweakDef
         {
-            Id = "perf-disable-nagle-algorithm",
-            Label = "Disable Nagle's Algorithm (Low Latency TCP)",
-            Category = "System",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Disables Nagle's algorithm and enables TCP acknowledgement optimisation for lower network latency. Beneficial for gaming and real-time applications.",
-            Tags = ["performance", "network", "nagle", "tcp", "latency", "gaming"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\MSMQ\Parameters"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\MSMQ\Parameters", "TCPNoDelay", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\MSMQ\Parameters", "TCPNoDelay")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\MSMQ\Parameters", "TCPNoDelay", 1)],
-        },
-        new TweakDef
-        {
             Id = "perf-disable-power-throttling",
             Label = "Disable Power Throttling",
             Category = "System",
@@ -808,21 +699,6 @@ internal static class Performance
             ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "EnableAeroPeek", 0)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "EnableAeroPeek")],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "EnableAeroPeek", 0)],
-        },
-        new TweakDef
-        {
-            Id = "perf-disable-aero-shake",
-            Label = "Disable Aero Shake (Minimize Other Windows)",
-            Category = "System",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Disables the Aero Shake gesture that minimises all background windows when you shake the active window. Prevents accidental mass-minimise.",
-            Tags = ["performance", "aero", "shake", "explorer"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "DisallowShaking", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "DisallowShaking")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "DisallowShaking", 1)],
         },
         new TweakDef
         {
@@ -898,21 +774,6 @@ internal static class Performance
             ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Control Panel\Desktop", "WaitToKillAppTimeout", 5000)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Control Panel\Desktop", "WaitToKillAppTimeout")],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Control Panel\Desktop", "WaitToKillAppTimeout", 5000)],
-        },
-        new TweakDef
-        {
-            Id = "perf-disable-taskbar-animations",
-            Label = "Disable Taskbar Animations",
-            Category = "System",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Disables taskbar button animations (TaskbarAnimations=0). Reduces compositor workload from button hover, press, and window show/hide transitions.",
-            Tags = ["performance", "taskbar", "animations", "ui"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "TaskbarAnimations", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "TaskbarAnimations")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "TaskbarAnimations", 0)],
         },
         new TweakDef
         {
@@ -1365,55 +1226,10 @@ internal static class SystemOptimization
             RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\GameBar", "UseNexusForGameBarEnabled", 1)],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\GameBar", "UseNexusForGameBarEnabled", 0)],
         },
-        new TweakDef
-        {
-            Id = "sysopt-disable-full-screen-optimizations",
-            Label = "Disable Full-Screen Optimisations",
-            Category = "System",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Disables automatic full-screen optimisations that can cause input lag in older games.",
-            Tags = ["optimization", "fullscreen", "gaming", "input-lag"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\System\GameConfigStore"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\System\GameConfigStore", "GameDVR_FSEBehavior", 2)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\System\GameConfigStore", "GameDVR_FSEBehavior")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\System\GameConfigStore", "GameDVR_FSEBehavior", 2)],
-        },
         // ── Network Buffer Tuning ────────────────────────────────────────
 
-        new TweakDef
-        {
-            Id = "sysopt-tcp-no-delay",
-            Label = "Disable Nagle's Algorithm (TCP No Delay)",
-            Category = "System",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables Nagle's algorithm for lower TCP latency — beneficial for gaming and real-time apps.",
-            Tags = ["optimization", "tcp", "nagle", "latency"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\MSMQ\Parameters"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\MSMQ\Parameters", "TCPNoDelay", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\MSMQ\Parameters", "TCPNoDelay")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\MSMQ\Parameters", "TCPNoDelay", 1)],
-        },
         // ── UI Responsiveness ────────────────────────────────────────────
 
-        new TweakDef
-        {
-            Id = "sysopt-low-disk-space-warning-off",
-            Label = "Disable Low Disk Space Warning",
-            Category = "System",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Suppresses the low disk space notification balloon for a clutter-free experience.",
-            Tags = ["optimization", "disk", "notification", "warning"],
-            RegistryKeys = [Explorer],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer", "NoLowDiskSpaceChecks", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer", "NoLowDiskSpaceChecks")],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer", "NoLowDiskSpaceChecks", 1),
-            ],
-        },
     ];
 }
 
@@ -1423,68 +1239,6 @@ internal static class SystemTweaks
 {
     internal static IReadOnlyList<TweakDef> Tweaks { get; } =
     [
-        new TweakDef
-        {
-            Id = "sys-high-timer-resolution",
-            Label = "Enable High Timer Resolution (Perf)",
-            Category = "System",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description =
-                "Enables global high timer resolution (0.5ms) for improved scheduling accuracy. Benefits real-time audio, gaming, and latency-sensitive applications. Default: Disabled. Recommended: Enabled for gaming/audio.",
-            Tags = ["system", "performance", "timer", "latency"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\kernel"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\kernel", "GlobalTimerResolutionRequests", 1),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\kernel", "GlobalTimerResolutionRequests"),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\kernel", "GlobalTimerResolutionRequests", 1),
-            ],
-        },
-        new TweakDef
-        {
-            Id = "sys-disable-activity-history",
-            Label = "Disable Activity History",
-            Category = "System",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables Activity History, preventing Windows from collecting and uploading activity data (timeline, app usage).",
-            Tags = ["system", "privacy", "activity-history", "timeline"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "EnableActivityFeed", 0),
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "PublishUserActivities", 0),
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "UploadUserActivities", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "EnableActivityFeed"),
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "PublishUserActivities"),
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "UploadUserActivities"),
-            ],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "EnableActivityFeed", 0)],
-        },
-        new TweakDef
-        {
-            Id = "sys-disable-clipboard-history",
-            Label = "Disable Clipboard History",
-            Category = "System",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables Windows Clipboard History (Win+V). Prevents clipboard content from being stored and synced.",
-            Tags = ["system", "privacy", "clipboard"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "AllowClipboardHistory", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "AllowClipboardHistory")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "AllowClipboardHistory", 0)],
-        },
         new TweakDef
         {
             Id = "sys-disable-admin-shares",
@@ -1498,44 +1252,6 @@ internal static class SystemTweaks
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters", "AutoShareWks", 0)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters", "AutoShareWks")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters", "AutoShareWks", 0)],
-        },
-        new TweakDef
-        {
-            Id = "sys-system-disable-auto-maintenance",
-            Label = "Disable Automatic Maintenance",
-            Category = "System",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Disables Windows automatic maintenance tasks (defrag, diagnostics, updates). Prevents unexpected disk and CPU usage. Default: Enabled. Recommended: Disabled for manual control.",
-            Tags = ["system", "maintenance", "performance", "scheduled"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Schedule\Maintenance"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Schedule\Maintenance", "MaintenanceDisabled", 1),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Schedule\Maintenance", "MaintenanceDisabled"),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Schedule\Maintenance", "MaintenanceDisabled", 1),
-            ],
-        },
-        new TweakDef
-        {
-            Id = "sys-disable-error-reporting",
-            Label = "Disable Windows Error Reporting",
-            Category = "System",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Disables Windows Error Reporting via Group Policy. Default: Enabled. Recommended: Disabled for privacy.",
-            Tags = ["system", "error-reporting", "privacy", "wer"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Error Reporting"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Error Reporting", "Disabled", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Error Reporting", "Disabled")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Error Reporting", "Disabled", 1)],
         },
         new TweakDef
         {
@@ -2047,20 +1763,6 @@ internal static class MemoryOptimization
         },
         new TweakDef
         {
-            Id = "mem-optimize-svchosts",
-            Label = "Increase Svchost Split Threshold",
-            Category = "System",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Sets the SvcHostSplitThresholdInKB to a high value so Windows groups services into fewer svchost processes. Saves RAM.",
-            Tags = ["memory", "performance", "services"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control", "SvcHostSplitThresholdInKB", 67108864)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control", "SvcHostSplitThresholdInKB")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control", "SvcHostSplitThresholdInKB", 67108864)],
-        },
-        new TweakDef
-        {
             Id = "mem-disable-memory-compression",
             Label = "Disable Memory Compression",
             Category = "System",
@@ -2307,29 +2009,6 @@ internal static class MemoryOptimization
 
         new TweakDef
         {
-            Id = "mem-set-pool-usage-max",
-            Label = "Set Pool Usage Maximum to 60%",
-            Category = "System",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Limits paged and nonpaged pool usage to 60% of physical RAM, preventing runaway pool consumption from leaky drivers.",
-            Tags = ["memory", "pool", "performance", "stability"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "PoolUsageMaximum", 60),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "PoolUsageMaximum"),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "PoolUsageMaximum", 60),
-            ],
-        },
-        new TweakDef
-        {
             Id = "mem-set-session-pool-size",
             Label = "Optimize Session Pool Size",
             Category = "System",
@@ -2476,20 +2155,6 @@ internal static class MemoryOptimization
         },
         new TweakDef
         {
-            Id = "mem-disable-write-watch",
-            Label = "Disable Write Watch for Faster Allocation",
-            Category = "System",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables memory write watch tracking which adds overhead to memory allocation. Useful for high-throughput applications.",
-            Tags = ["memory", "performance", "allocation", "write-watch"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "WriteWatch", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "WriteWatch")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "WriteWatch", 0)],
-        },
-        new TweakDef
-        {
             Id = "mem-set-paged-pool-quota",
             Label = "Disable Per-Process Paged Pool Quota",
             Category = "System",
@@ -2512,21 +2177,6 @@ internal static class MemoryOptimization
             ],
         },
         // ── merged from: Gpu.cs ──────────────────────────────────────────────────
-        new TweakDef
-        {
-            Id = "gpu-disable-mpo",
-            Label = "Disable Multi-Plane Overlay (MPO)",
-            Category = "Display",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description =
-                "Disables Multi-Plane Overlay which can cause black screens, flickering, or stuttering on some GPU/monitor combinations. Safe to disable if you experience display issues. Default: Enabled. Recommended: Disabled for troubleshooting.",
-            Tags = ["gpu", "display", "fix", "mpo"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Dwm"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Dwm", "OverlayTestMode", 5)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Dwm", "OverlayTestMode")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Dwm", "OverlayTestMode", 5)],
-        },
         new TweakDef
         {
             Id = "gpu-tdr-timeout",
@@ -2614,21 +2264,6 @@ internal static class MemoryOptimization
         },
         new TweakDef
         {
-            Id = "gpu-disable-game-bar-overlay",
-            Label = "Disable Game Bar Overlay for GPU",
-            Category = "Display",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Disables the Xbox Game Bar overlay (UseNexusForGameBarEnabled=0). Reduces GPU overhead and prevents accidental overlay activation. Default: 1 (Enabled). Recommended: 0 (Disabled).",
-            Tags = ["gpu", "gaming", "overlay", "game-bar"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\GameBar"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\GameBar", "UseNexusForGameBarEnabled", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\GameBar", "UseNexusForGameBarEnabled", 1)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\GameBar", "UseNexusForGameBarEnabled", 0)],
-        },
-        new TweakDef
-        {
             Id = "gpu-nvidia-tdr-delay",
             Label = "Increase NVIDIA TDR Delay (8s)",
             Category = "Display",
@@ -2699,21 +2334,6 @@ internal static class MemoryOptimization
         },
         new TweakDef
         {
-            Id = "gpu-increase-tdr-delay",
-            Label = "Increase GPU TDR Timeout",
-            Category = "Display",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description =
-                "Increases GPU Timeout Detection and Recovery delay to 10 seconds. Prevents false TDR resets during heavy GPU workloads. Default: 2s. Recommended: 10s for compute/rendering.",
-            Tags = ["gpu", "tdr", "timeout", "stability", "compute"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers", "TdrDelay", 10)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers", "TdrDelay")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers", "TdrDelay", 10)],
-        },
-        new TweakDef
-        {
             Id = "gpu-max-prerendered-frames",
             Label = "Set Max Pre-Rendered Frames to 1",
             Category = "Display",
@@ -2773,21 +2393,6 @@ internal static class MemoryOptimization
         },
         new TweakDef
         {
-            Id = "gpu-set-tdr-delay-10",
-            Label = "Increase GPU TDR Timeout to 10 Seconds",
-            Category = "Display",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description =
-                "Increases the Timeout Detection Recovery delay from 2s to 10s. Helps with long compute shaders or heavy rendering. Default: 2.",
-            Tags = ["gpu", "tdr", "timeout", "crash", "stability"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers", "TdrDelay", 10)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers", "TdrDelay")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers", "TdrDelay", 10)],
-        },
-        new TweakDef
-        {
             Id = "gpu-force-high-performance-power",
             Label = "Force GPU High Performance Power Plan",
             Category = "Display",
@@ -2799,34 +2404,6 @@ internal static class MemoryOptimization
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Power", "DefaultD3ColdSupported", 0)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Power", "DefaultD3ColdSupported")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Power", "DefaultD3ColdSupported", 0)],
-        },
-        new TweakDef
-        {
-            Id = "gpu-disable-preemption",
-            Label = "Disable GPU Preemption",
-            Category = "Display",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Disables GPU preemption scheduling. May improve frame consistency but can cause hangs on some hardware. Default: enabled.",
-            Tags = ["gpu", "preemption", "scheduling", "latency"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Scheduler"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Scheduler", "EnablePreemption", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Scheduler", "EnablePreemption")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Scheduler", "EnablePreemption", 0)],
-        },
-        new TweakDef
-        {
-            Id = "gpu-disable-fullscreen-optimizations-global",
-            Label = "Disable Fullscreen Optimisations (Global)",
-            Category = "Display",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Disables fullscreen optimisations globally for all applications. Forces true exclusive fullscreen mode. Default: enabled.",
-            Tags = ["gpu", "fullscreen", "optimizations", "global"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\System\GameConfigStore"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\System\GameConfigStore", "GameDVR_FSEBehaviorMode", 2)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\System\GameConfigStore", "GameDVR_FSEBehaviorMode")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\System\GameConfigStore", "GameDVR_FSEBehaviorMode", 2)],
         },
         new TweakDef
         {
@@ -2856,21 +2433,6 @@ internal static class MemoryOptimization
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Dwm", "EnableSWCursor", 1)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Dwm", "EnableSWCursor")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Dwm", "EnableSWCursor", 1)],
-        },
-        new TweakDef
-        {
-            Id = "gpu-hw-scheduling",
-            Label = "Enable Hardware-Accelerated GPU Scheduling",
-            Category = "Display",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            MinBuild = 19041,
-            Description = "Enables Hardware-Accelerated GPU Scheduling (WDDM 2.7+). Reduces GPU scheduling latency and CPU overhead. Default: off.",
-            Tags = ["gpu", "hw-scheduling", "wddm", "performance"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers", "HwSchMode", 2)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers", "HwSchMode", 1)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers", "HwSchMode", 2)],
         },
         new TweakDef
         {
@@ -2906,21 +2468,6 @@ internal static class MemoryOptimization
                     8
                 ),
             ],
-        },
-        new TweakDef
-        {
-            Id = "gpu-multiplane-overlay-disable",
-            Label = "Disable Multiplane Overlay (MPO)",
-            Category = "Display",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Disables Multiplane Overlay. Can fix stuttering, flickering, and black screens on some GPU/driver combinations. Default: enabled.",
-            Tags = ["gpu", "mpo", "overlay", "fix"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Dwm"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Dwm", "OverlayTestMode", 5)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Dwm", "OverlayTestMode")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Dwm", "OverlayTestMode", 5)],
         },
         new TweakDef
         {
@@ -3015,36 +2562,6 @@ internal static class MemoryOptimization
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers", "ThreadedOptimizationFlags", 1)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers", "ThreadedOptimizationFlags")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers", "ThreadedOptimizationFlags", 1)],
-        },
-        new TweakDef
-        {
-            Id = "gpu-hw-accel-enable",
-            Label = "Enable WPF Hardware Acceleration",
-            Category = "Display",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Sets DisableHWAcceleration=0 in Avalon.Graphics to ensure WPF/XAML apps use GPU hardware acceleration. Default: 0 (enabled).",
-            Tags = ["gpu", "hwaccel", "wpf", "avalon"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Avalon.Graphics"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Avalon.Graphics", "DisableHWAcceleration", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Avalon.Graphics", "DisableHWAcceleration")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Avalon.Graphics", "DisableHWAcceleration", 0)],
-        },
-        new TweakDef
-        {
-            Id = "gpu-display-preemption-off",
-            Label = "Disable GPU Display Preemption",
-            Category = "Display",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets EnablePreemption=0 in GraphicsDrivers Scheduler to disable GPU task preemption. Can reduce frame-time variance in latency-sensitive workloads. Default: enabled.",
-            Tags = ["gpu", "preemption", "scheduler", "latency"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Scheduler"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Scheduler", "EnablePreemption", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Scheduler", "EnablePreemption")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Scheduler", "EnablePreemption", 0)],
         },
         new TweakDef
         {
@@ -3169,21 +2686,6 @@ internal static class MemoryOptimization
         },
         new TweakDef
         {
-            Id = "gpu-disable-aero-peek",
-            Label = "Disable Aero Peek (Taskbar Transparency Effect)",
-            Category = "Display",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Disables Aero Peek, which shows a live transparent preview of windows when hovering over taskbar thumbnails. Reduces DWM compositing load. Default: enabled.",
-            Tags = ["gpu", "aero", "peek", "dwm", "performance"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\DWM"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\DWM", "EnableAeroPeek", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\DWM", "EnableAeroPeek", 1)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\DWM", "EnableAeroPeek", 0)],
-        },
-        new TweakDef
-        {
             Id = "gpu-set-tdr-ddi-delay",
             Label = "Set GPU TDR DDI Delay to 0 (Immediate)",
             Category = "Display",
@@ -3284,28 +2786,6 @@ internal static class Startup
                 RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run", "Skype for Desktop"),
             ],
             DetectOps = [RegOp.CheckMissing(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run", "Skype")],
-        },
-        new TweakDef
-        {
-            Id = "startup-disable-edge-autostart",
-            Label = "Disable Edge Startup Boost & Background",
-            Category = "System",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables Edge's Startup Boost pre-launch and background mode to free memory and reduce startup load.",
-            Tags = ["startup", "edge", "performance"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "StartupBoostEnabled", 0),
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "BackgroundModeEnabled", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "StartupBoostEnabled"),
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "BackgroundModeEnabled"),
-            ],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge", "StartupBoostEnabled", 0)],
         },
         new TweakDef
         {
@@ -3529,20 +3009,6 @@ internal static class Startup
         },
         new TweakDef
         {
-            Id = "startup-disable-auto-restart-apps",
-            Label = "Disable Auto Restart of Apps After Sign-In",
-            Category = "System",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Prevents Windows from reopening apps that were open before restart/sign-out. Default: enabled.",
-            Tags = ["startup", "auto-restart", "apps", "sign-in"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows NT\CurrentVersion\Winlogon"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows NT\CurrentVersion\Winlogon", "RestartApps", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows NT\CurrentVersion\Winlogon", "RestartApps", 1)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows NT\CurrentVersion\Winlogon", "RestartApps", 0)],
-        },
-        new TweakDef
-        {
             Id = "startup-disable-lock-screen-app-notifications",
             Label = "Disable Lock Screen App Notifications on Startup",
             Category = "System",
@@ -3554,35 +3020,6 @@ internal static class Startup
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "DisableLockScreenAppNotifications", 1)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "DisableLockScreenAppNotifications")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "DisableLockScreenAppNotifications", 1)],
-        },
-        new TweakDef
-        {
-            Id = "startup-disable-login-background-image",
-            Label = "Disable Login Screen Background Image",
-            Category = "System",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Uses a solid colour instead of the Windows Spotlight image on the login screen. Faster render. Default: image.",
-            Tags = ["startup", "login", "background", "spotlight"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "DisableLogonBackgroundImage", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "DisableLogonBackgroundImage")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "DisableLogonBackgroundImage", 1)],
-        },
-        new TweakDef
-        {
-            Id = "startup-disable-gamebar-capture",
-            Label = "Disable Game Bar Startup Capture",
-            Category = "System",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Disables the Game Bar background capture service from running at startup. Saves CPU and memory if game recording is not needed. Default: enabled.",
-            Tags = ["startup", "gamebar", "capture", "disable"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\GameDVR"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\GameDVR", "AppCaptureEnabled", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\GameDVR", "AppCaptureEnabled", 1)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\GameDVR", "AppCaptureEnabled", 0)],
         },
         new TweakDef
         {
@@ -3717,44 +3154,6 @@ internal static class Startup
         },
         new TweakDef
         {
-            Id = "startup-disable-prelaunch-apps",
-            Label = "Disable App Pre-Launch at Login",
-            Category = "System",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Disables Windows pre-launching UWP apps in the background at login. Reduces memory usage and speeds up login.",
-            Tags = ["startup", "prelaunch", "uwp", "performance"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager", "PreInstalledAppsEnabled", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager", "PreInstalledAppsEnabled"),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager", "PreInstalledAppsEnabled", 0),
-            ],
-        },
-        new TweakDef
-        {
-            Id = "startup-disable-background-apps-policy",
-            Label = "Disable Background Apps via Policy",
-            Category = "System",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Disables all UWP background apps via Group Policy. Saves CPU and battery. Individual app permissions still apply. Default: enabled.",
-            Tags = ["startup", "background", "uwp", "policy"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy", "LetAppsRunInBackground", 2)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy", "LetAppsRunInBackground")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy", "LetAppsRunInBackground", 2)],
-        },
-        new TweakDef
-        {
             Id = "startup-set-boot-timeout-3s",
             Label = "Set Boot Menu Timeout to 3 Seconds",
             Category = "System",
@@ -3766,29 +3165,6 @@ internal static class Startup
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control", "SystemBootDevice", 3)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control", "SystemBootDevice")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control", "SystemBootDevice", 3)],
-        },
-        new TweakDef
-        {
-            Id = "startup-disable-firstlogon-animation",
-            Label = "Disable First Sign-In Animation",
-            Category = "System",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Skips the 'Hi, we're getting things ready' animation after first login or profile creation. Boots straight to desktop.",
-            Tags = ["startup", "animation", "firstlogon", "speed"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "EnableFirstLogonAnimation", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "EnableFirstLogonAnimation"),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "EnableFirstLogonAnimation", 0),
-            ],
         },
         new TweakDef
         {
@@ -3828,43 +3204,6 @@ internal static class Startup
 
         new TweakDef
         {
-            Id = "startup-disable-tablet-mode-prompt",
-            Label = "Disable Tablet Mode Switch Prompt",
-            Category = "System",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Prevents the 'Do you want to switch to tablet mode?' prompt on login for convertible devices.",
-            Tags = ["startup", "tablet", "login", "ux"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ImmersiveShell"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ImmersiveShell", "TabletMode", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ImmersiveShell", "TabletMode")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ImmersiveShell", "TabletMode", 0)],
-        },
-        new TweakDef
-        {
-            Id = "startup-disable-signin-info-reopen",
-            Label = "Disable Sign-In Info for App Reopen",
-            Category = "System",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Prevents Windows from using sign-in info to automatically finish setting up and reopen apps after restart.",
-            Tags = ["startup", "signin", "privacy", "reopen"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "DisableAutomaticRestartSignOn", 1),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "DisableAutomaticRestartSignOn"),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "DisableAutomaticRestartSignOn", 1),
-            ],
-        },
-        new TweakDef
-        {
             Id = "startup-disable-boot-logo",
             Label = "Disable Boot Logo Display",
             Category = "System",
@@ -3876,29 +3215,6 @@ internal static class Startup
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\ControlSet001\Control\BootDisplay", "DisableBootLogo", 1)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\ControlSet001\Control\BootDisplay", "DisableBootLogo")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\ControlSet001\Control\BootDisplay", "DisableBootLogo", 1)],
-        },
-        new TweakDef
-        {
-            Id = "startup-disable-auto-maintenance",
-            Label = "Disable Automatic Maintenance at Startup",
-            Category = "System",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables Windows automatic maintenance that runs background tasks on startup. Reduces early boot CPU/disk load.",
-            Tags = ["startup", "maintenance", "performance", "background"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Schedule\Maintenance"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Schedule\Maintenance", "MaintenanceDisabled", 1),
-            ],
-            RemoveOps =
-            [
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Schedule\Maintenance", "MaintenanceDisabled"),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Schedule\Maintenance", "MaintenanceDisabled", 1),
-            ],
         },
         new TweakDef
         {
@@ -4025,20 +3341,6 @@ internal static class Boot
     [
         new TweakDef
         {
-            Id = "boot-numlock-on-boot",
-            Label = "Enable NumLock at Boot",
-            Category = "System",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Turns on NumLock automatically at the login screen. Options: 0=Off, 2=On. Default: 0 (Off). Recommended: On.",
-            Tags = ["boot", "keyboard", "numlock"],
-            RegistryKeys = [@"HKEY_USERS\.DEFAULT\Control Panel\Keyboard"],
-            ApplyOps = [RegOp.SetString(@"HKEY_USERS\.DEFAULT\Control Panel\Keyboard", "InitialKeyboardIndicators", "2")],
-            RemoveOps = [RegOp.SetString(@"HKEY_USERS\.DEFAULT\Control Panel\Keyboard", "InitialKeyboardIndicators", "0")],
-            DetectOps = [RegOp.CheckString(@"HKEY_USERS\.DEFAULT\Control Panel\Keyboard", "InitialKeyboardIndicators", "2")],
-        },
-        new TweakDef
-        {
             Id = "boot-disable-secboot-check",
             Label = "Suppress Secure Boot Status Check",
             Category = "System",
@@ -4119,21 +3421,6 @@ internal static class Boot
         },
         new TweakDef
         {
-            Id = "boot-full-bsod-info",
-            Label = "Show Full BSOD Parameters",
-            Category = "System",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description =
-                "Shows detailed crash parameters on the Blue Screen of Death. Displays bug-check code and arguments for troubleshooting. Default: Hidden. Recommended: Shown for diagnostics.",
-            Tags = ["boot", "bsod", "parameters", "crash", "diagnostics"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "DisplayParameters", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "DisplayParameters")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "DisplayParameters", 1)],
-        },
-        new TweakDef
-        {
             Id = "boot-clear-pagefile",
             Label = "Clear Pagefile at Shutdown",
             Category = "System",
@@ -4167,21 +3454,6 @@ internal static class Boot
                     1
                 ),
             ],
-        },
-        new TweakDef
-        {
-            Id = "boot-enable-boot-log",
-            Label = "Enable Boot Log",
-            Category = "System",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Enables the boot log file (ntbtlog.txt) that records all drivers loaded during startup. Useful for diagnosing boot issues. Default: disabled.",
-            Tags = ["boot", "log", "diagnostics", "drivers"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control", "BootLog", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control", "BootLog")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control", "BootLog", 1)],
         },
         new TweakDef
         {
@@ -4233,20 +3505,6 @@ internal static class Boot
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "VerboseStatus", 1)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "VerboseStatus")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "VerboseStatus", 1)],
-        },
-        new TweakDef
-        {
-            Id = "boot-disable-windows-recovery",
-            Label = "Disable Windows Recovery on Boot Failure",
-            Category = "System",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Disables automatic recovery attempts after boot failures. Prevents boot repair loops. Default: recovery enabled.",
-            Tags = ["boot", "recovery", "auto-repair", "server"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager", "AutoChkTimeout", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager", "AutoChkTimeout")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager", "AutoChkTimeout", 0)],
         },
         // ── Command-based boot tweaks (bcdedit) ────────────────────────────
         new TweakDef
@@ -4512,21 +3770,6 @@ internal static class Boot
                 var (_, stdout, _) = Elevation.RunElevated("bcdedit", ["/enum", "{bootmgr}"]);
                 return stdout.Contains("timeout", StringComparison.OrdinalIgnoreCase) && stdout.Contains("0", StringComparison.Ordinal);
             },
-        },
-        new TweakDef
-        {
-            Id = "boot-ignore-boot-failures",
-            Label = "Ignore All Boot Failures",
-            Category = "System",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Configures Windows to ignore all boot failures and skip the recovery screen. Use on stable systems only.",
-            Tags = ["boot", "failures", "policy", "server"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl"],
-            SideEffects = "Boot failures will not trigger automatic repair.",
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "DisplayDisabled", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "DisplayDisabled")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "DisplayDisabled", 1)],
         },
         new TweakDef
         {
@@ -4863,21 +4106,6 @@ internal static class Boot
         },
         new TweakDef
         {
-            Id = "boot-disable-crash-alert",
-            Label = "Disable Admin Alert on System Crash",
-            Category = "System",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Disables the administrator alert notification (SendAlert=0) that Windows generates on a fatal system crash. Reduces noise in environments where crashes are monitored externally. Default: 0 (disabled by default on most builds).",
-            Tags = ["boot", "crash", "alert", "admin"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "SendAlert", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "SendAlert")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CrashControl", "SendAlert", 0)],
-        },
-        new TweakDef
-        {
             Id = "boot-enable-nmi-crash-dump",
             Label = "Enable NMI-Triggered Crash Dump",
             Category = "System",
@@ -4952,58 +4180,6 @@ internal static class Boot
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\BootStatus", "DisplayStatusMessages", 0)],
         },
         // ── merged from: Services.cs ──────────────────────────────────────────────────
-        new TweakDef
-        {
-            Id = "svc-disable-diagtrack-service",
-            Label = "Disable DiagTrack Service Startup",
-            Category = "System",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Disables the DiagTrack and dmwappushservice services that collect and send diagnostic data to Microsoft.",
-            Tags = ["services", "telemetry", "privacy"],
-            RegistryKeys =
-            [
-                @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\DiagTrack",
-                @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\dmwappushservice",
-            ],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\DiagTrack", "Start", 4),
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\dmwappushservice", "Start", 4),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\DiagTrack", "Start", 2),
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\dmwappushservice", "Start", 3),
-            ],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\DiagTrack", "Start", 4)],
-        },
-        new TweakDef
-        {
-            Id = "svc-disable-wer",
-            Label = "Disable Windows Error Reporting",
-            Category = "System",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables Windows Error Reporting service and crash dump uploads.",
-            Tags = ["services", "telemetry", "privacy"],
-            RegistryKeys =
-            [
-                @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\WerSvc",
-                @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Error Reporting",
-            ],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\WerSvc", "Start", 4),
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Error Reporting", "Disabled", 1),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\WerSvc", "Start", 3),
-                RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Error Reporting", "Disabled"),
-            ],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\WerSvc", "Start", 4)],
-        },
         new TweakDef
         {
             Id = "svc-disable-sysmain-service",
@@ -5090,49 +4266,6 @@ internal static class Boot
         },
         new TweakDef
         {
-            Id = "svc-disable-alljoyn",
-            Label = "Disable AllJoyn Router",
-            Category = "System",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables the AllJoyn IoT router service — not needed by most users.",
-            Tags = ["services", "iot", "cleanup"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\AJRouter"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\AJRouter", "Start", 4)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\AJRouter", "Start", 3)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\AJRouter", "Start", 4)],
-        },
-        new TweakDef
-        {
-            Id = "svc-disable-sysmain",
-            Label = "Disable SysMain (Superfetch)",
-            Category = "System",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description =
-                "Disables SysMain (formerly Superfetch) preloading service. Reduces disk I/O on SSDs where preloading provides minimal benefit. Default: Automatic (2). Recommended: Disabled (4) for SSDs.",
-            Tags = ["services", "sysmain", "superfetch", "performance", "ssd"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SysMain"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SysMain", "Start", 4)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SysMain", "Start", 2)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SysMain", "Start", 4)],
-        },
-        new TweakDef
-        {
-            Id = "svc-disable-print-spooler",
-            Label = "Disable Print Spooler (Security Hardening)",
-            Category = "System",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description = "Disables Print Spooler to mitigate PrintNightmare vulnerabilities. Default: Automatic. Recommended: Disabled.",
-            Tags = ["services", "spooler", "security", "printnightmare"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Spooler"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Spooler", "Start", 4)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Spooler", "Start", 2)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Spooler", "Start", 4)],
-        },
-        new TweakDef
-        {
             Id = "svc-disable-fax",
             Label = "Disable Fax Service (Cleanup)",
             Category = "System",
@@ -5144,21 +4277,6 @@ internal static class Boot
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Fax", "Start", 4)],
             RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Fax", "Start", 3)],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Fax", "Start", 4)],
-        },
-        new TweakDef
-        {
-            Id = "svc-disable-biometric",
-            Label = "Disable Windows Biometric Service",
-            Category = "System",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description =
-                "Disables Windows Biometric Service (WbioSrvc) used for fingerprint and face recognition. Frees resources if biometrics are unused. Default: Manual. Recommended: Disabled.",
-            Tags = ["services", "biometric", "wbiosrvc", "security"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\WbioSrvc"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\WbioSrvc", "Start", 4)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\WbioSrvc", "Start", 3)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\WbioSrvc", "Start", 4)],
         },
         new TweakDef
         {
@@ -5174,36 +4292,6 @@ internal static class Boot
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SCardSvr", "Start", 4)],
             RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SCardSvr", "Start", 3)],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SCardSvr", "Start", 4)],
-        },
-        new TweakDef
-        {
-            Id = "svc-disable-geolocation",
-            Label = "Disable Geolocation Service",
-            Category = "System",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description =
-                "Disables the Geolocation service (lfsvc) that tracks device location. Improves privacy. Default: Manual. Recommended: Disabled for desktops.",
-            Tags = ["services", "geolocation", "lfsvc", "privacy"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\lfsvc"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\lfsvc", "Start", 4)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\lfsvc", "Start", 3)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\lfsvc", "Start", 4)],
-        },
-        new TweakDef
-        {
-            Id = "svc-disable-cdpsvc",
-            Label = "Disable Connected Devices Platform Service",
-            Category = "System",
-            NeedsAdmin = true,
-            CorpSafe = false,
-            Description =
-                "Disables the Connected Devices Platform Service (CDPSvc) used for cross-device experiences. Frees resources if unused. Default: Automatic. Recommended: Disabled.",
-            Tags = ["services", "cdpsvc", "cross-device", "platform"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\CDPSvc"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\CDPSvc", "Start", 4)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\CDPSvc", "Start", 2)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\CDPSvc", "Start", 4)],
         },
         new TweakDef
         {
@@ -5277,34 +4365,6 @@ internal static class Boot
             RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\WebClient", "Start", 3)],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\WebClient", "Start", 4)],
         },
-        new TweakDef
-        {
-            Id = "svc-disable-phone-service",
-            Label = "Disable Phone Service",
-            Category = "System",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables the Phone Service used by Phone Link and telephony APIs. Default: manual.",
-            Tags = ["services", "phone", "telephony", "disable"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\PhoneSvc"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\PhoneSvc", "Start", 4)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\PhoneSvc", "Start", 3)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\PhoneSvc", "Start", 4)],
-        },
-        new TweakDef
-        {
-            Id = "svc-disable-fax-service",
-            Label = "Disable Fax Service",
-            Category = "System",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables the Windows Fax service. Reduces attack surface and saves resources. Default: manual start.",
-            Tags = ["services", "fax", "disable", "legacy"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Fax"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Fax", "Start", 4)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Fax", "Start", 3)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Fax", "Start", 4)],
-        },
         // ── Command-based service tweaks (sc.exe) ──────────────────────────
         new TweakDef
         {
@@ -5366,36 +4426,6 @@ internal static class Boot
                 var (_, stdout, _) = Elevation.RunElevated("sc", ["qc", "CDPSvc"]);
                 return stdout.Contains("DISABLED", StringComparison.OrdinalIgnoreCase);
             },
-        },
-        new TweakDef
-        {
-            Id = "svc-disable-xbox-live-services",
-            Label = "Disable Xbox Live Services",
-            Category = "System",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Disables Xbox Live Auth Manager and Xbox Live Game Save services. Saves resources if Xbox features are not used. Default: manual start.",
-            Tags = ["services", "xbox", "live", "disable"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\XblAuthManager"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\XblAuthManager", "Start", 4)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\XblAuthManager", "Start", 3)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\XblAuthManager", "Start", 4)],
-        },
-        new TweakDef
-        {
-            Id = "svc-disable-ssdpsrv",
-            Label = "Disable SSDP Discovery Service (UPnP Device Finder)",
-            Category = "System",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Disables the SSDP Discovery service. Stops Windows from broadcasting and responding to UPnP device discovery packets on the local network.",
-            Tags = ["services", "ssdp", "upnp", "network", "disable"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SSDPSRV"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SSDPSRV", "Start", 4)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SSDPSRV", "Start", 4)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SSDPSRV", "Start", 4)],
         },
         new TweakDef
         {

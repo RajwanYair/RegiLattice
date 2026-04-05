@@ -360,21 +360,6 @@ internal static class Audio
         },
         new TweakDef
         {
-            Id = "audio-disable-comm-ducking",
-            Label = "Disable Communication Ducking",
-            Category = "Audio",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Disables automatic audio ducking when communications are detected (e.g., calls). Prevents volume reduction during voice calls. Default: reduce 80%.",
-            Tags = ["audio", "ducking", "communication", "volume"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Multimedia\Audio"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Multimedia\Audio", "UserDuckingPreference", 3)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Multimedia\Audio", "UserDuckingPreference", 0)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Multimedia\Audio", "UserDuckingPreference", 3)],
-        },
-        new TweakDef
-        {
             Id = "audio-disable-notification-sounds",
             Label = "Disable Notification Sounds",
             Category = "Audio",
@@ -684,21 +669,6 @@ internal static class Audio
                     unchecked((int)0xFFFFFFFF)
                 ),
             ],
-        },
-        new TweakDef
-        {
-            Id = "audio-disable-audio-graph-isolation",
-            Label = "Disable Audio Graph Isolation",
-            Category = "Audio",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Disables the Windows Audio Graph isolation process (audiodg.exe enhancements). Can reduce latency for DAW users. Default: enabled.",
-            Tags = ["audio", "graph", "isolation", "latency"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Audio"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Audio", "DisableProtectedAudioDG", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Audio", "DisableProtectedAudioDG")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Audio", "DisableProtectedAudioDG", 1)],
         },
         new TweakDef
         {
@@ -1243,20 +1213,6 @@ internal static class Multimedia
         },
         new TweakDef
         {
-            Id = "media-set-wmf-no-telemetry",
-            Label = "Disable Windows Media Foundation Telemetry",
-            Category = "Audio",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables telemetry/DRM phone-home in Windows Media Foundation components. Default: enabled.",
-            Tags = ["media", "wmf", "telemetry", "drm"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WMDRM"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WMDRM", "DisableOnline", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WMDRM", "DisableOnline")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WMDRM", "DisableOnline", 1)],
-        },
-        new TweakDef
-        {
             Id = "media-disable-casting",
             Label = "Disable Media Casting to Device",
             Category = "Audio",
@@ -1268,20 +1224,6 @@ internal static class Multimedia
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\PlayToReceiver", "AutoEnabled", 0)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\PlayToReceiver", "AutoEnabled")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\PlayToReceiver", "AutoEnabled", 0)],
-        },
-        new TweakDef
-        {
-            Id = "media-disable-media-player-sharing",
-            Label = "Disable Windows Media Player Network Sharing",
-            Category = "Audio",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables the Windows Media Player Network Sharing Service. Prevents DLNA media streaming. Default: enabled.",
-            Tags = ["multimedia", "media-player", "sharing", "dlna"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\WMPNetworkSvc"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\WMPNetworkSvc", "Start", 4)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\WMPNetworkSvc", "Start", 3)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\WMPNetworkSvc", "Start", 4)],
         },
         new TweakDef
         {
@@ -1311,21 +1253,6 @@ internal static class Multimedia
             ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\AppEvents\Schemes", "", ".None")],
             RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\AppEvents\Schemes", "", ".Default")],
             DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\AppEvents\Schemes", "", ".None")],
-        },
-        new TweakDef
-        {
-            Id = "media-disable-wmp-network-sharing",
-            Label = "Disable WMP Network Sharing",
-            Category = "Audio",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Disables Windows Media Player network sharing service. Prevents media library from being shared across the network. Default: enabled.",
-            Tags = ["multimedia", "wmp", "sharing", "network"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsMediaPlayer"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsMediaPlayer", "PreventLibrarySharing", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsMediaPlayer", "PreventLibrarySharing")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsMediaPlayer", "PreventLibrarySharing", 1)],
         },
         // ── Sprint 47 additions ───────────────────────────────────────────────
         new TweakDef

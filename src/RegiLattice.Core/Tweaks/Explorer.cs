@@ -22,20 +22,6 @@ internal static class Explorer
         },
         new TweakDef
         {
-            Id = "explorer-show-super-hidden",
-            Label = "Show Protected OS Files",
-            Category = "Explorer",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Shows protected operating system files (super hidden).",
-            Tags = ["explorer", "files", "advanced"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "ShowSuperHidden", 1)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "ShowSuperHidden", 0)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "ShowSuperHidden", 1)],
-        },
-        new TweakDef
-        {
             Id = "explorer-open-this-pc",
             Label = "Open Explorer to This PC",
             Category = "Explorer",
@@ -61,20 +47,6 @@ internal static class Explorer
             ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "IconsOnly", 1)],
             RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "IconsOnly", 0)],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "IconsOnly", 1)],
-        },
-        new TweakDef
-        {
-            Id = "explorer-full-path-title",
-            Label = "Full Path in Title Bar",
-            Category = "Explorer",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Shows the full folder path in the Explorer title bar.",
-            Tags = ["explorer", "navigation"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\CabinetState"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\CabinetState", "FullPath", 1)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\CabinetState", "FullPath", 0)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\CabinetState", "FullPath", 1)],
         },
         new TweakDef
         {
@@ -205,20 +177,6 @@ internal static class Explorer
         },
         new TweakDef
         {
-            Id = "explorer-disable-breadcrumbs",
-            Label = "Disable Breadcrumb Bar",
-            Category = "Explorer",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Shows the full path in Explorer address bar instead of breadcrumbs.",
-            Tags = ["explorer", "navigation"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\CabinetState"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\CabinetState", "FullPath", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\CabinetState", "FullPath")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\CabinetState", "FullPath", 1)],
-        },
-        new TweakDef
-        {
             Id = "explorer-disable-merge-conflicts",
             Label = "Disable Folder Merge Conflicts",
             Category = "Explorer",
@@ -301,54 +259,6 @@ internal static class Explorer
             DetectOps =
             [
                 RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer", "NoRecentDocsHistory", 1),
-            ],
-        },
-        new TweakDef
-        {
-            Id = "explorer-disable-thumbnail-cache",
-            Label = "Disable Thumbnail Cache",
-            Category = "Explorer",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Disables thumbnail cache (thumbs.db) creation in folders. Reduces disk writes and avoids locked files on network shares. Default: Enabled. Recommended: Disabled on SSDs/network drives.",
-            Tags = ["explorer", "thumbnails", "cache", "performance"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "DisableThumbnailCache", 1)],
-            RemoveOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "DisableThumbnailCache", 0),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "DisableThumbnailCache", 1),
-            ],
-        },
-        new TweakDef
-        {
-            Id = "explorer-disable-quick-access",
-            Label = "Disable Quick Access Recent Files",
-            Category = "Explorer",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Disables Quick Access recent and frequent files display. Improves privacy and reduces Explorer clutter. Default: Enabled. Recommended: Disabled for privacy.",
-            Tags = ["explorer", "quick-access", "recent", "privacy"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer", "ShowRecent", 0),
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer", "ShowFrequent", 0),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer", "ShowRecent", 1),
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer", "ShowFrequent", 1),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer", "ShowRecent", 0),
-                RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer", "ShowFrequent", 0),
             ],
         },
         new TweakDef
@@ -602,43 +512,6 @@ internal static class Explorer
             DetectOps =
             [
                 RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "HideDrivesWithNoMedia", 0),
-            ],
-        },
-        new TweakDef
-        {
-            Id = "explorer-open-to-this-pc",
-            Label = "Open Explorer to This PC",
-            Category = "Explorer",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Opens File Explorer to 'This PC' instead of 'Quick Access' or 'Home'. Default: Home (Win11) / Quick Access (Win10).",
-            Tags = ["explorer", "this-pc", "quick-access", "home"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "LaunchTo", 1)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "LaunchTo", 2)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "LaunchTo", 1)],
-        },
-        new TweakDef
-        {
-            Id = "explorer-expand-to-open-folder",
-            Label = "Expand Navigation Pane to Open Folder",
-            Category = "Explorer",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Automatically expands the navigation pane to the currently open folder. Default: collapsed.",
-            Tags = ["explorer", "navigation", "expand", "folder"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "NavPaneExpandToCurrentFolder", 1),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "NavPaneExpandToCurrentFolder", 0),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "NavPaneExpandToCurrentFolder", 1),
             ],
         },
         new TweakDef
@@ -909,20 +782,6 @@ internal static class Explorer
         },
         new TweakDef
         {
-            Id = "explorer-recent-places",
-            Label = "Disable Recent Places Tracking",
-            Category = "Explorer",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Prevents Explorer from tracking recently accessed folders and showing them in Quick Access.",
-            Tags = ["explorer", "recent", "places", "privacy", "quick-access"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "Start_TrackDocs", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "Start_TrackDocs")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "Start_TrackDocs", 0)],
-        },
-        new TweakDef
-        {
             Id = "explorer-show-file-extensions",
             Label = "Show File Extensions",
             Category = "Explorer",
@@ -1034,28 +893,6 @@ internal static class Clipboard
         },
         new TweakDef
         {
-            Id = "clip-decrease-drag-threshold",
-            Label = "Decrease Drag-Drop Threshold (2 px)",
-            Category = "Explorer",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Decreases drag start threshold to 2 pixels for easier dragging. Default: 4 pixels. Recommended: 2 (for touchscreen/pen).",
-            Tags = ["clipboard", "drag", "drop", "sensitivity", "touch"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Desktop"],
-            ApplyOps =
-            [
-                RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "DragWidth", "2"),
-                RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "DragHeight", "2"),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "DragWidth", "4"),
-                RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "DragHeight", "4"),
-            ],
-            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "DragWidth", "2")],
-        },
-        new TweakDef
-        {
             Id = "clip-instant-drag-delay",
             Label = "Set Instant Drag Delay (0 ms)",
             Category = "Explorer",
@@ -1083,21 +920,6 @@ internal static class Clipboard
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "EnableClipboardSuggestedActions", 0)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "EnableClipboardSuggestedActions")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "EnableClipboardSuggestedActions", 0)],
-        },
-        new TweakDef
-        {
-            Id = "clip-disable-cloud-clipboard",
-            Label = "Disable Cloud Clipboard Sync",
-            Category = "Explorer",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Disables cloud clipboard sync and automatic upload. Prevents clipboard data from being sent to Microsoft cloud services. Default: enabled. Recommended: disabled for privacy.",
-            Tags = ["clipboard", "cloud", "sync", "privacy"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Clipboard"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "AllowCrossDeviceClipboard", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "AllowCrossDeviceClipboard")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "AllowCrossDeviceClipboard", 0)],
         },
         new TweakDef
         {
@@ -1146,29 +968,6 @@ internal static class Clipboard
         },
         new TweakDef
         {
-            Id = "clip-drag-threshold-medium",
-            Label = "Set Drag-Drop Minimum Distance (8 px)",
-            Category = "Explorer",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Increases the minimum mouse movement required to initiate a drag-drop operation from 4 px to 8 px. Prevents accidental dragging. Default: 4 px.",
-            Tags = ["clipboard", "drag", "drop", "threshold", "mouse"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Desktop"],
-            ApplyOps =
-            [
-                RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "DragWidth", "8"),
-                RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "DragHeight", "8"),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "DragWidth", "4"),
-                RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "DragHeight", "4"),
-            ],
-            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "DragWidth", "8")],
-        },
-        new TweakDef
-        {
             Id = "clip-disable-clipboard-history",
             Label = "Disable Clipboard History",
             Category = "Explorer",
@@ -1180,28 +979,6 @@ internal static class Clipboard
             ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "AllowClipboardHistory", 0)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "AllowClipboardHistory")],
             DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "AllowClipboardHistory", 0)],
-        },
-        new TweakDef
-        {
-            Id = "clip-increase-drag-sensitivity",
-            Label = "Increase Drag Sensitivity to 10px",
-            Category = "Explorer",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Increases the drag threshold from 4 to 10 pixels. Prevents accidental drag-and-drop. Default: 4 pixels.",
-            Tags = ["clipboard", "drag", "sensitivity", "threshold"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Desktop"],
-            ApplyOps =
-            [
-                RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "DragWidth", "10"),
-                RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "DragHeight", "10"),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "DragWidth", "4"),
-                RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "DragHeight", "4"),
-            ],
-            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "DragWidth", "10")],
         },
         new TweakDef
         {
@@ -1219,35 +996,6 @@ internal static class Clipboard
         },
         new TweakDef
         {
-            Id = "clip-disable-clipboard-history-roaming",
-            Label = "Disable Clipboard History Roaming",
-            Category = "Explorer",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Prevents clipboard history from roaming across devices signed into the same Microsoft account. Default: user-configurable.",
-            Tags = ["clipboard", "history", "roaming", "privacy"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "AllowClipboardHistory", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "AllowClipboardHistory")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "AllowClipboardHistory", 0)],
-        },
-        new TweakDef
-        {
-            Id = "clip-set-drag-sensitivity-6",
-            Label = "Increase Drag Sensitivity to 6px",
-            Category = "Explorer",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Increases the drag threshold to 6 pixels. Prevents accidental drag when clicking. Default: 4px.",
-            Tags = ["clipboard", "drag", "sensitivity", "threshold"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Control Panel\Desktop"],
-            ApplyOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "DragWidth", "6")],
-            RemoveOps = [RegOp.SetString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "DragWidth", "4")],
-            DetectOps = [RegOp.CheckString(@"HKEY_CURRENT_USER\Control Panel\Desktop", "DragWidth", "6")],
-        },
-        new TweakDef
-        {
             Id = "clip-disable-clipboard-experience",
             Label = "Disable Clipboard Experience UI",
             Category = "Explorer",
@@ -1260,50 +1008,6 @@ internal static class Clipboard
             ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Clipboard", "EnableClipboardContentParsing", 0)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Clipboard", "EnableClipboardContentParsing")],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Clipboard", "EnableClipboardContentParsing", 0)],
-        },
-        new TweakDef
-        {
-            Id = "clip-disable-cloud-sync",
-            Label = "Disable Clipboard Cloud Sync",
-            Category = "Explorer",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Disables clipboard cloud synchronisation across devices via Group Policy. Prevents clipboard data from leaving the device. Default: allowed.",
-            Tags = ["clipboard", "cloud", "sync", "privacy"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "AllowCrossDeviceClipboard", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "AllowCrossDeviceClipboard")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "AllowCrossDeviceClipboard", 0)],
-        },
-        new TweakDef
-        {
-            Id = "clip-disable-history-policy",
-            Label = "Disable Clipboard History (Policy)",
-            Category = "Explorer",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Disables Clipboard History via Group Policy. Prevents Windows from storing clipboard entries. Default: allowed.",
-            Tags = ["clipboard", "history", "policy", "privacy"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "AllowClipboardHistory", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "AllowClipboardHistory")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\System", "AllowClipboardHistory", 0)],
-        },
-        new TweakDef
-        {
-            Id = "clip-disable-roaming",
-            Label = "Disable Clipboard Roaming",
-            Category = "Explorer",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Disables clipboard roaming (syncing clipboard content to other signed-in devices). Keeps clipboard data local. Default: enabled.",
-            Tags = ["clipboard", "roaming", "sync", "privacy"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Clipboard"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Clipboard", "CloudClipboardAutomaticUpload", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Clipboard", "CloudClipboardAutomaticUpload")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Clipboard", "CloudClipboardAutomaticUpload", 0)],
         },
         new TweakDef
         {
@@ -1483,20 +1187,6 @@ internal static class Clipboard
             ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Clipboard", "SessionWistenessConsent", 1)],
             RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Clipboard", "SessionWistenessConsent")],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Clipboard", "SessionWistenessConsent", 1)],
-        },
-        new TweakDef
-        {
-            Id = "clip-disable-windows-ink-workspace",
-            Label = "Disable Windows Ink Workspace",
-            Category = "Explorer",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description = "Turns off the Windows Ink Workspace pen quick-launch overlay accessible from the taskbar.",
-            Tags = ["clipboard", "ink", "pen", "taskbar"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsInkWorkspace"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsInkWorkspace", "AllowWindowsInkWorkspace", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsInkWorkspace", "AllowWindowsInkWorkspace")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsInkWorkspace", "AllowWindowsInkWorkspace", 0)],
         },
         new TweakDef
         {
@@ -1813,20 +1503,6 @@ internal static class Clipboard
                     ""
                 ),
             ],
-        },
-        new TweakDef
-        {
-            Id = "ctx-remove-send-to-compressed",
-            Label = "Remove 'Compressed (zipped) folder' from Send To",
-            Category = "Explorer",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Removes the obsolete 'Compressed (zipped) folder' from the Send To menu. Use 7-Zip instead. Default: shown.",
-            Tags = ["context-menu", "send-to", "zip", "remove"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "HideFileExt", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "HideFileExt")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "HideFileExt", 0)],
         },
         new TweakDef
         {
@@ -2209,49 +1885,6 @@ internal static class Shell
     [
         new TweakDef
         {
-            Id = "shell-compact-file-explorer",
-            Label = "Enable Compact View in File Explorer",
-            Category = "Explorer",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Enables the compact layout in File Explorer, reducing padding between items.",
-            Tags = ["shell", "explorer", "compact", "layout"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "UseCompactMode", 1)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "UseCompactMode", 0)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "UseCompactMode", 1)],
-        },
-        new TweakDef
-        {
-            Id = "shell-disable-ink-workspace",
-            Label = "Disable Windows Ink Workspace",
-            Category = "Explorer",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Disables Windows Ink Workspace (pen/touch drawing overlay). Frees resources on non-touch devices. Default: Enabled. Recommended: Disabled.",
-            Tags = ["shell", "ink", "workspace", "pen"],
-            RegistryKeys = [@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsInkWorkspace"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsInkWorkspace", "AllowWindowsInkWorkspace", 0)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsInkWorkspace", "AllowWindowsInkWorkspace")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsInkWorkspace", "AllowWindowsInkWorkspace", 0)],
-        },
-        new TweakDef
-        {
-            Id = "shell-enable-dark-mode-console",
-            Label = "Enable Dark Mode for Console Windows",
-            Category = "Explorer",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Enables dark mode for legacy console host windows. Default: light.",
-            Tags = ["shell", "console", "dark-mode", "appearance"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Console"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Console", "ForceV2", 1)],
-            RemoveOps = [RegOp.DeleteValue(@"HKEY_CURRENT_USER\Console", "ForceV2")],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Console", "ForceV2", 1)],
-        },
-        new TweakDef
-        {
             Id = "shell-set-console-buffer-9999",
             Label = "Set Console Screen Buffer to 9999 Lines",
             Category = "Explorer",
@@ -2263,20 +1896,6 @@ internal static class Shell
             ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Console", "ScreenBufferSize", 655279999)],
             RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Console", "ScreenBufferSize", 19660920)],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Console", "ScreenBufferSize", 655279999)],
-        },
-        new TweakDef
-        {
-            Id = "shell-enable-quickedit-mode",
-            Label = "Enable Console QuickEdit Mode",
-            Category = "Explorer",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description = "Enables QuickEdit mode in console windows. Allows mouse text selection. Default: enabled.",
-            Tags = ["shell", "console", "quickedit", "mouse"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Console"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Console", "QuickEdit", 1)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Console", "QuickEdit", 0)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Console", "QuickEdit", 1)],
         },
         new TweakDef
         {
@@ -2602,42 +2221,6 @@ internal static class Shell
         },
         new TweakDef
         {
-            Id = "shell-disable-folder-info-tips",
-            Label = "Disable Folder Info Tips in Explorer",
-            Category = "Explorer",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Sets FolderContentsInfoTip=0 in Explorer Advanced. Removes the tooltip that appears when hovering over a folder showing its file count and size — reduces Explorer popups.",
-            Tags = ["shell", "explorer", "tooltip", "info"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "FolderContentsInfoTip", 0)],
-            RemoveOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "FolderContentsInfoTip", 1),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "FolderContentsInfoTip", 0),
-            ],
-        },
-        new TweakDef
-        {
-            Id = "shell-disable-sharing-wizard",
-            Label = "Disable File Sharing Wizard",
-            Category = "Explorer",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Sets SharingWizardOn=0 in Explorer Advanced. Removes the simplified sharing wizard from context menus, giving direct access to advanced sharing permissions without the guided wizard.",
-            Tags = ["shell", "explorer", "sharing", "network"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "SharingWizardOn", 0)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "SharingWizardOn", 1)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "SharingWizardOn", 0)],
-        },
-        new TweakDef
-        {
             Id = "shell-restore-previous-folders",
             Label = "Reopen Previous Folder Windows on Login",
             Category = "Explorer",
@@ -2650,30 +2233,6 @@ internal static class Shell
             ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "PersistBrowsers", 1)],
             RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "PersistBrowsers", 0)],
             DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "PersistBrowsers", 1)],
-        },
-        new TweakDef
-        {
-            Id = "shell-show-encrypted-color",
-            Label = "Show Encrypted & Compressed Files in Color",
-            Category = "Explorer",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Sets ShowEncryptCompressedColor=1 in Explorer Advanced. Displays encrypted files in green and NTFS-compressed files in blue in Explorer, making protected content visually distinct.",
-            Tags = ["shell", "explorer", "encryption", "color"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
-            ApplyOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "ShowEncryptCompressedColor", 1),
-            ],
-            RemoveOps =
-            [
-                RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "ShowEncryptCompressedColor", 0),
-            ],
-            DetectOps =
-            [
-                RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "ShowEncryptCompressedColor", 1),
-            ],
         },
         new TweakDef
         {
@@ -2692,21 +2251,6 @@ internal static class Shell
             [
                 RegOp.CheckDword(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer", "NoRecentDocsHistory", 1),
             ],
-        },
-        new TweakDef
-        {
-            Id = "shell-show-status-bar",
-            Label = "Show Status Bar in Explorer Windows",
-            Category = "Explorer",
-            NeedsAdmin = false,
-            CorpSafe = true,
-            Description =
-                "Sets ShowStatusBar=1 in Explorer Advanced. Enables the bottom status bar in Explorer windows that shows selected item counts, sizes, and folder details.",
-            Tags = ["shell", "explorer", "status-bar", "ui"],
-            RegistryKeys = [@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"],
-            ApplyOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "ShowStatusBar", 1)],
-            RemoveOps = [RegOp.SetDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "ShowStatusBar", 0)],
-            DetectOps = [RegOp.CheckDword(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "ShowStatusBar", 1)],
         },
     ];
 }
