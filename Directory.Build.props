@@ -19,10 +19,10 @@
          Configuration Manager to the x64 platform.  Both are required. -->
     <Platforms>x64</Platforms>
     <PlatformTarget>x64</PlatformTarget>
-    <Version>6.11.0</Version>
-    <AssemblyVersion>6.11.0.0</AssemblyVersion>
-    <FileVersion>6.11.0.0</FileVersion>
-    <InformationalVersion>6.11.0</InformationalVersion>
+    <Version>6.12.0</Version>
+    <AssemblyVersion>6.12.0.0</AssemblyVersion>
+    <FileVersion>6.12.0.0</FileVersion>
+    <InformationalVersion>6.12.0</InformationalVersion>
     <Deterministic>true</Deterministic>
     <ContinuousIntegrationBuild Condition="'$(GITHUB_ACTIONS)' == 'true'">true</ContinuousIntegrationBuild>
     <TieredCompilation>true</TieredCompilation>
