@@ -26,7 +26,7 @@ $repoRoot = Split-Path $PSScriptRoot -Parent
 $outPath  = Join-Path $repoRoot 'src\RegiLattice.GUI\app.ico'
 
 # ── Helper: draw a rounded rectangle ──────────────────────────────────────────
-function Fill-RoundedRect {
+function Invoke-RoundedRectFill {
     param(
         [System.Drawing.Graphics]$g,
         [System.Drawing.Brush]$brush,
@@ -45,7 +45,7 @@ function Fill-RoundedRect {
 }
 
 # ── Draw the RegiLattice app icon at any size ─────────────────────────────────
-function Draw-AppIcon {
+function Invoke-AppIconDraw {
     param([System.Drawing.Graphics]$g, [int]$s)
 
     $g.SmoothingMode      = [System.Drawing.Drawing2D.SmoothingMode]::AntiAlias
@@ -64,7 +64,7 @@ function Draw-AppIcon {
 
     $radius = [Math]::Max(3, [int]($s * 0.15))
     $margin = 1
-    Fill-RoundedRect $g $gradient ([System.Drawing.Rectangle]::new($margin, $margin, $s - 2*$margin, $s - 2*$margin)) $radius
+    Invoke-RoundedRectFill $g $gradient ([System.Drawing.Rectangle]::new($margin, $margin, $s - 2*$margin, $s - 2*$margin)) $radius
     $gradient.Dispose()
 
     # Bold "R" centred on the icon
@@ -111,7 +111,7 @@ Write-Host "[Generate-AppIcon] Rendering $($sizes.Count) sizes: $($sizes -join '
 $pngChunks = foreach ($sz in $sizes) {
     $bmp = [System.Drawing.Bitmap]::new($sz, $sz, [System.Drawing.Imaging.PixelFormat]::Format32bppArgb)
     $g   = [System.Drawing.Graphics]::FromImage($bmp)
-    Draw-AppIcon $g $sz
+    Invoke-AppIconDraw $g $sz
     $g.Dispose()
 
     $ms = [System.IO.MemoryStream]::new()

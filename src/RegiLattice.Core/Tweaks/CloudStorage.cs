@@ -4,12 +4,9 @@ using RegiLattice.Core.Models;
 
 // ── merged from Backup.cs ──
 
-
 // ── Merged from Recovery.cs ──────────────────────────────────────────────────
 
-
 // ── Merged from SystemRestore.cs ──────────────────────────────────────────────────
-
 
 internal static class CloudStorage
 {
@@ -1092,7 +1089,6 @@ internal static class OneDrive
         },
     ];
 }
-
 
 internal static class PolicyCloud
 {

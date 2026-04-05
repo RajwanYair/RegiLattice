@@ -1208,10 +1208,7 @@ internal static class Multimedia
 
 internal static class PolicyMediaPlayer
 {
-    public static IReadOnlyList<TweakDef> Tweaks =>
-        [
-            .. _WmpPolicy.Data,
-        ];
+    public static IReadOnlyList<TweakDef> Tweaks => [.. _WmpPolicy.Data];
 
     // ── Sprint 672 — Windows Media Player Policy ──────────────────────────────
     private static class _WmpPolicy

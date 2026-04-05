@@ -2,9 +2,7 @@ namespace RegiLattice.Core.Tweaks;
 
 using RegiLattice.Core.Models;
 
-
 // === Merged from: TouchPen.cs ===
-
 
 // ── Merged from WindowsInk.cs ──────────────────────────────────────────────────
 

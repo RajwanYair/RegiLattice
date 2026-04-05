@@ -4089,9 +4089,7 @@ internal static class PolicyAppPrivacy
 {
     private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy";
 
-    internal static IReadOnlyList<TweakDef> Tweaks { get; } =
-    [
-    ];
+    internal static IReadOnlyList<TweakDef> Tweaks { get; } = [];
 }
 
 /// <summary>
@@ -4101,8 +4099,6 @@ internal static class PolicyAppPrivacy
 /// Spotlight features, lock screen suggestions, and tailored experiences
 /// that are delivered via cloud services.
 /// </summary>
-
-
 /// <summary>
 /// Sprint 655 — Windows Event Log sizing and access policies (10 tweaks).
 /// Registry: HKLM\SOFTWARE\Policies\Microsoft\Windows\EventLog\{Application|Security|System|Setup}
@@ -4116,9 +4112,7 @@ internal static class PolicyEventLogAudit
     private const string SysLog = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\EventLog\System";
     private const string SetupLog = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\EventLog\Setup";
 
-    internal static IReadOnlyList<TweakDef> Tweaks { get; } =
-    [
-    ];
+    internal static IReadOnlyList<TweakDef> Tweaks { get; } = [];
 }
 
 /// <summary>
@@ -4132,18 +4126,12 @@ internal static class PolicySyncSettings
 {
     private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\SettingSync";
 
-    internal static IReadOnlyList<TweakDef> Tweaks { get; } =
-    [
-    ];
+    internal static IReadOnlyList<TweakDef> Tweaks { get; } = [];
 }
 
 internal static class PolicyLocation
 {
-    public static IReadOnlyList<TweakDef> Tweaks =>
-        [
-            .. _MapsPolicy.Data,
-            .. _LocationSensorsPolicy.Data,
-        ];
+    public static IReadOnlyList<TweakDef> Tweaks => [.. _MapsPolicy.Data, .. _LocationSensorsPolicy.Data];
 
     // ── Sprint 667 — Windows Maps Policy ──────────────────────────────────────
     private static class _MapsPolicy
@@ -4328,11 +4316,7 @@ internal static class PolicyLocation
 
 internal static class PolicyDataCollection
 {
-    public static IReadOnlyList<TweakDef> Tweaks =>
-        [
-            .. _DataCollectionPolicy.Data,
-            .. _AppCompatPolicy.Data,
-        ];
+    public static IReadOnlyList<TweakDef> Tweaks => [.. _DataCollectionPolicy.Data, .. _AppCompatPolicy.Data];
 
     // ── Sprint 669a — Data Collection (Telemetry) Advanced Policy ─────────────
     private static class _DataCollectionPolicy

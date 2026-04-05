@@ -34,7 +34,9 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 - Modules: **31** (was 35)
 - Tests: **3,050** (0 failures)
 
+---
 
+## [6.11.0] — 2026-04-05
 
 ### Added
 
