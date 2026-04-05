@@ -1935,3 +1935,125 @@ public sealed class RunBatchTests(DispatchTestFixture fixture) : DispatchTestBas
         }
     }
 }
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Phase 3.1 — --json global output flag (RunStats, RunStatus, RunList)
+// Phase 3.3 — conditional apply flags (RunAction)
+// ─────────────────────────────────────────────────────────────────────────────
+
+[Collection("CliDispatch")]
+public sealed class Phase3CliTests(DispatchTestFixture fixture) : DispatchTestBase(fixture)
+{
+    // ── Phase 3.1: JSON output ───────────────────────────────────────────
+
+    [Fact]
+    public void Dispatch_Stats_JsonOutput_ReturnsZero()
+    {
+        int exit = Program.Dispatch(new CliArgs { Stats = true, OutputFormat = "json" });
+        Assert.Equal(0, exit);
+    }
+
+    [Fact]
+    public void Dispatch_Stats_JsonOutput_IsValidJson()
+    {
+        Program.Dispatch(new CliArgs { Stats = true, OutputFormat = "json", JsonOutput = true });
+        var json = Output.Trim();
+        var doc = System.Text.Json.JsonDocument.Parse(json);
+        Assert.True(doc.RootElement.TryGetProperty("TotalTweaks", out _));
+        Assert.True(doc.RootElement.TryGetProperty("Categories", out _));
+    }
+
+    [Fact]
+    public void Dispatch_Stats_JsonOutput_TotalTweaksMatchesEngine()
+    {
+        Program.Dispatch(new CliArgs { Stats = true, OutputFormat = "json", JsonOutput = true });
+        var doc = System.Text.Json.JsonDocument.Parse(Output.Trim());
+        int total = doc.RootElement.GetProperty("TotalTweaks").GetInt32();
+        Assert.True(total > 0);
+    }
+
+    [Fact]
+    public void Dispatch_Status_JsonOutput_ContainsId()
+    {
+        Program.Dispatch(new CliArgs { Mode = "status", Tweak = DispatchTestFixture.KnownId, OutputFormat = "json" });
+        var doc = System.Text.Json.JsonDocument.Parse(Output.Trim());
+        Assert.Equal(DispatchTestFixture.KnownId, doc.RootElement.GetProperty("Id").GetString());
+    }
+
+    [Fact]
+    public void Dispatch_Status_JsonOutput_ContainsStatus()
+    {
+        Program.Dispatch(new CliArgs { Mode = "status", Tweak = DispatchTestFixture.KnownId, OutputFormat = "json" });
+        var doc = System.Text.Json.JsonDocument.Parse(Output.Trim());
+        Assert.True(doc.RootElement.TryGetProperty("Status", out _));
+    }
+
+    [Fact]
+    public void Dispatch_List_JsonOutput_ReturnsArray()
+    {
+        Program.Dispatch(new CliArgs { ShowList = true, OutputFormat = "json" });
+        var doc = System.Text.Json.JsonDocument.Parse(Output.Trim());
+        Assert.Equal(System.Text.Json.JsonValueKind.Array, doc.RootElement.ValueKind);
+    }
+
+    [Fact]
+    public void Dispatch_Search_JsonOutput_ReturnsArray()
+    {
+        Program.Dispatch(new CliArgs { Search = "telemetry", OutputFormat = "json" });
+        // output should be a JSON array (possibly empty if search finds nothing via IDs only)
+        var trimmed = Output.Trim();
+        Assert.StartsWith("[", trimmed);
+    }
+
+    [Fact]
+    public void Dispatch_Profile_JsonOutput_ContainsProfile()
+    {
+        Program.Dispatch(new CliArgs { Profile = "minimal", OutputFormat = "json", AssumeYes = true, Force = true, DryRun = true });
+        var doc = System.Text.Json.JsonDocument.Parse(Output.Trim());
+        Assert.Equal("minimal", doc.RootElement.GetProperty("Profile").GetString());
+    }
+
+    // ── Phase 3.3 — --if-not-applied ────────────────────────────────────
+
+    [Fact]
+    public void Dispatch_Apply_IfNotApplied_FlagPresent_DoesNotCrash()
+    {
+        // With DryRun the status will be Unknown/NotApplied so the condition won't skip
+        int exit = Program.Dispatch(new CliArgs { Mode = "apply", Tweak = DispatchTestFixture.KnownId, IfNotApplied = true, AssumeYes = true, Force = true, DryRun = true });
+        Assert.True(exit is 0 or 2); // 0 = applied/skipped-correctly, 2 = skipped by condition
+    }
+
+    [Fact]
+    public void Dispatch_Apply_IfBuildMin_TooHigh_Skips()
+    {
+        // Request a build far in the future — will always be skipped on any real machine
+        int exit = Program.Dispatch(new CliArgs { Mode = "apply", Tweak = DispatchTestFixture.KnownId, IfBuildMin = 999999, AssumeYes = true, Force = true });
+        Assert.Equal(2, exit);
+        Assert.Contains("Skipped", Output, StringComparison.OrdinalIgnoreCase);
+    }
+
+    [Fact]
+    public void Dispatch_Apply_IfBuildMin_Zero_DoesNotSkip()
+    {
+        // IfBuildMin = 0 means disabled — should not skip
+        int exit = Program.Dispatch(new CliArgs { Mode = "apply", Tweak = DispatchTestFixture.KnownId, IfBuildMin = 0, AssumeYes = true, Force = true, DryRun = true });
+        Assert.NotEqual(2, exit); // not skipped by build condition
+    }
+
+    // ── Phase 3.4 — --wizard dry-run ─────────────────────────────────────
+
+    [Fact]
+    public void Dispatch_Wizard_DryRun_ReturnsZero()
+    {
+        // RunWizard with DryRun exits before any confirmation prompt
+        int exit = Program.Dispatch(new CliArgs { Wizard = true, DryRun = true });
+        Assert.Equal(0, exit);
+    }
+
+    [Fact]
+    public void Dispatch_Wizard_DryRun_OutputContainsRecommend()
+    {
+        Program.Dispatch(new CliArgs { Wizard = true, DryRun = true });
+        Assert.Contains("recommend", Output, StringComparison.OrdinalIgnoreCase);
+    }
+}

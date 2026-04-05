@@ -115,7 +115,7 @@ internal static class Program
         if (a.Validate)
             return RunValidate();
         if (a.Stats)
-            return RunStats();
+            return RunStats(a);
         if (a.ShowCategories)
             return RunCategories(a);
         if (a.ShowTags)
@@ -187,6 +187,8 @@ internal static class Program
             return RunGui();
         if (a.Menu)
             return RunMenu(a.Force);
+        if (a.Wizard)
+            return RunWizard(a);
 
         // Positional: mode + tweak
         if (a.Mode == "status" && a.Tweak is not null)
@@ -464,11 +466,37 @@ internal static class Program
 
     // ── Stats ───────────────────────────────────────────────────────────
 
-    private static int RunStats()
+    private static int RunStats(CliArgs a)
     {
         var tweaks = _engine.AllTweaks();
         var byCat = _engine.TweaksByCategory();
         var scopeCounts = _engine.ScopeCounts();
+
+        if (a.OutputFormat == "json")
+        {
+            var data = new
+            {
+                TotalTweaks = tweaks.Count,
+                Categories = byCat.Count,
+                Profiles = TweakEngine.Profiles.Count,
+                Scopes = Enum.GetValues<TweakScope>()
+                    .ToDictionary(s => s.ToString(), s => scopeCounts.GetValueOrDefault(s)),
+                CorpSafe = tweaks.Count(t => t.CorpSafe),
+                NeedsAdmin = tweaks.Count(t => t.NeedsAdmin),
+                HasDetect = tweaks.Count(t => t.DetectOps.Count > 0 || t.DetectAction is not null),
+                HasDescription = tweaks.Count(t => !string.IsNullOrWhiteSpace(t.Description)),
+                HasDependsOn = tweaks.Count(t => t.DependsOn.Count > 0),
+                QuickWins = tweaks.Count(t => t.ImpactScore >= 4 && t.SafetyRating >= 4),
+                ImpactDistribution = Enumerable.Range(1, 5)
+                    .ToDictionary(s => s, s => tweaks.Count(t => t.ImpactScore == s)),
+                SafetyDistribution = Enumerable.Range(1, 5)
+                    .ToDictionary(s => s, s => tweaks.Count(t => t.SafetyRating == s)),
+                CategoryCounts = byCat.Keys.Order()
+                    .ToDictionary(cat => cat, cat => byCat[cat].Count),
+            };
+            Console.WriteLine(JsonSerializer.Serialize(data, new JsonSerializerOptions { WriteIndented = true }));
+            return 0;
+        }
 
         Console.WriteLine(
             "\u2500\u2500 RegiLattice Stats \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500"
@@ -1044,13 +1072,26 @@ internal static class Program
                 Analytics.RecordError(id);
         }
 
-        if (_session.DryRun)
+        if (a.OutputFormat == "json")
+        {
+            var data = new
+            {
+                Profile = a.Profile,
+                Applied = ok,
+                Total = results.Count,
+                DryRun = _session.DryRun,
+                Results = results.Select(kv => new { Id = kv.Key, Status = kv.Value.ToString() }).ToList(),
+            };
+            Console.WriteLine(JsonSerializer.Serialize(data, new JsonSerializerOptions { WriteIndented = true }));
+        }
+        else if (_session.DryRun)
             Console.WriteLine($"\U0001f50d Dry-run: {ok}/{results.Count} tweaks would be applied ({_session.DryOps} ops skipped).");
         else
+        {
             Console.WriteLine($"\u2705 Profile '{a.Profile}': {ok}/{results.Count} tweaks applied.");
-
-        foreach (var (id, res) in results)
-            Console.WriteLine($"  {id}: {res}");
+            foreach (var (id, res) in results)
+                Console.WriteLine($"  {id}: {res}");
+        }
         return 0;
     }
 
@@ -1378,6 +1419,23 @@ internal static class Program
 
     private static int RunAction(CliArgs a)
     {
+        // ── Phase 3.3: conditional apply guards ─────────────────────────
+        if (a.IfAdmin && !Elevation.IsAdmin())
+        {
+            Console.WriteLine("Skipped: --if-admin condition not met (not running elevated).");
+            return 2;
+        }
+        if (a.IfNotCorp && CorporateGuard.IsCorporateNetwork())
+        {
+            Console.WriteLine("Skipped: --if-not-corp condition not met (corporate network detected).");
+            return 2;
+        }
+        if (a.IfBuildMin > 0 && Environment.OSVersion.Version.Build < a.IfBuildMin)
+        {
+            Console.WriteLine($"Skipped: --if-build {a.IfBuildMin} condition not met (build {Environment.OSVersion.Version.Build}).");
+            return 2;
+        }
+
         if (!a.Force && CorporateGuard.IsCorporateNetwork())
         {
             Console.WriteLine("\U0001f6d1 Corporate network detected. Use --force to override.");
@@ -1423,6 +1481,21 @@ internal static class Program
         {
             Console.WriteLine($"\u274c Unknown tweak '{a.Tweak}'.");
             return 2;
+        }
+
+        // ── Phase 3.3: --if-not-applied conditional ──────────────────────
+        if (a.IfNotApplied)
+        {
+            var curStatus = _engine.DetectStatus(td);
+            bool targetMet = isApply ? curStatus == TweakResult.Applied : curStatus == TweakResult.NotApplied;
+            if (targetMet)
+            {
+                if (a.OutputFormat == "json")
+                    Console.WriteLine(JsonSerializer.Serialize(new { td.Id, Skipped = true, Reason = "already-in-target-state", Status = curStatus.ToString() }));
+                else
+                    Console.WriteLine($"Skipped: '{td.Id}' is already {(isApply ? "applied" : "removed")}.");
+                return 0;
+            }
         }
 
         if (!a.AssumeYes && !Confirm($"{(isApply ? "Apply" : "Remove")} '{td.Label}'"))
@@ -1600,6 +1673,104 @@ internal static class Program
                 Console.ReadKey(true);
             }
         }
+        return 0;
+    }
+
+    // ── Wizard (Phase 3.4) ─────────────────────────────────────────────
+    /// <summary>
+    /// Interactive multi-question setup wizard that recommends a profile based
+    /// on user answers and optionally applies it.
+    /// </summary>
+    private static int RunWizard(CliArgs a)
+    {
+        Console.WriteLine();
+        Console.WriteLine("  RegiLattice \u2014 Interactive Setup Wizard");
+        Console.WriteLine("  " + new string('=', 42));
+        Console.WriteLine();
+
+        // Q1: primary use
+        Console.WriteLine("  1. What is this machine\u2019s primary use?");
+        Console.WriteLine("     [1] Office / Business     [2] Gaming");
+        Console.WriteLine("     [3] Personal / Home       [4] Server / Headless");
+        Console.WriteLine("     [5] Developer Workstation");
+        Console.Write("  Choice [1-5]: ");
+        int useChoice = int.TryParse(Console.ReadLine()?.Trim(), out var u) ? u : 1;
+
+        // Q2: privacy importance
+        Console.WriteLine();
+        Console.WriteLine("  2. How important is privacy to you?");
+        Console.WriteLine("     [1] Not important    [2] Moderate    [3] Maximum");
+        Console.Write("  Choice [1-3]: ");
+        int privChoice = int.TryParse(Console.ReadLine()?.Trim(), out var pv) ? pv : 2;
+
+        // Q3: corporate device
+        Console.WriteLine();
+        Console.Write("  3. Is this a managed corporate device? [y/N]: ");
+        bool isCorp = Console.ReadLine()?.Trim().Equals("y", StringComparison.OrdinalIgnoreCase) == true;
+
+        // Score each profile
+        var scores = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase)
+        {
+            ["business"] = 0,
+            ["gaming"] = 0,
+            ["privacy"] = 0,
+            ["minimal"] = 0,
+            ["server"] = 0,
+        };
+
+        switch (useChoice)
+        {
+            case 1: scores["business"] += 40; scores["minimal"] += 10; break;
+            case 2: scores["gaming"] += 40; break;
+            case 3: scores["minimal"] += 30; scores["privacy"] += 20; break;
+            case 4: scores["server"] += 40; break;
+            case 5: scores["business"] += 20; scores["minimal"] += 20; break;
+        }
+        switch (privChoice)
+        {
+            case 1: break;
+            case 2: scores["privacy"] += 20; break;
+            case 3: scores["privacy"] += 40; break;
+        }
+        if (isCorp)
+        {
+            scores["business"] += 20;
+            scores["gaming"] -= 10;
+        }
+
+        var recommended = scores.OrderByDescending(kv => kv.Value).First().Key;
+        var profile = TweakEngine.GetProfile(recommended);
+        int tweakCount = profile is not null ? _engine.TweaksForProfile(recommended).Count : 0;
+
+        Console.WriteLine();
+        Console.WriteLine($"  Based on your answers, we recommend: \"{recommended}\" profile ({tweakCount} tweaks)");
+        Console.WriteLine();
+
+        if (profile is not null)
+        {
+            Console.WriteLine($"  Description: {profile.Description}");
+            Console.WriteLine();
+        }
+
+        if (a.DryRun)
+        {
+            Console.WriteLine("  [Dry-run mode \u2014 no changes will be written]");
+            Console.WriteLine("  Run without --dry-run to apply.");
+            return 0;
+        }
+
+        Console.Write("  Apply now? [Y/n]: ");
+        var confirm = Console.ReadLine()?.Trim().ToLowerInvariant();
+        if (confirm == "n")
+        {
+            Console.WriteLine("  Aborted.");
+            return 0;
+        }
+
+        Console.WriteLine($"  Applying \"{recommended}\" profile\u2026");
+        var results = _engine.ApplyProfile(recommended, forceCorp: a.Force, parallel: true);
+        int ok = results.Count(kv => kv.Value == TweakResult.Applied);
+        Console.WriteLine($"  \u2705 {ok}/{results.Count} tweaks applied.");
         return 0;
     }
 
@@ -2931,6 +3102,32 @@ internal static class Program
                     p.PluginHost = true;
                     if (++i < args.Length)
                         p.PluginPipeName = args[i];
+                    break;
+
+                // ── Phase 3.1 – global JSON output flag ───────────────────────
+                case "--json":
+                    p.JsonOutput = true;
+                    p.OutputFormat = "json";
+                    break;
+
+                // ── Phase 3.3 – conditional apply flags ───────────────────────
+                case "--if-not-applied":
+                    p.IfNotApplied = true;
+                    break;
+                case "--if-admin":
+                    p.IfAdmin = true;
+                    break;
+                case "--if-build":
+                    if (++i < args.Length && int.TryParse(args[i], out var ifBuild))
+                        p.IfBuildMin = ifBuild;
+                    break;
+                case "--if-not-corp":
+                    p.IfNotCorp = true;
+                    break;
+
+                // ── Phase 3.4 – interactive profile wizard ────────────────────
+                case "--wizard":
+                    p.Wizard = true;
                     break;
 
                 default:
