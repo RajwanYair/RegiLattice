@@ -2505,3 +2505,215 @@ internal static class PolicyCommunication
         ];
     }
 }
+
+internal static class PolicyWindowsChat
+{
+    // HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Chat — controls the Teams
+    // consumer chat integration pinned to the Windows 11 taskbar.
+    // Additional key: HKLM\SOFTWARE\Policies\Microsoft\Windows\Calling — voice calling integration.
+
+    private const string ChatKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Chat";
+    private const string CallingKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Calling";
+
+    public static IReadOnlyList<TweakDef> Tweaks { get; } =
+    [
+        new TweakDef
+        {
+            Id = "wschat-set-chat-icon-hidden",
+            Label = "Hide Chat Icon from Taskbar via Policy",
+            Category = "Communication",
+            Description =
+                "Sets ChatIcon=2 in the Windows Chat Group Policy key. "
+                + "Value 2 hides the Teams Chat / Meet Now icon from the Windows 11 taskbar. "
+                + "Removes the consumer collaboration entry point on managed enterprise workstations "
+                + "where the full Microsoft Teams Professional client is deployed instead.",
+            Tags = ["chat", "teams", "taskbar", "policy", "enterprise"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            ImpactScore = 3,
+            SafetyRating = 5,
+            ImpactNote = "Teams consumer chat icon is hidden from taskbar; Teams business client unaffected.",
+            ApplyOps = [RegOp.SetDword(ChatKey, "ChatIcon", 2)],
+            RemoveOps = [RegOp.DeleteValue(ChatKey, "ChatIcon")],
+            DetectOps = [RegOp.CheckDword(ChatKey, "ChatIcon", 2)],
+        },
+        new TweakDef
+        {
+            Id = "wschat-disable-consumer-teams",
+            Label = "Block Consumer Microsoft Teams Chat",
+            Category = "Communication",
+            Description =
+                "Sets AllowTeamsChat=0 in the Windows Chat Group Policy key. "
+                + "Blocks the consumer/personal Microsoft Teams integration built into Windows 11. "
+                + "Prevents first-run wizard, account linking, and persistent notification badge for "
+                + "Teams consumer on managed endpoints where personal accounts must not be used.",
+            Tags = ["chat", "teams", "consumer", "policy", "enterprise", "security"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            ImpactScore = 3,
+            SafetyRating = 5,
+            ImpactNote = "Consumer Teams chat cannot be launched or configured from Windows 11.",
+            ApplyOps = [RegOp.SetDword(ChatKey, "AllowTeamsChat", 0)],
+            RemoveOps = [RegOp.DeleteValue(ChatKey, "AllowTeamsChat")],
+            DetectOps = [RegOp.CheckDword(ChatKey, "AllowTeamsChat", 0)],
+        },
+        new TweakDef
+        {
+            Id = "wschat-disable-chat-notification-badge",
+            Label = "Remove Chat Notification Badge on Taskbar",
+            Category = "Communication",
+            Description =
+                "Sets HideChatBadge=1 in the Windows Chat Group Policy key. "
+                + "Removes the unread-message badge overlaid on the Chat taskbar button. "
+                + "Reduces distraction on workstations and prevents consumer-chat notifications "
+                + "from drawing attention during corporate presentations or screen shares.",
+            Tags = ["chat", "teams", "notification", "taskbar", "policy"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            ImpactScore = 2,
+            SafetyRating = 5,
+            ImpactNote = "Chat notification badge (unread count) no longer shown on taskbar.",
+            ApplyOps = [RegOp.SetDword(ChatKey, "HideChatBadge", 1)],
+            RemoveOps = [RegOp.DeleteValue(ChatKey, "HideChatBadge")],
+            DetectOps = [RegOp.CheckDword(ChatKey, "HideChatBadge", 1)],
+        },
+        new TweakDef
+        {
+            Id = "wschat-disable-first-launch-experience",
+            Label = "Suppress Teams Chat First-Launch Welcome Screen",
+            Category = "Communication",
+            Description =
+                "Sets SuppressFirstLaunchExperience=1 in the Windows Chat Group Policy key. "
+                + "Skips the consumer Teams onboarding flow (sign-in prompt, terms screen, EULA) "
+                + "when a user launches Chat for the first time. On managed machines the consumer "
+                + "profile wizard interferes with standard provisioning and MDM enrollment flows.",
+            Tags = ["chat", "teams", "onboarding", "first-run", "policy"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            ImpactScore = 2,
+            SafetyRating = 5,
+            ImpactNote = "Consumer Teams first-run welcome flow is suppressed.",
+            ApplyOps = [RegOp.SetDword(ChatKey, "SuppressFirstLaunchExperience", 1)],
+            RemoveOps = [RegOp.DeleteValue(ChatKey, "SuppressFirstLaunchExperience")],
+            DetectOps = [RegOp.CheckDword(ChatKey, "SuppressFirstLaunchExperience", 1)],
+        },
+        new TweakDef
+        {
+            Id = "wschat-disable-personal-account-linking",
+            Label = "Block Personal Account Linking to Chat",
+            Category = "Communication",
+            Description =
+                "Sets BlockPersonalAccountLinking=1 in the Windows Chat Group Policy key. "
+                + "Prevents users from signing the built-in Chat with a personal Microsoft account. "
+                + "Enforces the boundary between consumer and enterprise identity on shared and BYOD machines.",
+            Tags = ["chat", "teams", "personal-account", "identity", "policy", "security"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            ImpactScore = 3,
+            SafetyRating = 5,
+            ImpactNote = "Personal Microsoft accounts cannot be linked to the Windows Chat taskbar widget.",
+            ApplyOps = [RegOp.SetDword(ChatKey, "BlockPersonalAccountLinking", 1)],
+            RemoveOps = [RegOp.DeleteValue(ChatKey, "BlockPersonalAccountLinking")],
+            DetectOps = [RegOp.CheckDword(ChatKey, "BlockPersonalAccountLinking", 1)],
+        },
+        new TweakDef
+        {
+            Id = "wschat-disable-calling-integration",
+            Label = "Disable Windows 11 Calling Integration",
+            Category = "Communication",
+            Description =
+                "Sets AllowWindowsCalling=0 in the Calling Group Policy key. "
+                + "Removes the Windows 11 calling integration that allows PSTN-linked mobile phone "
+                + "numbers to be used directly from the Windows Start menu and taskbar call panel. "
+                + "Reduces data-sharing with the linked mobile device on managed workstations.",
+            Tags = ["calling", "phone", "integration", "policy", "enterprise"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            ImpactScore = 2,
+            SafetyRating = 5,
+            ImpactNote = "Windows 11 taskbar Calling panel is disabled; desk phone/VOIP tools unaffected.",
+            ApplyOps = [RegOp.SetDword(CallingKey, "AllowWindowsCalling", 0)],
+            RemoveOps = [RegOp.DeleteValue(CallingKey, "AllowWindowsCalling")],
+            DetectOps = [RegOp.CheckDword(CallingKey, "AllowWindowsCalling", 0)],
+        },
+        new TweakDef
+        {
+            Id = "wschat-disable-calling-auto-start",
+            Label = "Prevent Windows Calling Service Auto-Start",
+            Category = "Communication",
+            Description =
+                "Sets DisableCallingAutoStart=1 in the Calling Group Policy key. "
+                + "Stops the Windows Calling background service from starting automatically at user login. "
+                + "Reduces login latency and background network activity from the calling integration agent.",
+            Tags = ["calling", "startup", "background", "policy", "performance"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            ImpactScore = 2,
+            SafetyRating = 5,
+            ImpactNote = "Calling service does not auto-start; initiated only if user manually opens Calling.",
+            ApplyOps = [RegOp.SetDword(CallingKey, "DisableCallingAutoStart", 1)],
+            RemoveOps = [RegOp.DeleteValue(CallingKey, "DisableCallingAutoStart")],
+            DetectOps = [RegOp.CheckDword(CallingKey, "DisableCallingAutoStart", 1)],
+        },
+        new TweakDef
+        {
+            Id = "wschat-disable-caller-id-lookup",
+            Label = "Disable Caller ID Lookup via Microsoft Services",
+            Category = "Communication",
+            Description =
+                "Sets AllowCallerIdLookup=0 in the Calling Group Policy key. "
+                + "Prevents Windows from sending caller phone numbers to Microsoft Cloud to resolve "
+                + "caller identity and display name before a call is answered. "
+                + "Caller ID numbers remain local-only; no data leaves the device for name resolution.",
+            Tags = ["calling", "caller-id", "privacy", "cloud", "policy"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            ImpactScore = 2,
+            SafetyRating = 5,
+            ImpactNote = "Phone numbers from incoming calls are not sent to Microsoft for lookup.",
+            ApplyOps = [RegOp.SetDword(CallingKey, "AllowCallerIdLookup", 0)],
+            RemoveOps = [RegOp.DeleteValue(CallingKey, "AllowCallerIdLookup")],
+            DetectOps = [RegOp.CheckDword(CallingKey, "AllowCallerIdLookup", 0)],
+        },
+        new TweakDef
+        {
+            Id = "wschat-disable-chat-history-sync",
+            Label = "Block Cross-Device Chat History Sync",
+            Category = "Communication",
+            Description =
+                "Sets DisableChatHistorySync=1 in the Windows Chat Group Policy key. "
+                + "Prevents the consumer Teams chat history from synchronising across all devices linked "
+                + "to the same personal Microsoft account. On shared terminals or kiosk devices, chat "
+                + "history from other devices must not appear and could expose personal/confidential conversations.",
+            Tags = ["chat", "history", "sync", "privacy", "cloud", "policy"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            ImpactScore = 3,
+            SafetyRating = 5,
+            ImpactNote = "Chat history from other devices is not synced to this machine.",
+            ApplyOps = [RegOp.SetDword(ChatKey, "DisableChatHistorySync", 1)],
+            RemoveOps = [RegOp.DeleteValue(ChatKey, "DisableChatHistorySync")],
+            DetectOps = [RegOp.CheckDword(ChatKey, "DisableChatHistorySync", 1)],
+        },
+        new TweakDef
+        {
+            Id = "wschat-restrict-chat-file-transfer",
+            Label = "Block File Transfer via Consumer Chat",
+            Category = "Communication",
+            Description =
+                "Sets DisableChatFileTransfer=1 in the Windows Chat Group Policy key. "
+                + "Prevents users from sending or receiving files through the consumer Teams chat integration. "
+                + "Removes an unmonitored side channel for data exfiltration that bypasses corporate DLP "
+                + "policies configured on the enterprise Teams deployment.",
+            Tags = ["chat", "file-transfer", "dlp", "security", "policy", "enterprise"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            ImpactScore = 4,
+            SafetyRating = 5,
+            ImpactNote = "File sharing in consumer chat is blocked; corporate Teams file sharing unaffected.",
+            ApplyOps = [RegOp.SetDword(ChatKey, "DisableChatFileTransfer", 1)],
+            RemoveOps = [RegOp.DeleteValue(ChatKey, "DisableChatFileTransfer")],
+            DetectOps = [RegOp.CheckDword(ChatKey, "DisableChatFileTransfer", 1)],
+        },
+    ];
+}
