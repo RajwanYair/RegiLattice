@@ -161,11 +161,91 @@ chore(vscode): remove stale pylint.args, add Pylance analysis settings
 | Scenario                      | Branch                                   |
 | ----------------------------- | ---------------------------------------- |
 | Normal development            | `main` (direct, trusted single-dev repo) |
-| Experimental redesign (risky) | `feature/<name>`                         |
-| Hotfix from production        | `hotfix/<description>`                   |
+| Version bump / release        | `release/vX.Y.Z` → PR to `main`         |
+| Experimental redesign (risky) | `feature/<name>` → PR to `main`          |
+| Hotfix from production        | `hotfix/<description>` → PR to `main`    |
 
-No PR required for `main` — this is a single-developer project.
-Use `git tag v<version>` on release commits for GitHub releases.
+Direct commits to `main` are allowed for small, low-risk changes (docs, config tweaks,
+single-file fixes). For **version bumps** and **multi-file features**, use a branch + PR
+so CI validates the change before it lands on `main`.
+
+---
+
+## GitHub Issues & Pull Requests in the Release Flow
+
+> **This is a standing rule. Every version bump MUST be tracked by a GitHub Issue
+> and merged via a Pull Request.**
+
+### Issue-Driven Development
+
+| Event                         | Action                                                |
+| ----------------------------- | ----------------------------------------------------- |
+| Bug discovered                | Create or find a **Bug Report** issue                 |
+| Feature planned               | Create a **Feature Request** issue                    |
+| New tweaks needed             | Create a **New Tweak Proposal** issue                 |
+| Version bump planned          | Run **release-prep.yml** → auto-creates issue + PR    |
+| CI/Release fails              | **notify-failure.yml** auto-creates a `ci-failure` issue |
+
+Every commit that addresses an issue MUST reference it in the footer:
+
+```
+fix(engine): handle null TweakDef in Search
+
+Closes #42
+```
+
+### Release via Pull Request (MANDATORY for version bumps)
+
+**Automated path** (preferred):
+
+1. Run `release-prep.yml` via GitHub Actions → creates release issue + `release/vX.Y.Z` branch + draft PR
+2. Check out the release branch locally: `git checkout release/vX.Y.Z`
+3. Update all version files (follow the checklist in the release issue)
+4. Push changes to the release branch
+5. Mark the PR as ready → CI runs automatically
+6. Merge the PR to `main` (squash or merge commit)
+7. Tag and push immediately after merge:
+   ```powershell
+   git checkout main
+   git pull
+   git tag vX.Y.Z
+   git push --tags   # ← TRIGGERS release.yml
+   ```
+8. Verify the release, then close the release issue
+
+**Manual path** (for urgent hotfixes):
+
+```powershell
+git checkout -b release/vX.Y.Z
+# ... make version file changes ...
+git add -A
+git commit -m "chore: bump version to vX.Y.Z"
+git push -u origin release/vX.Y.Z
+# Create PR via gh CLI:
+gh pr create --title "chore: release vX.Y.Z" --body "Closes #NN" --base main
+# After CI passes and PR is merged:
+git checkout main; git pull
+git tag vX.Y.Z
+git push --tags
+```
+
+### Linking Issues to PRs
+
+- **In PR body**: Use `Closes #N` to auto-close issues when the PR merges
+- **In commit messages**: Use `Closes #N` or `Fixes #N` in the footer
+- **Multiple issues**: List each on a separate line: `Closes #42\nCloses #43`
+- **Related but not closing**: Use `Related to #N` or `Ref #N`
+
+### When a PR is NOT Required
+
+Small, low-risk changes may be committed directly to `main`:
+
+- Documentation-only changes (`.md`, `.svg`, comments)
+- Config file updates (`.vscode/`, `.github/instructions/`)
+- Single-file formatting or style fixes
+- Instruction file updates
+
+Even for direct commits, reference the related issue if one exists.
 
 ---
 
@@ -181,6 +261,7 @@ Version follows **Semantic Versioning**: `MAJOR.MINOR.PATCH`
 
 When bumping:
 
+0. **Create a release issue** — run `release-prep.yml` or create manually from the Release Checklist template. This creates the tracking issue, release branch, and draft PR.
 1. Update `Directory.Build.props` — ALL four version properties must be kept in sync:
     ```xml
     <Version>X.Y.Z</Version>

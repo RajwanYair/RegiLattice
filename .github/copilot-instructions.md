@@ -96,9 +96,24 @@ Rules:
 - **Commit per logical phase/task** during a session (granular local history)
 - **Each commit must state** what phase it covers + total tweak/test counts if changed
 - **Push + tag on EVERY version bump** — NEVER defer a pushed tag; tag push triggers GitHub Actions `release.yml` which publishes EXEs + MSI to GitHub Releases
+- **Every version bump MUST be tracked** by a GitHub Issue and merged via a Pull Request
 - **Non-version-bump work** stays in local commits until wrapped into the next version bump
+- **Reference issues** in commit footers: `Closes #N` or `Fixes #N`
 - Commit message format: `type(scope): description` (Conventional Commits)
 - Full details: `.github/instructions/git-workflow.instructions.md`
+
+### Issue-Driven Release Flow (MANDATORY for version bumps)
+
+1. Run `release-prep.yml` → creates release issue + `release/vX.Y.Z` branch + draft PR
+2. Check out branch, update version files, push changes
+3. Mark PR ready → CI validates → merge to `main`
+4. Tag and push immediately after merge:
+
+```powershell
+git checkout main; git pull
+git tag vX.Y.Z
+git push --tags   # ← TRIGGERS release.yml
+```
 
 ### Version Bump → Push Flow (MANDATORY every time)
 
