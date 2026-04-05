@@ -23,7 +23,7 @@ graph TD
         Models["Models\n(TweakDef · RegOp · ProfileDef)"]
         Registry["RegistrySession"]
         Services["Services\n(15 services)"]
-        Tweaks["Tweaks/\n(83 modules · 9190 tweaks)"]
+        Tweaks["Tweaks/\n(30 modules · 8,847 tweaks)"]
         Plugins["Plugins\n(Pack marketplace)"]
 
         TweakEngine --> Models

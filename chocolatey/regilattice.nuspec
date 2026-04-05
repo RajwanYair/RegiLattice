@@ -14,7 +14,7 @@
   <metadata>
     <id>regilattice</id>
     <!-- Version is replaced by the release workflow during choco pack -->
-    <version>6.8.0</version>
+    <version>6.9.0</version>
     <packageSourceUrl>https://github.com/RajwanYair/RegiLattice/tree/main/chocolatey</packageSourceUrl>
     <owners>RajwanYair</owners>
     <title>RegiLattice</title>

@@ -191,12 +191,22 @@ When bumping:
     No `Properties/AssemblyInfo.cs` exists — `Directory.Build.props` is the single source of truth.
 2. Update `installer/Package.wxs` → `Version="X.Y.Z.0"`
 3. Add `## [X.Y.Z] — YYYY-MM-DD` section to `docs/CHANGELOG.md`
-4. Update `Readme.md` version badge and tweak/test counts if changed
+4. Update `Readme.md` version badge, tweak/test counts, and Mermaid diagram counts if changed
 5. Update all count-bearing metadata files — **see the full 16-file checklist** in `lessons-learned.instructions.md` (section "stats.svg Uses Space-Separated Thousands"). Counts tracked across files: **tweaks · categories · modules · tests · themes · profiles · pkg-managers**
-6. Update GitHub About sidebar: `gh repo edit RajwanYair/RegiLattice --description "... N,NNN tweaks ..."`
-7. Commit: `chore: bump version to vX.Y.Z`
-8. Tag: `git tag vX.Y.Z`
-9. Push: `git push; git push --tags`
+6. **Update all SVG graphics** — every version bump where counts change MUST update the SVG files in `docs/assets/`:
+    - `stats.svg` — tweaks + categories (space-separated thousands: `8 847`)
+    - `banner.svg` — tweaks, categories, tests
+    - `architecture.svg` — tweaks count in TweakDef Modules box
+    - `how-it-works.svg` — tweaks count in Browse step
+    - `features.svg` — per-category tweak counts (if categories changed)
+    ```powershell
+    # Quick bulk-replace for SVGs (run after counts change):
+    (Get-Content "docs\assets\stats.svg") -replace 'OLD_TWEAK_COUNT', 'NEW_TWEAK_COUNT' | Set-Content "docs\assets\stats.svg"
+    ```
+7. Update GitHub About sidebar: `gh repo edit RajwanYair/RegiLattice --description "... N,NNN tweaks ..."`
+8. Commit: `chore: bump version to vX.Y.Z`
+9. Tag: `git tag vX.Y.Z`
+10. Push: `git push; git push --tags`  ← **TRIGGERS release.yml → EXE + CLI + MSI published to GitHub Releases**
 
 ---
 
