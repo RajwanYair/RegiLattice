@@ -1412,8 +1412,9 @@ Version history:
 | v6.4.0 | 5 | 50 | 647–651 (PolicyConfig.cs: PolicyFirewallProfiles/NetLogon/ReliabilityMonitor/DNSSecurity/SmartScreenWin) |
 | v6.5.0 | 5 | 50 | 652–656 (PolicyUser.cs: PolicyWindowsSearch/AppPrivacy/UserExperience/EventLogAudit/SyncSettings) |
 | v6.6.0 | 5 | 50 | 657–661 (PolicyMisc2.cs: WindowsFeeds/CompressedFolders/WindowsChat/TextInputExt/SpeechInput) |
+| v6.7.0 | 5 | 50 | 662–666 (PolicyMisc3.cs: AutoPlay/Store/LockScreen/RemoteAssistance/SmartCard) |
 
-**Current version**: v6.6.0 — 9,440 tweaks, 116 categories, 155 modules. Run full gap analysis on all three phases before creating any new module.
+**Current version**: v6.7.0 — 9,490 tweaks, 121 categories, 160 modules. Run full gap analysis on all three phases before creating any new module.
 
 ---
 

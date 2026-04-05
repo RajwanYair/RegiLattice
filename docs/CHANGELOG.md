@@ -4,6 +4,23 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [6.7.0] — 2026-05-03
+
+### Added
+
+- **Policy miscellaneous module 3** (`PolicyMisc3.cs`) — 50 new Group Policy tweaks across 5 modules (Sprints 662-666):
+  - `PolicyAutoRun` (10) — AutoRun/AutoPlay enforcement: disable AutoPlay for non-volume devices, disable AutoRun all drives (0xFF), disable AutoRun for removable drives, set default action to no-action, prevent mixed-content AutoPlay bypass, disable CD/DVD AutoPlay, block users from changing AutoPlay default, disable network drive AutoPlay, disable shell AutoPlay handlers for removable media, master AutoPlay off switch
+  - `PolicyWindowsStore` (10) — Windows Store app deployment policies: disable Store app, remove Store from Settings, require private Store only, disable auto-download, disable OS upgrade offers, turn off Store notifications, disable Store purchases, block non-admin app installs, disable video streaming page, disable music streaming page
+  - `PolicyLockScreen` (10) — Lock screen appearance and Spotlight restrictions: disable lock screen, prevent lock screen image change, disable Spotlight on lock screen, disable Spotlight in Action Centre, disable third-party suggestions, disable Windows Welcome Experience, disable camera from lock screen, turn off all Spotlight features (master policy), disable Spotlight in taskbar Search, disable Spotlight tips in Settings
+  - `PolicyRemoteAssistance` (10) — Remote Assistance security policies: disable RA completely, disable unsolicited Offer RA, require explicit consent for control, limit ticket validity to 1 hour, cap bandwidth to 2 Mbps, disable email invitation tickets, disable Easy Connect RA, enable RA session audit logging, disable clipboard transfer during sessions, disable file transfer during sessions
+  - `PolicySmartCard` (10) — Smart Card authentication policies: require smart card for logon, lock workstation on card removal, force logoff on card removal, allow integrated PIN unblock screen, enable virtual smart card PIN logon, disable credential caching (plaintext PIN), enable certificate propagation on insert, clean up certificates on removal, prevent root certificate auto-update, disallow PINless logon
+
+### Stats
+
+- Tweaks: **9,490** (+50) | Categories: **121** (+5) | Modules: **160** (+5) | Tests: **3,376** (unchanged)
+
+---
+
 ## [6.6.0] — 2026-04-05
 
 ### Added
