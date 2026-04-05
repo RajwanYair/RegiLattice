@@ -14,7 +14,7 @@
   <metadata>
     <id>regilattice</id>
     <!-- Version is replaced by the release workflow during choco pack -->
-    <version>6.7.0</version>
+    <version>6.8.0</version>
     <packageSourceUrl>https://github.com/RajwanYair/RegiLattice/tree/main/chocolatey</packageSourceUrl>
     <owners>RajwanYair</owners>
     <title>RegiLattice</title>
@@ -28,11 +28,11 @@
     <docsUrl>https://github.com/RajwanYair/RegiLattice/blob/main/docs/Development.md</docsUrl>
     <bugTrackerUrl>https://github.com/RajwanYair/RegiLattice/issues</bugTrackerUrl>
     <tags>registry tweaks windows optimization privacy performance security gui cli admin</tags>
-    <summary>Windows Registry Tweak Toolkit — 9,490 tweaks across 121 categories</summary>
+    <summary>Windows Registry Tweak Toolkit — 8,847 tweaks across 26 categories</summary>
     <description><![CDATA[
 ## RegiLattice
 
-A comprehensive Windows registry tuning toolkit featuring **9,490 expert-curated tweaks** across **121 categories** — from privacy hardening and performance optimisation to security policies and enterprise management.
+A comprehensive Windows registry tuning toolkit featuring **8,847 expert-curated tweaks** across **26 categories** — from privacy hardening and performance optimisation to security policies and enterprise management.
 
 ### Features
 

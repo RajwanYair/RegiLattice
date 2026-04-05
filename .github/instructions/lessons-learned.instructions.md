@@ -1413,8 +1413,10 @@ Version history:
 | v6.5.0 | 5 | 50 | 652–656 (PolicyUser.cs: PolicyWindowsSearch/AppPrivacy/UserExperience/EventLogAudit/SyncSettings) |
 | v6.6.0 | 5 | 50 | 657–661 (PolicyMisc2.cs: WindowsFeeds/CompressedFolders/WindowsChat/TextInputExt/SpeechInput) |
 | v6.7.0 | 5 | 50 | 662–666 (PolicyMisc3.cs: AutoPlay/Store/LockScreen/RemoteAssistance/SmartCard) |
-
-**Current version**: v6.7.0 — 9,490 tweaks, 121 categories, 160 modules. Run full gap analysis on all three phases before creating any new module.
+| v6.8.0 | 0 | -643 | — (consolidation: 15 file merges, 20 category renames, 643 duplicate tweaks removed; 45→30 files, 47→26 categories, 9490→8847 tweaks) |
+| v6.8.0 | 0 | -643 | — (consolidation: 15 file merges, 20 category renames, 643 duplicate tweaks removed; 45→30 files, 47→26 categories, 9490→8847 tweaks) |
+8.0 — 8,847 tweaks, 26 categories, 3
+**Current version**: v6.8.0 — 8,847 tweaks, 26 categories, 30 modules. Run full gap analysis on all three phases before creating any new module.
 
 ---
 
