@@ -370,7 +370,6 @@ internal sealed class TweakCardRow : Panel
 
     internal TweakCardRow()
     {
-        Height = CardHeight;
         BackColor = AppTheme.Surface;
 
         _toggle = new ToggleSwitchControl { Location = new Point(12, (CardHeight - 22) / 2), Size = new Size(44, 22) };
@@ -426,6 +425,11 @@ internal sealed class TweakCardRow : Panel
         };
 
         Controls.AddRange(new Control[] { _toggle, _lblName, _lblDesc, _lblBadge, _btnInfo });
+
+        // Set Height AFTER child controls are created — setting Height triggers
+        // OnResize → LayoutControls, which accesses _lblName/_lblDesc/_lblBadge/_btnInfo.
+        // If Height is set before those fields are assigned, LayoutControls NREs.
+        Height = CardHeight;
 
         // Bottom divider
         SetStyle(ControlStyles.ResizeRedraw | ControlStyles.OptimizedDoubleBuffer, true);
@@ -507,6 +511,10 @@ internal sealed class TweakCardRow : Panel
 
     private void LayoutControls()
     {
+        // Guard: OnResize fires during the constructor before child controls are created.
+        if (_lblName is null)
+            return;
+
         int w = Width;
         _lblName.Width = w - 66 - 80; // leave room for badge + info btn on right
         _lblDesc.Width = w - 66 - 80;
