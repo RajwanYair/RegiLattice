@@ -4,6 +4,21 @@ All notable changes to RegiLattice are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [6.10.0] — 2026-04-05
+
+### Removed
+
+- **Phase C — Scoop tool-install tweaks removed** (44 tweaks): individual `scoop-*` package install tweaks
+  (`scoop-install-aria2`, `scoop-7zip`, `scoop-bat`, `scoop-btop` … `scoop-oha`) removed from Developer.cs.
+  These duplicated functionality already provided by the Scoop Manager dialog. Infrastructure
+  tweaks (`pkg-install-scoop`, `pkg-scoop-setup`, `scoop-cleanup-all`) retained.
+
+### Stats
+
+- Tweaks: **8,803** (−44 from v6.9.0); Categories: 26; Modules: 30; Tests: 3,051 (0 failures)
+
+---
+
 ## [6.9.0] — 2026-04-05
 
 ### Changed

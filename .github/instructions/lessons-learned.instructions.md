@@ -1414,9 +1414,9 @@ Version history:
 | v6.6.0 | 5 | 50 | 657–661 (PolicyMisc2.cs: WindowsFeeds/CompressedFolders/WindowsChat/TextInputExt/SpeechInput) |
 | v6.7.0 | 5 | 50 | 662–666 (PolicyMisc3.cs: AutoPlay/Store/LockScreen/RemoteAssistance/SmartCard) |
 | v6.8.0 | 0 | -643 | — (consolidation: 15 file merges, 20 category renames, 643 duplicate tweaks removed; 45→30 files, 47→26 categories, 9490→8847 tweaks) |
-| v6.8.0 | 0 | -643 | — (consolidation: 15 file merges, 20 category renames, 643 duplicate tweaks removed; 45→30 files, 47→26 categories, 9490→8847 tweaks) |
-8.0 — 8,847 tweaks, 26 categories, 3
-**Current version**: v6.9.0 — 8,847 tweaks, 26 categories, 30 modules. Run full gap analysis on all three phases before creating any new module.
+| v6.9.0 | 0 | 0 | — (doc consolidation: Architecture.md/Development.md/README.md stale counts fixed; git-workflow updated with SVG update mandate) |
+| v6.10.0 | 0 | -44 | — (Phase C: removed 44 scoop tool-install tweaks from Developer.cs; 8,847→8,803 tweaks) |
+**Current version**: v6.10.0 — 8,803 tweaks, 26 categories, 30 modules. Run full gap analysis on all three phases before creating any new module.
 
 ---
 
