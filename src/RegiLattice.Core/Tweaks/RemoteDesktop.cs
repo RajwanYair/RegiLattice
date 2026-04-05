@@ -2249,3 +2249,180 @@ internal static class PolicyRemoteAccess
             ];
     }
 }
+
+internal static class PolicyRemoteAssistance
+{
+    private const string RemAssist = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services";
+    private const string RemAssistRA = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\RemoteAssistance";
+
+    public static IReadOnlyList<TweakDef> Tweaks { get; } =
+    [
+        new TweakDef
+        {
+            Id = "remassist-policy-disable-offer-ra",
+            Label = "Disable Offer Remote Assistance",
+            Category = "Remote Desktop",
+            Description =
+                "Sets fAllowUnsolicited=0 under the Terminal Services Group Policy key. "
+                + "Prevents helpers from offering unsolicited Remote Assistance sessions. "
+                + "Disables the 'Offer RA' variant where a helper can push a connection without the user initiating a request.",
+            Tags = ["remote-assistance", "offer", "unsolicited", "policy", "security"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            ImpactScore = 4,
+            SafetyRating = 5,
+            ImpactNote = "Unsolicited Remote Assistance offers blocked; only user-initiated requests allowed.",
+            ApplyOps = [RegOp.SetDword(RemAssist, "fAllowUnsolicited", 0)],
+            RemoveOps = [RegOp.DeleteValue(RemAssist, "fAllowUnsolicited")],
+            DetectOps = [RegOp.CheckDword(RemAssist, "fAllowUnsolicited", 0)],
+        },
+        new TweakDef
+        {
+            Id = "remassist-policy-require-explicit-prompt",
+            Label = "Require Explicit User Consent for RA Control",
+            Category = "Remote Desktop",
+            Description =
+                "Sets fEnableFullControl=0 under the Terminal Services Group Policy key. "
+                + "Restricts incoming Remote Assistance sessions to view-only mode; the user must grant explicit "
+                + "permission before the helper can take mouse and keyboard control. "
+                + "Prevents silent takeover of user sessions.",
+            Tags = ["remote-assistance", "consent", "control", "policy", "security"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            ImpactScore = 3,
+            SafetyRating = 5,
+            ImpactNote = "RA helper can view but not control the session until the user approves.",
+            ApplyOps = [RegOp.SetDword(RemAssist, "fEnableFullControl", 0)],
+            RemoveOps = [RegOp.DeleteValue(RemAssist, "fEnableFullControl")],
+            DetectOps = [RegOp.CheckDword(RemAssist, "fEnableFullControl", 0)],
+        },
+        new TweakDef
+        {
+            Id = "remassist-policy-max-ticket-expiry-hours",
+            Label = "Limit Remote Assistance Ticket Validity to 1 Hour",
+            Category = "Remote Desktop",
+            Description =
+                "Sets MaxTicketExpiryUnits=1 and MaxTicketExpiry=1 under the RemoteAssistance Policy key. "
+                + "Limits invitation ticket validity to 1 hour. "
+                + "Shortens the window during which an RA invitation can be acted upon, reducing exposure.",
+            Tags = ["remote-assistance", "ticket", "expiry", "policy"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            ImpactScore = 2,
+            SafetyRating = 5,
+            ImpactNote = "RA invitation tickets expire within 1 hour; stale invitations cannot be reused.",
+            ApplyOps =
+            [
+                RegOp.SetDword(RemAssistRA, "MaxTicketExpiryUnits", 1),
+                RegOp.SetDword(RemAssistRA, "MaxTicketExpiry", 1),
+            ],
+            RemoveOps =
+            [
+                RegOp.DeleteValue(RemAssistRA, "MaxTicketExpiryUnits"),
+                RegOp.DeleteValue(RemAssistRA, "MaxTicketExpiry"),
+            ],
+            DetectOps =
+            [
+                RegOp.CheckDword(RemAssistRA, "MaxTicketExpiryUnits", 1),
+                RegOp.CheckDword(RemAssistRA, "MaxTicketExpiry", 1),
+            ],
+        },
+        new TweakDef
+        {
+            Id = "remassist-policy-require-bandwidth-limit",
+            Label = "Set Remote Assistance Bandwidth Limit",
+            Category = "Remote Desktop",
+            Description =
+                "Sets MaxAllowedBandwidth=2 under the RemoteAssistance Policy key. "
+                + "Caps bandwidth consumed by a Remote Assistance session (value 2 = 2 Mbps maximum). "
+                + "Prevents Remote Assistance from saturating network links during active sessions.",
+            Tags = ["remote-assistance", "bandwidth", "network", "policy"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            ImpactScore = 2,
+            SafetyRating = 5,
+            ImpactNote = "Remote Assistance bandwidth capped at 2 Mbps; network impact during sessions is bounded.",
+            ApplyOps = [RegOp.SetDword(RemAssistRA, "MaxAllowedBandwidth", 2)],
+            RemoveOps = [RegOp.DeleteValue(RemAssistRA, "MaxAllowedBandwidth")],
+            DetectOps = [RegOp.CheckDword(RemAssistRA, "MaxAllowedBandwidth", 2)],
+        },
+        new TweakDef
+        {
+            Id = "remassist-policy-disable-email-tickets",
+            Label = "Disable Email Invitation Tickets for RA",
+            Category = "Remote Desktop",
+            Description =
+                "Sets fAllowEmailInvitations=0 under the Terminal Services Group Policy key. "
+                + "Prevents users from creating Remote Assistance invitation tickets delivered by email. "
+                + "Email-based RA tickets can be forwarded, intercepted, or expire without notice; disabling this channel is a security best practice.",
+            Tags = ["remote-assistance", "email", "invitation", "policy", "security"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            ImpactScore = 3,
+            SafetyRating = 5,
+            ImpactNote = "Email-based Remote Assistance invitations disabled; only Easy Connect or file-based invites allowed.",
+            ApplyOps = [RegOp.SetDword(RemAssist, "fAllowEmailInvitations", 0)],
+            RemoveOps = [RegOp.DeleteValue(RemAssist, "fAllowEmailInvitations")],
+            DetectOps = [RegOp.CheckDword(RemAssist, "fAllowEmailInvitations", 0)],
+        },
+        new TweakDef
+        {
+            Id = "remassist-policy-disable-easy-connect",
+            Label = "Disable Easy Connect Remote Assistance",
+            Category = "Remote Desktop",
+            Description =
+                "Sets fAllowEasyConnect=0 under the RemoteAssistance Policy key. "
+                + "Disables the 'Easy Connect' Remote Assistance method which uses the Peer Name Resolution Protocol "
+                + "(PNRP) cloud service instead of a ticket file. "
+                + "Easy Connect depends on external cloud infrastructure; disabling it constrains RA to local network or ticket methods.",
+            Tags = ["remote-assistance", "easy-connect", "pnrp", "cloud", "policy"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            ImpactScore = 2,
+            SafetyRating = 5,
+            ImpactNote = "Easy Connect cloud-based RA method disabled; ticket-file method remains available.",
+            ApplyOps = [RegOp.SetDword(RemAssistRA, "fAllowEasyConnect", 0)],
+            RemoveOps = [RegOp.DeleteValue(RemAssistRA, "fAllowEasyConnect")],
+            DetectOps = [RegOp.CheckDword(RemAssistRA, "fAllowEasyConnect", 0)],
+        },
+        new TweakDef
+        {
+            Id = "remassist-policy-log-sessions",
+            Label = "Enable Remote Assistance Session Logging",
+            Category = "Remote Desktop",
+            Description =
+                "Sets EnableRASSessionAudit=1 under the RemoteAssistance Policy key. "
+                + "Enables audit logging of Remote Assistance connection events. "
+                + "Records who connected, when, and for how long — supports compliance and incident investigation.",
+            Tags = ["remote-assistance", "logging", "audit", "policy", "compliance"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            ImpactScore = 3,
+            SafetyRating = 5,
+            ImpactNote = "RA session events logged to the Windows event log for audit purposes.",
+            ApplyOps = [RegOp.SetDword(RemAssistRA, "EnableRASSessionAudit", 1)],
+            RemoveOps = [RegOp.DeleteValue(RemAssistRA, "EnableRASSessionAudit")],
+            DetectOps = [RegOp.CheckDword(RemAssistRA, "EnableRASSessionAudit", 1)],
+        },
+        new TweakDef
+        {
+            Id = "remassist-policy-disable-file-transfer",
+            Label = "Disable File Transfer During RA Sessions",
+            Category = "Remote Desktop",
+            Description =
+                "Sets fDisableExclamation=1 under the Terminal Services Group Policy key. "
+                + "Disables the file-transfer feature in Remote Assistance sessions. "
+                + "Prevents the helper from sending or receiving files during a session, "
+                + "blocking a common data exfiltration or dropper-delivery path.",
+            Tags = ["remote-assistance", "file-transfer", "exfiltration", "policy", "security"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            ImpactScore = 3,
+            SafetyRating = 5,
+            ImpactNote = "File transfer blocked during RA sessions; helpers cannot upload or download files.",
+            ApplyOps = [RegOp.SetDword(RemAssist, "fDisableExclamation", 1)],
+            RemoveOps = [RegOp.DeleteValue(RemAssist, "fDisableExclamation")],
+            DetectOps = [RegOp.CheckDword(RemAssist, "fDisableExclamation", 1)],
+        },
+    ];
+}

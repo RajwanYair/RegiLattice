@@ -4101,33 +4101,7 @@ internal static class PolicyAppPrivacy
 /// Spotlight features, lock screen suggestions, and tailored experiences
 /// that are delivered via cloud services.
 /// </summary>
-internal static class PolicyUserExperience
-{
-    private const string Key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CloudContent";
 
-    internal static IReadOnlyList<TweakDef> Tweaks { get; } =
-    [
-        new TweakDef
-        {
-            Id = "uxpol-disable-lock-screen-app-notifications",
-            Label = "Disable Lock Screen App Notifications via Policy",
-            Category = "System",
-            NeedsAdmin = true,
-            CorpSafe = true,
-            Description =
-                "Sets DisableLockScreenAppNotifications=1 under the CloudContent Group Policy path. "
-                + "Prevents app notification banners and badges from displaying on the lock screen. "
-                + "Reduces information exposure on unattended machines.",
-            Tags = ["lock-screen", "notifications", "policy", "security"],
-            ImpactScore = 3,
-            SafetyRating = 5,
-            ImpactNote = "Clears notification banners from the lock screen display.",
-            ApplyOps = [RegOp.SetDword(Key, "DisableLockScreenAppNotifications", 1)],
-            RemoveOps = [RegOp.DeleteValue(Key, "DisableLockScreenAppNotifications")],
-            DetectOps = [RegOp.CheckDword(Key, "DisableLockScreenAppNotifications", 1)],
-        },
-    ];
-}
 
 /// <summary>
 /// Sprint 655 — Windows Event Log sizing and access policies (10 tweaks).
@@ -4160,5 +4134,867 @@ internal static class PolicySyncSettings
 
     internal static IReadOnlyList<TweakDef> Tweaks { get; } =
     [
+    ];
+}
+
+internal static class PolicyLocation
+{
+    public static IReadOnlyList<TweakDef> Tweaks =>
+        [
+            .. _MapsPolicy.Data,
+            .. _LocationSensorsPolicy.Data,
+        ];
+
+    // ── Sprint 667 — Windows Maps Policy ──────────────────────────────────────
+    private static class _MapsPolicy
+    {
+        private const string MapsKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Maps";
+
+        public static IReadOnlyList<TweakDef> Data =>
+            [
+                new TweakDef
+                {
+                    Id = "priv-maps-disable-location",
+                    Label = "Disable Location in Maps Application",
+                    Category = "Privacy",
+                    Description =
+                        "Prevents the Windows Maps app from accessing location services via Group Policy. The app can still display maps but will not use device location for routing or nearby search. Stronger than the per-user setting. Default: location enabled. Recommended: disabled for privacy.",
+                    Tags = ["maps", "location", "privacy", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ApplyOps = [RegOp.SetDword(MapsKey, "DisableLocationBasedMaps", 1)],
+                    RemoveOps = [RegOp.DeleteValue(MapsKey, "DisableLocationBasedMaps")],
+                    DetectOps = [RegOp.CheckDword(MapsKey, "DisableLocationBasedMaps", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "priv-maps-disable-traffic",
+                    Label = "Disable Live Traffic Data in Maps",
+                    Category = "Privacy",
+                    Description =
+                        "Prevents the Maps app from downloading and displaying live traffic data. Eliminates background network calls used for route prediction and traffic inference. Default: traffic enabled. Recommended: disabled.",
+                    Tags = ["maps", "traffic", "network", "privacy", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 2,
+                    SafetyRating = 5,
+                    ApplyOps = [RegOp.SetDword(MapsKey, "TrafficEnabled", 0)],
+                    RemoveOps = [RegOp.DeleteValue(MapsKey, "TrafficEnabled")],
+                    DetectOps = [RegOp.CheckDword(MapsKey, "TrafficEnabled", 0)],
+                },
+                new TweakDef
+                {
+                    Id = "priv-maps-disable-auto-update",
+                    Label = "Disable Automatic Offline Map Downloads",
+                    Category = "Privacy",
+                    Description =
+                        "Stops Windows from automatically downloading and updating offline map tile data in the background. Eliminates background network traffic for map tile refreshes. Default: auto-updates enabled. Recommended: disabled.",
+                    Tags = ["maps", "offline", "update", "network", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 2,
+                    SafetyRating = 5,
+                    ApplyOps = [RegOp.SetDword(MapsKey, "AutoUpdatesEnabled", 0)],
+                    RemoveOps = [RegOp.DeleteValue(MapsKey, "AutoUpdatesEnabled")],
+                    DetectOps = [RegOp.CheckDword(MapsKey, "AutoUpdatesEnabled", 0)],
+                },
+                new TweakDef
+                {
+                    Id = "priv-maps-block-network-access",
+                    Label = "Block Maps App Network Access for Tile Downloads",
+                    Category = "Privacy",
+                    Description =
+                        "Blocks the Maps app from accessing the network to download map tile data. Companion to the auto-update disable policy; together they fully prevent background map network traffic. Default: network access allowed. Recommended: blocked.",
+                    Tags = ["maps", "network", "offline", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 2,
+                    SafetyRating = 5,
+                    ApplyOps = [RegOp.SetDword(MapsKey, "AllowNetworkAccess", 0)],
+                    RemoveOps = [RegOp.DeleteValue(MapsKey, "AllowNetworkAccess")],
+                    DetectOps = [RegOp.CheckDword(MapsKey, "AllowNetworkAccess", 0)],
+                },
+                new TweakDef
+                {
+                    Id = "priv-maps-disable-geofence-query",
+                    Label = "Disable Geo-Fence Address Queries in Maps",
+                    Category = "Privacy",
+                    Description =
+                        "Prevents the Maps app from making geo-fence address query requests to Microsoft servers. Geo-fence queries allow the service to track device entry and exit from geographic regions. Default: queries allowed. Recommended: disabled.",
+                    Tags = ["maps", "geofence", "location", "privacy", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ApplyOps = [RegOp.SetDword(MapsKey, "DisableGeoFenceAddressQuery", 1)],
+                    RemoveOps = [RegOp.DeleteValue(MapsKey, "DisableGeoFenceAddressQuery")],
+                    DetectOps = [RegOp.CheckDword(MapsKey, "DisableGeoFenceAddressQuery", 1)],
+                },
+            ];
+    }
+
+    // ── Sprint 668 — Location & Sensors Platform Policy ───────────────────────
+    private static class _LocationSensorsPolicy
+    {
+        private const string LocKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\LocationAndSensors";
+
+        public static IReadOnlyList<TweakDef> Data =>
+            [
+                new TweakDef
+                {
+                    Id = "priv-loc-disable-location",
+                    Label = "Disable Windows Location Platform (Policy)",
+                    Category = "Privacy",
+                    Description =
+                        "Turns off the Windows Location platform via Group Policy. Prevents all apps and system components from obtaining device location. Stronger than individual per-app settings because this is a machine-wide policy that cannot be overridden by user settings. Default: location enabled. Recommended: disabled for privacy.",
+                    Tags = ["location", "gps", "privacy", "policy", "sensors"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 4,
+                    ApplyOps = [RegOp.SetDword(LocKey, "DisableLocation", 1)],
+                    RemoveOps = [RegOp.DeleteValue(LocKey, "DisableLocation")],
+                    DetectOps = [RegOp.CheckDword(LocKey, "DisableLocation", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "priv-loc-disable-scripting",
+                    Label = "Disable Scripted Access to Windows Location Provider",
+                    Category = "Privacy",
+                    Description =
+                        "Prevents scripts (JavaScript, VBScript, WScript) from accessing the Windows Location Provider API. Blocks browser-based and embedded-application scripted location queries without affecting native app location access. Default: scripting allowed. Recommended: disabled.",
+                    Tags = ["location", "scripting", "privacy", "api", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ApplyOps = [RegOp.SetDword(LocKey, "DisableLocationScripting", 1)],
+                    RemoveOps = [RegOp.DeleteValue(LocKey, "DisableLocationScripting")],
+                    DetectOps = [RegOp.CheckDword(LocKey, "DisableLocationScripting", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "priv-loc-disable-win-location-provider",
+                    Label = "Disable Windows Location Provider",
+                    Category = "Privacy",
+                    Description =
+                        "Disables the Windows Location Provider component, which derives location from Wi-Fi triangulation, IP geolocation, and cell tower data (on mobile hardware). Prevents passive location tracking without GPS. Default: enabled. Recommended: disabled for privacy.",
+                    Tags = ["location", "wifi", "triangulation", "privacy", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 4,
+                    ApplyOps = [RegOp.SetDword(LocKey, "DisableWindowsLocationProvider", 1)],
+                    RemoveOps = [RegOp.DeleteValue(LocKey, "DisableWindowsLocationProvider")],
+                    DetectOps = [RegOp.CheckDword(LocKey, "DisableWindowsLocationProvider", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "priv-loc-disable-sensors",
+                    Label = "Disable Windows Sensors Platform",
+                    Category = "Privacy",
+                    Description =
+                        "Disables the Windows Sensors platform, which provides apps access to accelerometers, ambient light sensors, gyrometers, and other hardware sensors. Prevents passive motion and environment inference by apps. Default: enabled. Recommended: disabled on fixed workstations.",
+                    Tags = ["sensors", "accelerometer", "ambient-light", "privacy", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 2,
+                    SafetyRating = 4,
+                    ApplyOps = [RegOp.SetDword(LocKey, "DisableSensors", 1)],
+                    RemoveOps = [RegOp.DeleteValue(LocKey, "DisableSensors")],
+                    DetectOps = [RegOp.CheckDword(LocKey, "DisableSensors", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "priv-loc-disable-geolocation-api",
+                    Label = "Disable Geolocation API for Applications",
+                    Category = "Privacy",
+                    Description =
+                        "Disables the system Geolocation API used by UWP and Win32 apps to request precise geographic coordinates. Applied at the policy layer, blocking all apps from obtaining location data regardless of individual user grant settings. Default: API accessible. Recommended: disabled.",
+                    Tags = ["geolocation", "api", "location", "privacy", "policy", "uwp"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 4,
+                    SafetyRating = 4,
+                    ApplyOps = [RegOp.SetDword(LocKey, "DisableGeolocation", 1)],
+                    RemoveOps = [RegOp.DeleteValue(LocKey, "DisableGeolocation")],
+                    DetectOps = [RegOp.CheckDword(LocKey, "DisableGeolocation", 1)],
+                },
+            ];
+    }
+}
+
+internal static class PolicyDataCollection
+{
+    public static IReadOnlyList<TweakDef> Tweaks =>
+        [
+            .. _DataCollectionPolicy.Data,
+            .. _AppCompatPolicy.Data,
+        ];
+
+    // ── Sprint 669a — Data Collection (Telemetry) Advanced Policy ─────────────
+    private static class _DataCollectionPolicy
+    {
+        private const string DcKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DataCollection";
+
+        public static IReadOnlyList<TweakDef> Data =>
+            [
+                new TweakDef
+                {
+                    Id = "telem-policy-disable-device-census",
+                    Label = "Disable Device Census Telemetry Task (Policy)",
+                    Category = "Privacy",
+                    Description =
+                        "Disables the Device Census scheduled task via Group Policy, which collects detailed hardware inventory, installed software, and system configuration data for Microsoft analytics. Default: enabled. Recommended: disabled.",
+                    Tags = ["telemetry", "census", "inventory", "policy", "diagnostic"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ApplyOps = [RegOp.SetDword(DcKey, "DisableDeviceCensus", 1)],
+                    RemoveOps = [RegOp.DeleteValue(DcKey, "DisableDeviceCensus")],
+                    DetectOps = [RegOp.CheckDword(DcKey, "DisableDeviceCensus", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "telem-policy-disable-onedrive-sync-telemetry",
+                    Label = "Disable OneDrive Diagnostic Telemetry (Policy)",
+                    Category = "Privacy",
+                    Description =
+                        "Disables OneDrive-specific diagnostic telemetry via the DataCollection Group Policy key. Prevents OneDrive from contributing sync diagnostic and usage pattern data to Microsoft telemetry pipelines. Default: enabled. Recommended: disabled.",
+                    Tags = ["telemetry", "onedrive", "diagnostic", "privacy", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 2,
+                    SafetyRating = 5,
+                    ApplyOps = [RegOp.SetDword(DcKey, "DisableOneDriveSyncDiagnostics", 1)],
+                    RemoveOps = [RegOp.DeleteValue(DcKey, "DisableOneDriveSyncDiagnostics")],
+                    DetectOps = [RegOp.CheckDword(DcKey, "DisableOneDriveSyncDiagnostics", 1)],
+                },
+            ];
+    }
+
+    // ── Sprint 669b — Application Compatibility CEIP Policy ───────────────────
+    private static class _AppCompatPolicy
+    {
+        private const string CompatKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\AppCompat";
+
+        public static IReadOnlyList<TweakDef> Data =>
+            [
+                new TweakDef
+                {
+                    Id = "telem-policy-disable-uac-detection",
+                    Label = "Disable Application Compatibility UAC Mitigation Detection",
+                    Category = "Privacy",
+                    Description =
+                        "Disables the Application Compatibility layer from running UAC compatibility mitigations on applications. Reduces compatibility engine overhead and telemetry data about legacy application UAC patterns. Default: enabled. Recommended: disabled on modern application environments.",
+                    Tags = ["appcompat", "uac", "compatibility", "policy", "telemetry"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 2,
+                    SafetyRating = 4,
+                    ApplyOps = [RegOp.SetDword(CompatKey, "DisableUACompleteAutomation", 1)],
+                    RemoveOps = [RegOp.DeleteValue(CompatKey, "DisableUACompleteAutomation")],
+                    DetectOps = [RegOp.CheckDword(CompatKey, "DisableUACompleteAutomation", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "telem-policy-disable-ceip-reporting",
+                    Label = "Disable Application Compatibility CEIP Reporting",
+                    Category = "Privacy",
+                    Description =
+                        "Disables the Customer Experience Improvement Program (CEIP) data collection within the Application Compatibility subsystem. Stops the engine from uploading crash and compatibility sentinel events to Microsoft telemetry servers. Default: CEIP data uploaded. Recommended: disabled.",
+                    Tags = ["appcompat", "ceip", "telemetry", "reporting", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 3,
+                    SafetyRating = 5,
+                    ApplyOps = [RegOp.SetDword(CompatKey, "DisablePropPageShim", 1)],
+                    RemoveOps = [RegOp.DeleteValue(CompatKey, "DisablePropPageShim")],
+                    DetectOps = [RegOp.CheckDword(CompatKey, "DisablePropPageShim", 1)],
+                },
+            ];
+    }
+}
+
+internal static class PolicyWindowsFeeds
+{
+    // HKLM\SOFTWARE\Policies\Microsoft\Windows\WindowsFeeds — Windows RSS Feeds/
+    // Ticker controlled via Group Policy (distinct from the Dsh/News widgets path).
+
+    private const string FeedsKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsFeeds";
+
+    public static IReadOnlyList<TweakDef> Tweaks { get; } =
+    [
+        new TweakDef
+        {
+            Id = "wsfeed-disable-windows-feeds",
+            Label = "Disable Windows Feeds via Policy",
+            Category = "Privacy",
+            Description =
+                "Sets DisableWindowsFeeds=1 in the WindowsFeeds Group Policy key. "
+                + "Prevents the Windows Feeds (RSS/Atom) integration from running in the taskbar and File Explorer. "
+                + "Eliminates background network polling for feed updates and removes the news ticker UI.",
+            Tags = ["feeds", "rss", "news", "taskbar", "policy", "privacy"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            ImpactScore = 3,
+            SafetyRating = 5,
+            ImpactNote = "Disables Windows Feed subscriptions and background RSS polling.",
+            ApplyOps = [RegOp.SetDword(FeedsKey, "DisableWindowsFeeds", 1)],
+            RemoveOps = [RegOp.DeleteValue(FeedsKey, "DisableWindowsFeeds")],
+            DetectOps = [RegOp.CheckDword(FeedsKey, "DisableWindowsFeeds", 1)],
+        },
+        new TweakDef
+        {
+            Id = "wsfeed-disable-background-sync",
+            Label = "Disable Background Feed Synchronisation",
+            Category = "Privacy",
+            Description =
+                "Sets BackgroundSyncEnabled=0 in the WindowsFeeds Group Policy key. "
+                + "Prevents Windows from silently synchronising feed content in the background. "
+                + "Reduces network traffic and CPU wakeups from feed polling tasks.",
+            Tags = ["feeds", "sync", "background", "network", "policy"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            ImpactScore = 2,
+            SafetyRating = 5,
+            ImpactNote = "Feed content no longer syncs in the background; pages only update when manually opened.",
+            ApplyOps = [RegOp.SetDword(FeedsKey, "BackgroundSyncEnabled", 0)],
+            RemoveOps = [RegOp.DeleteValue(FeedsKey, "BackgroundSyncEnabled")],
+            DetectOps = [RegOp.CheckDword(FeedsKey, "BackgroundSyncEnabled", 0)],
+        },
+        new TweakDef
+        {
+            Id = "wsfeed-prevent-feed-subscription",
+            Label = "Prevent Users from Subscribing to Feeds",
+            Category = "Privacy",
+            Description =
+                "Sets PreventSubscription=1 in the WindowsFeeds Group Policy key. "
+                + "Blocks users from subscribing to new RSS/Atom feeds via Internet Explorer or Feed Discovery. "
+                + "Useful in controlled environments where feed subscriptions must be centrally managed.",
+            Tags = ["feeds", "subscription", "policy", "enterprise"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            ImpactScore = 2,
+            SafetyRating = 5,
+            ImpactNote = "Users cannot add new RSS feed subscriptions in browsers or via auto-discovery.",
+            ApplyOps = [RegOp.SetDword(FeedsKey, "PreventSubscription", 1)],
+            RemoveOps = [RegOp.DeleteValue(FeedsKey, "PreventSubscription")],
+            DetectOps = [RegOp.CheckDword(FeedsKey, "PreventSubscription", 1)],
+        },
+        new TweakDef
+        {
+            Id = "wsfeed-prevent-feed-discovery",
+            Label = "Prevent Automatic Feed Discovery",
+            Category = "Privacy",
+            Description =
+                "Sets PreventAutoDiscovery=1 in the WindowsFeeds Group Policy key. "
+                + "Stops Internet Explorer and other browsers from automatically discovering available feeds "
+                + "on visited web pages. Eliminates the feed icon in the toolbar and related network probes.",
+            Tags = ["feeds", "discovery", "browser", "policy", "privacy"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            ImpactScore = 2,
+            SafetyRating = 5,
+            ImpactNote = "Feed discovery in browsers is disabled; no auto-detection of RSS/Atom links.",
+            ApplyOps = [RegOp.SetDword(FeedsKey, "PreventAutoDiscovery", 1)],
+            RemoveOps = [RegOp.DeleteValue(FeedsKey, "PreventAutoDiscovery")],
+            DetectOps = [RegOp.CheckDword(FeedsKey, "PreventAutoDiscovery", 1)],
+        },
+        new TweakDef
+        {
+            Id = "wsfeed-disable-unlocked-feeds",
+            Label = "Lock Feed List to Prevent User Modifications",
+            Category = "Privacy",
+            Description =
+                "Sets FeedListLocked=1 in the WindowsFeeds Group Policy key. "
+                + "Prevents users from adding, removing, or modifying feed subscriptions. "
+                + "Administrators retain full control over what feed sources are available systemwide.",
+            Tags = ["feeds", "lockdown", "policy", "enterprise"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            ImpactScore = 2,
+            SafetyRating = 5,
+            ImpactNote = "Feed list is read-only for standard users; only admins can change subscriptions.",
+            ApplyOps = [RegOp.SetDword(FeedsKey, "FeedListLocked", 1)],
+            RemoveOps = [RegOp.DeleteValue(FeedsKey, "FeedListLocked")],
+            DetectOps = [RegOp.CheckDword(FeedsKey, "FeedListLocked", 1)],
+        },
+        new TweakDef
+        {
+            Id = "wsfeed-disable-feed-download",
+            Label = "Block Feed Content Download",
+            Category = "Privacy",
+            Description =
+                "Sets AllowFeedDownload=0 in the WindowsFeeds Group Policy key. "
+                + "Prevents Windows from downloading feed content to the local machine, stopping "
+                + "offline reading caches and news-article pre-fetch from consuming bandwidth and storage.",
+            Tags = ["feeds", "download", "bandwidth", "policy", "privacy"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            ImpactScore = 2,
+            SafetyRating = 5,
+            ImpactNote = "Feed articles are not pre-fetched; online access required to view feed content.",
+            ApplyOps = [RegOp.SetDword(FeedsKey, "AllowFeedDownload", 0)],
+            RemoveOps = [RegOp.DeleteValue(FeedsKey, "AllowFeedDownload")],
+            DetectOps = [RegOp.CheckDword(FeedsKey, "AllowFeedDownload", 0)],
+        },
+        new TweakDef
+        {
+            Id = "wsfeed-disable-third-party-feeds",
+            Label = "Block Third-Party Feed Providers",
+            Category = "Privacy",
+            Description =
+                "Sets AllowThirdPartyFeeds=0 in the WindowsFeeds Group Policy key. "
+                + "Restricts feed aggregation to Windows-native sources only, preventing third-party "
+                + "feed aggregators or browser extensions from registering as system-level feed providers.",
+            Tags = ["feeds", "third-party", "policy", "enterprise", "security"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            ImpactScore = 2,
+            SafetyRating = 4,
+            ImpactNote = "Only Windows-native feed mechanisms are permitted; third-party aggregators are blocked.",
+            ApplyOps = [RegOp.SetDword(FeedsKey, "AllowThirdPartyFeeds", 0)],
+            RemoveOps = [RegOp.DeleteValue(FeedsKey, "AllowThirdPartyFeeds")],
+            DetectOps = [RegOp.CheckDword(FeedsKey, "AllowThirdPartyFeeds", 0)],
+        },
+        new TweakDef
+        {
+            Id = "wsfeed-disable-feed-reading-pane",
+            Label = "Disable Feed Reading Pane",
+            Category = "Privacy",
+            Description =
+                "Sets DisableReadingPane=1 in the WindowsFeeds Group Policy key. "
+                + "Removes the feed reading pane from Internet Explorer and Windows RSS Platform view. "
+                + "Reduces distraction and prevents previewing unapproved news content inside the browser.",
+            Tags = ["feeds", "reading-pane", "browser", "policy"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            ImpactScore = 1,
+            SafetyRating = 5,
+            ImpactNote = "Reading pane in feed viewer is hidden; feeds show in list-only mode.",
+            ApplyOps = [RegOp.SetDword(FeedsKey, "DisableReadingPane", 1)],
+            RemoveOps = [RegOp.DeleteValue(FeedsKey, "DisableReadingPane")],
+            DetectOps = [RegOp.CheckDword(FeedsKey, "DisableReadingPane", 1)],
+        },
+        new TweakDef
+        {
+            Id = "wsfeed-disable-enclosure-download",
+            Label = "Block Feed Enclosure (Podcast) Auto-Download",
+            Category = "Privacy",
+            Description =
+                "Sets AllowEnclosureDownload=0 in the WindowsFeeds Group Policy key. "
+                + "Prevents Windows from automatically downloading podcast and media enclosures "
+                + "attached to RSS feed items. Eliminates background large-file downloads triggered by feed updates.",
+            Tags = ["feeds", "podcast", "enclosure", "download", "bandwidth", "policy"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            ImpactScore = 3,
+            SafetyRating = 5,
+            ImpactNote = "Podcast/media enclosures in RSS feeds are not auto-downloaded.",
+            ApplyOps = [RegOp.SetDword(FeedsKey, "AllowEnclosureDownload", 0)],
+            RemoveOps = [RegOp.DeleteValue(FeedsKey, "AllowEnclosureDownload")],
+            DetectOps = [RegOp.CheckDword(FeedsKey, "AllowEnclosureDownload", 0)],
+        },
+        new TweakDef
+        {
+            Id = "wsfeed-restrict-feed-secure-only",
+            Label = "Restrict Feeds to HTTPS Sources Only",
+            Category = "Privacy",
+            Description =
+                "Sets SecureFeedsOnly=1 in the WindowsFeeds Group Policy key. "
+                + "Enforces that only feeds served over HTTPS are accepted by the Windows RSS Platform. "
+                + "Blocks plain HTTP feed URLs which could be subject to man-in-the-middle injection and content tampering.",
+            Tags = ["feeds", "https", "security", "policy", "network"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            ImpactScore = 3,
+            SafetyRating = 5,
+            ImpactNote = "HTTP feed URLs are rejected; all feed sources must use HTTPS.",
+            ApplyOps = [RegOp.SetDword(FeedsKey, "SecureFeedsOnly", 1)],
+            RemoveOps = [RegOp.DeleteValue(FeedsKey, "SecureFeedsOnly")],
+            DetectOps = [RegOp.CheckDword(FeedsKey, "SecureFeedsOnly", 1)],
+        },
+    ];
+}
+
+internal static class PolicySpeechInput
+{
+    // HKLM\SOFTWARE\Policies\Microsoft\Windows\Speech — Speech Recognition / Voice Access.
+    // HKLM\SOFTWARE\Policies\Microsoft\Windows\SpeechModel — online speech model policies.
+
+    private const string SpeechKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Speech";
+    private const string ModelKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\SpeechModel";
+
+    public static IReadOnlyList<TweakDef> Tweaks { get; } =
+    [
+        new TweakDef
+        {
+            Id = "spkinput-disable-online-speech-recognition",
+            Label = "Disable Online Speech Recognition via Policy",
+            Category = "Privacy",
+            Description =
+                "Sets AllowSpeechRecognition=0 in the Speech Group Policy key. "
+                + "Prevents the cloud speech recognition service from being used for Windows speech features. "
+                + "Voice data is only processed on-device; no audio is transmitted to Microsoft Speech servers. "
+                + "Applies broadly to Cortana voice queries, Voice Typing, and Voice Access cloud enhancement.",
+            Tags = ["speech", "recognition", "cloud", "privacy", "policy"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            ImpactScore = 4,
+            SafetyRating = 5,
+            ImpactNote = "Cloud speech recognition disabled; on-device speech processing continues.",
+            ApplyOps = [RegOp.SetDword(SpeechKey, "AllowSpeechRecognition", 0)],
+            RemoveOps = [RegOp.DeleteValue(SpeechKey, "AllowSpeechRecognition")],
+            DetectOps = [RegOp.CheckDword(SpeechKey, "AllowSpeechRecognition", 0)],
+        },
+        new TweakDef
+        {
+            Id = "spkinput-disable-voice-activation",
+            Label = "Block Always-On Voice Activation",
+            Category = "Privacy",
+            Description =
+                "Sets AllowVoiceActivation=0 in the Speech Group Policy key. "
+                + "Prevents applications from using the always-on voice listening hook (keyword detection). "
+                + "Eliminates the continuous microphone monitoring required for wake words ('Hey Cortana', etc.), "
+                + "removing a permanent audio capture pipeline from the endpoint.",
+            Tags = ["speech", "voice-activation", "wake-word", "microphone", "privacy", "policy"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            ImpactScore = 4,
+            SafetyRating = 5,
+            ImpactNote = "Always-on wake word detection is disabled; microphone not continuously monitored.",
+            ApplyOps = [RegOp.SetDword(SpeechKey, "AllowVoiceActivation", 0)],
+            RemoveOps = [RegOp.DeleteValue(SpeechKey, "AllowVoiceActivation")],
+            DetectOps = [RegOp.CheckDword(SpeechKey, "AllowVoiceActivation", 0)],
+        },
+        new TweakDef
+        {
+            Id = "spkinput-disable-speech-model-update",
+            Label = "Block Automatic Speech Model Updates",
+            Category = "Privacy",
+            Description =
+                "Sets AllowSpeechModelUpdate=0 in the SpeechModel Group Policy key. "
+                + "Prevents Windows from automatically downloading and applying updated cloud or on-device "
+                + "speech recognition model files. Stabilises speech behaviour in validated regulated "
+                + "environments where untested model changes could affect accessibility tools.",
+            Tags = ["speech", "model-update", "policy", "enterprise", "compliance"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            ImpactScore = 2,
+            SafetyRating = 4,
+            ImpactNote = "Speech model files are frozen; updates require IT-managed deployment.",
+            ApplyOps = [RegOp.SetDword(ModelKey, "AllowSpeechModelUpdate", 0)],
+            RemoveOps = [RegOp.DeleteValue(ModelKey, "AllowSpeechModelUpdate")],
+            DetectOps = [RegOp.CheckDword(ModelKey, "AllowSpeechModelUpdate", 0)],
+        },
+        new TweakDef
+        {
+            Id = "spkinput-disable-speech-telemetry",
+            Label = "Disable Speech Input Telemetry",
+            Category = "Privacy",
+            Description =
+                "Sets AllowSpeechTelemetry=0 in the Speech Group Policy key. "
+                + "Blocks the Speech subsystem from sending diagnostic voice data, recognition accuracy "
+                + "metrics, and corrected text snippets to Microsoft for model improvement. "
+                + "Audio utterances and transcription corrections are classified as personal data under GDPR/HIPAA.",
+            Tags = ["speech", "telemetry", "privacy", "compliance", "policy"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            ImpactScore = 3,
+            SafetyRating = 5,
+            ImpactNote = "Speech telemetry suppressed; no voice samples or transcription data transmitted.",
+            ApplyOps = [RegOp.SetDword(SpeechKey, "AllowSpeechTelemetry", 0)],
+            RemoveOps = [RegOp.DeleteValue(SpeechKey, "AllowSpeechTelemetry")],
+            DetectOps = [RegOp.CheckDword(SpeechKey, "AllowSpeechTelemetry", 0)],
+        },
+        new TweakDef
+        {
+            Id = "spkinput-disable-voice-typing",
+            Label = "Disable Voice Typing via Policy",
+            Category = "Privacy",
+            Description =
+                "Sets AllowVoiceTyping=0 in the Speech Group Policy key. "
+                + "Disables the Voice Typing feature (Win+H) systemwide via Group Policy. "
+                + "Prevents users from dictating text into any application, stopping the microphone "
+                + "activation path associated with dictation on shared and kiosk workstations.",
+            Tags = ["speech", "voice-typing", "dictation", "microphone", "policy"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            ImpactScore = 3,
+            SafetyRating = 5,
+            ImpactNote = "Voice Typing (Win+H) is disabled; microphone not used for dictation.",
+            ApplyOps = [RegOp.SetDword(SpeechKey, "AllowVoiceTyping", 0)],
+            RemoveOps = [RegOp.DeleteValue(SpeechKey, "AllowVoiceTyping")],
+            DetectOps = [RegOp.CheckDword(SpeechKey, "AllowVoiceTyping", 0)],
+        },
+        new TweakDef
+        {
+            Id = "spkinput-disable-cortana-voice",
+            Label = "Disable Cortana Voice Interaction via Policy",
+            Category = "Privacy",
+            Description =
+                "Sets AllowCortanaVoice=0 in the Speech Group Policy key. "
+                + "Prevents Cortana from accepting voice input and responding to spoken queries. "
+                + "Complements the Cortana keyboard disable by also closing the audio/microphone channel "
+                + "used for Cortana's voice assistant functionality.",
+            Tags = ["speech", "cortana", "voice", "microphone", "policy", "privacy"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            ImpactScore = 3,
+            SafetyRating = 5,
+            ImpactNote = "Cortana no longer accepts voice queries; keyboard interaction unaffected.",
+            ApplyOps = [RegOp.SetDword(SpeechKey, "AllowCortanaVoice", 0)],
+            RemoveOps = [RegOp.DeleteValue(SpeechKey, "AllowCortanaVoice")],
+            DetectOps = [RegOp.CheckDword(SpeechKey, "AllowCortanaVoice", 0)],
+        },
+        new TweakDef
+        {
+            Id = "spkinput-disable-speech-personalization",
+            Label = "Block Speech Personalisation Data Collection",
+            Category = "Privacy",
+            Description =
+                "Sets AllowSpeechPersonalization=0 in the Speech Group Policy key. "
+                + "Stops Windows from collecting contacts, calendar events, frequently typed words, "
+                + "and app usage patterns to personalise speech recognition accuracy. "
+                + "This dataset would stay on-device but its aggregation represents a privacy concern "
+                + "in regulated environments where data minimisation principles apply.",
+            Tags = ["speech", "personalisation", "privacy", "policy", "compliance"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            ImpactScore = 2,
+            SafetyRating = 5,
+            ImpactNote = "Speech personalisation disabled; recognition accuracy unchanged.",
+            ApplyOps = [RegOp.SetDword(SpeechKey, "AllowSpeechPersonalization", 0)],
+            RemoveOps = [RegOp.DeleteValue(SpeechKey, "AllowSpeechPersonalization")],
+            DetectOps = [RegOp.CheckDword(SpeechKey, "AllowSpeechPersonalization", 0)],
+        },
+        new TweakDef
+        {
+            Id = "spkinput-disable-voice-access-start",
+            Label = "Prevent Voice Access from Starting at Login",
+            Category = "Privacy",
+            Description =
+                "Sets AllowVoiceAccessStartup=0 in the Speech Group Policy key. "
+                + "Prevents the Windows Voice Access feature from automatically starting when a user logs "
+                + "into Windows. Voice Access requires persistent microphone access; letting it auto-start "
+                + "runs an unnecessary audio capture pipeline on workstations not requiring accessibility.",
+            Tags = ["speech", "voice-access", "startup", "microphone", "policy"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            ImpactScore = 2,
+            SafetyRating = 5,
+            ImpactNote = "Voice Access does not auto-start; users can still launch it manually.",
+            ApplyOps = [RegOp.SetDword(SpeechKey, "AllowVoiceAccessStartup", 0)],
+            RemoveOps = [RegOp.DeleteValue(SpeechKey, "AllowVoiceAccessStartup")],
+            DetectOps = [RegOp.CheckDword(SpeechKey, "AllowVoiceAccessStartup", 0)],
+        },
+        new TweakDef
+        {
+            Id = "spkinput-restrict-online-speech-model",
+            Label = "Block Online Speech Model Download",
+            Category = "Privacy",
+            Description =
+                "Sets AllowOnlineSpeechModel=0 in the SpeechModel Group Policy key. "
+                + "Prevents Windows from downloading an enhanced online speech recognition model "
+                + "that improves accuracy beyond the locally installed model. "
+                + "Disabling the download removes a background network data transfer and pins "
+                + "speech processing to on-device models vetted by the organisation.",
+            Tags = ["speech", "model", "download", "network", "policy"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            ImpactScore = 2,
+            SafetyRating = 4,
+            ImpactNote = "Online speech model is not downloaded; on-device model used exclusively.",
+            ApplyOps = [RegOp.SetDword(ModelKey, "AllowOnlineSpeechModel", 0)],
+            RemoveOps = [RegOp.DeleteValue(ModelKey, "AllowOnlineSpeechModel")],
+            DetectOps = [RegOp.CheckDword(ModelKey, "AllowOnlineSpeechModel", 0)],
+        },
+        new TweakDef
+        {
+            Id = "spkinput-disable-speech-access-across-lock",
+            Label = "Disable Speech Recognition on Lock Screen",
+            Category = "Privacy",
+            Description =
+                "Sets AllowSpeechOnLockScreen=0 in the Speech Group Policy key. "
+                + "Prevents voice assistants and speech recognition from accepting voice input when "
+                + "the workstation screen is locked. Eliminates the attack surface where an attacker "
+                + "with physical access to a locked machine can issue voice commands to local assistants.",
+            Tags = ["speech", "lock-screen", "security", "policy", "physical-security"],
+            NeedsAdmin = true,
+            CorpSafe = true,
+            ImpactScore = 4,
+            SafetyRating = 5,
+            ImpactNote = "Voice assistant cannot be invoked from locked screen; prevents audio-based attacks.",
+            ApplyOps = [RegOp.SetDword(SpeechKey, "AllowSpeechOnLockScreen", 0)],
+            RemoveOps = [RegOp.DeleteValue(SpeechKey, "AllowSpeechOnLockScreen")],
+            DetectOps = [RegOp.CheckDword(SpeechKey, "AllowSpeechOnLockScreen", 0)],
+        },
+    ];
+}
+
+internal static class PolicyReliabilityMonitor
+{
+    private const string RacKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows NT\Reliability";
+    private const string WerKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Error Reporting";
+    private const string PcKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\PCHealth\ErrorReporting";
+
+    internal static IReadOnlyList<TweakDef> Tweaks { get; } =
+    [
+        new TweakDef
+        {
+            Id = "maint-reliability-shutdown-reason-text",
+            Label = "Require Shutdown Reason Text",
+            Category = "Privacy",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Sets ShutdownReasonUI=1 and ReasonCodeRequired=1 in Reliability policy. "
+                + "Forces users to select a shutdown reason and enter explanatory text when initiating a planned or unplanned shutdown. "
+                + "Improves uptime tracking and post-incident root cause analysis in managed enterprise environments.",
+            Tags = ["reliability", "shutdown", "reason", "audit", "uptime"],
+            ImpactScore = 3,
+            SafetyRating = 5,
+            ImpactNote = "Prompts for shutdown reason; visible user impact at every shutdown/restart.",
+            ApplyOps = [RegOp.SetDword(RacKey, "ShutdownReasonUI", 1), RegOp.SetDword(RacKey, "ReasonCodeRequired", 1)],
+            RemoveOps = [RegOp.DeleteValue(RacKey, "ShutdownReasonUI"), RegOp.DeleteValue(RacKey, "ReasonCodeRequired")],
+            DetectOps = [RegOp.CheckDword(RacKey, "ShutdownReasonUI", 1), RegOp.CheckDword(RacKey, "ReasonCodeRequired", 1)],
+        },
+        new TweakDef
+        {
+            Id = "maint-reliability-racevent-interval",
+            Label = "Extend Reliability Event Logging Interval",
+            Category = "Privacy",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Sets TimeStampInterval=7 in Reliability policy, extending the RAC (Reliability Analysis Component) time-stamp interval to 7 days. "
+                + "Reduces disk I/O for reliability data collection on endpoints where the default hourly reliability logging is excessive. "
+                + "Useful for write-sensitive devices such as those with eMMC storage.",
+            Tags = ["reliability", "rac", "logging", "interval", "disk-io"],
+            ImpactScore = 2,
+            SafetyRating = 5,
+            ImpactNote = "Reduces reliability event logging frequency; less granular uptime data.",
+            ApplyOps = [RegOp.SetDword(RacKey, "TimeStampInterval", 7)],
+            RemoveOps = [RegOp.DeleteValue(RacKey, "TimeStampInterval")],
+            DetectOps = [RegOp.CheckDword(RacKey, "TimeStampInterval", 7)],
+        },
+        new TweakDef
+        {
+            Id = "maint-wer-disable-default-consent",
+            Label = "Disable Windows Error Reporting Default Consent",
+            Category = "Privacy",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Sets DefaultConsent=1 in WER policy (Always Ask). "
+                + "Requires explicit user or administrator consent before any error report is sent to Microsoft. "
+                + "Prevents automatic or silent submission of crash dumps and application error telemetry that may contain sensitive process memory contents.",
+            Tags = ["wer", "error-reporting", "consent", "privacy", "telemetry"],
+            ImpactScore = 3,
+            SafetyRating = 5,
+            ImpactNote = "Prompts before any error report upload; no silent data submission.",
+            ApplyOps = [RegOp.SetDword(WerKey, "DefaultConsent", 1)],
+            RemoveOps = [RegOp.DeleteValue(WerKey, "DefaultConsent")],
+            DetectOps = [RegOp.CheckDword(WerKey, "DefaultConsent", 1)],
+        },
+        new TweakDef
+        {
+            Id = "maint-wer-disable-kernel-faults",
+            Label = "Exclude Kernel-Level Faults from WER",
+            Category = "Privacy",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Sets ExcludeKernelFaults=1 in WER policy. "
+                + "Prevents kernel-level crash events from being included in Windows Error Reporting submissions. "
+                + "Kernel dumps can contain entire memory contents including encryption keys and privileged process memory, making them unsuitable for external submission.",
+            Tags = ["wer", "kernel-dump", "crash", "memory", "security"],
+            ImpactScore = 3,
+            SafetyRating = 5,
+            ImpactNote = "Excludes kernel crash data from WER submissions; reduces data leakage risk.",
+            ApplyOps = [RegOp.SetDword(WerKey, "ExcludeKernelFaults", 1)],
+            RemoveOps = [RegOp.DeleteValue(WerKey, "ExcludeKernelFaults")],
+            DetectOps = [RegOp.CheckDword(WerKey, "ExcludeKernelFaults", 1)],
+        },
+        new TweakDef
+        {
+            Id = "maint-wer-disable-archive-behavior",
+            Label = "Disable WER Problem Reporting Queue Archival",
+            Category = "Privacy",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Sets DumpType=0 in WER policy. "
+                + "Prevents Windows Error Reporting from archiving application crash mini-dumps to the local queue directory for later upload. "
+                + "Reduces disk usage from accumulated crash dump files and prevents sensitive process memory from persisting on disk beyond the immediate crash event.",
+            Tags = ["wer", "archive", "dump", "disk", "privacy"],
+            ImpactScore = 2,
+            SafetyRating = 5,
+            ImpactNote = "Prevents crash dump accumulation on disk; no deferred upload queue.",
+            ApplyOps = [RegOp.SetDword(WerKey, "DumpType", 0)],
+            RemoveOps = [RegOp.DeleteValue(WerKey, "DumpType")],
+            DetectOps = [RegOp.CheckDword(WerKey, "DumpType", 0)],
+        },
+        new TweakDef
+        {
+            Id = "maint-pch-disable-all-error-reporting",
+            Label = "Disable All PCHealth Error Reporting Channels",
+            Category = "Privacy",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Sets AllOrNone=1 and ShowUI=0 in PCHealth\\ErrorReporting policy. "
+                + "Blocks the PCHealth component from showing any error reporting UI and from queuing reports to any reporting channel. "
+                + "Complements the DoReport=0 setting to ensure the legacy error reporting subsystem is fully silent.",
+            Tags = ["pchealth", "error-reporting", "legacy", "silent", "ui"],
+            ImpactScore = 2,
+            SafetyRating = 5,
+            ImpactNote = "Silences legacy PCHealth error dialogs and submission queue.",
+            ApplyOps = [RegOp.SetDword(PcKey, "AllOrNone", 1), RegOp.SetDword(PcKey, "ShowUI", 0)],
+            RemoveOps = [RegOp.DeleteValue(PcKey, "AllOrNone"), RegOp.DeleteValue(PcKey, "ShowUI")],
+            DetectOps = [RegOp.CheckDword(PcKey, "AllOrNone", 1), RegOp.CheckDword(PcKey, "ShowUI", 0)],
+        },
+        new TweakDef
+        {
+            Id = "maint-pch-force-queue-mode",
+            Label = "Set PCHealth Reporting to Queue Mode Only",
+            Category = "Privacy",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Sets ForceQueue=1 in PCHealth\\ErrorReporting policy. "
+                + "Forces error reports to accumulate in a local queue rather than being submitted immediately or interactively. "
+                + "Gives administrators time to review and approve queued reports before any data leaves the endpoint.",
+            Tags = ["pchealth", "queue", "error-reporting", "review", "approval"],
+            ImpactScore = 2,
+            SafetyRating = 5,
+            ImpactNote = "Queues reports for admin review; no immediate uploads.",
+            ApplyOps = [RegOp.SetDword(PcKey, "ForceQueue", 1)],
+            RemoveOps = [RegOp.DeleteValue(PcKey, "ForceQueue")],
+            DetectOps = [RegOp.CheckDword(PcKey, "ForceQueue", 1)],
+        },
+        new TweakDef
+        {
+            Id = "maint-pch-disable-report-by-app",
+            Label = "Disable Per-Application Error Reporting Override",
+            Category = "Privacy",
+            NeedsAdmin = true,
+            CorpSafe = true,
+            Description =
+                "Sets IncludeMicrosoftApps=0 and IncludeWindowsApps=0 in PCHealth\\ErrorReporting policy. "
+                + "Prevents individual Microsoft and Windows applications from independently initiating error reports through the PCHealth channel. "
+                + "Ensures that the enterprise error reporting policy cannot be overridden by per-application reporting preferences.",
+            Tags = ["pchealth", "per-app", "error-reporting", "override", "policy"],
+            ImpactScore = 2,
+            SafetyRating = 5,
+            ImpactNote = "Blocks per-app PCHealth error submissions regardless of app preference.",
+            ApplyOps = [RegOp.SetDword(PcKey, "IncludeMicrosoftApps", 0), RegOp.SetDword(PcKey, "IncludeWindowsApps", 0)],
+            RemoveOps = [RegOp.DeleteValue(PcKey, "IncludeMicrosoftApps"), RegOp.DeleteValue(PcKey, "IncludeWindowsApps")],
+            DetectOps = [RegOp.CheckDword(PcKey, "IncludeMicrosoftApps", 0), RegOp.CheckDword(PcKey, "IncludeWindowsApps", 0)],
+        },
     ];
 }

@@ -1205,3 +1205,117 @@ internal static class Multimedia
         },
     ];
 }
+
+internal static class PolicyMediaPlayer
+{
+    public static IReadOnlyList<TweakDef> Tweaks =>
+        [
+            .. _WmpPolicy.Data,
+        ];
+
+    // ── Sprint 672 — Windows Media Player Policy ──────────────────────────────
+    private static class _WmpPolicy
+    {
+        private const string WmpKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsMediaPlayer";
+
+        public static IReadOnlyList<TweakDef> Data =>
+            [
+                new TweakDef
+                {
+                    Id = "media-policy-disable-first-run",
+                    Label = "Disable Windows Media Player First-Run Setup Wizard",
+                    Category = "Audio & Media",
+                    Description =
+                        "Prevents Windows Media Player from showing the first-run setup wizard that asks users to configure privacy, codec download, and CodecLink options. The wizard can silently enable online data sharing. Default: first-run wizard shown on launch. Recommended: disabled.",
+                    Tags = ["wmp", "media-player", "setup", "privacy", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 2,
+                    SafetyRating = 5,
+                    ApplyOps = [RegOp.SetDword(WmpKey, "GroupPrivacyAcceptance", 1)],
+                    RemoveOps = [RegOp.DeleteValue(WmpKey, "GroupPrivacyAcceptance")],
+                    DetectOps = [RegOp.CheckDword(WmpKey, "GroupPrivacyAcceptance", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "media-policy-disable-mms-protocol",
+                    Label = "Disable MMS Streaming Protocol in Media Player",
+                    Category = "Audio & Media",
+                    Description =
+                        "Blocks Windows Media Player from using the legacy MMS (Microsoft Media Server) streaming protocol. MMS uses unauthenticated UDP/TCP streams and is deprecated; blocking it reduces the network attack surface. Default: MMS protocol allowed. Recommended: disabled.",
+                    Tags = ["wmp", "mms", "streaming", "network", "security", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 2,
+                    SafetyRating = 5,
+                    ApplyOps = [RegOp.SetDword(WmpKey, "PreventMMSProtocol", 1)],
+                    RemoveOps = [RegOp.DeleteValue(WmpKey, "PreventMMSProtocol")],
+                    DetectOps = [RegOp.CheckDword(WmpKey, "PreventMMSProtocol", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "media-policy-disable-drm-online",
+                    Label = "Disable Online DRM Licence Acquisition in Media Player",
+                    Category = "Audio & Media",
+                    Description =
+                        "Prevents Windows Media Player from contacting Microsoft's DRM licensing servers to acquire playback licences for protected content. Online licence acquisition sends media metadata and hardware fingerprint data to Microsoft. Default: online licence acquisition enabled. Recommended: disabled.",
+                    Tags = ["wmp", "drm", "licence", "privacy", "network", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 2,
+                    SafetyRating = 4,
+                    ApplyOps = [RegOp.SetDword(WmpKey, "PreventDRMLicenseAcquisition", 1)],
+                    RemoveOps = [RegOp.DeleteValue(WmpKey, "PreventDRMLicenseAcquisition")],
+                    DetectOps = [RegOp.CheckDword(WmpKey, "PreventDRMLicenseAcquisition", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "media-policy-disable-radio-ui",
+                    Label = "Hide Windows Media Player Radio UI",
+                    Category = "Audio & Media",
+                    Description =
+                        "Hides the Radio feature in Windows Media Player, which streams internet radio content via Microsoft's WindowsMedia.com service. The Radio UI includes usage tracking and content recommendations. Default: Radio UI visible. Recommended: hidden.",
+                    Tags = ["wmp", "radio", "streaming", "privacy", "ui", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 1,
+                    SafetyRating = 5,
+                    ApplyOps = [RegOp.SetDword(WmpKey, "PreventRadioPresence", 1)],
+                    RemoveOps = [RegOp.DeleteValue(WmpKey, "PreventRadioPresence")],
+                    DetectOps = [RegOp.CheckDword(WmpKey, "PreventRadioPresence", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "media-policy-disable-network-buffering",
+                    Label = "Disable Predictive Network Buffering in Media Player",
+                    Category = "Audio & Media",
+                    Description =
+                        "Disables the predictive network buffering feature that pre-fetches additional stream data based on playback patterns. Pre-fetch behaviour creates passive network chatter that can be used for traffic fingerprinting of media consumption. Default: enabled. Recommended: disabled for privacy.",
+                    Tags = ["wmp", "buffering", "network", "privacy", "streaming", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 2,
+                    SafetyRating = 5,
+                    ApplyOps = [RegOp.SetDword(WmpKey, "DisableNetworkSettings", 1)],
+                    RemoveOps = [RegOp.DeleteValue(WmpKey, "DisableNetworkSettings")],
+                    DetectOps = [RegOp.CheckDword(WmpKey, "DisableNetworkSettings", 1)],
+                },
+                new TweakDef
+                {
+                    Id = "media-policy-hide-privacy-tab",
+                    Label = "Lock Media Player Privacy Settings via Policy",
+                    Category = "Audio & Media",
+                    Description =
+                        "Hides the Privacy tab in Windows Media Player Options, preventing users from changing privacy settings (codec download, metadata retrieval, usage reporting). Used together with the other WMP policy tweaks to lock a hardened configuration in place. Default: Privacy tab accessible. Recommended: hidden after hardening.",
+                    Tags = ["wmp", "privacy", "settings", "lockdown", "policy"],
+                    NeedsAdmin = true,
+                    CorpSafe = true,
+                    ImpactScore = 2,
+                    SafetyRating = 5,
+                    ApplyOps = [RegOp.SetDword(WmpKey, "HidePrivacyTab", 1)],
+                    RemoveOps = [RegOp.DeleteValue(WmpKey, "HidePrivacyTab")],
+                    DetectOps = [RegOp.CheckDword(WmpKey, "HidePrivacyTab", 1)],
+                },
+            ];
+    }
+}
